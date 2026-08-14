@@ -726,6 +726,14 @@ function moveEntity(
     return false;
   }
 
+  // Movement draws on the same shared budget the actions do, so it obeys the
+  // same turn order. AI movement never comes through here.
+  const wrongTurn = outOfTurn(txn, actor.id);
+  if (wrongTurn) {
+    if (!silent) txn.emit({ type: 'refused', action: 'move', reason: wrongTurn });
+    return false;
+  }
+
   if (distance(actor.position, to) !== 1) {
     if (!silent) txn.emit({ type: 'refused', action: 'move', reason: 'that is not one step away' });
     return false;
@@ -992,6 +1000,24 @@ function outcomeReached(txn: Transaction, when: unknown, rng: Rng): boolean {
 }
 
 /**
+ * In combat, initiative decides who may act — a reason naming whose turn it is,
+ * or null when the actor is free to go ahead.
+ *
+ * The budget is a single record on the combat state, so without this check the
+ * selected character could act on any combatant's turn and spend it for them —
+ * and the refusal the player then saw, "no action left this turn", read as a
+ * budget problem rather than a turn-order one.
+ */
+function outOfTurn(txn: Transaction, actorId: EntityId): string | null {
+  const combat = txn.state.combat;
+  if (!combat) return null;
+  const activeId = combat.order[combat.turn];
+  if (!activeId || activeId === actorId) return null;
+  const active = txn.entity(activeId);
+  return active ? `it is ${active.name}'s turn` : null;
+}
+
+/**
  * Use an ability and, in combat, spend the action it costs.
  *
  * Shared by `attack` and `useAbility` so the budget can never be spent by one
@@ -1007,6 +1033,12 @@ function performAbility(
 ): void {
   const actor = txn.entity(actorId);
   if (!actor) return;
+
+  const wrongTurn = outOfTurn(txn, actorId);
+  if (wrongTurn) {
+    txn.emit({ type: 'refused', action: 'useAbility', reason: wrongTurn });
+    return;
+  }
 
   const ability = txn.module.find<{ actionType?: string }>('content.abilities', abilityId);
   if (txn.state.combat && !hasBudget(txn, ability?.actionType)) {

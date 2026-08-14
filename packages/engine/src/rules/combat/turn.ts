@@ -87,6 +87,19 @@ function freshTurn(txn: Transaction, entity: Entity): { spent: Record<string, nu
 }
 
 /**
+ * Put the player behind the character whose turn it is.
+ *
+ * Commands act as the selected character, so without this the last-selected
+ * member spends every party turn — one character attacks round after round
+ * while the rest of the party burns their turns on "no action left".
+ */
+function selectActive(txn: Transaction, next: Entity): void {
+  if (next.kind !== 'character' || !txn.state.party.includes(next.id)) return;
+  if (txn.state.selected === next.id) return;
+  txn.set({ ...txn.state, selected: next.id });
+}
+
+/**
  * Begin combat, if anything hostile can actually perceive the party.
  *
  * Sharing a map is not enough. A dungeon holds a dozen creatures in separate
@@ -127,6 +140,8 @@ export function maybeStartCombat(txn: Transaction, context: TargetingContext, rn
       ...(first ? freshTurn(txn, first) : { spent: {}, movement: 0 }),
     },
   });
+
+  if (first) selectActive(txn, first);
 
   txn.emit({ type: 'combatStarted', participants: order });
   txn.emit({ type: 'roundStarted', round: 1 });
@@ -282,6 +297,7 @@ export function endTurn(txn: Transaction, context: TargetingContext, rng: Rng): 
           ...freshTurn(txn, next),
         },
       });
+      selectActive(txn, next);
       tickConditions(txn, next.id, rng.derive(`conditions:${next.id}:${round}`));
       txn.emit({ type: 'turnStarted', entity: next.id });
 

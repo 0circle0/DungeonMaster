@@ -35,7 +35,8 @@ export function statusLines(module: CompiledModule, state: GameState): string[] 
   });
 
   const conditions = view.conditions.join(', ');
-  const combat = view.combat ? pc.red(` ⚔ round ${view.combat.round}`) : '';
+  const turn = view.combat?.turnName ? ` — ${view.combat.turnName}'s turn` : '';
+  const combat = view.combat ? pc.red(` ⚔ round ${view.combat.round}${turn}`) : '';
   const moving = view.stance ? pc.cyan(view.stance.name.toLowerCase()) : '';
 
   return [[

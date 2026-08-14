@@ -40,6 +40,8 @@ export interface StatusView {
   readonly combat: {
     readonly round: number;
     readonly turnOf: EntityId | null;
+    /** The active combatant's name, ready to print. */
+    readonly turnName: string | null;
     /** Whether the active combatant is a party member. */
     readonly yours: boolean;
   } | null;
@@ -108,6 +110,7 @@ export function statusView(module: CompiledModule, state: GameState): StatusView
       ? {
           round: state.combat.round,
           turnOf: active?.id ?? null,
+          turnName: active?.name ?? null,
           yours: active?.kind === 'character',
         }
       : null,

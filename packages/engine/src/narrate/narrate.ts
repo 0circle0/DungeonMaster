@@ -265,6 +265,12 @@ export function narrateEvent(context: NarratorContext, event: GameEvent): Line |
     case 'roundStarted':
       return { text: `— round ${event.round} —`, kind: 'system' };
 
+    // Whose turn it is has to land in the transcript: the player commands the
+    // party one member at a time, and without this line the only clue was a
+    // refusal after acting with the wrong one.
+    case 'turnStarted':
+      return { text: `${nameOf(context, event.entity)}'s turn.`, kind: 'combat' };
+
     case 'gateOpened': {
       const how = event.how === 'bypass' ? ' — forced' : event.how === 'ability' ? ' — by power' : '';
       return { text: `${contentName(context, 'world.gates', event.gate)} opens${how}.`, kind: 'note' };
