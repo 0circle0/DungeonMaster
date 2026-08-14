@@ -1,0 +1,19 @@
+{
+  // Use the TypeScript in node_modules, not the one bundled with the editor.
+  //
+  // This is the setting that makes the red squigglies agree with `npm run
+  // check`. The workspace packages point their `exports` at TypeScript source
+  // rather than at built output, and how a given compiler version resolves that
+  // has changed over releases — so an editor running its own older TypeScript
+  // can report a module as having no exports while `tsc` resolves it perfectly.
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "typescript.enablePromptUseWorkspaceTsdk": true,
+
+  // Surface errors for files that are open but not yet saved, and across the
+  // whole project rather than only the open file.
+  "typescript.tsserver.experimental.enableProjectDiagnostics": true,
+
+  "editor.codeActionsOnSave": { "source.fixAll.eslint": "explicit" },
+  "eslint.useFlatConfig": true,
+  "eslint.validate": ["typescript", "typescriptreact", "javascript"]
+}

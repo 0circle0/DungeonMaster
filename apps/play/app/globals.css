@@ -1,0 +1,401 @@
+/* Dark, dense, and quiet — the same tokens as the editor, duplicated on
+   purpose: two apps, one look, and sharing a stylesheet across Next apps is
+   not worth forty lines. The shared thing is the Tone *decision* in
+   @dm/play's palette; the hex lives once per app. */
+
+:root {
+  --bg: #12131a;
+  --panel: #181a23;
+  --panel-2: #1e212c;
+  --line: #2a2e3d;
+  --text: #dfe3ee;
+  --muted: #8890a6;
+  --accent: #d9a441;
+  --accent-dim: #8a6a2c;
+  --ok: #5fb87a;
+  --err: #e06c6c;
+  --warn: #d9a441;
+  --mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+
+  /* The eight tones a text map can carry — @dm/play decides which, this
+     decides what they look like. */
+  --tone-red: #e06c6c;
+  --tone-green: #5fb87a;
+  --tone-yellow: #d9a441;
+  --tone-blue: #6f8fd6;
+  --tone-magenta: #b48ad6;
+  --tone-cyan: #6fb3c4;
+  --tone-white: #dfe3ee;
+  --tone-gray: #5d6478;
+
+  /* The CSS equivalent of pc.dim on remembered ground. */
+  --remembered: 0.42;
+  /* Grid cell size; the zoom control rewrites it. */
+  --cell: 16px;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  height: 100%;
+  background: var(--bg);
+  color: var(--text);
+  font: 14px/1.5 system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+
+button, input, select, textarea { font: inherit; color: inherit; }
+
+.app { display: flex; flex-direction: column; height: 100vh; }
+
+/* ── top bar ─────────────────────────────────────────────── */
+
+.topbar {
+  display: flex; align-items: center; gap: 14px;
+  padding: 8px 16px;
+  background: var(--panel);
+  border-bottom: 1px solid var(--line);
+  flex: none;
+}
+.topbar .title { font-weight: 600; }
+.topbar .spacer { flex: 1; }
+.topbar .meta { color: var(--muted); font-size: 12px; }
+
+.btn {
+  background: var(--panel-2);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 5px 12px;
+  cursor: pointer;
+  color: var(--text);
+}
+.btn:hover { border-color: var(--accent-dim); }
+.btn.primary { background: var(--accent-dim); border-color: var(--accent-dim); color: #fff5e0; }
+.btn.primary:hover { background: var(--accent); color: #1a1405; }
+.btn:disabled { opacity: 0.45; cursor: default; }
+.btn:disabled:hover { border-color: var(--line); }
+
+/* ── the three-pane body ─────────────────────────────────── */
+
+.play-body {
+  display: grid;
+  grid-template-columns: 1fr 280px;
+  grid-template-rows: 1fr minmax(160px, 28vh);
+  gap: 1px;
+  background: var(--line);
+  flex: 1;
+  min-height: 0;
+}
+.map-pane { grid-column: 1; grid-row: 1; background: var(--bg); display: flex; flex-direction: column; min-width: 0; min-height: 0; }
+.sidebar { grid-column: 2; grid-row: 1 / 3; background: var(--panel); overflow-y: auto; padding: 12px; display: flex; flex-direction: column; gap: 16px; }
+.log-pane { grid-column: 1; grid-row: 2; background: var(--panel); display: flex; flex-direction: column; min-height: 0; }
+
+@media (max-width: 900px) {
+  .play-body { grid-template-columns: 1fr; }
+  .sidebar { display: none; }
+  .map-pane { grid-column: 1; }
+  .log-pane { grid-column: 1; }
+}
+
+/* ── the map ─────────────────────────────────────────────── */
+
+.map-scroll { flex: 1; overflow: auto; display: grid; place-items: center; padding: 12px; min-height: 0; }
+
+.mapgrid {
+  display: grid;
+  font-family: var(--mono);
+  font-size: calc(var(--cell) * 0.72);
+  line-height: 1;
+  user-select: none;
+}
+
+.cell {
+  width: var(--cell);
+  height: var(--cell);
+  display: grid;
+  place-items: center;
+  background: none;
+  border: none;
+  padding: 0;
+  color: var(--muted);
+  cursor: default;
+  border-radius: 2px;
+}
+.cell.walkable { cursor: pointer; }
+.cell.remembered { opacity: var(--remembered); }
+.cell.unknown { visibility: hidden; }
+.cell.you { background: var(--accent-dim); color: #fff5e0; }
+.cell.on-path { background: rgba(217, 164, 65, 0.18); }
+.cell.hover-target { outline: 1px solid var(--accent); }
+.cell:hover { background: rgba(223, 227, 238, 0.08); }
+.cell.you:hover { background: var(--accent); }
+
+.map-header {
+  display: flex; align-items: baseline; gap: 12px;
+  padding: 8px 14px 0;
+  flex: none;
+}
+.map-header .place { font-weight: 600; }
+.map-header .coords, .map-header .clock { color: var(--muted); font-size: 12px; }
+.map-header .zoom { margin-left: auto; display: flex; gap: 4px; }
+
+/* ── the context bar ─────────────────────────────────────── */
+
+.context-bar {
+  display: flex; flex-wrap: wrap; gap: 6px;
+  padding: 8px 12px;
+  border-top: 1px solid var(--line);
+  flex: none;
+  max-height: 92px;
+  overflow-y: auto;
+}
+.context-bar .btn { font-size: 12.5px; padding: 3px 10px; }
+
+/* ── the sidebar panes ───────────────────────────────────── */
+
+.pane h3 {
+  margin: 0 0 6px;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.roster-row {
+  display: flex; align-items: center; gap: 8px;
+  width: 100%;
+  background: none; border: none; padding: 4px 6px;
+  border-radius: 6px; cursor: pointer; text-align: left;
+}
+.roster-row:hover { background: var(--panel-2); }
+.roster-row.selected { background: var(--panel-2); outline: 1px solid var(--accent-dim); }
+.roster-row .name { flex: 1; }
+.roster-row .fallen { color: var(--err); text-decoration: line-through; }
+.roster-row .lvl { color: var(--muted); font-size: 12px; }
+
+.meter { position: relative; width: 64px; height: 8px; background: var(--panel-2); border-radius: 4px; overflow: hidden; flex: none; }
+.meter > i { position: absolute; inset: 0 auto 0 0; border-radius: 4px; }
+.meter.ok > i { background: var(--ok); }
+.meter.hurt > i { background: var(--warn); }
+.meter.critical > i { background: var(--err); }
+
+.objective { color: var(--text); }
+.objective .marker { color: var(--tone-cyan); margin-right: 6px; }
+.objective .count { color: var(--muted); margin-left: 6px; }
+
+.exit-row {
+  display: flex; align-items: baseline; gap: 8px;
+  width: 100%;
+  background: none; border: none; padding: 3px 6px;
+  border-radius: 6px; cursor: pointer; text-align: left;
+  color: var(--text);
+}
+.exit-row:hover { background: var(--panel-2); }
+.exit-row:disabled { color: var(--muted); cursor: default; }
+.exit-row:disabled:hover { background: none; }
+.exit-row .verb { color: var(--tone-cyan); font-size: 12px; }
+.exit-row .time { color: var(--muted); font-size: 12px; margin-left: auto; }
+.exit-row .why { display: block; color: var(--warn); font-size: 11.5px; }
+
+.legend-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 2px 10px; font-size: 12.5px; }
+.legend-grid .g { font-family: var(--mono); display: inline-block; width: 1.2em; text-align: center; }
+.legend-grid .selected-glyph { background: var(--accent-dim); color: #fff5e0; border-radius: 2px; }
+.legend-grid span { color: var(--muted); }
+
+/* ── the log ─────────────────────────────────────────────── */
+
+.transcript {
+  flex: 1; overflow-y: auto;
+  padding: 10px 14px;
+  font-size: 13.5px;
+}
+.transcript p { margin: 0 0 2px; }
+.transcript .prose { color: var(--text); }
+.transcript .speech { font-style: italic; }
+.transcript .combat { color: var(--muted); }
+.transcript .system { color: var(--tone-cyan); }
+.transcript .refusal { color: var(--warn); }
+.transcript .note { color: var(--muted); }
+
+.dialogue { padding: 8px 14px; border-top: 1px solid var(--line); flex: none; }
+.dialogue .say { font-style: italic; margin-bottom: 6px; }
+.dialogue-option {
+  display: block; width: 100%; text-align: left;
+  background: none; border: none; padding: 4px 8px;
+  border-radius: 6px; cursor: pointer; color: var(--text);
+}
+.dialogue-option:hover { background: var(--panel-2); }
+.dialogue-option:disabled { color: var(--muted); cursor: default; }
+.dialogue-option .num { color: var(--tone-cyan); margin-right: 8px; }
+.dialogue-option .hint { color: var(--muted); font-size: 12px; margin-left: 8px; }
+
+/* ── the command bar ─────────────────────────────────────── */
+
+.command-bar { position: relative; border-top: 1px solid var(--line); flex: none; }
+.command-bar input {
+  width: 100%;
+  background: var(--panel-2);
+  border: none;
+  padding: 9px 14px;
+  font-family: var(--mono);
+  outline: none;
+}
+.command-bar input:focus { background: #232736; }
+
+.completions {
+  position: absolute; bottom: 100%; left: 8px; right: 8px;
+  background: var(--panel-2);
+  border: 1px solid var(--line);
+  border-radius: 8px 8px 0 0;
+  max-height: 220px; overflow-y: auto;
+  box-shadow: 0 -6px 24px rgba(0, 0, 0, 0.4);
+}
+.completion {
+  display: flex; gap: 12px; align-items: baseline;
+  width: 100%; text-align: left;
+  background: none; border: none; padding: 5px 12px;
+  cursor: pointer; color: var(--text);
+}
+.completion.active, .completion:hover { background: var(--panel); }
+.completion .what { font-family: var(--mono); }
+.completion .why { color: var(--muted); font-size: 12px; margin-left: auto; }
+
+/* ── the status bar ──────────────────────────────────────── */
+
+.status-bar {
+  display: flex; align-items: center; gap: 14px;
+  padding: 6px 16px;
+  background: var(--panel);
+  border-top: 1px solid var(--line);
+  flex: none;
+  font-size: 13px;
+}
+.status-bar .who { font-weight: 600; }
+.status-bar .pool { display: flex; align-items: center; gap: 6px; }
+.status-bar .pool .label { color: var(--muted); font-size: 12px; }
+.status-bar .chip {
+  background: var(--panel-2); border-radius: 999px;
+  padding: 1px 10px; font-size: 12px; color: var(--muted);
+}
+.status-bar .chip.combat { background: rgba(224, 108, 108, 0.18); color: var(--err); }
+.status-bar .chip.condition { color: var(--tone-magenta); }
+.status-bar .clock { margin-left: auto; color: var(--muted); font-size: 12px; }
+
+/* ── the initiative strip ────────────────────────────────── */
+
+.initiative {
+  display: flex; gap: 6px; align-items: center;
+  padding: 6px 14px 0;
+  flex: none; flex-wrap: wrap;
+}
+.initiative .chip {
+  background: var(--panel-2); border: 1px solid var(--line);
+  border-radius: 999px; padding: 1px 10px; font-size: 12px;
+}
+.initiative .chip.active { border-color: var(--accent); color: var(--accent); }
+.initiative .chip.hostile { color: var(--tone-red); }
+.initiative .round { color: var(--muted); font-size: 12px; }
+
+/* ── overlays ────────────────────────────────────────────── */
+
+.overlay-backdrop {
+  position: fixed; inset: 0;
+  background: rgba(10, 11, 16, 0.7);
+  display: grid; place-items: center;
+  z-index: 20;
+}
+.overlay {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  width: min(680px, 92vw);
+  max-height: 84vh;
+  display: flex; flex-direction: column;
+  box-shadow: 0 18px 60px rgba(0, 0, 0, 0.5);
+}
+.overlay header {
+  display: flex; align-items: center;
+  padding: 12px 18px;
+  border-bottom: 1px solid var(--line);
+  font-weight: 600;
+}
+.overlay header .btn { margin-left: auto; }
+.overlay .body { padding: 14px 18px; overflow-y: auto; }
+
+.quest-card { border: 1px solid var(--line); border-radius: 8px; padding: 10px 14px; margin-bottom: 10px; }
+.quest-card h4 { margin: 0; display: flex; align-items: center; gap: 10px; }
+.quest-card .pill {
+  font-size: 11px; border-radius: 999px; padding: 1px 9px;
+  background: var(--panel-2); color: var(--muted);
+}
+.quest-card .pill.active { color: var(--tone-cyan); }
+.quest-card .pill.done { color: var(--ok); }
+.quest-card .pill.failed { color: var(--err); }
+.quest-card .desc { color: var(--muted); margin: 4px 0 8px; }
+.quest-card .stage { color: var(--muted); font-size: 12px; margin-bottom: 4px; }
+.quest-card .objective { margin: 2px 0; }
+.quest-card .objective.done { color: var(--muted); text-decoration: line-through; }
+.quest-card .prose { font-style: italic; color: var(--muted); margin-top: 6px; }
+
+.sheet-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px 18px; margin-bottom: 14px; }
+.sheet-grid .stat { display: flex; justify-content: space-between; border-bottom: 1px solid var(--line); padding: 3px 0; }
+.sheet-grid .stat b { color: var(--muted); font-weight: 500; }
+
+.inv-row { display: flex; align-items: center; gap: 10px; padding: 6px 0; border-bottom: 1px solid var(--line); }
+.inv-row .name { flex: 1; }
+.inv-row .qty { color: var(--muted); }
+.inv-row .slot { font-size: 11px; color: var(--accent); border: 1px solid var(--accent-dim); border-radius: 999px; padding: 0 8px; }
+
+.creation-row { display: flex; align-items: center; gap: 10px; padding: 4px 0; }
+.creation-row .attr { width: 130px; }
+.creation-row .score { width: 2.4em; text-align: center; font-family: var(--mono); }
+.creation-row .cost { color: var(--muted); font-size: 12px; }
+.pick-card {
+  display: block; width: 100%; text-align: left;
+  border: 1px solid var(--line); border-radius: 8px;
+  background: var(--panel-2); padding: 10px 14px; margin-bottom: 8px;
+  cursor: pointer; color: var(--text);
+}
+.pick-card:hover { border-color: var(--accent-dim); }
+.pick-card.picked { border-color: var(--accent); }
+.pick-card .desc { color: var(--muted); font-size: 12.5px; }
+
+.save-slot { display: flex; align-items: center; gap: 10px; padding: 8px 0; border-bottom: 1px solid var(--line); }
+.save-slot .when { color: var(--muted); font-size: 12px; flex: 1; }
+
+.empty { color: var(--muted); font-style: italic; }
+.hint { color: var(--muted); font-size: 12.5px; }
+.error-note { color: var(--err); padding: 8px 14px; }
+
+/* ── the end of a run ────────────────────────────────────── */
+
+.game-over {
+  padding: 10px 16px;
+  text-align: center;
+  font-weight: 600;
+  border-top: 1px solid var(--line);
+}
+.game-over.victory { color: var(--ok); }
+.game-over.defeat { color: var(--err); }
+
+/* ── the picker ──────────────────────────────────────────── */
+
+.picker {
+  position: fixed;
+  background: var(--panel-2);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  box-shadow: 0 10px 36px rgba(0, 0, 0, 0.5);
+  z-index: 30;
+  min-width: 220px;
+  overflow: hidden;
+}
+.picker button {
+  display: flex; gap: 10px; align-items: baseline;
+  width: 100%; text-align: left;
+  background: none; border: none; padding: 7px 14px;
+  cursor: pointer; color: var(--text);
+}
+.picker button:hover { background: var(--panel); }
+.picker button:disabled { color: var(--muted); cursor: default; }
+.picker button .why { color: var(--muted); font-size: 12px; margin-left: auto; }

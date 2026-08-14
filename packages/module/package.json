@@ -1,0 +1,20 @@
+{
+  "name": "@dm/module",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Game module format: schemas, DSL, and compiler. The source of truth for what a game is.",
+  "main": "./src/index.ts",
+  "exports": {
+    ".": {
+      "types": "./src/index.ts",
+      "import": "./src/index.ts",
+      "default": "./src/index.ts"
+    }
+  },
+  "dependencies": {
+    "zod": "^3.24.1",
+    "zod-to-json-schema": "^3.24.1"
+  },
+  "types": "./src/index.ts"
+}

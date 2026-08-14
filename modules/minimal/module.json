@@ -1,0 +1,451 @@
+{
+  "format": 1,
+  "id": "minimal",
+  "version": "1.0.0",
+  "engine": "^1.0.0",
+  "extends": null,
+  "meta": {
+    "title": "Minimal",
+    "author": "DungeonMaster",
+    "description": "The smallest module the engine will play. Its attributes, resource, and stats are deliberately unlike the reference fantasy ruleset: if the engine has hardcoded a single assumption about what a character is made of, this module fails to run.",
+    "tags": [
+      "test",
+      "fixture"
+    ]
+  },
+  "rules": {
+    "attributes": [
+      {
+        "id": "vigor",
+        "name": "Vigor",
+        "abbrev": "VIG",
+        "min": 1,
+        "max": 12,
+        "default": 6,
+        "modifier": {
+          "floor": {
+            "div": [
+              {
+                "sub": [
+                  {
+                    "ref": "value"
+                  },
+                  6
+                ]
+              },
+              3
+            ]
+          }
+        }
+      },
+      {
+        "id": "wits",
+        "name": "Wits",
+        "abbrev": "WIT",
+        "min": 1,
+        "max": 12,
+        "default": 6,
+        "modifier": {
+          "floor": {
+            "div": [
+              {
+                "sub": [
+                  {
+                    "ref": "value"
+                  },
+                  6
+                ]
+              },
+              3
+            ]
+          }
+        }
+      }
+    ],
+    "resources": [
+      {
+        "id": "vitality",
+        "name": "Vitality",
+        "max": {
+          "add": [
+            8,
+            {
+              "mul": [
+                {
+                  "ref": "actor.mod.vigor"
+                },
+                2
+              ]
+            }
+          ]
+        },
+        "min": 0,
+        "restoreOnLongRest": 1,
+        "onDepleted": [
+          {
+            "emit": {
+              "event": "died",
+              "data": {
+                "who": {
+                  "ref": "actor.id"
+                }
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "derivedStats": [
+      {
+        "id": "ward",
+        "name": "Ward",
+        "formula": {
+          "add": [
+            8,
+            {
+              "ref": "actor.mod.wits"
+            }
+          ]
+        }
+      }
+    ],
+    "damageTypes": [
+      {
+        "id": "blunt",
+        "name": "Blunt"
+      }
+    ],
+    "conditions": [
+      {
+        "id": "reeling",
+        "name": "Reeling",
+        "stacking": "refresh",
+        "defaultDuration": 2,
+        "modifiers": {
+          "ward": -2
+        }
+      }
+    ],
+    "actionTypes": [
+      {
+        "id": "action",
+        "name": "Action",
+        "perTurn": 1
+      }
+    ],
+    "movementModes": [
+      {
+        "id": "walk",
+        "name": "Walk",
+        "defaultSpeed": 25,
+        "terrainMultiplier": 1
+      }
+    ],
+    "equipmentSlots": [
+      {
+        "id": "hand",
+        "name": "Hand",
+        "capacity": 1
+      }
+    ],
+    "rests": [
+      {
+        "id": "camp",
+        "name": "Camp",
+        "kind": "long",
+        "duration": 480
+      }
+    ],
+    "resolution": {
+      "checkDice": "1d20",
+      "criticalSuccessAt": 20,
+      "criticalFailureAt": 1,
+      "defaultDifficulty": 10
+    },
+    "progression": {
+      "maxLevel": 3,
+      "levels": [
+        {
+          "level": 1,
+          "xpRequired": 0
+        },
+        {
+          "level": 2,
+          "xpRequired": 100
+        },
+        {
+          "level": 3,
+          "xpRequired": 300
+        }
+      ]
+    },
+    "vitalResource": "vitality",
+    "initiativeStat": "ward"
+  },
+  "content": {
+    "abilities": [
+      {
+        "id": "cudgel_swing",
+        "name": "Cudgel Swing",
+        "actionType": "action",
+        "targeting": "single",
+        "attack": {
+          "stat": "vigor",
+          "against": "ward"
+        },
+        "onUse": [
+          {
+            "damage": {
+              "target": {
+                "ref": "target.id"
+              },
+              "amount": {
+                "add": [
+                  {
+                    "roll": "1d6"
+                  },
+                  {
+                    "ref": "actor.mod.vigor"
+                  }
+                ]
+              },
+              "damageType": "blunt"
+            }
+          }
+        ]
+      }
+    ],
+    "skills": [
+      {
+        "id": "notice",
+        "name": "Notice",
+        "attribute": "wits"
+      }
+    ],
+    "ancestries": [
+      {
+        "id": "folk",
+        "name": "Folk",
+        "attributeBonuses": {
+          "vigor": 1
+        }
+      }
+    ],
+    "classes": [
+      {
+        "id": "drifter",
+        "name": "Drifter",
+        "hitDie": "1d6",
+        "primaryAttribute": "vigor",
+        "skillProficiencies": [
+          "notice"
+        ],
+        "startingItems": [
+          {
+            "item": "cudgel",
+            "quantity": 1
+          }
+        ],
+        "abilitiesByLevel": {
+          "1": [
+            "cudgel_swing"
+          ]
+        }
+      }
+    ],
+    "items": [
+      {
+        "id": "cudgel",
+        "name": "Cudgel",
+        "kind": "weapon",
+        "slot": "hand",
+        "value": 2,
+        "weight": 3,
+        "damage": {
+          "dice": "1d6",
+          "damageType": "blunt",
+          "stat": "vigor"
+        }
+      }
+    ],
+    "lootTables": [
+      {
+        "id": "scraps",
+        "rolls": "1",
+        "entries": [
+          {
+            "weight": 1,
+            "value": {
+              "item": "cudgel",
+              "quantity": "1"
+            }
+          }
+        ]
+      }
+    ],
+    "monsters": [
+      {
+        "id": "husk",
+        "name": "Husk",
+        "level": 1,
+        "xp": 10,
+        "attributes": {
+          "vigor": 5,
+          "wits": 4
+        },
+        "abilities": [
+          "cudgel_swing"
+        ],
+        "behaviour": [
+          {
+            "priority": 0,
+            "use": "cudgel_swing"
+          }
+        ],
+        "loot": "scraps",
+        "descriptors": [
+          "a hollow-eyed"
+        ]
+      }
+    ],
+    "traps": [],
+    "factions": [],
+    "npcs": []
+  },
+  "world": {
+    "terrains": [
+      {
+        "id": "bare_floor",
+        "name": "Bare Floor",
+        "glyph": ".",
+        "passable": true,
+        "opaque": false,
+        "moveCost": 1
+      },
+      {
+        "id": "raw_stone",
+        "name": "Raw Stone",
+        "glyph": "#",
+        "passable": false,
+        "opaque": true
+      }
+    ],
+    "palettes": [
+      {
+        "id": "hollow",
+        "floor": "bare_floor",
+        "wall": "raw_stone"
+      }
+    ],
+    "biomes": [
+      {
+        "id": "hollow",
+        "name": "The Hollow",
+        "layer": "underworld",
+        "roomTemplates": [
+          "bare_room",
+          "the_mouth",
+          "deep_room"
+        ],
+        "encounterTables": [
+          "husks"
+        ],
+        "lootTables": [
+          "scraps"
+        ],
+        "palette": "hollow"
+      }
+    ],
+    "areas": [],
+    "pointsOfInterest": [],
+    "gates": [],
+    "roomTemplates": [
+      {
+        "id": "bare_room",
+        "name": "Bare Room",
+        "descriptionKey": "room_bare",
+        "role": "chamber",
+        "minExits": 1,
+        "maxExits": 3
+      },
+      {
+        "id": "the_mouth",
+        "name": "The Mouth",
+        "descriptionKey": "room_bare",
+        "role": "entrance",
+        "minExits": 1,
+        "maxExits": 2
+      },
+      {
+        "id": "deep_room",
+        "name": "Deep Room",
+        "descriptionKey": "room_bare",
+        "role": "boss",
+        "minExits": 1,
+        "maxExits": 1
+      }
+    ],
+    "encounterTables": [
+      {
+        "id": "husks",
+        "minDepth": 0,
+        "maxDepth": 999,
+        "groups": [
+          {
+            "id": "lone_husk",
+            "weight": 1,
+            "entries": [
+              {
+                "monster": "husk",
+                "count": "1d2"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "dungeons": [
+      {
+        "id": "first_descent",
+        "name": "First Descent",
+        "biome": "hollow",
+        "roomCount": "5",
+        "depth": "1",
+        "branchiness": 0.3,
+        "bossTable": "husks"
+      }
+    ]
+  },
+  "narrative": {
+    "textGrammar": [
+      {
+        "id": "room_bare",
+        "variants": [
+          {
+            "text": "Bare stone, and the sound of your own breathing."
+          },
+          {
+            "text": "A low room. Dust lies undisturbed until you disturb it."
+          },
+          {
+            "text": "Rough walls close in. Something dripped here, once."
+          }
+        ]
+      }
+    ],
+    "dialogues": [],
+    "quests": [],
+    "arcs": [],
+    "deedKinds": []
+  },
+  "start": {
+    "partySize": 1,
+    "creation": {
+      "attributePoints": 4,
+      "startingLevel": 1,
+      "skillRanks": 1
+    },
+    "startingDungeon": "first_descent",
+    "openingTextKey": "room_bare"
+  }
+}

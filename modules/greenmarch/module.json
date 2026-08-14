@@ -1,0 +1,2531 @@
+{
+  "format": 1,
+  "id": "greenmarch",
+  "version": "0.1.0",
+  "engine": "^1.0.0",
+  "extends": null,
+  "meta": {
+    "title": "The Greenmarch",
+    "author": "DungeonMaster",
+    "description": "A worked example of a complete game flow: biome to area to point of interest, gated progression, encounters with odds, loot limited by what a character has become, a staged quest with dialogue and memory, and creatures that react to each other rather than only to the party.",
+    "tags": [
+      "demo",
+      "fantasy"
+    ]
+  },
+  "rules": {
+    "attributes": [
+      {
+        "id": "might",
+        "name": "Might",
+        "abbrev": "MIG",
+        "min": 8,
+        "max": 20,
+        "default": 10,
+        "modifier": {
+          "floor": {
+            "div": [
+              {
+                "sub": [
+                  {
+                    "ref": "value"
+                  },
+                  10
+                ]
+              },
+              2
+            ]
+          }
+        }
+      },
+      {
+        "id": "agility",
+        "name": "Agility",
+        "abbrev": "AGI",
+        "min": 8,
+        "max": 20,
+        "default": 10,
+        "modifier": {
+          "floor": {
+            "div": [
+              {
+                "sub": [
+                  {
+                    "ref": "value"
+                  },
+                  10
+                ]
+              },
+              2
+            ]
+          }
+        }
+      },
+      {
+        "id": "endurance",
+        "name": "Endurance",
+        "abbrev": "END",
+        "min": 8,
+        "max": 20,
+        "default": 10,
+        "modifier": {
+          "floor": {
+            "div": [
+              {
+                "sub": [
+                  {
+                    "ref": "value"
+                  },
+                  10
+                ]
+              },
+              2
+            ]
+          }
+        }
+      },
+      {
+        "id": "intellect",
+        "name": "Intellect",
+        "abbrev": "INT",
+        "min": 8,
+        "max": 20,
+        "default": 10,
+        "modifier": {
+          "floor": {
+            "div": [
+              {
+                "sub": [
+                  {
+                    "ref": "value"
+                  },
+                  10
+                ]
+              },
+              2
+            ]
+          }
+        }
+      },
+      {
+        "id": "instinct",
+        "name": "Instinct",
+        "abbrev": "INS",
+        "min": 8,
+        "max": 20,
+        "default": 10,
+        "modifier": {
+          "floor": {
+            "div": [
+              {
+                "sub": [
+                  {
+                    "ref": "value"
+                  },
+                  10
+                ]
+              },
+              2
+            ]
+          }
+        }
+      },
+      {
+        "id": "presence",
+        "name": "Presence",
+        "abbrev": "PRE",
+        "min": 8,
+        "max": 20,
+        "default": 10,
+        "modifier": {
+          "floor": {
+            "div": [
+              {
+                "sub": [
+                  {
+                    "ref": "value"
+                  },
+                  10
+                ]
+              },
+              2
+            ]
+          }
+        }
+      }
+    ],
+    "resources": [
+      {
+        "id": "hp",
+        "name": "Hit Points",
+        "max": {
+          "max": [
+            1,
+            {
+              "add": [
+                8,
+                {
+                  "mul": [
+                    {
+                      "ref": "actor.mod.endurance"
+                    },
+                    {
+                      "ref": "actor.level"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "onDepleted": [
+          {
+            "emit": {
+              "event": "died",
+              "data": {
+                "who": {
+                  "ref": "actor.id"
+                }
+              }
+            }
+          }
+        ]
+      },
+      {
+        "id": "focus",
+        "name": "Focus",
+        "max": {
+          "max": [
+            0,
+            {
+              "add": [
+                2,
+                {
+                  "ref": "actor.mod.intellect"
+                }
+              ]
+            }
+          ]
+        },
+        "restoreOnShortRest": 0.5,
+        "restoreOnLongRest": 1
+      }
+    ],
+    "derivedStats": [
+      {
+        "id": "guard",
+        "name": "Guard",
+        "formula": {
+          "add": [
+            10,
+            {
+              "ref": "actor.mod.agility"
+            }
+          ]
+        }
+      },
+      {
+        "id": "initiative",
+        "name": "Initiative",
+        "formula": {
+          "ref": "actor.mod.agility"
+        }
+      }
+    ],
+    "damageTypes": [
+      {
+        "id": "slashing",
+        "name": "Slashing"
+      },
+      {
+        "id": "piercing",
+        "name": "Piercing"
+      },
+      {
+        "id": "fire",
+        "name": "Fire"
+      }
+    ],
+    "conditions": [
+      {
+        "id": "bleeding",
+        "name": "Bleeding",
+        "stacking": "refresh",
+        "defaultDuration": 3,
+        "onTick": [
+          {
+            "damage": {
+              "target": {
+                "ref": "actor.id"
+              },
+              "amount": 1,
+              "damageType": "slashing"
+            }
+          }
+        ]
+      },
+      {
+        "id": "frightened",
+        "name": "Frightened",
+        "stacking": "refresh",
+        "defaultDuration": 2,
+        "modifiers": {
+          "guard": -2
+        }
+      },
+      {
+        "id": "emboldened",
+        "name": "Emboldened",
+        "stacking": "refresh",
+        "defaultDuration": 3,
+        "modifiers": {
+          "guard": 2
+        }
+      }
+    ],
+    "actionTypes": [
+      {
+        "id": "action",
+        "name": "Action",
+        "perTurn": 1
+      },
+      {
+        "id": "quick",
+        "name": "Quick Action",
+        "perTurn": 1
+      }
+    ],
+    "equipmentSlots": [
+      {
+        "id": "hand",
+        "name": "Hand",
+        "capacity": 2
+      },
+      {
+        "id": "body",
+        "name": "Body",
+        "capacity": 1
+      }
+    ],
+    "masteryTiers": [
+      {
+        "id": "novice",
+        "name": "Novice",
+        "atRank": 1
+      },
+      {
+        "id": "adept",
+        "name": "Adept",
+        "atRank": 3
+      },
+      {
+        "id": "master",
+        "name": "Master",
+        "atRank": 5
+      }
+    ],
+    "rests": [
+      {
+        "id": "breather",
+        "name": "Breather",
+        "kind": "short",
+        "duration": 60,
+        "interruptChance": 0.1
+      },
+      {
+        "id": "camp",
+        "name": "Make Camp",
+        "kind": "long",
+        "duration": 480,
+        "interruptChance": 0.25
+      }
+    ],
+    "resolution": {
+      "checkDice": "1d20",
+      "advantageDice": "2d20kh1",
+      "disadvantageDice": "2d20kl1",
+      "defaultDifficulty": 12,
+      "difficulties": {
+        "easy": 8,
+        "standard": 12,
+        "hard": 16,
+        "daunting": 20
+      }
+    },
+    "progression": {
+      "maxLevel": 10,
+      "levels": [
+        {
+          "level": 1,
+          "xpRequired": 0
+        },
+        {
+          "level": 2,
+          "xpRequired": 100
+        },
+        {
+          "level": 3,
+          "xpRequired": 300
+        },
+        {
+          "level": 4,
+          "xpRequired": 600
+        },
+        {
+          "level": 5,
+          "xpRequired": 1000
+        }
+      ]
+    },
+    "vitalResource": "hp",
+    "initiativeStat": "initiative",
+    "senses": [
+      {
+        "id": "sight",
+        "name": "Sight",
+        "description": "What you can see, which is nothing at all through a wall. Either something is in view or it is not, so every threshold is the same.",
+        "defaultRange": 60,
+        "propagation": "line",
+        "blockedBy": "opaque",
+        "falloff": "cliff"
+      },
+      {
+        "id": "hearing",
+        "name": "Hearing",
+        "description": "Sound travels in a straight line and stops at stone, but passes reeds and open doorways perfectly well. It fades with distance, so a far-off clatter is worth walking towards and a near one is worth drawing steel for.",
+        "defaultRange": 120,
+        "propagation": "line",
+        "blockedBy": "impassable",
+        "falloff": "linear",
+        "rememberMinutes": 30,
+        "impressionTextKey": "heard_something",
+        "faintImpressionTextKey": "heard_something_faint",
+        "emptyTextKey": "heard_nothing",
+        "thresholds": {
+          "detect": 0.05,
+          "investigate": 0.25,
+          "aggro": 0.8
+        }
+      },
+      {
+        "id": "smell",
+        "name": "Smell",
+        "description": "Scent seeps around corners and hangs about long after you have gone. A hound follows where you went rather than where you are, and a cold trail is faint even underfoot.",
+        "defaultRange": 125,
+        "propagation": "field",
+        "blockedBy": "impassable",
+        "falloff": "linear",
+        "lingerMinutes": 90,
+        "spreadPerMinute": 0.4,
+        "rememberMinutes": 60,
+        "impressionTextKey": "smelled_something",
+        "faintImpressionTextKey": "smelled_something_faint",
+        "emptyTextKey": "smelled_nothing",
+        "thresholds": {
+          "detect": 0.05,
+          "investigate": 0.3,
+          "aggro": 0.95
+        }
+      }
+    ],
+    "stances": [
+      {
+        "id": "sneak",
+        "name": "Sneak",
+        "description": "Slow and careful. Half pace, a fifth the noise, and rather less of your smell on the wind.",
+        "speedMultiplier": 0.5,
+        "emits": {
+          "hearing": 0.2,
+          "smell": 0.6
+        },
+        "concealedBy": "stealth",
+        "concealmentPerPoint": 0.04
+      },
+      {
+        "id": "walk",
+        "name": "Walk",
+        "description": "An ordinary pace. Nothing gained, nothing given away.",
+        "speedMultiplier": 1
+      },
+      {
+        "id": "dash",
+        "name": "Dash",
+        "description": "Quick, and heard from a long way off.",
+        "speedMultiplier": 1.5,
+        "emits": {
+          "hearing": 2.2,
+          "smell": 1.4
+        }
+      }
+    ],
+    "perception": {
+      "defaultStance": "walk",
+      "sightSense": "sight",
+      "curiosityMinutes": 20
+    },
+    "movementModes": [
+      {
+        "id": "walk",
+        "name": "Walk",
+        "defaultSpeed": 30,
+        "terrainMultiplier": 1
+      },
+      {
+        "id": "swim",
+        "name": "Swim",
+        "defaultSpeed": 15,
+        "terrainMultiplier": 1
+      }
+    ],
+    "opportunities": [
+      {
+        "id": "parting_blow",
+        "name": "Parting Blow",
+        "description": "Anyone who walks out of your reach gives you one free swing, which is what makes disengaging a decision rather than a formality.",
+        "on": "moveAway",
+        "use": "strike",
+        "usesPerRound": 1
+      }
+    ],
+    "coverTypes": [
+      {
+        "id": "half",
+        "name": "Half Cover",
+        "defenceBonus": 2
+      },
+      {
+        "id": "three_quarters",
+        "name": "Three-Quarters Cover",
+        "defenceBonus": 5
+      }
+    ]
+  },
+  "content": {
+    "skills": [
+      {
+        "id": "lockpicking",
+        "name": "Lockpicking",
+        "attribute": "agility"
+      },
+      {
+        "id": "lore",
+        "name": "Lore",
+        "attribute": "intellect"
+      },
+      {
+        "id": "perception",
+        "name": "Perception",
+        "attribute": "instinct"
+      },
+      {
+        "id": "stealth",
+        "name": "Stealth",
+        "attribute": "agility",
+        "description": "Moving without being heard. Ranks quieten a careful step further; nothing makes you silent outright."
+      },
+      {
+        "id": "persuasion",
+        "name": "Persuasion",
+        "attribute": "presence"
+      },
+      {
+        "id": "resolve",
+        "name": "Resolve",
+        "attribute": "presence"
+      }
+    ],
+    "abilities": [
+      {
+        "id": "strike",
+        "name": "Strike",
+        "actionType": "action",
+        "targeting": "single",
+        "attack": {
+          "stat": "might",
+          "against": "guard"
+        },
+        "onUse": [
+          {
+            "damage": {
+              "target": {
+                "ref": "target.id"
+              },
+              "amount": {
+                "add": [
+                  {
+                    "roll": "1d8"
+                  },
+                  {
+                    "ref": "actor.mod.might"
+                  }
+                ]
+              },
+              "damageType": "slashing"
+            }
+          }
+        ]
+      },
+      {
+        "id": "rally",
+        "name": "Rally",
+        "actionType": "quick",
+        "targeting": "allAllies",
+        "costs": {
+          "focus": 1
+        },
+        "onUse": [
+          {
+            "applyCondition": {
+              "target": {
+                "ref": "target.id"
+              },
+              "condition": "emboldened",
+              "duration": 3
+            }
+          }
+        ]
+      },
+      {
+        "id": "read_runes",
+        "name": "Read Runes",
+        "actionType": "action",
+        "targeting": "none",
+        "requires": {
+          "skills": [
+            {
+              "skill": "lore",
+              "minRank": 2,
+              "minTier": "adept"
+            }
+          ]
+        },
+        "onUse": [
+          {
+            "setFlag": {
+              "flag": "runes_read",
+              "value": true
+            }
+          }
+        ]
+      },
+      {
+        "id": "howl",
+        "name": "Howl",
+        "actionType": "action",
+        "targeting": "allEnemies",
+        "onUse": [
+          {
+            "applyCondition": {
+              "target": {
+                "ref": "target.id"
+              },
+              "condition": "frightened",
+              "duration": 2
+            }
+          }
+        ]
+      }
+    ],
+    "ancestries": [
+      {
+        "id": "human",
+        "name": "Human",
+        "attributeBonuses": {
+          "presence": 1
+        }
+      },
+      {
+        "id": "dwarf",
+        "name": "Dwarf",
+        "attributeBonuses": {
+          "endurance": 1
+        },
+        "skillBonuses": {
+          "lore": 1
+        }
+      }
+    ],
+    "classes": [
+      {
+        "id": "warden",
+        "name": "Warden",
+        "hitDie": "1d10",
+        "primaryAttribute": "might",
+        "attributeBonuses": {
+          "might": 1
+        },
+        "skillProficiencies": [
+          "perception",
+          "resolve"
+        ],
+        "startingItems": [
+          {
+            "item": "iron_sword",
+            "quantity": 1
+          },
+          {
+            "item": "rope",
+            "quantity": 1
+          }
+        ],
+        "abilitiesByLevel": {
+          "1": [
+            "strike"
+          ],
+          "2": [
+            "rally"
+          ]
+        }
+      },
+      {
+        "id": "stalker",
+        "name": "Stalker",
+        "hitDie": "1d8",
+        "primaryAttribute": "agility",
+        "attributeBonuses": {
+          "agility": 1
+        },
+        "skillProficiencies": [
+          "lockpicking",
+          "perception"
+        ],
+        "startingItems": [
+          {
+            "item": "iron_sword",
+            "quantity": 1
+          },
+          {
+            "item": "lockpicks",
+            "quantity": 1
+          }
+        ],
+        "abilitiesByLevel": {
+          "1": [
+            "strike"
+          ]
+        }
+      }
+    ],
+    "items": [
+      {
+        "id": "iron_sword",
+        "name": "Iron Sword",
+        "kind": "weapon",
+        "slot": "hand",
+        "value": 15,
+        "weight": 3,
+        "damage": {
+          "dice": "1d8",
+          "damageType": "slashing",
+          "stat": "might"
+        }
+      },
+      {
+        "id": "lockpicks",
+        "name": "Lockpicks",
+        "kind": "tool",
+        "value": 8,
+        "weight": 1
+      },
+      {
+        "id": "rope",
+        "name": "Rope",
+        "kind": "tool",
+        "value": 3,
+        "weight": 5,
+        "stackable": true
+      },
+      {
+        "id": "brass_key",
+        "name": "Brass Key",
+        "kind": "key",
+        "value": 0,
+        "weight": 0,
+        "description": "Worn smooth. It opens the mill."
+      },
+      {
+        "id": "warded_blade",
+        "name": "Warded Blade",
+        "kind": "weapon",
+        "slot": "hand",
+        "value": 200,
+        "weight": 3,
+        "damage": {
+          "dice": "1d8+2",
+          "damageType": "slashing",
+          "stat": "might"
+        },
+        "modifiers": {
+          "guard": 1
+        }
+      },
+      {
+        "id": "rune_tablet",
+        "name": "Rune Tablet",
+        "kind": "treasure",
+        "value": 60,
+        "weight": 2
+      },
+      {
+        "id": "millers_ledger",
+        "name": "Miller's Ledger",
+        "kind": "treasure",
+        "value": 5,
+        "weight": 1
+      }
+    ],
+    "lootTables": [
+      {
+        "id": "fen_scavenge",
+        "name": "Fen Scavenge",
+        "rolls": "1",
+        "emptyChance": 0.3,
+        "bonusRollSkill": "perception",
+        "entries": [
+          {
+            "weight": 60,
+            "value": {
+              "item": "rope",
+              "quantity": "1"
+            }
+          },
+          {
+            "weight": 25,
+            "value": {
+              "item": "rune_tablet",
+              "quantity": "1",
+              "requirementScope": "anyMember",
+              "requires": {
+                "description": "Only a reader of runes recognises it as more than a rock.",
+                "skills": [
+                  {
+                    "skill": "lore",
+                    "minRank": 2
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "weight": 15,
+            "value": {
+              "item": "warded_blade",
+              "quantity": "1",
+              "unique": true,
+              "requirementScope": "party",
+              "requires": {
+                "description": "The barrow only yields its blade to a proven party.",
+                "minLevel": 3,
+                "quests": [
+                  {
+                    "quest": "the_mill_door",
+                    "status": "complete"
+                  }
+                ]
+              }
+            }
+          }
+        ]
+      },
+      {
+        "id": "millers_effects",
+        "name": "Miller's Effects",
+        "rolls": "1",
+        "entries": [
+          {
+            "weight": 1,
+            "value": {
+              "item": "millers_ledger",
+              "quantity": "1"
+            }
+          }
+        ]
+      }
+    ],
+    "factions": [
+      {
+        "id": "wardens",
+        "name": "The Wardens",
+        "initialStanding": 0,
+        "decayPerDay": 0.1,
+        "ranks": [
+          {
+            "id": "suspect",
+            "name": "Suspect",
+            "atLeast": -100
+          },
+          {
+            "id": "known",
+            "name": "Known",
+            "atLeast": 10
+          },
+          {
+            "id": "trusted",
+            "name": "Trusted",
+            "atLeast": 40
+          }
+        ],
+        "relations": {
+          "fen_things": -0.5
+        }
+      },
+      {
+        "id": "fen_things",
+        "name": "Things of the Fen",
+        "initialStanding": -20
+      }
+    ],
+    "monsters": [
+      {
+        "id": "bog_hound",
+        "name": "Bog Hound",
+        "level": 1,
+        "xp": 25,
+        "faction": "fen_things",
+        "attributes": {
+          "might": 12,
+          "agility": 13,
+          "endurance": 11,
+          "intellect": 4,
+          "instinct": 12,
+          "presence": 6
+        },
+        "abilities": [
+          "strike",
+          "howl"
+        ],
+        "behaviour": [
+          {
+            "priority": 10,
+            "use": "howl",
+            "when": {
+              "chance": 0.3
+            }
+          },
+          {
+            "priority": 0,
+            "use": "strike"
+          }
+        ],
+        "reactions": [
+          {
+            "id": "pack_fury",
+            "description": "A hound that watches a packmate die goes berserk \u2014 creatures act on each other, not only on the party.",
+            "on": "allyKilled",
+            "priority": 10,
+            "effects": [
+              {
+                "applyCondition": {
+                  "target": {
+                    "ref": "actor.id"
+                  },
+                  "condition": "emboldened",
+                  "duration": 3
+                }
+              }
+            ],
+            "textKey": "hound_fury"
+          },
+          {
+            "id": "flee_when_alone",
+            "description": "Last one standing, badly hurt: it tests its nerve and may break.",
+            "on": "lowHealth",
+            "priority": 5,
+            "roll": {
+              "attribute": "presence",
+              "difficulty": 12
+            },
+            "onFailure": [
+              {
+                "applyCondition": {
+                  "target": {
+                    "ref": "actor.id"
+                  },
+                  "condition": "frightened",
+                  "duration": 3
+                }
+              }
+            ]
+          }
+        ],
+        "loot": "fen_scavenge",
+        "descriptors": [
+          "a lean, mud-slicked"
+        ]
+      },
+      {
+        "id": "barrow_wight",
+        "name": "Barrow Wight",
+        "level": 3,
+        "xp": 120,
+        "faction": "fen_things",
+        "attributes": {
+          "might": 15,
+          "agility": 10,
+          "endurance": 14,
+          "intellect": 10,
+          "instinct": 12,
+          "presence": 14
+        },
+        "abilities": [
+          "strike",
+          "howl"
+        ],
+        "behaviour": [
+          {
+            "priority": 0,
+            "use": "strike"
+          }
+        ],
+        "reactions": [
+          {
+            "id": "remembers_the_thief",
+            "description": "It knows who robbed the barrow, and goes for them first.",
+            "on": "seePlayer",
+            "requires": {
+              "memories": [
+                {
+                  "deedKind": "barrow_robbed",
+                  "who": "speaker"
+                }
+              ]
+            },
+            "effects": [
+              {
+                "applyCondition": {
+                  "target": {
+                    "ref": "target.id"
+                  },
+                  "condition": "frightened",
+                  "duration": 2
+                }
+              }
+            ]
+          }
+        ],
+        "loot": "fen_scavenge",
+        "descriptors": [
+          "a grey, patient"
+        ]
+      }
+    ],
+    "traps": [
+      {
+        "id": "snare",
+        "name": "Fen Snare",
+        "detect": {
+          "skill": "perception",
+          "difficulty": 12
+        },
+        "disarm": {
+          "skill": "lockpicking",
+          "difficulty": 12
+        },
+        "onTrigger": [
+          {
+            "damage": {
+              "target": {
+                "ref": "target.id"
+              },
+              "amount": {
+                "roll": "1d6"
+              },
+              "damageType": "piercing"
+            }
+          }
+        ]
+      }
+    ],
+    "npcs": [
+      {
+        "id": "vess",
+        "name": "Vess the Miller",
+        "description": "Ran the mill until something moved into it.",
+        "faction": "wardens",
+        "dialogue": "vess_talk",
+        "home": "millford_village",
+        "disposition": 10,
+        "memorySpan": 120,
+        "gullibility": 0.4,
+        "offersQuests": [
+          "the_mill_door"
+        ],
+        "caresAbout": [
+          "mill_cleared",
+          "theft"
+        ],
+        "reactions": [
+          {
+            "id": "turns_cold_on_thieves",
+            "description": "If she has heard you steal, she stops dealing with you \u2014 memory changing behaviour, not just dialogue.",
+            "on": "seePlayer",
+            "requires": {
+              "memories": [
+                {
+                  "deedKind": "theft",
+                  "who": "speaker",
+                  "withinDays": 60
+                }
+              ]
+            },
+            "effects": [
+              {
+                "setFlag": {
+                  "flag": "vess_cold",
+                  "value": true
+                }
+              }
+            ]
+          }
+        ],
+        "shop": {
+          "lootTable": "millers_effects",
+          "buysTags": [
+            "treasure"
+          ],
+          "priceMultiplier": 1.2,
+          "requires": {
+            "factions": [
+              {
+                "faction": "wardens",
+                "minStanding": 5
+              }
+            ]
+          }
+        }
+      }
+    ]
+  },
+  "world": {
+    "terrains": [
+      {
+        "id": "floor",
+        "name": "Floor",
+        "glyph": ".",
+        "passable": true,
+        "opaque": false,
+        "moveCost": 1
+      },
+      {
+        "id": "wall",
+        "name": "Wall",
+        "glyph": "#",
+        "passable": false,
+        "opaque": true
+      },
+      {
+        "id": "door",
+        "name": "Door",
+        "glyph": "+",
+        "passable": true,
+        "opaque": true,
+        "isDoor": true
+      },
+      {
+        "id": "deep_water",
+        "name": "Deep Water",
+        "glyph": "~",
+        "color": "blue",
+        "tags": [
+          "water"
+        ],
+        "passable": true,
+        "opaque": false,
+        "moveCost": 2,
+        "requiresMode": [
+          "swim"
+        ]
+      },
+      {
+        "id": "shallow_water",
+        "name": "Shallow Water",
+        "description": "Ankle deep and slow going, but you can wade it.",
+        "glyph": ",",
+        "color": "cyan",
+        "tags": [
+          "water"
+        ],
+        "passable": true,
+        "opaque": false,
+        "moveCost": 2
+      },
+      {
+        "id": "reeds",
+        "name": "Reeds",
+        "glyph": "\"",
+        "passable": true,
+        "opaque": true,
+        "moveCost": 2
+      },
+      {
+        "id": "rubble",
+        "name": "Rubble",
+        "glyph": "%",
+        "passable": false,
+        "opaque": false,
+        "providesCover": "half"
+      },
+      {
+        "id": "brazier",
+        "name": "Brazier",
+        "glyph": "*",
+        "passable": false,
+        "opaque": false,
+        "lightRadius": 6
+      }
+    ],
+    "palettes": [
+      {
+        "id": "fen",
+        "name": "The Fens",
+        "floor": "floor",
+        "wall": "reeds",
+        "door": "door",
+        "scatter": [
+          {
+            "terrain": "deep_water",
+            "frequency": 0.16,
+            "distribution": "patch",
+            "scale": 9,
+            "octaves": 2,
+            "edgeTerrain": "shallow_water",
+            "edgeWidth": 1,
+            "priority": 0
+          },
+          {
+            "terrain": "reeds",
+            "frequency": 0.1,
+            "distribution": "patch",
+            "scale": 5,
+            "octaves": 3,
+            "priority": 1
+          }
+        ]
+      },
+      {
+        "id": "barrow_stone",
+        "name": "Barrow Stone",
+        "floor": "floor",
+        "wall": "wall",
+        "door": "door",
+        "scatter": [
+          {
+            "terrain": "rubble",
+            "frequency": 0.06
+          }
+        ],
+        "exterior": "wall"
+      }
+    ],
+    "biomes": [
+      {
+        "id": "greenmarch",
+        "name": "The Greenmarch",
+        "layer": "overworld",
+        "roomTemplates": [
+          "barrow_hall",
+          "barrow_mouth",
+          "barrow_deep"
+        ],
+        "encounterTables": [
+          "fen_wanderers"
+        ],
+        "lootTables": [
+          "fen_scavenge"
+        ],
+        "traps": [
+          "snare"
+        ],
+        "ambienceKey": "fen_ambience",
+        "triggers": [
+          {
+            "id": "fen_mist",
+            "description": "Ambient colour, every visit, never remembered.",
+            "mode": "everyEntry",
+            "on": "enter",
+            "chance": 0.4,
+            "remember": false,
+            "textKey": "fen_ambience"
+          }
+        ],
+        "palette": "fen"
+      }
+    ],
+    "areas": [
+      {
+        "id": "millford",
+        "name": "Millford",
+        "description": "A handful of roofs where the road meets the water.",
+        "biome": "greenmarch",
+        "layer": "overworld",
+        "descriptionKey": "millford_desc",
+        "dangerLevel": 0,
+        "recommendedLevel": 1,
+        "controllingFaction": "wardens",
+        "connections": [
+          {
+            "to": "the_fens",
+            "travelMinutes": 90,
+            "encounterTables": [
+              "fen_wanderers"
+            ]
+          }
+        ],
+        "map": {
+          "width": "31",
+          "height": "21",
+          "palette": "fen"
+        },
+        "entryPoint": {
+          "x": 15,
+          "y": 10
+        }
+      },
+      {
+        "id": "the_fens",
+        "name": "The Fens",
+        "description": "Standing water and older things under it.",
+        "biome": "greenmarch",
+        "layer": "overworld",
+        "descriptionKey": "fens_desc",
+        "dangerLevel": 3,
+        "recommendedLevel": 2,
+        "encounterTables": [
+          "fen_wanderers"
+        ],
+        "connections": [
+          {
+            "to": "millford",
+            "travelMinutes": 90
+          }
+        ],
+        "triggers": [
+          {
+            "id": "fens_first_sight",
+            "description": "Fires once, and is remembered \u2014 the world keeps a record that you have been here.",
+            "mode": "once",
+            "on": "enter",
+            "remember": true,
+            "effects": [
+              {
+                "setFlag": {
+                  "flag": "seen_fens",
+                  "value": true
+                }
+              }
+            ],
+            "textKey": "fens_desc"
+          }
+        ],
+        "map": {
+          "width": "31",
+          "height": "21",
+          "palette": "fen"
+        },
+        "entryPoint": {
+          "x": 15,
+          "y": 10
+        }
+      }
+    ],
+    "pointsOfInterest": [
+      {
+        "id": "millford_village",
+        "name": "Millford Village",
+        "area": "millford",
+        "kind": "settlement",
+        "descriptionKey": "millford_village_desc",
+        "residents": [
+          "vess"
+        ],
+        "services": [
+          "inn",
+          "market"
+        ],
+        "rumourReach": 1.5,
+        "controllingFaction": "wardens",
+        "position": {
+          "x": 6,
+          "y": 6
+        }
+      },
+      {
+        "id": "the_mill",
+        "name": "The Old Mill",
+        "area": "millford",
+        "kind": "ruin",
+        "position": {
+          "x": 22,
+          "y": 6
+        },
+        "gate": "mill_door",
+        "travelMinutes": 20,
+        "encounterTables": [
+          "mill_things"
+        ],
+        "encounterChance": 0.8,
+        "loot": [
+          "millers_effects"
+        ],
+        "triggers": [
+          {
+            "id": "mill_cleared",
+            "description": "Repeats until the mill is actually clear, then stops for good.",
+            "mode": "untilComplete",
+            "on": "combatEnd",
+            "completeWhen": {
+              "test": {
+                "ref": "flags.mill_clear"
+              }
+            },
+            "remember": true,
+            "effects": [
+              {
+                "setFlag": {
+                  "flag": "mill_clear",
+                  "value": true
+                }
+              },
+              {
+                "adjustReputation": {
+                  "faction": "wardens",
+                  "amount": 15
+                }
+              },
+              {
+                "emit": {
+                  "event": "deed",
+                  "data": {
+                    "kind": "mill_cleared"
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "id": "mill_creaks",
+            "description": "Ambient, on a cooldown, forever.",
+            "mode": "loop",
+            "on": "enter",
+            "cooldownMinutes": 240,
+            "chance": 0.5,
+            "remember": false
+          }
+        ],
+        "position": {
+          "x": 24,
+          "y": 5
+        }
+      },
+      {
+        "id": "fen_barrow",
+        "name": "The Fen Barrow",
+        "area": "the_fens",
+        "kind": "dungeonEntrance",
+        "gate": "barrow_ward",
+        "hidden": true,
+        "discover": {
+          "skill": "perception",
+          "difficulty": 14
+        },
+        "dungeon": "barrow_depths",
+        "travelMinutes": 45,
+        "triggers": [
+          {
+            "id": "barrow_resets",
+            "description": "Leave it unfinished and the barrow reorders itself \u2014 the restart mode.",
+            "mode": "restart",
+            "on": "enter",
+            "requires": {
+              "without": {
+                "flags": [
+                  {
+                    "flag": "barrow_finished"
+                  }
+                ]
+              }
+            },
+            "remember": true
+          }
+        ],
+        "position": {
+          "x": 21,
+          "y": 15
+        }
+      }
+    ],
+    "gates": [
+      {
+        "id": "mill_door",
+        "name": "The Mill Door",
+        "description": "Barred from the inside. The brass key opens it; a good hand with picks can manage without.",
+        "kind": "lock",
+        "requires": {
+          "description": "Vess's brass key.",
+          "items": [
+            {
+              "item": "brass_key",
+              "consume": false
+            }
+          ]
+        },
+        "bypass": {
+          "skill": "lockpicking",
+          "difficulty": 14,
+          "retryable": true,
+          "onFailure": [
+            {
+              "emit": {
+                "event": "noise_made",
+                "data": {
+                  "where": "the_mill"
+                }
+              }
+            }
+          ]
+        },
+        "onOpen": [
+          {
+            "setFlag": {
+              "flag": "mill_open",
+              "value": true
+            }
+          }
+        ],
+        "onBlocked": [],
+        "blockedTextKey": "mill_door_blocked",
+        "staysOpen": true
+      },
+      {
+        "id": "barrow_ward",
+        "name": "The Barrow Ward",
+        "description": "A carved seal. It answers to spoken runes, or to someone the Wardens vouch for.",
+        "kind": "ward",
+        "opensWith": [
+          "read_runes"
+        ],
+        "requires": {
+          "anyOf": [
+            {
+              "abilities": [
+                "read_runes"
+              ]
+            },
+            {
+              "factions": [
+                {
+                  "faction": "wardens",
+                  "minStanding": 40
+                }
+              ]
+            }
+          ]
+        },
+        "onOpen": [
+          {
+            "setFlag": {
+              "flag": "barrow_open",
+              "value": true
+            }
+          }
+        ],
+        "staysOpen": true
+      }
+    ],
+    "roomTemplates": [
+      {
+        "id": "barrow_mouth",
+        "name": "Barrow Mouth",
+        "descriptionKey": "barrow_room",
+        "role": "entrance",
+        "minExits": 1,
+        "maxExits": 2,
+        "encounterChance": 0,
+        "map": {
+          "width": "5",
+          "height": "5",
+          "palette": "barrow_stone"
+        }
+      },
+      {
+        "id": "barrow_hall",
+        "name": "Barrow Hall",
+        "descriptionKey": "barrow_room",
+        "role": "chamber",
+        "minExits": 1,
+        "maxExits": 3,
+        "encounterChance": 0.45,
+        "trapChance": 0.2,
+        "lootChance": 0.3,
+        "map": {
+          "width": "2d4+5",
+          "height": "2d3+5",
+          "palette": "barrow_stone"
+        }
+      },
+      {
+        "id": "barrow_deep",
+        "name": "The Deep Cell",
+        "descriptionKey": "barrow_room",
+        "role": "boss",
+        "minExits": 1,
+        "maxExits": 1,
+        "encounterChance": 1,
+        "lootChance": 1,
+        "map": {
+          "palette": "barrow_stone",
+          "layout": [
+            "#########",
+            "#...*...#",
+            "#.#####.#",
+            "#.#...#.#",
+            "#.#.@.#.#",
+            "#.#...#.#",
+            "#.##+##.#",
+            "#.......#",
+            "####+####"
+          ],
+          "legend": {
+            "@": "floor",
+            "*": "brazier",
+            "+": "door"
+          }
+        }
+      }
+    ],
+    "encounterTables": [
+      {
+        "id": "fen_wanderers",
+        "name": "Fen Wanderers",
+        "chance": 0.35,
+        "emptyWeight": 20,
+        "minDepth": 0,
+        "maxDepth": 999,
+        "groups": [
+          {
+            "id": "lone_hound",
+            "name": "A lone hound",
+            "weight": 50,
+            "entries": [
+              {
+                "monster": "bog_hound",
+                "count": "1"
+              }
+            ]
+          },
+          {
+            "id": "hound_pack",
+            "name": "A pack",
+            "weight": 30,
+            "requires": {
+              "minLevel": 2
+            },
+            "entries": [
+              {
+                "monster": "bog_hound",
+                "count": "1d3+1"
+              }
+            ]
+          },
+          {
+            "id": "wight_abroad",
+            "name": "Something older",
+            "weight": 8,
+            "requires": {
+              "minLevel": 3,
+              "description": "Only stalks parties that have made a name."
+            },
+            "entries": [
+              {
+                "monster": "barrow_wight",
+                "count": "1"
+              }
+            ],
+            "textKey": "wight_arrives"
+          }
+        ]
+      },
+      {
+        "id": "mill_things",
+        "name": "In the Mill",
+        "chance": 1,
+        "minDepth": 0,
+        "maxDepth": 999,
+        "groups": [
+          {
+            "id": "mill_hounds",
+            "weight": 1,
+            "entries": [
+              {
+                "monster": "bog_hound",
+                "count": "2"
+              }
+            ],
+            "onEncounter": [
+              {
+                "setFlag": {
+                  "flag": "mill_fight_started",
+                  "value": true
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "barrow_boss",
+        "name": "The Deep Cell",
+        "chance": 1,
+        "minDepth": 0,
+        "maxDepth": 999,
+        "groups": [
+          {
+            "id": "the_wight",
+            "weight": 1,
+            "entries": [
+              {
+                "monster": "barrow_wight",
+                "count": "1"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "dungeons": [
+      {
+        "id": "barrow_depths",
+        "name": "Barrow Depths",
+        "biome": "greenmarch",
+        "roomCount": "6",
+        "depth": "2",
+        "branchiness": 0.4,
+        "lockedDoorChance": 0.2,
+        "doorGates": [
+          "barrow_ward"
+        ],
+        "bossTable": "barrow_boss",
+        "completionTriggers": [
+          {
+            "id": "barrow_finished",
+            "mode": "once",
+            "on": "custom",
+            "event": "dungeonCleared",
+            "remember": true,
+            "effects": [
+              {
+                "setFlag": {
+                  "flag": "barrow_finished",
+                  "value": true
+                }
+              },
+              {
+                "emit": {
+                  "event": "deed",
+                  "data": {
+                    "kind": "barrow_robbed"
+                  }
+                }
+              }
+            ]
+          }
+        ],
+        "palette": "barrow_stone",
+        "corridorLength": "2d3"
+      }
+    ],
+    "time": {
+      "minutesPerDay": 1440,
+      "startMinute": 480,
+      "minutesPerTile": 1,
+      "dayPhases": [
+        {
+          "id": "dawn",
+          "name": "Dawn",
+          "startMinute": 300
+        },
+        {
+          "id": "day",
+          "name": "Day",
+          "startMinute": 480
+        },
+        {
+          "id": "dusk",
+          "name": "Dusk",
+          "startMinute": 1140
+        },
+        {
+          "id": "night",
+          "name": "Night",
+          "startMinute": 1260
+        }
+      ]
+    }
+  },
+  "narrative": {
+    "deedKinds": [
+      {
+        "id": "mill_cleared",
+        "name": "Cleared the mill",
+        "severity": 15,
+        "faction": "wardens",
+        "memorability": 1.5,
+        "distortion": 0.1
+      },
+      {
+        "id": "theft",
+        "name": "Took what was not theirs",
+        "severity": -20,
+        "faction": "wardens",
+        "memorability": 2,
+        "distortion": 0.4
+      },
+      {
+        "id": "barrow_robbed",
+        "name": "Opened the barrow",
+        "severity": -10,
+        "faction": "fen_things",
+        "memorability": 3,
+        "distortion": 0.2
+      }
+    ],
+    "textGrammar": [
+      {
+        "id": "heard_something",
+        "variants": [
+          { "text": "Something moves out there, {direction} of you, and does not care who knows it." },
+          { "text": "A heavy splash, {direction}. Then nothing." },
+          { "text": "Reeds crack somewhere {direction}." }
+        ]
+      },
+      {
+        "id": "heard_something_faint",
+        "variants": [
+          { "text": "A sound, maybe. Somewhere {direction}." },
+          { "text": "You stop. Whatever it was does not come again." },
+          { "text": "Far off {direction}, something disturbs the water." }
+        ]
+      },
+      {
+        "id": "smelled_something",
+        "variants": [
+          { "text": "Wet fur and old meat, carried {direction} on the air." },
+          { "text": "A rank animal smell, close enough to place: {direction}." },
+          { "text": "Something has been through here recently, and it stank." }
+        ]
+      },
+      {
+        "id": "smelled_something_faint",
+        "variants": [
+          { "text": "The wind turns and brings something sour off the {direction} water." },
+          { "text": "A trace of musk in the reeds, going cold." },
+          { "text": "Something passed this way. Hours ago, by the smell." }
+        ]
+      },
+      {
+        "id": "millford_desc",
+        "variants": [
+          {
+            "text": "Millford, such as it is: six roofs, a wet road, and the wheel standing still."
+          },
+          {
+            "text": "Smoke sits low over Millford. Nobody is on the road."
+          },
+          {
+            "text": "The village holds its breath. The mill wheel has not turned in weeks."
+          }
+        ]
+      },
+      {
+        "id": "fens_desc",
+        "variants": [
+          {
+            "text": "The ground stops being ground. Water lies in sheets between the alders."
+          },
+          {
+            "text": "The fens open out, flat and brown and patient."
+          },
+          {
+            "text": "Reeds close over the path. Something moves, far off, and stops when you stop."
+          }
+        ]
+      },
+      {
+        "id": "fen_ambience",
+        "variants": [
+          {
+            "text": "Mist comes off the water in slow ropes."
+          },
+          {
+            "text": "Something calls once, across the water, and is not answered."
+          },
+          {
+            "text": "The smell of iron and rot rises where you step."
+          }
+        ]
+      },
+      {
+        "id": "barrow_room",
+        "variants": [
+          {
+            "text": "Dressed stone, laid dry, still true after all this time."
+          },
+          {
+            "text": "The passage narrows. Carvings run along the lintel, worn past reading."
+          },
+          {
+            "text": "Cold air moves against your face from somewhere ahead."
+          }
+        ]
+      },
+      {
+        "id": "mill_door_blocked",
+        "variants": [
+          {
+            "text": "The door does not give. Something heavy is set against it on the inside."
+          },
+          {
+            "text": "Barred. You can hear the beam shift when you push."
+          },
+          {
+            "text": "It holds. Whatever is in there wants to stay in there."
+          }
+        ]
+      },
+      {
+        "id": "hound_fury",
+        "variants": [
+          {
+            "text": "The hound sees its packmate fall and comes apart with rage."
+          },
+          {
+            "text": "A shriek goes up, and the survivor stops being careful."
+          },
+          {
+            "text": "It abandons the circling and simply comes at you."
+          }
+        ]
+      },
+      {
+        "id": "wight_arrives",
+        "variants": [
+          {
+            "text": "The water goes still. Something is standing in it that was not."
+          },
+          {
+            "text": "A grey shape resolves out of the mist, unhurried."
+          },
+          {
+            "text": "The cold arrives before it does."
+          }
+        ]
+      },
+      {
+        "id": "heard_nothing",
+        "variants": [
+          { "text": "You hold still. Water, reeds, your own breathing. Nothing else." },
+          { "text": "Nothing but the fen shifting about, and none of it in a hurry." },
+          { "text": "You listen a while. Whatever is out there is not moving." }
+        ]
+      },
+      {
+        "id": "smelled_nothing",
+        "variants": [
+          { "text": "Wet peat and rot, and under it nothing that has passed lately." },
+          { "text": "The air is all bog. Nothing has come this way." },
+          { "text": "You take the air. Old water, and no trail in it." }
+        ]
+      },
+      {
+        "id": "millford_village_desc",
+        "variants": [
+          {
+            "text": "Mud, thatch, and the smell of the fen. The mill stands at the end of the road with its wheel dead still."
+          },
+          {
+            "text": "A dozen houses leaning on one another. Somebody is watching from a doorway and not coming out."
+          },
+          {
+            "text": "The road gives up here at the water. The mill is the only building worth the name, and nothing moves in it."
+          }
+        ]
+      },
+      {
+        "id": "vess_journal",
+        "variants": [
+          {
+            "text": "Vess wants the mill back. Whatever is in it does not agree."
+          },
+          {
+            "text": "The miller's problem is now your problem."
+          },
+          {
+            "text": "Clear the mill. Simple enough, said in a warm room."
+          }
+        ]
+      }
+    ],
+    "dialogues": [
+      {
+        "id": "vess_talk",
+        "start": "opening",
+        "nodes": [
+          {
+            "id": "opening",
+            "says": [
+              {
+                "text": "\"You'll be the ones the Wardens sent. Good. I want my mill back.\""
+              },
+              {
+                "text": "\"Sit if you like. I'd offer better, but everything I own is in that mill.\""
+              },
+              {
+                "text": "\"You came. I'd half stopped expecting anyone.\"",
+                "requires": {
+                  "factions": [
+                    {
+                      "faction": "wardens",
+                      "minStanding": 20
+                    }
+                  ]
+                }
+              }
+            ],
+            "redirectWhen": [
+              {
+                "requires": {
+                  "flags": [
+                    {
+                      "flag": "vess_cold"
+                    }
+                  ]
+                },
+                "goto": "cold"
+              }
+            ],
+            "options": [
+              {
+                "id": "ask_mill",
+                "text": "What happened at the mill?",
+                "goto": "about_mill"
+              },
+              {
+                "id": "take_job",
+                "text": "We'll clear it.",
+                "requires": {
+                  "quests": [
+                    {
+                      "quest": "the_mill_door",
+                      "status": "unstarted"
+                    }
+                  ]
+                },
+                "effects": [
+                  {
+                    "emit": {
+                      "event": "startQuest",
+                      "data": {
+                        "quest": "the_mill_door"
+                      }
+                    }
+                  },
+                  {
+                    "grantItem": {
+                      "target": {
+                        "ref": "actor.id"
+                      },
+                      "item": "brass_key"
+                    }
+                  }
+                ],
+                "goto": "given_key"
+              },
+              {
+                "id": "done_it",
+                "text": "It's done. The mill is clear.",
+                "requires": {
+                  "flags": [
+                    {
+                      "flag": "mill_clear"
+                    }
+                  ]
+                },
+                "effects": [
+                  {
+                    "adjustReputation": {
+                      "faction": "wardens",
+                      "amount": 10
+                    }
+                  }
+                ],
+                "goto": "thanks"
+              },
+              {
+                "id": "haggle",
+                "text": "It'll cost you more than thanks.",
+                "requires": {
+                  "quests": [
+                    {
+                      "quest": "the_mill_door",
+                      "status": "active"
+                    }
+                  ]
+                },
+                "check": {
+                  "skill": "persuasion",
+                  "difficulty": 14,
+                  "opposedBy": "resolve",
+                  "onSuccess": "haggle_won",
+                  "onFailure": "haggle_lost"
+                },
+                "onceOnly": true
+              },
+              {
+                "id": "shop",
+                "text": "What are you selling?",
+                "requires": {
+                  "factions": [
+                    {
+                      "faction": "wardens",
+                      "minStanding": 5
+                    }
+                  ]
+                },
+                "showWhenLocked": true,
+                "lockedHint": "She doesn't know you well enough to open the chest.",
+                "goto": "opening"
+              },
+              {
+                "id": "farewell",
+                "text": "We'll be getting on."
+              }
+            ]
+          },
+          {
+            "id": "about_mill",
+            "says": [
+              {
+                "text": "\"Wheel stopped. I went to see why. I did not go in.\""
+              },
+              {
+                "text": "\"Something took it in the wet season. I heard it before I saw the door barred.\""
+              },
+              {
+                "text": "\"You want the truth? I ran. I'm not ashamed of it.\""
+              }
+            ],
+            "remembers": "mill_cleared",
+            "options": [
+              {
+                "id": "back",
+                "text": "Back.",
+                "goto": "opening"
+              }
+            ]
+          },
+          {
+            "id": "given_key",
+            "says": [
+              {
+                "text": "\"Then take the key. Brass one. Don't lose it \u2014 there isn't another.\""
+              },
+              {
+                "text": "\"Here. It sticks. Lean on it.\""
+              },
+              {
+                "text": "\"The key, and my thanks, and that's all I have.\""
+              }
+            ],
+            "options": [
+              {
+                "id": "back",
+                "text": "Back.",
+                "goto": "opening"
+              }
+            ]
+          },
+          {
+            "id": "haggle_won",
+            "says": [
+              {
+                "text": "\"...Fine. Fine. There's coin under the floor. It's yours when it's done.\""
+              },
+              {
+                "text": "She looks at you a long moment. \"You drive a hard bargain for a wet village.\""
+              },
+              {
+                "text": "\"Take it, then. I'd rather be poor and sleeping.\""
+              }
+            ],
+            "onEnter": [
+              {
+                "setFlag": {
+                  "flag": "haggled_up",
+                  "value": true
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "back",
+                "text": "Back.",
+                "goto": "opening"
+              }
+            ]
+          },
+          {
+            "id": "haggle_lost",
+            "says": [
+              {
+                "text": "\"I've nothing to give that I haven't offered. Take it or don't.\""
+              },
+              {
+                "text": "\"You can see what I have. It's all in that mill.\""
+              },
+              {
+                "text": "She doesn't answer. That is an answer."
+              }
+            ],
+            "options": [
+              {
+                "id": "back",
+                "text": "Back.",
+                "goto": "opening"
+              }
+            ]
+          },
+          {
+            "id": "thanks",
+            "says": [
+              {
+                "text": "\"Then I'll sleep tonight. That's worth more than the coin.\""
+              },
+              {
+                "text": "\"You have my thanks, and the Wardens will hear of it.\""
+              },
+              {
+                "text": "She sits down slowly, as if she had been standing for weeks."
+              }
+            ],
+            "remembers": "mill_cleared",
+            "options": []
+          },
+          {
+            "id": "cold",
+            "says": [
+              {
+                "text": "\"I've heard what you are. Get off my step.\""
+              },
+              {
+                "text": "She does not open the door all the way. \"No. Not you.\""
+              },
+              {
+                "text": "\"Word travels, even out here. Go on.\""
+              }
+            ],
+            "options": []
+          }
+        ]
+      }
+    ],
+    "quests": [
+      {
+        "id": "arrive_in_millford",
+        "name": "Wet Boots",
+        "description": "The Wardens sent you down to Millford because someone here asked for help and nobody else would come.",
+        "autoStart": true,
+        "ordered": true,
+        "objectives": [
+          {
+            "id": "find_vess",
+            "kind": "talk",
+            "target": "vess",
+            "description": "Find Vess the miller and hear what she wants."
+          }
+        ],
+        "rewards": {
+          "xp": 25
+        }
+      },
+      {
+        "id": "the_mill_door",
+        "name": "The Mill Door",
+        "description": "Vess wants her mill back.",
+        "giver": "vess",
+        "requires": {
+          "description": "Offered once the Wardens are not actively suspicious.",
+          "factions": [
+            {
+              "faction": "wardens",
+              "minStanding": -10
+            }
+          ]
+        },
+        "ordered": true,
+        "remembersAs": "mill_cleared",
+        "stages": [
+          {
+            "id": "get_in",
+            "name": "Get inside",
+            "description": "The door is barred. The key or the picks.",
+            "journalKey": "vess_journal",
+            "objectives": [
+              {
+                "id": "open_door",
+                "kind": "reach",
+                "target": "the_mill",
+                "description": "Get through the mill door."
+              }
+            ]
+          },
+          {
+            "id": "clear_it",
+            "name": "Clear the mill",
+            "objectives": [
+              {
+                "id": "kill_hounds",
+                "kind": "kill",
+                "target": "bog_hound",
+                "count": 2,
+                "description": "Deal with what moved in."
+              }
+            ],
+            "onComplete": [
+              {
+                "setFlag": {
+                  "flag": "mill_clear",
+                  "value": true
+                }
+              }
+            ]
+          },
+          {
+            "id": "tell_her",
+            "name": "Tell Vess",
+            "objectives": [
+              {
+                "id": "report",
+                "kind": "talk",
+                "target": "vess",
+                "description": "Bring word back to Vess."
+              }
+            ]
+          }
+        ],
+        "objectives": [],
+        "onComplete": [
+          {
+            "adjustReputation": {
+              "faction": "wardens",
+              "amount": 20
+            }
+          }
+        ],
+        "failWhen": {
+          "test": {
+            "ref": "flags.vess_dead"
+          }
+        },
+        "rewards": {
+          "xp": 150,
+          "items": [
+            {
+              "item": "brass_key",
+              "quantity": 1
+            }
+          ],
+          "reputation": {
+            "wardens": 10
+          }
+        },
+        "unlocks": [
+          "the_barrow_ward"
+        ]
+      },
+      {
+        "id": "the_barrow_ward",
+        "name": "The Barrow Ward",
+        "description": "There is older trouble under the fens, and the mill was only its edge.",
+        "requires": {
+          "description": "Only once the mill is done and the party can survive it.",
+          "minLevel": 2,
+          "quests": [
+            {
+              "quest": "the_mill_door",
+              "status": "complete"
+            }
+          ]
+        },
+        "ordered": true,
+        "remembersAs": "barrow_robbed",
+        "stages": [
+          {
+            "id": "find_it",
+            "name": "Find the barrow",
+            "objectives": [
+              {
+                "id": "discover",
+                "kind": "reach",
+                "target": "fen_barrow",
+                "description": "Find what the fens are hiding."
+              }
+            ]
+          },
+          {
+            "id": "open_it",
+            "name": "Past the ward",
+            "objectives": [
+              {
+                "id": "pass_ward",
+                "kind": "custom",
+                "when": {
+                  "test": {
+                    "ref": "flags.barrow_open"
+                  }
+                },
+                "description": "Open the sealed way."
+              }
+            ]
+          },
+          {
+            "id": "end_it",
+            "name": "The deep cell",
+            "objectives": [
+              {
+                "id": "kill_wight",
+                "kind": "kill",
+                "target": "barrow_wight",
+                "count": 1,
+                "description": "Put the wight down."
+              }
+            ]
+          }
+        ],
+        "objectives": [],
+        "onComplete": [
+          {
+            "setFlag": {
+              "flag": "barrow_finished",
+              "value": true
+            }
+          }
+        ],
+        "rewards": {
+          "xp": 400,
+          "reputation": {
+            "wardens": 25,
+            "fen_things": -20
+          }
+        }
+      }
+    ],
+    "arcs": [
+      {
+        "id": "the_greenmarch",
+        "name": "The Greenmarch",
+        "quests": [
+          "the_mill_door",
+          "the_barrow_ward"
+        ],
+        "isEnding": true
+      }
+    ],
+    "memory": {
+      "mode": "hybrid",
+      "forgetting": {
+        "curve": "exponential",
+        "halfLifeDays": 45,
+        "floor": 0.05,
+        "reinforceOnRecall": 0.3,
+        "neverForget": [
+          "barrow_robbed"
+        ]
+      },
+      "gossip": {
+        "enabled": true,
+        "spreadPerDay": 0.3,
+        "maxHops": 3,
+        "hopRetention": 0.7,
+        "distortionPerHop": 0.2,
+        "requiresTravel": true,
+        "crossFactionRate": 0.2,
+        "minimumSeverity": 5
+      },
+      "witness": {
+        "radius": 0,
+        "requiresLineOfSight": true,
+        "deadMenTellNoTales": true,
+        "identificationChance": 0.75,
+        "disguiseReduction": 0.5,
+        "factionAlwaysLearns": false
+      },
+      "learning": {
+        "enabled": true,
+        "encountersBeforeAdapting": 3,
+        "adaptationStrength": 0.5,
+        "sharedWithinFaction": true,
+        "minimumIntellect": 6,
+        "tracks": [
+          "damageTypes",
+          "abilities"
+        ],
+        "forgetAfterDays": 60
+      },
+      "rules": [
+        {
+          "id": "vess_never_forgets_theft",
+          "name": "Vess never forgets a theft",
+          "description": "The GM pins this one: whatever the simulation decides, Vess learns of a theft and never lets it go.",
+          "deedKinds": [
+            "theft"
+          ],
+          "alwaysKnownBy": [
+            "vess"
+          ],
+          "halfLifeDays": 3650
+        },
+        {
+          "id": "barrow_is_quiet",
+          "name": "The barrow keeps its own counsel",
+          "description": "Nothing living saw it, so opening the barrow spreads only to the things of the fen.",
+          "deedKinds": [
+            "barrow_robbed"
+          ],
+          "neverKnownBy": [
+            "vess"
+          ],
+          "spreadPerDay": 0.0
+        }
+      ]
+    }
+  },
+  "start": {
+    "partySize": 4,
+    "creation": {
+      "attributePoints": 27,
+      "attributeCosts": {
+        "8": 0,
+        "9": 1,
+        "10": 2,
+        "11": 3,
+        "12": 4,
+        "13": 5,
+        "14": 7,
+        "15": 9
+      },
+      "startingLevel": 1,
+      "skillRanks": 4
+    },
+    "startingArea": "millford",
+    "startingPoi": "millford_village",
+    "openingTextKey": "millford_desc",
+    "initialFlags": {
+      "mill_clear": false
+    },
+    "victoryWhen": {
+      "test": {
+        "ref": "flags.barrow_finished"
+      }
+    }
+  }
+}

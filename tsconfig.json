@@ -1,0 +1,12 @@
+{
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": { "types": ["node"], "allowJs": true },
+
+  // Everything. Tests and the tooling config are source too — leaving them out
+  // of the project is what put twenty-one files into the editor's inferred
+  // project, where there are no path mappings and no Node types, and every one
+  // of them lit up red while `npm run typecheck` passed.
+  "include": ["packages/*/src/**/*.ts", "vitest.config.ts", "eslint.config.js"],
+  "exclude": ["**/dist/**"]
+}

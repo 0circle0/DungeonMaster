@@ -1,0 +1,8 @@
+{
+  "extends": "../../tsconfig.base.json",
+
+  // Tests are included so the editor resolves them; the engine's own source is
+  // held to the stricter no-Node rule by `tsconfig.isomorphic.json`, which is
+  // what `npm run typecheck` runs.
+  "include": ["src/**/*.ts"]
+}

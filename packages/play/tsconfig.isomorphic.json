@@ -1,0 +1,11 @@
+{
+  "extends": "../../tsconfig.base.json",
+
+  // No Node types, and no tests: this package is every front end's shared play
+  // logic, so it must run in a browser untouched. Reaching for `process` or
+  // `node:fs` in its source fails here — the same enforcement the engine has,
+  // for the same reason.
+  "compilerOptions": { "types": [] },
+  "include": ["src/**/*.ts"],
+  "exclude": ["src/**/*.test.ts"]
+}

@@ -1,0 +1,20 @@
+{
+  "name": "@dm/engine",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Pure, isomorphic game engine. No Node APIs, no I/O, no ambient randomness or time.",
+  "main": "./src/index.ts",
+  "exports": {
+    ".": {
+      "types": "./src/index.ts",
+      "import": "./src/index.ts",
+      "default": "./src/index.ts"
+    }
+  },
+  "dependencies": {
+    "@dm/core": "0.1.0",
+    "@dm/module": "0.1.0"
+  },
+  "types": "./src/index.ts"
+}

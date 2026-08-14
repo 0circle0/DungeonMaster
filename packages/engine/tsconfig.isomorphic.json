@@ -1,0 +1,12 @@
+{
+  "extends": "../../tsconfig.base.json",
+
+  // No Node types, and no tests: the engine must stay isomorphic so a browser
+  // play surface is a UI layer rather than a rewrite. This config is the check
+  // that enforces it — reaching for `process` or `node:fs` in engine source
+  // fails here even though the editor, which uses the config beside it, is
+  // happy to let the tests import `node:fs`.
+  "compilerOptions": { "types": [] },
+  "include": ["src/**/*.ts"],
+  "exclude": ["src/**/*.test.ts"]
+}
