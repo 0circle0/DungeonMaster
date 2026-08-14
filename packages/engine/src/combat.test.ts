@@ -35,15 +35,14 @@ function arena(
   monsters: { id: string; at: { x: number; y: number } }[] = [],
   module = GREENMARCH,
   seed = 7,
+  party: string[] = ['Ash'],
 ): GameState {
-  const base = newGame(module, { seed, party: [defaultChoices(module, 'Ash')] });
+  const base = newGame(module, { seed, party: party.map((name) => defaultChoices(module, name)) });
   const floor = module.source.id === 'minimal' ? 'bare_floor' : 'floor';
-  const hero = base.entities[base.party[0]!]!;
-
-  const entities: Record<string, typeof hero> = {
-    ...base.entities,
-    [hero.id]: { ...hero, map: 'arena', position: { x: 5, y: 5 } },
-  };
+  const entities: Record<string, (typeof base.entities)[string]> = { ...base.entities };
+  base.party.forEach((id, i) => {
+    entities[id] = { ...base.entities[id]!, map: 'arena', position: { x: 5, y: 5 + i } };
+  });
   monsters.forEach((entry, i) => {
     const id = `m:${i}`;
     entities[id] = { ...spawnMonster(module, id, entry.id), map: 'arena', position: entry.at };
@@ -327,6 +326,68 @@ describe('combat flow', () => {
     const { state: next, events } = reduce(current, { type: 'wait', minutes: 0 }, ctx);
     expect(next.combat).toBeNull();
     expect(events.find((e) => e.type === 'combatEnded')).toMatchObject({ outcome: 'victory' });
+  });
+});
+
+describe('turn order', () => {
+  /** A two-member party in combat, hound adjacent to both. */
+  function started(): GameState {
+    const state = arena([{ id: 'bog_hound', at: { x: 6, y: 5 } }], GREENMARCH, 7, ['Ash', 'Korrin']);
+    return reduce(state, { type: 'wait', minutes: 0 }, ctx).state;
+  }
+
+  it('selects the character whose turn begins, so bare commands act as them', () => {
+    let current = started();
+    expect(current.combat).not.toBeNull();
+
+    // Whenever reduce hands control back, the active combatant is a party
+    // member — and must be the selected one.
+    for (let i = 0; i < 8 && current.combat; i += 1) {
+      const active = current.combat.order[current.combat.turn]!;
+      expect(current.entities[active]?.kind).toBe('character');
+      expect(current.selected).toBe(active);
+      current = reduce(current, { type: 'endTurn' }, ctx).state;
+    }
+  });
+
+  it('refuses an attack out of turn, naming whose turn it is', () => {
+    const current = started();
+    if (!current.combat) return;
+
+    const active = current.combat.order[current.combat.turn]!;
+    const other = current.party.find((id) => id !== active)!;
+    const activeName = current.entities[active]!.name;
+
+    const { state: next, events } = reduce(current, { type: 'attack', target: 'm:0', actor: other }, ctx);
+    expect(events.find((e) => e.type === 'refused')).toMatchObject({
+      reason: `it is ${activeName}'s turn`,
+    });
+    expect(events.some((e) => e.type === 'attacked')).toBe(false);
+
+    // The refusal must not have spent the turn: the active member still acts.
+    if (!next.combat) return;
+    const retry = reduce(next, { type: 'attack', target: 'm:0' }, ctx);
+    expect(retry.events.some((e) => e.type === 'attacked')).toBe(true);
+  });
+
+  it('refuses a step out of turn', () => {
+    const current = started();
+    if (!current.combat) return;
+
+    const active = current.combat.order[current.combat.turn]!;
+    const other = current.party.find((id) => id !== active)!;
+    const before = current.entities[other]!.position;
+
+    const { state: next, events } = reduce(current, { type: 'step', direction: 'west', actor: other }, ctx);
+    expect(events.find((e) => e.type === 'refused')).toMatchObject({ action: 'move' });
+    expect(next.entities[other]!.position).toEqual(before);
+  });
+
+  it('narrates whose turn begins', () => {
+    const state = arena([{ id: 'bog_hound', at: { x: 6, y: 5 } }], GREENMARCH, 7, ['Ash', 'Korrin']);
+    const { state: next, events } = reduce(state, { type: 'wait', minutes: 0 }, ctx);
+    const lines = narrate({ module: GREENMARCH, state: next, seed: 1 }, events);
+    expect(lines.some((line) => line.text.endsWith("'s turn."))).toBe(true);
   });
 });
 
