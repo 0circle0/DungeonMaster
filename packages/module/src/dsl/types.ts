@@ -133,8 +133,19 @@ export type Effect =
 
 /** A resolved intent produced by evaluating an {@link Effect}. */
 export type EffectOp =
-  | { readonly op: 'damage'; readonly target: Value; readonly amount: number; readonly damageType: string | null }
+  | {
+      readonly op: 'damage';
+      readonly target: Value;
+      readonly amount: number;
+      readonly damageType: string | null;
+      /**
+       * What the blow carries besides its type — `silvered`, `magical`, `cold_iron`.
+       * A resistance may declare itself void `unless` the damage has one of these.
+       */
+      readonly tags?: readonly string[];
+    }
   | { readonly op: 'heal'; readonly target: Value; readonly amount: number }
+  | { readonly op: 'adjustCurrency'; readonly amount: number }
   | {
       readonly op: 'applyCondition';
       readonly target: Value;

@@ -26,6 +26,16 @@ export interface MapCellEntity {
   readonly hostile: boolean;
 }
 
+/** A trap on this tile, if the party has found it. */
+function knownTrapAt(
+  map: { traps: Readonly<Record<number, { trap: string; state: string }>> },
+  packed: number,
+): 'found' | 'disarmed' | 'sprung' | null {
+  const placed = map.traps[packed];
+  if (!placed || placed.state === 'hidden') return null;
+  return placed.state as 'found' | 'disarmed' | 'sprung';
+}
+
 export interface MapCellView {
   readonly x: number;
   readonly y: number;
@@ -39,6 +49,13 @@ export interface MapCellView {
   /** Item stacks lying on the floor here. */
   readonly items: number;
   readonly gate: { readonly id: string; readonly open: boolean } | null;
+  /**
+   * A trap the party knows about.
+   *
+   * Never set for a `hidden` one: leaking an undiscovered trap through the UI
+   * is the same failure as drawing a creature through a wall.
+   */
+  readonly trap: 'found' | 'disarmed' | 'sprung' | null;
 }
 
 export interface MapView {
@@ -65,7 +82,7 @@ export interface MapViewOptions {
 
 const UNKNOWN: Omit<MapCellView, 'x' | 'y'> = {
   visibility: 'unknown', terrain: '', glyph: ' ', tone: null,
-  entity: null, items: 0, gate: null,
+  entity: null, items: 0, gate: null, trap: null,
 };
 
 export function mapView(
@@ -137,6 +154,7 @@ export function mapView(
           : null,
         items: seen ? (map.items[packed]?.length ?? 0) : 0,
         gate: gate ? { id: gate.gate, open: gate.open } : null,
+        trap: knownTrapAt(map, packed),
       });
     }
   }

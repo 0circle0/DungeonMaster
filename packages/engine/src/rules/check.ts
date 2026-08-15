@@ -11,10 +11,11 @@
  */
 
 import { Rng, parseDice, rollDice } from '@dm/core';
-import type { CompiledModule } from '@dm/module';
+import { evalExpr } from '@dm/module';
+import type { CompiledModule, Expr, Scope, Value } from '@dm/module';
 import type { Entity } from '../state.js';
 import type { RollRecord } from '../events.js';
-import { statsOf } from '../stats.js';
+import { statsOf, proficiencyOf, isSaveProficient } from '../stats.js';
 
 interface Resolution {
   checkDice: string;
@@ -191,7 +192,35 @@ export function savingThrow(
     modifier += statblock?.saveBonuses?.[saveId] ?? 0;
   }
 
-  return check(module, rng, { modifier, difficulty: difficultyOf(module, difficulty) });
+  // A class trained in this save adds the module's proficiency bonus, which is
+  // what `saveProficiencies` has always meant and never did.
+  if (isSaveProficient(module, entity, saveId)) modifier += proficiencyOf(module, entity);
+
+  // A save that declares its own default is asking to be harder or easier than
+  // an ordinary check — that is the whole point of writing one — so it wins over
+  // the global difficulty whenever the caller named none.
+  const against = difficulty ?? defaultDifficultyOf(module, definition, entity);
+  return check(module, rng, { modifier, difficulty: difficultyOf(module, against) });
+}
+
+/** The save's own `defaultDifficulty`, which the module may write as a formula. */
+function defaultDifficultyOf(
+  module: CompiledModule,
+  definition: SaveDef | undefined,
+  entity: Entity,
+): number | undefined {
+  if (definition?.defaultDifficulty === undefined) return undefined;
+  const stats = statsOf(module, entity);
+  const scope: Scope = {
+    actor: {
+      level: entity.level,
+      attr: entity.attributes as Record<string, Value>,
+      mod: stats.mod,
+      derived: stats.derived,
+    },
+  };
+  const value = evalExpr(definition.defaultDifficulty as Expr, { scope, rng: Rng.fromSeed(0) });
+  return typeof value === 'number' && Number.isFinite(value) ? Math.floor(value) : undefined;
 }
 
 /** How much a critical multiplies damage. */

@@ -12,6 +12,7 @@ import pc from 'picocolors';
 import type { CompiledModule } from '@dm/module';
 import type { GameState, Line } from '@dm/engine';
 import { statusView, partyView, sheetView, inventoryView, clockOf } from '@dm/play';
+import type { ShopView } from '@dm/play';
 import { wrap } from './text.js';
 
 export { clockOf };
@@ -38,11 +39,13 @@ export function statusLines(module: CompiledModule, state: GameState): string[] 
   const turn = view.combat?.turnName ? ` — ${view.combat.turnName}'s turn` : '';
   const combat = view.combat ? pc.red(` ⚔ round ${view.combat.round}${turn}`) : '';
   const moving = view.stance ? pc.cyan(view.stance.name.toLowerCase()) : '';
+  const purse = view.purse ? pc.yellow(`${view.purse.amount}${view.purse.abbrev}`) : '';
 
   return [[
     pc.bold(view.name),
     `L${view.level}`,
     ...pools,
+    purse,
     moving,
     pc.dim(view.clock.text),
     conditions ? pc.magenta(conditions) : '',
@@ -112,4 +115,39 @@ export function inventoryLines(module: CompiledModule, state: GameState): string
 
   return carried.map((item) =>
     `  ${item.name}${item.quantity > 1 ? ` ×${item.quantity}` : ''}`);
+}
+
+/**
+ * A shopkeeper's counter.
+ *
+ * Prices on the right, the purse at the bottom, and — when they will not deal
+ * with you — the reason instead of an empty shelf.
+ */
+export function shopLines(view: ShopView): string[] {
+  const out: string[] = [];
+  const coin = (n: number) => `${n}${view.currency.abbrev}`;
+
+  if (view.barred) {
+    out.push(pc.yellow(`  ${view.name} will not deal with you.`));
+    for (const need of view.requires) out.push(pc.dim(`    needs ${need}`));
+    out.push('', pc.dim(`  purse: ${coin(view.purse)}`));
+    return out;
+  }
+
+  out.push(pc.bold('  For sale'));
+  if (view.stock.length === 0) out.push(pc.dim('    (nothing today)'));
+  for (const entry of view.stock) {
+    const many = entry.quantity > 1 ? pc.dim(` ×${entry.quantity}`) : '';
+    out.push(`    ${entry.name}${many}  ${pc.dim(coin(entry.price))}`);
+  }
+
+  out.push('', pc.bold('  They will buy'));
+  if (view.sellable.length === 0) out.push(pc.dim('    (nothing you are carrying)'));
+  for (const entry of view.sellable) {
+    const many = entry.quantity > 1 ? pc.dim(` ×${entry.quantity}`) : '';
+    out.push(`    ${entry.name}${many}  ${pc.dim(coin(entry.price))}`);
+  }
+
+  out.push('', pc.dim(`  purse: ${coin(view.purse)}`));
+  return out;
 }

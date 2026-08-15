@@ -5818,10 +5818,7 @@
                                   "kill",
                                   "collect",
                                   "reach",
-                                  "talk",
-                                  "deliver",
-                                  "survive",
-                                  "escort"
+                                  "talk"
                                 ],
                                 "default": "custom"
                               },

@@ -66,7 +66,7 @@ of one. A module exported from the editor opens directly via **Open…**.
 npm run editor        # http://localhost:4400
 ```
 
-Loads a JSON module, gives full control over the system and the story, and exports a module.
+Loads a JSON module, gives full control over the system and the story, and exports a module. The layout is game-engine-style: a world tree and collection tabs on the left, a tabbed viewport in the centre whose map previews are **seed-faithful** — they call the real engine generators with the same rng derivations a new game uses, so what the viewport draws for seed N is what a player starting with seed N walks into — an inspector on the right, and a problems console below.
 
 Its navigation, forms, and validation are **generated from the Zod schemas** rather than hand-written per content type. Add a field to `packages/module` and it appears in the editor, correctly typed and validated, with no UI change — the editor cannot drift out of sync with what the engine accepts.
 

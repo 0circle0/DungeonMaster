@@ -1,0 +1,23 @@
+{
+  "id": "mill_interior",
+  "name": "Inside the Old Mill",
+  "description": "The mill floor and its little store room, exactly as the wardens remember it.",
+  "entry": "entry",
+  "layers": [
+    {
+      "kind": "terrain",
+      "name": "terrain",
+      "file": "terrain.csv"
+    },
+    {
+      "kind": "items",
+      "name": "items",
+      "file": "items.csv"
+    },
+    {
+      "kind": "markers",
+      "name": "markers",
+      "file": "markers.csv"
+    }
+  ]
+}

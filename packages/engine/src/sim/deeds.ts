@@ -108,6 +108,20 @@ export function witnessesOf(
  * so what counts as an outrage is a content decision. Reputation only moves if
  * somebody was there to see it.
  */
+/**
+ * Whether this actor is going unrecognised.
+ *
+ * A disguise is whatever the module says it is: any condition that declares the
+ * `disguised` tag. The engine still knows nothing about hoods.
+ */
+function isDisguised(txn: Transaction, actor: Entity): boolean {
+  for (const active of actor.conditions) {
+    const condition = txn.module.find<{ tags?: string[] }>('rules.conditions', active.condition);
+    if (condition?.tags?.includes('disguised')) return true;
+  }
+  return false;
+}
+
 export function recordDeed(
   txn: Transaction,
   terrain: TerrainIndex,
@@ -122,8 +136,14 @@ export function recordDeed(
   const config = witnessConfig(txn.module);
   const seen = witnessesOf(txn, terrain, actor);
 
-  // Being seen is not the same as being recognised.
-  const identified = seen.filter(() => rng.chance(config.identificationChance));
+  // Being seen is not the same as being recognised — and being hooded makes it
+  // less so still. `disguiseReduction` was read into the config and never
+  // applied, so a cloak was scenery.
+  const hooded = isDisguised(txn, actor);
+  const chance = hooded
+    ? config.identificationChance * (1 - config.disguiseReduction)
+    : config.identificationChance;
+  const identified = seen.filter(() => rng.chance(chance));
 
   const deed: Deed = {
     id: `deed:${kindId}:${txn.state.minute}`,

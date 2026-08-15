@@ -23,7 +23,11 @@ export {
   startAutoQuests, refreshQuestAvailability, objectivesOf, stageIndexOf,
 } from './sim/quests.js';
 export type { QuestDef, StageDef, ObjectiveDef } from './sim/quests.js';
-export { questJournal, currentObjective } from './sim/questview.js';
+export { questJournal, currentObjective, journalByArc } from './sim/questview.js';
+export { arcsOf, endingReached, arcScope } from './sim/arcs.js';
+export type { ArcView, ArcStatus, ArcDef } from './sim/arcs.js';
+export { questsOffered } from './sim/quests.js';
+export { describeCreature } from './narrate/grammar.js';
 export type { JournalEntry, JournalObjective, CurrentObjective } from './sim/questview.js';
 export { startDialogue, visibleOptions, chooseOption, endDialogue, canTalkTo } from './sim/dialogue.js';
 export type { VisibleOption } from './sim/dialogue.js';
@@ -31,12 +35,23 @@ export { recordDeed, witnessesOf, knowledgeOf } from './sim/deeds.js';
 export { enterDungeon, enterArea, enterPoi, placeParty } from './sim/enter.js';
 export { OPEN_NAMESPACES } from './stats.js';
 
-export { populateDungeon, rollLoot, rollEncounter } from './world/populate.js';
+export { populateDungeon, rollLoot, rollEncounter, singleScope } from './world/populate.js';
+export { springTrap, searchForTraps, disarmTrap, reachableTrap } from './sim/traps.js';
+export { shopOf, shopStock, sellable, shopBarred, priceOf, buyItem, sellItem } from './sim/trade.js';
+export { phaseOf, dateOf, layerOf } from './sim/clock.js';
+export {
+  slotsFor, slotsLeft, slotForSpell, saveDifficultyOf, attackBonusOf, isSpell, recoverSlots,
+} from './rules/casting.js';
+export type { WorldDate } from './sim/clock.js';
+export type { ShopDef, StockEntry } from './sim/trade.js';
+export type { ScopeSet, LootOptions } from './world/populate.js';
 export type { Population, PlacedMonster, PlacedLoot, PlacedTrap, LootDraw, EncounterDraw } from './world/populate.js';
 export { generateDungeon, gatesOf } from './world/dungeon.js';
 export type { GeneratedDungeon, Room, Door } from './world/dungeon.js';
 export { buildMap, resolvePalette } from './world/mapgen.js';
 export type { BuiltMap, Palette, MapSpec } from './world/mapgen.js';
+export { buildStaticMap } from './world/staticmap.js';
+export type { BuiltStaticMap, StaticSpawn } from './world/staticmap.js';
 
 export * from './grid/index.js';
 
@@ -52,7 +67,10 @@ export type {
   Deed,
 } from './state.js';
 
-export { modifiersOf, maximaOf, derivedOf, statsOf, buildScope } from './stats.js';
+export {
+  modifiersOf, maximaOf, minimaOf, initialOf, derivedOf, statsOf, buildScope,
+  proficiencyOf, carriedWeight,
+} from './stats.js';
 export {
   sensesOf,
   senseOf,

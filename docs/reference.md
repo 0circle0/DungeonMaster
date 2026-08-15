@@ -58,6 +58,7 @@ not anticipate there. It is the supported way to exceed what ships.
 | `conditions` | [object](#module-rules-conditions)[] |  | `[]` |
 | `actionTypes` | [object](#module-rules-actionTypes)[] |  | `[]` |
 | `equipmentSlots` | [object](#module-rules-equipmentSlots)[] |  | `[]` |
+| `itemProperties` | [object](#module-rules-itemProperties)[] |  | `[]` |
 | `masteryTiers` | [object](#module-rules-masteryTiers)[] |  | `[]` |
 | `rests` | [object](#module-rules-rests)[] |  | `[]` |
 | `resolution` | [object](#module-rules-resolution) |  | `{}` |
@@ -74,6 +75,7 @@ not anticipate there. It is the supported way to exceed what ships.
 | `coverTypes` | [object](#module-rules-coverTypes)[] |  | `[]` |
 | `spellcasting` | [object](#module-rules-spellcasting) |  | `{}` |
 | `perception` | [object](#module-rules-perception) |  | `{}` |
+| `currency` | [object](#module-rules-currency) |  | `{}` |
 | `vitalResource` | [→ rules.resources](#rulesresources) | **yes** |  |
 | `initiativeStat` | [→ rules.derivedStats](#rulesderivedStats) |  |  |
 | `defaultSize` | [→ rules.sizes](#rulessizes) |  |  |
@@ -183,6 +185,18 @@ not anticipate there. It is the supported way to exceed what ships.
 | `id` | string | **yes** |  |
 | `name` | string | **yes** |  |
 | `capacity` | number |  | `1` |
+
+### Module → `rules` → `itemProperties`
+
+<a id="module-rules-itemProperties"></a>
+
+| Field | Type | Required | Default |
+| --- | --- | --- | --- |
+| `id` | string | **yes** |  |
+| `name` | string | **yes** |  |
+| `description` | string |  | `""` |
+| `modifiers` | { string: [DSL](#the-dsl) } |  | `{}` |
+| `extra` | { string: any } |  | `{}` |
 
 ### Module → `rules` → `masteryTiers`
 
@@ -438,6 +452,15 @@ not anticipate there. It is the supported way to exceed what ships.
 | `defaultStance` | [→ rules.stances](#rulesstances) |  |  |
 | `extra` | { string: any } |  | `{}` |
 
+### Module → `rules` → `currency`
+
+<a id="module-rules-currency"></a>
+
+| Field | Type | Required | Default |
+| --- | --- | --- | --- |
+| `name` | string |  | `"coins"` |
+| `abbrev` | string |  | `"c"` |
+
 ### Module → `content`
 
 <a id="module-content"></a>
@@ -502,6 +525,10 @@ not anticipate there. It is the supported way to exceed what ships.
 | `abilities` | [→ content.abilities](#contentabilities)[] |  | `[]` |
 | `attributes` | [object](#module-content-abilities-requires-attributes)[] |  | `[]` |
 | `skills` | [object](#module-content-abilities-requires-skills)[] |  | `[]` |
+| `creatureTypes` | [→ rules.creatureTypes](#rulescreatureTypes)[] |  | `[]` |
+| `alignments` | [→ rules.alignments](#rulesalignments)[] |  | `[]` |
+| `languages` | [→ rules.languages](#ruleslanguages)[] |  | `[]` |
+| `currency` | number |  |  |
 | `items` | [object](#module-content-abilities-requires-items)[] |  | `[]` |
 | `quests` | [object](#module-content-abilities-requires-quests)[] |  | `[]` |
 | `factions` | [object](#module-content-abilities-requires-factions)[] |  | `[]` |
@@ -610,6 +637,10 @@ not anticipate there. It is the supported way to exceed what ships.
 | `abilities` | [→ content.abilities](#contentabilities)[] |  | `[]` |
 | `attributes` | [object](#module-content-abilities-requires-attributes)[] |  | `[]` |
 | `skills` | [object](#module-content-abilities-requires-skills)[] |  | `[]` |
+| `creatureTypes` | [→ rules.creatureTypes](#rulescreatureTypes)[] |  | `[]` |
+| `alignments` | [→ rules.alignments](#rulesalignments)[] |  | `[]` |
+| `languages` | [→ rules.languages](#ruleslanguages)[] |  | `[]` |
+| `currency` | number |  |  |
 | `items` | [object](#module-content-abilities-requires-items)[] |  | `[]` |
 | `quests` | [object](#module-content-abilities-requires-quests)[] |  | `[]` |
 | `factions` | [object](#module-content-abilities-requires-factions)[] |  | `[]` |
@@ -768,7 +799,7 @@ not anticipate there. It is the supported way to exceed what ships.
 | `requiresAttunement` | boolean |  | `false` |
 | `attunementRequires` | string[] |  | `[]` |
 | `charges` | [object](#module-content-items-charges) |  |  |
-| `properties` | string[] |  | `[]` |
+| `properties` | [→ rules.itemProperties](#rulesitemProperties)[] |  | `[]` |
 | `damageInteractions` | [object](#module-content-ancestries-damageInteractions)[] |  | `[]` |
 | `usableBy` | [→ content.classes](#contentclasses)[] |  | `[]` |
 | `extra` | { string: any } |  | `{}` |
@@ -994,7 +1025,7 @@ not anticipate there. It is the supported way to exceed what ships.
 | `faction` | [→ content.factions](#contentfactions) |  |  |
 | `statblock` | [→ content.monsters](#contentmonsters) |  |  |
 | `dialogue` | [→ narrative.dialogues](#narrativedialogues) |  |  |
-| `home` | string |  |  |
+| `home` | [→ world.pointsOfInterest](#worldpointsOfInterest) |  |  |
 | `gullibility` | number |  | `0.5` |
 | `memorySpan` | number |  | `90` |
 | `disposition` | number |  | `0` |
@@ -1029,6 +1060,7 @@ not anticipate there. It is the supported way to exceed what ships.
 | `roomTemplates` | [object](#module-world-roomTemplates)[] |  | `[]` |
 | `encounterTables` | [object](#module-world-encounterTables)[] |  | `[]` |
 | `dungeons` | [object](#module-world-dungeons)[] |  | `[]` |
+| `maps` | [object](#module-world-maps)[] |  | `[]` |
 | `time` | [object](#module-world-time) |  | `{}` |
 
 ### Module → `world` → `terrains`
@@ -1169,6 +1201,7 @@ not anticipate there. It is the supported way to exceed what ships.
 | `width` | string |  | `"7"` |
 | `height` | string |  | `"7"` |
 | `palette` | [→ world.palettes](#worldpalettes) |  |  |
+| `static` | [→ world.maps](#worldmaps) |  |  |
 | `layout` | string[] |  | `[]` |
 | `legend` | { string: [→ world.terrains](#worldterrains) } |  | `{}` |
 | `extra` | { string: any } |  | `{}` |
@@ -1334,6 +1367,35 @@ not anticipate there. It is the supported way to exceed what ships.
 | `completionTriggers` | [object](#module-world-biomes-triggers)[] |  | `[]` |
 | `palette` | [→ world.palettes](#worldpalettes) |  |  |
 | `corridorLength` | string |  | `"3d3"` |
+| `algorithm` | `rooms` \| `bsp` \| `caverns` |  | `"rooms"` |
+| `staticMap` | [→ world.maps](#worldmaps) |  |  |
+| `rollEncounters` | boolean |  | `false` |
+| `corridor` | [object](#module-world-dungeons-corridor) |  | `{}` |
+| `width` | string |  |  |
+| `height` | string |  |  |
+| `extra` | { string: any } |  | `{}` |
+
+### Module → `world` → `dungeons` → `corridor`
+
+<a id="module-world-dungeons-corridor"></a>
+
+| Field | Type | Required | Default |
+| --- | --- | --- | --- |
+| `style` | `l` \| `straight` \| `winding` |  | `"l"` |
+| `width` | number |  | `1` |
+
+### Module → `world` → `maps`
+
+<a id="module-world-maps"></a>
+
+| Field | Type | Required | Default |
+| --- | --- | --- | --- |
+| `id` | string | **yes** |  |
+| `name` | string |  |  |
+| `description` | string |  | `""` |
+| `tags` | string[] |  | `[]` |
+| `entry` | string |  | `"entry"` |
+| `layers` | [DSL](#the-dsl)[] | **yes** |  |
 | `extra` | { string: any } |  | `{}` |
 
 ### Module → `world` → `time`
@@ -1492,7 +1554,7 @@ not anticipate there. It is the supported way to exceed what ships.
 | --- | --- | --- | --- |
 | `id` | string | **yes** |  |
 | `description` | string |  | `""` |
-| `kind` | `custom` \| `kill` \| `collect` \| `reach` \| `talk` \| `deliver` \| `survive` \| `escort` |  | `"custom"` |
+| `kind` | `custom` \| `kill` \| `collect` \| `reach` \| `talk` |  | `"custom"` |
 | `target` | string |  |  |
 | `count` | number |  | `1` |
 | `when` | [DSL](#the-dsl) |  |  |
@@ -1689,11 +1751,24 @@ trap triggers, dialogue gates, loot rules, and quest objectives.
 
 **Predicate operators** — `all`, `any`, `not`, `eq`, `ne`, `gt`, `gte`, `lt`, `lte`, `in`, `chance`, `exists`, `test`
 
-**Effect operators** — `damage`, `heal`, `applyCondition`, `removeCondition`, `adjustResource`, `setFlag`, `grantItem`, `removeItem`, `adjustReputation`, `move`, `emit`, `noise`, `if`, `repeat`, `forEach`, `let`
+**Effect operators** — `damage`, `heal`, `applyCondition`, `removeCondition`, `adjustResource`, `setFlag`, `grantItem`, `removeItem`, `adjustReputation`, `adjustCurrency`, `move`, `emit`, `noise`, `if`, `repeat`, `forEach`, `let`
 
 Reads go through one mechanism: `{ "ref": "actor.attr.might" }` walks the scope
 the engine supplies. There is deliberately no `hasFlag` or `hasItem` operator,
 because those are ordinary paths — `flags.met_vess`, `actor.inventory.rope`.
+
+One of each, shaped the way the editor expects them:
+
+```jsonc
+// expression — a number: the actor's level plus two
+{ "add": [ { "ref": "actor.level" }, 2 ] }
+
+// predicate — a yes or no: might of at least 14
+{ "gte": [ { "ref": "actor.attr.might" }, 14 ] }
+
+// effects — a list of things that happen: 1d6 damage to the target
+[ { "damage": { "target": { "ref": "target.id" }, "amount": { "roll": "1d6" } } } ]
+```
 
 ## Collections
 
@@ -1706,6 +1781,7 @@ Every addressable collection, each entry identified by its `id`:
 - `rules.conditions`
 - `rules.actionTypes`
 - `rules.equipmentSlots`
+- `rules.itemProperties`
 - `rules.masteryTiers`
 - `rules.rests`
 - `rules.savingThrows`
@@ -1737,6 +1813,7 @@ Every addressable collection, each entry identified by its `id`:
 - `world.roomTemplates`
 - `world.encounterTables`
 - `world.dungeons`
+- `world.maps`
 - `narrative.textGrammar`
 - `narrative.dialogues`
 - `narrative.quests`

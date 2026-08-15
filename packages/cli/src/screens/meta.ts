@@ -11,11 +11,11 @@
 import { readFileSync, writeFileSync } from 'node:fs';
 import pc from 'picocolors';
 import type { MetaCommand } from '@dm/play';
-import { HELP } from '@dm/play';
+import { HELP, traderNearby, shopView } from '@dm/play';
 import type { Session } from '@dm/play';
 import { serialize, deserialize } from '@dm/play';
 import { mapOverview, mapLegend } from '../render/map.js';
-import { sheetLines, inventoryLines } from '../render/panes.js';
+import { sheetLines, inventoryLines, shopLines } from '../render/panes.js';
 import { journalLines } from '../render/journal.js';
 import { exitLines } from '../render/exits.js';
 
@@ -85,6 +85,14 @@ export function runMeta(
 
     case 'inventory':
       return { kind: 'panel', title: 'Carried', lines: inventoryLines(module, state) };
+
+    case 'shop': {
+      const npc = traderNearby({ module, state });
+      if (!npc) return { kind: 'note', text: pc.dim('  nobody here is trading') };
+      const view = shopView(module, state, npc);
+      if (!view) return { kind: 'note', text: pc.dim('  nobody here is trading') };
+      return { kind: 'panel', title: view.name, lines: shopLines(view) };
+    }
 
     case 'journal':
       return { kind: 'panel', title: 'Journal', lines: journalLines(module, state, seed) };

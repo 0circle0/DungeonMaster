@@ -85,11 +85,19 @@ export const EffectSchema: z.ZodType<Effect> = z.lazy(() =>
     z
       .object({
         damage: z
-          .object({ target: ExprSchema, amount: ExprSchema, damageType: ExprSchema.optional() })
+          .object({
+            target: ExprSchema,
+            amount: ExprSchema,
+            damageType: ExprSchema.optional(),
+            /** Qualities of the blow, which a resistance's `unless` can name. */
+            tags: z.array(z.string()).optional(),
+          })
           .strict(),
       })
       .strict(),
     z.object({ heal: z.object({ target: ExprSchema, amount: ExprSchema }).strict() }).strict(),
+    /** Pay or be paid. Negative spends; positive earns. */
+    z.object({ adjustCurrency: z.object({ amount: ExprSchema }).strict() }).strict(),
     z
       .object({
         applyCondition: z

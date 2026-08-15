@@ -20,11 +20,17 @@ export function exitLines(
   const ways = waysFromHere(module, state, terrain);
   const out: string[] = [];
 
+  // "(barred)" with no reason is the least useful thing this panel can say —
+  // the derivation already carries what it would take, so print it. A toll the
+  // party can afford should read as a price, not as a wall.
+  const bar = (barred: boolean, requires: readonly string[]) =>
+    barred ? pc.yellow(`  (${requires.length > 0 ? requires.join(', ') : 'barred'})`) : '';
+
   if (ways.places.length > 0) {
     out.push(pc.dim('  Here'));
     for (const place of ways.places) {
       const away = duration(place.travelMinutes);
-      const locked = place.barred ? pc.yellow('  (barred)') : '';
+      const locked = bar(place.barred, place.requires);
       out.push(`    ${pc.cyan('enter')} ${place.name}${away ? pc.dim(`  ${away}`) : ''}${locked}`);
     }
   }
@@ -34,7 +40,7 @@ export function exitLines(
     out.push(pc.dim('  Roads'));
     for (const road of ways.roads) {
       const away = duration(road.travelMinutes);
-      const gated = road.barred ? pc.yellow('  (barred)') : '';
+      const gated = bar(road.barred, road.requires);
       out.push(`    ${pc.cyan('travel')} ${road.name}${away ? pc.dim(`  ${away}`) : ''}${gated}`);
     }
   }

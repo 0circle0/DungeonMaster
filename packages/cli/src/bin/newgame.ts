@@ -6,39 +6,10 @@
  * shown is computed from the module's own formulas.
  */
 
-import { readFileSync, existsSync, readdirSync } from 'node:fs';
-import { join, resolve, dirname } from 'node:path';
-import { compileModule, resolveExtends, formatIssues } from '@dm/module';
 import type { CompiledModule } from '@dm/module';
 import { newGame, defaultChoices, statsOf } from '@dm/engine';
 import type { Entity, GameState } from '@dm/engine';
-
-function readJson(path: string): Record<string, unknown> {
-  return JSON.parse(readFileSync(path, 'utf8')) as Record<string, unknown>;
-}
-
-function loadModule(input: string): CompiledModule {
-  const target = resolve(input);
-  const path = existsSync(target) && !target.endsWith('.json') ? join(target, 'module.json') : target;
-  if (!existsSync(path)) throw new Error(`no such module: ${input}`);
-
-  const modulesRoot = dirname(dirname(path));
-  const resolved = resolveExtends(readJson(path), (identity) => {
-    if (!existsSync(modulesRoot)) return undefined;
-    for (const entry of readdirSync(modulesRoot)) {
-      const candidate = join(modulesRoot, entry, 'module.json');
-      if (!existsSync(candidate)) continue;
-      const doc = readJson(candidate);
-      if (`${String(doc['id'])}@${String(doc['version'])}` === identity) return doc;
-    }
-    return undefined;
-  });
-  if (!resolved.ok) throw new Error(resolved.error);
-
-  const result = compileModule(resolved.document);
-  if (!result.ok) throw new Error(`module failed to compile:\n${formatIssues(result.errors)}`);
-  return result.module;
-}
+import { loadModule } from '../loader.js';
 
 function flag(name: string, fallback: number): number {
   const index = process.argv.indexOf(`--${name}`);

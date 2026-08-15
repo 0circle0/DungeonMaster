@@ -10,6 +10,9 @@
   --muted: #8890a6;
   --accent: #d9a441;
   --accent-dim: #8a6a2c;
+  /* Named because a pinned .group-head has to repaint its group's background
+     exactly; the two drifting apart would show as a seam while scrolling. */
+  --group-bg: #15171f;
   --ok: #5fb87a;
   --err: #e06c6c;
   --warn: #d9a441;
@@ -28,29 +31,11 @@ html, body {
 
 button, input, select, textarea { font: inherit; color: inherit; }
 
-.app { display: flex; flex-direction: column; height: 100vh; }
+/* ── status dots & buttons ───────────────────────────────── */
 
-/* ── top bar ─────────────────────────────────────────────── */
-
-.topbar {
-  display: flex; align-items: center; gap: 20px;
-  padding: 10px 16px;
-  background: var(--panel);
-  border-bottom: 1px solid var(--line);
-  flex: none;
-}
-.brand strong { color: var(--accent); letter-spacing: 0.02em; }
-.brand .sub { color: var(--muted); margin-left: 8px; font-size: 12px; }
-
-.identity { display: flex; align-items: center; gap: 10px; font-size: 13px; color: var(--muted); }
 .ok-dot, .err-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
 .ok-dot { background: var(--ok); }
 .err-dot { background: var(--err); }
-.identity .hash { font-family: var(--mono); font-size: 11px; color: #5d6478; }
-.identity .warn { color: var(--warn); }
-.identity .dirty { color: var(--accent); }
-
-.actions { margin-left: auto; display: flex; gap: 8px; }
 
 .btn {
   background: var(--panel-2); border: 1px solid var(--line); color: var(--text);
@@ -64,46 +49,11 @@ button, input, select, textarea { font: inherit; color: inherit; }
 
 /* ── layout ──────────────────────────────────────────────── */
 
-.body { display: flex; flex: 1; min-height: 0; }
-
-.sidebar {
-  width: 210px; flex: none; overflow-y: auto;
-  background: var(--panel); border-right: 1px solid var(--line);
-  padding: 10px 0;
-}
-.nav-section { margin-bottom: 14px; }
-.nav-head {
-  padding: 4px 14px; font-size: 11px; text-transform: uppercase;
-  letter-spacing: 0.09em; color: #5d6478;
-}
-.nav-item {
-  display: flex; align-items: center; justify-content: space-between; gap: 8px;
-  width: 100%; text-align: left; background: none; border: none;
-  padding: 5px 14px; cursor: pointer; color: var(--muted);
-}
-.nav-item:hover { background: var(--panel-2); color: var(--text); }
-.nav-item.active { background: var(--panel-2); color: var(--accent); box-shadow: inset 2px 0 0 var(--accent); }
 .pill {
   font-size: 11px; font-family: var(--mono); color: #5d6478;
   background: #22252f; padding: 1px 6px; border-radius: 9px;
 }
 .pill.err { background: #3a2224; color: var(--err); }
-
-.list {
-  width: 260px; flex: none; display: flex; flex-direction: column;
-  border-right: 1px solid var(--line); background: #15171f; min-height: 0;
-}
-.list-head { display: flex; gap: 6px; padding: 10px; border-bottom: 1px solid var(--line); }
-.list-items { overflow-y: auto; flex: 1; }
-.list-item {
-  display: flex; flex-direction: column; gap: 2px; width: 100%; text-align: left;
-  background: none; border: none; border-bottom: 1px solid #1d202a;
-  padding: 8px 12px; cursor: pointer;
-}
-.list-item:hover { background: var(--panel-2); }
-.list-item.active { background: #232734; box-shadow: inset 2px 0 0 var(--accent); }
-.item-name { color: var(--text); }
-.item-id { font-family: var(--mono); font-size: 11px; color: #5d6478; }
 
 .pane { flex: 1; overflow-y: auto; padding: 18px 22px; min-width: 0; }
 .pane.wide { max-width: none; }
@@ -133,9 +83,27 @@ textarea.input { resize: vertical; font-family: inherit; }
 
 .group {
   border: 1px solid var(--line); border-radius: 8px;
-  padding: 10px 12px; margin-bottom: 12px; background: #15171f;
+  padding: 10px 12px; margin-bottom: 12px; background: var(--group-bg);
 }
 .group-head { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+
+/* A pinned header needs a background of its own, because the group's content
+   scrolls underneath it. `top` is set inline from the nesting depth so headers
+   stack instead of covering one another. Beware: an `overflow` on .group or
+   .card would disable all of this silently. */
+.group-head.pinned {
+  position: sticky;
+  background: var(--group-bg);
+  padding: 4px 28px 4px 0;
+  margin-bottom: 2px;
+}
+
+/* Adding a section that is not there yet — see ObjectField in Field.tsx.
+   The select shrinks with the column rather than overflowing it, since these
+   sit at the bottom of groups that may be five levels deep and narrow. */
+.add-row { display: flex; align-items: center; gap: 8px; margin-top: 4px; min-width: 0; }
+.add-row select { flex: 1; min-width: 0; max-width: 200px; }
+.add-row .count { white-space: nowrap; }
 .group-label { font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; }
 .count { font-size: 11px; color: #5d6478; font-family: var(--mono); }
 .badge {
@@ -145,7 +113,8 @@ textarea.input { resize: vertical; font-family: inherit; }
 
 .stack { display: flex; flex-direction: column; gap: 8px; }
 .card { border: 1px solid #232734; border-radius: 6px; padding: 10px; position: relative; background: #12141b; }
-.card > .btn.tiny.danger { position: absolute; top: 6px; right: 6px; }
+/* Above a pinned header, so remove stays clickable where the two overlap. */
+.card > .btn.tiny.danger { position: absolute; top: 6px; right: 6px; z-index: 11; }
 
 .inline-list { display: flex; flex-wrap: wrap; gap: 6px; }
 .inline-item { display: flex; align-items: center; gap: 4px; }
@@ -182,44 +151,22 @@ textarea.input { resize: vertical; font-family: inherit; }
 /* ── problems ────────────────────────────────────────────── */
 
 .problems { flex: none; max-height: 190px; display: flex; flex-direction: column; background: var(--panel); border-top: 1px solid var(--line); }
-.problems-head { padding: 6px 14px; font-size: 11px; text-transform: uppercase; letter-spacing: 0.09em; color: #5d6478; border-bottom: 1px solid var(--line); }
-.problems-list { overflow-y: auto; }
 .problem { padding: 5px 14px; font-size: 12.5px; border-bottom: 1px solid #1d202a; display: flex; gap: 8px; align-items: baseline; }
 .problem code { font-family: var(--mono); font-size: 11.5px; color: var(--accent); flex: none; }
 .problem .code { margin-left: auto; font-size: 10px; color: #4e5468; }
 .problem.err { border-left: 2px solid var(--err); }
 .problem.warn { border-left: 2px solid var(--warn); }
 
-/* ── world tree ──────────────────────────────────────────── */
+/* ── chips (balance & timeline views) ────────────────────── */
 
-.world-tree { max-width: 900px; }
-.tree-biome { margin-bottom: 18px; border: 1px solid var(--line); border-radius: 8px; background: #15171f; overflow: hidden; }
-.tree-biome.orphans { border-color: #4a3a24; }
-.tree-row { display: flex; align-items: center; gap: 9px; padding: 6px 12px; border-bottom: 1px solid #1d202a; }
-.tree-row:last-child { border-bottom: none; }
-.tree-row.biome { background: #1c1f29; }
-.tree-row.area { padding-left: 26px; }
-.tree-row.poi { padding-left: 46px; background: #12141b; }
-.tree-name { background: none; border: none; color: var(--text); cursor: pointer; padding: 0; text-align: left; }
-.tree-name:hover { color: var(--accent); text-decoration: underline; }
-.tree-row.biome .tree-name { color: var(--accent); font-weight: 600; }
-.tree-id { font-family: var(--mono); font-size: 11px; color: #4e5468; }
-.tree-meta { font-size: 11px; color: #5d6478; }
 .tree-chip { font-size: 10.5px; background: #22252f; color: #8890a6; padding: 1px 7px; border-radius: 9px; }
 .tree-chip.gate { background: #2f2718; color: var(--accent); }
 .tree-chip.dungeon { background: #1b2a2f; color: #6fb3c4; }
 .tree-chip.hidden { background: #2a2035; color: #b48ad6; }
 .tree-chip.err { background: #3a2224; color: var(--err); }
-.tree-row .btn.tiny { margin-left: auto; }
-.tree-connections { display: flex; flex-wrap: wrap; gap: 10px; padding: 3px 12px 7px 46px; }
-.tree-conn { font-size: 11px; color: #5d6478; font-family: var(--mono); }
-.tree-conn em { color: var(--accent); font-style: normal; }
-.warn-text { color: var(--warn); font-weight: 600; }
-.empty.indent { padding-left: 26px; }
-.empty.indent2 { padding-left: 46px; }
 
 /* problems panel: where + what + why, in that order */
-.problems-count { margin-left: 10px; color: #4e5468; text-transform: none; letter-spacing: 0; }
+
 .problem {
   display: flex; gap: 10px; align-items: baseline; width: 100%; text-align: left;
   background: none; border: none; border-bottom: 1px solid #1d202a;

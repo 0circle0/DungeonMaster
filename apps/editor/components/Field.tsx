@@ -14,10 +14,22 @@
 'use client';
 
 import { useState } from 'react';
-import type { FieldSpec } from '@/lib/schema';
-import { labelFor } from '@/lib/schema';
+import type { FieldEntry, FieldSpec } from '@/lib/schema';
+import { labelFor, stepFor } from '@/lib/schema';
+import { fieldLabel } from '@/lib/labels';
+import { hasContent, rendersAsGroup } from '@/lib/fieldContent';
 import type { Path } from '@/lib/store';
 import { JsonBox } from './JsonBox';
+
+/**
+ * Height of one pinned header, and how many may stack.
+ *
+ * A gate inside a dialogue option reaches nine levels, and nine stacked
+ * headers would be the whole panel. Four costs 104px of a ~600px column, which
+ * is already as much as orientation is worth; deeper groups simply scroll.
+ */
+const HEAD_ROW = 26;
+const MAX_PINNED = 4;
 
 export interface FieldProps {
   spec: FieldSpec;
@@ -30,6 +42,15 @@ export interface FieldProps {
   onChange: (path: Path, value: unknown) => void;
   onRemove: (path: Path) => void;
   depth?: number;
+  /** Render optional object fields inline rather than behind a fold. Off by default. */
+  expandOptional?: boolean;
+  /**
+   * What the enclosing section is called, for levels whose own label is a bare
+   * index. Lets an array item head read "Nodes 3" rather than "3".
+   */
+  context?: string;
+  /** Put an empty revealed section away again. Absent when there is nothing to undo. */
+  onHide?: () => void;
 }
 
 /** A sensible empty value, so "Add" produces something the schema accepts. */
@@ -103,13 +124,18 @@ export function Field(props: FieldProps) {
       );
     }
 
-    case 'number':
+    case 'number': {
+      const step = stepFor(spec);
       return (
         <Labelled label={label} description={description}>
           <input
             className="input narrow"
             type="number"
-            step={spec.int ? 1 : 'any'}
+            step={step}
+            // The declared bounds, so the arrows stop where the schema does
+            // instead of walking a probability past 1 and failing validation.
+            {...(spec.min !== null ? { min: spec.min } : {})}
+            {...(spec.max !== null ? { max: spec.max } : {})}
             value={typeof value === 'number' ? value : ''}
             onChange={(e) => {
               const next = e.target.value === '' ? undefined : Number(e.target.value);
@@ -119,6 +145,7 @@ export function Field(props: FieldProps) {
           />
         </Labelled>
       );
+    }
 
     case 'boolean':
       return (
@@ -155,15 +182,18 @@ export function Field(props: FieldProps) {
       const items = Array.isArray(value) ? value : [];
       // Short scalar lists (tags, ability ids) render inline rather than as cards.
       const inline = spec.element.kind === 'string' || spec.element.kind === 'number';
+      // The section head supplies the name at the top level, so `label` is blank
+      // there; `context` carries it down so an item still knows what it is one of.
+      const name = label ?? props.context;
       return (
         <div className="group">
-          <div className="group-head">
-            <span className="group-label">{label}</span>
+          <GroupHead depth={depth} label={label}>
             <span className="count">{items.length}</span>
             <button className="btn tiny" onClick={() => onChange([...path, items.length], emptyValue(spec.element))}>
               + Add
             </button>
-          </div>
+            {props.onHide && <HideButton onHide={props.onHide} />}
+          </GroupHead>
           {description && <p className="hint">{description}</p>}
           <div className={inline ? 'inline-list' : 'stack'}>
             {items.map((item, i) => (
@@ -173,9 +203,15 @@ export function Field(props: FieldProps) {
                   spec={spec.element}
                   value={item}
                   path={[...path, i]}
-                  label={inline ? undefined : `${i + 1}`}
+                  label={inline ? undefined : name ? `${name} ${i + 1}` : `${i + 1}`}
                   description={null}
                   depth={depth + 1}
+                  // An item is present by construction; inheriting the array's
+                  // own optionality would offer to unset the item as if it were
+                  // the whole list.
+                  optional={false}
+                  context={name}
+                  onHide={undefined}
                 />
                 <button className="btn tiny danger" title="Remove" onClick={() => onRemove([...path, i])}>
                   ×
@@ -188,46 +224,8 @@ export function Field(props: FieldProps) {
       );
     }
 
-    case 'object': {
-      const object = (value ?? {}) as Record<string, unknown>;
-      const required = spec.fields.filter((f) => !f.optional);
-      const extras = spec.fields.filter((f) => f.optional);
-      return (
-        <div className={depth === 0 ? 'form' : 'group'}>
-          {label && depth > 0 && <div className="group-label">{label}</div>}
-          {required.map((field) => (
-            <Field
-              {...props}
-              key={field.key}
-              spec={field.spec}
-              value={object[field.key]}
-              path={[...path, field.key]}
-              label={labelFor(field.key)}
-              description={field.description}
-              optional={false}
-              depth={depth + 1}
-            />
-          ))}
-          {extras.length > 0 && (
-            <Collapsible label={`Optional (${extras.length})`}>
-              {extras.map((field) => (
-                <Field
-                  {...props}
-                  key={field.key}
-                  spec={field.spec}
-                  value={object[field.key] ?? field.defaultValue}
-                  path={[...path, field.key]}
-                  label={labelFor(field.key)}
-                  description={field.description}
-                  optional
-                  depth={depth + 1}
-                />
-              ))}
-            </Collapsible>
-          )}
-        </div>
-      );
-    }
+    case 'object':
+      return <ObjectField {...props} spec={spec} depth={depth} />;
 
     case 'record': {
       const entries = Object.entries((value ?? {}) as Record<string, unknown>);
@@ -235,8 +233,7 @@ export function Field(props: FieldProps) {
       const unused = options.filter((id) => !entries.some(([k]) => k === id));
       return (
         <div className="group">
-          <div className="group-head">
-            <span className="group-label">{label}</span>
+          <GroupHead depth={depth} label={label}>
             {spec.keyRef ? (
               <select
                 className="input narrow"
@@ -253,7 +250,8 @@ export function Field(props: FieldProps) {
             ) : (
               <KeyAdder onAdd={(key) => onChange([...path, key], emptyValue(spec.value))} />
             )}
-          </div>
+            {props.onHide && <HideButton onHide={props.onHide} />}
+          </GroupHead>
           {description && <p className="hint">{description}</p>}
           <div className="stack">
             {entries.map(([key, entryValue]) => (
@@ -267,6 +265,8 @@ export function Field(props: FieldProps) {
                   label={undefined}
                   description={null}
                   depth={depth + 1}
+                  context={label ?? props.context}
+                  onHide={undefined}
                 />
                 <button className="btn tiny danger" onClick={() => onRemove([...path, key])}>
                   ×
@@ -284,33 +284,180 @@ export function Field(props: FieldProps) {
     case 'dsl':
       return (
         <div className="group">
-          <div className="group-head">
-            <span className="group-label">{label}</span>
+          <GroupHead depth={depth} label={label}>
             <span className="badge">{spec.flavour}</span>
-          </div>
+            {props.onHide && <HideButton onHide={props.onHide} />}
+          </GroupHead>
           {description && <p className="hint">{description}</p>}
-          <JsonBox
-            value={value}
-            onChange={(next) => onChange(path, next)}
-            placeholder={
-              spec.flavour === 'effect'
-                ? '[ { "damage": { "target": { "ref": "target.id" }, "amount": { "roll": "1d6" } } } ]'
-                : spec.flavour === 'predicate'
-                  ? '{ "gte": [ { "ref": "actor.attr.might" }, 14 ] }'
-                  : '{ "add": [ { "ref": "actor.level" }, 2 ] }'
-            }
-          />
+          <JsonBox value={value} onChange={(next) => onChange(path, next)} />
         </div>
       );
 
     default:
       return (
         <div className="group">
-          <div className="group-label">{label}</div>
+          <GroupHead depth={depth} label={label}>
+            {props.onHide && <HideButton onHide={props.onHide} />}
+          </GroupHead>
           <JsonBox value={value} onChange={(next) => onChange(path, next)} />
         </div>
       );
   }
+}
+
+/**
+ * One group's header bar, pinned so you can still see what you are inside.
+ *
+ * The offset comes from `depth`, which every recursion already threads, so
+ * nested headers stack rather than cover one another; shallower ones sit on top,
+ * which is what makes the hand-off read right as a deep group scrolls away under
+ * its parent. Sticky is bounded by the parent's padding box, so a header never
+ * outlives its own content.
+ *
+ * Two things this depends on and would break silently: `.group-head.pinned`
+ * needs an opaque background (content scrolls *under* it), and no ancestor may
+ * set `overflow`.
+ *
+ * The label span is rendered only when there is a label. A top-level container
+ * is named by its section head instead, and pinning a blank bar would cost a row
+ * and say nothing.
+ */
+function GroupHead(props: { depth: number; label?: string; children?: React.ReactNode }) {
+  const slot = props.depth - 1;
+  const pinned = slot >= 1 && slot <= MAX_PINNED && Boolean(props.label);
+  return (
+    <div
+      className={`group-head ${pinned ? 'pinned' : ''}`}
+      style={pinned ? { top: slot * HEAD_ROW, zIndex: 10 - props.depth } : undefined}
+    >
+      {props.label && <span className="group-label">{props.label}</span>}
+      {props.children}
+    </div>
+  );
+}
+
+/** Put back a section that was revealed and then left empty. */
+function HideButton(props: { onHide: () => void }) {
+  return (
+    <button className="btn tiny" title="Hide again — nothing was added" onClick={props.onHide}>
+      ×
+    </button>
+  );
+}
+
+/**
+ * An object's fields, with the empty optional ones folded into one dropdown.
+ *
+ * A component rather than a `case` because it holds state, and a hook inside a
+ * switch is a rules-of-hooks violation nothing here would catch.
+ *
+ * Revealing writes **nothing to the document**. Writing the schema default back
+ * would be invisible (the section would re-hide itself on the next render, since
+ * emptiness is judged on the raw value) and writing a blank entry would fail
+ * `idSchema` and post an error for what was only a request to see a field. So
+ * "which sections am I looking at" stays where it belongs, in the view.
+ */
+function ObjectField(props: FieldProps & { spec: Extract<FieldSpec, { kind: 'object' }>; depth: number }) {
+  const { spec, value, path, label, description, optional, onChange, onRemove, depth } = props;
+  const [revealed, setRevealed] = useState<ReadonlySet<string>>(new Set());
+
+  const reveal = (key: string) => setRevealed(new Set(revealed).add(key));
+  const hide = (key: string) => {
+    const next = new Set(revealed);
+    next.delete(key);
+    setRevealed(next);
+  };
+
+  // An absent optional object is not there at all. Rendering its fields
+  // with the schema defaults filled in reads as "this exists" — a POI with
+  // no interior map showed a live 7×7 — and a single keystroke in any of
+  // them would silently materialize the object.
+  if (optional && value == null) {
+    return (
+      <div className="group">
+        <GroupHead depth={depth} label={label}>
+          <span className="empty">not set</span>
+          <button className="btn tiny" onClick={() => onChange(path, emptyValue(spec))}>
+            + Add
+          </button>
+          {props.onHide && <HideButton onHide={props.onHide} />}
+        </GroupHead>
+        {description && <p className="hint">{description}</p>}
+      </div>
+    );
+  }
+
+  const object = (value ?? {}) as Record<string, unknown>;
+  const required = spec.fields.filter((f) => !f.optional);
+  const extras = spec.fields.filter((f) => f.optional);
+
+  // Only below the top level: `ItemForm` gives depth-1 fields their own section
+  // heads and counts, and folding those would move the form's outline about
+  // depending on what happens to be filled in.
+  const nested = depth >= 1 && props.expandOptional === true;
+  const foldable = (field: FieldEntry) =>
+    nested && rendersAsGroup(field.spec) && !hasContent(object[field.key]) && !revealed.has(field.key);
+  const shown = extras.filter((field) => !foldable(field));
+  const hidden = extras.filter(foldable);
+
+  const renderEntry = (field: FieldEntry, isOptional: boolean) => (
+    <Field
+      {...props}
+      key={field.key}
+      spec={field.spec}
+      value={isOptional ? (object[field.key] ?? field.defaultValue) : object[field.key]}
+      path={[...path, field.key]}
+      label={fieldLabel(labelFor(field.key))}
+      description={field.description}
+      optional={isOptional}
+      depth={depth + 1}
+      context={undefined}
+      // Offered only while the section is still empty; once something is in it,
+      // removing it is the array's or object's own business.
+      onHide={revealed.has(field.key) && !hasContent(object[field.key]) ? () => hide(field.key) : undefined}
+    />
+  );
+
+  return (
+    <div className={depth === 0 ? 'form' : 'group'}>
+      {(label || optional) && depth > 0 && (
+        <GroupHead depth={depth} label={label}>
+          {optional && (
+            <button
+              className="btn tiny danger"
+              title="Remove this — back to not set"
+              onClick={() => onRemove(path)}
+            >
+              × unset
+            </button>
+          )}
+          {props.onHide && <HideButton onHide={props.onHide} />}
+        </GroupHead>
+      )}
+      {required.map((field) => renderEntry(field, false))}
+      {shown.length > 0 &&
+        (props.expandOptional ? (
+          shown.map((field) => renderEntry(field, true))
+        ) : (
+          <Collapsible label={`Optional (${shown.length})`}>
+            {shown.map((field) => renderEntry(field, true))}
+          </Collapsible>
+        ))}
+      {hidden.length > 0 && (
+        <div className="add-row">
+          <select className="input narrow" value="" onChange={(e) => e.target.value && reveal(e.target.value)}>
+            <option value="">+ add…</option>
+            {hidden.map((field) => (
+              <option key={field.key} value={field.key}>
+                {fieldLabel(labelFor(field.key))}
+              </option>
+            ))}
+          </select>
+          <span className="count">{hidden.length} more</span>
+        </div>
+      )}
+    </div>
+  );
 }
 
 function Labelled(props: { label?: string; description?: string | null; children: React.ReactNode }) {

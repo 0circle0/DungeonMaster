@@ -219,6 +219,38 @@ export const masteryTierSchema = z
   .strict();
 
 /** Equipment slots, so gear layout is a module decision. */
+/**
+ * A named quality a weapon can have: finesse, versatile, two-handed, thrown.
+ *
+ * `items[].properties` was an `idSchema[]` naming nothing declared anywhere —
+ * tags with extra steps, and unvalidated. Making the vocabulary real means a
+ * property can carry modifiers and a requirement can ask for one, which is what
+ * a D&D weapon property actually is.
+ */
+export const itemPropertySchema = z
+  .object({
+    id: idSchema,
+    name: displayName,
+    description: description.default(''),
+    /** Additive modifiers to derived stats while a weapon with this is wielded. */
+    modifiers: z.record(idSchema, ExprSchema).default({}),
+    extra,
+  })
+  .strict();
+
+/**
+ * What money is called here.
+ *
+ * The engine keeps a single scalar purse; this is only what to print beside it.
+ * A module that never mentions money simply never shows one.
+ */
+export const currencySchema = z
+  .object({
+    name: displayName.default('coins'),
+    abbrev: z.string().max(6).default('c'),
+  })
+  .strict();
+
 export const equipmentSlotSchema = z
   .object({
     id: idSchema,
@@ -237,6 +269,7 @@ export const rulesSchema = z
     conditions: z.array(conditionSchema).default([]),
     actionTypes: z.array(actionTypeSchema).default([]),
     equipmentSlots: z.array(equipmentSlotSchema).default([]),
+    itemProperties: z.array(itemPropertySchema).default([]),
     masteryTiers: z.array(masteryTierSchema).default([]),
     rests: z.array(restSchema).default([]),
     resolution: resolutionSchema.default({}),
@@ -257,6 +290,7 @@ export const rulesSchema = z
     spellcasting: spellcastingSchema.default({}),
     perception: perceptionSchema.default({}),
     /** Resource consumed when a character is reduced to zero, e.g. `hp`. */
+    currency: currencySchema.default({}),
     vitalResource: ref('rules.resources'),
     /** Attribute that breaks initiative ties, if any. */
     initiativeStat: ref('rules.derivedStats').optional(),

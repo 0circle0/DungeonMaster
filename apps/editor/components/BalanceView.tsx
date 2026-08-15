@@ -127,6 +127,34 @@ export function BalanceView({ doc }: { doc: ModuleDoc }) {
 
   const itemName = (id: string) => String(items.find((i) => i['id'] === id)?.['name'] ?? id);
 
+  /**
+   * Which areas send this table at a party it was not written for.
+   *
+   * `areas[].recommendedLevel` and `dangerLevel` were the author's own note
+   * about who a place is for, read by nothing — including this view, whose
+   * whole job is to answer that question. Now they answer it: an area rated for
+   * level 2 that draws on a table budgeted well above a level-2 party is worth
+   * saying out loud.
+   */
+  const overAimed = (table: Row): string[] => {
+    const out: string[] = [];
+    for (const area of list(doc, 'world.areas')) {
+      const tables = Array.isArray(area['encounterTables']) ? (area['encounterTables'] as string[]) : [];
+      if (!tables.includes(String(table['id']))) continue;
+
+      const rated = Number(area['recommendedLevel'] ?? 0);
+      if (!rated) continue;
+
+      // Judged at the level the area claims to be for, not at whatever is
+      // typed in the box above — that is the whole point of the field.
+      const assessed = assessTable(table as never, monsters as never, levels as never, rated, partySize);
+      if (assessed.worst === 'deadly' || assessed.expected === 'deadly') {
+        out.push(`${String(area['name'] ?? area['id'])} is rated for level ${rated}, where this reads ${assessed.worst}`);
+      }
+    }
+    return out;
+  };
+
   return (
     <div className="balance">
       <div className="pane-head">
@@ -203,6 +231,9 @@ export function BalanceView({ doc }: { doc: ModuleDoc }) {
           <section className="balance-table" key={String(table['id'])}>
             <div className="balance-table-head">
               <strong>{String(table['name'] ?? table['id'])}</strong>
+              {overAimed(table).map((warning) => (
+                <span className="diff deadly" key={warning}>{warning}</span>
+              ))}
               <span className={`diff ${DIFFICULTY_CLASS[assessment.expected]}`}>
                 typical: {assessment.expected}
               </span>
@@ -268,6 +299,9 @@ export function BalanceView({ doc }: { doc: ModuleDoc }) {
           <section className="balance-table" key={String(table['id'])}>
             <div className="balance-table-head">
               <strong>{String(table['name'] ?? table['id'])}</strong>
+              {overAimed(table).map((warning) => (
+                <span className="diff deadly" key={warning}>{warning}</span>
+              ))}
               <span className="balance-meta">
                 {preview.excluded.length > 0
                   ? `${preview.excluded.length} entr${preview.excluded.length === 1 ? 'y' : 'ies'} gated out for this party`

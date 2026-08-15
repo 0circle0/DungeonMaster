@@ -43,10 +43,20 @@ export function toTiles(module: CompiledModule, units: number): number {
 
 /** A creature's reach in tiles: its size's natural reach, at least one. */
 export function reachOf(module: CompiledModule, entity: Entity): number {
-  if (!entity.statblock) return 1;
-  const statblock = module.find<{ size?: string }>('content.monsters', entity.statblock);
-  if (!statblock?.size) return 1;
-  const size = module.find<{ reach: number }>('rules.sizes', statblock.size);
+  const statblock = entity.statblock
+    ? module.find<{ size?: string }>('content.monsters', entity.statblock)
+    : undefined;
+
+  // A creature that declares no size falls back to the module's own default,
+  // which is what `rules.defaultSize` is for and what nothing consulted — so a
+  // module declaring "everything is Medium unless it says otherwise" was
+  // ignored and every player character had a reach of exactly one tile.
+  const sizeId = statblock?.size
+    ?? (entity.extra['size'] as string | undefined)
+    ?? module.source.rules.defaultSize;
+  if (!sizeId) return 1;
+
+  const size = module.find<{ reach: number }>('rules.sizes', String(sizeId));
   return size ? Math.max(1, toTiles(module, size.reach)) : 1;
 }
 
@@ -137,6 +147,18 @@ export function reachability(
   return { inRange: gap <= range, hasSight, distance: gap, cover };
 }
 
+/**
+ * Cover so complete there is no shot at all.
+ *
+ * `blocksTargeting` was declared on every cover type and consulted by nothing,
+ * so total cover was worth a defence bonus and no more — a creature behind a
+ * pillar could still be picked off through it.
+ */
+export function blocksTargeting(module: CompiledModule, cover: string | null): boolean {
+  if (!cover) return false;
+  return module.find<{ blocksTargeting?: boolean }>('rules.coverTypes', cover)?.blocksTargeting === true;
+}
+
 /** Defence bonus granted by a cover type. */
 export function coverBonus(module: CompiledModule, cover: string | null): number {
   if (!cover) return 0;
@@ -216,7 +238,7 @@ export function resolveTargets(
       // Even a sweeping ability only reaches what it can see and get to.
       const reachable = wanted.filter((entity) => {
         const check = reachability(context, actor.position, entity.position, Math.max(range, 1));
-        return check.inRange && check.hasSight;
+        return check.inRange && check.hasSight && !blocksTargeting(module, check.cover);
       });
       return { targets: reachable, tiles: reachable.map((e) => e.position), reason: null };
     }
@@ -231,6 +253,9 @@ export function resolveTargets(
       const check = reachability(context, actor.position, target.position, effectiveRange);
       if (!check.inRange) return { targets: [], tiles: [], reason: 'out of reach' };
       if (!check.hasSight) return { targets: [], tiles: [], reason: 'no line of sight' };
+      if (blocksTargeting(module, check.cover)) {
+        return { targets: [], tiles: [], reason: 'they are behind full cover' };
+      }
 
       return { targets: [target], tiles: [target.position], reason: null };
     }

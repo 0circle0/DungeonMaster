@@ -5,47 +5,18 @@
  * lints. This is the gate a module passes before it can be played or shared.
  */
 
-import { readFileSync, existsSync, readdirSync } from 'node:fs';
-import { join, resolve, dirname, basename } from 'node:path';
+import { readFileSync } from 'node:fs';
+import { dirname, basename } from 'node:path';
 import { compileModule } from '../compile.js';
 import { lintModule, formatDiagnostics } from '../diagnostics/lint.js';
 import { resolveExtends } from '../merge.js';
-
-function readJson(path: string): Record<string, unknown> {
-  try {
-    return JSON.parse(readFileSync(path, 'utf8')) as Record<string, unknown>;
-  } catch (err) {
-    throw new Error(`cannot read ${path}: ${(err as Error).message}`);
-  }
-}
-
-/** Accept either a module directory or a direct path to its JSON. */
-function resolveModulePath(input: string): string {
-  const target = resolve(input);
-  if (existsSync(target) && !target.endsWith('.json')) {
-    const candidate = join(target, 'module.json');
-    if (existsSync(candidate)) return candidate;
-  }
-  if (!existsSync(target)) throw new Error(`no such module: ${input}`);
-  return target;
-}
-
-/**
- * Look for `extends` bases among sibling module directories, which is how a
- * pack finds the game it layers onto during local development.
- */
-function makeLoader(modulesRoot: string) {
-  return (identity: string): Record<string, unknown> | undefined => {
-    if (!existsSync(modulesRoot)) return undefined;
-    for (const entry of readdirSync(modulesRoot)) {
-      const candidate = join(modulesRoot, entry, 'module.json');
-      if (!existsSync(candidate)) continue;
-      const doc = readJson(candidate);
-      if (`${String(doc['id'])}@${String(doc['version'])}` === identity) return doc;
-    }
-    return undefined;
-  };
-}
+import {
+  readAssembledModule,
+  resolveModulePath,
+  siblingLoader,
+  formatMapIssues,
+} from '../load.js';
+import { sortWorldMaps } from '../staticmaps.js';
 
 function main(): number {
   const arg = process.argv[2];
@@ -64,10 +35,29 @@ function main(): number {
     return 2;
   }
 
-  // Lint the raw text first: it is the only pass that can report line and
-  // column numbers, and it produces far better messages than the schema alone.
+  // Assembly first: static map folders get inlined and their problems come
+  // back with per-file positions, and the lint's reference-integrity pass
+  // needs the assembled document — the raw text alone would call every
+  // folder-map reference dangling.
   const colour = process.stdout.isTTY === true;
-  const lint = lintModule(rawText);
+  let assembled: ReturnType<typeof readAssembledModule> | null;
+  try {
+    assembled = readAssembledModule(path);
+  } catch {
+    // Malformed JSON: the lint below reports the syntax error with its line.
+    assembled = null;
+  }
+  if (assembled && assembled.issues.length > 0) {
+    process.stderr.write(
+      `✗ ${arg} — ${assembled.issues.length} map error${assembled.issues.length === 1 ? '' : 's'}\n\n`,
+    );
+    process.stderr.write(`${formatMapIssues(assembled.issues)}\n`);
+    return 1;
+  }
+
+  // Lint the raw text: it is the only pass that can report line and column
+  // numbers, and it produces far better messages than the schema alone.
+  const lint = lintModule(rawText, assembled ? { assembled: assembled.doc } : {});
   const errors = lint.diagnostics.filter((d) => d.severity === 'error');
   const lintWarnings = lint.diagnostics.filter((d) => d.severity === 'warning');
 
@@ -80,16 +70,20 @@ function main(): number {
     return 1;
   }
 
-  // Safe now that linting has proven the document parses.
-  const document = readJson(path);
-  const modulesRoot = dirname(dirname(path));
-  const resolved = resolveExtends(document, makeLoader(modulesRoot));
+  if (!assembled) {
+    // Unreachable in practice: a document the lint passed also assembles.
+    process.stderr.write(`✗ ${arg}: could not read the module directory\n`);
+    return 1;
+  }
+
+  const modulesRoot = dirname(assembled.dir);
+  const resolved = resolveExtends(assembled.doc, siblingLoader(modulesRoot));
   if (!resolved.ok) {
     process.stderr.write(`✗ ${basename(path)}: ${resolved.error}\n`);
     return 1;
   }
 
-  const result = compileModule(resolved.document);
+  const result = compileModule(sortWorldMaps(resolved.document));
 
   if (!result.ok) {
     process.stderr.write(`✗ ${arg} — ${result.errors.length} error(s) after resolving extends\n`);
@@ -111,6 +105,7 @@ function main(): number {
     ['items', module.ids('content.items').length],
     ['monsters', module.ids('content.monsters').length],
     ['rooms', module.ids('world.roomTemplates').length],
+    ['maps', module.ids('world.maps').length],
     ['quests', module.ids('narrative.quests').length],
   ] as const;
   process.stdout.write(

@@ -7,10 +7,9 @@
  */
 
 import { describe, it, expect } from 'vitest';
-import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
-import { compileModule } from '@dm/module';
 import type { CompiledModule } from '@dm/module';
+import { loadModuleFrom } from '@dm/module/load';
 import type { GameState } from '@dm/engine';
 import { reduce, spawnMonster, key } from '@dm/engine';
 import { startSession, runCommand } from './session.js';
@@ -18,10 +17,7 @@ import type { Session } from './session.js';
 import { affordances, affordancesAt, affordancesFor } from './affordances.js';
 
 function loadModule(name: string): CompiledModule {
-  const path = fileURLToPath(new URL(`../../../modules/${name}/module.json`, import.meta.url));
-  const result = compileModule(JSON.parse(readFileSync(path, 'utf8')));
-  if (!result.ok) throw new Error(result.errors.map((e) => `${e.path}: ${e.message}`).join('\n'));
-  return result.module;
+  return loadModuleFrom(fileURLToPath(new URL(`../../../modules/${name}`, import.meta.url)));
 }
 
 const GREENMARCH = loadModule('greenmarch');

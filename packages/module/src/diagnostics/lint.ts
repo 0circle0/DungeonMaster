@@ -460,6 +460,43 @@ function lintSemantics(ctx: Context, document: Record<string, unknown>): void {
   const pois = asList(world['pointsOfInterest']);
   const quests = asList(narrative['quests']);
 
+  lintTrapPlacement(ctx, document);
+  lintOneWayTraps(ctx, document);
+  lintCaverns(ctx, document);
+  lintStaticMaps(ctx, document);
+
+  // A module with no start location compiles clean but throws the moment a
+  // new game begins (`startingLocation` in the engine). Catch it here, where
+  // the author can still see it. These are errors, not warnings: the module
+  // cannot be played at all.
+  const hasStart =
+    start['startingPoi'] !== undefined ||
+    start['startingArea'] !== undefined ||
+    start['startingDungeon'] !== undefined;
+  if (!hasStart) {
+    report(
+      ctx,
+      'error',
+      'no_start_location',
+      'start',
+      'no starting location is set',
+      'set start.startingPoi (or startingArea / startingDungeon) so a new game knows where to begin',
+    );
+  }
+
+  // No areas is fine for a dungeon-only module, but with no starting dungeon
+  // either there is nowhere for the world to exist.
+  if (areas.length === 0 && start['startingDungeon'] === undefined) {
+    report(
+      ctx,
+      'error',
+      'empty_world',
+      'world.areas',
+      'the world has no areas and no starting dungeon',
+      'add an area to world.areas, or set start.startingDungeon for a dungeon-only module',
+    );
+  }
+
   // Reachability: walk the connection graph from wherever play begins.
   if (areas.length > 0) {
     const startArea =
@@ -549,6 +586,372 @@ function lintSemantics(ctx: Context, document: Record<string, unknown>): void {
   }
 }
 
+/**
+ * A biome that stocks traps no room it can draw will ever place.
+ *
+ * Authoring a trap and never seeing it is one of the quieter ways to lose an
+ * afternoon: the trap is valid, the biome lists it, and every room template the
+ * biome can draw leaves `trapChance` at a value that never fires.
+ */
+/**
+ * An area you can walk into and never walk out of.
+ *
+ * The softlock every hand-built dungeon eventually ships: a one-way road in,
+ * nothing out, and no ending to reach from there. The reachability walk already
+ * traverses forward only, so this is the same walk asked in reverse.
+ */
+function lintOneWayTraps(ctx: Context, doc: Record<string, unknown>): void {
+  const world = (doc['world'] ?? {}) as Record<string, unknown>;
+  const areas = asList(world['areas']);
+  if (areas.length === 0) return;
+
+  // Where you can get to from each area, honouring one-way roads in both
+  // directions: a road marked one-way is passable out of its origin only.
+  const out = new Map<string, Set<string>>();
+  for (const area of areas) out.set(String(area['id']), new Set());
+  for (const area of areas) {
+    const from = String(area['id']);
+    for (const road of asList(area['connections'])) {
+      const to = String(road['to']);
+      out.get(from)?.add(to);
+      // The far end can come back only if it declares the road itself, and only
+      // if this end did not mark it one-way.
+      if (road['oneWay'] === true) out.get(to)?.delete(from);
+    }
+  }
+
+  for (const [i, area] of areas.entries()) {
+    const id = String(area['id']);
+    const reachable = out.get(id) ?? new Set<string>();
+    if (reachable.size > 0) continue;
+
+    // Somewhere you can reach at all, and then never leave.
+    const enterable = areas.some((other) =>
+      asList(other['connections']).some((road) => String(road['to']) === id));
+    if (!enterable) continue;
+
+    report(
+      ctx,
+      'warning',
+      'one_way_trap',
+      `world.areas.${i}.connections`,
+      `"${id}" can be entered but never left`,
+      'give it a road out, or mark it as where the story ends',
+    );
+  }
+}
+
+/**
+ * Static maps, judged as places rather than grids.
+ *
+ * The schema already guarantees the shape — rectangular layers, a total base
+ * terrain. What it cannot see is meaning: whether the party can arrive, stand,
+ * and reach the rest of the floor; whether a room-template map has anywhere a
+ * corridor may attach; whether a gate sits on something door-like. Those are
+ * exactly the mistakes an author makes in a CSV at midnight.
+ */
+function lintStaticMaps(ctx: Context, doc: Record<string, unknown>): void {
+  const world = (doc['world'] ?? {}) as Record<string, unknown>;
+  const content = (doc['content'] ?? {}) as Record<string, unknown>;
+  const maps = asList(world['maps']);
+  if (maps.length === 0) return;
+
+  const impassable = new Set(
+    asList(world['terrains'])
+      .filter((terrain) => terrain['passable'] === false)
+      .map((terrain) => String(terrain['id'])),
+  );
+  const doorLike = new Set(
+    asList(world['terrains'])
+      .filter((terrain) => terrain['isDoor'] === true || terrain['passable'] !== false)
+      .map((terrain) => String(terrain['id'])),
+  );
+
+  // Who uses each map, and how: arrival maps need an entry; room maps need doors.
+  const arrivalUse = new Map<string, string>();
+  const roomUse = new Map<string, string>();
+  for (const area of asList(world['areas'])) {
+    const id = (area['map'] as Record<string, unknown> | undefined)?.['static'];
+    if (typeof id === 'string') arrivalUse.set(id, `area "${String(area['id'])}"`);
+  }
+  for (const poi of asList(world['pointsOfInterest'])) {
+    const id = (poi['map'] as Record<string, unknown> | undefined)?.['static'];
+    if (typeof id === 'string') arrivalUse.set(id, `place "${String(poi['id'])}"`);
+  }
+  for (const dungeon of asList(world['dungeons'])) {
+    if (typeof dungeon['staticMap'] === 'string') {
+      arrivalUse.set(dungeon['staticMap'], `dungeon "${String(dungeon['id'])}"`);
+    }
+  }
+  for (const template of asList(world['roomTemplates'])) {
+    const id = (template['map'] as Record<string, unknown> | undefined)?.['static'];
+    if (typeof id === 'string') roomUse.set(id, `room template "${String(template['id'])}"`);
+  }
+
+  for (const [i, map] of maps.entries()) {
+    const mapId = String(map['id']);
+    const layers = asList(map['layers']);
+    const terrainLayers = layers.filter((layer) => layer['kind'] === 'terrain');
+    if (terrainLayers.length === 0) continue; // the schema already errored
+
+    // Compose the ground: later terrain layers override earlier.
+    const base = terrainLayers[0]!['cells'] as string[][];
+    const height = base.length;
+    const width = base[0]?.length ?? 0;
+    if (height === 0 || width === 0) continue;
+    const ground = base.map((row) => [...row]);
+    for (const layer of terrainLayers.slice(1)) {
+      (layer['cells'] as string[][]).forEach((row, y) =>
+        row.forEach((cell, x) => {
+          if (cell !== '') ground[y]![x] = cell;
+        }));
+    }
+    const open = (x: number, y: number): boolean =>
+      x >= 0 && y >= 0 && x < width && y < height && !impassable.has(ground[y]![x]!);
+
+    // Markers, by id.
+    const markerAt = new Map<string, { x: number; y: number }[]>();
+    for (const layer of layers) {
+      if (layer['kind'] !== 'markers') continue;
+      (layer['cells'] as string[][]).forEach((row, y) =>
+        row.forEach((cell, x) => {
+          if (cell === '') return;
+          const list = markerAt.get(cell);
+          if (list) list.push({ x, y });
+          else markerAt.set(cell, [{ x, y }]);
+        }));
+    }
+
+    // — arrival ————————————————————————————————————————————
+    const entryId = typeof map['entry'] === 'string' ? map['entry'] : 'entry';
+    const entry = markerAt.get(entryId)?.[0];
+    const usedFor = arrivalUse.get(mapId);
+    if (usedFor && !entry) {
+      report(
+        ctx,
+        'error',
+        'map_entry_missing',
+        `world.maps.${i}.entry`,
+        `"${mapId}" is where ${usedFor} arrives, but it has no "${entryId}" marker`,
+        'add the marker to a markers layer, or point `entry` at one that exists',
+      );
+    }
+    if (entry && !open(entry.x, entry.y)) {
+      report(
+        ctx,
+        'error',
+        'map_entry_impassable',
+        `world.maps.${i}.entry`,
+        `"${mapId}" puts its entry marker on impassable ground at ${entry.x},${entry.y}`,
+        'move the marker onto floor',
+      );
+    }
+
+    // — rooms need doors, on the edge ————————————————————————
+    const roomFor = roomUse.get(mapId);
+    const doors = markerAt.get('door') ?? [];
+    if (roomFor && doors.length === 0) {
+      report(
+        ctx,
+        'error',
+        'map_door_missing',
+        `world.maps.${i}.layers`,
+        `"${mapId}" is stamped into dungeons by ${roomFor}, but has no "door" markers — corridors would have nowhere to attach`,
+        'mark at least one boundary tile as a door',
+      );
+    }
+    for (const door of doors) {
+      const onEdge = door.x === 0 || door.y === 0 || door.x === width - 1 || door.y === height - 1;
+      if (roomFor && !onEdge) {
+        report(
+          ctx,
+          'error',
+          'map_door_on_edge',
+          `world.maps.${i}.layers`,
+          `"${mapId}" has a door marker at ${door.x},${door.y}, inside the map — corridors attach only at the boundary`,
+          'move the marker onto the outer ring',
+        );
+      }
+    }
+
+    // — gates want ground somebody can approach ————————————————
+    // A gate over a passable or door terrain reads fine; one buried in solid
+    // wall guards nothing and confuses the exits panel.
+    for (const layer of layers) {
+      if (layer['kind'] !== 'gates') continue;
+      (layer['cells'] as string[][]).forEach((row, y) =>
+        row.forEach((cell, x) => {
+          if (cell === '' || doorLike.has(ground[y]![x]!)) return;
+          report(
+            ctx,
+            'warning',
+            'map_gate_off_door',
+            `world.maps.${i}.layers`,
+            `"${mapId}" puts gate "${cell}" at ${x},${y} on "${ground[y]![x]}", which is neither a door nor passable`,
+            'put the gate on a door terrain, or open the ground beneath it',
+          );
+        }));
+    }
+
+    // — one floor, not several ———————————————————————————————
+    // Flood from the entry (or the first open tile). A deliberately sealed
+    // vault is a legitimate design, which is why this warns instead of erring.
+    let start = entry;
+    if (!start || !open(start.x, start.y)) {
+      outer: for (let y = 0; y < height; y += 1) {
+        for (let x = 0; x < width; x += 1) {
+          if (open(x, y)) { start = { x, y }; break outer; }
+        }
+      }
+    }
+    if (start) {
+      const seen = new Set<number>([start.y * width + start.x]);
+      const stack = [start];
+      while (stack.length > 0) {
+        const at = stack.pop()!;
+        for (const [dx, dy] of [[1, 0], [-1, 0], [0, 1], [0, -1]] as const) {
+          const nx = at.x + dx;
+          const ny = at.y + dy;
+          if (!open(nx, ny) || seen.has(ny * width + nx)) continue;
+          seen.add(ny * width + nx);
+          stack.push({ x: nx, y: ny });
+        }
+      }
+      let total = 0;
+      for (let y = 0; y < height; y += 1) {
+        for (let x = 0; x < width; x += 1) {
+          if (open(x, y)) total += 1;
+        }
+      }
+      if (seen.size < total) {
+        report(
+          ctx,
+          'warning',
+          'map_disconnected_floor',
+          `world.maps.${i}.layers`,
+          `"${mapId}" has ${total - seen.size} floor tile(s) unreachable from its entry`,
+          'sealed pockets are fine if deliberate; otherwise connect them or wall them in',
+        );
+      }
+    }
+
+    // Cells naming things that do not exist are the compiler's dangling_ref
+    // job; nothing to add here.
+    void content;
+  }
+
+  // — a static dungeon ignores its generator knobs —————————————
+  for (const [i, dungeon] of asList(world['dungeons']).entries()) {
+    if (typeof dungeon['staticMap'] !== 'string') continue;
+    const ignored = ['roomCount', 'branchiness', 'lockedDoorChance', 'corridorLength', 'corridor', 'algorithm', 'width', 'height']
+      .filter((knob) => dungeon[knob] !== undefined);
+    if (ignored.length > 0) {
+      report(
+        ctx,
+        'info',
+        'dungeon_static_fields_ignored',
+        `world.dungeons.${i}.staticMap`,
+        `"${String(dungeon['id'])}" is a static map; ${ignored.join(', ')} do nothing`,
+        'drop them, or remove staticMap to generate',
+      );
+    }
+  }
+
+  // — degree demands the tree cannot meet ————————————————————
+  for (const [i, dungeon] of asList(world['dungeons']).entries()) {
+    if (typeof dungeon['staticMap'] === 'string') continue;
+    if (dungeon['algorithm'] === 'caverns') continue;
+    const biome = asList(world['biomes']).find((entry) => entry['id'] === dungeon['biome']);
+    if (!biome) continue;
+    const templates = (Array.isArray(biome['roomTemplates']) ? biome['roomTemplates'] as string[] : [])
+      .map((id) => asList(world['roomTemplates']).find((entry) => entry['id'] === id))
+      .filter((entry): entry is Record<string, unknown> => Boolean(entry));
+    if (templates.length === 0) continue;
+
+    const caps = templates.map((entry) =>
+      typeof entry['maxExits'] === 'number' ? entry['maxExits'] : Infinity);
+    if (Math.max(...caps) <= 1) {
+      report(
+        ctx,
+        'warning',
+        'dungeon_degree_unsatisfiable',
+        `world.dungeons.${i}`,
+        `every room template "${String(dungeon['id'])}" can draw caps maxExits at 1 — a connected dungeon needs through-rooms, so the cap will be relaxed at generation`,
+        'raise maxExits on at least one template',
+      );
+    }
+  }
+}
+
+/**
+ * A cavern has no doors: whatever a module authors about locks or branchiness
+ * on one is silently meaningless, and silence is how a knob earns an
+ * afternoon of tuning. Say so instead.
+ */
+function lintCaverns(ctx: Context, doc: Record<string, unknown>): void {
+  const world = (doc['world'] ?? {}) as Record<string, unknown>;
+  for (const [i, dungeon] of asList(world['dungeons']).entries()) {
+    if (dungeon['algorithm'] !== 'caverns') continue;
+
+    const locks = Number(dungeon['lockedDoorChance'] ?? 0) > 0
+      || (Array.isArray(dungeon['doorGates']) && (dungeon['doorGates'] as unknown[]).length > 0);
+    if (locks) {
+      report(
+        ctx,
+        'warning',
+        'dungeon_locks_unusable',
+        `world.dungeons.${i}.lockedDoorChance`,
+        `"${String(dungeon['id'])}" is a cavern — it has no doors, so lockedDoorChance and doorGates do nothing`,
+        'drop them, or use the rooms or bsp algorithm',
+      );
+    }
+
+    if (Number(dungeon['branchiness'] ?? 0) > 0 && dungeon['branchiness'] !== undefined) {
+      report(
+        ctx,
+        'warning',
+        'dungeon_caverns_templates',
+        `world.dungeons.${i}.branchiness`,
+        `"${String(dungeon['id'])}" is a cavern — branchiness adds loops between rooms, and a cavern has neither`,
+        'drop it, or use the rooms or bsp algorithm',
+      );
+    }
+  }
+}
+
+function lintTrapPlacement(ctx: Context, doc: Record<string, unknown>): void {
+  const world = (doc['world'] ?? {}) as Record<string, unknown>;
+  const templates = new Map(
+    asList(world['roomTemplates']).map((entry) => [String(entry['id']), entry]),
+  );
+
+  for (const [i, biome] of asList(world['biomes']).entries()) {
+    const traps = Array.isArray(biome['traps']) ? (biome['traps'] as unknown[]) : [];
+    if (traps.length === 0) continue;
+
+    const drawable = (Array.isArray(biome['roomTemplates']) ? biome['roomTemplates'] : [])
+      .map((id) => templates.get(String(id)))
+      .filter((entry): entry is Record<string, unknown> => Boolean(entry));
+
+    // No templates at all is a different complaint; only judge the ones present.
+    if (drawable.length === 0) continue;
+    const canPlace = drawable.some((entry) => {
+      const chance = entry['trapChance'];
+      return chance === undefined || (typeof chance === 'number' && chance > 0);
+    });
+    if (canPlace) continue;
+
+    report(
+      ctx,
+      'warning',
+      'unplaceable_trap',
+      `world.biomes.${i}.traps`,
+      `"${String(biome['id'])}" stocks traps, but none of its room templates can place one`,
+      'give a room template a trapChance above zero, or drop the traps',
+    );
+  }
+}
+
 function asList(value: unknown): Record<string, unknown>[] {
   return Array.isArray(value) ? (value as Record<string, unknown>[]) : [];
 }
@@ -557,13 +960,26 @@ function asList(value: unknown): Record<string, unknown>[] {
 // Entry point
 // ---------------------------------------------------------------------------
 
+export interface LintOptions {
+  /**
+   * The document with static map folders inlined into `world.maps`.
+   *
+   * A `module.json` on disk may reference maps that live in sibling folders,
+   * which the raw text alone cannot resolve — compiling it as-is would report
+   * every such reference as dangling. When this is provided, the compile pass
+   * (reference integrity, duplicate ids) runs against it instead of the parsed
+   * input; every text-positioned lint still runs on the input itself.
+   */
+  readonly assembled?: Record<string, unknown>;
+}
+
 /**
  * Lint a module.
  *
  * Pass `text` to get line and column numbers; pass an already-parsed object to
  * check a document held in memory, as the editor does.
  */
-export function lintModule(input: string | unknown): LintResult {
+export function lintModule(input: string | unknown, options: LintOptions = {}): LintResult {
   const out: Diagnostic[] = [];
 
   let document: unknown;
@@ -607,11 +1023,15 @@ export function lintModule(input: string | unknown): LintResult {
   const schemaOk = lintSchema(ctx, document);
 
   if (schemaOk && typeof document === 'object' && document !== null) {
-    lintSemantics(ctx, document as Record<string, unknown>);
+    // Semantic checks see the assembled document when one is provided — the
+    // static-map rules are about maps that live in folders the raw text never
+    // mentions. Their diagnostics lose exact line numbers and keep everything
+    // else, the same trade the compile pass below makes.
+    lintSemantics(ctx, (options.assembled ?? document) as Record<string, unknown>);
 
     // Reference integrity and duplicate ids come from the compiler, so the
     // editor and the engine agree on what counts as valid.
-    const compiled = compileModule(document);
+    const compiled = compileModule(options.assembled ?? document);
     if (!compiled.ok) {
       for (const issue of compiled.errors) {
         const hint =

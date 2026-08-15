@@ -1,25 +1,27 @@
 /**
- * Entry point. The bundled starter module is read on the server so the editor
- * opens with something real in it rather than an empty document.
+ * Entry point — the studio. A bundled starter module is read on the server so
+ * the editor opens with something real in it rather than an empty document.
  */
 
-import { readFileSync, existsSync } from 'node:fs';
-import { join } from 'node:path';
-import { Editor } from './Editor';
-import type { ModuleDoc } from '@/lib/store';
+import type { Metadata } from 'next';
+import { listModuleNames, readModuleByName } from '@/lib/modulesOnDisk';
+import { Studio } from './studio/Studio';
 
-function loadStarter(): { doc: ModuleDoc; name: string } {
-  const candidates = ['greenmarch', 'core_fantasy', 'minimal'];
-  for (const name of candidates) {
-    const path = join(process.cwd(), '..', '..', 'modules', name, 'module.json');
-    if (existsSync(path)) {
-      return { doc: JSON.parse(readFileSync(path, 'utf8')) as ModuleDoc, name: `${name}.json` };
-    }
-  }
-  return { doc: {}, name: 'module.json' };
-}
+export const metadata: Metadata = {
+  title: 'DungeonMaster — studio',
+  description: 'World-first module authoring: a scene tree, a live map preview, and an inspector.',
+};
 
 export default function Page() {
-  const { doc, name } = loadStarter();
-  return <Editor initialDoc={doc} initialName={name} />;
+  const names = listModuleNames();
+  const starter = ['greenmarch', 'core_fantasy', 'minimal'].find((name) => names.includes(name)) ?? names[0];
+  const doc = starter ? readModuleByName(starter) : null;
+
+  return (
+    <Studio
+      initialDoc={doc ?? {}}
+      initialName={starter ? `${starter}.json` : 'untitled.module.json'}
+      templates={names}
+    />
+  );
 }

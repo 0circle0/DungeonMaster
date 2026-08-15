@@ -22,9 +22,62 @@ import { Rng } from '@dm/core';
 import type { CompiledModule, Value, Expr, Scope, DslRng } from '@dm/module';
 import { evalExpr } from '@dm/module';
 import type { Entity, GameState } from './state.js';
+import { dateOf, phaseOf, layerOf } from './sim/clock.js';
+import { arcScope } from './sim/arcs.js';
 
 /** Formulas must not consume randomness; a stat that changes when re-read is a bug. */
 const FORBIDDEN_RNG: Rng = Rng.fromSeed(0);
+
+interface ClassScopeDef {
+  id: string;
+  primaryAttribute?: string;
+  saveProficiencies?: string[];
+}
+
+interface MasteryTierDef {
+  id: string;
+  atRank: number;
+}
+
+interface FactionRankDef {
+  id: string;
+  ranks?: { id: string; atLeast: number }[];
+}
+
+/**
+ * The thresholds a requirement compares against: mastery tiers and faction ranks.
+ *
+ * `compileRequirement` lowers "requires journeyman smithing" to a comparison
+ * against `tiers.journeyman`, and "requires the Wardens to trust you" to one
+ * against `ranks.wardens.trusted`. Neither namespace was ever supplied, and
+ * because both sat in {@link OPEN_NAMESPACES} the miss resolved to `null`
+ * rather than erroring — which then threw inside the comparison, from a call
+ * site most callers do not guard. Both are pure functions of the module, so
+ * they are built once and cached on the module object.
+ */
+const thresholdCache = new WeakMap<CompiledModule, { tiers: Scope; ranks: Scope }>();
+
+function thresholdsOf(module: CompiledModule): { tiers: Scope; ranks: Scope } {
+  const cached = thresholdCache.get(module);
+  if (cached) return cached;
+
+  const tiers: Record<string, Value> = {};
+  for (const tier of module.all<MasteryTierDef>('rules.masteryTiers')) {
+    tiers[tier.id] = tier.atRank;
+  }
+
+  // Scoped per faction, so two factions may each name a rank `trusted`.
+  const ranks: Record<string, Value> = {};
+  for (const faction of module.all<FactionRankDef>('content.factions')) {
+    const ladder: Record<string, Value> = {};
+    for (const rank of faction.ranks ?? []) ladder[rank.id] = rank.atLeast;
+    ranks[faction.id] = ladder;
+  }
+
+  const value = { tiers, ranks };
+  thresholdCache.set(module, value);
+  return value;
+}
 
 interface AttributeDef {
   id: string;
@@ -49,6 +102,7 @@ interface DerivedDef {
 interface ItemDef {
   id: string;
   modifiers: Record<string, Expr>;
+  properties?: string[];
 }
 
 interface ConditionDef {
@@ -107,6 +161,53 @@ export function maximaOf(
 }
 
 /**
+ * Step 3, the other end: resource minima.
+ *
+ * Zero is the obvious floor and was hardcoded as one, which quietly denied a
+ * module any resource that bottoms out somewhere else — a corruption track that
+ * cannot fall below its starting taint, a morale scale that runs negative. It
+ * sees exactly what `max` sees, for the same reason: a minimum that depended on
+ * a derived stat could express a cycle.
+ */
+export function minimaOf(
+  module: CompiledModule,
+  entity: Entity,
+  mods: Record<string, number>,
+): Record<string, number> {
+  const scope = baseScope(entity, mods);
+  const out: Record<string, number> = {};
+  for (const resource of module.all<ResourceDef>('rules.resources')) {
+    out[resource.id] = Math.floor(evaluate(resource.min, scope, `min of ${resource.id}`));
+  }
+  return out;
+}
+
+/**
+ * What a resource starts at.
+ *
+ * Defaults to full, which is what `initial` being optional means. A module that
+ * wants a character to begin bloodied, or a spell pool to begin empty, says so.
+ */
+export function initialOf(
+  module: CompiledModule,
+  entity: Entity,
+  mods: Record<string, number>,
+): Record<string, number> {
+  const scope = baseScope(entity, mods);
+  const maxima = maximaOf(module, entity, mods);
+  const minima = minimaOf(module, entity, mods);
+  const out: Record<string, number> = {};
+  for (const resource of module.all<ResourceDef>('rules.resources')) {
+    const max = maxima[resource.id] ?? 0;
+    const value = resource.initial === undefined
+      ? max
+      : Math.floor(evaluate(resource.initial, scope, `initial of ${resource.id}`));
+    out[resource.id] = Math.max(minima[resource.id] ?? 0, Math.min(max, value));
+  }
+  return out;
+}
+
+/**
  * Additive modifiers contributed by equipped items and active conditions.
  *
  * Computing these each time is why derived stats are not stored: equipping a
@@ -129,6 +230,15 @@ function externalModifiers(
       if (!item) continue;
       for (const [statId, expr] of Object.entries(item.modifiers)) {
         add(statId, evaluate(expr, scope, `modifier from item ${itemId}`));
+      }
+      // And whatever its declared properties are worth. `properties` named
+      // nothing before, so a "finesse" or "two-handed" weapon differed from a
+      // plain one only in the word.
+      for (const propertyId of item.properties ?? []) {
+        const property = module.find<ItemDef>('rules.itemProperties', propertyId);
+        for (const [statId, expr] of Object.entries(property?.modifiers ?? {})) {
+          add(statId, evaluate(expr, scope, `modifier from property ${propertyId}`));
+        }
       }
     }
   }
@@ -189,8 +299,70 @@ export function statsOf(module: CompiledModule, entity: Entity): EntityStats {
  * at the start — content asking about a flag nobody has set is normal. Anything
  * structural (`actor.attr`, `actor.derived`) stays strict, so a misspelling
  * there is still an error rather than a silent zero.
+ *
+ * `tiers` and `ranks` used to be listed here. They are derived from the module
+ * rather than written during play, so a missing key is a misspelled tier rather
+ * than a "not yet" — and being open is what let the miss resolve to `null` and
+ * then throw inside the comparison it was feeding.
  */
-export const OPEN_NAMESPACES = ['flags', 'quests', 'memory', 'reputation', 'rank', 'tiers', 'ranks'] as const;
+export const OPEN_NAMESPACES = ['flags', 'quests', 'memory', 'reputation'] as const;
+
+/**
+ * The module's proficiency-style bonus for a character, if it declares one.
+ *
+ * A single formula over `actor.level` — the "+2 rising to +6" shape — which the
+ * schema has always accepted and nothing evaluated, so a module that wrote one
+ * got a flat zero everywhere it was referenced.
+ */
+export function proficiencyOf(module: CompiledModule, entity: Entity): number {
+  const formula = module.source.rules.progression.proficiency;
+  if (formula === undefined) return 0;
+  const mods = modifiersOf(module, entity.attributes);
+  const value = evalExpr(formula, { scope: baseScope(entity, mods), rng: FORBIDDEN_RNG });
+  return typeof value === 'number' && Number.isFinite(value) ? Math.floor(value) : 0;
+}
+
+/** Everything an entity is carrying, by declared weight. */
+export function carriedWeight(module: CompiledModule, entity: Entity): number {
+  let total = 0;
+  for (const stack of entity.inventory) {
+    const item = module.find<{ weight?: number }>('content.items', stack.item);
+    total += (item?.weight ?? 0) * stack.quantity;
+  }
+  return Math.round(total * 100) / 100;
+}
+
+/**
+ * The world half of the scope: the clock, and what the module makes of it.
+ *
+ * Phase, month and year are derived on every read rather than stored, so
+ * content can write `{"eq": [{"ref": "world.phase"}, "night"]}` in a trigger's
+ * condition or a text variant's gate without anything having to tick.
+ */
+function worldScope(module: CompiledModule, state: GameState): Scope {
+  const date = dateOf(module, state.minute);
+  const phase = phaseOf(module, state.minute, layerOf(module, state.location));
+
+  return {
+    minute: state.minute,
+    day: date.day,
+    dayOfMonth: date.dayOfMonth,
+    month: date.month,
+    monthName: date.monthName,
+    year: date.year,
+    hour: date.hour,
+    // Null underground, where there is no daylight to have a phase of.
+    phase: phase?.id ?? null,
+    phaseName: phase?.name ?? null,
+  };
+}
+
+/** Whether a character's class is trained in a saving throw. */
+export function isSaveProficient(module: CompiledModule, entity: Entity, saveId: string): boolean {
+  if (!entity.characterClass) return false;
+  const characterClass = module.find<ClassScopeDef>('content.classes', entity.characterClass);
+  return characterClass?.saveProficiencies?.includes(saveId) ?? false;
+}
 
 /** The evaluation context the engine uses everywhere. */
 export function evalContext(scope: Scope, rng: DslRng): { scope: Scope; rng: DslRng; openNamespaces: readonly string[] } {
@@ -211,6 +383,9 @@ export function buildScope(
   extra: Scope = {},
 ): Scope {
   const stats = statsOf(module, actor);
+  const primary = actor.characterClass
+    ? module.find<ClassScopeDef>('content.classes', actor.characterClass)
+    : undefined;
   const conditions: Record<string, Value> = {};
   for (const active of actor.conditions) {
     conditions[active.condition] = active.remaining ?? true;
@@ -256,14 +431,31 @@ export function buildScope(
       skills: actor.skills as Record<string, Value>,
       ancestry: actor.ancestry,
       class: actor.characterClass,
+      // The proficiency-style bonus a module may declare, and the attribute its
+      // class keys off. `primaryMod` is what lets one authored `strike` serve a
+      // might class and an agility class without duplicating the ability.
+      proficiency: proficiencyOf(module, actor),
+      // Total weight carried. The engine deliberately owns no encumbrance rule:
+      // a module builds one out of a derived stat and a condition, which is the
+      // "nothing is hardcoded" answer and what makes `item.weight` mean anything.
+      carried: carriedWeight(module, actor),
+      // What the creature *is*, for content that gates on it: "only affects
+      // undead", "only if you speak Dwarvish". Empty rather than absent, so a
+      // module that declares none of this vocabulary still resolves the paths.
+      creatureType: (actor.extra['creatureType'] as Value) ?? null,
+      alignment: (actor.extra['alignment'] as Value) ?? null,
+      size: (actor.extra['size'] as Value) ?? null,
+      languages: (actor.extra['languages'] as Value) ?? [],
+      primaryAttribute: primary?.primaryAttribute ?? null,
+      primaryMod: primary?.primaryAttribute ? (stats.mod[primary.primaryAttribute] ?? 0) : 0,
     },
     quests,
     flags: state.flags,
     reputation: state.reputation,
-    world: {
-      minute: state.minute,
-      day: Math.floor(state.minute / module.source.world.time.minutesPerDay) + 1,
-    },
+    purse: state.purse,
+    ...thresholdsOf(module),
+    arcs: arcScope(module, state),
+    world: worldScope(module, state),
     party: state.party.map((id) => {
       const member = state.entities[id];
       return member ? { id: member.id, name: member.name, alive: member.alive } : null;

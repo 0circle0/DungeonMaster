@@ -135,16 +135,23 @@ export const positionSchema = z
 /**
  * How a space is sized and drawn.
  *
- * `layout` is the escape hatch for set pieces: give it rows of glyphs and the
- * generator uses them verbatim instead of generating, which is how a module
- * hand-authors the throne room while letting the corridors be procedural.
+ * Three ways to get a map, in precedence order: `static` names a hand-built
+ * `world.maps` entry used verbatim, identical across seeds; `layout` is the
+ * older glyph-row escape hatch; otherwise the map is generated from `width` ×
+ * `height` and the palette.
+ *
+ * The inner object is exported separately because `.superRefine` produces a
+ * ZodEffects, which cannot be `.extend`ed — anything composing this spec
+ * starts from `mapSpecObject`.
  */
-export const mapSpecSchema = z
+export const mapSpecObject = z
   .object({
     /** Dice notation, so size varies per instance. */
     width: diceNotation.default('7'),
     height: diceNotation.default('7'),
     palette: ref('world.palettes').optional(),
+    /** A hand-built map used exactly as authored. Wins over `layout` and generation. */
+    static: ref('world.maps').optional(),
     /**
      * Hand-authored tiles, as rows of palette glyphs. When present, `width`
      * and `height` are ignored and the layout is used exactly as written.
@@ -154,7 +161,9 @@ export const mapSpecSchema = z
     legend: z.record(z.string(), ref('world.terrains')).default({}),
     extra,
   })
-  .strict()
+  .strict();
+
+export const mapSpecSchema = mapSpecObject
   .superRefine((spec, ctx) => {
     if (spec.layout.length === 0) return;
     // A ragged layout would silently produce a jagged map; rows must be equal.

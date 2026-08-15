@@ -10,6 +10,11 @@
       "types": "./src/index.ts",
       "import": "./src/index.ts",
       "default": "./src/index.ts"
+    },
+    "./load": {
+      "types": "./src/load.ts",
+      "import": "./src/load.ts",
+      "default": "./src/load.ts"
     }
   },
   "dependencies": {

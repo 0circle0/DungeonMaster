@@ -90,6 +90,78 @@ const MIGRATIONS: Readonly<Record<number, Migration>> = {
     }
     return { ...state, saveVersion: 3, entities };
   },
+
+  /**
+   * 3 → 4: the dungeon is a dungeon.
+   *
+   * Maps gained their traps, the rooms they were generated from, and how deep
+   * they sit. All three default to exactly the old behaviour — no traps
+   * installed, no rooms known, everything at depth 1 — so an old save loads as
+   * the game it was saved from rather than as a newly dangerous one.
+   */
+  3: (state) => {
+    const maps = { ...(state['maps'] as Record<string, Record<string, unknown>>) };
+    for (const [id, map] of Object.entries(maps)) {
+      // Filled in, never overwritten: a migration that clobbers a field which
+      // is already present can only destroy a save.
+      maps[id] = {
+        ...map,
+        traps: map['traps'] ?? {},
+        rooms: map['rooms'] ?? [],
+        depth: map['depth'] ?? 1,
+      };
+    }
+    return { ...state, saveVersion: 4, maps };
+  },
+
+  /**
+   * 4 → 5: coin.
+   *
+   * An empty purse is what a save written before money existed describes, so
+   * an old party loads exactly as poor as it was.
+   */
+  4: (state) => ({ ...state, saveVersion: 5, purse: state['purse'] ?? 0 }),
+
+  /**
+   * 5 → 6: cooldowns, once-per-encounter reactions, and legendary actions.
+   *
+   * All three live on the combat, which is null in most saves. Empty is exactly
+   * the old behaviour — nothing on cooldown, nothing spent — so a fight saved
+   * mid-round resumes as the fight it was.
+   */
+  5: (state) => {
+    const combat = state['combat'] as Record<string, unknown> | null;
+    if (!combat) return { ...state, saveVersion: 6 };
+    return {
+      ...state,
+      saveVersion: 6,
+      combat: {
+        ...combat,
+        cooldowns: combat['cooldowns'] ?? [],
+        usedOnce: combat['usedOnce'] ?? [],
+        specialUses: combat['specialUses'] ?? {},
+      },
+    };
+  },
+
+  /**
+   * 6 → 7: casting.
+   *
+   * Creatures gained the slots they have spent and what they are concentrating
+   * on. Nothing spent and nothing held is exactly the old behaviour, so a saved
+   * caster loads with a full complement.
+   */
+  6: (state) => {
+    const entities = { ...(state['entities'] as Record<string, Record<string, unknown>>) };
+    for (const [id, entity] of Object.entries(entities)) {
+      entities[id] = {
+        ...entity,
+        slotsUsed: entity['slotsUsed'] ?? [],
+        concentrating: entity['concentrating'] ?? null,
+      };
+    }
+    return { ...state, saveVersion: 7, entities };
+  },
 };
 
 export function load(text: string, module: CompiledModule, options: { allowModuleDrift?: boolean } = {}): LoadResult {

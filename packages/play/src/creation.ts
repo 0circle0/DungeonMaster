@@ -28,16 +28,45 @@ export interface CreationRules {
   readonly classes: readonly { id: string; name: string; description: string }[];
   readonly points: number;
   readonly startingLevel: number;
+  /** Ranks each character distributes across skills at creation. */
+  readonly skillRanks: number;
+  /** What the party starts with, so the screen can say so. */
+  readonly startingCurrency: number;
+}
+
+/** Narrow a list to what the module permits; an empty allow-list permits all. */
+function allowed<T extends { id: string }>(
+  everything: readonly T[],
+  permitted: readonly string[],
+): readonly T[] {
+  if (permitted.length === 0) return everything;
+  const wanted = new Set(permitted);
+  const narrowed = everything.filter((entry) => wanted.has(entry.id));
+  // A restriction that leaves nothing is an authoring error the linter reports;
+  // it must not leave the player unable to make a character at all.
+  return narrowed.length > 0 ? narrowed : everything;
 }
 
 export function creationRules(module: CompiledModule): CreationRules {
   const creation = module.source.start.creation;
   return {
     attributes: module.all<AttributeDef>('rules.attributes'),
-    ancestries: module.all<{ id: string; name: string; description: string }>('content.ancestries'),
-    classes: module.all<{ id: string; name: string; description: string }>('content.classes'),
+    // Restricted to what the module allows, if it restricts anything. An empty
+    // list means everything is allowed, which is what the schema says — and
+    // both fields were read by nothing, so a module that wanted a dwarves-only
+    // campaign still offered every ancestry it had ever defined.
+    ancestries: allowed(
+      module.all<{ id: string; name: string; description: string }>('content.ancestries'),
+      creation.allowedAncestries,
+    ),
+    classes: allowed(
+      module.all<{ id: string; name: string; description: string }>('content.classes'),
+      creation.allowedClasses,
+    ),
     points: creation.attributePoints,
     startingLevel: creation.startingLevel,
+    skillRanks: creation.skillRanks,
+    startingCurrency: creation.startingCurrency,
   };
 }
 

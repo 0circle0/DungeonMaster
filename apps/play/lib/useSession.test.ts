@@ -6,17 +6,15 @@
  */
 
 import { describe, it, expect } from 'vitest';
-import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
-import { compileModule } from '@dm/module';
+import { loadModuleFrom } from '@dm/module/load';
 import { startSession } from '@dm/play';
 import { sessionReducer } from './useSession.js';
 import type { SessionFrame } from './useSession.js';
 
-const path = fileURLToPath(new URL('../../../modules/greenmarch/module.json', import.meta.url));
-const compiled = compileModule(JSON.parse(readFileSync(path, 'utf8')));
-if (!compiled.ok) throw new Error('fixture failed');
-const MODULE = compiled.module;
+const MODULE = loadModuleFrom(
+  fileURLToPath(new URL('../../../modules/greenmarch', import.meta.url)),
+);
 
 function frame(): SessionFrame {
   const session = startSession(MODULE, 7);

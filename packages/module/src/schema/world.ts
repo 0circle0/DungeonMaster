@@ -20,6 +20,7 @@ import { PredicateSchema, EffectSchema, diceNotation } from '../dsl/schema.js';
 import { idSchema, displayName, description, ref, tags, weighted, extra } from './common.js';
 import { requirementSchema } from './requirement.js';
 import { terrainSchema, paletteSchema, mapSpecSchema, positionSchema } from './space.js';
+import { staticMapSchema } from './staticmap.js';
 
 /**
  * How an automatic event behaves on repeat visits.
@@ -326,8 +327,42 @@ export const dungeonGenSchema = z
     completionTriggers: z.array(triggerSchema).default([]),
     /** Overrides the biome's palette for this dungeon. */
     palette: ref('world.palettes').optional(),
-    /** Tiles of corridor between rooms. */
+    /**
+     * Tiles of corridor between rooms. Its mean sets the spacing rooms are
+     * placed at; `winding` corridors also read each edge's roll as a minimum
+     * path length.
+     */
     corridorLength: diceNotation.default('3d3'),
+    /**
+     * How the dungeon is made: `rooms` and corridors (the classic), `bsp`
+     * (dense building-like interiors, rooms sharing walls), or `caverns`
+     * (organic cellular caves — no doors, so no locks or branchiness).
+     */
+    algorithm: z.enum(['rooms', 'bsp', 'caverns']).default('rooms'),
+    /**
+     * A hand-built `world.maps` entry used as the whole dungeon, identical
+     * across seeds. Generation is skipped entirely; the map's own layers place
+     * its gates, traps, items and creatures.
+     */
+    staticMap: ref('world.maps').optional(),
+    /**
+     * Static dungeons only: roll the biome's encounter tables once per `spawn`
+     * marker on the map, so a fixed castle can still have variable guards.
+     */
+    rollEncounters: z.boolean().default(false),
+    /** What the passages are like. */
+    corridor: z
+      .object({
+        /** `l` elbows, `straight` runs, or `winding` burrows. */
+        style: z.enum(['l', 'straight', 'winding']).default('l'),
+        /** Tiles wide. Doors stay one tile regardless. */
+        width: z.number().int().min(1).max(3).default(1),
+      })
+      .strict()
+      .default({}),
+    /** Map bounds, dice notation. Derived from `roomCount` when absent. */
+    width: diceNotation.optional(),
+    height: diceNotation.optional(),
     extra,
   })
   .strict();
@@ -363,6 +398,12 @@ export const worldSchema = z
     roomTemplates: z.array(roomTemplateSchema).default([]),
     encounterTables: z.array(encounterTableSchema).default([]),
     dungeons: z.array(dungeonGenSchema).default([]),
+    /**
+     * Hand-authored maps, identical across seeds. Authored as folders of CSV
+     * layers beside `module.json` (`maps/<id>/`) and inlined here at load;
+     * inline entries are also legal, which is what a browser export produces.
+     */
+    maps: z.array(staticMapSchema).default([]),
     time: timeSchema.default({}),
   })
   .strict();
@@ -375,5 +416,6 @@ export type Biome = z.infer<typeof biomeSchema>;
 export type RoomTemplate = z.infer<typeof roomTemplateSchema>;
 export type EncounterTable = z.infer<typeof encounterTableSchema>;
 export type World = z.infer<typeof worldSchema>;
+export type { StaticMap, MapLayer, LayerKind } from './staticmap.js';
 export type { Terrain, Palette, MapSpec, Position } from './space.js';
 export { weighted };

@@ -14,7 +14,7 @@
 import type { CompiledModule } from '@dm/module';
 import type { GameEvent, RollRecord } from '../events.js';
 import type { GameState } from '../state.js';
-import { narrateFrom, interpolate, list, count, nameScore } from './grammar.js';
+import { narrateFrom, interpolate, list, count, article, nameScore, describeCreature } from './grammar.js';
 import {
   perceivedTiles, sightSenseOf, impressions, canPerceive, senseOf, senseReport,
 } from '../sim/senses.js';
@@ -133,6 +133,11 @@ export function narrateEvent(context: NarratorContext, event: GameEvent): Line |
           : contentName(context, 'world.pointsOfInterest', place);
         return { text: named, kind: 'system' };
       }
+      if (event.event === 'questOffered') {
+        const name = String(event.data['name'] ?? event.data['quest'] ?? '');
+        const who = nameOf(context, String(event.data['npc'] ?? ''));
+        return { text: `${who} has work for you: ${name}.`, kind: 'system' };
+      }
       if (event.event === 'followChanged') {
         return event.data['following'] === true
           ? { text: 'The others fall in behind you.', kind: 'note' }
@@ -242,6 +247,46 @@ export function narrateEvent(context: NarratorContext, event: GameEvent): Line |
         kind: 'note',
       };
 
+    // A silent drop is a drop the player never picks up.
+    case 'droppedLoot':
+      return {
+        text: `${nameOf(context, event.from)} leaves ${list(
+          event.items.map((stack) => count(stack.quantity, contentName(context, 'content.items', stack.item))),
+        )} behind.`,
+        kind: 'note',
+      };
+
+    case 'trapSprung': {
+      const name = contentName(context, 'content.traps', event.trap);
+      return { text: `${nameOf(context, event.entity)} sets off ${article(name)}!`, kind: 'system' };
+    }
+
+    case 'trapDisarmed':
+      return {
+        text: `${nameOf(context, event.entity)} disarms the ${contentName(context, 'content.traps', event.trap).toLowerCase()}.`,
+        kind: 'note',
+      };
+
+    case 'traded': {
+      const item = contentName(context, 'content.items', event.item);
+      const who = nameOf(context, event.npc);
+      const many = event.quantity > 1 ? count(event.quantity, item) : item;
+      return {
+        text: event.bought
+          ? `Bought ${many} from ${who} for ${event.price}.`
+          : `Sold ${many} to ${who} for ${event.price}.`,
+        kind: 'note',
+      };
+    }
+
+    // The purchase itself already said the price; this is for coin that moves
+    // any other way — a reward, a toll, a bribe.
+    case 'currencyChanged':
+      return {
+        text: event.amount > 0 ? `You are ${event.amount} the richer.` : `You are ${-event.amount} the poorer.`,
+        kind: 'note',
+      };
+
     case 'xpGained':
       return { text: `${nameOf(context, event.entity)} gains ${event.amount} experience.`, kind: 'note' };
 
@@ -284,7 +329,9 @@ export function narrateEvent(context: NarratorContext, event: GameEvent): Line |
 
     case 'discovered':
       return {
-        text: `You find ${contentName(context, 'world.pointsOfInterest', event.what)}.`,
+        text: event.kind === 'trap'
+          ? `You spot ${article(contentName(context, 'content.traps', event.what).toLowerCase())}.`
+          : `You find ${contentName(context, 'world.pointsOfInterest', event.what)}.`,
         kind: 'prose',
       };
 
@@ -607,10 +654,19 @@ export function describeSurroundings(context: NarratorContext): Line[] {
       (!visible || visible.has(key(entity.position))),
   );
   if (others.length > 0) {
+    // A lone creature gets the colour its statblock declares — "a lean,
+    // mud-slicked bog hound" rather than "bog hound". Several of a kind are
+    // tallied instead, because "two lean bog hounds and a lean bog hound" is
+    // worse than counting them.
     const names = others.map((entity) => entity.name.toLowerCase());
     const tally = new Map<string, number>();
     for (const name of names) tally.set(name, (tally.get(name) ?? 0) + 1);
-    const described = [...tally].map(([name, n]) => (n === 1 ? name : count(n, name)));
+
+    const described = [...tally].map(([name, n]) => {
+      if (n > 1) return count(n, name);
+      const one = others.find((entity) => entity.name.toLowerCase() === name)!;
+      return describeCreature(module, one, context.seed);
+    });
     out.push({ text: `You see ${list(described)}.`, kind: 'prose' });
   }
 

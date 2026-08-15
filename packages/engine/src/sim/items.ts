@@ -10,7 +10,7 @@
  * two hands, or four, or none, needs no engine change.
  */
 
-import { Rng } from '@dm/core';
+import { Rng, parseDice, rollDice } from '@dm/core';
 import { evalEffects } from '@dm/module';
 import type { Effect, Scope } from '@dm/module';
 import type { Entity } from '../state.js';
@@ -27,6 +27,13 @@ interface ItemDef {
   consumedOnUse: boolean;
   usableBy: string[];
   requiresAttunement: boolean;
+  /** Limited uses that come back on a rest — a wand, a staff, a horn. */
+  charges?: {
+    max: number;
+    rechargeOn?: string;
+    rechargeAmount?: string;
+    destroyOnEmpty: boolean;
+  };
 }
 
 interface SlotDef {
@@ -252,6 +259,26 @@ export function useItem(
     return false;
   }
 
+  // A wand with nothing left in it. Charges are counted per character per item
+  // in `flags` rather than as item instances, which the engine has no concept
+  // of — so the case that matters (the party owns one wand) works, and the
+  // limit is one charged copy each.
+  const charges = item.charges;
+  if (charges) {
+    const key = chargeKey(current.id, itemId);
+    const left = Number(txn.state.flags[key] ?? charges.max);
+    if (left <= 0) {
+      txn.emit({ type: 'refused', action: 'useItem', reason: `the ${item.name.toLowerCase()} is spent` });
+      return false;
+    }
+    txn.set({ ...txn.state, flags: { ...txn.state.flags, [key]: left - 1 } });
+
+    // Some things crumble when the last charge goes.
+    if (left - 1 <= 0 && charges.destroyOnEmpty) {
+      changeInventory(txn, txn.entity(actor.id) ?? current, itemId, -1);
+    }
+  }
+
   const subject = target ? txn.entity(target) : current;
   // Built explicitly rather than with a conditional spread: an optional property
   // typed `X | undefined` is rejected by the shared `Scope` index signature
@@ -266,6 +293,52 @@ export function useItem(
     changeInventory(txn, txn.entity(actor.id) ?? current, itemId, -1);
   }
   return true;
+}
+
+/** Where a character's remaining charges for one item are kept. */
+export function chargeKey(entityId: string, itemId: string): string {
+  return `charges:${entityId}:${itemId}`;
+}
+
+/**
+ * Refill charged items on a rest of the kind they recharge on.
+ *
+ * `rechargeOn` and `rechargeAmount` described exactly this and nothing read
+ * them, so a wand of seven charges was a wand of seven charges for the whole
+ * campaign.
+ */
+export function rechargeItems(txn: Transaction, restId: string, rng: Rng): void {
+  for (const id of txn.state.party) {
+    const holder = txn.entity(id);
+    if (!holder) continue;
+
+    for (const stack of holder.inventory) {
+      const item = txn.module.find<ItemDef>('content.items', stack.item);
+      const charges = item?.charges;
+      if (!charges || charges.rechargeOn !== restId) continue;
+
+      const key = chargeKey(holder.id, stack.item);
+      const left = Number(txn.state.flags[key] ?? charges.max);
+      if (left >= charges.max) continue;
+
+      const restored = charges.rechargeAmount
+        ? rollCharges(charges.rechargeAmount, rng.derive(`recharge:${holder.id}:${stack.item}`))
+        : charges.max;
+
+      txn.set({
+        ...txn.state,
+        flags: { ...txn.state.flags, [key]: Math.min(charges.max, left + restored) },
+      });
+    }
+  }
+}
+
+function rollCharges(notation: string, rng: Rng): number {
+  try {
+    return Math.max(0, rollDice(parseDice(notation), rng).total);
+  } catch {
+    return 0;
+  }
 }
 
 /** Hand something to another party member standing nearby. */

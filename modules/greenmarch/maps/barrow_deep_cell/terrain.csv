@@ -1,0 +1,10 @@
+# The 9x9 cell-within-a-cell, converted from the old glyph layout.
+wall,wall,wall,wall,wall,wall,wall,wall,wall
+wall,floor,floor,floor,brazier,floor,floor,floor,wall
+wall,floor,wall,wall,wall,wall,wall,floor,wall
+wall,floor,wall,floor,floor,floor,wall,floor,wall
+wall,floor,wall,floor,floor,floor,wall,floor,wall
+wall,floor,wall,floor,floor,floor,wall,floor,wall
+wall,floor,wall,wall,door,wall,wall,floor,wall
+wall,floor,floor,floor,floor,floor,floor,floor,wall
+wall,wall,wall,wall,door,wall,wall,wall,wall

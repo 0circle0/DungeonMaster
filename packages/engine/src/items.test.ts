@@ -1,10 +1,11 @@
 import { describe, it, expect } from 'vitest';
-import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { Rng } from '@dm/core';
 import { compileModule } from '@dm/module';
 import type { CompiledModule } from '@dm/module';
+import { loadModuleFrom } from '@dm/module/load';
 import { newGame, defaultChoices } from './newgame.js';
+import { spawnMonster } from './character.js';
 import { reduce } from './reduce.js';
 import { Transaction } from './rules/apply.js';
 import { takeItem, dropItem, equipItem, unequipItem, useItem, giveItem, itemsWithinReach } from './sim/items.js';
@@ -14,10 +15,7 @@ import { createMap, TerrainIndex, key } from './grid/tiles.js';
 import type { GameState } from './state.js';
 
 function loadModule(name: string): CompiledModule {
-  const path = fileURLToPath(new URL(`../../../modules/${name}/module.json`, import.meta.url));
-  const result = compileModule(JSON.parse(readFileSync(path, 'utf8')));
-  if (!result.ok) throw new Error(result.errors.map((e) => `${e.path}: ${e.message}`).join('\n'));
-  return result.module;
+  return loadModuleFrom(fileURLToPath(new URL(`../../../modules/${name}`, import.meta.url)));
 }
 
 const GREENMARCH = loadModule('greenmarch');
@@ -34,6 +32,7 @@ function fresh(seed = 5): GameState {
       here: {
         id: 'here', tiles: createMap(11, 11, 'floor'), kind: 'area', source: 'x',
         explored: [], gates: {}, exits: {}, items: {}, marks: {},
+      traps: {}, rooms: [], depth: 1,
       },
     },
     entities: { ...base.entities, [hero.id]: { ...hero, map: 'here', position: { x: 5, y: 5 } } },
@@ -239,7 +238,7 @@ describe('using and giving', () => {
     const state: GameState = {
       ...base,
       currentMap: 'here',
-      maps: { here: { id: 'here', tiles: createMap(11, 11, 'floor'), kind: 'area', source: 'x', explored: [], gates: {}, exits: {}, items: {}, marks: {} } },
+      maps: { here: { id: 'here', tiles: createMap(11, 11, 'floor'), kind: 'area', source: 'x', explored: [], gates: {}, exits: {}, items: {}, marks: {}, traps: {}, rooms: [], depth: 1 } },
       entities: {
         ...base.entities,
         'e:1': { ...base.entities['e:1']!, map: 'here', position: { x: 5, y: 5 } },
@@ -309,11 +308,11 @@ describe('preview parity', () => {
 
   it('previews loot by running the same draw the game runs', async () => {
     const { simulateLoot } = await import('./analysis.js');
-    const { rollLoot } = await import('./world/populate.js');
+    const { rollLoot, singleScope } = await import('./world/populate.js');
 
     // The preview's first trial must match a direct draw on the same stream.
     const preview = simulateLoot(GREENMARCH, 'fen_scavenge', veteran, { trials: 1, seed: 5 });
-    const direct = rollLoot(GREENMARCH, 'fen_scavenge', veteran, Rng.fromSeed(5).derive('trial:0'));
+    const direct = rollLoot(GREENMARCH, 'fen_scavenge', singleScope(veteran), Rng.fromSeed(5).derive('trial:0'));
 
     const previewed = preview.outcomes.filter((o) => o.appearances > 0).map((o) => o.id).sort();
     expect(previewed).toEqual(direct.map((d) => d.item).sort());
@@ -342,5 +341,107 @@ describe('preview parity', () => {
     const { simulateEncounters } = await import('./analysis.js');
     const preview = simulateEncounters(GREENMARCH, 'fen_wanderers', novice, { trials: 600, seed: 2 });
     expect(preview.excluded).toContain('wight_abroad');
+  });
+});
+
+/** Put a monster beside the party, on a seed-varied stream. */
+function withMonster(
+  state: GameState,
+  statblock: string,
+  at: { x: number; y: number },
+  seed: number,
+): GameState {
+  const monster = spawnMonster(GREENMARCH, 'e:99', statblock);
+  return {
+    ...state,
+    seed,
+    rng: Rng.fromSeed(seed).save(),
+    entities: {
+      ...state.entities,
+      'e:99': { ...monster, map: state.currentMap, position: at, disposition: 'hostile' },
+    },
+  };
+}
+
+describe('the weapon in your hand', () => {
+  /** A hero wielding one item. */
+  function wielding(item: string | null) {
+    const state = fresh();
+    const hero = state.entities['e:1']!;
+    const equipped = item ? { hand: [item] } : {};
+    return {
+      ...state,
+      entities: {
+        ...state.entities,
+        'e:1': { ...hero, equipped, inventory: item ? [{ item, quantity: 1 }] : [] },
+      },
+    };
+  }
+
+  // `items[].damage` was unread, so a bare `strike` dealt whatever the ability
+  // declared however you were armed — swapping a 15-gold iron sword for a
+  // 200-gold warded blade changed nothing whatsoever.
+  it('decides the damage when the ability declares none', () => {
+    const totals = (item: string | null) => {
+      let sum = 0;
+      for (let seed = 0; seed < 120; seed += 1) {
+        const state = withMonster(wielding(item), 'bog_hound', { x: 6, y: 5 }, seed);
+        const { events } = reduce(state, { type: 'attack', target: 'e:99' }, ctx);
+        for (const event of events) {
+          if (event.type === 'damaged' && event.entity === 'e:99') sum += event.raw;
+        }
+      }
+      return sum;
+    };
+
+    // 1d8+2 must land harder than 1d8 over a long run.
+    expect(totals('warded_blade')).toBeGreaterThan(totals('iron_sword'));
+  });
+
+  it('leaves an ability that declares its own damage alone', () => {
+    // `strike` carries damage of its own; arming the hero must not double it.
+    const state = withMonster(wielding('iron_sword'), 'bog_hound', { x: 6, y: 5 }, 1);
+    const { events } = reduce(state, { type: 'useAbility', ability: 'strike', target: 'e:99' }, ctx);
+    const hits = events.filter((e) => e.type === 'damaged' && e.entity === 'e:99');
+    expect(hits.length).toBeLessThanOrEqual(1);
+  });
+
+  it('carries the blade\'s own tags, so a resistance can make an exception', () => {
+    // The wight halves slashing `unless` the blow is silvered, and only the
+    // warded blade is. That pairing is the whole reason the sword costs 200.
+    //
+    // Only blows the wight survives are counted: `amount` is the resource
+    // change after clamping, so a killing blow always reads lower than `raw`
+    // for reasons that have nothing to do with resistance.
+    const landed = (item: string) => {
+      let raw = 0;
+      let taken = 0;
+      for (let seed = 0; seed < 200; seed += 1) {
+        const state = withMonster(wielding(item), 'barrow_wight', { x: 6, y: 5 }, seed);
+        const { state: after, events } = reduce(state, { type: 'attack', target: 'e:99' }, ctx);
+        if (!after.entities['e:99']!.alive) continue;
+
+        for (const event of events) {
+          if (event.type !== 'damaged' || event.entity !== 'e:99') continue;
+          raw += event.raw;
+          taken += event.amount;
+        }
+      }
+      return taken / raw;
+    };
+
+    // Silver lands in full; ordinary steel lands at about half — "about",
+    // because a 1-point blow halves to 1 rather than to nothing.
+    expect(landed('warded_blade')).toBe(1);
+    expect(landed('iron_sword')).toBeGreaterThan(0.45);
+    expect(landed('iron_sword')).toBeLessThan(0.65);
+  });
+
+  it('reports what a character is carrying, so a module can build encumbrance', async () => {
+    const { buildScope } = await import('./stats.js');
+    const state = wielding('iron_sword');
+    const scope = buildScope(GREENMARCH, state, state.entities['e:1']);
+    // greenmarch's iron sword weighs 3.
+    expect((scope['actor'] as { carried: number }).carried).toBe(3);
   });
 });

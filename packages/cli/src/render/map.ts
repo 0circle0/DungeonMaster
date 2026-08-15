@@ -118,6 +118,16 @@ export function mapLines(options: RenderOptions): string[] {
         continue;
       }
 
+      // A trap the party has found, drawn over the ground it is buried in.
+      // Never a hidden one — that would hand the player knowledge the
+      // characters have no way of having, the same rule the fog of war follows.
+      const trap = map.traps[packed];
+      if (trap && trap.state !== 'hidden') {
+        const glyph = trap.state === 'found' ? pc.red('^') : pc.dim('^');
+        row += glyph + pad;
+        continue;
+      }
+
       const tile = terrain.at(map.tiles, { x, y });
       const painted = paintFor(module, tile.id, paints)(tile.glyph);
       row += (seen ? painted : pc.dim(tile.glyph)) + pad;
@@ -199,6 +209,13 @@ export function mapLegend(options: RenderOptions): string[] {
     named.set(paintEntity(entity, false), entity.name.toLowerCase());
   }
   for (const [glyph, name] of named) creatures.push(`${glyph} ${pc.dim(name)}`);
+
+  // A `^` on screen means nothing without being told what it is.
+  const traps = Object.values(map.traps).filter((placed) => placed.state !== 'hidden');
+  if (traps.length > 0) {
+    const armed = traps.some((placed) => placed.state === 'found');
+    creatures.push(`${armed ? pc.red('^') : pc.dim('^')} ${pc.dim(armed ? 'trap' : 'spent trap')}`);
+  }
 
   return [...chunk([...creatures, ...terrains], 6)].map((line) => `  ${line.join('   ')}`);
 }

@@ -14,10 +14,15 @@
  *   4. effects, scaled for criticals and successful saves
  */
 
-import { Rng } from '@dm/core';
+import { Rng, parseDice, rollDice } from '@dm/core';
+import {
+  isSpell, paySpell, componentsMissing, consumeComponents, beginConcentration,
+  saveDifficultyOf, attackBonusOf,
+} from '../casting.js';
+import type { SpellDef } from '../casting.js';
 import { evalEffects, evalExpr, evalPredicate, compileRequirement, isEmptyRequirement } from '@dm/module';
 import type { Expr } from '@dm/module';
-import type { CompiledModule, Effect, EffectOp, Predicate, Requirement } from '@dm/module';
+import type { CompiledModule, Effect, EffectOp, Scope, Predicate, Requirement } from '@dm/module';
 import type { Entity, EntityId } from '../../state.js';
 import type { Position } from '../../grid/tiles.js';
 import { buildScope, statsOf, OPEN_NAMESPACES } from '../../stats.js';
@@ -26,6 +31,52 @@ import { preventsAction } from '../conditions.js';
 import { check, savingThrow, succeeded, criticalMultiplier, difficultyOf } from '../check.js';
 import type { TargetingContext } from './targeting.js';
 import { resolveTargets, reachability, coverBonus, toTiles, reachOf } from './targeting.js';
+
+/**
+ * What a spell gains from being cast out of a bigger slot.
+ *
+ * Applied once per level above the spell's own, with `upcastLevels` in scope so
+ * one authored effect can scale itself rather than being repeated. Nothing at
+ * all for a spell cast at its own level, which is the common case.
+ */
+function upcastEffects(
+  ability: AbilityDef,
+  slot: number,
+  scope: Scope,
+  rng: Rng,
+): EffectOp[] {
+  const upcast = ability.upcast ?? [];
+  if (upcast.length === 0 || !isSpell(ability)) return [];
+
+  const levels = slot - (ability.spellLevel ?? 0);
+  if (levels <= 0) return [];
+
+  const out: EffectOp[] = [];
+  for (let step = 0; step < levels; step += 1) {
+    out.push(...evalEffects(upcast, {
+      scope: { ...scope, upcastLevels: levels },
+      rng,
+      openNamespaces: OPEN_NAMESPACES,
+    }));
+  }
+  return out;
+}
+
+/** The spell half of an ability, with the schema's own defaults filled in. */
+function asSpell(ability: AbilityDef): SpellDef {
+  return {
+    id: ability.id,
+    name: ability.name,
+    ...(ability.spellLevel === undefined ? {} : { spellLevel: ability.spellLevel }),
+    concentration: ability.concentration === true,
+    ritual: ability.ritual === true,
+    castingTime: ability.castingTime ?? '',
+    duration: ability.duration ?? '',
+    components: ability.components ?? [],
+    ...(ability.materialComponent === undefined ? {} : { materialComponent: ability.materialComponent }),
+    upcast: ability.upcast ?? [],
+  };
+}
 
 export interface AbilityDef {
   id: string;
@@ -48,6 +99,16 @@ export interface AbilityDef {
   onUse: Effect[];
   onMiss: Effect[];
   onCritical: Effect[];
+
+  /** Spell fields. Absent on an ordinary ability, which is how magic is opt-in. */
+  spellLevel?: number;
+  concentration?: boolean;
+  ritual?: boolean;
+  castingTime?: string;
+  duration?: string;
+  components?: readonly ('verbal' | 'somatic' | 'material' | 'focus')[];
+  materialComponent?: string;
+  upcast?: Effect[];
 }
 
 export interface UseResult {
@@ -111,7 +172,7 @@ export function useAbility(
   context: TargetingContext,
   actor: Entity,
   abilityId: string,
-  explicit: { target?: EntityId; at?: Position },
+  explicit: { target?: EntityId; at?: Position; ritual?: boolean },
   rng: Rng,
 ): UseResult {
   const module = txn.module;
@@ -135,6 +196,34 @@ export function useAbility(
     return refuse(txn, `${ability.name} cannot be used now`);
   }
 
+  // Still catching its breath. Cooldowns count in rounds, so out of combat
+  // there is nothing to count and an ability is always ready — which is the
+  // honest reading of a field measured in rounds.
+  const combat = txn.state.combat;
+  if (combat && ability.cooldown > 0) {
+    const waiting = combat.cooldowns.find(
+      (entry) => entry.entity === actor.id && entry.ability === abilityId,
+    );
+    if (waiting && waiting.until > combat.round) {
+      const rounds = waiting.until - combat.round;
+      return refuse(txn, `${ability.name} is not ready for another ${rounds} round${rounds === 1 ? '' : 's'}`);
+    }
+  }
+
+  // — casting ————————————————————————————————————————————————
+  // Everything below is skipped entirely for an ability with no `spellLevel`,
+  // which is what makes a module with no magic in it unaffected.
+  let slot = 0;
+  if (isSpell(ability)) {
+    const spell = asSpell(ability);
+    const missing = componentsMissing(txn, actor, spell);
+    if (missing) return refuse(txn, missing);
+
+    const paid = paySpell(txn, actor, spell, { ritual: explicit.ritual === true });
+    if (!paid.ok) return refuse(txn, paid.reason);
+    slot = paid.slot;
+  }
+
   const costs = costsOf(txn, actor, ability, rng);
   const shortfall = shortfallOf(txn, actor, costs);
   if (shortfall) return refuse(txn, shortfall);
@@ -145,8 +234,46 @@ export function useAbility(
 
   payCosts(txn, actor, costs);
 
+  if (isSpell(ability)) {
+    const spell = asSpell(ability);
+    consumeComponents(txn, actor, spell);
+    if (spell.concentration) beginConcentration(txn, txn.entity(actor.id) ?? actor, ability.id);
+
+    // A ritual is cast slowly instead of expensively, which is what makes the
+    // trade real — `castingTime` had no job at all before.
+    if (explicit.ritual && spell.castingTime) {
+      txn.emit({ type: 'custom', event: 'ritualCast', data: { spell: ability.id, time: spell.castingTime } });
+    }
+    txn.emit({
+      type: 'spellCast',
+      entity: actor.id,
+      spell: ability.id,
+      slot,
+      ritual: explicit.ritual === true,
+    });
+  }
+
+  // The cooldown starts when the ability is actually spent, not when it is
+  // attempted — a refusal must not put it on the shelf.
+  const running = txn.state.combat;
+  if (running && ability.cooldown > 0) {
+    const rest = running.cooldowns.filter(
+      (entry) => !(entry.entity === actor.id && entry.ability === abilityId),
+    );
+    txn.set({
+      ...txn.state,
+      combat: {
+        ...running,
+        // Sorted by entity then ability: a creature-accumulated collection with
+        // a total order, so two runs that spent the same abilities compare equal.
+        cooldowns: [...rest, { entity: actor.id, ability: abilityId, until: running.round + ability.cooldown }]
+          .sort((a, b) => a.entity.localeCompare(b.entity) || a.ability.localeCompare(b.ability)),
+      },
+    });
+  }
+
   for (const target of targets) {
-    resolveAgainst(txn, context, actor, target, ability, rng);
+    resolveAgainst(txn, context, actor, target, ability, rng, slot);
   }
 
   // A `none`-targeting ability still does whatever it declares.
@@ -171,6 +298,8 @@ function resolveAgainst(
   target: Entity,
   ability: AbilityDef,
   rng: Rng,
+  /** The slot the spell went into, so upcasting knows how far above its own. */
+  slot = 0,
 ): void {
   const module = txn.module;
   const current = txn.entity(target.id);
@@ -190,8 +319,11 @@ function resolveAgainst(
     const reach = reachability(context, actor.position, current.position, range);
     const defenceWithCover = defence + coverBonus(module, reach.cover);
 
+    // A spell attack uses the caster's own bonus, when the module declares one
+    // — the single most-felt number in casting, and it was unreachable.
+    const spellBonus = isSpell(ability) ? attackBonusOf(module, actor) : undefined;
     const roll = check(module, rng, {
-      modifier: stats.mod[ability.attack.stat] ?? 0,
+      modifier: spellBonus ?? stats.mod[ability.attack.stat] ?? 0,
       difficulty: defenceWithCover,
     });
 
@@ -202,7 +334,19 @@ function resolveAgainst(
       return;
     }
 
-    const ops = evalEffects(ability.onUse, { scope: scopeFor(), rng });
+    const declared = [
+      ...evalEffects(ability.onUse, { scope: scopeFor(), rng }),
+      ...upcastEffects(ability, slot, scopeFor(), rng),
+    ];
+    // The blow was struck with whatever is in the actor's hands, so the blade's
+    // own qualities travel with it — a resistance's `unless` is asking about the
+    // weapon, not about the ability. Damage the ability tagged itself is left
+    // alone. Then, if the ability named no damage at all, the weapon supplies it.
+    const weapon = weaponOf(module, actor);
+    const ops = [
+      ...withWeaponTags(declared, weapon),
+      ...weaponDamage(module, actor, current, declared, weapon, rng),
+    ];
     // A critical multiplies damage by whatever the module says, and then runs
     // any extra `onCritical` effects on top.
     const factor = roll.outcome === 'critical' ? criticalMultiplier(module) : 1;
@@ -216,11 +360,18 @@ function resolveAgainst(
 
   // — a saving throw, when the ability declares one ——————————
   if (ability.savingThrow) {
-    const difficulty = difficultyOf(module, ability.savingThrow.difficulty as number | undefined);
+    // The spell's own DC when the ability names one, then the caster's formula,
+    // then the module's ordinary difficulty.
+    const declared = ability.savingThrow.difficulty as number | undefined;
+    const casterDc = isSpell(ability) ? saveDifficultyOf(module, actor) : undefined;
+    const difficulty = difficultyOf(module, declared ?? casterDc);
     const roll = savingThrow(module, rng, current, ability.savingThrow.save, difficulty);
     txn.emit({ type: 'saved', entity: current.id, save: ability.savingThrow.save, roll });
 
-    const ops = evalEffects(ability.onUse, { scope: scopeFor(), rng });
+    const ops = [
+      ...evalEffects(ability.onUse, { scope: scopeFor(), rng }),
+      ...upcastEffects(ability, slot, scopeFor(), rng),
+    ];
 
     if (succeeded(roll)) {
       switch (ability.savingThrow.onSuccess) {
@@ -244,7 +395,89 @@ function resolveAgainst(
   }
 
   // — no roll: it simply happens ———————————————————————————
-  applyOps(txn, evalEffects(ability.onUse, { scope: scopeFor(), rng }), actor.id);
+  applyOps(txn, [
+    ...evalEffects(ability.onUse, { scope: scopeFor(), rng }),
+    ...upcastEffects(ability, slot, scopeFor(), rng),
+  ], actor.id);
+}
+
+interface WeaponDef {
+  id: string;
+  kind: string;
+  tags?: string[];
+  properties?: string[];
+  damage?: { dice: string; damageType: string; stat?: string };
+}
+
+/**
+ * The weapon a character is actually wielding.
+ *
+ * Weapon-kind items only: a shield and a ring are equipped too, and neither
+ * should decide how hard you hit.
+ */
+export function weaponOf(module: CompiledModule, actor: Entity): WeaponDef | null {
+  for (const items of Object.values(actor.equipped)) {
+    for (const itemId of items) {
+      const item = module.find<WeaponDef>('content.items', itemId);
+      if (item?.kind === 'weapon' && item.damage) return item;
+    }
+  }
+  return null;
+}
+
+/**
+ * Damage from the wielded weapon, when the ability produced none of its own.
+ *
+ * `content.items[].damage` was unread, so a bare `strike` dealt whatever the
+ * ability declared no matter what was in your hands — swapping a 15-gold iron
+ * sword for a 200-gold warded blade changed nothing at all. An ability that
+ * *does* declare damage keeps it, so a fireball is still a fireball.
+ */
+function weaponDamage(
+  module: CompiledModule,
+  actor: Entity,
+  target: Entity,
+  produced: readonly EffectOp[],
+  weapon: WeaponDef | null,
+  rng: Rng,
+): EffectOp[] {
+  if (produced.some((op) => op.op === 'damage')) return [];
+  if (!weapon?.damage) return [];
+
+  const stats = statsOf(module, actor);
+  const bonus = weapon.damage.stat ? (stats.mod[weapon.damage.stat] ?? 0) : 0;
+
+  let rolled: number;
+  try {
+    rolled = rollDice(parseDice(weapon.damage.dice), rng).total;
+  } catch {
+    return [];
+  }
+
+  return [{
+    op: 'damage',
+    target: target.id,
+    amount: Math.max(0, rolled + bonus),
+    damageType: weapon.damage.damageType,
+    // The blade's own tags travel with the blow, so a wight immune to slashing
+    // `unless: ['silvered']` can be cut by a silvered blade and nothing else.
+    tags: qualitiesOf(weapon),
+  }];
+}
+
+/** A weapon's qualities: its own tags plus the properties it declares. */
+function qualitiesOf(weapon: WeaponDef | null): string[] {
+  if (!weapon) return [];
+  return [...new Set([...(weapon.tags ?? []), ...(weapon.properties ?? [])])];
+}
+
+/** Stamp the wielded weapon's qualities onto damage that carries none of its own. */
+function withWeaponTags(ops: readonly EffectOp[], weapon: WeaponDef | null): EffectOp[] {
+  const qualities = qualitiesOf(weapon);
+  if (qualities.length === 0) return [...ops];
+  return ops.map((op) =>
+    op.op === 'damage' && (op.tags ?? []).length === 0 ? { ...op, tags: qualities } : op,
+  );
 }
 
 /** The `target.*` half of the DSL scope. */
@@ -275,6 +508,16 @@ function targetScope(module: CompiledModule, target: Entity): Record<string, nev
  * without the player knowing ability names.
  */
 export function defaultAttackAbility(module: CompiledModule, actor: Entity): string | null {
+  // A weapon's own ability first: a shield or a ring may also grant one, and
+  // "attack" should mean the thing you are swinging.
+  for (const items of Object.values(actor.equipped)) {
+    for (const itemId of items) {
+      const item = module.find<{ kind: string; grantedAbilities: string[] }>('content.items', itemId);
+      if (item?.kind !== 'weapon') continue;
+      const granted = item.grantedAbilities?.[0];
+      if (granted) return granted;
+    }
+  }
   for (const items of Object.values(actor.equipped)) {
     for (const itemId of items) {
       const item = module.find<{ grantedAbilities: string[] }>('content.items', itemId);

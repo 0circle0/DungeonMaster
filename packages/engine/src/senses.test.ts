@@ -13,10 +13,9 @@
  */
 
 import { describe, it, expect } from 'vitest';
-import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
-import { compileModule } from '@dm/module';
 import type { CompiledModule } from '@dm/module';
+import { loadModuleFrom } from '@dm/module/load';
 import { newGame, defaultChoices } from './newgame.js';
 import { spawnMonster } from './character.js';
 import { reduce } from './reduce.js';
@@ -36,10 +35,7 @@ import { hasLineOfSight } from './grid/fov.js';
 import type { GameState, Entity } from './state.js';
 
 function loadModule(name: string): CompiledModule {
-  const path = fileURLToPath(new URL(`../../../modules/${name}/module.json`, import.meta.url));
-  const result = compileModule(JSON.parse(readFileSync(path, 'utf8')));
-  if (!result.ok) throw new Error(result.errors.map((e) => `${e.path}: ${e.message}`).join('\n'));
-  return result.module;
+  return loadModuleFrom(fileURLToPath(new URL(`../../../modules/${name}`, import.meta.url)));
 }
 
 const GREENMARCH = loadModule('greenmarch');
@@ -87,6 +83,7 @@ function field(
       field: {
         id: 'field', tiles: builder.freeze(), kind: 'room', source: 'field',
         explored: [], gates: {}, exits: {}, items: {}, marks: {},
+      traps: {}, rooms: [], depth: 1,
       },
     },
     entities,
@@ -783,13 +780,19 @@ describe('the editor preview and play agree', () => {
 
   it('reflects the stance an author picks', () => {
     const layout = [Array.from({ length: 20 }, () => 'floor')];
-    const at = (stance: string) => {
+    const at = (stance: string, sense: string) => {
       const preview = simulatePerception(GREENMARCH, { layout, source: { x: 0, y: 0 }, stance });
-      return preview.cells.find((c) => c.x === 10 && c.y === 0)!.signals['hearing']!;
+      return preview.cells.find((c) => c.x === 10 && c.y === 0)!.signals[sense]!;
     };
 
-    expect(at('sneak')).toBeLessThan(at('walk'));
-    expect(at('walk')).toBeLessThan(at('dash'));
+    expect(at('sneak', 'hearing')).toBeLessThan(at('walk', 'hearing'));
+    expect(at('walk', 'hearing')).toBeLessThan(at('dash', 'hearing'));
+
+    // Smell too: greenmarch declares that dashing stirs up more scent and
+    // sneaking leaves less, so the stance dropdown moves this sense as well.
+    // The multipliers come from the stance's own `emits` table, not the engine.
+    expect(at('sneak', 'smell')).toBeCloseTo(at('walk', 'smell') * 0.6, 10);
+    expect(at('dash', 'smell')).toBeCloseTo(at('walk', 'smell') * 1.4, 10);
   });
 });
 

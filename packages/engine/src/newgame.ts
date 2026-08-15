@@ -121,6 +121,7 @@ export function newGame(module: CompiledModule, options: NewGameOptions): GameSt
     memory: {},
     dialogue: null,
     flags: { ...module.source.start.initialFlags },
+    purse: module.source.start.creation.startingCurrency,
     reputation,
     quests: {},
     deeds: [],

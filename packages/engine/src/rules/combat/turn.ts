@@ -18,13 +18,15 @@ import type { Scope } from '@dm/module';
 import type { Entity, EntityId } from '../../state.js';
 import { buildScope, statsOf, OPEN_NAMESPACES } from '../../stats.js';
 import { Transaction, applyOps } from '../apply.js';
-import { tickConditions } from '../conditions.js';
+import { tickConditions, rollConditionSaves } from '../conditions.js';
+import { runTerrain } from '../../sim/terrain.js';
 import { check, savingThrow, succeeded, skillModifier, difficultyOf } from '../check.js';
 import type { TargetingContext } from './targeting.js';
 import { useAbility } from './attack.js';
 import { recordEncounter } from '../../sim/agenda.js';
 import { combatants, isHostileTo, reachOf, speedOf } from './targeting.js';
 import { canPerceive } from '../../sim/senses.js';
+import { terrainFor } from '../../grid/tiles.js';
 import { distance } from '../../grid/geometry.js';
 import type { Position } from '../../grid/tiles.js';
 
@@ -137,6 +139,9 @@ export function maybeStartCombat(txn: Transaction, context: TargetingContext, rn
       order,
       turn: 0,
       reactionsUsed: {},
+      cooldowns: [],
+      usedOnce: [],
+      specialUses: {},
       ...(first ? freshTurn(txn, first) : { spent: {}, movement: 0 }),
     },
   });
@@ -265,13 +270,29 @@ export function endTurn(txn: Transaction, context: TargetingContext, rng: Rng): 
   if (!combat) {
     // Outside combat, ending a turn just ages everything one step.
     for (const entity of combatants(txn.state, txn.state.currentMap)) {
+      runTerrain(txn, entity.id, 'onOccupy', entity.position, rng.derive(`occupy:${entity.id}`));
+      rollConditionSaves(txn, entity.id, 'endOfTurn', rng.derive(`saves:${entity.id}`));
       tickConditions(txn, entity.id, rng.derive(`conditions:${entity.id}`));
     }
     return;
   }
 
+  // The creature whose turn is ending gets its `endOfTurn` saves — against the
+  // conditions it has been carrying, before the turn passes on.
   const finished = combat.order[combat.turn];
-  if (finished) txn.emit({ type: 'turnEnded', entity: finished });
+  if (finished) {
+    // A turn spent standing somewhere is what `terrain.onOccupy` is for — the
+    // fire you are still in, the acid you did not step out of.
+    const standing = txn.entity(finished);
+    if (standing) runTerrain(txn, finished, 'onOccupy', standing.position, rng.derive(`occupy:${finished}`));
+    rollConditionSaves(txn, finished, 'endOfTurn', rng.derive(`saves:${finished}:${combat.round}`));
+    txn.emit({ type: 'turnEnded', entity: finished });
+
+    // Legendary and lair actions: a creature acting *between* other creatures'
+    // turns, which is the whole point of a boss. `specialTurns` was declared and
+    // read by nothing, so a lair was a room with a monster in it.
+    runSpecialTurns(txn, rng.derive(`special:${combat.round}:${finished}`));
+  }
 
   let turn = combat.turn;
   let round = combat.round;
@@ -282,7 +303,10 @@ export function endTurn(txn: Transaction, context: TargetingContext, rng: Rng): 
     if (turn >= combat.order.length) {
       turn = 0;
       round += 1;
-      txn.set({ ...txn.state, combat: { ...combat, turn, round, reactionsUsed: {} } });
+      txn.set({
+        ...txn.state,
+        combat: { ...combat, turn, round, reactionsUsed: {}, specialUses: {} },
+      });
       txn.emit({ type: 'roundStarted', round });
     }
 
@@ -298,6 +322,7 @@ export function endTurn(txn: Transaction, context: TargetingContext, rng: Rng): 
         },
       });
       selectActive(txn, next);
+      rollConditionSaves(txn, next.id, 'startOfTurn', rng.derive(`saves:${next.id}:${round}`));
       tickConditions(txn, next.id, rng.derive(`conditions:${next.id}:${round}`));
       txn.emit({ type: 'turnStarted', entity: next.id });
 
@@ -308,6 +333,68 @@ export function endTurn(txn: Transaction, context: TargetingContext, rng: Rng): 
 
   // Nobody left standing.
   maybeEndCombat(txn, context);
+}
+
+interface SpecialTurnDef {
+  id: string;
+  name: string;
+  use: string;
+  uses: number;
+  when?: Predicate;
+}
+
+/**
+ * Extra turns taken outside initiative.
+ *
+ * Run after each combatant's turn ends, which is where a legendary action goes:
+ * the boss acts, then someone else does, then the boss acts again. Uses are
+ * counted per round and reset with the round.
+ */
+function runSpecialTurns(txn: Transaction, rng: Rng): void {
+  const combat = txn.state.combat;
+  if (!combat) return;
+
+  // In initiative order, so the sequence is the same on every replay.
+  for (const id of combat.order) {
+    const creature = txn.entity(id);
+    if (!creature || !creature.alive || !creature.statblock) continue;
+
+    const statblock = txn.module.find<{ specialTurns?: SpecialTurnDef[] }>(
+      'content.monsters',
+      creature.statblock,
+    );
+    const specials = statblock?.specialTurns ?? [];
+    if (specials.length === 0) continue;
+
+    for (const special of specials) {
+      const current = txn.state.combat;
+      if (!current) return;
+
+      const spent = current.specialUses[id] ?? 0;
+      if (spent >= special.uses) break;
+
+      const actor = txn.entity(id);
+      if (!actor || !actor.alive) break;
+
+      const scope = buildScope(txn.module, txn.state, actor);
+      const context = { scope, rng, openNamespaces: OPEN_NAMESPACES };
+      if (special.when && !evalPredicate(special.when, context)) continue;
+
+      txn.set({
+        ...txn.state,
+        combat: { ...current, specialUses: { ...current.specialUses, [id]: spent + 1 } },
+      });
+
+      useAbility(
+        txn,
+        { module: txn.module, state: txn.state, terrain: terrainFor(txn.module) },
+        actor,
+        special.use,
+        {},
+        rng.derive(`${id}:${special.id}`),
+      );
+    }
+  }
 }
 
 /**
@@ -403,7 +490,25 @@ export function runReactions(
       if (!evalPredicate(compileRequirement(reaction.requires), { scope, rng, openNamespaces: OPEN_NAMESPACES })) continue;
     }
     if (reaction.when && !evalPredicate(reaction.when, { scope, rng, openNamespaces: OPEN_NAMESPACES })) continue;
+
+    // A reaction the creature has already spent this encounter. Declared by the
+    // schema from the beginning and checked by nothing, so a "once per fight"
+    // shout went off every single round.
+    const once = `${reactor.id}:${reaction.id}`;
+    if (reaction.oncePerEncounter && (txn.state.combat?.usedOnce ?? []).includes(once)) continue;
+
     if (reaction.chance < 1 && !rng.chance(reaction.chance)) continue;
+
+    if (reaction.oncePerEncounter && txn.state.combat) {
+      txn.set({
+        ...txn.state,
+        combat: {
+          ...txn.state.combat,
+          // Sorted, so two runs that spent the same reactions compare equal.
+          usedOnce: [...txn.state.combat.usedOnce, once].sort(),
+        },
+      });
+    }
 
     txn.emit({ type: 'reacted', entity: reactor.id, reaction: reaction.id, trigger });
 
@@ -440,6 +545,20 @@ export function runReactions(
 
       const branch = succeeded(roll) ? reaction.onSuccess : reaction.onFailure;
       if (branch.length > 0) applyOps(txn, evalEffects(branch, { scope, rng, openNamespaces: OPEN_NAMESPACES }), reactor.id);
+    }
+
+    // Answering with an ability, rather than with a list of effects. `use` was
+    // not even declared on the local shape, so a reaction that named one did
+    // nothing at all.
+    if (reaction.use) {
+      useAbility(
+        txn,
+        { module: txn.module, state: txn.state, terrain: terrainFor(txn.module) },
+        txn.entity(reactor.id) ?? reactor,
+        reaction.use,
+        subject ? { target: subject.id } : {},
+        rng.derive(`use:${reaction.id}`),
+      );
     }
   }
 }

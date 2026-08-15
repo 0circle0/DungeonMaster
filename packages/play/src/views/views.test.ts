@@ -8,10 +8,9 @@
  */
 
 import { describe, it, expect } from 'vitest';
-import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
-import { compileModule } from '@dm/module';
 import type { CompiledModule } from '@dm/module';
+import { loadModuleFrom } from '@dm/module/load';
 import type { GameState } from '@dm/engine';
 import { key } from '@dm/engine';
 import { startSession, runCommand } from '../session.js';
@@ -25,10 +24,7 @@ import { legend } from './legend.js';
 import { inventoryView } from './inventory.js';
 
 function loadModule(name: string): CompiledModule {
-  const path = fileURLToPath(new URL(`../../../../modules/${name}/module.json`, import.meta.url));
-  const result = compileModule(JSON.parse(readFileSync(path, 'utf8')));
-  if (!result.ok) throw new Error(result.errors.map((e) => `${e.path}: ${e.message}`).join('\n'));
-  return result.module;
+  return loadModuleFrom(fileURLToPath(new URL(`../../../../modules/${name}`, import.meta.url)));
 }
 
 const GREENMARCH = loadModule('greenmarch');
@@ -106,6 +102,33 @@ describe('waysFromHere', () => {
       .places.find((place) => place.poi === 'the_mill')!;
     expect(mill.barred).toBe(false);
     expect(mill.requires).toEqual([]);
+  });
+
+  // The test above sets the flag by hand, which is how the bug survived: the
+  // panel read a flag the engine never wrote, so a door the party had actually
+  // opened went on reading as barred for the rest of the run. This one opens it
+  // by playing.
+  it('drops the bar after the gate is opened in play, not just in a fixture', () => {
+    const session = startSession(GREENMARCH, 7);
+    const hero = session.state.entities[session.state.selected]!;
+    session.state = {
+      ...session.state,
+      entities: {
+        ...session.state.entities,
+        [hero.id]: { ...hero, inventory: [...hero.inventory, { item: 'brass_key', quantity: 1 }] },
+      },
+    };
+
+    const before = waysFromHere(GREENMARCH, session.state, session.terrain)
+      .places.find((place) => place.poi === 'the_mill')!;
+    expect(before.barred).toBe(true);
+
+    const opened = runCommand(session, 'open the mill door');
+    expect(opened.kind).not.toBe('error');
+
+    const after = waysFromHere(GREENMARCH, session.state, session.terrain)
+      .places.find((place) => place.poi === 'the_mill')!;
+    expect(after.barred).toBe(false);
   });
 
   it('offers nothing in a module with no declared ways', () => {
@@ -191,7 +214,8 @@ describe('statusView', () => {
     expect(vital.band).toBe('ok');
     expect(status.stance?.id).toBe('walk');
     expect(status.combat).toBeNull();
-    expect(status.clock.text).toBe('day 1 08:00');
+    // greenmarch declares four day phases; 08:00 is the start of `day`.
+    expect(status.clock.text).toBe('day 1 08:00 (Day)');
   });
 
   it('bands at exactly the halves and quarters the terminal colours by', () => {

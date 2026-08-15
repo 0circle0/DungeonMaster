@@ -33,8 +33,12 @@ import {
   itemsWithinReach,
   describeRequirement,
   sightSenseOf,
+  reachableTrap,
+  shopBarred,
 } from '@dm/engine';
+import { Rng } from '@dm/core';
 import type { Requirement } from '@dm/module';
+import { traderNearby } from './parser.js';
 import type { PlayContext } from './session.js';
 import { waysFromHere } from './views/exits.js';
 import { duration } from './views/format.js';
@@ -50,11 +54,49 @@ function gateReason(requires: Requirement | undefined): readonly string[] {
   return requires?.description ? described.slice(0, 1) : described;
 }
 
+/**
+ * What you do to a barrier of this kind.
+ *
+ * "Open the barrow ward" is the wrong sentence for a seal, and "open the ferry
+ * toll" is not a sentence at all. The gate's `kind` has always said which of
+ * these it is; only the label never asked.
+ */
+const OPEN_VERB: Record<string, string> = {
+  lock: 'Unlock',
+  ward: 'Dispel',
+  puzzle: 'Solve',
+  toll: 'Pay',
+  story: 'Approach',
+  hazard: 'Brave',
+};
+
+function openVerb(kind: string | undefined): string {
+  return OPEN_VERB[kind ?? ''] ?? 'Open';
+}
+
 
 export type AffordanceKind =
   | 'walk' | 'attack' | 'talk' | 'enter' | 'leave' | 'take' | 'open'
-  | 'look' | 'search' | 'sense' | 'select' | 'stance' | 'follow'
+  | 'look' | 'search' | 'disarm' | 'trade' | 'sense' | 'select' | 'stance' | 'follow'
   | 'endTurn' | 'flee' | 'rest' | 'wait' | 'travel' | 'quest';
+
+/**
+ * Whether the place the party is standing in offers a counter.
+ *
+ * `pointsOfInterest[].services` was display-only data. This is what it decides:
+ * which of a settlement's affordances are on offer. Outside a point of interest
+ * — on the open road, in a dungeon — a trader who happens to be there still
+ * trades, because there is no place to have said otherwise.
+ */
+function servesTrade(context: PlayContext): boolean {
+  const here = context.state.location;
+  if (here.kind !== 'poi') return true;
+
+  const poi = context.module.find<{ services?: string[] }>('world.pointsOfInterest', here.poi);
+  const services = poi?.services ?? [];
+  if (services.length === 0) return true;
+  return services.includes('market') || services.includes('smith') || services.includes('guild');
+}
 
 export type Subject =
   | { readonly kind: 'entity'; readonly id: EntityId }
@@ -200,12 +242,15 @@ export function affordancesAt(context: PlayContext, at: Position): readonly Affo
   // — a gate on the tile ————————————————————————————————————
   const gate = map.gates[packed];
   if (gate && !gate.open) {
-    const definition = module.find<{ name?: string; requires?: Requirement }>('world.gates', gate.gate);
+    const definition = module.find<{ name?: string; kind?: string; requires?: Requirement }>(
+      'world.gates',
+      gate.gate,
+    );
     const needs = gateReason(definition?.requires);
     out.push({
       id: `open:${gate.gate}`,
       kind: 'open',
-      label: `Open ${definition?.name ?? gate.gate.replace(/_/g, ' ')}`,
+      label: `${openVerb(definition?.kind)} ${definition?.name ?? gate.gate.replace(/_/g, ' ')}`,
       action: { type: 'open', target: gate.gate },
       weight: 75,
       ...(needs.length > 0 ? { blocked: `needs ${needs.join(', ')}` } : {}),
@@ -388,6 +433,41 @@ export function affordances(context: PlayContext): readonly Affordance[] {
     id: 'search', kind: 'search', label: 'Search',
     action: { type: 'search' }, weight: 35,
   });
+
+  // Trade, where the party is standing with someone who deals — and where the
+  // place says so. `services` decides which counters a settlement offers; a
+  // shopkeeper in a place with no market is somebody you can still talk to.
+  const trader = traderNearby(context);
+  if (trader && servesTrade(context)) {
+    const txn = reading(context);
+    const gate = shopBarred(txn, trader, actor, Rng.fromSeed(state.seed).derive(`shop:${trader}`));
+    const npc = module.find<{ name: string }>('content.npcs', trader);
+    out.push({
+      id: `trade:${trader}`,
+      kind: 'trade',
+      label: `Trade with ${npc?.name ?? trader}`,
+      action: { type: 'look', at: 'shop' },
+      subject: { kind: 'entity', id: trader },
+      weight: 70,
+      ...(gate.barred
+        ? { blocked: gate.requires.length > 0 ? `needs ${gate.requires.join(', ')}` : 'they will not deal with you' }
+        : {}),
+    });
+  }
+
+  // Only once something has actually been found. Offering "Disarm" with nothing
+  // in reach would tell the player a trap is there.
+  const trap = reachableTrap(reading(context), actor);
+  if (trap) {
+    const definition = module.find<{ name?: string }>('content.traps', trap.trap);
+    out.push({
+      id: `disarm:${trap.trap}`,
+      kind: 'disarm',
+      label: `Disarm the ${(definition?.name ?? trap.trap.replace(/_/g, ' ')).toLowerCase()}`,
+      action: { type: 'disarm' },
+      weight: 78,
+    });
+  }
 
   // — pace, when the module offers a choice of one ——————————
   const stances = module.all<{ id: string; name: string }>('rules.stances');

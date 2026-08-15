@@ -213,7 +213,7 @@ export const itemSchema = z
       .strict()
       .optional(),
     /** Reach, thrown, two-handed, finesse — named by the module. */
-    properties: z.array(idSchema).default([]),
+    properties: z.array(ref('rules.itemProperties')).default([]),
     /** Resistances granted while worn. */
     damageInteractions: z.array(damageInteractionSchema).default([]),
     /** Who can use it at all. */
@@ -423,8 +423,14 @@ export const npcSchema = z
     /** Reuses a monster's statblock when the NPC can fight. */
     statblock: ref('content.monsters').optional(),
     dialogue: ref('narrative.dialogues').optional(),
-    /** Where they can normally be found. */
-    home: idSchema.optional(),
+    /**
+     * Where they can normally be found.
+     *
+     * A real reference now, so a typo is a load error rather than a person who
+     * simply never appears. Naming a home is enough to place someone: listing
+     * them in that place's `residents` says the same thing from the other end.
+     */
+    home: ref('world.pointsOfInterest').optional(),
     /** How readily they believe rumours about the party, 0..1. */
     gullibility: z.number().min(0).max(1).default(0.5),
     /** How long they remember a deed, in in-world days. */

@@ -14,6 +14,7 @@ import type { CharacterChoices } from '@dm/engine';
 import { placeNameOf } from '@dm/engine';
 import type { CompiledModule } from '@dm/module';
 import type { MetaCommand } from '@dm/play';
+import { traderNearby } from '@dm/play';
 import type { ModuleChoice } from '@/lib/modules';
 import { compileDoc } from '@/lib/modules';
 import { useSession } from '@/lib/useSession';
@@ -26,10 +27,10 @@ import { Sidebar } from '@/components/Sidebar';
 import { Transcript } from '@/components/Transcript';
 import { Dialogue } from '@/components/Dialogue';
 import { CommandBar } from '@/components/CommandBar';
-import { Overlay, Journal, Sheet, Inventory, SaveMenu, Help } from '@/components/Overlays';
+import { Overlay, Journal, Sheet, Inventory, Shop, SaveMenu, Help } from '@/components/Overlays';
 import { Creation } from '@/components/Creation';
 
-type Panel = 'journal' | 'sheet' | 'inventory' | 'saves' | 'help' | 'creation' | null;
+type Panel = 'journal' | 'sheet' | 'inventory' | 'shop' | 'saves' | 'help' | 'creation' | null;
 
 export function Play({ shipped }: { shipped: readonly ModuleChoice[] }) {
   const [chosen, setChosen] = useState<ModuleChoice | null>(shipped[0] ?? null);
@@ -71,6 +72,8 @@ function Game({
   onDrop: (choice: ModuleChoice) => void;
 }) {
   const session: SessionApi = useSession(module, 12345);
+  // Who the party could trade with, so the panel and its button agree.
+  const trader = traderNearby({ module: session.module, state: session.frame.state });
   const [panel, setPanel] = useState<Panel>(null);
   const file = useRef<HTMLInputElement>(null);
 
@@ -82,6 +85,7 @@ function Game({
       case 'journal': setPanel('journal'); break;
       case 'sheet': setPanel('sheet'); break;
       case 'inventory': setPanel('inventory'); break;
+      case 'shop': setPanel('shop'); break;
       case 'save': case 'load': setPanel('saves'); break;
       case 'help': setPanel('help'); break;
       case 'quit': setPanel('saves'); break;
@@ -191,6 +195,11 @@ function Game({
       )}
       {panel === 'inventory' && (
         <Overlay title="Carried" onClose={() => setPanel(null)}><Inventory session={session} /></Overlay>
+      )}
+      {panel === 'shop' && trader && (
+        <Overlay title="Trade" onClose={() => setPanel(null)}>
+          <Shop session={session} npc={trader} />
+        </Overlay>
       )}
       {panel === 'saves' && (
         <Overlay title="Saved games" onClose={() => setPanel(null)}>

@@ -224,3 +224,21 @@ export function neighbours(position: Position, diagonal = true): Position[] {
   const offsets = diagonal ? DIRECTIONS : ORTHOGONAL;
   return offsets.map((offset) => ({ x: position.x + offset.x, y: position.y + offset.y }));
 }
+
+/**
+ * The terrain index for a module, built once.
+ *
+ * Keyed on the module object, so replacing the module replaces the index. Lives
+ * here rather than in the reducer because the combat turn needs one too, and
+ * importing the reducer from inside it would be a cycle.
+ */
+const terrainCache = new WeakMap<CompiledModule, TerrainIndex>();
+
+export function terrainFor(module: CompiledModule): TerrainIndex {
+  let index = terrainCache.get(module);
+  if (!index) {
+    index = new TerrainIndex(module);
+    terrainCache.set(module, index);
+  }
+  return index;
+}

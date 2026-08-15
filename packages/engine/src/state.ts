@@ -17,7 +17,7 @@ import type { Value } from '@dm/module';
 import type { Position, TileMap } from './grid/tiles.js';
 
 /** Bumped when the shape changes in a way that needs migrating. */
-export const SAVE_VERSION = 3;
+export const SAVE_VERSION = 7;
 
 export type EntityId = string;
 
@@ -110,6 +110,16 @@ export interface Entity {
 
   /** What it has noticed and not yet forgotten, strongest first. */
   readonly alerts: readonly Alert[];
+  /**
+   * Spell slots already spent, indexed by spell level.
+   *
+   * An array indexed by level rather than a record keyed by one: index order is
+   * a total order by construction, so two saves that spent the same slots
+   * compare equal without anything having to sort.
+   */
+  readonly slotsUsed: readonly number[];
+  /** The concentration spell this creature is holding, if any. */
+  readonly concentrating: string | null;
   /** How it is moving, and so what it gives off. Null when none is declared. */
   readonly stance: string | null;
 
@@ -146,6 +156,36 @@ export interface MapInstance {
   /** Exits to other maps, by packed tile key. */
   readonly exits: Readonly<Record<number, { readonly toMap: string; readonly at: Position }>>;
   /**
+   * Traps installed on this map, by packed tile key.
+   *
+   * Shaped like {@link MapInstance.gates} on purpose: one per tile, keyed the
+   * same way, discovered and then dealt with. The generator has always *placed*
+   * traps and the arrival code threw them away, so `content.traps` — detect,
+   * disarm, onTrigger, onDisarm, reusable — was a whole collection that did
+   * nothing.
+   */
+  readonly traps: Readonly<Record<number, {
+    readonly trap: string;
+    readonly state: 'hidden' | 'found' | 'disarmed' | 'sprung';
+  }>>;
+  /**
+   * The rooms this map was generated from, in generator order.
+   *
+   * Kept so walking from one room into another can be noticed — which is what
+   * makes a room template's `descriptionKey` and its `triggers` reachable.
+   */
+  readonly rooms: readonly {
+    readonly id: string;
+    readonly template: string;
+    readonly role: string;
+    readonly x: number;
+    readonly y: number;
+    readonly width: number;
+    readonly height: number;
+  }[];
+  /** How deep this map sits, for the tables that gate on depth. */
+  readonly depth: number;
+  /**
    * Items lying on the floor, by packed tile key.
    *
    * Kept on the map rather than in a global list so a dropped sword is *where*
@@ -177,6 +217,23 @@ export interface CombatState {
   readonly movement: number;
   /** Reactions used this round, by entity. */
   readonly reactionsUsed: Readonly<Record<EntityId, number>>;
+  /**
+   * Abilities on cooldown, and the round they come back.
+   *
+   * An array with a total sort rather than a nested record, because this is a
+   * collection creatures accumulate — and it lives on the *combat*, not on the
+   * entity, because a cooldown is counted in rounds and there are no rounds
+   * outside a fight.
+   */
+  readonly cooldowns: readonly {
+    readonly entity: EntityId;
+    readonly ability: string;
+    readonly until: number;
+  }[];
+  /** Reactions already spent for the whole encounter, as `<entity>:<reaction>`. */
+  readonly usedOnce: readonly string[];
+  /** Special turns taken this round, by entity — reset alongside `reactionsUsed`. */
+  readonly specialUses: Readonly<Record<EntityId, number>>;
 }
 
 /**
@@ -259,6 +316,16 @@ export interface GameState {
   readonly dialogue: { readonly npc: EntityId; readonly dialogue: string; readonly node: string; readonly taken: readonly string[] } | null;
 
   readonly flags: Readonly<Record<string, Value>>;
+  /**
+   * What the party has to spend.
+   *
+   * Party-wide rather than per character, because a D&D party shares a purse
+   * and per-character coin is a bookkeeping tax nobody enjoys. A scalar rather
+   * than an item, because `item.value` and `start.creation.startingCurrency`
+   * are both numbers — an item-based purse would need a "which item is money"
+   * field, and would let a player drop three hundred coins on the floor.
+   */
+  readonly purse: number;
   readonly reputation: Readonly<Record<string, number>>;
   readonly quests: Readonly<Record<string, QuestState>>;
   readonly deeds: readonly Deed[];

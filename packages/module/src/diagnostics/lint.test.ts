@@ -2,6 +2,7 @@ import { describe, it, expect } from 'vitest';
 import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { lintModule } from './lint.js';
+import { readAssembledModule } from '../load.js';
 import { parseJsonWithSource, JsonSyntaxError } from './source.js';
 import { editDistance, closest } from './suggest.js';
 
@@ -10,17 +11,70 @@ const GREENMARCH = readFileSync(
   'utf8',
 );
 
+// The raw text alone cannot resolve references into `maps/` folders; the
+// assembled document is what the compile pass must see.
+const ASSEMBLED = readAssembledModule(
+  fileURLToPath(new URL('../../../../modules/greenmarch', import.meta.url)),
+).doc;
+
+const MINIMAL = readFileSync(
+  fileURLToPath(new URL('../../../../modules/minimal/module.json', import.meta.url)),
+  'utf8',
+);
+
 const find = (text: string, code: string) =>
   lintModule(text).diagnostics.find((d) => d.code === code);
 
 describe('a valid module', () => {
   it('passes with no errors', () => {
-    const result = lintModule(GREENMARCH);
+    const result = lintModule(GREENMARCH, { assembled: ASSEMBLED });
     const errors = result.diagnostics.filter((d) => d.severity === 'error');
     if (errors.length > 0) {
       throw new Error(`unexpected errors:\n${errors.map((e) => `${e.path}: ${e.message}`).join('\n')}`);
     }
     expect(result.ok).toBe(true);
+  });
+
+  it('accepts a dungeon-only module with no areas', () => {
+    const result = lintModule(MINIMAL);
+    const errors = result.diagnostics.filter((d) => d.severity === 'error');
+    if (errors.length > 0) {
+      throw new Error(`unexpected errors:\n${errors.map((e) => `${e.path}: ${e.message}`).join('\n')}`);
+    }
+    expect(result.ok).toBe(true);
+  });
+});
+
+describe('start configuration', () => {
+  it('errors when no starting location is set', () => {
+    const document = JSON.parse(GREENMARCH) as Record<string, unknown>;
+    const start = document['start'] as Record<string, unknown>;
+    delete start['startingPoi'];
+    delete start['startingArea'];
+    delete start['startingDungeon'];
+    const diagnostic = find(JSON.stringify(document), 'no_start_location');
+    expect(diagnostic).toBeDefined();
+    expect(diagnostic!.severity).toBe('error');
+    expect(diagnostic!.path).toBe('start');
+  });
+
+  it('errors when the world has no areas and no starting dungeon', () => {
+    const document = JSON.parse(MINIMAL) as Record<string, unknown>;
+    const start = document['start'] as Record<string, unknown>;
+    delete start['startingDungeon'];
+    const diagnostic = find(JSON.stringify(document), 'empty_world');
+    expect(diagnostic).toBeDefined();
+    expect(diagnostic!.severity).toBe('error');
+  });
+
+  it('suggests the live objective kinds when a removed one is used', () => {
+    const document = JSON.parse(GREENMARCH) as Record<string, unknown>;
+    const narrative = document['narrative'] as Record<string, unknown>;
+    const quests = narrative['quests'] as Record<string, unknown>[];
+    const objectives = quests[0]!['objectives'] as Record<string, unknown>[];
+    objectives[0]!['kind'] = 'deliver';
+    const diagnostic = find(JSON.stringify(document), 'invalid_value');
+    expect(diagnostic).toBeDefined();
   });
 });
 
@@ -237,6 +291,118 @@ describe('semantic checks', () => {
 
     const diagnostic = lintModule(document).diagnostics.find((d) => d.code === 'orphan_poi')!;
     expect(diagnostic.severity).toBe('error');
+  });
+
+  it('warns when a cavern authors locks or branchiness', () => {
+    const document = JSON.parse(GREENMARCH) as Record<string, unknown>;
+    const world = document['world'] as Record<string, unknown>;
+    const caves = (world['dungeons'] as Record<string, unknown>[]).find(
+      (d) => d['id'] === 'fen_caves',
+    )!;
+    caves['lockedDoorChance'] = 0.5;
+    caves['branchiness'] = 0.3;
+
+    const diagnostics = lintModule(document).diagnostics;
+    const locks = diagnostics.find((d) => d.code === 'dungeon_locks_unusable')!;
+    expect(locks.severity).toBe('warning');
+    expect(locks.message).toContain('fen_caves');
+    expect(diagnostics.some((d) => d.code === 'dungeon_caverns_templates')).toBe(true);
+  });
+
+  it('stays quiet about a cavern that authors neither', () => {
+    const document = JSON.parse(GREENMARCH) as Record<string, unknown>;
+    const diagnostics = lintModule(document).diagnostics;
+    expect(diagnostics.some((d) => d.code === 'dungeon_locks_unusable')).toBe(false);
+    expect(diagnostics.some((d) => d.code === 'dungeon_caverns_templates')).toBe(false);
+  });
+});
+
+describe('static map checks', () => {
+  /** The assembled doc, which carries greenmarch's real `world.maps` entries. */
+  const assembled = () => JSON.parse(JSON.stringify(ASSEMBLED)) as Record<string, unknown>;
+  const mapsOf = (doc: Record<string, unknown>) =>
+    ((doc['world'] as Record<string, unknown>)['maps']) as Record<string, unknown>[];
+  const codesOf = (doc: Record<string, unknown>) =>
+    lintModule(doc).diagnostics.map((d) => d.code);
+
+  it('the shipped maps lint clean', () => {
+    const codes = codesOf(assembled());
+    for (const code of [
+      'map_entry_missing', 'map_entry_impassable', 'map_door_missing',
+      'map_door_on_edge', 'map_gate_off_door', 'map_disconnected_floor',
+      'dungeon_degree_unsatisfiable',
+    ]) {
+      expect(codes, code).not.toContain(code);
+    }
+  });
+
+  it('errors when an arrival map loses its entry marker', () => {
+    const doc = assembled();
+    const mill = mapsOf(doc).find((m) => m['id'] === 'mill_interior')!;
+    mill['layers'] = (mill['layers'] as Record<string, unknown>[])
+      .filter((layer) => layer['kind'] !== 'markers');
+    expect(codesOf(doc)).toContain('map_entry_missing');
+  });
+
+  it('errors when the entry marker stands in a wall', () => {
+    const doc = assembled();
+    const mill = mapsOf(doc).find((m) => m['id'] === 'mill_interior')!;
+    const terrain = (mill['layers'] as Record<string, unknown>[])
+      .find((layer) => layer['kind'] === 'terrain')!;
+    (terrain['cells'] as string[][])[7]![5] = 'wall';
+    expect(codesOf(doc)).toContain('map_entry_impassable');
+  });
+
+  it('errors when a room-template map has no doors, or doors off the edge', () => {
+    const doc = assembled();
+    const cell = mapsOf(doc).find((m) => m['id'] === 'barrow_deep_cell')!;
+    const markers = (cell['layers'] as Record<string, unknown>[])
+      .find((layer) => layer['kind'] === 'markers')!;
+    const cells = markers['cells'] as string[][];
+    cells[8]![4] = '';
+    expect(codesOf(doc)).toContain('map_door_missing');
+
+    cells[4]![4] = 'door';
+    expect(codesOf(doc)).toContain('map_door_on_edge');
+  });
+
+  it('warns about a gate buried in solid wall', () => {
+    const doc = assembled();
+    const cell = mapsOf(doc).find((m) => m['id'] === 'barrow_deep_cell')!;
+    const gates = (cell['layers'] as Record<string, unknown>[])
+      .find((layer) => layer['kind'] === 'gates')!;
+    (gates['cells'] as string[][])[0]![0] = 'barrow_ward';
+    expect(codesOf(doc)).toContain('map_gate_off_door');
+  });
+
+  it('warns about floor no route reaches', () => {
+    const doc = assembled();
+    const mill = mapsOf(doc).find((m) => m['id'] === 'mill_interior')!;
+    const terrain = (mill['layers'] as Record<string, unknown>[])
+      .find((layer) => layer['kind'] === 'terrain')!;
+    // Wall the store room's doorway shut: its floor becomes a sealed pocket.
+    (terrain['cells'] as string[][])[3]![6] = 'wall';
+    expect(codesOf(doc)).toContain('map_disconnected_floor');
+  });
+
+  it('says so when a static dungeon authors generator knobs', () => {
+    const doc = assembled();
+    ((doc['world'] as Record<string, unknown>)['dungeons'] as Record<string, unknown>[]).push({
+      id: 'fixed', name: 'Fixed', biome: 'greenmarch',
+      staticMap: 'mill_interior', roomCount: '9',
+    });
+    const found = lintModule(doc).diagnostics.find((d) => d.code === 'dungeon_static_fields_ignored');
+    expect(found?.severity).toBe('info');
+    expect(found?.message).toContain('roomCount');
+  });
+
+  it('warns when every drawable template caps maxExits at 1', () => {
+    const doc = assembled();
+    for (const template of (doc['world'] as Record<string, unknown>)['roomTemplates'] as Record<string, unknown>[]) {
+      template['maxExits'] = 1;
+      template['minExits'] = 1;
+    }
+    expect(codesOf(doc)).toContain('dungeon_degree_unsatisfiable');
   });
 });
 

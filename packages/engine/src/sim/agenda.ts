@@ -109,15 +109,21 @@ export function recordEncounter(txn: Transaction, statblock: string, usedAbiliti
 }
 
 /** Whether a creature kind has learned enough to fight differently. */
-export function hasAdapted(txn: Transaction, statblock: string): boolean {
+export function hasAdapted(txn: Transaction, statblock: string, rng?: Rng): boolean {
   const config = learningConfig(txn);
   if (!config.enabled) return false;
 
   const monster = txn.module.find<{ faction?: string }>('content.monsters', statblock);
   const subject = config.sharedWithinFaction && monster?.faction ? monster.faction : statblock;
   const seen = Number(txn.state.flags[learningKey(subject, 'encounters')] ?? 0);
+  if (seen < config.encountersBeforeAdapting) return false;
 
-  return seen >= config.encountersBeforeAdapting;
+  // Knowing better and doing better are not the same. `adaptationStrength` is
+  // how often the lesson actually reaches the creature's decision — it was read
+  // into the config and never consulted, so a creature that had learned
+  // anything applied it every single turn.
+  if (!rng) return true;
+  return rng.chance(config.adaptationStrength);
 }
 
 /** Adaptations fade if the party stays away long enough. */

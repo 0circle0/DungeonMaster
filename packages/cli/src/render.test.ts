@@ -41,7 +41,7 @@ describe('the pane output, pinned before the derivation split', () => {
     const green = startSession(GREENMARCH, 7);
     expect(strip(statusLines(green.module, green.state))).toMatchInlineSnapshot(`
       [
-        "Ash  L1  Hit Points 8/8  Focus 2/2  walk  day 1 08:00",
+        "Ash  L1  Hit Points 8/8  Focus 2/2  25m  walk  day 1 08:00 (Day)",
       ]
     `);
 
@@ -57,7 +57,7 @@ describe('the pane output, pinned before the derivation split', () => {
     const session = played();
     expect(strip(statusLines(session.module, session.state))).toMatchInlineSnapshot(`
       [
-        "Ash  L1  Hit Points 8/8  Focus 2/2  walk  day 1 08:03",
+        "Ash  L1  Hit Points 8/8  Focus 2/2  25m  walk  day 1 08:03 (Day)",
       ]
     `);
   });
@@ -86,10 +86,10 @@ describe('the pane output, pinned before the derivation split', () => {
     expect(strip(exitLines(green.module, green.state, green.terrain))).toMatchInlineSnapshot(`
       [
         "  Here",
-        "    enter The Old Mill  20m  (barred)",
+        "    enter The Old Mill  20m  (Vess's brass key.)",
         "",
         "  Roads",
-        "    travel The Fens  1h 30m",
+        "    travel The Fens  1h 30m  (ten marks for the ferryman)",
       ]
     `);
 
@@ -106,10 +106,10 @@ describe('the pane output, pinned before the derivation split', () => {
     expect(strip(exitLines(session.module, session.state, session.terrain))).toMatchInlineSnapshot(`
       [
         "  Here",
-        "    enter The Old Mill  20m  (barred)",
+        "    enter The Old Mill  20m  (Vess's brass key.)",
         "",
         "  Roads",
-        "    travel The Fens  1h 30m",
+        "    travel The Fens  1h 30m  (ten marks for the ferryman)",
         "",
         "  Unexplored",
         "    northeast  6 tiles off",

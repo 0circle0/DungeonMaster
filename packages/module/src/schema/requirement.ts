@@ -114,6 +114,17 @@ const requirementClauses = {
   attributes: z.array(attributeRequirementSchema).default([]),
   skills: z.array(skillRequirementSchema).default([]),
 
+  /**
+   * What the actor *is*. These make the vocabulary collections mechanical:
+   * "this only affects undead", "this line only appears if you speak Dwarvish".
+   */
+  creatureTypes: z.array(ref('rules.creatureTypes')).default([]),
+  alignments: z.array(ref('rules.alignments')).default([]),
+  languages: z.array(ref('rules.languages')).default([]),
+
+  /** Coin in the party's purse — what makes a toll gate a toll. */
+  currency: z.number().int().min(0).optional(),
+
   items: z.array(itemRequirementSchema).default([]),
   quests: z.array(questRequirementSchema).default([]),
   factions: z.array(factionRequirementSchema).default([]),
@@ -200,12 +211,16 @@ export function isEmptyRequirement(req: Requirement | RequirementBranch | undefi
   const without = withoutOf(req);
   return (
     req.minLevel === undefined &&
+    req.currency === undefined &&
     req.maxLevel === undefined &&
     clause(req.classes).length === 0 &&
     clause(req.ancestries).length === 0 &&
     clause(req.abilities).length === 0 &&
     clause(req.attributes).length === 0 &&
     clause(req.skills).length === 0 &&
+    clause(req.creatureTypes).length === 0 &&
+    clause(req.alignments).length === 0 &&
+    clause(req.languages).length === 0 &&
     clause(req.items).length === 0 &&
     clause(req.quests).length === 0 &&
     clause(req.factions).length === 0 &&
@@ -259,10 +274,29 @@ export function compileRequirement(req: Requirement | RequirementBranch | undefi
 
   for (const skill of clause(r.skills)) {
     clauses.push({ gte: [{ ref: `actor.skills.${skill.skill}`, else: 0 }, skill.minRank] });
+    // A tier is a named rung on the *rank* ladder — `masteryTier.atRank` says so
+    // itself — so the comparison is the skill's own rank against the rank the
+    // tier starts at. `tiers` is supplied by the engine's scope.
     if (skill.minTier) {
-      clauses.push({ gte: [{ ref: `actor.mastery.${skill.skill}`, else: 0 }, { ref: `tiers.${skill.minTier}` }] });
+      clauses.push({
+        gte: [{ ref: `actor.skills.${skill.skill}`, else: 0 }, { ref: `tiers.${skill.minTier}` }],
+      });
     }
   }
+
+  if (clause(r.creatureTypes).length > 0) {
+    clauses.push({ in: [{ ref: 'actor.creatureType' }, { list: [...clause(r.creatureTypes)] }] });
+  }
+  if (clause(r.alignments).length > 0) {
+    clauses.push({ in: [{ ref: 'actor.alignment' }, { list: [...clause(r.alignments)] }] });
+  }
+  // Every named tongue must be spoken, not merely one of them: a requirement
+  // listing two languages is asking for a translator who has both.
+  for (const language of clause(r.languages)) {
+    clauses.push({ in: [language, { ref: 'actor.languages' }] });
+  }
+
+  if (r.currency !== undefined) clauses.push({ gte: [{ ref: 'purse' }, r.currency] });
 
   for (const item of clause(r.items)) {
     const path = item.equipped ? `actor.equippedItems.${item.item}` : `actor.inventory.${item.item}`;
@@ -278,8 +312,15 @@ export function compileRequirement(req: Requirement | RequirementBranch | undefi
     if (faction.maxStanding !== undefined) {
       clauses.push({ lte: [{ ref: `reputation.${faction.faction}`, else: 0 }, faction.maxStanding] });
     }
+    // Ranks are thresholds on the faction's own standing, and they are scoped
+    // per faction so two factions may each declare a rank called `trusted`.
     if (faction.minRank) {
-      clauses.push({ gte: [{ ref: `rank.${faction.faction}`, else: 0 }, { ref: `ranks.${faction.minRank}` }] });
+      clauses.push({
+        gte: [
+          { ref: `reputation.${faction.faction}`, else: 0 },
+          { ref: `ranks.${faction.faction}.${faction.minRank}` },
+        ],
+      });
     }
   }
 

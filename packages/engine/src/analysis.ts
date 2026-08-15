@@ -9,7 +9,7 @@
 
 import { Rng } from '@dm/core';
 import type { CompiledModule, Scope } from '@dm/module';
-import { rollLoot, rollEncounter } from './world/populate.js';
+import { rollLoot, rollEncounter, singleScope } from './world/populate.js';
 import { monsterThreat } from '@dm/module';
 import { MapBuilder, TerrainIndex, terrainAt } from './grid/tiles.js';
 import type { Position } from './grid/tiles.js';
@@ -81,7 +81,7 @@ export function simulateLoot(
   let emptyTrials = 0;
 
   for (let trial = 0; trial < trials; trial += 1) {
-    const draws = rollLoot(module, tableId, scope, rng.derive(`trial:${trial}`));
+    const draws = rollLoot(module, tableId, singleScope(scope), rng.derive(`trial:${trial}`));
     if (draws.length === 0) {
       emptyTrials += 1;
       continue;
@@ -251,6 +251,7 @@ export function simulatePerception(
       preview: {
         id: 'preview', tiles, kind: 'room', source: 'preview',
         explored: [], gates: {}, exits: {}, items: {}, marks: {},
+      traps: {}, rooms: [], depth: 1,
       },
     },
     entities: { 'preview:source': source },
@@ -263,8 +264,11 @@ export function simulatePerception(
 
   for (let y = 0; y < height; y += 1) {
     for (let x = 0; x < width; x += 1) {
-      // Someone standing here: how much of the source reaches them?
-      const observer: Entity = { ...source, id: 'preview:observer', position: { x, y } };
+      // Someone standing here: how much of the source reaches them? Built from
+      // the plain template rather than the source, so a statblock picked as the
+      // *emitter* cannot smuggle its own sense ranges into the *perceiver* —
+      // the drawn reach must be the module default the caller was told about.
+      const observer: Entity = { ...template, id: 'preview:observer', map: 'preview', position: { x, y } };
       const context = {
         module,
         state: { ...state, entities: { ...state.entities, 'preview:observer': observer } },

@@ -201,6 +201,16 @@ export function runIdleTurns(
     if (actor.map !== txn.state.currentMap) continue;
     if (actor.alerts.length === 0) continue;
 
+    // How long a creature keeps caring. `perception.curiosityMinutes` has
+    // always described exactly this and was read by nothing, so a hound would
+    // walk purposefully towards a smell it noticed two hours ago.
+    const curiosity = txn.module.source.rules.perception.curiosityMinutes;
+    if (curiosity > 0) {
+      const fresh = actor.alerts.filter((alert) => txn.state.minute - alert.minute <= curiosity);
+      if (fresh.length === 0) continue;
+      if (fresh.length !== actor.alerts.length) txn.putEntity({ ...actor, alerts: fresh });
+    }
+
     investigate(
       txn,
       { module: context.module, state: txn.state, terrain: context.terrain },

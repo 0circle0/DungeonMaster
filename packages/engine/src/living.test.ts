@@ -1,9 +1,9 @@
 import { describe, it, expect } from 'vitest';
-import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { Rng } from '@dm/core';
 import { compileModule } from '@dm/module';
 import type { CompiledModule } from '@dm/module';
+import { loadModuleFrom } from '@dm/module/load';
 import { newGame, defaultChoices } from './newgame.js';
 import { spawnMonster, spawnNpc } from './character.js';
 import { reduce, reduceAll } from './reduce.js';
@@ -18,10 +18,7 @@ import type { GameState } from './state.js';
 import type { Action } from './actions.js';
 
 function loadModule(name: string): CompiledModule {
-  const path = fileURLToPath(new URL(`../../../modules/${name}/module.json`, import.meta.url));
-  const result = compileModule(JSON.parse(readFileSync(path, 'utf8')));
-  if (!result.ok) throw new Error(result.errors.map((e) => `${e.path}: ${e.message}`).join('\n'));
-  return result.module;
+  return loadModuleFrom(fileURLToPath(new URL(`../../../modules/${name}`, import.meta.url)));
 }
 
 const GREENMARCH = loadModule('greenmarch');
@@ -36,7 +33,7 @@ function fresh(seed = 5): GameState {
     ...base,
     currentMap: 'here',
     maps: {
-      here: { id: 'here', tiles: createMap(13, 13, 'floor'), kind: 'area', source: 'millford', explored: [], gates: {}, exits: {}, items: {}, marks: {} },
+      here: { id: 'here', tiles: createMap(13, 13, 'floor'), kind: 'area', source: 'millford', explored: [], gates: {}, exits: {}, items: {}, marks: {}, traps: {}, rooms: [], depth: 1 },
     },
     entities: { ...base.entities, [hero.id]: { ...hero, map: 'here', position: { x: 6, y: 6 } } },
   };

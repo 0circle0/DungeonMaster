@@ -1,17 +1,17 @@
 import { describe, it, expect } from 'vitest';
-import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { compileModule } from '@dm/module';
 import type { CompiledModule, GameModule } from '@dm/module';
+import { readAssembledModule } from '@dm/module/load';
 import { newGame, defaultChoices, NewGameError } from './newgame.js';
 import { createCharacter, spawnMonster } from './character.js';
 import { statsOf, buildScope } from './stats.js';
 import { Rng } from '@dm/core';
 
-const MINIMAL_PATH = fileURLToPath(new URL('../../../modules/minimal/module.json', import.meta.url));
+const MINIMAL_DIR = fileURLToPath(new URL('../../../modules/minimal', import.meta.url));
 
 function loadModule(mutate?: (doc: GameModule) => void): CompiledModule {
-  const doc = JSON.parse(readFileSync(MINIMAL_PATH, 'utf8')) as GameModule;
+  const doc = readAssembledModule(MINIMAL_DIR).doc as unknown as GameModule;
   mutate?.(doc);
   const result = compileModule(doc);
   if (!result.ok) {

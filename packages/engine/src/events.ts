@@ -88,6 +88,17 @@ export type GameEvent =
   | { readonly type: 'itemEquipped'; readonly entity: EntityId; readonly item: string; readonly slot: string }
   | { readonly type: 'itemUnequipped'; readonly entity: EntityId; readonly item: string; readonly slot: string }
   | { readonly type: 'itemUsed'; readonly entity: EntityId; readonly item: string; readonly consumed: boolean }
+  /** What a dead creature left on the ground. Without this the drop is silent. */
+  | {
+      readonly type: 'droppedLoot';
+      readonly from: EntityId;
+      readonly at: Position;
+      readonly items: readonly { readonly item: string; readonly quantity: number }[];
+    }
+
+  // — traps —————————————————————————————————————————————————
+  | { readonly type: 'trapSprung'; readonly trap: string; readonly entity: EntityId; readonly at: Position }
+  | { readonly type: 'trapDisarmed'; readonly trap: string; readonly entity: EntityId; readonly at: Position }
 
   // — progression ———————————————————————————————————————————
   | { readonly type: 'xpGained'; readonly entity: EntityId; readonly amount: number; readonly total: number }
@@ -105,11 +116,25 @@ export type GameEvent =
   | { readonly type: 'turnEnded'; readonly entity: EntityId }
   | { readonly type: 'reacted'; readonly entity: EntityId; readonly reaction: string; readonly trigger: string }
 
+  // — casting ———————————————————————————————————————————————
+  | { readonly type: 'spellCast'; readonly entity: EntityId; readonly spell: string; readonly slot: number; readonly ritual: boolean }
+  | { readonly type: 'concentrationBroken'; readonly entity: EntityId; readonly spell: string }
+
   // — world —————————————————————————————————————————————————
   | { readonly type: 'timePassed'; readonly minutes: number; readonly totalMinute: number }
   | { readonly type: 'dayBroke'; readonly day: number }
   | { readonly type: 'flagSet'; readonly flag: string; readonly value: unknown }
   | { readonly type: 'reputationChanged'; readonly faction: string; readonly from: number; readonly to: number }
+  | { readonly type: 'currencyChanged'; readonly amount: number; readonly purse: number }
+  | {
+      readonly type: 'traded';
+      readonly npc: EntityId;
+      readonly item: string;
+      readonly quantity: number;
+      readonly price: number;
+      /** True when the party bought it, false when they sold it. */
+      readonly bought: boolean;
+    }
   | { readonly type: 'triggerFired'; readonly trigger: string; readonly at: string }
   | { readonly type: 'gateOpened'; readonly gate: string; readonly how: 'requirement' | 'bypass' | 'ability' }
   | { readonly type: 'gateBlocked'; readonly gate: string; readonly missing: readonly string[] }

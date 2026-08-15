@@ -13,17 +13,29 @@
  * corrupt a save.
  */
 
-import type { CompiledModule, EffectOp, Value } from '@dm/module';
+import { Rng } from '@dm/core';
+import { evalEffects, evalExpr } from '@dm/module';
+import type { CompiledModule, Effect, EffectOp, Expr, Value } from '@dm/module';
 import type { GameState, Entity, EntityId, ActiveCondition } from '../state.js';
 import type { GameEvent } from '../events.js';
-import { maximaOf, modifiersOf } from '../stats.js';
+import { buildScope, maximaOf, minimaOf, modifiersOf, OPEN_NAMESPACES } from '../stats.js';
 import { TerrainIndex } from '../grid/tiles.js';
 import { makeNoise } from '../sim/senses.js';
+import { testConcentration } from './casting.js';
 
 /** Accumulates state changes and the events describing them. */
 export class Transaction {
   private current: GameState;
   private readonly events: GameEvent[] = [];
+
+  /**
+   * Depletions currently unwinding, as `<entity>:<resource>`.
+   *
+   * Per-call scratch, deliberately not on `GameState`: a module whose
+   * `onDepleted` pushes the same pool back to its floor would otherwise recurse
+   * without end. Never serialized, so it cannot affect save equality.
+   */
+  readonly depleting = new Set<string>();
 
   constructor(
     state: GameState,
@@ -34,6 +46,19 @@ export class Transaction {
 
   get state(): GameState {
     return this.current;
+  }
+
+  /**
+   * Randomness for effects that are evaluated deep inside an application.
+   *
+   * `evalEffects` normally runs at the top of a reduction, where the reducer's
+   * own generator is in hand. A few things — an `onDepleted` that heals `1d4`,
+   * a condition whose `defaultDuration` is rolled — are only reached from here.
+   * Deriving from the state's own generator keeps them a pure function of the
+   * state they fire in, so a replay reproduces them exactly.
+   */
+  rngFor(label: string): Rng {
+    return Rng.fromState(this.current.rng).derive(label);
   }
 
   set(next: GameState): void {
@@ -74,11 +99,62 @@ interface ConditionDef {
   id: string;
   stacking: 'refresh' | 'extend' | 'stack' | 'ignore';
   defaultDuration?: unknown;
+  onApply?: unknown[];
+}
+
+interface Interaction {
+  damageType: string;
+  multiplier: number;
+  unless?: string[];
 }
 
 interface MonsterDef {
-  damageInteractions?: { damageType: string; multiplier: number; unless?: string[] }[];
+  damageInteractions?: Interaction[];
   conditionImmunities?: string[];
+}
+
+/**
+ * Every resistance, immunity and vulnerability that applies to a creature.
+ *
+ * Only the statblock was consulted, and only monsters have one — so a *player
+ * character* could not have a resistance at all, and `ancestries[].
+ * damageInteractions` and `items[].damageInteractions` were unreachable by
+ * construction rather than merely unimplemented.
+ *
+ * Sources compose multiplicatively: armour that halves fire on top of an
+ * ancestry that already halves it leaves a quarter, which is the reading that
+ * makes stacking protections worth having without making them additive-to-zero.
+ */
+function interactionsFor(module: CompiledModule, target: Entity): Interaction[] {
+  const out: Interaction[] = [];
+
+  if (target.statblock) {
+    const statblock = module.find<MonsterDef>('content.monsters', target.statblock);
+    out.push(...(statblock?.damageInteractions ?? []));
+  }
+  if (target.ancestry) {
+    const ancestry = module.find<MonsterDef>('content.ancestries', target.ancestry);
+    out.push(...(ancestry?.damageInteractions ?? []));
+  }
+  for (const itemIds of Object.values(target.equipped)) {
+    for (const itemId of itemIds) {
+      const item = module.find<MonsterDef>('content.items', itemId);
+      out.push(...(item?.damageInteractions ?? []));
+    }
+  }
+  return out;
+}
+
+/** Conditions a creature shrugs off, from its statblock or its ancestry. */
+function immunitiesOf(module: CompiledModule, target: Entity): string[] {
+  const out: string[] = [];
+  if (target.statblock) {
+    out.push(...(module.find<MonsterDef>('content.monsters', target.statblock)?.conditionImmunities ?? []));
+  }
+  if (target.ancestry) {
+    out.push(...(module.find<MonsterDef>('content.ancestries', target.ancestry)?.conditionImmunities ?? []));
+  }
+  return out;
 }
 
 /**
@@ -88,17 +164,28 @@ interface MonsterDef {
  * rather than three separate mechanisms — and lets a module express healing
  * from fire as -1 without the engine knowing that is unusual.
  */
-function damageMultiplier(module: CompiledModule, target: Entity, damageType: string | null): number {
-  if (!damageType || !target.statblock) return 1;
-  const statblock = module.find<MonsterDef>('content.monsters', target.statblock);
-  const interaction = statblock?.damageInteractions?.find((entry) => entry.damageType === damageType);
-  return interaction ? interaction.multiplier : 1;
+function damageMultiplier(
+  module: CompiledModule,
+  target: Entity,
+  damageType: string | null,
+  tags: readonly string[] = [],
+): number {
+  if (!damageType) return 1;
+
+  let multiplier = 1;
+  for (const interaction of interactionsFor(module, target)) {
+    if (interaction.damageType !== damageType) continue;
+    // `unless` is what makes "immune to slashing, except silvered" expressible.
+    // Without it the classic beat — an ordinary blade is useless, the warded one
+    // is not — had no way to be written.
+    if (interaction.unless?.some((tag) => tags.includes(tag))) continue;
+    multiplier *= interaction.multiplier;
+  }
+  return multiplier;
 }
 
 function isImmuneTo(module: CompiledModule, target: Entity, condition: string): boolean {
-  if (!target.statblock) return false;
-  const statblock = module.find<MonsterDef>('content.monsters', target.statblock);
-  return statblock?.conditionImmunities?.includes(condition) ?? false;
+  return immunitiesOf(module, target).includes(condition);
 }
 
 /** Change a resource, clamped, emitting the right events including depletion. */
@@ -116,10 +203,10 @@ export function adjustResource(
   }
 
   const before = entity.resources[resourceId] ?? 0;
-  // The maximum depends on gear and conditions, so it is computed rather than
+  // Both bounds depend on gear and conditions, so they are computed rather than
   // stored — see `stats.ts`.
   const max = maximaFor(txn, entity)[resourceId] ?? before;
-  const min = 0;
+  const min = minimaFor(txn, entity)[resourceId] ?? 0;
 
   const after = Math.max(min, Math.min(max, before + delta));
   if (after === before) return;
@@ -137,6 +224,10 @@ export function adjustResource(
       resource: resourceId,
       source: options.source ?? null,
     });
+
+    // Being hurt is the only moment concentration is really tested, so the
+    // check lives on the damage rather than on a turn boundary.
+    testConcentration(txn, entity, before - after, txn.rngFor(`concentration:${entity.id}`));
   } else if (delta > 0) {
     txn.emit({ type: 'healed', entity: entity.id, amount: after - before, resource: resourceId });
   } else {
@@ -145,14 +236,61 @@ export function adjustResource(
 
   if (after <= min && before > min) {
     txn.emit({ type: 'depleted', entity: entity.id, resource: resourceId });
+    runDepletion(txn, entity.id, resourceId, options.source ?? null);
+  }
+}
 
-    // Death is not an engine concept: it is whatever the module attached to the
-    // vital resource running out.
-    if (resourceId === txn.module.source.rules.vitalResource) {
-      txn.putEntity({ ...updated, alive: false });
-      txn.emit({ type: 'died', entity: entity.id, killer: options.source ?? null });
+/**
+ * What happens when a pool bottoms out.
+ *
+ * The order is the design: the module's own `onDepleted` runs **first**, and
+ * death is only declared afterwards, if the character is still at the floor.
+ * That is what lets `[heal 1, applyCondition downed]` mean "dropped to 0 and
+ * stabilised" — the D&D shape — without the engine needing a concept of dying
+ * separate from a resource running out. A resource that declares no
+ * `onDepleted` behaves exactly as it did before.
+ */
+function runDepletion(
+  txn: Transaction,
+  entityId: EntityId,
+  resourceId: string,
+  killer: EntityId | null,
+): void {
+  const definition = txn.module.find<ResourceDef>('rules.resources', resourceId);
+  const effects = (definition?.onDepleted ?? []) as Effect[];
+
+  if (effects.length > 0) {
+    // `onDepleted` may itself damage, heal, or kill. Without a guard, a module
+    // whose effects push the same pool back down would recurse forever; the
+    // mark is per-call scratch on the transaction and is never serialized.
+    const mark = `${entityId}:${resourceId}`;
+    if (txn.depleting.has(mark)) return;
+    txn.depleting.add(mark);
+    try {
+      const current = txn.entity(entityId);
+      if (current) {
+        const scope = buildScope(txn.module, txn.state, current);
+        const rng = txn.rngFor(`depleted:${entityId}:${resourceId}`);
+        applyOps(txn, evalEffects(effects, { scope, rng, openNamespaces: OPEN_NAMESPACES }), entityId);
+      }
+    } finally {
+      txn.depleting.delete(mark);
     }
   }
+
+  // Death is not an engine concept: it is whatever the module attached to the
+  // vital resource running out — but only if the module did not just pull the
+  // character back off the floor.
+  if (resourceId !== txn.module.source.rules.vitalResource) return;
+
+  const after = txn.entity(entityId);
+  if (!after || !after.alive) return;
+
+  const min = minimaFor(txn, after)[resourceId] ?? 0;
+  if ((after.resources[resourceId] ?? 0) > min) return;
+
+  txn.putEntity({ ...after, alive: false });
+  txn.emit({ type: 'died', entity: entityId, killer });
 }
 
 /**
@@ -169,6 +307,17 @@ function maximaFor(txn: Transaction, entity: Entity): Record<string, number> {
   if (cached) return cached;
   const value = maximaOf(txn.module, entity, modifiersOf(txn.module, entity.attributes));
   maximaCache.set(entity, value);
+  return value;
+}
+
+/** Minima, cached the same way and for the same reason. */
+const minimaCache = new WeakMap<Entity, Record<string, number>>();
+
+function minimaFor(txn: Transaction, entity: Entity): Record<string, number> {
+  const cached = minimaCache.get(entity);
+  if (cached) return cached;
+  const value = minimaOf(txn.module, entity, modifiersOf(txn.module, entity.attributes));
+  minimaCache.set(entity, value);
   return value;
 }
 
@@ -192,6 +341,12 @@ export function applyCondition(
     return;
   }
 
+  // An effect that names no duration gets the condition's own. Without this,
+  // every authored `defaultDuration` was ignored and the condition lasted until
+  // something removed it — so "frightened for 2 rounds" meant frightened for
+  // the rest of the game.
+  const applied = duration ?? durationOf(txn, definition, entity, magnitude);
+
   const existing = entity.conditions.find((active) => active.condition === conditionId);
   const stacking = definition.stacking ?? 'refresh';
 
@@ -201,24 +356,50 @@ export function applyCondition(
   let stacked = false;
 
   if (!existing || stacking === 'stack') {
-    conditions = [...entity.conditions, { condition: conditionId, remaining: duration, magnitude, source }];
+    conditions = [...entity.conditions, { condition: conditionId, remaining: applied, magnitude, source }];
     stacked = Boolean(existing);
   } else if (stacking === 'extend') {
     conditions = entity.conditions.map((active) =>
       active.condition === conditionId
-        ? { ...active, remaining: (active.remaining ?? 0) + (duration ?? 0) }
+        ? { ...active, remaining: (active.remaining ?? 0) + (applied ?? 0) }
         : active,
     );
     stacked = true;
   } else {
     // refresh: reset the clock without adding a second instance.
     conditions = entity.conditions.map((active) =>
-      active.condition === conditionId ? { ...active, remaining: duration, magnitude, source } : active,
+      active.condition === conditionId ? { ...active, remaining: applied, magnitude, source } : active,
     );
   }
 
   txn.putEntity({ ...entity, conditions });
-  txn.emit({ type: 'conditionApplied', entity: entity.id, condition: conditionId, duration, stacked });
+  txn.emit({ type: 'conditionApplied', entity: entity.id, condition: conditionId, duration: applied, stacked });
+
+  // `onApply` fires when the condition actually takes hold — so a second dose
+  // of a `refresh` condition re-runs it, and one that was `ignore`d does not.
+  const effects = (definition.onApply ?? []) as Effect[];
+  if (effects.length > 0) {
+    const current = txn.entity(entity.id);
+    if (current) {
+      const scope = { ...buildScope(txn.module, txn.state, current), magnitude: magnitude ?? 1 };
+      const rng = txn.rngFor(`onApply:${entity.id}:${conditionId}`);
+      applyOps(txn, evalEffects(effects, { scope, rng, openNamespaces: OPEN_NAMESPACES }), source);
+    }
+  }
+}
+
+/** A condition's own duration, rolled if the module wrote it as dice. */
+function durationOf(
+  txn: Transaction,
+  definition: ConditionDef,
+  entity: Entity,
+  magnitude: number | null,
+): number | null {
+  if (definition.defaultDuration === undefined) return null;
+  const scope = { ...buildScope(txn.module, txn.state, entity), magnitude: magnitude ?? 1 };
+  const rng = txn.rngFor(`duration:${entity.id}:${definition.id}`);
+  const value = evalExpr(definition.defaultDuration as Expr, { scope, rng, openNamespaces: OPEN_NAMESPACES });
+  return typeof value === 'number' && Number.isFinite(value) ? Math.max(0, Math.floor(value)) : null;
 }
 
 export function removeCondition(txn: Transaction, entity: Entity, conditionId: string): void {
@@ -302,7 +483,7 @@ export function applyOps(txn: Transaction, ops: readonly EffectOp[], source: Ent
         // "kill" a corpse repeatedly and emit a death event each time.
         if (!entity.alive) break;
 
-        const multiplier = damageMultiplier(txn.module, entity, op.damageType);
+        const multiplier = damageMultiplier(txn.module, entity, op.damageType, op.tags ?? []);
         const amount = Math.round(op.amount * multiplier);
         if (amount === 0) break;
 
@@ -366,6 +547,18 @@ export function applyOps(txn: Transaction, ops: readonly EffectOp[], source: Ent
         adjustReputation(txn, op.faction, op.amount);
         break;
 
+      case 'adjustCurrency': {
+        // The purse never goes negative: a module that overspends is refused
+        // the difference rather than putting the party in debt, which is not a
+        // state anything else here knows how to read.
+        const before = txn.state.purse;
+        const after = Math.max(0, before + op.amount);
+        if (after === before) break;
+        txn.set({ ...txn.state, purse: after });
+        txn.emit({ type: 'currencyChanged', amount: after - before, purse: after });
+        break;
+      }
+
       case 'move': {
         const target = asEntityId(op.target, txn.state);
         const entity = target ? txn.entity(target) : undefined;
@@ -397,8 +590,19 @@ export function applyOps(txn: Transaction, ops: readonly EffectOp[], source: Ent
         break;
       }
 
-      default:
+      default: {
+        // An op the engine does not implement did nothing, quietly — which is
+        // the exact failure this file exists to prevent on the content side.
+        // The `never` makes it a compile error to add an op and forget the
+        // case; the refusal covers a module built against a newer engine.
+        const unhandled: never = op;
+        txn.emit({
+          type: 'refused',
+          action: 'applyOps',
+          reason: `this engine does not implement "${(unhandled as { op: string }).op}"`,
+        });
         break;
+      }
     }
   }
 }

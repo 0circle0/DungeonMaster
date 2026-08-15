@@ -30,6 +30,31 @@ describe('mergeModules', () => {
       },
     };
 
+    it('merges world.maps by id, a pack map replacing a base map wholesale inside', () => {
+      const withMaps = mergeModules(
+        {
+          world: {
+            maps: [
+              { id: 'keep', layers: [{ kind: 'terrain', cells: [['a']] }] },
+              { id: 'shop', layers: [{ kind: 'terrain', cells: [['a']] }] },
+            ],
+          },
+        },
+        {
+          world: {
+            maps: [{ id: 'shop', layers: [{ kind: 'terrain', cells: [['b', 'b']] }] }],
+          },
+        },
+      ) as { world: { maps: { id: string; layers: unknown[] }[] } };
+
+      expect(withMaps.world.maps.map((m) => m.id)).toEqual(['keep', 'shop']);
+      // `layers` is a non-collection array, so the pack's grid wins wholesale —
+      // per-layer patching is deliberately not a thing.
+      expect(withMaps.world.maps[1]!.layers).toEqual([
+        { kind: 'terrain', cells: [['b', 'b']] },
+      ]);
+    });
+
     // Merging by position would silently rewrite whichever monster sat at that index.
     it('overrides an existing entry by id, field by field', () => {
       const merged = mergeModules(base, {

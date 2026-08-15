@@ -1,12 +1,12 @@
 import { describe, it, expect } from 'vitest';
-import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
+import { readAssembledModule } from '@dm/module/load';
 import { collectEvents, summariseEffects, summariseRequirement } from './events.js';
 import type { ModuleDoc } from './store.js';
 
-const doc = JSON.parse(
-  readFileSync(fileURLToPath(new URL('../../../modules/greenmarch/module.json', import.meta.url)), 'utf8'),
-) as ModuleDoc;
+const doc: ModuleDoc = readAssembledModule(
+  fileURLToPath(new URL('../../../modules/greenmarch', import.meta.url)),
+).doc;
 
 const events = collectEvents(doc);
 const byKind = (kind: string) => events.filter((e) => e.kind === kind);

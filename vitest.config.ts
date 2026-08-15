@@ -10,6 +10,9 @@ export default defineConfig({
   },
   resolve: {
     alias: {
+      // Before '@dm/module': aliases prefix-match, and the bare one would
+      // otherwise swallow the subpath.
+      '@dm/module/load': r('./packages/module/src/load.ts'),
       '@dm/module': r('./packages/module/src/index.ts'),
       '@dm/engine': r('./packages/engine/src/index.ts'),
       '@dm/core': r('./packages/core/src/index.ts'),

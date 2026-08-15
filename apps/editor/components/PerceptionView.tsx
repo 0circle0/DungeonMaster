@@ -131,10 +131,10 @@ export function PerceptionView({ doc }: { doc: ModuleDoc }) {
         wall with {doorway ? 'a doorway in it' : 'no way through'}. Brighter is stronger.
       </p>
 
-      <div className="group">
+      <div className="balance-controls">
         <label>
           Sense
-          <select value={active} onChange={(e) => setSenseId(e.target.value)}>
+          <select className="input narrow" value={active} onChange={(e) => setSenseId(e.target.value)}>
             {senses.map((sense) => (
               <option key={String(sense['id'])} value={String(sense['id'])}>
                 {String(sense['name'] ?? sense['id'])}
@@ -146,7 +146,7 @@ export function PerceptionView({ doc }: { doc: ModuleDoc }) {
         {stances.length > 0 && (
           <label>
             Moving as
-            <select value={stance} onChange={(e) => setStance(e.target.value)}>
+            <select className="input narrow" value={stance} onChange={(e) => setStance(e.target.value)}>
               <option value="">(default)</option>
               {stances.map((entry) => (
                 <option key={String(entry['id'])} value={String(entry['id'])}>
@@ -160,7 +160,7 @@ export function PerceptionView({ doc }: { doc: ModuleDoc }) {
         {monsters.length > 0 && (
           <label>
             Giving it off
-            <select value={statblock} onChange={(e) => setStatblock(e.target.value)}>
+            <select className="input narrow" value={statblock} onChange={(e) => setStatblock(e.target.value)}>
               <option value="">(a character)</option>
               {monsters.map((entry) => (
                 <option key={String(entry['id'])} value={String(entry['id'])}>
@@ -171,7 +171,7 @@ export function PerceptionView({ doc }: { doc: ModuleDoc }) {
           </label>
         )}
 
-        <label>
+        <label className="checkbox">
           <input
             type="checkbox"
             checked={doorway}

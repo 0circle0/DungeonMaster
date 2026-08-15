@@ -16,8 +16,10 @@ import { evalEffects, evalExpr, evalPredicate, compileRequirement, isEmptyRequir
 import type { Expr } from '@dm/module';
 import type { Effect, Predicate, Requirement } from '@dm/module';
 import type { GameEvent } from '../events.js';
-import type { QuestState } from '../state.js';
+import type { EntityId, QuestState } from '../state.js';
 import { buildScope, OPEN_NAMESPACES } from '../stats.js';
+import { abilitiesUpTo } from '../character.js';
+import type { ClassDef } from '../character.js';
 import { Transaction, applyOps, changeInventory, adjustReputation } from '../rules/apply.js';
 
 export interface ObjectiveDef {
@@ -417,7 +419,7 @@ function checkQuestCompletion(txn: Transaction, quest: QuestDef, rng: Rng): void
 
   // — rewards ——————————————————————————————————————————————
   const xp = Number(evalNumber(quest.rewards?.xp, txn, leader.id, rng));
-  if (xp > 0) grantXp(txn, xp);
+  if (xp > 0) grantXp(txn, xp, rng.derive('levelup'));
 
   for (const reward of quest.rewards?.items ?? []) {
     const quantity = Math.max(1, Number(evalNumber(reward.quantity, txn, leader.id, rng)));
@@ -475,10 +477,23 @@ function evalNumber(expr: unknown, txn: Transaction, actorId: string, rng: Rng):
   return typeof value === 'number' && Number.isFinite(value) ? value : 0;
 }
 
-/** Award experience to the whole party, and level anyone who has earned it. */
-export function grantXp(txn: Transaction, amount: number): void {
+/**
+ * Award experience to the whole party, and level anyone who has earned it.
+ *
+ * Levelling used to be a number going up and nothing else — the module's
+ * `grants` were never run and the class's later `abilitiesByLevel` were never
+ * unlocked, so greenmarch's warden could reach level 2 and still not know the
+ * `rally` its own class declares at level 2. Each crossed level is applied in
+ * order, because a module may reasonably grant something at 2 that something at
+ * 3 depends on.
+ */
+export function grantXp(txn: Transaction, amount: number, rng: Rng): void {
   if (amount <= 0) return;
-  const levels = txn.module.source.rules.progression.levels as { level: number; xpRequired: number }[];
+  const levels = txn.module.source.rules.progression.levels as {
+    level: number;
+    xpRequired: number;
+    grants?: Effect[];
+  }[];
   const maxLevel = txn.module.source.rules.progression.maxLevel;
 
   for (const id of txn.state.party) {
@@ -495,6 +510,92 @@ export function grantXp(txn: Transaction, amount: number): void {
 
     txn.putEntity({ ...member, xp: total, level });
     txn.emit({ type: 'xpGained', entity: id, amount, total });
-    if (level > member.level) txn.emit({ type: 'leveledUp', entity: id, level });
+    if (level === member.level) continue;
+
+    txn.emit({ type: 'leveledUp', entity: id, level });
+
+    for (let reached = member.level + 1; reached <= level; reached += 1) {
+      applyLevel(txn, id, reached, levels, rng.derive(`levelup:${id}:${reached}`));
+    }
   }
+}
+
+/** Everything reaching one level does, beyond the number itself. */
+function applyLevel(
+  txn: Transaction,
+  id: EntityId,
+  level: number,
+  levels: readonly { level: number; grants?: Effect[] }[],
+  rng: Rng,
+): void {
+  // What the class has unlocked by now. A union rather than a replacement, so
+  // an ability granted by an ancestry or an item is not quietly revoked.
+  const current = txn.entity(id);
+  if (current?.characterClass) {
+    const characterClass = txn.module.find<ClassDef>('content.classes', current.characterClass);
+    if (characterClass) {
+      const unlocked = abilitiesUpTo(characterClass, level)
+        .filter((ability: string) => !current.abilities.includes(ability));
+      if (unlocked.length > 0) {
+        txn.putEntity({ ...current, abilities: [...current.abilities, ...unlocked] });
+      }
+    }
+  }
+
+  // Then the module's own effects for reaching it. Scoped to the character who
+  // levelled, not the party leader — `applyEffects` here always uses the
+  // leader, which would give everyone's level-up bonus to one person.
+  const grants = levels.find((entry) => entry.level === level)?.grants ?? [];
+  if (grants.length === 0) return;
+
+  const member = txn.entity(id);
+  if (!member) return;
+  const scope = buildScope(txn.module, txn.state, member);
+  applyOps(txn, evalEffects(grants, { scope, rng, openNamespaces: OPEN_NAMESPACES }), id);
+}
+
+/**
+ * Quests this person can hand over, that the party could take right now.
+ *
+ * `npcs[].offersQuests` was read only by the linter, and `quests[].giver` by
+ * nothing at all — so a module that described who hands out what still needed a
+ * dialogue tree to make it happen. Both are answered here, so a front end can
+ * offer the job and a bare `talk` can mention it.
+ */
+export function questsOffered(txn: Transaction, npcId: string, rng: Rng): readonly QuestDef[] {
+  const npc = txn.module.find<{ offersQuests?: string[] }>('content.npcs', npcId);
+
+  const declared = new Set(npc?.offersQuests ?? []);
+  for (const quest of txn.module.all<QuestDef>('narrative.quests')) {
+    if (quest.giver === npcId) declared.add(quest.id);
+  }
+  if (declared.size === 0) return [];
+
+  const leader = txn.state.entities[txn.state.selected];
+  const out: QuestDef[] = [];
+
+  // Sorted, so two runs offer the same jobs in the same order.
+  for (const id of [...declared].sort()) {
+    const quest = txn.module.find<QuestDef>('narrative.quests', id);
+    if (!quest) continue;
+
+    const existing = txn.state.quests[id];
+    // Already taken, already done — unless it is one you can take again.
+    if (existing && existing.status !== 'available' && !(quest.repeatable && existing.status === 'complete')) {
+      continue;
+    }
+
+    if (leader && !isEmptyRequirement(quest.requires)) {
+      const scope = buildScope(txn.module, txn.state, leader);
+      try {
+        if (!evalPredicate(compileRequirement(quest.requires), { scope, rng, openNamespaces: OPEN_NAMESPACES })) {
+          continue;
+        }
+      } catch {
+        continue;
+      }
+    }
+    out.push(quest);
+  }
+  return out;
 }

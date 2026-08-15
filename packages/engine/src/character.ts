@@ -10,7 +10,7 @@
 import { Rng, roll } from '@dm/core';
 import type { CompiledModule } from '@dm/module';
 import type { Entity, ItemStack } from './state.js';
-import { modifiersOf, maximaOf } from './stats.js';
+import { modifiersOf, initialOf } from './stats.js';
 
 interface AncestryDef {
   id: string;
@@ -18,9 +18,15 @@ interface AncestryDef {
   attributeBonuses: Record<string, number>;
   grantedAbilities: string[];
   skillBonuses: Record<string, number>;
+  /** How this ancestry moves. Dropped on the floor until now, so nothing flew. */
+  speeds?: Record<string, number>;
+  senses?: Record<string, number>;
+  size?: string;
+  creatureType?: string;
+  languages?: string[];
 }
 
-interface ClassDef {
+export interface ClassDef {
   id: string;
   name: string;
   hitDie: string;
@@ -28,6 +34,7 @@ interface ClassDef {
   skillProficiencies: string[];
   startingItems: { item: string; quantity: number }[];
   abilitiesByLevel: Record<string, string[]>;
+  spellcasting?: { knownByLevel?: Record<string, number> };
 }
 
 interface AttributeDef {
@@ -47,6 +54,12 @@ interface MonsterDef {
   abilities: string[];
   faction?: string;
   speeds?: Record<string, number>;
+  /** Trained skills. Discarded at spawn, so every monster had rank 0 in all. */
+  skillBonuses?: Record<string, number>;
+  size?: string;
+  creatureType?: string;
+  alignment?: string;
+  languages?: string[];
   extra?: Record<string, never>;
 }
 
@@ -79,8 +92,85 @@ export class CreationError extends Error {
   }
 }
 
+/**
+ * What a class actually knows at a level.
+ *
+ * `abilitiesByLevel` grants automatically; `spellcasting.knownByLevel` caps how
+ * many *spells* of those a caster has picked up — the sorcerer shape, where the
+ * list is long and the memory is not. The cap applies only to abilities the
+ * module marked as spells, so a class feature is never crowded out by one.
+ */
+function knownAtLevel(
+  module: CompiledModule,
+  characterClass: ClassDef,
+  level: number,
+): string[] {
+  const granted = abilitiesUpTo(characterClass, level);
+  const known = characterClass.spellcasting?.knownByLevel?.[String(level)];
+  if (known === undefined) return granted;
+
+  const spells: string[] = [];
+  const rest: string[] = [];
+  for (const id of granted) {
+    const ability = module.find<{ spellLevel?: number }>('content.abilities', id);
+    (typeof ability?.spellLevel === 'number' ? spells : rest).push(id);
+  }
+  // The first `known` in declaration order, so what a character has is a
+  // property of the module rather than of the dice.
+  return [...rest, ...spells.slice(0, Math.max(0, known))];
+}
+
+/** The descriptive facts a statblock gives a creature. */
+function monsterVocabulary(monster: MonsterDef): Record<string, never> {
+  const out: Record<string, unknown> = {};
+  if (monster.size) out['size'] = monster.size;
+  if (monster.creatureType) out['creatureType'] = monster.creatureType;
+  if (monster.alignment) out['alignment'] = monster.alignment;
+  if (monster.languages && monster.languages.length > 0) out['languages'] = [...monster.languages];
+  return out as Record<string, never>;
+}
+
+/** The descriptive facts an ancestry gives a character. */
+function vocabularyOf(ancestry: AncestryDef): Record<string, never> {
+  const out: Record<string, unknown> = {};
+  if (ancestry.size) out['size'] = ancestry.size;
+  if (ancestry.creatureType) out['creatureType'] = ancestry.creatureType;
+  if (ancestry.languages && ancestry.languages.length > 0) out['languages'] = [...ancestry.languages];
+  return out as Record<string, never>;
+}
+
+/**
+ * Put the gear a character starts with *on* them.
+ *
+ * Starting items landed in the bag and nowhere else, so a fresh party stood in
+ * the first fight holding their swords in their packs — and, now that a weapon
+ * decides what a blow does, hitting for nothing. Anything with a declared slot
+ * is worn, up to that slot's capacity, in the order the module lists it.
+ */
+function equipStartingGear(
+  module: CompiledModule,
+  inventory: readonly ItemStack[],
+): Record<string, string[]> {
+  const slots = new Map(
+    module.all<{ id: string; capacity: number }>('rules.equipmentSlots')
+      .map((slot) => [slot.id, slot.capacity ?? 1]),
+  );
+
+  const equipped: Record<string, string[]> = {};
+  for (const stack of inventory) {
+    const item = module.find<{ slot?: string }>('content.items', stack.item);
+    const slotId = item?.slot;
+    if (!slotId || !slots.has(slotId)) continue;
+
+    const worn = equipped[slotId] ?? [];
+    if (worn.length >= (slots.get(slotId) ?? 1)) continue;
+    equipped[slotId] = [...worn, stack.item];
+  }
+  return equipped;
+}
+
 /** Abilities a class has unlocked by a given level. */
-function abilitiesUpTo(characterClass: ClassDef, level: number): string[] {
+export function abilitiesUpTo(characterClass: ClassDef, level: number): string[] {
   const out: string[] = [];
   for (const [levelKey, abilities] of Object.entries(characterClass.abilitiesByLevel)) {
     if (Number(levelKey) <= level) out.push(...abilities);
@@ -143,7 +233,10 @@ export function createCharacter(
     })),
   ]);
 
-  const abilities = [...new Set([...ancestry.grantedAbilities, ...abilitiesUpTo(characterClass, level)])];
+  const abilities = [...new Set([
+    ...ancestry.grantedAbilities,
+    ...knownAtLevel(module, characterClass, level),
+  ])];
 
   // Levels beyond the first roll the class hit die, which is why creation takes
   // an RNG: a level-3 character is not deterministic from choices alone.
@@ -157,15 +250,20 @@ export function createCharacter(
     // creation happens before any map exists.
     map: '',
     position: { x: 0, y: 0 },
-    movementModes: movementModesFor(module, undefined),
+    movementModes: movementModesFor(module, ancestry.speeds),
     disposition: 'ally',
     following: null,
     alerts: [],
+    slotsUsed: [],
+    concentrating: null,
     // Null means "however this ruleset says creatures move by default", which
     // is resolved when it is read. Baking it in here would copy the default
     // into every creature and quietly ignore a module that changed it.
     stance: null,
-    extra: {},
+    // Size, kind, tongues. These live in the open `extra` bag rather than as new
+    // typed fields: it is already part of `Entity` and already serialized, so a
+    // character finally carrying them costs no save migration.
+    extra: vocabularyOf(ancestry),
     id,
     name: choices.name,
     kind: 'character',
@@ -176,7 +274,7 @@ export function createCharacter(
     skills,
     conditions: [],
     inventory,
-    equipped: {},
+    equipped: equipStartingGear(module, inventory),
     abilities,
     ancestry: ancestry.id,
     characterClass: characterClass.id,
@@ -185,14 +283,15 @@ export function createCharacter(
     alive: true,
   };
 
-  // 2-3. Modifiers, then maxima, then fill each resource to full.
+  // 2-3. Modifiers, then each resource at its starting value — full unless the
+  // module said otherwise, which is what `initial` being optional means.
   const mods = modifiersOf(module, attributes);
-  const maxima = maximaOf(module, draft, mods);
+  const starting = initialOf(module, draft, mods);
   const vital = module.source.rules.vitalResource;
 
   const resources: Record<string, number> = {};
-  for (const [resourceId, max] of Object.entries(maxima)) {
-    resources[resourceId] = resourceId === vital ? max + bonusVitality : max;
+  for (const [resourceId, value] of Object.entries(starting)) {
+    resources[resourceId] = resourceId === vital ? value + bonusVitality : value;
   }
 
   return { ...draft, resources };
@@ -215,11 +314,13 @@ export function spawnMonster(module: CompiledModule, id: string, monsterId: stri
     disposition: 'hostile',
     following: null,
     alerts: [],
+    slotsUsed: [],
+    concentrating: null,
     // Null means "however this ruleset says creatures move by default", which
     // is resolved when it is read. Baking it in here would copy the default
     // into every creature and quietly ignore a module that changed it.
     stance: null,
-    extra: {},
+    extra: monsterVocabulary(monster),
     id,
     name: monster.name,
     kind: 'monster',
@@ -227,7 +328,10 @@ export function spawnMonster(module: CompiledModule, id: string, monsterId: stri
     xp: monster.xp,
     attributes,
     resources: {},
-    skills: {},
+    // A statblock's trained skills. Left empty until now, so a creature the
+    // module described as stealthy or perceptive rolled at rank 0 like anything
+    // else — and every opposed check against one was decided by attributes.
+    skills: { ...(monster.skillBonuses ?? {}) },
     conditions: [],
     inventory: [],
     equipped: {},
@@ -240,9 +344,8 @@ export function spawnMonster(module: CompiledModule, id: string, monsterId: stri
   };
 
   const mods = modifiersOf(module, attributes);
-  const maxima = maximaOf(module, draft, mods);
 
-  return { ...draft, resources: { ...maxima } };
+  return { ...draft, resources: initialOf(module, draft, mods) };
 }
 
 interface NpcDef {
@@ -285,6 +388,8 @@ export function spawnNpc(module: CompiledModule, npcId: string): Entity {
     disposition: npc.disposition >= 0 ? 'neutral' : 'hostile',
     following: null,
     alerts: [],
+    slotsUsed: [],
+    concentrating: null,
     stance: null,
     // What content this person came from, so dialogue and memory can find their
     // definition back from the entity even when a statblock renamed them.
@@ -309,9 +414,8 @@ export function spawnNpc(module: CompiledModule, npcId: string): Entity {
   };
 
   const mods = modifiersOf(module, attributes);
-  const maxima = maximaOf(module, draft, mods);
 
-  return { ...draft, resources: { ...maxima } };
+  return { ...draft, resources: initialOf(module, draft, mods) };
 }
 
 /**

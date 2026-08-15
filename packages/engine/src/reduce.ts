@@ -13,8 +13,8 @@
 
 import { Rng } from '@dm/core';
 import type { CompiledModule } from '@dm/module';
-import { evalPredicate } from '@dm/module';
-import type { Predicate } from '@dm/module';
+import { evalPredicate, compileRequirement, isEmptyRequirement } from '@dm/module';
+import type { Predicate, Requirement } from '@dm/module';
 import { buildScope, OPEN_NAMESPACES } from './stats.js';
 import type { Action } from './actions.js';
 import { DIRECTION_OFFSETS } from './actions.js';
@@ -23,6 +23,8 @@ import type { GameState, Entity, EntityId } from './state.js';
 import { Transaction, adjustResource } from './rules/apply.js';
 import { statsOf } from './stats.js';
 import { tickAllConditions } from './rules/conditions.js';
+import { recoverSlots } from './rules/casting.js';
+import { runPartyPassives } from './rules/passives.js';
 import { useAbility, defaultAttackAbility } from './rules/combat/attack.js';
 import {
   maybeStartCombat,
@@ -35,16 +37,22 @@ import {
   broadcastReaction,
 } from './rules/combat/turn.js';
 import { runAiTurns, runIdleTurns } from './rules/combat/ai.js';
-import { enterDungeon, enterArea, enterPoi } from './sim/enter.js';
-import { openGate, markGateOpen } from './sim/gates.js';
-import { startQuest, abandonQuest, advanceQuests } from './sim/quests.js';
+import { enterDungeon, enterArea, enterPoi, placeParty } from './sim/enter.js';
+import { openGate, markGateOpen, describeRequirement } from './sim/gates.js';
+import { startQuest, abandonQuest, advanceQuests, questsOffered } from './sim/quests.js';
 import { startDialogue, chooseOption, canTalkTo, endDialogue } from './sim/dialogue.js';
+import { dropDeathLoot } from './sim/spoils.js';
+import { endingReached } from './sim/arcs.js';
+import { buyItem, sellItem } from './sim/trade.js';
+import { springTrap, searchForTraps, disarmTrap } from './sim/traps.js';
+import { runTerrain } from './sim/terrain.js';
+import { runTriggers, triggersFor } from './sim/triggers.js';
 import { recordDeed } from './sim/deeds.js';
 import { tickDay } from './sim/agenda.js';
-import { takeItem, dropItem, equipItem, unequipItem, useItem, giveItem } from './sim/items.js';
+import { takeItem, dropItem, equipItem, unequipItem, useItem, giveItem, rechargeItems } from './sim/items.js';
 import { skillCheck, succeeded } from './rules/check.js';
 import type { TargetingContext } from './rules/combat/targeting.js';
-import { TerrainIndex, key, unkey } from './grid/tiles.js';
+import { TerrainIndex, key, unkey, terrainFor } from './grid/tiles.js';
 import type { Position } from './grid/tiles.js';
 import { findPath } from './grid/path.js';
 import { distance } from './grid/geometry.js';
@@ -66,17 +74,6 @@ export interface ReduceResult {
 export interface ReduceContext {
   readonly module: CompiledModule;
   readonly terrain?: TerrainIndex;
-}
-
-const terrainCache = new WeakMap<CompiledModule, TerrainIndex>();
-
-function terrainFor(module: CompiledModule): TerrainIndex {
-  let index = terrainCache.get(module);
-  if (!index) {
-    index = new TerrainIndex(module);
-    terrainCache.set(module, index);
-  }
-  return index;
 }
 
 /** Resolve who is acting: the named entity, or the selected party member. */
@@ -207,7 +204,11 @@ export function reduce(state: GameState, action: Action, context: ReduceContext)
         targeting,
         actor.id,
         action.ability,
-        { ...(action.target ? { target: action.target } : {}), ...(action.at ? { at: action.at } : {}) },
+        {
+          ...(action.target ? { target: action.target } : {}),
+          ...(action.at ? { at: action.at } : {}),
+          ...(action.ritual ? { ritual: true } : {}),
+        },
         rng,
       );
       break;
@@ -228,14 +229,21 @@ export function reduce(state: GameState, action: Action, context: ReduceContext)
       if (!actor) break;
 
       // A point of interest may be gated; opening it is part of entering.
-      const poi = module.find<{ id: string; gate?: string }>('world.pointsOfInterest', action.target);
+      const poi = module.find<{ id: string; gate?: string; travelMinutes?: number }>(
+        'world.pointsOfInterest',
+        action.target,
+      );
       if (poi) {
         let opened = true;
         if (poi.gate) {
           const outcome = openGate(txn, poi.gate, actor, rng);
           opened = outcome.opened;
         }
-        enterPoi(txn, terrain, action.target, actor, rng, opened);
+        const entered = enterPoi(txn, terrain, action.target, actor, rng, opened);
+        // The walk out to it. Exit labels have printed this number since the
+        // beginning and the clock never moved, so a place "45m away" was next
+        // door.
+        if (entered && poi.travelMinutes) advanceTime(txn, poi.travelMinutes, rng);
         break;
       }
       if (module.has('world.dungeons', action.target)) {
@@ -260,6 +268,38 @@ export function reduce(state: GameState, action: Action, context: ReduceContext)
         if (!route) {
           txn.emit({ type: 'refused', action: 'travelToArea', reason: 'there is no road that way' });
           break;
+        }
+
+        // A cliff you can descend but not climb. `travelToArea` looks the route
+        // up on the *origin*, so an asymmetry made by omission was already
+        // enforced — but a module that lists its roads both ways, which is the
+        // natural thing to do, got nothing from `oneWay` at all.
+        const back = module
+          .find<{ connections: { to: string; oneWay: boolean }[] }>('world.areas', action.area)
+          ?.connections.find((entry) => entry.to === areaId);
+        if (back?.oneWay) {
+          txn.emit({ type: 'refused', action: 'travelToArea', reason: 'there is no way back up' });
+          break;
+        }
+
+        // An area may be gated on more than a door. `requires` on an area was
+        // the registry's own complaint: a gate that gates nothing.
+        const destination = module.find<{ requires?: Requirement }>('world.areas', action.area);
+        if (!isEmptyRequirement(destination?.requires)) {
+          const traveller = actorOf(state, action);
+          const scope = traveller ? buildScope(module, txn.state, traveller) : {};
+          const met = evalPredicate(compileRequirement(destination!.requires), {
+            scope, rng, openNamespaces: OPEN_NAMESPACES,
+          });
+          if (!met) {
+            const missing = describeRequirement(destination!.requires);
+            txn.emit({
+              type: 'refused',
+              action: 'travelToArea',
+              reason: missing.length > 0 ? `not yet — ${missing.join(', ')}` : 'not yet',
+            });
+            break;
+          }
         }
         if (route.gate) {
           const actor = actorOf(state, action);
@@ -358,10 +398,16 @@ export function reduce(state: GameState, action: Action, context: ReduceContext)
         .filter((poi) => poi.area === areaId && poi.hidden && poi.discover)
         .filter((poi) => txn.state.flags[`found:${poi.id}`] !== true);
 
-      if (hidden.length === 0) {
+      // Searching also finds what is buried underfoot. This is deliberately the
+      // *only* way a trap is found: a passive roll re-made on every step finds
+      // everything eventually and teaches the player nothing.
+      const foundTraps = searchForTraps(txn, actor, rng.derive('traps'));
+
+      if (hidden.length === 0 && !foundTraps) {
         // Silence reads as a broken command, so say plainly that the search
         // turned nothing up.
         txn.emit({ type: 'refused', action: 'search', reason: 'you find nothing here' });
+        runSearchTriggers(txn, actor, rng);
         break;
       }
 
@@ -373,7 +419,30 @@ export function reduce(state: GameState, action: Action, context: ReduceContext)
         txn.set({ ...txn.state, flags: { ...txn.state.flags, [`found:${poi.id}`]: true } });
         txn.emit({ type: 'discovered', what: poi.id, kind: 'poi' });
       }
+      runSearchTriggers(txn, actor, rng);
       advanceTime(txn, 10, rng);
+      break;
+    }
+
+    case 'buy': {
+      const actor = actorOf(state, action);
+      if (!actor) break;
+      buyItem(txn, action.npc, actor, action.item, action.quantity ?? 1, rng.derive('buy'));
+      break;
+    }
+
+    case 'sell': {
+      const actor = actorOf(state, action);
+      if (!actor) break;
+      sellItem(txn, action.npc, actor, action.item, action.quantity ?? 1, rng.derive('sell'));
+      break;
+    }
+
+    case 'disarm': {
+      const actor = actorOf(state, action);
+      if (!actor) break;
+      disarmTrap(txn, actor, rng.derive('disarm'));
+      if (!txn.state.combat) advanceTime(txn, 10, rng);
       break;
     }
 
@@ -386,6 +455,17 @@ export function reduce(state: GameState, action: Action, context: ReduceContext)
       }
       const speaker = txn.entity(action.npc);
       if (speaker) startDialogue(txn, actor, speaker, rng);
+
+      // What they have for you, whether or not they have a dialogue tree. A
+      // module that said "Vess offers the mill door" needed a conversation
+      // authored before that meant anything.
+      for (const quest of questsOffered(txn, action.npc, rng.derive('offers'))) {
+        txn.emit({
+          type: 'custom',
+          event: 'questOffered',
+          data: { quest: quest.id, npc: action.npc, name: quest.name },
+        });
+      }
       break;
     }
 
@@ -418,6 +498,9 @@ export function reduce(state: GameState, action: Action, context: ReduceContext)
         break;
       }
 
+      runOccasion(txn, 'rest', rng);
+      rechargeItems(txn, rest.id, rng.derive('recharge'));
+      recoverSlots(txn, rest.id);
       advanceTime(txn, rest.duration, rng);
 
       // Hours of stillness in one place is exactly what a nose is for. Anything
@@ -495,9 +578,47 @@ export function reduce(state: GameState, action: Action, context: ReduceContext)
 
       const here = txn.state.location;
       if (here.kind === 'dungeon') {
-        txn.emit({ type: 'refused', action: 'leave', reason: 'find the way out first' });
+        // The way out is the way in: the exit tile recorded when the party
+        // first arrived. Standing on or beside it, "leave" walks back to
+        // wherever they came from — beside counts because the party clusters
+        // on arrival and a member may be occupying the tile itself. Anywhere
+        // else, the dungeon still has to be crossed.
+        const inside = txn.state.maps[txn.state.currentMap];
+        const leader = txn.entity(txn.state.selected);
+        const exit = inside && leader
+          ? Object.entries(inside.exits).find(([tile]) => {
+              const at = unkey(Number(tile));
+              return Math.max(Math.abs(at.x - leader.position.x), Math.abs(at.y - leader.position.y)) <= 1;
+            })?.[1]
+          : undefined;
+        if (!exit || !txn.state.maps[exit.toMap]) {
+          txn.emit({ type: 'refused', action: 'leave', reason: 'find the way out first' });
+          break;
+        }
+
+        runOccasion(txn, 'exit', rng);
+
+        const colon = exit.toMap.indexOf(':');
+        const outsideKind = exit.toMap.slice(0, colon);
+        const outsideId = exit.toMap.slice(colon + 1);
+        if (outsideKind === 'area') {
+          txn.set({ ...txn.state, location: { kind: 'area', area: outsideId } });
+        } else if (outsideKind === 'poi') {
+          const poi = module.find<{ area: string }>('world.pointsOfInterest', outsideId);
+          if (poi) {
+            txn.set({ ...txn.state, location: { kind: 'poi', area: poi.area, poi: outsideId } });
+          }
+        } else {
+          txn.set({ ...txn.state, location: { kind: 'dungeon', dungeon: outsideId, room: '' } });
+        }
+
+        placeParty(txn, terrain, exit.toMap, exit.at);
+        txn.emit({ type: 'custom', event: 'entered', data: { place: outsideId, kind: outsideKind } });
         break;
       }
+      // Whatever the place has to say about being left. Declared by the schema
+      // since the beginning and fired from nowhere.
+      if (here.kind === 'poi') runOccasion(txn, 'exit', rng);
       if (here.kind === 'poi') {
         // Stepping back out of a place returns you to its area. When that area
         // is the ground already underfoot, stepping back out is a change of
@@ -511,6 +632,10 @@ export function reduce(state: GameState, action: Action, context: ReduceContext)
           break;
         }
         enterArea(txn, terrain, here.area, rng);
+        // Stepping out of an interior puts you on the doorstep — the place's
+        // outdoor position — not at the area's arrival point across the map.
+        const outside = module.find<{ position?: Position }>('world.pointsOfInterest', here.poi);
+        if (outside?.position) placeParty(txn, terrain, `area:${here.area}`, outside.position);
         break;
       }
       txn.emit({ type: 'refused', action: 'leave', reason: 'there is nowhere to go back to' });
@@ -616,6 +741,18 @@ export function reduce(state: GameState, action: Action, context: ReduceContext)
     const questId = String((event.data as { quest?: unknown }).quest ?? '');
     if (questId) startQuest(followUp, questId, rng.derive(`quest:${questId}`));
   }
+
+  // A trigger can wait on an event the content itself emits, which is what
+  // `on: 'custom'` has always meant and never done.
+  for (const event of pending.events) {
+    if (event.type !== 'custom') continue;
+    if (event.event === 'deed' || event.event === 'startQuest') continue;
+    runOccasion(followUp, 'custom', rng.derive(`custom:${event.event}`), event.event);
+  }
+
+  // The dead leave what they were carrying. Before quests advance, so a "bring
+  // me its hide" objective can be satisfied by the same batch that killed it.
+  dropDeathLoot(followUp, terrain, pending.events, rng.derive('spoils'));
 
   // Quests watch everything that just happened.
   advanceQuests(followUp, pending.events, rng.derive('quests'));
@@ -791,6 +928,19 @@ function moveEntity(
   // And everything that walks leaves something behind for a nose to find.
   leaveMarks(txn, txn.entity(actor.id) ?? actor, to);
 
+  // What the ground itself does to whoever stands on it — lava, caltrops, a
+  // pressure plate. Declared on every terrain and read by nothing until now.
+  runTerrain(txn, actor.id, 'onEnter', to, _rng);
+
+  // Walking into a new room is how a generated dungeon gets described at all:
+  // a room template's `descriptionKey` is required by the schema and was
+  // narrated nowhere, so every corridor and chamber read as blank ground.
+  enterRoom(txn, actor.id, from, to, _rng);
+
+  // And whatever is buried under the tile.
+  const stepped = txn.entity(actor.id);
+  if (stepped) springTrap(txn, stepped, _rng.derive(`trap:${actor.id}`));
+
   // Walking takes time — but only out of combat, where a round is seconds and
   // the clock has no business moving.
   const perTile = txn.module.source.world.time.minutesPerTile;
@@ -802,6 +952,112 @@ function moveEntity(
   if (!silent) moveFollowers(txn, terrain, actor.id, _rng);
 
   return true;
+}
+
+/**
+ * Every place the party is currently inside, innermost last.
+ *
+ * A trigger declared on the biome, the area, the point of interest, the room,
+ * or the dungeon should all get their occasion — `runTriggers` has always taken
+ * one and was only ever called with `'enter'`, from three places.
+ */
+function placesHere(txn: Transaction): { collection: string; id: string }[] {
+  const here = txn.state.location;
+  const out: { collection: string; id: string }[] = [];
+
+  if (here.kind === 'area' || here.kind === 'poi') {
+    const area = txn.module.find<{ biome: string }>('world.areas', here.area);
+    if (area) out.push({ collection: 'world.biomes', id: area.biome });
+    out.push({ collection: 'world.areas', id: here.area });
+    if (here.kind === 'poi') out.push({ collection: 'world.pointsOfInterest', id: here.poi });
+  } else if (here.kind === 'dungeon') {
+    out.push({ collection: 'world.dungeons', id: here.dungeon });
+  }
+
+  const map = txn.state.maps[txn.state.currentMap];
+  const actor = txn.entity(txn.state.selected);
+  if (map && actor) {
+    const room = roomAt(txn, actor.map, actor.position);
+    if (room) out.push({ collection: 'world.roomTemplates', id: room.template });
+  }
+  return out;
+}
+
+/**
+ * Fire everything declared for an occasion, wherever the party is standing.
+ *
+ * `trigger.on` accepts eight occasions and only `enter` ever happened, so
+ * `exit`, `rest`, `search`, `combatStart`, `combatEnd`, `timePass` and `custom`
+ * were all authorable and inert — and `mode: 'loop'` with them, since a loop
+ * needs an occasion that recurs.
+ */
+export function runOccasion(
+  txn: Transaction,
+  occasion: string,
+  rng: Rng,
+  customEvent?: string,
+): void {
+  const actor = txn.entity(txn.state.selected);
+  if (!actor) return;
+
+  const here = txn.state.location;
+  const source =
+    here.kind === 'poi' ? { id: here.poi, kind: 'poi' as const }
+    : here.kind === 'area' ? { id: here.area, kind: 'area' as const }
+    : here.kind === 'dungeon' ? { id: here.dungeon, kind: 'dungeon' as const }
+    : null;
+  if (!source) return;
+
+  runTriggers(
+    txn, triggersFor(txn, placesHere(txn)), occasion, source, actor,
+    rng.derive(`occasion:${occasion}`), customEvent,
+  );
+}
+
+function runSearchTriggers(txn: Transaction, _actor: Entity, rng: Rng): void {
+  runOccasion(txn, 'search', rng);
+}
+
+/** The room of a map a position falls inside, if the map records rooms. */
+function roomAt(txn: Transaction, mapId: string, at: Position): { id: string; template: string } | null {
+  const map = txn.state.maps[mapId];
+  for (const room of map?.rooms ?? []) {
+    if (at.x >= room.x && at.x < room.x + room.width
+      && at.y >= room.y && at.y < room.y + room.height) return room;
+  }
+  return null;
+}
+
+/**
+ * Notice walking from one room into another.
+ *
+ * The description is given once per room per save — a corridor announced on
+ * every step back and forth would be worse than silence — but the room's own
+ * triggers use their declared mode, so an `everyEntry` ambush still works.
+ */
+function enterRoom(txn: Transaction, actorId: EntityId, from: Position, to: Position, rng: Rng): void {
+  const actor = txn.entity(actorId);
+  if (!actor || actor.kind !== 'character') return;
+
+  const room = roomAt(txn, actor.map, to);
+  if (!room) return;
+  if (roomAt(txn, actor.map, from)?.id === room.id) return;
+
+  const template = txn.module.find<{ descriptionKey?: string }>('world.roomTemplates', room.template);
+  const seen = `seen:${actor.map}:${room.id}`;
+  if (template?.descriptionKey && txn.state.flags[seen] !== true) {
+    txn.set({ ...txn.state, flags: { ...txn.state.flags, [seen]: true } });
+    txn.emit({ type: 'narrate', textKey: template.descriptionKey, context: { place: room.id } });
+  }
+
+  runTriggers(
+    txn,
+    triggersFor(txn, [{ collection: 'world.roomTemplates', id: room.template }]),
+    'enter',
+    { id: room.id, kind: 'room' },
+    actor,
+    rng.derive(`room:${room.id}`),
+  );
 }
 
 /**
@@ -910,6 +1166,10 @@ export function advanceTime(txn: Transaction, minutes: number, rng: Rng): void {
   txn.set({ ...txn.state, minute: after });
   txn.emit({ type: 'timePassed', minutes, totalMinute: after });
 
+  // Ambience, weather, the thing that stirs at dusk. `timePass` is what a
+  // `mode: 'loop'` trigger with a cooldown is written against.
+  runOccasion(txn, 'timePass', rng.derive(`timePass:${after}`));
+
   // Anything that noticed something has this long to act on it. Out of combat
   // the world moves because time passes, not because the player typed.
   const terrain = terrainFor(txn.module);
@@ -941,8 +1201,22 @@ function settle(txn: Transaction, terrain: TerrainIndex, rng: Rng): void {
   // next.
   perceiveAll(txn, terrain);
 
+  // What an ancestry *is* and what a carried thing *does* — asked every
+  // reduction, because a passive whose condition changed should take effect
+  // when it changes rather than when somebody happens to swing.
+  runPartyPassives(txn, rng.derive('passives'));
+
+  // A fight starting and a fight ending are both occasions a place can declare
+  // something for — an alarm, a door slamming, a cave-in once it is over.
+  const combatBefore = txn.state.combat !== null;
   maybeEndCombat(txn, { module: txn.module, state: txn.state, terrain });
   maybeStartCombat(txn, { module: txn.module, state: txn.state, terrain }, rng);
+
+  if (!combatBefore && txn.state.combat !== null) {
+    runOccasion(txn, 'combatStart', rng.derive('combatStart'));
+  } else if (combatBefore && txn.state.combat === null) {
+    runOccasion(txn, 'combatEnd', rng.derive('combatEnd'));
+  }
 
   // Anything that is not a player character takes its turn as soon as the turn
   // reaches it, rather than waiting for the player to end a turn. Doing this
@@ -960,6 +1234,16 @@ function settle(txn: Transaction, terrain: TerrainIndex, rng: Rng): void {
 
   // The module says what winning is. Checked before the all-dead test on
   // purpose: a party that falls on the blow that ends it has still won.
+  // Finishing an arc the module marked as the ending wins the game. Checked
+  // after `victoryWhen`, so a module declaring both keeps its own predicate as
+  // the primary answer and the arc is one more way to get there.
+  const ending = endingReached(txn.module, txn.state);
+  if (ending && txn.state.outcome === 'playing') {
+    txn.set({ ...txn.state, outcome: 'victory' });
+    txn.emit({ type: 'custom', event: 'arcCompleted', data: { arc: ending.id } });
+    return;
+  }
+
   const start = txn.module.source.start;
   if (outcomeReached(txn, start.victoryWhen, rng)) {
     txn.set({ ...txn.state, outcome: 'victory' });
@@ -1028,7 +1312,7 @@ function performAbility(
   targeting: () => TargetingContext,
   actorId: EntityId,
   abilityId: string,
-  explicit: { target?: EntityId; at?: Position },
+  explicit: { target?: EntityId; at?: Position; ritual?: boolean },
   rng: Rng,
 ): void {
   const actor = txn.entity(actorId);

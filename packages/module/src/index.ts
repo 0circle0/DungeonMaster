@@ -22,6 +22,18 @@ export { terrainSchema, paletteSchema, mapSpecSchema, positionSchema } from './s
 export type { Terrain, Palette, MapSpec, Position } from './schema/space.js';
 export type { World, Biome, RoomTemplate, Area, PointOfInterest, Gate, Trigger, EncounterTable } from './schema/world.js';
 
+export { staticMapSchema, mapLayerSchema, LAYER_TARGETS, LAYER_KINDS } from './schema/staticmap.js';
+export type { StaticMap, MapLayer, LayerKind } from './schema/staticmap.js';
+// Browser-safe static map file handling; disk policy is in `@dm/module/load`.
+export {
+  parseCsvGrid,
+  serializeCsvGrid,
+  assembleStaticMap,
+  splitStaticMap,
+  sortWorldMaps,
+} from './staticmaps.js';
+export type { CsvIssue, AssembleIssue } from './staticmaps.js';
+
 export {
   requirementSchema,
   requirementBranchSchema,

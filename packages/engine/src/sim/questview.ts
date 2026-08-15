@@ -15,6 +15,8 @@ import type { CompiledModule } from '@dm/module';
 import type { GameState, QuestState } from '../state.js';
 import { objectivesOf, stageIndexOf } from './quests.js';
 import type { QuestDef, ObjectiveDef } from './quests.js';
+import { arcsOf } from './arcs.js';
+import type { ArcView } from './arcs.js';
 
 export interface JournalObjective {
   readonly id: string;
@@ -145,4 +147,33 @@ export function currentObjective(
   }
 
   return null;
+}
+
+/**
+ * The journal, grouped by the arcs a module declares.
+ *
+ * `narrative.arcs` existed and nothing read it, so a module that described its
+ * story in three acts showed the player a flat list of jobs. Quests belonging to
+ * no arc come last, under no heading — which is what a module with no arcs at
+ * all sees, unchanged.
+ */
+export function journalByArc(
+  module: CompiledModule,
+  state: GameState,
+): readonly {
+  readonly arc: ArcView | null;
+  readonly entries: readonly JournalEntry[];
+}[] {
+  const entries = questJournal(module, state);
+  const arcs = arcsOf(module, state);
+  const claimed = new Set<string>();
+
+  const grouped = arcs.map((arc) => {
+    const mine = entries.filter((entry) => arc.quests.some((quest) => quest.id === entry.quest));
+    for (const entry of mine) claimed.add(entry.quest);
+    return { arc, entries: mine };
+  }).filter((group) => group.entries.length > 0);
+
+  const loose = entries.filter((entry) => !claimed.has(entry.quest));
+  return loose.length > 0 ? [...grouped, { arc: null, entries: loose }] : grouped;
 }

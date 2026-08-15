@@ -14,7 +14,7 @@
 
 import type { CompiledModule } from '@dm/module';
 import type { Action, Direction, GameState } from '@dm/engine';
-import { distance, nameScore } from '@dm/engine';
+import { distance, nameScore, Transaction, shopOf, shopStock } from '@dm/engine';
 import type { Position } from '@dm/engine';
 
 /**
@@ -36,6 +36,7 @@ export type MetaCommand =
   /** Page the transcript. Negative goes back, positive returns. */
   | { readonly kind: 'scroll'; readonly by: number }
   | { readonly kind: 'inventory' }
+  | { readonly kind: 'shop' }
   | { readonly kind: 'sheet' }
   | { readonly kind: 'journal' }
   | { readonly kind: 'save'; readonly path: string }
@@ -44,7 +45,7 @@ export type MetaCommand =
 /** What kind of noun a verb wants after it, for completion and for help. */
 export type VerbTakes =
   | 'nothing' | 'direction' | 'entity' | 'item' | 'place' | 'area'
-  | 'ability' | 'gate' | 'quest' | 'member' | 'rest' | 'text';
+  | 'ability' | 'gate' | 'quest' | 'member' | 'rest' | 'text' | 'stock';
 
 export interface VerbSpec {
   /** Canonical key — what the switch in `parse` dispatches on. */
@@ -75,7 +76,10 @@ export const VERB_SPECS: readonly VerbSpec[] = [
   { verb: 'unequip', spellings: ['unequip', 'remove', 'sheathe', 'doff'], takes: 'item', summary: 'take something off', meta: false },
   { verb: 'open', spellings: ['open', 'unlock', 'force'], takes: 'gate', summary: 'open a door or a gate', meta: false },
   { verb: 'search', spellings: ['search', 'look for', 'examine'], takes: 'nothing', summary: 'search for what is hidden here', meta: false },
+  { verb: 'disarm', spellings: ['disarm', 'defuse'], takes: 'nothing', summary: 'disarm a trap you have found', meta: false },
   { verb: 'talk', spellings: ['talk', 'speak', 'greet', 'ask'], takes: 'entity', summary: 'talk to someone', meta: false },
+  { verb: 'buy', spellings: ['buy', 'purchase'], takes: 'stock', summary: 'buy something from a trader', meta: false },
+  { verb: 'sell', spellings: ['sell'], takes: 'item', summary: 'sell something to a trader', meta: false },
   { verb: 'say', spellings: ['say', 'reply', 'choose', 'answer'], takes: 'text', summary: 'give a reply in conversation', meta: false },
   { verb: 'rest', spellings: ['rest', 'sleep', 'camp'], takes: 'rest', summary: 'rest and recover', meta: false },
   { verb: 'wait', spellings: ['wait', 'z'], takes: 'nothing', summary: 'let time pass', meta: false },
@@ -100,6 +104,7 @@ export const VERB_SPECS: readonly VerbSpec[] = [
   { verb: 'exits', spellings: ['exits', 'where', 'x'], takes: 'nothing', summary: 'where you can go from here', meta: true },
   { verb: 'scroll', spellings: ['scroll'], takes: 'nothing', summary: 'page back through the log', meta: true },
   { verb: 'map', spellings: ['map', 'm'], takes: 'nothing', summary: 'the whole map, scaled to fit', meta: true },
+  { verb: 'shop', spellings: ['shop', 'trade', 'barter', 'wares'], takes: 'nothing', summary: 'see what a trader has', meta: true },
   { verb: 'inventory', spellings: ['inventory', 'inv', 'i'], takes: 'nothing', summary: 'what you are carrying', meta: true },
   { verb: 'sheet', spellings: ['sheet', 'character', 'stats'], takes: 'nothing', summary: 'the character sheet', meta: true },
   { verb: 'journal', spellings: ['journal', 'quests', 'q'], takes: 'nothing', summary: 'the quest journal', meta: true },
@@ -287,6 +292,35 @@ export function carried(context: ParseContext): Candidate<string>[] {
 }
 
 /** Items carried, plus anything lying within reach. */
+/**
+ * The nearest shopkeeper the party could actually speak to.
+ *
+ * Trade verbs take no NPC argument — "buy rope" is what a player types — so the
+ * counter they are standing at is inferred exactly the way `talk` infers it.
+ */
+export function traderNearby(context: ParseContext): string | null {
+  const actor = context.state.entities[context.state.selected];
+  if (!actor) return null;
+
+  const txn = new Transaction(context.state, context.module);
+  const candidates = Object.values(context.state.entities)
+    .filter((entity) => entity.alive && entity.kind === 'npc' && entity.map === actor.map)
+    .filter((entity) => Boolean(shopOf(txn, entity.extra['npc'] as string ?? entity.id)))
+    .filter((entity) => distance(entity.position, actor.position) <= 2)
+    .sort((a, b) => distance(a.position, actor.position) - distance(b.position, actor.position));
+
+  const nearest = candidates[0];
+  return nearest ? ((nearest.extra['npc'] as string | undefined) ?? nearest.id) : null;
+}
+
+/** What that shopkeeper has today — so the parser can never offer what is not there. */
+export function stockNearby(context: ParseContext): Candidate<string>[] {
+  const npcId = traderNearby(context);
+  if (!npcId) return [];
+  const txn = new Transaction(context.state, context.module);
+  return shopStock(txn, npcId).map((entry) => ({ value: entry.item, name: entry.name }));
+}
+
 export function carriedOrNearby(context: ParseContext): Candidate<string>[] {
   const actor = context.state.entities[context.state.selected];
   const map = actor ? context.state.maps[actor.map] : undefined;
@@ -521,6 +555,29 @@ export function parse(input: string, context: ParseContext): ParseResult {
     case 'search':
       return { kind: 'action', action: { type: 'search' } };
 
+    case 'disarm':
+      return { kind: 'action', action: { type: 'disarm' } };
+
+    case 'buy': {
+      const npc = traderNearby(context);
+      if (!npc) return { kind: 'error', message: 'There is nobody here selling anything.' };
+      if (!rest) return { kind: 'error', message: 'Buy what?' };
+
+      const item = resolveNoun(rest, stockNearby(context));
+      if (!item.ok) return { kind: 'error', message: item.message };
+      return { kind: 'action', action: { type: 'buy', npc, item: item.value } };
+    }
+
+    case 'sell': {
+      const npc = traderNearby(context);
+      if (!npc) return { kind: 'error', message: 'There is nobody here buying anything.' };
+      if (!rest) return { kind: 'error', message: 'Sell what?' };
+
+      const item = resolveNoun(rest, carried(context));
+      if (!item.ok) return { kind: 'error', message: item.message };
+      return { kind: 'action', action: { type: 'sell', npc, item: item.value } };
+    }
+
     case 'wait':
       return { kind: 'action', action: { type: 'wait', minutes: 10 } };
 
@@ -567,6 +624,9 @@ export function parse(input: string, context: ParseContext): ParseResult {
       return { kind: 'meta', meta: { kind: 'map' } };
     case 'inventory':
       return { kind: 'meta', meta: { kind: 'inventory' } };
+
+    case 'shop':
+      return { kind: 'meta', meta: { kind: 'shop' } };
     case 'sheet':
       return { kind: 'meta', meta: { kind: 'sheet' } };
     case 'journal':

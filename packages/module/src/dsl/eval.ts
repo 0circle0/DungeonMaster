@@ -83,7 +83,7 @@ export const PREDICATE_OPS = new Set([
 
 export const EFFECT_OPS = new Set([
   'damage', 'heal', 'applyCondition', 'removeCondition', 'adjustResource', 'setFlag',
-  'grantItem', 'removeItem', 'adjustReputation', 'move', 'emit', 'noise',
+  'grantItem', 'removeItem', 'adjustReputation', 'adjustCurrency', 'move', 'emit', 'noise',
   'if', 'repeat', 'forEach', 'let',
 ]);
 
@@ -560,11 +560,16 @@ function evalEffect(effect: Effect, ctx: EvalContext, path: string, out: EffectO
         target: target(),
         amount: num('amount', 0)!,
         damageType: 'damageType' in spec ? str('damageType') : null,
+        ...(Array.isArray(spec['tags']) ? { tags: (spec['tags'] as string[]).map(String) } : {}),
       });
       return;
 
     case 'heal':
       out.push({ op: 'heal', target: target(), amount: num('amount', 0)! });
+      return;
+
+    case 'adjustCurrency':
+      out.push({ op: 'adjustCurrency', amount: num('amount', 0)! });
       return;
 
     case 'applyCondition':

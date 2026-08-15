@@ -4,21 +4,20 @@ import { fileURLToPath } from 'node:url';
 import { Rng } from '@dm/core';
 import { compileModule } from '@dm/module';
 import type { CompiledModule } from '@dm/module';
+import { loadModuleFrom } from '@dm/module/load';
 import { newGame, defaultChoices } from './newgame.js';
 import { spawnMonster } from './character.js';
 import { reduce, reduceAll } from './reduce.js';
 import { save, load, statesEqual } from './save.js';
 import { Transaction, applyOps, adjustResource, applyCondition } from './rules/apply.js';
-import { tickConditions } from './rules/conditions.js';
+import { tickConditions, rollConditionSaves } from './rules/conditions.js';
 import { createMap, key, unkey } from './grid/tiles.js';
+import { SAVE_VERSION } from './state.js';
 import type { GameState } from './state.js';
 import type { Action } from './actions.js';
 
 function loadModule(name: string): CompiledModule {
-  const path = fileURLToPath(new URL(`../../../modules/${name}/module.json`, import.meta.url));
-  const result = compileModule(JSON.parse(readFileSync(path, 'utf8')));
-  if (!result.ok) throw new Error(result.errors.map((e) => `${e.path}: ${e.message}`).join('\n'));
-  return result.module;
+  return loadModuleFrom(fileURLToPath(new URL(`../../../modules/${name}`, import.meta.url)));
 }
 
 const GREENMARCH = loadModule('greenmarch');
@@ -35,7 +34,7 @@ function started(module = GREENMARCH, seed = 1): GameState {
     ...base,
     currentMap: 'test',
     maps: {
-      test: { id: 'test', tiles, kind: 'room', source: 'test', explored: [], gates: {}, exits: {}, items: {}, marks: {} },
+      test: { id: 'test', tiles, kind: 'room', source: 'test', explored: [], gates: {}, exits: {}, items: {}, marks: {}, traps: {}, rooms: [], depth: 1 },
     },
     entities: {
       ...base.entities,
@@ -421,10 +420,114 @@ describe('conditions', () => {
     expect(txn.entity('e:1')!.resources['hp']).toBe(before - 2);
   });
 
-  it('leaves a null duration in place forever', () => {
+  // Greenmarch's `frightened` declares `defaultDuration: 2`, and that used to be
+  // ignored — so "frightened for two rounds" meant frightened until something
+  // removed it, for the rest of the game.
+  it('falls back to the condition\'s own duration when an effect names none', () => {
     const txn = transact(started());
     applyCondition(txn, txn.entity('e:1')!, 'frightened', null, null, null);
+    expect(txn.entity('e:1')!.conditions[0]!.remaining).toBe(2);
+
+    for (let i = 0; i < 3; i += 1) tickConditions(txn, 'e:1', Rng.fromSeed(i));
+    expect(txn.entity('e:1')!.conditions).toHaveLength(0);
+  });
+
+  it('leaves a condition with no declared duration in place forever', () => {
+    // Both shipped modules give every condition a default, so "until removed"
+    // needs a module that does not.
+    const doc = JSON.parse(JSON.stringify(GREENMARCH.source)) as never as {
+      rules: { conditions: Record<string, unknown>[] };
+    };
+    const frightened = doc.rules.conditions.find((c) => c['id'] === 'frightened')!;
+    delete frightened['defaultDuration'];
+    const compiled = compileModule(doc);
+    if (!compiled.ok) throw new Error('fixture failed to compile');
+
+    const txn = new Transaction(started(), compiled.module);
+    applyCondition(txn, txn.entity('e:1')!, 'frightened', null, null, null);
+    expect(txn.entity('e:1')!.conditions[0]!.remaining).toBeNull();
+
     for (let i = 0; i < 20; i += 1) tickConditions(txn, 'e:1', Rng.fromSeed(i));
+    expect(txn.entity('e:1')!.conditions).toHaveLength(1);
+  });
+
+  // The whole point of running `onDepleted` before declaring death: a module
+  // that catches the character on the way down keeps them alive, which is the
+  // D&D "dropped to 0 and stabilised" shape. The engine needs no concept of
+  // dying separate from a resource running out.
+  it('lets onDepleted catch a character before death is declared', () => {
+    const doc = JSON.parse(JSON.stringify(GREENMARCH.source)) as never as {
+      rules: { resources: Record<string, unknown>[]; conditions: Record<string, unknown>[] };
+    };
+    doc.rules.conditions.push({ id: 'downed', name: 'Downed', prevents: ['action'] });
+    const hp = doc.rules.resources.find((r) => r['id'] === 'hp')!;
+    hp['onDepleted'] = [
+      { heal: { target: { ref: 'actor.id' }, amount: 1 } },
+      { applyCondition: { target: { ref: 'actor.id' }, condition: 'downed' } },
+    ];
+    const compiled = compileModule(doc);
+    if (!compiled.ok) throw new Error('fixture failed to compile');
+
+    const txn = new Transaction(started(compiled.module), compiled.module);
+    const hero = txn.entity('e:1')!;
+    adjustResource(txn, hero, 'hp', -999);
+
+    const after = txn.entity('e:1')!;
+    expect(after.alive).toBe(true);
+    expect(after.resources['hp']).toBe(1);
+    expect(after.conditions.map((c) => c.condition)).toContain('downed');
+    expect(txn.finish().events.some((e) => e.type === 'died')).toBe(false);
+  });
+
+  it('still declares death when onDepleted does not intervene', () => {
+    const txn = transact(started());
+    adjustResource(txn, txn.entity('e:1')!, 'hp', -999);
+    expect(txn.entity('e:1')!.alive).toBe(false);
+    expect(txn.finish().events.some((e) => e.type === 'died')).toBe(true);
+  });
+
+  // "Save ends" is half of D&D's conditions, and the schema has always
+  // described it — a save, a difficulty, a timing. Nothing rolled it, so a
+  // condition with a save behaved exactly like one without.
+  it('rolls a save to shake off a condition that allows one', () => {
+    const doc = JSON.parse(JSON.stringify(GREENMARCH.source)) as never as {
+      rules: { conditions: Record<string, unknown>[]; savingThrows?: unknown[] };
+    };
+    doc.rules.savingThrows = [{ id: 'will', name: 'Will', attribute: 'presence' }];
+    const frightened = doc.rules.conditions.find((c) => c['id'] === 'frightened')!;
+    frightened['defaultDuration'] = 99;
+    frightened['savingThrow'] = { save: 'will', difficulty: 5, timing: 'endOfTurn' };
+    const compiled = compileModule(doc);
+    if (!compiled.ok) throw new Error('fixture failed to compile');
+
+    // Difficulty 5 on a d20: a handful of end-of-turn passes will land it.
+    const txn = new Transaction(started(), compiled.module);
+    applyCondition(txn, txn.entity('e:1')!, 'frightened', null, null, null);
+    expect(txn.entity('e:1')!.conditions).toHaveLength(1);
+
+    for (let i = 0; i < 6 && txn.entity('e:1')!.conditions.length > 0; i += 1) {
+      rollConditionSaves(txn, 'e:1', 'endOfTurn', Rng.fromSeed(i));
+    }
+
+    expect(txn.entity('e:1')!.conditions).toHaveLength(0);
+    expect(txn.finish().events).toContainEqual(
+      expect.objectContaining({ type: 'conditionRemoved', condition: 'frightened', reason: 'saved' }),
+    );
+  });
+
+  it('does not roll a save at a timing the condition did not ask for', () => {
+    const doc = JSON.parse(JSON.stringify(GREENMARCH.source)) as never as {
+      rules: { conditions: Record<string, unknown>[]; savingThrows?: unknown[] };
+    };
+    doc.rules.savingThrows = [{ id: 'will', name: 'Will', attribute: 'presence' }];
+    const frightened = doc.rules.conditions.find((c) => c['id'] === 'frightened')!;
+    frightened['savingThrow'] = { save: 'will', difficulty: 1, timing: 'endOfTurn' };
+    const compiled = compileModule(doc);
+    if (!compiled.ok) throw new Error('fixture failed to compile');
+
+    const txn = new Transaction(started(), compiled.module);
+    applyCondition(txn, txn.entity('e:1')!, 'frightened', null, null, null);
+    for (let i = 0; i < 6; i += 1) rollConditionSaves(txn, 'e:1', 'startOfTurn', Rng.fromSeed(i));
     expect(txn.entity('e:1')!.conditions).toHaveLength(1);
   });
 
@@ -541,6 +644,44 @@ describe('save and load', () => {
     if (allowed.ok) expect(allowed.warnings[0]).toMatch(/has changed/);
   });
 
+  // A migration that forgets to move `saveVersion` produces a state forever
+  // unequal to an identical fresh one, which the determinism net then blames on
+  // whatever changed last.
+  it('migrates a v3 save forward into a world with no traps and no money', () => {
+    const current = started(GREENMARCH, 21);
+    const raw = JSON.parse(save(current, 0)) as {
+      saveVersion: number;
+      state: { saveVersion: number; maps: Record<string, Record<string, unknown>> };
+    };
+
+    // Roll it back to what a version-3 save looked like.
+    raw.saveVersion = 3;
+    raw.state.saveVersion = 3;
+    delete (raw.state as Record<string, unknown>)['purse'];
+    for (const map of Object.values(raw.state.maps)) {
+      delete map['traps'];
+      delete map['rooms'];
+      delete map['depth'];
+    }
+
+    const loaded = load(JSON.stringify(raw), GREENMARCH);
+    expect(loaded.ok).toBe(true);
+    if (!loaded.ok) return;
+
+    expect(loaded.state.saveVersion).toBe(SAVE_VERSION);
+    const map = loaded.state.maps['test']!;
+    expect(map.traps).toEqual({});
+    expect(map.rooms).toEqual([]);
+    expect(map.depth).toBe(1);
+    // An old party is exactly as poor as it was.
+    expect(loaded.state.purse).toBe(0);
+
+    // And it is otherwise the same game it was saved from. The purse is the one
+    // thing a v3 save genuinely does not know, so it is compared against zero
+    // rather than against a party that started with coin.
+    expect(statesEqual(loaded.state, { ...current, purse: 0 })).toBe(true);
+  });
+
   it('refuses a save written by a newer engine', () => {
     const text = JSON.stringify({ saveVersion: 999, savedAt: 0, state: started() });
     const result = load(text, GREENMARCH);
@@ -568,6 +709,74 @@ describe('save and load', () => {
     const resumed = reduceAll(reloaded.state, script.slice(2), ctx).state;
 
     expect(statesEqual(resumed, straight)).toBe(true);
+  });
+});
+
+/**
+ * The standing net for everything that adds to state.
+ *
+ * `statesEqual` compares canonical JSON *including the RNG position*, so one
+ * script run twice catches the four ways a new state field goes wrong: a `Set`
+ * or `Map` (which `JSON.stringify` flattens to `{}`), a `"x,y"` tile key
+ * (which enumerates in string order), an id-keyed record where an array with a
+ * total sort was needed, and a migration that forgot to move `saveVersion`.
+ *
+ * It runs against a real `newGame` rather than a synthetic map so that map
+ * generation, arrival, and the world clock are all inside the comparison.
+ */
+describe('determinism', () => {
+  const step = (...directions: readonly ('north' | 'south' | 'east' | 'west')[]): Action[] =>
+    directions.map((direction) => ({ type: 'step', direction }));
+
+  // `newGame` leaves the party on no map — arriving is the front end's first
+  // act — so the script travels before it tries to walk.
+  const script: Action[] = [
+    { type: 'travelToArea', area: 'the_fens' },
+    { type: 'look' },
+    ...step('east', 'east', 'south', 'south', 'west', 'north'),
+    { type: 'setStance', stance: 'sneak' },
+    { type: 'sense', sense: 'hearing' },
+    { type: 'advanceTime', minutes: 90 },
+    { type: 'endTurn' },
+    ...step('east', 'north', 'north', 'west'),
+    { type: 'advanceTime', minutes: 600 },
+    { type: 'travelToArea', area: 'millford' },
+    { type: 'enter', target: 'millford_village' },
+    { type: 'search' },
+    { type: 'look' },
+  ];
+
+  const run = (seed: number) =>
+    reduceAll(newGame(GREENMARCH, { seed, party: [defaultChoices(GREENMARCH, 'Ash')] }), script, ctx);
+  const play = (seed: number) => run(seed).state;
+
+  // A script of nothing but refusals would replay identically too, so the net
+  // is only worth having while the run is genuinely doing something.
+  it('is a script that actually plays', () => {
+    const { state, events } = run(4242);
+    expect(events.filter((event) => event.type === 'moved').length).toBeGreaterThanOrEqual(8);
+    expect(events.some((event) => event.type === 'triggerFired')).toBe(true);
+    expect(Object.keys(state.maps)).toHaveLength(2);
+    expect(state.location).toEqual({ kind: 'poi', area: 'millford', poi: 'millford_village' });
+    // Every refusal must be one the script means; "not on a map" is not.
+    for (const event of events) {
+      if (event.type === 'refused') expect(event.reason).toMatch(/you find nothing here/);
+    }
+  });
+
+  it('replays the same script to the same state', () => {
+    expect(statesEqual(play(4242), play(4242))).toBe(true);
+  });
+
+  it('reaches a state a save round-trip cannot tell from the original', () => {
+    const played = play(4242);
+    const reloaded = load(save(played, 0), GREENMARCH);
+    if (!reloaded.ok) throw new Error(reloaded.error);
+    expect(statesEqual(reloaded.state, played)).toBe(true);
+  });
+
+  it('gives a different seed a different run', () => {
+    expect(statesEqual(play(4242), play(9999))).toBe(false);
   });
 });
 

@@ -2,8 +2,8 @@ import type { Metadata } from 'next';
 import './globals.css';
 
 export const metadata: Metadata = {
-  title: 'DungeonMaster — module editor',
-  description: 'Load a JSON module, edit the whole system and story, export a module.',
+  title: 'DungeonMaster — studio',
+  description: 'World-first module authoring: a scene tree, a live map preview, and an inspector.',
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

@@ -1,14 +1,24 @@
 import { describe, it, expect } from 'vitest';
-import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { compileModule, COLLECTION_PATHS } from '@dm/module';
-import { COLLECTIONS, SECTIONS, SINGLETONS, collectionAt, labelFor } from './schema.js';
+import { readAssembledModule } from '@dm/module/load';
+import { resolvePalette } from '@dm/engine';
+import { COLLECTIONS, SECTIONS, SINGLETONS, collectionAt, labelFor, stepFor } from './schema.js';
+import type { FieldEntry, FieldSpec } from './schema.js';
 import { getAt, setAt, deleteAt } from './store.js';
 import type { ModuleDoc } from './store.js';
+import { hasContent, rendersAsGroup } from './fieldContent.js';
+import { resolveMapSubjects } from './mapSubject.js';
+import { compileForPreview } from './preview.js';
+import { coverageNotesFor } from './inertFields.js';
+import { importantFieldsFor } from './importantFields.js';
+import type { MapTarget } from '../app/studio/selection.js';
 
-const MINIMAL_PATH = fileURLToPath(new URL('../../../modules/minimal/module.json', import.meta.url));
-const RAW = readFileSync(MINIMAL_PATH, 'utf8');
-const loadMinimal = () => JSON.parse(RAW) as ModuleDoc;
+const MINIMAL_DIR = fileURLToPath(new URL('../../../modules/minimal', import.meta.url));
+const loadMinimal = (): ModuleDoc => readAssembledModule(MINIMAL_DIR).doc;
+
+const GREENMARCH_DIR = fileURLToPath(new URL('../../../modules/greenmarch', import.meta.url));
+const loadGreenmarch = (): ModuleDoc => readAssembledModule(GREENMARCH_DIR).doc;
 
 describe('schema-driven navigation', () => {
   // The editor's coverage claim: every collection in the format is reachable.
@@ -109,6 +119,60 @@ describe('describeSchema', () => {
   it('separates optional fields from required ones', () => {
     expect(field('id').optional).toBe(false);
     expect(field('loot').optional).toBe(true);
+  });
+
+  /**
+   * `step="any"` makes a browser's arrows move by 1, which walks a probability
+   * clean past its own maximum. The bounds to do better are already declared.
+   */
+  it('steps a number by something the schema makes sensible', () => {
+    const palette = collectionAt('world.palettes')!;
+    const paletteFields = palette.spec.kind === 'object' ? palette.spec.fields : [];
+    const scatter = paletteFields.find((f) => f.key === 'scatter')!;
+    expect(scatter.spec.kind).toBe('array');
+    if (scatter.spec.kind !== 'array' || scatter.spec.element.kind !== 'object') return;
+
+    const frequency = scatter.spec.element.fields.find((f) => f.key === 'frequency')!;
+    expect(frequency.spec).toMatchObject({ kind: 'number', int: false, min: 0, max: 1 });
+    if (frequency.spec.kind !== 'number') return;
+    expect(stepFor(frequency.spec)).toBe(0.01);
+
+    // Whole-number fields keep whole-number arrows.
+    const monster = collectionAt('content.monsters')!;
+    const monsterFields = monster.spec.kind === 'object' ? monster.spec.fields : [];
+    const level = monsterFields.find((f) => f.key === 'level')!;
+    if (level.spec.kind !== 'number') return;
+    expect(stepFor(level.spec)).toBe(1);
+
+    // A float with no declared ceiling is a quantity, not a ratio — but it is
+    // still a float, so the arrows must not move it by a whole unit.
+    const terrain = collectionAt('world.terrains')!;
+    const terrainFields = terrain.spec.kind === 'object' ? terrain.spec.fields : [];
+    const moveCost = terrainFields.find((f) => f.key === 'moveCost')!;
+    if (moveCost.spec.kind !== 'number') return;
+    expect(moveCost.spec.max).toBeNull();
+    expect(stepFor(moveCost.spec)).toBe(0.1);
+  });
+
+  // Every 0..1 field in the format is a probability or a ratio; none of them
+  // should ever have been steppable by a whole unit.
+  it('gives every declared ratio a hundredth-sized step', () => {
+    const seen: string[] = [];
+    const walk = (spec: FieldSpec, where: string, depth = 0) => {
+      if (depth > 6) return;
+      if (spec.kind === 'number' && !spec.int && spec.min === 0 && spec.max === 1) {
+        expect(stepFor(spec), where).toBe(0.01);
+        seen.push(where);
+      }
+      if (spec.kind === 'object') for (const f of spec.fields) walk(f.spec, `${where}.${f.key}`, depth + 1);
+      if (spec.kind === 'array') walk(spec.element, `${where}[]`, depth + 1);
+      if (spec.kind === 'record') walk(spec.value, `${where}{}`, depth + 1);
+    };
+    for (const c of COLLECTIONS) walk(c.spec, c.path);
+
+    expect(seen).toContain('world.palettes.scatter[].frequency');
+    expect(seen).toContain('world.dungeons.branchiness');
+    expect(seen.length).toBeGreaterThan(8);
   });
 
   it('humanises keys for labels', () => {
@@ -214,5 +278,209 @@ describe('load → edit → export round trip', () => {
     expect(result.ok).toBe(true);
     if (!result.ok) return;
     expect(result.module.has('content.monsters', 'new_monster')).toBe(true);
+  });
+});
+
+/**
+ * The clutter fix: a clause an author never touched should not draw a box.
+ *
+ * Nearly every collection in the schema is `.default([])`, which the form
+ * reports as optional *with* a default — and the form then paints that default
+ * over the absent key. These pin the predicate that decides otherwise.
+ */
+describe('empty nested sections fold away', () => {
+  it('treats absence and emptiness alike, but keeps what was written', () => {
+    for (const empty of [undefined, null, [], {}, '']) {
+      expect(hasContent(empty), JSON.stringify(empty) ?? 'undefined').toBe(false);
+    }
+    // 0 and false are things an author wrote down. Folding them would put
+    // `oneWay: false` out of reach of everything but the raw JSON editor.
+    for (const present of [0, false, 'x', [0], { a: 1 }]) {
+      expect(hasContent(present), JSON.stringify(present)).toBe(true);
+    }
+  });
+
+  it('only offers to fold the kinds that draw a box', () => {
+    const kinds: FieldSpec[] = [
+      { kind: 'object', fields: [] },
+      { kind: 'array', element: { kind: 'boolean' } },
+      { kind: 'record', keyRef: null, value: { kind: 'boolean' } },
+      { kind: 'dsl', flavour: 'predicate' },
+      { kind: 'unknown' },
+    ];
+    for (const spec of kinds) expect(rendersAsGroup(spec), spec.kind).toBe(true);
+
+    const rows: FieldSpec[] = [
+      { kind: 'string', ref: null, long: false, pattern: null },
+      { kind: 'number', int: true, min: null, max: null },
+      { kind: 'boolean' },
+      { kind: 'enum', options: ['a'] },
+    ];
+    for (const spec of rows) expect(rendersAsGroup(spec), spec.kind).toBe(false);
+  });
+
+  // The complaint, in numbers: an empty gate used to paint a box per clause.
+  it('reduces an untouched requirement to its three scalar rows', () => {
+    const gate = collectionAt('world.gates')!;
+    const requires = gate.spec.kind === 'object'
+      ? gate.spec.fields.find((f) => f.key === 'requires')!
+      : undefined;
+    expect(requires?.spec.kind).toBe('object');
+    if (!requires || requires.spec.kind !== 'object') return;
+
+    const foldable = (raw: Record<string, unknown>) =>
+      requires.spec.kind === 'object'
+        ? requires.spec.fields
+            .filter((f) => f.optional && rendersAsGroup(f.spec) && !hasContent(raw[f.key]))
+            .map((f) => f.key)
+        : [];
+
+    const shown = (raw: Record<string, unknown>) =>
+      requires.spec.kind === 'object'
+        ? requires.spec.fields.filter((f) => !foldable(raw).includes(f.key)).map((f) => f.key)
+        : [];
+
+    // Nothing gated: every container clause folds, leaving only the scalar
+    // rows. `currency` joined them when a toll became something a gate can ask
+    // for — it is a plain number, so there is no container to fold away.
+    expect(shown({}).sort()).toEqual(['currency', 'description', 'maxLevel', 'minLevel']);
+    expect(foldable({}).length).toBeGreaterThan(12);
+
+    // Gate on one item and that clause — and only that one — comes back.
+    const withItem = { items: [{ item: 'brass_key' }] };
+    expect(shown(withItem)).toContain('items');
+    expect(foldable(withItem)).not.toContain('items');
+    expect(foldable(withItem).length).toBe(foldable({}).length - 1);
+  });
+
+  it('never folds a required field, in any collection', () => {
+    const walk = (spec: FieldSpec, seen: Set<FieldSpec>): FieldEntry[] => {
+      if (seen.has(spec)) return [];
+      seen.add(spec);
+      if (spec.kind === 'object') {
+        return spec.fields.flatMap((f) => [f, ...walk(f.spec, seen)]);
+      }
+      if (spec.kind === 'array') return walk(spec.element, seen);
+      if (spec.kind === 'record') return walk(spec.value, seen);
+      return [];
+    };
+
+    for (const collection of COLLECTIONS) {
+      for (const field of walk(collection.spec, new Set())) {
+        // The fold operates on optional fields only; this is the guard that
+        // says so from the outside.
+        if (!field.optional) {
+          expect(field.optional, `${collection.path}.${field.key}`).toBe(false);
+        }
+      }
+    }
+  });
+});
+
+/**
+ * The map drawer edits whatever actually drew the map — which is not always the
+ * thing that was selected, and whose palette is resolved three different ways.
+ */
+describe('what drew the map', () => {
+  it('gives an area its biome\'s palette, not its own', () => {
+    const doc = loadGreenmarch();
+    const subjects = resolveMapSubjects(doc, { type: 'area', id: 'millford' });
+
+    expect(subjects.paletteId).toBe('fen');
+    expect(subjects.place?.registryPath).toBe('world.areas');
+    expect(subjects.palette?.registryPath).toBe('world.palettes');
+    expect(getAt(doc, subjects.palette!.basePath)).toMatchObject({ id: 'fen' });
+    expect(subjects.paletteReason).toContain('biome');
+  });
+
+  // The fact the drawer exists to explain: `area.map.palette` is passed over.
+  it('says so when map.palette is the one being overridden', () => {
+    const doc = loadGreenmarch();
+    const overridden = setAt(doc, ['world', 'areas', 0, 'map', 'palette'], 'barrow_stone') as ModuleDoc;
+    const subjects = resolveMapSubjects(overridden, { type: 'area', id: 'millford' });
+
+    expect(subjects.paletteId).toBe('fen');
+    expect(subjects.paletteReason).toContain('overrides');
+    expect(subjects.paletteReason).toContain('barrow_stone');
+  });
+
+  it('follows a POI to the map actually drawn for it', () => {
+    const doc = loadGreenmarch();
+
+    // fen_barrow descends into a dungeon.
+    const barrow = resolveMapSubjects(doc, { type: 'poi', id: 'fen_barrow' });
+    expect(barrow.place?.registryPath).toBe('world.dungeons');
+    expect(barrow.redirect).toContain('barrow_depths');
+
+    // millford_village has no interior, so what is drawn is its area.
+    const village = resolveMapSubjects(doc, { type: 'poi', id: 'millford_village' });
+    expect(village.place?.registryPath).toBe('world.areas');
+    expect(village.place?.id).toBe('millford');
+    expect(village.redirect).toContain('millford');
+  });
+
+  it('resolves the start the way a new game would', () => {
+    const doc = loadGreenmarch();
+    const start = resolveMapSubjects(doc, { type: 'start' });
+    const direct = resolveMapSubjects(doc, { type: 'poi', id: 'millford_village' });
+    expect(start.place).toEqual(direct.place);
+    expect(start.paletteId).toBe(direct.paletteId);
+  });
+
+  it('is missing rather than wrong for a place that is not there', () => {
+    expect(resolveMapSubjects(loadGreenmarch(), { type: 'area', id: 'nowhere' }).place).toBeNull();
+  });
+
+  /**
+   * The guard that matters. Three collections resolve their palette three
+   * different ways, and the drawer's whole value is being right about which.
+   * If anyone changes the override order in the engine, this fails here.
+   */
+  it('resolves the same palette the engine does, everywhere', () => {
+    for (const [name, doc] of [['greenmarch', loadGreenmarch()], ['minimal', loadMinimal()]] as const) {
+      const module = compileForPreview(doc);
+      if (!module) throw new Error(`${name} does not compile`);
+
+      const world = (doc['world'] ?? {}) as Record<string, unknown>;
+      const targets: Extract<MapTarget, { id: string }>[] = [
+        ...(world['areas'] as { id: string }[] ?? []).map((a) => ({ type: 'area', id: a.id }) as const),
+        ...(world['dungeons'] as { id: string }[] ?? []).map((d) => ({ type: 'dungeon', id: d.id }) as const),
+      ];
+
+      for (const target of targets) {
+        const mine = resolveMapSubjects(doc, target);
+        const theirs = resolvePalette(module, mine.paletteId ?? undefined);
+        // `resolvePalette` always returns something; what is being pinned is
+        // that we hand it the same id the engine would have.
+        expect(theirs.floor, `${name} ${target.type}:${target.id}`).toBeTruthy();
+        if (mine.paletteId) expect(theirs.id).toBe(mine.paletteId);
+      }
+    }
+  });
+});
+
+/**
+ * The two hand-kept registries fail open — an unknown path is simply an empty
+ * set — so a typo silently drops a note rather than breaking anything.
+ */
+describe('the studio registries stay in step with the schema', () => {
+  const pathsInSchema = new Set<string>([...COLLECTION_PATHS, ...SINGLETONS.map((s) => s.path)]);
+
+  const fieldsOf = (path: string): Set<string> => {
+    const spec = collectionAt(path)?.spec ?? SINGLETONS.find((s) => s.path === path)?.spec;
+    return new Set(spec?.kind === 'object' ? spec.fields.map((f) => f.key) : []);
+  };
+
+  it('names only fields that exist', () => {
+    for (const path of pathsInSchema) {
+      const fields = fieldsOf(path);
+      for (const note of coverageNotesFor(path)) {
+        if (note.field === '*') continue;
+        expect(fields.has(note.field), `inertFields ${path}.${note.field}`).toBe(true);
+      }
+      for (const key of importantFieldsFor(path)) {
+        expect(fields.has(key), `importantFields ${path}.${key}`).toBe(true);
+      }
+    }
   });
 });

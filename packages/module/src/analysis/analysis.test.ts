@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
-import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
+import { readAssembledModule } from '../load.js';
 import {
   monsterThreat,
   xpToNextLevel,
@@ -11,9 +11,9 @@ import {
 } from './budget.js';
 import { buildReferenceIndex, referencesTo, findOrphans } from './references.js';
 
-const doc = JSON.parse(
-  readFileSync(fileURLToPath(new URL('../../../../modules/greenmarch/module.json', import.meta.url)), 'utf8'),
-) as Record<string, any>;
+const doc = readAssembledModule(
+  fileURLToPath(new URL('../../../../modules/greenmarch', import.meta.url)),
+).doc as Record<string, any>;
 
 const monsters = doc['content']['monsters'] as any[];
 const levels = doc['rules']['progression']['levels'] as any[];

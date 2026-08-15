@@ -7,7 +7,7 @@
  * what stops the two front ends drifting apart about what the game *is*.
  */
 
-export { parse, resolveNoun, isMeta, HELP, VERB_SPECS } from './parser.js';
+export { parse, resolveNoun, isMeta, HELP, VERB_SPECS, traderNearby, stockNearby } from './parser.js';
 export type {
   ParseResult, MetaCommand, ParseContext, Candidate, Resolution, VerbSpec, VerbTakes,
 } from './parser.js';
@@ -45,6 +45,8 @@ export { waysFromHere } from './views/exits.js';
 export type { WaysFromHere, PlaceExit, RoadExit, Frontier } from './views/exits.js';
 export { mapView } from './views/map.js';
 export type { MapView, MapCellView, MapCellEntity, Visibility, MapViewOptions } from './views/map.js';
+export { shopView } from './views/shop.js';
+export type { ShopView } from './views/shop.js';
 export { statusView, clockOf } from './views/status.js';
 export type { StatusView, ResourceReading } from './views/status.js';
 export { partyView } from './views/party.js';

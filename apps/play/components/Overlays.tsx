@@ -10,7 +10,7 @@
 
 import { useMemo, useRef } from 'react';
 import { questJournal, narrateFrom } from '@dm/engine';
-import { sheetView, inventoryView, VERB_SPECS } from '@dm/play';
+import { sheetView, inventoryView, shopView, VERB_SPECS } from '@dm/play';
 import type { SessionApi } from '../lib/useSession.js';
 import { useSaves } from '../lib/useSaves.js';
 
@@ -234,6 +234,71 @@ export function Help() {
           {rows.map((row) => <p key={row} className="hint">{row}</p>)}
         </div>
       ))}
+    </>
+  );
+}
+
+/**
+ * A shopkeeper's counter.
+ *
+ * The same `shopView` the terminal paints, with buttons instead of prices in
+ * dim text. A barred shop shows the reason rather than an empty shelf, for the
+ * same reason a barred door names its key.
+ */
+export function Shop({ session, npc }: { session: SessionApi; npc: string }) {
+  const { module, frame, dispatchAction } = session;
+  const view = useMemo(() => shopView(module, frame.state, npc), [module, frame.state, npc]);
+
+  if (!view) return <p className="empty">Nobody here is trading.</p>;
+
+  const coin = (n: number) => `${n}${view.currency.abbrev}`;
+
+  if (view.barred) {
+    return (
+      <>
+        <p className="empty">{view.name} will not deal with you.</p>
+        {view.requires.length > 0 && <p className="empty">Needs {view.requires.join(', ')}.</p>}
+        <p className="empty">Purse: {coin(view.purse)}</p>
+      </>
+    );
+  }
+
+  return (
+    <>
+      <h3>For sale</h3>
+      {view.stock.length === 0 && <p className="empty">Nothing today.</p>}
+      {view.stock.map((entry) => (
+        <div className="inv-row" key={`buy:${entry.item}`}>
+          <span className="name">{entry.name}</span>
+          {entry.quantity > 1 && <span className="qty">×{entry.quantity}</span>}
+          <span className="slot">{coin(entry.price)}</span>
+          <button
+            className="btn"
+            disabled={entry.price > view.purse}
+            onClick={() => dispatchAction({ type: 'buy', npc: view.npc, item: entry.item })}
+          >
+            Buy
+          </button>
+        </div>
+      ))}
+
+      <h3>They will buy</h3>
+      {view.sellable.length === 0 && <p className="empty">Nothing you are carrying.</p>}
+      {view.sellable.map((entry) => (
+        <div className="inv-row" key={`sell:${entry.item}`}>
+          <span className="name">{entry.name}</span>
+          {entry.quantity > 1 && <span className="qty">×{entry.quantity}</span>}
+          <span className="slot">{coin(entry.price)}</span>
+          <button
+            className="btn"
+            onClick={() => dispatchAction({ type: 'sell', npc: view.npc, item: entry.item })}
+          >
+            Sell
+          </button>
+        </div>
+      ))}
+
+      <p className="empty">Purse: {coin(view.purse)}</p>
     </>
   );
 }

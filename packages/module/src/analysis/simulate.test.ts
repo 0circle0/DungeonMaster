@@ -1,11 +1,11 @@
 import { describe, it, expect } from 'vitest';
-import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
+import { readAssembledModule } from '../load.js';
 import { simulateMemory } from './simulate.js';
 
-const doc = JSON.parse(
-  readFileSync(fileURLToPath(new URL('../../../../modules/greenmarch/module.json', import.meta.url)), 'utf8'),
-) as Record<string, any>;
+const doc = readAssembledModule(
+  fileURLToPath(new URL('../../../../modules/greenmarch', import.meta.url)),
+).doc as Record<string, any>;
 
 describe('simulateMemory', () => {
   const memory = doc['narrative']['memory'];

@@ -25,6 +25,10 @@ const SCOPE: Scope = {
     conditions: { burning: 2 },
   },
   reputation: { wardens: 20, thieves: -5 },
+  // Supplied by the engine's `buildScope`: the rank a tier starts at, and each
+  // faction's own ladder. Both are scoped exactly as the engine scopes them.
+  tiers: { novice: 1, adept: 3, master: 6 },
+  ranks: { wardens: { friend: 10, trusted: 25 }, thieves: { trusted: 5 } },
   flags: { met_vess: true, tithe_paid: false, chapter: 3 },
   quests: {
     find_the_mill: { status: 'complete', objectives: { burn_it: true } },
@@ -78,6 +82,23 @@ describe('character development gates', () => {
     expect(holds(req({ skills: [{ skill: 'smithing', minRank: 1 }] }))).toBe(false);
   });
 
+  it('gates on a named mastery tier', () => {
+    // lockpicking is rank 3, and `adept` starts at rank 3.
+    expect(holds(req({ skills: [{ skill: 'lockpicking', minTier: 'adept' }] }))).toBe(true);
+    expect(holds(req({ skills: [{ skill: 'lockpicking', minTier: 'master' }] }))).toBe(false);
+    // lore is rank 1 — trained, but not yet adept.
+    expect(holds(req({ skills: [{ skill: 'lore', minTier: 'adept' }] }))).toBe(false);
+    expect(holds(req({ skills: [{ skill: 'lore', minTier: 'novice' }] }))).toBe(true);
+  });
+
+  it('does not throw when a tier gate is evaluated', () => {
+    // A tier compiled against an unpopulated namespace resolved to null and
+    // then threw inside the comparison, from call sites that do not catch —
+    // so a gate, an ability, a quest or a dialogue option carrying a `minTier`
+    // took the whole reduction down.
+    expect(() => holds(req({ skills: [{ skill: 'lore', minTier: 'adept' }] }))).not.toThrow();
+  });
+
   it('gates on attribute scores', () => {
     expect(holds(req({ attributes: [{ attribute: 'might', min: 16 }] }))).toBe(true);
     expect(holds(req({ attributes: [{ attribute: 'wits', min: 12 }] }))).toBe(false);
@@ -116,6 +137,19 @@ describe('possession and progress gates', () => {
     expect(holds(req({ factions: [{ faction: 'thieves', maxStanding: 0 }] }))).toBe(true);
     // An unknown faction reads as neutral rather than failing.
     expect(holds(req({ factions: [{ faction: 'cult', minStanding: 0 }] }))).toBe(true);
+  });
+
+  it('gates on a named faction rank', () => {
+    // Standing with the wardens is 20: past `friend` (10), short of `trusted` (25).
+    expect(holds(req({ factions: [{ faction: 'wardens', minRank: 'friend' }] }))).toBe(true);
+    expect(holds(req({ factions: [{ faction: 'wardens', minRank: 'trusted' }] }))).toBe(false);
+  });
+
+  it('scopes ranks to their own faction', () => {
+    // Both ladders name a `trusted` rank at different standings; asking about
+    // the wardens must not be answered by the thieves' threshold.
+    expect(holds(req({ factions: [{ faction: 'thieves', minRank: 'trusted' }] }))).toBe(false);
+    expect(() => holds(req({ factions: [{ faction: 'wardens', minRank: 'trusted' }] }))).not.toThrow();
   });
 
   it('gates on flags, with and without a value', () => {

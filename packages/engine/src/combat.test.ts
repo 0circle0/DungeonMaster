@@ -1,9 +1,9 @@
 import { describe, it, expect } from 'vitest';
-import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { Rng } from '@dm/core';
 import { compileModule } from '@dm/module';
 import type { CompiledModule } from '@dm/module';
+import { loadModuleFrom } from '@dm/module/load';
 import { newGame, defaultChoices } from './newgame.js';
 import { spawnMonster } from './character.js';
 import { reduce, reduceAll } from './reduce.js';
@@ -16,13 +16,11 @@ import { reachability, resolveTargets, speedOf, toTiles, nearestHostile, isHosti
 import { createMap, MapBuilder, TerrainIndex } from './grid/tiles.js';
 import { distance } from './grid/geometry.js';
 import type { GameState } from './state.js';
+import type { GameEvent } from './events.js';
 import type { Action } from './actions.js';
 
 function loadModule(name: string): CompiledModule {
-  const path = fileURLToPath(new URL(`../../../modules/${name}/module.json`, import.meta.url));
-  const result = compileModule(JSON.parse(readFileSync(path, 'utf8')));
-  if (!result.ok) throw new Error(result.errors.map((e) => `${e.path}: ${e.message}`).join('\n'));
-  return result.module;
+  return loadModuleFrom(fileURLToPath(new URL(`../../../modules/${name}`, import.meta.url)));
 }
 
 const GREENMARCH = loadModule('greenmarch');
@@ -55,6 +53,7 @@ function arena(
       arena: {
         id: 'arena', tiles: createMap(15, 15, floor), kind: 'room', source: 'arena',
         explored: [], gates: {}, exits: {}, items: {}, marks: {},
+      traps: {}, rooms: [], depth: 1,
       },
     },
     entities,
@@ -124,7 +123,12 @@ describe('resolution', () => {
     const doc = JSON.parse(JSON.stringify(GREENMARCH.source)) as never as {
       rules: { savingThrows: unknown[] };
     };
-    doc.rules.savingThrows = [{ id: 'fortitude', name: 'Fortitude', attribute: 'endurance' }];
+    // Appended, not replaced: the module's own saves are referenced by its
+    // conditions, and dropping them makes the fixture fail to compile.
+    doc.rules.savingThrows = [
+      ...(doc.rules.savingThrows ?? []),
+      { id: 'fortitude', name: 'Fortitude', attribute: 'endurance' },
+    ];
     const compiled = compileModule(doc);
     if (!compiled.ok) throw new Error('fixture failed');
 
@@ -591,5 +595,125 @@ describe('running away', () => {
     const state = arena([{ id: 'bog_hound', at: { x: 6, y: 5 } }]);
     const script: Action[] = [{ type: 'wait', minutes: 0 }, { type: 'flee' }];
     expect(statesEqual(reduceAll(state, script, ctx).state, reduceAll(state, script, ctx).state)).toBe(true);
+  });
+});
+
+describe('combat has depth', () => {
+  /** A fight already underway, so rounds exist to count in. */
+  function fighting(seed = 3, monster = 'barrow_wight'): GameState {
+    const base = arena([{ id: monster, at: { x: 6, y: 5 } }], GREENMARCH, seed);
+    const hero = base.entities['e:1']!;
+    return {
+      ...base,
+      entities: { ...base.entities, 'e:1': { ...hero, abilities: [...hero.abilities, 'rally'] } },
+      combat: {
+        round: 1,
+        order: ['e:1', 'm:0'],
+        turn: 0,
+        spent: {},
+        movement: 6,
+        reactionsUsed: {},
+        cooldowns: [],
+        usedOnce: [],
+        specialUses: {},
+      },
+    };
+  }
+
+  // `abilities[].cooldown` was declared on every ability and tracked nowhere,
+  // so a once-every-three-rounds shout could be used every single round.
+  it('puts an ability on cooldown, and refuses it until it comes back', () => {
+    const first = reduce(fighting(), { type: 'useAbility', ability: 'rally' }, ctx);
+    expect(first.state.combat!.cooldowns).toContainEqual(
+      expect.objectContaining({ entity: 'e:1', ability: 'rally' }),
+    );
+
+    // A fresh action budget, so the refusal that comes back is the cooldown's
+    // and not "no action left this turn".
+    const ready: GameState = { ...first.state, combat: { ...first.state.combat!, spent: {} } };
+    const again = reduce(ready, { type: 'useAbility', ability: 'rally' }, ctx);
+    const refusal = again.events.find((e) => e.type === 'refused');
+    expect(refusal).toBeDefined();
+    if (refusal?.type === 'refused') expect(refusal.reason).toMatch(/not ready/);
+  });
+
+  it('lets it back once enough rounds have passed', () => {
+    const used = reduce(fighting(), { type: 'useAbility', ability: 'rally' }, ctx).state;
+    const later: GameState = {
+      ...used,
+      combat: { ...used.combat!, round: used.combat!.round + 3, spent: {} },
+    };
+
+    const events = reduce(later, { type: 'useAbility', ability: 'rally' }, ctx).events;
+    expect(events.some((e) => e.type === 'refused' && /not ready/.test(e.reason))).toBe(false);
+  });
+
+  it('does not put anything on cooldown outside a fight, where there are no rounds', () => {
+    // No combat, no rounds to count in — so the ability is always ready, and
+    // there is nowhere to record a cooldown even if there were one.
+    const peace: GameState = { ...fighting(), combat: null };
+    const first = reduce(peace, { type: 'useAbility', ability: 'rally' }, ctx);
+    const again = reduce({ ...first.state, combat: null }, { type: 'useAbility', ability: 'rally' }, ctx);
+    expect(again.events.some((e) => e.type === 'refused' && /not ready/.test(e.reason))).toBe(false);
+  });
+
+  // `specialTurns` — legendary and lair actions — was declared and read by
+  // nothing, so a boss was a monster with more hit points.
+  const cold = (events: readonly GameEvent[]) =>
+    events.filter((e) => e.type === 'damaged' && e.damageType === 'cold').length;
+
+  it('gives a boss its extra turn between everyone else\'s', () => {
+    const { events } = reduce(fighting(5), { type: 'endTurn' }, ctx);
+    // The wight's lair action reaches for the living as the hero's turn ends.
+    expect(cold(events)).toBeGreaterThan(0);
+  });
+
+  // Once a *round*, not once a turn — which is what makes a lair action a
+  // budget rather than a tax on every other creature acting.
+  it('spends a lair action once a round, however many turns pass', () => {
+    // Three in the order, so two turns can end inside one round.
+    const base = arena([{ id: 'barrow_wight', at: { x: 6, y: 5 } }], GREENMARCH, 5, ['Ash', 'Korrin']);
+    const state: GameState = {
+      ...base,
+      combat: {
+        round: 1, order: ['e:1', 'e:2', 'm:0'], turn: 0, spent: {}, movement: 6,
+        reactionsUsed: {}, cooldowns: [], usedOnce: [], specialUses: {},
+      },
+    };
+
+    // One use, reaching both party members — so the count is the party, not
+    // the number of times the barrow stirred.
+    const first = reduce(state, { type: 'endTurn' }, ctx);
+    expect(first.state.combat?.round).toBe(1);
+    expect(cold(first.events)).toBe(2);
+
+    const second = reduce(first.state, { type: 'endTurn' }, ctx);
+    // Still round 1: the barrow has already stirred this round.
+    if (second.state.combat?.round === 1) expect(cold(second.events)).toBe(0);
+  });
+});
+
+describe('a reaction that fires once a fight', () => {
+  it('is spent after the first time', () => {
+    const base = arena([{ id: 'barrow_wight', at: { x: 6, y: 5 } }], GREENMARCH, 3);
+    const state: GameState = {
+      ...base,
+      combat: {
+        round: 1, order: ['e:1', 'm:0'], turn: 0, spent: {}, movement: 6,
+        reactionsUsed: {}, cooldowns: [], usedOnce: [], specialUses: {},
+      },
+    };
+
+    const txn = new Transaction(state, GREENMARCH);
+    const wight = txn.entity('m:0')!;
+
+    runReactions(txn, wight, 'selfHurt', txn.entity('e:1')!, Rng.fromSeed(1));
+    expect(txn.state.flags['wight_wailed']).toBe(true);
+    expect(txn.state.combat!.usedOnce).toContain('m:0:death_wail');
+
+    // Struck again, it does not shriek again.
+    txn.set({ ...txn.state, flags: { ...txn.state.flags, wight_wailed: false } });
+    runReactions(txn, txn.entity('m:0')!, 'selfHurt', txn.entity('e:1')!, Rng.fromSeed(2));
+    expect(txn.state.flags['wight_wailed']).toBe(false);
   });
 });

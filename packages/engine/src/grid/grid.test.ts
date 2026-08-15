@@ -1,8 +1,7 @@
 import { describe, it, expect } from 'vitest';
-import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
-import { compileModule } from '@dm/module';
 import type { CompiledModule } from '@dm/module';
+import { loadModuleFrom } from '@dm/module/load';
 import { Rng } from '@dm/core';
 import { MapBuilder, TerrainIndex, createMap, terrainAt, key, inBounds } from './tiles.js';
 import type { TileMap, Position } from './tiles.js';
@@ -13,10 +12,7 @@ import { findPath, reachable, floodFill } from './path.js';
 const GREENMARCH = compileOrThrow('greenmarch');
 
 function compileOrThrow(name: string): CompiledModule {
-  const path = fileURLToPath(new URL(`../../../../modules/${name}/module.json`, import.meta.url));
-  const result = compileModule(JSON.parse(readFileSync(path, 'utf8')));
-  if (!result.ok) throw new Error(result.errors.map((e) => `${e.path}: ${e.message}`).join('\n'));
-  return result.module;
+  return loadModuleFrom(fileURLToPath(new URL(`../../../../modules/${name}`, import.meta.url)));
 }
 
 const terrain = new TerrainIndex(GREENMARCH);

@@ -148,3 +148,27 @@ export function nameScore(needle: string, name: string): number {
   if (candidate.includes(typed)) return 60;
   return 0;
 }
+
+/**
+ * How a creature reads in prose: "a lean, mud-slicked bog hound".
+ *
+ * `monsters[].descriptors` was declared and used nowhere, so every creature was
+ * described by its bare name however much colour the module wrote. Picked with
+ * a scene-seeded generator, so the same hound reads the same way each time it
+ * is mentioned and differently between playthroughs — the same rule room
+ * descriptions follow.
+ */
+export function describeCreature(
+  module: CompiledModule,
+  entity: { id: string; name: string; statblock: string | null },
+  seed: number,
+): string {
+  if (!entity.statblock) return entity.name;
+
+  const statblock = module.find<{ descriptors?: string[] }>('content.monsters', entity.statblock);
+  const descriptors = statblock?.descriptors ?? [];
+  if (descriptors.length === 0) return entity.name;
+
+  const rng = Rng.fromSeed(seed).derive(`describe:${entity.id}`);
+  return `${rng.pick([...descriptors])} ${entity.name.toLowerCase()}`;
+}

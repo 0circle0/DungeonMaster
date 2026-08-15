@@ -41,8 +41,15 @@ export type Action =
       readonly target?: EntityId;
       /** For area abilities: where it is centred or aimed. */
       readonly at?: Position;
+      /** Cast it slowly instead of spending a slot, when the spell allows. */
+      readonly ritual?: boolean;
     })
   | (Actor & { readonly type: 'endTurn' })
+  | (Actor & { readonly type: 'disarm' })
+
+  // — trade —————————————————————————————————————————————————
+  | (Actor & { readonly type: 'buy'; readonly npc: EntityId; readonly item: string; readonly quantity?: number })
+  | (Actor & { readonly type: 'sell'; readonly npc: EntityId; readonly item: string; readonly quantity?: number })
   | (Actor & { readonly type: 'flee' })
 
   // — items —————————————————————————————————————————————————

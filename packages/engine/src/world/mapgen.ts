@@ -22,6 +22,8 @@ export interface MapSpec {
   width: string;
   height: string;
   palette?: string;
+  /** A `world.maps` id used verbatim. Callers branch to `buildStaticMap` before generating. */
+  static?: string;
   layout: string[];
   legend: Record<string, string>;
 }
@@ -196,9 +198,22 @@ export function buildMap(
  * share of the first and the listed order changed everyone's effective
  * frequency but the last's.
  */
-function applyScatter(builder: MapBuilder, palette: Palette, rng: Rng): void {
+export function applyScatter(
+  builder: MapBuilder,
+  palette: Palette,
+  rng: Rng,
+  /**
+   * Tiles scatter may never claim, packed `y * width + x`. Dungeons reserve
+   * room centres, the entrance, and doorways: scatter is dressing, and an
+   * impassable rubble pile on the boss room's centre is not dressing.
+   */
+  reserved: ReadonlySet<number> = new Set(),
+): void {
   const { width, height } = builder;
   const claimed = new Uint8Array(width * height);
+  for (const index of reserved) {
+    if (index >= 0 && index < claimed.length) claimed[index] = 1;
+  }
 
   // A stable sort by priority: equal priorities keep their declared order, so
   // reordering identical entries cannot change the map.
@@ -297,11 +312,17 @@ function applyScatter(builder: MapBuilder, palette: Palette, rng: Rng): void {
  * The invariant is worth stating plainly: **`buildMap` never returns a map
  * whose walkable floor is in more than one piece.**
  */
-function reconnect(
+export function reconnect(
   builder: MapBuilder,
   module: CompiledModule,
   palette: Palette,
   entry: Position,
+  /**
+   * Cells the repair may never dig through nor worry about, packed with the
+   * grid `key()`. Dungeons pass their static rooms' rectangles: a pocket the
+   * author sealed stays sealed, and no causeway is scored through their walls.
+   */
+  avoid: ReadonlySet<number> = new Set(),
 ): void {
   const terrain = new TerrainIndex(module);
   const { width, height } = builder;
@@ -335,32 +356,49 @@ function reconnect(
     builder.set(entry.x, entry.y, crossing(entry));
   }
 
+  // Stranded tiles whose every route back crosses an avoided cell: given up
+  // on, so the search does not pick them again forever.
+  const abandoned = new Set<number>();
+
   for (let attempt = 0; attempt < 32; attempt += 1) {
     const tiles = builder.freeze();
     const main = floodFill(tiles, terrain, entry, WALK);
 
-    // Any walkable tile the flood did not reach is stranded.
+    // Any walkable tile the flood did not reach is stranded. Tiles inside an
+    // avoided region are the author's business, not the repair crew's.
     let stranded: Position | null = null;
     for (let y = 1; y < height - 1 && !stranded; y += 1) {
       for (let x = 1; x < width - 1; x += 1) {
+        const packed = packKey({ x, y });
+        if (avoid.has(packed) || abandoned.has(packed)) continue;
         if (!terrain.isPassable(tiles, { x, y }, WALK)) continue;
-        if (main.has(packKey({ x, y }))) continue;
+        if (main.has(packed)) continue;
         stranded = { x, y };
         break;
       }
     }
     if (!stranded) return;
 
-    // Dig straight back to the nearest tile of the main region. A channel is
-    // the honest repair here: it reads as a ford or a causeway, not as damage.
+    // Dig straight back to the nearest tile of the main region whose line does
+    // not cross an avoided cell. A channel is the honest repair here: it reads
+    // as a ford or a causeway, not as damage.
+    const crossesAvoid = (target: Position): boolean =>
+      avoid.size > 0 && line(stranded, target).some((step) => avoid.has(packKey(step)));
+
     let nearest: Position | null = null;
     let best = Infinity;
     for (const packed of main) {
       const at = unkey(packed);
       const span = Math.max(Math.abs(at.x - stranded.x), Math.abs(at.y - stranded.y));
-      if (span < best) { best = span; nearest = at; }
+      if (span >= best) continue;
+      if (crossesAvoid(at)) continue;
+      best = span;
+      nearest = at;
     }
-    if (!nearest) return;
+    if (!nearest) {
+      abandoned.add(packKey(stranded));
+      continue;
+    }
 
     for (const step of line(stranded, nearest)) {
       if (step.x <= 0 || step.y <= 0 || step.x >= width - 1 || step.y >= height - 1) continue;

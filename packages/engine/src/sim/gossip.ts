@@ -155,9 +155,19 @@ export function spreadRumours(txn: Transaction, day: number, rng: Rng): void {
         if (barred.has(listener.id)) continue;
         if (memory[listener.id]?.[deed.id]) continue;
 
+        // News needs somebody to carry it. `requiresTravel` says a rumour does
+        // not leap between places on its own, which is the difference between a
+        // world with distance in it and one without.
+        if (model.gossip.requiresTravel && !together(txn, teller.id, listener.id)) continue;
+
         // Hostile factions gossip less freely with each other.
         const crossFaction = teller.faction && listener.faction && teller.faction !== listener.faction;
-        const rate = spreadRate * (crossFaction ? model.gossip.crossFactionRate : 1) * (listener.gullibility * 2);
+        // How fast news leaves the place it happened. A market town carries a
+        // story further than a shrine, which is exactly what `rumourReach` says.
+        const reach = rumourReachOf(txn, deed.location);
+        const rate = spreadRate * reach
+          * (crossFaction ? model.gossip.crossFactionRate : 1)
+          * (listener.gullibility * 2);
 
         if (!rng.derive(`${deed.id}:${teller.id}:${listener.id}:${day}`).chance(rate)) continue;
 
@@ -171,12 +181,52 @@ export function spreadRumours(txn: Transaction, day: number, rng: Rng): void {
         };
         changed = true;
         txn.emit({ type: 'rumourSpread', deed: deed.id, to: listener.id, hops: held.hops + 1 });
-        void distortion;
+
+        // The story gets away from itself as it travels. `distortion` on the
+        // deed kind and `distortionPerHop` on the model were read and thrown
+        // away with a `void`; a garbled retelling is one the listener half
+        // believes, which is what a weaker memory already means.
+        const garbled = rng
+          .derive(`garble:${deed.id}:${listener.id}`)
+          .chance(Math.min(1, distortion + kind.distortion));
+        if (garbled) {
+          const record = memory[listener.id]![deed.id]!;
+          memory[listener.id]![deed.id] = { ...record, strength: record.strength * 0.5 };
+        }
       }
     }
   }
 
   if (changed) txn.set({ ...txn.state, memory });
+}
+
+/**
+ * Where a person belongs, as the module names it.
+ *
+ * Deliberately the declared `home` rather than whatever map they are standing
+ * on: a map id and a point-of-interest id are different vocabularies, and
+ * comparing one to the other would make everybody a stranger to everybody.
+ * Null means the module has not placed them, and an unplaced person is not
+ * separated from anyone.
+ */
+function homeOfNpc(txn: Transaction, npcId: string): string | null {
+  return txn.module.find<{ home?: string }>('content.npcs', npcId)?.home ?? null;
+}
+
+/** Whether news can pass between two people without anybody travelling. */
+function together(txn: Transaction, a: string, b: string): boolean {
+  const here = homeOfNpc(txn, a);
+  const there = homeOfNpc(txn, b);
+  // Unplaced people are not held apart by a geography the module never gave.
+  if (here === null || there === null) return true;
+  return here === there;
+}
+
+/** How readily news leaves a place, as the place itself declares. */
+function rumourReachOf(txn: Transaction, location: string | null): number {
+  if (!location) return 1;
+  const poi = txn.module.find<{ rumourReach?: number }>('world.pointsOfInterest', location);
+  return poi?.rumourReach ?? 1;
 }
 
 /**
@@ -215,9 +265,23 @@ export function decayMemories(txn: Transaction, _day: number, _rng: Rng): void {
           (rule) => rule.halfLifeDays !== undefined && rule.alwaysKnownBy.length === 0,
         )?.halfLifeDays;
 
-      const npc = txn.module.find<{ memorySpan: number }>('content.npcs', npcId);
-      const halfLife = pinned
-        ?? Math.min(model.forgetting.halfLifeDays, npc?.memorySpan ?? Infinity);
+      const npc = txn.module.find<{ memorySpan: number; caresAbout?: string[] }>(
+        'content.npcs',
+        npcId,
+      );
+
+      // How memorable the deed is, and how much this module weighs that. Both
+      // were declared and neither was read, so an atrocity faded exactly as
+      // fast as a rudeness. Someone who *cares about* this kind of thing
+      // remembers it longer still — which is the whole point of `caresAbout`.
+      const kind = txn.module.find<{ memorability: number }>('narrative.deedKinds', deed.kind);
+      const memorability = Math.max(0, kind?.memorability ?? 1);
+      const personal = npc?.caresAbout?.includes(deed.kind) ? 2 : 1;
+      const weighted = 1 + (memorability - 1) * model.forgetting.memorabilityWeight;
+
+      const halfLife = (pinned
+        ?? Math.min(model.forgetting.halfLifeDays, npc?.memorySpan ?? Infinity))
+        * Math.max(0.01, weighted) * personal;
 
       const elapsedDays = (txn.state.minute - deed.at) / perDay;
       const strength = retention(model.forgetting.curve, elapsedDays, halfLife, model.forgetting.floor)

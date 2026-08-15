@@ -180,6 +180,25 @@ export function labelFor(key: string): string {
   return spaced.charAt(0).toUpperCase() + spaced.slice(1);
 }
 
+/**
+ * How much one press of a number input's arrows should move it.
+ *
+ * Read off the bounds the schema already declares, because the browser's own
+ * answer is useless here: `step="any"` makes the arrows move by 1, and a
+ * scatter frequency lives entirely between 0 and 1 — one press took 0.16 to
+ * 1.16, past the maximum, when 0.01 is already a visible change in the map.
+ *
+ * A schema that writes `z.number()` rather than `.int()` is stating that
+ * fractions are meaningful, so the arrows never move a float by a whole unit.
+ * A narrow declared range means every hundredth counts; anything wider or
+ * unbounded is a quantity rather than a ratio, and a tenth is fine.
+ */
+export function stepFor(spec: Extract<FieldSpec, { kind: 'number' }>): number {
+  if (spec.int) return 1;
+  const bounded = spec.min !== null && spec.max !== null;
+  return bounded && spec.max! - spec.min! <= 2 ? 0.01 : 0.1;
+}
+
 export interface CollectionInfo {
   readonly path: string;
   readonly section: string;

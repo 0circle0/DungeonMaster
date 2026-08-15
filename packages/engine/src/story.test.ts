@@ -1,9 +1,9 @@
 import { describe, it, expect } from 'vitest';
-import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { Rng } from '@dm/core';
 import { compileModule } from '@dm/module';
 import type { CompiledModule } from '@dm/module';
+import { loadModuleFrom, readAssembledModule } from '@dm/module/load';
 import { newGame, defaultChoices } from './newgame.js';
 import { spawnMonster, spawnNpc, npcIdOf } from './character.js';
 import { reduce, reduceAll } from './reduce.js';
@@ -13,22 +13,22 @@ import { shouldFire, runTriggers } from './sim/triggers.js';
 import type { TriggerDef } from './sim/triggers.js';
 import { openGate, describeRequirement } from './sim/gates.js';
 import {
-  startQuest, abandonQuest, advanceQuests, grantXp, startAutoQuests, stageIndexOf,
+  startQuest, abandonQuest, advanceQuests, grantXp, startAutoQuests, stageIndexOf, questsOffered,
 } from './sim/quests.js';
 import type { QuestDef } from './sim/quests.js';
 import { questJournal, currentObjective } from './sim/questview.js';
+import { arcsOf, endingReached } from './sim/arcs.js';
 import { startDialogue, visibleOptions, chooseOption, canTalkTo } from './sim/dialogue.js';
 import { recordDeed, witnessesOf, knowledgeOf } from './sim/deeds.js';
 import { enterDungeon, enterArea, enterPoi, placeParty } from './sim/enter.js';
+import { savingThrow } from './rules/check.js';
+import { buildScope } from './stats.js';
 import { TerrainIndex, createMap, MapBuilder } from './grid/tiles.js';
 import type { GameState } from './state.js';
 import type { Action } from './actions.js';
 
 function loadModule(name: string): CompiledModule {
-  const path = fileURLToPath(new URL(`../../../modules/${name}/module.json`, import.meta.url));
-  const result = compileModule(JSON.parse(readFileSync(path, 'utf8')));
-  if (!result.ok) throw new Error(result.errors.map((e) => `${e.path}: ${e.message}`).join('\n'));
-  return result.module;
+  return loadModuleFrom(fileURLToPath(new URL(`../../../modules/${name}`, import.meta.url)));
 }
 
 const GREENMARCH = loadModule('greenmarch');
@@ -47,6 +47,7 @@ function fresh(module = GREENMARCH, seed = 11): GameState {
       here: {
         id: 'here', tiles: createMap(13, 13, floor), kind: 'area', source: 'millford',
         explored: [], gates: {}, exits: {}, items: {}, marks: {},
+      traps: {}, rooms: [], depth: 1,
       },
     },
     entities: { ...base.entities, [hero.id]: { ...hero, map: 'here', position: { x: 6, y: 6 } } },
@@ -55,6 +56,23 @@ function fresh(module = GREENMARCH, seed = 11): GameState {
 
 function transact(state: GameState, module = GREENMARCH): Transaction {
   return new Transaction(state, module);
+}
+
+// Greenmarch authors no interior POIs, so interior tests run on a fixture: the
+// village given a small generated interior, and an outdoor `position` that
+// lies outside the interior's bounds — which is the normal case, since
+// `position` is in area coordinates.
+function withInteriorVillage(): CompiledModule {
+  const dir = fileURLToPath(new URL('../../../modules/greenmarch', import.meta.url));
+  const doc = readAssembledModule(dir).doc as unknown as {
+    world: { pointsOfInterest: { id: string; map?: unknown; position?: unknown }[] };
+  };
+  const village = doc.world.pointsOfInterest.find((p) => p.id === 'millford_village')!;
+  village.map = { width: '7', height: '7' };
+  village.position = { x: 24, y: 5 };
+  const result = compileModule(doc);
+  if (!result.ok) throw new Error('interior fixture failed to compile');
+  return result.module;
 }
 
 describe('triggers', () => {
@@ -200,10 +218,72 @@ describe('gates', () => {
     expect(outcome.opened).toBe(true);
   });
 
+  // The exits panel and the affordance list have always decided "barred" by
+  // reading this flag. Nothing wrote it, so a door the party had opened went on
+  // reading as locked for the rest of the run.
+  it('records that it stands open, so the way stops reading as barred', () => {
+    const state = fresh();
+    const hero = state.entities['e:1']!;
+    const withKey: GameState = {
+      ...state,
+      entities: { ...state.entities, 'e:1': { ...hero, inventory: [{ item: 'brass_key', quantity: 1 }] } },
+    };
+
+    const txn = transact(withKey);
+    openGate(txn, 'mill_door', txn.entity('e:1')!, Rng.fromSeed(1));
+    expect(txn.finish().state.flags['gate:mill_door:open']).toBe(true);
+  });
+
+  // A standing door is not re-opened on the way back through: `onOpen` fires
+  // once, so a gate that grants something cannot be farmed by walking in and
+  // out of it.
+  it('does not open twice', () => {
+    const state = fresh();
+    const hero = state.entities['e:1']!;
+    const withKey: GameState = {
+      ...state,
+      entities: { ...state.entities, 'e:1': { ...hero, inventory: [{ item: 'brass_key', quantity: 1 }] } },
+    };
+
+    const first = transact(withKey);
+    openGate(first, 'mill_door', first.entity('e:1')!, Rng.fromSeed(1));
+    const opened = first.finish().state;
+
+    const second = transact(opened);
+    const outcome = openGate(second, 'mill_door', second.entity('e:1')!, Rng.fromSeed(1));
+    expect(outcome.opened).toBe(true);
+    expect(second.finish().events.filter((e) => e.type === 'gateOpened')).toHaveLength(0);
+  });
+
+  // `minTier` compiled to a comparison against a namespace nothing populated,
+  // which resolved to null and then threw inside the comparison — from
+  // `useAbility`, which does not catch. Greenmarch's `read_runes` carries one,
+  // so any character who learned it took the whole reduction down on use.
+  it('resolves a mastery-tier gate on an ability instead of throwing', () => {
+    const state = fresh();
+    const hero = state.entities['e:1']!;
+    const learner = (lore: number): GameState => ({
+      ...state,
+      entities: {
+        ...state.entities,
+        'e:1': { ...hero, abilities: [...hero.abilities, 'read_runes'], skills: { ...hero.skills, lore } },
+      },
+    });
+
+    // `adept` starts at rank 3, so rank 2 is short of it and rank 3 meets it.
+    const short = reduce(learner(2), { type: 'useAbility', ability: 'read_runes' }, ctx);
+    expect(short.state.flags['runes_read']).toBeUndefined();
+    expect(short.events.some((e) => e.type === 'refused')).toBe(true);
+
+    const adept = reduce(learner(3), { type: 'useAbility', ability: 'read_runes' }, ctx);
+    expect(adept.state.flags['runes_read']).toBe(true);
+  });
+
   it('describes a requirement in words', () => {
     const described = describeRequirement({
       description: '', minLevel: 3, items: [{ item: 'brass_key', quantity: 1, consume: false, equipped: false }],
       classes: [], ancestries: [], abilities: [], attributes: [], skills: [], quests: [], factions: [],
+      creatureTypes: [], alignments: [], languages: [],
       memories: [], flags: [], anyOf: [],
       without: { classes: [], abilities: [], items: [], quests: [], flags: [], conditions: [] },
     });
@@ -275,9 +355,55 @@ describe('quests', () => {
     expect(txn.state.flags['quest:the_mill_door:kill_hounds:count']).toBe(1);
   });
 
+  // Levelling used to be a number going up and nothing else.
+  it('unlocks the class abilities the new level opens', () => {
+    const txn = transact(fresh());
+    // The warden declares `rally` at level 2 and could never reach it.
+    expect(txn.entity('e:1')!.abilities).not.toContain('rally');
+
+    grantXp(txn, 150, Rng.fromSeed(1));
+    expect(txn.entity('e:1')!.level).toBe(2);
+    expect(txn.entity('e:1')!.abilities).toContain('rally');
+    // And keeps what it already had.
+    expect(txn.entity('e:1')!.abilities).toContain('strike');
+  });
+
+  it('runs the module effects for every level crossed, not just the last', () => {
+    const txn = transact(fresh());
+    const before = txn.entity('e:1')!.inventory.find((s) => s.item === 'rope')?.quantity ?? 0;
+
+    // Enough for level 3 in one award, so level 2's grant must not be skipped.
+    grantXp(txn, 1000, Rng.fromSeed(1));
+    const hero = txn.entity('e:1')!;
+    expect(hero.level).toBeGreaterThanOrEqual(3);
+
+    const after = hero.inventory.find((s) => s.item === 'rope')?.quantity ?? 0;
+    expect(after).toBe(before + 2);          // level 2 granted two ropes
+    expect(txn.state.flags['veteran']).toBe(true); // level 3 set the flag
+  });
+
+  it('adds proficiency to a save the class is trained in', () => {
+    const state = fresh();
+    const hero = state.entities['e:1']!;
+    // Greenmarch trains the warden in `will` and nobody else.
+    const warden: GameState = {
+      ...state,
+      entities: { ...state.entities, 'e:1': { ...hero, characterClass: 'warden', level: 1 } },
+    };
+    const stalker: GameState = {
+      ...state,
+      entities: { ...state.entities, 'e:1': { ...hero, characterClass: 'stalker', level: 1 } },
+    };
+
+    const rollFor = (from: GameState) =>
+      savingThrow(GREENMARCH, Rng.fromSeed(4), from.entities['e:1']!, 'will', 12);
+
+    expect(rollFor(warden).modifier - rollFor(stalker).modifier).toBe(2);
+  });
+
   it('awards xp and levels the party up', () => {
     const txn = transact(fresh());
-    grantXp(txn, 150);
+    grantXp(txn, 150, Rng.fromSeed(1));
     const hero = txn.entity('e:1')!;
     expect(hero.xp).toBe(150);
     // greenmarch: level 2 at 100 xp.
@@ -408,6 +534,7 @@ describe('walking together', () => {
         here: {
           id: 'here', tiles: createMap(15, 15, 'floor'), kind: 'area', source: 'millford',
           explored: [], gates: {}, exits: {}, items: {}, marks: {},
+      traps: {}, rooms: [], depth: 1,
         },
       },
       selected: first,
@@ -470,7 +597,7 @@ describe('walking together', () => {
       ...state,
       combat: {
         round: 1, order: [state.selected], turn: 0,
-        spent: {}, movement: 6, reactionsUsed: {},
+        spent: {}, movement: 6, reactionsUsed: {}, cooldowns: [], usedOnce: [], specialUses: {},
       },
     };
     const result = reduce(fighting, { type: 'setFollow', follow: true }, { module: GREENMARCH, terrain });
@@ -708,7 +835,7 @@ describe('entering places', () => {
       ...base,
       currentMap: 'here',
       maps: {
-        here: { id: 'here', tiles: createMap(9, 9, 'floor'), kind: 'area', source: 'x', explored: [], gates: {}, exits: {}, items: {}, marks: {} },
+        here: { id: 'here', tiles: createMap(9, 9, 'floor'), kind: 'area', source: 'x', explored: [], gates: {}, exits: {}, items: {}, marks: {}, traps: {}, rooms: [], depth: 1 },
       },
     };
 
@@ -780,6 +907,43 @@ describe('entering places', () => {
     );
     expect(arrived).toBeDefined();
     expect((arrived as { data: Record<string, unknown> }).data['place']).toBe('the_mill');
+  });
+
+  it('walks the party into an interior, and back in on a return visit', () => {
+    const module = withInteriorVillage();
+    const inside = new TerrainIndex(module);
+    const txn = transact(fresh(module), module);
+    const actor = txn.entity('e:1')!;
+
+    enterPoi(txn, inside, 'millford_village', actor, Rng.fromSeed(5), true);
+    expect(txn.state.currentMap).toBe('poi:millford_village');
+    expect(txn.entity(txn.state.selected)!.map).toBe('poi:millford_village');
+
+    // Step back outside, then enter again: the return visit used to leave the
+    // party standing on the area map at the POI's outdoor coordinates.
+    placeParty(txn, inside, 'here', { x: 6, y: 6 });
+    enterPoi(txn, inside, 'millford_village', actor, Rng.fromSeed(5), true);
+    expect(txn.state.currentMap).toBe('poi:millford_village');
+    expect(txn.entity(txn.state.selected)!.map).toBe('poi:millford_village');
+  });
+
+  it('spawns residents inside the interior, not at the outdoor position', () => {
+    const module = withInteriorVillage();
+    const inside = new TerrainIndex(module);
+    const txn = transact(fresh(module), module);
+    const actor = txn.entity('e:1')!;
+
+    enterPoi(txn, inside, 'millford_village', actor, Rng.fromSeed(5), true);
+
+    // The outdoor position (24,5) does not exist on the 7×7 interior; anchoring
+    // there used to leave residents standing outside the map entirely.
+    const vess = txn.entity('vess')!;
+    const tiles = txn.state.maps['poi:millford_village']!.tiles;
+    expect(vess.map).toBe('poi:millford_village');
+    expect(vess.position.x).toBeGreaterThanOrEqual(0);
+    expect(vess.position.y).toBeGreaterThanOrEqual(0);
+    expect(vess.position.x).toBeLessThan(tiles.width);
+    expect(vess.position.y).toBeLessThan(tiles.height);
   });
 
   it('completes a reach objective on arriving at such a place', () => {
@@ -951,9 +1115,39 @@ describe('leaving a place', () => {
     expect(next.currentMap).toBe('area:millford');
   });
 
-  it('will not let you walk out of a dungeon', () => {
+  it('steps out of an interior onto the doorstep, not across the map', () => {
+    const module = withInteriorVillage();
+    const inside = new TerrainIndex(module);
+    const txn = transact(fresh(module), module);
+    enterPoi(txn, inside, 'millford_village', txn.entity('e:1')!, Rng.fromSeed(3), true);
+    expect(txn.state.currentMap).toBe('poi:millford_village');
+
+    const { state: next } = reduce(txn.state, { type: 'leave' }, { module });
+    expect(next.currentMap).toBe('area:millford');
+    // The village's outdoor position (24,5), not the area entry point (15,10).
+    const leader = next.entities[next.selected]!;
+    expect(Math.max(Math.abs(leader.position.x - 24), Math.abs(leader.position.y - 5)))
+      .toBeLessThanOrEqual(2);
+  });
+
+  it('will not let you walk out of a dungeon except at the way in', () => {
     const txn = transact(fresh());
     enterDungeon(txn, terrain, 'barrow_depths', Rng.fromSeed(4));
+
+    // Move the leader clear of the exit tile (on or beside it counts as at
+    // the way out): from anywhere else the dungeon still has to be crossed.
+    const hero = txn.entity(txn.state.selected)!;
+    const inside = txn.state.maps[txn.state.currentMap]!;
+    let off: { x: number; y: number } | undefined;
+    for (let y = 1; y < inside.tiles.height - 1 && !off; y += 1) {
+      for (let x = 1; x < inside.tiles.width - 1; x += 1) {
+        if (Math.max(Math.abs(x - hero.position.x), Math.abs(y - hero.position.y)) <= 1) continue;
+        if (!terrain.isPassable(inside.tiles, { x, y })) continue;
+        off = { x, y };
+        break;
+      }
+    }
+    txn.putEntity({ ...hero, position: off! });
 
     const { state: next, events } = reduce(txn.state, { type: 'leave' }, { module: GREENMARCH });
     expect(events.find((e) => e.type === 'refused')).toMatchObject({
@@ -971,5 +1165,107 @@ describe('leaving a place', () => {
     expect(events.find((e) => e.type === 'refused')).toMatchObject({
       reason: 'there is nowhere to go back to',
     });
+  });
+});
+
+describe('story arcs', () => {
+  // `narrative.arcs` was never queried at all — a whole collection the schema
+  // accepted, the linter cleared, the docs described, and nothing read.
+  it('derives an arc\'s standing from its quests, storing nothing', () => {
+    const base = fresh();
+    const [arc] = arcsOf(GREENMARCH, base);
+    expect(arc).toBeDefined();
+    expect(arc!.status).toBe('unstarted');
+    expect(arc!.total).toBe(2);
+
+    const half: GameState = {
+      ...base,
+      quests: {
+        the_mill_door: {
+          quest: 'the_mill_door', status: 'complete', completedObjectives: [], startedAt: 0,
+        },
+      },
+    };
+    expect(arcsOf(GREENMARCH, half)[0]!).toMatchObject({ status: 'active', done: 1 });
+  });
+
+  it('counts a failed quest as a failed arc, however much else is finished', () => {
+    const state: GameState = {
+      ...fresh(),
+      quests: {
+        the_mill_door: {
+          quest: 'the_mill_door', status: 'complete', completedObjectives: [], startedAt: 0,
+        },
+        the_barrow_ward: {
+          quest: 'the_barrow_ward', status: 'failed', completedObjectives: [], startedAt: 0,
+        },
+      },
+    };
+    expect(arcsOf(GREENMARCH, state)[0]!.status).toBe('failed');
+  });
+
+  // `isEnding` promised the game would end and did nothing whatsoever.
+  it('ends the run when an ending arc is finished', () => {
+    const done: GameState = {
+      ...fresh(),
+      quests: {
+        the_mill_door: {
+          quest: 'the_mill_door', status: 'complete', completedObjectives: [], startedAt: 0,
+        },
+        the_barrow_ward: {
+          quest: 'the_barrow_ward', status: 'complete', completedObjectives: [], startedAt: 0,
+        },
+      },
+    };
+    expect(endingReached(GREENMARCH, done)?.id).toBe('the_greenmarch');
+
+    const { state } = reduce(done, { type: 'wait', minutes: 1 }, ctx);
+    expect(state.outcome).toBe('victory');
+  });
+
+  it('puts every declared arc in scope, so a typo is loud', () => {
+    const scope = buildScope(GREENMARCH, fresh(), fresh().entities['e:1']!);
+    const arcs = scope['arcs'] as Record<string, { status: string }>;
+    expect(arcs['the_greenmarch']!.status).toBe('unstarted');
+  });
+});
+
+describe('who hands out work', () => {
+  // `offersQuests` was read only by the linter and `giver` by nothing at all,
+  // so a module that said who gives what still needed a dialogue tree.
+  it('offers what an NPC declares, when the party could take it', () => {
+    const txn = transact(fresh());
+    const offered = questsOffered(txn, 'vess', Rng.fromSeed(1)).map((quest) => quest.id);
+    expect(offered).toContain('the_mill_door');
+  });
+
+  it('stops offering a job already taken', () => {
+    const state: GameState = {
+      ...fresh(),
+      quests: {
+        the_mill_door: {
+          quest: 'the_mill_door', status: 'active', completedObjectives: [], startedAt: 0,
+        },
+      },
+    };
+    const offered = questsOffered(transact(state), 'vess', Rng.fromSeed(1)).map((q) => q.id);
+    expect(offered).not.toContain('the_mill_door');
+  });
+
+  it('says so out loud when the party talks to them', () => {
+    const base = fresh();
+    const vess = spawnNpc(GREENMARCH, 'vess');
+    const state: GameState = {
+      ...base,
+      entities: {
+        ...base.entities,
+        vess: { ...vess, map: 'here', position: { x: 7, y: 6 } },
+      },
+    };
+
+    const { events } = reduce(state, { type: 'talk', npc: 'vess' }, ctx);
+    expect(events).toContainEqual(
+      expect.objectContaining({ type: 'custom', event: 'questOffered' }),
+    );
   });
 });

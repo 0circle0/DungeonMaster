@@ -143,9 +143,7 @@ export const objectiveSchema = z
     id: idSchema,
     description: description.default(''),
     /** Common shapes, so the usual objective needs no hand-written predicate. */
-    kind: z
-      .enum(['custom', 'kill', 'collect', 'reach', 'talk', 'deliver', 'survive', 'escort'])
-      .default('custom'),
+    kind: z.enum(['custom', 'kill', 'collect', 'reach', 'talk']).default('custom'),
     /** Target of the objective, interpreted per `kind`. */
     target: idSchema.optional(),
     count: z.number().int().min(1).default(1),

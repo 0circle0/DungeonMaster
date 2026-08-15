@@ -83,6 +83,13 @@ export function openGate(
     return { opened: false, missing: [] };
   }
 
+  // Already standing open. Returning here must not re-run `onOpen`, re-consume
+  // the key, or re-roll the lockpick — walking back through a door you opened
+  // is not a second opening.
+  if (gate.staysOpen && txn.state.flags[`gate:${gate.id}:open`] === true) {
+    return { opened: true, how: 'requirement' };
+  }
+
   const scope = buildScope(txn.module, txn.state, actor);
 
   // — the requirement, met outright ————————————————————————
@@ -107,7 +114,11 @@ export function openGate(
   }
 
   // — forcing it ——————————————————————————————————————————
-  if (gate.bypass && options.force !== false) {
+  // A gate that is not `retryable` gives one attempt ever. The requirement and
+  // ability paths above are deliberately still open, so failing to pick a lock
+  // never bars you from coming back with the key.
+  const spent = txn.state.flags[`gate:${gate.id}:tried`] === true;
+  if (gate.bypass && options.force !== false && !(spent && !gate.bypass.retryable)) {
     const roll = skillCheck(txn.module, rng, actor, gate.bypass.skill, gate.bypass.difficulty);
     txn.emit({ type: 'checked', entity: actor.id, skill: gate.bypass.skill, attribute: null, roll });
 
@@ -121,6 +132,9 @@ export function openGate(
     // Failing can have its own consequence — noise, a sprung trap.
     if (gate.bypass.onFailure.length > 0) {
       applyOps(txn, evalEffects(gate.bypass.onFailure, { scope, rng, openNamespaces: OPEN_NAMESPACES }), actor.id);
+    }
+    if (!gate.bypass.retryable) {
+      txn.set({ ...txn.state, flags: { ...txn.state.flags, [`gate:${gate.id}:tried`]: true } });
     }
   }
 
@@ -148,6 +162,16 @@ function succeed(
   how: 'requirement' | 'bypass' | 'ability',
   rng: Rng,
 ): GateOutcome {
+  // `staysOpen` is the whole difference between a door and a turnstile, and it
+  // is recorded here rather than on a tile because a gate can bar a road or a
+  // point of interest that has no tile at all. The exits panel and the
+  // affordance list have always read this flag to decide whether a way is
+  // barred; until now nothing wrote it, so every gate the party opened went on
+  // reading as locked for the rest of the run.
+  if (gate.staysOpen) {
+    txn.set({ ...txn.state, flags: { ...txn.state.flags, [`gate:${gate.id}:open`]: true } });
+  }
+
   if (gate.onOpen.length > 0) {
     const current = txn.entity(actor.id) ?? actor;
     const scope = buildScope(txn.module, txn.state, current);

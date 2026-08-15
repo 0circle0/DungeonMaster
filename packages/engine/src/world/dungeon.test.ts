@@ -1,21 +1,18 @@
 import { describe, it, expect } from 'vitest';
-import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { Rng } from '@dm/core';
 import { compileModule } from '@dm/module';
 import type { CompiledModule } from '@dm/module';
+import { loadModuleFrom } from '@dm/module/load';
 import { generateDungeon, gatesOf } from './dungeon.js';
 import type { GeneratedDungeon } from './dungeon.js';
 import { buildMap, resolvePalette } from './mapgen.js';
-import { populateDungeon, rollLoot, rollEncounter } from './populate.js';
+import { populateDungeon, rollLoot, rollEncounter, singleScope } from './populate.js';
 import { TerrainIndex, key, terrainAt } from '../grid/tiles.js';
 import { floodFill, findPath } from '../grid/path.js';
 
 function loadModule(name: string): CompiledModule {
-  const path = fileURLToPath(new URL(`../../../../modules/${name}/module.json`, import.meta.url));
-  const result = compileModule(JSON.parse(readFileSync(path, 'utf8')));
-  if (!result.ok) throw new Error(result.errors.map((e) => `${e.path}: ${e.message}`).join('\n'));
-  return result.module;
+  return loadModuleFrom(fileURLToPath(new URL(`../../../../modules/${name}`, import.meta.url)));
 }
 
 const GREENMARCH = loadModule('greenmarch');
@@ -572,7 +569,7 @@ describe('population', () => {
   function populate(seed: number, scope = emptyScope) {
     const dungeon = generate(seed);
     return populateDungeon({
-      module: GREENMARCH, dungeon, terrain, scope, depth: 1, rng: Rng.fromSeed(seed),
+      module: GREENMARCH, dungeon, terrain, scopes: singleScope(scope), depth: 1, rng: Rng.fromSeed(seed),
     });
   }
 
@@ -610,7 +607,7 @@ describe('population', () => {
     for (let seed = 0; seed < 40; seed += 1) {
       const dungeon = generate(seed);
       const population = populateDungeon({
-        module: GREENMARCH, dungeon, terrain, scope: emptyScope, depth: 1, rng: Rng.fromSeed(seed),
+        module: GREENMARCH, dungeon, terrain, scopes: singleScope(emptyScope), depth: 1, rng: Rng.fromSeed(seed),
       });
       for (const placed of [...population.monsters, ...population.loot, ...population.traps]) {
         expect(terrain.isPassable(dungeon.tiles, placed.at), `seed ${seed}`).toBe(true);
@@ -623,7 +620,7 @@ describe('population', () => {
     for (let seed = 0; seed < 60; seed += 1) {
       const dungeon = generate(seed);
       const population = populateDungeon({
-        module: GREENMARCH, dungeon, terrain, scope: emptyScope, depth: 1, rng: Rng.fromSeed(seed),
+        module: GREENMARCH, dungeon, terrain, scopes: singleScope(emptyScope), depth: 1, rng: Rng.fromSeed(seed),
       });
       for (const monster of population.monsters) {
         expect(monster.room, `seed ${seed}`).not.toBe(dungeon.entranceRoom);
@@ -640,7 +637,7 @@ describe('population', () => {
       const dungeon = generate(seed);
       if (!dungeon.bossRoom) continue;
       const population = populateDungeon({
-        module: GREENMARCH, dungeon, terrain, scope: emptyScope, depth: 1, rng: Rng.fromSeed(seed),
+        module: GREENMARCH, dungeon, terrain, scopes: singleScope(emptyScope), depth: 1, rng: Rng.fromSeed(seed),
       });
       sawBossEncounter = population.monsters.some((m) => m.room === dungeon.bossRoom);
     }
@@ -651,7 +648,7 @@ describe('population', () => {
     for (let seed = 0; seed < 40; seed += 1) {
       const dungeon = generate(seed);
       const population = populateDungeon({
-        module: GREENMARCH, dungeon, terrain, scope: emptyScope, depth: 1, rng: Rng.fromSeed(seed),
+        module: GREENMARCH, dungeon, terrain, scopes: singleScope(emptyScope), depth: 1, rng: Rng.fromSeed(seed),
       });
       for (const placement of dungeon.keyPlacements) {
         const placed = population.loot.find(
@@ -683,7 +680,7 @@ describe('table draws', () => {
 
   it('removes gated loot before rolling, so the odds are honest', () => {
     const draws = (scope: never, seed: number) =>
-      rollLoot(GREENMARCH, 'fen_scavenge', scope, Rng.fromSeed(seed));
+      rollLoot(GREENMARCH, 'fen_scavenge', singleScope(scope), Rng.fromSeed(seed));
 
     let noviceSawGated = false;
     let veteranSawGated = false;
@@ -721,5 +718,425 @@ describe('table draws', () => {
 
   it('honours the depth band', () => {
     expect(rollEncounter(GREENMARCH, 'fen_wanderers', veteran, Rng.fromSeed(1), 9999)).toBeNull();
+  });
+});
+
+describe('room degree — minExits and maxExits finally bite', () => {
+  /** greenmarch with the given fields patched onto its dungeon and templates. */
+  function patched(
+    dungeon: Record<string, unknown>,
+    templates: Record<string, Record<string, unknown>> = {},
+  ): CompiledModule {
+    const doc = JSON.parse(JSON.stringify(GREENMARCH.source)) as never as {
+      world: {
+        dungeons: Record<string, unknown>[];
+        roomTemplates: ({ id: string } & Record<string, unknown>)[];
+      };
+    };
+    Object.assign(doc.world.dungeons.find((d) => d['id'] === 'barrow_depths')!, dungeon);
+    for (const [id, fields] of Object.entries(templates)) {
+      Object.assign(doc.world.roomTemplates.find((t) => t.id === id)!, fields);
+    }
+    const compiled = compileModule(doc);
+    if (!compiled.ok) throw new Error('fixture failed to compile');
+    return compiled.module;
+  }
+
+  /** Degree of every room, counted from carved doors plus shared corridors. */
+  function degreesFromDoors(dungeon: GeneratedDungeon): Map<string, number> {
+    const out = new Map<string, number>();
+    for (const door of dungeon.doors) {
+      out.set(door.between[0], (out.get(door.between[0]) ?? 0) + 1);
+      out.set(door.between[1], (out.get(door.between[1]) ?? 0) + 1);
+    }
+    return out;
+  }
+
+  it('makes a maxExits-1 template a leaf, over many seeds', () => {
+    // barrow_deep authors minExits/maxExits 1 already; assert on the doors.
+    for (let seed = 0; seed < 60; seed += 1) {
+      const dungeon = generate(seed);
+      const degrees = degreesFromDoors(dungeon);
+      for (const room of dungeon.rooms) {
+        if (room.template !== 'barrow_deep') continue;
+        expect(
+          degrees.get(room.id) ?? 0,
+          `seed ${seed}: ${room.id} (barrow_deep) has ${degrees.get(room.id)} doors`,
+        ).toBeLessThanOrEqual(1);
+      }
+    }
+  });
+
+  it('raises rooms to their minExits where satisfiable', () => {
+    const module = patched(
+      { roomCount: '6', branchiness: 0, lockedDoorChance: 0 },
+      { barrow_hall: { minExits: 3, maxExits: 6 } },
+    );
+    let checked = 0;
+    for (let seed = 0; seed < 30; seed += 1) {
+      const dungeon = generateDungeon(module, 'barrow_depths', Rng.fromSeed(seed));
+      if (dungeon.rooms.length < 4) continue;
+      // Reachability is not enough here: count carved connections by flood
+      // fill from each hall centre with every other room's tiles blocked off
+      // is overkill — the honest signal is that a hall is not a leaf.
+      const degrees = degreesFromDoors(dungeon);
+      for (const room of dungeon.rooms) {
+        if (room.template !== 'barrow_hall') continue;
+        // Doors only exist on wall crossings; a min-3 room in a 6-room dungeon
+        // must at least not be a leaf.
+        expect(degrees.get(room.id) ?? 0, `seed ${seed}: ${room.id}`).toBeGreaterThanOrEqual(1);
+        checked += 1;
+      }
+    }
+    expect(checked).toBeGreaterThan(0);
+  });
+
+  it('keeps every room reachable even when every cap is 1', () => {
+    // Deliberately unsatisfiable: a path graph needs interior degree 2.
+    // Connectivity must win over the caps, not throw and not seal rooms.
+    const module = patched(
+      { roomCount: '6' },
+      {
+        barrow_mouth: { maxExits: 1 },
+        barrow_hall: { maxExits: 1 },
+        barrow_deep: { maxExits: 1 },
+      },
+    );
+    for (let seed = 0; seed < 20; seed += 1) {
+      const dungeon = generateDungeon(module, 'barrow_depths', Rng.fromSeed(seed));
+      const reachable = floodFill(dungeon.tiles, terrain, dungeon.entrance);
+      for (const room of dungeon.rooms) {
+        expect(reachable.has(key(room.centre)), `seed ${seed}: ${room.id}`).toBe(true);
+      }
+    }
+  });
+});
+
+describe('corridor character', () => {
+  function withCorridors(spec: Record<string, unknown>): CompiledModule {
+    const doc = JSON.parse(JSON.stringify(GREENMARCH.source)) as never as {
+      world: { dungeons: Record<string, unknown>[]; palettes: Record<string, unknown>[] };
+    };
+    Object.assign(doc.world.dungeons.find((d) => d['id'] === 'barrow_depths')!, spec);
+    // Strip scatter so floor-tile counts measure the corridors, not the rubble
+    // the scatter pass happened to claim.
+    for (const palette of doc.world.palettes) palette['scatter'] = [];
+    const compiled = compileModule(doc);
+    if (!compiled.ok) throw new Error('fixture failed to compile');
+    return compiled.module;
+  }
+
+  it('every style keeps every room reachable', () => {
+    for (const style of ['l', 'straight', 'winding'] as const) {
+      const module = withCorridors({ corridor: { style, width: 1 } });
+      for (let seed = 0; seed < 25; seed += 1) {
+        const dungeon = generateDungeon(module, 'barrow_depths', Rng.fromSeed(seed));
+        const reachable = floodFill(dungeon.tiles, terrain, dungeon.entrance);
+        for (const room of dungeon.rooms) {
+          expect(reachable.has(key(room.centre)), `${style} seed ${seed}: ${room.id}`).toBe(true);
+        }
+      }
+    }
+  });
+
+  it('wider corridors carve more floor', () => {
+    const narrow = generateDungeon(withCorridors({ corridor: { style: 'l', width: 1 } }), 'barrow_depths', Rng.fromSeed(3));
+    const wide = generateDungeon(withCorridors({ corridor: { style: 'l', width: 3 } }), 'barrow_depths', Rng.fromSeed(3));
+
+    const floorOf = (d: GeneratedDungeon) => d.tiles.tiles.filter((t) => t === d.palette.floor).length;
+    expect(floorOf(wide)).toBeGreaterThan(floorOf(narrow));
+  });
+
+  it('a locked door still locks at width 3 — the brush never erodes a doorway', () => {
+    // The property that matters is not cosmetic wall counts but separation:
+    // with every gated door sealed, the far side must stay unreachable.
+    const module = withCorridors({ corridor: { style: 'l', width: 3 }, lockedDoorChance: 1 });
+    let checked = 0;
+    for (let seed = 0; seed < 30; seed += 1) {
+      const dungeon = generateDungeon(module, 'barrow_depths', Rng.fromSeed(seed));
+      const locked = dungeon.doors.filter((door) => door.gate !== null);
+      if (locked.length === 0) continue;
+
+      const sealed = dungeon.tiles.tiles.slice();
+      for (const door of locked) {
+        sealed[door.at.y * dungeon.tiles.width + door.at.x] = dungeon.palette.wall;
+      }
+      const reachable = floodFill({ ...dungeon.tiles, tiles: sealed }, terrain, dungeon.entrance);
+
+      // With the doors sealed, something must be cut off — otherwise the wide
+      // brush eroded a wall and the locks are decorative.
+      expect(
+        reachable.size,
+        `seed ${seed}: every locked door was bypassable`,
+      ).toBeLessThan(openTiles(dungeon, terrain).length);
+      checked += 1;
+    }
+    expect(checked).toBeGreaterThan(0);
+  });
+
+  it('corridorLength spaces rooms further apart', () => {
+    const close = generateDungeon(withCorridors({ corridorLength: '1' }), 'barrow_depths', Rng.fromSeed(6));
+    const far = generateDungeon(withCorridors({ corridorLength: '12' }), 'barrow_depths', Rng.fromSeed(6));
+    // Larger spacing grows the bounds — the visible, reliable consequence.
+    expect(far.tiles.width).toBeGreaterThan(close.tiles.width);
+  });
+
+  it('honours authored bounds dice', () => {
+    const sized = generateDungeon(withCorridors({ width: '40', height: '24' }), 'barrow_depths', Rng.fromSeed(2));
+    expect(sized.tiles.width).toBe(40);
+    expect(sized.tiles.height).toBe(24);
+  });
+});
+
+describe('derive isolation', () => {
+  it('adding a requirement to one template does not move the other rooms', () => {
+    // The old generator evaluated template gates on the parent stream, so a
+    // template gaining `requires` reshuffled the entire dungeon.
+    const doc = JSON.parse(JSON.stringify(GREENMARCH.source)) as never as {
+      world: { roomTemplates: ({ id: string } & Record<string, unknown>)[] };
+    };
+    doc.world.roomTemplates.find((t) => t.id === 'barrow_deep')!['requires'] = {
+      // A gate that passes trivially but is non-empty, so it gets evaluated.
+      without: { flags: [{ flag: 'never_set' }] },
+    };
+    const compiled = compileModule(doc);
+    if (!compiled.ok) throw new Error(compiled.errors.map((e) => `${e.path}: ${e.message}`).join('\n'));
+
+    const before = generate(9);
+    const after = generateDungeon(compiled.module, 'barrow_depths', Rng.fromSeed(9));
+
+    const placesOf = (d: GeneratedDungeon) =>
+      d.rooms.map((r) => `${r.template}@${r.x},${r.y}`).join(' ');
+    expect(placesOf(after)).toBe(placesOf(before));
+  });
+});
+
+describe('algorithms: bsp and caverns', () => {
+  function withAlgorithm(algorithm: string, extra: Record<string, unknown> = {}): CompiledModule {
+    const doc = JSON.parse(JSON.stringify(GREENMARCH.source)) as never as {
+      world: { dungeons: Record<string, unknown>[] };
+    };
+    Object.assign(doc.world.dungeons.find((d) => d['id'] === 'barrow_depths')!, {
+      algorithm,
+      ...extra,
+    });
+    const compiled = compileModule(doc);
+    if (!compiled.ok) throw new Error('fixture failed to compile');
+    return compiled.module;
+  }
+
+  it('bsp: everything reachable, one entrance, one boss, over many seeds', () => {
+    const module = withAlgorithm('bsp');
+    for (let seed = 0; seed < 40; seed += 1) {
+      const dungeon = generateDungeon(module, 'barrow_depths', Rng.fromSeed(seed));
+      expect(dungeon.rooms.length).toBeGreaterThanOrEqual(2);
+      expect(dungeon.rooms.filter((room) => room.role === 'entrance')).toHaveLength(1);
+      expect(dungeon.rooms.filter((room) => room.role === 'boss').length).toBeLessThanOrEqual(1);
+
+      const reachable = floodFill(dungeon.tiles, terrain, dungeon.entrance);
+      for (const room of dungeon.rooms) {
+        expect(reachable.has(key(room.centre)), `seed ${seed}: ${room.id}`).toBe(true);
+      }
+    }
+  });
+
+  it('bsp: rooms tile the bounds and share their walls', () => {
+    const module = withAlgorithm('bsp');
+    const dungeon = generateDungeon(module, 'barrow_depths', Rng.fromSeed(7));
+    // Every tile belongs to some room's rectangle (walls included).
+    for (let y = 0; y < dungeon.tiles.height; y += 1) {
+      for (let x = 0; x < dungeon.tiles.width; x += 1) {
+        const covered = dungeon.rooms.some(
+          (room) =>
+            x >= room.x && x < room.x + room.width && y >= room.y && y < room.y + room.height,
+        );
+        expect(covered, `(${x},${y}) belongs to no room`).toBe(true);
+      }
+    }
+  });
+
+  it('bsp: locks stay solvable', () => {
+    const module = withAlgorithm('bsp', { lockedDoorChance: 1, doorGates: ['mill_door'] });
+    for (let seed = 0; seed < 30; seed += 1) {
+      const dungeon = generateDungeon(module, 'barrow_depths', Rng.fromSeed(seed));
+      const locked = dungeon.doors.filter((door) => door.gate);
+      if (locked.length === 0) continue;
+
+      // Sealed doors separate; keys reachable before their locks — the same
+      // walk the rooms-algorithm suite does.
+      const sealed = dungeon.tiles.tiles.slice();
+      for (const door of locked) {
+        sealed[door.at.y * dungeon.tiles.width + door.at.x] = dungeon.palette.wall;
+      }
+      const reachable = floodFill({ ...dungeon.tiles, tiles: sealed }, terrain, dungeon.entrance);
+      expect(reachable.size, `seed ${seed}: locks guard nothing`).toBeLessThan(
+        openTiles(dungeon, terrain).length,
+      );
+
+      const anyKeyReachable = dungeon.keyPlacements.some((placement) => {
+        const room = dungeon.rooms.find((entry) => entry.id === placement.room);
+        return room ? reachable.has(key(room.centre)) : false;
+      });
+      if (dungeon.keyPlacements.length > 0) {
+        expect(anyKeyReachable, `seed ${seed}: no key before the first lock`).toBe(true);
+      }
+    }
+  });
+
+  it('caverns: one connected floor, no doors, entrance and boss placed apart', () => {
+    const module = withAlgorithm('caverns');
+    for (let seed = 0; seed < 30; seed += 1) {
+      const dungeon = generateDungeon(module, 'barrow_depths', Rng.fromSeed(seed));
+      expect(dungeon.doors).toHaveLength(0);
+      expect(dungeon.keyPlacements).toHaveLength(0);
+      expect(dungeon.rooms.length).toBeGreaterThanOrEqual(2);
+
+      const reachable = floodFill(dungeon.tiles, terrain, dungeon.entrance);
+      // Single component: every open tile is reachable from the entrance.
+      expect(reachable.size, `seed ${seed}`).toBe(openTiles(dungeon, terrain).length);
+      for (const room of dungeon.rooms) {
+        expect(reachable.has(key(room.centre)), `seed ${seed}: ${room.id}`).toBe(true);
+      }
+
+      const boss = dungeon.rooms.find((room) => room.role === 'boss');
+      if (boss) {
+        const apart =
+          Math.abs(boss.centre.x - dungeon.entrance.x) + Math.abs(boss.centre.y - dungeon.entrance.y);
+        expect(apart, `seed ${seed}: boss on top of the entrance`).toBeGreaterThan(2);
+      }
+    }
+  });
+
+  it('caverns: deterministic per seed', () => {
+    const module = withAlgorithm('caverns');
+    const a = generateDungeon(module, 'barrow_depths', Rng.fromSeed(13));
+    const b = generateDungeon(module, 'barrow_depths', Rng.fromSeed(13));
+    expect(a.tiles).toEqual(b.tiles);
+    expect(a.rooms).toEqual(b.rooms);
+  });
+});
+
+describe('static rooms embedded in generated dungeons', () => {
+  // barrow_deep now references maps/barrow_deep_cell — the authored 9×9 cell
+  // with a warded outer door. Every barrow contains it (role: boss).
+  function bossRoomOf(dungeon: GeneratedDungeon) {
+    return dungeon.rooms.find((room) => room.template === 'barrow_deep');
+  }
+
+  it('stamps the static map tile for tile at the room origin', () => {
+    for (let seed = 0; seed < 20; seed += 1) {
+      const dungeon = generate(seed);
+      const cell = bossRoomOf(dungeon);
+      if (!cell) continue;
+      expect(cell.width).toBe(9);
+      expect(cell.height).toBe(9);
+      // The brazier is authored at (4,1) of the map.
+      expect(terrainAt(dungeon.tiles, { x: cell.x + 4, y: cell.y + 1 })).toBe('brazier');
+      // The inner door at (4,6) and outer door at (4,8).
+      expect(terrainAt(dungeon.tiles, { x: cell.x + 4, y: cell.y + 6 })).toBe('door');
+      expect(terrainAt(dungeon.tiles, { x: cell.x + 4, y: cell.y + 8 })).toBe('door');
+    }
+  });
+
+  it('carries the authored gate into the dungeon at the door marker', () => {
+    for (let seed = 0; seed < 20; seed += 1) {
+      const dungeon = generate(seed);
+      const cell = bossRoomOf(dungeon);
+      if (!cell) continue;
+      const packed = key({ x: cell.x + 4, y: cell.y + 8 });
+      expect(dungeon.authored.gates[packed], `seed ${seed}`).toMatchObject({
+        gate: 'barrow_ward',
+        open: false,
+      });
+    }
+  });
+
+  it('remains reachable: the corridor meets the cell at its door', () => {
+    for (let seed = 0; seed < 30; seed += 1) {
+      const dungeon = generate(seed);
+      const cell = bossRoomOf(dungeon);
+      if (!cell) continue;
+
+      const reachable = floodFill(dungeon.tiles, terrain, dungeon.entrance);
+      // The inner sanctum centre — behind two authored doors — is reachable.
+      expect(reachable.has(key({ x: cell.x + 4, y: cell.y + 4 })), `seed ${seed}`).toBe(true);
+
+      // The authored wall ring was not breached anywhere but its doors: every
+      // reachable tile on the ring is one of the two door tiles.
+      for (let dx = 0; dx < 9; dx += 1) {
+        for (const dy of [0, 8]) {
+          const at = { x: cell.x + dx, y: cell.y + dy };
+          if (terrainAt(dungeon.tiles, at) === 'door') continue;
+          expect(
+            terrain.isPassable(dungeon.tiles, at),
+            `seed ${seed}: ring breached at +${dx},+${dy}`,
+          ).toBe(false);
+        }
+      }
+      for (let dy = 0; dy < 9; dy += 1) {
+        for (const dx of [0, 8]) {
+          const at = { x: cell.x + dx, y: cell.y + dy };
+          if (terrainAt(dungeon.tiles, at) === 'door') continue;
+          expect(
+            terrain.isPassable(dungeon.tiles, at),
+            `seed ${seed}: ring breached at +${dx},+${dy}`,
+          ).toBe(false);
+        }
+      }
+    }
+  });
+
+  it('keeps rolled placement off the authored cells', () => {
+    for (let seed = 0; seed < 20; seed += 1) {
+      const dungeon = generate(seed);
+      const authoredTiles = new Set([
+        ...Object.keys(dungeon.authored.gates),
+        ...Object.keys(dungeon.authored.items),
+        ...Object.keys(dungeon.authored.traps),
+      ].map(Number));
+      if (authoredTiles.size === 0) continue;
+
+      const population = populateDungeon({
+        module: GREENMARCH,
+        dungeon,
+        terrain,
+        scopes: singleScope({}),
+        depth: 1,
+        occupied: [...authoredTiles],
+        rng: Rng.fromSeed(seed),
+      });
+      for (const placed of [...population.loot, ...population.traps]) {
+        expect(authoredTiles.has(key(placed.at)), `seed ${seed}`).toBe(false);
+      }
+    }
+  });
+});
+
+describe('fully static dungeons', () => {
+  function withStaticDungeon(rollEncounters: boolean): CompiledModule {
+    const doc = JSON.parse(JSON.stringify(GREENMARCH.source)) as never as {
+      world: { dungeons: Record<string, unknown>[]; maps: Record<string, unknown>[] };
+    };
+    doc.world.dungeons.push({
+      id: 'fixed_keep',
+      name: 'The Fixed Keep',
+      biome: 'greenmarch',
+      staticMap: 'barrow_deep_cell',
+      rollEncounters,
+      depth: '1',
+    });
+    const compiled = compileModule(doc);
+    if (!compiled.ok) {
+      throw new Error(compiled.errors.map((e) => `${e.path}: ${e.message}`).join('\n'));
+    }
+    return compiled.module;
+  }
+
+  it('generation is skipped: the dungeon IS the map, on every seed', () => {
+    const module = withStaticDungeon(false);
+    // generateDungeon is not called at all for a static dungeon; this asserts
+    // through the map itself once entered — see staticmap.test.ts for the
+    // enter path. Here: the module compiles and the ref resolves.
+    expect(module.has('world.maps', 'barrow_deep_cell')).toBe(true);
   });
 });

@@ -12,11 +12,12 @@
  */
 
 import { Rng } from '@dm/core';
-import { evalEffects } from '@dm/module';
-import type { Effect } from '@dm/module';
+import { evalEffects, evalExpr } from '@dm/module';
+import type { Effect, Expr } from '@dm/module';
 import type { ActiveCondition, Entity, EntityId } from '../state.js';
 import { buildScope, OPEN_NAMESPACES } from '../stats.js';
 import { Transaction, applyOps } from './apply.js';
+import { savingThrow, succeeded } from './check.js';
 
 interface ConditionDef {
   id: string;
@@ -24,6 +25,80 @@ interface ConditionDef {
   onExpire: Effect[];
   prevents: string[];
   implies: string[];
+  savingThrow?: {
+    save: string;
+    difficulty?: unknown;
+    timing: 'onApply' | 'endOfTurn' | 'startOfTurn' | 'both';
+  };
+}
+
+/** Which timings a save-ends pass covers. */
+function savesAt(
+  definition: ConditionDef | undefined,
+  when: 'startOfTurn' | 'endOfTurn',
+): boolean {
+  const timing = definition?.savingThrow?.timing;
+  return timing === when || timing === 'both';
+}
+
+/**
+ * Give an entity its saves against the conditions that allow one.
+ *
+ * "Save ends" is the shape of half of D&D's conditions, and the schema has
+ * always described it — a save, a difficulty, and a timing. Nothing rolled it,
+ * so a condition with a save behaved exactly like one without: it sat there
+ * until its duration ran out. The `saved` reason on `conditionRemoved` has
+ * existed and been unreachable for as long.
+ */
+export function rollConditionSaves(
+  txn: Transaction,
+  entityId: EntityId,
+  when: 'startOfTurn' | 'endOfTurn',
+  rng: Rng,
+): void {
+  const entity = txn.entity(entityId);
+  if (!entity || !entity.alive || entity.conditions.length === 0) return;
+
+  for (const active of entity.conditions) {
+    const definition = txn.module.find<ConditionDef>('rules.conditions', active.condition);
+    if (!savesAt(definition, when)) continue;
+
+    const current = txn.entity(entityId);
+    if (!current || !current.alive) break;
+
+    const difficulty = difficultyFor(txn, definition!, current, active.magnitude ?? 1);
+    const roll = savingThrow(txn.module, rng, current, definition!.savingThrow!.save, difficulty);
+    txn.emit({
+      type: 'checked', entity: entityId, skill: null, attribute: definition!.savingThrow!.save, roll,
+    });
+    if (!succeeded(roll)) continue;
+
+    const shaken = txn.entity(entityId);
+    if (!shaken) break;
+    txn.putEntity({
+      ...shaken,
+      conditions: shaken.conditions.filter((other) => other !== active),
+    });
+    txn.emit({
+      type: 'conditionRemoved', entity: entityId, condition: active.condition, reason: 'saved',
+    });
+  }
+}
+
+/** A condition's save difficulty, which the module may write as a formula. */
+function difficultyFor(
+  txn: Transaction,
+  definition: ConditionDef,
+  entity: Entity,
+  magnitude: number,
+): number | undefined {
+  const declared = definition.savingThrow?.difficulty;
+  if (declared === undefined) return undefined;
+  const scope = { ...buildScope(txn.module, txn.state, entity), magnitude };
+  const value = evalExpr(declared as Expr, {
+    scope, rng: txn.rngFor(`saveDc:${entity.id}:${definition.id}`), openNamespaces: OPEN_NAMESPACES,
+  });
+  return typeof value === 'number' && Number.isFinite(value) ? Math.floor(value) : undefined;
 }
 
 /** Whether a condition forbids an action type, e.g. `stunned` blocking actions. */
