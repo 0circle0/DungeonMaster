@@ -2122,7 +2122,7 @@ trap triggers, dialogue gates, loot rules, and quest objectives.
 
 **Predicate operators** — `all`, `any`, `not`, `eq`, `ne`, `gt`, `gte`, `lt`, `lte`, `in`, `chance`, `exists`, `test`
 
-**Effect operators** — `damage`, `heal`, `applyCondition`, `removeCondition`, `adjustResource`, `setFlag`, `grantItem`, `removeItem`, `adjustReputation`, `adjustCurrency`, `move`, `emit`, `noise`, `if`, `repeat`, `forEach`, `let`
+**Effect operators** — `damage`, `heal`, `applyCondition`, `removeCondition`, `adjustResource`, `setFlag`, `grantItem`, `removeItem`, `adjustReputation`, `setDisposition`, `adjustCurrency`, `move`, `emit`, `noise`, `if`, `repeat`, `forEach`, `let`
 
 Reads go through one mechanism: `{ "ref": "actor.attr.might" }` walks the scope
 the engine supplies. There is deliberately no `hasFlag` or `hasItem` operator,

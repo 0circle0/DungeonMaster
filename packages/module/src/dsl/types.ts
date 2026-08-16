@@ -121,6 +121,14 @@ export type Effect =
       };
     }
   | { readonly adjustReputation: { readonly faction: Expr; readonly amount: Expr } }
+  /**
+   * Change how a creature regards the party.
+   *
+   * `to` is either a stance the rules name, or a number the module's own
+   * `dispositionBands` sort into one — the same road `spawnNpc` takes, so a
+   * betrayal is judged by the ruleset rather than by the engine.
+   */
+  | { readonly setDisposition: { readonly target: Expr; readonly to: Expr } }
   | { readonly move: { readonly target: Expr; readonly to: Expr } }
   /** Emit a custom event for quests and the narrator to observe. */
   | { readonly emit: { readonly event: Expr; readonly data?: { readonly [k: string]: Expr } } }
@@ -159,6 +167,7 @@ export type EffectOp =
   | { readonly op: 'grantItem'; readonly target: Value; readonly item: string; readonly quantity: number }
   | { readonly op: 'removeItem'; readonly target: Value; readonly item: string; readonly quantity: number }
   | { readonly op: 'adjustReputation'; readonly faction: string; readonly amount: number }
+  | { readonly op: 'setDisposition'; readonly target: Value; readonly to: Value }
   | { readonly op: 'move'; readonly target: Value; readonly to: Value }
   | { readonly op: 'emit'; readonly event: string; readonly data: { readonly [k: string]: Value } }
   | {

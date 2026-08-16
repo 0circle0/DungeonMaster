@@ -144,6 +144,11 @@ export const EffectSchema: z.ZodType<Effect> = z.lazy(() =>
         adjustReputation: z.object({ faction: ExprSchema, amount: ExprSchema }).strict(),
       })
       .strict(),
+    z
+      .object({
+        setDisposition: z.object({ target: ExprSchema, to: ExprSchema }).strict(),
+      })
+      .strict(),
     z.object({ move: z.object({ target: ExprSchema, to: ExprSchema }).strict() }).strict(),
     z
       .object({

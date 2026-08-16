@@ -35,6 +35,7 @@ import {
   spendMovement,
   provokeOpportunity,
   broadcastReaction,
+  joinCombat,
 } from './rules/combat/turn.js';
 import { runAiTurns, runIdleTurns } from './rules/combat/ai.js';
 import { enterDungeon, enterArea, enterPoi, placeParty } from './sim/enter.js';
@@ -1373,6 +1374,9 @@ function settle(txn: Transaction, terrain: TerrainIndex, rng: Rng): void {
   const combatBefore = txn.state.combat !== null;
   maybeEndCombat(txn, { module: txn.module, state: txn.state, terrain });
   maybeStartCombat(txn, { module: txn.module, state: txn.state, terrain }, rng);
+  // Someone whose stance changed while the fight was already running. Runs
+  // after `maybeStartCombat`, which does nothing once combat exists.
+  joinCombat(txn, { module: txn.module, state: txn.state, terrain }, rng);
 
   if (!combatBefore && txn.state.combat !== null) {
     runOccasion(txn, 'combatStart', rng.derive('combatStart'));

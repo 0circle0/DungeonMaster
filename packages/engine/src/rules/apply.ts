@@ -24,6 +24,7 @@ import { makeNoise } from '../sim/senses.js';
 import { testConcentration } from './casting.js';
 import { message } from '../narrate/systemText.js';
 import { configOf } from './config.js';
+import { dispositionFor } from '../character.js';
 // Type-only: `runtime.ts` imports `applyOps` from here, so a value import
 // would close a cycle. Types are erased, so this one does not.
 import type { ModRuntime } from '../mods/runtime.js';
@@ -587,6 +588,38 @@ export function applyOps(txn: Transaction, ops: readonly EffectOp[], source: Ent
       case 'adjustReputation':
         adjustReputation(txn, op.faction, op.amount);
         break;
+
+      case 'setDisposition': {
+        // How a creature regards the party was written once, at spawn, and no
+        // effect could touch it — so an ally you had wronged past forgiveness
+        // stood there and let you kill her, because `isHostileTo` never
+        // changed its mind. Enrolling her in a fight already under way is
+        // `settle`'s job; this only moves the stance.
+        const subject = txn.entity(String(op.target));
+        if (!subject) break;
+
+        const stance = typeof op.to === 'number'
+          ? dispositionFor(txn.module, op.to)
+          : String(op.to);
+        if (stance !== 'ally' && stance !== 'neutral' && stance !== 'hostile') {
+          txn.emit({
+            type: 'refused',
+            action: 'setDisposition',
+            reason: message('refused.internal.unknownOp', { op: `disposition ${String(op.to)}` }),
+          });
+          break;
+        }
+        if (subject.disposition === stance) break;
+
+        txn.putEntity({ ...subject, disposition: stance });
+        txn.emit({
+          type: 'dispositionChanged',
+          entity: subject.id,
+          from: subject.disposition,
+          to: stance,
+        });
+        break;
+      }
 
       case 'adjustCurrency': {
         // Whether the purse can go below zero is the module's call. Clamped,

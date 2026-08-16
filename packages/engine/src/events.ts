@@ -129,6 +129,15 @@ export type GameEvent =
   | { readonly type: 'dayBroke'; readonly day: number }
   | { readonly type: 'flagSet'; readonly flag: string; readonly value: unknown }
   | { readonly type: 'reputationChanged'; readonly faction: string; readonly from: number; readonly to: number }
+  /** Somebody joined a fight already under way, having just turned on you. */
+  | { readonly type: 'joinedCombat'; readonly entity: EntityId }
+  /** A creature changed its mind about the party — or somebody changed it. */
+  | {
+      readonly type: 'dispositionChanged';
+      readonly entity: EntityId;
+      readonly from: 'ally' | 'neutral' | 'hostile';
+      readonly to: 'ally' | 'neutral' | 'hostile';
+    }
   | { readonly type: 'currencyChanged'; readonly amount: number; readonly purse: number }
   | {
       readonly type: 'traded';

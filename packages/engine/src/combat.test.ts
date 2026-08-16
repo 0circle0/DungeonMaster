@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { fileURLToPath } from 'node:url';
 import { Rng } from '@dm/core';
-import { compileModule } from '@dm/module';
+import { compileModule, evalEffects } from '@dm/module';
 import type { CompiledModule } from '@dm/module';
 import { loadModuleFrom } from '@dm/module/load';
 import { newGame, defaultChoices } from './newgame.js';
@@ -9,7 +9,8 @@ import { spawnMonster } from './character.js';
 import { reduce, reduceAll } from './reduce.js';
 import { statesEqual } from './save.js';
 import { narrate } from './narrate/narrate.js';
-import { Transaction } from './rules/apply.js';
+import { Transaction, applyOps } from './rules/apply.js';
+import { OPEN_NAMESPACES } from './stats.js';
 import { check, skillCheck, savingThrow, succeeded, difficultyOf, opposedCheck } from './rules/check.js';
 import { rollInitiative, runReactions } from './rules/combat/turn.js';
 import { reachability, resolveTargets, speedOf, toTiles, nearestHostile, isHostileTo } from './rules/combat/targeting.js';
@@ -723,5 +724,110 @@ describe('a reaction that fires once a fight', () => {
     txn.set({ ...txn.state, flags: { ...txn.state.flags, wight_wailed: false } });
     runReactions(txn, txn.entity('m:0')!, 'selfHurt', txn.entity('e:1')!, Rng.fromSeed(2));
     expect(txn.state.flags['wight_wailed']).toBe(false);
+  });
+});
+
+describe('changing sides', () => {
+  // How a creature regarded the party was written once, at spawn, and no
+  // effect could touch it — so a friend you had wronged past forgiveness stood
+  // there and let you kill her, because `isHostileTo` never changed its mind.
+  const flip = (target: string, to: unknown) =>
+    ({ setDisposition: { target, to } }) as never;
+
+  function withNeutral(): GameState {
+    const state = arena([{ id: 'bog_hound', at: { x: 12, y: 12 } }]);
+    const hound = state.entities['m:0']!;
+    return {
+      ...state,
+      entities: { ...state.entities, 'm:0': { ...hound, disposition: 'neutral', position: { x: 6, y: 5 } } },
+    };
+  }
+
+  it('turns a neutral creature hostile', () => {
+    const txn = new Transaction(withNeutral(), GREENMARCH);
+    applyOps(txn, evalEffects([flip('m:0', 'hostile')], {
+      scope: {}, rng: Rng.fromSeed(1), openNamespaces: OPEN_NAMESPACES,
+    }), 'e:1');
+
+    expect(txn.entity('m:0')!.disposition).toBe('hostile');
+    expect(txn.finish().events.some((e) => e.type === 'dispositionChanged')).toBe(true);
+    expect(isHostileTo(txn.entity('e:1')!, txn.entity('m:0')!)).toBe(true);
+  });
+
+  it('sorts a number through the module\'s own bands', () => {
+    // greenmarch declares no `ally` band, so a high number still lands neutral —
+    // which is the point: the ruleset decides, not the engine.
+    const txn = new Transaction(withNeutral(), GREENMARCH);
+    applyOps(txn, evalEffects([flip('m:0', -50)], {
+      scope: {}, rng: Rng.fromSeed(1), openNamespaces: OPEN_NAMESPACES,
+    }), 'e:1');
+    expect(txn.entity('m:0')!.disposition).toBe('hostile');
+  });
+
+  it('refuses a stance the rules do not name', () => {
+    const txn = new Transaction(withNeutral(), GREENMARCH);
+    applyOps(txn, evalEffects([flip('m:0', 'furious')], {
+      scope: {}, rng: Rng.fromSeed(1), openNamespaces: OPEN_NAMESPACES,
+    }), 'e:1');
+    expect(txn.entity('m:0')!.disposition).toBe('neutral');
+    expect(txn.finish().events.some((e) => e.type === 'refused')).toBe(true);
+  });
+
+  it('enrols someone who turns on you mid-fight, at the end of the order', () => {
+    // Two creatures: one starts the fight, the other is standing by, neutral.
+    const base = arena([
+      { id: 'bog_hound', at: { x: 6, y: 5 } },
+      { id: 'bog_hound', at: { x: 5, y: 6 } },
+    ]);
+    const bystander = base.entities['m:1']!;
+    const started = reduce(
+      { ...base, entities: { ...base.entities, 'm:1': { ...bystander, disposition: 'neutral' } } },
+      { type: 'wait', minutes: 0 }, ctx,
+    ).state;
+    expect(started.combat!.order).toContain('m:0');
+    expect(started.combat!.order).not.toContain('m:1');
+
+    const txn = new Transaction(started, GREENMARCH);
+    applyOps(txn, evalEffects([flip('m:1', 'hostile')], {
+      scope: {}, rng: Rng.fromSeed(1), openNamespaces: OPEN_NAMESPACES,
+    }), 'e:1');
+
+    const { state, events } = reduce(txn.finish().state, { type: 'wait', minutes: 0 }, ctx);
+    expect(state.combat!.order).toContain('m:1');
+    // Appended, never sorted in: `combat.turn` is an index, and inserting by
+    // initiative could hand the turn to somebody else mid-round.
+    expect(state.combat!.order.at(-1)).toBe('m:1');
+    expect(events.some((e) => e.type === 'joinedCombat' && e.entity === 'm:1')).toBe(true);
+  });
+
+  it('does not enrol a grudge held behind a wall', () => {
+    // The awareness boundary holds here exactly as it does at the start of a
+    // fight: turning hostile is not the same as having noticed anybody. A
+    // solid wall down the middle is what makes that testable.
+    const builder = new MapBuilder(15, 15, 'floor');
+    for (let y = 0; y < 15; y += 1) builder.set(9, y, 'wall');
+
+    const base = arena([
+      { id: 'bog_hound', at: { x: 6, y: 5 } },
+      { id: 'bog_hound', at: { x: 12, y: 5 } },
+    ]);
+    const walled: GameState = {
+      ...base,
+      maps: { arena: { ...base.maps['arena']!, tiles: builder.freeze() } },
+      entities: {
+        ...base.entities,
+        'm:1': { ...base.entities['m:1']!, disposition: 'neutral' },
+      },
+    };
+    const started = reduce(walled, { type: 'wait', minutes: 0 }, ctx).state;
+    expect(started.combat!.order).not.toContain('m:1');
+
+    const txn = new Transaction(started, GREENMARCH);
+    applyOps(txn, evalEffects([flip('m:1', 'hostile')], {
+      scope: {}, rng: Rng.fromSeed(1), openNamespaces: OPEN_NAMESPACES,
+    }), 'e:1');
+
+    const { state } = reduce(txn.finish().state, { type: 'wait', minutes: 0 }, ctx);
+    expect(state.combat!.order).not.toContain('m:1');
   });
 });

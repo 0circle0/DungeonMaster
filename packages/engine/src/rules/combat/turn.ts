@@ -156,6 +156,46 @@ export function maybeStartCombat(txn: Transaction, context: TargetingContext, rn
 }
 
 /**
+ * Enrol anyone who has turned hostile since the fight started.
+ *
+ * `maybeStartCombat` returns immediately once combat is running, so a creature
+ * whose disposition changes mid-fight — an ally you pushed too far — would
+ * never appear in the initiative order and never get a turn. She would simply
+ * stand there being attacked.
+ *
+ * Newcomers are **appended** rather than sorted into place. `combat.turn` is an
+ * index into `order`, so appending can never change whose turn it currently is,
+ * where inserting by initiative could hand the turn to somebody else in the
+ * middle of a round. They act at the end of this round and roll in properly
+ * with everyone else at the start of the next.
+ *
+ * The awareness boundary applies here exactly as it does at the start: turning
+ * hostile does not enrol something across the map that has not noticed anybody.
+ * Fighting, not merely bearing a grudge.
+ */
+export function joinCombat(txn: Transaction, context: TargetingContext, rng: Rng): void {
+  const combat = txn.state.combat;
+  if (!combat) return;
+
+  const enrolled = new Set(combat.order);
+  const party = combat.order
+    .map((id) => txn.entity(id))
+    .filter((entity): entity is Entity => Boolean(entity) && entity!.kind === 'character');
+  if (party.length === 0) return;
+
+  const joining = combatants(txn.state, txn.state.currentMap).filter((entity) => {
+    if (enrolled.has(entity.id)) return false;
+    if (!party.some((member) => isHostileTo(member, entity))) return false;
+    return party.some((member) => canPerceive(context, entity, member, { threshold: 'aggro' }));
+  });
+  if (joining.length === 0) return;
+
+  const order = rollInitiative(txn, joining, rng.derive(`joins:${txn.state.minute}`));
+  txn.set({ ...txn.state, combat: { ...combat, order: [...combat.order, ...order] } });
+  for (const id of order) txn.emit({ type: 'joinedCombat', entity: id });
+}
+
+/**
  * End combat when one side is gone — or when neither side can find the other.
  *
  * The second case is what makes running away work. Combat begins when someone

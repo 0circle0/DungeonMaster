@@ -83,7 +83,8 @@ export const PREDICATE_OPS = new Set([
 
 export const EFFECT_OPS = new Set([
   'damage', 'heal', 'applyCondition', 'removeCondition', 'adjustResource', 'setFlag',
-  'grantItem', 'removeItem', 'adjustReputation', 'adjustCurrency', 'move', 'emit', 'noise',
+  'grantItem', 'removeItem', 'adjustReputation', 'setDisposition', 'adjustCurrency', 'move',
+  'emit', 'noise',
   'if', 'repeat', 'forEach', 'let',
 ]);
 
@@ -615,6 +616,14 @@ function evalEffect(effect: Effect, ctx: EvalContext, path: string, out: EffectO
 
     case 'adjustReputation':
       out.push({ op: 'adjustReputation', faction: str('faction'), amount: num('amount', 0)! });
+      return;
+
+    case 'setDisposition':
+      out.push({
+        op: 'setDisposition',
+        target: target(),
+        to: evalExpr(spec['to'] as Expr, ctx, at('to')),
+      });
       return;
 
     case 'move':
