@@ -49,6 +49,7 @@ import { springTrap, searchForTraps, disarmTrap } from './sim/traps.js';
 import { runTerrain } from './sim/terrain.js';
 import { runTriggers, triggersFor } from './sim/triggers.js';
 import { recordDeed } from './sim/deeds.js';
+import { dispatchReactions } from './sim/reactions.js';
 import { tickDay } from './sim/agenda.js';
 import { takeItem, dropItem, equipItem, unequipItem, useItem, giveItem, rechargeItems } from './sim/items.js';
 import { skillCheck, succeeded } from './rules/check.js';
@@ -885,6 +886,10 @@ function processEmissions(
     runOccasion(txn, 'custom', rng.derive(`custom:${event.event}${suffix}`), event.event);
   }
 
+  // Whoever declared they would react to any of this. After the deed scan, so
+  // `witnessDeed` sees a deed the same batch recorded.
+  dispatchReactions(txn, events, rng.derive(`reactions${suffix}`));
+
   // The dead leave what they were carrying. Before quests advance, so a "bring
   // me its hide" objective can be satisfied by the same batch that killed it.
   dropDeathLoot(txn, terrain, events, rng.derive(`spoils${suffix}`));
@@ -1371,6 +1376,7 @@ function settle(txn: Transaction, terrain: TerrainIndex, rng: Rng): void {
 
   // A fight starting and a fight ending are both occasions a place can declare
   // something for — an alarm, a door slamming, a cave-in once it is over.
+  const eventsBefore = txn.finish().events.length;
   const combatBefore = txn.state.combat !== null;
   maybeEndCombat(txn, { module: txn.module, state: txn.state, terrain });
   maybeStartCombat(txn, { module: txn.module, state: txn.state, terrain }, rng);
@@ -1384,6 +1390,13 @@ function settle(txn: Transaction, terrain: TerrainIndex, rng: Rng): void {
     runOccasion(txn, 'combatEnd', rng.derive('combatEnd'));
   }
 
+  // `combatStarted`, `combatEnded` and `turnStarted` are emitted here rather
+  // than by the action, so they are already past `processEmissions` by the time
+  // it runs. Fanning them out from inside `settle` is what makes the combat
+  // lifecycle triggers live at all.
+  let dispatched = txn.finish().events.length;
+  dispatchReactions(txn, txn.finish().events.slice(eventsBefore), rng.derive('settleReactions'));
+
   // Anything that is not a player character takes its turn as soon as the turn
   // reaches it, rather than waiting for the player to end a turn. Doing this
   // here — after every action — means a monster that becomes active because
@@ -1396,6 +1409,13 @@ function settle(txn: Transaction, terrain: TerrainIndex, rng: Rng): void {
       (t, _c, r) => endCombatTurn(t, { module: t.module, state: t.state, terrain }, r),
     );
     maybeEndCombat(txn, { module: txn.module, state: txn.state, terrain });
+
+    // The AI's turns emit their own `turnStarted` — and their own damage — so
+    // the fan-out runs again over whatever they produced. Two passes rather
+    // than one at the end, because `seePlayer` and `combatStart` have to be
+    // able to change the board *before* anybody acts on it.
+    dispatchReactions(txn, txn.finish().events.slice(dispatched), rng.derive('aiReactions'));
+    dispatched = txn.finish().events.length;
   }
 
   // The module says what winning is. Checked before the all-dead test on

@@ -27,6 +27,7 @@ import { useAbility } from './attack.js';
 import { recordEncounter } from '../../sim/agenda.js';
 import { combatants, isHostileTo, reachOf, speedOf } from './targeting.js';
 import { canPerceive } from '../../sim/senses.js';
+import { npcIdOf } from '../../state.js';
 import { terrainFor } from '../../grid/tiles.js';
 import { distance } from '../../grid/geometry.js';
 import type { Position } from '../../grid/tiles.js';
@@ -549,10 +550,15 @@ export function runReactions(
   trigger: string,
   subject: Entity | null,
   rng: Rng,
+  /** Which `custom` event this is, for reactions that name one. */
+  customEvent?: string,
 ): void {
+  // `npcIdOf`, not `reactor.id`: an entity's id and the npc definition it came
+  // from are only the same thing by today's coincidence in `spawnNpc`, and
+  // this is the class of bug `memoryKeyOf` exists one file over to prevent.
   const source = reactor.statblock
     ? txn.module.find<{ reactions?: ReactionDef[] }>('content.monsters', reactor.statblock)
-    : txn.module.find<{ reactions?: ReactionDef[] }>('content.npcs', reactor.id);
+    : txn.module.find<{ reactions?: ReactionDef[] }>('content.npcs', npcIdOf(reactor));
 
   // A mod may react to anything a statblock could, and to triggers no
   // statblock declares.
@@ -568,6 +574,10 @@ export function runReactions(
 
   const reactions = (source?.reactions ?? [])
     .filter((reaction) => reaction.on === trigger)
+    // `on: 'custom'` names the event it waits for, and nothing checked it —
+    // so once custom reactions could fire at all, every one of them would have
+    // fired on every custom event. Mirrors the guard in `runTriggers`.
+    .filter((reaction) => trigger !== 'custom' || reaction.event === customEvent)
     .sort((a, b) => b.priority - a.priority);
 
   for (const reaction of reactions) {

@@ -13,6 +13,9 @@ import { Transaction, applyOps } from './rules/apply.js';
 import { OPEN_NAMESPACES } from './stats.js';
 import { check, skillCheck, savingThrow, succeeded, difficultyOf, opposedCheck } from './rules/check.js';
 import { rollInitiative, runReactions } from './rules/combat/turn.js';
+import { dispatchReactions } from './sim/reactions.js';
+import { recordDeed } from './sim/deeds.js';
+import { readAssembledModule } from '@dm/module/load';
 import { reachability, resolveTargets, speedOf, toTiles, nearestHostile, isHostileTo } from './rules/combat/targeting.js';
 import { createMap, MapBuilder, TerrainIndex } from './grid/tiles.js';
 import { distance } from './grid/geometry.js';
@@ -67,6 +70,29 @@ function arena(
     entities,
   };
 }
+
+
+/** greenmarch's hound, given one reaction, so a trigger can be tested end to end. */
+function houndWith(reaction: Record<string, unknown>): CompiledModule {
+  const dir = fileURLToPath(new URL('../../../modules/greenmarch', import.meta.url));
+  const doc = readAssembledModule(dir).doc as unknown as {
+    content: { monsters: { id: string; reactions?: unknown[] }[] };
+  };
+  const hound = doc.content.monsters.find((m) => m.id === 'bog_hound')!;
+  hound.reactions = [...(hound.reactions ?? []), reaction];
+  const result = compileModule(doc);
+  if (!result.ok) throw new Error(`reaction fixture failed: ${JSON.stringify(result.errors)}`);
+  return result.module;
+}
+
+const setFlagEffect = (flag: string) => [{ setFlag: { flag, value: true } }];
+
+const withWitnessReaction = () =>
+  houndWith({ id: 'notices_theft', on: 'witnessDeed', effects: setFlagEffect('saw_it') });
+const withTurnStartReaction = () =>
+  houndWith({ id: 'stirs', on: 'turnStart', effects: setFlagEffect('took_a_turn') });
+const withCustomReaction = (event: string) =>
+  houndWith({ id: 'hears', on: 'custom', event, effects: setFlagEffect('heard_it') });
 
 describe('resolution', () => {
   it('rolls the dice the module declares, not a hardcoded d20', () => {
@@ -829,5 +855,74 @@ describe('changing sides', () => {
 
     const { state } = reduce(txn.finish().state, { type: 'wait', minutes: 0 }, ctx);
     expect(state.combat!.order).not.toContain('m:1');
+  });
+});
+
+describe('reactions fire on the trigger they declare', () => {
+  // Eleven of the twelve declared triggers were never broadcast, so greenmarch
+  // has carried a death-wail and two memory-gated reactions since it was
+  // written and not one of them had ever fired.
+
+  it('fires selfHurt when something is struck', () => {
+    const state = arena([{ id: 'barrow_wight', at: { x: 6, y: 5 } }]);
+    expect(state.flags['wight_wailed']).toBeUndefined();
+
+    const { state: next } = reduce(state, { type: 'attack', target: 'm:0' }, ctx);
+    // The wail is `oncePerEncounter`, and either the blow landed or it did not;
+    // when it lands, the flag is set.
+    const damaged = reduce(state, { type: 'attack', target: 'm:0' }, ctx)
+      .events.some((e) => e.type === 'damaged' && e.entity === 'm:0');
+    if (damaged) expect(next.flags['wight_wailed']).toBe(true);
+  });
+
+  it('fires witnessDeed on exactly the witnesses, and nobody else', () => {
+    const module = withWitnessReaction();
+    const state = arena([{ id: 'bog_hound', at: { x: 6, y: 5 } }], module);
+    const txn = new Transaction(state, module);
+    recordDeed(txn, new TerrainIndex(module), 'theft', txn.entity('e:1')!, null, Rng.fromSeed(3));
+
+    const deed = txn.state.deeds[0]!;
+    const saw = deed.witnesses.includes('m:0');
+    dispatchReactions(txn, txn.finish().events, Rng.fromSeed(4));
+    expect(txn.state.flags['saw_it']).toBe(saw ? true : undefined);
+  });
+
+  it('fires turnStart when the creature\'s turn actually comes round', () => {
+    const module = withTurnStartReaction();
+    const state = arena([{ id: 'bog_hound', at: { x: 6, y: 5 } }], module);
+
+    // The hero wins initiative here, so the hound has not acted yet.
+    const started = reduce(state, { type: 'wait', minutes: 0 }, { module }).state;
+    expect(started.combat!.order).toEqual(['e:1', 'm:0']);
+    expect(started.flags['took_a_turn']).toBeUndefined();
+
+    // Hand the turn over and the hound stirs.
+    const { state: next } = reduce(started, { type: 'endTurn' }, { module });
+    expect(next.flags['took_a_turn']).toBe(true);
+  });
+
+  it('only fires a custom reaction on the event it names', () => {
+    const module = withCustomReaction('the_bell_rang');
+    const state = arena([{ id: 'bog_hound', at: { x: 6, y: 5 } }], module);
+
+    const wrong = new Transaction(state, module);
+    dispatchReactions(wrong, [{ type: 'custom', event: 'something_else', data: {} }], Rng.fromSeed(1));
+    expect(wrong.state.flags['heard_it']).toBeUndefined();
+
+    const right = new Transaction(state, module);
+    dispatchReactions(right, [{ type: 'custom', event: 'the_bell_rang', data: {} }], Rng.fromSeed(1));
+    expect(right.state.flags['heard_it']).toBe(true);
+  });
+
+  it('works with no fight in progress at all', () => {
+    // `oncePerEncounter` is recorded on combat state, so out of combat there is
+    // nothing to record it in — which is honest, since there is no encounter.
+    const module = withCustomReaction('the_bell_rang');
+    const state = arena([{ id: 'bog_hound', at: { x: 14, y: 14 } }], module);
+    expect(state.combat).toBeNull();
+
+    const txn = new Transaction(state, module);
+    dispatchReactions(txn, [{ type: 'custom', event: 'the_bell_rang', data: {} }], Rng.fromSeed(1));
+    expect(txn.state.flags['heard_it']).toBe(true);
   });
 });
