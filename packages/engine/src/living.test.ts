@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { fileURLToPath } from 'node:url';
 import { Rng } from '@dm/core';
-import { compileModule } from '@dm/module';
+import { compileModule, compileRequirement, evalPredicate } from '@dm/module';
 import type { CompiledModule } from '@dm/module';
 import { loadModuleFrom } from '@dm/module/load';
 import { newGame, defaultChoices } from './newgame.js';
@@ -9,6 +9,7 @@ import { spawnMonster, spawnNpc } from './character.js';
 import { reduce, reduceAll } from './reduce.js';
 import { statesEqual } from './save.js';
 import { Transaction } from './rules/apply.js';
+import { buildScope, OPEN_NAMESPACES } from './stats.js';
 import { recordDeed } from './sim/deeds.js';
 import { spreadRumours, decayMemories, driftFactions, retention, memoryKeyOf } from './sim/gossip.js';
 import { tickDay, recordEncounter, hasAdapted, learningKey } from './sim/agenda.js';
@@ -66,6 +67,75 @@ describe('memory keys', () => {
   it('keeps a monster\'s memory on the instance', () => {
     const hound = spawnMonster(GREENMARCH, 'm:1', 'bog_hound');
     expect(memoryKeyOf({ ...hound, map: 'here', position: { x: 1, y: 1 } })).toBe('m:1');
+  });
+});
+
+describe('memory in scope', () => {
+  // `requirement.memories` compiles to `{exists: "memory.<who>.<kind>"}`, and
+  // until the namespace was built in `buildScope` it was populated in exactly
+  // one place — dialogue. Everywhere else the path resolved to null, so
+  // `known: true` never passed and `known: false` always did, silently.
+  const gate = (who: string, kind: string, withinDays?: number) =>
+    compileRequirement({ memories: [{ deedKind: kind, who, known: true, ...(withinDays !== undefined ? { withinDays } : {}) }] } as never);
+
+  function holds(txn: Transaction, subject: string, requirement: ReturnType<typeof gate>): boolean {
+    const scope = buildScope(GREENMARCH, txn.state, txn.entity(subject)!);
+    return evalPredicate(requirement, { scope, rng: Rng.fromSeed(1), openNamespaces: OPEN_NAMESPACES });
+  }
+
+  it('lets a gate outside dialogue read what the subject remembers', () => {
+    const txn = afterTheft();
+    expect(holds(txn, 'vess', gate('speaker', 'theft'))).toBe(true);
+    // The hero did it; she is not a witness to herself.
+    expect(holds(txn, 'e:1', gate('speaker', 'theft'))).toBe(false);
+  });
+
+  it('answers "self" the same way, for content that is not a conversation', () => {
+    const txn = afterTheft();
+    expect(holds(txn, 'vess', gate('self', 'theft'))).toBe(true);
+  });
+
+  it('knows what the party did, whoever saw it', () => {
+    const txn = afterTheft();
+    expect(holds(txn, 'e:1', gate('party', 'theft'))).toBe(true);
+    expect(holds(txn, 'e:1', gate('party', 'mill_cleared'))).toBe(false);
+  });
+
+  it('distinguishes "anyone knows" from "this one person knows"', () => {
+    const txn = afterTheft();
+    // Vess saw it, so anyone-knows holds even when asked of the hero.
+    expect(holds(txn, 'e:1', gate('anyone', 'theft'))).toBe(true);
+  });
+
+  it('reads a deed kind nobody has heard of as unknown', () => {
+    const txn = afterTheft();
+    expect(holds(txn, 'vess', gate('anyone', 'barrow_robbed'))).toBe(false);
+  });
+
+  // The regression that matters: `withinDays` compared `world.day` (a day
+  // index) against a record's `.at` (a minute count), so the subtraction was
+  // hugely negative and every window ever declared passed.
+  it('measures withinDays in days, so an old memory falls outside the window', () => {
+    const txn = afterTheft();
+    const aged = new Transaction({ ...txn.state, minute: txn.state.minute + DAY * 90 }, GREENMARCH);
+    expect(holds(aged, 'vess', gate('speaker', 'theft'))).toBe(true);
+    expect(holds(aged, 'vess', gate('speaker', 'theft', 120))).toBe(true);
+    expect(holds(aged, 'vess', gate('speaker', 'theft', 60))).toBe(false);
+  });
+
+  it('costs nothing until something reads it', () => {
+    // The five `who` keys are getters; building a scope must not walk the deed
+    // log. Proven by building a scope against a state whose deed list would
+    // throw if it were iterated.
+    const txn = afterTheft();
+    const booby = new Proxy([] as unknown[], {
+      get(target, prop) {
+        if (prop === 'find' || prop === Symbol.iterator) throw new Error('deeds were read eagerly');
+        return Reflect.get(target, prop);
+      },
+    });
+    const scope = buildScope(GREENMARCH, { ...txn.state, deeds: booby as never }, txn.entity('vess')!);
+    expect(scope['memory']).toBeDefined();
   });
 });
 

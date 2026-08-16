@@ -516,10 +516,7 @@ export function spawnNpc(module: CompiledModule, npcId: string): Entity {
 /**
  * Which npc definition an entity came from.
  *
- * Prefers the recorded content id over the entity id, and never the statblock —
- * looking a person up by the monster they fight like finds nothing.
+ * Defined on `state.ts` now — `stats.ts` needs it and `character.ts` imports
+ * `stats.ts` — and re-exported here so every existing caller is unaffected.
  */
-export function npcIdOf(entity: Entity): string {
-  const recorded = entity.extra['npc'];
-  return typeof recorded === 'string' && recorded ? recorded : entity.id;
-}
+export { npcIdOf } from './state.js';

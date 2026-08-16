@@ -24,6 +24,7 @@ import { evalExpr } from '@dm/module';
 import type { Entity, GameState } from './state.js';
 import { dateOf, phaseOf, layerOf } from './sim/clock.js';
 import { arcScope } from './sim/arcs.js';
+import { memoryScope } from './sim/memoryscope.js';
 
 /** Formulas must not consume randomness; a stat that changes when re-read is a bug. */
 const FORBIDDEN_RNG: Rng = Rng.fromSeed(0);
@@ -451,6 +452,9 @@ export function buildScope(
     },
     quests,
     flags: state.flags,
+    // What is remembered, so `requirement.memories` works at every gate rather
+    // than only inside a conversation. Built lazily — see sim/memoryscope.ts.
+    memory: memoryScope(module, state, actor),
     reputation: state.reputation,
     purse: state.purse,
     ...thresholdsOf(module),

@@ -14,9 +14,7 @@
 
 import { Rng } from '@dm/core';
 import type { CompiledModule, MemoryModel } from '@dm/module';
-import type { Entity } from '../state.js';
 import { Transaction } from '../rules/apply.js';
-import { npcIdOf } from '../character.js';
 
 /** Mutable shape of the memory table, for building the next one. */
 type MemoryTable = Record<string, Record<string, { at: number; strength: number; hops: number }>>;
@@ -43,9 +41,7 @@ export function memoryModel(module: CompiledModule): MemoryModel {
  * to whichever entity instance happens to represent them. Monsters are
  * transient and keep theirs on the instance.
  */
-export function memoryKeyOf(entity: Entity): string {
-  return entity.kind === 'npc' ? npcIdOf(entity) : entity.id;
-}
+export { memoryKeyOf } from '../state.js';
 
 /** Rules that apply to a deed kind. */
 function rulesFor(model: MemoryModel, kind: string) {

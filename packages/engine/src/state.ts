@@ -367,3 +367,30 @@ export function livingParty(state: GameState): readonly Entity[] {
 export function withEntity(state: GameState, next: Entity): GameState {
   return { ...state, entities: { ...state.entities, [next.id]: next } };
 }
+
+/**
+ * Which npc definition an entity came from.
+ *
+ * Prefers the recorded content id over the entity id, and never the statblock —
+ * looking a person up by the monster they fight like finds nothing.
+ *
+ * This and `memoryKeyOf` live here, on the leaf that owns `Entity`, rather than
+ * in `character.ts` and `sim/gossip.ts` where they grew up: `stats.ts` needs
+ * them to build the memory scope, and `character.ts` imports `stats.ts`. Both
+ * are still re-exported from their old homes.
+ */
+export function npcIdOf(entity: Entity): string {
+  const recorded = entity.extra['npc'];
+  return typeof recorded === 'string' && recorded ? recorded : entity.id;
+}
+
+/**
+ * The key an entity's memories are filed under.
+ *
+ * Named NPCs are persistent, so their memories belong to the *character*, not
+ * to whichever entity instance happens to represent them. Monsters are
+ * transient and keep theirs on the instance.
+ */
+export function memoryKeyOf(entity: Entity): string {
+  return entity.kind === 'npc' ? npcIdOf(entity) : entity.id;
+}

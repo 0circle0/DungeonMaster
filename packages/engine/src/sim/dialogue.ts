@@ -18,7 +18,7 @@ import type { Entity, EntityId } from '../state.js';
 import { buildScope, OPEN_NAMESPACES } from '../stats.js';
 import { Transaction, applyOps } from '../rules/apply.js';
 import { skillCheck, check, succeeded, skillModifier } from '../rules/check.js';
-import { knowledgeOf } from './deeds.js';
+import { memoryScope } from './memoryscope.js';
 import { npcIdOf } from '../character.js';
 import { message, literal } from '../narrate/systemText.js';
 
@@ -77,20 +77,15 @@ export interface VisibleOption {
  * how `memories` requirements in dialogue work at all.
  */
 function conversationScope(txn: Transaction, actor: Entity, speaker: Entity) {
-  const speakerMemory: Record<string, unknown> = {};
-  for (const kind of txn.module.ids('narrative.deedKinds')) {
-    const known = knowledgeOf(txn, npcIdOf(speaker), kind);
-    if (known) speakerMemory[kind] = { at: known.at, strength: known.strength };
-  }
-
   return buildScope(txn.module, txn.state, actor, {
     speaker: { id: speaker.id, name: speaker.name } as never,
-    memory: {
-      speaker: speakerMemory,
-      party: {},
-      anyone: speakerMemory,
-      faction: {},
-    } as never,
+    // `buildScope` already supplies `memory`, but keyed on the *actor*. In a
+    // conversation `speaker` has to mean the person being talked to, so this
+    // rebuilds it around them. It also replaces a hand-rolled version in which
+    // `anyone` was aliased to the speaker and `party` and `faction` were empty
+    // objects — so "word has got around" was indistinguishable from "this one
+    // person saw you", and two of the four `who` values never answered yes.
+    memory: memoryScope(txn.module, txn.state, speaker) as never,
   });
 }
 
