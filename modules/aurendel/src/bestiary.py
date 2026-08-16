@@ -141,14 +141,14 @@ MONSTERS = [
     # a starting party's only damage is a plain iron blade: halving it here
     # turned the tutorial into a loss. Silver starts mattering at the
     # Door-Warden, by which point Hesk will sell you a silvered blade.
-    creature("grave_hound", "Grave Hound", 2, 40, A(14, 13, 12, 3, 14, 8),
+    creature("grave_hound", "Grave Hound", 2, 40, A(12, 12, 12, 3, 14, 8),
              ["rend", "gore"],
              "It was a dog. The barrow has had it for some while.",
              creature_type="undead", descriptors=["a lean", "a silent"],
              behaviour=[{"priority": 10, "use": "gore", "when": {"chance": 0.35}},
                         {"priority": 0, "use": "rend"}],
              loot="barrow_scraps",
-             immunities=["frightened", "poisoned"], hp=12),
+             immunities=["frightened", "poisoned"], hp=9),
     creature("door_warden", "The Door-Warden", 4, 200, A(16, 11, 16, 8, 12, 14),
              ["gore", "grave_chill", "call_the_shut"],
              "It was set to keep the barrow shut and it is still, in its way, "

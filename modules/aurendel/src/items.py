@@ -176,7 +176,9 @@ CLASS_KIT = {
     "keeper":  [("iron_mace", 1), ("ring_mail", 1)],
 }
 
-PARTY_KIT = [("bandages", 3)]
+# Everybody gets these on top of their class kit. Measured rather than
+# guessed: the barrow was a two-in-ten party wipe without them.
+PARTY_KIT = [("bandages", 3), ("healing_draught", 2)]
 
 
 def outfit(classes):

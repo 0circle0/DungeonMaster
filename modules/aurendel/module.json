@@ -3374,8 +3374,8 @@
         "level": 2,
         "xp": 40,
         "attributes": {
-          "might": 14,
-          "agility": 13,
+          "might": 12,
+          "agility": 12,
           "endurance": 12,
           "intellect": 3,
           "instinct": 14,
@@ -3412,7 +3412,7 @@
           "poisoned"
         ],
         "resourceOverrides": {
-          "hp": 12
+          "hp": 9
         }
       },
       {
@@ -37225,6 +37225,10 @@
         {
           "item": "bandages",
           "quantity": 3
+        },
+        {
+          "item": "healing_draught",
+          "quantity": 2
         }
       ],
       "startingCurrency": 40
