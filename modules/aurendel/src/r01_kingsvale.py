@@ -97,8 +97,11 @@ GATES = [
     gate("kingshold_undercroft_door", "The Undercroft Door", "lock",
          "Iron-banded oak at the bottom of a stair nobody sweeps.",
          bypass=("lockpicking", 16),
-         requires={"description": "the Kingshold steward's leave",
-                   "minLevel": 3},
+         # Two ways in, which is the shape every gate on the critical path
+         # takes: the Crown's key if you took the Crown's commission, and a
+         # lock that can be picked if you did not.
+         requires={"description": "the undercroft key, or a very good lockpick",
+                   "items": [{"item": "undercroft_key", "consume": False}]},
          blocked_key="kingshold_undercroft_blocked"),
     gate("pennyford_sluice", "The Pennyford Sluice", "hazard",
          "The old ford gate. Shut, the channel runs deep and fast; open, it "

@@ -29,6 +29,11 @@ BASE = os.path.join(ROOT, "modules/core_fantasy/module.json")
 
 import materials  # noqa: E402
 import prose  # noqa: E402
+import factions  # noqa: E402
+import items  # noqa: E402
+import bestiary  # noqa: E402
+import loot  # noqa: E402
+import story  # noqa: E402
 
 try:
     import regions  # noqa: E402
@@ -53,6 +58,10 @@ def main():
 
     if regions:
         regions.attach_room_templates(biome_list)
+    # The questline turns its own route live — encounters, loot, and rooms
+    # that are not empty — and leaves the rest of the continent alone.
+    story.attach_content(biome_list, dungeons, room_templates, areas)
+    story.attach_triggers(pois)
 
     world = {
         "terrains": materials.terrains(),
@@ -63,6 +72,7 @@ def main():
         "gates": gates,
         "roomTemplates": room_templates,
         "dungeons": dungeons,
+        "encounterTables": loot.ENCOUNTER_TABLES,
         "time": materials.TIME,
         # Nothing rolls encounters — this world has no monsters yet — but rooms
         # still want loot spots and traps marked out for whoever fills them.
@@ -70,9 +80,19 @@ def main():
                                "trapChance": 0.12},
     }
 
-    # The ruleset, lifted wholesale from the base module.
-    content = {k: base["content"][k]
+    # The ruleset, lifted wholesale from the base module — then armed. Without
+    # `classes[].startingItems` every non-caster in Aurendel swings for zero:
+    # `strike` declares no damage of its own, so damage comes entirely from an
+    # equipped weapon (rules/combat/attack.ts) and there were no weapons.
+    content = {k: list(base["content"][k])
                for k in ("skills", "abilities", "ancestries", "classes")}
+    content["classes"] = items.outfit(content["classes"])
+    content["abilities"] = content["abilities"] + bestiary.ABILITIES
+    content["items"] = items.ITEMS
+    content["lootTables"] = loot.LOOT_TABLES
+    content["monsters"] = bestiary.MONSTERS
+    content["factions"] = factions.FACTIONS
+    content["npcs"] = story.npcs()
     content["traps"] = regions.traps() if regions else []
 
     # The base module's sense-impression pools come along with `rules.senses`,
@@ -112,6 +132,11 @@ def main():
     doc["narrative"] = {
         "textGrammar": merged,
         "systemText": base["narrative"]["systemText"],
+        "deedKinds": factions.DEED_KINDS,
+        "memory": factions.MEMORY,
+        "dialogues": story.dialogues(),
+        "quests": story.quests(),
+        "arcs": story.arcs(),
     }
     doc["start"] = regions.start() if regions else {}
 
@@ -127,6 +152,11 @@ def main():
           f"{len(room_templates)} room templates")
     print(f"  {len(world['terrains'])} terrains, {len(world['palettes'])} palettes, "
           f"{len(biome_list)} biomes, {len(merged)} text pools")
+    print(f"  {len(content['items'])} items, {len(content['monsters'])} monsters, "
+          f"{len(content['npcs'])} npcs, {len(content['factions'])} factions")
+    print(f"  {len(doc['narrative']['quests'])} quests, "
+          f"{len(doc['narrative']['dialogues'])} dialogues, "
+          f"{len(doc['narrative']['arcs'])} arcs")
 
 
 if __name__ == "__main__":

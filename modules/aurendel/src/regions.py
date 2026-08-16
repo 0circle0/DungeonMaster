@@ -205,7 +205,8 @@ def start():
                                "12": 4, "13": 5, "14": 7, "15": 9},
             "startingLevel": 1,
             "skillRanks": 4,
-            "startingItems": [],
+            "startingItems": [{"item": i, "quantity": q}
+                              for i, q in __import__("items").PARTY_KIT],
             "startingCurrency": 40,
         },
         "startingArea": "kingsvale_hollowdene",
