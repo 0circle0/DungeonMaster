@@ -521,6 +521,58 @@ describe('quests', () => {
 
 // Only the selected character used to move; the rest stood where they had been
 // dropped until the player switched to each one and walked them individually.
+describe('objectives that are gated', () => {
+  // Both `requires` and `when` were accepted by the schema and read by nothing
+  // on an event-driven objective, so an author who wrote either got no gate and
+  // no warning.
+  function withGatedKill(gate: Record<string, unknown>): CompiledModule {
+    const dir = fileURLToPath(new URL('../../../modules/greenmarch', import.meta.url));
+    const doc = readAssembledModule(dir).doc as unknown as {
+      narrative: { quests: { id: string; ordered?: boolean; stages?: unknown[]; objectives: Record<string, unknown>[] }[] };
+    };
+    const quest = doc.narrative.quests.find((q) => q.id === 'the_mill_door')!;
+    quest.stages = [];
+    quest.ordered = false;
+    quest.objectives = [{ id: 'one_hound', kind: 'kill', target: 'bog_hound', count: 1, ...gate }];
+    const result = compileModule(doc);
+    if (!result.ok) throw new Error(`gated fixture failed: ${JSON.stringify(result.errors)}`);
+    return result.module;
+  }
+
+  function killOneHound(module: CompiledModule, flags: Record<string, boolean> = {}) {
+    const txn = transact({ ...fresh(module), flags: { ...fresh(module).flags, ...flags } }, module);
+    startQuest(txn, 'the_mill_door', Rng.fromSeed(1));
+    txn.set({
+      ...txn.state,
+      entities: {
+        ...txn.state.entities,
+        'm:0': { ...spawnMonster(module, 'm:0', 'bog_hound'), map: 'here', position: { x: 7, y: 6 } },
+      },
+    });
+    advanceQuests(txn, [{ type: 'died', entity: 'm:0', killer: 'e:1' }], Rng.fromSeed(1));
+    return txn.state.quests['the_mill_door']!;
+  }
+
+  it('holds an objective inactive until its `requires` is met', () => {
+    const module = withGatedKill({ requires: { flags: [{ flag: 'hunt_declared', equals: true }] } });
+    expect(killOneHound(module).completedObjectives).not.toContain('one_hound');
+    expect(killOneHound(module, { hunt_declared: true }).completedObjectives).toContain('one_hound');
+  });
+
+  it('treats `when` on an event kind as an extra gate, not a second way to win', () => {
+    const module = withGatedKill({ when: { test: { ref: 'flags.hunt_declared' } } });
+    expect(killOneHound(module).completedObjectives).not.toContain('one_hound');
+
+    // And the predicate alone does not finish it — the kill still has to happen.
+    const txn = transact({ ...fresh(module), flags: { hunt_declared: true } }, module);
+    startQuest(txn, 'the_mill_door', Rng.fromSeed(1));
+    advanceQuests(txn, [], Rng.fromSeed(1));
+    expect(txn.state.quests['the_mill_door']!.completedObjectives).not.toContain('one_hound');
+
+    expect(killOneHound(module, { hunt_declared: true }).completedObjectives).toContain('one_hound');
+  });
+});
+
 describe('walking together', () => {
   /** A three-strong party spread along a corridor of floor. */
   function party(): GameState {

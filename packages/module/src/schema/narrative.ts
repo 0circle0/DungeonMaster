@@ -148,7 +148,12 @@ export const objectiveSchema = z
     /** Target of the objective, interpreted per `kind`. */
     target: idSchema.optional(),
     count: z.number().int().min(1).default(1),
-    /** Satisfied when this holds; required for `custom`. */
+    /**
+     * For `custom`, the completion condition, and required. For the other
+     * kinds, an extra gate the matching event must *also* satisfy — not a
+     * second way to finish, which would give a `kill` objective a completion
+     * path its author never asked for.
+     */
     when: PredicateSchema.optional(),
     /** Additional gate before the objective becomes active. */
     requires: requirementSchema.optional(),

@@ -324,12 +324,32 @@ export function advanceQuests(txn: Transaction, events: readonly GameEvent[], rn
         if (next && next.objective.id !== objective.id) continue;
       }
 
+      // An objective can declare what it takes to be *active*. Until now that
+      // was accepted by the schema and read by nothing. Deliberately not
+      // threaded into `stageIndexOf`: on an ordered quest the cursor sits on
+      // the gated objective and the quest waits, which is the correct reading
+      // and keeps the stage cursor derived from `completedObjectives` alone.
+      if (!isEmptyRequirement(objective.requires) && leader) {
+        const scope = buildScope(txn.module, txn.state, leader);
+        const gate = compileRequirement(objective.requires);
+        if (!evalPredicate(gate, { scope, rng, openNamespaces: OPEN_NAMESPACES })) continue;
+      }
+
       let satisfied = false;
 
       if (objective.kind === 'custom' && objective.when && leader) {
         const scope = buildScope(txn.module, txn.state, leader);
         satisfied = evalPredicate(objective.when, { scope, rng, openNamespaces: OPEN_NAMESPACES });
       } else {
+        // On an event-driven kind, `when` is an extra gate the event must also
+        // satisfy — not a second, silently competing way to finish. Reading it
+        // the other way would give a `kill` objective two completion paths, one
+        // of which the author never asked for.
+        if (objective.when && leader) {
+          const scope = buildScope(txn.module, txn.state, leader);
+          if (!evalPredicate(objective.when, { scope, rng, openNamespaces: OPEN_NAMESPACES })) continue;
+        }
+
         const hits = events.filter((event) => matchesEvent(objective, event, txn)).length;
         if (hits > 0) {
           const flagId = progressKey(quest.id, objective.id);

@@ -196,10 +196,26 @@ function together(txn: Transaction, a: string, b: string): boolean {
   return here === there;
 }
 
-/** How readily news leaves a place, as the place itself declares. */
+/**
+ * How readily news leaves a place, as the place itself declares.
+ *
+ * A deed records `state.currentMap` as its location, and map ids are minted
+ * `poi:<id>` / `area:<id>` / `dungeon:<id>` — so looking the whole id up in
+ * `world.pointsOfInterest` missed every time and every deed silently used the
+ * fallback. The vocabulary mismatch is exactly the one `memoryKeyOf` exists to
+ * prevent, one file over.
+ *
+ * Only a point of interest declares a reach; an area or a dungeon is neither
+ * more nor less talkative than average. Note that standing *at* a POI with no
+ * interior leaves `currentMap` on the area, so that deed takes the area's
+ * silence rather than the POI's reach — the map is what the deed knows.
+ */
 function rumourReachOf(txn: Transaction, location: string | null): number {
   if (!location) return 1;
-  const poi = txn.module.find<{ rumourReach?: number }>('world.pointsOfInterest', location);
+  const split = location.indexOf(':');
+  if (split < 0 || location.slice(0, split) !== 'poi') return 1;
+  const poi = txn.module.find<{ rumourReach?: number }>(
+    'world.pointsOfInterest', location.slice(split + 1));
   return poi?.rumourReach ?? 1;
 }
 
