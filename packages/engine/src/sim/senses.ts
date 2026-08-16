@@ -18,7 +18,7 @@
  * that reproduces the engine's original behaviour exactly.
  */
 
-import type { CompiledModule } from '@dm/module';
+import type { CompiledModule, SystemTextKey } from '@dm/module';
 import type { Entity, EntityId, GameState, Mark, Alert } from '../state.js';
 import type { Position, TileMap } from '../grid/tiles.js';
 import { TerrainIndex, key as packKey, neighbours, inBounds } from '../grid/tiles.js';
@@ -58,6 +58,8 @@ export interface SenseDef {
   readonly lingerMinutes: number;
   /** Tiles a lingering trace spreads outward per minute as it thins. */
   readonly spreadPerMinute: number;
+  /** Signal kept once it has spread: the same scent over more ground. */
+  readonly spreadRetention: number;
   /** Minutes a percept stays remembered. Zero means it is forgotten at once. */
   readonly rememberMinutes: number;
   /** What noticing something this way reads like, strong and faint. */
@@ -104,6 +106,7 @@ function implicitSense(module: CompiledModule): SenseDef {
     range: toTiles(module, IMPLICIT_RANGE_UNITS),
     lingerMinutes: 0,
     spreadPerMinute: 0,
+    spreadRetention: 0.5,
     rememberMinutes: 0,
     impressionTextKey: null,
     emptyTextKey: null,
@@ -123,6 +126,7 @@ interface DeclaredSense {
   falloff: Falloff;
   lingerMinutes: number;
   spreadPerMinute: number;
+  spreadRetention: number;
   rememberMinutes: number;
   impressionTextKey?: string;
   faintImpressionTextKey?: string;
@@ -150,6 +154,7 @@ export function sensesOf(module: CompiledModule): readonly SenseDef[] {
         range: toTiles(module, sense.defaultRange),
         lingerMinutes: sense.lingerMinutes,
         spreadPerMinute: sense.spreadPerMinute,
+        spreadRetention: sense.spreadRetention,
         rememberMinutes: sense.rememberMinutes,
         impressionTextKey: sense.impressionTextKey ?? null,
         faintImpressionTextKey: sense.faintImpressionTextKey ?? null,
@@ -397,9 +402,9 @@ export function emissionOf(
     emission -= rank * stance.concealmentPerPoint;
   }
 
-  // Never silent outright: perfect stealth would make a skill a win condition
-  // rather than an advantage.
-  return Math.max(0.01, emission);
+  // Never silent outright by default: whether perfect stealth is possible is
+  // an opinion about the game, and it is the module's to hold.
+  return Math.max(module.source.rules.perception.minimumEmission, emission);
 }
 
 /**
@@ -761,7 +766,7 @@ function spreadSignal(
 ): number {
   const widened: SenseDef = { ...sense, range: rangeOf(context, observer, sense) + Math.floor(spread) };
   // Weaker for having spread: the same scent over more ground.
-  return signalAt(context, widened, observer, at, remaining) * 0.5;
+  return signalAt(context, widened, observer, at, remaining) * sense.spreadRetention;
 }
 
 /** Strongest first; ties settled by sense order then subject, so it is total. */
@@ -1054,19 +1059,24 @@ export function senseReport(
 }
 
 /**
- * Which way something lies, in words — the fuzzy reading.
+ * Which way something lies — the fuzzy reading.
  *
  * Deliberately coarser than the octant `bearing` in `grid/geometry.ts`: a
  * sense report should be allowed to say "nearby", and its diagonal band is
  * wider. Both readings are right for their own purpose; there is one copy of
  * each.
+ *
+ * Returns a `systemText` **key**, not a word. The engine works out which way is
+ * which; the module says what that direction is called, which is what lets a
+ * `{direction}` placeholder read in the module's own language.
  */
-export function roughBearing(from: Position, to: Position): string {
+export function roughBearing(from: Position, to: Position): SystemTextKey {
   const dx = to.x - from.x;
   const dy = to.y - from.y;
-  if (dx === 0 && dy === 0) return 'right here';
+  if (dx === 0 && dy === 0) return 'direction.here';
 
   const vertical = Math.abs(dy) * 2 > Math.abs(dx) ? (dy < 0 ? 'north' : 'south') : '';
   const horizontal = Math.abs(dx) * 2 > Math.abs(dy) ? (dx < 0 ? 'west' : 'east') : '';
-  return `${vertical}${horizontal}` || 'nearby';
+  const named = `${vertical}${horizontal}`;
+  return named === '' ? 'direction.nearby' : (`direction.${named}` as SystemTextKey);
 }

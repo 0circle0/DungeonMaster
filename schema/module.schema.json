@@ -739,6 +739,12 @@
                                 },
                                 "damageType": {
                                   "$ref": "#/$defs/GameModule/properties/rules/properties/attributes/items/properties/modifier"
+                                },
+                                "tags": {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "string"
+                                  }
                                 }
                               },
                               "required": [
@@ -775,6 +781,27 @@
                           },
                           "required": [
                             "heal"
+                          ],
+                          "additionalProperties": false
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "adjustCurrency": {
+                              "type": "object",
+                              "properties": {
+                                "amount": {
+                                  "$ref": "#/$defs/GameModule/properties/rules/properties/attributes/items/properties/modifier"
+                                }
+                              },
+                              "required": [
+                                "amount"
+                              ],
+                              "additionalProperties": false
+                            }
+                          },
+                          "required": [
+                            "adjustCurrency"
                           ],
                           "additionalProperties": false
                         },
@@ -1317,6 +1344,10 @@
                     },
                     "default": []
                   },
+                  "concealsIdentity": {
+                    "type": "boolean",
+                    "default": false
+                  },
                   "savingThrow": {
                     "type": "object",
                     "properties": {
@@ -1412,6 +1443,45 @@
                     "type": "integer",
                     "minimum": 1,
                     "default": 1
+                  }
+                },
+                "required": [
+                  "id",
+                  "name"
+                ],
+                "additionalProperties": false
+              },
+              "default": []
+            },
+            "itemProperties": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "$ref": "#/$defs/GameModule/properties/id"
+                  },
+                  "name": {
+                    "$ref": "#/$defs/GameModule/properties/meta/properties/title"
+                  },
+                  "description": {
+                    "$ref": "#/$defs/GameModule/properties/meta/properties/description",
+                    "default": ""
+                  },
+                  "modifiers": {
+                    "type": "object",
+                    "additionalProperties": {
+                      "$ref": "#/$defs/GameModule/properties/rules/properties/attributes/items/properties/modifier"
+                    },
+                    "propertyNames": {
+                      "minLength": 1,
+                      "maxLength": 64,
+                      "pattern": "^[a-z][a-z0-9_]*$"
+                    },
+                    "default": {}
+                  },
+                  "extra": {
+                    "$ref": "#/$defs/GameModule/properties/rules/properties/conditions/items/properties/extra"
                   }
                 },
                 "required": [
@@ -1543,6 +1613,43 @@
                   "minimum": 1,
                   "default": 2
                 },
+                "saveSuccessMultiplier": {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 1,
+                  "default": 0.5
+                },
+                "passiveBase": {
+                  "type": "integer",
+                  "default": 10
+                },
+                "opposedMode": {
+                  "type": "string",
+                  "enum": [
+                    "passive",
+                    "contested"
+                  ],
+                  "default": "passive"
+                },
+                "damageRounding": {
+                  "type": "string",
+                  "enum": [
+                    "floor",
+                    "round",
+                    "ceil"
+                  ],
+                  "default": "round"
+                },
+                "reputationRounding": {
+                  "type": "string",
+                  "enum": [
+                    "floor",
+                    "round",
+                    "ceil",
+                    "trunc"
+                  ],
+                  "default": "trunc"
+                },
                 "defaultDifficulty": {
                   "type": "integer",
                   "default": 12
@@ -1602,6 +1709,40 @@
                 },
                 "proficiency": {
                   "$ref": "#/$defs/GameModule/properties/rules/properties/attributes/items/properties/modifier"
+                },
+                "proficiencyRank": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "default": 1
+                },
+                "levelVitality": {
+                  "type": "object",
+                  "properties": {
+                    "policy": {
+                      "type": "string",
+                      "enum": [
+                        "roll",
+                        "average",
+                        "max",
+                        "none"
+                      ],
+                      "default": "roll"
+                    },
+                    "die": {
+                      "type": "string",
+                      "enum": [
+                        "class",
+                        "size"
+                      ],
+                      "default": "class"
+                    },
+                    "bonus": {
+                      "$ref": "#/$defs/GameModule/properties/rules/properties/attributes/items/properties/modifier",
+                      "default": 0
+                    }
+                  },
+                  "additionalProperties": false,
+                  "default": {}
                 }
               },
               "required": [
@@ -1780,19 +1921,37 @@
                     "minimum": 0,
                     "default": 0
                   },
+                  "spreadRetention": {
+                    "type": "number",
+                    "minimum": 0,
+                    "maximum": 1,
+                    "default": 0.5
+                  },
                   "rememberMinutes": {
                     "type": "number",
                     "minimum": 0,
                     "default": 0
                   },
                   "impressionTextKey": {
-                    "$ref": "#/$defs/GameModule/properties/id"
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 64,
+                    "pattern": "^[a-z][a-z0-9_]*$",
+                    "description": "ref:narrative.textGrammar"
                   },
                   "faintImpressionTextKey": {
-                    "$ref": "#/$defs/GameModule/properties/id"
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 64,
+                    "pattern": "^[a-z][a-z0-9_]*$",
+                    "description": "ref:narrative.textGrammar"
                   },
                   "emptyTextKey": {
-                    "$ref": "#/$defs/GameModule/properties/id"
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 64,
+                    "pattern": "^[a-z][a-z0-9_]*$",
+                    "description": "ref:narrative.textGrammar"
                   },
                   "thresholds": {
                     "type": "object",
@@ -2182,6 +2341,27 @@
                   "type": "boolean",
                   "default": false
                 },
+                "componentActionTypes": {
+                  "type": "object",
+                  "properties": {
+                    "verbal": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 64,
+                      "pattern": "^[a-z][a-z0-9_]*$",
+                      "description": "ref:rules.actionTypes"
+                    },
+                    "somatic": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 64,
+                      "pattern": "^[a-z][a-z0-9_]*$",
+                      "description": "ref:rules.actionTypes"
+                    }
+                  },
+                  "additionalProperties": false,
+                  "default": {}
+                },
                 "extra": {
                   "$ref": "#/$defs/GameModule/properties/rules/properties/conditions/items/properties/extra"
                 }
@@ -2211,8 +2391,34 @@
                   "pattern": "^[a-z][a-z0-9_]*$",
                   "description": "ref:rules.stances"
                 },
+                "minimumEmission": {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 1,
+                  "default": 0.01
+                },
                 "extra": {
                   "$ref": "#/$defs/GameModule/properties/rules/properties/conditions/items/properties/extra"
+                }
+              },
+              "additionalProperties": false,
+              "default": {}
+            },
+            "currency": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "$ref": "#/$defs/GameModule/properties/meta/properties/title",
+                  "default": "coins"
+                },
+                "abbrev": {
+                  "type": "string",
+                  "maxLength": 6,
+                  "default": "c"
+                },
+                "allowNegative": {
+                  "type": "boolean",
+                  "default": false
                 }
               },
               "additionalProperties": false,
@@ -2238,6 +2444,85 @@
               "maxLength": 64,
               "pattern": "^[a-z][a-z0-9_]*$",
               "description": "ref:rules.sizes"
+            },
+            "defaultMovementMode": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 64,
+              "pattern": "^[a-z][a-z0-9_]*$",
+              "description": "ref:rules.movementModes"
+            },
+            "interactionRange": {
+              "type": "object",
+              "properties": {
+                "talk": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "default": 2
+                },
+                "reach": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "default": 1
+                }
+              },
+              "additionalProperties": false,
+              "default": {}
+            },
+            "search": {
+              "type": "object",
+              "properties": {
+                "trapRadius": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "default": 2
+                },
+                "disarmReach": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "default": 1
+                }
+              },
+              "additionalProperties": false,
+              "default": {}
+            },
+            "dispositionBands": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "$ref": "#/$defs/GameModule/properties/id"
+                  },
+                  "atLeast": {
+                    "type": "number"
+                  },
+                  "stance": {
+                    "type": "string",
+                    "enum": [
+                      "ally",
+                      "neutral",
+                      "hostile"
+                    ]
+                  }
+                },
+                "required": [
+                  "id",
+                  "stance"
+                ],
+                "additionalProperties": false
+              },
+              "default": [
+                {
+                  "id": "neutral",
+                  "atLeast": 0,
+                  "stance": "neutral"
+                },
+                {
+                  "id": "hostile",
+                  "stance": "hostile"
+                }
+              ]
             },
             "extra": {
               "$ref": "#/$defs/GameModule/properties/rules/properties/conditions/items/properties/extra"
@@ -2406,6 +2691,43 @@
                           "additionalProperties": false
                         },
                         "default": []
+                      },
+                      "creatureTypes": {
+                        "type": "array",
+                        "items": {
+                          "type": "string",
+                          "minLength": 1,
+                          "maxLength": 64,
+                          "pattern": "^[a-z][a-z0-9_]*$",
+                          "description": "ref:rules.creatureTypes"
+                        },
+                        "default": []
+                      },
+                      "alignments": {
+                        "type": "array",
+                        "items": {
+                          "type": "string",
+                          "minLength": 1,
+                          "maxLength": 64,
+                          "pattern": "^[a-z][a-z0-9_]*$",
+                          "description": "ref:rules.alignments"
+                        },
+                        "default": []
+                      },
+                      "languages": {
+                        "type": "array",
+                        "items": {
+                          "type": "string",
+                          "minLength": 1,
+                          "maxLength": 64,
+                          "pattern": "^[a-z][a-z0-9_]*$",
+                          "description": "ref:rules.languages"
+                        },
+                        "default": []
+                      },
+                      "currency": {
+                        "type": "integer",
+                        "minimum": 0
                       },
                       "items": {
                         "type": "array",
@@ -2662,6 +2984,18 @@
                             "skills": {
                               "$ref": "#/$defs/GameModule/properties/content/properties/abilities/items/properties/requires/properties/skills"
                             },
+                            "creatureTypes": {
+                              "$ref": "#/$defs/GameModule/properties/content/properties/abilities/items/properties/requires/properties/creatureTypes"
+                            },
+                            "alignments": {
+                              "$ref": "#/$defs/GameModule/properties/content/properties/abilities/items/properties/requires/properties/alignments"
+                            },
+                            "languages": {
+                              "$ref": "#/$defs/GameModule/properties/content/properties/abilities/items/properties/requires/properties/languages"
+                            },
+                            "currency": {
+                              "$ref": "#/$defs/GameModule/properties/content/properties/abilities/items/properties/requires/properties/currency"
+                            },
                             "items": {
                               "$ref": "#/$defs/GameModule/properties/content/properties/abilities/items/properties/requires/properties/items"
                             },
@@ -2833,6 +3167,12 @@
                           "others"
                         ],
                         "default": "all"
+                      },
+                      "angle": {
+                        "type": "number",
+                        "minimum": 1,
+                        "maximum": 180,
+                        "default": 45
                       }
                     },
                     "required": [
@@ -3132,11 +3472,36 @@
                   "skillProficiencies": {
                     "type": "array",
                     "items": {
-                      "type": "string",
-                      "minLength": 1,
-                      "maxLength": 64,
-                      "pattern": "^[a-z][a-z0-9_]*$",
-                      "description": "ref:content.skills"
+                      "anyOf": [
+                        {
+                          "type": "string",
+                          "minLength": 1,
+                          "maxLength": 64,
+                          "pattern": "^[a-z][a-z0-9_]*$",
+                          "description": "ref:content.skills"
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "skill": {
+                              "type": "string",
+                              "minLength": 1,
+                              "maxLength": 64,
+                              "pattern": "^[a-z][a-z0-9_]*$",
+                              "description": "ref:content.skills"
+                            },
+                            "rank": {
+                              "type": "integer",
+                              "minimum": 0
+                            }
+                          },
+                          "required": [
+                            "skill",
+                            "rank"
+                          ],
+                          "additionalProperties": false
+                        }
+                      ]
                     },
                     "default": []
                   },
@@ -3418,7 +3783,11 @@
                   "properties": {
                     "type": "array",
                     "items": {
-                      "$ref": "#/$defs/GameModule/properties/id"
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 64,
+                      "pattern": "^[a-z][a-z0-9_]*$",
+                      "description": "ref:rules.itemProperties"
                     },
                     "default": []
                   },
@@ -3541,6 +3910,23 @@
                     "maxLength": 64,
                     "pattern": "^[a-z][a-z0-9_]*$",
                     "description": "ref:content.skills"
+                  },
+                  "bonusRolls": {
+                    "type": "object",
+                    "properties": {
+                      "onSuccess": {
+                        "type": "integer",
+                        "minimum": 0,
+                        "default": 1
+                      },
+                      "onCritical": {
+                        "type": "integer",
+                        "minimum": 0,
+                        "default": 2
+                      }
+                    },
+                    "additionalProperties": false,
+                    "default": {}
                   }
                 },
                 "required": [
@@ -4166,7 +4552,11 @@
                     "description": "ref:narrative.dialogues"
                   },
                   "home": {
-                    "$ref": "#/$defs/GameModule/properties/id"
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 64,
+                    "pattern": "^[a-z][a-z0-9_]*$",
+                    "description": "ref:world.pointsOfInterest"
                   },
                   "gullibility": {
                     "type": "number",
@@ -4776,6 +5166,22 @@
                     "minimum": 0,
                     "default": 1
                   },
+                  "encounterChance": {
+                    "$ref": "#/$defs/GameModule/properties/rules/properties/attributes/items/properties/modifier",
+                    "default": {
+                      "min": [
+                        0.75,
+                        {
+                          "mul": [
+                            {
+                              "ref": "dangerLevel"
+                            },
+                            0.15
+                          ]
+                        }
+                      ]
+                    }
+                  },
                   "recommendedLevel": {
                     "type": "integer",
                     "minimum": 1
@@ -4800,6 +5206,13 @@
                         "maxLength": 64,
                         "pattern": "^[a-z][a-z0-9_]*$",
                         "description": "ref:world.palettes"
+                      },
+                      "static": {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 64,
+                        "pattern": "^[a-z][a-z0-9_]*$",
+                        "description": "ref:world.maps"
                       },
                       "layout": {
                         "type": "array",
@@ -5223,6 +5636,18 @@
                     "maximum": 1,
                     "default": 0.25
                   },
+                  "alwaysEncounter": {
+                    "type": "boolean",
+                    "default": false
+                  },
+                  "neverEncounter": {
+                    "type": "boolean",
+                    "default": false
+                  },
+                  "neverTrap": {
+                    "type": "boolean",
+                    "default": false
+                  },
                   "requires": {
                     "$ref": "#/$defs/GameModule/properties/content/properties/abilities/items/properties/requires"
                   },
@@ -5285,6 +5710,11 @@
                     "type": "number",
                     "minimum": 0,
                     "default": 0
+                  },
+                  "scalePerLevels": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "default": 2
                   },
                   "groups": {
                     "type": "array",
@@ -5432,6 +5862,10 @@
                       "boss"
                     ]
                   },
+                  "safeEntrance": {
+                    "type": "boolean",
+                    "default": true
+                  },
                   "bossTable": {
                     "type": "string",
                     "minLength": 1,
@@ -5457,6 +5891,112 @@
                     "$ref": "#/$defs/GameModule/properties/rules/properties/resolution/properties/checkDice",
                     "default": "3d3"
                   },
+                  "winding": {
+                    "type": "object",
+                    "properties": {
+                      "continueChance": {
+                        "type": "number",
+                        "minimum": 0,
+                        "maximum": 1,
+                        "default": 0.6
+                      },
+                      "turnPenalty": {
+                        "type": "number",
+                        "minimum": 0,
+                        "default": 0.4
+                      }
+                    },
+                    "additionalProperties": false,
+                    "default": {}
+                  },
+                  "roomSize": {
+                    "$ref": "#/$defs/GameModule/properties/rules/properties/resolution/properties/checkDice",
+                    "default": "2d3+3"
+                  },
+                  "algorithm": {
+                    "type": "string",
+                    "enum": [
+                      "rooms",
+                      "bsp",
+                      "caverns"
+                    ],
+                    "default": "rooms"
+                  },
+                  "bsp": {
+                    "type": "object",
+                    "properties": {
+                      "minLeaf": {
+                        "type": "integer",
+                        "minimum": 2,
+                        "default": 5
+                      }
+                    },
+                    "additionalProperties": false,
+                    "default": {}
+                  },
+                  "caverns": {
+                    "type": "object",
+                    "properties": {
+                      "fill": {
+                        "type": "number",
+                        "minimum": 0,
+                        "maximum": 1,
+                        "default": 0.45
+                      },
+                      "smoothingPasses": {
+                        "type": "integer",
+                        "minimum": 0,
+                        "default": 4
+                      },
+                      "birthThreshold": {
+                        "type": "integer",
+                        "minimum": 1,
+                        "maximum": 8,
+                        "default": 5
+                      }
+                    },
+                    "additionalProperties": false,
+                    "default": {}
+                  },
+                  "staticMap": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 64,
+                    "pattern": "^[a-z][a-z0-9_]*$",
+                    "description": "ref:world.maps"
+                  },
+                  "rollEncounters": {
+                    "type": "boolean",
+                    "default": false
+                  },
+                  "corridor": {
+                    "type": "object",
+                    "properties": {
+                      "style": {
+                        "type": "string",
+                        "enum": [
+                          "l",
+                          "straight",
+                          "winding"
+                        ],
+                        "default": "l"
+                      },
+                      "width": {
+                        "type": "integer",
+                        "minimum": 1,
+                        "maximum": 3,
+                        "default": 1
+                      }
+                    },
+                    "additionalProperties": false,
+                    "default": {}
+                  },
+                  "width": {
+                    "$ref": "#/$defs/GameModule/properties/rules/properties/resolution/properties/checkDice"
+                  },
+                  "height": {
+                    "$ref": "#/$defs/GameModule/properties/rules/properties/resolution/properties/checkDice"
+                  },
                   "extra": {
                     "$ref": "#/$defs/GameModule/properties/rules/properties/conditions/items/properties/extra"
                   }
@@ -5470,6 +6010,324 @@
               },
               "default": []
             },
+            "maps": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "$ref": "#/$defs/GameModule/properties/id"
+                  },
+                  "name": {
+                    "$ref": "#/$defs/GameModule/properties/meta/properties/title"
+                  },
+                  "description": {
+                    "$ref": "#/$defs/GameModule/properties/meta/properties/description",
+                    "default": ""
+                  },
+                  "tags": {
+                    "$ref": "#/$defs/GameModule/properties/meta/properties/tags"
+                  },
+                  "entry": {
+                    "$ref": "#/$defs/GameModule/properties/id",
+                    "default": "entry"
+                  },
+                  "layers": {
+                    "type": "array",
+                    "items": {
+                      "anyOf": [
+                        {
+                          "type": "object",
+                          "properties": {
+                            "kind": {
+                              "type": "string",
+                              "const": "terrain"
+                            },
+                            "name": {
+                              "$ref": "#/$defs/GameModule/properties/id"
+                            },
+                            "cells": {
+                              "type": "array",
+                              "items": {
+                                "type": "array",
+                                "items": {
+                                  "anyOf": [
+                                    {
+                                      "type": "string",
+                                      "const": ""
+                                    },
+                                    {
+                                      "type": "string",
+                                      "minLength": 1,
+                                      "maxLength": 64,
+                                      "pattern": "^[a-z][a-z0-9_]*$",
+                                      "description": "ref:world.terrains"
+                                    }
+                                  ]
+                                }
+                              }
+                            },
+                            "extra": {
+                              "$ref": "#/$defs/GameModule/properties/rules/properties/conditions/items/properties/extra"
+                            }
+                          },
+                          "required": [
+                            "kind",
+                            "cells"
+                          ],
+                          "additionalProperties": false
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "kind": {
+                              "type": "string",
+                              "const": "items"
+                            },
+                            "name": {
+                              "$ref": "#/$defs/GameModule/properties/id"
+                            },
+                            "cells": {
+                              "type": "array",
+                              "items": {
+                                "type": "array",
+                                "items": {
+                                  "anyOf": [
+                                    {
+                                      "type": "string",
+                                      "const": ""
+                                    },
+                                    {
+                                      "type": "string",
+                                      "minLength": 1,
+                                      "maxLength": 64,
+                                      "pattern": "^[a-z][a-z0-9_]*$",
+                                      "description": "ref:content.items"
+                                    }
+                                  ]
+                                }
+                              }
+                            },
+                            "extra": {
+                              "$ref": "#/$defs/GameModule/properties/rules/properties/conditions/items/properties/extra"
+                            }
+                          },
+                          "required": [
+                            "kind",
+                            "cells"
+                          ],
+                          "additionalProperties": false
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "kind": {
+                              "type": "string",
+                              "const": "monsters"
+                            },
+                            "name": {
+                              "$ref": "#/$defs/GameModule/properties/id"
+                            },
+                            "cells": {
+                              "type": "array",
+                              "items": {
+                                "type": "array",
+                                "items": {
+                                  "anyOf": [
+                                    {
+                                      "type": "string",
+                                      "const": ""
+                                    },
+                                    {
+                                      "type": "string",
+                                      "minLength": 1,
+                                      "maxLength": 64,
+                                      "pattern": "^[a-z][a-z0-9_]*$",
+                                      "description": "ref:content.monsters"
+                                    }
+                                  ]
+                                }
+                              }
+                            },
+                            "extra": {
+                              "$ref": "#/$defs/GameModule/properties/rules/properties/conditions/items/properties/extra"
+                            }
+                          },
+                          "required": [
+                            "kind",
+                            "cells"
+                          ],
+                          "additionalProperties": false
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "kind": {
+                              "type": "string",
+                              "const": "npcs"
+                            },
+                            "name": {
+                              "$ref": "#/$defs/GameModule/properties/id"
+                            },
+                            "cells": {
+                              "type": "array",
+                              "items": {
+                                "type": "array",
+                                "items": {
+                                  "anyOf": [
+                                    {
+                                      "type": "string",
+                                      "const": ""
+                                    },
+                                    {
+                                      "type": "string",
+                                      "minLength": 1,
+                                      "maxLength": 64,
+                                      "pattern": "^[a-z][a-z0-9_]*$",
+                                      "description": "ref:content.npcs"
+                                    }
+                                  ]
+                                }
+                              }
+                            },
+                            "extra": {
+                              "$ref": "#/$defs/GameModule/properties/rules/properties/conditions/items/properties/extra"
+                            }
+                          },
+                          "required": [
+                            "kind",
+                            "cells"
+                          ],
+                          "additionalProperties": false
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "kind": {
+                              "type": "string",
+                              "const": "gates"
+                            },
+                            "name": {
+                              "$ref": "#/$defs/GameModule/properties/id"
+                            },
+                            "cells": {
+                              "type": "array",
+                              "items": {
+                                "type": "array",
+                                "items": {
+                                  "anyOf": [
+                                    {
+                                      "type": "string",
+                                      "const": ""
+                                    },
+                                    {
+                                      "type": "string",
+                                      "minLength": 1,
+                                      "maxLength": 64,
+                                      "pattern": "^[a-z][a-z0-9_]*$",
+                                      "description": "ref:world.gates"
+                                    }
+                                  ]
+                                }
+                              }
+                            },
+                            "extra": {
+                              "$ref": "#/$defs/GameModule/properties/rules/properties/conditions/items/properties/extra"
+                            }
+                          },
+                          "required": [
+                            "kind",
+                            "cells"
+                          ],
+                          "additionalProperties": false
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "kind": {
+                              "type": "string",
+                              "const": "traps"
+                            },
+                            "name": {
+                              "$ref": "#/$defs/GameModule/properties/id"
+                            },
+                            "cells": {
+                              "type": "array",
+                              "items": {
+                                "type": "array",
+                                "items": {
+                                  "anyOf": [
+                                    {
+                                      "type": "string",
+                                      "const": ""
+                                    },
+                                    {
+                                      "type": "string",
+                                      "minLength": 1,
+                                      "maxLength": 64,
+                                      "pattern": "^[a-z][a-z0-9_]*$",
+                                      "description": "ref:content.traps"
+                                    }
+                                  ]
+                                }
+                              }
+                            },
+                            "extra": {
+                              "$ref": "#/$defs/GameModule/properties/rules/properties/conditions/items/properties/extra"
+                            }
+                          },
+                          "required": [
+                            "kind",
+                            "cells"
+                          ],
+                          "additionalProperties": false
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "kind": {
+                              "type": "string",
+                              "const": "markers"
+                            },
+                            "name": {
+                              "$ref": "#/$defs/GameModule/properties/id"
+                            },
+                            "cells": {
+                              "type": "array",
+                              "items": {
+                                "type": "array",
+                                "items": {
+                                  "type": "string",
+                                  "pattern": "^$|^[a-z][a-z0-9_]*$"
+                                }
+                              }
+                            },
+                            "extra": {
+                              "$ref": "#/$defs/GameModule/properties/rules/properties/conditions/items/properties/extra"
+                            }
+                          },
+                          "required": [
+                            "kind",
+                            "cells"
+                          ],
+                          "additionalProperties": false
+                        }
+                      ]
+                    },
+                    "minItems": 1
+                  },
+                  "extra": {
+                    "$ref": "#/$defs/GameModule/properties/rules/properties/conditions/items/properties/extra"
+                  }
+                },
+                "required": [
+                  "id",
+                  "layers"
+                ],
+                "additionalProperties": false
+              },
+              "default": []
+            },
             "time": {
               "type": "object",
               "properties": {
@@ -5477,6 +6335,11 @@
                   "type": "integer",
                   "minimum": 1,
                   "default": 1440
+                },
+                "minutesPerHour": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "default": 60
                 },
                 "daysPerMonth": {
                   "type": "integer",
@@ -5520,10 +6383,48 @@
                   "minimum": 0,
                   "default": 480
                 },
+                "actionMinutes": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "integer",
+                    "minimum": 0
+                  },
+                  "default": {
+                    "search": 10,
+                    "disarm": 10,
+                    "sense": 1,
+                    "wait": 10
+                  }
+                },
                 "minutesPerTile": {
                   "type": "integer",
                   "minimum": 0,
                   "default": 0
+                }
+              },
+              "additionalProperties": false,
+              "default": {}
+            },
+            "generationDefaults": {
+              "type": "object",
+              "properties": {
+                "encounterChance": {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 1,
+                  "default": 0.3
+                },
+                "lootChance": {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 1,
+                  "default": 0.25
+                },
+                "trapChance": {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 1,
+                  "default": 0.1
                 }
               },
               "additionalProperties": false,
@@ -5536,6 +6437,11 @@
         "narrative": {
           "type": "object",
           "properties": {
+            "maxDialogueHops": {
+              "type": "integer",
+              "minimum": 1,
+              "default": 8
+            },
             "textGrammar": {
               "type": "array",
               "items": {
@@ -5587,6 +6493,969 @@
                 "additionalProperties": false
               },
               "default": []
+            },
+            "systemText": {
+              "type": "object",
+              "properties": {
+                "grammar.and": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "pool": {
+                          "type": "string",
+                          "minLength": 1,
+                          "maxLength": 64,
+                          "pattern": "^[a-z][a-z0-9_]*$",
+                          "description": "ref:narrative.textGrammar"
+                        }
+                      },
+                      "required": [
+                        "pool"
+                      ],
+                      "additionalProperties": false
+                    }
+                  ],
+                  "description": "Joins the last two items of a list."
+                },
+                "grammar.or": {
+                  "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
+                  "description": "Joins alternatives, as in a gate's unmet requirements."
+                },
+                "grammar.list.separator": {
+                  "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
+                  "description": "Between all but the last two items of a list."
+                },
+                "grammar.list.pair": {
+                  "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
+                  "description": "A list of exactly two."
+                },
+                "grammar.list.many": {
+                  "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
+                  "description": "A list of three or more; `head` is already joined."
+                },
+                "grammar.article.consonant": {
+                  "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
+                  "description": "Indefinite article before a consonant."
+                },
+                "grammar.article.vowel": {
+                  "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
+                  "description": "Indefinite article before a vowel."
+                },
+                "grammar.count": {
+                  "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
+                  "description": "A counted noun, as in \"three hounds\"."
+                },
+                "grammar.plural": {
+                  "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
+                  "description": "How a counted noun is made plural when the content declares no plural of its own."
+                },
+                "grammar.smallNumbers": {
+                  "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
+                  "description": "Number words from zero upward, space separated. Counts past the end of this ladder are written as digits."
+                },
+                "unit.round": {
+                  "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
+                  "description": "One round of combat, singular."
+                },
+                "unit.rounds": {
+                  "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
+                  "description": "Rounds of combat, plural."
+                },
+                "direction.north": {
+                  "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
+                  "description": "Bearing word, interpolated into `{direction}`."
+                },
+                "direction.south": {
+                  "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
+                  "description": "Bearing word."
+                },
+                "direction.east": {
+                  "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
+                  "description": "Bearing word."
+                },
+                "direction.west": {
+                  "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
+                  "description": "Bearing word."
+                },
+                "direction.northeast": {
+                  "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
+                  "description": "Bearing word."
+                },
+                "direction.northwest": {
+                  "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
+                  "description": "Bearing word."
+                },
+                "direction.southeast": {
+                  "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
+                  "description": "Bearing word."
+                },
+                "direction.southwest": {
+                  "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
+                  "description": "Bearing word."
+                },
+                "direction.here": {
+                  "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
+                  "description": "Bearing to the tile you are standing on."
+                },
+                "direction.nearby": {
+                  "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
+                  "description": "Bearing too close or too diagonal to name."
+                },
+                "roll.line": {
+                  "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
+                  "description": "A roll shown as its arithmetic, so a player can learn the system."
+                },
+                "roll.versus": {
+                  "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
+                  "description": "The number a roll was measured against."
+                },
+                "roll.swing": {
+                  "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
+                  "description": "Advantage or disadvantage on a roll."
+                },
+                "combat.outcome.critical": {
+                  "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
+                  "description": "How a critical reads in an attack line."
+                },
+                "combat.outcome.success": {
+                  "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
+                  "description": "How a success reads in an attack line."
+                },
+                "combat.outcome.failure": {
+                  "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
+                  "description": "How a failure reads in an attack line."
+                },
+                "combat.outcome.fumble": {
+                  "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
+                  "description": "How a fumble reads in an attack line."
+                },
+                "combat.attack.unnamed": {
+                  "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
+                  "description": "Stands in when an attack names no ability."
+                },
+                "combat.check.unnamed": {
+                  "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
+                  "description": "Stands in when a check names neither skill nor attribute."
+                },
+                "combat.damaged.resisted": {
+                  "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
+                  "description": "Appended when resistance or vulnerability changed the number."
+                },
+                "combat.attacked": {
+                  "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
+                  "default": "{attacker} — {ability} on {target}: {roll} — {outcome}.",
+                  "description": "One attack, with its arithmetic."
+                },
+                "combat.checked": {
+                  "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
+                  "default": "{who} — {what}: {roll}.",
+                  "description": "A skill or attribute check."
+                },
+                "combat.saved": {
+                  "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
+                  "default": "{who} — {save} save: {roll}.",
+                  "description": "A saving throw."
+                },
+                "combat.damaged": {
+                  "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
+                  "default": "{who} takes {amount}{type} damage{resisted}.",
+                  "description": "Damage taken."
+                },
+                "combat.healed": {
+                  "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
+                  "default": "{who} recovers {amount}.",
+                  "description": "A resource restored."
+                },
+                "combat.died": {
+                  "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
+                  "default": "{who} falls.",
+                  "description": "A creature dies."
+                },
+                "combat.conditionApplied": {
+                  "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
+                  "default": "{who} is {condition}.",
+                  "description": "A condition takes hold."
+                },
+                "combat.conditionExpired": {
+                  "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
+                  "default": "{who} is no longer {condition}.",
+                  "description": "A condition runs out."
+                },
+                "combat.conditionResisted": {
+                  "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
+                  "default": "{who} shrugs off {condition}.",
+                  "description": "A condition is saved against."
+                },
+                "combat.reacted": {
+                  "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
+                  "default": "{who} reacts.",
+                  "description": "A reaction fires."
+                },
+                "combat.started": {
+                  "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
+                  "default": "Combat begins — {who}.",
+                  "description": "A fight starts, listing who is in it."
+                },
+                "combat.ended.victory": {
+                  "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
+                  "default": "The fight is over.",
+                  "description": "The party won."
+                },
+                "combat.ended.fled": {
+                  "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
+                  "default": "You are not followed.",
+                  "description": "The party escaped."
+                },
+                "combat.ended.defeat": {
+                  "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
+                  "default": "The party falls.",
+                  "description": "The party lost."
+                },
+                "combat.round": {
+                  "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
+                  "default": "— round {round} —",
+                  "description": "A new round begins."
+                },
+                "combat.turn": {
+                  "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
+                  "default": "{who}'s turn.",
+                  "description": "Whose turn it is — without this a player only learns it from a refusal."
+                },
+                "move.blocked": {
+                  "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
+                  "default": "Blocked by {what}.",
+                  "description": "Something stopped a step: a wall, or somebody standing there."
+                },
+                "move.blocked.edge": {
+                  "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
+                  "description": "What stopped a step when it was the end of the map rather than any terrain."
+                },
+                "item.taken": {
+                  "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
+                  "default": "Taken: {items}.",
+                  "description": "Picked up."
+                },
+                "item.lost": {
+                  "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
+                  "default": "Lost: {items}.",
+                  "description": "Gone from the party's hands."
+                },
+                "item.dropped": {
+                  "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
+                  "default": "{who} leaves {items} behind.",
+                  "description": "A body's spoils — a silent drop is a drop the player never picks up."
+                },
+                "trade.bought": {
+                  "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
+                  "default": "Bought {items} from {who} for {price}.",
+                  "description": "A purchase."
+                },
+                "trade.sold": {
+                  "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
+                  "default": "Sold {items} to {who} for {price}.",
+                  "description": "A sale."
+                },
+                "currency.gained": {
+                  "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
+                  "default": "You are {amount} the richer.",
+                  "description": "Coin arriving any way other than a sale."
+                },
+                "currency.lost": {
+                  "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
+                  "default": "You are {amount} the poorer.",
+                  "description": "Coin leaving any way other than a purchase."
+                },
+                "trap.sprung": {
+                  "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
+                  "default": "{who} sets off {trap}!",
+                  "description": "A trap fires."
+                },
+                "trap.disarmed": {
+                  "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
+                  "default": "{who} disarms the {trap}.",
+                  "description": "A trap is made safe."
+                },
+                "discovered.trap": {
+                  "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
+                  "default": "You spot {what}.",
+                  "description": "A trap is noticed before it fires."
+                },
+                "discovered.place": {
+                  "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
+                  "default": "You find {what}.",
+                  "description": "A hidden place is found."
+                },
+                "progress.xp": {
+                  "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
+                  "default": "{who} gains {amount} experience.",
+                  "description": "Experience awarded."
+                },
+                "progress.level": {
+                  "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
+                  "default": "{who} reaches level {level}.",
+                  "description": "A level gained."
+                },
+                "gate.opened.bypass": {
+                  "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
+                  "description": "Appended when a gate was forced rather than opened."
+                },
+                "gate.opened.ability": {
+                  "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
+                  "description": "Appended when an ability opened a gate."
+                },
+                "gate.blocked.missing": {
+                  "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
+                  "description": "Appended to a blocked gate, listing what would open it."
+                },
+                "gate.opened": {
+                  "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
+                  "default": "{gate} opens{how}.",
+                  "description": "A gate gives way."
+                },
+                "gate.blocked": {
+                  "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
+                  "default": "{gate} will not open.{missing}",
+                  "description": "A gate holds."
+                },
+                "requirement.item": {
+                  "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
+                  "description": "An item a requirement asks for."
+                },
+                "requirement.skill": {
+                  "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
+                  "description": "A skill rank a requirement asks for."
+                },
+                "requirement.quest": {
+                  "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
+                  "description": "A quest state a requirement asks for."
+                },
+                "requirement.faction": {
+                  "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
+                  "description": "Reputation a requirement asks for."
+                },
+                "requirement.level": {
+                  "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
+                  "description": "A level a requirement asks for."
+                },
+                "requirement.ability": {
+                  "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
+                  "description": "An ability a requirement asks for."
+                },
+                "quest.offered": {
+                  "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
+                  "default": "{who} has work for you: {quest}.",
+                  "description": "Somebody offers a job."
+                },
+                "quest.started": {
+                  "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
+                  "default": "New quest: {quest} — {description}",
+                  "description": "A job taken, with what it is — the title alone says nothing."
+                },
+                "quest.started.plain": {
+                  "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
+                  "default": "New quest: {quest}.",
+                  "description": "A job taken that has no description."
+                },
+                "quest.stage": {
+                  "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
+                  "default": "{stage}",
+                  "description": "A quest moves on, when the stage wrote no journal prose."
+                },
+                "quest.stage.journal": {
+                  "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
+                  "default": "{stage} — {journal}",
+                  "description": "A quest moves on, with the stage's own journal line."
+                },
+                "quest.objective": {
+                  "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
+                  "default": "Objective complete: {objective}",
+                  "description": "One objective done."
+                },
+                "quest.completed": {
+                  "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
+                  "default": "Quest complete: {quest}.",
+                  "description": "A job finished."
+                },
+                "quest.failed": {
+                  "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
+                  "default": "Quest failed: {quest} — {reason}.",
+                  "description": "A job lost."
+                },
+                "quest.failed.abandoned": {
+                  "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
+                  "description": "Why a quest was lost: the party walked away from it."
+                },
+                "quest.failed.conditions": {
+                  "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
+                  "description": "Why a quest was lost: its `failWhen` became true."
+                },
+                "quest.failed.timedOut": {
+                  "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
+                  "description": "Why a quest was lost: its deadline ran out."
+                },
+                "quest.failed.expired": {
+                  "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
+                  "description": "Why a quest was lost: it expired off-screen."
+                },
+                "party.stance": {
+                  "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
+                  "default": "You move at a {stance}.",
+                  "description": "The party changes how carefully it moves."
+                },
+                "party.following": {
+                  "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
+                  "default": "The others fall in behind you.",
+                  "description": "The party closes up."
+                },
+                "party.spread": {
+                  "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
+                  "default": "The party spreads out.",
+                  "description": "The party stops following."
+                },
+                "time.dayBroke": {
+                  "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
+                  "default": "Day {day} breaks.",
+                  "description": "A new day."
+                },
+                "reputation.improved": {
+                  "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
+                  "description": "Which way standing moved."
+                },
+                "reputation.worsened": {
+                  "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
+                  "description": "Which way standing moved."
+                },
+                "reputation.changed": {
+                  "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
+                  "default": "{faction}: {direction} ({delta}).",
+                  "description": "Standing with a faction moved."
+                },
+                "deed.witness": {
+                  "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
+                  "description": "One witness."
+                },
+                "deed.witnesses": {
+                  "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
+                  "description": "Several witnesses."
+                },
+                "deed.unseen": {
+                  "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
+                  "default": "Nobody saw that.",
+                  "description": "A deed nobody witnessed — which is what makes stealth mechanically different."
+                },
+                "deed.witnessed": {
+                  "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
+                  "default": "{witnesses} to that.",
+                  "description": "A deed that was seen."
+                },
+                "game.victory": {
+                  "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
+                  "default": "You have won.",
+                  "description": "The game is won."
+                },
+                "game.defeat": {
+                  "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
+                  "default": "Your party is dead.",
+                  "description": "The game is lost."
+                },
+                "sense.nearness.faint": {
+                  "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
+                  "description": "How a weak or stale impression is introduced."
+                },
+                "sense.nearness.close": {
+                  "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
+                  "description": "How a strong impression is introduced."
+                },
+                "sense.nearness.far": {
+                  "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
+                  "description": "How a middling impression is introduced."
+                },
+                "sense.unnamed": {
+                  "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
+                  "description": "Stands in when a sense declares no name."
+                },
+                "perception.investigating": {
+                  "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
+                  "default": "{who} casts about, and starts toward something.",
+                  "description": "A creature goes to look at what it noticed."
+                },
+                "perception.lostInterest": {
+                  "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
+                  "default": "{who} loses the thread of it.",
+                  "description": "A creature gives up looking."
+                },
+                "sense.empty": {
+                  "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
+                  "default": "You stop. Nothing reaches you.",
+                  "description": "Using a sense that turns nothing up, when the sense has no name."
+                },
+                "sense.empty.named": {
+                  "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
+                  "default": "You stop. Nothing reaches you by {sense}.",
+                  "description": "Using a sense that turns nothing up. Always says something — silence reads as a broken command."
+                },
+                "sense.impression": {
+                  "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
+                  "default": "{nearness}, something you can {sense}.",
+                  "description": "Noticing something, when the sense wrote no phrasing of its own."
+                },
+                "look.creatures": {
+                  "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
+                  "default": "You see {what}.",
+                  "description": "Who else is here."
+                },
+                "look.creature.plain": {
+                  "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
+                  "default": "{name}, and nothing more to be told from here.",
+                  "description": "Looking at a creature whose statblock wrote no description."
+                },
+                "look.item.plain": {
+                  "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
+                  "default": "{name}. Nothing remarkable.",
+                  "description": "Looking at an item that wrote no description."
+                },
+                "look.place.plain": {
+                  "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
+                  "default": "{name}, from here.",
+                  "description": "Looking at a place that wrote no description."
+                },
+                "look.unseen": {
+                  "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
+                  "default": "You cannot see {what} from here.",
+                  "description": "Looking at something that is not here."
+                },
+                "refused.actor.missing": {
+                  "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
+                  "default": "no such character",
+                  "description": "The action named somebody who is not in the game."
+                },
+                "refused.action.unknown": {
+                  "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
+                  "default": "\"{action}\" is not something you can do",
+                  "description": "An action this build has never heard of — a save or a caller can hand one over."
+                },
+                "refused.turn.other": {
+                  "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
+                  "default": "it is {who}'s turn",
+                  "description": "Acting out of turn."
+                },
+                "refused.select.notParty": {
+                  "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
+                  "default": "not in the party",
+                  "description": "Selecting somebody who is not yours to command."
+                },
+                "refused.move.noMap": {
+                  "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
+                  "default": "not on a map",
+                  "description": "Moving while not on a tactical map."
+                },
+                "refused.move.tooFar": {
+                  "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
+                  "default": "that is not one step away",
+                  "description": "Moving further than one tile at a time."
+                },
+                "refused.move.noMovement": {
+                  "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
+                  "default": "no movement left this turn",
+                  "description": "Out of movement in combat."
+                },
+                "refused.travel.noMap": {
+                  "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
+                  "default": "nowhere to walk",
+                  "description": "Walking with no map underfoot."
+                },
+                "refused.travel.noRoute": {
+                  "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
+                  "default": "no way through",
+                  "description": "No path to the destination."
+                },
+                "refused.travel.noRoad": {
+                  "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
+                  "default": "there is no road that way",
+                  "description": "No connection between these two areas."
+                },
+                "refused.travel.noWayUp": {
+                  "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
+                  "default": "there is no way back up",
+                  "description": "No route out of a dungeon by that door."
+                },
+                "refused.travel.notYet": {
+                  "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
+                  "default": "not yet — {missing}",
+                  "description": "The way on is gated, and this is what is missing."
+                },
+                "refused.travel.notYet.plain": {
+                  "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
+                  "default": "not yet",
+                  "description": "The way on is gated, with nothing to say about why."
+                },
+                "refused.travel.unknownArea": {
+                  "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
+                  "default": "no area \"{area}\"",
+                  "description": "The module names no such area."
+                },
+                "refused.leave.noExitFound": {
+                  "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
+                  "default": "find the way out first",
+                  "description": "Leaving a dungeon before the exit is known."
+                },
+                "refused.leave.nowhere": {
+                  "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
+                  "default": "there is nowhere to go back to",
+                  "description": "Leaving with nowhere to go."
+                },
+                "refused.enter.noSuchPlace": {
+                  "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
+                  "default": "there is no \"{target}\" here",
+                  "description": "Entering something that is not here."
+                },
+                "refused.enter.unknownPlace": {
+                  "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
+                  "default": "no such place",
+                  "description": "The place exists in no collection."
+                },
+                "refused.enter.unknownDungeon": {
+                  "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
+                  "default": "no dungeon \"{dungeon}\"",
+                  "description": "The module names no such dungeon."
+                },
+                "refused.attack.noWeapon": {
+                  "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
+                  "default": "{who} has nothing to attack with",
+                  "description": "Attacking with no ability and no weapon."
+                },
+                "refused.ability.unknown": {
+                  "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
+                  "default": "no ability \"{ability}\"",
+                  "description": "The module names no such ability."
+                },
+                "refused.ability.notKnown": {
+                  "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
+                  "default": "{who} does not know {ability}",
+                  "description": "Using an ability this creature has not got."
+                },
+                "refused.ability.prevented": {
+                  "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
+                  "default": "{who} cannot take that action right now",
+                  "description": "A condition forbids the action type."
+                },
+                "refused.ability.requirements": {
+                  "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
+                  "default": "{who} does not meet the requirements for {ability}",
+                  "description": "An ability is gated and the gate is shut."
+                },
+                "refused.ability.unavailable": {
+                  "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
+                  "default": "{ability} cannot be used now",
+                  "description": "An ability's own condition says no."
+                },
+                "refused.ability.cooldown": {
+                  "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
+                  "default": "{ability} is not ready for another {rounds}",
+                  "description": "An ability is still cooling down."
+                },
+                "refused.ability.noAction": {
+                  "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
+                  "default": "no action left this turn",
+                  "description": "Out of actions in combat."
+                },
+                "refused.cost.shortfall": {
+                  "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
+                  "default": "not enough {resource}",
+                  "description": "An ability costs more than is left."
+                },
+                "refused.target.none": {
+                  "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
+                  "default": "nothing to target",
+                  "description": "An ability that needs a target found none."
+                },
+                "refused.target.missing": {
+                  "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
+                  "default": "no target",
+                  "description": "No target was named."
+                },
+                "refused.target.empty": {
+                  "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
+                  "default": "nothing there",
+                  "description": "The named target is gone."
+                },
+                "refused.target.elsewhere": {
+                  "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
+                  "default": "not here",
+                  "description": "The target is on another map."
+                },
+                "refused.target.outOfRange": {
+                  "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
+                  "default": "out of range",
+                  "description": "Beyond the ability's reach."
+                },
+                "refused.target.outOfReach": {
+                  "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
+                  "default": "out of reach",
+                  "description": "Beyond arm's length."
+                },
+                "refused.target.noSight": {
+                  "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
+                  "default": "no line of sight",
+                  "description": "Something solid is in the way."
+                },
+                "refused.target.covered": {
+                  "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
+                  "default": "they are behind full cover",
+                  "description": "Cover blocks the shot entirely."
+                },
+                "refused.flee.noCombat": {
+                  "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
+                  "default": "nothing to flee from",
+                  "description": "Fleeing outside a fight."
+                },
+                "refused.flee.noExit": {
+                  "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
+                  "default": "there is nowhere to run",
+                  "description": "Fleeing with no way out."
+                },
+                "refused.cast.silenced": {
+                  "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
+                  "default": "{who} cannot speak the words",
+                  "description": "A verbal component with speech prevented."
+                },
+                "refused.cast.bound": {
+                  "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
+                  "default": "{who} cannot make the signs",
+                  "description": "A somatic component with gesture prevented."
+                },
+                "refused.cast.noComponent": {
+                  "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
+                  "default": "{who} has no {component}",
+                  "description": "A material component the caster is not carrying."
+                },
+                "refused.cast.notRitual": {
+                  "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
+                  "default": "{spell} cannot be cast as a ritual",
+                  "description": "Casting as a ritual something that is not one."
+                },
+                "refused.cast.noSlot": {
+                  "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
+                  "default": "no slot left for {spell}",
+                  "description": "Out of spell slots at that level."
+                },
+                "refused.item.unknown": {
+                  "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
+                  "default": "no item \"{item}\"",
+                  "description": "The module names no such item."
+                },
+                "refused.item.notCarried": {
+                  "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
+                  "default": "you are not carrying that",
+                  "description": "Acting on an item nobody holds."
+                },
+                "refused.take.nothingHere": {
+                  "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
+                  "default": "there is nothing here to take",
+                  "description": "Nothing within reach to pick up."
+                },
+                "refused.take.noSuchItem": {
+                  "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
+                  "default": "there is no {item} here",
+                  "description": "That particular thing is not here."
+                },
+                "refused.equip.notWearable": {
+                  "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
+                  "default": "{item} is not something you wear",
+                  "description": "Equipping something with no slot."
+                },
+                "refused.equip.notAllowed": {
+                  "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
+                  "default": "{item} is not for you",
+                  "description": "Equipping something this character may not use."
+                },
+                "refused.unequip.notWorn": {
+                  "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
+                  "default": "you are not wearing that",
+                  "description": "Taking off something not worn."
+                },
+                "refused.use.nothingHappens": {
+                  "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
+                  "default": "nothing happens with the {item}",
+                  "description": "Using an item that declares no effect."
+                },
+                "refused.use.spent": {
+                  "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
+                  "default": "the {item} is spent",
+                  "description": "Using an item whose charges are gone."
+                },
+                "refused.give.tooFar": {
+                  "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
+                  "default": "they are not close enough",
+                  "description": "Handing something over from too far away."
+                },
+                "refused.search.nothing": {
+                  "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
+                  "default": "you find nothing here",
+                  "description": "A search that turned nothing up."
+                },
+                "refused.disarm.nothingHere": {
+                  "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
+                  "default": "there is nothing here to disarm",
+                  "description": "Disarming with no trap in reach."
+                },
+                "refused.open.noSuchThing": {
+                  "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
+                  "default": "nothing here called \"{target}\"",
+                  "description": "Opening something that is not here."
+                },
+                "refused.open.unknownGate": {
+                  "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
+                  "default": "no gate \"{gate}\"",
+                  "description": "The module names no such gate."
+                },
+                "refused.sense.unknown": {
+                  "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
+                  "default": "nothing here works like that",
+                  "description": "Using a sense the module does not declare."
+                },
+                "refused.stance.unknown": {
+                  "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
+                  "default": "there is no way of moving called \"{stance}\"",
+                  "description": "Setting a stance the module does not declare."
+                },
+                "refused.follow.inCombat": {
+                  "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
+                  "default": "in a fight everyone acts on their own initiative",
+                  "description": "Setting follow while fighting."
+                },
+                "refused.rest.notHere": {
+                  "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
+                  "default": "cannot rest like that here",
+                  "description": "This place does not allow that kind of rest."
+                },
+                "refused.rest.inCombat": {
+                  "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
+                  "default": "not while fighting",
+                  "description": "Resting mid-fight."
+                },
+                "refused.rest.interrupted": {
+                  "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
+                  "default": "something came looking before you could settle",
+                  "description": "A rest broken into."
+                },
+                "refused.talk.tooFar": {
+                  "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
+                  "default": "too far away to talk",
+                  "description": "Talking from across the room."
+                },
+                "refused.talk.nothingToSay": {
+                  "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
+                  "default": "{who} has nothing to say",
+                  "description": "This character has no dialogue."
+                },
+                "refused.talk.unknownDialogue": {
+                  "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
+                  "default": "no dialogue \"{dialogue}\"",
+                  "description": "The module names no such dialogue."
+                },
+                "refused.reply.noConversation": {
+                  "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
+                  "default": "nobody is talking",
+                  "description": "Replying with no conversation open."
+                },
+                "refused.reply.unknown": {
+                  "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
+                  "default": "no such reply",
+                  "description": "Choosing a reply that is not on offer."
+                },
+                "refused.reply.locked": {
+                  "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
+                  "default": "you cannot say that",
+                  "description": "A reply that is shown but not available, and wrote no hint of its own."
+                },
+                "refused.buy.noStock": {
+                  "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
+                  "default": "they have nothing to sell",
+                  "description": "This character keeps no shop."
+                },
+                "refused.buy.noSuchItem": {
+                  "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
+                  "default": "they do not have that",
+                  "description": "Not in stock."
+                },
+                "refused.buy.tooExpensive": {
+                  "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
+                  "default": "you cannot afford that",
+                  "description": "Not enough coin."
+                },
+                "refused.sell.notBuying": {
+                  "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
+                  "default": "they are not buying",
+                  "description": "This shop does not buy."
+                },
+                "refused.sell.unwanted": {
+                  "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
+                  "default": "they have no use for that",
+                  "description": "This shop will not take that."
+                },
+                "refused.trade.barred": {
+                  "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
+                  "default": "they will not deal with you — {missing}",
+                  "description": "The shop is gated, and this is why."
+                },
+                "refused.trade.barred.plain": {
+                  "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
+                  "default": "they will not deal with you",
+                  "description": "The shop is gated, with nothing to say about why."
+                },
+                "affordance.barred": {
+                  "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
+                  "default": "barred — needs {what}",
+                  "description": "A way that is shut, and what would open it."
+                },
+                "affordance.needs": {
+                  "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
+                  "default": "needs {what}",
+                  "description": "A shop that will not deal, and what would change that."
+                },
+                "refused.quest.unknown": {
+                  "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
+                  "default": "no quest \"{quest}\"",
+                  "description": "The module names no such quest."
+                },
+                "refused.quest.unavailable": {
+                  "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
+                  "default": "{quest} is not available yet",
+                  "description": "A quest whose requirements are unmet."
+                },
+                "refused.quest.notTaken": {
+                  "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
+                  "default": "you are not on that job",
+                  "description": "Abandoning a quest nobody took."
+                },
+                "refused.internal.unknownResource": {
+                  "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
+                  "default": "no resource \"{resource}\"",
+                  "description": "Content named a resource the ruleset does not declare."
+                },
+                "refused.internal.unknownCondition": {
+                  "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
+                  "default": "no condition \"{condition}\"",
+                  "description": "Content named a condition the ruleset does not declare."
+                },
+                "refused.internal.unknownFaction": {
+                  "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
+                  "default": "no faction \"{faction}\"",
+                  "description": "Content named a faction the module does not declare."
+                },
+                "refused.internal.unknownOp": {
+                  "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
+                  "default": "this engine does not implement \"{op}\"",
+                  "description": "An effect this build does not know."
+                }
+              },
+              "additionalProperties": false,
+              "default": {}
             },
             "dialogues": {
               "type": "array",
@@ -6137,6 +8006,16 @@
                       "minimum": 0,
                       "default": 1
                     },
+                    "caresAboutMultiplier": {
+                      "type": "number",
+                      "minimum": 0,
+                      "default": 2
+                    },
+                    "linearSpanMultiplier": {
+                      "type": "number",
+                      "minimum": 0.01,
+                      "default": 2
+                    },
                     "neverForget": {
                       "type": "array",
                       "items": {
@@ -6199,6 +8078,17 @@
                       "type": "number",
                       "minimum": 0,
                       "default": 1
+                    },
+                    "gullibilityScale": {
+                      "type": "number",
+                      "minimum": 0,
+                      "default": 2
+                    },
+                    "garbledRetention": {
+                      "type": "number",
+                      "minimum": 0,
+                      "maximum": 1,
+                      "default": 0.5
                     },
                     "spreadsWithoutWitness": {
                       "type": "boolean",
@@ -6506,7 +8396,28 @@
               "description": "ref:world.dungeons"
             },
             "openingTextKey": {
-              "$ref": "#/$defs/GameModule/properties/id"
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 64,
+              "pattern": "^[a-z][a-z0-9_]*$",
+              "description": "ref:narrative.textGrammar"
+            },
+            "partyFollow": {
+              "type": "object",
+              "properties": {
+                "catchUpDistance": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "default": 3
+                },
+                "catchUpSteps": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "default": 2
+                }
+              },
+              "additionalProperties": false,
+              "default": {}
             },
             "initialFlags": {
               "type": "object",

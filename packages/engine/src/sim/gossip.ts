@@ -13,7 +13,7 @@
  */
 
 import { Rng } from '@dm/core';
-import type { CompiledModule } from '@dm/module';
+import type { CompiledModule, MemoryModel } from '@dm/module';
 import type { Entity } from '../state.js';
 import { Transaction } from '../rules/apply.js';
 import { npcIdOf } from '../character.js';
@@ -21,38 +21,7 @@ import { npcIdOf } from '../character.js';
 /** Mutable shape of the memory table, for building the next one. */
 type MemoryTable = Record<string, Record<string, { at: number; strength: number; hops: number }>>;
 
-export interface MemoryModel {
-  mode: 'simulated' | 'manual' | 'hybrid';
-  forgetting: {
-    curve: 'none' | 'linear' | 'exponential' | 'threshold';
-    halfLifeDays: number;
-    floor: number;
-    reinforceOnRecall: number;
-    memorabilityWeight: number;
-    neverForget: string[];
-  };
-  gossip: {
-    enabled: boolean;
-    spreadPerDay: number;
-    maxHops: number;
-    hopRetention: number;
-    distortionPerHop: number;
-    requiresTravel: boolean;
-    crossFactionRate: number;
-    minimumSeverity: number;
-    spreadsWithoutWitness: boolean;
-  };
-  rules: {
-    id: string;
-    deedKinds: string[];
-    alwaysKnownBy: string[];
-    neverKnownBy: string[];
-    spreadPerDay?: number;
-    halfLifeDays?: number;
-    distortionPerHop?: number;
-    manualOnly: boolean;
-  }[];
-}
+export type { MemoryModel };
 
 /** A shallow-per-npc copy, so building the next table never mutates the last. */
 function structuredCloneMemory(
@@ -64,7 +33,7 @@ function structuredCloneMemory(
 }
 
 export function memoryModel(module: CompiledModule): MemoryModel {
-  return module.source.narrative.memory as unknown as MemoryModel;
+  return module.source.narrative.memory;
 }
 
 /**
@@ -89,10 +58,16 @@ export function retention(
   days: number,
   halfLife: number,
   floor: number,
+  /**
+   * How far a `linear` curve runs, as a multiple of the half-life. Passed in
+   * rather than read from the module because this is a pure function of the
+   * numbers and is exported as one.
+   */
+  linearSpan = 2,
 ): number {
   if (curve === 'none' || halfLife <= 0) return 1;
   if (curve === 'threshold') return days <= halfLife ? 1 : 0;
-  if (curve === 'linear') return Math.max(floor, 1 - days / (halfLife * 2));
+  if (curve === 'linear') return Math.max(floor, 1 - days / (halfLife * linearSpan));
   // Exponential: sharp at first, then a long tail — how people actually forget.
   return Math.max(floor, Math.pow(0.5, days / halfLife));
 }
@@ -101,7 +76,7 @@ export function retention(
 function populace(module: CompiledModule): { id: string; gullibility: number; faction?: string }[] {
   return module
     .all<{ id: string; gullibility: number; faction?: string }>('content.npcs')
-    .map((npc) => ({ id: npc.id, gullibility: npc.gullibility ?? 0.5, ...(npc.faction ? { faction: npc.faction } : {}) }));
+    .map((npc) => ({ id: npc.id, gullibility: npc.gullibility, ...(npc.faction ? { faction: npc.faction } : {}) }));
 }
 
 /**
@@ -167,7 +142,7 @@ export function spreadRumours(txn: Transaction, day: number, rng: Rng): void {
         const reach = rumourReachOf(txn, deed.location);
         const rate = spreadRate * reach
           * (crossFaction ? model.gossip.crossFactionRate : 1)
-          * (listener.gullibility * 2);
+          * (listener.gullibility * model.gossip.gullibilityScale);
 
         if (!rng.derive(`${deed.id}:${teller.id}:${listener.id}:${day}`).chance(rate)) continue;
 
@@ -191,7 +166,10 @@ export function spreadRumours(txn: Transaction, day: number, rng: Rng): void {
           .chance(Math.min(1, distortion + kind.distortion));
         if (garbled) {
           const record = memory[listener.id]![deed.id]!;
-          memory[listener.id]![deed.id] = { ...record, strength: record.strength * 0.5 };
+          memory[listener.id]![deed.id] = {
+            ...record,
+            strength: record.strength * model.gossip.garbledRetention,
+          };
         }
       }
     }
@@ -276,7 +254,9 @@ export function decayMemories(txn: Transaction, _day: number, _rng: Rng): void {
       // remembers it longer still — which is the whole point of `caresAbout`.
       const kind = txn.module.find<{ memorability: number }>('narrative.deedKinds', deed.kind);
       const memorability = Math.max(0, kind?.memorability ?? 1);
-      const personal = npc?.caresAbout?.includes(deed.kind) ? 2 : 1;
+      const personal = npc?.caresAbout?.includes(deed.kind)
+        ? model.forgetting.caresAboutMultiplier
+        : 1;
       const weighted = 1 + (memorability - 1) * model.forgetting.memorabilityWeight;
 
       const halfLife = (pinned
@@ -284,7 +264,10 @@ export function decayMemories(txn: Transaction, _day: number, _rng: Rng): void {
         * Math.max(0.01, weighted) * personal;
 
       const elapsedDays = (txn.state.minute - deed.at) / perDay;
-      const strength = retention(model.forgetting.curve, elapsedDays, halfLife, model.forgetting.floor)
+      const strength = retention(
+        model.forgetting.curve, elapsedDays, halfLife,
+        model.forgetting.floor, model.forgetting.linearSpanMultiplier,
+      )
         * Math.pow(model.gossip.hopRetention, record.hops);
 
       if (strength <= 0) {

@@ -3,6 +3,12 @@
 An audit of every constant, threshold, string, and behavioural assumption that
 lives in engine code rather than in the GM's module JSON.
 
+> **Status: addressed, 2026-08-15.** Every P0 and P1 finding, and the whole of
+> the P2 table, has been moved into module JSON. P3 stays hardcoded by
+> decision. What each finding became is recorded inline below; the section at
+> the end, *[What was done](#what-was-done)*, has the summary and the two
+> mechanisms the work introduced.
+
 **Scope:** `../packages/engine/src` primarily, with `../packages/module/src` (schema),
 `../packages/play/src`, and the front ends noted where relevant. Version audited:
 working tree at `ec3e9db` + uncommitted changes, 2026-08-15.
@@ -605,4 +611,89 @@ field against its readers in the engine. Line numbers are from the working tree
 at the time of writing and will drift — the symbol names in each snippet are the
 durable anchor.
 
-Nothing in this document has been changed in code; it is an audit only.
+---
+
+## What was done
+
+Every P0 and P1 finding and the whole P2 table were moved into module JSON. Two
+mechanisms carry most of it.
+
+### `narrative.systemText` — the engine's own words
+
+Finding #1, and the largest change. The registry lives in
+[systemText.ts](../packages/module/src/schema/systemText.ts): one stable key per
+sentence, its canonical wording, and the placeholders it cannot lose. The engine
+reads them through `text()` / `render()`
+([narrate/systemText.ts](../packages/engine/src/narrate/systemText.ts)) and holds
+**no English of its own** — `refused` events carry a key and its facts rather
+than a finished sentence, and `roughBearing` and `bearing` return
+`direction.*` keys rather than words.
+
+Two tiers decide what is mandatory, and the rule is the one a player would
+recognise: **a value is only required when something else is relying on it to
+convey a message.**
+
+- **fragment** — a piece another message interpolates (`combat.outcome.failure`
+  is the `{outcome}` in an attack line). Required in the document; omitting one
+  is a load error, because the sentence around it would render with a hole.
+- **message** — a sentence that stands alone. Carries a schema default, so an
+  author writes only what they want to change.
+
+`compileModule` rejects a missing fragment, a blank message, and a template that
+has lost a required placeholder. `npm run systemtext -- <module>` writes the
+whole set into a module; `blankModule()` seeds the fragments so a new module
+compiles. `spine.test.ts` gained a guard that fails on prose in engine code.
+
+### `rules/config.ts` — the resolution knobs
+
+[config.ts](../packages/engine/src/rules/config.ts) resolves and memoizes the
+one-line constants, in the style of the existing `criticalMultiplier`.
+
+### Finding by finding
+
+| # | Became |
+| --- | --- |
+| 1 | `narrative.systemText`, above |
+| 2 | `rules.resolution.saveSuccessMultiplier` |
+| 3 | `rules.resolution.passiveBase` + `opposedMode`; `opposedCheck` now reports a meaningful outcome instead of always `success` |
+| 4 | `world.generationDefaults` |
+| 5 | `world.areas[].encounterChance`, an expression over `dangerLevel` |
+| 6 | `rules.defaultMovementMode` |
+| 7 | `skillProficiencies` accepts `{ skill, rank }`; `rules.progression.proficiencyRank` |
+| 8 | `rules.progression.levelVitality` — `roll` / `average` / `max` / `none`, class or size die, plus a per-level expression. Un-inerts `sizes[].hitDie` |
+| 9 | `rules.dispositionBands`, with an explicit catch-all band |
+| 10 | `gossip.gullibilityScale`, `gossip.garbledRetention`, `forgetting.caresAboutMultiplier`, `forgetting.linearSpanMultiplier` |
+| 11 | The 12-tile floor is gone; `radius: 0` means everyone present, as the schema always said |
+| 12 | `rules.conditions[].concealsIdentity` — typed, so a wrong id cannot fail silently |
+| 13 | `rules.spellcasting.componentActionTypes`, as refs |
+| 14 | `rules.search.{trapRadius, disarmReach}` |
+| 15 | `world.time.actionMinutes` |
+| 16 | `rules.interactionRange.{talk, reach}` |
+| 17 | `start.partyFollow.{catchUpDistance, catchUpSteps}` |
+| 18 | `lootTables[].bonusRolls.{onSuccess, onCritical}` |
+| 19 | `encounterTables[].scalePerLevels` |
+| 20 | `roomTemplates[].{alwaysEncounter, neverEncounter, neverTrap}` and `dungeons[].safeEntrance`; `role` is no longer load-bearing |
+| 21 | `rules.perception.minimumEmission`, `rules.senses[].spreadRetention` |
+| 22 | Deleted. `MemoryModel` and `Spellcasting` are the schema's inferred types now, not hand-written copies behind an `as unknown as` |
+| 23 | `rules.resolution.damageRounding`, `rules.currency.allowNegative` |
+| 24 | `rules.resolution.reputationRounding` |
+| P2 | `world.time.minutesPerHour`, `dungeons[].bsp.minLeaf`, `dungeons[].caverns`, `dungeons[].winding`, `dungeons[].roomSize`, `narrative.maxDialogueHops`, `areaOfEffect.angle`. `DEFAULT_TILE_SIZE` and the spiral bound stay, as the table recommended |
+
+### The registry gaps
+
+`maxSpellLevel`, `opportunities[].actionType` and `movementModes[].terrainMultiplier`
+were **wired up** rather than registered — the last of these because
+`space.ts`'s documentation and the engine disagreed, and the documentation was
+right. `sizes[].hitDie` became live through #8. `languages[].exotic` is now
+listed in `apps/editor/lib/inertFields.ts`. `start.creation`'s constraints moved
+out of `packages/play` into
+[creation.ts](../packages/engine/src/creation.ts), so a party built any other way
+obeys them too.
+
+### How it was checked
+
+`npm run check` (985 tests), `validate` and `smoke` on both modules, both Next
+apps built, and — the part a test suite cannot do — a played transcript read
+side by side with one captured before the work: **identical**. Then the same
+transcript run against a module that overrides the new fields, to prove they are
+connected rather than merely accepted.

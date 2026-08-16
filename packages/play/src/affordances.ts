@@ -35,7 +35,12 @@ import {
   sightSenseOf,
   reachableTrap,
   shopBarred,
+  text,
+  list,
+  grammarOf,
+  joinMessages,
 } from '@dm/engine';
+import type { Message } from '@dm/engine';
 import { Rng } from '@dm/core';
 import type { Requirement } from '@dm/module';
 import { traderNearby } from './parser.js';
@@ -49,7 +54,7 @@ import { duration } from './views/format.js';
  * An authored description says it all; the mechanical item list is the
  * fallback for gates that never wrote one, not an addition to those that did.
  */
-function gateReason(requires: Requirement | undefined): readonly string[] {
+function gateReason(requires: Requirement | undefined): readonly Message[] {
   const described = describeRequirement(requires);
   return requires?.description ? described.slice(0, 1) : described;
 }
@@ -234,7 +239,9 @@ export function affordancesAt(context: PlayContext, at: Position): readonly Affo
         weight: 80,
         // Entering *attempts* the gate — the party may hold the key — so this
         // is a hint about what stands in the way, not a hard refusal.
-        ...(barred && needs.length > 0 ? { blocked: `barred — needs ${needs.join(', ')}` } : {}),
+        ...(barred && needs.length > 0
+          ? { blocked: text(module, 'affordance.barred', { what: joinMessages(module, needs) }) }
+          : {}),
       });
     }
   }
@@ -374,7 +381,7 @@ export function affordances(context: PlayContext): readonly Affordance[] {
         subject: { kind: 'poi', id: place.poi },
         weight: 60,
         ...(place.barred && place.requires.length > 0
-          ? { blocked: `barred — needs ${place.requires.join(', ')}` }
+          ? { blocked: text(module, 'affordance.barred', { what: list(grammarOf(module), place.requires) }) }
           : {}),
       });
     }
@@ -387,7 +394,7 @@ export function affordances(context: PlayContext): readonly Affordance[] {
         subject: { kind: 'area', id: road.area },
         weight: 55,
         ...(road.barred && road.requires.length > 0
-          ? { blocked: `barred — needs ${road.requires.join(', ')}` }
+          ? { blocked: text(module, 'affordance.barred', { what: list(grammarOf(module), road.requires) }) }
           : {}),
       });
     }
@@ -450,7 +457,11 @@ export function affordances(context: PlayContext): readonly Affordance[] {
       subject: { kind: 'entity', id: trader },
       weight: 70,
       ...(gate.barred
-        ? { blocked: gate.requires.length > 0 ? `needs ${gate.requires.join(', ')}` : 'they will not deal with you' }
+        ? {
+            blocked: gate.requires.length > 0
+              ? text(module, 'affordance.needs', { what: joinMessages(module, gate.requires) })
+              : text(module, 'refused.trade.barred.plain'),
+          }
         : {}),
     });
   }

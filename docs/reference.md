@@ -79,6 +79,10 @@ not anticipate there. It is the supported way to exceed what ships.
 | `vitalResource` | [→ rules.resources](#rulesresources) | **yes** |  |
 | `initiativeStat` | [→ rules.derivedStats](#rulesderivedStats) |  |  |
 | `defaultSize` | [→ rules.sizes](#rulessizes) |  |  |
+| `defaultMovementMode` | [→ rules.movementModes](#rulesmovementModes) |  |  |
+| `interactionRange` | [object](#module-rules-interactionRange) |  | `{}` |
+| `search` | [object](#module-rules-search) |  | `{}` |
+| `dispositionBands` | [object](#module-rules-dispositionBands)[] |  | `[{"id":"neutral","atLeast":0,"stance":"neutral"},{"id":"hostile","stance":"hostile"}]` |
 | `extra` | { string: any } |  | `{}` |
 
 ### Module → `rules` → `attributes`
@@ -151,6 +155,7 @@ not anticipate there. It is the supported way to exceed what ships.
 | `onExpire` | [DSL](#the-dsl)[] |  | `[]` |
 | `modifiers` | { string: [DSL](#the-dsl) } |  | `{}` |
 | `prevents` | string[] |  | `[]` |
+| `concealsIdentity` | boolean |  | `false` |
 | `savingThrow` | [object](#module-rules-conditions-savingThrow) |  |  |
 | `implies` | string[] |  | `[]` |
 | `extra` | { string: any } |  | `{}` |
@@ -235,6 +240,11 @@ not anticipate there. It is the supported way to exceed what ships.
 | `criticalSuccessAt` | number |  | `20` |
 | `criticalFailureAt` | number |  | `1` |
 | `criticalDamageMultiplier` | number |  | `2` |
+| `saveSuccessMultiplier` | number |  | `0.5` |
+| `passiveBase` | number |  | `10` |
+| `opposedMode` | `passive` \| `contested` |  | `"passive"` |
+| `damageRounding` | `floor` \| `round` \| `ceil` |  | `"round"` |
+| `reputationRounding` | `floor` \| `round` \| `ceil` \| `trunc` |  | `"trunc"` |
 | `defaultDifficulty` | number |  | `12` |
 | `difficulties` | { string: number } |  | `{}` |
 
@@ -247,6 +257,8 @@ not anticipate there. It is the supported way to exceed what ships.
 | `maxLevel` | number |  | `20` |
 | `levels` | [object](#module-rules-progression-levels)[] | **yes** |  |
 | `proficiency` | [DSL](#the-dsl) |  |  |
+| `proficiencyRank` | number |  | `1` |
+| `levelVitality` | [object](#module-rules-progression-levelVitality) |  | `{}` |
 
 ### Module → `rules` → `progression` → `levels`
 
@@ -257,6 +269,16 @@ not anticipate there. It is the supported way to exceed what ships.
 | `level` | number | **yes** |  |
 | `xpRequired` | number | **yes** |  |
 | `grants` | [DSL](#the-dsl)[] |  | `[]` |
+
+### Module → `rules` → `progression` → `levelVitality`
+
+<a id="module-rules-progression-levelVitality"></a>
+
+| Field | Type | Required | Default |
+| --- | --- | --- | --- |
+| `policy` | `roll` \| `average` \| `max` \| `none` |  | `"roll"` |
+| `die` | `class` \| `size` |  | `"class"` |
+| `bonus` | [DSL](#the-dsl) |  | `0` |
 
 ### Module → `rules` → `savingThrows`
 
@@ -313,10 +335,11 @@ not anticipate there. It is the supported way to exceed what ships.
 | `falloff` | `cliff` \| `linear` |  | `"cliff"` |
 | `lingerMinutes` | number |  | `0` |
 | `spreadPerMinute` | number |  | `0` |
+| `spreadRetention` | number |  | `0.5` |
 | `rememberMinutes` | number |  | `0` |
-| `impressionTextKey` | string |  |  |
-| `faintImpressionTextKey` | string |  |  |
-| `emptyTextKey` | string |  |  |
+| `impressionTextKey` | [→ narrative.textGrammar](#narrativetextGrammar) |  |  |
+| `faintImpressionTextKey` | [→ narrative.textGrammar](#narrativetextGrammar) |  |  |
+| `emptyTextKey` | [→ narrative.textGrammar](#narrativetextGrammar) |  |  |
 | `thresholds` | [object](#module-rules-senses-thresholds) |  | `{}` |
 | `extra` | { string: any } |  | `{}` |
 
@@ -428,6 +451,7 @@ not anticipate there. It is the supported way to exceed what ships.
 | `concentration` | [object](#module-rules-spellcasting-concentration) |  | `{}` |
 | `recoverOn` | [→ rules.rests](#rulesrests)[] |  | `[]` |
 | `ritualCasting` | boolean |  | `false` |
+| `componentActionTypes` | [object](#module-rules-spellcasting-componentActionTypes) |  | `{}` |
 | `extra` | { string: any } |  | `{}` |
 
 ### Module → `rules` → `spellcasting` → `concentration`
@@ -441,6 +465,15 @@ not anticipate there. It is the supported way to exceed what ships.
 | `difficulty` | [DSL](#the-dsl) |  |  |
 | `maxConcurrent` | number |  | `1` |
 
+### Module → `rules` → `spellcasting` → `componentActionTypes`
+
+<a id="module-rules-spellcasting-componentActionTypes"></a>
+
+| Field | Type | Required | Default |
+| --- | --- | --- | --- |
+| `verbal` | [→ rules.actionTypes](#rulesactionTypes) |  |  |
+| `somatic` | [→ rules.actionTypes](#rulesactionTypes) |  |  |
+
 ### Module → `rules` → `perception`
 
 <a id="module-rules-perception"></a>
@@ -450,6 +483,7 @@ not anticipate there. It is the supported way to exceed what ships.
 | `sightSense` | [→ rules.senses](#rulessenses) |  |  |
 | `curiosityMinutes` | number |  | `10` |
 | `defaultStance` | [→ rules.stances](#rulesstances) |  |  |
+| `minimumEmission` | number |  | `0.01` |
 | `extra` | { string: any } |  | `{}` |
 
 ### Module → `rules` → `currency`
@@ -460,6 +494,35 @@ not anticipate there. It is the supported way to exceed what ships.
 | --- | --- | --- | --- |
 | `name` | string |  | `"coins"` |
 | `abbrev` | string |  | `"c"` |
+| `allowNegative` | boolean |  | `false` |
+
+### Module → `rules` → `interactionRange`
+
+<a id="module-rules-interactionRange"></a>
+
+| Field | Type | Required | Default |
+| --- | --- | --- | --- |
+| `talk` | number |  | `2` |
+| `reach` | number |  | `1` |
+
+### Module → `rules` → `search`
+
+<a id="module-rules-search"></a>
+
+| Field | Type | Required | Default |
+| --- | --- | --- | --- |
+| `trapRadius` | number |  | `2` |
+| `disarmReach` | number |  | `1` |
+
+### Module → `rules` → `dispositionBands`
+
+<a id="module-rules-dispositionBands"></a>
+
+| Field | Type | Required | Default |
+| --- | --- | --- | --- |
+| `id` | string | **yes** |  |
+| `atLeast` | number |  |  |
+| `stance` | `ally` \| `neutral` \| `hostile` | **yes** |  |
 
 ### Module → `content`
 
@@ -678,6 +741,7 @@ not anticipate there. It is the supported way to exceed what ships.
 | `shape` | `sphere` \| `cube` \| `cone` \| `line` \| `cylinder` \| `aura` | **yes** |  |
 | `size` | number | **yes** |  |
 | `affects` | `all` \| `enemies` \| `allies` \| `others` |  | `"all"` |
+| `angle` | number |  | `45` |
 
 ### Module → `content` → `skills`
 
@@ -747,7 +811,7 @@ not anticipate there. It is the supported way to exceed what ships.
 | `hitDie` | string | **yes** |  |
 | `attributeBonuses` | { [→ rules.attributes](#rulesattributes): number } |  | `{}` |
 | `primaryAttribute` | [→ rules.attributes](#rulesattributes) | **yes** |  |
-| `skillProficiencies` | [→ content.skills](#contentskills)[] |  | `[]` |
+| `skillProficiencies` | [DSL](#the-dsl)[] |  | `[]` |
 | `startingItems` | [object](#module-content-classes-startingItems)[] |  | `[]` |
 | `abilitiesByLevel` | { string: [→ content.abilities](#contentabilities)[] } |  | `{}` |
 | `saveProficiencies` | [→ rules.savingThrows](#rulessavingThrows)[] |  | `[]` |
@@ -839,6 +903,7 @@ not anticipate there. It is the supported way to exceed what ships.
 | `emptyChance` | number |  | `0` |
 | `requires` | [object](#module-content-abilities-requires) |  |  |
 | `bonusRollSkill` | [→ content.skills](#contentskills) |  |  |
+| `bonusRolls` | [object](#module-content-lootTables-bonusRolls) |  | `{}` |
 
 ### Module → `content` → `lootTables` → `entries`
 
@@ -860,6 +925,15 @@ not anticipate there. It is the supported way to exceed what ships.
 | `requires` | [object](#module-content-abilities-requires) |  |  |
 | `requirementScope` | `finder` \| `party` \| `anyMember` |  | `"anyMember"` |
 | `unique` | boolean |  | `false` |
+
+### Module → `content` → `lootTables` → `bonusRolls`
+
+<a id="module-content-lootTables-bonusRolls"></a>
+
+| Field | Type | Required | Default |
+| --- | --- | --- | --- |
+| `onSuccess` | number |  | `1` |
+| `onCritical` | number |  | `2` |
 
 ### Module → `content` → `monsters`
 
@@ -1062,6 +1136,7 @@ not anticipate there. It is the supported way to exceed what ships.
 | `dungeons` | [object](#module-world-dungeons)[] |  | `[]` |
 | `maps` | [object](#module-world-maps)[] |  | `[]` |
 | `time` | [object](#module-world-time) |  | `{}` |
+| `generationDefaults` | [object](#module-world-generationDefaults) |  | `{}` |
 
 ### Module → `world` → `terrains`
 
@@ -1174,6 +1249,7 @@ not anticipate there. It is the supported way to exceed what ships.
 | `encounterTables` | [→ world.encounterTables](#worldencounterTables)[] |  | `[]` |
 | `controllingFaction` | [→ content.factions](#contentfactions) |  |  |
 | `dangerLevel` | number |  | `1` |
+| `encounterChance` | [DSL](#the-dsl) |  | `{"min":[0.75,{"mul":[{"ref":"dangerLevel"},0.15]}]}` |
 | `recommendedLevel` | number |  |  |
 | `requires` | [object](#module-content-abilities-requires) |  |  |
 | `map` | [object](#module-world-areas-map) |  | `{}` |
@@ -1302,6 +1378,9 @@ not anticipate there. It is the supported way to exceed what ships.
 | `encounterChance` | number |  | `0.3` |
 | `trapChance` | number |  | `0.1` |
 | `lootChance` | number |  | `0.25` |
+| `alwaysEncounter` | boolean |  | `false` |
+| `neverEncounter` | boolean |  | `false` |
+| `neverTrap` | boolean |  | `false` |
 | `requires` | [object](#module-content-abilities-requires) |  |  |
 | `triggers` | [object](#module-world-biomes-triggers)[] |  | `[]` |
 | `map` | [object](#module-world-areas-map) |  | `{}` |
@@ -1320,6 +1399,7 @@ not anticipate there. It is the supported way to exceed what ships.
 | `maxDepth` | number |  | `999` |
 | `chance` | number |  | `1` |
 | `emptyWeight` | number |  | `0` |
+| `scalePerLevels` | number |  | `2` |
 | `groups` | [object](#module-world-encounterTables-groups)[] | **yes** |  |
 
 ### Module → `world` → `encounterTables` → `groups`
@@ -1363,17 +1443,49 @@ not anticipate there. It is the supported way to exceed what ships.
 | `lockedDoorChance` | number |  | `0.15` |
 | `doorGates` | [→ world.gates](#worldgates)[] |  | `[]` |
 | `guaranteedRoles` | string[] |  | `["entrance","boss"]` |
+| `safeEntrance` | boolean |  | `true` |
 | `bossTable` | [→ world.encounterTables](#worldencounterTables) |  |  |
 | `completionTriggers` | [object](#module-world-biomes-triggers)[] |  | `[]` |
 | `palette` | [→ world.palettes](#worldpalettes) |  |  |
 | `corridorLength` | string |  | `"3d3"` |
+| `winding` | [object](#module-world-dungeons-winding) |  | `{}` |
+| `roomSize` | string |  | `"2d3+3"` |
 | `algorithm` | `rooms` \| `bsp` \| `caverns` |  | `"rooms"` |
+| `bsp` | [object](#module-world-dungeons-bsp) |  | `{}` |
+| `caverns` | [object](#module-world-dungeons-caverns) |  | `{}` |
 | `staticMap` | [→ world.maps](#worldmaps) |  |  |
 | `rollEncounters` | boolean |  | `false` |
 | `corridor` | [object](#module-world-dungeons-corridor) |  | `{}` |
 | `width` | string |  |  |
 | `height` | string |  |  |
 | `extra` | { string: any } |  | `{}` |
+
+### Module → `world` → `dungeons` → `winding`
+
+<a id="module-world-dungeons-winding"></a>
+
+| Field | Type | Required | Default |
+| --- | --- | --- | --- |
+| `continueChance` | number |  | `0.6` |
+| `turnPenalty` | number |  | `0.4` |
+
+### Module → `world` → `dungeons` → `bsp`
+
+<a id="module-world-dungeons-bsp"></a>
+
+| Field | Type | Required | Default |
+| --- | --- | --- | --- |
+| `minLeaf` | number |  | `5` |
+
+### Module → `world` → `dungeons` → `caverns`
+
+<a id="module-world-dungeons-caverns"></a>
+
+| Field | Type | Required | Default |
+| --- | --- | --- | --- |
+| `fill` | number |  | `0.45` |
+| `smoothingPasses` | number |  | `4` |
+| `birthThreshold` | number |  | `5` |
 
 ### Module → `world` → `dungeons` → `corridor`
 
@@ -1405,10 +1517,12 @@ not anticipate there. It is the supported way to exceed what ships.
 | Field | Type | Required | Default |
 | --- | --- | --- | --- |
 | `minutesPerDay` | number |  | `1440` |
+| `minutesPerHour` | number |  | `60` |
 | `daysPerMonth` | number |  | `30` |
 | `monthNames` | string[] |  | `[]` |
 | `dayPhases` | [object](#module-world-time-dayPhases)[] |  | `[]` |
 | `startMinute` | number |  | `480` |
+| `actionMinutes` | { string: number } |  | `{"search":10,"disarm":10,"sense":1,"wait":10}` |
 | `minutesPerTile` | number |  | `0` |
 
 ### Module → `world` → `time` → `dayPhases`
@@ -1421,13 +1535,25 @@ not anticipate there. It is the supported way to exceed what ships.
 | `name` | string | **yes** |  |
 | `startMinute` | number | **yes** |  |
 
+### Module → `world` → `generationDefaults`
+
+<a id="module-world-generationDefaults"></a>
+
+| Field | Type | Required | Default |
+| --- | --- | --- | --- |
+| `encounterChance` | number |  | `0.3` |
+| `lootChance` | number |  | `0.25` |
+| `trapChance` | number |  | `0.1` |
+
 ### Module → `narrative`
 
 <a id="module-narrative"></a>
 
 | Field | Type | Required | Default |
 | --- | --- | --- | --- |
+| `maxDialogueHops` | number |  | `8` |
 | `textGrammar` | [object](#module-narrative-textGrammar)[] |  | `[]` |
+| `systemText` | [object](#module-narrative-systemText) |  | `{}` |
 | `dialogues` | [object](#module-narrative-dialogues)[] |  | `[]` |
 | `quests` | [object](#module-narrative-quests)[] |  | `[]` |
 | `arcs` | [object](#module-narrative-arcs)[] |  | `[]` |
@@ -1455,6 +1581,224 @@ not anticipate there. It is the supported way to exceed what ships.
 | `requires` | [object](#module-content-abilities-requires) |  |  |
 | `weight` | number |  | `1` |
 | `tags` | string[] |  | `[]` |
+
+### Module → `narrative` → `systemText`
+
+<a id="module-narrative-systemText"></a>
+
+Every sentence the engine produces. The engine holds no prose of its own: it
+emits a key and its facts, and these decide the words. A value may be a string
+or `{ "pool": "<textGrammar id>" }` for weighted variation.
+
+**Fragments** are pieces other messages are built from — the word `{outcome}`
+in an attack line. A module must declare them, because nothing sensible can
+stand in for a missing one and the sentence around it would render with a hole.
+**Messages** stand alone and carry a default, so you write only what you want
+to change. `npm run systemtext -- <module>` writes the whole set into a module.
+
+Placeholders listed here are the ones a message cannot lose; `compileModule`
+rejects a module that drops one.
+
+| Key | Tier | Must keep | Default |
+| --- | --- | --- | --- |
+| `grammar.and` | fragment | — | `"and"` |
+| `grammar.or` | fragment | — | `"or"` |
+| `grammar.list.separator` | fragment | — | `", "` |
+| `grammar.list.pair` | fragment | `{first}` `{last}` `{conjunction}` | `"{first} {conjunction} {last}"` |
+| `grammar.list.many` | fragment | `{head}` `{last}` `{conjunction}` | `"{head} {conjunction} {last}"` |
+| `grammar.article.consonant` | fragment | `{noun}` | `"a {noun}"` |
+| `grammar.article.vowel` | fragment | `{noun}` | `"an {noun}"` |
+| `grammar.count` | fragment | `{number}` `{noun}` | `"{number} {noun}"` |
+| `grammar.plural` | fragment | `{noun}` | `"{noun}s"` |
+| `grammar.smallNumbers` | fragment | — | `"no one two three four five six seven eight nine ten"` |
+| `unit.round` | fragment | — | `"round"` |
+| `unit.rounds` | fragment | — | `"rounds"` |
+| `direction.north` | fragment | — | `"north"` |
+| `direction.south` | fragment | — | `"south"` |
+| `direction.east` | fragment | — | `"east"` |
+| `direction.west` | fragment | — | `"west"` |
+| `direction.northeast` | fragment | — | `"northeast"` |
+| `direction.northwest` | fragment | — | `"northwest"` |
+| `direction.southeast` | fragment | — | `"southeast"` |
+| `direction.southwest` | fragment | — | `"southwest"` |
+| `direction.here` | fragment | — | `"right here"` |
+| `direction.nearby` | fragment | — | `"nearby"` |
+| `roll.line` | fragment | `{total}` `{parts}` | `"{total} ({parts}){versus}{swing}"` |
+| `roll.versus` | fragment | `{difficulty}` | `" vs {difficulty}"` |
+| `roll.swing` | fragment | `{swing}` | `" [{swing}]"` |
+| `combat.outcome.critical` | fragment | — | `"a critical hit"` |
+| `combat.outcome.success` | fragment | — | `"a hit"` |
+| `combat.outcome.failure` | fragment | — | `"a miss"` |
+| `combat.outcome.fumble` | fragment | — | `"a fumble"` |
+| `combat.attack.unnamed` | fragment | — | `"attacks"` |
+| `combat.check.unnamed` | fragment | — | `"check"` |
+| `combat.damaged.resisted` | fragment | `{raw}` | `" ({raw} before resistance)"` |
+| `combat.attacked` | message | `{attacker}` `{target}` `{roll}` `{outcome}` | `"{attacker} — {ability} on {target}: {roll} — {outcome}."` |
+| `combat.checked` | message | `{who}` `{roll}` | `"{who} — {what}: {roll}."` |
+| `combat.saved` | message | `{who}` `{roll}` | `"{who} — {save} save: {roll}."` |
+| `combat.damaged` | message | `{who}` `{amount}` | `"{who} takes {amount}{type} damage{resisted}."` |
+| `combat.healed` | message | `{who}` `{amount}` | `"{who} recovers {amount}."` |
+| `combat.died` | message | `{who}` | `"{who} falls."` |
+| `combat.conditionApplied` | message | `{who}` `{condition}` | `"{who} is {condition}."` |
+| `combat.conditionExpired` | message | `{who}` `{condition}` | `"{who} is no longer {condition}."` |
+| `combat.conditionResisted` | message | `{who}` `{condition}` | `"{who} shrugs off {condition}."` |
+| `combat.reacted` | message | `{who}` | `"{who} reacts."` |
+| `combat.started` | message | `{who}` | `"Combat begins — {who}."` |
+| `combat.ended.victory` | message | — | `"The fight is over."` |
+| `combat.ended.fled` | message | — | `"You are not followed."` |
+| `combat.ended.defeat` | message | — | `"The party falls."` |
+| `combat.round` | message | `{round}` | `"— round {round} —"` |
+| `combat.turn` | message | `{who}` | `"{who}'s turn."` |
+| `move.blocked` | message | `{what}` | `"Blocked by {what}."` |
+| `move.blocked.edge` | fragment | — | `"the edge of the world"` |
+| `item.taken` | message | `{items}` | `"Taken: {items}."` |
+| `item.lost` | message | `{items}` | `"Lost: {items}."` |
+| `item.dropped` | message | `{who}` `{items}` | `"{who} leaves {items} behind."` |
+| `trade.bought` | message | `{items}` `{who}` `{price}` | `"Bought {items} from {who} for {price}."` |
+| `trade.sold` | message | `{items}` `{who}` `{price}` | `"Sold {items} to {who} for {price}."` |
+| `currency.gained` | message | `{amount}` | `"You are {amount} the richer."` |
+| `currency.lost` | message | `{amount}` | `"You are {amount} the poorer."` |
+| `trap.sprung` | message | `{who}` `{trap}` | `"{who} sets off {trap}!"` |
+| `trap.disarmed` | message | `{who}` `{trap}` | `"{who} disarms the {trap}."` |
+| `discovered.trap` | message | `{what}` | `"You spot {what}."` |
+| `discovered.place` | message | `{what}` | `"You find {what}."` |
+| `progress.xp` | message | `{who}` `{amount}` | `"{who} gains {amount} experience."` |
+| `progress.level` | message | `{who}` `{level}` | `"{who} reaches level {level}."` |
+| `gate.opened.bypass` | fragment | — | `" — forced"` |
+| `gate.opened.ability` | fragment | — | `" — by power"` |
+| `gate.blocked.missing` | fragment | `{what}` | `" You would need {what}."` |
+| `gate.opened` | message | `{gate}` | `"{gate} opens{how}."` |
+| `gate.blocked` | message | `{gate}` | `"{gate} will not open.{missing}"` |
+| `requirement.item` | fragment | `{item}` | `"the {item}"` |
+| `requirement.skill` | fragment | `{skill}` `{rank}` | `"{skill} {rank}"` |
+| `requirement.quest` | fragment | `{quest}` `{status}` | `"{quest} {status}"` |
+| `requirement.faction` | fragment | `{faction}` | `"standing with the {faction}"` |
+| `requirement.level` | fragment | `{level}` | `"level {level}"` |
+| `requirement.ability` | fragment | `{ability}` | `"the {ability} ability"` |
+| `quest.offered` | message | `{who}` `{quest}` | `"{who} has work for you: {quest}."` |
+| `quest.started` | message | `{quest}` `{description}` | `"New quest: {quest} — {description}"` |
+| `quest.started.plain` | message | `{quest}` | `"New quest: {quest}."` |
+| `quest.stage` | message | `{stage}` | `"{stage}"` |
+| `quest.stage.journal` | message | `{stage}` `{journal}` | `"{stage} — {journal}"` |
+| `quest.objective` | message | `{objective}` | `"Objective complete: {objective}"` |
+| `quest.completed` | message | `{quest}` | `"Quest complete: {quest}."` |
+| `quest.failed` | message | `{quest}` `{reason}` | `"Quest failed: {quest} — {reason}."` |
+| `quest.failed.abandoned` | fragment | — | `"abandoned"` |
+| `quest.failed.conditions` | fragment | — | `"conditions changed"` |
+| `quest.failed.timedOut` | fragment | — | `"too much time passed"` |
+| `quest.failed.expired` | fragment | — | `"time ran out"` |
+| `party.stance` | message | `{stance}` | `"You move at a {stance}."` |
+| `party.following` | message | — | `"The others fall in behind you."` |
+| `party.spread` | message | — | `"The party spreads out."` |
+| `time.dayBroke` | message | `{day}` | `"Day {day} breaks."` |
+| `reputation.improved` | fragment | — | `"improved"` |
+| `reputation.worsened` | fragment | — | `"worsened"` |
+| `reputation.changed` | message | `{faction}` `{direction}` `{delta}` | `"{faction}: {direction} ({delta})."` |
+| `deed.witness` | fragment | — | `"witness"` |
+| `deed.witnesses` | fragment | — | `"witnesses"` |
+| `deed.unseen` | message | — | `"Nobody saw that."` |
+| `deed.witnessed` | message | `{witnesses}` | `"{witnesses} to that."` |
+| `game.victory` | message | — | `"You have won."` |
+| `game.defeat` | message | — | `"Your party is dead."` |
+| `sense.nearness.faint` | fragment | — | `"Faintly"` |
+| `sense.nearness.close` | fragment | — | `"Close by"` |
+| `sense.nearness.far` | fragment | — | `"Somewhere"` |
+| `sense.unnamed` | fragment | — | `"sense"` |
+| `perception.investigating` | message | `{who}` | `"{who} casts about, and starts toward something."` |
+| `perception.lostInterest` | message | `{who}` | `"{who} loses the thread of it."` |
+| `sense.empty` | message | — | `"You stop. Nothing reaches you."` |
+| `sense.empty.named` | message | `{sense}` | `"You stop. Nothing reaches you by {sense}."` |
+| `sense.impression` | message | `{nearness}` `{sense}` | `"{nearness}, something you can {sense}."` |
+| `look.creatures` | message | `{what}` | `"You see {what}."` |
+| `look.creature.plain` | message | `{name}` | `"{name}, and nothing more to be told from here."` |
+| `look.item.plain` | message | `{name}` | `"{name}. Nothing remarkable."` |
+| `look.place.plain` | message | `{name}` | `"{name}, from here."` |
+| `look.unseen` | message | `{what}` | `"You cannot see {what} from here."` |
+| `refused.actor.missing` | message | — | `"no such character"` |
+| `refused.action.unknown` | message | `{action}` | `"\"{action}\" is not something you can do"` |
+| `refused.turn.other` | message | `{who}` | `"it is {who}'s turn"` |
+| `refused.select.notParty` | message | — | `"not in the party"` |
+| `refused.move.noMap` | message | — | `"not on a map"` |
+| `refused.move.tooFar` | message | — | `"that is not one step away"` |
+| `refused.move.noMovement` | message | — | `"no movement left this turn"` |
+| `refused.travel.noMap` | message | — | `"nowhere to walk"` |
+| `refused.travel.noRoute` | message | — | `"no way through"` |
+| `refused.travel.noRoad` | message | — | `"there is no road that way"` |
+| `refused.travel.noWayUp` | message | — | `"there is no way back up"` |
+| `refused.travel.notYet` | message | `{missing}` | `"not yet — {missing}"` |
+| `refused.travel.notYet.plain` | message | — | `"not yet"` |
+| `refused.travel.unknownArea` | message | `{area}` | `"no area \"{area}\""` |
+| `refused.leave.noExitFound` | message | — | `"find the way out first"` |
+| `refused.leave.nowhere` | message | — | `"there is nowhere to go back to"` |
+| `refused.enter.noSuchPlace` | message | `{target}` | `"there is no \"{target}\" here"` |
+| `refused.enter.unknownPlace` | message | — | `"no such place"` |
+| `refused.enter.unknownDungeon` | message | `{dungeon}` | `"no dungeon \"{dungeon}\""` |
+| `refused.attack.noWeapon` | message | `{who}` | `"{who} has nothing to attack with"` |
+| `refused.ability.unknown` | message | `{ability}` | `"no ability \"{ability}\""` |
+| `refused.ability.notKnown` | message | `{who}` `{ability}` | `"{who} does not know {ability}"` |
+| `refused.ability.prevented` | message | `{who}` | `"{who} cannot take that action right now"` |
+| `refused.ability.requirements` | message | `{who}` `{ability}` | `"{who} does not meet the requirements for {ability}"` |
+| `refused.ability.unavailable` | message | `{ability}` | `"{ability} cannot be used now"` |
+| `refused.ability.cooldown` | message | `{ability}` `{rounds}` | `"{ability} is not ready for another {rounds}"` |
+| `refused.ability.noAction` | message | — | `"no action left this turn"` |
+| `refused.cost.shortfall` | message | `{resource}` | `"not enough {resource}"` |
+| `refused.target.none` | message | — | `"nothing to target"` |
+| `refused.target.missing` | message | — | `"no target"` |
+| `refused.target.empty` | message | — | `"nothing there"` |
+| `refused.target.elsewhere` | message | — | `"not here"` |
+| `refused.target.outOfRange` | message | — | `"out of range"` |
+| `refused.target.outOfReach` | message | — | `"out of reach"` |
+| `refused.target.noSight` | message | — | `"no line of sight"` |
+| `refused.target.covered` | message | — | `"they are behind full cover"` |
+| `refused.flee.noCombat` | message | — | `"nothing to flee from"` |
+| `refused.flee.noExit` | message | — | `"there is nowhere to run"` |
+| `refused.cast.silenced` | message | `{who}` | `"{who} cannot speak the words"` |
+| `refused.cast.bound` | message | `{who}` | `"{who} cannot make the signs"` |
+| `refused.cast.noComponent` | message | `{who}` `{component}` | `"{who} has no {component}"` |
+| `refused.cast.notRitual` | message | `{spell}` | `"{spell} cannot be cast as a ritual"` |
+| `refused.cast.noSlot` | message | `{spell}` | `"no slot left for {spell}"` |
+| `refused.item.unknown` | message | `{item}` | `"no item \"{item}\""` |
+| `refused.item.notCarried` | message | — | `"you are not carrying that"` |
+| `refused.take.nothingHere` | message | — | `"there is nothing here to take"` |
+| `refused.take.noSuchItem` | message | `{item}` | `"there is no {item} here"` |
+| `refused.equip.notWearable` | message | `{item}` | `"{item} is not something you wear"` |
+| `refused.equip.notAllowed` | message | `{item}` | `"{item} is not for you"` |
+| `refused.unequip.notWorn` | message | — | `"you are not wearing that"` |
+| `refused.use.nothingHappens` | message | `{item}` | `"nothing happens with the {item}"` |
+| `refused.use.spent` | message | `{item}` | `"the {item} is spent"` |
+| `refused.give.tooFar` | message | — | `"they are not close enough"` |
+| `refused.search.nothing` | message | — | `"you find nothing here"` |
+| `refused.disarm.nothingHere` | message | — | `"there is nothing here to disarm"` |
+| `refused.open.noSuchThing` | message | `{target}` | `"nothing here called \"{target}\""` |
+| `refused.open.unknownGate` | message | `{gate}` | `"no gate \"{gate}\""` |
+| `refused.sense.unknown` | message | — | `"nothing here works like that"` |
+| `refused.stance.unknown` | message | `{stance}` | `"there is no way of moving called \"{stance}\""` |
+| `refused.follow.inCombat` | message | — | `"in a fight everyone acts on their own initiative"` |
+| `refused.rest.notHere` | message | — | `"cannot rest like that here"` |
+| `refused.rest.inCombat` | message | — | `"not while fighting"` |
+| `refused.rest.interrupted` | message | — | `"something came looking before you could settle"` |
+| `refused.talk.tooFar` | message | — | `"too far away to talk"` |
+| `refused.talk.nothingToSay` | message | `{who}` | `"{who} has nothing to say"` |
+| `refused.talk.unknownDialogue` | message | `{dialogue}` | `"no dialogue \"{dialogue}\""` |
+| `refused.reply.noConversation` | message | — | `"nobody is talking"` |
+| `refused.reply.unknown` | message | — | `"no such reply"` |
+| `refused.reply.locked` | message | — | `"you cannot say that"` |
+| `refused.buy.noStock` | message | — | `"they have nothing to sell"` |
+| `refused.buy.noSuchItem` | message | — | `"they do not have that"` |
+| `refused.buy.tooExpensive` | message | — | `"you cannot afford that"` |
+| `refused.sell.notBuying` | message | — | `"they are not buying"` |
+| `refused.sell.unwanted` | message | — | `"they have no use for that"` |
+| `refused.trade.barred` | message | `{missing}` | `"they will not deal with you — {missing}"` |
+| `refused.trade.barred.plain` | message | — | `"they will not deal with you"` |
+| `affordance.barred` | message | `{what}` | `"barred — needs {what}"` |
+| `affordance.needs` | message | `{what}` | `"needs {what}"` |
+| `refused.quest.unknown` | message | `{quest}` | `"no quest \"{quest}\""` |
+| `refused.quest.unavailable` | message | `{quest}` | `"{quest} is not available yet"` |
+| `refused.quest.notTaken` | message | — | `"you are not on that job"` |
+| `refused.internal.unknownResource` | message | `{resource}` | `"no resource \"{resource}\""` |
+| `refused.internal.unknownCondition` | message | `{condition}` | `"no condition \"{condition}\""` |
+| `refused.internal.unknownFaction` | message | `{faction}` | `"no faction \"{faction}\""` |
+| `refused.internal.unknownOp` | message | `{op}` | `"this engine does not implement \"{op}\""` |
 
 ### Module → `narrative` → `dialogues`
 
@@ -1633,6 +1977,8 @@ not anticipate there. It is the supported way to exceed what ships.
 | `floor` | number |  | `0.05` |
 | `reinforceOnRecall` | number |  | `0.25` |
 | `memorabilityWeight` | number |  | `1` |
+| `caresAboutMultiplier` | number |  | `2` |
+| `linearSpanMultiplier` | number |  | `2` |
 | `neverForget` | [→ narrative.deedKinds](#narrativedeedKinds)[] |  | `[]` |
 | `extra` | { string: any } |  | `{}` |
 
@@ -1650,6 +1996,8 @@ not anticipate there. It is the supported way to exceed what ships.
 | `requiresTravel` | boolean |  | `true` |
 | `crossFactionRate` | number |  | `0.4` |
 | `minimumSeverity` | number |  | `1` |
+| `gullibilityScale` | number |  | `2` |
+| `garbledRetention` | number |  | `0.5` |
 | `spreadsWithoutWitness` | boolean |  | `false` |
 | `extra` | { string: any } |  | `{}` |
 
@@ -1712,7 +2060,8 @@ not anticipate there. It is the supported way to exceed what ships.
 | `startingArea` | [→ world.areas](#worldareas) |  |  |
 | `startingPoi` | [→ world.pointsOfInterest](#worldpointsOfInterest) |  |  |
 | `startingDungeon` | [→ world.dungeons](#worlddungeons) |  |  |
-| `openingTextKey` | string |  |  |
+| `openingTextKey` | [→ narrative.textGrammar](#narrativetextGrammar) |  |  |
+| `partyFollow` | [object](#module-start-partyFollow) |  | `{}` |
 | `initialFlags` | { string: [DSL](#the-dsl) } |  | `{}` |
 | `victoryWhen` | [DSL](#the-dsl) |  |  |
 | `defeatWhen` | [DSL](#the-dsl) |  |  |
@@ -1740,6 +2089,15 @@ not anticipate there. It is the supported way to exceed what ships.
 | --- | --- | --- | --- |
 | `item` | [→ content.items](#contentitems) | **yes** |  |
 | `quantity` | number |  | `1` |
+
+### Module → `start` → `partyFollow`
+
+<a id="module-start-partyFollow"></a>
+
+| Field | Type | Required | Default |
+| --- | --- | --- | --- |
+| `catchUpDistance` | number |  | `3` |
+| `catchUpSteps` | number |  | `2` |
 
 
 ## The DSL

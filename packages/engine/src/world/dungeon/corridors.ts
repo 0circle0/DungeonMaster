@@ -23,6 +23,12 @@ export interface CorridorSpec {
   readonly style: CorridorStyle;
   /** Carve brush, 1–3 tiles. Wall piercings stay one tile wide regardless. */
   readonly width: number;
+  /**
+   * How a `winding` corridor wanders: the chance a step carries on toward the
+   * target rather than drifting, and what a change of direction costs when
+   * routing. Aesthetic tuning, and strongly felt — so the dungeon's to set.
+   */
+  readonly winding: { readonly continueChance: number; readonly turnPenalty: number };
 }
 
 /**
@@ -56,7 +62,7 @@ export function carvePath(
 ): Position[] {
   let line =
     spec.style === 'straight' ? straightLine(from, to)
-    : spec.style === 'winding' ? windingLine(from, to, rng, minLength, builder)
+    : spec.style === 'winding' ? windingLine(from, to, rng, minLength, builder, spec.winding.continueChance)
     : elbowLine(from, to, rng.chance(0.5));
 
   // The endpoints themselves are legal — a corridor targeting a static room
@@ -66,7 +72,7 @@ export function carvePath(
     forbidden.has(packed(at)) && !(at.x === from.x && at.y === from.y) && !(at.x === to.x && at.y === to.y);
 
   if (forbidden.size > 0 && line.some(isForbidden)) {
-    line = detourLine(from, to, builder, isForbidden) ?? line;
+    line = detourLine(from, to, builder, isForbidden, spec.winding.turnPenalty) ?? line;
   }
 
   const crossings: Position[] = [];
@@ -136,6 +142,7 @@ function detourLine(
   to: Position,
   builder: MapBuilder,
   isForbidden: (at: Position) => boolean,
+  turnPenalty: number,
 ): Position[] | null {
   interface Node {
     x: number;
@@ -187,7 +194,7 @@ function detourLine(
       if (nx <= 0 || ny <= 0 || nx >= builder.width - 1 || ny >= builder.height - 1) continue;
       if (isForbidden({ x: nx, y: ny })) continue;
 
-      const turn = current.dir !== -1 && current.dir !== dir ? 0.4 : 0;
+      const turn = current.dir !== -1 && current.dir !== dir ? turnPenalty : 0;
       const cost = current.cost + 1 + turn;
       const key = (ny * builder.width + nx) * 4 + dir;
       const known = seen.get(key);
@@ -259,6 +266,7 @@ function windingLine(
   rng: Rng,
   minLength: number,
   builder: MapBuilder,
+  continueChance: number,
 ): Position[] {
   const out: Position[] = [{ ...from }];
   let { x, y } = from;
@@ -277,7 +285,7 @@ function windingLine(
 
     let dx = 0;
     let dy = 0;
-    if (!arrived && rng.chance(0.6)) {
+    if (!arrived && rng.chance(continueChance)) {
       // Step toward the target, preferring the axis with more ground to cover.
       const preferX = Math.abs(to.x - x) >= Math.abs(to.y - y);
       if (preferX && towardX !== 0) dx = towardX;

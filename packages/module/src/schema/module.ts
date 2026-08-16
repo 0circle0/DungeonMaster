@@ -62,7 +62,21 @@ export const startSchema = z
     startingPoi: ref('world.pointsOfInterest').optional(),
     startingDungeon: ref('world.dungeons').optional(),
     /** Text-grammar pool for the opening scene. */
-    openingTextKey: idSchema.optional(),
+    openingTextKey: ref('narrative.textGrammar').optional(),
+    /**
+     * How the rest of the party keeps up with whoever is leading.
+     *
+     * Party cohesion, previously two invented numbers in `moveFollowers`.
+     */
+    partyFollow: z
+      .object({
+        /** Beyond this many tiles, a follower hurries. */
+        catchUpDistance: z.number().int().min(0).default(3),
+        /** Steps a hurrying follower takes in one go. */
+        catchUpSteps: z.number().int().min(1).default(2),
+      })
+      .strict()
+      .default({}),
     /** Flags set on a new game. */
     initialFlags: z.record(z.string(), z.union([z.string(), z.number(), z.boolean()])).default({}),
     /** Ends the game when it becomes true. */

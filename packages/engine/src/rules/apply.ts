@@ -22,6 +22,8 @@ import { buildScope, maximaOf, minimaOf, modifiersOf, OPEN_NAMESPACES } from '..
 import { TerrainIndex } from '../grid/tiles.js';
 import { makeNoise } from '../sim/senses.js';
 import { testConcentration } from './casting.js';
+import { message } from '../narrate/systemText.js';
+import { configOf } from './config.js';
 
 /** Accumulates state changes and the events describing them. */
 export class Transaction {
@@ -198,7 +200,7 @@ export function adjustResource(
 ): void {
   const definition = txn.module.find<ResourceDef>('rules.resources', resourceId);
   if (!definition) {
-    txn.emit({ type: 'refused', action: 'adjustResource', reason: `no resource "${resourceId}"` });
+    txn.emit({ type: 'refused', action: 'adjustResource', reason: message('refused.internal.unknownResource', { resource: resourceId }) });
     return;
   }
 
@@ -332,7 +334,7 @@ export function applyCondition(
 ): void {
   const definition = txn.module.find<ConditionDef>('rules.conditions', conditionId);
   if (!definition) {
-    txn.emit({ type: 'refused', action: 'applyCondition', reason: `no condition "${conditionId}"` });
+    txn.emit({ type: 'refused', action: 'applyCondition', reason: message('refused.internal.unknownCondition', { condition: conditionId }) });
     return;
   }
 
@@ -420,7 +422,7 @@ export function changeInventory(
 ): void {
   if (delta === 0) return;
   if (!txn.module.has('content.items', itemId)) {
-    txn.emit({ type: 'refused', action: 'inventory', reason: `no item "${itemId}"` });
+    txn.emit({ type: 'refused', action: 'inventory', reason: message('refused.item.unknown', { item: itemId }) });
     return;
   }
 
@@ -445,7 +447,7 @@ export function changeInventory(
 
 export function adjustReputation(txn: Transaction, factionId: string, delta: number): void {
   if (!txn.module.has('content.factions', factionId)) {
-    txn.emit({ type: 'refused', action: 'adjustReputation', reason: `no faction "${factionId}"` });
+    txn.emit({ type: 'refused', action: 'adjustReputation', reason: message('refused.internal.unknownFaction', { faction: factionId }) });
     return;
   }
   const before = txn.state.reputation[factionId] ?? 0;
@@ -458,7 +460,7 @@ export function adjustReputation(txn: Transaction, factionId: string, delta: num
   // Standing with one faction bleeds into its allies and rivals.
   const faction = txn.module.find<{ relations?: Record<string, number> }>('content.factions', factionId);
   for (const [other, weight] of Object.entries(faction?.relations ?? {})) {
-    const spill = Math.trunc(delta * weight);
+    const spill = configOf(txn.module).roundReputation(delta * weight);
     if (spill === 0) continue;
     const otherBefore = txn.state.reputation[other] ?? 0;
     txn.set({ ...txn.state, reputation: { ...txn.state.reputation, [other]: otherBefore + spill } });
@@ -484,7 +486,7 @@ export function applyOps(txn: Transaction, ops: readonly EffectOp[], source: Ent
         if (!entity.alive) break;
 
         const multiplier = damageMultiplier(txn.module, entity, op.damageType, op.tags ?? []);
-        const amount = Math.round(op.amount * multiplier);
+        const amount = configOf(txn.module).roundDamage(op.amount * multiplier);
         if (amount === 0) break;
 
         adjustResource(txn, entity, txn.module.source.rules.vitalResource, -amount, {
@@ -548,11 +550,13 @@ export function applyOps(txn: Transaction, ops: readonly EffectOp[], source: Ent
         break;
 
       case 'adjustCurrency': {
-        // The purse never goes negative: a module that overspends is refused
-        // the difference rather than putting the party in debt, which is not a
-        // state anything else here knows how to read.
+        // Whether the purse can go below zero is the module's call. Clamped,
+        // a party that overspends is refused the difference rather than put
+        // into a debt nothing else knows how to read; allowed, a module can
+        // model exactly that.
         const before = txn.state.purse;
-        const after = Math.max(0, before + op.amount);
+        const raw = before + op.amount;
+        const after = configOf(txn.module).allowDebt ? raw : Math.max(0, raw);
         if (after === before) break;
         txn.set({ ...txn.state, purse: after });
         txn.emit({ type: 'currencyChanged', amount: after - before, purse: after });
@@ -599,7 +603,7 @@ export function applyOps(txn: Transaction, ops: readonly EffectOp[], source: Ent
         txn.emit({
           type: 'refused',
           action: 'applyOps',
-          reason: `this engine does not implement "${(unhandled as { op: string }).op}"`,
+          reason: message('refused.internal.unknownOp', { op: (unhandled as { op: string }).op }),
         });
         break;
       }

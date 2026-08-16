@@ -7,10 +7,13 @@
  * All produce an {@link Entity}, so nothing downstream branches on who is here.
  */
 
-import { Rng, roll } from '@dm/core';
+import { Rng, roll, parseDice } from '@dm/core';
 import type { CompiledModule } from '@dm/module';
+import { evalExpr } from '@dm/module';
+import { defaultMovementModeOf } from './rules/config.js';
+import { creationProblem } from './creation.js';
 import type { Entity, ItemStack } from './state.js';
-import { modifiersOf, initialOf } from './stats.js';
+import { modifiersOf, initialOf, OPEN_NAMESPACES } from './stats.js';
 
 interface AncestryDef {
   id: string;
@@ -31,7 +34,7 @@ export interface ClassDef {
   name: string;
   hitDie: string;
   attributeBonuses: Record<string, number>;
-  skillProficiencies: string[];
+  skillProficiencies: (string | { skill: string; rank: number })[];
   startingItems: { item: string; quantity: number }[];
   abilitiesByLevel: Record<string, string[]>;
   spellcasting?: { knownByLevel?: Record<string, number> };
@@ -66,14 +69,94 @@ interface MonsterDef {
 /**
  * Movement modes an entity has.
  *
- * Everything walks unless the module says otherwise; a creature with declared
- * `speeds` uses exactly those, which is how a fish gets `swim` and no `walk`.
+ * A creature with declared `speeds` uses exactly those, which is how a fish
+ * gets swimming and nothing else. Everything else gets the ruleset's own
+ * default — named by `rules.defaultMovementMode`, not by the engine guessing
+ * at a word.
  */
 function movementModesFor(module: CompiledModule, declared: Record<string, number> | undefined): string[] {
   const declaredModes = Object.keys(declared ?? {});
   if (declaredModes.length > 0) return declaredModes;
-  const available = module.ids('rules.movementModes');
-  return available.includes('walk') ? ['walk'] : available.slice(0, 1);
+  const fallback = defaultMovementModeOf(module);
+  return fallback === null ? [] : [fallback];
+}
+
+/**
+ * Which stance a signed disposition lands in.
+ *
+ * Bands are matched by the highest threshold the number meets; a band with no
+ * `atLeast` is the catch-all below all of them. Sorting here rather than
+ * trusting declaration order means an author cannot break it by reordering.
+ */
+export function dispositionFor(module: CompiledModule, disposition: number): Entity['disposition'] {
+  const bands = module.source.rules.dispositionBands;
+  const floor = bands.find((band) => band.atLeast === undefined);
+
+  let best: (typeof bands)[number] | undefined;
+  for (const band of bands) {
+    if (band.atLeast === undefined || disposition < band.atLeast) continue;
+    if (best?.atLeast === undefined || band.atLeast > best.atLeast) best = band;
+  }
+  return (best ?? floor)?.stance ?? 'neutral';
+}
+
+/**
+ * What levels beyond the first add to the vital resource.
+ *
+ * The die comes from the class or from the creature's size, as the ruleset
+ * says — which is what finally makes `rules.sizes[].hitDie` do something. A
+ * module whose resources already scale by level says `policy: "none"` and gets
+ * nothing added on top.
+ */
+function levelVitality(
+  module: CompiledModule,
+  characterClass: ClassDef,
+  ancestry: AncestryDef,
+  attributes: Record<string, number>,
+  level: number,
+  rng: Rng,
+): number {
+  const policy = module.source.rules.progression.levelVitality;
+  if (level <= 1) return 0;
+
+  const sizeId = ancestry.size ?? module.source.rules.defaultSize;
+  const die = policy.die === 'size'
+    ? module.find<{ hitDie?: string }>('rules.sizes', sizeId ?? '')?.hitDie
+    : characterClass.hitDie;
+
+  const perLevel = Number(
+    evalExpr(policy.bonus, {
+      scope: { level, attr: attributes, mod: modifiersOf(module, attributes) },
+      rng,
+      openNamespaces: OPEN_NAMESPACES,
+    }),
+  );
+
+  // A fixed policy needs the die's value once; `roll` draws per level, which
+  // is what makes creation take an RNG at all.
+  const fixed = policy.policy === 'roll' || policy.policy === 'none' || !die
+    ? 0
+    : dieValue(die, policy.policy);
+
+  let total = 0;
+  for (let l = 2; l <= level; l += 1) {
+    total += perLevel;
+    if (policy.policy === 'none' || !die) continue;
+    total += policy.policy === 'roll' ? roll(die, rng).total : fixed;
+  }
+  return total;
+}
+
+/** A die's mean (rounded up, as tables do) or its top face, without rolling. */
+function dieValue(notation: string, policy: 'average' | 'max'): number {
+  let total = 0;
+  for (const term of parseDice(notation).terms) {
+    if (term.kind === 'constant') { total += term.sign * term.value; continue; }
+    const kept = term.keep ? Math.min(term.keep.count, term.count) : term.count;
+    const per = policy === 'max' ? term.sides : (term.sides + 1) / 2;
+    total += term.sign * kept * per;
+  }
+  return Math.ceil(total);
 }
 
 export interface CharacterChoices {
@@ -208,6 +291,12 @@ export function createCharacter(
     throw new CreationError(`unknown class ${JSON.stringify(choices.characterClass)}`);
   }
 
+  // The campaign's own limits, enforced here rather than only in whichever
+  // screen happened to be asking — a party built any other way used to bypass
+  // them entirely.
+  const problem = creationProblem(module, choices);
+  if (problem) throw new CreationError(problem);
+
   const level = choices.level ?? module.source.start.creation.startingLevel;
 
   // 1. Attributes: allocation + ancestry + class, clamped to declared bounds.
@@ -219,8 +308,15 @@ export function createCharacter(
     attributes[attr.id] = Math.min(attr.max, Math.max(attr.min, total));
   }
 
+  // A bare id means the ruleset's own idea of "trained"; an entry that names a
+  // rank says exactly what it is worth. Ancestry bonuses add on top, so the two
+  // sources of skill finally agree about what a number means.
   const skills: Record<string, number> = {};
-  for (const skillId of characterClass.skillProficiencies) skills[skillId] = 1;
+  const trained = module.source.rules.progression.proficiencyRank;
+  for (const entry of characterClass.skillProficiencies) {
+    if (typeof entry === 'string') skills[entry] = trained;
+    else skills[entry.skill] = entry.rank;
+  }
   for (const [skillId, bonus] of Object.entries(ancestry.skillBonuses)) {
     skills[skillId] = (skills[skillId] ?? 0) + bonus;
   }
@@ -238,12 +334,10 @@ export function createCharacter(
     ...knownAtLevel(module, characterClass, level),
   ])];
 
-  // Levels beyond the first roll the class hit die, which is why creation takes
-  // an RNG: a level-3 character is not deterministic from choices alone.
-  let bonusVitality = 0;
-  for (let l = 2; l <= level; l++) {
-    bonusVitality += roll(characterClass.hitDie, rng).total;
-  }
+  // What a level beyond the first adds, per the ruleset's declared policy.
+  // Rolling is why creation takes an RNG: under `roll` a level-3 character is
+  // not deterministic from choices alone. Under the other policies it is.
+  const bonusVitality = levelVitality(module, characterClass, ancestry, attributes, level, rng);
 
   const draft: Entity = {
     // Position is assigned when the party is placed on a map; character
@@ -383,9 +477,10 @@ export function spawnNpc(module: CompiledModule, npcId: string): Entity {
     map: '',
     position: { x: 0, y: 0 },
     movementModes: base?.movementModes ?? movementModesFor(module, undefined),
-    // Never `ally`: an ally is a party member for targeting, and a friendly
-    // villager standing in a doorway is not somebody you heal by accident.
-    disposition: npc.disposition >= 0 ? 'neutral' : 'hostile',
+    // Which band a signed disposition falls in is the ruleset's call. The
+    // engine used to cut at exactly zero and never offer `ally`, so however
+    // warmly a module wrote somebody they could not spawn as one.
+    disposition: dispositionFor(module, npc.disposition),
     following: null,
     alerts: [],
     slotsUsed: [],

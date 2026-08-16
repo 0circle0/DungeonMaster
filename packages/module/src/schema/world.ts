@@ -16,7 +16,7 @@
  */
 
 import { z } from 'zod';
-import { PredicateSchema, EffectSchema, diceNotation } from '../dsl/schema.js';
+import { ExprSchema, PredicateSchema, EffectSchema, diceNotation } from '../dsl/schema.js';
 import { idSchema, displayName, description, ref, tags, weighted, extra } from './common.js';
 import { requirementSchema } from './requirement.js';
 import { terrainSchema, paletteSchema, mapSpecSchema, positionSchema } from './space.js';
@@ -126,6 +126,15 @@ export const roomTemplateSchema = z
     encounterChance: z.number().min(0).max(1).default(0.3),
     trapChance: z.number().min(0).max(1).default(0.1),
     lootChance: z.number().min(0).max(1).default(0.25),
+    /**
+     * Override the roll entirely. The engine used to read `role: "boss"` as
+     * "always" and the dungeon's entrance room as "never", which made the role
+     * vocabulary load-bearing and put a design opinion — that the way in is
+     * safe — where a horror module could not reverse it.
+     */
+    alwaysEncounter: z.boolean().default(false),
+    neverEncounter: z.boolean().default(false),
+    neverTrap: z.boolean().default(false),
     requires: requirementSchema.optional(),
     triggers: z.array(triggerSchema).default([]),
     /** Shape and size of the room's tiles. */
@@ -177,6 +186,12 @@ export const encounterTableSchema = z
     chance: z.number().min(0).max(1).default(1),
     /** Nothing happened: the weight given to a quiet result. */
     emptyWeight: z.number().min(0).default(0),
+    /**
+     * Levels per extra creature for entries that scale. "One more per two
+     * levels" was a design decision written as `floor((level - 1) / 2)` in the
+     * engine, where a module could neither see nor change it.
+     */
+    scalePerLevels: z.number().int().min(1).default(2),
     groups: z.array(encounterGroupSchema).min(1),
   })
   .strict()
@@ -298,6 +313,15 @@ export const areaSchema = z
     encounterTables: z.array(ref('world.encounterTables')).default([]),
     controllingFaction: ref('content.factions').optional(),
     dangerLevel: z.number().int().min(0).default(1),
+    /**
+     * Odds of a wandering encounter on entering, as an expression over
+     * `dangerLevel`. The engine's curve was `min(0.75, danger * 0.15)` — the
+     * ceiling in particular is an argument about what a wilderness is, and that
+     * argument belongs to the GM. The default reproduces it exactly.
+     */
+    encounterChance: ExprSchema.default({
+      min: [0.75, { mul: [{ ref: 'dangerLevel' }, 0.15] }],
+    }),
     /** Suggested party level, used by the editor's balance warnings. */
     recommendedLevel: z.number().int().min(1).optional(),
     requires: requirementSchema.optional(),
@@ -323,6 +347,13 @@ export const dungeonGenSchema = z
     /** Gates the generator may place on interior doors. */
     doorGates: z.array(ref('world.gates')).default([]),
     guaranteedRoles: z.array(z.string()).default(['entrance', 'boss']),
+    /**
+     * Whether the room you arrive in is quiet — no encounter, no trap.
+     *
+     * A defensible design opinion, and the engine used to hold it as a fact. A
+     * horror module wanting the door to close behind you turns it off.
+     */
+    safeEntrance: z.boolean().default(true),
     bossTable: ref('world.encounterTables').optional(),
     completionTriggers: z.array(triggerSchema).default([]),
     /** Overrides the biome's palette for this dungeon. */
@@ -334,11 +365,43 @@ export const dungeonGenSchema = z
      */
     corridorLength: diceNotation.default('3d3'),
     /**
+     * How a `winding` corridor wanders: the chance it carries straight on, and
+     * how much a turn is penalised when routing. Aesthetic, and strongly felt.
+     */
+    winding: z
+      .object({
+        continueChance: z.number().min(0).max(1).default(0.6),
+        turnPenalty: z.number().min(0).default(0.4),
+      })
+      .strict()
+      .default({}),
+    /** Room size when a template declares no map spec of its own. */
+    roomSize: diceNotation.default('2d3+3'),
+    /**
      * How the dungeon is made: `rooms` and corridors (the classic), `bsp`
      * (dense building-like interiors, rooms sharing walls), or `caverns`
      * (organic cellular caves — no doors, so no locks or branchiness).
      */
     algorithm: z.enum(['rooms', 'bsp', 'caverns']).default('rooms'),
+    /**
+     * Tuning for `bsp`: the smallest leaf the space is cut into, which decides
+     * how fine-grained the interior reads.
+     */
+    bsp: z.object({ minLeaf: z.number().int().min(2).default(5) }).strict().default({}),
+    /**
+     * Tuning for `caverns` — the classic cellular-automaton dials. These shape
+     * how a cave *feels* more than any other numbers in generation: `fill` is
+     * how much rock the noise starts as, `smoothingPasses` how many rounds it
+     * is eroded, and `birthThreshold` how many rock neighbours make rock.
+     */
+    caverns: z
+      .object({
+        fill: z.number().min(0).max(1).default(0.45),
+        smoothingPasses: z.number().int().min(0).default(4),
+        birthThreshold: z.number().int().min(1).max(8).default(5),
+      })
+      .strict()
+      .default({}),
     /**
      * A hand-built `world.maps` entry used as the whole dungeon, identical
      * across seeds. Generation is skipped entirely; the map's own layers place
@@ -371,6 +434,11 @@ export const dungeonGenSchema = z
 export const timeSchema = z
   .object({
     minutesPerDay: z.number().int().min(1).default(1440),
+    /**
+     * How long an hour is. `minutesPerDay` was a module decision and this was
+     * not, so a calendar of hundred-minute hours could not be expressed.
+     */
+    minutesPerHour: z.number().int().min(1).default(60),
     daysPerMonth: z.number().int().min(1).default(30),
     monthNames: z.array(displayName).default([]),
     dayPhases: z
@@ -379,6 +447,19 @@ export const timeSchema = z
       )
       .default([]),
     startMinute: z.number().int().min(0).default(480),
+    /**
+     * What an action costs in world-clock minutes, by action id.
+     *
+     * `minutesPerTile` and rest durations were already the GM's; searching a
+     * room and disarming a trap were ten minutes each because the engine said
+     * so. Absent entries cost nothing.
+     */
+    actionMinutes: z.record(z.string(), z.number().int().min(0)).default({
+      search: 10,
+      disarm: 10,
+      sense: 1,
+      wait: 10,
+    }),
     /**
      * Minutes spent crossing one tile out of combat. Zero — the default — means
      * walking is free, which suits a module that would rather not track it.
@@ -405,6 +486,21 @@ export const worldSchema = z
      */
     maps: z.array(staticMapSchema).default([]),
     time: timeSchema.default({}),
+    /**
+     * What generation does for a room that names no template.
+     *
+     * That is exactly the new-author case, and the numbers used to be invented
+     * in the engine where the schema could not show them. They match
+     * `roomTemplates`' own defaults, which stay the per-room source.
+     */
+    generationDefaults: z
+      .object({
+        encounterChance: z.number().min(0).max(1).default(0.3),
+        lootChance: z.number().min(0).max(1).default(0.25),
+        trapChance: z.number().min(0).max(1).default(0.1),
+      })
+      .strict()
+      .default({}),
   })
   .strict();
 

@@ -161,7 +161,7 @@ describe('a one-way road', () => {
     const up = reduce(down.state, { type: 'travelToArea', area: 'millford' }, context);
     expect(up.state.location).toMatchObject({ area: 'the_fens' });
     expect(up.events).toContainEqual(
-      expect.objectContaining({ type: 'refused', reason: 'there is no way back up' }),
+      expect.objectContaining({ type: 'refused', reason: { key: 'refused.travel.noWayUp' } }),
     );
   });
 });
@@ -185,7 +185,7 @@ describe('an area that gates itself', () => {
     expect(state.location).toMatchObject({ area: 'millford' });
     const refusal = events.find((e) => e.type === 'refused');
     expect(refusal).toBeDefined();
-    if (refusal?.type === 'refused') expect(refusal.reason).toMatch(/wardens to name you/);
+    if (refusal?.type === 'refused') expect(refusal.reason).toMatchObject({ key: 'refused.travel.notYet' });
   });
 });
 

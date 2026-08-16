@@ -123,14 +123,47 @@ describe('createCharacter', () => {
   });
 
   it('clamps attributes to the module\'s declared bounds', () => {
+    // A budget wide enough that the allocation is legal: what is being tested
+    // here is the bounds, and `createCharacter` now also enforces the point
+    // budget — which the test below covers on its own.
+    const rich = loadModule((doc) => {
+      (doc['start'] as { creation: Record<string, unknown> }).creation['attributePoints'] = 99;
+    });
     const character = createCharacter(
-      MODULE,
+      rich,
       'e:1',
-      { ...defaultChoices(MODULE, 'Ash'), attributes: { vigor: 12, wits: 0 } },
+      { ...defaultChoices(rich, 'Ash'), attributes: { vigor: 12, wits: 0 } },
       rng(),
     );
     expect(character.attributes['vigor']).toBe(12); // capped at max, not 13
     expect(character.attributes['wits']).toBe(1); // raised to min
+  });
+
+  /**
+   * The campaign's own limits, wherever a character is built.
+   *
+   * `start.creation` was enforced only by the creation screens, so a party made
+   * any other way — a test, a third-party front end — walked past the point
+   * budget and the allowed lists entirely.
+   */
+  it('refuses an allocation the module cannot afford', () => {
+    expect(() => createCharacter(
+      MODULE,
+      'e:1',
+      { ...defaultChoices(MODULE, 'Ash'), attributes: { vigor: 12, wits: 6 } },
+      rng(),
+    )).toThrow(/points/);
+  });
+
+  it('refuses an ancestry the campaign does not allow', () => {
+    const picky = loadModule((doc) => {
+      (doc['start'] as { creation: Record<string, unknown> }).creation['allowedAncestries'] = ['nobody'];
+      (doc['content'] as { ancestries: { id: string }[] }).ancestries.push({
+        id: 'nobody', name: 'Nobody',
+      } as never);
+    });
+    expect(() => createCharacter(picky, 'e:1', defaultChoices(MODULE, 'Ash'), rng()))
+      .toThrow(/not one this campaign allows/);
   });
 
   it('starts resources full, using the module\'s formula', () => {

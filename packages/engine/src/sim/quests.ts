@@ -21,6 +21,8 @@ import { buildScope, OPEN_NAMESPACES } from '../stats.js';
 import { abilitiesUpTo } from '../character.js';
 import type { ClassDef } from '../character.js';
 import { Transaction, applyOps, changeInventory, adjustReputation } from '../rules/apply.js';
+import { message } from '../narrate/systemText.js';
+import type { Message } from '../narrate/systemText.js';
 
 export interface ObjectiveDef {
   id: string;
@@ -112,7 +114,7 @@ function applyEffects(txn: Transaction, effects: readonly Effect[], rng: Rng): v
 export function startQuest(txn: Transaction, questId: string, rng: Rng): boolean {
   const quest = txn.module.find<QuestDef>('narrative.quests', questId);
   if (!quest) {
-    txn.emit({ type: 'refused', action: 'acceptQuest', reason: `no quest "${questId}"` });
+    txn.emit({ type: 'refused', action: 'acceptQuest', reason: message('refused.quest.unknown', { quest: questId }) });
     return false;
   }
 
@@ -125,7 +127,7 @@ export function startQuest(txn: Transaction, questId: string, rng: Rng): boolean
   if (leader && !isEmptyRequirement(quest.requires)) {
     const scope = buildScope(txn.module, txn.state, leader);
     if (!evalPredicate(compileRequirement(quest.requires), { scope, rng, openNamespaces: OPEN_NAMESPACES })) {
-      txn.emit({ type: 'refused', action: 'acceptQuest', reason: `${quest.name} is not available yet` });
+      txn.emit({ type: 'refused', action: 'acceptQuest', reason: message('refused.quest.unavailable', { quest: quest.name }) });
       return false;
     }
   }
@@ -210,7 +212,7 @@ export function refreshQuestAvailability(txn: Transaction, rng: Rng): void {
 export function abandonQuest(txn: Transaction, questId: string): boolean {
   const questState = txn.state.quests[questId];
   if (!questState || questState.status !== 'active') {
-    txn.emit({ type: 'refused', action: 'abandonQuest', reason: 'you are not on that job' });
+    txn.emit({ type: 'refused', action: 'abandonQuest', reason: message('refused.quest.notTaken') });
     return false;
   }
 
@@ -228,7 +230,7 @@ export function abandonQuest(txn: Transaction, questId: string): boolean {
       [questId]: { quest: questId, status: 'available', completedObjectives: [], startedAt: null },
     },
   });
-  txn.emit({ type: 'questFailed', quest: questId, reason: 'abandoned' });
+  txn.emit({ type: 'questFailed', quest: questId, reason: message('quest.failed.abandoned') });
   return true;
 }
 
@@ -298,14 +300,14 @@ export function advanceQuests(txn: Transaction, events: readonly GameEvent[], rn
     if (leader && quest.failWhen) {
       const scope = buildScope(txn.module, txn.state, leader);
       if (evalPredicate(quest.failWhen, { scope, rng, openNamespaces: OPEN_NAMESPACES })) {
-        failQuest(txn, quest, 'conditions changed', rng);
+        failQuest(txn, quest, message('quest.failed.conditions'), rng);
         continue;
       }
     }
     if (quest.timeLimitDays && questState.startedAt !== null) {
       const perDay = txn.module.source.world.time.minutesPerDay;
       if (txn.state.minute - questState.startedAt > quest.timeLimitDays * perDay) {
-        failQuest(txn, quest, 'too much time passed', rng);
+        failQuest(txn, quest, message('quest.failed.timedOut'), rng);
         continue;
       }
     }
@@ -448,7 +450,7 @@ function checkQuestCompletion(txn: Transaction, quest: QuestDef, rng: Rng): void
   }
 }
 
-function failQuest(txn: Transaction, quest: QuestDef, reason: string, rng: Rng): void {
+function failQuest(txn: Transaction, quest: QuestDef, reason: Message, rng: Rng): void {
   const questState = txn.state.quests[quest.id];
   if (!questState) return;
 

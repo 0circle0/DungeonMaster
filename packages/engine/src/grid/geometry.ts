@@ -16,6 +16,7 @@
  */
 
 import type { Position } from './tiles.js';
+import type { SystemTextKey } from '@dm/module';
 
 /** Chebyshev distance: the number of steps when diagonals are free. */
 export function distance(a: Position, b: Position): number {
@@ -106,6 +107,8 @@ export interface AreaSpec {
   readonly origin: Position;
   /** Direction for cones and lines; ignored by the rest. */
   readonly toward?: Position;
+  /** Half-angle of a cone, in degrees. Defaults to the quarter-circle blast. */
+  readonly angle?: number;
   /** Width of a line shape. */
   readonly width?: number;
 }
@@ -169,8 +172,11 @@ export function area(spec: AreaSpec): Position[] {
       const out: Position[] = [];
 
       // A tile is in the cone when it is within range and its bearing from the
-      // origin is within the cone's half-angle. 45 degrees each side gives the
-      // familiar quarter-circle blast.
+      // origin is within the cone's half-angle — 45 degrees each side unless
+      // the ability says otherwise, which is the familiar quarter-circle blast.
+      // A small tolerance keeps the edges from looking ragged.
+      const halfAngle = ((spec.angle ?? 45) * Math.PI) / 180;
+      const limit = Math.cos(halfAngle) - 0.007;
       for (const point of within(origin, radius)) {
         if (point.x === origin.x && point.y === origin.y) continue;
         if (distance(point, origin) > radius) continue;
@@ -179,8 +185,7 @@ export function area(spec: AreaSpec): Position[] {
         const dy = point.y - origin.y;
         const length = Math.sqrt(dx * dx + dy * dy) || 1;
         const dot = (dx / length) * direction.x + (dy / length) * direction.y;
-        // cos(45°) ≈ 0.7071, with a small tolerance so the edges do not look ragged.
-        if (dot >= 0.7) out.push(point);
+        if (dot >= limit) out.push(point);
       }
       return out;
     }
@@ -199,14 +204,20 @@ function normalize(from: Position, to: Position): { x: number; y: number } {
   return { x: dx / length, y: dy / length };
 }
 
-/** The eight-way compass direction from one tile to another. */
-export function bearing(from: Position, to: Position): string {
+/**
+ * The eight-way compass direction from one tile to another, as a `systemText`
+ * key. Geometry decides which octant; the module decides what to call it.
+ */
+export function bearing(from: Position, to: Position): SystemTextKey {
   const dx = to.x - from.x;
   const dy = to.y - from.y;
-  if (dx === 0 && dy === 0) return 'here';
+  if (dx === 0 && dy === 0) return 'direction.here';
 
   const angle = (Math.atan2(dy, dx) * 180) / Math.PI;
-  const compass = ['east', 'southeast', 'south', 'southwest', 'west', 'northwest', 'north', 'northeast'];
+  const compass = [
+    'direction.east', 'direction.southeast', 'direction.south', 'direction.southwest',
+    'direction.west', 'direction.northwest', 'direction.north', 'direction.northeast',
+  ] as const;
   const index = Math.round(((angle + 360) % 360) / 45) % 8;
   return compass[index]!;
 }

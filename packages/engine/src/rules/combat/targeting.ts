@@ -19,6 +19,8 @@ import { distance, area } from '../../grid/geometry.js';
 import type { AreaShape } from '../../grid/geometry.js';
 import { hasLineOfSight } from '../../grid/fov.js';
 import { stanceOf } from '../../sim/senses.js';
+import { message } from '../../narrate/systemText.js';
+import type { Message } from '../../narrate/systemText.js';
 
 /** Fallback tile size when a module declares no sizes. */
 const DEFAULT_TILE_SIZE = 5;
@@ -170,7 +172,10 @@ interface AbilityDef {
   id: string;
   range: number;
   targeting: 'self' | 'single' | 'allEnemies' | 'allAllies' | 'all' | 'none';
-  areaOfEffect?: { shape: AreaShape; size: number; affects: 'all' | 'enemies' | 'allies' | 'others' };
+  areaOfEffect?: {
+    shape: AreaShape; size: number; angle: number;
+    affects: 'all' | 'enemies' | 'allies' | 'others';
+  };
 }
 
 /**
@@ -185,7 +190,7 @@ export function resolveTargets(
   actor: Entity,
   ability: AbilityDef,
   explicit: { target?: EntityId; at?: Position },
-): { targets: Entity[]; tiles: Position[]; reason: string | null } {
+): { targets: Entity[]; tiles: Position[]; reason: Message | null } {
   const { module, state } = context;
   const present = combatants(state, actor.map);
   const range = Math.max(0, toTiles(module, ability.range));
@@ -197,11 +202,12 @@ export function resolveTargets(
       ?? actor.position;
 
     const check = reachability(context, actor.position, origin, Math.max(range, 1));
-    if (!check.inRange) return { targets: [], tiles: [], reason: 'out of range' };
-    if (!check.hasSight) return { targets: [], tiles: [], reason: 'no line of sight' };
+    if (!check.inRange) return { targets: [], tiles: [], reason: message('refused.target.outOfRange') };
+    if (!check.hasSight) return { targets: [], tiles: [], reason: message('refused.target.noSight') };
 
     const tiles = area({
       shape: ability.areaOfEffect.shape,
+      angle: ability.areaOfEffect.angle,
       size: Math.max(1, toTiles(module, ability.areaOfEffect.size)),
       origin,
       toward: origin,
@@ -244,17 +250,17 @@ export function resolveTargets(
     }
 
     default: {
-      if (!explicit.target) return { targets: [], tiles: [], reason: 'no target' };
+      if (!explicit.target) return { targets: [], tiles: [], reason: message('refused.target.missing') };
       const target = state.entities[explicit.target];
-      if (!target || !target.alive) return { targets: [], tiles: [], reason: 'nothing there' };
-      if (target.map !== actor.map) return { targets: [], tiles: [], reason: 'not here' };
+      if (!target || !target.alive) return { targets: [], tiles: [], reason: message('refused.target.empty') };
+      if (target.map !== actor.map) return { targets: [], tiles: [], reason: message('refused.target.elsewhere') };
 
       const effectiveRange = Math.max(range, reachOf(module, actor));
       const check = reachability(context, actor.position, target.position, effectiveRange);
-      if (!check.inRange) return { targets: [], tiles: [], reason: 'out of reach' };
-      if (!check.hasSight) return { targets: [], tiles: [], reason: 'no line of sight' };
+      if (!check.inRange) return { targets: [], tiles: [], reason: message('refused.target.outOfReach') };
+      if (!check.hasSight) return { targets: [], tiles: [], reason: message('refused.target.noSight') };
       if (blocksTargeting(module, check.cover)) {
-        return { targets: [], tiles: [], reason: 'they are behind full cover' };
+        return { targets: [], tiles: [], reason: message('refused.target.covered') };
       }
 
       return { targets: [target], tiles: [target.position], reason: null };

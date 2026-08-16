@@ -91,7 +91,7 @@ describe('slots', () => {
     const dry = reduce(state, { type: 'useAbility', ability: 'wardlight' }, ctx);
     const refusal = dry.events.find((e) => e.type === 'refused');
     expect(refusal).toBeDefined();
-    if (refusal?.type === 'refused') expect(refusal.reason).toMatch(/no slot left/);
+    if (refusal?.type === 'refused') expect(refusal.reason).toMatchObject({ key: 'refused.cast.noSlot' });
   });
 
   it('come back on the rest the module names', () => {
@@ -164,7 +164,7 @@ describe('components', () => {
     const { events } = reduce(empty, { type: 'useAbility', ability: 'barrow_bolt', target: 'e:99' }, ctx);
     const refusal = events.find((e) => e.type === 'refused');
     expect(refusal).toBeDefined();
-    if (refusal?.type === 'refused') expect(refusal.reason).toMatch(/grave ash/i);
+    if (refusal?.type === 'refused') expect(refusal.reason).toMatchObject({ key: 'refused.cast.noComponent' });
   });
 
   it('spends the material, and keeps the slot', () => {
@@ -195,7 +195,7 @@ describe('components', () => {
     const { events } = reduce(gagged, { type: 'useAbility', ability: 'wardlight' }, ctx);
     const refusal = events.find((e) => e.type === 'refused');
     expect(refusal).toBeDefined();
-    if (refusal?.type === 'refused') expect(refusal.reason).toMatch(/cannot speak/);
+    if (refusal?.type === 'refused') expect(refusal.reason).toMatchObject({ key: 'refused.cast.silenced' });
   });
 });
 
@@ -288,7 +288,7 @@ describe('rituals', () => {
     const { events } = reduce(caster(1), { type: 'useAbility', ability: 'wardlight', ritual: true }, ctx);
     const refusal = events.find((e) => e.type === 'refused');
     expect(refusal).toBeDefined();
-    if (refusal?.type === 'refused') expect(refusal.reason).toMatch(/cannot be cast as a ritual/);
+    if (refusal?.type === 'refused') expect(refusal.reason).toMatchObject({ key: 'refused.cast.notRitual' });
   });
 });
 

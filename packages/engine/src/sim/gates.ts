@@ -18,6 +18,8 @@ import type { Entity } from '../state.js';
 import { buildScope, OPEN_NAMESPACES } from '../stats.js';
 import { Transaction, applyOps, changeInventory } from '../rules/apply.js';
 import { skillCheck, succeeded } from '../rules/check.js';
+import { message, literal } from '../narrate/systemText.js';
+import type { Message } from '../narrate/systemText.js';
 
 export interface GateDef {
   id: string;
@@ -40,25 +42,39 @@ export interface GateDef {
 
 export type GateOutcome =
   | { readonly opened: true; readonly how: 'requirement' | 'bypass' | 'ability' }
-  | { readonly opened: false; readonly missing: readonly string[] };
+  | { readonly opened: false; readonly missing: readonly Message[] };
 
 /** Plain-language description of what a requirement is asking for. */
-export function describeRequirement(requirement: Requirement | undefined): string[] {
+export function describeRequirement(requirement: Requirement | undefined): Message[] {
   if (isEmptyRequirement(requirement)) return [];
   const r = requirement!;
-  const out: string[] = [];
+  const out: Message[] = [];
 
-  if (r.description) out.push(r.description);
-  for (const item of r.items ?? []) out.push(`the ${item.item.replace(/_/g, ' ')}`);
+  // The requirement's own `description` is authored prose, so it passes
+  // through; everything else is the engine naming a thing, and that is keyed.
+  if (r.description) out.push(literal(r.description));
+  for (const item of r.items ?? []) {
+    out.push(message('requirement.item', { item: item.item.replace(/_/g, ' ') }));
+  }
   for (const skill of r.skills ?? []) {
-    out.push(`${skill.skill.replace(/_/g, ' ')} ${skill.minTier ?? skill.minRank}`);
+    out.push(message('requirement.skill', {
+      skill: skill.skill.replace(/_/g, ' '),
+      rank: skill.minTier ?? skill.minRank ?? '',
+    }));
   }
-  for (const quest of r.quests ?? []) out.push(`${quest.quest.replace(/_/g, ' ')} ${quest.status}`);
+  for (const quest of r.quests ?? []) {
+    out.push(message('requirement.quest', {
+      quest: quest.quest.replace(/_/g, ' '),
+      status: quest.status,
+    }));
+  }
   for (const faction of r.factions ?? []) {
-    out.push(`standing with the ${faction.faction.replace(/_/g, ' ')}`);
+    out.push(message('requirement.faction', { faction: faction.faction.replace(/_/g, ' ') }));
   }
-  if (typeof r.minLevel === 'number') out.push(`level ${r.minLevel}`);
-  for (const ability of r.abilities ?? []) out.push(`the ${ability.replace(/_/g, ' ')} ability`);
+  if (typeof r.minLevel === 'number') out.push(message('requirement.level', { level: r.minLevel }));
+  for (const ability of r.abilities ?? []) {
+    out.push(message('requirement.ability', { ability: ability.replace(/_/g, ' ') }));
+  }
 
   return out;
 }
@@ -79,7 +95,7 @@ export function openGate(
 ): GateOutcome {
   const gate = txn.module.find<GateDef>('world.gates', gateId);
   if (!gate) {
-    txn.emit({ type: 'refused', action: 'open', reason: `no gate "${gateId}"` });
+    txn.emit({ type: 'refused', action: 'open', reason: message('refused.open.unknownGate', { gate: gateId }) });
     return { opened: false, missing: [] };
   }
 
@@ -139,9 +155,10 @@ export function openGate(
   }
 
   // — blocked ——————————————————————————————————————————————
-  const missing = [
+  const missing: Message[] = [
     ...describeRequirement(gate.requires),
-    ...gate.opensWith.map((ability) => `the ${ability.replace(/_/g, ' ')} ability`),
+    ...gate.opensWith.map((ability) =>
+      message('requirement.ability', { ability: ability.replace(/_/g, ' ') })),
   ];
 
   if (gate.onBlocked.length > 0) {

@@ -148,10 +148,11 @@ describe('geometry', () => {
   });
 
   it('names compass bearings', () => {
-    expect(bearing({ x: 0, y: 0 }, { x: 1, y: 0 })).toBe('east');
-    expect(bearing({ x: 0, y: 0 }, { x: 0, y: -1 })).toBe('north');
-    expect(bearing({ x: 0, y: 0 }, { x: -1, y: 1 })).toBe('southwest');
-    expect(bearing({ x: 0, y: 0 }, { x: 0, y: 0 })).toBe('here');
+    // Keys, not words: the module supplies what each direction is called.
+    expect(bearing({ x: 0, y: 0 }, { x: 1, y: 0 })).toBe('direction.east');
+    expect(bearing({ x: 0, y: 0 }, { x: 0, y: -1 })).toBe('direction.north');
+    expect(bearing({ x: 0, y: 0 }, { x: -1, y: 1 })).toBe('direction.southwest');
+    expect(bearing({ x: 0, y: 0 }, { x: 0, y: 0 })).toBe('direction.here');
   });
 });
 

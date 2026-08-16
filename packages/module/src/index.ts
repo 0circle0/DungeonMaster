@@ -54,6 +54,16 @@ export { narrativeSchema } from './schema/narrative.js';
 export type { Narrative, TextPool, TextVariant, Quest } from './schema/narrative.js';
 
 export {
+  systemTextSchema,
+  SYSTEM_TEXT,
+  SYSTEM_TEXT_BY_KEY,
+  REQUIRED_SYSTEM_TEXT,
+  defaultSystemText,
+  requiredSystemText,
+} from './schema/systemText.js';
+export type { SystemText, SystemTextEntry, SystemTextKey, SystemTextValue } from './schema/systemText.js';
+
+export {
   ExprSchema,
   PredicateSchema,
   EffectSchema,

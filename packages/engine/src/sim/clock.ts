@@ -67,6 +67,7 @@ export function dateOf(module: CompiledModule, minute: number): WorldDate {
   const day = Math.floor(minute / time.minutesPerDay) + 1;
   const clock = minute % time.minutesPerDay;
 
+  const perHour = time.minutesPerHour;
   const monthLength = Math.max(1, time.daysPerMonth);
   const names = time.monthNames;
   const monthsPerYear = Math.max(1, names.length);
@@ -80,8 +81,8 @@ export function dateOf(module: CompiledModule, minute: number): WorldDate {
     month: (monthIndex % monthsPerYear) + 1,
     monthName: names.length > 0 ? (names[monthIndex % monthsPerYear] ?? null) : null,
     year: Math.floor(monthIndex / monthsPerYear) + 1,
-    hour: Math.floor(clock / 60),
-    minute: clock % 60,
+    hour: Math.floor(clock / perHour),
+    minute: clock % perHour,
   };
 }
 

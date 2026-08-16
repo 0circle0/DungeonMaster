@@ -102,24 +102,66 @@ function allows(
   return true;
 }
 
-/** Join a list into readable prose: "a, b and c". */
-export function list(items: readonly string[], conjunction = 'and'): string {
-  if (items.length === 0) return '';
-  if (items.length === 1) return items[0]!;
-  if (items.length === 2) return `${items[0]} ${conjunction} ${items[1]}`;
-  return `${items.slice(0, -1).join(', ')} ${conjunction} ${items.at(-1)}`;
+/**
+ * The words a sentence is assembled from, resolved from the module once.
+ *
+ * These helpers used to hold their own English — "and", "a"/"an", and a ladder
+ * of number words. The *rules* are still here (where the conjunction goes, that
+ * a vowel takes the other article); only the words moved out, which is the line
+ * this file draws between grammar and vocabulary.
+ */
+export interface Grammar {
+  readonly and: string;
+  readonly or: string;
+  readonly separator: string;
+  readonly pair: string;
+  readonly many: string;
+  readonly consonant: string;
+  readonly vowel: string;
+  readonly counted: string;
+  readonly plural: string;
+  /** Number words from zero upward; past the end, digits are used. */
+  readonly numbers: readonly string[];
 }
 
-/** "a sword" / "an apple" — good enough for English content. */
-export function article(noun: string): string {
-  return /^[aeiou]/i.test(noun) ? `an ${noun}` : `a ${noun}`;
+/** How a noun reads when there is more than one of it. */
+export function plural(grammar: Grammar, noun: string): string {
+  return interpolate(grammar.plural, { noun });
+}
+
+/** Join a list into readable prose: "a, b and c". */
+export function list(grammar: Grammar, items: readonly string[], conjunction = grammar.and): string {
+  if (items.length === 0) return '';
+  if (items.length === 1) return items[0]!;
+  if (items.length === 2) {
+    return interpolate(grammar.pair, { first: items[0]!, last: items[1]!, conjunction });
+  }
+  return interpolate(grammar.many, {
+    head: items.slice(0, -1).join(grammar.separator),
+    last: items.at(-1)!,
+    conjunction,
+  });
+}
+
+/**
+ * "a sword" / "an apple".
+ *
+ * The vowel test is a rule about how the language works, so it stays; which
+ * word each branch produces is the module's business.
+ */
+export function article(grammar: Grammar, noun: string): string {
+  return interpolate(/^[aeiou]/i.test(noun) ? grammar.vowel : grammar.consonant, { noun });
 }
 
 /** "three hounds" for small numbers, "12 hounds" beyond. */
-export function count(n: number, singular: string, plural = `${singular}s`): string {
-  const words = ['no', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten'];
-  const word = n < words.length ? words[n] : String(n);
-  return `${word} ${n === 1 ? singular : plural}`;
+export function count(
+  grammar: Grammar,
+  n: number,
+  singular: string,
+  plural: string,
+): string {
+  const word = n >= 0 && n < grammar.numbers.length ? grammar.numbers[n]! : String(n);
+  return interpolate(grammar.counted, { number: word, noun: n === 1 ? singular : plural });
 }
 
 /**

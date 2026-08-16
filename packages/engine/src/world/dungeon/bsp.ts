@@ -33,8 +33,8 @@ export interface BspLayout {
   readonly treeCrossings: { edge: [number, number]; crossings: Position[] }[];
 }
 
-/** A leaf is never split below this, walls included. */
-const MIN_LEAF = 5;
+/** A leaf is never split below this, walls included. Set by the dungeon. */
+const DEFAULT_MIN_LEAF = 5;
 
 /**
  * Split the bounds into at least `count` leaves and carve them.
@@ -49,7 +49,9 @@ export function bspLayout(
   guaranteedRoles: readonly string[],
   palette: Palette,
   rng: Rng,
+  minLeaf: number = DEFAULT_MIN_LEAF,
 ): BspLayout {
+  const MIN_LEAF = minLeaf;
   const bounds: Rect = { x: 0, y: 0, width: builder.width, height: builder.height };
 
   // — split ————————————————————————————————————————————————

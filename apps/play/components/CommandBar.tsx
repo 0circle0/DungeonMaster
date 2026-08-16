@@ -11,7 +11,7 @@
  */
 
 import { useMemo, useRef, useState } from 'react';
-import { distance, roughBearing } from '@dm/engine';
+import { distance, roughBearing, text as systemText } from '@dm/engine';
 import { complete, parse, resolveNoun, visibleEntities } from '@dm/play';
 import type { MetaCommand, Resolution } from '@dm/play';
 import type { SessionApi } from '../lib/useSession.js';
@@ -55,7 +55,9 @@ export function CommandBar({
         const actor = frame.state.entities[frame.state.selected];
         setPicker(resolved.candidates.map((candidate, index) => {
           const gap = actor && candidate.at ? distance(actor.position, candidate.at) : null;
-          const way = actor && candidate.at ? roughBearing(actor.position, candidate.at) : '';
+          const way = actor && candidate.at
+            ? systemText(module, roughBearing(actor.position, candidate.at))
+            : '';
           return {
             id: `${candidate.value}:${index}`,
             label: candidate.name,

@@ -7,8 +7,12 @@ export {
   narrate, narrateEvent, describeSurroundings, formatRoll, placeOf, placeNameOf,
 } from './narrate/narrate.js';
 export type { Line, NarratorContext } from './narrate/narrate.js';
-export { narrateFrom, interpolate, list, count, article, nameScore } from './narrate/grammar.js';
-export type { NarrateOptions } from './narrate/grammar.js';
+export { narrateFrom, interpolate, list, count, article, plural, nameScore } from './narrate/grammar.js';
+export type { NarrateOptions, Grammar } from './narrate/grammar.js';
+export {
+  text, render, message, literal, joinMessages, grammarOf,
+} from './narrate/systemText.js';
+export type { Message, TextParams } from './narrate/systemText.js';
 
 export { spreadRumours, decayMemories, driftFactions, retention, memoryKeyOf, memoryModel } from './sim/gossip.js';
 export type { MemoryModel } from './sim/gossip.js';
@@ -165,3 +169,5 @@ export type { MapInstance, CombatState } from './state.js';
 
 export { newGame, defaultChoices, NewGameError } from './newgame.js';
 export type { NewGameOptions } from './newgame.js';
+
+export { costOf, totalSpent, baseAllocation, creationProblem } from './creation.js';

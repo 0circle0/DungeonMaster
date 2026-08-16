@@ -69,6 +69,12 @@ export const abilitySchema = z
         size: z.number().min(0),
         /** Everyone in the area, or only enemies. */
         affects: z.enum(['all', 'enemies', 'allies', 'others']).default('all'),
+        /**
+         * Half-angle of a cone, in degrees. The engine's 45 each side is the
+         * familiar quarter-circle blast; a narrower one is a jet and a wider
+         * one is a wash, and neither could be asked for.
+         */
+        angle: z.number().min(1).max(180).default(45),
       })
       .strict()
       .optional(),
@@ -127,7 +133,20 @@ export const characterClassSchema = z
     attributeBonuses: z.record(ref('rules.attributes'), z.number().int()).default({}),
     /** The attribute this class's abilities key off. */
     primaryAttribute: ref('rules.attributes'),
-    skillProficiencies: z.array(ref('content.skills')).default([]),
+    /**
+     * Skills the class starts trained in. A bare id grants
+     * `rules.progression.proficiencyRank`; `{ skill, rank }` says exactly what
+     * "trained" is worth, which a module with a rank ladder needs and could not
+     * previously say.
+     */
+    skillProficiencies: z
+      .array(
+        z.union([
+          ref('content.skills'),
+          z.object({ skill: ref('content.skills'), rank: z.number().int().min(0) }).strict(),
+        ]),
+      )
+      .default([]),
     startingItems: z
       .array(
         z
@@ -256,6 +275,17 @@ export const lootTableSchema = z
     requires: requirementSchema.optional(),
     /** Extra draws granted by a scavenging-style skill. */
     bonusRollSkill: ref('content.skills').optional(),
+    /**
+     * What that skill is worth. The skill was data; what succeeding at it
+     * bought you was not.
+     */
+    bonusRolls: z
+      .object({
+        onSuccess: z.number().int().min(0).default(1),
+        onCritical: z.number().int().min(0).default(2),
+      })
+      .strict()
+      .default({}),
   })
   .strict();
 

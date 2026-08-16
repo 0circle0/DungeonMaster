@@ -23,6 +23,7 @@
     "editor": "npm run dev --workspace @dm/editor",
     "editor:build": "npm run build --workspace @dm/editor",
     "docs": "tsx packages/module/src/bin/emit-docs.ts",
+    "systemtext": "tsx packages/module/src/bin/emit-system-text.ts",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "check": "npm run check:projects && npm run typecheck && npm run lint && npm test",

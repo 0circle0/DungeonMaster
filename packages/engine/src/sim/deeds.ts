@@ -11,7 +11,7 @@
  */
 
 import { Rng } from '@dm/core';
-import type { CompiledModule } from '@dm/module';
+import type { CompiledModule, MemoryModel } from '@dm/module';
 import type { Entity, Deed } from '../state.js';
 import { Transaction, adjustReputation } from '../rules/apply.js';
 import { TerrainIndex } from '../grid/tiles.js';
@@ -28,25 +28,16 @@ interface DeedKindDef {
   distortion: number;
 }
 
-interface WitnessConfig {
-  radius: number;
-  requiresLineOfSight: boolean;
-  deadMenTellNoTales: boolean;
-  identificationChance: number;
-  disguiseReduction: number;
-  factionAlwaysLearns: boolean;
-}
-
-function witnessConfig(module: CompiledModule): WitnessConfig {
-  const memory = module.source.narrative.memory as unknown as { witness?: Partial<WitnessConfig> };
-  return {
-    radius: memory.witness?.radius ?? 0,
-    requiresLineOfSight: memory.witness?.requiresLineOfSight ?? true,
-    deadMenTellNoTales: memory.witness?.deadMenTellNoTales ?? true,
-    identificationChance: memory.witness?.identificationChance ?? 0.8,
-    disguiseReduction: memory.witness?.disguiseReduction ?? 0.5,
-    factionAlwaysLearns: memory.witness?.factionAlwaysLearns ?? false,
-  };
+/**
+ * The module's witness settings.
+ *
+ * A read, not a merge: `compileModule` runs the document through Zod, so every
+ * default in `witnessSchema` is already present by the time the engine sees it.
+ * Re-stating them here would be a second source of truth, and the two would
+ * drift the first time one of them changed.
+ */
+function witnessConfig(module: CompiledModule): MemoryModel['witness'] {
+  return module.source.narrative.memory.witness;
 }
 
 /**
@@ -89,9 +80,12 @@ export function witnessesOf(
     if (other.kind === 'character') continue;
 
     if (!config.requiresLineOfSight) {
-      // A module that says sight is not required is asking for presence alone.
-      const radius = radiusOverride ?? Math.max(config.radius, 12);
-      if (distance(other.position, at.position) <= radius) out.push(other.id);
+      // A module that says sight is not required is asking for presence alone,
+      // and `radius: 0` means exactly that: everyone here. The engine used to
+      // floor this at twelve tiles — the sight constant from before senses were
+      // declarable — which made the schema's own default unreachable.
+      const radius = radiusOverride ?? config.radius;
+      if (radius === 0 || distance(other.position, at.position) <= radius) out.push(other.id);
       continue;
     }
 
@@ -111,13 +105,18 @@ export function witnessesOf(
 /**
  * Whether this actor is going unrecognised.
  *
- * A disguise is whatever the module says it is: any condition that declares the
- * `disguised` tag. The engine still knows nothing about hoods.
+ * A disguise is whatever the module says it is: any condition declaring
+ * `concealsIdentity`. The engine knows nothing about hoods, and now it does not
+ * know a magic word for them either — the relationship is typed, so a module
+ * that gets it wrong fails to load rather than quietly never disguising anyone.
  */
 function isDisguised(txn: Transaction, actor: Entity): boolean {
   for (const active of actor.conditions) {
-    const condition = txn.module.find<{ tags?: string[] }>('rules.conditions', active.condition);
-    if (condition?.tags?.includes('disguised')) return true;
+    const condition = txn.module.find<{ concealsIdentity?: boolean }>(
+      'rules.conditions',
+      active.condition,
+    );
+    if (condition?.concealsIdentity === true) return true;
   }
   return false;
 }

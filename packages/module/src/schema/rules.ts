@@ -117,6 +117,12 @@ export const conditionSchema = z
     modifiers: z.record(idSchema, ExprSchema).default({}),
     /** Actions the condition forbids, e.g. `stunned` blocking `action`. */
     prevents: z.array(idSchema).default([]),
+    /**
+     * Whether being under this hides who you are, so a witness is less likely
+     * to name you. Typed rather than a magic tag the engine knows: a module
+     * using `hooded` or `veiled` got no disguise reduction and no error.
+     */
+    concealsIdentity: z.boolean().default(false),
     /** A save each round to shake it off. */
     savingThrow: z
       .object({
@@ -147,6 +153,42 @@ export const resolutionSchema = z
     criticalFailureAt: z.number().int().nullable().default(1),
     /** A critical hit multiplies damage dice by this. */
     criticalDamageMultiplier: z.number().min(1).default(2),
+    /**
+     * What a successful save against `onSuccess: "half"` leaves, as a fraction.
+     *
+     * The mirror of `criticalDamageMultiplier`, and it was a literal `0.5` three
+     * lines away from it — so a crit could be ×3 but a save could never take a
+     * quarter or two thirds.
+     */
+    saveSuccessMultiplier: z.number().min(0).max(1).default(0.5),
+    /**
+     * The floor a passive score is measured from: `passiveBase + modifier`.
+     *
+     * D&D's convention, and the engine's until now. A `3d6` ruleset where 10 is
+     * the *mean* rather than a floor needs a different number here.
+     */
+    passiveBase: z.number().int().default(10),
+    /**
+     * What "opposed" means when one side is only resisting.
+     *
+     * `passive` measures against `passiveBase + modifier`, which is stable and
+     * cheap. `contested` has the other side roll too. The engine held both
+     * readings at once — a reaction used the passive one, `opposedCheck` rolled
+     * — so the same word meant two things depending on which path you were on.
+     */
+    opposedMode: z.enum(['passive', 'contested']).default('passive'),
+    /**
+     * Which way a scaled damage number is rounded — resistance, a save for
+     * half, a critical. Tables disagree about this and it is systematic, not
+     * incidental: at `round`, seven halved is four; at `floor` it is three.
+     */
+    damageRounding: z.enum(['floor', 'round', 'ceil']).default('round'),
+    /**
+     * Which way a reputation spill is rounded. `trunc` means a relation weight
+     * of 0.4 on a ±2 deed spills nothing at all, silently — which is a balance
+     * decision rather than an arithmetic one.
+     */
+    reputationRounding: z.enum(['floor', 'round', 'ceil', 'trunc']).default('trunc'),
     defaultDifficulty: z.number().int().default(12),
     /** Named difficulties content can refer to instead of raw numbers. */
     difficulties: z.record(idSchema, z.number().int()).default({}),
@@ -162,12 +204,47 @@ export const levelSchema = z
   })
   .strict();
 
+/**
+ * What a level beyond the first adds to the vital resource.
+ *
+ * This was the D&D hit-point model written into the one place a character is
+ * built: a die rolled per level, stacked on top of whatever
+ * `rules.resources[].max` already said, for the vital resource only. The
+ * default here reproduces it exactly; the other policies are the variants
+ * tables actually use.
+ *
+ * - `roll` — roll the die, as before.
+ * - `average` — take its mean, rounded up. The common table variant.
+ * - `max` — take the top face.
+ * - `none` — add nothing, and let `resources[].max` do the whole job. This is
+ *   the honest option for a module that already scales its pools by level.
+ *
+ * `die` chooses whose die: the class's, or the creature's size — which is what
+ * finally makes `rules.sizes[].hitDie` mean something. `bonus` is an expression
+ * over the character, so "constitution modifier per level" is expressible at
+ * last.
+ */
+export const levelVitalitySchema = z
+  .object({
+    policy: z.enum(['roll', 'average', 'max', 'none']).default('roll'),
+    die: z.enum(['class', 'size']).default('class'),
+    bonus: ExprSchema.default(0),
+  })
+  .strict();
+
 export const progressionSchema = z
   .object({
     maxLevel: z.number().int().min(1).default(20),
     levels: z.array(levelSchema).min(1),
     /** Proficiency-style bonus by level, if the module uses one. */
     proficiency: ExprSchema.optional(),
+    /**
+     * The rank a bare `skillProficiencies` entry grants. Training always meant
+     * exactly 1, while `ancestry.skillBonuses` carried real numbers — so the
+     * two sources of skill disagreed about what a number was.
+     */
+    proficiencyRank: z.number().int().min(0).default(1),
+    levelVitality: levelVitalitySchema.default({}),
   })
   .strict()
   .refine(
@@ -244,10 +321,46 @@ export const itemPropertySchema = z
  * The engine keeps a single scalar purse; this is only what to print beside it.
  * A module that never mentions money simply never shows one.
  */
+/**
+ * How far the party can reach without moving.
+ *
+ * Reach in combat comes from `sizes[].reach`, but these three did not: talking,
+ * picking things up, and handing something over were fixed at two tiles, one
+ * tile, and one tile in three different files.
+ */
+export const interactionRangeSchema = z
+  .object({
+    /** Chebyshev tiles you can hold a conversation across. */
+    talk: z.number().int().min(0).default(2),
+    /** Tiles you can pick something up from, or hand it over. */
+    reach: z.number().int().min(0).default(1),
+  })
+  .strict();
+
+/**
+ * Searching a room, and defusing what it turns up.
+ *
+ * Both govern how a dungeon crawl feels — how much of a room one `search`
+ * covers, and whether disarming means standing on the thing.
+ */
+export const searchSchema = z
+  .object({
+    /** How far a search reaches. Arm's length plus a step, not the whole room. */
+    trapRadius: z.number().int().min(0).default(2),
+    /** How close you must be to disarm what you found. */
+    disarmReach: z.number().int().min(0).default(1),
+  })
+  .strict();
+
 export const currencySchema = z
   .object({
     name: displayName.default('coins'),
     abbrev: z.string().max(6).default('c'),
+    /**
+     * Whether the purse can go below zero. Off, the engine clamps and a module
+     * simply cannot express a debt; on, it can.
+     */
+    allowNegative: z.boolean().default(false),
   })
   .strict();
 
@@ -296,6 +409,40 @@ export const rulesSchema = z
     initiativeStat: ref('rules.derivedStats').optional(),
     /** Default size for creatures that do not declare one. */
     defaultSize: ref('rules.sizes').optional(),
+    /**
+     * How a creature gets about when it declares no speeds of its own, and how
+     * generation decides a map is connected.
+     *
+     * Without this the engine took the mode named `walk`, or else whichever was
+     * declared first — so a module whose modes are `glide` and `phase` got an
+     * ordering dependency dressed up as a default.
+     */
+    defaultMovementMode: ref('rules.movementModes').optional(),
+    interactionRange: interactionRangeSchema.default({}),
+    search: searchSchema.default({}),
+    /**
+     * How an NPC's signed `disposition` becomes a stance toward the party.
+     *
+     * Bands are matched highest `atLeast` first. The engine used to cut at
+     * exactly zero and offer only two of the three stances, so however warmly a
+     * module wrote somebody they could never spawn as an ally. The default
+     * reproduces that cut; adding a band above it is how you get allies.
+     */
+    dispositionBands: z
+      .array(
+        z
+          .object({
+            id: idSchema,
+            /** Lowest disposition in this band. Omit for the catch-all below them all. */
+            atLeast: z.number().optional(),
+            stance: z.enum(['ally', 'neutral', 'hostile']),
+          })
+          .strict(),
+      )
+      .default([
+        { id: 'neutral', atLeast: 0, stance: 'neutral' },
+        { id: 'hostile', stance: 'hostile' },
+      ]),
     extra,
   })
   .strict();

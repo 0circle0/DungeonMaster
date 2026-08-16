@@ -19,30 +19,15 @@
 
 import { Rng } from '@dm/core';
 import { evalExpr } from '@dm/module';
-import type { CompiledModule, Expr, Scope, Value } from '@dm/module';
+import type { CompiledModule, Expr, Scope, Value, Spellcasting } from '@dm/module';
 import type { Entity } from '../state.js';
 import { buildScope, statsOf, OPEN_NAMESPACES } from '../stats.js';
 import { Transaction, changeInventory } from './apply.js';
 import { preventsAction } from './conditions.js';
 import { savingThrow } from './check.js';
+import { message } from '../narrate/systemText.js';
+import type { Message } from '../narrate/systemText.js';
 
-interface Spellcasting {
-  mode: 'none' | 'slots' | 'points' | 'both';
-  maxSpellLevel: number;
-  slotTable: Record<string, number[]>;
-  pointResource?: string;
-  pointCosts: Record<string, number>;
-  saveDifficulty?: Expr;
-  attackBonus?: Expr;
-  concentration: {
-    enabled: boolean;
-    savingThrow?: string;
-    difficulty?: Expr;
-    maxConcurrent: number;
-  };
-  recoverOn: string[];
-  ritualCasting: boolean;
-}
 
 interface ClassCasting {
   castingAttribute: string;
@@ -64,8 +49,15 @@ export interface SpellDef {
   upcast: unknown[];
 }
 
+/**
+ * The module's casting rules.
+ *
+ * The schema's own type, not a copy of it: a hand-written mirror here meant an
+ * `as unknown as` cast, and a field added to one and not the other would have
+ * type-checked all the way to a runtime undefined.
+ */
 export function spellcastingOf(module: CompiledModule): Spellcasting {
-  return module.source.rules.spellcasting as unknown as Spellcasting;
+  return module.source.rules.spellcasting;
 }
 
 /** The casting half of a character's class, when it has one. */
@@ -137,8 +129,13 @@ export function slotForSpell(
   spellLevel: number,
 ): number | null {
   if (spellLevel <= 0) return 0; // Cantrips cost nothing.
+  // `maxSpellLevel` was declared by every module with magic and consulted by
+  // nothing, so a spell above the ruleset's own ceiling cast perfectly well.
+  const ceiling = spellcastingOf(module).maxSpellLevel;
+  if (spellLevel > ceiling) return null;
+
   const left = slotsLeft(module, actor);
-  for (let level = spellLevel; level <= left.length; level += 1) {
+  for (let level = spellLevel; level <= Math.min(left.length, ceiling); level += 1) {
     if ((left[level - 1] ?? 0) > 0) return level;
   }
   return null;
@@ -187,19 +184,27 @@ export function componentsMissing(
   txn: Transaction,
   actor: Entity,
   spell: SpellDef,
-): string | null {
+): Message | null {
+  // Which action a component actually is, per the module. A ruleset that names
+  // neither cannot have its casting interrupted that way, which is a coherent
+  // thing for a ruleset to say.
+  const { verbal, somatic } = spellcastingOf(txn.module).componentActionTypes;
+
   for (const component of spell.components) {
-    if (component === 'verbal' && preventsAction(txn, actor, 'speak')) {
-      return `${actor.name} cannot speak the words`;
+    if (component === 'verbal' && verbal !== undefined && preventsAction(txn, actor, verbal)) {
+      return message('refused.cast.silenced', { who: actor.name });
     }
-    if (component === 'somatic' && preventsAction(txn, actor, 'gesture')) {
-      return `${actor.name} cannot make the signs`;
+    if (component === 'somatic' && somatic !== undefined && preventsAction(txn, actor, somatic)) {
+      return message('refused.cast.bound', { who: actor.name });
     }
     if (component === 'material' && spell.materialComponent) {
       const held = actor.inventory.some((stack) => stack.item === spell.materialComponent);
       if (!held) {
         const item = txn.module.find<{ name: string }>('content.items', spell.materialComponent);
-        return `${actor.name} has no ${(item?.name ?? spell.materialComponent).toLowerCase()}`;
+        return message('refused.cast.noComponent', {
+          who: actor.name,
+          component: (item?.name ?? spell.materialComponent).toLowerCase(),
+        });
       }
     }
   }
@@ -225,13 +230,13 @@ export function paySpell(
   actor: Entity,
   spell: SpellDef,
   options: { ritual?: boolean } = {},
-): { ok: true; slot: number } | { ok: false; reason: string } {
+): { ok: true; slot: number } | { ok: false; reason: Message } {
   const casting = spellcastingOf(txn.module);
   const level = spell.spellLevel ?? 0;
 
   if (options.ritual) {
     if (!casting.ritualCasting || !spell.ritual) {
-      return { ok: false, reason: `${spell.name} cannot be cast as a ritual` };
+      return { ok: false, reason: message('refused.cast.notRitual', { spell: spell.name }) };
     }
     return { ok: true, slot: level };
   }
@@ -251,14 +256,14 @@ export function paySpell(
       }
       if (casting.mode === 'points') {
         const resource = txn.module.find<{ name: string }>('rules.resources', casting.pointResource);
-        return { ok: false, reason: `not enough ${resource?.name ?? casting.pointResource}` };
+        return { ok: false, reason: message('refused.cost.shortfall', { resource: resource?.name ?? casting.pointResource }) };
       }
     }
   }
 
   if (casting.mode === 'slots' || casting.mode === 'both') {
     const slot = slotForSpell(txn.module, actor, level);
-    if (slot === null) return { ok: false, reason: `no slot left for ${spell.name}` };
+    if (slot === null) return { ok: false, reason: message('refused.cast.noSlot', { spell: spell.name }) };
     if (slot === 0) return { ok: true, slot: 0 };
 
     const used = [...actor.slotsUsed];

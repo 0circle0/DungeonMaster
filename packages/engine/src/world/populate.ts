@@ -51,6 +51,7 @@ interface EncounterTableDef {
   emptyWeight: number;
   minDepth: number;
   maxDepth: number;
+  scalePerLevels: number;
   groups: EncounterGroupDef[];
 }
 
@@ -59,6 +60,9 @@ interface RoomTemplateDef {
   encounterChance: number;
   trapChance: number;
   lootChance: number;
+  alwaysEncounter: boolean;
+  neverEncounter: boolean;
+  neverTrap: boolean;
 }
 
 interface BiomeDef {
@@ -228,10 +232,11 @@ export function rollEncounter(
     roll -= group.weight ?? 1;
     if (roll > 0) continue;
 
-    // A group that scales gains one creature per full two levels above the
-    // first, which keeps a table relevant without becoming a second table.
+    // A scaling group gains a creature every `scalePerLevels` levels above the
+    // first, which keeps a table relevant without becoming a second table. How
+    // steep that is belongs to the table, not here.
     const level = Number((scope['actor'] as { level?: unknown } | undefined)?.level ?? 1);
-    const bonus = Math.max(0, Math.floor((level - 1) / 2));
+    const bonus = Math.max(0, Math.floor((level - 1) / table.scalePerLevels));
 
     return {
       group: group.id,
@@ -337,23 +342,36 @@ export function populateDungeon(options: PopulateOptions): Population {
     loot.push({ item: placement.item, quantity: 1, at, room: room.id });
   }
 
+  const defaults = module.source.world.generationDefaults;
+  const definition = module.find<{ bossTable?: string; safeEntrance?: boolean }>(
+    'world.dungeons',
+    dungeon.id,
+  );
+  const safeEntrance = definition?.safeEntrance !== false;
+
   for (const room of dungeon.rooms) {
     const template = module.find<RoomTemplateDef>('world.roomTemplates', room.template);
     const roomRng = rng.derive(`room:${room.id}`);
-    const isEntrance = room.id === dungeon.entranceRoom;
+    const quietEntrance = room.id === dungeon.entranceRoom && safeEntrance;
 
     // — encounters ————————————————————————————————————————
     const tables = biome?.encounterTables ?? [];
-    const bossTable = module.find<{ bossTable?: string }>('world.dungeons', dungeon.id)?.bossTable;
+    const bossTable = definition?.bossTable;
     const chosenTable =
-      room.role === 'boss' && bossTable
+      template?.alwaysEncounter === true && bossTable
         ? bossTable
         : tables.length > 0
           ? roomRng.pick(tables)
           : null;
 
-    const wantsEncounter =
-      room.role === 'boss' || (!isEntrance && roomRng.chance(template?.encounterChance ?? 0.3));
+    // Whether a room fights you is the module's call twice over: the template
+    // may force or forbid it, and the dungeon says whether arriving is quiet.
+    // Both used to be engine knowledge — `role === 'boss'` meant always, and
+    // "it is the entrance" meant never, with no way to argue.
+    const wantsEncounter = template?.alwaysEncounter === true
+      || (template?.neverEncounter !== true
+        && !quietEntrance
+        && roomRng.chance(template?.encounterChance ?? defaults.encounterChance));
 
     if (chosenTable && wantsEncounter) {
       const draw = rollEncounter(module, chosenTable, scopes.finder, roomRng.derive('encounter'), depth);
@@ -372,7 +390,7 @@ export function populateDungeon(options: PopulateOptions): Population {
 
     // — loot ——————————————————————————————————————————————
     const lootTables = biome?.lootTables ?? [];
-    if (lootTables.length > 0 && roomRng.chance(template?.lootChance ?? 0.25)) {
+    if (lootTables.length > 0 && roomRng.chance(template?.lootChance ?? defaults.lootChance)) {
       const tableId = roomRng.pick(lootTables);
       for (const draw of rollLoot(module, tableId, scopes, roomRng.derive('loot'))) {
         const free = freeTilesIn(room, dungeon, terrain, taken);
@@ -385,7 +403,10 @@ export function populateDungeon(options: PopulateOptions): Population {
 
     // — traps ——————————————————————————————————————————————
     const trapIds = biome?.traps ?? [];
-    if (!isEntrance && trapIds.length > 0 && roomRng.chance(template?.trapChance ?? 0.1)) {
+    if (template?.neverTrap !== true
+      && !quietEntrance
+      && trapIds.length > 0
+      && roomRng.chance(template?.trapChance ?? defaults.trapChance)) {
       const free = freeTilesIn(room, dungeon, terrain, taken);
       if (free.length > 0) {
         const at = roomRng.derive('trap').pick(free);

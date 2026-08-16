@@ -14,6 +14,7 @@ import { dirname, resolve } from 'node:path';
 import { z } from 'zod';
 import { gameModuleSchema, COLLECTION_PATHS } from '../schema/module.js';
 import { EXPR_OPS, PREDICATE_OPS, EFFECT_OPS } from '../dsl/eval.js';
+import { SYSTEM_TEXT } from '../schema/systemText.js';
 
 interface Unwrapped {
   schema: z.ZodTypeAny;
@@ -116,6 +117,47 @@ function anchorFor(schema: z.ZodTypeAny, fallback: string): string {
   return emitted.get(schema) ?? fallback;
 }
 
+/**
+ * What the engine says, key by key.
+ *
+ * Written from the registry rather than the schema shape, because the two
+ * things an author needs — whether a key is mandatory and which placeholders
+ * it must keep — live there and not in the Zod type.
+ */
+function systemTextSection(heading: string, anchor: string): string[] {
+  const lines = [
+    `### ${heading}`,
+    '',
+    `<a id="${anchor}"></a>`,
+    '',
+    'Every sentence the engine produces. The engine holds no prose of its own: it',
+    'emits a key and its facts, and these decide the words. A value may be a string',
+    'or `{ "pool": "<textGrammar id>" }` for weighted variation.',
+    '',
+    '**Fragments** are pieces other messages are built from — the word `{outcome}`',
+    'in an attack line. A module must declare them, because nothing sensible can',
+    'stand in for a missing one and the sentence around it would render with a hole.',
+    '**Messages** stand alone and carry a default, so you write only what you want',
+    'to change. `npm run systemtext -- <module>` writes the whole set into a module.',
+    '',
+    'Placeholders listed here are the ones a message cannot lose; `compileModule`',
+    'rejects a module that drops one.',
+    '',
+    '| Key | Tier | Must keep | Default |',
+    '| --- | --- | --- | --- |',
+  ];
+
+  for (const item of SYSTEM_TEXT) {
+    const keeps = item.placeholders.map((name: string) => `\`{${name}}\``).join(' ') || '—';
+    lines.push(
+      `| \`${item.key}\` | ${item.tier} | ${keeps} | ${formatDefault(item.text)} |`,
+    );
+  }
+
+  lines.push('');
+  return lines;
+}
+
 function documentObject(
   schema: z.ZodTypeAny,
   heading: string,
@@ -128,6 +170,11 @@ function documentObject(
   if (depth > 4) return [];
 
   emitted.set(inner, anchor);
+
+  // `systemText` is nearly two hundred message keys and gets a section of its
+  // own, written from the registry so it can show tier and placeholders — a
+  // generic field table would say much less at ten times the length.
+  if (anchor.endsWith('-systemText')) return systemTextSection(heading, anchor);
 
   const shape = (inner as z.ZodObject<z.ZodRawShape>).shape;
   const lines = [

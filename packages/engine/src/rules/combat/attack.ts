@@ -31,6 +31,10 @@ import { preventsAction } from '../conditions.js';
 import { check, savingThrow, succeeded, criticalMultiplier, difficultyOf } from '../check.js';
 import type { TargetingContext } from './targeting.js';
 import { resolveTargets, reachability, coverBonus, toTiles, reachOf } from './targeting.js';
+import { message, text, grammarOf } from '../../narrate/systemText.js';
+import { saveMultiplier } from '../config.js';
+import { count } from '../../narrate/grammar.js';
+import type { Message } from '../../narrate/systemText.js';
 
 /**
  * What a spell gains from being cast out of a bigger slot.
@@ -95,7 +99,10 @@ export interface AbilityDef {
     onSuccess: 'none' | 'half' | 'negates' | 'partial';
     onSuccessEffects: Effect[];
   };
-  areaOfEffect?: { shape: never; size: number; affects: 'all' | 'enemies' | 'allies' | 'others' };
+  areaOfEffect?: {
+    shape: never; size: number; angle: number;
+    affects: 'all' | 'enemies' | 'allies' | 'others';
+  };
   onUse: Effect[];
   onMiss: Effect[];
   onCritical: Effect[];
@@ -113,7 +120,7 @@ export interface AbilityDef {
 
 export interface UseResult {
   readonly used: boolean;
-  readonly reason: string | null;
+  readonly reason: Message | null;
 }
 
 /** Scale damage in a set of ops — used for criticals and half-damage saves. */
@@ -144,11 +151,11 @@ function costsOf(txn: Transaction, actor: Entity, ability: AbilityDef, rng: Rng)
 }
 
 /** The first cost the actor cannot pay, as a readable reason. */
-function shortfallOf(txn: Transaction, actor: Entity, costs: ReadonlyMap<string, number>): string | null {
+function shortfallOf(txn: Transaction, actor: Entity, costs: ReadonlyMap<string, number>): Message | null {
   for (const [resourceId, cost] of costs) {
     if ((actor.resources[resourceId] ?? 0) >= cost) continue;
     const resource = txn.module.find<{ name: string }>('rules.resources', resourceId);
-    return `not enough ${resource?.name ?? resourceId}`;
+    return message('refused.cost.shortfall', { resource: resource?.name ?? resourceId });
   }
   return null;
 }
@@ -178,22 +185,22 @@ export function useAbility(
   const module = txn.module;
   const ability = module.find<AbilityDef>('content.abilities', abilityId);
 
-  if (!ability) return refuse(txn, `no ability "${abilityId}"`);
-  if (!actor.abilities.includes(abilityId)) return refuse(txn, `${actor.name} does not know ${abilityId}`);
+  if (!ability) return refuse(txn, message('refused.ability.unknown', { ability: abilityId }));
+  if (!actor.abilities.includes(abilityId)) return refuse(txn, message('refused.ability.notKnown', { who: actor.name, ability: abilityId }));
 
   // A condition that forbids this kind of action stops it before anything else.
   if (ability.actionType && preventsAction(txn, actor, ability.actionType)) {
-    return refuse(txn, `${actor.name} cannot take that action right now`);
+    return refuse(txn, message('refused.ability.prevented', { who: actor.name }));
   }
 
   const scope = buildScope(module, txn.state, actor);
   if (!isEmptyRequirement(ability.requires)) {
     if (!evalPredicate(compileRequirement(ability.requires), { scope, rng, openNamespaces: OPEN_NAMESPACES })) {
-      return refuse(txn, `${actor.name} does not meet the requirements for ${ability.name}`);
+      return refuse(txn, message('refused.ability.requirements', { who: actor.name, ability: ability.name }));
     }
   }
   if (ability.when && !evalPredicate(ability.when, { scope, rng, openNamespaces: OPEN_NAMESPACES })) {
-    return refuse(txn, `${ability.name} cannot be used now`);
+    return refuse(txn, message('refused.ability.unavailable', { ability: ability.name }));
   }
 
   // Still catching its breath. Cooldowns count in rounds, so out of combat
@@ -206,7 +213,14 @@ export function useAbility(
     );
     if (waiting && waiting.until > combat.round) {
       const rounds = waiting.until - combat.round;
-      return refuse(txn, `${ability.name} is not ready for another ${rounds} round${rounds === 1 ? '' : 's'}`);
+      const grammar = grammarOf(txn.module);
+      return refuse(txn, message('refused.ability.cooldown', {
+        ability: ability.name,
+        rounds: count(
+          grammar, rounds,
+          text(txn.module, 'unit.round'), text(txn.module, 'unit.rounds'),
+        ),
+      }));
     }
   }
 
@@ -230,7 +244,7 @@ export function useAbility(
 
   const { targets, reason } = resolveTargets(context, actor, ability, explicit);
   if (reason) return refuse(txn, reason);
-  if (targets.length === 0 && ability.targeting !== 'none') return refuse(txn, 'nothing to target');
+  if (targets.length === 0 && ability.targeting !== 'none') return refuse(txn, message('refused.target.none'));
 
   payCosts(txn, actor, costs);
 
@@ -285,7 +299,7 @@ export function useAbility(
   return { used: true, reason: null };
 }
 
-function refuse(txn: Transaction, reason: string): UseResult {
+function refuse(txn: Transaction, reason: Message): UseResult {
   txn.emit({ type: 'refused', action: 'useAbility', reason });
   return { used: false, reason };
 }
@@ -378,7 +392,7 @@ function resolveAgainst(
         case 'negates':
           break;
         case 'half':
-          applyOps(txn, scaleDamage(ops, 0.5), actor.id);
+          applyOps(txn, scaleDamage(ops, saveMultiplier(module)), actor.id);
           break;
         default:
           applyOps(txn, ops, actor.id);

@@ -15,10 +15,12 @@
 
 import { Rng } from '@dm/core';
 import { evalPredicate } from '@dm/module';
+import type { MemoryModel } from '@dm/module';
 import { Transaction } from '../rules/apply.js';
 import { pruneMarks } from './senses.js';
 import { spreadRumours, decayMemories, driftFactions, memoryModel } from './gossip.js';
 import { buildScope, OPEN_NAMESPACES } from '../stats.js';
+import { message } from '../narrate/systemText.js';
 
 /**
  * What a creature kind has learned about the party.
@@ -31,29 +33,14 @@ export function learningKey(subject: string, what: string): string {
   return `learned:${subject}:${what}`;
 }
 
-interface LearningConfig {
-  enabled: boolean;
-  encountersBeforeAdapting: number;
-  adaptationStrength: number;
-  sharedWithinFaction: boolean;
-  minimumIntellect?: number;
-  tracks: string[];
-  forgetAfterDays: number;
-}
-
-function learningConfig(txn: Transaction): LearningConfig {
-  const model = memoryModel(txn.module) as unknown as { learning?: Partial<LearningConfig> };
-  return {
-    enabled: model.learning?.enabled ?? true,
-    encountersBeforeAdapting: model.learning?.encountersBeforeAdapting ?? 3,
-    adaptationStrength: model.learning?.adaptationStrength ?? 0.5,
-    sharedWithinFaction: model.learning?.sharedWithinFaction ?? true,
-    ...(model.learning?.minimumIntellect !== undefined
-      ? { minimumIntellect: model.learning.minimumIntellect }
-      : {}),
-    tracks: model.learning?.tracks ?? ['damageTypes', 'abilities'],
-    forgetAfterDays: model.learning?.forgetAfterDays ?? 90,
-  };
+/**
+ * The module's learning settings.
+ *
+ * A read, not a merge — see the note on `witnessConfig` in `deeds.ts`. Zod has
+ * already applied every default in `learningSchema`.
+ */
+function learningConfig(txn: Transaction): MemoryModel['learning'] {
+  return memoryModel(txn.module).learning;
 }
 
 /**
@@ -183,7 +170,7 @@ function expireQuests(txn: Transaction, rng: Rng): void {
       ...txn.state,
       quests: { ...txn.state.quests, [quest.id]: { ...questState, status: 'failed' } },
     });
-    txn.emit({ type: 'questFailed', quest: quest.id, reason: 'time ran out' });
+    txn.emit({ type: 'questFailed', quest: quest.id, reason: message('quest.failed.expired') });
   }
 }
 

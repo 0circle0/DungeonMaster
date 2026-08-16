@@ -20,6 +20,7 @@ import { Transaction, applyOps } from '../rules/apply.js';
 import { skillCheck, check, succeeded, skillModifier } from '../rules/check.js';
 import { knowledgeOf } from './deeds.js';
 import { npcIdOf } from '../character.js';
+import { message, literal } from '../narrate/systemText.js';
 
 interface TextVariant {
   text: string;
@@ -128,13 +129,13 @@ export function startDialogue(
   const npc = txn.module.find<{ dialogue?: string }>('content.npcs', npcIdOf(speaker));
   const dialogueId = npc?.dialogue;
   if (!dialogueId) {
-    txn.emit({ type: 'refused', action: 'talk', reason: `${speaker.name} has nothing to say` });
+    txn.emit({ type: 'refused', action: 'talk', reason: message('refused.talk.nothingToSay', { who: speaker.name }) });
     return false;
   }
 
   const dialogue = txn.module.find<DialogueDef>('narrative.dialogues', dialogueId);
   if (!dialogue) {
-    txn.emit({ type: 'refused', action: 'talk', reason: `no dialogue "${dialogueId}"` });
+    txn.emit({ type: 'refused', action: 'talk', reason: message('refused.talk.unknownDialogue', { dialogue: dialogueId }) });
     return false;
   }
 
@@ -169,7 +170,7 @@ function enterNode(
   // greenmarch's case, straight to the cold shoulder. Bounded so a pair of
   // nodes redirecting at each other cannot spin.
   let node: NodeDef = start;
-  for (let hops = 0; hops < 8; hops += 1) {
+  for (let hops = 0; hops < txn.module.source.narrative.maxDialogueHops; hops += 1) {
     const redirect = node.redirectWhen.find((entry) =>
       passes(entry.requires, undefined, scope, rng),
     );
@@ -239,7 +240,7 @@ export function chooseOption(
 ): boolean {
   const conversation = txn.state.dialogue;
   if (!conversation) {
-    txn.emit({ type: 'refused', action: 'choose', reason: 'nobody is talking' });
+    txn.emit({ type: 'refused', action: 'choose', reason: message('refused.reply.noConversation') });
     return false;
   }
 
@@ -249,13 +250,13 @@ export function chooseOption(
   const option = node?.options.find((entry) => entry.id === optionId);
 
   if (!speaker || !node || !option) {
-    txn.emit({ type: 'refused', action: 'choose', reason: 'no such reply' });
+    txn.emit({ type: 'refused', action: 'choose', reason: message('refused.reply.unknown') });
     return false;
   }
 
   const scope = conversationScope(txn, actor, speaker);
   if (!passes(option.requires, option.when, scope, rng)) {
-    txn.emit({ type: 'refused', action: 'choose', reason: option.lockedHint || 'you cannot say that' });
+    txn.emit({ type: 'refused', action: 'choose', reason: option.lockedHint ? literal(option.lockedHint) : message('refused.reply.locked') });
     return false;
   }
 
@@ -305,5 +306,5 @@ export function canTalkTo(actor: Entity, speaker: EntityId, txn: Transaction): b
   return Math.max(
     Math.abs(other.position.x - actor.position.x),
     Math.abs(other.position.y - actor.position.y),
-  ) <= 2;
+  ) <= txn.module.source.rules.interactionRange.talk;
 }

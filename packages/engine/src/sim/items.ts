@@ -18,6 +18,7 @@ import { buildScope, OPEN_NAMESPACES } from '../stats.js';
 import { Transaction, applyOps, changeInventory } from '../rules/apply.js';
 import { key as packKey } from '../grid/tiles.js';
 import { distance } from '../grid/geometry.js';
+import { message } from '../narrate/systemText.js';
 
 interface ItemDef {
   id: string;
@@ -55,7 +56,7 @@ export function itemsWithinReach(
     const tile = Number(tileKey);
     const at = { x: tile & 0xffff, y: tile >>> 16 };
     // Reachable means underfoot or adjacent — no picking things up across a room.
-    if (distance(at, actor.position) > 1) continue;
+    if (distance(at, actor.position) > txn.module.source.rules.interactionRange.reach) continue;
     for (const stack of stacks) out.push({ tile, item: stack.item, quantity: stack.quantity });
   }
   return out;
@@ -87,7 +88,7 @@ export function takeItem(
 ): boolean {
   const reachable = itemsWithinReach(txn, actor);
   if (reachable.length === 0) {
-    txn.emit({ type: 'refused', action: 'take', reason: 'there is nothing here to take' });
+    txn.emit({ type: 'refused', action: 'take', reason: message('refused.take.nothingHere') });
     return false;
   }
 
@@ -98,8 +99,8 @@ export function takeItem(
     : reachable;
 
   if (wanted.length === 0) {
-    const name = txn.module.find<ItemDef>('content.items', itemId ?? '')?.name ?? itemId;
-    txn.emit({ type: 'refused', action: 'take', reason: `there is no ${name} here` });
+    const name = txn.module.find<ItemDef>('content.items', itemId ?? '')?.name ?? itemId ?? '';
+    txn.emit({ type: 'refused', action: 'take', reason: message('refused.take.noSuchItem', { item: name }) });
     return false;
   }
 
@@ -131,7 +132,7 @@ export function dropItem(
   const held = current.inventory.find((stack) => stack.item === itemId);
 
   if (!held) {
-    txn.emit({ type: 'refused', action: 'drop', reason: 'you are not carrying that' });
+    txn.emit({ type: 'refused', action: 'drop', reason: message('refused.item.notCarried') });
     return false;
   }
 
@@ -166,26 +167,26 @@ export function equipItem(
 ): boolean {
   const item = txn.module.find<ItemDef>('content.items', itemId);
   if (!item) {
-    txn.emit({ type: 'refused', action: 'equip', reason: `no item "${itemId}"` });
+    txn.emit({ type: 'refused', action: 'equip', reason: message('refused.item.unknown', { item: itemId }) });
     return false;
   }
 
   const current = txn.entity(actor.id) ?? actor;
   if (!current.inventory.some((stack) => stack.item === itemId)) {
-    txn.emit({ type: 'refused', action: 'equip', reason: 'you are not carrying that' });
+    txn.emit({ type: 'refused', action: 'equip', reason: message('refused.item.notCarried') });
     return false;
   }
 
   const slotId = slotOverride ?? item.slot;
   if (!slotId) {
-    txn.emit({ type: 'refused', action: 'equip', reason: `${item.name} is not something you wear` });
+    txn.emit({ type: 'refused', action: 'equip', reason: message('refused.equip.notWearable', { item: item.name }) });
     return false;
   }
 
   // A module may restrict who can use a thing.
   if (item.usableBy.length > 0 && current.characterClass
     && !item.usableBy.includes(current.characterClass)) {
-    txn.emit({ type: 'refused', action: 'equip', reason: `${item.name} is not for you` });
+    txn.emit({ type: 'refused', action: 'equip', reason: message('refused.equip.notAllowed', { item: item.name }) });
     return false;
   }
 
@@ -229,7 +230,7 @@ export function unequipItem(
   }
 
   if (!options.quiet) {
-    txn.emit({ type: 'refused', action: 'unequip', reason: 'you are not wearing that' });
+    txn.emit({ type: 'refused', action: 'unequip', reason: message('refused.unequip.notWorn') });
   }
   return false;
 }
@@ -244,18 +245,18 @@ export function useItem(
 ): boolean {
   const item = txn.module.find<ItemDef>('content.items', itemId);
   if (!item) {
-    txn.emit({ type: 'refused', action: 'useItem', reason: `no item "${itemId}"` });
+    txn.emit({ type: 'refused', action: 'useItem', reason: message('refused.item.unknown', { item: itemId }) });
     return false;
   }
 
   const current = txn.entity(actor.id) ?? actor;
   if (!current.inventory.some((stack) => stack.item === itemId)) {
-    txn.emit({ type: 'refused', action: 'useItem', reason: 'you are not carrying that' });
+    txn.emit({ type: 'refused', action: 'useItem', reason: message('refused.item.notCarried') });
     return false;
   }
 
   if (item.onUse.length === 0) {
-    txn.emit({ type: 'refused', action: 'useItem', reason: `nothing happens with the ${item.name.toLowerCase()}` });
+    txn.emit({ type: 'refused', action: 'useItem', reason: message('refused.use.nothingHappens', { item: item.name.toLowerCase() }) });
     return false;
   }
 
@@ -268,7 +269,7 @@ export function useItem(
     const key = chargeKey(current.id, itemId);
     const left = Number(txn.state.flags[key] ?? charges.max);
     if (left <= 0) {
-      txn.emit({ type: 'refused', action: 'useItem', reason: `the ${item.name.toLowerCase()} is spent` });
+      txn.emit({ type: 'refused', action: 'useItem', reason: message('refused.use.spent', { item: item.name.toLowerCase() }) });
       return false;
     }
     txn.set({ ...txn.state, flags: { ...txn.state.flags, [key]: left - 1 } });
@@ -351,12 +352,14 @@ export function giveItem(
   const recipient = txn.entity(toId);
   const current = txn.entity(actor.id) ?? actor;
 
-  if (!recipient || recipient.map !== current.map || distance(recipient.position, current.position) > 1) {
-    txn.emit({ type: 'refused', action: 'give', reason: 'they are not close enough' });
+  const reach = txn.module.source.rules.interactionRange.reach;
+  if (!recipient || recipient.map !== current.map
+    || distance(recipient.position, current.position) > reach) {
+    txn.emit({ type: 'refused', action: 'give', reason: message('refused.give.tooFar') });
     return false;
   }
   if (!current.inventory.some((stack) => stack.item === itemId)) {
-    txn.emit({ type: 'refused', action: 'give', reason: 'you are not carrying that' });
+    txn.emit({ type: 'refused', action: 'give', reason: message('refused.item.notCarried') });
     return false;
   }
 

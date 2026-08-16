@@ -58,6 +58,8 @@ import { findPath } from './grid/path.js';
 import { distance } from './grid/geometry.js';
 import { isHostileTo } from './rules/combat/targeting.js';
 import { leaveMarks, perceiveAll, perceivedTiles, sightSenseOf } from './sim/senses.js';
+import { message, joinMessages } from './narrate/systemText.js';
+import type { Message } from './narrate/systemText.js';
 
 export interface ReduceResult {
   readonly state: GameState;
@@ -93,6 +95,17 @@ export function occupiedTiles(state: GameState, exclude?: EntityId): Set<number>
   return blocked;
 }
 
+/**
+ * What an action costs on the world clock.
+ *
+ * Searching a room and disarming a trap were ten minutes each because the
+ * engine said so, while `minutesPerTile` and rest durations were the GM's all
+ * along. An action the module does not price costs nothing.
+ */
+function actionMinutes(module: CompiledModule, action: string): number {
+  return module.source.world.time.actionMinutes[action] ?? 0;
+}
+
 export function reduce(state: GameState, action: Action, context: ReduceContext): ReduceResult {
   const { module } = context;
   const terrain = context.terrain ?? terrainFor(module);
@@ -110,7 +123,7 @@ export function reduce(state: GameState, action: Action, context: ReduceContext)
     case 'move': {
       const actor = actorOf(state, action);
       if (!actor) {
-        txn.emit({ type: 'refused', action: action.type, reason: 'no such character' });
+        txn.emit({ type: 'refused', action: action.type, reason: message('refused.actor.missing') });
         break;
       }
       const target =
@@ -127,12 +140,12 @@ export function reduce(state: GameState, action: Action, context: ReduceContext)
     case 'travelTo': {
       const actor = actorOf(state, action);
       if (!actor) {
-        txn.emit({ type: 'refused', action: 'travelTo', reason: 'no such character' });
+        txn.emit({ type: 'refused', action: 'travelTo', reason: message('refused.actor.missing') });
         break;
       }
       const map = txn.state.maps[txn.state.currentMap];
       if (!map) {
-        txn.emit({ type: 'refused', action: 'travelTo', reason: 'nowhere to walk' });
+        txn.emit({ type: 'refused', action: 'travelTo', reason: message('refused.travel.noMap') });
         break;
       }
 
@@ -146,7 +159,7 @@ export function reduce(state: GameState, action: Action, context: ReduceContext)
       });
 
       if (!path.found) {
-        txn.emit({ type: 'refused', action: 'travelTo', reason: 'no way through' });
+        txn.emit({ type: 'refused', action: 'travelTo', reason: message('refused.travel.noRoute') });
         break;
       }
       // Walk the route a tile at a time so anything interesting — a trigger, a
@@ -160,7 +173,7 @@ export function reduce(state: GameState, action: Action, context: ReduceContext)
     }
 
     case 'wait': {
-      const minutes = Math.max(0, action.minutes ?? 10);
+      const minutes = Math.max(0, action.minutes ?? actionMinutes(txn.module, 'wait'));
       advanceTime(txn, minutes, rng);
       break;
     }
@@ -171,7 +184,7 @@ export function reduce(state: GameState, action: Action, context: ReduceContext)
 
     case 'select': {
       if (!state.party.includes(action.entity)) {
-        txn.emit({ type: 'refused', action: 'select', reason: 'not in the party' });
+        txn.emit({ type: 'refused', action: 'select', reason: message('refused.select.notParty') });
         break;
       }
       txn.set({ ...txn.state, selected: action.entity });
@@ -181,12 +194,12 @@ export function reduce(state: GameState, action: Action, context: ReduceContext)
     case 'attack': {
       const actor = actorOf(state, action);
       if (!actor) {
-        txn.emit({ type: 'refused', action: 'attack', reason: 'no such character' });
+        txn.emit({ type: 'refused', action: 'attack', reason: message('refused.actor.missing') });
         break;
       }
       const abilityId = defaultAttackAbility(module, actor);
       if (!abilityId) {
-        txn.emit({ type: 'refused', action: 'attack', reason: `${actor.name} has nothing to attack with` });
+        txn.emit({ type: 'refused', action: 'attack', reason: message('refused.attack.noWeapon', { who: actor.name }) });
         break;
       }
       performAbility(txn, targeting, actor.id, abilityId, { target: action.target }, rng);
@@ -196,7 +209,7 @@ export function reduce(state: GameState, action: Action, context: ReduceContext)
     case 'useAbility': {
       const actor = actorOf(state, action);
       if (!actor) {
-        txn.emit({ type: 'refused', action: 'useAbility', reason: 'no such character' });
+        txn.emit({ type: 'refused', action: 'useAbility', reason: message('refused.actor.missing') });
         break;
       }
       performAbility(
@@ -250,7 +263,7 @@ export function reduce(state: GameState, action: Action, context: ReduceContext)
         enterDungeon(txn, terrain, action.target, rng);
         break;
       }
-      txn.emit({ type: 'refused', action: 'enter', reason: `there is no "${action.target}" here` });
+      txn.emit({ type: 'refused', action: 'enter', reason: message('refused.enter.noSuchPlace', { target: action.target }) });
       break;
     }
 
@@ -266,7 +279,7 @@ export function reduce(state: GameState, action: Action, context: ReduceContext)
         const route = area?.connections.find((entry) => entry.to === action.area);
 
         if (!route) {
-          txn.emit({ type: 'refused', action: 'travelToArea', reason: 'there is no road that way' });
+          txn.emit({ type: 'refused', action: 'travelToArea', reason: message('refused.travel.noRoad') });
           break;
         }
 
@@ -278,7 +291,7 @@ export function reduce(state: GameState, action: Action, context: ReduceContext)
           .find<{ connections: { to: string; oneWay: boolean }[] }>('world.areas', action.area)
           ?.connections.find((entry) => entry.to === areaId);
         if (back?.oneWay) {
-          txn.emit({ type: 'refused', action: 'travelToArea', reason: 'there is no way back up' });
+          txn.emit({ type: 'refused', action: 'travelToArea', reason: message('refused.travel.noWayUp') });
           break;
         }
 
@@ -296,7 +309,9 @@ export function reduce(state: GameState, action: Action, context: ReduceContext)
             txn.emit({
               type: 'refused',
               action: 'travelToArea',
-              reason: missing.length > 0 ? `not yet — ${missing.join(', ')}` : 'not yet',
+              reason: missing.length > 0
+                ? message('refused.travel.notYet', { missing: joinMessages(txn.module, missing) })
+                : message('refused.travel.notYet.plain'),
             });
             break;
           }
@@ -328,7 +343,7 @@ export function reduce(state: GameState, action: Action, context: ReduceContext)
         }
         break;
       }
-      txn.emit({ type: 'refused', action: 'open', reason: `nothing here called "${action.target}"` });
+      txn.emit({ type: 'refused', action: 'open', reason: message('refused.open.noSuchThing', { target: action.target }) });
       break;
     }
 
@@ -348,13 +363,14 @@ export function reduce(state: GameState, action: Action, context: ReduceContext)
 
       const sense = module.find<{ id: string }>('rules.senses', action.sense);
       if (!sense) {
-        txn.emit({ type: 'refused', action: 'sense', reason: `nothing here works like that` });
+        txn.emit({ type: 'refused', action: 'sense', reason: message('refused.sense.unknown') });
         break;
       }
 
-      // Stopping to listen or take the air costs a minute, and the world moves
-      // in it — which is the point: it is a real thing to spend time on.
-      advanceTime(txn, 1, rng);
+      // Stopping to listen or take the air costs time, and the world moves in
+      // it — which is the point: it is a real thing to spend time on. How much
+      // is `world.time.actionMinutes`, like every other duration here.
+      advanceTime(txn, actionMinutes(txn.module, 'sense'), rng);
       txn.emit({ type: 'custom', event: 'sensed', data: { sense: sense.id, by: actor.id } });
       break;
     }
@@ -366,7 +382,7 @@ export function reduce(state: GameState, action: Action, context: ReduceContext)
       if (txn.state.combat) {
         txn.emit({
           type: 'refused', action: 'setFollow',
-          reason: 'in a fight everyone acts on their own initiative',
+          reason: message('refused.follow.inCombat'),
         });
         break;
       }
@@ -406,7 +422,7 @@ export function reduce(state: GameState, action: Action, context: ReduceContext)
       if (hidden.length === 0 && !foundTraps) {
         // Silence reads as a broken command, so say plainly that the search
         // turned nothing up.
-        txn.emit({ type: 'refused', action: 'search', reason: 'you find nothing here' });
+        txn.emit({ type: 'refused', action: 'search', reason: message('refused.search.nothing') });
         runSearchTriggers(txn, actor, rng);
         break;
       }
@@ -420,7 +436,7 @@ export function reduce(state: GameState, action: Action, context: ReduceContext)
         txn.emit({ type: 'discovered', what: poi.id, kind: 'poi' });
       }
       runSearchTriggers(txn, actor, rng);
-      advanceTime(txn, 10, rng);
+      advanceTime(txn, actionMinutes(txn.module, 'search'), rng);
       break;
     }
 
@@ -442,7 +458,7 @@ export function reduce(state: GameState, action: Action, context: ReduceContext)
       const actor = actorOf(state, action);
       if (!actor) break;
       disarmTrap(txn, actor, rng.derive('disarm'));
-      if (!txn.state.combat) advanceTime(txn, 10, rng);
+      if (!txn.state.combat) advanceTime(txn, actionMinutes(txn.module, 'disarm'), rng);
       break;
     }
 
@@ -450,7 +466,7 @@ export function reduce(state: GameState, action: Action, context: ReduceContext)
       const actor = actorOf(state, action);
       if (!actor) break;
       if (!canTalkTo(actor, action.npc, txn)) {
-        txn.emit({ type: 'refused', action: 'talk', reason: 'too far away to talk' });
+        txn.emit({ type: 'refused', action: 'talk', reason: message('refused.talk.tooFar') });
         break;
       }
       const speaker = txn.entity(action.npc);
@@ -490,11 +506,11 @@ export function reduce(state: GameState, action: Action, context: ReduceContext)
       }>('rules.rests', action.kind);
 
       if (!actor || !rest) {
-        txn.emit({ type: 'refused', action: 'rest', reason: `cannot rest like that here` });
+        txn.emit({ type: 'refused', action: 'rest', reason: message('refused.rest.notHere') });
         break;
       }
       if (txn.state.combat) {
-        txn.emit({ type: 'refused', action: 'rest', reason: 'not while fighting' });
+        txn.emit({ type: 'refused', action: 'rest', reason: message('refused.rest.inCombat') });
         break;
       }
 
@@ -515,7 +531,7 @@ export function reduce(state: GameState, action: Action, context: ReduceContext)
         txn.emit({
           type: 'refused',
           action: 'rest',
-          reason: 'something came looking before you could settle',
+          reason: message('refused.rest.interrupted'),
         });
         break;
       }
@@ -543,7 +559,7 @@ export function reduce(state: GameState, action: Action, context: ReduceContext)
       const actor = actorOf(state, action);
       if (!actor) break;
       if (!txn.state.combat) {
-        txn.emit({ type: 'refused', action: 'flee', reason: 'nothing to flee from' });
+        txn.emit({ type: 'refused', action: 'flee', reason: message('refused.flee.noCombat') });
         break;
       }
 
@@ -555,7 +571,7 @@ export function reduce(state: GameState, action: Action, context: ReduceContext)
       const steps = runAway(txn, terrain, actor.id, rng);
 
       if (steps === 0) {
-        txn.emit({ type: 'refused', action: 'flee', reason: 'there is nowhere to run' });
+        txn.emit({ type: 'refused', action: 'flee', reason: message('refused.flee.noExit') });
         break;
       }
 
@@ -592,7 +608,7 @@ export function reduce(state: GameState, action: Action, context: ReduceContext)
             })?.[1]
           : undefined;
         if (!exit || !txn.state.maps[exit.toMap]) {
-          txn.emit({ type: 'refused', action: 'leave', reason: 'find the way out first' });
+          txn.emit({ type: 'refused', action: 'leave', reason: message('refused.leave.noExitFound') });
           break;
         }
 
@@ -638,7 +654,7 @@ export function reduce(state: GameState, action: Action, context: ReduceContext)
         if (outside?.position) placeParty(txn, terrain, `area:${here.area}`, outside.position);
         break;
       }
-      txn.emit({ type: 'refused', action: 'leave', reason: 'there is nowhere to go back to' });
+      txn.emit({ type: 'refused', action: 'leave', reason: message('refused.leave.nowhere') });
       break;
     }
 
@@ -648,7 +664,7 @@ export function reduce(state: GameState, action: Action, context: ReduceContext)
 
       const stance = module.find<{ id: string; name: string }>('rules.stances', action.stance);
       if (!stance) {
-        txn.emit({ type: 'refused', action: 'setStance', reason: `there is no way of moving called "${action.stance}"` });
+        txn.emit({ type: 'refused', action: 'setStance', reason: message('refused.stance.unknown', { stance: action.stance }) });
         break;
       }
 
@@ -709,7 +725,7 @@ export function reduce(state: GameState, action: Action, context: ReduceContext)
       txn.emit({
         type: 'refused',
         action: unhandled.type,
-        reason: `"${unhandled.type}" is not something you can do`,
+        reason: message('refused.action.unknown', { action: unhandled.type }),
       });
       break;
     }
@@ -859,7 +875,7 @@ function moveEntity(
 
   const map = txn.state.maps[actor.map];
   if (!map) {
-    if (!silent) txn.emit({ type: 'refused', action: 'move', reason: 'not on a map' });
+    if (!silent) txn.emit({ type: 'refused', action: 'move', reason: message('refused.move.noMap') });
     return false;
   }
 
@@ -872,14 +888,16 @@ function moveEntity(
   }
 
   if (distance(actor.position, to) !== 1) {
-    if (!silent) txn.emit({ type: 'refused', action: 'move', reason: 'that is not one step away' });
+    if (!silent) txn.emit({ type: 'refused', action: 'move', reason: message('refused.move.tooFar') });
     return false;
   }
 
   if (!terrain.isPassable(map.tiles, to, actor.movementModes)) {
     const blocking = terrain.at(map.tiles, to);
     if (!silent) {
-      txn.emit({ type: 'blocked', entity: actor.id, at: to, by: blocking.id || 'the edge of the world' });
+      // An empty id means there was no tile at all — the narrator has a word
+      // for that, and it is the module's word.
+      txn.emit({ type: 'blocked', entity: actor.id, at: to, by: blocking.id });
     }
     return false;
   }
@@ -896,7 +914,7 @@ function moveEntity(
   const cost = terrain.costOf(map.tiles, to, actor.movementModes);
   const combat = txn.state.combat;
   if (combat && combat.movement < cost) {
-    if (!silent) txn.emit({ type: 'refused', action: 'move', reason: 'no movement left this turn' });
+    if (!silent) txn.emit({ type: 'refused', action: 'move', reason: message('refused.move.noMovement') });
     return false;
   }
 
@@ -1093,8 +1111,12 @@ function moveFollowers(
     if (member.map !== leader.map) continue;
 
     // Already at the leader's shoulder: close enough, and crowding the tile
-    // they are about to leave helps nobody.
-    let steps = distance(member.position, leader.position) > 3 ? 2 : 1;
+    // they are about to leave helps nobody. How far is "trailing" and how fast
+    // they close it up is party cohesion, and so the module's to set.
+    const follow = txn.module.source.start.partyFollow;
+    let steps = distance(member.position, leader.position) > follow.catchUpDistance
+      ? follow.catchUpSteps
+      : 1;
 
     while (steps > 0) {
       const current = txn.entity(id);
@@ -1292,13 +1314,13 @@ function outcomeReached(txn: Transaction, when: unknown, rng: Rng): boolean {
  * and the refusal the player then saw, "no action left this turn", read as a
  * budget problem rather than a turn-order one.
  */
-function outOfTurn(txn: Transaction, actorId: EntityId): string | null {
+function outOfTurn(txn: Transaction, actorId: EntityId): Message | null {
   const combat = txn.state.combat;
   if (!combat) return null;
   const activeId = combat.order[combat.turn];
   if (!activeId || activeId === actorId) return null;
   const active = txn.entity(activeId);
-  return active ? `it is ${active.name}'s turn` : null;
+  return active ? message('refused.turn.other', { who: active.name }) : null;
 }
 
 /**
@@ -1326,7 +1348,7 @@ function performAbility(
 
   const ability = txn.module.find<{ actionType?: string }>('content.abilities', abilityId);
   if (txn.state.combat && !hasBudget(txn, ability?.actionType)) {
-    txn.emit({ type: 'refused', action: 'useAbility', reason: 'no action left this turn' });
+    txn.emit({ type: 'refused', action: 'useAbility', reason: message('refused.ability.noAction') });
     return;
   }
 

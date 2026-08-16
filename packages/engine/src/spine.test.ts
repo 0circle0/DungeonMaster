@@ -142,7 +142,8 @@ describe('reduce', () => {
 
     const { state: next, events } = reduce(state, { type: 'travelTo', to: { x: 9, y: 5 } }, ctx);
     expect(next.entities['e:1']!.position).toEqual({ x: 5, y: 5 });
-    expect(events.find((e) => e.type === 'refused')).toMatchObject({ reason: 'no way through' });
+    expect(events.find((e) => e.type === 'refused'))
+      .toMatchObject({ reason: { key: 'refused.travel.noRoute' } });
   });
 
   it('advances the world clock and announces a new day', () => {
@@ -172,7 +173,10 @@ describe('reduce', () => {
     const refusal = events.find((e) => e.type === 'refused');
     expect(refusal).toBeDefined();
     if (refusal?.type !== 'refused') return;
-    expect(refusal.reason).toContain('polymorph_into_a_goose');
+    expect(refusal.reason).toEqual({
+      key: 'refused.action.unknown',
+      params: { action: 'polymorph_into_a_goose' },
+    });
   });
 
   it('never mutates the state it was given', () => {
@@ -760,7 +764,7 @@ describe('determinism', () => {
     expect(state.location).toEqual({ kind: 'poi', area: 'millford', poi: 'millford_village' });
     // Every refusal must be one the script means; "not on a map" is not.
     for (const event of events) {
-      if (event.type === 'refused') expect(event.reason).toMatch(/you find nothing here/);
+      if (event.type === 'refused') expect(event.reason).toEqual({ key: 'refused.search.nothing' });
     }
   });
 
@@ -806,11 +810,18 @@ describe('nothing is hardcoded', () => {
 
   it('has no game-specific vocabulary in the engine source', () => {
     // If the engine mentions a fantasy attribute or resource by name, some
-    // module out there cannot run on it.
-    const banned = ['"might"', '"agility"', '"hp"', "'hp'", '"fire"', '"slashing"', '"warden"'];
+    // module out there cannot run on it. `walk`, `disguised`, `speak` and
+    // `gesture` are here because each was once a bare string the engine
+    // compared against, so a module that named the same idea differently got
+    // silently wrong behaviour and no error.
+    const banned = [
+      '"might"', '"agility"', '"hp"', "'hp'", '"fire"', '"slashing"', '"warden"',
+      "'walk'", "'disguised'", "'speak'", "'gesture'",
+    ];
     const files = [
       'reduce.ts', 'save.ts', 'events.ts', 'actions.ts', 'state.ts', 'stats.ts',
       'character.ts', 'newgame.ts', 'rules/apply.ts', 'rules/conditions.ts',
+      'rules/casting.ts', 'sim/deeds.ts', 'world/mapgen.ts',
       'grid/tiles.ts', 'grid/geometry.ts', 'grid/fov.ts', 'grid/path.ts',
     ];
     for (const file of files) {
@@ -818,6 +829,37 @@ describe('nothing is hardcoded', () => {
       for (const word of banned) {
         expect(source.includes(word), `${file} mentions ${word}`).toBe(false);
       }
+    }
+  });
+
+  /**
+   * The engine says nothing of its own.
+   *
+   * Every sentence a player reads now comes from `narrative.systemText`, so a
+   * multi-word English string literal in the narrator or in a refusal path is
+   * a regression — it means somebody wrote prose in code again. Ids, keys, dsl
+   * operators and format strings are single words or punctuation and pass.
+   */
+  it('writes no prose of its own', () => {
+    const files = [
+      'narrate/narrate.ts', 'narrate/grammar.ts', 'reduce.ts', 'sim/items.ts',
+      'sim/trade.ts', 'sim/dialogue.ts', 'sim/quests.ts', 'sim/gates.ts',
+      'sim/traps.ts', 'sim/enter.ts', 'rules/apply.ts', 'rules/casting.ts',
+      'rules/combat/attack.ts', 'rules/combat/targeting.ts',
+    ];
+    // Three or more space-separated words of letters inside a quoted string:
+    // that is a sentence, not an identifier.
+    const prose = /(['"`])[a-z]+ [a-z]+ [a-z]+[^'"`]*\1/i;
+
+    for (const file of files) {
+      const source = readFileSync(fileURLToPath(new URL(file, import.meta.url)), 'utf8');
+      // Comments are prose on purpose; only code is checked.
+      const code = source
+        .split('\n')
+        .filter((line) => !/^\s*(\/\/|\*|\/\*)/.test(line))
+        .join('\n');
+      const found = prose.exec(code);
+      expect(found?.[0] ?? null, `${file} contains prose: ${found?.[0] ?? ''}`).toBe(null);
     }
   });
 });

@@ -10,6 +10,7 @@
  * the guided entry point into world building.
  */
 
+import { requiredSystemText } from '@dm/module';
 import type { ModuleDoc } from './store';
 
 export function blankModule(): ModuleDoc {
@@ -57,7 +58,13 @@ export function blankModule(): ModuleDoc {
       classes: [{ id: 'adventurer', name: 'Adventurer', hitDie: '1d8', primaryAttribute: 'might' }],
     },
     world: {},
-    narrative: {},
+    // The fragments other messages are built from. A new module gets these
+    // written in rather than having to discover them: they are the words the
+    // engine assembles its own sentences out of, and a document without them
+    // does not compile. Everything else the engine says carries a schema
+    // default, so this stays the smallest working block rather than a wall of
+    // prose. `npm run systemtext -- <module>` writes out the full set.
+    narrative: { systemText: requiredSystemText() },
     start: {},
   };
 }

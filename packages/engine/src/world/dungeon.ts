@@ -120,6 +120,10 @@ interface DungeonDef {
   palette?: string;
   corridorLength: string;
   algorithm?: 'rooms' | 'bsp' | 'caverns';
+  winding: { continueChance: number; turnPenalty: number };
+  roomSize: string;
+  bsp: { minLeaf: number };
+  caverns: { fill: number; smoothingPasses: number; birthThreshold: number };
   corridor?: { style: CorridorStyle; width: number };
   width?: string;
   height?: string;
@@ -293,7 +297,7 @@ export function generateDungeon(
     // No doors, no locks, no loops: a cavern is one organic body of floor.
     const layout = cavernLayout(
       builder, nonStatic.length > 0 ? nonStatic : templates, roomCount,
-      definition.guaranteedRoles, palette, rng.derive('rooms'),
+      definition.guaranteedRoles, palette, rng.derive('rooms'), definition.caverns,
     );
     rooms = layout.rooms;
     tree = [];
@@ -303,7 +307,7 @@ export function generateDungeon(
   } else if (algorithm === 'bsp') {
     const layout = bspLayout(
       builder, nonStatic.length > 0 ? nonStatic : templates, roomCount,
-      definition.guaranteedRoles, palette, rng.derive('rooms'),
+      definition.guaranteedRoles, palette, rng.derive('rooms'), definition.bsp.minLeaf,
     );
     rooms = layout.rooms;
     tree = layout.tree;
@@ -333,6 +337,7 @@ export function generateDungeon(
       definition.guaranteedRoles,
       spacing,
       rng.derive('rooms'),
+      definition.roomSize,
     );
 
     // — carve ——————————————————————————————————————————————
@@ -382,6 +387,7 @@ export function generateDungeon(
     const corridor: CorridorSpec = {
       style: definition.corridor?.style ?? 'l',
       width: definition.corridor?.width ?? 1,
+      winding: definition.winding,
     };
 
     // Door spots accumulate as tree corridors are carved, so no later brush

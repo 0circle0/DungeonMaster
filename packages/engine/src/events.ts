@@ -18,6 +18,7 @@
 
 import type { Position } from './grid/tiles.js';
 import type { EntityId } from './state.js';
+import type { Message } from './narrate/systemText.js';
 
 /** A roll, recorded in full so it can be explained. */
 export interface RollRecord {
@@ -48,8 +49,11 @@ export type GameEvent =
   /**
    * An action could not be taken, and why. Not an error: refusals are ordinary
    * play, and the reason is what the player needs to read.
+   *
+   * The reason is a `systemText` key and its facts, not a finished sentence —
+   * the engine states what happened and the module decides the words.
    */
-  | { readonly type: 'refused'; readonly action: string; readonly reason: string }
+  | { readonly type: 'refused'; readonly action: string; readonly reason: Message }
 
   // — movement ——————————————————————————————————————————————
   | { readonly type: 'moved'; readonly entity: EntityId; readonly from: Position; readonly to: Position; readonly cost: number }
@@ -137,14 +141,14 @@ export type GameEvent =
     }
   | { readonly type: 'triggerFired'; readonly trigger: string; readonly at: string }
   | { readonly type: 'gateOpened'; readonly gate: string; readonly how: 'requirement' | 'bypass' | 'ability' }
-  | { readonly type: 'gateBlocked'; readonly gate: string; readonly missing: readonly string[] }
+  | { readonly type: 'gateBlocked'; readonly gate: string; readonly missing: readonly Message[] }
   | { readonly type: 'discovered'; readonly what: string; readonly kind: 'poi' | 'trap' | 'secret' }
 
   // — narrative —————————————————————————————————————————————
   | { readonly type: 'questStarted'; readonly quest: string }
   | { readonly type: 'objectiveCompleted'; readonly quest: string; readonly objective: string }
   | { readonly type: 'questCompleted'; readonly quest: string }
-  | { readonly type: 'questFailed'; readonly quest: string; readonly reason: string }
+  | { readonly type: 'questFailed'; readonly quest: string; readonly reason: Message }
   | { readonly type: 'dialogueStarted'; readonly npc: EntityId; readonly dialogue: string }
   | { readonly type: 'dialogueNode'; readonly node: string; readonly text: string }
   | { readonly type: 'dialogueEnded' }

@@ -70,58 +70,11 @@ export function creationRules(module: CompiledModule): CreationRules {
   };
 }
 
-/**
- * Total cost of a score.
- *
- * The module's table is cumulative — the cost of *having* that score, not of
- * the last step — because that is how point-buy tables are written.
- */
-export function costOf(module: CompiledModule, attribute: AttributeDef, score: number): number {
-  const table = module.source.start.creation.attributeCosts;
-  const key = String(score);
-
-  if (Object.keys(table).length > 0) {
-    if (key in table) return table[key]!;
-
-    // Outside the table: continue at the rate of its last step, so a module
-    // that only tabulates 8–15 still prices a 16 — and prices it like a 15,
-    // not like a rounding error. Never negative: dumping a score below the
-    // table's floor gives nothing back, or a module with a cheap floor would
-    // hand out free points.
-    const known = Object.keys(table).map(Number).sort((a, b) => a - b);
-    const below = score < known[0]!;
-    const edge = below ? known[0]! : known.at(-1)!;
-    const inward = below ? known[1] ?? edge : known.at(-2) ?? edge;
-    const step = edge === inward
-      ? 1
-      : Math.abs(((table[String(edge)] ?? 0) - (table[String(inward)] ?? 0)) / (edge - inward));
-
-    return Math.max(0, (table[String(edge)] ?? 0) + (score - edge) * step);
-  }
-
-  // No table: one point per step above the declared default.
-  return Math.max(0, score - attribute.default);
-}
-
-export function totalSpent(
-  module: CompiledModule,
-  attributes: Readonly<Record<string, number>>,
-): number {
-  let spent = 0;
-  for (const attribute of module.all<AttributeDef>('rules.attributes')) {
-    spent += costOf(module, attribute, attributes[attribute.id] ?? attribute.default);
-  }
-  return spent;
-}
-
-/** A starting allocation: everything at its declared default. */
-export function baseAllocation(module: CompiledModule): Record<string, number> {
-  const out: Record<string, number> = {};
-  for (const attribute of module.all<AttributeDef>('rules.attributes')) {
-    out[attribute.id] = attribute.default;
-  }
-  return out;
-}
+// `costOf`, `totalSpent` and `baseAllocation` are the ruleset's, not this
+// screen's, and live in `@dm/engine` beside `createCharacter` — which enforces
+// the same budget for parties that never come through a creation screen.
+export { costOf, totalSpent, baseAllocation } from '@dm/engine';
+import { costOf, totalSpent } from '@dm/engine';
 
 export type AdjustResult =
   | { readonly ok: true; readonly attributes: Record<string, number> }

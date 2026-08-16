@@ -95,6 +95,8 @@ export function placeRooms(
   guaranteedRoles: readonly string[],
   spacing: number,
   rng: Rng,
+  /** Size for a template that declares no map spec, from the dungeon. */
+  defaultSize = '2d3+3',
 ): PlacedRoom[] {
   const rooms: PlacedRoom[] = [];
   const attemptsPerRoom = 40;
@@ -126,8 +128,8 @@ export function placeRooms(
     const template = ordered[index]!;
     const spec = template.map;
 
-    const width = Math.max(3, roll(spec?.width ?? '2d3+3', rng, 6));
-    const height = Math.max(3, roll(spec?.height ?? '2d3+3', rng, 6));
+    const width = Math.max(3, roll(spec?.width ?? defaultSize, rng, 6));
+    const height = Math.max(3, roll(spec?.height ?? defaultSize, rng, 6));
     // A hand-authored room uses its own dimensions, glyph layout or static map.
     const laidOut = spec?.layout && spec.layout.length > 0;
     const w = template.fixedSize?.width ?? (laidOut ? spec.layout[0]!.length : width);

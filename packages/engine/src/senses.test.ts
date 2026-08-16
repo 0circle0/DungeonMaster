@@ -33,6 +33,7 @@ import { simulatePerception } from './analysis.js';
 import { TerrainIndex, MapBuilder } from './grid/tiles.js';
 import { hasLineOfSight } from './grid/fov.js';
 import type { GameState, Entity } from './state.js';
+import { compileModule } from '@dm/module';
 
 function loadModule(name: string): CompiledModule {
   return loadModuleFrom(fileURLToPath(new URL(`../../../modules/${name}`, import.meta.url)));
@@ -181,8 +182,10 @@ describe('who witnessed it', () => {
     return witnessesOf(txn, terrain, txn.entity('e:1')!);
   }
 
-  // greenmarch declares `witness.radius: 0`, which the engine floors at 12 —
-  // a second, independent copy of the same magic number.
+  // Twelve tiles is greenmarch's own sight: `defaultRange: 60` at five units to
+  // the tile. It is not an engine constant, and the note that used to stand
+  // here saying the engine floored `witness.radius` at 12 was describing a
+  // different branch — the one below, for modules that switch sight off.
   it('sees a deed twelve tiles away', () => {
     expect(onlookerAt(HERO.x + 12)).toEqual(['w:1']);
   });
@@ -195,11 +198,44 @@ describe('who witnessed it', () => {
     expect(onlookerAt(HERO.x + 6, HERO.x + 3)).toEqual([]);
   });
 
-  it('honours an explicit radius over the floor', () => {
+  it('honours an explicit radius over the sense', () => {
     const state = field([{ id: 'w:1', at: { x: HERO.x + 5, y: HERO.y } }]);
     const txn = new Transaction(state, GREENMARCH);
     expect(witnessesOf(txn, terrain, txn.entity('e:1')!, 4)).toEqual([]);
     expect(witnessesOf(txn, terrain, txn.entity('e:1')!, 5)).toEqual(['w:1']);
+  });
+
+  /**
+   * With sight not required, `radius: 0` means everyone here.
+   *
+   * The engine used to floor it at twelve tiles, so a module that turned line
+   * of sight off and left the radius at its schema default silently got a
+   * twelve-tile circle instead of the whole place — and no way to ask for the
+   * whole place at all.
+   */
+  describe('when the module says sight is not required', () => {
+    function blindWitness(radius: number, distance: number): string[] {
+      const doc = JSON.parse(JSON.stringify(GREENMARCH.source)) as never as {
+        narrative: { memory: { witness: Record<string, unknown> } };
+      };
+      doc.narrative.memory.witness['requiresLineOfSight'] = false;
+      doc.narrative.memory.witness['radius'] = radius;
+      const compiled = compileModule(doc);
+      if (!compiled.ok) throw new Error('fixture failed');
+
+      const state = field([{ id: 'w:1', at: { x: HERO.x + distance, y: HERO.y } }]);
+      const txn = new Transaction(state, compiled.module);
+      return witnessesOf(txn, new TerrainIndex(compiled.module), txn.entity('e:1')!);
+    }
+
+    it('counts everyone present at radius zero', () => {
+      expect(blindWitness(0, 30)).toEqual(['w:1']);
+    });
+
+    it('still honours a radius the module actually declares', () => {
+      expect(blindWitness(4, 3)).toEqual(['w:1']);
+      expect(blindWitness(4, 5)).toEqual([]);
+    });
   });
 });
 
@@ -832,7 +868,7 @@ describe('using a sense deliberately', () => {
     const state = heardSomething();
     const readings = senseReport({ module: GREENMARCH, state, terrain }, state.entities['e:1']!, 'hearing');
     expect(readings.length).toBeGreaterThan(0);
-    expect(readings[0]!.direction).toBe('east');
+    expect(readings[0]!.direction).toBe('direction.east');
   });
 
   it('reports nothing when there is nothing out there', () => {
@@ -856,7 +892,7 @@ describe('using a sense deliberately', () => {
       later.entities['e:1']!,
       'hearing',
     );
-    const held = readings.find((reading) => reading.direction === 'east')!;
+    const held = readings.find((reading) => reading.direction === 'direction.east')!;
     expect(held.age).toBe(12);
     expect(held.fresh).toBe(false);
   });

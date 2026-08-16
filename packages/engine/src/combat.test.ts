@@ -26,6 +26,13 @@ function loadModule(name: string): CompiledModule {
 const GREENMARCH = loadModule('greenmarch');
 const MINIMAL = loadModule('minimal');
 const ctx = { module: GREENMARCH };
+
+/**
+ * A refusal is a key now, not a sentence, so tests assert on the key — which
+ * is the durable thing. The wording is the module's and may change freely.
+ */
+const isCooldownRefusal = (event: GameEvent): boolean =>
+  event.type === 'refused' && 'key' in event.reason && event.reason.key === 'refused.ability.cooldown';
 const terrain = new TerrainIndex(GREENMARCH);
 
 /** Party on an open map, optionally with hostiles placed. */
@@ -210,7 +217,7 @@ describe('targeting', () => {
       ability,
       { target: 'm:0' },
     );
-    expect(result.reason).toBe('out of reach');
+    expect(result.reason).toEqual({ key: 'refused.target.outOfReach' });
   });
 
   it('picks the nearest visible hostile', () => {
@@ -269,7 +276,8 @@ describe('combat flow', () => {
     const state = arena([{ id: 'bog_hound', at: { x: 13, y: 13 } }]);
     const started = reduce(state, { type: 'wait', minutes: 0 }, ctx).state;
     const { events } = reduce(started, { type: 'attack', target: 'm:0' }, ctx);
-    expect(events.find((e) => e.type === 'refused')).toMatchObject({ reason: 'out of reach' });
+    expect(events.find((e) => e.type === 'refused'))
+      .toMatchObject({ reason: { key: 'refused.target.outOfReach' } });
   });
 
   it('spends the action budget and refuses a second attack', () => {
@@ -286,7 +294,7 @@ describe('combat flow', () => {
     if (!first.state.combat) return; // the hound died outright
     const second = reduce(first.state, { type: 'attack', target: 'm:0' }, ctx);
     expect(second.events.find((e) => e.type === 'refused')).toMatchObject({
-      reason: 'no action left this turn',
+      reason: { key: 'refused.ability.noAction' },
     });
   });
 
@@ -364,7 +372,7 @@ describe('turn order', () => {
 
     const { state: next, events } = reduce(current, { type: 'attack', target: 'm:0', actor: other }, ctx);
     expect(events.find((e) => e.type === 'refused')).toMatchObject({
-      reason: `it is ${activeName}'s turn`,
+      reason: { key: 'refused.turn.other', params: { who: activeName } },
     });
     expect(events.some((e) => e.type === 'attacked')).toBe(false);
 
@@ -509,7 +517,7 @@ describe('running away', () => {
     const { events } = reduce(arena(), { type: 'flee' }, ctx);
     expect(events.find((e) => e.type === 'refused')).toMatchObject({
       action: 'flee',
-      reason: 'nothing to flee from',
+      reason: { key: 'refused.flee.noCombat' },
     });
   });
 
@@ -634,7 +642,7 @@ describe('combat has depth', () => {
     const again = reduce(ready, { type: 'useAbility', ability: 'rally' }, ctx);
     const refusal = again.events.find((e) => e.type === 'refused');
     expect(refusal).toBeDefined();
-    if (refusal?.type === 'refused') expect(refusal.reason).toMatch(/not ready/);
+    if (refusal?.type === 'refused') expect(refusal.reason).toMatchObject({ key: 'refused.ability.cooldown' });
   });
 
   it('lets it back once enough rounds have passed', () => {
@@ -645,7 +653,7 @@ describe('combat has depth', () => {
     };
 
     const events = reduce(later, { type: 'useAbility', ability: 'rally' }, ctx).events;
-    expect(events.some((e) => e.type === 'refused' && /not ready/.test(e.reason))).toBe(false);
+    expect(events.some(isCooldownRefusal)).toBe(false);
   });
 
   it('does not put anything on cooldown outside a fight, where there are no rounds', () => {
@@ -654,7 +662,7 @@ describe('combat has depth', () => {
     const peace: GameState = { ...fighting(), combat: null };
     const first = reduce(peace, { type: 'useAbility', ability: 'rally' }, ctx);
     const again = reduce({ ...first.state, combat: null }, { type: 'useAbility', ability: 'rally' }, ctx);
-    expect(again.events.some((e) => e.type === 'refused' && /not ready/.test(e.reason))).toBe(false);
+    expect(again.events.some(isCooldownRefusal)).toBe(false);
   });
 
   // `specialTurns` — legendary and lair actions — was declared and read by

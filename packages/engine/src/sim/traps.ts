@@ -26,6 +26,7 @@ import { Transaction, applyOps } from '../rules/apply.js';
 import { skillCheck, succeeded } from '../rules/check.js';
 import { key as packKey, unkey } from '../grid/tiles.js';
 import { distance } from '../grid/geometry.js';
+import { message } from '../narrate/systemText.js';
 
 export interface TrapDef {
   id: string;
@@ -39,8 +40,7 @@ export interface TrapDef {
 
 export type TrapState = 'hidden' | 'found' | 'disarmed' | 'sprung';
 
-/** How far a search reaches. Arm's length plus a step, not the whole room. */
-const SEARCH_RADIUS = 2;
+
 
 function mapOf(txn: Transaction): MapInstance | undefined {
   return txn.state.maps[txn.state.currentMap];
@@ -105,7 +105,8 @@ export function searchForTraps(txn: Transaction, searcher: Entity, rng: Rng): bo
   const nearby = Object.entries(map.traps)
     .map(([tile, placed]) => ({ tile: Number(tile), placed }))
     .filter(({ tile, placed }) =>
-      placed.state === 'hidden' && distance(unkey(tile), searcher.position) <= SEARCH_RADIUS)
+      placed.state === 'hidden'
+      && distance(unkey(tile), searcher.position) <= txn.module.source.rules.search.trapRadius)
     // Sorted, so two searches of the same ground roll in the same order.
     .sort((a, b) => a.tile - b.tile);
 
@@ -136,7 +137,8 @@ export function reachableTrap(txn: Transaction, actor: Entity): { tile: number; 
   const candidates = Object.entries(map.traps)
     .map(([tile, placed]) => ({ tile: Number(tile), placed }))
     .filter(({ tile, placed }) =>
-      placed.state === 'found' && distance(unkey(tile), actor.position) <= 1)
+      placed.state === 'found'
+      && distance(unkey(tile), actor.position) <= txn.module.source.rules.search.disarmReach)
     .sort((a, b) => a.tile - b.tile);
 
   const first = candidates[0];
@@ -152,7 +154,7 @@ export function reachableTrap(txn: Transaction, actor: Entity): { tile: number; 
 export function disarmTrap(txn: Transaction, actor: Entity, rng: Rng): boolean {
   const target = reachableTrap(txn, actor);
   if (!target) {
-    txn.emit({ type: 'refused', action: 'disarm', reason: 'there is nothing here to disarm' });
+    txn.emit({ type: 'refused', action: 'disarm', reason: message('refused.disarm.nothingHere') });
     return false;
   }
 

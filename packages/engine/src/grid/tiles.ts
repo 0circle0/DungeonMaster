@@ -139,8 +139,15 @@ export class MapBuilder {
 export class TerrainIndex {
   private readonly byId: ReadonlyMap<string, TerrainDef>;
   private readonly fallback: TerrainDef;
+  /** `movementModes[].terrainMultiplier`, by mode id. */
+  private readonly modeMultiplier: ReadonlyMap<string, number>;
 
   constructor(module: CompiledModule) {
+    this.modeMultiplier = new Map(
+      module
+        .all<{ id: string; terrainMultiplier: number }>('rules.movementModes')
+        .map((mode) => [mode.id, mode.terrainMultiplier]),
+    );
     const map = new Map<string, TerrainDef>();
     for (const terrain of module.all<Record<string, unknown>>('world.terrains')) {
       map.set(String(terrain['id']), {
@@ -193,10 +200,25 @@ export class TerrainIndex {
     return this.at(map, position).opaque;
   }
 
-  /** Movement cost to enter, or `Infinity` when the tile cannot be entered. */
+  /**
+   * Movement cost to enter, or `Infinity` when the tile cannot be entered.
+   *
+   * The terrain's own cost times the mover's cheapest mode multiplier, which is
+   * what `space.ts` has always documented `moveCost` as meaning and what
+   * nothing did — `movementModes[].terrainMultiplier` was authored, validated,
+   * and read by no one, so a flier waded through a bog at a walker's pace. A
+   * creature with several modes uses whichever crosses this ground best.
+   */
   costOf(map: TileMap, position: Position, modes: readonly string[] = []): number {
     if (!this.isPassable(map, position, modes)) return Infinity;
-    return Math.max(0, this.at(map, position).moveCost);
+    const base = Math.max(0, this.at(map, position).moveCost);
+
+    let multiplier = 1;
+    for (const mode of modes) {
+      const declared = this.modeMultiplier.get(mode);
+      if (declared !== undefined && declared < multiplier) multiplier = declared;
+    }
+    return base * multiplier;
   }
 }
 

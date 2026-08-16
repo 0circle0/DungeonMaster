@@ -17,10 +17,11 @@ import type { Effect, Predicate, Requirement } from '@dm/module';
 import type { Scope } from '@dm/module';
 import type { Entity, EntityId } from '../../state.js';
 import { buildScope, statsOf, OPEN_NAMESPACES } from '../../stats.js';
+import { passiveBase, configOf } from '../config.js';
 import { Transaction, applyOps } from '../apply.js';
 import { tickConditions, rollConditionSaves } from '../conditions.js';
 import { runTerrain } from '../../sim/terrain.js';
-import { check, savingThrow, succeeded, skillModifier, difficultyOf } from '../check.js';
+import { check, savingThrow, succeeded, skillModifier, difficultyOf, opposedCheck } from '../check.js';
 import type { TargetingContext } from './targeting.js';
 import { useAbility } from './attack.js';
 import { recordEncounter } from '../../sim/agenda.js';
@@ -29,6 +30,7 @@ import { canPerceive } from '../../sim/senses.js';
 import { terrainFor } from '../../grid/tiles.js';
 import { distance } from '../../grid/geometry.js';
 import type { Position } from '../../grid/tiles.js';
+import type { RollRecord } from '../../events.js';
 
 interface ActionTypeDef {
   id: string;
@@ -428,6 +430,10 @@ export function provokeOpportunity(
     for (const opportunity of opportunities) {
       const used = combat?.reactionsUsed[other.id] ?? 0;
       if (used >= opportunity.usesPerRound) continue;
+      // An opportunity that names an action type costs one, like anything
+      // else. `actionType` was declared and never read, so an opportunity
+      // attack was free of the reaction economy the module had written down.
+      if (!hasBudget(txn, opportunity.actionType)) continue;
 
       const scope = buildScope(txn.module, txn.state, other, { target: { id: mover.id } as never });
       if (opportunity.requires && !evalPredicate(opportunity.requires, { scope, rng, openNamespaces: OPEN_NAMESPACES })) continue;
@@ -440,6 +446,7 @@ export function provokeOpportunity(
             reactionsUsed: { ...(txn.state.combat).reactionsUsed, [other.id]: used + 1 },
           },
         });
+        spendBudget(txn, opportunity.actionType);
       }
 
       txn.emit({ type: 'reacted', entity: other.id, reaction: opportunity.id, trigger: 'moveAway' });
@@ -467,6 +474,35 @@ export function provokeOpportunity(
  * gated on the *reactor's* own memory, faction standing, and state, and may
  * involve them rolling dice of their own.
  */
+/**
+ * A reaction's roll against somebody who is resisting it.
+ *
+ * `passive` is the cheap reading — their score, standing still. `contested`
+ * makes them roll for it, and the reactor's record is measured against what
+ * they got.
+ */
+function opposedRoll(
+  txn: Transaction,
+  rng: Rng,
+  reactor: Entity,
+  modifier: number,
+  subject: Entity,
+  opposedBy: string,
+): RollRecord {
+  if (configOf(txn.module).opposedMode === 'contested') {
+    const contest = opposedCheck(
+      txn.module, rng,
+      { entity: reactor, skill: opposedBy },
+      { entity: subject, skill: opposedBy },
+    );
+    return contest.attacker;
+  }
+  return check(txn.module, rng, {
+    modifier,
+    difficulty: passiveBase(txn.module) + skillModifier(txn.module, subject, opposedBy),
+  });
+}
+
 export function runReactions(
   txn: Transaction,
   reactor: Entity,
@@ -524,16 +560,15 @@ export function runReactions(
           ? (statsOf(txn.module, reactor).mod[reaction.roll.attribute] ?? 0)
           : 0;
 
-      const roll =
-        reaction.roll.opposedBy && subject
-          ? check(txn.module, rng, {
-              modifier,
-              difficulty: 10 + skillModifier(txn.module, subject, reaction.roll.opposedBy),
-            })
-          : check(txn.module, rng, {
-              modifier,
-              difficulty: difficultyOf(txn.module, reaction.roll.difficulty),
-            });
+      // Which of the two readings of "opposed" applies is the ruleset's call.
+      // `contested` rolls the subject too; `passive` measures against their
+      // score standing still.
+      const roll = reaction.roll.opposedBy && subject
+        ? opposedRoll(txn, rng, reactor, modifier, subject, reaction.roll.opposedBy)
+        : check(txn.module, rng, {
+            modifier,
+            difficulty: difficultyOf(txn.module, reaction.roll.difficulty),
+          });
 
       txn.emit({
         type: 'checked',

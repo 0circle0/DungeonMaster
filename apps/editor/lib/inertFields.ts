@@ -44,10 +44,6 @@ const INERT: Record<string, readonly CoverageNote[]> = {
     { field: 'requiresAttunement', note: 'not read by the engine yet, and neither is attunementRequires' },
   ],
   'rules.movementModes': [
-    {
-      field: 'terrainMultiplier',
-      note: 'per-mode, but path costs are per-path — terrain moveCost and requiresMode carry this instead',
-    },
     { field: 'fallsWhenDisabled', note: 'not read by the engine yet — nothing takes a movement mode away' },
   ],
   'rules.sizes': [
@@ -55,10 +51,15 @@ const INERT: Record<string, readonly CoverageNote[]> = {
       field: 'carryMultiplier',
       note: 'not read by the engine — build encumbrance from actor.carried and a derived stat',
     },
-    { field: 'hitDie', note: 'not read by the engine; classes[].hitDie is what rolls' },
   ],
   'rules.senses': [
     { field: 'ignores', note: 'not read by the engine yet — no condition currently suppresses a sense' },
+  ],
+  'rules.languages': [
+    {
+      field: 'exotic',
+      note: 'not read by the engine — dialogue and readable content are not language-gated',
+    },
   ],
 };
 

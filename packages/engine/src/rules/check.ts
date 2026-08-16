@@ -138,6 +138,12 @@ export function skillCheck(
  *
  * Ties go to the defender, which is the convention that keeps a contested
  * action from succeeding on a draw.
+ *
+ * Both records are rolled against nothing and then restated against each
+ * other, so `against` is the number that actually mattered and `outcome` says
+ * who won. They used to carry a difficulty of zero, which made every roll here
+ * report `success` — a record that read as a lie in any transcript that
+ * showed it.
  */
 export function opposedCheck(
   module: CompiledModule,
@@ -153,11 +159,24 @@ export function opposedCheck(
     modifier: skillModifier(module, defender.entity, defender.skill),
     difficulty: 0,
   });
+
+  const attackerWins = attackerRoll.total > defenderRoll.total;
   return {
-    attacker: attackerRoll,
-    defender: defenderRoll,
-    attackerWins: attackerRoll.total > defenderRoll.total,
+    attacker: restate(attackerRoll, defenderRoll.total, attackerWins),
+    defender: restate(defenderRoll, attackerRoll.total, !attackerWins),
+    attackerWins,
   };
+}
+
+/**
+ * A roll measured against the other side rather than against nothing.
+ *
+ * A critical or a fumble is judged on the natural die and stands whatever the
+ * comparison says, exactly as `check` decides it.
+ */
+function restate(roll: RollRecord, against: number, won: boolean): RollRecord {
+  const decided = roll.outcome === 'critical' || roll.outcome === 'fumble';
+  return { ...roll, against, outcome: decided ? roll.outcome : won ? 'success' : 'failure' };
 }
 
 interface SaveDef {

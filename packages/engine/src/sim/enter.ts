@@ -8,8 +8,8 @@
  */
 
 import { Rng, parseDice, rollDice } from '@dm/core';
-import { evalEffects } from '@dm/module';
-import type { Effect, Scope } from '@dm/module';
+import { evalEffects, evalExpr } from '@dm/module';
+import type { Effect, Expr, Scope } from '@dm/module';
 import type { Entity, ItemStack, MapInstance } from '../state.js';
 import { Transaction, applyOps } from '../rules/apply.js';
 import { buildScope, OPEN_NAMESPACES } from '../stats.js';
@@ -25,6 +25,7 @@ import type { ScopeSet } from '../world/populate.js';
 import { spawnMonster, spawnNpc } from '../character.js';
 import { runTriggers, triggersFor } from './triggers.js';
 import { phaseOf, layerOf } from './clock.js';
+import { message } from '../narrate/systemText.js';
 
 /** How deep a dungeon runs, from its declared dice. */
 function rollDepth(notation: string | undefined, rng: Rng): number {
@@ -438,7 +439,7 @@ export function enterDungeon(
     rollEncounters?: boolean;
   }>('world.dungeons', dungeonId);
   if (!definition) {
-    txn.emit({ type: 'refused', action: 'enter', reason: `no dungeon "${dungeonId}"` });
+    txn.emit({ type: 'refused', action: 'enter', reason: message('refused.enter.unknownDungeon', { dungeon: dungeonId }) });
     return false;
   }
 
@@ -658,11 +659,12 @@ export function enterArea(
     map?: MapSpec;
     entryPoint?: Position;
     encounterTables?: string[];
-    dangerLevel?: number;
+    dangerLevel: number;
+    encounterChance: Expr;
   }>('world.areas', areaId);
 
   if (!area) {
-    txn.emit({ type: 'refused', action: 'travelToArea', reason: `no area "${areaId}"` });
+    txn.emit({ type: 'refused', action: 'travelToArea', reason: message('refused.travel.unknownArea', { area: areaId }) });
     return false;
   }
 
@@ -707,14 +709,26 @@ export function enterArea(
   // `dangerLevel` sets the odds: a settlement at 0 is quiet by definition, and
   // each step up makes an arrival more likely, to a ceiling short of certainty
   // — a place you can never cross in peace is a wall, not a wilderness.
-  const danger = area.dangerLevel ?? 1;
+  //
+  // The curve from danger to probability is the area's own expression, so a
+  // module that wants "danger 5 means near-certain ambush" can say it. The
+  // default reproduces the engine's old `min(0.75, danger * 0.15)` exactly.
+  const encounterRng = rng.derive(`area:${areaId}:encounter`);
+  const chance = Number(
+    evalExpr(area.encounterChance, {
+      scope: { dangerLevel: area.dangerLevel },
+      rng: encounterRng,
+      openNamespaces: OPEN_NAMESPACES,
+    }),
+  );
+
   spawnEncounter(
     txn,
     terrain,
     area.encounterTables ?? [],
-    Math.min(0.75, danger * 0.15),
+    Math.max(0, Math.min(1, chance)),
     area.entryPoint,
-    rng.derive(`area:${areaId}:encounter`),
+    encounterRng,
   );
 
   // What the place is like right now. A biome's `ambienceKey` was declared and
@@ -777,7 +791,7 @@ export function enterPoi(
   }>('world.pointsOfInterest', poiId);
 
   if (!poi) {
-    txn.emit({ type: 'refused', action: 'enter', reason: `no such place` });
+    txn.emit({ type: 'refused', action: 'enter', reason: message('refused.enter.unknownPlace') });
     return false;
   }
   if (poi.gate && !gateOpened) return false;

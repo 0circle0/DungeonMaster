@@ -12,6 +12,7 @@ import { ExprSchema, PredicateSchema, EffectSchema } from '../dsl/schema.js';
 import { idSchema, displayName, description, ref, tags, weighted } from './common.js';
 import { requirementSchema } from './requirement.js';
 import { memoryModelSchema } from './memory.js';
+import { systemTextSchema } from './systemText.js';
 
 /**
  * One way of saying something. Variants may carry conditions, so a room reads
@@ -276,7 +277,20 @@ export const deedKindSchema = z
 
 export const narrativeSchema = z
   .object({
+    /**
+     * How many nodes a dialogue may auto-advance through before it stops.
+     *
+     * A loop guard, but a mildly game-visible one: it caps how long a scene can
+     * run without the player saying anything.
+     */
+    maxDialogueHops: z.number().int().min(1).default(8),
     textGrammar: z.array(textPoolSchema).default([]),
+    /**
+     * What the engine itself says: refusals, combat lines, the words a
+     * narrated sentence is assembled from. The engine holds no prose of its
+     * own, so this is the only place those sentences exist.
+     */
+    systemText: systemTextSchema.default({}),
     dialogues: z.array(dialogueSchema).default([]),
     quests: z.array(questSchema).default([]),
     arcs: z.array(arcSchema).default([]),

@@ -44,6 +44,21 @@ export const forgettingSchema = z
     reinforceOnRecall: z.number().min(0).max(1).default(0.25),
     /** Multiplier per point of a deed's own memorability. */
     memorabilityWeight: z.number().min(0).default(1),
+    /**
+     * How much longer somebody remembers a deed of a kind they care about.
+     *
+     * The engine doubled the half-life for anything in an NPC's `caresAbout`,
+     * bypassing `memorabilityWeight` on the very next line — two knobs for one
+     * idea, one of them invisible.
+     */
+    caresAboutMultiplier: z.number().min(0).default(2),
+    /**
+     * What "half-life" means for the `linear` curve, as a multiple of
+     * `halfLifeDays`: strength runs down to the floor over `halfLifeDays ×
+     * this`. Two makes it agree with the exponential curve at the halfway
+     * mark, which is why it is the default and why it needed saying out loud.
+     */
+    linearSpanMultiplier: z.number().min(0.01).default(2),
     /** Deed kinds exempt from forgetting entirely. */
     neverForget: z.array(ref('narrative.deedKinds')).default([]),
     extra,
@@ -78,6 +93,18 @@ export const gossipSchema = z
     crossFactionRate: z.number().min(0).max(1).default(0.4),
     /** Minimum severity worth repeating; small deeds die where they happen. */
     minimumSeverity: z.number().min(0).default(1),
+    /**
+     * What a listener's `gullibility` is multiplied by when deciding whether a
+     * rumour takes. At the default of 2, a gullibility of 0.5 is the neutral
+     * point — which an author reading "0..1" would never have guessed, and
+     * which silently halved every spread rate they set.
+     */
+    gullibilityScale: z.number().min(0).default(2),
+    /**
+     * Strength kept by a rumour that came out garbled. `distortionPerHop`
+     * decides *whether* a retelling distorts; this is *how much* it costs.
+     */
+    garbledRetention: z.number().min(0).max(1).default(0.5),
     /** Rumours that spread even when nobody survived to tell it. */
     spreadsWithoutWitness: z.boolean().default(false),
     extra,
@@ -93,7 +120,13 @@ export const gossipSchema = z
  */
 export const witnessSchema = z
   .object({
-    /** Same location by default; a wider radius includes neighbouring places. */
+    /**
+     * Same location by default; a wider radius includes neighbouring places.
+     *
+     * With `requiresLineOfSight` off, zero means everyone present — the engine
+     * used to floor this at twelve tiles, which made the schema's own default
+     * unreachable and imported a sight constant from before senses existed.
+     */
     radius: z.number().int().min(0).default(0),
     /** Sneaking and darkness can prevent witnessing. */
     requiresLineOfSight: z.boolean().default(true),

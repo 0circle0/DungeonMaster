@@ -11,10 +11,13 @@
  * cannot learn the system.
  */
 
-import type { CompiledModule } from '@dm/module';
+import type { CompiledModule, SystemTextKey } from '@dm/module';
 import type { GameEvent, RollRecord } from '../events.js';
 import type { GameState } from '../state.js';
-import { narrateFrom, interpolate, list, count, article, nameScore, describeCreature } from './grammar.js';
+import {
+  narrateFrom, interpolate, list, count, article, plural, nameScore, describeCreature,
+} from './grammar.js';
+import { text, render, grammarOf } from './systemText.js';
 import {
   perceivedTiles, sightSenseOf, impressions, canPerceive, senseOf, senseReport,
 } from '../sim/senses.js';
@@ -38,6 +41,13 @@ const nameOf = (context: NarratorContext, id: string): string =>
 
 const contentName = (context: NarratorContext, collection: string, id: string): string =>
   context.module.find<{ name?: string }>(collection, id)?.name ?? id.replace(/_/g, ' ');
+
+/** "three torches" — the item's own name, counted and pluralised by the module. */
+function countItem(context: NarratorContext, itemId: string, quantity: number): string {
+  const grammar = grammarOf(context.module);
+  const name = contentName(context, 'content.items', itemId);
+  return count(grammar, quantity, name, plural(grammar, name));
+}
 
 /** Just enough of a quest to talk about it. */
 interface QuestShape {
@@ -70,20 +80,23 @@ function objectiveShape(
 }
 
 /** Render a roll as its arithmetic: `17 (14+3) vs 12`. */
-export function formatRoll(roll: RollRecord): string {
+export function formatRoll(module: CompiledModule, roll: RollRecord): string {
   const sign = roll.modifier >= 0 ? '+' : '';
-  const parts = `${roll.natural}${roll.modifier === 0 ? '' : `${sign}${roll.modifier}`}`;
-  const target = roll.against === null ? '' : ` vs ${roll.against}`;
-  const swing = roll.swing ? ` [${roll.swing}]` : '';
-  return `${roll.total} (${parts})${target}${swing}`;
+  return text(module, 'roll.line', {
+    total: roll.total,
+    parts: `${roll.natural}${roll.modifier === 0 ? '' : `${sign}${roll.modifier}`}`,
+    versus: roll.against === null ? '' : text(module, 'roll.versus', { difficulty: roll.against }),
+    swing: roll.swing ? text(module, 'roll.swing', { swing: roll.swing }) : '',
+  });
 }
 
-const OUTCOME_WORD: Record<RollRecord['outcome'], string> = {
-  critical: 'a critical hit',
-  success: 'a hit',
-  failure: 'a miss',
-  fumble: 'a fumble',
-};
+/** How an outcome reads in an attack line. */
+const OUTCOME_KEY = {
+  critical: 'combat.outcome.critical',
+  success: 'combat.outcome.success',
+  failure: 'combat.outcome.failure',
+  fumble: 'combat.outcome.fumble',
+} as const satisfies Record<RollRecord['outcome'], SystemTextKey>;
 
 /**
  * Turn one event into a line, or nothing.
@@ -97,11 +110,11 @@ export function narrateEvent(context: NarratorContext, event: GameEvent): Line |
   switch (event.type) {
     case 'narrate': {
       if (!event.textKey) return null;
-      const text = narrateFrom(module, event.textKey, context.seed, {
+      const prose = narrateFrom(module, event.textKey, context.seed, {
         context: event.context,
         sceneKey: `${event.textKey}:${JSON.stringify(event.context)}`,
       });
-      return text ? { text, kind: 'prose' } : null;
+      return prose ? { text: prose, kind: 'prose' } : null;
     }
 
     case 'custom': {
@@ -115,15 +128,19 @@ export function narrateEvent(context: NarratorContext, event: GameEvent): Line |
         if (!partyCanSee(context, id)) return null;
 
         const who = nameOf(context, id);
-        return event.event === 'investigating'
-          ? { text: `${who} casts about, and starts toward something.`, kind: 'prose' }
-          : { text: `${who} loses the thread of it.`, kind: 'prose' };
+        const key = event.event === 'investigating'
+          ? 'perception.investigating'
+          : 'perception.lostInterest';
+        return { text: text(module, key, { who }), kind: 'prose' };
       }
       if (event.event === 'noticed') {
         return impressionLine(context, event.data);
       }
       if (event.event === 'stanceChanged') {
-        return { text: `You move at a ${String(event.data['name'] ?? '').toLowerCase()}.`, kind: 'note' };
+        return {
+          text: text(module, 'party.stance', { stance: String(event.data['name'] ?? '').toLowerCase() }),
+          kind: 'note',
+        };
       }
       if (event.event === 'entered') {
         const place = String(event.data['place'] ?? '');
@@ -134,14 +151,13 @@ export function narrateEvent(context: NarratorContext, event: GameEvent): Line |
         return { text: named, kind: 'system' };
       }
       if (event.event === 'questOffered') {
-        const name = String(event.data['name'] ?? event.data['quest'] ?? '');
+        const quest = String(event.data['name'] ?? event.data['quest'] ?? '');
         const who = nameOf(context, String(event.data['npc'] ?? ''));
-        return { text: `${who} has work for you: ${name}.`, kind: 'system' };
+        return { text: text(module, 'quest.offered', { who, quest }), kind: 'system' };
       }
       if (event.event === 'followChanged') {
-        return event.data['following'] === true
-          ? { text: 'The others fall in behind you.', kind: 'note' }
-          : { text: 'The party spreads out.', kind: 'note' };
+        const key = event.data['following'] === true ? 'party.following' : 'party.spread';
+        return { text: text(module, key), kind: 'note' };
       }
       if (event.event === 'stageAdvanced') {
         const questId = String(event.data['quest'] ?? '');
@@ -151,11 +167,16 @@ export function narrateEvent(context: NarratorContext, event: GameEvent): Line |
 
         // The stage's own journal prose, if the module wrote any — this is the
         // line that tells a player what the next piece of work actually is.
-        const prose = stage?.journalKey
+        const journal = stage?.journalKey
           ? narrateFrom(module, stage.journalKey, context.seed, { sceneKey: `stage:${questId}:${stageId}` })
           : '';
 
-        return { text: prose ? `${name} — ${prose}` : name, kind: 'system' };
+        return {
+          text: journal
+            ? text(module, 'quest.stage.journal', { stage: name, journal })
+            : text(module, 'quest.stage', { stage: name }),
+          kind: 'system',
+        };
       }
       return null;
     }
@@ -164,117 +185,160 @@ export function narrateEvent(context: NarratorContext, event: GameEvent): Line |
       return { text: event.text, kind: 'speech' };
 
     case 'refused':
-      return { text: event.reason, kind: 'refusal' };
+      return { text: render(module, event.reason, context.seed), kind: 'refusal' };
 
     case 'blocked': {
       // `by` is a terrain id when the wall stopped you and a creature's name
       // when someone did, so look the id up and fall back to what was sent.
-      const named = context.module.find<{ name: string }>('world.terrains', event.by)?.name;
-      return { text: `Blocked by ${(named ?? event.by).toLowerCase()}.`, kind: 'note' };
-    }
-
-    case 'attacked': {
-      const attacker = nameOf(context, event.attacker);
-      const target = nameOf(context, event.target);
-      const ability = event.ability ? contentName(context, 'content.abilities', event.ability) : 'attacks';
+      const named = module.find<{ name: string }>('world.terrains', event.by)?.name
+        ?? (event.by || text(module, 'move.blocked.edge'));
       return {
-        text: `${attacker} — ${ability} on ${target}: ${formatRoll(event.roll)} — ${OUTCOME_WORD[event.roll.outcome]}.`,
-        kind: 'combat',
+        text: text(module, 'move.blocked', { what: named.toLowerCase() }),
+        kind: 'note',
       };
     }
 
-    case 'checked': {
-      const what = event.skill ?? event.attribute ?? 'check';
+    case 'attacked':
       return {
-        text: `${nameOf(context, event.entity)} — ${what.replace(/_/g, ' ')}: ${formatRoll(event.roll)}.`,
+        text: text(module, 'combat.attacked', {
+          attacker: nameOf(context, event.attacker),
+          target: nameOf(context, event.target),
+          ability: event.ability
+            ? contentName(context, 'content.abilities', event.ability)
+            : text(module, 'combat.attack.unnamed'),
+          roll: formatRoll(module, event.roll),
+          outcome: text(module, OUTCOME_KEY[event.roll.outcome]),
+        }),
+        kind: 'combat',
+      };
+
+    case 'checked': {
+      const what = event.skill ?? event.attribute;
+      return {
+        text: text(module, 'combat.checked', {
+          who: nameOf(context, event.entity),
+          what: what ? what.replace(/_/g, ' ') : text(module, 'combat.check.unnamed'),
+          roll: formatRoll(module, event.roll),
+        }),
         kind: 'combat',
       };
     }
 
     case 'saved':
       return {
-        text: `${nameOf(context, event.entity)} — ${event.save} save: ${formatRoll(event.roll)}.`,
+        text: text(module, 'combat.saved', {
+          who: nameOf(context, event.entity),
+          save: event.save,
+          roll: formatRoll(module, event.roll),
+        }),
         kind: 'combat',
       };
 
-    case 'damaged': {
-      const type = event.damageType ? ` ${event.damageType}` : '';
-      const resisted = event.raw !== event.amount ? ` (${event.raw} before resistance)` : '';
+    case 'damaged':
       return {
-        text: `${nameOf(context, event.entity)} takes ${event.amount}${type} damage${resisted}.`,
+        text: text(module, 'combat.damaged', {
+          who: nameOf(context, event.entity),
+          amount: event.amount,
+          type: event.damageType ? ` ${event.damageType}` : '',
+          resisted: event.raw !== event.amount
+            ? text(module, 'combat.damaged.resisted', { raw: event.raw })
+            : '',
+        }),
         kind: 'combat',
       };
-    }
 
     case 'healed':
-      return { text: `${nameOf(context, event.entity)} recovers ${event.amount}.`, kind: 'combat' };
+      return {
+        text: text(module, 'combat.healed', { who: nameOf(context, event.entity), amount: event.amount }),
+        kind: 'combat',
+      };
 
     case 'died':
-      return { text: `${nameOf(context, event.entity)} falls.`, kind: 'combat' };
+      return { text: text(module, 'combat.died', { who: nameOf(context, event.entity) }), kind: 'combat' };
 
     case 'conditionApplied':
       return {
-        text: `${nameOf(context, event.entity)} is ${contentName(context, 'rules.conditions', event.condition).toLowerCase()}.`,
+        text: text(module, 'combat.conditionApplied', {
+          who: nameOf(context, event.entity),
+          condition: contentName(context, 'rules.conditions', event.condition).toLowerCase(),
+        }),
         kind: 'combat',
       };
 
     case 'conditionRemoved':
       return event.reason === 'expired'
         ? {
-            text: `${nameOf(context, event.entity)} is no longer ${contentName(context, 'rules.conditions', event.condition).toLowerCase()}.`,
+            text: text(module, 'combat.conditionExpired', {
+              who: nameOf(context, event.entity),
+              condition: contentName(context, 'rules.conditions', event.condition).toLowerCase(),
+            }),
             kind: 'note',
           }
         : null;
 
     case 'conditionResisted':
       return {
-        text: `${nameOf(context, event.entity)} shrugs off ${contentName(context, 'rules.conditions', event.condition).toLowerCase()}.`,
+        text: text(module, 'combat.conditionResisted', {
+          who: nameOf(context, event.entity),
+          condition: contentName(context, 'rules.conditions', event.condition).toLowerCase(),
+        }),
         kind: 'combat',
       };
 
     case 'reacted':
-      return { text: `${nameOf(context, event.entity)} reacts.`, kind: 'combat' };
+      return { text: text(module, 'combat.reacted', { who: nameOf(context, event.entity) }), kind: 'combat' };
 
     case 'itemGained':
       return {
-        text: `Taken: ${count(event.quantity, contentName(context, 'content.items', event.item))}.`,
+        text: text(module, 'item.taken', { items: countItem(context, event.item, event.quantity) }),
         kind: 'note',
       };
 
     case 'itemLost':
       return {
-        text: `Lost: ${count(event.quantity, contentName(context, 'content.items', event.item))}.`,
+        text: text(module, 'item.lost', { items: countItem(context, event.item, event.quantity) }),
         kind: 'note',
       };
 
     // A silent drop is a drop the player never picks up.
     case 'droppedLoot':
       return {
-        text: `${nameOf(context, event.from)} leaves ${list(
-          event.items.map((stack) => count(stack.quantity, contentName(context, 'content.items', stack.item))),
-        )} behind.`,
+        text: text(module, 'item.dropped', {
+          who: nameOf(context, event.from),
+          items: list(
+            grammarOf(module),
+            event.items.map((stack) => countItem(context, stack.item, stack.quantity)),
+          ),
+        }),
         kind: 'note',
       };
 
-    case 'trapSprung': {
-      const name = contentName(context, 'content.traps', event.trap);
-      return { text: `${nameOf(context, event.entity)} sets off ${article(name)}!`, kind: 'system' };
-    }
+    case 'trapSprung':
+      return {
+        text: text(module, 'trap.sprung', {
+          who: nameOf(context, event.entity),
+          trap: article(grammarOf(module), contentName(context, 'content.traps', event.trap)),
+        }),
+        kind: 'system',
+      };
 
     case 'trapDisarmed':
       return {
-        text: `${nameOf(context, event.entity)} disarms the ${contentName(context, 'content.traps', event.trap).toLowerCase()}.`,
+        text: text(module, 'trap.disarmed', {
+          who: nameOf(context, event.entity),
+          trap: contentName(context, 'content.traps', event.trap).toLowerCase(),
+        }),
         kind: 'note',
       };
 
     case 'traded': {
       const item = contentName(context, 'content.items', event.item);
-      const who = nameOf(context, event.npc);
-      const many = event.quantity > 1 ? count(event.quantity, item) : item;
       return {
-        text: event.bought
-          ? `Bought ${many} from ${who} for ${event.price}.`
-          : `Sold ${many} to ${who} for ${event.price}.`,
+        text: text(module, event.bought ? 'trade.bought' : 'trade.sold', {
+          items: event.quantity > 1 ? countItem(context, event.item, event.quantity) : item,
+          who: nameOf(context, event.npc),
+          price: event.price,
+        }),
         kind: 'note',
       };
     }
@@ -283,55 +347,82 @@ export function narrateEvent(context: NarratorContext, event: GameEvent): Line |
     // any other way — a reward, a toll, a bribe.
     case 'currencyChanged':
       return {
-        text: event.amount > 0 ? `You are ${event.amount} the richer.` : `You are ${-event.amount} the poorer.`,
+        text: event.amount > 0
+          ? text(module, 'currency.gained', { amount: event.amount })
+          : text(module, 'currency.lost', { amount: -event.amount }),
         kind: 'note',
       };
 
     case 'xpGained':
-      return { text: `${nameOf(context, event.entity)} gains ${event.amount} experience.`, kind: 'note' };
+      return {
+        text: text(module, 'progress.xp', { who: nameOf(context, event.entity), amount: event.amount }),
+        kind: 'note',
+      };
 
     case 'leveledUp':
-      return { text: `${nameOf(context, event.entity)} reaches level ${event.level}.`, kind: 'system' };
+      return {
+        text: text(module, 'progress.level', { who: nameOf(context, event.entity), level: event.level }),
+        kind: 'system',
+      };
 
     case 'combatStarted':
       return {
-        text: `Combat begins — ${list(event.participants.map((id) => nameOf(context, id)))}.`,
+        text: text(module, 'combat.started', {
+          who: list(grammarOf(module), event.participants.map((id) => nameOf(context, id))),
+        }),
         kind: 'system',
       };
 
     case 'combatEnded': {
-      const text =
-        event.outcome === 'victory' ? 'The fight is over.'
-        : event.outcome === 'fled' ? 'You are not followed.'
-        : 'The party falls.';
-      return { text, kind: 'system' };
+      const key = event.outcome === 'victory' ? 'combat.ended.victory'
+        : event.outcome === 'fled' ? 'combat.ended.fled'
+        : 'combat.ended.defeat';
+      return { text: text(module, key), kind: 'system' };
     }
 
     case 'roundStarted':
-      return { text: `— round ${event.round} —`, kind: 'system' };
+      return { text: text(module, 'combat.round', { round: event.round }), kind: 'system' };
 
     // Whose turn it is has to land in the transcript: the player commands the
     // party one member at a time, and without this line the only clue was a
     // refusal after acting with the wrong one.
     case 'turnStarted':
-      return { text: `${nameOf(context, event.entity)}'s turn.`, kind: 'combat' };
+      return { text: text(module, 'combat.turn', { who: nameOf(context, event.entity) }), kind: 'combat' };
 
-    case 'gateOpened': {
-      const how = event.how === 'bypass' ? ' — forced' : event.how === 'ability' ? ' — by power' : '';
-      return { text: `${contentName(context, 'world.gates', event.gate)} opens${how}.`, kind: 'note' };
-    }
+    case 'gateOpened':
+      return {
+        text: text(module, 'gate.opened', {
+          gate: contentName(context, 'world.gates', event.gate),
+          how: event.how === 'bypass' ? text(module, 'gate.opened.bypass')
+            : event.how === 'ability' ? text(module, 'gate.opened.ability')
+            : '',
+        }),
+        kind: 'note',
+      };
 
     case 'gateBlocked': {
-      const gate = contentName(context, 'world.gates', event.gate);
-      const missing = event.missing.length > 0 ? ` You would need ${list(event.missing, 'or')}.` : '';
-      return { text: `${gate} will not open.${missing}`, kind: 'note' };
+      const grammar = grammarOf(module);
+      const missing = event.missing.map((piece) => render(module, piece, context.seed));
+      return {
+        text: text(module, 'gate.blocked', {
+          gate: contentName(context, 'world.gates', event.gate),
+          missing: missing.length > 0
+            ? text(module, 'gate.blocked.missing', { what: list(grammar, missing, grammar.or) })
+            : '',
+        }),
+        kind: 'note',
+      };
     }
 
     case 'discovered':
       return {
         text: event.kind === 'trap'
-          ? `You spot ${article(contentName(context, 'content.traps', event.what).toLowerCase())}.`
-          : `You find ${contentName(context, 'world.pointsOfInterest', event.what)}.`,
+          ? text(module, 'discovered.trap', {
+              what: article(grammarOf(module), contentName(context, 'content.traps', event.what).toLowerCase()),
+            })
+          : text(module, 'discovered.place', {
+              what: contentName(context, 'world.pointsOfInterest', event.what),
+            }),
         kind: 'prose',
       };
 
@@ -341,37 +432,51 @@ export function narrateEvent(context: NarratorContext, event: GameEvent): Line |
       // The description is the whole point of taking a job. Announcing the
       // title alone told the player a quest existed and nothing about it.
       return {
-        text: quest?.description ? `New quest: ${name} — ${quest.description}` : `New quest: ${name}.`,
+        text: quest?.description
+          ? text(module, 'quest.started', { quest: name, description: quest.description })
+          : text(module, 'quest.started.plain', { quest: name }),
         kind: 'system',
       };
     }
 
     case 'objectiveCompleted': {
       const objective = objectiveShape(context, event.quest, event.objective);
-      const described = objective?.description || event.objective.replace(/_/g, ' ');
-      return { text: `Objective complete: ${described}`, kind: 'system' };
+      return {
+        text: text(module, 'quest.objective', {
+          objective: objective?.description || event.objective.replace(/_/g, ' '),
+        }),
+        kind: 'system',
+      };
     }
 
     case 'questCompleted':
       return {
-        text: `Quest complete: ${contentName(context, 'narrative.quests', event.quest)}.`,
+        text: text(module, 'quest.completed', {
+          quest: contentName(context, 'narrative.quests', event.quest),
+        }),
         kind: 'system',
       };
 
     case 'questFailed':
       return {
-        text: `Quest failed: ${contentName(context, 'narrative.quests', event.quest)} — ${event.reason}.`,
+        text: text(module, 'quest.failed', {
+          quest: contentName(context, 'narrative.quests', event.quest),
+          reason: render(module, event.reason, context.seed),
+        }),
         kind: 'system',
       };
 
     case 'dayBroke':
-      return { text: `Day ${event.day} breaks.`, kind: 'note' };
+      return { text: text(module, 'time.dayBroke', { day: event.day }), kind: 'note' };
 
     case 'reputationChanged': {
-      const faction = contentName(context, 'content.factions', event.faction);
       const shift = event.to - event.from;
       return {
-        text: `${faction}: ${shift > 0 ? 'improved' : 'worsened'} (${shift > 0 ? '+' : ''}${shift}).`,
+        text: text(module, 'reputation.changed', {
+          faction: contentName(context, 'content.factions', event.faction),
+          direction: text(module, shift > 0 ? 'reputation.improved' : 'reputation.worsened'),
+          delta: `${shift > 0 ? '+' : ''}${shift}`,
+        }),
         kind: 'note',
       };
     }
@@ -379,14 +484,21 @@ export function narrateEvent(context: NarratorContext, event: GameEvent): Line |
     case 'deedDone': {
       const seen = event.witnesses.length;
       return {
-        text: seen === 0 ? 'Nobody saw that.' : `${count(seen, 'witness', 'witnesses')} to that.`,
+        text: seen === 0
+          ? text(module, 'deed.unseen')
+          : text(module, 'deed.witnessed', {
+              witnesses: count(
+                grammarOf(module), seen,
+                text(module, 'deed.witness'), text(module, 'deed.witnesses'),
+              ),
+            }),
         kind: 'note',
       };
     }
 
     case 'gameOver':
       return {
-        text: event.outcome === 'victory' ? 'You have won.' : 'Your party is dead.',
+        text: text(module, event.outcome === 'victory' ? 'game.victory' : 'game.defeat'),
         kind: 'system',
       };
 
@@ -445,7 +557,8 @@ function describeLook(context: NarratorContext, at: string): Line[] {
         return [
           { text: entity.name, kind: 'system' },
           {
-            text: source?.description || `${entity.name}, and nothing more to be told from here.`,
+            text: source?.description
+              || text(module, 'look.creature.plain', { name: entity.name }),
             kind: 'prose',
           },
         ];
@@ -464,7 +577,10 @@ function describeLook(context: NarratorContext, at: string): Line[] {
       score,
       lines: () => [
         { text: item.name, kind: 'system' },
-        { text: item.description || `${item.name}. Nothing remarkable.`, kind: 'prose' },
+        {
+          text: item.description || text(module, 'look.item.plain', { name: item.name }),
+          kind: 'prose',
+        },
       ],
     });
   }
@@ -488,7 +604,10 @@ function describeLook(context: NarratorContext, at: string): Line[] {
           : '';
         return [
           { text: poi.name, kind: 'system' },
-          { text: prose || poi.description || `${poi.name}, from here.`, kind: 'prose' },
+          {
+            text: prose || poi.description || text(module, 'look.place.plain', { name: poi.name }),
+            kind: 'prose',
+          },
         ];
       },
     });
@@ -499,7 +618,7 @@ function describeLook(context: NarratorContext, at: string): Line[] {
     null,
   );
 
-  if (!best) return [{ text: `You cannot see ${at} from here.`, kind: 'refusal' }];
+  if (!best) return [{ text: text(module, 'look.unseen', { what: at }), kind: 'refusal' }];
   return best.lines();
 }
 
@@ -523,14 +642,16 @@ function describeSense(context: NarratorContext, senseId: string, by: string): L
 
   if (readings.length === 0) {
     const empty = sense.emptyTextKey;
-    const text = empty ? narrateFrom(module, empty, context.seed, { sceneKey: `${empty}:${state.minute}` }) : '';
+    const authored = empty
+      ? narrateFrom(module, empty, context.seed, { sceneKey: `${empty}:${state.minute}` })
+      : '';
     // Phrased around the sense as a noun — "by hearing", "by smell" — because
     // the engine knows the module's name for a sense and not its verb.
     const named = module.find<{ name: string }>('rules.senses', senseId)?.name ?? '';
     return [{
-      text: text || (named
-        ? `You stop. Nothing reaches you by ${named.toLowerCase()}.`
-        : 'You stop. Nothing reaches you.'),
+      text: authored || (named
+        ? text(module, 'sense.empty.named', { sense: named.toLowerCase() })
+        : text(module, 'sense.empty')),
       kind: 'prose',
     }];
   }
@@ -662,12 +783,13 @@ export function describeSurroundings(context: NarratorContext): Line[] {
     const tally = new Map<string, number>();
     for (const name of names) tally.set(name, (tally.get(name) ?? 0) + 1);
 
+    const grammar = grammarOf(module);
     const described = [...tally].map(([name, n]) => {
-      if (n > 1) return count(n, name);
+      if (n > 1) return count(grammar, n, name, plural(grammar, name));
       const one = others.find((entity) => entity.name.toLowerCase() === name)!;
       return describeCreature(module, one, context.seed);
     });
-    out.push({ text: `You see ${list(described)}.`, kind: 'prose' });
+    out.push({ text: text(module, 'look.creatures', { what: list(grammar, described) }), kind: 'prose' });
   }
 
   // And what reaches the party by other means. Deliberately unnamed and
@@ -721,8 +843,9 @@ function impressionLine(
   context: NarratorContext,
   data: Readonly<Record<string, unknown>>,
 ): Line | null {
+  const { module } = context;
   const senseId = String(data['sense'] ?? '');
-  const sense = senseOf(context.module, senseId);
+  const sense = senseOf(module, senseId);
   const strength = Number(data['strength'] ?? 0);
 
   const faint = strength <= 0.35;
@@ -730,20 +853,29 @@ function impressionLine(
     ? sense?.faintImpressionTextKey ?? sense?.impressionTextKey
     : sense?.impressionTextKey;
 
-  const declared = context.module.find<{ name: string }>('rules.senses', senseId);
-  const where = String(data['direction'] ?? '');
+  const declared = module.find<{ name: string }>('rules.senses', senseId);
+  // The bearing arrives as a key, so the module's own `{direction}` pools read
+  // in whatever language and vocabulary the module was written in.
+  const where = data['direction']
+    ? text(module, data['direction'] as SystemTextKey)
+    : '';
 
   if (key) {
-    const text = narrateFrom(context.module, key, context.seed, {
+    const authored = narrateFrom(module, key, context.seed, {
       context: { direction: where },
       sceneKey: `${key}:${data['x']},${data['y']}`,
     });
-    if (text) return { text, kind: 'prose' };
+    if (authored) return { text: authored, kind: 'prose' };
   }
 
-  const nearness = faint ? 'Faintly' : strength > 0.6 ? 'Close by' : 'Somewhere';
+  const nearness = faint ? 'sense.nearness.faint'
+    : strength > 0.6 ? 'sense.nearness.close'
+    : 'sense.nearness.far';
   return {
-    text: `${nearness}, something you can ${(declared?.name ?? 'sense').toLowerCase()}.`,
+    text: text(module, 'sense.impression', {
+      nearness: text(module, nearness),
+      sense: (declared?.name ?? text(module, 'sense.unnamed')).toLowerCase(),
+    }),
     kind: 'prose',
   };
 }

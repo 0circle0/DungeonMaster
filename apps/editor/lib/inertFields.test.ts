@@ -58,12 +58,10 @@ const EXEMPT: Record<string, string> = {
   // about `map.palette` specifically, which no grep can see.
   map: 'collides with Array.map and state.maps',
 
-  // Same name, different collection. `classes[].hitDie` is read and
-  // `sizes[].hitDie` is not; `PathOptions.terrainMultiplier` is read and
-  // `movementModes[].terrainMultiplier` — which nothing passes into it — is
-  // not; `TerrainDef.isDoor` is indexed and never consulted.
-  hitDie: 'classes[].hitDie is read; sizes[].hitDie is the inert one',
-  terrainMultiplier: 'PathOptions carries one; no caller passes the mode\'s',
+  // `TerrainDef.isDoor` is indexed and never consulted — a distinction a grep
+  // cannot draw. (`hitDie` and `terrainMultiplier` used to sit here too; both
+  // are now genuinely read, by `progression.levelVitality` and by
+  // `TerrainIndex.costOf` respectively.)
 
   // `TerrainIndex` copies every declared terrain field into its struct, so both
   // of these are "read" by the indexer and consulted by nothing after it —

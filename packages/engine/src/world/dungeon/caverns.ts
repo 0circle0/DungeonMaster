@@ -24,8 +24,18 @@ export interface CavernLayout {
   readonly entranceIndex: number;
 }
 
-const FILL = 0.45;
-const SMOOTHING_PASSES = 4;
+/**
+ * The cellular-automaton dials, from the dungeon that asked for the cavern.
+ *
+ * These shape how a cave reads more than anything else in generation, so they
+ * are the module's to set; the defaults are the classic values this generator
+ * shipped with.
+ */
+export interface CavernTuning {
+  readonly fill: number;
+  readonly smoothingPasses: number;
+  readonly birthThreshold: number;
+}
 
 /** Carve a cavern into the builder and sample its chambers. */
 export function cavernLayout(
@@ -35,6 +45,7 @@ export function cavernLayout(
   guaranteedRoles: readonly string[],
   palette: Palette,
   rng: Rng,
+  tuning: CavernTuning,
 ): CavernLayout {
   const { width, height } = builder;
 
@@ -45,11 +56,11 @@ export function cavernLayout(
   for (let y = 0; y < height; y += 1) {
     for (let x = 0; x < width; x += 1) {
       const edge = x === 0 || y === 0 || x === width - 1 || y === height - 1;
-      wall[y * width + x] = edge || rng.chance(FILL) ? 1 : 0;
+      wall[y * width + x] = edge || rng.chance(tuning.fill) ? 1 : 0;
     }
   }
 
-  for (let pass = 0; pass < SMOOTHING_PASSES; pass += 1) {
+  for (let pass = 0; pass < tuning.smoothingPasses; pass += 1) {
     const next = new Uint8Array(wall);
     for (let y = 1; y < height - 1; y += 1) {
       for (let x = 1; x < width - 1; x += 1) {
@@ -61,7 +72,7 @@ export function cavernLayout(
           }
         }
         // The classic majority rule: crowded cells silt up, open ones erode.
-        next[y * width + x] = neighbours >= 5 ? 1 : 0;
+        next[y * width + x] = neighbours >= tuning.birthThreshold ? 1 : 0;
       }
     }
     wall = next;

@@ -33,6 +33,7 @@ interface MonsterDef {
 
 interface LootTableDef {
   bonusRollSkill?: string;
+  bonusRolls: { onSuccess: number; onCritical: number };
 }
 
 /**
@@ -58,7 +59,8 @@ function bonusRollsFor(
   const roll = skillCheck(txn.module, rng, finder, skill, undefined);
   txn.emit({ type: 'checked', entity: finder.id, skill, attribute: null, roll });
   if (!succeeded(roll)) return 0;
-  return roll.outcome === 'critical' ? 2 : 1;
+  const bonus = table?.bonusRolls;
+  return roll.outcome === 'critical' ? (bonus?.onCritical ?? 2) : (bonus?.onSuccess ?? 1);
 }
 
 /**

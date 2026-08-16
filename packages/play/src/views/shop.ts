@@ -11,7 +11,7 @@
 import { Rng } from '@dm/core';
 import type { CompiledModule } from '@dm/module';
 import type { GameState, StockEntry } from '@dm/engine';
-import { Transaction, shopOf, shopStock, sellable, shopBarred } from '@dm/engine';
+import { Transaction, shopOf, shopStock, sellable, shopBarred, render } from '@dm/engine';
 
 export interface ShopView {
   readonly npc: string;
@@ -47,7 +47,7 @@ export function shopView(
     currency: { name: currency.name, abbrev: currency.abbrev },
     purse: state.purse,
     barred: gate.barred,
-    requires: gate.requires,
+    requires: gate.requires.map((need) => render(module, need)),
     // Nothing is shown for sale to someone they will not serve.
     stock: gate.barred ? [] : shopStock(txn, npcId),
     sellable: gate.barred ? [] : sellable(txn, npcId, actor),

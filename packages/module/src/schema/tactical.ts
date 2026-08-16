@@ -110,6 +110,11 @@ export const senseSchema = z
 
     /** Tiles a lingering trace spreads outward per minute as it thins. */
     spreadPerMinute: z.number().min(0).default(0),
+    /**
+     * Signal kept by a trace that has spread out. The same scent over more
+     * ground is weaker; how much weaker is a property of the sense.
+     */
+    spreadRetention: z.number().min(0).max(1).default(0.5),
 
     /**
      * Minutes a creature remembers having perceived something. Zero forgets at
@@ -125,15 +130,15 @@ export const senseSchema = z
      *
      * `{direction}` is interpolated with where it lies.
      */
-    impressionTextKey: idSchema.optional(),
-    faintImpressionTextKey: idSchema.optional(),
+    impressionTextKey: ref('narrative.textGrammar').optional(),
+    faintImpressionTextKey: ref('narrative.textGrammar').optional(),
     /**
      * What stopping to use this sense reads like when it turns nothing up.
      *
      * A sense that says nothing at all reads to a player as a broken command,
      * so there is always a line; this is how a module writes its own.
      */
-    emptyTextKey: idSchema.optional(),
+    emptyTextKey: ref('narrative.textGrammar').optional(),
 
     /** Signal needed to notice at all, to go and look, and to fight. Ordered. */
     thresholds: z
@@ -194,6 +199,14 @@ export const perceptionSchema = z
     curiosityMinutes: z.number().min(0).default(10),
     /** Stance a creature uses when it has chosen none. */
     defaultStance: ref('rules.stances').optional(),
+    /**
+     * The least a creature can ever give off, whatever its stance or skill.
+     *
+     * Above zero, perfect stealth is impossible — which is a design opinion
+     * about whether a skill should be a win condition, and so the module's to
+     * hold rather than the engine's.
+     */
+    minimumEmission: z.number().min(0).max(1).default(0.01),
     extra,
   })
   .strict();
@@ -287,6 +300,21 @@ export const spellcastingSchema = z
     /** Recovered on which rest kinds. */
     recoverOn: z.array(ref('rules.rests')).default([]),
     ritualCasting: z.boolean().default(false),
+    /**
+     * Which action a spell component actually is, so silence and manacles work.
+     *
+     * The engine used to look for action types named exactly `speak` and
+     * `gesture`. Nothing validated that — a module naming its own `vocalize`
+     * got components that could never be blocked, silently and only in play.
+     * As refs, a wrong id is a load error instead.
+     */
+    componentActionTypes: z
+      .object({
+        verbal: ref('rules.actionTypes').optional(),
+        somatic: ref('rules.actionTypes').optional(),
+      })
+      .strict()
+      .default({}),
     extra,
   })
   .strict();

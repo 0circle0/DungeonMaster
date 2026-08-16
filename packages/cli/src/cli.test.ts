@@ -11,7 +11,9 @@ import {
   renderMap, renderStatus, renderSheet, renderJournal, wrap,
   stripAnsi, width, truncate, padTo,
 } from './render.js';
-import { statesEqual, narrate, formatRoll, narrateFrom, interpolate, list, count } from '@dm/engine';
+import {
+  statesEqual, narrate, formatRoll, narrateFrom, interpolate, list, count, grammarOf,
+} from '@dm/engine';
 import type { GameState } from '@dm/engine';
 
 const path = (name: string) => fileURLToPath(new URL(`../../../modules/${name}`, import.meta.url));
@@ -193,14 +195,14 @@ describe('parser', () => {
 
 describe('narrator', () => {
   it('renders a roll with its arithmetic', () => {
-    expect(formatRoll({
+    expect(formatRoll(GREENMARCH, {
       notation: '1d20', dice: [14], natural: 14, modifier: 3, total: 17,
       against: 12, outcome: 'success', swing: null,
     })).toBe('17 (14+3) vs 12');
   });
 
   it('marks advantage in the line', () => {
-    expect(formatRoll({
+    expect(formatRoll(GREENMARCH, {
       notation: '2d20kh1', dice: [8, 17], natural: 17, modifier: 0, total: 17,
       against: 12, outcome: 'success', swing: 'advantage',
     })).toContain('[advantage]');
@@ -230,7 +232,7 @@ describe('narrator', () => {
   it('explains why a gate refused', () => {
     const state = session().state;
     const lines = narrate({ module: GREENMARCH, state, seed: 1 }, [
-      { type: 'gateBlocked', gate: 'mill_door', missing: ['the brass key'] },
+      { type: 'gateBlocked', gate: 'mill_door', missing: [{ text: 'the brass key' }] },
     ]);
     expect(lines[0]!.text).toContain('brass key');
   });
@@ -259,12 +261,14 @@ describe('narrator', () => {
     expect(interpolate('You see {what}.', {})).toBe('You see {what}.');
   });
 
+  // The words come from the module; only where they go is the engine's.
   it('makes readable lists and counts', () => {
-    expect(list(['a', 'b', 'c'])).toBe('a, b and c');
-    expect(list(['a', 'b'], 'or')).toBe('a or b');
-    expect(count(1, 'hound')).toBe('one hound');
-    expect(count(3, 'hound')).toBe('three hounds');
-    expect(count(20, 'hound')).toBe('20 hounds');
+    const grammar = grammarOf(GREENMARCH);
+    expect(list(grammar, ['a', 'b', 'c'])).toBe('a, b and c');
+    expect(list(grammar, ['a', 'b'], grammar.or)).toBe('a or b');
+    expect(count(grammar, 1, 'hound', 'hounds')).toBe('one hound');
+    expect(count(grammar, 3, 'hound', 'hounds')).toBe('three hounds');
+    expect(count(grammar, 20, 'hound', 'hounds')).toBe('20 hounds');
   });
 });
 

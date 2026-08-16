@@ -19,6 +19,7 @@ import { spawnNpc } from './character.js';
 import { shopStock, sellable, shopBarred, priceOf, shopOf } from './sim/trade.js';
 import { createMap } from './grid/tiles.js';
 import type { GameState } from './state.js';
+import { render } from './narrate/systemText.js';
 
 function loadModule(name: string): CompiledModule {
   return loadModuleFrom(fileURLToPath(new URL(`../../../modules/${name}`, import.meta.url)));
@@ -106,7 +107,7 @@ describe('a shopkeeper', () => {
     // Vess wants the Wardens to vouch for you: standing 5.
     const cold = shopBarred(read(atTheCounter(0)), 'vess', atTheCounter(0).entities['e:1']!, Rng.fromSeed(1));
     expect(cold.barred).toBe(true);
-    expect(cold.requires.join(' ')).toMatch(/warden/i);
+    expect(cold.requires.map((need) => render(GREENMARCH, need)).join(' ')).toMatch(/warden/i);
 
     const warm = shopBarred(read(atTheCounter(10)), 'vess', atTheCounter(10).entities['e:1']!, Rng.fromSeed(1));
     expect(warm.barred).toBe(false);
@@ -164,7 +165,7 @@ describe('buying', () => {
     );
     expect(after.purse).toBe(0);
     expect(events).toContainEqual(
-      expect.objectContaining({ type: 'refused', reason: 'you cannot afford that' }),
+      expect.objectContaining({ type: 'refused', reason: { key: 'refused.buy.tooExpensive' } }),
     );
   });
 
@@ -173,7 +174,7 @@ describe('buying', () => {
     const { events } = reduce(state, { type: 'buy', npc: 'vess', item: 'rope' }, ctx);
     const refusal = events.find((e) => e.type === 'refused');
     expect(refusal).toBeDefined();
-    if (refusal?.type === 'refused') expect(refusal.reason).toMatch(/will not deal/);
+    if (refusal?.type === 'refused') expect(refusal.reason).toMatchObject({ key: 'refused.trade.barred' });
   });
 });
 
@@ -206,7 +207,7 @@ describe('selling', () => {
 
     const { events } = reduce(state, { type: 'sell', npc: 'vess', item: 'rope' }, ctx);
     expect(events).toContainEqual(
-      expect.objectContaining({ type: 'refused', reason: 'they have no use for that' }),
+      expect.objectContaining({ type: 'refused', reason: { key: 'refused.sell.unwanted' } }),
     );
   });
 });
@@ -230,7 +231,7 @@ describe('a toll', () => {
     const { state: after, events } = reduce(broke, { type: 'travelToArea', area: 'the_fens' }, ctx);
     const blocked = events.find((e) => e.type === 'gateBlocked');
     expect(blocked).toBeDefined();
-    if (blocked?.type === 'gateBlocked') expect(blocked.missing.join(' ')).toMatch(/marks/);
+    if (blocked?.type === 'gateBlocked') expect(blocked.missing.map((need) => render(GREENMARCH, need)).join(' ')).toMatch(/marks/);
     expect(after.location).toMatchObject({ area: 'millford' });
   });
 

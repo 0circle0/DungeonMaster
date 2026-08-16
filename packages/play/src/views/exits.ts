@@ -12,7 +12,7 @@
 import type { CompiledModule, Requirement } from '@dm/module';
 import type { GameState, Action, Position } from '@dm/engine';
 import {
-  TerrainIndex, key, neighbours, roughBearing, describeRequirement,
+  TerrainIndex, key, neighbours, roughBearing, describeRequirement, render, text,
 } from '@dm/engine';
 
 interface AreaDef {
@@ -84,8 +84,8 @@ function gateState(
   const described = describeRequirement(definition?.requires);
   // An authored description says it all; the mechanical item list is the
   // fallback for gates that never wrote one, not an addition to those that did.
-  const requires = definition?.requires?.description ? described.slice(0, 1) : described;
-  return { gate, barred: true, requires };
+  const chosen = definition?.requires?.description ? described.slice(0, 1) : described;
+  return { gate, barred: true, requires: chosen.map((need) => render(module, need)) };
 }
 
 /** Roads, places, and — in a maze — which way is still unwalked. */
@@ -133,7 +133,7 @@ export function waysFromHere(
     }
   }
 
-  return { places, roads, frontier: frontierOf(state, terrain) };
+  return { places, roads, frontier: frontierOf(module, state, terrain) };
 }
 
 /**
@@ -143,7 +143,11 @@ export function waysFromHere(
  * with an unknown neighbour. In a corridor that is the honest answer to
  * "where haven't I been", which no list of roads can give.
  */
-function frontierOf(state: GameState, terrain: TerrainIndex): Frontier | null {
+function frontierOf(
+  module: CompiledModule,
+  state: GameState,
+  terrain: TerrainIndex,
+): Frontier | null {
   const map = state.maps[state.currentMap];
   const actor = state.entities[state.selected];
   if (!map || !actor) return null;
@@ -170,7 +174,7 @@ function frontierOf(state: GameState, terrain: TerrainIndex): Frontier | null {
         // Unwalked ground the party can reach: this is the frontier.
         if (!known.has(packed)) {
           return {
-            direction: roughBearing(actor.position, neighbour),
+            direction: text(module, roughBearing(actor.position, neighbour)),
             tiles: steps,
             at: neighbour,
             action: { type: 'travelTo', to: neighbour },

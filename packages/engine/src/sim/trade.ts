@@ -21,6 +21,8 @@ import { buildScope, OPEN_NAMESPACES } from '../stats.js';
 import { Transaction, changeInventory } from '../rules/apply.js';
 import { describeRequirement } from './gates.js';
 import { rollLoot, singleScope } from '../world/populate.js';
+import { message, joinMessages } from '../narrate/systemText.js';
+import type { Message } from '../narrate/systemText.js';
 
 export interface ShopDef {
   lootTable?: string;
@@ -70,7 +72,7 @@ export function shopBarred(
   npcId: string,
   actor: Entity,
   rng: Rng,
-): { barred: boolean; requires: readonly string[] } {
+): { barred: boolean; requires: readonly Message[] } {
   const shop = shopOf(txn, npcId);
   if (!shop || isEmptyRequirement(shop.requires)) return { barred: false, requires: [] };
 
@@ -186,29 +188,29 @@ export function buyItem(
 ): boolean {
   const shop = shopOf(txn, npcId);
   if (!shop) {
-    txn.emit({ type: 'refused', action: 'buy', reason: 'they have nothing to sell' });
+    txn.emit({ type: 'refused', action: 'buy', reason: message('refused.buy.noStock') });
     return false;
   }
 
   const gate = shopBarred(txn, npcId, actor, rng);
   if (gate.barred) {
     const reason = gate.requires.length > 0
-      ? `they will not deal with you — ${gate.requires.join(', ')}`
-      : 'they will not deal with you';
+      ? message('refused.trade.barred', { missing: joinMessages(txn.module, gate.requires) })
+      : message('refused.trade.barred.plain');
     txn.emit({ type: 'refused', action: 'buy', reason });
     return false;
   }
 
   const entry = shopStock(txn, npcId).find((stock) => stock.item === itemId);
   if (!entry) {
-    txn.emit({ type: 'refused', action: 'buy', reason: 'they do not have that' });
+    txn.emit({ type: 'refused', action: 'buy', reason: message('refused.buy.noSuchItem') });
     return false;
   }
 
   const wanted = Math.max(1, Math.min(quantity, entry.quantity));
   const cost = entry.price * wanted;
   if (cost > txn.state.purse) {
-    txn.emit({ type: 'refused', action: 'buy', reason: `you cannot afford that` });
+    txn.emit({ type: 'refused', action: 'buy', reason: message('refused.buy.tooExpensive') });
     return false;
   }
 
@@ -237,20 +239,20 @@ export function sellItem(
 ): boolean {
   const shop = shopOf(txn, npcId);
   if (!shop) {
-    txn.emit({ type: 'refused', action: 'sell', reason: 'they are not buying' });
+    txn.emit({ type: 'refused', action: 'sell', reason: message('refused.sell.notBuying') });
     return false;
   }
 
   const gate = shopBarred(txn, npcId, actor, rng);
   if (gate.barred) {
-    txn.emit({ type: 'refused', action: 'sell', reason: 'they will not deal with you' });
+    txn.emit({ type: 'refused', action: 'sell', reason: message('refused.trade.barred.plain') });
     return false;
   }
 
   const current = txn.entity(actor.id) ?? actor;
   const entry = sellable(txn, npcId, current).find((stock) => stock.item === itemId);
   if (!entry) {
-    txn.emit({ type: 'refused', action: 'sell', reason: 'they have no use for that' });
+    txn.emit({ type: 'refused', action: 'sell', reason: message('refused.sell.unwanted') });
     return false;
   }
 

@@ -26,6 +26,7 @@ import { buildScope } from './stats.js';
 import { TerrainIndex, createMap, MapBuilder } from './grid/tiles.js';
 import type { GameState } from './state.js';
 import type { Action } from './actions.js';
+import { render } from './narrate/systemText.js';
 
 function loadModule(name: string): CompiledModule {
   return loadModuleFrom(fileURLToPath(new URL(`../../../modules/${name}`, import.meta.url)));
@@ -183,7 +184,7 @@ describe('gates', () => {
 
     expect(outcome.opened).toBe(false);
     if (outcome.opened) return;
-    expect(outcome.missing.join(' ')).toMatch(/brass key/);
+    expect(outcome.missing.map((need) => render(GREENMARCH, need)).join(' ')).toMatch(/brass key/);
 
     const blocked = txn.finish().events.find((e) => e.type === 'gateBlocked');
     expect(blocked).toBeDefined();
@@ -287,8 +288,9 @@ describe('gates', () => {
       memories: [], flags: [], anyOf: [],
       without: { classes: [], abilities: [], items: [], quests: [], flags: [], conditions: [] },
     });
-    expect(described.join(' ')).toMatch(/brass key/);
-    expect(described.join(' ')).toMatch(/level 3/);
+    const words = described.map((need) => render(GREENMARCH, need)).join(' ');
+    expect(words).toMatch(/brass key/);
+    expect(words).toMatch(/level 3/);
   });
 });
 
@@ -1070,7 +1072,8 @@ describe('the greenmarch story flow', () => {
     };
     const started = reduce(withHound, { type: 'wait', minutes: 0 }, ctx).state;
     const { events } = reduce(started, { type: 'rest', kind: 'camp' }, ctx);
-    expect(events.find((e) => e.type === 'refused')).toMatchObject({ reason: 'not while fighting' });
+    expect(events.find((e) => e.type === 'refused'))
+      .toMatchObject({ reason: { key: 'refused.rest.inCombat' } });
   });
 });
 
@@ -1099,7 +1102,7 @@ describe('searching', () => {
     const { events } = reduce(txn.state, { type: 'search' }, { module: GREENMARCH });
     expect(events.find((e) => e.type === 'refused')).toMatchObject({
       action: 'search',
-      reason: 'you find nothing here',
+      reason: { key: 'refused.search.nothing' },
     });
   });
 });
@@ -1152,7 +1155,7 @@ describe('leaving a place', () => {
     const { state: next, events } = reduce(txn.state, { type: 'leave' }, { module: GREENMARCH });
     expect(events.find((e) => e.type === 'refused')).toMatchObject({
       action: 'leave',
-      reason: 'find the way out first',
+      reason: { key: 'refused.leave.noExitFound' },
     });
     expect(next.currentMap).toBe('dungeon:barrow_depths');
   });
@@ -1163,7 +1166,7 @@ describe('leaving a place', () => {
 
     const { events } = reduce(txn.state, { type: 'leave' }, { module: GREENMARCH });
     expect(events.find((e) => e.type === 'refused')).toMatchObject({
-      reason: 'there is nowhere to go back to',
+      reason: { key: 'refused.leave.nowhere' },
     });
   });
 });

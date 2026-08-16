@@ -17,6 +17,7 @@ import { MapBuilder, TerrainIndex, key as packKey, unkey } from '../grid/tiles.j
 import type { TileMap, Position } from '../grid/tiles.js';
 import { floodFill } from '../grid/path.js';
 import { line } from '../grid/geometry.js';
+import { defaultMovementModeOf } from '../rules/config.js';
 
 export interface MapSpec {
   width: string;
@@ -326,7 +327,11 @@ export function reconnect(
 ): void {
   const terrain = new TerrainIndex(module);
   const { width, height } = builder;
-  const WALK = ['walk'];
+  // Connectivity is judged for whatever the ruleset says a creature does by
+  // default. A module whose modes are `glide` and `phase` is checked with the
+  // one it declares, not with a word the engine happens to know.
+  const defaultMode = defaultMovementModeOf(module);
+  const WALK = defaultMode === null ? [] : [defaultMode];
 
   /**
    * What to replace a blocking tile with.
