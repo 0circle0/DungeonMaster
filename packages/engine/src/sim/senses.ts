@@ -847,9 +847,32 @@ function sameAlerts(a: readonly Alert[], b: readonly Alert[]): boolean {
   });
 }
 
-/** Let everything on the party's map notice what there is to notice. */
-export function perceiveAll(txn: Transaction, terrain: TerrainIndex): void {
-  if (!sensesOf(txn.module).some((sense) => sense.rememberMinutes > 0)) return;
+/**
+ * Somebody who has just become aware of a party member.
+ *
+ * Returned rather than acted on here: `seePlayer` reactions are driven from
+ * this, and importing `runReactions` into this file would close a cycle —
+ * `rules/combat/turn.ts` already imports `canPerceive` from here.
+ */
+export interface Noticed {
+  readonly observer: EntityId;
+  readonly subject: EntityId;
+}
+
+/**
+ * Let everything on the party's map notice what there is to notice.
+ *
+ * Returns the pairs that are *new* this pass, which is the only honest way to
+ * express "spotted you": noticing is a difference between two perception
+ * passes, not an event anything emits.
+ */
+export function perceiveAll(
+  txn: Transaction,
+  terrain: TerrainIndex,
+): readonly Noticed[] {
+  if (!sensesOf(txn.module).some((sense) => sense.rememberMinutes > 0)) return [];
+
+  const noticed: Noticed[] = [];
 
   for (const id of Object.keys(txn.state.entities)) {
     const entity = txn.entity(id);
@@ -858,13 +881,26 @@ export function perceiveAll(txn: Transaction, terrain: TerrainIndex): void {
 
     const before = entity.alerts;
     perceiveInto(txn, terrain, entity);
+    const after = txn.entity(id)?.alerts ?? [];
+
+    // Somebody who has just caught sight — or scent, or sound — of a party
+    // member. Deduped on *who* was noticed rather than on which sense noticed
+    // them, so a creature that both sees and smells you reacts once.
+    if (entity.kind !== 'character') {
+      const already = new Set<string>();
+      for (const alert of after) {
+        if (!alert.of || already.has(alert.of)) continue;
+        if (before.some((held) => held.of === alert.of)) continue;
+        if (txn.entity(alert.of)?.kind !== 'character') continue;
+        already.add(alert.of);
+        noticed.push({ observer: entity.id, subject: alert.of });
+      }
+      continue;
+    }
 
     // The party is told what it just noticed. Creatures act on it silently;
     // a player has only the prose, so a new impression has to be announced or
     // it may as well not exist.
-    if (entity.kind !== 'character') continue;
-
-    const after = txn.entity(id)?.alerts ?? [];
     for (const alert of after) {
       const known = before.some((held) => held.sense === alert.sense && held.of === alert.of);
       if (known) continue;
@@ -883,6 +919,8 @@ export function perceiveAll(txn: Transaction, terrain: TerrainIndex): void {
       });
     }
   }
+
+  return noticed;
 }
 
 /** The strongest thing a creature would act on at a given threshold, or null. */

@@ -49,7 +49,7 @@ import { springTrap, searchForTraps, disarmTrap } from './sim/traps.js';
 import { runTerrain } from './sim/terrain.js';
 import { runTriggers, triggersFor } from './sim/triggers.js';
 import { recordDeed } from './sim/deeds.js';
-import { dispatchReactions } from './sim/reactions.js';
+import { dispatchReactions, dispatchNoticed } from './sim/reactions.js';
 import { tickDay } from './sim/agenda.js';
 import { takeItem, dropItem, equipItem, unequipItem, useItem, giveItem, rechargeItems } from './sim/items.js';
 import { skillCheck, succeeded } from './rules/check.js';
@@ -1367,7 +1367,12 @@ function settle(txn: Transaction, terrain: TerrainIndex, rng: Rng): void {
   // Everything notices what there is to notice before anyone decides anything,
   // so a creature that heard you a moment ago acts on it this turn rather than
   // next.
-  perceiveAll(txn, terrain);
+  const noticed = perceiveAll(txn, terrain);
+
+  // Anything that has just spotted a party member. Before `maybeStartCombat`,
+  // so a reaction that kills or drives off the observer keeps it out of the
+  // fight it would otherwise have started.
+  dispatchNoticed(txn, noticed, rng.derive('noticed'));
 
   // What an ancestry *is* and what a carried thing *does* — asked every
   // reduction, because a passive whose condition changed should take effect

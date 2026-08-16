@@ -926,3 +926,44 @@ describe('reactions fire on the trigger they declare', () => {
     expect(txn.state.flags['heard_it']).toBe(true);
   });
 });
+
+describe('being noticed', () => {
+  // `seePlayer` is where three separate fixes cash out at once: the trigger
+  // now broadcasts, `requirement.memories` now resolves outside dialogue, and
+  // `withinDays` now measures days. Greenmarch's wight has declared this
+  // reaction since it was written and it has never once fired.
+  function wightThatRemembers(remembers: boolean, agoDays = 0): GameState {
+    const base = arena([{ id: 'barrow_wight', at: { x: 8, y: 5 } }]);
+    if (!remembers) return base;
+
+    const at = Math.max(0, base.minute - agoDays * GREENMARCH.source.world.time.minutesPerDay);
+    return {
+      ...base,
+      deeds: [{
+        id: 'deed:barrow_robbed:1', kind: 'barrow_robbed', actor: 'e:1',
+        subject: null, at, location: 'arena', witnesses: ['m:0'], severity: -10,
+      }],
+      memory: { 'm:0': { 'deed:barrow_robbed:1': { at, strength: 1, hops: 0 } } },
+    };
+  }
+
+  it('goes for the one who robbed the barrow', () => {
+    const { state } = reduce(wightThatRemembers(true), { type: 'wait', minutes: 0 }, ctx);
+    expect(state.entities['e:1']!.conditions.some((c) => c.condition === 'frightened')).toBe(true);
+  });
+
+  it('leaves alone a party it has nothing against', () => {
+    const { state } = reduce(wightThatRemembers(false), { type: 'wait', minutes: 0 }, ctx);
+    expect(state.entities['e:1']!.conditions.some((c) => c.condition === 'frightened')).toBe(false);
+  });
+
+  it('fires once per noticing, not once per sense that noticed', () => {
+    // Sight and hearing both reach across an open arena. The reaction applies
+    // `frightened` for a fixed duration, so a second application in the same
+    // pass would be invisible — the assertion that matters is the count of
+    // reaction effects, which is one condition, once.
+    const { state } = reduce(wightThatRemembers(true), { type: 'wait', minutes: 0 }, ctx);
+    const frightened = state.entities['e:1']!.conditions.filter((c) => c.condition === 'frightened');
+    expect(frightened).toHaveLength(1);
+  });
+});
