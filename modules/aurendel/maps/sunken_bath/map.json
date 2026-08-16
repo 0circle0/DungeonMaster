@@ -1,0 +1,18 @@
+{
+  "id": "sunken_bath",
+  "name": "The Sunken Bath",
+  "description": "Three storeys built when the water stood forty feet higher, entered now at what used to be the roof.",
+  "entry": "entry",
+  "layers": [
+    {
+      "kind": "terrain",
+      "name": "terrain",
+      "file": "terrain.csv"
+    },
+    {
+      "kind": "markers",
+      "name": "markers",
+      "file": "markers.csv"
+    }
+  ]
+}

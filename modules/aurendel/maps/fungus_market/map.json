@@ -1,0 +1,18 @@
+{
+  "id": "fungus_market",
+  "name": "The Fungus Market",
+  "description": "Trestles under a living roof: the light comes off the stock, and the stock is the light.",
+  "entry": "entry",
+  "layers": [
+    {
+      "kind": "terrain",
+      "name": "terrain",
+      "file": "terrain.csv"
+    },
+    {
+      "kind": "markers",
+      "name": "markers",
+      "file": "markers.csv"
+    }
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "id": "karn_dolur_forge",
+  "name": "The Great Forge of Karn Dolur",
+  "description": "The top tier of the forge shaft: six hearths, the bellows gallery, and the rail over the drop.",
+  "entry": "entry",
+  "layers": [
+    {
+      "kind": "terrain",
+      "name": "terrain",
+      "file": "terrain.csv"
+    },
+    {
+      "kind": "markers",
+      "name": "markers",
+      "file": "markers.csv"
+    }
+  ]
+}

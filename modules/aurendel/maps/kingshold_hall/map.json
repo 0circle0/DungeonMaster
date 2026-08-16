@@ -1,0 +1,18 @@
+{
+  "id": "kingshold_hall",
+  "name": "The Kingshold",
+  "description": "The great hall of Aurenhal's castle, its two withdrawing rooms, and the lodgings along the south front.",
+  "entry": "entry",
+  "layers": [
+    {
+      "kind": "terrain",
+      "name": "terrain",
+      "file": "terrain.csv"
+    },
+    {
+      "kind": "markers",
+      "name": "markers",
+      "file": "markers.csv"
+    }
+  ]
+}

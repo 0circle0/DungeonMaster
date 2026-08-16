@@ -1,0 +1,18 @@
+{
+  "id": "moot_oak",
+  "name": "Inside the Moot Oak",
+  "description": "The hollow of the Elderhollow oak, floored and benched, with the town's records let into the wood at the back.",
+  "entry": "entry",
+  "layers": [
+    {
+      "kind": "terrain",
+      "name": "terrain",
+      "file": "terrain.csv"
+    },
+    {
+      "kind": "markers",
+      "name": "markers",
+      "file": "markers.csv"
+    }
+  ]
+}

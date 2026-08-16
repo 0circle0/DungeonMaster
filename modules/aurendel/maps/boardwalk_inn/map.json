@@ -1,0 +1,18 @@
+{
+  "id": "boardwalk_inn",
+  "name": "The Long Boardwalk",
+  "description": "Four hundred feet of covered walk with the inn at one end, the market hall at the other, and open water underneath all of it.",
+  "entry": "entry",
+  "layers": [
+    {
+      "kind": "terrain",
+      "name": "terrain",
+      "file": "terrain.csv"
+    },
+    {
+      "kind": "markers",
+      "name": "markers",
+      "file": "markers.csv"
+    }
+  ]
+}

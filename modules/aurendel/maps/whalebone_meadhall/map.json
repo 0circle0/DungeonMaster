@@ -1,0 +1,18 @@
+{
+  "id": "whalebone_meadhall",
+  "name": "The Jawbone",
+  "description": "One fire down the middle, benches down both sides, no windows, and a roof of whale jaw eighty feet long.",
+  "entry": "entry",
+  "layers": [
+    {
+      "kind": "terrain",
+      "name": "terrain",
+      "file": "terrain.csv"
+    },
+    {
+      "kind": "markers",
+      "name": "markers",
+      "file": "markers.csv"
+    }
+  ]
+}

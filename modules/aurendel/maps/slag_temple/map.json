@@ -1,0 +1,18 @@
+{
+  "id": "slag_temple",
+  "name": "The Slag Cathedral",
+  "description": "Cast in one pour over eleven years: a nave with no joints, side chapels, and the door in the floor at the crossing.",
+  "entry": "entry",
+  "layers": [
+    {
+      "kind": "terrain",
+      "name": "terrain",
+      "file": "terrain.csv"
+    },
+    {
+      "kind": "markers",
+      "name": "markers",
+      "file": "markers.csv"
+    }
+  ]
+}

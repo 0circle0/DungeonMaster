@@ -1,0 +1,18 @@
+{
+  "id": "khans_yurt",
+  "name": "The Khan's Yurt",
+  "description": "Sixty feet of felt over a lattice: the fire in the middle, the rugs, and the standing screens at the back.",
+  "entry": "entry",
+  "layers": [
+    {
+      "kind": "terrain",
+      "name": "terrain",
+      "file": "terrain.csv"
+    },
+    {
+      "kind": "markers",
+      "name": "markers",
+      "file": "markers.csv"
+    }
+  ]
+}

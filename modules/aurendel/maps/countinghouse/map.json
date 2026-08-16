@@ -1,0 +1,18 @@
+{
+  "id": "countinghouse",
+  "name": "The Countinghouse",
+  "description": "Clerks' floor, principals' gallery, and the strongroom at the back.",
+  "entry": "entry",
+  "layers": [
+    {
+      "kind": "terrain",
+      "name": "terrain",
+      "file": "terrain.csv"
+    },
+    {
+      "kind": "markers",
+      "name": "markers",
+      "file": "markers.csv"
+    }
+  ]
+}

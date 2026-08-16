@@ -1,0 +1,18 @@
+{
+  "id": "barrowgate_moot",
+  "name": "The Barrowgate Moot Hall",
+  "description": "One raised floor, benches on three sides, and the record chest at the back on the fourth.",
+  "entry": "entry",
+  "layers": [
+    {
+      "kind": "terrain",
+      "name": "terrain",
+      "file": "terrain.csv"
+    },
+    {
+      "kind": "markers",
+      "name": "markers",
+      "file": "markers.csv"
+    }
+  ]
+}

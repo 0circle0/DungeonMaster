@@ -1,0 +1,18 @@
+{
+  "id": "wreck_tavern",
+  "name": "The Weatherly",
+  "description": "A merchantman ashore stern-first: the great cabin aft, the common room amidships, and the hold below the waterline.",
+  "entry": "entry",
+  "layers": [
+    {
+      "kind": "terrain",
+      "name": "terrain",
+      "file": "terrain.csv"
+    },
+    {
+      "kind": "markers",
+      "name": "markers",
+      "file": "markers.csv"
+    }
+  ]
+}

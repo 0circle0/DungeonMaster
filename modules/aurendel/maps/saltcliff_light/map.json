@@ -1,0 +1,18 @@
+{
+  "id": "saltcliff_light",
+  "name": "The Saltcliff Light",
+  "description": "The keeper's room at the foot of the tower, the coal store beside it, and the stair going up.",
+  "entry": "entry",
+  "layers": [
+    {
+      "kind": "terrain",
+      "name": "terrain",
+      "file": "terrain.csv"
+    },
+    {
+      "kind": "markers",
+      "name": "markers",
+      "file": "markers.csv"
+    }
+  ]
+}
