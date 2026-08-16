@@ -796,7 +796,15 @@ export function enterPoi(
   }
   if (poi.gate && !gateOpened) return false;
 
-  if (poi.dungeon) return enterDungeon(txn, terrain, poi.dungeon, rng);
+  // A place that fronts a dungeon is still a place you arrived at. Handing
+  // straight off meant the `entered` event below never fired for any of them,
+  // so a `reach` objective naming a barrow mouth or a stair head could never
+  // complete — and `objective.target` is not a ref, so nothing said a word
+  // about it. The event goes first, then the descent.
+  if (poi.dungeon) {
+    txn.emit({ type: 'custom', event: 'entered', data: { place: poiId, kind: 'poi' } });
+    return enterDungeon(txn, terrain, poi.dungeon, rng);
+  }
 
   // An interior, if the place has one; otherwise the party simply stands here.
   const mapId = `poi:${poiId}`;

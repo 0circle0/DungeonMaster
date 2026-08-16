@@ -1037,6 +1037,28 @@ describe('entering places', () => {
     expect((arrived as { data: Record<string, unknown> }).data['place']).toBe('the_mill');
   });
 
+  // The same, for a place whose whole purpose is to be a way down. Handing
+  // straight off to the dungeon meant a `reach` objective naming a barrow
+  // mouth or a stair head could never complete, and since `objective.target`
+  // is a plain id rather than a ref, nothing anywhere said so.
+  it('says so when the party arrives at a way down, before descending', () => {
+    const txn = transact(fresh());
+    const actor = txn.entity('e:1')!;
+    enterPoi(txn, terrain, 'sunken_caves', actor, Rng.fromSeed(5), true);
+
+    const events = txn.finish().events;
+    const arrived = events.find((e) => e.type === 'custom' && e.event === 'entered');
+    expect(arrived).toBeDefined();
+    expect((arrived as { data: Record<string, unknown> }).data['place']).toBe('sunken_caves');
+
+    // And it still descends: the arrival does not replace the dungeon.
+    expect(txn.state.location).toMatchObject({ kind: 'dungeon', dungeon: 'fen_caves' });
+    // The arrival is announced before the descent, so a quest watching for it
+    // sees the point of interest and then the map, in that order.
+    const enteredMap = events.findIndex((e) => e.type === 'enteredMap');
+    expect(events.indexOf(arrived!)).toBeLessThan(enteredMap);
+  });
+
   it('walks the party into an interior, and back in on a return visit', () => {
     const module = withInteriorVillage();
     const inside = new TerrainIndex(module);
