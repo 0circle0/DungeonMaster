@@ -24,6 +24,9 @@ import { makeNoise } from '../sim/senses.js';
 import { testConcentration } from './casting.js';
 import { message } from '../narrate/systemText.js';
 import { configOf } from './config.js';
+// Type-only: `runtime.ts` imports `applyOps` from here, so a value import
+// would close a cycle. Types are erased, so this one does not.
+import type { ModRuntime } from '../mods/runtime.js';
 
 /** Accumulates state changes and the events describing them. */
 export class Transaction {
@@ -39,9 +42,28 @@ export class Transaction {
    */
   readonly depleting = new Set<string>();
 
+  /**
+   * Guards `event.emit` against re-entering itself.
+   *
+   * A mod that emits an event from inside an emit hook would otherwise recurse
+   * until the stack gave out. Per-call scratch, like `depleting`, and for the
+   * same reason: never serialized, so it cannot affect save equality.
+   */
+  private emitting = false;
+
   constructor(
     state: GameState,
     readonly module: CompiledModule,
+    /**
+     * Installed mods, or null when there are none.
+     *
+     * Carried on the transaction rather than passed down because the deepest
+     * hook site — an unimplemented effect op — is several frames below
+     * `reduce`, and threading a parameter through every intermediate signature
+     * would touch far more code than it explains. Null is the common case and
+     * costs an optional-chain miss.
+     */
+    readonly mods: ModRuntime | null = null,
   ) {
     this.current = state;
   }
@@ -69,6 +91,23 @@ export class Transaction {
 
   emit(event: GameEvent): void {
     this.events.push(event);
+
+    /**
+     * Mods watching for this specific event type.
+     *
+     * The `match` on the declaration is mandatory for this hook, so the gate
+     * below is a `Set` miss for every event nobody asked about — which matters
+     * because this runs hundreds of times a turn. Re-entrancy is guarded: a mod
+     * that emits from inside an emit hook would otherwise recurse without end.
+     */
+    if (this.emitting) return;
+    if (!this.mods?.has('event.emit', event.type)) return;
+    this.emitting = true;
+    try {
+      this.mods.run(this, 'event.emit', { event }, this.rngFor(`modEmit:${event.type}`));
+    } finally {
+      this.emitting = false;
+    }
   }
 
   entity(id: EntityId): Entity | undefined {
@@ -600,10 +639,25 @@ export function applyOps(txn: Transaction, ops: readonly EffectOp[], source: Ent
         // The `never` makes it a compile error to add an op and forget the
         // case; the refusal covers a module built against a newer engine.
         const unhandled: never = op;
+        const name = (unhandled as { op: string }).op;
+
+        // Ask the mods before refusing. This is what lets a mod add a genuinely
+        // new effect op: module JSON can use it, the studio can edit it, and
+        // the engine needs no case for it.
+        if (txn.mods?.has('applyOp', name)) {
+          const outcome = txn.mods.run(
+            txn,
+            'applyOp',
+            { op: unhandled },
+            txn.rngFor(`modOp:${name}`),
+          );
+          if (outcome.replaced) break;
+        }
+
         txn.emit({
           type: 'refused',
           action: 'applyOps',
-          reason: message('refused.internal.unknownOp', { op: (unhandled as { op: string }).op }),
+          reason: message('refused.internal.unknownOp', { op: name }),
         });
         break;
       }

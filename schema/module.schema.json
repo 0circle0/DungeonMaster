@@ -38,6 +38,43 @@
           ],
           "default": null
         },
+        "mods": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "$ref": "#/$defs/GameModule/properties/id"
+              },
+              "hash": {
+                "type": "string",
+                "pattern": "^[0-9a-f]{16}$"
+              },
+              "target": {
+                "type": "string",
+                "enum": [
+                  "engine",
+                  "editor"
+                ],
+                "default": "engine"
+              },
+              "required": {
+                "type": "boolean",
+                "default": false
+              },
+              "note": {
+                "type": "string",
+                "maxLength": 400,
+                "default": ""
+              }
+            },
+            "required": [
+              "id",
+              "hash"
+            ],
+            "additionalProperties": false
+          }
+        },
         "meta": {
           "type": "object",
           "properties": {

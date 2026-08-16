@@ -4,7 +4,7 @@ const config: NextConfig = {
   // The workspace packages ship as TypeScript source, so Next compiles them
   // rather than expecting a build step. This is what lets the editor share the
   // exact schemas the engine validates against — one source of truth.
-  transpilePackages: ['@dm/module', '@dm/core', '@dm/engine'],
+  transpilePackages: ['@dm/module', '@dm/core', '@dm/engine', '@dm/mods'],
 
   typescript: { ignoreBuildErrors: false },
 

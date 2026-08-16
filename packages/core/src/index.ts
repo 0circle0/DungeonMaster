@@ -1,4 +1,5 @@
 export { Rng, hashString } from './rng.js';
+export { hash64, stableStringify } from './hash.js';
 export { valueNoise } from './noise.js';
 export type { NoiseField, NoiseOptions } from './noise.js';
 export type { RngState } from './rng.js';

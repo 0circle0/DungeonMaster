@@ -1,0 +1,45 @@
+{
+  "format": 1,
+  "id": "morale_studio",
+  "target": "editor",
+  "version": "1.0.0",
+  "hash": "6fdec9ac2a038c2c",
+  "meta": {
+    "title": "Morale (studio)",
+    "author": "DungeonMaster",
+    "description": "Authoring half of the morale pair: adds a Morale field to monsters, lints for it, and can fill it in bulk. Its engine half makes the number mean something.",
+    "license": "MIT",
+    "homepage": ""
+  },
+  "engine": "^1.0.0",
+  "dependencies": [],
+  "loadAfter": [],
+  "entry": "main.js",
+  "hooks": [
+    {
+      "hook": "editor.fields",
+      "mode": "after",
+      "priority": 0
+    },
+    {
+      "hook": "editor.lint",
+      "mode": "after",
+      "priority": 0
+    },
+    {
+      "hook": "editor.commands",
+      "mode": "after",
+      "priority": 0
+    },
+    {
+      "hook": "editor.panel",
+      "mode": "after",
+      "priority": 0
+    }
+  ],
+  "limits": {
+    "steps": 2000000,
+    "memoryBytes": 33554432
+  },
+  "systemText": {}
+}

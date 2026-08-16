@@ -5,7 +5,7 @@ const config: NextConfig = {
   // rather than expecting a build step. `@dm/play` here is also the proof that
   // no Node API leaked into the play layer: this build resolves the real
   // import graph, and a stray `node:fs` fails it.
-  transpilePackages: ['@dm/play', '@dm/module', '@dm/core', '@dm/engine'],
+  transpilePackages: ['@dm/play', '@dm/module', '@dm/core', '@dm/engine', '@dm/mods'],
 
   typescript: { ignoreBuildErrors: false },
 

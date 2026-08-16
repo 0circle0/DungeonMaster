@@ -17,6 +17,10 @@ import type { MetaCommand } from '@dm/play';
 import { traderNearby } from '@dm/play';
 import type { ModuleChoice } from '@/lib/modules';
 import { compileDoc } from '@/lib/modules';
+import type { ModWire, ModSetup } from '@/lib/mods';
+import { useMods } from '@/lib/useMods';
+import type { ModsApi } from '@/lib/useMods';
+import { ModsPanel, ModBanner } from '@/components/Mods';
 import { useSession } from '@/lib/useSession';
 import type { SessionApi } from '@/lib/useSession';
 import { MapView } from '@/components/MapView';
@@ -30,9 +34,9 @@ import { CommandBar } from '@/components/CommandBar';
 import { Overlay, Journal, Sheet, Inventory, Shop, SaveMenu, Help } from '@/components/Overlays';
 import { Creation } from '@/components/Creation';
 
-type Panel = 'journal' | 'sheet' | 'inventory' | 'shop' | 'saves' | 'help' | 'creation' | null;
+type Panel = 'journal' | 'sheet' | 'inventory' | 'shop' | 'saves' | 'help' | 'creation' | 'mods' | null;
 
-export function Play({ shipped }: { shipped: readonly ModuleChoice[] }) {
+export function Play({ shipped, mods }: { shipped: readonly ModuleChoice[]; mods: readonly ModWire[] }) {
   const [chosen, setChosen] = useState<ModuleChoice | null>(shipped[0] ?? null);
   const [dropped, setDropped] = useState<ModuleChoice | null>(null);
 
@@ -51,9 +55,10 @@ export function Play({ shipped }: { shipped: readonly ModuleChoice[] }) {
   }
 
   return (
-    <Game
+    <Gate
       key={active.id}
       module={compiled.module}
+      installed={mods}
       shipped={shipped}
       activeId={active.id}
       onChoose={(choice) => { setDropped(null); setChosen(choice); }}
@@ -62,16 +67,81 @@ export function Play({ shipped }: { shipped: readonly ModuleChoice[] }) {
   );
 }
 
-function Game({
-  module, shipped, activeId, onChoose, onDrop,
+/**
+ * Mods resolve before the game mounts.
+ *
+ * Not a nicety: a session started without its mods and then re-created with
+ * them would already have advanced the RNG, so the run would no longer match
+ * its own replay. A module that declares no mods skips all of this and mounts
+ * on the first render exactly as it did before mods existed.
+ */
+function Gate({
+  module, installed, shipped, activeId, onChoose, onDrop,
 }: {
   module: CompiledModule;
+  installed: readonly ModWire[];
   shipped: readonly ModuleChoice[];
   activeId: string;
   onChoose: (choice: ModuleChoice) => void;
   onDrop: (choice: ModuleChoice) => void;
 }) {
-  const session: SessionApi = useSession(module, 12345);
+  const mods = useMods(module, installed);
+
+  if (mods.state.status === 'preparing') {
+    return <div className="app"><p className="error-note">Preparing mods…</p></div>;
+  }
+
+  // A missing required mod is the one thing that stops play outright. The game
+  // said it needs it; running anyway produces a broken session that reads as an
+  // engine bug rather than a missing download.
+  if (mods.state.status === 'blocked') {
+    const { missing, issues } = mods.state.setup.resolution;
+    return (
+      <div className="app">
+        <div className="error-note">
+          <p><strong>{module.source.meta.title}</strong> cannot start: it requires mods that are not installed.</p>
+          <ul>
+            {missing.map((entry) => (
+              <li key={entry.id}>
+                <code>{entry.id}-{entry.hash}</code>
+                {entry.note ? ` — ${entry.note}` : ''}
+              </li>
+            ))}
+          </ul>
+          <p>Install them under <code>mods/engine/</code> and reload.</p>
+          {issues.filter((i) => i.severity === 'error').map((issue, i) => (
+            <p key={i}>{issue.message}</p>
+          ))}
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <Game
+      module={module}
+      setup={mods.state.setup}
+      modsApi={mods}
+      shipped={shipped}
+      activeId={activeId}
+      onChoose={onChoose}
+      onDrop={onDrop}
+    />
+  );
+}
+
+function Game({
+  module, setup, modsApi, shipped, activeId, onChoose, onDrop,
+}: {
+  module: CompiledModule;
+  setup: ModSetup | null;
+  modsApi: ModsApi;
+  shipped: readonly ModuleChoice[];
+  activeId: string;
+  onChoose: (choice: ModuleChoice) => void;
+  onDrop: (choice: ModuleChoice) => void;
+}) {
+  const session: SessionApi = useSession(module, 12345, setup);
   // Who the party could trade with, so the panel and its button agree.
   const trader = traderNearby({ module: session.module, state: session.frame.state });
   const [panel, setPanel] = useState<Panel>(null);
@@ -158,6 +228,9 @@ function Game({
         <button className="btn" onClick={() => setPanel('sheet')}>Sheet</button>
         <button className="btn" onClick={() => setPanel('inventory')}>Inventory</button>
         <button className="btn" onClick={() => setPanel('saves')}>Saves</button>
+        {modsApi.toggles.length > 0 && (
+          <button className="btn" onClick={() => setPanel('mods')}>Mods</button>
+        )}
         <button className="btn" onClick={() => setPanel('help')}>?</button>
       </div>
 
@@ -179,6 +252,7 @@ function Game({
         <Sidebar session={session} />
 
         <div className="log-pane">
+          <ModBanner setup={setup} />
           <Transcript lines={frame.transcript} />
           <Dialogue session={session} />
           {!over && <CommandBar session={session} onMeta={onMeta} />}
@@ -187,6 +261,11 @@ function Game({
 
       <StatusBar session={session} />
 
+      {panel === 'mods' && (
+        <Overlay title="Mods" onClose={() => setPanel(null)}>
+          <ModsPanel api={modsApi} setup={setup} modState={frame.state.modState} />
+        </Overlay>
+      )}
       {panel === 'journal' && (
         <Overlay title="Journal" onClose={() => setPanel(null)}><Journal session={session} /></Overlay>
       )}

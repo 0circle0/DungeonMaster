@@ -59,6 +59,14 @@ export function runPassives(txn: Transaction, entityId: string, rng: Rng): void 
   const entity = txn.entity(entityId);
   if (!entity || !entity.alive) return;
 
+  // Mods run alongside the module's own passives, and are consulted even when
+  // an entity has none of its own — a mod granting a trait to everything would
+  // otherwise be invisible on entities the module never gave traits to.
+  if (txn.mods?.has('passives')) {
+    const outcome = txn.mods.run(txn, 'passives', { entityId }, rng.derive(`modPassive:${entityId}`));
+    if (outcome.replaced) return;
+  }
+
   const rules = rulesFor(txn, entity);
   if (rules.length === 0) return;
 

@@ -17,7 +17,7 @@ import type { Value } from '@dm/module';
 import type { Position, TileMap } from './grid/tiles.js';
 
 /** Bumped when the shape changes in a way that needs migrating. */
-export const SAVE_VERSION = 7;
+export const SAVE_VERSION = 8;
 
 export type EntityId = string;
 
@@ -329,6 +329,23 @@ export interface GameState {
   readonly reputation: Readonly<Record<string, number>>;
   readonly quests: Readonly<Record<string, QuestState>>;
   readonly deeds: readonly Deed[];
+
+  /**
+   * Mod-owned state, namespaced by mod id.
+   *
+   * A separate bag rather than `flags`: a mod writing into `flags` would
+   * collide with the module's own namespace and with the `setFlag` op, and
+   * `load` could not then tell an author that a save carries state for a mod
+   * they do not have installed.
+   *
+   * A record rather than an array, despite the "collections are arrays" rule
+   * above: those exist because `JSON.stringify` writes keys in insertion order,
+   * whereas `statesEqual` compares through `canonical()`, which sorts keys at
+   * every level. Two runs that write the same mod keys in different orders
+   * therefore still compare equal. Mods only ever write under their own id,
+   * enforced host-side, so the outer keys are a small fixed set.
+   */
+  readonly modState: Readonly<Record<string, Readonly<Record<string, Value>>>>;
 
   /** Set when the run has ended. */
   readonly outcome: 'playing' | 'victory' | 'defeat';

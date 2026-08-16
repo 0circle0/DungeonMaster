@@ -118,6 +118,22 @@ export function narrateEvent(context: NarratorContext, event: GameEvent): Line |
     }
 
     case 'custom': {
+      /**
+       * A mod speaking.
+       *
+       * The one custom event whose text is carried on the event rather than
+       * looked up here, because the words belong to a mod's own `systemText`
+       * and this file has no way to reach it. Everything below is engine
+       * narration for engine events; this is a mod's line passing through.
+       */
+      if (event.event === 'modSay') {
+        const spoken = String(event.data['text'] ?? '');
+        if (!spoken) return null;
+        const tone = String(event.data['tone'] ?? 'prose');
+        const kind: Line['kind'] = tone === 'note' ? 'note' : tone === 'refusal' ? 'refusal' : 'prose';
+        return { text: spoken, kind };
+      }
+
       // Perception events read as prose rather than as a log line, since a
       // creature going to look at something is a scene, not a statistic.
       if (event.event === 'investigating' || event.event === 'lostInterest') {

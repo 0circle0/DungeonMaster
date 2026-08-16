@@ -1,0 +1,12 @@
+{
+  "extends": "../../tsconfig.base.json",
+
+  // No Node types, no tests, and no `load.ts`: the mod runtime has to run in a
+  // browser, because both front ends are browsers. `load.ts` is the one file
+  // allowed to touch the filesystem, and it is excluded here for the same
+  // reason `packages/module/src/load.ts` is — a client import of it is meant to
+  // be a build error rather than a convention.
+  "compilerOptions": { "types": [] },
+  "include": ["src/**/*.ts"],
+  "exclude": ["src/**/*.test.ts", "src/load.ts", "src/testing.ts", "src/bin/**/*.ts"]
+}

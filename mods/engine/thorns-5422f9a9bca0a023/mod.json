@@ -1,0 +1,60 @@
+{
+  "format": 1,
+  "id": "thorns",
+  "target": "engine",
+  "version": "1.0.0",
+  "hash": "5422f9a9bca0a023",
+  "meta": {
+    "title": "Thorns",
+    "author": "DungeonMaster",
+    "description": "Take a wound while standing in briar and the thorns stay in you. Three or more and you cannot rest until you have waited long enough to pick them out. Needs a module with briar terrain; greenmarch scatters it through the fen.",
+    "license": "MIT",
+    "homepage": ""
+  },
+  "engine": "^1.0.0",
+  "dependencies": [],
+  "loadAfter": [],
+  "entry": "main.js",
+  "hooks": [
+    {
+      "hook": "event.emit",
+      "mode": "after",
+      "priority": 0,
+      "match": "damaged"
+    },
+    {
+      "hook": "action.before",
+      "mode": "before",
+      "priority": 0,
+      "match": "rest"
+    },
+    {
+      "hook": "action.after",
+      "mode": "after",
+      "priority": 0,
+      "match": "wait"
+    },
+    {
+      "hook": "applyOp",
+      "mode": "replace",
+      "priority": 0,
+      "match": "pluckThorns"
+    },
+    {
+      "hook": "occasion",
+      "mode": "after",
+      "priority": 0,
+      "match": "rest"
+    }
+  ],
+  "limits": {
+    "steps": 2000000,
+    "memoryBytes": 33554432
+  },
+  "systemText": {
+    "thorns.caught": "The briar takes its price — a barb catches and stays in. ({stacks} in you now.)",
+    "thorns.pulled": "You work a thorn out and flick it away. ({stacks} left.)",
+    "thorns.lastOut": "The last thorn comes free. Nothing left in you but the ache.",
+    "thorns.tooSharp": "You cannot settle. There are {stacks} thorns in you, and every one of them is awake. Wait, and pick them out."
+  }
+}

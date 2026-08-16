@@ -24,7 +24,17 @@ function isPlainObject(v: unknown): v is Record<string, unknown> {
   return typeof v === 'object' && v !== null && !Array.isArray(v);
 }
 
-const COLLECTION_SET = new Set<string>(COLLECTION_PATHS);
+/**
+ * Paths whose arrays merge entry-by-entry on `id`.
+ *
+ * `mods` is in here but is **not** a collection: it is a single-segment
+ * top-level path with no `section.collection` address, it is not indexed, and
+ * `collectionAt` cannot reach it. It merges by id for the same reason the
+ * collections do — a base pinning a mod and a patch re-pinning it must end up
+ * with one entry, not two — and `$delete` then lets a pack drop an inherited
+ * mod it does not want.
+ */
+const COLLECTION_SET = new Set<string>([...COLLECTION_PATHS, 'mods']);
 
 /**
  * Merge a patch over a base document.

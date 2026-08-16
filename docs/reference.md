@@ -26,12 +26,25 @@ not anticipate there. It is the supported way to exceed what ships.
 | `version` | string | **yes** |  |
 | `engine` | string |  | `"^1.0.0"` |
 | `extends` | string |  | `null` |
+| `mods` | [object](#module-mods)[] |  |  |
 | `meta` | [object](#module-meta) | **yes** |  |
 | `rules` | [object](#module-rules) | **yes** |  |
 | `content` | [object](#module-content) |  | `{}` |
 | `world` | [object](#module-world) |  | `{}` |
 | `narrative` | [object](#module-narrative) |  | `{}` |
 | `start` | [object](#module-start) |  | `{}` |
+
+### Module → `mods`
+
+<a id="module-mods"></a>
+
+| Field | Type | Required | Default |
+| --- | --- | --- | --- |
+| `id` | string | **yes** |  |
+| `hash` | string | **yes** |  |
+| `target` | `engine` \| `editor` |  | `"engine"` |
+| `required` | boolean |  | `false` |
+| `note` | string |  | `""` |
 
 ### Module → `meta`
 

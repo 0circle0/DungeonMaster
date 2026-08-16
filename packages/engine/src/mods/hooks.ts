@@ -1,0 +1,176 @@
+/**
+ * The hook contract.
+ *
+ * This file is the whole surface a mod attaches to. It is deliberately small:
+ * every hook is a place the engine already had a seam, and each one costs a
+ * call site in a hot function, so they are added when something needs them
+ * rather than speculatively.
+ *
+ * ## Why hooks rather than patching functions
+ *
+ * Both front ends are browsers and packages are bundled from source, so there
+ * is no module registry to reach into and ESM live bindings are read-only. A
+ * mod cannot literally replace `applyOps`. Declared hook points with
+ * before / after / replace semantics give the same power — including full
+ * override — while leaving one place where mod output enters the engine.
+ *
+ * ## What a mod may do
+ *
+ * Anything. `replace` on `action.before` skips the core handler outright, and
+ * the `patch` directive writes anywhere in `GameState`. Invincibility, one-hit
+ * kills, rewriting the turn economy — all supported, none special-cased. The
+ * runtime enforces determinism and containment, and nothing else.
+ */
+
+import type { Action } from '../actions.js';
+import type { GameEvent } from '../events.js';
+import type { EntityId } from '../state.js';
+
+export type HookName =
+  /** Before the action switch. `replace` skips the core handler entirely. */
+  | 'action.before'
+  /** After the action switch, before the rng is written back. */
+  | 'action.after'
+  /**
+   * An effect op the engine does not implement.
+   *
+   * The highest-value hook in the set: the branch already existed to refuse
+   * unknown ops, so a mod can add a genuinely new effect op — usable from
+   * module JSON, editable in the studio — with no core change at all.
+   */
+  | 'applyOp'
+  /** An occasion firing, before the module's own triggers run. */
+  | 'occasion'
+  /**
+   * After a reduction settles: perception, combat start/stop, AI turns, and
+   * the victory and defeat checks have all run.
+   *
+   * No `replace`. `settle` is where the invariants that keep a game coherent
+   * are enforced, and a mod standing in for all of them would not be modding a
+   * rule so much as removing the floor. A mod that wants that can still do it
+   * from `action.before` with `replace`, where the intent is explicit.
+   */
+  | 'settle.after'
+  /** After the world clock advances, once per call rather than per minute. */
+  | 'time.after'
+  /** Whether a module trigger fires. `replace` decides it outright. */
+  | 'trigger.shouldFire'
+  /** After an entity's passive traits and item procs are evaluated. */
+  | 'passives'
+  /** A creature's chance to react, alongside its statblock's own reactions. */
+  | 'reactions'
+  /**
+   * Every event, as it is emitted.
+   *
+   * The one hook that fires hundreds of times a turn, so a declaration
+   * **must** carry a `match` naming the event type — an unfiltered one would
+   * put a WASM crossing on every event in the game.
+   */
+  | 'event.emit';
+
+export const HOOK_NAMES: readonly HookName[] = [
+  'action.before',
+  'action.after',
+  'applyOp',
+  'occasion',
+  'settle.after',
+  'time.after',
+  'trigger.shouldFire',
+  'passives',
+  'reactions',
+  'event.emit',
+];
+
+/** Hooks that must be narrowed, because unfiltered they would be ruinous. */
+export const MUST_MATCH: readonly HookName[] = ['event.emit'];
+
+export function isHookName(value: string): value is HookName {
+  return (HOOK_NAMES as readonly string[]).includes(value);
+}
+
+/** World facts every hook gets. Cheap to build, and usually enough on its own. */
+export interface HookNow {
+  readonly minute: number;
+  readonly day: number;
+  readonly map: string;
+  readonly outcome: string;
+}
+
+export interface HookSubjects {
+  'action.before': { readonly action: Action; readonly actorId: EntityId };
+  'action.after': {
+    readonly action: Action;
+    readonly actorId: EntityId;
+    readonly events: readonly GameEvent['type'][];
+  };
+  applyOp: { readonly op: Record<string, unknown> };
+  occasion: {
+    readonly occasion: string;
+    readonly customEvent: string | null;
+    readonly sourceId: string | null;
+    readonly sourceKind: string | null;
+  };
+  'settle.after': { readonly inCombat: boolean; readonly outcome: string };
+  'time.after': {
+    readonly minutes: number;
+    readonly totalMinute: number;
+    readonly daysCrossed: number;
+  };
+  'trigger.shouldFire': {
+    readonly triggerId: string;
+    readonly occasion: string;
+    readonly actorId: EntityId;
+    readonly willFire: boolean;
+  };
+  passives: { readonly entityId: EntityId };
+  reactions: {
+    readonly reactorId: EntityId;
+    readonly trigger: string;
+    readonly subjectId: EntityId | null;
+  };
+  'event.emit': { readonly event: GameEvent };
+}
+
+/**
+ * The narrowing key for a hook, matched against a declaration's `match`.
+ *
+ * This is what keeps the boundary crossing rare: a mod that declares
+ * `applyOp` with `match: "gainMomentum"` is only consulted for that op.
+ */
+export function matchKeyFor<K extends HookName>(hook: K, subject: HookSubjects[K]): string | undefined {
+  switch (hook) {
+    case 'action.before':
+    case 'action.after':
+      return (subject as HookSubjects['action.before']).action.type;
+    case 'applyOp':
+      return (subject as HookSubjects['applyOp']).op['op'] as string | undefined;
+    case 'occasion': {
+      const s = subject as HookSubjects['occasion'];
+      return s.customEvent ?? s.occasion;
+    }
+    case 'trigger.shouldFire':
+      return (subject as HookSubjects['trigger.shouldFire']).occasion;
+    case 'reactions':
+      return (subject as HookSubjects['reactions']).trigger;
+    case 'event.emit':
+      return (subject as HookSubjects['event.emit']).event.type;
+    case 'settle.after':
+    case 'time.after':
+    case 'passives':
+      // Nothing sensible to narrow on: these fire once per reduction, which is
+      // rare enough that a crossing per call is affordable.
+      return undefined;
+    default:
+      return undefined;
+  }
+}
+
+/** What a hook run did, so the call site knows whether to run the core path. */
+export interface HookOutcome {
+  /** A `replace` handler stood in for the core implementation. */
+  readonly replaced: boolean;
+  /** A handler refused the action. */
+  readonly refused: boolean;
+}
+
+export const NO_HOOK_OUTCOME: HookOutcome = { replaced: false, refused: false };

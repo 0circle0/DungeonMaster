@@ -5,6 +5,7 @@
 
 import type { Metadata } from 'next';
 import { listModuleNames, readModuleByName } from '@/lib/modulesOnDisk';
+import { readInstalledMods } from '@/lib/modsOnDisk';
 import { Studio } from './studio/Studio';
 
 export const metadata: Metadata = {
@@ -22,6 +23,7 @@ export default function Page() {
       initialDoc={doc ?? {}}
       initialName={starter ? `${starter}.json` : 'untitled.module.json'}
       templates={names}
+      mods={readInstalledMods()}
     />
   );
 }

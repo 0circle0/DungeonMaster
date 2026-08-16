@@ -14,7 +14,7 @@
   "scripts": {
     "test": "vitest run",
     "test:watch": "vitest",
-    "typecheck": "tsc -p tsconfig.json && tsc -p packages/engine/tsconfig.isomorphic.json && tsc -p packages/play/tsconfig.isomorphic.json && tsc -p apps/editor/tsconfig.json && tsc -p apps/play/tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json && tsc -p packages/engine/tsconfig.isomorphic.json && tsc -p packages/play/tsconfig.isomorphic.json && tsc -p packages/mods/tsconfig.isomorphic.json && tsc -p apps/editor/tsconfig.json && tsc -p apps/play/tsconfig.json",
     "validate": "tsx packages/module/src/bin/validate.ts",
     "schema": "tsx packages/module/src/bin/emit-schema.ts",
     "editor": "npm run dev --workspace @dm/editor",
@@ -28,7 +28,8 @@
     "editor:stop": "tsx packages/tools/src/bin/free-port.ts 4400",
     "play": "npm run dev --workspace @dm/play-app",
     "play:build": "npm run build --workspace @dm/play-app",
-    "play:stop": "tsx packages/tools/src/bin/free-port.ts 4500"
+    "play:stop": "tsx packages/tools/src/bin/free-port.ts 4500",
+    "mod": "tsx packages/mods/src/bin/mod-tool.ts"
   },
   "devDependencies": {
     "@types/node": "^22.10.2",

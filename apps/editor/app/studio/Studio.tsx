@@ -21,6 +21,9 @@ import { Dock } from '@/components/studio/Dock';
 import { Viewport } from '@/components/studio/Viewport';
 import { Inspector } from '@/components/studio/Inspector';
 import { ProblemsConsole } from '@/components/studio/ProblemsConsole';
+import { ModsPanel } from '@/components/studio/ModsPanel';
+import { useEditorMods } from '@/lib/useEditorMods';
+import type { ModWire } from '@/lib/modWire';
 import { NewModuleDialog } from '@/components/studio/NewModuleDialog';
 import { emptyValue } from '@/components/Field';
 import type { MapTarget, Selection, ViewId, ViewportKind } from './selection';
@@ -31,6 +34,7 @@ export function Studio(props: {
   initialDoc: ModuleDoc;
   initialName: string;
   templates: readonly string[];
+  mods: readonly ModWire[];
 }) {
   const store = useModuleStore(props.initialDoc, props.initialName);
   const [selection, setSelection] = useState<Selection>({ kind: 'start' });
@@ -38,8 +42,35 @@ export function Studio(props: {
   const [mapTarget, setMapTarget] = useState<MapTarget>({ type: 'start' });
   const [tablePath, setTablePath] = useState<string | null>(null);
   const [newDialog, setNewDialog] = useState(false);
+  const [modsOpen, setModsOpen] = useState(false);
+  const mods = useEditorMods(props.mods);
 
   const { validation } = store;
+
+  /**
+   * The engine's own problems plus whatever the mods raise.
+   *
+   * Merged rather than shown separately: an author fixing a module wants one
+   * list of what is wrong with it, and a mod's complaint is prefixed with the
+   * mod that raised it so its origin is never a guess.
+   */
+  const modDiagnostics = useMemo(
+    () => (mods.runtime ? mods.runtime.lint(store.doc) : []),
+    [mods.runtime, store.doc],
+  );
+
+  const validationWithMods = useMemo(() => {
+    if (modDiagnostics.length === 0) return validation;
+    const errors = modDiagnostics.filter((d) => d.severity === 'error');
+    const warnings = modDiagnostics.filter((d) => d.severity !== 'error');
+    return {
+      ...validation,
+      // A mod can raise an error, but it cannot make a valid module invalid:
+      // `ok` still reflects the format, so a mod's opinion never blocks export.
+      errors: [...validation.errors, ...errors],
+      warnings: [...validation.warnings, ...warnings],
+    };
+  }, [validation, modDiagnostics]);
 
   // Leaving the page with unsaved edits deserves one browser prompt.
   useEffect(() => {
@@ -194,6 +225,8 @@ export function Studio(props: {
         onNew={() => setNewDialog(true)}
         onLoadFile={loadFile}
         onOpenStart={openStart}
+        onOpenMods={() => setModsOpen((open) => !open)}
+        modCount={props.mods.length}
       />
 
       <div className={styles.main}>
@@ -238,7 +271,26 @@ export function Studio(props: {
         />
       </div>
 
-      <ProblemsConsole validation={validation} onOpen={openDiagnostic} />
+      <ProblemsConsole validation={validationWithMods} onOpen={openDiagnostic} />
+
+      {modsOpen && (
+        <ModsPanel
+          mods={mods}
+          doc={store.doc}
+          declared={(store.doc['mods'] as { id: string; hash: string; target?: string; required?: boolean }[] | undefined)?.map((entry) => ({
+            id: entry.id,
+            hash: entry.hash,
+            target: entry.target ?? 'engine',
+            required: entry.required ?? false,
+          })) ?? []}
+          onPatch={(patches) => {
+            for (const patch of patches) {
+              if (patch.op === 'set') store.set(patch.path, patch.value);
+              else store.remove(patch.path);
+            }
+          }}
+        />
+      )}
 
       {newDialog && (
         <NewModuleDialog

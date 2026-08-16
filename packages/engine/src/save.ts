@@ -20,15 +20,52 @@ import type { CompiledModule } from '@dm/module';
 import { SAVE_VERSION } from './state.js';
 import type { GameState } from './state.js';
 
+/** One module build this save has been written under. */
+export interface SaveLineageEntry {
+  readonly hash: string;
+  readonly version: string;
+  /** The `savedAt` of the save that first wrote this hash. */
+  readonly at: number;
+}
+
 export interface SaveFile {
   readonly saveVersion: number;
   readonly savedAt: number;
+  /**
+   * Every module build this save has been written under, oldest first.
+   *
+   * Appended, never replaced. The point is to answer "which change broke it"
+   * later, and to let a player tell someone else which version of a game a
+   * broken save came from — so the earlier entries are the valuable part and
+   * are never dropped.
+   *
+   * Optional so a save written before lineage existed still loads.
+   */
+  readonly lineage?: readonly SaveLineageEntry[];
+  /** Mods active when this was written, as `<id>-<hash>`, sorted. */
+  readonly mods?: readonly string[];
   readonly state: GameState;
 }
 
 export type LoadResult =
-  | { readonly ok: true; readonly state: GameState; readonly warnings: readonly string[] }
+  | {
+      readonly ok: true;
+      readonly state: GameState;
+      readonly warnings: readonly string[];
+      /**
+       * The envelope as read, so a front end can show lineage and hand it back
+       * to `save()` as `previous` — which is what keeps the chain going.
+       */
+      readonly file: SaveFile;
+    }
   | { readonly ok: false; readonly error: string };
+
+export interface SaveOptions {
+  /** The file this run was loaded from, if any. Its lineage is carried forward. */
+  readonly previous?: SaveFile | null;
+  /** Active mods as `<id>-<hash>`. */
+  readonly mods?: readonly string[];
+}
 
 /**
  * Serialize state.
@@ -36,8 +73,26 @@ export type LoadResult =
  * `savedAt` is passed in rather than read from a clock, because the engine has
  * no clock — reading one would make saving impure and break replay.
  */
-export function save(state: GameState, savedAt: number): string {
-  const file: SaveFile = { saveVersion: SAVE_VERSION, savedAt, state };
+export function save(state: GameState, savedAt: number, options: SaveOptions = {}): string {
+  const previous = options.previous ?? null;
+  const carried = previous?.lineage ?? [];
+  const last = carried[carried.length - 1];
+
+  // Append only when the module actually changed. Saving twice against the
+  // same build should not grow the chain — a lineage full of duplicates says
+  // nothing about which change broke anything.
+  const lineage: SaveLineageEntry[] =
+    last && last.hash === state.module.hash
+      ? [...carried]
+      : [...carried, { hash: state.module.hash, version: state.module.version, at: savedAt }];
+
+  const file: SaveFile = {
+    saveVersion: SAVE_VERSION,
+    savedAt,
+    lineage,
+    mods: options.mods ? [...options.mods].sort() : [],
+    state,
+  };
   return JSON.stringify(file);
 }
 
@@ -162,9 +217,23 @@ const MIGRATIONS: Readonly<Record<number, Migration>> = {
     }
     return { ...state, saveVersion: 7, entities };
   },
+
+  /**
+   * 7 → 8: mods.
+   *
+   * A save written before mods existed carries no mod state, which is exactly
+   * what an empty bag describes — so it loads as the game it was saved from.
+   * `lineage` and `mods` live on the envelope rather than in state and need no
+   * migration at all: an older file simply has neither, and both are optional.
+   */
+  7: (state) => ({ ...state, saveVersion: 8, modState: state['modState'] ?? {} }),
 };
 
-export function load(text: string, module: CompiledModule, options: { allowModuleDrift?: boolean } = {}): LoadResult {
+export function load(
+  text: string,
+  module: CompiledModule,
+  options: { allowModuleDrift?: boolean; mods?: readonly string[] } = {},
+): LoadResult {
   let file: SaveFile;
   try {
     file = JSON.parse(text) as SaveFile;
@@ -217,7 +286,25 @@ export function load(text: string, module: CompiledModule, options: { allowModul
     warnings.push(message);
   }
 
-  return { ok: true, state, warnings };
+  // Mod drift is reported, never refused.
+  //
+  // The engine cannot tell whether a different mod set matters: it does not
+  // know what any mod changed. Blocking would make every mod toggle a
+  // save-breaking decision, which is not a trade a player should be forced
+  // into. Naming what differs lets them judge it — and the lineage is there
+  // afterwards if something did go wrong.
+  const savedMods = file.mods ?? [];
+  const activeMods = options.mods ?? [];
+  const gone = savedMods.filter((id) => !activeMods.includes(id));
+  const added = activeMods.filter((id) => !savedMods.includes(id));
+  if (gone.length > 0) {
+    warnings.push(`this save was played with ${gone.join(', ')}, which ${gone.length === 1 ? 'is' : 'are'} not active now`);
+  }
+  if (added.length > 0) {
+    warnings.push(`${added.join(', ')} ${added.length === 1 ? 'is' : 'are'} active now but ${added.length === 1 ? 'was' : 'were'} not when this save was made`);
+  }
+
+  return { ok: true, state, warnings, file: { ...file, state } };
 }
 
 /**

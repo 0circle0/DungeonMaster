@@ -112,7 +112,21 @@ export function runTriggers(
     if (occasion === 'custom' && trigger.event !== customEvent) continue;
 
     const triggerRng = rng.derive(`trigger:${trigger.id}`);
-    if (!shouldFire(txn, trigger, actor, triggerRng)) continue;
+    let willFire = shouldFire(txn, trigger, actor, triggerRng);
+
+    // A mod gets the last word on whether a module trigger fires. `replace`
+    // decides it outright; anything else just observes.
+    if (txn.mods?.has('trigger.shouldFire', occasion)) {
+      const outcome = txn.mods.run(
+        txn,
+        'trigger.shouldFire',
+        { triggerId: trigger.id, occasion, actorId: actor.id, willFire },
+        triggerRng,
+      );
+      if (outcome.replaced) willFire = !willFire;
+    }
+
+    if (!willFire) continue;
 
     // A restart wipes what the world remembered about this place, so returning
     // to an unfinished barrow finds it reordered rather than half-cleared.

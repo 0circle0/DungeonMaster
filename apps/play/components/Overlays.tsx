@@ -157,8 +157,8 @@ export function Inventory({ session }: { session: SessionApi }) {
 }
 
 export function SaveMenu({ session, onClose }: { session: SessionApi; onClose: () => void }) {
-  const { module, frame, restore, note } = session;
-  const saves = useSaves(module);
+  const { module, restore, note, serialize } = session;
+  const saves = useSaves(module, serialize);
   const file = useRef<HTMLInputElement>(null);
 
   const load = (text: string) => {
@@ -177,11 +177,11 @@ export function SaveMenu({ session, onClose }: { session: SessionApi; onClose: (
       <div className="save-slot">
         <button
           className="btn primary"
-          onClick={() => { saves.store(`slot-${Date.now()}`, frame.state); }}
+          onClick={() => { saves.store(`slot-${Date.now()}`); }}
         >
           Save now
         </button>
-        <button className="btn" onClick={() => saves.download(frame.state)}>Download</button>
+        <button className="btn" onClick={() => saves.download()}>Download</button>
         <button className="btn" onClick={() => file.current?.click()}>Upload…</button>
         <input
           ref={file}

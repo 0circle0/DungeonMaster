@@ -514,6 +514,18 @@ export function runReactions(
     ? txn.module.find<{ reactions?: ReactionDef[] }>('content.monsters', reactor.statblock)
     : txn.module.find<{ reactions?: ReactionDef[] }>('content.npcs', reactor.id);
 
+  // A mod may react to anything a statblock could, and to triggers no
+  // statblock declares.
+  if (txn.mods?.has('reactions', trigger)) {
+    const outcome = txn.mods.run(
+      txn,
+      'reactions',
+      { reactorId: reactor.id, trigger, subjectId: subject?.id ?? null },
+      rng.derive(`modReaction:${reactor.id}`),
+    );
+    if (outcome.replaced) return;
+  }
+
   const reactions = (source?.reactions ?? [])
     .filter((reaction) => reaction.on === trigger)
     .sort((a, b) => b.priority - a.priority);

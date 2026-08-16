@@ -497,3 +497,20 @@
 .dialogOption:hover { border-color: var(--accent-dim); }
 .dialogOption em { display: block; color: var(--muted); font-style: normal; font-size: 11.5px; margin-top: 2px; }
 .dialogActions { display: flex; justify-content: flex-end; gap: 8px; }
+
+/* Mods panel. A mod describes its UI and the host draws it, so these are the
+   only styles a mod's widget tree can reach — deliberately: an editor mod
+   cannot ship CSS, which is what keeps one mod from restyling the studio. */
+.modsBody { padding: 10px 12px; overflow: auto; }
+.modsBody h3 { font-size: 11px; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); margin: 14px 0 6px; }
+.modsBody h3:first-child { margin-top: 0; }
+.modsList { list-style: none; margin: 0; padding: 0; }
+.modsList > li { padding: 6px 0; border-bottom: 1px solid var(--line); }
+.modsHint { color: var(--muted); font-size: 12px; margin: 2px 0; }
+.modsWarn { color: var(--warn); font-size: 12px; margin: 2px 0; }
+.modsBtn { font: inherit; font-size: 11px; padding: 2px 8px; margin-top: 4px; background: var(--panel-2); color: var(--fg); border: 1px solid var(--line); border-radius: 5px; cursor: pointer; }
+.modsBtn:hover { border-color: var(--accent); }
+.modsTable { width: 100%; border-collapse: collapse; font-size: 12px; margin: 6px 0; }
+.modsTable th { text-align: left; color: var(--muted); font-weight: 500; border-bottom: 1px solid var(--line); padding: 3px 6px; }
+.modsTable td { padding: 3px 6px; border-bottom: 1px solid var(--line); }
+.modsMissing { color: var(--err); }

@@ -2,6 +2,7 @@ import { describe, it, expect } from 'vitest';
 import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { compileModule, hashModule } from './compile.js';
+import { loadModuleFrom } from './load.js';
 import type { GameModule } from './schema/module.js';
 
 const MINIMAL_PATH = fileURLToPath(new URL('../../../modules/minimal/module.json', import.meta.url));
@@ -186,5 +187,80 @@ describe('hashModule', () => {
     const changed = clone(result.module.source);
     changed.content.monsters[0]!.xp = 999;
     expect(hashModule(changed)).not.toBe(original);
+  });
+
+  /**
+   * ⚠️ DO NOT "fix" this test by updating the expected values. ⚠️
+   *
+   * `compileModule` hashes `parsed.data` — the document *after* zod applies
+   * defaults. So any new top-level field carrying a `.default()` silently
+   * changes the hash of every module ever authored, and `load()` in the engine
+   * refuses a save whose recorded module hash no longer matches. The first
+   * symptom is every player's save file failing to load.
+   *
+   * If this test fails, a schema change did that. The fix is to make the new
+   * field `.optional()` (an absent key stays absent in `parsed.data`, so the
+   * hash is untouched), not to re-stamp the numbers below.
+   *
+   * These are the hashes as of the mod-system work, which added
+   * `gameModuleSchema.mods` as `.optional()` for exactly this reason.
+   */
+  it('is unchanged for a module that declares no mods', () => {
+    // `minimal` is the witness, and deliberately not greenmarch: greenmarch
+    // carries mods and authored `extra` data now, so its hash moves whenever
+    // its *content* does, which would make this test noise. `minimal` declares
+    // no mods and is the no-hardcoding control, so the only thing that can
+    // move this number is the schema itself.
+    const at = (name: string) => fileURLToPath(new URL(`../../../modules/${name}`, import.meta.url));
+    expect(loadModuleFrom(at('minimal')).hash).toBe('4ce71bf8aa4ef5f0');
+  });
+
+  it('treats an absent `mods` key as absent, not as an empty list', () => {
+    // The property the pinned number above depends on, stated directly.
+    //
+    // `compileModule` hashes `parsed.data`, so if `mods` were `.default([])`
+    // rather than `.optional()`, zod would insert `mods: []` into every
+    // document ever parsed and every module hash in existence would change —
+    // and `load()` refuses a save whose recorded hash no longer matches. The
+    // two hashes below being *different* is what proves the key stays out.
+    const bare = compileModule(loadMinimal());
+    const doc = loadMinimal();
+    doc['mods'] = [];
+    const empty = compileModule(doc);
+    if (!bare.ok || !empty.ok) throw new Error('expected both to compile');
+
+    expect(empty.module.hash).not.toBe(bare.module.hash);
+    expect(bare.module.source.mods).toBeUndefined();
+    expect(empty.module.source.mods).toEqual([]);
+  });
+});
+
+describe('checkMods', () => {
+  it('rejects two pins for one mod', () => {
+    const doc = loadMinimal();
+    doc['mods'] = [
+      { id: 'thorns', hash: '0'.repeat(16) },
+      { id: 'thorns', hash: '1'.repeat(16) },
+    ];
+    const result = compileModule(doc);
+    if (result.ok) throw new Error('expected duplicate_mod');
+    expect(result.errors).toContainEqual(expect.objectContaining({ code: 'duplicate_mod' }));
+  });
+
+  it('warns that `required` on an editor mod does not gate play', () => {
+    const doc = loadMinimal();
+    doc['mods'] = [{ id: 'thorns_studio', hash: '0'.repeat(16), target: 'editor', required: true }];
+    const result = compileModule(doc);
+    if (!result.ok) throw new Error(`expected success: ${JSON.stringify(result.errors)}`);
+    expect(result.warnings).toContainEqual(expect.objectContaining({ code: 'mod_required_editor' }));
+  });
+
+  it('changes the module hash, so a pin cannot drift unnoticed', () => {
+    const bare = compileModule(loadMinimal());
+    const doc = loadMinimal();
+    doc['mods'] = [{ id: 'thorns', hash: 'a'.repeat(16), required: true }];
+    const pinned = compileModule(doc);
+    if (!bare.ok || !pinned.ok) throw new Error('expected both to compile');
+    expect(pinned.module.hash).not.toBe(bare.module.hash);
   });
 });

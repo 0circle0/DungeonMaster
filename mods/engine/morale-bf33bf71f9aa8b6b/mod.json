@@ -1,0 +1,30 @@
+{
+  "format": 1,
+  "id": "morale",
+  "target": "engine",
+  "version": "1.0.0",
+  "hash": "bf33bf71f9aa8b6b",
+  "meta": {
+    "title": "Morale",
+    "author": "DungeonMaster",
+    "description": "Play half of the morale pair: a monster whose vitality falls to its authored morale threshold breaks and is marked as routed. Reads extra.morale, which the studio half writes.",
+    "license": "MIT",
+    "homepage": ""
+  },
+  "engine": "^1.0.0",
+  "dependencies": [],
+  "loadAfter": [],
+  "entry": "main.js",
+  "hooks": [
+    {
+      "hook": "action.after",
+      "mode": "after",
+      "priority": 0
+    }
+  ],
+  "limits": {
+    "steps": 2000000,
+    "memoryBytes": 33554432
+  },
+  "systemText": {}
+}

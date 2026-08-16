@@ -7,7 +7,7 @@
  */
 
 import type { CompiledModule } from '@dm/module';
-import type { Action, GameState, Line } from '@dm/engine';
+import type { Action, GameState, Line, ModRuntime } from '@dm/engine';
 import {
   newGame,
   defaultChoices,
@@ -127,6 +127,14 @@ export interface PlayContext {
   readonly module: CompiledModule;
   readonly state: GameState;
   readonly terrain: TerrainIndex;
+  /**
+   * Installed mods, when a game uses any.
+   *
+   * Optional, and absent is byte-for-byte the unmodded engine — the same
+   * arrangement `ReduceContext` uses, and for the same reason: mods must cost
+   * nothing at all when there are none.
+   */
+  readonly mods?: ModRuntime | undefined;
 }
 
 /** One resolved turn: the world after, and what to say about it. */
@@ -147,6 +155,7 @@ export function applyTo(context: PlayContext & { readonly seed: number }, action
   const result = reduce(context.state, action, {
     module: context.module,
     terrain: context.terrain,
+    mods: context.mods,
   });
   const lines = narrate(
     { module: context.module, state: result.state, seed: context.seed },

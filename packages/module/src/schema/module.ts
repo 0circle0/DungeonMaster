@@ -85,6 +85,31 @@ export const startSchema = z
   })
   .strict();
 
+/**
+ * A mod this game expects, pinned to the exact build it was authored against.
+ *
+ * `id` and `hash` are separate fields rather than one `"thorns-3f2a…"` string,
+ * and that is load-bearing: `mergeModules` merges by `id`, so a combined string
+ * would make a base pinning one version and a patch pinning another look like
+ * two different mods, and **both** would survive the merge. Split, the existing
+ * merge does the right thing and `$delete` works — a pack drops an inherited
+ * mod with `{ "id": "thorns", "$delete": true }`.
+ */
+export const moduleModSchema = z
+  .object({
+    id: idSchema,
+    /** The build this game was authored against. Drift warns; it does not block. */
+    hash: z.string().regex(/^[0-9a-f]{16}$/, 'must be a 16-character mod content hash'),
+    target: z.enum(['engine', 'editor']).default('engine'),
+    /** Forced on, and play is blocked when it is missing. */
+    required: z.boolean().default(false),
+    /** Shown when the mod is missing or drifted — the author's own words. */
+    note: z.string().max(400).default(''),
+  })
+  .strict();
+
+export type ModuleMod = z.infer<typeof moduleModSchema>;
+
 export const gameModuleSchema = z
   .object({
     /** Format version, so a future reader knows how to migrate this document. */
@@ -103,6 +128,21 @@ export const gameModuleSchema = z
       .regex(/^[a-z][a-z0-9_]*@\d+\.\d+\.\d+$/, 'must look like "core_fantasy@1.0.0"')
       .nullable()
       .default(null),
+    /**
+     * Mods this game expects.
+     *
+     * ⚠️ `.optional()`, and it must stay that way. `compileModule` hashes
+     * `parsed.data`, so a `.default([])` here would insert `mods: []` into
+     * every document zod has ever parsed, changing the hash of every module —
+     * and `load()` in the engine refuses a save whose recorded module hash no
+     * longer matches. Every existing save would stop loading. `compile.test.ts`
+     * pins the shipped modules' hashes to catch exactly that.
+     *
+     * The section does participate in the hash once an author adds it, which is
+     * the point: changing a required mod pin has to surface as drift on an old
+     * save rather than pass silently.
+     */
+    mods: z.array(moduleModSchema).optional(),
     meta: moduleMetaSchema,
     rules: rulesSchema,
     content: contentSchema.default({}),

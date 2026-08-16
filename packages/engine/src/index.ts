@@ -163,7 +163,14 @@ export {
 export { takeAiTurn, runAiTurns } from './rules/combat/ai.js';
 
 export { save, load, statesEqual } from './save.js';
-export type { SaveFile, LoadResult } from './save.js';
+export type { SaveFile, LoadResult, SaveOptions, SaveLineageEntry } from './save.js';
+
+// Mods. `ModRuntime` is what a front end builds and hands to `reduce` via
+// `ReduceContext.mods`; the hook names are the contract a mod attaches to.
+export { ModRuntime } from './mods/runtime.js';
+export type { ModRuntimeOptions } from './mods/runtime.js';
+export { HOOK_NAMES, isHookName } from './mods/hooks.js';
+export type { HookName, HookOutcome, HookSubjects } from './mods/hooks.js';
 
 export type { MapInstance, CombatState } from './state.js';
 

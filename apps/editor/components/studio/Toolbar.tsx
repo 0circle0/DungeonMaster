@@ -17,6 +17,9 @@ export function Toolbar(props: {
   onNew: () => void;
   onLoadFile: (file: File) => void;
   onOpenStart: () => void;
+  onOpenMods: () => void;
+  /** How many mods are installed, so the button can say. */
+  modCount: number;
 }) {
   const { store } = props;
   const { validation } = store;
@@ -82,6 +85,14 @@ export function Toolbar(props: {
         ) : (
           'no start set'
         )}
+      </button>
+
+      <button
+        className="btn"
+        onClick={props.onOpenMods}
+        title="Mods installed under mods/, and what this module pins."
+      >
+        Mods{props.modCount > 0 ? ` (${props.modCount})` : ''}
       </button>
 
       <span className={styles.spacer} />

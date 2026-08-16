@@ -60,6 +60,7 @@ import { isHostileTo } from './rules/combat/targeting.js';
 import { leaveMarks, perceiveAll, perceivedTiles, sightSenseOf } from './sim/senses.js';
 import { message, joinMessages } from './narrate/systemText.js';
 import type { Message } from './narrate/systemText.js';
+import type { ModRuntime } from './mods/runtime.js';
 
 export interface ReduceResult {
   readonly state: GameState;
@@ -76,6 +77,15 @@ export interface ReduceResult {
 export interface ReduceContext {
   readonly module: CompiledModule;
   readonly terrain?: TerrainIndex;
+  /**
+   * Installed mods.
+   *
+   * Absent means no mods, which is byte-for-byte today's behaviour: every hook
+   * site is an optional-chain miss, so nothing is allocated, serialized, or
+   * crossed. `mods.test.ts` proves that by replaying the same action list with
+   * and without a zero-mod runtime and comparing states.
+   */
+  readonly mods?: ModRuntime | undefined;
 }
 
 /** Resolve who is acting: the named entity, or the selected party member. */
@@ -109,7 +119,8 @@ function actionMinutes(module: CompiledModule, action: string): number {
 export function reduce(state: GameState, action: Action, context: ReduceContext): ReduceResult {
   const { module } = context;
   const terrain = context.terrain ?? terrainFor(module);
-  const txn = new Transaction(state, module);
+  const mods = context.mods ?? null;
+  const txn = new Transaction(state, module, mods);
 
   // The run's RNG is restored, used, and written back, so consuming randomness
   // is itself part of the state transition and replays identically.
@@ -118,6 +129,25 @@ export function reduce(state: GameState, action: Action, context: ReduceContext)
   /** Rebuilt per read because it closes over the transaction's current state. */
   const targeting = (): TargetingContext => ({ module, state: txn.state, terrain });
 
+  // Mods get first refusal on every action. A `replace` handler stands in for
+  // the core case entirely — which is how a mod rewrites an existing rule
+  // rather than only adding to it.
+  let replacedByMod = false;
+  if (mods?.has('action.before', action.type)) {
+    const actorId = 'actor' in action && action.actor ? action.actor : state.selected;
+    const outcome = mods.run(txn, 'action.before', { action, actorId }, rng);
+    replacedByMod = outcome.replaced;
+    if (outcome.refused) {
+      txn.set({ ...txn.state, rng: rng.save() });
+      return txn.finish();
+    }
+  }
+
+  // No braces so the switch below keeps its indentation, and — more to the
+  // point — so `action.type` stays the scrutinee. Switching on anything
+  // computed would destroy the discriminated-union narrowing that every case
+  // in this function depends on.
+  if (!replacedByMod)
   switch (action.type) {
     case 'step':
     case 'move': {
@@ -731,14 +761,33 @@ export function reduce(state: GameState, action: Action, context: ReduceContext)
     }
   }
 
+  // Mods see the action's own events before anything settles, which is what
+  // makes "react to what just happened" possible without re-deriving it.
+  if (mods?.has('action.after', action.type)) {
+    const actorId = 'actor' in action && action.actor ? action.actor : state.selected;
+    const seen = txn.finish().events.map((event) => event.type);
+    mods.run(txn, 'action.after', { action, actorId, events: seen }, rng);
+  }
+
   // Write the advanced generator back, then settle anything the action caused.
   txn.set({ ...txn.state, rng: rng.save() });
   settle(txn, terrain, rng);
 
+  // After everything the action set in motion has resolved. Deliberately no
+  // `replace`: see the note on the hook.
+  if (mods?.has('settle.after')) {
+    mods.run(
+      txn,
+      'settle.after',
+      { inCombat: txn.state.combat !== null, outcome: txn.state.outcome },
+      rng,
+    );
+  }
+
   // Content asks for a deed by emitting one; recording it here means every
   // path that can cause one — a trigger, a quest, a dialogue node — is covered.
   const pending = txn.finish();
-  const followUp = new Transaction(pending.state, module);
+  const followUp = new Transaction(pending.state, module, mods);
   const actor = followUp.entity(pending.state.selected);
 
   if (actor) {
@@ -1026,6 +1075,20 @@ export function runOccasion(
     : null;
   if (!source) return;
 
+  // Mods see every occasion, including the `custom` events content emits — so
+  // a mod can listen to the module's own pub/sub as well as the engine's.
+  // A `replace` here stands in for the module's triggers entirely.
+  const key = customEvent ?? occasion;
+  if (txn.mods?.has('occasion', key)) {
+    const outcome = txn.mods.run(
+      txn,
+      'occasion',
+      { occasion, customEvent: customEvent ?? null, sourceId: source.id, sourceKind: source.kind },
+      rng.derive(`modOccasion:${key}`),
+    );
+    if (outcome.replaced) return;
+  }
+
   runTriggers(
     txn, triggersFor(txn, placesHere(txn)), occasion, source, actor,
     rng.derive(`occasion:${occasion}`), customEvent,
@@ -1201,6 +1264,17 @@ export function advanceTime(txn: Transaction, minutes: number, rng: Rng): void {
   // Resting through a week must age the world by a week, not by one tick.
   const dayBefore = Math.floor(before / perDay);
   const dayAfter = Math.floor(after / perDay);
+
+  // The world tick. Once per call rather than per minute, because resting
+  // through a week is one jump, not ten thousand.
+  if (txn.mods?.has('time.after')) {
+    txn.mods.run(
+      txn,
+      'time.after',
+      { minutes, totalMinute: after, daysCrossed: dayAfter - dayBefore },
+      rng.derive(`modTime:${after}`),
+    );
+  }
   for (let day = dayBefore + 1; day <= dayAfter; day += 1) {
     tickDay(txn, day, rng);
   }

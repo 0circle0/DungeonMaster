@@ -11,11 +11,12 @@
  * it is testable without a DOM.
  */
 
-import { useCallback, useReducer, useRef } from 'react';
+import { useCallback, useMemo, useReducer, useRef } from 'react';
 import type { CompiledModule } from '@dm/module';
-import type { Action, GameState, Line } from '@dm/engine';
-import { TerrainIndex, load as loadState } from '@dm/engine';
+import type { Action, GameState, Line, SaveFile } from '@dm/engine';
+import { TerrainIndex, load as loadState, save as saveState } from '@dm/engine';
 import { startSession, applyTo, interpret } from '@dm/play';
+import type { ModSetup } from './mods';
 import type { MetaCommand, CharacterChoicesLike } from './choices.js';
 
 export interface SessionFrame {
@@ -56,9 +57,33 @@ export interface SessionApi {
   /** Replace the run with a loaded save. Returns an error to show, or null. */
   readonly restore: (text: string, allowDrift?: boolean) => string | null;
   readonly note: (text: string, kind?: Line['kind']) => void;
+  /**
+   * Serialize the run, carrying the lineage and the active mod set.
+   *
+   * On the API rather than left to each caller because the append rule is easy
+   * to get subtly wrong, and a lineage that silently restarts is worse than
+   * none — it would claim a save had only ever seen one module build.
+   */
+  readonly serialize: (savedAt: number) => string;
 }
 
-export function useSession(module: CompiledModule, initialSeed: number): SessionApi {
+export function useSession(
+  module: CompiledModule,
+  initialSeed: number,
+  /** Resolved mods, or null when the game uses none. */
+  setup: ModSetup | null = null,
+): SessionApi {
+  const mods = setup?.runtime ?? undefined;
+  const modIds = useMemo(() => setup?.identities ?? [], [setup]);
+
+  /**
+   * The save this run was loaded from, so its lineage carries forward.
+   *
+   * Without it every load-then-save would start the chain over, and the chain
+   * is the whole point: it is what says which module build a broken save came
+   * from.
+   */
+  const previousRef = useRef<SaveFile | null>(null);
   // Large, non-serializable, constant per module — a ref, not a memo: useMemo
   // is a hint, and losing the terrain index mid-run would rebuild it silently.
   const terrainRef = useRef<{ module: CompiledModule; terrain: TerrainIndex } | null>(null);
@@ -84,17 +109,17 @@ export function useSession(module: CompiledModule, initialSeed: number): Session
   const dispatchAction = useCallback((action: Action) => {
     const current = liveRef.current;
     const turn = applyTo(
-      { module, state: current.state, terrain, seed: current.seed },
+      { module, state: current.state, terrain, seed: current.seed, mods },
       action,
     );
     liveRef.current = { ...current, state: turn.state, transcript: [...current.transcript, ...turn.lines] };
     dispatch({ type: 'applied', state: turn.state, lines: turn.lines });
-  }, [module, terrain]);
+  }, [module, terrain, mods]);
 
   const submit = useCallback((input: string): MetaCommand | null => {
     const current = liveRef.current;
     const outcome = interpret(
-      { module, state: current.state, terrain, seed: current.seed },
+      { module, state: current.state, terrain, seed: current.seed, mods },
       input,
     );
 
@@ -115,7 +140,7 @@ export function useSession(module: CompiledModule, initialSeed: number): Session
       case 'meta':
         return outcome.command;
     }
-  }, [module, terrain]);
+  }, [module, terrain, mods]);
 
   const restart = useCallback((seed: number, roster?: readonly CharacterChoicesLike[]) => {
     const session = startSession(module, seed, undefined, roster);
@@ -126,21 +151,40 @@ export function useSession(module: CompiledModule, initialSeed: number): Session
   }, [module]);
 
   const restore = useCallback((text: string, allowDrift = false): string | null => {
-    const result = loadState(text, module, { allowModuleDrift: allowDrift });
+    const result = loadState(text, module, { allowModuleDrift: allowDrift, mods: modIds });
     if (!result.ok) return result.error;
 
+    // Mod drift never blocks a load. The engine cannot tell whether a different
+    // mod set matters, because it does not know what any mod changed — so it
+    // names what differs and leaves the judgement to the player.
+    const notes: Line[] = [
+      { text: 'Loaded.', kind: 'note' },
+      ...result.warnings.map((text): Line => ({ text, kind: 'refusal' })),
+    ];
+    previousRef.current = result.file;
+
     const current = liveRef.current;
-    const note: Line = { text: 'Loaded.', kind: 'note' };
     liveRef.current = {
-      ...current, state: result.state, transcript: [...current.transcript, note],
+      ...current, state: result.state, transcript: [...current.transcript, ...notes],
     };
-    dispatch({ type: 'applied', state: result.state, lines: [note] });
+    dispatch({ type: 'applied', state: result.state, lines: notes });
     return null;
-  }, [module]);
+  }, [module, modIds]);
 
   const note = useCallback((text: string, kind: Line['kind'] = 'note') => {
     dispatch({ type: 'note', line: { text, kind } });
   }, []);
 
-  return { frame, module, terrain, dispatchAction, submit, restart, restore, note };
+  const serialize = useCallback(
+    (savedAt: number) =>
+      saveState(liveRef.current.state, savedAt, {
+        // Carrying the file this run was loaded from is what keeps the lineage
+        // a chain rather than a single link.
+        previous: previousRef.current,
+        mods: modIds,
+      }),
+    [modIds],
+  );
+
+  return { frame, module, terrain, dispatchAction, submit, restart, restore, note, serialize };
 }

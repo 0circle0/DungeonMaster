@@ -125,6 +125,7 @@ export function newGame(module: CompiledModule, options: NewGameOptions): GameSt
     reputation,
     quests: {},
     deeds: [],
+    modState: {},
     outcome: 'playing',
   };
 }

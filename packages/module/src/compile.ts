@@ -8,7 +8,7 @@
  */
 
 import { z } from 'zod';
-import { hashString } from '@dm/core';
+import { hash64, stableStringify } from '@dm/core';
 import { gameModuleSchema, COLLECTION_PATHS } from './schema/module.js';
 import type { GameModule, CollectionPath } from './schema/module.js';
 import { refTarget } from './schema/common.js';
@@ -27,7 +27,9 @@ export interface CompileIssue {
     | 'missing_system_text'
     | 'blank_system_text'
     | 'system_text_placeholder'
-    | 'unreachable_content';
+    | 'unreachable_content'
+    | 'duplicate_mod'
+    | 'mod_required_editor';
 }
 
 /** Anything with an id; every indexed collection entry has one. */
@@ -272,28 +274,58 @@ function collectRefs(
 }
 
 /**
- * Stable stringify: object keys sorted, so a hash tracks content rather than
- * whichever order an editor happened to serialize.
+ * Internal consistency of the `mods` section.
+ *
+ * Presence is deliberately **not** checked here. This package has no
+ * filesystem and must not depend on `@dm/mods`, so "is that mod installed",
+ * "does its hash match", and "are its dependencies active" are load-time
+ * questions answered by `resolveMods`. What can be settled from the document
+ * alone is settled here.
  */
-function stableStringify(value: unknown): string {
-  if (value === null || typeof value !== 'object') return JSON.stringify(value) ?? 'null';
-  if (Array.isArray(value)) return `[${value.map(stableStringify).join(',')}]`;
-  const entries = Object.entries(value as Record<string, unknown>)
-    .filter(([, v]) => v !== undefined)
-    .sort(([a], [b]) => (a < b ? -1 : a > b ? 1 : 0));
-  return `{${entries.map(([k, v]) => `${JSON.stringify(k)}:${stableStringify(v)}`).join(',')}}`;
+function checkMods(module: GameModule, errors: CompileIssue[], warnings: CompileIssue[]): void {
+  const mods = module.mods ?? [];
+  const seen = new Set<string>();
+
+  mods.forEach((entry, i) => {
+    if (seen.has(entry.id)) {
+      errors.push({
+        path: `mods[${i}]`,
+        message: `duplicate mod ${JSON.stringify(entry.id)} — two pins for one mod cannot both load`,
+        code: 'duplicate_mod',
+      });
+      return;
+    }
+    seen.add(entry.id);
+
+    // An editor mod is not consulted at play time at all, so `required` on one
+    // promises a guarantee nothing delivers.
+    if (entry.target === 'editor' && entry.required) {
+      warnings.push({
+        path: `mods[${i}].required`,
+        message: `${entry.id} is an editor mod, so \`required\` does not gate play — it only affects the studio`,
+        code: 'mod_required_editor',
+      });
+    }
+  });
 }
 
 /**
- * Content hash, for change detection rather than security. Two 32-bit passes
- * over different salts give a 64-bit hex tag, plenty to catch a module that
- * changed under a save file.
+ * Content hash, for change detection rather than security.
+ *
+ * The recipe and `stableStringify` now live in `@dm/core` so the mod format
+ * hashes the same way rather than growing a second implementation that drifts.
+ * The salt separator is a NUL byte — see `hash64` — which is why this file used
+ * to read as binary to `grep`.
+ *
+ * ⚠️ This hashes the module **after** zod applies defaults, because
+ * `compileModule` calls it on `parsed.data`. Any new top-level field carrying a
+ * `.default()` therefore changes the hash of every module ever authored, and
+ * `load()` in the engine refuses a save whose recorded hash no longer matches.
+ * New optional sections must use `.optional()`. `compile.test.ts` pins the
+ * shipped modules' hashes as the guard on exactly that mistake.
  */
 export function hashModule(module: GameModule): string {
-  const text = stableStringify(module);
-  const a = hashString(text);
-  const b = hashString(`${text} salt`);
-  return (a.toString(16).padStart(8, '0') + b.toString(16).padStart(8, '0'));
+  return hash64(stableStringify(module));
 }
 
 /** Validate and compile a raw JSON document into a playable module. */
@@ -358,6 +390,7 @@ export function compileModule(raw: unknown): CompileResult {
   }
 
   checkSystemText(module, errors);
+  checkMods(module, errors, warnings);
 
   // Prose repetition is the main threat to how the game feels, so a thin
   // template pool is surfaced rather than left to be discovered in play.

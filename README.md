@@ -20,10 +20,12 @@ State is fully serializable *including RNG state*, so `seed + action log` reprod
 | `packages/module` | Schemas, the behaviour DSL, and the compiler. The source of truth for what a game *is*. |
 | `packages/engine` | Rules, world, simulation, narration. Isomorphic — no Node APIs. |
 | `packages/play` | The play surface every front end shares: session, parser, affordances, view models. Isomorphic — no Node APIs. |
+| `packages/mods` | The mod format and its sandbox: manifests, content hashing, resolution, the QuickJS host. Isomorphic — no Node APIs. |
 | `packages/tools` | Dev tooling: port-freeing and project-coverage checks. Imported by nothing; npm runs it. |
 | `apps/play` | Browser play: click-first, command bar kept. |
 | `apps/editor` | The authoring studio. |
 | `modules/` | Game modules. `minimal` is the no-hardcoding proof. |
+| `mods/` | Installed mods, `engine/` and `editor/`. Not packaged with any game — see [mods/README.md](mods/README.md). |
 
 ## The DSL
 
@@ -87,6 +89,43 @@ Three things worth knowing:
 
 The DSL is edited as JSON rather than through generated widgets, since effects and predicates are recursive unions that a generic form renders badly.
 
+## Mods
+
+A mod extends, fixes, or replaces what the engine or the studio does — added by
+someone who is not editing this repository, and shared with other players. Mods
+live in `mods/`, never inside a game: a game *names* the ones it needs, and the
+mods are installed separately.
+
+```json
+"mods": [
+  { "id": "thorns", "hash": "914d347738948991", "required": true,
+    "note": "The barrow rules depend on it." }
+]
+```
+
+A mod ships real JavaScript, run inside QuickJS (WebAssembly) — a separate heap,
+no DOM, no `fetch`, no filesystem. That is a **security** boundary, not a
+gameplay one: mods are downloaded from strangers, and the sandbox is the only
+thing protecting the player's browser. What a mod may do to the *game* is
+unrestricted — invincibility, one-hit kills, rewriting combat, adding effect ops
+the engine has never heard of. The engine is not a rules referee.
+
+Two properties are enforced, and neither is a game rule. **Determinism**:
+`Date` and `Math.random` do not exist inside a mod, and `dm.random()` draws from
+a generator derived off game state, so rule 2 above still holds with mods
+loaded. **Containment**: a mod that throws, hangs, or returns nonsense becomes a
+`modError` event and the turn continues.
+
+Identity is `<id>-<hash>`, which is also the folder name, so several versions of
+one mod coexist. A game pins the hash it was authored against: a **missing
+required** mod blocks play, while a **hash mismatch warns and plays anyway** —
+the hash sits in a file anyone can edit, so blocking would only teach people to
+edit the hash. Saves record their module-hash lineage and the active mod set, so
+a broken save can say which version broke it.
+
+[mods/README.md](mods/README.md) is the authoring guide: the hook table, the
+`dm` API, directives, and the editor-side widget model with its limits.
+
 ## Commands
 
 ```bash
@@ -98,6 +137,8 @@ npm run validate -- modules/minimal # schema, reference integrity, content lints
 npm run schema                      # emit JSON Schema for the editor and VS Code
 npm run editor                      # the authoring UI   (build: editor:build)
 npm run play                        # the browser game   (build: play:build)
+npm run mod -- check                # validate every installed mod
+npm run mod -- hash mods/engine/x   # re-stamp a mod's content hash and folder
 ```
 
 `validate` exits non-zero on failure, so it works as a CI gate:

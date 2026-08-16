@@ -11,8 +11,10 @@
 import { join } from 'node:path';
 import { resolveExtends } from '@dm/module';
 import { readAssembledModule, siblingLoader, listModules } from '@dm/module/load';
+import { loadModsFrom } from '@dm/mods/load';
 import { Play } from './Play';
 import type { ModuleChoice } from '@/lib/modules';
+import type { ModWire } from '@/lib/mods';
 
 function loadShipped(): ModuleChoice[] {
   const root = join(process.cwd(), '..', '..', 'modules');
@@ -45,6 +47,34 @@ function loadShipped(): ModuleChoice[] {
     Number(b.id === 'greenmarch') - Number(a.id === 'greenmarch') || a.title.localeCompare(b.title));
 }
 
+/**
+ * Installed mods, as source text.
+ *
+ * Mods live in `mods/` rather than beside a game, because a mod is not
+ * game-specific — a game names the ones it needs and the mods themselves are
+ * shared separately. Only the engine target crosses: editor mods are the
+ * studio's business.
+ *
+ * JavaScript source is just a string, so this crosses the RSC boundary exactly
+ * as a module document does. It is evaluated in the browser, inside QuickJS.
+ */
+function loadInstalledMods(): ModWire[] {
+  const root = join(process.cwd(), '..', '..', 'mods');
+  try {
+    return loadModsFrom(root)
+      .mods.filter((mod) => mod.manifest.target === 'engine')
+      .map((mod) => ({
+        manifest: mod.manifest,
+        files: mod.files,
+        hash: mod.hash,
+        issues: mod.issues.map((issue) => ({ message: issue.message, severity: issue.severity })),
+      }));
+  } catch {
+    // No `mods/` directory at all is the ordinary case for a fresh checkout.
+    return [];
+  }
+}
+
 export default function Page() {
-  return <Play shipped={loadShipped()} />;
+  return <Play shipped={loadShipped()} mods={loadInstalledMods()} />;
 }
