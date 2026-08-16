@@ -784,46 +784,112 @@ export function reduce(state: GameState, action: Action, context: ReduceContext)
     );
   }
 
-  // Content asks for a deed by emitting one; recording it here means every
-  // path that can cause one — a trigger, a quest, a dialogue node — is covered.
   const pending = txn.finish();
   const followUp = new Transaction(pending.state, module, mods);
-  const actor = followUp.entity(pending.state.selected);
 
+  // Consequences can have consequences. Each pass sees only what the previous
+  // one produced, and stops when a pass produces nothing.
+  let batch: readonly GameEvent[] = pending.events;
+  let produced: GameEvent[] = [];
+  for (let pass = 0; pass < MAX_EMISSION_PASSES && batch.length > 0; pass += 1) {
+    const before = followUp.finish().events.length;
+    processEmissions(followUp, terrain, batch, rng, pass);
+    produced = followUp.finish().events.slice(before);
+    batch = produced;
+  }
+
+  // A module whose consequences never settle says so rather than being silently
+  // truncated. Deliberately an event carrying data and not a `refused` carrying
+  // prose: every message-tier entry in the system-text registry has a schema
+  // default, so adding one would move the hash of every module in existence and
+  // invalidate every save — which is exactly what `compile.test.ts` pins
+  // `minimal`'s hash to catch. This is a fact about a broken module, and facts
+  // travel as events.
+  if (batch.length > 0) {
+    followUp.emit({
+      type: 'custom',
+      event: 'emissionsUnsettled',
+      data: { passes: MAX_EMISSION_PASSES, pending: batch.length },
+    });
+  }
+
+  const settled = followUp.finish();
+  return { state: settled.state, events: [...pending.events, ...settled.events] };
+}
+
+/**
+ * How many times a batch of events may set off another batch.
+ *
+ * The same posture as `narrative.maxDialogueHops` and gossip's `maxHops`: deep
+ * enough that no honest chain hits it, shallow enough that a quest whose
+ * `onComplete` restarts itself stops rather than hanging the turn.
+ */
+const MAX_EMISSION_PASSES = 4;
+
+/**
+ * Everything a batch of events sets in motion.
+ *
+ * This used to run once, straight-line, over the action's own events — which
+ * meant anything `advanceQuests` emitted arrived after the scan had finished
+ * and was never looked at. `quest.remembersAs` produced no deed at all,
+ * `onComplete` could not emit `startQuest`, and an objective's `onComplete`
+ * could not set off a trigger. Looping it fixes all three.
+ *
+ * Feeding each pass **only the previous pass's new events** is what makes that
+ * safe. Re-feeding the accumulated list would double-count a multi-kill
+ * objective, since `advanceQuests` tallies hits per batch into a progress flag,
+ * and would drop the same corpse's loot twice.
+ *
+ * Pass 0 keeps its original rng labels exactly, so a module whose quests emit
+ * nothing has a byte-identical trace to before and only the runs this fix is
+ * *for* change at all.
+ */
+function processEmissions(
+  txn: Transaction,
+  terrain: TerrainIndex,
+  events: readonly GameEvent[],
+  rng: Rng,
+  pass: number,
+): void {
+  const suffix = pass === 0 ? '' : `:${pass}`;
+
+  // Re-read the leader each pass: a quest's `onComplete` can change who is
+  // selected, or kill them.
+  const actor = txn.entity(txn.state.selected);
+
+  // Content asks for a deed by emitting one; recording it here means every
+  // path that can cause one — a trigger, a quest, a dialogue node — is covered.
   if (actor) {
-    for (const event of pending.events) {
+    for (const event of events) {
       if (event.type !== 'custom' || event.event !== 'deed') continue;
       const kind = String((event.data as { kind?: unknown }).kind ?? '');
-      if (kind) recordDeed(followUp, terrain, kind, actor, null, rng.derive(`deed:${kind}`));
+      if (kind) recordDeed(txn, terrain, kind, actor, null, rng.derive(`deed:${kind}${suffix}`));
     }
   }
 
   // A quest can be handed over in conversation. This runs before the quests
   // advance so the job the party just took can be progressed by the same batch
   // of events that granted it — accepting and arriving are often one moment.
-  for (const event of pending.events) {
+  for (const event of events) {
     if (event.type !== 'custom' || event.event !== 'startQuest') continue;
     const questId = String((event.data as { quest?: unknown }).quest ?? '');
-    if (questId) startQuest(followUp, questId, rng.derive(`quest:${questId}`));
+    if (questId) startQuest(txn, questId, rng.derive(`quest:${questId}${suffix}`));
   }
 
   // A trigger can wait on an event the content itself emits, which is what
   // `on: 'custom'` has always meant and never done.
-  for (const event of pending.events) {
+  for (const event of events) {
     if (event.type !== 'custom') continue;
     if (event.event === 'deed' || event.event === 'startQuest') continue;
-    runOccasion(followUp, 'custom', rng.derive(`custom:${event.event}`), event.event);
+    runOccasion(txn, 'custom', rng.derive(`custom:${event.event}${suffix}`), event.event);
   }
 
   // The dead leave what they were carrying. Before quests advance, so a "bring
   // me its hide" objective can be satisfied by the same batch that killed it.
-  dropDeathLoot(followUp, terrain, pending.events, rng.derive('spoils'));
+  dropDeathLoot(txn, terrain, events, rng.derive(`spoils${suffix}`));
 
   // Quests watch everything that just happened.
-  advanceQuests(followUp, pending.events, rng.derive('quests'));
-
-  const settled = followUp.finish();
-  return { state: settled.state, events: [...pending.events, ...settled.events] };
+  advanceQuests(txn, events, rng.derive(`quests${suffix}`));
 }
 
 /**

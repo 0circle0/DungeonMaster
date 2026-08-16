@@ -521,6 +521,80 @@ describe('quests', () => {
 
 // Only the selected character used to move; the rest stood where they had been
 // dropped until the player switched to each one and walked them individually.
+describe('consequences of consequences', () => {
+  // Everything a quest emits used to land after the scan that looks for it, so
+  // `remembersAs` produced no deed at all, and a quest could not hand out
+  // another quest on completion.
+  function finishQuestVia(doc: Record<string, unknown>): ReturnType<typeof reduce> {
+    const result = compileModule(doc);
+    if (!result.ok) throw new Error(`fixture failed: ${JSON.stringify(result.errors)}`);
+    const module = result.module;
+    const state = fresh(module);
+    const txn = transact(state, module);
+    startQuest(txn, 'the_mill_door', Rng.fromSeed(1));
+    // A witness, so a deed has somebody to be seen by.
+    txn.set({
+      ...txn.state,
+      entities: {
+        ...txn.state.entities,
+        vess: { ...spawnNpc(module, 'vess'), map: 'here', position: { x: 7, y: 6 } },
+      },
+    });
+    return reduce(txn.finish().state, { type: 'wait' }, { module });
+  }
+
+  function oneObjectiveMillDoor(extra: Record<string, unknown> = {}) {
+    const dir = fileURLToPath(new URL('../../../modules/greenmarch', import.meta.url));
+    const doc = readAssembledModule(dir).doc as unknown as {
+      narrative: { quests: Record<string, unknown>[] };
+    };
+    const quest = doc.narrative.quests.find((q) => q['id'] === 'the_mill_door')!;
+    quest['stages'] = [];
+    quest['objectives'] = [{ id: 'at_once', kind: 'custom', when: { eq: [1, 1] } }];
+    Object.assign(quest, extra);
+    return doc as unknown as Record<string, unknown>;
+  }
+
+  it('records the deed a quest says it is remembered by', () => {
+    const { state } = finishQuestVia(oneObjectiveMillDoor({ remembersAs: 'mill_cleared' }));
+    expect(state.quests['the_mill_door']!.status).toBe('complete');
+    expect(state.deeds.some((deed) => deed.kind === 'mill_cleared')).toBe(true);
+  });
+
+  it('lets a quest hand out another quest when it finishes', () => {
+    const { state } = finishQuestVia(oneObjectiveMillDoor({
+      onComplete: [{ emit: { event: 'startQuest', data: { quest: 'the_barrow_ward' } } }],
+    }));
+    expect(state.quests['the_barrow_ward']?.status).toBe('active');
+  });
+
+  it('stops a quest that restarts itself instead of hanging the turn', () => {
+    const { events } = finishQuestVia(oneObjectiveMillDoor({
+      repeatable: true,
+      onComplete: [{ emit: { event: 'startQuest', data: { quest: 'the_mill_door' } } }],
+    }));
+    expect(events.some((e) => e.type === 'custom' && e.event === 'emissionsUnsettled')).toBe(true);
+  });
+
+  it('counts a multi-kill objective once per death, not once per pass', () => {
+    // The reason each pass sees only the previous pass's events: re-feeding the
+    // accumulated list would tally the same corpse twice.
+    const txn = transact(fresh());
+    startQuest(txn, 'the_mill_door', Rng.fromSeed(1));
+    const questState = txn.state.quests['the_mill_door']!;
+    txn.set({
+      ...txn.state,
+      quests: { ...txn.state.quests, the_mill_door: { ...questState, completedObjectives: ['open_door'] } },
+      entities: {
+        ...txn.state.entities,
+        'm:0': { ...spawnMonster(GREENMARCH, 'm:0', 'bog_hound'), map: 'here', position: { x: 7, y: 6 } },
+      },
+    });
+    advanceQuests(txn, [{ type: 'died', entity: 'm:0', killer: 'e:1' }], Rng.fromSeed(1));
+    expect(txn.state.flags['quest:the_mill_door:kill_hounds:count']).toBe(1);
+  });
+});
+
 describe('objectives that are gated', () => {
   // Both `requires` and `when` were accepted by the schema and read by nothing
   // on an event-driven objective, so an author who wrote either got no gate and
