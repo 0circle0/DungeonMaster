@@ -1,5 +1,5 @@
 /**
- * `tsx packages/cli/src/bin/free-port.ts 4400`
+ * `tsx packages/tools/src/bin/free-port.ts 4400`
  *
  * Clear a stale dev server off a port before starting a new one.
  *

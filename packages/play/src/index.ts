@@ -1,10 +1,11 @@
 /**
  * The play surface, shared by every front end.
  *
- * Everything here is isomorphic — no Node APIs, no ANSI, no DOM. The terminal
- * shell colours it with picocolors; the browser shell colours it with CSS; both
- * read the same session, the same parser, and the same view models, which is
- * what stops the two front ends drifting apart about what the game *is*.
+ * Everything here is isomorphic — no Node APIs, no ANSI, no DOM. It emits data
+ * and leaves every question of paint to the shell above it, so a second front
+ * end is a rendering layer rather than a second opinion about what the game
+ * *is*. The restriction is enforced by `tsconfig.isomorphic.json` and a lint
+ * block, not by convention.
  */
 
 export { parse, resolveNoun, isMeta, HELP, VERB_SPECS, traderNearby, stockNearby } from './parser.js';
@@ -31,7 +32,6 @@ export {
   adjust,
   remaining,
   toChoices,
-  renderAllocation,
 } from './creation.js';
 export type { CreationRules, AdjustResult } from './creation.js';
 

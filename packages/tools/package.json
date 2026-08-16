@@ -1,0 +1,7 @@
+{
+  "name": "@dm/tools",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Dev tooling: port-freeing and project-coverage checks. Not imported by anything — these are scripts npm runs."
+}

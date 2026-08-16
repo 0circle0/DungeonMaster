@@ -447,7 +447,6 @@
 .legendRow { display: flex; align-items: center; gap: 7px; }
 .legendSwatch { width: 12px; height: 12px; border-radius: 3px; border: 1px solid rgba(255, 255, 255, 0.15); }
 .legendId { font-family: var(--mono); font-size: 11px; }
-.legendFlags { color: #5d6478; font-size: 10.5px; }
 .mapMessage { margin: auto; color: var(--muted); font-size: 13px; max-width: 420px; text-align: center; }
 .mapMessage code { font-family: var(--mono); color: var(--err); }
 .mapHover {

@@ -107,15 +107,15 @@ export default tseslint.config(
     rules: {
       'no-restricted-globals': [
         'error',
-        { name: 'process', message: 'The engine and the play layer are isomorphic — keep Node APIs in @dm/cli.' },
-        { name: '__dirname', message: 'The engine and the play layer are isomorphic — keep Node APIs in @dm/cli.' },
-        { name: 'require', message: 'The engine and the play layer are isomorphic — keep Node APIs in @dm/cli.' },
+        { name: 'process', message: 'The engine and the play layer are isomorphic — Node APIs belong in the app layer or `@dm/module/load`.' },
+        { name: '__dirname', message: 'The engine and the play layer are isomorphic — Node APIs belong in the app layer or `@dm/module/load`.' },
+        { name: 'require', message: 'The engine and the play layer are isomorphic — Node APIs belong in the app layer or `@dm/module/load`.' },
       ],
       'no-restricted-imports': [
         'error',
         {
           patterns: [
-            { group: ['node:*', 'fs', 'path', 'os'], message: 'The engine and the play layer are isomorphic — keep Node APIs in @dm/cli.' },
+            { group: ['node:*', 'fs', 'path', 'os'], message: 'The engine and the play layer are isomorphic — Node APIs belong in the app layer or `@dm/module/load`.' },
             { group: ['picocolors'], message: 'The play layer emits data, not escape codes — colour belongs to the front end.' },
           ],
         },

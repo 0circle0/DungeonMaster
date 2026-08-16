@@ -17,9 +17,6 @@
     "typecheck": "tsc -p tsconfig.json && tsc -p packages/engine/tsconfig.isomorphic.json && tsc -p packages/play/tsconfig.isomorphic.json && tsc -p apps/editor/tsconfig.json && tsc -p apps/play/tsconfig.json",
     "validate": "tsx packages/module/src/bin/validate.ts",
     "schema": "tsx packages/module/src/bin/emit-schema.ts",
-    "play": "tsx packages/cli/src/bin/play.ts",
-    "smoke": "tsx packages/cli/src/bin/smoke.ts",
-    "newgame": "tsx packages/cli/src/bin/newgame.ts",
     "editor": "npm run dev --workspace @dm/editor",
     "editor:build": "npm run build --workspace @dm/editor",
     "docs": "tsx packages/module/src/bin/emit-docs.ts",
@@ -27,17 +24,17 @@
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "check": "npm run check:projects && npm run typecheck && npm run lint && npm test",
-    "check:projects": "tsx packages/cli/src/bin/check-projects.ts",
-    "editor:stop": "tsx packages/cli/src/bin/free-port.ts 4400",
-    "play:web": "npm run dev --workspace @dm/play-app",
-    "play:web:build": "npm run build --workspace @dm/play-app",
-    "play:web:stop": "tsx packages/cli/src/bin/free-port.ts 4500"
+    "check:projects": "tsx packages/tools/src/bin/check-projects.ts",
+    "editor:stop": "tsx packages/tools/src/bin/free-port.ts 4400",
+    "play": "npm run dev --workspace @dm/play-app",
+    "play:build": "npm run build --workspace @dm/play-app",
+    "play:stop": "tsx packages/tools/src/bin/free-port.ts 4500"
   },
   "devDependencies": {
     "@types/node": "^22.10.2",
     "eslint": "^9.39.5",
     "tsx": "^4.19.2",
-    "typescript": "^5.7.2",
+    "typescript": "^6.0.3",
     "typescript-eslint": "^8.67.0",
     "vitest": "^2.1.8"
   }

@@ -3,9 +3,9 @@
  *
  * The *decision* is shared knowledge — terrain declaring `color: "blue"` or
  * `tags: ["water"]` means the same thing to every front end. The *paint* is
- * not: the terminal turns a tone into a picocolors call, the browser into a
- * CSS variable. Splitting it here is what stops the two drawing water in
- * different colours without anybody noticing.
+ * not: the browser turns a tone into a CSS variable, and another front end
+ * would turn it into something else. Splitting it here is what stops two
+ * surfaces drawing water in different colours without anybody noticing.
  */
 
 import type { CompiledModule } from '@dm/module';

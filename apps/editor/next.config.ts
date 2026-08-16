@@ -8,10 +8,6 @@ const config: NextConfig = {
 
   typescript: { ignoreBuildErrors: false },
 
-  // The studio used to live at /studio before it became the only UI.
-  redirects: () =>
-    Promise.resolve([{ source: '/studio', destination: '/', permanent: false }]),
-
   webpack: (webpackConfig) => {
     // Those packages use ESM-style relative imports ending in `.js`, which is
     // correct for Node but needs mapping back to the `.ts` source here.

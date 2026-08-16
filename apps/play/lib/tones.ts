@@ -2,7 +2,7 @@
  * Tone → CSS variable.
  *
  * The *decision* of which tone a thing gets is `@dm/play`'s; what a tone looks
- * like is this app's. The terminal makes the same split with picocolors.
+ * like is this app's — which is why the tone names carry no colour of their own.
  */
 
 import type { Tone } from '@dm/play';

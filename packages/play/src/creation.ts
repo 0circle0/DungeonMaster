@@ -74,7 +74,7 @@ export function creationRules(module: CompiledModule): CreationRules {
 // screen's, and live in `@dm/engine` beside `createCharacter` — which enforces
 // the same budget for parties that never come through a creation screen.
 export { costOf, totalSpent, baseAllocation } from '@dm/engine';
-import { costOf, totalSpent } from '@dm/engine';
+import { totalSpent } from '@dm/engine';
 
 export type AdjustResult =
   | { readonly ok: true; readonly attributes: Record<string, number> }
@@ -135,19 +135,4 @@ export function toChoices(
     characterClass: characterClass ?? rules.classes[0]?.id ?? '',
     attributes,
   };
-}
-
-/** Render the allocation as a table, with costs and what is left. */
-export function renderAllocation(
-  module: CompiledModule,
-  attributes: Readonly<Record<string, number>>,
-): string {
-  const rows = module.all<AttributeDef>('rules.attributes').map((attribute) => {
-    const score = attributes[attribute.id] ?? attribute.default;
-    const cost = costOf(module, attribute, score);
-    return `    ${attribute.abbrev.padEnd(5)} ${attribute.name.padEnd(12)} ${String(score).padStart(2)}   ${cost} pts`;
-  });
-
-  const left = remaining(module, attributes);
-  return [...rows, '', `    ${left} point${left === 1 ? '' : 's'} left`].join('\n');
 }

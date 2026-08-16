@@ -1,10 +1,10 @@
 /**
  * The view models both front ends draw from.
  *
- * These are the derivations extracted from the terminal renderers; the
- * renderers' own bytes are pinned in `packages/cli/src/render.test.ts`. Here
- * the data itself is what is under test — bands at their thresholds, the three
- * visibility states, gate reasons, palette precedence.
+ * These are the derivations every front end reads instead of reaching into
+ * `GameState` itself. The data is what is under test — bands at their
+ * thresholds, the three visibility states, gate reasons, palette precedence —
+ * because formatting is the shell's business and derivation is not.
  */
 
 import { describe, it, expect } from 'vitest';
@@ -22,6 +22,7 @@ import { statusView } from './status.js';
 import { partyView } from './party.js';
 import { legend } from './legend.js';
 import { inventoryView } from './inventory.js';
+import { sheetView } from './sheet.js';
 
 function loadModule(name: string): CompiledModule {
   return loadModuleFrom(fileURLToPath(new URL(`../../../../modules/${name}`, import.meta.url)));
@@ -275,6 +276,34 @@ describe('legend', () => {
     expect(names).toContain('floor');
     // And nothing from maps the party has never seen.
     expect(names).not.toContain('rubble');
+  });
+});
+
+describe('sheetView', () => {
+  it('reads the character from the module\'s own attributes and derived stats', () => {
+    const session = startSession(GREENMARCH, 7);
+    const sheet = sheetView(GREENMARCH, session.state)!;
+
+    expect(sheet.name).toBe('Ash');
+    expect(sheet.level).toBe(1);
+    expect(sheet.xp).toBe(0);
+    expect(sheet.attributes.map((a) => a.abbrev))
+      .toEqual(['MIG', 'AGI', 'END', 'INT', 'INS', 'PRE']);
+    expect(sheet.attributes.find((a) => a.abbrev === 'MIG')!.score).toBe(11);
+    expect(sheet.derived.map((d) => d.name)).toContain('Guard');
+    expect(sheet.abilities.map((a) => a.name)).toEqual(['Strike']);
+    expect(sheet.skills.map((s) => s.name)).toEqual(['Perception', 'Resolve']);
+  });
+
+  // A module with no magic must show no slots rather than a row of zeroes.
+  it('runs on the alien ruleset, and offers no slots where there is no magic', () => {
+    const sheet = sheetView(MINIMAL, startSession(MINIMAL, 7).state)!;
+
+    expect(sheet.attributes.map((a) => a.abbrev)).toEqual(['VIG', 'WIT']);
+    expect(sheet.attributes.find((a) => a.abbrev === 'VIG')!.score).toBe(7);
+    expect(sheet.derived.map((d) => d.name)).toEqual(['Ward']);
+    expect(sheet.slots).toEqual([]);
+    expect(sheet.concentrating).toBeNull();
   });
 });
 

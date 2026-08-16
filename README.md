@@ -8,7 +8,7 @@ This is not a game with data files bolted on — it is a *runtime for a game mod
 
 1. **Nothing is hardcoded.** The engine ships with no attributes, damage types, conditions, or level curve of its own. It reads them from the module. `modules/minimal` exists to prove this: its attributes are Vigor and Wits, its vital resource is Vitality, and if the engine has baked in a single assumption about what a character is made of, that module fails to run.
 2. **The core is pure.** `reduce(state, action) → { state, events }` is the only path that mutates state. No I/O, no `Date.now()`, no `Math.random()`, no Node APIs — which is what keeps a browser play surface a later UI layer rather than a rewrite.
-3. **The engine emits events, never prose.** A narrator turns `Event[]` into text, so swapping templates for an LLM, or the terminal for a browser, touches no rules code.
+3. **The engine emits events, never prose.** A narrator turns `Event[]` into text, so swapping templates for an LLM, or one front end for another, touches no rules code.
 
 State is fully serializable *including RNG state*, so `seed + action log` reproduces a run exactly.
 
@@ -19,9 +19,10 @@ State is fully serializable *including RNG state*, so `seed + action log` reprod
 | `packages/core` | Seeded RNG, dice, ids. No game concepts. |
 | `packages/module` | Schemas, the behaviour DSL, and the compiler. The source of truth for what a game *is*. |
 | `packages/engine` | Rules, world, simulation, narration. Isomorphic — no Node APIs. |
-| `packages/play` | The play surface every front end shares: session, parser, affordances, view models. Isomorphic — no Node APIs, no ANSI. |
-| `packages/cli` | Terminal play: the ANSI renderer and REPL over `@dm/play`. |
+| `packages/play` | The play surface every front end shares: session, parser, affordances, view models. Isomorphic — no Node APIs. |
+| `packages/tools` | Dev tooling: port-freeing and project-coverage checks. Imported by nothing; npm runs it. |
 | `apps/play` | Browser play: click-first, command bar kept. |
+| `apps/editor` | The authoring studio. |
 | `modules/` | Game modules. `minimal` is the no-hardcoding proof. |
 
 ## The DSL
@@ -44,21 +45,18 @@ Reads go through one mechanism: `{ "ref": "actor.attr.might" }` walks the scope 
 ## Playing it
 
 ```bash
-npm run play:web      # http://localhost:4500 — the browser front end
-npm run play -- modules/greenmarch   # the same game, in a terminal
+npm run play          # http://localhost:4500
 ```
 
-The browser is the primary way to play. Click a tile to walk there, a creature
-to attack it, a person to talk; the buttons under the map are what you can do
-right now, drawn from the same affordance list the terminal prints as its hint
-line. The command bar stays for everything else, suggesting as you type from
+Click a tile to walk there, a creature to attack it, a person to talk; the
+buttons under the map are what you can do right now, drawn from the engine's
+own affordance list. The command bar stays for everything else, suggesting as you type from
 the same tables the parser matches against — so it can never offer a line the
 parser would reject. An ambiguous target ("two bog hounds") opens a picker with
 positions instead of an unanswerable error.
 
-Both front ends read the same `modules/` directory and the same `@dm/play`
-layer, which is what makes them the same game rather than two interpretations
-of one. A module exported from the editor opens directly via **Open…**.
+The app reads the same `modules/` directory the editor writes, so a module
+exported from the studio opens directly via **Open…**.
 
 ## The editor
 
@@ -98,11 +96,8 @@ npm run typecheck                   # strict TypeScript across every file, tests
 npm run lint                        # type-aware ESLint  (--fix on `npm run lint:fix`)
 npm run validate -- modules/minimal # schema, reference integrity, content lints
 npm run schema                      # emit JSON Schema for the editor and VS Code
-npm run play -- modules/greenmarch  # play it (add --create for point-buy characters)
-npm run smoke -- modules/minimal    # scripted playthrough, asserts reproducibility
-npm run newgame -- modules/minimal  # build and print an initial game state
-npm run editor                      # the authoring UI
-npm run play:web                    # the browser play surface (build: play:web:build)
+npm run editor                      # the authoring UI   (build: editor:build)
+npm run play                        # the browser game   (build: play:build)
 ```
 
 `validate` exits non-zero on failure, so it works as a CI gate:
@@ -127,7 +122,7 @@ Every reference is proven to resolve before play begins, so a typo is a load err
 | E5 | World generation — dungeons, locks and keys, population | **done** |
 | E6 | Exploration & narrative — gates, triggers, quests, dialogue, deeds | **done** |
 | E7 | Living world — gossip, forgetting, faction drift, learning | **done** |
-| E8 | Narrator & CLI — prose, verb parser, ASCII map, save/load | **done** |
+| E8 | Narrator & parser — prose, verb parser, save/load | **done** |
 
 | Items | Floor loot, take/drop, equipment slots, consumables | **done** |
 | Parity | Editor previews call the engine's own draws | **done** |
@@ -137,8 +132,8 @@ Every reference is proven to resolve before play begins, so a typo is a load err
 | Play surface | `@dm/play` — shared session, affordances, view models; isomorphic and enforced | **done** |
 | Browser UI | `apps/play` — click-first map, context bar, autocomplete, journal, saves | **done** |
 
-The game is playable: `npm run play -- modules/greenmarch`. Add `--create` to
-roll the party by hand — the ancestries, classes, budget, and price of each
+The game is playable: `npm run play`, then open `modules/greenmarch`. The party
+can be rolled by hand — the ancestries, classes, budget, and price of each
 score all come from the module, so a different ruleset gets a different screen
 with no code change.
 

@@ -34,7 +34,7 @@ Try it:
 ```bash
 npm run editor                        # author it
 npm run validate -- modules/greenmarch  # check it
-npm run newgame -- modules/greenmarch   # start a game in it
+npm run play                            # play it in the browser
 ```
 
 `modules/greenmarch` is a complete worked example. `modules/minimal` is the smallest module that runs.
