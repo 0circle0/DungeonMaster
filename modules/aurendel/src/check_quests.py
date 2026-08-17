@@ -31,6 +31,7 @@ what the generator meant.
 """
 import json
 import os
+import re
 import sys
 
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", ".."))
@@ -161,9 +162,30 @@ def main():
             f"objective or gate reading it can never come true")
 
     # --- 3. the chain from the start to the ending -------------------------
+    #
+    # Five ways in, not four. `emit: {event: "startQuest"}` is how a dialogue
+    # option hands a job over and how a trigger starts one the moment the party
+    # walks up to a place — which is the *only* way a hidden thread's quest
+    # begins, since the whole point of one is that nobody offers it.
+    emitted = set()
+
+    def _emits(node):
+        if isinstance(node, dict):
+            if node.get("event") == "startQuest":
+                target = (node.get("data") or {}).get("quest")
+                if isinstance(target, str):
+                    emitted.add(target)
+            for value in node.values():
+                _emits(value)
+        elif isinstance(node, list):
+            for item in node:
+                _emits(item)
+
+    _emits(doc)
+
     reachable, frontier = set(), []
     for quest in quests:
-        if quest.get("autoStart") or quest.get("giver"):
+        if quest.get("autoStart") or quest.get("giver") or quest["id"] in emitted:
             frontier.append(quest["id"])
     for quest in quests:
         for npc in doc["content"].get("npcs", []):
@@ -199,7 +221,9 @@ def main():
     # ======================================================================
 
     side = [q for q in quests if "side" in q.get("tags", [])]
-    spine = [q for q in quests if "side" not in q.get("tags", [])]
+    hidden = [q for q in quests if "hidden" in q.get("tags", [])]
+    spine = [q for q in quests if "side" not in q.get("tags", [])
+             and "hidden" not in q.get("tags", [])]
     side_ids = {q["id"] for q in side}
 
     # A chain is the set of quests sharing a key; the key is the third tag that
@@ -418,6 +442,197 @@ def main():
             f"→ level {level_for(levels, running_spine):>2} straight through, "
             f"level {level_for(levels, running_all):>2} doing everything")
 
+    # --- 9. the hidden threads ---------------------------------------------
+    #
+    # A hidden thread has no giver and no arc you can see coming, so every
+    # guarantee a side chain gets from being *offered* has to be asserted here
+    # instead. All nine of these describe a failure that validates perfectly and
+    # is invisible until somebody plays for four hours and finds nothing.
+    import hiddenspace
+
+    lore = {c["id"]: c for c in doc["narrative"].get("lore", [])}
+    threads = doc["narrative"].get("loreThreads", [])
+    npcs = {n["id"]: n for n in doc["content"]["npcs"]}
+    pois = {p["id"]: p for p in doc["world"]["pointsOfInterest"]}
+    areas = {a["id"]: a for a in doc["world"]["areas"]}
+    items_by_id = {i["id"]: i for i in doc["content"]["items"]}
+    empty = set(hiddenspace.areas())
+
+    def area_of(poi_id):
+        return pois.get(poi_id, {}).get("area")
+
+    # 9a. Every clue is taught by something.
+    taught = set()
+    def _taught(node):
+        if isinstance(node, dict):
+            if "learnLore" in node and isinstance(node["learnLore"], dict):
+                entry = node["learnLore"].get("entry")
+                if isinstance(entry, str):
+                    taught.add(entry)
+            for value in node.values():
+                _taught(value)
+        elif isinstance(node, list):
+            for item in node:
+                _taught(item)
+    _taught(doc)
+    for cid in sorted(set(lore) - taught):
+        problems.append(f"clue {cid!r} is taught by nothing, so it can never be learned")
+
+    # 9b. No clue names the place it points at. This is the mechanical half of
+    #     "a clue is true and partial": if the text contains the name or the id
+    #     of a point of interest, it has stopped being a clue and become a
+    #     waypoint marker with extra words.
+    #     Two tests, and the second is narrow on purpose. Any raw point-of-
+    #     interest id in a clue is always wrong. Display names are only checked
+    #     against the anchors of the clue's *own* thread: half the continent's
+    #     landmarks are called "The Landing" or "The Marker" or "The Edge", and
+    #     forbidding those everywhere forbids ordinary English.
+    anchor_names = {}
+    for thread in threads:
+        key = f'threads.{thread["id"]}.known'
+        named = [p["name"] for p in pois.values()
+                 if key in json.dumps(p.get("discover", {}))]
+        for entry_id in thread["entries"]:
+            anchor_names[entry_id] = named
+
+    for cid, entry in sorted(lore.items()):
+        text = f"{entry.get('name', '')} {entry.get('description', '')}".lower()
+        hit = next((p for p in pois if p in text), None)
+        if hit:
+            problems.append(
+                f"clue {cid!r} contains the id {hit!r} — a clue is prose, not "
+                f"a reference")
+            continue
+        for name in anchor_names.get(cid, []):
+            bare = re.sub(r"^the\s+", "", name.strip(), flags=re.I).lower()
+            if len(bare) >= 5 and re.search(rf"\b{re.escape(bare)}\b", text):
+                problems.append(
+                    f"clue {cid!r} names its own anchor ({name!r}) — a clue "
+                    f"points, it does not direct")
+                break
+
+    # 9c. Two tellers, in two areas. A thread that dies with one missed
+    #     conversation is a thread nobody finishes.
+    for thread in threads:
+        entries = set(thread["entries"])
+        tellers = []
+        for npc_id, npc in npcs.items():
+            did = npc.get("dialogue")
+            if not did:
+                continue
+            spoken = json.dumps(next((d for d in doc["narrative"]["dialogues"]
+                                      if d["id"] == did), {}))
+            if any(f'"{e}"' in spoken for e in entries):
+                tellers.append(npc_id)
+        if len(tellers) < 2:
+            problems.append(
+                f"thread {thread['id']!r}: only {len(tellers)} teller(s); a "
+                f"thread needs two so one missed conversation cannot end it")
+        where = {area_of(npcs[t].get("home", "")) for t in tellers}
+        if len(where) < 2:
+            problems.append(
+                f"thread {thread['id']!r}: every teller is in {where} — "
+                f"spread them over two areas")
+
+    # 9d. Nothing hidden stands on ground a questline already uses.
+    for quest in hidden:
+        for objective in objectives_of(quest):
+            target = objective.get("target")
+            if objective.get("kind") != "reach" or not target:
+                continue
+            where = area_of(target) or (target if target in areas else None)
+            if where and where not in empty:
+                problems.append(
+                    f"{quest['id']}/{objective['id']}: {target!r} is in "
+                    f"{where!r}, which a questline already uses — hidden "
+                    f"threads go in the empty half of the map")
+    for npc_id, npc in npcs.items():
+        did = npc.get("dialogue", "")
+        if not did.startswith("frost_") and not did.startswith("hidden_"):
+            continue
+        where = area_of(npc.get("home", ""))
+        if where and where not in empty:
+            problems.append(
+                f"{npc_id}: lives in {where!r}, which a questline already uses")
+
+    # 9e. Every key item has both routes: asked for, and taken off the body.
+    for item in items_by_id.values():
+        holder = (item.get("extra") or {}).get("heldBy")
+        if not holder:
+            continue
+        if holder not in npcs:
+            problems.append(f"{item['id']}: holder {holder!r} is not an NPC")
+            continue
+        statblock = npcs[holder].get("statblock")
+        if not statblock:
+            problems.append(
+                f"{item['id']}: {holder} has no statblock, so killing them "
+                f"drops nothing and asking is the only route")
+            continue
+        table = next((m for m in doc["content"]["monsters"]
+                      if m["id"] == statblock), {}).get("loot")
+        drops = json.dumps(next((t for t in doc["content"]["lootTables"]
+                                 if t["id"] == table), {}))
+        if f'"{item["id"]}"' not in drops:
+            problems.append(
+                f"{item['id']}: {holder}'s statblock does not drop it")
+        granted = json.dumps(doc["narrative"]["dialogues"])
+        if f'"{item["id"]}"' not in granted:
+            problems.append(
+                f"{item['id']}: nobody can be asked for it, so killing is the "
+                f"only route")
+
+    # 9f. Standing is a price, never a wall. A `minStanding` in front of a clue
+    #     or a key item is the one thing rule 4 forbids: hostility belongs in
+    #     the check's difficulty, where it makes a roll harder rather than
+    #     making a thing impossible.
+    keepsakes = {i["id"] for i in items_by_id.values()
+                 if (i.get("extra") or {}).get("heldBy")}
+    for dialogue in doc["narrative"]["dialogues"]:
+        for node in dialogue["nodes"]:
+            for opt in node.get("options", []):
+                payload = json.dumps(opt) + json.dumps(
+                    [n for n in dialogue["nodes"]
+                     if n["id"] in (opt.get("check", {}).get("onSuccess"),)])
+                touches = ("learnLore" in payload
+                           or any(f'"{k}"' in payload for k in keepsakes))
+                floors = [f for f in (opt.get("requires") or {}).get("factions", [])
+                          if f.get("minStanding") is not None]
+                if touches and floors:
+                    problems.append(
+                        f"{dialogue['id']}/{opt['id']}: a clue or key item "
+                        f"behind minStanding — put the standing in the check's "
+                        f"difficulty instead")
+
+    # 9g. Nothing on the spine or in a chain may read a hidden flag.
+    hidden_flags = set()
+    for quest in hidden:
+        hidden_flags |= walk(quest, "flag", set())
+    for gate in doc["world"]["gates"]:
+        if gate["id"].startswith("frost_"):
+            hidden_flags |= walk(gate, "flag", set())
+    for quest in spine + side:
+        read = flag_refs(quest, set())
+        for flag in sorted(read & hidden_flags):
+            problems.append(
+                f"{quest['id']}: reads {flag!r}, which a hidden thread owns — "
+                f"the main line would then wait on content nobody offers")
+
+    # 9h. A boss room with nothing to draw from is a room that generates empty.
+    for dungeon in doc["world"]["dungeons"]:
+        if not dungeon.get("bossTable"):
+            warnings.append(
+                f"{dungeon['id']}: boss room with no bossTable")
+
+    # 9i. Each thread's anchor must actually come down as the thread fills.
+    for thread in threads:
+        key = f'threads.{thread["id"]}.known'
+        anchors = [p for p in pois.values() if key in json.dumps(p.get("discover", {}))]
+        if not anchors:
+            problems.append(
+                f"thread {thread['id']!r}: no place gets easier to find as it "
+                f"fills, so the clues inform nothing")
+
     # --- report ------------------------------------------------------------
     if problems:
         print(f"✗ {len(problems)} problem(s) the schema cannot see\n")
@@ -426,9 +641,12 @@ def main():
         return 1
 
     print(f"✓ {len(quests)} quests ({len(spine)} spine, {len(side)} side in "
-          f"{len(chains)} chains): every objective target resolves, every flag "
-          f"waited on is set, the ending is reachable, and no side chain "
-          f"touches it")
+          f"{len(chains)} chains, {len(hidden)} hidden): every objective target "
+          f"resolves, every flag waited on is set, the ending is reachable, and "
+          f"neither side chains nor hidden threads touch it")
+    print(f"✓ {len(lore)} clues in {len(threads)} threads: every one teachable, "
+          f"two tellers in two areas each, and none of them names the place it "
+          f"points at")
     for note in notes:
         print(note)
     if warnings:

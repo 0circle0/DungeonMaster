@@ -3451,6 +3451,134 @@
           "silvered"
         ],
         "rarity": "very_rare"
+      },
+      {
+        "id": "makers_tally",
+        "name": "The Maker's Tally",
+        "description": "A bone stick notched on both edges: one side the nights the ice made, the other the nights it sounded. The two edges agree.",
+        "kind": "key",
+        "value": 0,
+        "weight": 0,
+        "tags": [
+          "keepsake"
+        ],
+        "extra": {
+          "heldBy": "ice_reader_saeun"
+        }
+      },
+      {
+        "id": "carvers_count",
+        "name": "The Carver's Count",
+        "description": "Eleven years of skulls, in a hand that got smaller each year as the columns got wider.",
+        "kind": "key",
+        "value": 0,
+        "weight": 0,
+        "tags": [
+          "keepsake"
+        ],
+        "extra": {
+          "heldBy": "bone_carver_thrand"
+        }
+      },
+      {
+        "id": "cutters_stone",
+        "name": "The Cutter's Stone",
+        "description": "A palm of worked granite with a slot down it. Sighted through, the marker on the Glass Ice stops being a bearing across and becomes a bearing down.",
+        "kind": "key",
+        "value": 0,
+        "weight": 0,
+        "tags": [
+          "keepsake"
+        ],
+        "extra": {
+          "heldBy": "rimewatch_keeper_hallr"
+        }
+      },
+      {
+        "id": "blue_bell_shard",
+        "name": "A Shard of the Blue Bell",
+        "description": "Cold that does not warm in the hand, and it will not stop ringing if you set it down.",
+        "kind": "treasure",
+        "value": 0,
+        "weight": 0,
+        "tags": [
+          "clue",
+          "proof"
+        ],
+        "onUse": [
+          {
+            "learnLore": {
+              "entry": "frost_blue_note"
+            }
+          }
+        ],
+        "consumedOnUse": false
+      },
+      {
+        "id": "rime_singers_torc",
+        "name": "The Rime-Singer's Torc",
+        "description": "Bronze gone green under nine hundred years of ice. Worn, the note under the calving face resolves into something with edges \u2014 and so does every other thing that has been trying not to be heard.",
+        "kind": "trinket",
+        "slot": "ring",
+        "value": 900,
+        "weight": 1,
+        "tags": [
+          "fabled"
+        ],
+        "modifiers": {
+          "initiative": 2
+        },
+        "skillBonuses": {
+          "perception": 3,
+          "insight": 2
+        },
+        "rarity": "very_rare"
+      },
+      {
+        "id": "strandwardens_coat",
+        "name": "The Strand-Warden's Coat",
+        "description": "Sealskin with the fur turned in and a lining of something else. Whatever cut the skulls on the Strand cut this too, once, and did not get through.",
+        "kind": "armor",
+        "slot": "cloak",
+        "value": 750,
+        "weight": 1,
+        "tags": [
+          "fabled"
+        ],
+        "modifiers": {
+          "guard": 2
+        },
+        "damageInteractions": [
+          {
+            "damageType": "cold",
+            "multiplier": 0.5
+          },
+          {
+            "damageType": "slashing",
+            "multiplier": 0.75
+          }
+        ],
+        "rarity": "rare"
+      },
+      {
+        "id": "moulin_lamp",
+        "name": "The Lamp from the Moulin",
+        "description": "It was lit when they shut the door on it, and it was still lit when the door came open. Nobody has been able to put it out.",
+        "kind": "trinket",
+        "slot": "belt",
+        "value": 1100,
+        "weight": 1,
+        "tags": [
+          "fabled"
+        ],
+        "modifiers": {
+          "carry": 2
+        },
+        "skillBonuses": {
+          "survival": 2,
+          "resolve": 2
+        },
+        "rarity": "very_rare"
       }
     ],
     "lootTables": [
@@ -4850,6 +4978,187 @@
         "rolls": "3",
         "emptyChance": 0.0,
         "name": "The Deep Stores"
+      },
+      {
+        "id": "frost_tally_carried",
+        "name": "What Saeun Kept",
+        "rolls": "1",
+        "emptyChance": 0,
+        "entries": [
+          {
+            "weight": 1,
+            "value": {
+              "item": "makers_tally",
+              "quantity": "1",
+              "unique": true,
+              "requirementScope": "party",
+              "requires": {
+                "without": {
+                  "flags": [
+                    {
+                      "flag": "given:makers_tally"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        ]
+      },
+      {
+        "id": "frost_count_carried",
+        "name": "What Thrand Kept",
+        "rolls": "1",
+        "emptyChance": 0,
+        "entries": [
+          {
+            "weight": 1,
+            "value": {
+              "item": "carvers_count",
+              "quantity": "1",
+              "unique": true,
+              "requirementScope": "party",
+              "requires": {
+                "without": {
+                  "flags": [
+                    {
+                      "flag": "given:carvers_count"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        ]
+      },
+      {
+        "id": "frost_stone_carried",
+        "name": "What Hallr Kept",
+        "rolls": "1",
+        "emptyChance": 0,
+        "entries": [
+          {
+            "weight": 1,
+            "value": {
+              "item": "cutters_stone",
+              "quantity": "1",
+              "unique": true,
+              "requirementScope": "party",
+              "requires": {
+                "without": {
+                  "flags": [
+                    {
+                      "flag": "given:cutters_stone"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        ]
+      },
+      {
+        "id": "frost_blue_hoard",
+        "name": "Under the Calving Face",
+        "rolls": "2",
+        "emptyChance": 0,
+        "bonusRollSkill": "perception",
+        "bonusRolls": {
+          "onSuccess": 1,
+          "onCritical": 2
+        },
+        "entries": [
+          {
+            "weight": 3,
+            "value": {
+              "item": "old_coin",
+              "quantity": "3d6"
+            }
+          },
+          {
+            "weight": 2,
+            "value": {
+              "item": "wight_ash",
+              "quantity": "1d3"
+            }
+          },
+          {
+            "weight": 1,
+            "value": {
+              "item": "blue_bell_shard",
+              "quantity": "1",
+              "unique": true
+            }
+          }
+        ]
+      },
+      {
+        "id": "frost_strand_hoard",
+        "name": "Inside the Wrong Shape",
+        "rolls": "2",
+        "emptyChance": 0.1,
+        "bonusRollSkill": "perception",
+        "bonusRolls": {
+          "onSuccess": 1,
+          "onCritical": 2
+        },
+        "entries": [
+          {
+            "weight": 4,
+            "value": {
+              "item": "old_coin",
+              "quantity": "2d6"
+            }
+          },
+          {
+            "weight": 2,
+            "value": {
+              "item": "amber_lump",
+              "quantity": "1"
+            }
+          },
+          {
+            "weight": 1,
+            "value": {
+              "item": "silvered_blade",
+              "quantity": "1"
+            }
+          }
+        ]
+      },
+      {
+        "id": "frost_moulin_hoard",
+        "name": "What the Lamp Lit",
+        "rolls": "3",
+        "emptyChance": 0,
+        "bonusRollSkill": "lore",
+        "bonusRolls": {
+          "onSuccess": 1,
+          "onCritical": 2
+        },
+        "entries": [
+          {
+            "weight": 3,
+            "value": {
+              "item": "old_coin",
+              "quantity": "4d6"
+            }
+          },
+          {
+            "weight": 2,
+            "value": {
+              "item": "barrow_torc",
+              "quantity": "1"
+            }
+          },
+          {
+            "weight": 2,
+            "value": {
+              "item": "warded_coat",
+              "quantity": "1"
+            }
+          }
+        ]
       }
     ],
     "monsters": [
@@ -6977,6 +7286,424 @@
         "derivedOverrides": {
           "guard": 18
         }
+      },
+      {
+        "id": "frost_reader",
+        "name": "Saeun, who Reads the Making",
+        "description": "Forty years of sitting still in the cold, which is its own kind of hardiness.",
+        "level": 5,
+        "xp": 0,
+        "attributes": {
+          "might": 9,
+          "agility": 11,
+          "endurance": 12,
+          "intellect": 13,
+          "instinct": 16,
+          "presence": 12
+        },
+        "abilities": [
+          "strike"
+        ],
+        "behaviour": [
+          {
+            "priority": 0,
+            "use": "strike"
+          }
+        ],
+        "faction": "the_ice_moot",
+        "creatureType": "humanoid",
+        "size": "medium",
+        "descriptors": [
+          "a weathered"
+        ],
+        "conditionalLoot": [],
+        "loot": "frost_tally_carried",
+        "resourceOverrides": {
+          "hp": 26
+        }
+      },
+      {
+        "id": "frost_carver",
+        "name": "Thrand, Bone Carver",
+        "description": "Cuts bone all day and has the shoulders for it.",
+        "level": 5,
+        "xp": 0,
+        "attributes": {
+          "might": 13,
+          "agility": 13,
+          "endurance": 13,
+          "intellect": 12,
+          "instinct": 12,
+          "presence": 10
+        },
+        "abilities": [
+          "strike",
+          "cut_and_run"
+        ],
+        "behaviour": [
+          {
+            "priority": 0,
+            "use": "strike"
+          }
+        ],
+        "faction": "the_ice_moot",
+        "creatureType": "humanoid",
+        "size": "medium",
+        "descriptors": [
+          "a thickset"
+        ],
+        "conditionalLoot": [],
+        "loot": "frost_count_carried",
+        "resourceOverrides": {
+          "hp": 32
+        }
+      },
+      {
+        "id": "frost_keeper",
+        "name": "Hallr of the Rimewatch",
+        "description": "Keeps a hut on a calving face alone, which selects for a particular sort of person.",
+        "level": 6,
+        "xp": 0,
+        "attributes": {
+          "might": 14,
+          "agility": 12,
+          "endurance": 14,
+          "intellect": 11,
+          "instinct": 14,
+          "presence": 11
+        },
+        "abilities": [
+          "strike",
+          "guarded_stance"
+        ],
+        "behaviour": [
+          {
+            "priority": 0,
+            "use": "strike"
+          }
+        ],
+        "faction": "the_ice_moot",
+        "creatureType": "humanoid",
+        "size": "medium",
+        "descriptors": [
+          "a hard-faced"
+        ],
+        "conditionalLoot": [],
+        "loot": "frost_stone_carried",
+        "resourceOverrides": {
+          "hp": 40
+        }
+      },
+      {
+        "id": "blue_bell",
+        "name": "The Blue Bell",
+        "description": "It is not shaped like anything. It has been sounding one note since before the Landing was moved, and the note is what is wrong with the water.",
+        "level": 9,
+        "xp": 900,
+        "attributes": {
+          "might": 10,
+          "agility": 8,
+          "endurance": 20,
+          "intellect": 14,
+          "instinct": 18,
+          "presence": 16
+        },
+        "abilities": [
+          "rime_touch",
+          "calving",
+          "wither"
+        ],
+        "behaviour": [
+          {
+            "priority": 20,
+            "use": "calving",
+            "when": {
+              "chance": 0.35
+            }
+          },
+          {
+            "priority": 10,
+            "use": "wither"
+          },
+          {
+            "priority": 0,
+            "use": "rime_touch"
+          }
+        ],
+        "faction": "the_unsealed",
+        "creatureType": "undead",
+        "size": "medium",
+        "descriptors": [
+          "a ringing",
+          "a sounding"
+        ],
+        "conditionalLoot": [],
+        "loot": "frost_blue_hoard",
+        "damageInteractions": [
+          {
+            "damageType": "slashing",
+            "multiplier": 0.5,
+            "unless": [
+              "silvered"
+            ]
+          },
+          {
+            "damageType": "piercing",
+            "multiplier": 0.5,
+            "unless": [
+              "silvered"
+            ]
+          }
+        ],
+        "conditionImmunities": [
+          "frightened",
+          "poisoned",
+          "prone"
+        ],
+        "resourceOverrides": {
+          "hp": 110
+        }
+      },
+      {
+        "id": "strand_cutter",
+        "name": "The Cutter",
+        "description": "Whatever went through those skulls in one stroke, and it has not put the edge down since.",
+        "level": 8,
+        "xp": 750,
+        "attributes": {
+          "might": 18,
+          "agility": 15,
+          "endurance": 15,
+          "intellect": 9,
+          "instinct": 15,
+          "presence": 8
+        },
+        "abilities": [
+          "rend",
+          "cut_and_run",
+          "gore"
+        ],
+        "behaviour": [
+          {
+            "priority": 15,
+            "use": "cut_and_run",
+            "when": {
+              "chance": 0.4
+            }
+          },
+          {
+            "priority": 0,
+            "use": "rend"
+          }
+        ],
+        "faction": "the_unsealed",
+        "creatureType": "undead",
+        "size": "medium",
+        "descriptors": [
+          "a long-armed",
+          "a patient"
+        ],
+        "conditionalLoot": [],
+        "loot": "frost_strand_hoard",
+        "damageInteractions": [
+          {
+            "damageType": "slashing",
+            "multiplier": 0.5,
+            "unless": [
+              "silvered"
+            ]
+          },
+          {
+            "damageType": "piercing",
+            "multiplier": 0.5,
+            "unless": [
+              "silvered"
+            ]
+          }
+        ],
+        "conditionImmunities": [
+          "frightened"
+        ],
+        "resourceOverrides": {
+          "hp": 88
+        }
+      },
+      {
+        "id": "moulin_keeper",
+        "name": "What the Seal Was Written For",
+        "description": "The stonework at the lip faces inward. Nine hundred years of somebody being extremely clear about which side of it they meant to be on.",
+        "level": 10,
+        "xp": 1400,
+        "attributes": {
+          "might": 19,
+          "agility": 13,
+          "endurance": 19,
+          "intellect": 16,
+          "instinct": 17,
+          "presence": 17
+        },
+        "abilities": [
+          "unmaking_word",
+          "rime_touch",
+          "grave_chill",
+          "call_the_shut"
+        ],
+        "behaviour": [
+          {
+            "priority": 30,
+            "use": "unmaking_word",
+            "when": {
+              "chance": 0.25
+            }
+          },
+          {
+            "priority": 20,
+            "use": "call_the_shut",
+            "when": {
+              "chance": 0.3
+            }
+          },
+          {
+            "priority": 10,
+            "use": "grave_chill"
+          },
+          {
+            "priority": 0,
+            "use": "rime_touch"
+          }
+        ],
+        "faction": "the_unsealed",
+        "creatureType": "undead",
+        "size": "medium",
+        "descriptors": [
+          "a lamplit",
+          "a still"
+        ],
+        "conditionalLoot": [],
+        "loot": "frost_moulin_hoard",
+        "damageInteractions": [
+          {
+            "damageType": "slashing",
+            "multiplier": 0.5,
+            "unless": [
+              "silvered"
+            ]
+          },
+          {
+            "damageType": "piercing",
+            "multiplier": 0.5,
+            "unless": [
+              "silvered"
+            ]
+          }
+        ],
+        "conditionImmunities": [
+          "frightened",
+          "poisoned",
+          "prone",
+          "silenced"
+        ],
+        "resourceOverrides": {
+          "hp": 150
+        }
+      },
+      {
+        "id": "pavement_walker",
+        "name": "Something Under the Pavement",
+        "description": "The Flats are flagged for two miles and nobody laid them.",
+        "level": 9,
+        "xp": 800,
+        "attributes": {
+          "might": 17,
+          "agility": 12,
+          "endurance": 18,
+          "intellect": 8,
+          "instinct": 14,
+          "presence": 9
+        },
+        "abilities": [
+          "stone_fist",
+          "rime_touch"
+        ],
+        "behaviour": [
+          {
+            "priority": 0,
+            "use": "stone_fist"
+          }
+        ],
+        "faction": "the_unsealed",
+        "creatureType": "undead",
+        "size": "medium",
+        "descriptors": [
+          "a grinding",
+          "a slab-backed"
+        ],
+        "conditionalLoot": [],
+        "loot": "frost_strand_hoard",
+        "conditionImmunities": [
+          "frightened",
+          "prone"
+        ],
+        "resourceOverrides": {
+          "hp": 95
+        }
+      },
+      {
+        "id": "first_cairn_shade",
+        "name": "What Was Set Under the First",
+        "description": "The moot counts from the Last Cairn and buries under the first, and does not discuss the difference.",
+        "level": 8,
+        "xp": 700,
+        "attributes": {
+          "might": 14,
+          "agility": 16,
+          "endurance": 14,
+          "intellect": 13,
+          "instinct": 16,
+          "presence": 15
+        },
+        "abilities": [
+          "grave_chill",
+          "wither"
+        ],
+        "behaviour": [
+          {
+            "priority": 0,
+            "use": "grave_chill"
+          }
+        ],
+        "faction": "the_unsealed",
+        "creatureType": "undead",
+        "size": "medium",
+        "descriptors": [
+          "a thin",
+          "a counting"
+        ],
+        "conditionalLoot": [],
+        "loot": "frost_blue_hoard",
+        "damageInteractions": [
+          {
+            "damageType": "slashing",
+            "multiplier": 0.5,
+            "unless": [
+              "silvered"
+            ]
+          },
+          {
+            "damageType": "piercing",
+            "multiplier": 0.5,
+            "unless": [
+              "silvered"
+            ]
+          }
+        ],
+        "conditionImmunities": [
+          "frightened",
+          "poisoned"
+        ],
+        "resourceOverrides": {
+          "hp": 80
+        }
       }
     ],
     "factions": [
@@ -8218,6 +8945,131 @@
               }
             ]
           }
+        }
+      },
+      {
+        "id": "ice_reader_saeun",
+        "name": "Saeun, who Reads the Making",
+        "description": "Sits at the end of the Landing with a bone stick and marks it when the ice makes. Forty years of that. Nobody has ever asked her why.",
+        "disposition": 4,
+        "gullibility": 0.2,
+        "memorySpan": 365,
+        "offersQuests": [],
+        "caresAbout": [
+          "cairn_set",
+          "ice_broken"
+        ],
+        "reactions": [],
+        "faction": "the_ice_moot",
+        "dialogue": "frost_saeun_talk",
+        "home": "whalebone_the_landing",
+        "statblock": "frost_reader"
+      },
+      {
+        "id": "bone_carver_thrand",
+        "name": "Thrand, Bone Carver",
+        "description": "Cuts scrimshaw for the ships and has been counting the Strand for eleven years in a book he does not show people.",
+        "disposition": 0,
+        "gullibility": 0.3,
+        "memorySpan": 200,
+        "offersQuests": [],
+        "caresAbout": [],
+        "reactions": [],
+        "faction": "the_ice_moot",
+        "dialogue": "frost_thrand_talk",
+        "home": "whalebone_bone_carver",
+        "statblock": "frost_carver",
+        "shop": {
+          "lootTable": "keeper_stock",
+          "buysTags": [
+            "treasure",
+            "material"
+          ],
+          "priceMultiplier": 1.25
+        }
+      },
+      {
+        "id": "rimewatch_keeper_hallr",
+        "name": "Hallr of the Rimewatch",
+        "description": "Keeps a hut, a log and a sighting stone at the calving face, and is extremely clear that he keeps them for the moot and not for you.",
+        "disposition": -4,
+        "gullibility": 0.15,
+        "memorySpan": 365,
+        "offersQuests": [],
+        "caresAbout": [
+          "ice_broken",
+          "cairn_set"
+        ],
+        "reactions": [],
+        "faction": "the_ice_moot",
+        "dialogue": "frost_hallr_talk",
+        "home": "rimewatch_watch_hut",
+        "statblock": "frost_keeper"
+      },
+      {
+        "id": "flenser_gudny",
+        "name": "Gudny, at the Flensing Yard",
+        "description": "Twenty-two seasons on the yard and the only one left who worked the old landing before they moved it.",
+        "disposition": 6,
+        "gullibility": 0.4,
+        "memorySpan": 150,
+        "offersQuests": [],
+        "caresAbout": [],
+        "reactions": [],
+        "faction": "the_ice_moot",
+        "dialogue": "frost_gudny_talk",
+        "home": "whalebone_flensing_yard"
+      },
+      {
+        "id": "chapel_keeper_orma",
+        "name": "Orma, at the Ice Chapel",
+        "description": "Keeps a chapel nobody attends in a town that buries at sea, and has opinions about which way a thing is facing when it arrives.",
+        "disposition": 8,
+        "gullibility": 0.35,
+        "memorySpan": 200,
+        "offersQuests": [],
+        "caresAbout": [
+          "ward_restored",
+          "ward_broken"
+        ],
+        "reactions": [],
+        "faction": "the_keepers",
+        "dialogue": "frost_orma_talk",
+        "home": "whalebone_chapel"
+      },
+      {
+        "id": "strand_picker_vigdis",
+        "name": "Vigdis, at the Strand Camp",
+        "description": "Works the boneyard for what the Landing will buy and sleeps out there, which nobody else in the Frostmere will do.",
+        "disposition": 2,
+        "gullibility": 0.45,
+        "memorySpan": 120,
+        "offersQuests": [],
+        "caresAbout": [],
+        "reactions": [],
+        "faction": "the_ice_moot",
+        "dialogue": "frost_vigdis_talk",
+        "home": "bone_strand_camp"
+      },
+      {
+        "id": "factor_ingimund",
+        "name": "Ingimund, the Factor",
+        "description": "Holds the Landing's ledgers back to the move and would very much rather discuss this season's oil price.",
+        "disposition": 0,
+        "gullibility": 0.2,
+        "memorySpan": 300,
+        "offersQuests": [],
+        "caresAbout": [],
+        "reactions": [],
+        "faction": "the_countinghouse",
+        "dialogue": "frost_ingimund_talk",
+        "home": "whalebone_house_b",
+        "shop": {
+          "lootTable": "countinghouse_stock",
+          "buysTags": [
+            "treasure"
+          ],
+          "priceMultiplier": 1.4
         }
       }
     ],
@@ -21433,7 +22285,22 @@
         "position": {
           "x": 3,
           "y": 3
-        }
+        },
+        "triggers": [
+          {
+            "id": "frost_found_calving",
+            "mode": "once",
+            "on": "enter",
+            "description": "Water that should have whales in it, and does not.",
+            "effects": [
+              {
+                "learnLore": {
+                  "entry": "frost_blue_calving"
+                }
+              }
+            ]
+          }
+        ]
       },
       {
         "id": "rimewatch_watch_hut",
@@ -21469,7 +22336,58 @@
         "position": {
           "x": 25,
           "y": 3
-        }
+        },
+        "triggers": [
+          {
+            "id": "frost_blue_committed",
+            "mode": "once",
+            "on": "enter",
+            "description": "Standing at the mouth of it, knowing what it is.",
+            "requires": {
+              "custom": {
+                "gte": [
+                  {
+                    "ref": "threads.frost_blue.known"
+                  },
+                  2
+                ]
+              }
+            },
+            "effects": [
+              {
+                "emit": {
+                  "event": "startQuest",
+                  "data": {
+                    "quest": "frost_the_blue_voice"
+                  }
+                }
+              }
+            ]
+          }
+        ],
+        "hidden": true,
+        "discover": {
+          "skill": "perception",
+          "difficulty": {
+            "max": [
+              10,
+              {
+                "sub": [
+                  22,
+                  {
+                    "mul": [
+                      3,
+                      {
+                        "ref": "threads.frost_blue.known"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "gate": "frost_blue_inner"
       },
       {
         "id": "white_reach_the_middle",
@@ -21559,7 +22477,22 @@
         "position": {
           "x": 3,
           "y": 3
-        }
+        },
+        "triggers": [
+          {
+            "id": "frost_found_boneyard",
+            "mode": "once",
+            "on": "enter",
+            "description": "Which way they are all facing.",
+            "effects": [
+              {
+                "learnLore": {
+                  "entry": "frost_strand_inland"
+                }
+              }
+            ]
+          }
+        ]
       },
       {
         "id": "bone_strand_camp",
@@ -21578,7 +22511,22 @@
         "position": {
           "x": 14,
           "y": 3
-        }
+        },
+        "triggers": [
+          {
+            "id": "frost_found_camp_door",
+            "mode": "once",
+            "on": "enter",
+            "description": "What somebody cut into the camp door, and then left.",
+            "effects": [
+              {
+                "learnLore": {
+                  "entry": "frost_strand_ribs"
+                }
+              }
+            ]
+          }
+        ]
       },
       {
         "id": "bone_strand_ribcage",
@@ -21595,7 +22543,58 @@
         "position": {
           "x": 25,
           "y": 3
-        }
+        },
+        "triggers": [
+          {
+            "id": "frost_strand_committed",
+            "mode": "once",
+            "on": "enter",
+            "description": "The wrong shape, from close enough to see it.",
+            "requires": {
+              "custom": {
+                "gte": [
+                  {
+                    "ref": "threads.frost_strand.known"
+                  },
+                  2
+                ]
+              }
+            },
+            "effects": [
+              {
+                "emit": {
+                  "event": "startQuest",
+                  "data": {
+                    "quest": "frost_the_count"
+                  }
+                }
+              }
+            ]
+          }
+        ],
+        "hidden": true,
+        "discover": {
+          "skill": "perception",
+          "difficulty": {
+            "max": [
+              8,
+              {
+                "sub": [
+                  20,
+                  {
+                    "mul": [
+                      3,
+                      {
+                        "ref": "threads.frost_strand.known"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "gate": "frost_ribcage_inner"
       },
       {
         "id": "glass_ice_the_clear",
@@ -21626,7 +22625,58 @@
         "position": {
           "x": 14,
           "y": 3
-        }
+        },
+        "triggers": [
+          {
+            "id": "frost_marker_committed",
+            "mode": "once",
+            "on": "enter",
+            "description": "The hole the bearing was pointing at.",
+            "requires": {
+              "custom": {
+                "gte": [
+                  {
+                    "ref": "threads.frost_marker.known"
+                  },
+                  2
+                ]
+              }
+            },
+            "effects": [
+              {
+                "emit": {
+                  "event": "startQuest",
+                  "data": {
+                    "quest": "frost_what_it_points_at"
+                  }
+                }
+              }
+            ]
+          }
+        ],
+        "hidden": true,
+        "discover": {
+          "skill": "survival",
+          "difficulty": {
+            "max": [
+              8,
+              {
+                "sub": [
+                  24,
+                  {
+                    "mul": [
+                      4,
+                      {
+                        "ref": "threads.frost_marker.known"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "gate": "frost_moulin_seal"
       },
       {
         "id": "glass_ice_marker",
@@ -21640,7 +22690,22 @@
         "position": {
           "x": 25,
           "y": 3
-        }
+        },
+        "triggers": [
+          {
+            "id": "frost_found_marker",
+            "mode": "once",
+            "on": "enter",
+            "description": "A bearing with no cairn at the end of it.",
+            "effects": [
+              {
+                "learnLore": {
+                  "entry": "frost_marker_bearing"
+                }
+              }
+            ]
+          }
+        ]
       },
       {
         "id": "wind_flats_pavement",
@@ -21675,7 +22740,22 @@
         "position": {
           "x": 14,
           "y": 3
-        }
+        },
+        "triggers": [
+          {
+            "id": "frost_found_rows",
+            "mode": "once",
+            "on": "enter",
+            "description": "Stonework that faces the wrong way to be keeping anything out.",
+            "effects": [
+              {
+                "learnLore": {
+                  "entry": "frost_marker_shut"
+                }
+              }
+            ]
+          }
+        ]
       },
       {
         "id": "wind_flats_under_pavement",
@@ -28499,6 +29579,99 @@
           "retryable": true
         },
         "blockedTextKey": "deeproads_echo_ward_blocked"
+      },
+      {
+        "id": "frost_blue_inner",
+        "name": "The Making Gallery",
+        "description": "The passage past the first chamber is open on the nights the ice makes and shut on every other night, and it is not the ice that shuts it.",
+        "kind": "ward",
+        "blockedTextKey": "frost_blue_blocked",
+        "staysOpen": true,
+        "onOpen": [
+          {
+            "setFlag": {
+              "flag": "frost_blue_open",
+              "value": true
+            }
+          }
+        ],
+        "onBlocked": [],
+        "opensWith": [],
+        "tags": [],
+        "requires": {
+          "items": [
+            {
+              "item": "makers_tally",
+              "quantity": 1,
+              "consume": false,
+              "equipped": false
+            }
+          ]
+        }
+      },
+      {
+        "id": "frost_ribcage_inner",
+        "name": "Inside the Wrong Shape",
+        "description": "From the shore it is a ribcage. From in here it is a room, and the room has a door in it.",
+        "kind": "ward",
+        "blockedTextKey": "frost_ribcage_blocked",
+        "staysOpen": true,
+        "onOpen": [
+          {
+            "setFlag": {
+              "flag": "frost_strand_open",
+              "value": true
+            }
+          }
+        ],
+        "onBlocked": [],
+        "opensWith": [],
+        "tags": [],
+        "requires": {
+          "items": [
+            {
+              "item": "carvers_count",
+              "quantity": 1,
+              "consume": false,
+              "equipped": false
+            }
+          ]
+        }
+      },
+      {
+        "id": "frost_moulin_seal",
+        "name": "The Seal on the Moulin",
+        "description": "Stonework at the lip of the hole, facing inward. Whatever this was built for, it was not built to keep anybody out.",
+        "kind": "ward",
+        "blockedTextKey": "frost_moulin_blocked",
+        "staysOpen": true,
+        "onOpen": [
+          {
+            "setFlag": {
+              "flag": "frost_moulin_open",
+              "value": true
+            }
+          }
+        ],
+        "onBlocked": [],
+        "opensWith": [],
+        "tags": [],
+        "requires": {
+          "items": [
+            {
+              "item": "cutters_stone",
+              "quantity": 1,
+              "consume": false,
+              "equipped": false
+            },
+            {
+              "item": "strandwardens_coat",
+              "quantity": 1,
+              "consume": false,
+              "equipped": false
+            }
+          ]
+        }
       }
     ],
     "roomTemplates": [
@@ -29832,7 +31005,8 @@
         "roomSize": "2d2+3",
         "width": "61",
         "height": "61",
-        "corridorLength": "3d3"
+        "corridorLength": "3d3",
+        "bossTable": "frost_cairn_boss"
       },
       {
         "id": "frostmere_blue_caves",
@@ -29852,7 +31026,8 @@
           "birthThreshold": 5
         },
         "width": "45",
-        "height": "45"
+        "height": "45",
+        "bossTable": "frost_blue_boss"
       },
       {
         "id": "frostmere_ribcage",
@@ -29868,7 +31043,8 @@
         "safeEntrance": true,
         "width": "69",
         "height": "69",
-        "corridorLength": "3d3"
+        "corridorLength": "3d3",
+        "bossTable": "frost_ribcage_boss"
       },
       {
         "id": "frostmere_moulin",
@@ -29885,7 +31061,8 @@
         "branchiness": 0.25,
         "corridorLength": "3d3",
         "width": "81",
-        "height": "81"
+        "height": "81",
+        "bossTable": "frost_moulin_boss"
       },
       {
         "id": "frostmere_under_pavement",
@@ -29903,7 +31080,8 @@
           "minLeaf": 6
         },
         "width": "33",
-        "height": "33"
+        "height": "33",
+        "bossTable": "frost_pavement_boss"
       },
       {
         "id": "frostmere_the_hollow",
@@ -32056,6 +33234,116 @@
             "requires": {
               "minLevel": 7
             }
+          }
+        ]
+      },
+      {
+        "id": "frost_blue_boss",
+        "minDepth": 0,
+        "maxDepth": 999,
+        "chance": 1,
+        "emptyWeight": 0,
+        "scalePerLevels": 3,
+        "groups": [
+          {
+            "id": "bell",
+            "weight": 1,
+            "hostile": true,
+            "entries": [
+              {
+                "monster": "blue_bell",
+                "count": "1",
+                "scaleWithLevel": false
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "frost_ribcage_boss",
+        "minDepth": 0,
+        "maxDepth": 999,
+        "chance": 1,
+        "emptyWeight": 0,
+        "scalePerLevels": 3,
+        "groups": [
+          {
+            "id": "cutter",
+            "weight": 1,
+            "hostile": true,
+            "entries": [
+              {
+                "monster": "strand_cutter",
+                "count": "1",
+                "scaleWithLevel": false
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "frost_moulin_boss",
+        "minDepth": 0,
+        "maxDepth": 999,
+        "chance": 1,
+        "emptyWeight": 0,
+        "scalePerLevels": 3,
+        "groups": [
+          {
+            "id": "keeper",
+            "weight": 1,
+            "hostile": true,
+            "entries": [
+              {
+                "monster": "moulin_keeper",
+                "count": "1",
+                "scaleWithLevel": false
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "frost_pavement_boss",
+        "minDepth": 0,
+        "maxDepth": 999,
+        "chance": 1,
+        "emptyWeight": 0,
+        "scalePerLevels": 3,
+        "groups": [
+          {
+            "id": "walker",
+            "weight": 1,
+            "hostile": true,
+            "entries": [
+              {
+                "monster": "pavement_walker",
+                "count": "1",
+                "scaleWithLevel": false
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "frost_cairn_boss",
+        "minDepth": 0,
+        "maxDepth": 999,
+        "chance": 1,
+        "emptyWeight": 0,
+        "scalePerLevels": 3,
+        "groups": [
+          {
+            "id": "shade",
+            "weight": 1,
+            "hostile": true,
+            "entries": [
+              {
+                "monster": "first_cairn_shade",
+                "count": "1d2",
+                "scaleWithLevel": true
+              }
+            ]
           }
         ]
       }
@@ -34737,6 +36025,54 @@
           },
           {
             "text": "The heat comes at you up the shaft and you feel it two tiers before you arrive."
+          }
+        ]
+      },
+      {
+        "id": "frost_blue_blocked",
+        "variants": [
+          {
+            "text": "The passage is closed. Not frozen \u2014 closed, and the seam is dry. You would have to know which nights it opens, and somebody spent forty years finding that out."
+          },
+          {
+            "text": "It is shut, and the cold coming off the seam has nothing to do with the weather. Whoever kept the making-nights kept them for a reason."
+          },
+          {
+            "text": "No handhold, no hinge, and no frost on it. Whatever opens this opens on a schedule, and the schedule is written down somewhere in the Landing."
+          },
+          {
+            "text": "The seam runs floor to roof and does not admit a blade. You are not going to force a thing that has been opening and shutting on its own for nine hundred years."
+          }
+        ]
+      },
+      {
+        "id": "frost_moulin_blocked",
+        "variants": [
+          {
+            "text": "The seal reads from the inside, and reading it from out here is the wrong way round. You would need the cutter's sighting stone \u2014 and, going by the burn on the rim, whatever it was on the Strand that took an edge like that and did not let it through."
+          },
+          {
+            "text": "The stone is cut to be understood by whatever is below it. Sighted properly it might make sense; unsighted, and unprepared for the cold coming up, it is a hole."
+          },
+          {
+            "text": "Air comes up out of it that is colder than the air on the ice, which is not a thing air does. Going down dressed for the Reach would be going down dressed for the wrong place entirely."
+          },
+          {
+            "text": "Nine hundred years of stonework, every face of it turned in. You would want to be very sure of your reading before you took the word of a door that was built to be read by the thing behind it."
+          }
+        ]
+      },
+      {
+        "id": "frost_ribcage_blocked",
+        "variants": [
+          {
+            "text": "The door in the ribcage has a count cut into it \u2014 years, and a number under each. You would need the other half of that tally to know what it is asking for."
+          },
+          {
+            "text": "Eleven columns, and the last four in a smaller hand. Somebody out there has been keeping the same book."
+          },
+          {
+            "text": "It is a tally, and it is only half of one. The door is waiting to be told a number it already knows."
           }
         ]
       },
@@ -47924,6 +49260,2233 @@
             "redirectWhen": []
           }
         ]
+      },
+      {
+        "id": "frost_saeun_talk",
+        "start": "greet",
+        "nodes": [
+          {
+            "id": "greet",
+            "says": [
+              {
+                "text": "She is sitting on a hauled-up boat at the end of the Landing with a bone stick across her knees, marking it. She does not stop."
+              },
+              {
+                "text": "\u201cMaking tonight,\u201d she says, before you have said anything. \u201cYou can hear it if you stop walking.\u201d"
+              }
+            ],
+            "onEnter": [],
+            "options": [
+              {
+                "id": "frost_saeun_note",
+                "text": "What is it you are actually listening for out there?",
+                "requires": {
+                  "without": {
+                    "lore": [
+                      "frost_blue_note"
+                    ]
+                  }
+                },
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "check": {
+                  "skill": "insight",
+                  "difficulty": {
+                    "sub": [
+                      13,
+                      {
+                        "clamp": [
+                          {
+                            "div": [
+                              {
+                                "ref": "reputation.the_ice_moot",
+                                "else": 0
+                              },
+                              5
+                            ]
+                          },
+                          -6,
+                          6
+                        ]
+                      }
+                    ]
+                  },
+                  "onSuccess": "frost_saeun_note_told",
+                  "onFailure": "frost_saeun_note_wont"
+                }
+              },
+              {
+                "id": "frost_saeun_making",
+                "text": "Does it sound every night?",
+                "requires": {
+                  "without": {
+                    "lore": [
+                      "frost_blue_making"
+                    ]
+                  }
+                },
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "check": {
+                  "skill": "persuasion",
+                  "difficulty": {
+                    "sub": [
+                      15,
+                      {
+                        "clamp": [
+                          {
+                            "div": [
+                              {
+                                "ref": "reputation.the_ice_moot",
+                                "else": 0
+                              },
+                              5
+                            ]
+                          },
+                          -6,
+                          6
+                        ]
+                      }
+                    ]
+                  },
+                  "onSuccess": "frost_saeun_making_told",
+                  "onFailure": "frost_saeun_making_wont"
+                }
+              },
+              {
+                "id": "frost_saeun_tally",
+                "text": "I need the tally itself. Not what it says \u2014 the stick.",
+                "requires": {
+                  "without": {
+                    "items": [
+                      "makers_tally"
+                    ],
+                    "flags": [
+                      {
+                        "flag": "given:makers_tally"
+                      }
+                    ]
+                  }
+                },
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "check": {
+                  "skill": "persuasion",
+                  "difficulty": {
+                    "sub": [
+                      17,
+                      {
+                        "clamp": [
+                          {
+                            "div": [
+                              {
+                                "ref": "reputation.the_ice_moot",
+                                "else": 0
+                              },
+                              5
+                            ]
+                          },
+                          -6,
+                          6
+                        ]
+                      }
+                    ]
+                  },
+                  "onSuccess": "frost_saeun_tally_gave",
+                  "onFailure": "frost_saeun_tally_kept"
+                }
+              },
+              {
+                "id": "greet_leave",
+                "text": "Nothing.",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": [
+              {
+                "requires": {
+                  "factions": [
+                    {
+                      "faction": "the_ice_moot",
+                      "maxStanding": -35
+                    }
+                  ]
+                },
+                "goto": "frost_saeun_cold"
+              }
+            ]
+          },
+          {
+            "id": "frost_saeun_note_told",
+            "says": [
+              {
+                "text": "\u201cA note.\u201d She does not look up from the stick. \u201cNot a noise. A note \u2014 one, the way a struck bowl goes on after you have taken your hand off it.\u201d She marks the edge. \u201cForty years. It has not changed pitch once.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "learnLore": {
+                  "entry": "frost_blue_note"
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "frost_saeun_note_on",
+                "text": "Go on.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "frost_saeun_note_wont",
+            "says": [
+              {
+                "text": "\u201cI've said all I mean to,\u201d they say, and go back to what they were doing."
+              }
+            ],
+            "onEnter": [
+              {
+                "adjustReputation": {
+                  "faction": "the_ice_moot",
+                  "amount": -1
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "frost_saeun_note_drop",
+                "text": "Leave it.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "frost_saeun_making_told",
+            "says": [
+              {
+                "text": "\u201cOnly while the ice is making.\u201d She turns the stick over so you can see the other edge, and the two rows of notches line up the whole way down. \u201cIn a thaw there is nothing there. Two men went in during a thaw to find out why that was such a comfort.\u201d A pause. \u201cIt was not a comfort.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "learnLore": {
+                  "entry": "frost_blue_making"
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "frost_saeun_making_on",
+                "text": "Go on.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "frost_saeun_making_wont",
+            "says": [
+              {
+                "text": "\u201cI've said all I mean to,\u201d they say, and go back to what they were doing."
+              }
+            ],
+            "onEnter": [
+              {
+                "adjustReputation": {
+                  "faction": "the_ice_moot",
+                  "amount": -1
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "frost_saeun_making_drop",
+                "text": "Leave it.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "frost_saeun_tally_gave",
+            "says": [
+              {
+                "text": "She is quiet for long enough that you think she has refused. Then she holds it out flat on both palms, the way you hand somebody a tool rather than a keepsake. \u201cForty years. Bring it back or do not, but do not lose it out there thinking it is a stick.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "grantItem": {
+                  "target": {
+                    "ref": "actor.id"
+                  },
+                  "item": "makers_tally",
+                  "quantity": 1
+                }
+              },
+              {
+                "setFlag": {
+                  "flag": "given:makers_tally",
+                  "value": true
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "frost_saeun_tally_thanks",
+                "text": "Thank you.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "frost_saeun_tally_kept",
+            "says": [
+              {
+                "text": "Her hand closes over it. \u201cNo. You want to know which nights it opens. I want to still be here when it does.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "adjustReputation": {
+                  "faction": "the_ice_moot",
+                  "amount": -3
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "frost_saeun_tally_leave",
+                "text": "Then no.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "frost_saeun_cold",
+            "says": [
+              {
+                "text": "She looks at you once, the way you look at weather, and turns the stick face down on her knee."
+              }
+            ],
+            "onEnter": [],
+            "options": [
+              {
+                "id": "frost_saeun_go",
+                "text": "Leave it.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          }
+        ]
+      },
+      {
+        "id": "frost_thrand_talk",
+        "start": "greet",
+        "nodes": [
+          {
+            "id": "greet",
+            "says": [
+              {
+                "text": "A shed that smells of hot bone. He is cutting a whaling scene into a jaw plate and does not stop for you."
+              },
+              {
+                "text": "\u201cScrimshaw's a season out. Oil's at the store. Whatever else you want, ask it while I'm working.\u201d"
+              }
+            ],
+            "onEnter": [],
+            "options": [
+              {
+                "id": "frost_thrand_count",
+                "text": "How many skulls are on the Strand?",
+                "requires": {
+                  "without": {
+                    "lore": [
+                      "frost_strand_count"
+                    ]
+                  }
+                },
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "check": {
+                  "skill": "insight",
+                  "difficulty": {
+                    "sub": [
+                      14,
+                      {
+                        "clamp": [
+                          {
+                            "div": [
+                              {
+                                "ref": "reputation.the_ice_moot",
+                                "else": 0
+                              },
+                              5
+                            ]
+                          },
+                          -6,
+                          6
+                        ]
+                      }
+                    ]
+                  },
+                  "onSuccess": "frost_thrand_count_told",
+                  "onFailure": "frost_thrand_count_wont"
+                }
+              },
+              {
+                "id": "frost_thrand_note",
+                "text": "You work bone all day. What is the sound off the face?",
+                "requires": {
+                  "without": {
+                    "lore": [
+                      "frost_blue_note"
+                    ]
+                  }
+                },
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "check": {
+                  "skill": "insight",
+                  "difficulty": {
+                    "sub": [
+                      12,
+                      {
+                        "clamp": [
+                          {
+                            "div": [
+                              {
+                                "ref": "reputation.the_ice_moot",
+                                "else": 0
+                              },
+                              5
+                            ]
+                          },
+                          -6,
+                          6
+                        ]
+                      }
+                    ]
+                  },
+                  "onSuccess": "frost_thrand_note_told",
+                  "onFailure": "frost_thrand_note_wont"
+                }
+              },
+              {
+                "id": "frost_thrand_ribs",
+                "text": "Those bones standing out of the Strand \u2014 is that one animal?",
+                "requires": {
+                  "without": {
+                    "lore": [
+                      "frost_strand_ribs"
+                    ]
+                  }
+                },
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "check": {
+                  "skill": "persuasion",
+                  "difficulty": {
+                    "sub": [
+                      15,
+                      {
+                        "clamp": [
+                          {
+                            "div": [
+                              {
+                                "ref": "reputation.the_ice_moot",
+                                "else": 0
+                              },
+                              5
+                            ]
+                          },
+                          -6,
+                          6
+                        ]
+                      }
+                    ]
+                  },
+                  "onSuccess": "frost_thrand_ribs_told",
+                  "onFailure": "frost_thrand_ribs_wont"
+                }
+              },
+              {
+                "id": "frost_thrand_book",
+                "text": "Let me take the count. The whole book.",
+                "requires": {
+                  "without": {
+                    "items": [
+                      "carvers_count"
+                    ],
+                    "flags": [
+                      {
+                        "flag": "given:carvers_count"
+                      }
+                    ]
+                  }
+                },
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "check": {
+                  "skill": "persuasion",
+                  "difficulty": {
+                    "sub": [
+                      15,
+                      {
+                        "clamp": [
+                          {
+                            "div": [
+                              {
+                                "ref": "reputation.the_ice_moot",
+                                "else": 0
+                              },
+                              5
+                            ]
+                          },
+                          -6,
+                          6
+                        ]
+                      }
+                    ]
+                  },
+                  "onSuccess": "frost_thrand_book_gave",
+                  "onFailure": "frost_thrand_book_kept"
+                }
+              },
+              {
+                "id": "greet_leave",
+                "text": "Nothing.",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": [
+              {
+                "requires": {
+                  "factions": [
+                    {
+                      "faction": "the_ice_moot",
+                      "maxStanding": -30
+                    }
+                  ]
+                },
+                "goto": "frost_thrand_cold"
+              }
+            ]
+          },
+          {
+            "id": "frost_thrand_count_told",
+            "says": [
+              {
+                "text": "The chisel stops. \u201cMore than this Landing has ever had ships,\u201d he says, to the scrimshaw rather than to you. \u201cI started counting to prove to myself I was wrong about that. Eleven years. I am not wrong about that.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "learnLore": {
+                  "entry": "frost_strand_count"
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "frost_thrand_count_on",
+                "text": "Go on.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "frost_thrand_count_wont",
+            "says": [
+              {
+                "text": "\u201cI've said all I mean to,\u201d they say, and go back to what they were doing."
+              }
+            ],
+            "onEnter": [
+              {
+                "adjustReputation": {
+                  "faction": "the_ice_moot",
+                  "amount": -1
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "frost_thrand_count_drop",
+                "text": "Leave it.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "frost_thrand_note_told",
+            "says": [
+              {
+                "text": "\u201cA note,\u201d he says at once, as though he has been waiting years for somebody to use the right word. \u201cEveryone here calls it a noise. It is a note. I have matched it on the saw and it does not shift.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "learnLore": {
+                  "entry": "frost_blue_note"
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "frost_thrand_note_on",
+                "text": "Go on.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "frost_thrand_note_wont",
+            "says": [
+              {
+                "text": "\u201cI've said all I mean to,\u201d they say, and go back to what they were doing."
+              }
+            ],
+            "onEnter": [
+              {
+                "adjustReputation": {
+                  "faction": "the_ice_moot",
+                  "amount": -1
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "frost_thrand_note_drop",
+                "text": "Leave it.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "frost_thrand_ribs_told",
+            "says": [
+              {
+                "text": "He laughs without any pleasure in it. \u201cIt is the right shape from the shore. Go and stand inside it.\u201d He goes back to the chisel. \u201cWhoever set those out knew exactly what it would look like from the water, which is a strange thing to care about if you are dead.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "learnLore": {
+                  "entry": "frost_strand_ribs"
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "frost_thrand_ribs_on",
+                "text": "Go on.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "frost_thrand_ribs_wont",
+            "says": [
+              {
+                "text": "\u201cI've said all I mean to,\u201d they say, and go back to what they were doing."
+              }
+            ],
+            "onEnter": [
+              {
+                "adjustReputation": {
+                  "faction": "the_ice_moot",
+                  "amount": -1
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "frost_thrand_ribs_drop",
+                "text": "Leave it.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "frost_thrand_book_gave",
+            "says": [
+              {
+                "text": "He does not hand it over so much as put it down between you and step back from it. \u201cEleven years. The last four are in a smaller hand because the columns got wider.\u201d He will not look at it. \u201cSomebody else can be right about this for a while.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "grantItem": {
+                  "target": {
+                    "ref": "actor.id"
+                  },
+                  "item": "carvers_count",
+                  "quantity": 1
+                }
+              },
+              {
+                "setFlag": {
+                  "flag": "given:carvers_count",
+                  "value": true
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "frost_thrand_book_thanks",
+                "text": "Thank you.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "frost_thrand_book_kept",
+            "says": [
+              {
+                "text": "\u201cNo.\u201d He puts his hand flat on the book. \u201cIt is the only thing I have that says I have not been imagining it.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "adjustReputation": {
+                  "faction": "the_ice_moot",
+                  "amount": -2
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "frost_thrand_book_leave",
+                "text": "Then no.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "frost_thrand_cold",
+            "says": [
+              {
+                "text": "He puts the chisel down, which is worse than if he had not. \u201cI know what you have been doing. Get out of my shed.\u201d"
+              }
+            ],
+            "onEnter": [],
+            "options": [],
+            "redirectWhen": []
+          }
+        ]
+      },
+      {
+        "id": "frost_hallr_talk",
+        "start": "greet",
+        "nodes": [
+          {
+            "id": "greet",
+            "says": [
+              {
+                "text": "A hut with one window facing the calving face and a log open on the sill. He puts his body between you and it without appearing to."
+              },
+              {
+                "text": "\u201cRimewatch. I keep it for the moot.\u201d A pause exactly long enough to be rude. \u201cNot for the Landing, and not for you.\u201d"
+              }
+            ],
+            "onEnter": [],
+            "options": [
+              {
+                "id": "frost_hallr_down",
+                "text": "The marker on the Glass Ice. What is it pointing at?",
+                "requires": {
+                  "without": {
+                    "lore": [
+                      "frost_marker_down"
+                    ]
+                  }
+                },
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "check": {
+                  "skill": "persuasion",
+                  "difficulty": {
+                    "sub": [
+                      16,
+                      {
+                        "clamp": [
+                          {
+                            "div": [
+                              {
+                                "ref": "reputation.the_ice_moot",
+                                "else": 0
+                              },
+                              5
+                            ]
+                          },
+                          -6,
+                          6
+                        ]
+                      }
+                    ]
+                  },
+                  "onSuccess": "frost_hallr_down_told",
+                  "onFailure": "frost_hallr_down_wont"
+                }
+              },
+              {
+                "id": "frost_hallr_making",
+                "text": "Your log. Does the sound keep to a season?",
+                "requires": {
+                  "without": {
+                    "lore": [
+                      "frost_blue_making"
+                    ]
+                  }
+                },
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "check": {
+                  "skill": "insight",
+                  "difficulty": {
+                    "sub": [
+                      15,
+                      {
+                        "clamp": [
+                          {
+                            "div": [
+                              {
+                                "ref": "reputation.the_ice_moot",
+                                "else": 0
+                              },
+                              5
+                            ]
+                          },
+                          -6,
+                          6
+                        ]
+                      }
+                    ]
+                  },
+                  "onSuccess": "frost_hallr_making_told",
+                  "onFailure": "frost_hallr_making_wont"
+                }
+              },
+              {
+                "id": "frost_hallr_stone",
+                "text": "The sighting stone. I need to stand where he stood.",
+                "requires": {
+                  "without": {
+                    "items": [
+                      "cutters_stone"
+                    ],
+                    "flags": [
+                      {
+                        "flag": "given:cutters_stone"
+                      }
+                    ]
+                  }
+                },
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "check": {
+                  "skill": "persuasion",
+                  "difficulty": {
+                    "sub": [
+                      18,
+                      {
+                        "clamp": [
+                          {
+                            "div": [
+                              {
+                                "ref": "reputation.the_ice_moot",
+                                "else": 0
+                              },
+                              5
+                            ]
+                          },
+                          -6,
+                          6
+                        ]
+                      }
+                    ]
+                  },
+                  "onSuccess": "frost_hallr_stone_gave",
+                  "onFailure": "frost_hallr_stone_kept"
+                }
+              },
+              {
+                "id": "greet_leave",
+                "text": "Nothing.",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": [
+              {
+                "requires": {
+                  "factions": [
+                    {
+                      "faction": "the_ice_moot",
+                      "maxStanding": -25
+                    }
+                  ]
+                },
+                "goto": "frost_hallr_cold"
+              }
+            ]
+          },
+          {
+            "id": "frost_hallr_down_told",
+            "says": [
+              {
+                "text": "\u201cNothing. That is the trouble with it.\u201d He shifts, and decides to say the rest. \u201cEvery marker on the Reach points at a cairn. That one points at open ice. Stand where the cutter stood, though \u2014 properly, with your eye where his was \u2014 and it is not pointing across at all.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "learnLore": {
+                  "entry": "frost_marker_down"
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "frost_hallr_down_on",
+                "text": "Go on.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "frost_hallr_down_wont",
+            "says": [
+              {
+                "text": "\u201cI've said all I mean to,\u201d they say, and go back to what they were doing."
+              }
+            ],
+            "onEnter": [
+              {
+                "adjustReputation": {
+                  "faction": "the_ice_moot",
+                  "amount": -1
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "frost_hallr_down_drop",
+                "text": "Leave it.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "frost_hallr_making_told",
+            "says": [
+              {
+                "text": "He turns the log round rather than reading it to you. The column is forty years deep and there are gaps in it, and the gaps are every thaw. \u201cIt does not keep to a season. It keeps to the ice.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "learnLore": {
+                  "entry": "frost_blue_making"
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "frost_hallr_making_on",
+                "text": "Go on.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "frost_hallr_making_wont",
+            "says": [
+              {
+                "text": "\u201cI've said all I mean to,\u201d they say, and go back to what they were doing."
+              }
+            ],
+            "onEnter": [
+              {
+                "adjustReputation": {
+                  "faction": "the_ice_moot",
+                  "amount": -1
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "frost_hallr_making_drop",
+                "text": "Leave it.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "frost_hallr_stone_gave",
+            "says": [
+              {
+                "text": "He weighs it, and you can see him decide that a stone which has told nobody anything in nine hundred years is not doing the moot much good in his pocket. \u201cSight it at the marker. Not at the hole \u2014 at the marker. The hole is what happens after.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "grantItem": {
+                  "target": {
+                    "ref": "actor.id"
+                  },
+                  "item": "cutters_stone",
+                  "quantity": 1
+                }
+              },
+              {
+                "setFlag": {
+                  "flag": "given:cutters_stone",
+                  "value": true
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "frost_hallr_stone_thanks",
+                "text": "Thank you.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "frost_hallr_stone_kept",
+            "says": [
+              {
+                "text": "\u201cIt is the moot's,\u201d he says, and does not elaborate, and does not move his hand."
+              }
+            ],
+            "onEnter": [
+              {
+                "adjustReputation": {
+                  "faction": "the_ice_moot",
+                  "amount": -3
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "frost_hallr_stone_leave",
+                "text": "Then no.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "frost_hallr_cold",
+            "says": [
+              {
+                "text": "He shuts the log, and then the shutter, and you are looking at a hut."
+              }
+            ],
+            "onEnter": [],
+            "options": [],
+            "redirectWhen": []
+          }
+        ]
+      },
+      {
+        "id": "frost_gudny_talk",
+        "start": "greet",
+        "nodes": [
+          {
+            "id": "greet",
+            "says": [
+              {
+                "text": "Elbow-deep in a flensing trough, and cheerful about it in a way that suggests she has been doing it long enough to have stopped noticing."
+              },
+              {
+                "text": "\u201cMind the deck, it's slick the whole length. Twenty-two seasons and I still go over on it.\u201d"
+              }
+            ],
+            "onEnter": [],
+            "options": [
+              {
+                "id": "frost_gudny_calving",
+                "text": "Do the whales still calve inside the face?",
+                "requires": {
+                  "without": {
+                    "lore": [
+                      "frost_blue_calving"
+                    ]
+                  }
+                },
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "check": {
+                  "skill": "persuasion",
+                  "difficulty": {
+                    "sub": [
+                      10,
+                      {
+                        "clamp": [
+                          {
+                            "div": [
+                              {
+                                "ref": "reputation.the_ice_moot",
+                                "else": 0
+                              },
+                              5
+                            ]
+                          },
+                          -6,
+                          6
+                        ]
+                      }
+                    ]
+                  },
+                  "onSuccess": "frost_gudny_calving_told",
+                  "onFailure": "frost_gudny_calving_wont"
+                }
+              },
+              {
+                "id": "frost_gudny_cut",
+                "text": "Half the skulls on the Strand are cut. What cuts like that?",
+                "requires": {
+                  "without": {
+                    "lore": [
+                      "frost_strand_cut"
+                    ]
+                  }
+                },
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "check": {
+                  "skill": "persuasion",
+                  "difficulty": {
+                    "sub": [
+                      12,
+                      {
+                        "clamp": [
+                          {
+                            "div": [
+                              {
+                                "ref": "reputation.the_ice_moot",
+                                "else": 0
+                              },
+                              5
+                            ]
+                          },
+                          -6,
+                          6
+                        ]
+                      }
+                    ]
+                  },
+                  "onSuccess": "frost_gudny_cut_told",
+                  "onFailure": "frost_gudny_cut_wont"
+                }
+              },
+              {
+                "id": "frost_gudny_moved",
+                "text": "Somebody said the Landing used to stand further in.",
+                "requires": {
+                  "without": {
+                    "lore": [
+                      "frost_blue_moved"
+                    ]
+                  }
+                },
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "check": {
+                  "skill": "persuasion",
+                  "difficulty": {
+                    "sub": [
+                      13,
+                      {
+                        "clamp": [
+                          {
+                            "div": [
+                              {
+                                "ref": "reputation.the_ice_moot",
+                                "else": 0
+                              },
+                              5
+                            ]
+                          },
+                          -6,
+                          6
+                        ]
+                      }
+                    ]
+                  },
+                  "onSuccess": "frost_gudny_moved_told",
+                  "onFailure": "frost_gudny_moved_wont"
+                }
+              },
+              {
+                "id": "greet_leave",
+                "text": "Nothing.",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "frost_gudny_calving_told",
+            "says": [
+              {
+                "text": "\u201cNo.\u201d She straightens up. \u201cAnd they used to \u2014 I worked it. Eleven years since one came inside. They still come to the shore either side of it, mind, which is the part that keeps me up. It is not the shore they are avoiding.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "learnLore": {
+                  "entry": "frost_blue_calving"
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "frost_gudny_calving_on",
+                "text": "Go on.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "frost_gudny_calving_wont",
+            "says": [
+              {
+                "text": "\u201cI've said all I mean to,\u201d they say, and go back to what they were doing."
+              }
+            ],
+            "onEnter": [
+              {
+                "adjustReputation": {
+                  "faction": "the_ice_moot",
+                  "amount": -1
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "frost_gudny_calving_drop",
+                "text": "Leave it.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "frost_gudny_cut_told",
+            "says": [
+              {
+                "text": "\u201cNot a flensing iron.\u201d She holds hers up. \u201cThis chatters. Every blade chatters, that is what bone does to a blade. Those went through in one and the edge is clean.\u201d She looks at it a moment. \u201cNothing I have ever been sold does that.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "learnLore": {
+                  "entry": "frost_strand_cut"
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "frost_gudny_cut_on",
+                "text": "Go on.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "frost_gudny_cut_wont",
+            "says": [
+              {
+                "text": "\u201cI've said all I mean to,\u201d they say, and go back to what they were doing."
+              }
+            ],
+            "onEnter": [
+              {
+                "adjustReputation": {
+                  "faction": "the_ice_moot",
+                  "amount": -1
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "frost_gudny_cut_drop",
+                "text": "Leave it.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "frost_gudny_moved_told",
+            "says": [
+              {
+                "text": "\u201cA mile in, and they shifted the whole of it in one winter. My grandmother's winter.\u201d She goes back to the trough. \u201cAsk the factor for the why. There is no why in the ledger, I have looked, and a thing with no why in a ledger is a thing somebody decided not to write down.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "learnLore": {
+                  "entry": "frost_blue_moved"
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "frost_gudny_moved_on",
+                "text": "Go on.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "frost_gudny_moved_wont",
+            "says": [
+              {
+                "text": "\u201cI've said all I mean to,\u201d they say, and go back to what they were doing."
+              }
+            ],
+            "onEnter": [
+              {
+                "adjustReputation": {
+                  "faction": "the_ice_moot",
+                  "amount": -1
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "frost_gudny_moved_drop",
+                "text": "Leave it.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          }
+        ]
+      },
+      {
+        "id": "frost_orma_talk",
+        "start": "greet",
+        "nodes": [
+          {
+            "id": "greet",
+            "says": [
+              {
+                "text": "A chapel with room for forty and nobody in it, in a town that buries at sea."
+              },
+              {
+                "text": "\u201cYou will be the first this month,\u201d she says, without reproach. \u201cSit if you like. Nobody will mind.\u201d"
+              }
+            ],
+            "onEnter": [],
+            "options": [
+              {
+                "id": "frost_orma_inland",
+                "text": "The skulls on the Strand. Have you looked at how they lie?",
+                "requires": {
+                  "without": {
+                    "lore": [
+                      "frost_strand_inland"
+                    ]
+                  }
+                },
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "check": {
+                  "skill": "persuasion",
+                  "difficulty": {
+                    "sub": [
+                      11,
+                      {
+                        "clamp": [
+                          {
+                            "div": [
+                              {
+                                "ref": "reputation.the_keepers",
+                                "else": 0
+                              },
+                              5
+                            ]
+                          },
+                          -6,
+                          6
+                        ]
+                      }
+                    ]
+                  },
+                  "onSuccess": "frost_orma_inland_told",
+                  "onFailure": "frost_orma_inland_wont"
+                }
+              },
+              {
+                "id": "frost_orma_older",
+                "text": "There is a marker out on the Glass Ice with no cairn at the end of it.",
+                "requires": {
+                  "without": {
+                    "lore": [
+                      "frost_marker_older"
+                    ]
+                  }
+                },
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "check": {
+                  "skill": "insight",
+                  "difficulty": {
+                    "sub": [
+                      13,
+                      {
+                        "clamp": [
+                          {
+                            "div": [
+                              {
+                                "ref": "reputation.the_keepers",
+                                "else": 0
+                              },
+                              5
+                            ]
+                          },
+                          -6,
+                          6
+                        ]
+                      }
+                    ]
+                  },
+                  "onSuccess": "frost_orma_older_told",
+                  "onFailure": "frost_orma_older_wont"
+                }
+              },
+              {
+                "id": "greet_leave",
+                "text": "Nothing.",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "frost_orma_inland_told",
+            "says": [
+              {
+                "text": "\u201cEvery one of them facing inland.\u201d She says it the way you say a thing you have said before and been thanked for leaving alone. \u201cA whale that dies at sea arrives however the water leaves it. These have been *arranged*, or they came ashore under their own arrangement, and I do not know which of those I would rather.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "learnLore": {
+                  "entry": "frost_strand_inland"
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "frost_orma_inland_on",
+                "text": "Go on.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "frost_orma_inland_wont",
+            "says": [
+              {
+                "text": "\u201cI've said all I mean to,\u201d they say, and go back to what they were doing."
+              }
+            ],
+            "onEnter": [
+              {
+                "adjustReputation": {
+                  "faction": "the_keepers",
+                  "amount": -1
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "frost_orma_inland_drop",
+                "text": "Leave it.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "frost_orma_older_told",
+            "says": [
+              {
+                "text": "\u201cCut before the moot kept records.\u201d She nods slowly. \u201cWhich is a polite way of saying nobody alive knows who set it, or what they were pointing at, or whether they were pointing at it to find it again or to warn somebody off it.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "learnLore": {
+                  "entry": "frost_marker_older"
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "frost_orma_older_on",
+                "text": "Go on.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "frost_orma_older_wont",
+            "says": [
+              {
+                "text": "\u201cI've said all I mean to,\u201d they say, and go back to what they were doing."
+              }
+            ],
+            "onEnter": [
+              {
+                "adjustReputation": {
+                  "faction": "the_keepers",
+                  "amount": -1
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "frost_orma_older_drop",
+                "text": "Leave it.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          }
+        ]
+      },
+      {
+        "id": "frost_ingimund_talk",
+        "start": "greet",
+        "nodes": [
+          {
+            "id": "greet",
+            "says": [
+              {
+                "text": "Ledgers to the ceiling and a very small stove. He has the look of a man who has priced you already."
+              },
+              {
+                "text": "\u201cOil is up. Bone is down. If it is neither of those, be brief.\u201d"
+              }
+            ],
+            "onEnter": [],
+            "options": [
+              {
+                "id": "frost_ingimund_moved",
+                "text": "Why was the Landing moved?",
+                "requires": {
+                  "without": {
+                    "lore": [
+                      "frost_blue_moved"
+                    ]
+                  }
+                },
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "check": {
+                  "skill": "persuasion",
+                  "difficulty": {
+                    "sub": [
+                      14,
+                      {
+                        "clamp": [
+                          {
+                            "div": [
+                              {
+                                "ref": "reputation.the_countinghouse",
+                                "else": 0
+                              },
+                              5
+                            ]
+                          },
+                          -6,
+                          6
+                        ]
+                      }
+                    ]
+                  },
+                  "onSuccess": "frost_ingimund_moved_told",
+                  "onFailure": "frost_ingimund_moved_wont"
+                }
+              },
+              {
+                "id": "frost_ingimund_count",
+                "text": "How many ships has this Landing ever had?",
+                "requires": {
+                  "without": {
+                    "lore": [
+                      "frost_strand_count"
+                    ]
+                  }
+                },
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "check": {
+                  "skill": "insight",
+                  "difficulty": {
+                    "sub": [
+                      12,
+                      {
+                        "clamp": [
+                          {
+                            "div": [
+                              {
+                                "ref": "reputation.the_countinghouse",
+                                "else": 0
+                              },
+                              5
+                            ]
+                          },
+                          -6,
+                          6
+                        ]
+                      }
+                    ]
+                  },
+                  "onSuccess": "frost_ingimund_count_told",
+                  "onFailure": "frost_ingimund_count_wont"
+                }
+              },
+              {
+                "id": "greet_leave",
+                "text": "Nothing.",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "frost_ingimund_moved_told",
+            "says": [
+              {
+                "text": "He does not go and fetch the book; he knows the page. \u201cOne winter, the whole station, a mile out to here. Eleven buildings.\u201d He taps the desk once. \u201cThere is a cost for the move and a cost for the timber and a cost for the men. There is no *reason*. I have kept these ledgers for thirty years and it is the only entry in them with no reason.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "learnLore": {
+                  "entry": "frost_blue_moved"
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "frost_ingimund_moved_on",
+                "text": "Go on.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "frost_ingimund_moved_wont",
+            "says": [
+              {
+                "text": "\u201cI've said all I mean to,\u201d they say, and go back to what they were doing."
+              }
+            ],
+            "onEnter": [
+              {
+                "adjustReputation": {
+                  "faction": "the_countinghouse",
+                  "amount": -1
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "frost_ingimund_moved_drop",
+                "text": "Leave it.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "frost_ingimund_count_told",
+            "says": [
+              {
+                "text": "\u201cSince the move? Forty-one keels, of which nine were lost.\u201d He says it instantly. \u201cWhy \u2014 has somebody been counting skulls at you?\u201d He returns to the column. \u201cThrand has been counting skulls at people for eleven years. The trouble is that his arithmetic is sound.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "learnLore": {
+                  "entry": "frost_strand_count"
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "frost_ingimund_count_on",
+                "text": "Go on.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "frost_ingimund_count_wont",
+            "says": [
+              {
+                "text": "\u201cI've said all I mean to,\u201d they say, and go back to what they were doing."
+              }
+            ],
+            "onEnter": [
+              {
+                "adjustReputation": {
+                  "faction": "the_countinghouse",
+                  "amount": -1
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "frost_ingimund_count_drop",
+                "text": "Leave it.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          }
+        ]
+      },
+      {
+        "id": "frost_vigdis_talk",
+        "start": "greet",
+        "nodes": [
+          {
+            "id": "greet",
+            "says": [
+              {
+                "text": "A tarpaulin, a fire that is mostly smoke, and a woman sorting bone into three piles by some system of her own."
+              },
+              {
+                "text": "\u201cBuying or looking? Looking's free. Standing where I'm sorting isn't.\u201d"
+              }
+            ],
+            "onEnter": [],
+            "options": [
+              {
+                "id": "frost_vigdis_cut",
+                "text": "These have been cut. What does that out here?",
+                "requires": {
+                  "without": {
+                    "lore": [
+                      "frost_strand_cut"
+                    ]
+                  }
+                },
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "check": {
+                  "skill": "persuasion",
+                  "difficulty": {
+                    "sub": [
+                      11,
+                      {
+                        "clamp": [
+                          {
+                            "div": [
+                              {
+                                "ref": "reputation.the_ice_moot",
+                                "else": 0
+                              },
+                              5
+                            ]
+                          },
+                          -6,
+                          6
+                        ]
+                      }
+                    ]
+                  },
+                  "onSuccess": "frost_vigdis_cut_told",
+                  "onFailure": "frost_vigdis_cut_wont"
+                }
+              },
+              {
+                "id": "frost_vigdis_inland",
+                "text": "They are all lying the same way round.",
+                "requires": {
+                  "without": {
+                    "lore": [
+                      "frost_strand_inland"
+                    ]
+                  }
+                },
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "check": {
+                  "skill": "persuasion",
+                  "difficulty": {
+                    "sub": [
+                      12,
+                      {
+                        "clamp": [
+                          {
+                            "div": [
+                              {
+                                "ref": "reputation.the_ice_moot",
+                                "else": 0
+                              },
+                              5
+                            ]
+                          },
+                          -6,
+                          6
+                        ]
+                      }
+                    ]
+                  },
+                  "onSuccess": "frost_vigdis_inland_told",
+                  "onFailure": "frost_vigdis_inland_wont"
+                }
+              },
+              {
+                "id": "frost_vigdis_ribs",
+                "text": "Those bones standing out of the Strand. You sleep next to them.",
+                "requires": {
+                  "without": {
+                    "lore": [
+                      "frost_strand_ribs"
+                    ]
+                  }
+                },
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "check": {
+                  "skill": "persuasion",
+                  "difficulty": {
+                    "sub": [
+                      13,
+                      {
+                        "clamp": [
+                          {
+                            "div": [
+                              {
+                                "ref": "reputation.the_ice_moot",
+                                "else": 0
+                              },
+                              5
+                            ]
+                          },
+                          -6,
+                          6
+                        ]
+                      }
+                    ]
+                  },
+                  "onSuccess": "frost_vigdis_ribs_told",
+                  "onFailure": "frost_vigdis_ribs_wont"
+                }
+              },
+              {
+                "id": "greet_leave",
+                "text": "Nothing.",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "frost_vigdis_cut_told",
+            "says": [
+              {
+                "text": "She holds one up without being asked twice \u2014 she has clearly wanted somebody to look at it. \u201cOne stroke. No chatter, no saw marks, no wedge. I have taken bone apart for nine years and I could not do that with anything I own.\u201d She puts it back on the pile. \u201cThe Landing says ice. Ice does not do that either.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "learnLore": {
+                  "entry": "frost_strand_cut"
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "frost_vigdis_cut_on",
+                "text": "Go on.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "frost_vigdis_cut_wont",
+            "says": [
+              {
+                "text": "\u201cI've said all I mean to,\u201d they say, and go back to what they were doing."
+              }
+            ],
+            "onEnter": [
+              {
+                "adjustReputation": {
+                  "faction": "the_ice_moot",
+                  "amount": -1
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "frost_vigdis_cut_drop",
+                "text": "Leave it.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "frost_vigdis_inland_told",
+            "says": [
+              {
+                "text": "\u201cFacing in. Every one, and I have moved a lot of them.\u201d She is quiet a moment. \u201cI stopped turning them back after the first winter. They were facing in again by the spring and I would rather not know how.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "learnLore": {
+                  "entry": "frost_strand_inland"
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "frost_vigdis_inland_on",
+                "text": "Go on.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "frost_vigdis_inland_wont",
+            "says": [
+              {
+                "text": "\u201cI've said all I mean to,\u201d they say, and go back to what they were doing."
+              }
+            ],
+            "onEnter": [
+              {
+                "adjustReputation": {
+                  "faction": "the_ice_moot",
+                  "amount": -1
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "frost_vigdis_inland_drop",
+                "text": "Leave it.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "frost_vigdis_ribs_told",
+            "says": [
+              {
+                "text": "\u201cI sleep with my back to it.\u201d She says it flatly, without any appetite for the joke. \u201cFrom out here it is a whale. Go and stand inside and count the uprights, and then tell me what whale that is.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "learnLore": {
+                  "entry": "frost_strand_ribs"
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "frost_vigdis_ribs_on",
+                "text": "Go on.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "frost_vigdis_ribs_wont",
+            "says": [
+              {
+                "text": "\u201cI've said all I mean to,\u201d they say, and go back to what they were doing."
+              }
+            ],
+            "onEnter": [
+              {
+                "adjustReputation": {
+                  "faction": "the_ice_moot",
+                  "amount": -1
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "frost_vigdis_ribs_drop",
+                "text": "Leave it.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          }
+        ]
       }
     ],
     "quests": [
@@ -55616,6 +59179,177 @@
             }
           }
         ]
+      },
+      {
+        "id": "frost_the_blue_voice",
+        "name": "The Blue Voice",
+        "description": "Something under the calving face has been sounding one note for eleven years. You are close enough now to hear it without the ice in the way.",
+        "autoStart": false,
+        "ordered": true,
+        "tags": [
+          "hidden",
+          "frostmere",
+          "frost_blue"
+        ],
+        "objectives": [
+          {
+            "id": "at_the_caves",
+            "description": "Get inside the Blue Caves.",
+            "kind": "reach",
+            "count": 1,
+            "hidden": true,
+            "optional": false,
+            "target": "rimewatch_blue_caves"
+          },
+          {
+            "id": "past_the_seam",
+            "description": "Get past the seam that is not frozen.",
+            "kind": "custom",
+            "count": 1,
+            "hidden": true,
+            "optional": false,
+            "when": {
+              "test": {
+                "ref": "flags.frost_blue_open"
+              }
+            }
+          },
+          {
+            "id": "silence_it",
+            "description": "Find the thing that will not stop ringing.",
+            "kind": "kill",
+            "count": 1,
+            "hidden": true,
+            "optional": false,
+            "target": "blue_bell"
+          }
+        ],
+        "stages": [],
+        "unlocks": [],
+        "rewards": {
+          "xp": 180,
+          "items": [
+            {
+              "item": "rime_singers_torc",
+              "quantity": 1
+            }
+          ],
+          "reputation": {}
+        }
+      },
+      {
+        "id": "frost_the_count",
+        "name": "The Count of the Strand",
+        "description": "Eleven years of skulls arriving facing the wrong way, and a ribcage on the shore that is the right shape only from a distance.",
+        "autoStart": false,
+        "ordered": true,
+        "tags": [
+          "hidden",
+          "frostmere",
+          "frost_strand"
+        ],
+        "objectives": [
+          {
+            "id": "at_the_ribs",
+            "description": "Get inside the Ribcage.",
+            "kind": "reach",
+            "count": 1,
+            "hidden": true,
+            "optional": false,
+            "target": "bone_strand_ribcage"
+          },
+          {
+            "id": "past_the_count",
+            "description": "Answer what the door is asking for.",
+            "kind": "custom",
+            "count": 1,
+            "hidden": true,
+            "optional": false,
+            "when": {
+              "test": {
+                "ref": "flags.frost_strand_open"
+              }
+            }
+          },
+          {
+            "id": "the_cutter",
+            "description": "Find what has been doing the cutting.",
+            "kind": "kill",
+            "count": 1,
+            "hidden": true,
+            "optional": false,
+            "target": "strand_cutter"
+          }
+        ],
+        "stages": [],
+        "unlocks": [],
+        "rewards": {
+          "xp": 170,
+          "items": [
+            {
+              "item": "strandwardens_coat",
+              "quantity": 1
+            }
+          ],
+          "reputation": {}
+        }
+      },
+      {
+        "id": "frost_what_it_points_at",
+        "name": "What the Marker Points At",
+        "description": "A bearing cut before the moot kept records, pointing down, at a hole with stonework around it that faces inward.",
+        "autoStart": false,
+        "ordered": true,
+        "tags": [
+          "hidden",
+          "frostmere",
+          "frost_marker"
+        ],
+        "objectives": [
+          {
+            "id": "at_the_moulin",
+            "description": "Get down the Moulin.",
+            "kind": "reach",
+            "count": 1,
+            "hidden": true,
+            "optional": false,
+            "target": "glass_ice_the_moulin"
+          },
+          {
+            "id": "past_the_seal",
+            "description": "Read the seal from the side it was cut for.",
+            "kind": "custom",
+            "count": 1,
+            "hidden": true,
+            "optional": false,
+            "when": {
+              "test": {
+                "ref": "flags.frost_moulin_open"
+              }
+            }
+          },
+          {
+            "id": "what_was_shut_in",
+            "description": "Meet what the seal was written for.",
+            "kind": "kill",
+            "count": 1,
+            "hidden": true,
+            "optional": false,
+            "target": "moulin_keeper"
+          }
+        ],
+        "stages": [],
+        "unlocks": [],
+        "rewards": {
+          "xp": 240,
+          "items": [
+            {
+              "item": "moulin_lamp",
+              "quantity": 1
+            }
+          ],
+          "reputation": {}
+        }
       }
     ],
     "arcs": [
@@ -55831,6 +59565,17 @@
         "isEnding": false
       },
       {
+        "id": "frost_hidden",
+        "name": "The Frostmere, Unaccounted",
+        "description": "Three things the Landing has known about for years and never once written down.",
+        "quests": [
+          "frost_the_blue_voice",
+          "frost_the_count",
+          "frost_what_it_points_at"
+        ],
+        "isEnding": false
+      },
+      {
         "id": "the_unsealing",
         "name": "The Unsealing",
         "description": "Nine doors were shut on purpose. Somebody has been opening them in order, and the ninth is the last.",
@@ -55842,6 +59587,103 @@
           "the_unsealing"
         ],
         "isEnding": true
+      }
+    ],
+    "lore": [
+      {
+        "id": "frost_blue_calving",
+        "name": "Whales used to calve inside the face. They have not come inside it in eleven years, and they still come to the shore either side.",
+        "source": "a flenser, Whalebone Landing"
+      },
+      {
+        "id": "frost_blue_note",
+        "name": "It is not a noise. It is a note \u2014 one note, the way a struck bowl goes on after you have stopped touching it.",
+        "source": "the bone carver"
+      },
+      {
+        "id": "frost_blue_making",
+        "name": "It only sounds while the ice is making. In a thaw there is nothing down there at all, and men have gone in during a thaw and found out why that is no comfort.",
+        "source": "the watch hut's log"
+      },
+      {
+        "id": "frost_blue_moved",
+        "name": "The Landing stood a mile further in, once. They moved the whole of it in a single winter and wrote down nothing about why.",
+        "source": "the factor's ledger"
+      },
+      {
+        "id": "frost_strand_count",
+        "name": "There are more skulls on the Strand than the Landing has ever had ships. Somebody has been counting for eleven years and the number keeps going the wrong way.",
+        "source": "the bone carver"
+      },
+      {
+        "id": "frost_strand_cut",
+        "name": "Half of them are cut. Not flensed \u2014 cut, with something that went through bone in one stroke and left no chatter at the edge.",
+        "source": "a flenser, Whalebone Landing"
+      },
+      {
+        "id": "frost_strand_inland",
+        "name": "They are facing inland. Every one of them. A whale that dies at sea does not arrive facing inland.",
+        "source": "the chapel's keeper"
+      },
+      {
+        "id": "frost_strand_ribs",
+        "name": "The bones standing up out of the Strand are not one animal. They are the right shape from the water and the wrong shape from inside, and the difference is somebody's work.",
+        "source": "cut into the strand camp's door"
+      },
+      {
+        "id": "frost_marker_bearing",
+        "name": "The marker on the Glass Ice is a bearing, and the bearing has no cairn at the end of it. Every other marker on the Reach points at a cairn.",
+        "source": "a stone-setter's apprentice"
+      },
+      {
+        "id": "frost_marker_older",
+        "name": "It was cut before the moot kept records, which is a way of saying nobody alive knows who set it or what they were pointing at.",
+        "source": "the Ice Chapel"
+      },
+      {
+        "id": "frost_marker_down",
+        "name": "It does not point across. Stand where the cutter stood and it points *down*, and there is only one hole in the Glass Ice.",
+        "source": "the Rimewatch keeper"
+      },
+      {
+        "id": "frost_marker_shut",
+        "name": "Whatever is at the bottom was shut in, not shut out. The stonework faces the wrong way to be keeping anything from getting down.",
+        "source": "the stone rows on the Flats"
+      }
+    ],
+    "loreThreads": [
+      {
+        "id": "frost_blue",
+        "name": "The Blue Voice",
+        "description": "Something under the calving face has been sounding one note for eleven years, and the whales understood it before anybody else started listening.",
+        "entries": [
+          "frost_blue_calving",
+          "frost_blue_note",
+          "frost_blue_making",
+          "frost_blue_moved"
+        ]
+      },
+      {
+        "id": "frost_strand",
+        "name": "The Count of the Strand",
+        "description": "The boneyard has been growing faster than the fleet can explain, and one man has the tally.",
+        "entries": [
+          "frost_strand_count",
+          "frost_strand_cut",
+          "frost_strand_inland",
+          "frost_strand_ribs"
+        ]
+      },
+      {
+        "id": "frost_marker",
+        "name": "What the Marker Points At",
+        "description": "A bearing cut before the moot kept records, aimed at no cairn, and not aimed across.",
+        "entries": [
+          "frost_marker_bearing",
+          "frost_marker_older",
+          "frost_marker_down",
+          "frost_marker_shut"
+        ]
       }
     ]
   },

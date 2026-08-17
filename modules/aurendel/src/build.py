@@ -62,6 +62,9 @@ def main():
     # that are not empty — and leaves the rest of the continent alone.
     story.attach_content(biome_list, dungeons, room_templates, areas)
     story.attach_triggers(pois)
+    # Hidden threads build no geography; they patch places that were already
+    # there and unmentioned. Applied last so a patch sees the finished place.
+    story.attach_patches(pois)
 
     world = {
         "terrains": materials.terrains(),
@@ -69,10 +72,10 @@ def main():
         "biomes": biome_list,
         "areas": areas,
         "pointsOfInterest": pois,
-        "gates": gates,
+        "gates": gates + story.gates(),
         "roomTemplates": room_templates,
         "dungeons": dungeons,
-        "encounterTables": loot.ENCOUNTER_TABLES,
+        "encounterTables": loot.ENCOUNTER_TABLES + story.encounter_tables(),
         "time": materials.TIME,
         # Nothing rolls encounters — this world has no monsters yet — but rooms
         # still want loot spots and traps marked out for whoever fills them.
@@ -88,9 +91,9 @@ def main():
                for k in ("skills", "abilities", "ancestries", "classes")}
     content["classes"] = items.outfit(content["classes"])
     content["abilities"] = content["abilities"] + bestiary.ABILITIES
-    content["items"] = items.ITEMS
-    content["lootTables"] = loot.LOOT_TABLES
-    content["monsters"] = bestiary.MONSTERS
+    content["items"] = items.ITEMS + story.items()
+    content["lootTables"] = loot.LOOT_TABLES + story.loot_tables()
+    content["monsters"] = bestiary.MONSTERS + story.monsters()
     content["factions"] = factions.FACTIONS
     content["npcs"] = story.npcs()
     content["traps"] = regions.traps() if regions else []
@@ -137,6 +140,8 @@ def main():
         "dialogues": story.dialogues(),
         "quests": story.quests(),
         "arcs": story.arcs(),
+        "lore": story.lore(),
+        "loreThreads": story.lore_threads(),
     }
     doc["start"] = regions.start() if regions else {}
 
@@ -157,6 +162,8 @@ def main():
     print(f"  {len(doc['narrative']['quests'])} quests, "
           f"{len(doc['narrative']['dialogues'])} dialogues, "
           f"{len(doc['narrative']['arcs'])} arcs")
+    print(f"  {len(doc['narrative']['lore'])} clues in "
+          f"{len(doc['narrative']['loreThreads'])} threads")
 
 
 if __name__ == "__main__":

@@ -75,8 +75,15 @@ const quests = module_.source.narrative.quests as unknown as QuestLike[];
 // `spine` walks the questline itself — every quest that is not side content —
 // which is the regression that matters most: side chains are allowed to be
 // skipped, and the story is not allowed to be unfinishable.
+// `spine` means the questline, not "everything that is not a side chain".
+// Hidden threads are neither: nobody offers them, they start from a trigger on
+// a doorway, and `playlore.ts` is what walks them. Sweeping them in here made
+// the spine run fail on three quests it has no way to begin.
 const chainQuests = CHAIN === 'spine'
-  ? quests.filter((q) => !(q.tags ?? []).includes('side'))
+  ? quests.filter((q) => {
+      const tags = q.tags ?? [];
+      return !tags.includes('side') && !tags.includes('hidden');
+    })
   : quests.filter((q) => (q.tags ?? []).includes(CHAIN));
 if (chainQuests.length === 0) {
   console.error(`no quests tagged ${CHAIN}. Chains: ${

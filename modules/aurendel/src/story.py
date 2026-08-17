@@ -31,8 +31,18 @@ SIDE_MODULES = [
     "side_isles",
 ]
 
+# The hidden threads: things nobody hands you, in the sixty-one areas neither
+# the spine nor a side chain touches. A third list rather than more entries in
+# the second, because the contract is different again — a side chain has a giver
+# and an arc you can see coming, and one of these has neither. `check_quests.py`
+# holds them to `hiddenspace.EMPTY` and to the rule that no clue may name the
+# place it points at.
+HIDDEN_MODULES = [
+    "hidden_frostmere",
+]
+
 _LOADED = []
-for _name in ACT_MODULES + SIDE_MODULES:
+for _name in ACT_MODULES + SIDE_MODULES + HIDDEN_MODULES:
     try:
         _LOADED.append(importlib.import_module(_name))
     except ImportError:
@@ -56,6 +66,34 @@ def quests():
 
 def dialogues():
     return _gather("DIALOGUES")
+
+
+def lore():
+    return _gather("LORE")
+
+
+def lore_threads():
+    return _gather("THREADS")
+
+
+def items():
+    return _gather("ITEMS")
+
+
+def gates():
+    return _gather("GATES")
+
+
+def loot_tables():
+    return _gather("LOOT_TABLES")
+
+
+def monsters():
+    return _gather("MONSTERS")
+
+
+def encounter_tables():
+    return _gather("ENCOUNTER_TABLES")
 
 
 def arcs():
@@ -123,6 +161,37 @@ def attach_triggers(poi_list):
             poi["triggers"] = list(poi.get("triggers", [])) + extra
 
 
+def attach_patches(poi_list):
+    """Turn an existing place into a hidden one, or hang a door on it.
+
+    A hidden thread builds no geography — the anchors are points of interest
+    that have been standing there unmentioned since the continent was drawn. So
+    the only thing a thread does to the map is patch a place that already
+    exists: `hidden` plus a `discover` difficulty that falls as its thread
+    fills, and a `gate` that says in words what it wants.
+
+    Merged rather than replaced, so a patch cannot silently drop a place's
+    triggers or its residents.
+    """
+    wanted = {}
+    for module in _LOADED:
+        for poi_id, patch in getattr(module, "POI_PATCHES", {}).items():
+            wanted.setdefault(poi_id, {}).update(patch)
+
+    seen = set()
+    for poi in poi_list:
+        patch = wanted.get(poi["id"])
+        if patch:
+            poi.update(patch)
+            seen.add(poi["id"])
+
+    missing = sorted(set(wanted) - seen)
+    if missing:
+        # Loud, because a patch that lands on nothing is a thread whose anchor
+        # is not hidden, not gated, and reachable by walking in.
+        raise ValueError(f"POI_PATCHES names points of interest that do not exist: {missing}")
+
+
 def attach_content(biome_list, dungeon_list, room_templates, area_list):
     """Turn the route live: encounters, loot, and rooms that are not empty.
 
@@ -146,8 +215,16 @@ def attach_content(biome_list, dungeon_list, room_templates, area_list):
         if tables:
             area["encounterTables"] = list(tables)
 
+    # Bosses the questline named, then the ones a hidden thread claims. Forty
+    # of Aurendel's sixty-eight dungeons had a boss room carrying
+    # `alwaysEncounter` and no table for it to draw from; a thread that anchors
+    # on one fixes that as a side effect of using it.
+    bosses = dict(loot.DUNGEON_BOSSES)
+    for module in _LOADED:
+        bosses.update(getattr(module, "BOSSES", {}))
+
     for dungeon in dungeon_list:
-        boss = loot.DUNGEON_BOSSES.get(dungeon["id"])
+        boss = bosses.get(dungeon["id"])
         if boss:
             dungeon["bossTable"] = boss
 
