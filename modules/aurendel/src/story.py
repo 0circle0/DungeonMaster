@@ -47,6 +47,7 @@ HIDDEN_MODULES = [
     "hidden_deeproads",
     "hidden_coast",
     "hidden_duskwood",
+    "hidden_steppe",
 ]
 
 _LOADED = []

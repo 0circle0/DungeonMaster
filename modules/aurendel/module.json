@@ -4645,6 +4645,134 @@
           "survival": 2
         },
         "rarity": "rare"
+      },
+      {
+        "id": "planting_tally",
+        "name": "The Hayward's Count",
+        "description": "Forty years of counting the same eleven miles, in one hand, and the column does not settle.",
+        "kind": "key",
+        "value": 0,
+        "weight": 0,
+        "tags": [
+          "keepsake"
+        ],
+        "extra": {
+          "heldBy": "hayward_serel"
+        }
+      },
+      {
+        "id": "flood_book",
+        "name": "The Relay Flood Book",
+        "description": "Nine hundred years of the same week, kept by riders who each wrote down the day the grass told them and never why.",
+        "kind": "key",
+        "value": 0,
+        "weight": 0,
+        "tags": [
+          "keepsake"
+        ],
+        "extra": {
+          "heldBy": "relay_rider_talith"
+        }
+      },
+      {
+        "id": "shaft_warrant",
+        "name": "The Warrant for the Shoring",
+        "description": "A timber order, signed and sealed, for a working on ground that has never been worked, dated in a year nobody uses any more.",
+        "kind": "key",
+        "value": 0,
+        "weight": 0,
+        "tags": [
+          "keepsake"
+        ],
+        "extra": {
+          "heldBy": "well_watcher_ondir"
+        }
+      },
+      {
+        "id": "laid_course",
+        "name": "A Stone Out of the Face",
+        "description": "Dressed on five sides, laid level, and pulled out of a river bank forty feet below the grass.",
+        "kind": "treasure",
+        "value": 0,
+        "weight": 0,
+        "tags": [
+          "clue",
+          "proof"
+        ],
+        "onUse": [
+          {
+            "learnLore": {
+              "entry": "step_bank_courses"
+            }
+          }
+        ],
+        "consumedOnUse": false
+      },
+      {
+        "id": "windbreak_belt",
+        "name": "The Belt of the Eleven Miles",
+        "description": "Bark cord off a tree that was set in a season nobody wrote down. The wearer counts what is in front of them and gets it right.",
+        "kind": "trinket",
+        "slot": "belt",
+        "value": 740,
+        "weight": 1,
+        "tags": [
+          "fabled"
+        ],
+        "skillBonuses": {
+          "perception": 3,
+          "survival": 2
+        },
+        "rarity": "rare"
+      },
+      {
+        "id": "flood_ring",
+        "name": "The Ring of the Fourth Week",
+        "description": "Iron off a ford post nine hundred years of riders have tied to. Water is slower to take the wearer than it should be.",
+        "kind": "trinket",
+        "slot": "ring",
+        "value": 780,
+        "weight": 1,
+        "tags": [
+          "fabled"
+        ],
+        "skillBonuses": {
+          "athletics": 3,
+          "survival": 2
+        },
+        "damageInteractions": [
+          {
+            "damageType": "cold",
+            "multiplier": 0.75
+          }
+        ],
+        "rarity": "rare"
+      },
+      {
+        "id": "warm_water_hood",
+        "name": "The Hood off the Warm Water",
+        "description": "Felt gone stiff with iron out of a spring that has never failed. Heat and thirst arrive later for whoever wears it.",
+        "kind": "armor",
+        "slot": "head",
+        "value": 860,
+        "weight": 1,
+        "tags": [
+          "fabled"
+        ],
+        "modifiers": {
+          "guard": 1
+        },
+        "skillBonuses": {
+          "resolve": 2,
+          "survival": 3
+        },
+        "damageInteractions": [
+          {
+            "damageType": "fire",
+            "multiplier": 0.75
+          }
+        ],
+        "rarity": "very_rare"
       }
     ],
     "lootTables": [
@@ -7832,6 +7960,208 @@
             "value": {
               "item": "wight_ash",
               "quantity": "1"
+            }
+          },
+          {
+            "weight": 1,
+            "value": {
+              "item": "warded_coat",
+              "quantity": "1"
+            }
+          }
+        ]
+      },
+      {
+        "id": "step_tally_carried",
+        "name": "What Serel Kept",
+        "rolls": "1",
+        "emptyChance": 0,
+        "entries": [
+          {
+            "weight": 1,
+            "value": {
+              "item": "planting_tally",
+              "quantity": "1",
+              "unique": true,
+              "requirementScope": "party",
+              "requires": {
+                "without": {
+                  "flags": [
+                    {
+                      "flag": "given:planting_tally"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        ]
+      },
+      {
+        "id": "step_book_carried",
+        "name": "What Talith Kept",
+        "rolls": "1",
+        "emptyChance": 0,
+        "entries": [
+          {
+            "weight": 1,
+            "value": {
+              "item": "flood_book",
+              "quantity": "1",
+              "unique": true,
+              "requirementScope": "party",
+              "requires": {
+                "without": {
+                  "flags": [
+                    {
+                      "flag": "given:flood_book"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        ]
+      },
+      {
+        "id": "step_warrant_carried",
+        "name": "What Ondir Kept",
+        "rolls": "1",
+        "emptyChance": 0,
+        "entries": [
+          {
+            "weight": 1,
+            "value": {
+              "item": "shaft_warrant",
+              "quantity": "1",
+              "unique": true,
+              "requirementScope": "party",
+              "requires": {
+                "without": {
+                  "flags": [
+                    {
+                      "flag": "given:shaft_warrant"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        ]
+      },
+      {
+        "id": "step_line_hoard",
+        "name": "Under the Marker",
+        "rolls": "2",
+        "emptyChance": 0.1,
+        "bonusRollSkill": "perception",
+        "bonusRolls": {
+          "onSuccess": 1,
+          "onCritical": 2
+        },
+        "entries": [
+          {
+            "weight": 5,
+            "value": {
+              "item": "old_coin",
+              "quantity": "3d6"
+            }
+          },
+          {
+            "weight": 2,
+            "value": {
+              "item": "amber_lump",
+              "quantity": "1"
+            }
+          },
+          {
+            "weight": 2,
+            "value": {
+              "item": "healing_draught",
+              "quantity": "1"
+            }
+          },
+          {
+            "weight": 1,
+            "value": {
+              "item": "torc_of_the_ridge",
+              "quantity": "1"
+            }
+          }
+        ]
+      },
+      {
+        "id": "step_bank_hoard",
+        "name": "Into the Laid Course",
+        "rolls": "3",
+        "emptyChance": 0,
+        "bonusRollSkill": "perception",
+        "bonusRolls": {
+          "onSuccess": 1,
+          "onCritical": 2
+        },
+        "entries": [
+          {
+            "weight": 5,
+            "value": {
+              "item": "old_coin",
+              "quantity": "4d6"
+            }
+          },
+          {
+            "weight": 3,
+            "value": {
+              "item": "hold_silver",
+              "quantity": "1"
+            }
+          },
+          {
+            "weight": 2,
+            "value": {
+              "item": "ward_salt",
+              "quantity": "1"
+            }
+          },
+          {
+            "weight": 1,
+            "value": {
+              "item": "laid_course",
+              "quantity": "1",
+              "unique": true
+            }
+          }
+        ]
+      },
+      {
+        "id": "step_water_hoard",
+        "name": "Past the Shoring",
+        "rolls": "2",
+        "emptyChance": 0,
+        "bonusRollSkill": "perception",
+        "bonusRolls": {
+          "onSuccess": 1,
+          "onCritical": 2
+        },
+        "entries": [
+          {
+            "weight": 4,
+            "value": {
+              "item": "old_coin",
+              "quantity": "4d6"
+            }
+          },
+          {
+            "weight": 3,
+            "value": {
+              "item": "antidote",
+              "quantity": "1d2"
+            }
+          },
+          {
+            "weight": 2,
+            "value": {
+              "item": "glass_bead",
+              "quantity": "1d2"
             }
           },
           {
@@ -13081,6 +13411,304 @@
         "resourceOverrides": {
           "hp": 60
         }
+      },
+      {
+        "id": "step_hayward",
+        "name": "Serel, Hayward",
+        "description": "Walks a parish boundary a week and argues about it for the other six days.",
+        "level": 5,
+        "xp": 0,
+        "attributes": {
+          "might": 13,
+          "agility": 13,
+          "endurance": 14,
+          "intellect": 14,
+          "instinct": 15,
+          "presence": 13
+        },
+        "abilities": [
+          "strike"
+        ],
+        "behaviour": [
+          {
+            "priority": 0,
+            "use": "strike"
+          }
+        ],
+        "faction": "the_horse_lords",
+        "creatureType": "humanoid",
+        "size": "medium",
+        "descriptors": [
+          "a sun-dark"
+        ],
+        "conditionalLoot": [],
+        "loot": "step_tally_carried",
+        "resourceOverrides": {
+          "hp": 28
+        }
+      },
+      {
+        "id": "step_rider",
+        "name": "Talith of the Relay",
+        "description": "Sixty miles between remounts, in a day, routinely.",
+        "level": 5,
+        "xp": 0,
+        "attributes": {
+          "might": 13,
+          "agility": 16,
+          "endurance": 14,
+          "intellect": 12,
+          "instinct": 14,
+          "presence": 13
+        },
+        "abilities": [
+          "strike",
+          "quick_shot"
+        ],
+        "behaviour": [
+          {
+            "priority": 0,
+            "use": "strike"
+          }
+        ],
+        "faction": "the_horse_lords",
+        "creatureType": "humanoid",
+        "size": "medium",
+        "descriptors": [
+          "a wiry"
+        ],
+        "conditionalLoot": [],
+        "loot": "step_book_carried",
+        "resourceOverrides": {
+          "hp": 30
+        }
+      },
+      {
+        "id": "step_watcher",
+        "name": "Ondir, at the Last Water",
+        "description": "Stands between everybody's thirst and the only water for two days in any direction.",
+        "level": 5,
+        "xp": 0,
+        "attributes": {
+          "might": 14,
+          "agility": 12,
+          "endurance": 16,
+          "intellect": 12,
+          "instinct": 15,
+          "presence": 11
+        },
+        "abilities": [
+          "strike",
+          "guarded_stance"
+        ],
+        "behaviour": [
+          {
+            "priority": 0,
+            "use": "strike"
+          }
+        ],
+        "faction": "the_horse_lords",
+        "creatureType": "humanoid",
+        "size": "medium",
+        "descriptors": [
+          "a still"
+        ],
+        "conditionalLoot": [],
+        "loot": "step_warrant_carried",
+        "resourceOverrides": {
+          "hp": 33
+        }
+      },
+      {
+        "id": "the_set_thing",
+        "name": "What the Line Was Set Around",
+        "description": "Eleven miles of one species in one season, running the wrong way for the wind, and a count that comes out different depending which end you start from.",
+        "level": 6,
+        "xp": 440,
+        "attributes": {
+          "might": 16,
+          "agility": 13,
+          "endurance": 17,
+          "intellect": 11,
+          "instinct": 14,
+          "presence": 10
+        },
+        "abilities": [
+          "root_and_branch",
+          "stone_fist",
+          "rend"
+        ],
+        "behaviour": [
+          {
+            "priority": 20,
+            "use": "root_and_branch",
+            "when": {
+              "chance": 0.35
+            }
+          },
+          {
+            "priority": 10,
+            "use": "stone_fist"
+          },
+          {
+            "priority": 0,
+            "use": "rend"
+          }
+        ],
+        "faction": "the_unsealed",
+        "creatureType": "undead",
+        "size": "medium",
+        "descriptors": [
+          "a root-bound",
+          "an unmoving"
+        ],
+        "conditionalLoot": [],
+        "loot": "step_line_hoard",
+        "conditionImmunities": [
+          "frightened",
+          "prone"
+        ],
+        "resourceOverrides": {
+          "hp": 62
+        }
+      },
+      {
+        "id": "course_dweller",
+        "name": "What the Course Carried",
+        "description": "Level courses of dressed stone going into a river bank in both directions, forty feet under nine hundred years of grass, and the river only borrows them four weeks a year.",
+        "level": 7,
+        "xp": 560,
+        "attributes": {
+          "might": 15,
+          "agility": 16,
+          "endurance": 15,
+          "intellect": 13,
+          "instinct": 15,
+          "presence": 12
+        },
+        "abilities": [
+          "drag_under",
+          "latch",
+          "rend"
+        ],
+        "behaviour": [
+          {
+            "priority": 20,
+            "use": "drag_under",
+            "when": {
+              "chance": 0.4
+            }
+          },
+          {
+            "priority": 5,
+            "use": "latch"
+          },
+          {
+            "priority": 0,
+            "use": "rend"
+          }
+        ],
+        "faction": "the_unsealed",
+        "creatureType": "undead",
+        "size": "medium",
+        "descriptors": [
+          "a silt-grey",
+          "a long"
+        ],
+        "conditionalLoot": [],
+        "loot": "step_bank_hoard",
+        "damageInteractions": [
+          {
+            "damageType": "slashing",
+            "multiplier": 0.5,
+            "unless": [
+              "silvered"
+            ]
+          },
+          {
+            "damageType": "piercing",
+            "multiplier": 0.5,
+            "unless": [
+              "silvered"
+            ]
+          }
+        ],
+        "conditionImmunities": [
+          "frightened",
+          "prone"
+        ],
+        "resourceOverrides": {
+          "hp": 72
+        }
+      },
+      {
+        "id": "the_warm_thing",
+        "name": "What Keeps It Warm",
+        "description": "Nine hundred years of a spring that has never failed, running warm and tasting of iron two miles from a country where nothing runs at all.",
+        "level": 7,
+        "xp": 590,
+        "attributes": {
+          "might": 14,
+          "agility": 14,
+          "endurance": 16,
+          "intellect": 15,
+          "instinct": 16,
+          "presence": 13
+        },
+        "abilities": [
+          "salt_burn",
+          "wither",
+          "vent_breath"
+        ],
+        "behaviour": [
+          {
+            "priority": 20,
+            "use": "vent_breath",
+            "when": {
+              "chance": 0.3
+            }
+          },
+          {
+            "priority": 10,
+            "use": "salt_burn"
+          },
+          {
+            "priority": 0,
+            "use": "wither"
+          }
+        ],
+        "faction": "the_unsealed",
+        "creatureType": "undead",
+        "size": "medium",
+        "descriptors": [
+          "a fever-warm",
+          "a patient"
+        ],
+        "conditionalLoot": [],
+        "loot": "step_water_hoard",
+        "damageInteractions": [
+          {
+            "damageType": "slashing",
+            "multiplier": 0.5,
+            "unless": [
+              "silvered"
+            ]
+          },
+          {
+            "damageType": "piercing",
+            "multiplier": 0.5,
+            "unless": [
+              "silvered"
+            ]
+          }
+        ],
+        "conditionImmunities": [
+          "frightened",
+          "burning"
+        ],
+        "resourceOverrides": {
+          "hp": 70
+        }
       }
     ],
     "factions": [
@@ -15336,6 +15964,107 @@
             "treasure"
           ],
           "priceMultiplier": 1.3
+        }
+      },
+      {
+        "id": "hayward_serel",
+        "name": "Serel, Hayward",
+        "description": "Counts what the village owns, including eleven miles of trees the village does not remember acquiring.",
+        "disposition": 4,
+        "gullibility": 0.3,
+        "memorySpan": 200,
+        "offersQuests": [],
+        "caresAbout": [],
+        "reactions": [],
+        "faction": "the_horse_lords",
+        "dialogue": "step_serel_talk",
+        "home": "tallgrass_house_b",
+        "statblock": "step_hayward"
+      },
+      {
+        "id": "relay_rider_talith",
+        "name": "Talith of the Relay",
+        "description": "Rides the long stage and keeps the book the riders have kept since there were riders.",
+        "disposition": 3,
+        "gullibility": 0.25,
+        "memorySpan": 240,
+        "offersQuests": [],
+        "caresAbout": [],
+        "reactions": [],
+        "faction": "the_horse_lords",
+        "dialogue": "step_talith_talk",
+        "home": "horse_road_relay",
+        "statblock": "step_rider",
+        "shop": {
+          "lootTable": "keeper_stock",
+          "buysTags": [
+            "material"
+          ],
+          "priceMultiplier": 1.2
+        }
+      },
+      {
+        "id": "well_watcher_ondir",
+        "name": "Ondir, at the Last Water",
+        "description": "Lives at the edge of where things grow and lets people drink, which is the whole of the job and takes all of it.",
+        "disposition": 2,
+        "gullibility": 0.2,
+        "memorySpan": 260,
+        "offersQuests": [],
+        "caresAbout": [],
+        "reactions": [],
+        "faction": "the_horse_lords",
+        "dialogue": "step_ondir_talk",
+        "home": "south_reach_last_water",
+        "statblock": "step_watcher"
+      },
+      {
+        "id": "ford_camper_bree",
+        "name": "Bree, at the Crossing",
+        "description": "Camps where nine hundred years of people have camped, at a crossing that has not needed crossing in any of them.",
+        "disposition": 6,
+        "gullibility": 0.45,
+        "memorySpan": 150,
+        "offersQuests": [],
+        "caresAbout": [],
+        "reactions": [],
+        "faction": "the_horse_lords",
+        "dialogue": "step_bree_talk",
+        "home": "dry_river_ford_camp"
+      },
+      {
+        "id": "shade_herder_kosh",
+        "name": "Kosh, in the Shade",
+        "description": "Grazes four hundred head along eleven miles of trees and has walked the length of them more times than anybody alive.",
+        "disposition": 5,
+        "gullibility": 0.4,
+        "memorySpan": 170,
+        "offersQuests": [],
+        "caresAbout": [],
+        "reactions": [],
+        "faction": "the_horse_lords",
+        "dialogue": "step_kosh_talk",
+        "home": "windbreak_shepherds_camp"
+      },
+      {
+        "id": "cut_store_ana",
+        "name": "Ana, at the Cut Store",
+        "description": "Buys hay by the load and sells everything a rider forgot, which is most things.",
+        "disposition": 7,
+        "gullibility": 0.45,
+        "memorySpan": 160,
+        "offersQuests": [],
+        "caresAbout": [],
+        "reactions": [],
+        "faction": "the_horse_lords",
+        "dialogue": "step_ana_talk",
+        "home": "tallgrass_store",
+        "shop": {
+          "lootTable": "hollowdene_stock",
+          "buysTags": [
+            "treasure"
+          ],
+          "priceMultiplier": 1.25
         }
       }
     ],
@@ -33345,7 +34074,22 @@
         "position": {
           "x": 25,
           "y": 3
-        }
+        },
+        "triggers": [
+          {
+            "id": "step_found_horse",
+            "mode": "once",
+            "on": "enter",
+            "description": "A relay marker for a stage that is not on the road.",
+            "effects": [
+              {
+                "learnLore": {
+                  "entry": "step_line_norecord"
+                }
+              }
+            ]
+          }
+        ]
       },
       {
         "id": "kurgan_field_the_line",
@@ -33479,7 +34223,22 @@
         "position": {
           "x": 3,
           "y": 3
-        }
+        },
+        "triggers": [
+          {
+            "id": "step_found_bed",
+            "mode": "once",
+            "on": "enter",
+            "description": "What is showing forty feet down in the open face.",
+            "effects": [
+              {
+                "learnLore": {
+                  "entry": "step_bank_courses"
+                }
+              }
+            ]
+          }
+        ]
       },
       {
         "id": "dry_river_ford_camp",
@@ -33498,7 +34257,22 @@
         "position": {
           "x": 14,
           "y": 3
-        }
+        },
+        "triggers": [
+          {
+            "id": "step_found_camp",
+            "mode": "once",
+            "on": "enter",
+            "description": "Nine hundred years of hearths at a crossing nobody needs to cross.",
+            "effects": [
+              {
+                "learnLore": {
+                  "entry": "step_bank_ford"
+                }
+              }
+            ]
+          }
+        ]
       },
       {
         "id": "dry_river_cut_bank",
@@ -33515,7 +34289,58 @@
         "position": {
           "x": 25,
           "y": 3
-        }
+        },
+        "triggers": [
+          {
+            "id": "step_bank_committed",
+            "mode": "once",
+            "on": "enter",
+            "description": "Down the open face, at the course that was laid.",
+            "requires": {
+              "custom": {
+                "gte": [
+                  {
+                    "ref": "threads.step_bank.known"
+                  },
+                  2
+                ]
+              }
+            },
+            "effects": [
+              {
+                "emit": {
+                  "event": "startQuest",
+                  "data": {
+                    "quest": "step_what_the_bank_shows"
+                  }
+                }
+              }
+            ]
+          }
+        ],
+        "hidden": true,
+        "discover": {
+          "skill": "perception",
+          "difficulty": {
+            "max": [
+              8,
+              {
+                "sub": [
+                  20,
+                  {
+                    "mul": [
+                      3,
+                      {
+                        "ref": "threads.step_bank.known"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "gate": "step_bank_course"
       },
       {
         "id": "windbreak_the_line",
@@ -33529,7 +34354,22 @@
         "position": {
           "x": 3,
           "y": 3
-        }
+        },
+        "triggers": [
+          {
+            "id": "step_found_line",
+            "mode": "once",
+            "on": "enter",
+            "description": "Which way the trees run, and which way the wind does.",
+            "effects": [
+              {
+                "learnLore": {
+                  "entry": "step_line_wrong"
+                }
+              }
+            ]
+          }
+        ]
       },
       {
         "id": "windbreak_shepherds_camp",
@@ -33569,7 +34409,62 @@
         "position": {
           "x": 25,
           "y": 3
-        }
+        },
+        "triggers": [
+          {
+            "id": "step_line_committed",
+            "mode": "once",
+            "on": "enter",
+            "description": "At the stone in the middle of the eleven miles.",
+            "requires": {
+              "custom": {
+                "gte": [
+                  {
+                    "ref": "threads.step_line.known"
+                  },
+                  2
+                ]
+              }
+            },
+            "effects": [
+              {
+                "emit": {
+                  "event": "startQuest",
+                  "data": {
+                    "quest": "step_the_planting"
+                  }
+                }
+              }
+            ]
+          }
+        ],
+        "hidden": true,
+        "discover": {
+          "skill": "survival",
+          "difficulty": {
+            "max": [
+              7,
+              {
+                "sub": [
+                  19,
+                  {
+                    "mul": [
+                      3,
+                      {
+                        "ref": "threads.step_line.known"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "gate": "step_line_root",
+        "encounterTables": [
+          "step_line_boss"
+        ],
+        "encounterChance": 1
       },
       {
         "id": "south_reach_the_pale",
@@ -33583,7 +34478,22 @@
         "position": {
           "x": 3,
           "y": 3
-        }
+        },
+        "triggers": [
+          {
+            "id": "step_found_pale",
+            "mode": "once",
+            "on": "enter",
+            "description": "Where the grass stops, and how close the spring is to it.",
+            "effects": [
+              {
+                "learnLore": {
+                  "entry": "step_water_wont"
+                }
+              }
+            ]
+          }
+        ]
       },
       {
         "id": "south_reach_last_water",
@@ -33617,7 +34527,58 @@
         "position": {
           "x": 25,
           "y": 3
-        }
+        },
+        "triggers": [
+          {
+            "id": "step_water_committed",
+            "mode": "once",
+            "on": "enter",
+            "description": "Beside the spring, at the top of the shoring.",
+            "requires": {
+              "custom": {
+                "gte": [
+                  {
+                    "ref": "threads.step_water.known"
+                  },
+                  2
+                ]
+              }
+            },
+            "effects": [
+              {
+                "emit": {
+                  "event": "startQuest",
+                  "data": {
+                    "quest": "step_the_last_water"
+                  }
+                }
+              }
+            ]
+          }
+        ],
+        "hidden": true,
+        "discover": {
+          "skill": "perception",
+          "difficulty": {
+            "max": [
+              9,
+              {
+                "sub": [
+                  21,
+                  {
+                    "mul": [
+                      3,
+                      {
+                        "ref": "threads.step_water.known"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "gate": "step_water_shoring"
       },
       {
         "id": "vashta_qal_the_spring",
@@ -38635,6 +39596,93 @@
             }
           ]
         }
+      },
+      {
+        "id": "step_line_root",
+        "name": "Under the Marker",
+        "description": "A stone at the middle of eleven miles of trees, and under it the roots go down further than roots go.",
+        "kind": "ward",
+        "blockedTextKey": "step_line_blocked",
+        "staysOpen": true,
+        "onOpen": [
+          {
+            "setFlag": {
+              "flag": "step_line_open",
+              "value": true
+            }
+          }
+        ],
+        "onBlocked": [],
+        "opensWith": [],
+        "tags": [],
+        "requires": {
+          "items": [
+            {
+              "item": "planting_tally",
+              "quantity": 1,
+              "consume": false,
+              "equipped": false
+            }
+          ]
+        }
+      },
+      {
+        "id": "step_bank_course",
+        "name": "Into the Laid Course",
+        "description": "Forty feet down the open face, a course of dressed stone going into the bank both ways, and one block out of it.",
+        "kind": "ward",
+        "blockedTextKey": "step_bank_blocked",
+        "staysOpen": true,
+        "onOpen": [
+          {
+            "setFlag": {
+              "flag": "step_bank_open",
+              "value": true
+            }
+          }
+        ],
+        "onBlocked": [],
+        "opensWith": [],
+        "tags": [],
+        "requires": {
+          "items": [
+            {
+              "item": "flood_book",
+              "quantity": 1,
+              "consume": false,
+              "equipped": false
+            }
+          ]
+        }
+      },
+      {
+        "id": "step_water_shoring",
+        "name": "Past the Shoring",
+        "description": "Sound timber in a country with no timber, holding up a way down beside a spring that has never failed.",
+        "kind": "ward",
+        "blockedTextKey": "step_water_blocked",
+        "staysOpen": true,
+        "onOpen": [
+          {
+            "setFlag": {
+              "flag": "step_water_open",
+              "value": true
+            }
+          }
+        ],
+        "onBlocked": [],
+        "opensWith": [],
+        "tags": [],
+        "requires": {
+          "items": [
+            {
+              "item": "shaft_warrant",
+              "quantity": 1,
+              "consume": false,
+              "equipped": false
+            }
+          ]
+        }
       }
     ],
     "roomTemplates": [
@@ -40434,7 +41482,8 @@
         "safeEntrance": true,
         "width": "73",
         "height": "73",
-        "corridorLength": "3d3"
+        "corridorLength": "3d3",
+        "bossTable": "step_bank_boss"
       },
       {
         "id": "steppe_sand_shaft",
@@ -40452,7 +41501,8 @@
           "minLeaf": 5
         },
         "width": "29",
-        "height": "29"
+        "height": "29",
+        "bossTable": "step_water_boss"
       },
       {
         "id": "glasslands_crater_deep",
@@ -42988,6 +44038,72 @@
             "entries": [
               {
                 "monster": "the_woodward",
+                "count": "1",
+                "scaleWithLevel": false
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "step_line_boss",
+        "minDepth": 0,
+        "maxDepth": 999,
+        "chance": 1,
+        "emptyWeight": 0,
+        "scalePerLevels": 3,
+        "groups": [
+          {
+            "id": "b",
+            "weight": 1,
+            "hostile": true,
+            "entries": [
+              {
+                "monster": "the_set_thing",
+                "count": "1",
+                "scaleWithLevel": false
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "step_bank_boss",
+        "minDepth": 0,
+        "maxDepth": 999,
+        "chance": 1,
+        "emptyWeight": 0,
+        "scalePerLevels": 3,
+        "groups": [
+          {
+            "id": "b",
+            "weight": 1,
+            "hostile": true,
+            "entries": [
+              {
+                "monster": "course_dweller",
+                "count": "1d2",
+                "scaleWithLevel": true
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "step_water_boss",
+        "minDepth": 0,
+        "maxDepth": 999,
+        "chance": 1,
+        "emptyWeight": 0,
+        "scalePerLevels": 3,
+        "groups": [
+          {
+            "id": "b",
+            "weight": 1,
+            "hostile": true,
+            "entries": [
+              {
+                "monster": "the_warm_thing",
                 "count": "1",
                 "scaleWithLevel": false
               }
@@ -48467,6 +49583,48 @@
           },
           {
             "text": "The last water is behind you, and everybody who has come this way knows exactly how far behind."
+          }
+        ]
+      },
+      {
+        "id": "step_bank_blocked",
+        "variants": [
+          {
+            "text": "The face is only open in the four weeks the water is in it, and the week is in the relay book, and the relay book is nine hundred years of riders writing down a day and never a reason."
+          },
+          {
+            "text": "Laid, level, and going on into the bank in both directions. This was not a wall. A wall has an end."
+          },
+          {
+            "text": "A quarter of a mile of bed for four weeks of river. Something else cut this and the river only uses it."
+          }
+        ]
+      },
+      {
+        "id": "step_line_blocked",
+        "variants": [
+          {
+            "text": "The count is the way in and the count does not settle. Forty years of somebody writing down a different number for the same eleven miles is the only record of this that exists, and the hayward has it."
+          },
+          {
+            "text": "One species, eleven miles, one season. Somebody had four hundred people and a reason, and left no note of either."
+          },
+          {
+            "text": "It runs with the wind rather than across it. Whatever this line is for, it is not for the wind."
+          }
+        ]
+      },
+      {
+        "id": "step_water_blocked",
+        "variants": [
+          {
+            "text": "Shoring is ordered, and an order is signed, and the order for this one still exists. Without it you are looking at a hole with good carpentry in it."
+          },
+          {
+            "text": "The water comes up warm and tastes of iron on a steppe where every other spring is cold and tastes of grass."
+          },
+          {
+            "text": "They will water here and they will not camp here, and there are twelve reasons and no two of them agree, which is what people do instead of remembering."
           }
         ]
       },
@@ -77192,6 +78350,1683 @@
             "redirectWhen": []
           }
         ]
+      },
+      {
+        "id": "step_serel_talk",
+        "start": "greet",
+        "nodes": [
+          {
+            "id": "greet",
+            "says": [
+              {
+                "text": "A yard of hurdles and tallies and a man going down a column with his thumb, twice, and then a third time."
+              },
+              {
+                "text": "\u201cI am counting. You can talk while I count.\u201d"
+              }
+            ],
+            "onEnter": [],
+            "options": [
+              {
+                "id": "step_serel_wrong",
+                "text": "The line of trees. What is it for?",
+                "requires": {
+                  "without": {
+                    "lore": [
+                      "step_line_wrong"
+                    ]
+                  }
+                },
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "check": {
+                  "skill": "insight",
+                  "difficulty": {
+                    "sub": [
+                      13,
+                      {
+                        "clamp": [
+                          {
+                            "div": [
+                              {
+                                "ref": "reputation.the_horse_lords",
+                                "else": 0
+                              },
+                              5
+                            ]
+                          },
+                          -6,
+                          6
+                        ]
+                      }
+                    ]
+                  },
+                  "onSuccess": "step_serel_wrong_told",
+                  "onFailure": "step_serel_wrong_wont"
+                }
+              },
+              {
+                "id": "step_serel_count",
+                "text": "How many trees are in it?",
+                "requires": {
+                  "without": {
+                    "lore": [
+                      "step_line_count"
+                    ]
+                  }
+                },
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "check": {
+                  "skill": "persuasion",
+                  "difficulty": {
+                    "sub": [
+                      15,
+                      {
+                        "clamp": [
+                          {
+                            "div": [
+                              {
+                                "ref": "reputation.the_horse_lords",
+                                "else": 0
+                              },
+                              5
+                            ]
+                          },
+                          -6,
+                          6
+                        ]
+                      }
+                    ]
+                  },
+                  "onSuccess": "step_serel_count_told",
+                  "onFailure": "step_serel_count_wont"
+                }
+              },
+              {
+                "id": "step_serel_tally",
+                "text": "Your count. All forty years of it.",
+                "requires": {
+                  "without": {
+                    "items": [
+                      "planting_tally"
+                    ],
+                    "flags": [
+                      {
+                        "flag": "given:planting_tally"
+                      }
+                    ]
+                  }
+                },
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "check": {
+                  "skill": "persuasion",
+                  "difficulty": {
+                    "sub": [
+                      13,
+                      {
+                        "clamp": [
+                          {
+                            "div": [
+                              {
+                                "ref": "reputation.the_horse_lords",
+                                "else": 0
+                              },
+                              5
+                            ]
+                          },
+                          -6,
+                          6
+                        ]
+                      }
+                    ]
+                  },
+                  "onSuccess": "step_serel_tally_gave",
+                  "onFailure": "step_serel_tally_kept"
+                }
+              },
+              {
+                "id": "greet_leave",
+                "text": "Nothing.",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "step_serel_wrong_told",
+            "says": [
+              {
+                "text": "\u201cIt is for breaking the wind.\u201d Serel says it the way you say the thing everybody says. Then, because you have not gone away: \u201cThe wind is off the south-west. Has been since before the Lines. And the trees run south-west to north-east.\u201d A hand, flat, drawing it in the air. \u201cThey run *with* it. Eleven miles of doing nothing at all.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "learnLore": {
+                  "entry": "step_line_wrong"
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "step_serel_wrong_on",
+                "text": "Go on.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "step_serel_wrong_wont",
+            "says": [
+              {
+                "text": "\u201cI've said all I mean to,\u201d they say, and go back to what they were doing."
+              }
+            ],
+            "onEnter": [
+              {
+                "adjustReputation": {
+                  "faction": "the_horse_lords",
+                  "amount": -1
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "step_serel_wrong_drop",
+                "text": "Leave it.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "step_serel_count_told",
+            "says": [
+              {
+                "text": "Serel goes quiet for long enough to be uncomfortable. \u201cI have counted it forty years,\u201d he says. \u201cGoing north I get one number. Coming back I get another. I have done it in a day, both ways, sober, with a boy counting beside me.\u201d He shrugs, and it is not a casual shrug. \u201cThe boy gets different numbers too, and not my different numbers.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "learnLore": {
+                  "entry": "step_line_count"
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "step_serel_count_on",
+                "text": "Go on.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "step_serel_count_wont",
+            "says": [
+              {
+                "text": "\u201cI've said all I mean to,\u201d they say, and go back to what they were doing."
+              }
+            ],
+            "onEnter": [
+              {
+                "adjustReputation": {
+                  "faction": "the_horse_lords",
+                  "amount": -1
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "step_serel_count_drop",
+                "text": "Leave it.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "step_serel_tally_gave",
+            "says": [
+              {
+                "text": "He brings out a roll of it, which is more than you expected and less tidy. \u201cIt does not settle,\u201d he says. \u201cForty years of it not settling. I have never shown anybody because there is no way to say it that does not sound like a man who cannot count.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "grantItem": {
+                  "target": {
+                    "ref": "actor.id"
+                  },
+                  "item": "planting_tally",
+                  "quantity": 1
+                }
+              },
+              {
+                "setFlag": {
+                  "flag": "given:planting_tally",
+                  "value": true
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "step_serel_tally_thanks",
+                "text": "Thank you.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "step_serel_tally_kept",
+            "says": [
+              {
+                "text": "\u201cIt is forty years of looking foolish,\u201d Serel says, \u201cand it is mine,\u201d and puts it away."
+              }
+            ],
+            "onEnter": [
+              {
+                "adjustReputation": {
+                  "faction": "the_horse_lords",
+                  "amount": -2
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "step_serel_tally_leave",
+                "text": "Then no.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          }
+        ]
+      },
+      {
+        "id": "step_talith_talk",
+        "start": "greet",
+        "nodes": [
+          {
+            "id": "greet",
+            "says": [
+              {
+                "text": "Eight horses on a line, four of them cooling, and somebody going over a hoof without seeming to look at it."
+              },
+              {
+                "text": "\u201cRemount, message, or neither. Neither is fine, but stand clear.\u201d"
+              }
+            ],
+            "onEnter": [],
+            "options": [
+              {
+                "id": "step_talith_norecord",
+                "text": "Is the planting in the Lines' record?",
+                "requires": {
+                  "without": {
+                    "lore": [
+                      "step_line_norecord"
+                    ]
+                  }
+                },
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "check": {
+                  "skill": "persuasion",
+                  "difficulty": {
+                    "sub": [
+                      14,
+                      {
+                        "clamp": [
+                          {
+                            "div": [
+                              {
+                                "ref": "reputation.the_horse_lords",
+                                "else": 0
+                              },
+                              5
+                            ]
+                          },
+                          -6,
+                          6
+                        ]
+                      }
+                    ]
+                  },
+                  "onSuccess": "step_talith_norecord_told",
+                  "onFailure": "step_talith_norecord_wont"
+                }
+              },
+              {
+                "id": "step_talith_week",
+                "text": "How do you know when the flood comes?",
+                "requires": {
+                  "without": {
+                    "lore": [
+                      "step_bank_week"
+                    ]
+                  }
+                },
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "check": {
+                  "skill": "insight",
+                  "difficulty": {
+                    "sub": [
+                      15,
+                      {
+                        "clamp": [
+                          {
+                            "div": [
+                              {
+                                "ref": "reputation.the_horse_lords",
+                                "else": 0
+                              },
+                              5
+                            ]
+                          },
+                          -6,
+                          6
+                        ]
+                      }
+                    ]
+                  },
+                  "onSuccess": "step_talith_week_told",
+                  "onFailure": "step_talith_week_wont"
+                }
+              },
+              {
+                "id": "step_talith_book",
+                "text": "The flood book. Let me have it.",
+                "requires": {
+                  "without": {
+                    "items": [
+                      "flood_book"
+                    ],
+                    "flags": [
+                      {
+                        "flag": "given:flood_book"
+                      }
+                    ]
+                  }
+                },
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "check": {
+                  "skill": "persuasion",
+                  "difficulty": {
+                    "sub": [
+                      14,
+                      {
+                        "clamp": [
+                          {
+                            "div": [
+                              {
+                                "ref": "reputation.the_horse_lords",
+                                "else": 0
+                              },
+                              5
+                            ]
+                          },
+                          -6,
+                          6
+                        ]
+                      }
+                    ]
+                  },
+                  "onSuccess": "step_talith_book_gave",
+                  "onFailure": "step_talith_book_kept"
+                }
+              },
+              {
+                "id": "greet_leave",
+                "text": "Nothing.",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": [
+              {
+                "requires": {
+                  "factions": [
+                    {
+                      "faction": "the_horse_lords",
+                      "maxStanding": -30
+                    }
+                  ]
+                },
+                "goto": "step_talith_cold"
+              }
+            ]
+          },
+          {
+            "id": "step_talith_norecord_told",
+            "says": [
+              {
+                "text": "\u201cNo.\u201d Talith does not need to check, which is itself the answer. \u201cWe have every foaling for nine hundred years. Every crossing. Every rider who did not come in.\u201d A hand on the book. \u201cEleven miles of trees is a season's work for four hundred people and there is not one line about it anywhere. We do not fail to write things down.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "learnLore": {
+                  "entry": "step_line_norecord"
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "step_talith_norecord_on",
+                "text": "Go on.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "step_talith_norecord_wont",
+            "says": [
+              {
+                "text": "\u201cI've said all I mean to,\u201d they say, and go back to what they were doing."
+              }
+            ],
+            "onEnter": [
+              {
+                "adjustReputation": {
+                  "faction": "the_horse_lords",
+                  "amount": -1
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "step_talith_norecord_drop",
+                "text": "Leave it.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "step_talith_week_told",
+            "says": [
+              {
+                "text": "\u201cThe grass tells you.\u201d Immediate, and then Talith hears it. \u201cThat is what we say. Three days out, everybody moves stock, and we are never wrong, and the week is the same week.\u201d A pause. \u201cI have asked eleven riders what the grass does. I have had eleven answers. None of them is a thing the grass does.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "learnLore": {
+                  "entry": "step_bank_week"
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "step_talith_week_on",
+                "text": "Go on.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "step_talith_week_wont",
+            "says": [
+              {
+                "text": "\u201cI've said all I mean to,\u201d they say, and go back to what they were doing."
+              }
+            ],
+            "onEnter": [
+              {
+                "adjustReputation": {
+                  "faction": "the_horse_lords",
+                  "amount": -1
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "step_talith_week_drop",
+                "text": "Leave it.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "step_talith_book_gave",
+            "says": [
+              {
+                "text": "It is oilcloth-wrapped and it is heavy. \u201cNine hundred years of the same week,\u201d Talith says, \u201cwritten by people who each thought they were the first to notice. If you go down that bank in the dry, that book tells you how long you have.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "grantItem": {
+                  "target": {
+                    "ref": "actor.id"
+                  },
+                  "item": "flood_book",
+                  "quantity": 1
+                }
+              },
+              {
+                "setFlag": {
+                  "flag": "given:flood_book",
+                  "value": true
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "step_talith_book_thanks",
+                "text": "Thank you.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "step_talith_book_kept",
+            "says": [
+              {
+                "text": "\u201cIt rides with the relay,\u201d Talith says. \u201cIt has always ridden with the relay.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "adjustReputation": {
+                  "faction": "the_horse_lords",
+                  "amount": -2
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "step_talith_book_leave",
+                "text": "Then no.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "step_talith_cold",
+            "says": [
+              {
+                "text": "Talith mounts a cooled horse and takes it twice round the post without a word."
+              }
+            ],
+            "onEnter": [],
+            "options": [
+              {
+                "id": "step_talith_go",
+                "text": "Leave it.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          }
+        ]
+      },
+      {
+        "id": "step_ondir_talk",
+        "start": "greet",
+        "nodes": [
+          {
+            "id": "greet",
+            "says": [
+              {
+                "text": "A stone trough, a rope, and somebody sitting where they can see both the water and the road to it."
+              },
+              {
+                "text": "\u201cDrink what you need. Fill what you carry. Do not wash in it.\u201d"
+              }
+            ],
+            "onEnter": [],
+            "options": [
+              {
+                "id": "step_ondir_never",
+                "text": "Has the spring ever failed?",
+                "requires": {
+                  "without": {
+                    "lore": [
+                      "step_water_never"
+                    ]
+                  }
+                },
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "check": {
+                  "skill": "persuasion",
+                  "difficulty": {
+                    "sub": [
+                      13,
+                      {
+                        "clamp": [
+                          {
+                            "div": [
+                              {
+                                "ref": "reputation.the_horse_lords",
+                                "else": 0
+                              },
+                              5
+                            ]
+                          },
+                          -6,
+                          6
+                        ]
+                      }
+                    ]
+                  },
+                  "onSuccess": "step_ondir_never_told",
+                  "onFailure": "step_ondir_never_wont"
+                }
+              },
+              {
+                "id": "step_ondir_shored",
+                "text": "What is the hole beside it?",
+                "requires": {
+                  "without": {
+                    "lore": [
+                      "step_water_shored"
+                    ]
+                  }
+                },
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "check": {
+                  "skill": "persuasion",
+                  "difficulty": {
+                    "sub": [
+                      16,
+                      {
+                        "clamp": [
+                          {
+                            "div": [
+                              {
+                                "ref": "reputation.the_horse_lords",
+                                "else": 0
+                              },
+                              5
+                            ]
+                          },
+                          -6,
+                          6
+                        ]
+                      }
+                    ]
+                  },
+                  "onSuccess": "step_ondir_shored_told",
+                  "onFailure": "step_ondir_shored_wont"
+                }
+              },
+              {
+                "id": "step_ondir_warrant",
+                "text": "Somebody paid for that timber. Do you have the paper?",
+                "requires": {
+                  "without": {
+                    "items": [
+                      "shaft_warrant"
+                    ],
+                    "flags": [
+                      {
+                        "flag": "given:shaft_warrant"
+                      }
+                    ]
+                  }
+                },
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "check": {
+                  "skill": "persuasion",
+                  "difficulty": {
+                    "sub": [
+                      15,
+                      {
+                        "clamp": [
+                          {
+                            "div": [
+                              {
+                                "ref": "reputation.the_horse_lords",
+                                "else": 0
+                              },
+                              5
+                            ]
+                          },
+                          -6,
+                          6
+                        ]
+                      }
+                    ]
+                  },
+                  "onSuccess": "step_ondir_warrant_gave",
+                  "onFailure": "step_ondir_warrant_kept"
+                }
+              },
+              {
+                "id": "greet_leave",
+                "text": "Nothing.",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "step_ondir_never_told",
+            "says": [
+              {
+                "text": "\u201cNot in the record.\u201d Ondir does not look at you; the watching is the job. \u201cNine hundred years. Droughts that took the Lines down to half their stock and it ran the same.\u201d A nod south. \u201cTwo miles that way nothing has run since before anybody was counting. It stops. Here does not.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "learnLore": {
+                  "entry": "step_water_never"
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "step_ondir_never_on",
+                "text": "Go on.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "step_ondir_never_wont",
+            "says": [
+              {
+                "text": "\u201cI've said all I mean to,\u201d they say, and go back to what they were doing."
+              }
+            ],
+            "onEnter": [
+              {
+                "adjustReputation": {
+                  "faction": "the_horse_lords",
+                  "amount": -1
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "step_ondir_never_drop",
+                "text": "Leave it.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "step_ondir_shored_told",
+            "says": [
+              {
+                "text": "\u201cShored.\u201d Flatly. \u201cTimber, cut and set, holding a way down. I have been in the first forty feet and the carpentry is better than my house.\u201d Now Ondir looks at you. \u201cThere is no timber on this steppe. There is no mine on this steppe. Somebody carted the wood here and paid for it.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "learnLore": {
+                  "entry": "step_water_shored"
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "step_ondir_shored_on",
+                "text": "Go on.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "step_ondir_shored_wont",
+            "says": [
+              {
+                "text": "\u201cI've said all I mean to,\u201d they say, and go back to what they were doing."
+              }
+            ],
+            "onEnter": [
+              {
+                "adjustReputation": {
+                  "faction": "the_horse_lords",
+                  "amount": -1
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "step_ondir_shored_drop",
+                "text": "Leave it.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "step_ondir_warrant_gave",
+            "says": [
+              {
+                "text": "Ondir takes it out of a box that has nothing else in it. \u201cSigned, sealed, and dated in a year we have not used for six hundred,\u201d he says. \u201cIt came with the post. Every watcher gets it. Not one of us has ever gone down on the strength of it.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "grantItem": {
+                  "target": {
+                    "ref": "actor.id"
+                  },
+                  "item": "shaft_warrant",
+                  "quantity": 1
+                }
+              },
+              {
+                "setFlag": {
+                  "flag": "given:shaft_warrant",
+                  "value": true
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "step_ondir_warrant_thanks",
+                "text": "Thank you.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "step_ondir_warrant_kept",
+            "says": [
+              {
+                "text": "\u201cIt comes with the post,\u201d Ondir says, \u201cand I have the post,\u201d and the box shuts."
+              }
+            ],
+            "onEnter": [
+              {
+                "adjustReputation": {
+                  "faction": "the_horse_lords",
+                  "amount": -3
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "step_ondir_warrant_leave",
+                "text": "Then no.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          }
+        ]
+      },
+      {
+        "id": "step_bree_talk",
+        "start": "greet",
+        "nodes": [
+          {
+            "id": "greet",
+            "says": [
+              {
+                "text": "A camp in the lee of a bank a quarter of a mile from the other bank, and a fire in a ring of stones that is not this year's ring."
+              },
+              {
+                "text": "\u201cThere is room. There has been room here for nine hundred years.\u201d"
+              }
+            ],
+            "onEnter": [],
+            "options": [
+              {
+                "id": "step_bree_width",
+                "text": "This bed is very wide for the water that comes down it.",
+                "requires": {
+                  "without": {
+                    "lore": [
+                      "step_bank_width"
+                    ]
+                  }
+                },
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "check": {
+                  "skill": "insight",
+                  "difficulty": {
+                    "sub": [
+                      12,
+                      {
+                        "clamp": [
+                          {
+                            "div": [
+                              {
+                                "ref": "reputation.the_horse_lords",
+                                "else": 0
+                              },
+                              5
+                            ]
+                          },
+                          -6,
+                          6
+                        ]
+                      }
+                    ]
+                  },
+                  "onSuccess": "step_bree_width_told",
+                  "onFailure": "step_bree_width_wont"
+                }
+              },
+              {
+                "id": "step_bree_warm",
+                "text": "The water at the Last Water.",
+                "requires": {
+                  "without": {
+                    "lore": [
+                      "step_water_warm"
+                    ]
+                  }
+                },
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "check": {
+                  "skill": "persuasion",
+                  "difficulty": {
+                    "sub": [
+                      11,
+                      {
+                        "clamp": [
+                          {
+                            "div": [
+                              {
+                                "ref": "reputation.the_horse_lords",
+                                "else": 0
+                              },
+                              5
+                            ]
+                          },
+                          -6,
+                          6
+                        ]
+                      }
+                    ]
+                  },
+                  "onSuccess": "step_bree_warm_told",
+                  "onFailure": "step_bree_warm_wont"
+                }
+              },
+              {
+                "id": "greet_leave",
+                "text": "Nothing.",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "step_bree_width_told",
+            "says": [
+              {
+                "text": "\u201cFour weeks.\u201d Bree pokes the fire. \u201cFour weeks of water and a quarter mile of bed. I have seen the flood \u2014 it is a frightening thing and it does not fill a fifth of this.\u201d A look up. \u201cSomething cut this. The river only borrows it.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "learnLore": {
+                  "entry": "step_bank_width"
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "step_bree_width_on",
+                "text": "Go on.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "step_bree_width_wont",
+            "says": [
+              {
+                "text": "\u201cI've said all I mean to,\u201d they say, and go back to what they were doing."
+              }
+            ],
+            "onEnter": [
+              {
+                "adjustReputation": {
+                  "faction": "the_horse_lords",
+                  "amount": -1
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "step_bree_width_drop",
+                "text": "Leave it.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "step_bree_warm_told",
+            "says": [
+              {
+                "text": "\u201cWarm, and iron.\u201d Bree makes a face. \u201cEvery spring on this grass is cold and tastes of grass. That one you could bathe a child in without heating it, and it leaves a taste like a coin.\u201d A shrug. \u201cOndir says it has always been so. That is not the same as knowing why.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "learnLore": {
+                  "entry": "step_water_warm"
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "step_bree_warm_on",
+                "text": "Go on.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "step_bree_warm_wont",
+            "says": [
+              {
+                "text": "\u201cI've said all I mean to,\u201d they say, and go back to what they were doing."
+              }
+            ],
+            "onEnter": [
+              {
+                "adjustReputation": {
+                  "faction": "the_horse_lords",
+                  "amount": -1
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "step_bree_warm_drop",
+                "text": "Leave it.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          }
+        ]
+      },
+      {
+        "id": "step_kosh_talk",
+        "start": "greet",
+        "nodes": [
+          {
+            "id": "greet",
+            "says": [
+              {
+                "text": "Four hundred head strung out along a line of trees, and a herder walking the length of them because that is what the day is."
+              },
+              {
+                "text": "\u201cWalk with me or stand still. Do not stand in the middle.\u201d"
+              }
+            ],
+            "onEnter": [],
+            "options": [
+              {
+                "id": "step_kosh_season",
+                "text": "The trees. Were they all set at once?",
+                "requires": {
+                  "without": {
+                    "lore": [
+                      "step_line_season"
+                    ]
+                  }
+                },
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "check": {
+                  "skill": "survival",
+                  "difficulty": {
+                    "sub": [
+                      13,
+                      {
+                        "clamp": [
+                          {
+                            "div": [
+                              {
+                                "ref": "reputation.the_horse_lords",
+                                "else": 0
+                              },
+                              5
+                            ]
+                          },
+                          -6,
+                          6
+                        ]
+                      }
+                    ]
+                  },
+                  "onSuccess": "step_kosh_season_told",
+                  "onFailure": "step_kosh_season_wont"
+                }
+              },
+              {
+                "id": "step_kosh_wont",
+                "text": "Why will the Lines not camp at the Last Water?",
+                "requires": {
+                  "without": {
+                    "lore": [
+                      "step_water_wont"
+                    ]
+                  }
+                },
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "check": {
+                  "skill": "insight",
+                  "difficulty": {
+                    "sub": [
+                      14,
+                      {
+                        "clamp": [
+                          {
+                            "div": [
+                              {
+                                "ref": "reputation.the_horse_lords",
+                                "else": 0
+                              },
+                              5
+                            ]
+                          },
+                          -6,
+                          6
+                        ]
+                      }
+                    ]
+                  },
+                  "onSuccess": "step_kosh_wont_told",
+                  "onFailure": "step_kosh_wont_wont"
+                }
+              },
+              {
+                "id": "greet_leave",
+                "text": "Nothing.",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "step_kosh_season_told",
+            "says": [
+              {
+                "text": "\u201cWithin a season.\u201d Kosh does not break stride. \u201cYou can see it in the boles \u2014 same girth, same lean, same scar year in all of them. Eleven miles.\u201d A glance across. \u201cFour hundred people for a season. On this grass, in that year, there were not four hundred people.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "learnLore": {
+                  "entry": "step_line_season"
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "step_kosh_season_on",
+                "text": "Go on.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "step_kosh_season_wont",
+            "says": [
+              {
+                "text": "\u201cI've said all I mean to,\u201d they say, and go back to what they were doing."
+              }
+            ],
+            "onEnter": [
+              {
+                "adjustReputation": {
+                  "faction": "the_horse_lords",
+                  "amount": -1
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "step_kosh_season_drop",
+                "text": "Leave it.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "step_kosh_wont_told",
+            "says": [
+              {
+                "text": "\u201cAsk twelve and you will get twelve answers.\u201d Kosh sounds genuinely amused. \u201cBad grass. Bad ground. A cousin who died there. The Glasslands too close.\u201d The amusement goes. \u201cNow ask why none of the twelve is the same, when we agree about everything else on this steppe down to which side of a hill.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "learnLore": {
+                  "entry": "step_water_wont"
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "step_kosh_wont_on",
+                "text": "Go on.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "step_kosh_wont_wont",
+            "says": [
+              {
+                "text": "\u201cI've said all I mean to,\u201d they say, and go back to what they were doing."
+              }
+            ],
+            "onEnter": [
+              {
+                "adjustReputation": {
+                  "faction": "the_horse_lords",
+                  "amount": -1
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "step_kosh_wont_drop",
+                "text": "Leave it.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          }
+        ]
+      },
+      {
+        "id": "step_ana_talk",
+        "start": "greet",
+        "nodes": [
+          {
+            "id": "greet",
+            "says": [
+              {
+                "text": "Hay by the load, girth straps, salt, and a woman who has already worked out what you forgot to bring."
+              },
+              {
+                "text": "\u201cHay, salt, strap, or rope. It is always one of the four.\u201d"
+              }
+            ],
+            "onEnter": [],
+            "options": [
+              {
+                "id": "step_ana_ford",
+                "text": "The camp at the crossing. Why is it there?",
+                "requires": {
+                  "without": {
+                    "lore": [
+                      "step_bank_ford"
+                    ]
+                  }
+                },
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "check": {
+                  "skill": "persuasion",
+                  "difficulty": {
+                    "sub": [
+                      12,
+                      {
+                        "clamp": [
+                          {
+                            "div": [
+                              {
+                                "ref": "reputation.the_horse_lords",
+                                "else": 0
+                              },
+                              5
+                            ]
+                          },
+                          -6,
+                          6
+                        ]
+                      }
+                    ]
+                  },
+                  "onSuccess": "step_ana_ford_told",
+                  "onFailure": "step_ana_ford_wont"
+                }
+              },
+              {
+                "id": "step_ana_courses",
+                "text": "What is showing in the open face?",
+                "requires": {
+                  "without": {
+                    "lore": [
+                      "step_bank_courses"
+                    ]
+                  }
+                },
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "check": {
+                  "skill": "craft",
+                  "difficulty": {
+                    "sub": [
+                      14,
+                      {
+                        "clamp": [
+                          {
+                            "div": [
+                              {
+                                "ref": "reputation.the_horse_lords",
+                                "else": 0
+                              },
+                              5
+                            ]
+                          },
+                          -6,
+                          6
+                        ]
+                      }
+                    ]
+                  },
+                  "onSuccess": "step_ana_courses_told",
+                  "onFailure": "step_ana_courses_wont"
+                }
+              },
+              {
+                "id": "greet_leave",
+                "text": "Nothing.",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "step_ana_ford_told",
+            "says": [
+              {
+                "text": "\u201cBecause it has always been there.\u201d Ana stacks something. \u201cNine hundred years of hearths, one on top of the last. And there is no crossing \u2014 it is dry eleven months, and the twelfth you would not put a horse in it.\u201d She stops stacking. \u201cNobody has ever *needed* to camp at that spot. They camp there anyway.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "learnLore": {
+                  "entry": "step_bank_ford"
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "step_ana_ford_on",
+                "text": "Go on.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "step_ana_ford_wont",
+            "says": [
+              {
+                "text": "\u201cI've said all I mean to,\u201d they say, and go back to what they were doing."
+              }
+            ],
+            "onEnter": [
+              {
+                "adjustReputation": {
+                  "faction": "the_horse_lords",
+                  "amount": -1
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "step_ana_ford_drop",
+                "text": "Leave it.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "step_ana_courses_told",
+            "says": [
+              {
+                "text": "\u201cStone.\u201d She says it like it is an inconvenience. \u201cForty foot down, courses of it, dressed, laid level, going both ways into the bank.\u201d A hand out flat. \u201cNot fallen. Not washed. Laid. My father took a block out and it is my doorstep, and you can see the chisel on it.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "learnLore": {
+                  "entry": "step_bank_courses"
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "step_ana_courses_on",
+                "text": "Go on.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "step_ana_courses_wont",
+            "says": [
+              {
+                "text": "\u201cI've said all I mean to,\u201d they say, and go back to what they were doing."
+              }
+            ],
+            "onEnter": [
+              {
+                "adjustReputation": {
+                  "faction": "the_horse_lords",
+                  "amount": -1
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "step_ana_courses_drop",
+                "text": "Leave it.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          }
+        ]
       }
     ],
     "quests": [
@@ -86537,6 +89372,177 @@
           ],
           "reputation": {}
         }
+      },
+      {
+        "id": "step_the_planting",
+        "name": "The Planting",
+        "description": "Eleven miles of one species set in a single season, running the wrong way to break any wind that blows here.",
+        "autoStart": false,
+        "ordered": true,
+        "tags": [
+          "hidden",
+          "sunward_steppe",
+          "step_line"
+        ],
+        "objectives": [
+          {
+            "id": "to_the_marker",
+            "description": "Get to the stone in the middle of it.",
+            "kind": "reach",
+            "count": 1,
+            "hidden": true,
+            "optional": false,
+            "target": "windbreak_the_planter"
+          },
+          {
+            "id": "settle_the_count",
+            "description": "Settle the count that will not settle.",
+            "kind": "custom",
+            "count": 1,
+            "hidden": true,
+            "optional": false,
+            "when": {
+              "test": {
+                "ref": "flags.step_line_open"
+              }
+            }
+          },
+          {
+            "id": "what_was_set",
+            "description": "Find what the line was set around.",
+            "kind": "kill",
+            "count": 1,
+            "hidden": true,
+            "optional": false,
+            "target": "the_set_thing"
+          }
+        ],
+        "stages": [],
+        "unlocks": [],
+        "rewards": {
+          "xp": 155,
+          "items": [
+            {
+              "item": "windbreak_belt",
+              "quantity": 1
+            }
+          ],
+          "reputation": {}
+        }
+      },
+      {
+        "id": "step_what_the_bank_shows",
+        "name": "What the Bank Shows",
+        "description": "A quarter-mile bed for a four-week river, and forty feet down in the open face, courses that were laid level.",
+        "autoStart": false,
+        "ordered": true,
+        "tags": [
+          "hidden",
+          "sunward_steppe",
+          "step_bank"
+        ],
+        "objectives": [
+          {
+            "id": "down_the_face",
+            "description": "Get down the open face.",
+            "kind": "reach",
+            "count": 1,
+            "hidden": true,
+            "optional": false,
+            "target": "dry_river_cut_bank"
+          },
+          {
+            "id": "open_the_course",
+            "description": "Take a block out of the laid course.",
+            "kind": "custom",
+            "count": 1,
+            "hidden": true,
+            "optional": false,
+            "when": {
+              "test": {
+                "ref": "flags.step_bank_open"
+              }
+            }
+          },
+          {
+            "id": "what_it_carried",
+            "description": "Meet what the course was built to carry.",
+            "kind": "kill",
+            "count": 1,
+            "hidden": true,
+            "optional": false,
+            "target": "course_dweller"
+          }
+        ],
+        "stages": [],
+        "unlocks": [],
+        "rewards": {
+          "xp": 170,
+          "items": [
+            {
+              "item": "flood_ring",
+              "quantity": 1
+            }
+          ],
+          "reputation": {}
+        }
+      },
+      {
+        "id": "step_the_last_water",
+        "name": "The Last Water",
+        "description": "A spring that has never failed at the edge of a country where nothing runs, warm and tasting of iron, with a shored way down beside it.",
+        "autoStart": false,
+        "ordered": true,
+        "tags": [
+          "hidden",
+          "sunward_steppe",
+          "step_water"
+        ],
+        "objectives": [
+          {
+            "id": "to_the_shoring",
+            "description": "Get to the top of the shoring.",
+            "kind": "reach",
+            "count": 1,
+            "hidden": true,
+            "optional": false,
+            "target": "south_reach_sand_shaft"
+          },
+          {
+            "id": "past_the_timber",
+            "description": "Get past the timber somebody ordered.",
+            "kind": "custom",
+            "count": 1,
+            "hidden": true,
+            "optional": false,
+            "when": {
+              "test": {
+                "ref": "flags.step_water_open"
+              }
+            }
+          },
+          {
+            "id": "what_warms_it",
+            "description": "Meet what has been keeping the water warm.",
+            "kind": "kill",
+            "count": 1,
+            "hidden": true,
+            "optional": false,
+            "target": "the_warm_thing"
+          }
+        ],
+        "stages": [],
+        "unlocks": [],
+        "rewards": {
+          "xp": 175,
+          "items": [
+            {
+              "item": "warm_water_hood",
+              "quantity": 1
+            }
+          ],
+          "reputation": {}
+        }
       }
     ],
     "arcs": [
@@ -86849,6 +89855,17 @@
           "dusk_the_extra_miles",
           "dusk_the_road",
           "dusk_the_round"
+        ],
+        "isEnding": false
+      },
+      {
+        "id": "step_hidden",
+        "name": "The Sunward Steppe, Laid Out",
+        "description": "Three pieces of work under nine hundred years of grass, all three of them still doing what they were built to do.",
+        "quests": [
+          "step_the_planting",
+          "step_what_the_bank_shows",
+          "step_the_last_water"
         ],
         "isEnding": false
       },
@@ -87446,6 +90463,66 @@
         "id": "dusk_ward_recut",
         "name": "Every stone on the edge has been re-cut on the same face, and the cuts are fresh, and there is nobody the parish is paying to do it.",
         "source": "the woodward's hut"
+      },
+      {
+        "id": "step_line_season",
+        "name": "Eleven miles of it, one species the whole way, and every tree in it was set within a season of every other. That is a season's work for four hundred people.",
+        "source": "a shade herder"
+      },
+      {
+        "id": "step_line_wrong",
+        "name": "The wind here comes off the south-west and has for as long as anybody has grazed here. The line runs south-west to north-east. It breaks nothing at all.",
+        "source": "the hayward"
+      },
+      {
+        "id": "step_line_norecord",
+        "name": "The Lines have kept a record of every foaling, every crossing and every death for nine hundred years, and there is no entry anywhere for eleven miles of trees.",
+        "source": "the relay post"
+      },
+      {
+        "id": "step_line_count",
+        "name": "Count them going north and count them coming back and you will not get the same number, and you will not get it twice running either.",
+        "source": "the Windbreak"
+      },
+      {
+        "id": "step_bank_width",
+        "name": "A quarter of a mile across, for a river that runs four weeks in the year. Nothing that runs four weeks a year cuts a bed that wide.",
+        "source": "the Ford Camp"
+      },
+      {
+        "id": "step_bank_courses",
+        "name": "Forty feet down in the open face there are courses of dressed stone. Not fallen in and not washed down \u2014 laid, level, and going on into the bank both ways.",
+        "source": "the Dry Bed"
+      },
+      {
+        "id": "step_bank_week",
+        "name": "The flood comes in the same week every year and the Lines move stock three days ahead of it. Ask any of them how they know and they will say the grass tells you, and they will not be able to say how.",
+        "source": "a rider"
+      },
+      {
+        "id": "step_bank_ford",
+        "name": "There has been a camp at that crossing for nine hundred years, and the crossing is dry eleven months and impassable the twelfth. Nobody has ever needed to camp there.",
+        "source": "the Cut Store"
+      },
+      {
+        "id": "step_water_never",
+        "name": "The spring at the edge of the pale ground has not failed in nine hundred years of record, and two miles further on nothing has run at all since before anybody was counting.",
+        "source": "the well watcher"
+      },
+      {
+        "id": "step_water_warm",
+        "name": "It comes up warm and it tastes of iron. Every other water on this grass comes up cold and tastes of grass.",
+        "source": "the Ford Camp"
+      },
+      {
+        "id": "step_water_shored",
+        "name": "Whatever goes down beside it is shored, with timber, properly. Shoring is a mine's work and there has never been a mine on this steppe.",
+        "source": "the shade camp"
+      },
+      {
+        "id": "step_water_wont",
+        "name": "The Lines will water there and will not camp there, and they have twelve reasons between them and no two of the twelve agree.",
+        "source": "the Pale Ground"
       }
     ],
     "loreThreads": [
@@ -87766,6 +90843,39 @@
           "dusk_ward_moved",
           "dusk_ward_line",
           "dusk_ward_recut"
+        ]
+      },
+      {
+        "id": "step_line",
+        "name": "The Planting",
+        "description": "Eleven miles of one species set in a single season, running the wrong way to break any wind that blows here, with no record anywhere of the work.",
+        "entries": [
+          "step_line_season",
+          "step_line_wrong",
+          "step_line_norecord",
+          "step_line_count"
+        ]
+      },
+      {
+        "id": "step_bank",
+        "name": "What the Bank Shows",
+        "description": "A quarter-mile bed for a four-week river, and forty feet down in the open face, courses that were laid level.",
+        "entries": [
+          "step_bank_width",
+          "step_bank_courses",
+          "step_bank_week",
+          "step_bank_ford"
+        ]
+      },
+      {
+        "id": "step_water",
+        "name": "The Last Water",
+        "description": "A spring that has never failed at the edge of a country where nothing runs, warm and tasting of iron, with a shored way down beside it.",
+        "entries": [
+          "step_water_never",
+          "step_water_warm",
+          "step_water_shored",
+          "step_water_wont"
         ]
       }
     ]
