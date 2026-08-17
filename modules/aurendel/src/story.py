@@ -39,6 +39,7 @@ SIDE_MODULES = [
 # place it points at.
 HIDDEN_MODULES = [
     "hidden_frostmere",
+    "hidden_glasslands",
 ]
 
 _LOADED = []

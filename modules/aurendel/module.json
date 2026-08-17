@@ -3579,6 +3579,159 @@
           "resolve": 2
         },
         "rarity": "very_rare"
+      },
+      {
+        "id": "weighers_jar",
+        "name": "The Weigher's Jar",
+        "description": "A stoppered jar of the ninth course. Heavier than salt has any business being, and it does not taste of this sea.",
+        "kind": "key",
+        "value": 0,
+        "weight": 0,
+        "tags": [
+          "keepsake"
+        ],
+        "extra": {
+          "heldBy": "weigher_qasim"
+        }
+      },
+      {
+        "id": "cistern_key",
+        "name": "The Cistern Keeper's Key",
+        "description": "For a channel that runs out of a cistern nothing runs into. The office of keeper outlived the water by three hundred years.",
+        "kind": "key",
+        "value": 0,
+        "weight": 0,
+        "tags": [
+          "keepsake"
+        ],
+        "extra": {
+          "heldBy": "cistern_keeper_havva"
+        }
+      },
+      {
+        "id": "unsold_lens",
+        "name": "The Lens They Do Not Sell",
+        "description": "Ground every year by the Cutters' Hall since before the guild kept minutes. Looked through, the glass on the crater lip is not glass.",
+        "kind": "key",
+        "value": 0,
+        "weight": 0,
+        "tags": [
+          "keepsake"
+        ],
+        "extra": {
+          "heldBy": "lens_cutter_naim"
+        }
+      },
+      {
+        "id": "dune_walkers_chart",
+        "name": "The Dune-Walker's Chart",
+        "description": "Where the dunes were, year by year, in four hands over ninety years. One line on it goes a mile in a season.",
+        "kind": "key",
+        "value": 0,
+        "weight": 0,
+        "tags": [
+          "keepsake"
+        ],
+        "extra": {
+          "heldBy": "dune_walker_sela"
+        }
+      },
+      {
+        "id": "ninth_course_salt",
+        "name": "A Measure of the Ninth",
+        "description": "It draws water out of the air in a place that has none.",
+        "kind": "treasure",
+        "value": 0,
+        "weight": 0,
+        "tags": [
+          "clue",
+          "proof"
+        ],
+        "onUse": [
+          {
+            "learnLore": {
+              "entry": "glass_courses_taste"
+            }
+          }
+        ],
+        "consumedOnUse": false
+      },
+      {
+        "id": "weighers_scale",
+        "name": "The Weigher's Scale",
+        "description": "Brass, and older than the pans. What is set on it reads its true weight, which is not always the weight it has.",
+        "kind": "trinket",
+        "slot": "belt",
+        "value": 850,
+        "weight": 1,
+        "tags": [
+          "fabled"
+        ],
+        "skillBonuses": {
+          "insight": 3,
+          "craft": 2
+        },
+        "rarity": "rare"
+      },
+      {
+        "id": "cistern_keepers_ring",
+        "name": "The Cistern Keeper's Ring",
+        "description": "Three hundred years of an office with nothing to do. The stone in it is always cold and always slightly wet.",
+        "kind": "trinket",
+        "slot": "ring",
+        "value": 800,
+        "weight": 1,
+        "tags": [
+          "fabled"
+        ],
+        "skillBonuses": {
+          "survival": 3
+        },
+        "damageInteractions": [
+          {
+            "damageType": "fire",
+            "multiplier": 0.5
+          }
+        ],
+        "rarity": "rare"
+      },
+      {
+        "id": "unsold_lens_mounted",
+        "name": "The Ground Lens, Mounted",
+        "description": "The one the cutters make and do not sell, in a frame somebody made for it a very long time after. Worn, the lines in the glass have ends.",
+        "kind": "armor",
+        "slot": "head",
+        "value": 1300,
+        "weight": 1,
+        "tags": [
+          "fabled"
+        ],
+        "skillBonuses": {
+          "perception": 3,
+          "arcana": 3
+        },
+        "rarity": "very_rare"
+      },
+      {
+        "id": "barred_door_iron",
+        "name": "Iron off a Barred Door",
+        "description": "The bar off a door in the uncovered town, straightened and hafted. It was on the outside, and whoever put it there meant it.",
+        "kind": "weapon",
+        "slot": "hand",
+        "value": 950,
+        "weight": 1,
+        "tags": [
+          "fabled"
+        ],
+        "damage": {
+          "dice": "1d10",
+          "damageType": "bludgeoning",
+          "stat": "might"
+        },
+        "properties": [
+          "heavy"
+        ],
+        "rarity": "very_rare"
       }
     ],
     "lootTables": [
@@ -5155,6 +5308,247 @@
             "weight": 2,
             "value": {
               "item": "warded_coat",
+              "quantity": "1"
+            }
+          }
+        ]
+      },
+      {
+        "id": "glass_jar_carried",
+        "name": "What Qasim Kept",
+        "rolls": "1",
+        "emptyChance": 0,
+        "entries": [
+          {
+            "weight": 1,
+            "value": {
+              "item": "weighers_jar",
+              "quantity": "1",
+              "unique": true,
+              "requirementScope": "party",
+              "requires": {
+                "without": {
+                  "flags": [
+                    {
+                      "flag": "given:weighers_jar"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        ]
+      },
+      {
+        "id": "glass_key_carried",
+        "name": "What Havva Kept",
+        "rolls": "1",
+        "emptyChance": 0,
+        "entries": [
+          {
+            "weight": 1,
+            "value": {
+              "item": "cistern_key",
+              "quantity": "1",
+              "unique": true,
+              "requirementScope": "party",
+              "requires": {
+                "without": {
+                  "flags": [
+                    {
+                      "flag": "given:cistern_key"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        ]
+      },
+      {
+        "id": "glass_lens_carried",
+        "name": "What Naim Kept",
+        "rolls": "1",
+        "emptyChance": 0,
+        "entries": [
+          {
+            "weight": 1,
+            "value": {
+              "item": "unsold_lens",
+              "quantity": "1",
+              "unique": true,
+              "requirementScope": "party",
+              "requires": {
+                "without": {
+                  "flags": [
+                    {
+                      "flag": "given:unsold_lens"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        ]
+      },
+      {
+        "id": "glass_chart_carried",
+        "name": "What Sela Kept",
+        "rolls": "1",
+        "emptyChance": 0,
+        "entries": [
+          {
+            "weight": 1,
+            "value": {
+              "item": "dune_walkers_chart",
+              "quantity": "1",
+              "unique": true,
+              "requirementScope": "party",
+              "requires": {
+                "without": {
+                  "flags": [
+                    {
+                      "flag": "given:dune_walkers_chart"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        ]
+      },
+      {
+        "id": "glass_pan_hoard",
+        "name": "Under the Eighth Course",
+        "rolls": "2",
+        "emptyChance": 0,
+        "bonusRollSkill": "perception",
+        "bonusRolls": {
+          "onSuccess": 1,
+          "onCritical": 2
+        },
+        "entries": [
+          {
+            "weight": 3,
+            "value": {
+              "item": "old_coin",
+              "quantity": "3d6"
+            }
+          },
+          {
+            "weight": 2,
+            "value": {
+              "item": "glass_bead",
+              "quantity": "1d3"
+            }
+          },
+          {
+            "weight": 1,
+            "value": {
+              "item": "ninth_course_salt",
+              "quantity": "1",
+              "unique": true
+            }
+          }
+        ]
+      },
+      {
+        "id": "glass_feeder_hoard",
+        "name": "The Far End of the Channel",
+        "rolls": "2",
+        "emptyChance": 0.1,
+        "bonusRollSkill": "perception",
+        "bonusRolls": {
+          "onSuccess": 1,
+          "onCritical": 2
+        },
+        "entries": [
+          {
+            "weight": 4,
+            "value": {
+              "item": "old_coin",
+              "quantity": "2d6"
+            }
+          },
+          {
+            "weight": 2,
+            "value": {
+              "item": "ward_salt",
+              "quantity": "1d2"
+            }
+          },
+          {
+            "weight": 1,
+            "value": {
+              "item": "antidote",
+              "quantity": "1d2"
+            }
+          }
+        ]
+      },
+      {
+        "id": "glass_crater_hoard",
+        "name": "Under the Poured Glass",
+        "rolls": "3",
+        "emptyChance": 0,
+        "bonusRollSkill": "lore",
+        "bonusRolls": {
+          "onSuccess": 1,
+          "onCritical": 2
+        },
+        "entries": [
+          {
+            "weight": 3,
+            "value": {
+              "item": "old_coin",
+              "quantity": "5d6"
+            }
+          },
+          {
+            "weight": 2,
+            "value": {
+              "item": "glass_bead",
+              "quantity": "2d3"
+            }
+          },
+          {
+            "weight": 2,
+            "value": {
+              "item": "warded_coat",
+              "quantity": "1"
+            }
+          }
+        ]
+      },
+      {
+        "id": "glass_town_hoard",
+        "name": "Behind a Barred Door",
+        "rolls": "2",
+        "emptyChance": 0.1,
+        "bonusRollSkill": "perception",
+        "bonusRolls": {
+          "onSuccess": 1,
+          "onCritical": 2
+        },
+        "entries": [
+          {
+            "weight": 4,
+            "value": {
+              "item": "old_coin",
+              "quantity": "2d6"
+            }
+          },
+          {
+            "weight": 2,
+            "value": {
+              "item": "amber_lump",
+              "quantity": "1"
+            }
+          },
+          {
+            "weight": 1,
+            "value": {
+              "item": "silvered_blade",
               "quantity": "1"
             }
           }
@@ -7704,6 +8098,435 @@
         "resourceOverrides": {
           "hp": 80
         }
+      },
+      {
+        "id": "glass_weigher",
+        "name": "Qasim, of the Weighing House",
+        "description": "A lifetime of lifting counterweights, which is more lifting than it sounds.",
+        "level": 5,
+        "xp": 0,
+        "attributes": {
+          "might": 11,
+          "agility": 11,
+          "endurance": 12,
+          "intellect": 15,
+          "instinct": 13,
+          "presence": 12
+        },
+        "abilities": [
+          "strike"
+        ],
+        "behaviour": [
+          {
+            "priority": 0,
+            "use": "strike"
+          }
+        ],
+        "faction": "the_water_wardens",
+        "creatureType": "humanoid",
+        "size": "medium",
+        "descriptors": [
+          "a deliberate"
+        ],
+        "conditionalLoot": [],
+        "loot": "glass_jar_carried",
+        "resourceOverrides": {
+          "hp": 28
+        }
+      },
+      {
+        "id": "glass_keeper",
+        "name": "Havva, Keeper of the Cistern",
+        "description": "Three hundred years of an office and every one of them spent on ladders.",
+        "level": 5,
+        "xp": 0,
+        "attributes": {
+          "might": 12,
+          "agility": 13,
+          "endurance": 13,
+          "intellect": 12,
+          "instinct": 14,
+          "presence": 13
+        },
+        "abilities": [
+          "strike"
+        ],
+        "behaviour": [
+          {
+            "priority": 0,
+            "use": "strike"
+          }
+        ],
+        "faction": "the_water_wardens",
+        "creatureType": "humanoid",
+        "size": "medium",
+        "descriptors": [
+          "a wiry"
+        ],
+        "conditionalLoot": [],
+        "loot": "glass_key_carried",
+        "resourceOverrides": {
+          "hp": 30
+        }
+      },
+      {
+        "id": "glass_cutter",
+        "name": "Naim, at the Cutters' Hall",
+        "description": "Hands steady enough to grind a lens nobody is allowed to buy.",
+        "level": 5,
+        "xp": 0,
+        "attributes": {
+          "might": 12,
+          "agility": 15,
+          "endurance": 12,
+          "intellect": 15,
+          "instinct": 12,
+          "presence": 11
+        },
+        "abilities": [
+          "strike",
+          "cut_and_run"
+        ],
+        "behaviour": [
+          {
+            "priority": 0,
+            "use": "strike"
+          }
+        ],
+        "faction": "the_library",
+        "creatureType": "humanoid",
+        "size": "medium",
+        "descriptors": [
+          "a precise"
+        ],
+        "conditionalLoot": [],
+        "loot": "glass_lens_carried",
+        "resourceOverrides": {
+          "hp": 27
+        }
+      },
+      {
+        "id": "glass_walker",
+        "name": "Sela, who Walks the Dunes",
+        "description": "Ninety years of chart and the legs that made the last thirty of it.",
+        "level": 6,
+        "xp": 0,
+        "attributes": {
+          "might": 13,
+          "agility": 16,
+          "endurance": 15,
+          "intellect": 12,
+          "instinct": 17,
+          "presence": 12
+        },
+        "abilities": [
+          "strike",
+          "quick_shot"
+        ],
+        "behaviour": [
+          {
+            "priority": 0,
+            "use": "strike"
+          }
+        ],
+        "faction": "the_water_wardens",
+        "creatureType": "humanoid",
+        "size": "medium",
+        "descriptors": [
+          "a sun-dark"
+        ],
+        "conditionalLoot": [],
+        "loot": "glass_chart_carried",
+        "resourceOverrides": {
+          "hp": 36
+        }
+      },
+      {
+        "id": "salt_drawer",
+        "name": "What Draws the Ninth",
+        "description": "It has been putting a ninth course into those pans every year for two hundred years, and nobody has ever asked what it wants the eight for.",
+        "level": 8,
+        "xp": 780,
+        "attributes": {
+          "might": 15,
+          "agility": 14,
+          "endurance": 17,
+          "intellect": 11,
+          "instinct": 15,
+          "presence": 12
+        },
+        "abilities": [
+          "salt_burn",
+          "wither",
+          "rend"
+        ],
+        "behaviour": [
+          {
+            "priority": 15,
+            "use": "salt_burn",
+            "when": {
+              "chance": 0.4
+            }
+          },
+          {
+            "priority": 0,
+            "use": "rend"
+          }
+        ],
+        "faction": "the_unsealed",
+        "creatureType": "undead",
+        "size": "medium",
+        "descriptors": [
+          "a crusted",
+          "a patient"
+        ],
+        "conditionalLoot": [],
+        "loot": "glass_pan_hoard",
+        "conditionImmunities": [
+          "poisoned",
+          "frightened"
+        ],
+        "resourceOverrides": {
+          "hp": 90
+        }
+      },
+      {
+        "id": "cistern_drinker",
+        "name": "What Has Been Drinking",
+        "description": "A channel out of a cistern with nothing running into it is not a drain. It is a throat.",
+        "level": 8,
+        "xp": 820,
+        "attributes": {
+          "might": 16,
+          "agility": 15,
+          "endurance": 16,
+          "intellect": 10,
+          "instinct": 16,
+          "presence": 11
+        },
+        "abilities": [
+          "drag_under",
+          "latch",
+          "rend"
+        ],
+        "behaviour": [
+          {
+            "priority": 20,
+            "use": "drag_under",
+            "when": {
+              "chance": 0.35
+            }
+          },
+          {
+            "priority": 10,
+            "use": "latch"
+          },
+          {
+            "priority": 0,
+            "use": "rend"
+          }
+        ],
+        "faction": "the_unsealed",
+        "creatureType": "undead",
+        "size": "medium",
+        "descriptors": [
+          "a sodden",
+          "a swollen"
+        ],
+        "conditionalLoot": [],
+        "loot": "glass_feeder_hoard",
+        "conditionImmunities": [
+          "prone",
+          "frightened"
+        ],
+        "resourceOverrides": {
+          "hp": 95
+        }
+      },
+      {
+        "id": "crater_founder",
+        "name": "What Has the Fire Under It",
+        "description": "Masonry under poured glass, and something below the masonry that the glass was poured to keep in. The city has been drinking the runoff for two hundred years.",
+        "level": 10,
+        "xp": 1500,
+        "attributes": {
+          "might": 20,
+          "agility": 12,
+          "endurance": 20,
+          "intellect": 17,
+          "instinct": 16,
+          "presence": 18
+        },
+        "abilities": [
+          "vent_breath",
+          "cinder_lash",
+          "unmaking_word",
+          "glass_shard"
+        ],
+        "behaviour": [
+          {
+            "priority": 30,
+            "use": "unmaking_word",
+            "when": {
+              "chance": 0.25
+            }
+          },
+          {
+            "priority": 20,
+            "use": "vent_breath",
+            "when": {
+              "chance": 0.35
+            }
+          },
+          {
+            "priority": 10,
+            "use": "glass_shard"
+          },
+          {
+            "priority": 0,
+            "use": "cinder_lash"
+          }
+        ],
+        "faction": "the_unsealed",
+        "creatureType": "undead",
+        "size": "medium",
+        "descriptors": [
+          "a molten",
+          "a founding"
+        ],
+        "conditionalLoot": [],
+        "loot": "glass_crater_hoard",
+        "damageInteractions": [
+          {
+            "damageType": "slashing",
+            "multiplier": 0.5,
+            "unless": [
+              "silvered"
+            ]
+          },
+          {
+            "damageType": "piercing",
+            "multiplier": 0.5,
+            "unless": [
+              "silvered"
+            ]
+          }
+        ],
+        "conditionImmunities": [
+          "frightened",
+          "poisoned",
+          "prone",
+          "burning"
+        ],
+        "resourceOverrides": {
+          "hp": 165
+        }
+      },
+      {
+        "id": "barred_thing",
+        "name": "What the Bars Were For",
+        "description": "Every door barred from the street, before the sand. They did not get it out; they got everything else out.",
+        "level": 7,
+        "xp": 700,
+        "attributes": {
+          "might": 17,
+          "agility": 16,
+          "endurance": 14,
+          "intellect": 9,
+          "instinct": 15,
+          "presence": 10
+        },
+        "abilities": [
+          "rend",
+          "gore",
+          "cut_and_run"
+        ],
+        "behaviour": [
+          {
+            "priority": 15,
+            "use": "cut_and_run",
+            "when": {
+              "chance": 0.4
+            }
+          },
+          {
+            "priority": 0,
+            "use": "rend"
+          }
+        ],
+        "faction": "the_unsealed",
+        "creatureType": "undead",
+        "size": "medium",
+        "descriptors": [
+          "a hunched",
+          "a sand-scoured"
+        ],
+        "conditionalLoot": [],
+        "loot": "glass_town_hoard",
+        "damageInteractions": [
+          {
+            "damageType": "slashing",
+            "multiplier": 0.5,
+            "unless": [
+              "silvered"
+            ]
+          },
+          {
+            "damageType": "piercing",
+            "multiplier": 0.5,
+            "unless": [
+              "silvered"
+            ]
+          }
+        ],
+        "conditionImmunities": [
+          "frightened"
+        ],
+        "resourceOverrides": {
+          "hp": 84
+        }
+      },
+      {
+        "id": "root_glass",
+        "name": "The Root",
+        "description": "Fulgurite goes down as far as the strike went, and this one went a long way down.",
+        "level": 7,
+        "xp": 650,
+        "attributes": {
+          "might": 16,
+          "agility": 10,
+          "endurance": 18,
+          "intellect": 8,
+          "instinct": 12,
+          "presence": 9
+        },
+        "abilities": [
+          "glass_shard",
+          "stone_fist"
+        ],
+        "behaviour": [
+          {
+            "priority": 0,
+            "use": "glass_shard"
+          }
+        ],
+        "faction": "the_unsealed",
+        "creatureType": "undead",
+        "size": "medium",
+        "descriptors": [
+          "a branching",
+          "a bright"
+        ],
+        "conditionalLoot": [],
+        "loot": "glass_town_hoard",
+        "conditionImmunities": [
+          "prone",
+          "frightened",
+          "bleeding"
+        ],
+        "resourceOverrides": {
+          "hp": 88
+        }
       }
     ],
     "factions": [
@@ -9071,6 +9894,162 @@
           ],
           "priceMultiplier": 1.4
         }
+      },
+      {
+        "id": "weigher_qasim",
+        "name": "Qasim, of the Weighing House",
+        "description": "Weighs every course out of the pans and has weighed one more each year than anybody cut, since he was an apprentice.",
+        "disposition": 2,
+        "gullibility": 0.2,
+        "memorySpan": 300,
+        "offersQuests": [],
+        "caresAbout": [],
+        "reactions": [],
+        "faction": "the_water_wardens",
+        "dialogue": "glass_qasim_talk",
+        "home": "saltrun_house_b",
+        "statblock": "glass_weigher",
+        "shop": {
+          "lootTable": "keeper_stock",
+          "buysTags": [
+            "treasure",
+            "material"
+          ],
+          "priceMultiplier": 1.2
+        }
+      },
+      {
+        "id": "cistern_keeper_havva",
+        "name": "Havva, Keeper of the Cistern",
+        "description": "Holds an office three hundred years older than the last water in it, and keeps the key oiled.",
+        "disposition": 6,
+        "gullibility": 0.3,
+        "memorySpan": 365,
+        "offersQuests": [],
+        "caresAbout": [],
+        "reactions": [],
+        "faction": "the_water_wardens",
+        "dialogue": "glass_havva_talk",
+        "home": "dry_cistern_house_a",
+        "statblock": "glass_keeper"
+      },
+      {
+        "id": "lens_cutter_naim",
+        "name": "Naim, at the Cutters' Hall",
+        "description": "Grinds one lens a year that the Hall does not sell, does not display, and does not have minutes for.",
+        "disposition": 0,
+        "gullibility": 0.15,
+        "memorySpan": 250,
+        "offersQuests": [],
+        "caresAbout": [],
+        "reactions": [],
+        "faction": "the_library",
+        "dialogue": "glass_naim_talk",
+        "home": "glass_quarter_cutters",
+        "statblock": "glass_cutter",
+        "shop": {
+          "lootTable": "aurenhal_stock",
+          "buysTags": [
+            "treasure",
+            "material"
+          ],
+          "priceMultiplier": 1.5
+        }
+      },
+      {
+        "id": "dune_walker_sela",
+        "name": "Sela, who Walks the Dunes",
+        "description": "Has ninety years of where the sand was, in four hands, and only one line on it that she cannot explain.",
+        "disposition": 8,
+        "gullibility": 0.4,
+        "memorySpan": 200,
+        "offersQuests": [],
+        "caresAbout": [],
+        "reactions": [],
+        "faction": "the_water_wardens",
+        "dialogue": "glass_sela_talk",
+        "home": "fulgurite_collectors_camp",
+        "statblock": "glass_walker"
+      },
+      {
+        "id": "night_keeper_ilyas",
+        "name": "Ilyas, at the White Chapel",
+        "description": "Keeps the chapel at night because somebody has to, and has therefore been the only person awake for two hundred pan-seasons' worth of arrivals.",
+        "disposition": 10,
+        "gullibility": 0.5,
+        "memorySpan": 180,
+        "offersQuests": [],
+        "caresAbout": [
+          "ward_restored",
+          "ward_broken"
+        ],
+        "reactions": [],
+        "faction": "the_keepers",
+        "dialogue": "glass_ilyas_talk",
+        "home": "saltrun_chapel"
+      },
+      {
+        "id": "cellarman_dov",
+        "name": "Dov, at the Green Room",
+        "description": "Runs the cellar under the Green Room and has been down there long enough to know exactly which wall is warm.",
+        "disposition": 6,
+        "gullibility": 0.45,
+        "memorySpan": 120,
+        "offersQuests": [],
+        "caresAbout": [],
+        "reactions": [],
+        "faction": "the_countinghouse",
+        "dialogue": "glass_dov_talk",
+        "home": "glass_quarter_the_green_room",
+        "shop": {
+          "lootTable": "aurenhal_stock",
+          "buysTags": [
+            "treasure"
+          ],
+          "priceMultiplier": 1.3
+        }
+      },
+      {
+        "id": "water_warden_taj",
+        "name": "Taj of the Wardens",
+        "description": "Meters every well in Vashta Qal to the cup and is professionally unable to stop thinking about the one that is not metered.",
+        "disposition": 4,
+        "gullibility": 0.2,
+        "memorySpan": 300,
+        "offersQuests": [],
+        "caresAbout": [],
+        "reactions": [],
+        "faction": "the_water_wardens",
+        "dialogue": "glass_taj_talk",
+        "home": "vashta_qal_water_wardens"
+      },
+      {
+        "id": "pan_cutter_reyhan",
+        "name": "Reyhan, Pan-Cutter",
+        "description": "Cuts eight courses a year, as her mother did, and is very clear that eight is what the sun will draw.",
+        "disposition": 6,
+        "gullibility": 0.4,
+        "memorySpan": 150,
+        "offersQuests": [],
+        "caresAbout": [],
+        "reactions": [],
+        "faction": "the_water_wardens",
+        "dialogue": "glass_reyhan_talk",
+        "home": "saltrun_salt_market"
+      },
+      {
+        "id": "well_digger_ferruh",
+        "name": "Ferruh, Well-Digger",
+        "description": "Digs dry holes for a living in a country that has nothing else to offer, and knows to the foot where the damp starts.",
+        "disposition": 4,
+        "gullibility": 0.35,
+        "memorySpan": 120,
+        "offersQuests": [],
+        "caresAbout": [],
+        "reactions": [],
+        "faction": "the_water_wardens",
+        "dialogue": "glass_ferruh_talk",
+        "home": "dry_cistern_the_drop"
       }
     ],
     "traps": [
@@ -26467,7 +27446,22 @@
         "position": {
           "x": 3,
           "y": 3
-        }
+        },
+        "triggers": [
+          {
+            "id": "glass_found_lip",
+            "mode": "once",
+            "on": "enter",
+            "description": "Stonework under the glass, and the glass poured over it.",
+            "effects": [
+              {
+                "learnLore": {
+                  "entry": "glass_bath_down"
+                }
+              }
+            ]
+          }
+        ]
       },
       {
         "id": "glass_quarter_glass_market",
@@ -26665,7 +27659,58 @@
         "position": {
           "x": 13,
           "y": 27
-        }
+        },
+        "triggers": [
+          {
+            "id": "glass_bath_committed",
+            "mode": "once",
+            "on": "enter",
+            "description": "The head of a stair the city does not admit to.",
+            "requires": {
+              "custom": {
+                "gte": [
+                  {
+                    "ref": "threads.glass_bath.known"
+                  },
+                  2
+                ]
+              }
+            },
+            "effects": [
+              {
+                "emit": {
+                  "event": "startQuest",
+                  "data": {
+                    "quest": "glass_still_full"
+                  }
+                }
+              }
+            ]
+          }
+        ],
+        "hidden": true,
+        "discover": {
+          "skill": "arcana",
+          "difficulty": {
+            "max": [
+              8,
+              {
+                "sub": [
+                  24,
+                  {
+                    "mul": [
+                      4,
+                      {
+                        "ref": "threads.glass_bath.known"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "gate": "glass_crater_seal"
       },
       {
         "id": "saltrun_the_pans",
@@ -26679,7 +27724,22 @@
         "position": {
           "x": 3,
           "y": 3
-        }
+        },
+        "triggers": [
+          {
+            "id": "glass_found_pans",
+            "mode": "once",
+            "on": "enter",
+            "description": "Eight courses cut, and the weighing house counting nine.",
+            "effects": [
+              {
+                "learnLore": {
+                  "entry": "glass_courses_eight"
+                }
+              }
+            ]
+          }
+        ]
       },
       {
         "id": "saltrun_salt_market",
@@ -26899,7 +27959,58 @@
         "position": {
           "x": 3,
           "y": 23
-        }
+        },
+        "triggers": [
+          {
+            "id": "glass_courses_committed",
+            "mode": "once",
+            "on": "enter",
+            "description": "Standing on the pan floor, knowing what it rings like.",
+            "requires": {
+              "custom": {
+                "gte": [
+                  {
+                    "ref": "threads.glass_courses.known"
+                  },
+                  2
+                ]
+              }
+            },
+            "effects": [
+              {
+                "emit": {
+                  "event": "startQuest",
+                  "data": {
+                    "quest": "glass_the_ninth_course"
+                  }
+                }
+              }
+            ]
+          }
+        ],
+        "hidden": true,
+        "discover": {
+          "skill": "perception",
+          "difficulty": {
+            "max": [
+              8,
+              {
+                "sub": [
+                  20,
+                  {
+                    "mul": [
+                      3,
+                      {
+                        "ref": "threads.glass_courses.known"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "gate": "glass_pan_floor"
       },
       {
         "id": "dry_cistern_the_cistern",
@@ -26920,7 +28031,22 @@
         "position": {
           "x": 3,
           "y": 3
-        }
+        },
+        "triggers": [
+          {
+            "id": "glass_found_cistern",
+            "mode": "once",
+            "on": "enter",
+            "description": "A channel out, and no channel in.",
+            "effects": [
+              {
+                "learnLore": {
+                  "entry": "glass_cistern_feed"
+                }
+              }
+            ]
+          }
+        ]
       },
       {
         "id": "dry_cistern_the_drop",
@@ -27027,7 +28153,58 @@
         "position": {
           "x": 27,
           "y": 10
-        }
+        },
+        "triggers": [
+          {
+            "id": "glass_cistern_committed",
+            "mode": "once",
+            "on": "enter",
+            "description": "The channel out, from the inside.",
+            "requires": {
+              "custom": {
+                "gte": [
+                  {
+                    "ref": "threads.glass_cistern.known"
+                  },
+                  2
+                ]
+              }
+            },
+            "effects": [
+              {
+                "emit": {
+                  "event": "startQuest",
+                  "data": {
+                    "quest": "glass_what_it_was_for"
+                  }
+                }
+              }
+            ]
+          }
+        ],
+        "hidden": true,
+        "discover": {
+          "skill": "perception",
+          "difficulty": {
+            "max": [
+              9,
+              {
+                "sub": [
+                  21,
+                  {
+                    "mul": [
+                      3,
+                      {
+                        "ref": "threads.glass_cistern.known"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "gate": "glass_feeder_channel"
       },
       {
         "id": "sunken_road_the_paving",
@@ -27140,7 +28317,22 @@
         "position": {
           "x": 14,
           "y": 3
-        }
+        },
+        "triggers": [
+          {
+            "id": "glass_found_town",
+            "mode": "once",
+            "on": "enter",
+            "description": "Which side of each door the bar is on.",
+            "effects": [
+              {
+                "learnLore": {
+                  "entry": "glass_town_doors"
+                }
+              }
+            ]
+          }
+        ]
       },
       {
         "id": "shifting_dunes_under_town",
@@ -27157,7 +28349,58 @@
         "position": {
           "x": 25,
           "y": 3
-        }
+        },
+        "triggers": [
+          {
+            "id": "glass_town_committed",
+            "mode": "once",
+            "on": "enter",
+            "description": "A street of barred doors, with the bars on your side.",
+            "requires": {
+              "custom": {
+                "gte": [
+                  {
+                    "ref": "threads.glass_town.known"
+                  },
+                  2
+                ]
+              }
+            },
+            "effects": [
+              {
+                "emit": {
+                  "event": "startQuest",
+                  "data": {
+                    "quest": "glass_the_town_that_came_back"
+                  }
+                }
+              }
+            ]
+          }
+        ],
+        "hidden": true,
+        "discover": {
+          "skill": "survival",
+          "difficulty": {
+            "max": [
+              10,
+              {
+                "sub": [
+                  22,
+                  {
+                    "mul": [
+                      3,
+                      {
+                        "ref": "threads.glass_town.known"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "gate": "glass_town_bar"
       },
       {
         "id": "crater_the_lip_crossing",
@@ -27236,7 +28479,22 @@
         "position": {
           "x": 3,
           "y": 3
-        }
+        },
+        "triggers": [
+          {
+            "id": "glass_found_grove",
+            "mode": "once",
+            "on": "enter",
+            "description": "Glass in lines, and the lines going somewhere.",
+            "effects": [
+              {
+                "learnLore": {
+                  "entry": "glass_town_glass"
+                }
+              }
+            ]
+          }
+        ]
       },
       {
         "id": "fulgurite_collectors_camp",
@@ -29672,6 +30930,128 @@
             }
           ]
         }
+      },
+      {
+        "id": "glass_pan_floor",
+        "name": "Under the Eighth Course",
+        "description": "The floor of the last pan is not pan-floor. It rings.",
+        "kind": "ward",
+        "blockedTextKey": "glass_pan_blocked",
+        "staysOpen": true,
+        "onOpen": [
+          {
+            "setFlag": {
+              "flag": "glass_courses_open",
+              "value": true
+            }
+          }
+        ],
+        "onBlocked": [],
+        "opensWith": [],
+        "tags": [],
+        "requires": {
+          "items": [
+            {
+              "item": "weighers_jar",
+              "quantity": 1,
+              "consume": false,
+              "equipped": false
+            }
+          ]
+        }
+      },
+      {
+        "id": "glass_feeder_channel",
+        "name": "The Channel Out",
+        "description": "A cistern with a way out and no way in, and the way out is barred at the far end by somebody who had a key.",
+        "kind": "ward",
+        "blockedTextKey": "glass_feeder_blocked",
+        "staysOpen": true,
+        "onOpen": [
+          {
+            "setFlag": {
+              "flag": "glass_cistern_open",
+              "value": true
+            }
+          }
+        ],
+        "onBlocked": [],
+        "opensWith": [],
+        "tags": [],
+        "requires": {
+          "items": [
+            {
+              "item": "cistern_key",
+              "quantity": 1,
+              "consume": false,
+              "equipped": false
+            }
+          ]
+        }
+      },
+      {
+        "id": "glass_crater_seal",
+        "name": "The Stonework Under the Lip",
+        "description": "There is masonry under the glass, and the glass was poured over it rather than the other way round.",
+        "kind": "ward",
+        "blockedTextKey": "glass_crater_blocked",
+        "staysOpen": true,
+        "onOpen": [
+          {
+            "setFlag": {
+              "flag": "glass_bath_open",
+              "value": true
+            }
+          }
+        ],
+        "onBlocked": [],
+        "opensWith": [],
+        "tags": [],
+        "requires": {
+          "items": [
+            {
+              "item": "unsold_lens",
+              "quantity": 1,
+              "consume": false,
+              "equipped": false
+            },
+            {
+              "item": "cistern_keepers_ring",
+              "quantity": 1,
+              "consume": false,
+              "equipped": false
+            }
+          ]
+        }
+      },
+      {
+        "id": "glass_town_bar",
+        "name": "The Doors Barred from Outside",
+        "description": "Every door in the uncovered town is barred, and every bar is on the street side.",
+        "kind": "ward",
+        "blockedTextKey": "glass_town_blocked",
+        "staysOpen": true,
+        "onOpen": [
+          {
+            "setFlag": {
+              "flag": "glass_town_open",
+              "value": true
+            }
+          }
+        ],
+        "onBlocked": [],
+        "opensWith": [],
+        "tags": [],
+        "requires": {
+          "items": [
+            {
+              "item": "dune_walkers_chart",
+              "quantity": 1,
+              "consume": false,
+              "equipped": false
+            }
+          ]
+        }
       }
     ],
     "roomTemplates": [
@@ -31493,7 +32873,8 @@
         "branchiness": 0.3,
         "width": "75",
         "height": "75",
-        "corridorLength": "2d3"
+        "corridorLength": "2d3",
+        "bossTable": "glass_crater_boss"
       },
       {
         "id": "glasslands_deep_pan",
@@ -31511,7 +32892,8 @@
           "minLeaf": 5
         },
         "width": "27",
-        "height": "27"
+        "height": "27",
+        "bossTable": "glass_pan_boss"
       },
       {
         "id": "glasslands_the_feeder",
@@ -31528,7 +32910,8 @@
         "branchiness": 0.15,
         "corridorLength": "3d3",
         "width": "73",
-        "height": "73"
+        "height": "73",
+        "bossTable": "glass_feeder_boss"
       },
       {
         "id": "glasslands_milepost",
@@ -31562,7 +32945,8 @@
           "minLeaf": 5
         },
         "width": "29",
-        "height": "29"
+        "height": "29",
+        "bossTable": "glass_town_boss"
       },
       {
         "id": "glasslands_centre_shaft",
@@ -31600,7 +32984,8 @@
           "birthThreshold": 5
         },
         "width": "45",
-        "height": "45"
+        "height": "45",
+        "bossTable": "glass_root_boss"
       },
       {
         "id": "glasslands_ninth_well",
@@ -33342,6 +34727,116 @@
                 "monster": "first_cairn_shade",
                 "count": "1d2",
                 "scaleWithLevel": true
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "glass_pan_boss",
+        "minDepth": 0,
+        "maxDepth": 999,
+        "chance": 1,
+        "emptyWeight": 0,
+        "scalePerLevels": 3,
+        "groups": [
+          {
+            "id": "drawer",
+            "weight": 1,
+            "hostile": true,
+            "entries": [
+              {
+                "monster": "salt_drawer",
+                "count": "1",
+                "scaleWithLevel": false
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "glass_feeder_boss",
+        "minDepth": 0,
+        "maxDepth": 999,
+        "chance": 1,
+        "emptyWeight": 0,
+        "scalePerLevels": 3,
+        "groups": [
+          {
+            "id": "drinker",
+            "weight": 1,
+            "hostile": true,
+            "entries": [
+              {
+                "monster": "cistern_drinker",
+                "count": "1",
+                "scaleWithLevel": false
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "glass_crater_boss",
+        "minDepth": 0,
+        "maxDepth": 999,
+        "chance": 1,
+        "emptyWeight": 0,
+        "scalePerLevels": 3,
+        "groups": [
+          {
+            "id": "founder",
+            "weight": 1,
+            "hostile": true,
+            "entries": [
+              {
+                "monster": "crater_founder",
+                "count": "1",
+                "scaleWithLevel": false
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "glass_town_boss",
+        "minDepth": 0,
+        "maxDepth": 999,
+        "chance": 1,
+        "emptyWeight": 0,
+        "scalePerLevels": 3,
+        "groups": [
+          {
+            "id": "thing",
+            "weight": 1,
+            "hostile": true,
+            "entries": [
+              {
+                "monster": "barred_thing",
+                "count": "1d2",
+                "scaleWithLevel": true
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "glass_root_boss",
+        "minDepth": 0,
+        "maxDepth": 999,
+        "chance": 1,
+        "emptyWeight": 0,
+        "scalePerLevels": 3,
+        "groups": [
+          {
+            "id": "root",
+            "weight": 1,
+            "hostile": true,
+            "entries": [
+              {
+                "monster": "root_glass",
+                "count": "1",
+                "scaleWithLevel": false
               }
             ]
           }
@@ -36529,6 +38024,34 @@
         ]
       },
       {
+        "id": "glass_crater_blocked",
+        "variants": [
+          {
+            "text": "The lines in the glass have ends, and the ends are down there. Reading them would want the lens the cutters will not sell \u2014 and going down after them would want something that does not mind heat, going by what comes up."
+          },
+          {
+            "text": "Air comes up off the stair that dries your mouth in one breath. Whatever is at the bottom of this has a fire under it, and the city has been drinking the runoff for two hundred years without asking."
+          },
+          {
+            "text": "Masonry under poured glass. Somebody sealed this from above, in a hurry, with the most permanent thing they had to hand."
+          }
+        ]
+      },
+      {
+        "id": "glass_feeder_blocked",
+        "variants": [
+          {
+            "text": "The grating at the end of the channel was made to be opened, and the office that opened it has outlived the water by three hundred years. Somebody in the village is still called the keeper."
+          },
+          {
+            "text": "Forty feet down and damp, in a country with no rain. The grating is sound and the lock in it has been oiled more recently than anything else down here."
+          },
+          {
+            "text": "It is a lock, and it is not an old lock, which is the part worth thinking about."
+          }
+        ]
+      },
+      {
         "id": "glass_ice_the_clear_desc",
         "variants": [
           {
@@ -36539,6 +38062,34 @@
           },
           {
             "text": "The ice is perfectly transparent and perfectly solid and both facts are difficult to hold at once."
+          }
+        ]
+      },
+      {
+        "id": "glass_pan_blocked",
+        "variants": [
+          {
+            "text": "The eighth pan sounds hollow along its whole length and there is no seam in it anywhere. Something has been coming up through this, and it has not been coming up through a door you can see."
+          },
+          {
+            "text": "It rings under your heel for forty feet. You would want the weigher's jar in your hand before you went looking for the way down \u2014 the ninth course knows the way and you do not."
+          },
+          {
+            "text": "Salt, and under the salt something that is not salt. The weighing house has been measuring the answer to this for two hundred years without once asking the question."
+          }
+        ]
+      },
+      {
+        "id": "glass_town_blocked",
+        "variants": [
+          {
+            "text": "The bars are on the outside and they were shut before the sand came. You could lift one \u2014 but you would want to know what the dune did first, and there is exactly one record of where these dunes have been."
+          },
+          {
+            "text": "Barred from the street, every one, and the sand piled against them afterwards. Somebody shut this town and then the desert agreed with them."
+          },
+          {
+            "text": "A town two hundred years too young for the dune that had it. You would want the chart before you started lifting bars."
           }
         ]
       },
@@ -51487,6 +53038,2578 @@
             "redirectWhen": []
           }
         ]
+      },
+      {
+        "id": "glass_qasim_talk",
+        "start": "greet",
+        "nodes": [
+          {
+            "id": "greet",
+            "says": [
+              {
+                "text": "A weighing house with the shutters half down against the glare, and a man setting brass weights on a beam by feel."
+              },
+              {
+                "text": "\u201cSalt is by the measure and the measure is on the wall. If you are arguing about the measure, argue outside.\u201d"
+              }
+            ],
+            "onEnter": [],
+            "options": [
+              {
+                "id": "glass_qasim_nine",
+                "text": "How many courses come out of these pans in a year?",
+                "requires": {
+                  "without": {
+                    "lore": [
+                      "glass_courses_nine"
+                    ]
+                  }
+                },
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "check": {
+                  "skill": "insight",
+                  "difficulty": {
+                    "sub": [
+                      13,
+                      {
+                        "clamp": [
+                          {
+                            "div": [
+                              {
+                                "ref": "reputation.the_water_wardens",
+                                "else": 0
+                              },
+                              5
+                            ]
+                          },
+                          -6,
+                          6
+                        ]
+                      }
+                    ]
+                  },
+                  "onSuccess": "glass_qasim_nine_told",
+                  "onFailure": "glass_qasim_nine_wont"
+                }
+              },
+              {
+                "id": "glass_qasim_taste",
+                "text": "What is the ninth like?",
+                "requires": {
+                  "without": {
+                    "lore": [
+                      "glass_courses_taste"
+                    ]
+                  }
+                },
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "check": {
+                  "skill": "persuasion",
+                  "difficulty": {
+                    "sub": [
+                      15,
+                      {
+                        "clamp": [
+                          {
+                            "div": [
+                              {
+                                "ref": "reputation.the_water_wardens",
+                                "else": 0
+                              },
+                              5
+                            ]
+                          },
+                          -6,
+                          6
+                        ]
+                      }
+                    ]
+                  },
+                  "onSuccess": "glass_qasim_taste_told",
+                  "onFailure": "glass_qasim_taste_wont"
+                }
+              },
+              {
+                "id": "glass_qasim_jar",
+                "text": "Let me take the jar.",
+                "requires": {
+                  "without": {
+                    "items": [
+                      "weighers_jar"
+                    ],
+                    "flags": [
+                      {
+                        "flag": "given:weighers_jar"
+                      }
+                    ]
+                  }
+                },
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "check": {
+                  "skill": "persuasion",
+                  "difficulty": {
+                    "sub": [
+                      15,
+                      {
+                        "clamp": [
+                          {
+                            "div": [
+                              {
+                                "ref": "reputation.the_water_wardens",
+                                "else": 0
+                              },
+                              5
+                            ]
+                          },
+                          -6,
+                          6
+                        ]
+                      }
+                    ]
+                  },
+                  "onSuccess": "glass_qasim_jar_gave",
+                  "onFailure": "glass_qasim_jar_kept"
+                }
+              },
+              {
+                "id": "greet_leave",
+                "text": "Nothing.",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": [
+              {
+                "requires": {
+                  "factions": [
+                    {
+                      "faction": "the_water_wardens",
+                      "maxStanding": -30
+                    }
+                  ]
+                },
+                "goto": "glass_qasim_cold"
+              }
+            ]
+          },
+          {
+            "id": "glass_qasim_nine_told",
+            "says": [
+              {
+                "text": "\u201cNine.\u201d He does not look up from the beam. \u201cEight cut, nine weighed. Two hundred years of ledgers say nine and I have added every one of them twice.\u201d He sets a weight. \u201cNobody has ever cut a ninth.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "learnLore": {
+                  "entry": "glass_courses_nine"
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "glass_qasim_nine_on",
+                "text": "Go on.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "glass_qasim_nine_wont",
+            "says": [
+              {
+                "text": "\u201cI've said all I mean to,\u201d they say, and go back to what they were doing."
+              }
+            ],
+            "onEnter": [
+              {
+                "adjustReputation": {
+                  "faction": "the_water_wardens",
+                  "amount": -1
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "glass_qasim_nine_drop",
+                "text": "Leave it.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "glass_qasim_taste_told",
+            "says": [
+              {
+                "text": "He goes and gets the jar without being asked, which tells you how long he has wanted to show somebody. \u201cHeavier. And it does not taste of this sea \u2014 I have tasted this sea for forty years.\u201d He stoppers it again. \u201cI do not sell any of it.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "learnLore": {
+                  "entry": "glass_courses_taste"
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "glass_qasim_taste_on",
+                "text": "Go on.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "glass_qasim_taste_wont",
+            "says": [
+              {
+                "text": "\u201cI've said all I mean to,\u201d they say, and go back to what they were doing."
+              }
+            ],
+            "onEnter": [
+              {
+                "adjustReputation": {
+                  "faction": "the_water_wardens",
+                  "amount": -1
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "glass_qasim_taste_drop",
+                "text": "Leave it.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "glass_qasim_jar_gave",
+            "says": [
+              {
+                "text": "He hands it over with both hands and does not let go for a moment. \u201cIf you find out where it comes from, come back and tell me before you tell the wardens. Forty years is a long time to be the only one adding up.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "grantItem": {
+                  "target": {
+                    "ref": "actor.id"
+                  },
+                  "item": "weighers_jar",
+                  "quantity": 1
+                }
+              },
+              {
+                "setFlag": {
+                  "flag": "given:weighers_jar",
+                  "value": true
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "glass_qasim_jar_thanks",
+                "text": "Thank you.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "glass_qasim_jar_kept",
+            "says": [
+              {
+                "text": "\u201cNo.\u201d He puts it back on the shelf, behind the counterweights. \u201cIt is the only evidence I have that I am not senile.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "adjustReputation": {
+                  "faction": "the_water_wardens",
+                  "amount": -2
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "glass_qasim_jar_leave",
+                "text": "Then no.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "glass_qasim_cold",
+            "says": [
+              {
+                "text": "He turns the beam away from you and waits, with the patience of a man who has all day and no intention of spending any of it on you."
+              }
+            ],
+            "onEnter": [],
+            "options": [
+              {
+                "id": "glass_qasim_go",
+                "text": "Leave it.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          }
+        ]
+      },
+      {
+        "id": "glass_reyhan_talk",
+        "start": "greet",
+        "nodes": [
+          {
+            "id": "greet",
+            "says": [
+              {
+                "text": "A salt market at the hot end of the day, which means one stall open and everybody else asleep under it."
+              },
+              {
+                "text": "\u201cCoarse or fine. If you want the fine you are two months early.\u201d"
+              }
+            ],
+            "onEnter": [],
+            "options": [
+              {
+                "id": "glass_reyhan_eight",
+                "text": "How many courses do you cut?",
+                "requires": {
+                  "without": {
+                    "lore": [
+                      "glass_courses_eight"
+                    ]
+                  }
+                },
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "check": {
+                  "skill": "persuasion",
+                  "difficulty": {
+                    "sub": [
+                      9,
+                      {
+                        "clamp": [
+                          {
+                            "div": [
+                              {
+                                "ref": "reputation.the_water_wardens",
+                                "else": 0
+                              },
+                              5
+                            ]
+                          },
+                          -6,
+                          6
+                        ]
+                      }
+                    ]
+                  },
+                  "onSuccess": "glass_reyhan_eight_told",
+                  "onFailure": "glass_reyhan_eight_wont"
+                }
+              },
+              {
+                "id": "glass_reyhan_taste",
+                "text": "Qasim keeps a jar of something he will not sell.",
+                "requires": {
+                  "without": {
+                    "lore": [
+                      "glass_courses_taste"
+                    ]
+                  }
+                },
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "check": {
+                  "skill": "persuasion",
+                  "difficulty": {
+                    "sub": [
+                      14,
+                      {
+                        "clamp": [
+                          {
+                            "div": [
+                              {
+                                "ref": "reputation.the_water_wardens",
+                                "else": 0
+                              },
+                              5
+                            ]
+                          },
+                          -6,
+                          6
+                        ]
+                      }
+                    ]
+                  },
+                  "onSuccess": "glass_reyhan_taste_told",
+                  "onFailure": "glass_reyhan_taste_wont"
+                }
+              },
+              {
+                "id": "greet_leave",
+                "text": "Nothing.",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "glass_reyhan_eight_told",
+            "says": [
+              {
+                "text": "\u201cEight.\u201d She says it the way you answer a question about which way is up. \u201cEight is what one season of sun will draw. Every pan on this coast is cut in eight, ask anyone, ask my mother if you can wake her.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "learnLore": {
+                  "entry": "glass_courses_eight"
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "glass_reyhan_eight_on",
+                "text": "Go on.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "glass_reyhan_eight_wont",
+            "says": [
+              {
+                "text": "\u201cI've said all I mean to,\u201d they say, and go back to what they were doing."
+              }
+            ],
+            "onEnter": [
+              {
+                "adjustReputation": {
+                  "faction": "the_water_wardens",
+                  "amount": -1
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "glass_reyhan_eight_drop",
+                "text": "Leave it.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "glass_reyhan_taste_told",
+            "says": [
+              {
+                "text": "Her face closes slightly. \u201cThat is the ninth, and it is not ours, and I will thank you not to say I said so.\u201d A pause. \u201cIt is heavier. And it does not taste of this sea, and I have licked my fingers in these pans since I was four.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "learnLore": {
+                  "entry": "glass_courses_taste"
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "glass_reyhan_taste_on",
+                "text": "Go on.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "glass_reyhan_taste_wont",
+            "says": [
+              {
+                "text": "\u201cI've said all I mean to,\u201d they say, and go back to what they were doing."
+              }
+            ],
+            "onEnter": [
+              {
+                "adjustReputation": {
+                  "faction": "the_water_wardens",
+                  "amount": -1
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "glass_reyhan_taste_drop",
+                "text": "Leave it.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          }
+        ]
+      },
+      {
+        "id": "glass_ilyas_talk",
+        "start": "greet",
+        "nodes": [
+          {
+            "id": "greet",
+            "says": [
+              {
+                "text": "A white chapel, cool for the first time all day, and a man awake in it at an hour when nobody is."
+              },
+              {
+                "text": "\u201cYou are the second person awake in Saltrun,\u201d he says, pleased about it. \u201cSit down.\u201d"
+              }
+            ],
+            "onEnter": [],
+            "options": [
+              {
+                "id": "glass_ilyas_night",
+                "text": "You are up all night. When does the ninth course arrive?",
+                "requires": {
+                  "without": {
+                    "lore": [
+                      "glass_courses_night"
+                    ]
+                  }
+                },
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "check": {
+                  "skill": "persuasion",
+                  "difficulty": {
+                    "sub": [
+                      10,
+                      {
+                        "clamp": [
+                          {
+                            "div": [
+                              {
+                                "ref": "reputation.the_keepers",
+                                "else": 0
+                              },
+                              5
+                            ]
+                          },
+                          -6,
+                          6
+                        ]
+                      }
+                    ]
+                  },
+                  "onSuccess": "glass_ilyas_night_told",
+                  "onFailure": "glass_ilyas_night_wont"
+                }
+              },
+              {
+                "id": "glass_ilyas_lip",
+                "text": "There is stonework under the glass on the crater lip.",
+                "requires": {
+                  "without": {
+                    "lore": [
+                      "glass_bath_down"
+                    ]
+                  }
+                },
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "check": {
+                  "skill": "insight",
+                  "difficulty": {
+                    "sub": [
+                      13,
+                      {
+                        "clamp": [
+                          {
+                            "div": [
+                              {
+                                "ref": "reputation.the_keepers",
+                                "else": 0
+                              },
+                              5
+                            ]
+                          },
+                          -6,
+                          6
+                        ]
+                      }
+                    ]
+                  },
+                  "onSuccess": "glass_ilyas_lip_told",
+                  "onFailure": "glass_ilyas_lip_wont"
+                }
+              },
+              {
+                "id": "greet_leave",
+                "text": "Nothing.",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "glass_ilyas_night_told",
+            "says": [
+              {
+                "text": "\u201cBetween one evening and the next morning, and no water runs in the night.\u201d He says it without any drama at all, which makes it worse. \u201cI have watched the channels. They are dry from dusk. And in the morning there is more salt than there was.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "learnLore": {
+                  "entry": "glass_courses_night"
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "glass_ilyas_night_on",
+                "text": "Go on.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "glass_ilyas_night_wont",
+            "says": [
+              {
+                "text": "\u201cI've said all I mean to,\u201d they say, and go back to what they were doing."
+              }
+            ],
+            "onEnter": [
+              {
+                "adjustReputation": {
+                  "faction": "the_keepers",
+                  "amount": -1
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "glass_ilyas_night_drop",
+                "text": "Leave it.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "glass_ilyas_lip_told",
+            "says": [
+              {
+                "text": "\u201cCut into our own shrine, that,\u201d he says. \u201cBy somebody with a chisel and a grievance, a long time ago. It says the crater is not a crater and the stone goes further down than anybody has measured, and the Hall has never once sent anybody to measure it.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "learnLore": {
+                  "entry": "glass_bath_down"
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "glass_ilyas_lip_on",
+                "text": "Go on.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "glass_ilyas_lip_wont",
+            "says": [
+              {
+                "text": "\u201cI've said all I mean to,\u201d they say, and go back to what they were doing."
+              }
+            ],
+            "onEnter": [
+              {
+                "adjustReputation": {
+                  "faction": "the_keepers",
+                  "amount": -1
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "glass_ilyas_lip_drop",
+                "text": "Leave it.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          }
+        ]
+      },
+      {
+        "id": "glass_havva_talk",
+        "start": "greet",
+        "nodes": [
+          {
+            "id": "greet",
+            "says": [
+              {
+                "text": "A house built against the lip of a hole the size of a market. She is oiling a key that has nothing to open."
+              },
+              {
+                "text": "\u201cKeeper of the Cistern,\u201d she says, before you ask. \u201cThere has been no water in it since my great-grandmother. There is still a keeper.\u201d"
+              }
+            ],
+            "onEnter": [],
+            "options": [
+              {
+                "id": "glass_havva_cut",
+                "text": "The cistern \u2014 was it built or cut?",
+                "requires": {
+                  "without": {
+                    "lore": [
+                      "glass_cistern_cut"
+                    ]
+                  }
+                },
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "check": {
+                  "skill": "insight",
+                  "difficulty": {
+                    "sub": [
+                      12,
+                      {
+                        "clamp": [
+                          {
+                            "div": [
+                              {
+                                "ref": "reputation.the_water_wardens",
+                                "else": 0
+                              },
+                              5
+                            ]
+                          },
+                          -6,
+                          6
+                        ]
+                      }
+                    ]
+                  },
+                  "onSuccess": "glass_havva_cut_told",
+                  "onFailure": "glass_havva_cut_wont"
+                }
+              },
+              {
+                "id": "glass_havva_feed",
+                "text": "Where does the water come in?",
+                "requires": {
+                  "without": {
+                    "lore": [
+                      "glass_cistern_feed"
+                    ]
+                  }
+                },
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "check": {
+                  "skill": "persuasion",
+                  "difficulty": {
+                    "sub": [
+                      13,
+                      {
+                        "clamp": [
+                          {
+                            "div": [
+                              {
+                                "ref": "reputation.the_water_wardens",
+                                "else": 0
+                              },
+                              5
+                            ]
+                          },
+                          -6,
+                          6
+                        ]
+                      }
+                    ]
+                  },
+                  "onSuccess": "glass_havva_feed_told",
+                  "onFailure": "glass_havva_feed_wont"
+                }
+              },
+              {
+                "id": "glass_havva_key",
+                "text": "The key to the grating. I want the far end of that channel.",
+                "requires": {
+                  "without": {
+                    "items": [
+                      "cistern_key"
+                    ],
+                    "flags": [
+                      {
+                        "flag": "given:cistern_key"
+                      }
+                    ]
+                  }
+                },
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "check": {
+                  "skill": "persuasion",
+                  "difficulty": {
+                    "sub": [
+                      12,
+                      {
+                        "clamp": [
+                          {
+                            "div": [
+                              {
+                                "ref": "reputation.the_water_wardens",
+                                "else": 0
+                              },
+                              5
+                            ]
+                          },
+                          -6,
+                          6
+                        ]
+                      }
+                    ]
+                  },
+                  "onSuccess": "glass_havva_key_gave",
+                  "onFailure": "glass_havva_key_kept"
+                }
+              },
+              {
+                "id": "greet_leave",
+                "text": "Nothing.",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "glass_havva_cut_told",
+            "says": [
+              {
+                "text": "\u201cCut.\u201d She is definite. \u201cOne rock, hollowed. And the tool marks run the wrong way for anyone standing on the floor of it, which I have pointed out to four generations of people who did not want to hear it.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "learnLore": {
+                  "entry": "glass_cistern_cut"
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "glass_havva_cut_on",
+                "text": "Go on.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "glass_havva_cut_wont",
+            "says": [
+              {
+                "text": "\u201cI've said all I mean to,\u201d they say, and go back to what they were doing."
+              }
+            ],
+            "onEnter": [
+              {
+                "adjustReputation": {
+                  "faction": "the_water_wardens",
+                  "amount": -1
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "glass_havva_cut_drop",
+                "text": "Leave it.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "glass_havva_feed_told",
+            "says": [
+              {
+                "text": "\u201cIt does not.\u201d She lets that sit. \u201cThere is a channel out and no channel in. I have been down there with a lamp more times than anybody and I am telling you there is no way in.\u201d A shrug. \u201cWhich does raise the question of what was going out.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "learnLore": {
+                  "entry": "glass_cistern_feed"
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "glass_havva_feed_on",
+                "text": "Go on.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "glass_havva_feed_wont",
+            "says": [
+              {
+                "text": "\u201cI've said all I mean to,\u201d they say, and go back to what they were doing."
+              }
+            ],
+            "onEnter": [
+              {
+                "adjustReputation": {
+                  "faction": "the_water_wardens",
+                  "amount": -1
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "glass_havva_feed_drop",
+                "text": "Leave it.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "glass_havva_key_gave",
+            "says": [
+              {
+                "text": "She takes it off the ring at once, which is startling. \u201cThree hundred years of keepers and not one of us has had a reason. Go on. If it is nothing I would like to be told it is nothing.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "grantItem": {
+                  "target": {
+                    "ref": "actor.id"
+                  },
+                  "item": "cistern_key",
+                  "quantity": 1
+                }
+              },
+              {
+                "setFlag": {
+                  "flag": "given:cistern_key",
+                  "value": true
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "glass_havva_key_thanks",
+                "text": "Thank you.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "glass_havva_key_kept",
+            "says": [
+              {
+                "text": "\u201cNot while I am the keeper,\u201d she says, and her hand is on the ring. \u201cCome back when you can tell me what is at the far end.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "adjustReputation": {
+                  "faction": "the_water_wardens",
+                  "amount": -1
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "glass_havva_key_leave",
+                "text": "Then no.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          }
+        ]
+      },
+      {
+        "id": "glass_ferruh_talk",
+        "start": "greet",
+        "nodes": [
+          {
+            "id": "greet",
+            "says": [
+              {
+                "text": "The taproom of the Drop, and a man with sand in every crease of him drinking something he has clearly earned."
+              },
+              {
+                "text": "\u201cDry,\u201d he says, meaning the hole and possibly the drink. \u201cNine holes this season and all of them dry.\u201d"
+              }
+            ],
+            "onEnter": [],
+            "options": [
+              {
+                "id": "glass_ferruh_size",
+                "text": "That cistern is enormous for a village this size.",
+                "requires": {
+                  "without": {
+                    "lore": [
+                      "glass_cistern_size"
+                    ]
+                  }
+                },
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "check": {
+                  "skill": "persuasion",
+                  "difficulty": {
+                    "sub": [
+                      10,
+                      {
+                        "clamp": [
+                          {
+                            "div": [
+                              {
+                                "ref": "reputation.the_water_wardens",
+                                "else": 0
+                              },
+                              5
+                            ]
+                          },
+                          -6,
+                          6
+                        ]
+                      }
+                    ]
+                  },
+                  "onSuccess": "glass_ferruh_size_told",
+                  "onFailure": "glass_ferruh_size_wont"
+                }
+              },
+              {
+                "id": "glass_ferruh_wet",
+                "text": "You would know where the damp starts. How deep?",
+                "requires": {
+                  "without": {
+                    "lore": [
+                      "glass_cistern_wet"
+                    ]
+                  }
+                },
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "check": {
+                  "skill": "persuasion",
+                  "difficulty": {
+                    "sub": [
+                      13,
+                      {
+                        "clamp": [
+                          {
+                            "div": [
+                              {
+                                "ref": "reputation.the_water_wardens",
+                                "else": 0
+                              },
+                              5
+                            ]
+                          },
+                          -6,
+                          6
+                        ]
+                      }
+                    ]
+                  },
+                  "onSuccess": "glass_ferruh_wet_told",
+                  "onFailure": "glass_ferruh_wet_wont"
+                }
+              },
+              {
+                "id": "greet_leave",
+                "text": "Nothing.",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "glass_ferruh_size_told",
+            "says": [
+              {
+                "text": "\u201cBigger than the market, and it was dry before anybody's grandmother.\u201d He drinks. \u201cAnd they named the village after it anyway, which tells you they thought it was coming back.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "learnLore": {
+                  "entry": "glass_cistern_size"
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "glass_ferruh_size_on",
+                "text": "Go on.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "glass_ferruh_size_wont",
+            "says": [
+              {
+                "text": "\u201cI've said all I mean to,\u201d they say, and go back to what they were doing."
+              }
+            ],
+            "onEnter": [
+              {
+                "adjustReputation": {
+                  "faction": "the_water_wardens",
+                  "amount": -1
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "glass_ferruh_size_drop",
+                "text": "Leave it.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "glass_ferruh_wet_told",
+            "says": [
+              {
+                "text": "He puts the cup down. \u201cForty feet, in the channel out of the cistern. Not the rock \u2014 the channel.\u201d He looks at you properly for the first time. \u201cIt has not rained here in nine years. You tell me what is damp at forty feet.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "learnLore": {
+                  "entry": "glass_cistern_wet"
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "glass_ferruh_wet_on",
+                "text": "Go on.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "glass_ferruh_wet_wont",
+            "says": [
+              {
+                "text": "\u201cI've said all I mean to,\u201d they say, and go back to what they were doing."
+              }
+            ],
+            "onEnter": [
+              {
+                "adjustReputation": {
+                  "faction": "the_water_wardens",
+                  "amount": -1
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "glass_ferruh_wet_drop",
+                "text": "Leave it.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          }
+        ]
+      },
+      {
+        "id": "glass_naim_talk",
+        "start": "greet",
+        "nodes": [
+          {
+            "id": "greet",
+            "says": [
+              {
+                "text": "A hall of wheels and grit and very good light, and one bench at the back with a cloth over it."
+              },
+              {
+                "text": "\u201cSpectacles are the third door. Lenses for instruments, I will want to know the instrument.\u201d"
+              }
+            ],
+            "onEnter": [],
+            "options": [
+              {
+                "id": "glass_naim_lens",
+                "text": "The Hall grinds a lens it does not sell.",
+                "requires": {
+                  "without": {
+                    "lore": [
+                      "glass_bath_lens"
+                    ]
+                  }
+                },
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "check": {
+                  "skill": "persuasion",
+                  "difficulty": {
+                    "sub": [
+                      17,
+                      {
+                        "clamp": [
+                          {
+                            "div": [
+                              {
+                                "ref": "reputation.the_library",
+                                "else": 0
+                              },
+                              5
+                            ]
+                          },
+                          -6,
+                          6
+                        ]
+                      }
+                    ]
+                  },
+                  "onSuccess": "glass_naim_lens_told",
+                  "onFailure": "glass_naim_lens_wont"
+                }
+              },
+              {
+                "id": "glass_naim_glass",
+                "text": "There is glass in the uncovered town that was not made in a kiln.",
+                "requires": {
+                  "without": {
+                    "lore": [
+                      "glass_town_glass"
+                    ]
+                  }
+                },
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "check": {
+                  "skill": "insight",
+                  "difficulty": {
+                    "sub": [
+                      14,
+                      {
+                        "clamp": [
+                          {
+                            "div": [
+                              {
+                                "ref": "reputation.the_library",
+                                "else": 0
+                              },
+                              5
+                            ]
+                          },
+                          -6,
+                          6
+                        ]
+                      }
+                    ]
+                  },
+                  "onSuccess": "glass_naim_glass_told",
+                  "onFailure": "glass_naim_glass_wont"
+                }
+              },
+              {
+                "id": "glass_naim_take",
+                "text": "Give me this year's lens.",
+                "requires": {
+                  "without": {
+                    "items": [
+                      "unsold_lens"
+                    ],
+                    "flags": [
+                      {
+                        "flag": "given:unsold_lens"
+                      }
+                    ]
+                  }
+                },
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "check": {
+                  "skill": "persuasion",
+                  "difficulty": {
+                    "sub": [
+                      18,
+                      {
+                        "clamp": [
+                          {
+                            "div": [
+                              {
+                                "ref": "reputation.the_library",
+                                "else": 0
+                              },
+                              5
+                            ]
+                          },
+                          -6,
+                          6
+                        ]
+                      }
+                    ]
+                  },
+                  "onSuccess": "glass_naim_take_gave",
+                  "onFailure": "glass_naim_take_kept"
+                }
+              },
+              {
+                "id": "greet_leave",
+                "text": "Nothing.",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": [
+              {
+                "requires": {
+                  "factions": [
+                    {
+                      "faction": "the_library",
+                      "maxStanding": -25
+                    }
+                  ]
+                },
+                "goto": "glass_naim_cold"
+              }
+            ]
+          },
+          {
+            "id": "glass_naim_lens_told",
+            "says": [
+              {
+                "text": "The wheel stops. \u201cWho told you that.\u201d It is not a question, and he does not wait for an answer. \u201cOne a year. Since before the guild kept minutes, which is four hundred years of a thing nobody has written down the reason for.\u201d He starts the wheel again. \u201cWe grind it because we grind it.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "learnLore": {
+                  "entry": "glass_bath_lens"
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "glass_naim_lens_on",
+                "text": "Go on.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "glass_naim_lens_wont",
+            "says": [
+              {
+                "text": "\u201cI've said all I mean to,\u201d they say, and go back to what they were doing."
+              }
+            ],
+            "onEnter": [
+              {
+                "adjustReputation": {
+                  "faction": "the_library",
+                  "amount": -1
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "glass_naim_lens_drop",
+                "text": "Leave it.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "glass_naim_glass_told",
+            "says": [
+              {
+                "text": "\u201cNor by lightning. I have looked.\u201d He is interested despite himself. \u201cIt runs in lines. Kiln glass pools and lightning glass branches, and that runs in *lines*, which means it was poured along something.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "learnLore": {
+                  "entry": "glass_town_glass"
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "glass_naim_glass_on",
+                "text": "Go on.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "glass_naim_glass_wont",
+            "says": [
+              {
+                "text": "\u201cI've said all I mean to,\u201d they say, and go back to what they were doing."
+              }
+            ],
+            "onEnter": [
+              {
+                "adjustReputation": {
+                  "faction": "the_library",
+                  "amount": -1
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "glass_naim_glass_drop",
+                "text": "Leave it.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "glass_naim_take_gave",
+            "says": [
+              {
+                "text": "He is quiet for a long moment with his hand flat on the bench. \u201cFour hundred years,\u201d he says. \u201cAnd every one of us assumed the last one knew why.\u201d He wraps it in felt. \u201cLook through it on the lip. Not at the market \u2014 on the lip.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "grantItem": {
+                  "target": {
+                    "ref": "actor.id"
+                  },
+                  "item": "unsold_lens",
+                  "quantity": 1
+                }
+              },
+              {
+                "setFlag": {
+                  "flag": "given:unsold_lens",
+                  "value": true
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "glass_naim_take_thanks",
+                "text": "Thank you.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "glass_naim_take_kept",
+            "says": [
+              {
+                "text": "\u201cNo,\u201d he says, and puts a cloth over it. \u201cIt is the Hall's, and the Hall has been very consistent about that.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "adjustReputation": {
+                  "faction": "the_library",
+                  "amount": -3
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "glass_naim_take_leave",
+                "text": "Then no.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "glass_naim_cold",
+            "says": [
+              {
+                "text": "He puts the cloth over the bench and stands in front of it."
+              }
+            ],
+            "onEnter": [],
+            "options": [
+              {
+                "id": "glass_naim_go",
+                "text": "Leave it.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          }
+        ]
+      },
+      {
+        "id": "glass_taj_talk",
+        "start": "greet",
+        "nodes": [
+          {
+            "id": "greet",
+            "says": [
+              {
+                "text": "A room of tally-boards, one per well, each with a number chalked on it and a smaller number under that."
+              },
+              {
+                "text": "\u201cEvery well in the city, to the cup,\u201d he says, with the flat pride of a man who has never once been thanked for it.\u201d"
+              }
+            ],
+            "onEnter": [],
+            "options": [
+              {
+                "id": "glass_taj_metered",
+                "text": "Is every well on those boards?",
+                "requires": {
+                  "without": {
+                    "lore": [
+                      "glass_bath_metered"
+                    ]
+                  }
+                },
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "check": {
+                  "skill": "insight",
+                  "difficulty": {
+                    "sub": [
+                      13,
+                      {
+                        "clamp": [
+                          {
+                            "div": [
+                              {
+                                "ref": "reputation.the_water_wardens",
+                                "else": 0
+                              },
+                              5
+                            ]
+                          },
+                          -6,
+                          6
+                        ]
+                      }
+                    ]
+                  },
+                  "onSuccess": "glass_taj_metered_told",
+                  "onFailure": "glass_taj_metered_wont"
+                }
+              },
+              {
+                "id": "glass_taj_nine",
+                "text": "You take the pans' returns. How many courses do they yield?",
+                "requires": {
+                  "without": {
+                    "lore": [
+                      "glass_courses_nine"
+                    ]
+                  }
+                },
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "check": {
+                  "skill": "insight",
+                  "difficulty": {
+                    "sub": [
+                      14,
+                      {
+                        "clamp": [
+                          {
+                            "div": [
+                              {
+                                "ref": "reputation.the_water_wardens",
+                                "else": 0
+                              },
+                              5
+                            ]
+                          },
+                          -6,
+                          6
+                        ]
+                      }
+                    ]
+                  },
+                  "onSuccess": "glass_taj_nine_told",
+                  "onFailure": "glass_taj_nine_wont"
+                }
+              },
+              {
+                "id": "glass_taj_cistern",
+                "text": "The cistern out at the Dry Cistern \u2014 what fed it?",
+                "requires": {
+                  "without": {
+                    "lore": [
+                      "glass_cistern_feed"
+                    ]
+                  }
+                },
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "check": {
+                  "skill": "persuasion",
+                  "difficulty": {
+                    "sub": [
+                      14,
+                      {
+                        "clamp": [
+                          {
+                            "div": [
+                              {
+                                "ref": "reputation.the_water_wardens",
+                                "else": 0
+                              },
+                              5
+                            ]
+                          },
+                          -6,
+                          6
+                        ]
+                      }
+                    ]
+                  },
+                  "onSuccess": "glass_taj_cistern_told",
+                  "onFailure": "glass_taj_cistern_wont"
+                }
+              },
+              {
+                "id": "greet_leave",
+                "text": "Nothing.",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "glass_taj_metered_told",
+            "says": [
+              {
+                "text": "\u201cEvery well.\u201d A beat, and then, because he cannot help it: \u201cThere is one that is not a well. The bath under the Glass Quarter has never been metered, not once, not in the whole run of the boards.\u201d He straightens a board that did not need it. \u201cIt is not a well, so it is not mine. That is the position.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "learnLore": {
+                  "entry": "glass_bath_metered"
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "glass_taj_metered_on",
+                "text": "Go on.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "glass_taj_metered_wont",
+            "says": [
+              {
+                "text": "\u201cI've said all I mean to,\u201d they say, and go back to what they were doing."
+              }
+            ],
+            "onEnter": [
+              {
+                "adjustReputation": {
+                  "faction": "the_water_wardens",
+                  "amount": -1
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "glass_taj_metered_drop",
+                "text": "Leave it.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "glass_taj_nine_told",
+            "says": [
+              {
+                "text": "\u201cNine.\u201d He does not have to look it up. \u201cWhich has been irritating me since I took the boards, because Saltrun cuts eight and everyone on that coast cuts eight, and the returns have said nine for two hundred years.\u201d He shrugs, very slightly. \u201cIt is salt, not water. Not mine.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "learnLore": {
+                  "entry": "glass_courses_nine"
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "glass_taj_nine_on",
+                "text": "Go on.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "glass_taj_nine_wont",
+            "says": [
+              {
+                "text": "\u201cI've said all I mean to,\u201d they say, and go back to what they were doing."
+              }
+            ],
+            "onEnter": [
+              {
+                "adjustReputation": {
+                  "faction": "the_water_wardens",
+                  "amount": -1
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "glass_taj_nine_drop",
+                "text": "Leave it.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "glass_taj_cistern_told",
+            "says": [
+              {
+                "text": "\u201cNothing on any chart of mine.\u201d He is put out by it. \u201cI have the whole watershed. There is no watershed. It has an outlet and no inlet, and I have three hundred years of wardens before me who all wrote *see previous* in that column.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "learnLore": {
+                  "entry": "glass_cistern_feed"
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "glass_taj_cistern_on",
+                "text": "Go on.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "glass_taj_cistern_wont",
+            "says": [
+              {
+                "text": "\u201cI've said all I mean to,\u201d they say, and go back to what they were doing."
+              }
+            ],
+            "onEnter": [
+              {
+                "adjustReputation": {
+                  "faction": "the_water_wardens",
+                  "amount": -1
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "glass_taj_cistern_drop",
+                "text": "Leave it.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          }
+        ]
+      },
+      {
+        "id": "glass_dov_talk",
+        "start": "greet",
+        "nodes": [
+          {
+            "id": "greet",
+            "says": [
+              {
+                "text": "A cellar under the Green Room, cool the way a cellar should be except along one wall."
+              },
+              {
+                "text": "\u201cMind the step. And mind the west wall, it's warm and it stains your coat.\u201d"
+              }
+            ],
+            "onEnter": [],
+            "options": [
+              {
+                "id": "glass_dov_warm",
+                "text": "Why is that wall warm?",
+                "requires": {
+                  "without": {
+                    "lore": [
+                      "glass_bath_warm"
+                    ]
+                  }
+                },
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "check": {
+                  "skill": "persuasion",
+                  "difficulty": {
+                    "sub": [
+                      11,
+                      {
+                        "clamp": [
+                          {
+                            "div": [
+                              {
+                                "ref": "reputation.the_countinghouse",
+                                "else": 0
+                              },
+                              5
+                            ]
+                          },
+                          -6,
+                          6
+                        ]
+                      }
+                    ]
+                  },
+                  "onSuccess": "glass_dov_warm_told",
+                  "onFailure": "glass_dov_warm_wont"
+                }
+              },
+              {
+                "id": "glass_dov_metered",
+                "text": "Do the wardens meter the bath?",
+                "requires": {
+                  "without": {
+                    "lore": [
+                      "glass_bath_metered"
+                    ]
+                  }
+                },
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "check": {
+                  "skill": "persuasion",
+                  "difficulty": {
+                    "sub": [
+                      12,
+                      {
+                        "clamp": [
+                          {
+                            "div": [
+                              {
+                                "ref": "reputation.the_countinghouse",
+                                "else": 0
+                              },
+                              5
+                            ]
+                          },
+                          -6,
+                          6
+                        ]
+                      }
+                    ]
+                  },
+                  "onSuccess": "glass_dov_metered_told",
+                  "onFailure": "glass_dov_metered_wont"
+                }
+              },
+              {
+                "id": "greet_leave",
+                "text": "Nothing.",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "glass_dov_warm_told",
+            "says": [
+              {
+                "text": "\u201cBath's behind it.\u201d He says it like a man discussing plumbing. Then, less like that: \u201cIt's warm all year. Nothing in the Glasslands is warm \u2014 the desert's cold at night, everything's cold at night. Warm water means a fire under it, and there's no fire under my cellar.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "learnLore": {
+                  "entry": "glass_bath_warm"
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "glass_dov_warm_on",
+                "text": "Go on.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "glass_dov_warm_wont",
+            "says": [
+              {
+                "text": "\u201cI've said all I mean to,\u201d they say, and go back to what they were doing."
+              }
+            ],
+            "onEnter": [
+              {
+                "adjustReputation": {
+                  "faction": "the_countinghouse",
+                  "amount": -1
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "glass_dov_warm_drop",
+                "text": "Leave it.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "glass_dov_metered_told",
+            "says": [
+              {
+                "text": "He laughs. \u201cThe wardens meter my washing-up. They have never put a stick in that bath in my life and I have asked twice.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "learnLore": {
+                  "entry": "glass_bath_metered"
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "glass_dov_metered_on",
+                "text": "Go on.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "glass_dov_metered_wont",
+            "says": [
+              {
+                "text": "\u201cI've said all I mean to,\u201d they say, and go back to what they were doing."
+              }
+            ],
+            "onEnter": [
+              {
+                "adjustReputation": {
+                  "faction": "the_countinghouse",
+                  "amount": -1
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "glass_dov_metered_drop",
+                "text": "Leave it.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          }
+        ]
+      },
+      {
+        "id": "glass_sela_talk",
+        "start": "greet",
+        "nodes": [
+          {
+            "id": "greet",
+            "says": [
+              {
+                "text": "A camp among glass trees, and a woman with ninety years of chart spread on a board and stones on the corners."
+              },
+              {
+                "text": "\u201cDo not step on the grove,\u201d she says. \u201cIt cuts through a boot and then it cuts through the foot.\u201d"
+              }
+            ],
+            "onEnter": [],
+            "options": [
+              {
+                "id": "glass_sela_season",
+                "text": "Has a dune here ever moved fast?",
+                "requires": {
+                  "without": {
+                    "lore": [
+                      "glass_town_season"
+                    ]
+                  }
+                },
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "check": {
+                  "skill": "persuasion",
+                  "difficulty": {
+                    "sub": [
+                      12,
+                      {
+                        "clamp": [
+                          {
+                            "div": [
+                              {
+                                "ref": "reputation.the_water_wardens",
+                                "else": 0
+                              },
+                              5
+                            ]
+                          },
+                          -6,
+                          6
+                        ]
+                      }
+                    ]
+                  },
+                  "onSuccess": "glass_sela_season_told",
+                  "onFailure": "glass_sela_season_wont"
+                }
+              },
+              {
+                "id": "glass_sela_age",
+                "text": "How old is the town it uncovered?",
+                "requires": {
+                  "without": {
+                    "lore": [
+                      "glass_town_age"
+                    ]
+                  }
+                },
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "check": {
+                  "skill": "insight",
+                  "difficulty": {
+                    "sub": [
+                      14,
+                      {
+                        "clamp": [
+                          {
+                            "div": [
+                              {
+                                "ref": "reputation.the_water_wardens",
+                                "else": 0
+                              },
+                              5
+                            ]
+                          },
+                          -6,
+                          6
+                        ]
+                      }
+                    ]
+                  },
+                  "onSuccess": "glass_sela_age_told",
+                  "onFailure": "glass_sela_age_wont"
+                }
+              },
+              {
+                "id": "glass_sela_chart",
+                "text": "I need the chart. All ninety years of it.",
+                "requires": {
+                  "without": {
+                    "items": [
+                      "dune_walkers_chart"
+                    ],
+                    "flags": [
+                      {
+                        "flag": "given:dune_walkers_chart"
+                      }
+                    ]
+                  }
+                },
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "check": {
+                  "skill": "persuasion",
+                  "difficulty": {
+                    "sub": [
+                      14,
+                      {
+                        "clamp": [
+                          {
+                            "div": [
+                              {
+                                "ref": "reputation.the_water_wardens",
+                                "else": 0
+                              },
+                              5
+                            ]
+                          },
+                          -6,
+                          6
+                        ]
+                      }
+                    ]
+                  },
+                  "onSuccess": "glass_sela_chart_gave",
+                  "onFailure": "glass_sela_chart_kept"
+                }
+              },
+              {
+                "id": "greet_leave",
+                "text": "Nothing.",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "glass_sela_season_told",
+            "says": [
+              {
+                "text": "\u201cA pace a year, all of them, all my life and my father's.\u201d She unrolls the chart far enough for you to see the lines. \u201cExcept this one. One season. A mile.\u201d Her finger stops on it. \u201cI have walked that ground since and there is no reason for it.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "learnLore": {
+                  "entry": "glass_town_season"
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "glass_sela_season_on",
+                "text": "Go on.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "glass_sela_season_wont",
+            "says": [
+              {
+                "text": "\u201cI've said all I mean to,\u201d they say, and go back to what they were doing."
+              }
+            ],
+            "onEnter": [
+              {
+                "adjustReputation": {
+                  "faction": "the_water_wardens",
+                  "amount": -1
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "glass_sela_season_drop",
+                "text": "Leave it.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "glass_sela_age_told",
+            "says": [
+              {
+                "text": "\u201cTwo hundred years, near enough \u2014 you can date the brick.\u201d She rolls the chart back up. \u201cIt should have been under that dune for nine hundred. Either the dune is young or the town is, and the dune is not young.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "learnLore": {
+                  "entry": "glass_town_age"
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "glass_sela_age_on",
+                "text": "Go on.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "glass_sela_age_wont",
+            "says": [
+              {
+                "text": "\u201cI've said all I mean to,\u201d they say, and go back to what they were doing."
+              }
+            ],
+            "onEnter": [
+              {
+                "adjustReputation": {
+                  "faction": "the_water_wardens",
+                  "amount": -1
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "glass_sela_age_drop",
+                "text": "Leave it.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "glass_sela_chart_gave",
+            "says": [
+              {
+                "text": "She hands it over rolled, and holds onto the end of it a second longer. \u201cFour hands. My great-grandfather started it.\u201d She lets go. \u201cThe line that goes a mile is in mine. I would like somebody to tell me I drew it wrong.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "grantItem": {
+                  "target": {
+                    "ref": "actor.id"
+                  },
+                  "item": "dune_walkers_chart",
+                  "quantity": 1
+                }
+              },
+              {
+                "setFlag": {
+                  "flag": "given:dune_walkers_chart",
+                  "value": true
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "glass_sela_chart_thanks",
+                "text": "Thank you.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "glass_sela_chart_kept",
+            "says": [
+              {
+                "text": "\u201cNot the chart,\u201d she says. \u201cAsk me anything off it and I will tell you. The chart stays.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "adjustReputation": {
+                  "faction": "the_water_wardens",
+                  "amount": -2
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "glass_sela_chart_leave",
+                "text": "Then no.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          }
+        ]
       }
     ],
     "quests": [
@@ -59350,6 +63473,234 @@
           ],
           "reputation": {}
         }
+      },
+      {
+        "id": "glass_the_ninth_course",
+        "name": "The Ninth Course",
+        "description": "Eight courses cut and nine weighed, every year for two hundred years, and the ninth arrives in the night out of a pan floor that rings.",
+        "autoStart": false,
+        "ordered": true,
+        "tags": [
+          "hidden",
+          "glasslands",
+          "glass_courses"
+        ],
+        "objectives": [
+          {
+            "id": "at_the_pan",
+            "description": "Get under the eighth pan.",
+            "kind": "reach",
+            "count": 1,
+            "hidden": true,
+            "optional": false,
+            "target": "saltrun_deep_pan"
+          },
+          {
+            "id": "through_the_floor",
+            "description": "Find the way the ninth course comes up.",
+            "kind": "custom",
+            "count": 1,
+            "hidden": true,
+            "optional": false,
+            "when": {
+              "test": {
+                "ref": "flags.glass_courses_open"
+              }
+            }
+          },
+          {
+            "id": "the_drawer",
+            "description": "Find what has been drawing.",
+            "kind": "kill",
+            "count": 1,
+            "hidden": true,
+            "optional": false,
+            "target": "salt_drawer"
+          }
+        ],
+        "stages": [],
+        "unlocks": [],
+        "rewards": {
+          "xp": 170,
+          "items": [
+            {
+              "item": "weighers_scale",
+              "quantity": 1
+            }
+          ],
+          "reputation": {}
+        }
+      },
+      {
+        "id": "glass_what_it_was_for",
+        "name": "What the Cistern Was For",
+        "description": "A hollowed rock the size of a market with a channel out of it and no channel in, and forty feet down the channel is damp.",
+        "autoStart": false,
+        "ordered": true,
+        "tags": [
+          "hidden",
+          "glasslands",
+          "glass_cistern"
+        ],
+        "objectives": [
+          {
+            "id": "at_the_feeder",
+            "description": "Get into the channel.",
+            "kind": "reach",
+            "count": 1,
+            "hidden": true,
+            "optional": false,
+            "target": "dry_cistern_the_feeder"
+          },
+          {
+            "id": "past_the_grating",
+            "description": "Open what the keeper's office was for.",
+            "kind": "custom",
+            "count": 1,
+            "hidden": true,
+            "optional": false,
+            "when": {
+              "test": {
+                "ref": "flags.glass_cistern_open"
+              }
+            }
+          },
+          {
+            "id": "what_drinks",
+            "description": "Find what has been drinking.",
+            "kind": "kill",
+            "count": 1,
+            "hidden": true,
+            "optional": false,
+            "target": "cistern_drinker"
+          }
+        ],
+        "stages": [],
+        "unlocks": [],
+        "rewards": {
+          "xp": 180,
+          "items": [
+            {
+              "item": "cistern_keepers_ring",
+              "quantity": 1
+            }
+          ],
+          "reputation": {}
+        }
+      },
+      {
+        "id": "glass_still_full",
+        "name": "The Bath That Is Still Full",
+        "description": "One warm bath in a desert, never metered by a city that meters to the cup, and masonry under poured glass on the crater lip.",
+        "autoStart": false,
+        "ordered": true,
+        "tags": [
+          "hidden",
+          "glasslands",
+          "glass_bath"
+        ],
+        "objectives": [
+          {
+            "id": "at_the_stair",
+            "description": "Get down the crater stair.",
+            "kind": "reach",
+            "count": 1,
+            "hidden": true,
+            "optional": false,
+            "target": "glass_quarter_crater_stair"
+          },
+          {
+            "id": "read_the_lines",
+            "description": "Read the lines in the glass from the side they were cut for.",
+            "kind": "custom",
+            "count": 1,
+            "hidden": true,
+            "optional": false,
+            "when": {
+              "test": {
+                "ref": "flags.glass_bath_open"
+              }
+            }
+          },
+          {
+            "id": "what_heats_it",
+            "description": "Find what has the fire under it.",
+            "kind": "kill",
+            "count": 1,
+            "hidden": true,
+            "optional": false,
+            "target": "crater_founder"
+          }
+        ],
+        "stages": [],
+        "unlocks": [],
+        "rewards": {
+          "xp": 260,
+          "items": [
+            {
+              "item": "unsold_lens_mounted",
+              "quantity": 1
+            }
+          ],
+          "reputation": {}
+        }
+      },
+      {
+        "id": "glass_the_town_that_came_back",
+        "name": "The Town That Came Back",
+        "description": "A dune that moved a mile in one season, off a town two hundred years too young for it, with every door barred from the street.",
+        "autoStart": false,
+        "ordered": true,
+        "tags": [
+          "hidden",
+          "glasslands",
+          "glass_town"
+        ],
+        "objectives": [
+          {
+            "id": "in_the_streets",
+            "description": "Get into the uncovered town.",
+            "kind": "reach",
+            "count": 1,
+            "hidden": true,
+            "optional": false,
+            "target": "shifting_dunes_under_town"
+          },
+          {
+            "id": "lift_a_bar",
+            "description": "Lift one of the bars.",
+            "kind": "custom",
+            "count": 1,
+            "hidden": true,
+            "optional": false,
+            "when": {
+              "test": {
+                "ref": "flags.glass_town_open"
+              }
+            }
+          },
+          {
+            "id": "what_was_shut_in_town",
+            "description": "Meet what the bars were on the outside for.",
+            "kind": "kill",
+            "count": 1,
+            "hidden": true,
+            "optional": false,
+            "target": "barred_thing"
+          }
+        ],
+        "stages": [],
+        "unlocks": [],
+        "rewards": {
+          "xp": 200,
+          "items": [
+            {
+              "item": "barred_door_iron",
+              "quantity": 1
+            }
+          ],
+          "reputation": {}
+        }
       }
     ],
     "arcs": [
@@ -59576,6 +63927,18 @@
         "isEnding": false
       },
       {
+        "id": "glass_hidden",
+        "name": "The Glasslands, Unmetered",
+        "description": "Four ways of noticing that the water did not leave on its own.",
+        "quests": [
+          "glass_the_ninth_course",
+          "glass_what_it_was_for",
+          "glass_still_full",
+          "glass_the_town_that_came_back"
+        ],
+        "isEnding": false
+      },
+      {
         "id": "the_unsealing",
         "name": "The Unsealing",
         "description": "Nine doors were shut on purpose. Somebody has been opening them in order, and the ninth is the last.",
@@ -59649,6 +64012,86 @@
         "id": "frost_marker_shut",
         "name": "Whatever is at the bottom was shut in, not shut out. The stonework faces the wrong way to be keeping anything from getting down.",
         "source": "the stone rows on the Flats"
+      },
+      {
+        "id": "glass_courses_eight",
+        "name": "The pans are cut in eight courses. Every salt town on this coast cuts eight, because eight is what one season of sun will draw.",
+        "source": "a pan-cutter"
+      },
+      {
+        "id": "glass_courses_nine",
+        "name": "The weighing house has counted nine courses out of these pans every year for two hundred years, and nobody has ever cut a ninth.",
+        "source": "the weigher's ledger"
+      },
+      {
+        "id": "glass_courses_taste",
+        "name": "The ninth is heavier and it does not taste of this sea. The weigher keeps a jar of it and will not sell any.",
+        "source": "the salt market"
+      },
+      {
+        "id": "glass_courses_night",
+        "name": "Whatever the ninth course is, it arrives between one evening and the next morning, and no water runs into the pans in the night.",
+        "source": "the chapel's night-keeper"
+      },
+      {
+        "id": "glass_cistern_size",
+        "name": "The cistern is bigger than the market it sits under and has been dry since before anybody's grandmother. The village is named after it anyway.",
+        "source": "the Drop's landlord"
+      },
+      {
+        "id": "glass_cistern_cut",
+        "name": "It was cut, not built. One rock, hollowed, and the tool marks run the wrong way for anyone standing on the floor of it.",
+        "source": "a stone-cutter at the Drop"
+      },
+      {
+        "id": "glass_cistern_feed",
+        "name": "There is a channel out of it and no channel into it, which is a thing a cistern does not have.",
+        "source": "the keeper's house"
+      },
+      {
+        "id": "glass_cistern_wet",
+        "name": "The channel out is damp forty feet down, in a place that has not had rain in nine years.",
+        "source": "a well-digger"
+      },
+      {
+        "id": "glass_bath_metered",
+        "name": "Every well in the city is metered by the wardens, to the cup. The bath under the Glass Quarter has never once been metered.",
+        "source": "a water warden"
+      },
+      {
+        "id": "glass_bath_warm",
+        "name": "It is warm, and nothing else in the Glasslands is warm. Warm water in a desert means it came from somewhere with a fire under it.",
+        "source": "the Green Room's cellarman"
+      },
+      {
+        "id": "glass_bath_lens",
+        "name": "The cutters make one lens they will not sell and will not explain, and they have made it every year for longer than the guild has minutes for.",
+        "source": "an apprentice at the Cutters' Hall"
+      },
+      {
+        "id": "glass_bath_down",
+        "name": "The crater is not a crater. There is stonework under the glass on the lip and it goes down further than anybody has measured.",
+        "source": "cut into the shrine on the lip"
+      },
+      {
+        "id": "glass_town_season",
+        "name": "The dune moved off that town in a single season. Dunes here move a pace a year and that one moved a mile.",
+        "source": "a collector at the Fulgurite"
+      },
+      {
+        "id": "glass_town_age",
+        "name": "The town is the wrong age for the dune. It should have been under it for nine hundred years and it has been under it for two hundred.",
+        "source": "the glass market"
+      },
+      {
+        "id": "glass_town_doors",
+        "name": "Every door in it is barred from the outside, and they were barred before the sand came.",
+        "source": "a dune-walker"
+      },
+      {
+        "id": "glass_town_glass",
+        "name": "There is glass in the streets that was not made in a kiln and did not come from lightning. It runs in lines, and the lines lead somewhere.",
+        "source": "the Cutters' Hall"
       }
     ],
     "loreThreads": [
@@ -59683,6 +64126,50 @@
           "frost_marker_older",
           "frost_marker_down",
           "frost_marker_shut"
+        ]
+      },
+      {
+        "id": "glass_courses",
+        "name": "The Ninth Course",
+        "description": "Eight courses cut, nine weighed, every year for two hundred years, and the ninth does not taste of this sea.",
+        "entries": [
+          "glass_courses_eight",
+          "glass_courses_nine",
+          "glass_courses_taste",
+          "glass_courses_night"
+        ]
+      },
+      {
+        "id": "glass_cistern",
+        "name": "What the Cistern Was For",
+        "description": "A hollowed rock the size of a market, a channel out and no channel in, and forty feet down it is damp.",
+        "entries": [
+          "glass_cistern_size",
+          "glass_cistern_cut",
+          "glass_cistern_feed",
+          "glass_cistern_wet"
+        ]
+      },
+      {
+        "id": "glass_bath",
+        "name": "The Bath That Is Still Full",
+        "description": "One warm bath in a desert, unmetered in a city that meters everything, and a lens the cutters make every year and will not sell.",
+        "entries": [
+          "glass_bath_metered",
+          "glass_bath_warm",
+          "glass_bath_lens",
+          "glass_bath_down"
+        ]
+      },
+      {
+        "id": "glass_town",
+        "name": "The Town That Came Back",
+        "description": "A dune moved a mile in one season and gave back a town two hundred years too young, with every door barred from outside.",
+        "entries": [
+          "glass_town_season",
+          "glass_town_age",
+          "glass_town_doors",
+          "glass_town_glass"
         ]
       }
     ]
