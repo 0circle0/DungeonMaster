@@ -175,9 +175,14 @@ QUESTS = [
 ]
 
 ARCS = [
+    # Both sides of the branch belong here too. `journalByArc` files a quest
+    # that no arc claims at the bottom of the journal under no heading, so
+    # leaving them out put Act I's one real choice below Act III.
     arc("act_one", "The Open Door",
         "A parish matter that turns out not to be one.",
-        ["the_open_door", "word_to_aurenhal", "the_undercroft"]),
+        ["the_open_door", "word_to_aurenhal",
+         "the_crowns_commission", "the_librarians_errand",
+         "the_undercroft"]),
 ]
 
 

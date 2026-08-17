@@ -60,9 +60,9 @@ LOOT_TABLES = [
     table("ice_scraps", [
         w(5, "old_coin"), w(3, "barrow_torc"), w(2, "ward_salt"),
     ], empty=0.45, bonus_skill="survival"),
-    table("alpine_scraps", [
-        w(5, "iron_ore", "1d3"), w(3, "hold_silver"), w(2, "healing_draught"),
-    ], empty=0.45, bonus_skill="survival"),
+    # `alpine_scraps` was here, keyed for a `dungeon_alpine` biome that does
+    # not exist — the Skarnspine's dungeons are delved and cave like everywhere
+    # else, so it was rolled by nothing. Everything it dropped drops elsewhere.
 
     # -- act payoffs ------------------------------------------------------
     table("door_warden_hoard", [
@@ -97,10 +97,8 @@ LOOT_TABLES = [
         w(4, "old_coin", "2d6"), w(3, "tallow_hood"), w(2, "barrow_torc"),
         w(2, "healing_draught", "1d2"),
     ], rolls="2", name="What Was Bricked Up With Him"),
-    table("smugglers_hoard", [
-        w(4, "wreck_brass", "1d3"), w(3, "wreckers_lantern"),
-        w(2, "healing_draught"), w(2, "old_coin", "2d4"),
-    ], rolls="2", name="The Run Under the Strand"),
+    # `smugglers_hoard` was here under the same name as `the_run`, for the same
+    # dungeon, and `DUNGEON_BOSSES` picks `the_run`. Two tables for one room.
     table("saltcliff_hoard", [
         w(4, "wreck_brass", "1d4"), w(3, "pilots_glass"), w(2, "amber_lump"),
         w(2, "healing_draught", "1d2"),
@@ -389,6 +387,21 @@ ENCOUNTER_TABLES = [
     encounters("the_drowned_battery", [
         group("battery", [("reef_thing", "1", False)])], chance=1, empty=0),
 
+    # The last three boss rooms on the continent with nothing to draw from.
+    # No quest, chain or thread goes near these dungeons, so what waits at the
+    # bottom is not somebody in particular — it is whatever the place has,
+    # in a fixed group, because a boss room that rolls empty is the one room a
+    # player is guaranteed to notice.
+    encounters("the_deeps_below", [
+        group("deeps", [("slag_crawler", "2", False),
+                        ("fungal_horror", "1", False)])], chance=1, empty=0),
+    encounters("the_bottom_of_the_shaft", [
+        group("shaft", [("bog_walker", "2", False),
+                        ("drowned_hand", "1", False)])], chance=1, empty=0),
+    encounters("the_top_of_the_chimney", [
+        group("chimney", [("drowned_hand", "2", False),
+                          ("strand_wrecker", "1", False)])], chance=1, empty=0),
+
     # The ice and the sea, the last two stretches of the continent with no
     # wandering monsters at all.
     encounters("ice_things", [
@@ -547,6 +560,12 @@ DUNGEON_BOSSES = {
     "steppe_great_kurgan": "the_kurgan_rider",
     "glasslands_centre_shaft": "the_glass_thing",
     "deeproads_ninth_door": "the_keeper_of_the_ninth",
+    # The three that nothing else claimed. Every other dungeon on the
+    # continent gets its boss from a quest, a chain or a thread; these are
+    # fronted by a POI and are otherwise nobody's.
+    "karn_dolur_deeps": "the_deeps_below",
+    "moor_tarn_shaft": "the_bottom_of_the_shaft",
+    "isles_gullstone_chimney": "the_top_of_the_chimney",
 }
 
 # Room templates in these biomes stop being empty. Everything else on the

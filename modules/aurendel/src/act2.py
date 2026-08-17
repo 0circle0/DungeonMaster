@@ -29,13 +29,21 @@ from prose import pool
 
 
 def route(key, *, name, ward_name, key_item, approach_area, site_poi,
-          site_dungeon, boss_monster, keeper, region_faction, level,
+          site_dungeon, boss_monster, region_faction, level,
           xp=(150, 200, 250, 200), unlocks_from="the_undercroft"):
     """The four quests of one route, in order.
 
     `unlocks_from` is only for the journal — every quest below also states its
     own `requires`, because `unlocks` marks a quest *available* and does not
     gate starting it. Belt and braces is the idiom greenmarch established.
+
+    There used to be a `keeper=` here naming the NPC who tends each ward. It
+    was never read — the tender is reached through `{key}_briefed`, which their
+    conversation sets — so it documented a link the build did not make, and the
+    East route shipped with its keeper missing while the parameter said
+    otherwise. The tenders are declared in `NPCS` below, one per
+    `approach_area`, and `check_quests.py` §11 is what actually holds the
+    relationship together now.
     """
     q1, q2, q3, q4 = (f"{key}_road", f"{key}_site", f"{key}_choice", f"{key}_key")
     broke, restored = f"{key}_broken", f"{key}_restored"
@@ -127,21 +135,21 @@ NORTH = route(
     key_item="grown_key",
     approach_area="duskwood_elderhollow", site_poi="witchwood_under_the_ring",
     site_dungeon="duskwood_under_ring", boss_monster="hollow_walker",
-    keeper="moot_warden_hesk", region_faction="the_keepers", level=4)
+    region_faction="the_keepers", level=4)
 
 EAST = route(
     "sisters", name="the Nine Sisters", ward_name="The Sisters' Ward",
     key_item="cast_key",
     approach_area="moor_barrowgate", site_poi="nine_sisters_under_ring",
     site_dungeon="moor_beneath_sisters", boss_monster="sister_shade",
-    keeper="cairn_keeper_ulla", region_faction="the_keepers", level=5)
+    region_faction="the_keepers", level=5)
 
 SOUTH = route(
     "kurgan", name="the Kurgan Field", ward_name="The Skull Line",
     key_item="glass_key",
     approach_area="steppe_ilkhet", site_poi="kurgan_field_great_kurgan",
     site_dungeon="steppe_great_kurgan", boss_monster="kurgan_rider",
-    keeper="rider_tenkh", region_faction="the_keepers", level=5)
+    region_faction="the_keepers", level=5)
 
 QUESTS = NORTH + EAST + SOUTH
 
@@ -154,6 +162,11 @@ ARCS = [
 
 
 # --- the people who tend them ---------------------------------------------
+# One per route, living in that route's `approach_area`, because the first
+# quest of every route sends you there and then asks you to find whoever tends
+# the ward. There must be three of these and there were two: the Sisters'
+# tender was written, given a conversation, and never given a body, so the East
+# route could not get past its own first objective.
 
 NPCS = [
     npc("thorn_warden_bel", "Bel of the Thornward",
@@ -162,6 +175,13 @@ NPCS = [
         home="elderhollow_moot_oak", disposition=12, gullibility=0.3,
         memory_span=300, cares=["ward_broken", "ward_restored"],
         shop=shop("keeper_stock", buys=("treasure", "ward"), multiplier=1.25)),
+
+    npc("stone_keeper_maun", "Maun of the Nine Sisters",
+        "Keeps the ring for Barrowgate, which mostly means keeping people "
+        "off it, and has kept a rubbing of the tenth stone for nine years.",
+        faction="the_keepers", dialogue_id="maun_talk",
+        home="barrowgate_moot_hall", disposition=10, gullibility=0.3,
+        memory_span=300, cares=["ward_broken", "ward_restored"]),
 
     npc("rider_tenkh", "Tenkh of the Skull Line",
         "Rides the line, counts the poles, and replaces the ones that go.",
@@ -242,18 +262,18 @@ DIALOGUES = [
          "not answer."]),
 
     ward_talk(
-        "ulla_ward_talk",
-        ["Ulla has come down from the chapel and is standing at the gap "
-         "between the two southern stones. \"You'll have felt it.\""],
-        ["\"Nine stones and a gap you can walk and won't.\" She sets a hand "
-         "flat on the nearest. \"The tenth is lying down over there with "
-         "writing on the underside, and the writing is the ward. Somebody "
-         "put her down on her face on purpose.\""],
+        "maun_talk",
+        ["Maun has the rubbing out on the Moot Hall table, weighted at the "
+         "corners, and does not roll it up. \"You'll have felt it.\""],
+        ["\"Nine stones and a gap you can walk and won't.\" She flattens a "
+         "curl out of the paper. \"The tenth is lying up there with writing "
+         "on the underside, and the writing is the ward. Somebody put her "
+         "down on her face on purpose.\""],
         "Set the tenth back up.",
         "Turn her over. We need to read it.",
         "sisters", "the_keepers",
         "sisters_restored", "sisters_broken", "sisters_taken",
-        ["\"I heard,\" says Ulla, and goes back to her stones."]),
+        ["\"I heard,\" says Maun, and goes back to her paper."]),
 
     ward_talk(
         "tenkh_talk",

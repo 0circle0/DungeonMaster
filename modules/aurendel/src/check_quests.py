@@ -828,6 +828,66 @@ def main():
                         f"{table_id}/{group['id']}: a post-game group that is "
                         f"not gated on the ending — this draws in Act I")
 
+    # --- 11. content that exists and cannot be reached ---------------------
+    #
+    # §2 asks whether a flag is written *anywhere*. That is not the same
+    # question as whether the writing can ever run, and the difference cost
+    # this module a quarter of Act II: the Nine Sisters' conversation was
+    # written, was the only writer of all four `sisters_*` flags, and belonged
+    # to no NPC. Every check passed. `validate` passed, because flags are free
+    # strings; §2 passed, because the flag *was* authored; and `playchain`
+    # passed, because it sets the flags itself rather than going and asking
+    # somebody. The route was dead at its own first objective and the game
+    # quietly became "do both of the other two" instead of "choose two".
+
+    # 11a. A dialogue nobody owns cannot be opened. `talk` is the only way in
+    #      and it goes through an NPC, so an unowned dialogue is dead prose.
+    dialogues = {d["id"]: d for d in doc["narrative"]["dialogues"]}
+    owned = {npc["dialogue"] for npc in npcs.values() if npc.get("dialogue")}
+    # Anything else in the document that names a dialogue counts as an owner
+    # too, so a future way of opening one does not read as a fault here.
+    owned |= walk(doc["world"], "dialogue", set())
+    owned |= walk(doc["narrative"], "dialogue", set())
+
+    for dialogue_id in sorted(set(dialogues) - owned):
+        problems.append(
+            f"dialogue {dialogue_id!r} belongs to no NPC — nothing can open "
+            f"it, so everything it says and every flag it sets is unreachable")
+
+    # 11b. And the consequence, stated separately because it is the one that
+    #      makes a questline unfinishable rather than merely wasting prose: a
+    #      flag an objective waits on needs a writer that can actually run.
+    def flag_writes(node, out):
+        """Every flag *written* under this node, as opposed to read."""
+        if isinstance(node, dict):
+            written = node.get("setFlag")
+            if isinstance(written, dict) and isinstance(written.get("flag"), str):
+                out.add(written["flag"])
+            for v in node.values():
+                flag_writes(v, out)
+        elif isinstance(node, list):
+            for item in node:
+                flag_writes(item, out)
+        return out
+
+    stranded = set()
+    for dialogue_id in set(dialogues) - owned:
+        stranded |= flag_writes(dialogues[dialogue_id], set())
+    # A flag is only stranded if *nothing else* writes it. Subtract every
+    # writer that is not in an unowned dialogue.
+    live = flag_writes({k: v for k, v in doc.items() if k != "narrative"}, set())
+    live |= flag_writes([d for i, d in dialogues.items() if i in owned], set())
+    live |= flag_writes(doc["narrative"]["quests"], set())
+    live |= flag_writes(doc["narrative"].get("arcs", []), set())
+    stranded -= live
+
+    for quest in quests:
+        for flag in sorted(flag_refs(quest, set()) & stranded):
+            problems.append(
+                f"{quest['id']}: waits on flag {flag!r}, which is only ever "
+                f"set inside a dialogue no NPC owns — this objective can "
+                f"never complete")
+
     # --- report ------------------------------------------------------------
     if problems:
         print(f"✗ {len(problems)} problem(s) the schema cannot see\n")

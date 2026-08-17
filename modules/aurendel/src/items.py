@@ -226,9 +226,13 @@ ITEMS = [
     key("glass_key", "The Glass Key",
         "Fulgurite, hollow, and it rings a note that is very slightly wrong.",
         kind="trinket"),
-    key("thornward_token", "The Moot's Token",
-        "A slip of laid thorn. Elderhollow gives them out rarely and takes "
-        "them back."),
+    # `thornward_token` — "the Elderhollow moot's leave" — was here with no
+    # source and no consumer. The Thornward states that leave as prose and
+    # gates on `minLevel` and a `nature` bypass instead, and gate keys live in
+    # `requires.items` (`opensWith` is abilities), so making the token real
+    # means adding an item requirement to a gate that already works. If the
+    # moot's leave should be a thing you carry, it wants earning somewhere
+    # first — an `anyOf` beside the level, never in front of it.
     key("hold_warrant", "A Deep Warrant",
         "Karn Dolur's seal on slate, and the ledger number that goes with it."),
 

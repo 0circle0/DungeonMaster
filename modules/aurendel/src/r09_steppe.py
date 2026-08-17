@@ -49,7 +49,12 @@ EDGES = [
     ("steppe_horse_road", "steppe_ilkhet", 40),
     ("steppe_ilkhet", "steppe_kurgan_field", 45),
     ("steppe_kurgan_field", "steppe_three_wells", 40),
-    ("steppe_three_wells", "steppe_the_long_grass", 50),
+    # The grazing toll was written and never laid across anything. It goes
+    # here — water on one side, grass on the other, which is what anybody
+    # would be charging for — and the long grass keeps its second road in off
+    # the dry river, so the toll is a price and not a wall.
+    ("steppe_three_wells", "steppe_the_long_grass", 50,
+     {"gate": "steppe_grazing_right"}),
     ("steppe_the_long_grass", "steppe_dry_river", 45),
     ("steppe_dry_river", "steppe_tallgrass", 40),
     ("steppe_tallgrass", "steppe_windbreak", 45),

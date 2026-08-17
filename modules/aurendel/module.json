@@ -3048,17 +3048,6 @@
         ]
       },
       {
-        "id": "thornward_token",
-        "name": "The Moot's Token",
-        "description": "A slip of laid thorn. Elderhollow gives them out rarely and takes them back.",
-        "kind": "key",
-        "value": 0,
-        "weight": 0.5,
-        "tags": [
-          "quest"
-        ]
-      },
-      {
         "id": "hold_warrant",
         "name": "A Deep Warrant",
         "description": "Karn Dolur's seal on slate, and the ledger number that goes with it.",
@@ -5600,39 +5589,6 @@
         }
       },
       {
-        "id": "alpine_scraps",
-        "entries": [
-          {
-            "weight": 5,
-            "value": {
-              "item": "iron_ore",
-              "quantity": "1d3"
-            }
-          },
-          {
-            "weight": 3,
-            "value": {
-              "item": "hold_silver",
-              "quantity": "1"
-            }
-          },
-          {
-            "weight": 2,
-            "value": {
-              "item": "healing_draught",
-              "quantity": "1"
-            }
-          }
-        ],
-        "rolls": "1",
-        "emptyChance": 0.45,
-        "bonusRollSkill": "survival",
-        "bonusRolls": {
-          "onSuccess": 1,
-          "onCritical": 2
-        }
-      },
-      {
         "id": "door_warden_hoard",
         "entries": [
           {
@@ -5876,42 +5832,6 @@
         "rolls": "2",
         "emptyChance": 0.0,
         "name": "What Was Bricked Up With Him"
-      },
-      {
-        "id": "smugglers_hoard",
-        "entries": [
-          {
-            "weight": 4,
-            "value": {
-              "item": "wreck_brass",
-              "quantity": "1d3"
-            }
-          },
-          {
-            "weight": 3,
-            "value": {
-              "item": "wreckers_lantern",
-              "quantity": "1"
-            }
-          },
-          {
-            "weight": 2,
-            "value": {
-              "item": "healing_draught",
-              "quantity": "1"
-            }
-          },
-          {
-            "weight": 2,
-            "value": {
-              "item": "old_coin",
-              "quantity": "2d4"
-            }
-          }
-        ],
-        "rolls": "2",
-        "emptyChance": 0.0,
-        "name": "The Run Under the Strand"
       },
       {
         "id": "saltcliff_hoard",
@@ -17195,6 +17115,23 @@
         }
       },
       {
+        "id": "stone_keeper_maun",
+        "name": "Maun of the Nine Sisters",
+        "description": "Keeps the ring for Barrowgate, which mostly means keeping people off it, and has kept a rubbing of the tenth stone for nine years.",
+        "disposition": 10,
+        "gullibility": 0.3,
+        "memorySpan": 300,
+        "offersQuests": [],
+        "caresAbout": [
+          "ward_broken",
+          "ward_restored"
+        ],
+        "reactions": [],
+        "faction": "the_keepers",
+        "dialogue": "maun_talk",
+        "home": "barrowgate_moot_hall"
+      },
+      {
         "id": "rider_tenkh",
         "name": "Tenkh of the Skull Line",
         "description": "Rides the line, counts the poles, and replaces the ones that go.",
@@ -25071,7 +25008,8 @@
           },
           {
             "to": "steppe_the_long_grass",
-            "travelMinutes": 50
+            "travelMinutes": 50,
+            "gate": "steppe_grazing_right"
           }
         ]
       },
@@ -25211,7 +25149,8 @@
         "connections": [
           {
             "to": "steppe_three_wells",
-            "travelMinutes": 50
+            "travelMinutes": 50,
+            "gate": "steppe_grazing_right"
           },
           {
             "to": "steppe_dry_river",
@@ -44944,7 +44883,8 @@
         },
         "branchiness": 0.4,
         "width": "37",
-        "height": "37"
+        "height": "37",
+        "bossTable": "the_deeps_below"
       },
       {
         "id": "karn_dolur_old_seams",
@@ -45265,7 +45205,8 @@
         "branchiness": 0.3,
         "width": "81",
         "height": "81",
-        "corridorLength": "3d3"
+        "corridorLength": "3d3",
+        "bossTable": "the_bottom_of_the_shaft"
       },
       {
         "id": "ember_under_cathedral",
@@ -45725,7 +45666,8 @@
         "branchiness": 0.2,
         "corridorLength": "3d3",
         "width": "73",
-        "height": "73"
+        "height": "73",
+        "bossTable": "the_top_of_the_chimney"
       },
       {
         "id": "isles_drowned_fort",
@@ -47038,6 +46980,87 @@
             "entries": [
               {
                 "monster": "reef_thing",
+                "count": "1",
+                "scaleWithLevel": false
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "the_deeps_below",
+        "minDepth": 0,
+        "maxDepth": 999,
+        "chance": 1,
+        "emptyWeight": 0,
+        "scalePerLevels": 3,
+        "groups": [
+          {
+            "id": "deeps",
+            "weight": 1,
+            "hostile": true,
+            "entries": [
+              {
+                "monster": "slag_crawler",
+                "count": "2",
+                "scaleWithLevel": false
+              },
+              {
+                "monster": "fungal_horror",
+                "count": "1",
+                "scaleWithLevel": false
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "the_bottom_of_the_shaft",
+        "minDepth": 0,
+        "maxDepth": 999,
+        "chance": 1,
+        "emptyWeight": 0,
+        "scalePerLevels": 3,
+        "groups": [
+          {
+            "id": "shaft",
+            "weight": 1,
+            "hostile": true,
+            "entries": [
+              {
+                "monster": "bog_walker",
+                "count": "2",
+                "scaleWithLevel": false
+              },
+              {
+                "monster": "drowned_hand",
+                "count": "1",
+                "scaleWithLevel": false
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "the_top_of_the_chimney",
+        "minDepth": 0,
+        "maxDepth": 999,
+        "chance": 1,
+        "emptyWeight": 0,
+        "scalePerLevels": 3,
+        "groups": [
+          {
+            "id": "chimney",
+            "weight": 1,
+            "hostile": true,
+            "entries": [
+              {
+                "monster": "drowned_hand",
+                "count": "2",
+                "scaleWithLevel": false
+              },
+              {
+                "monster": "strand_wrecker",
                 "count": "1",
                 "scaleWithLevel": false
               }
@@ -57276,14 +57299,14 @@
         ]
       },
       {
-        "id": "ulla_ward_talk",
+        "id": "maun_talk",
         "start": "greet",
         "nodes": [
           {
             "id": "greet",
             "says": [
               {
-                "text": "Ulla has come down from the chapel and is standing at the gap between the two southern stones. \"You'll have felt it.\""
+                "text": "Maun has the rubbing out on the Moot Hall table, weighted at the corners, and does not roll it up. \"You'll have felt it.\""
               }
             ],
             "options": [
@@ -57345,7 +57368,7 @@
             "id": "brief",
             "says": [
               {
-                "text": "\"Nine stones and a gap you can walk and won't.\" She sets a hand flat on the nearest. \"The tenth is lying down over there with writing on the underside, and the writing is the ward. Somebody put her down on her face on purpose.\""
+                "text": "\"Nine stones and a gap you can walk and won't.\" She flattens a curl out of the paper. \"The tenth is lying up there with writing on the underside, and the writing is the ward. Somebody put her down on her face on purpose.\""
               }
             ],
             "options": [
@@ -57488,7 +57511,7 @@
             "id": "cold",
             "says": [
               {
-                "text": "\"I heard,\" says Ulla, and goes back to her stones."
+                "text": "\"I heard,\" says Maun, and goes back to her paper."
               }
             ],
             "options": [
@@ -98811,6 +98834,8 @@
         "quests": [
           "the_open_door",
           "word_to_aurenhal",
+          "the_crowns_commission",
+          "the_librarians_errand",
           "the_undercroft"
         ],
         "isEnding": false
