@@ -15,9 +15,8 @@ The three endings are one quest with a `resolved_either_way` objective and an
 is what one is built out of.
 """
 from questkit import (
-    quest, stage, arc, obj, reach, kill, flagged, resolved_either_way,
-    set_flag, rep, give, deed, either, node, option, take_job, dialogue, npc,
-    shop,
+    quest, stage, reach, kill, flagged, resolved_either_way, set_flag, rep,
+    deed, either, node, option, take_job, dialogue, npc, shop,
 )
 from prose import pool
 
@@ -41,7 +40,15 @@ NPCS = [
         home="lantern_deep_fungus_market", disposition=5, gullibility=0.4,
         memory_span=200, cares=["lantern_lit", "deep_door_opened"],
         offers=["lantern_deep"],
-        shop=shop("deep_stock", multiplier=1.4)),
+        # Gated, like every other shop in the world: forty people can get you
+        # from here to Karn Dolur and the number is not going up, so they do
+        # not sell the deep stores to somebody they have not led. `lantern_deep`
+        # pays 15, so her own job opens her shelves — which is the shape the
+        # rest of the module already uses and the only faction that was missing
+        # it.
+        shop=shop("deep_stock", multiplier=1.4,
+                  requires={"factions": [{"faction": "the_wayfinders",
+                                          "minStanding": 10}]})),
 
     npc("hold_speaker_dath", "Dath, Speaker of the Gate",
         "Nine hundred years of not opening the Deep Door, and he has the "

@@ -213,9 +213,16 @@ def take_job(oid, text, quest_id, goto, *, gives=(), effects=(), requires=None):
     acceptance is an emitted event the reducer picks up *before* quests advance
     — so the job can be progressed by the same batch of events that granted it.
     """
+    # Merged key by key rather than `update`d. A caller passing its own
+    # `quests` clause — an act gate, say — would otherwise *replace* the
+    # unstarted check, and the offer would go on being made after it had been
+    # taken. Lists concatenate; everything else the caller wins.
     gate = {"quests": [{"quest": quest_id, "status": "unstarted"}]}
-    if requires:
-        gate.update(requires)
+    for key, value in (requires or {}).items():
+        if isinstance(value, list) and isinstance(gate.get(key), list):
+            gate[key] = gate[key] + value
+        else:
+            gate[key] = value
     return option(
         oid, text, goto=goto, requires=gate,
         effects=[{"emit": {"event": "startQuest", "data": {"quest": quest_id}}}]

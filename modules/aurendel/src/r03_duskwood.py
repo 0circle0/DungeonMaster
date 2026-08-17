@@ -4,9 +4,10 @@ Primeval forest across the north-west, standing over elf-work that the forest
 got to first. One town, two villages, six stretches of trees, and a corner
 called the Witchwood that the other five stretches do not talk about.
 """
-from place import (area, poi, gate, toll, house, inn, smithy, store, workshop,
-                   temple, stable, warehouse, guild, square, landmark, ruin,
-                   delve)
+from place import (
+    area, poi, gate, house, inn, smithy, store, workshop, temple, stable,
+    square, landmark, ruin, delve,
+)
 from dungeonkit import dungeon
 from prose import pool
 

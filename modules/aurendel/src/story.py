@@ -15,8 +15,24 @@ from questkit import arc
 
 ACT_MODULES = ["act1", "act2", "act3"]
 
+# The side chains: one file per chain, each owning one region and one act, each
+# exporting the same four names the acts do. They are gathered alongside rather
+# than inside the acts because the difference between them is load-bearing —
+# `ACT_THREE_SPINE` below decides what winning means, and nothing from this list
+# is allowed anywhere near it.
+SIDE_MODULES = [
+    # Act I — the Kingsvale, the capital, and the coast.
+    "side_kingsvale", "side_aurenhal", "side_coast", "side_sarnport",
+    # Act II — the three ward regions and the three the roads pass through.
+    "side_duskwood", "side_moor", "side_steppe", "side_skarnspine",
+    "side_ember", "side_thornmere",
+    # Act III — the deep, the far north, the far south, and the sea.
+    "side_karn_dolur", "side_deeproads", "side_glasslands", "side_frostmere",
+    "side_isles",
+]
+
 _LOADED = []
-for _name in ACT_MODULES:
+for _name in ACT_MODULES + SIDE_MODULES:
     try:
         _LOADED.append(importlib.import_module(_name))
     except ImportError:
@@ -89,8 +105,20 @@ POI_TRIGGERS = {
 
 
 def attach_triggers(poi_list):
+    """Arrival triggers, from the questline and from whichever chains want one.
+
+    A side chain reaches places the spine never named, and "you have found it"
+    is the only event some of them produce — a sunken barge does not talk. Each
+    module may export its own `POI_TRIGGERS` in the same shape, gathered here so
+    the geography files still do not have to know a quest exists.
+    """
+    wanted = dict(POI_TRIGGERS)
+    for module in _LOADED:
+        for poi_id, triggers in getattr(module, "POI_TRIGGERS", {}).items():
+            wanted.setdefault(poi_id, []).extend(triggers)
+
     for poi in poi_list:
-        extra = POI_TRIGGERS.get(poi["id"])
+        extra = wanted.get(poi["id"])
         if extra:
             poi["triggers"] = list(poi.get("triggers", [])) + extra
 

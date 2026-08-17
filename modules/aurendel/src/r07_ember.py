@@ -5,9 +5,10 @@ town built on slag, one village at the foot of a vent field, and six stretches
 of ash. The most dangerous overland country south of the ice, and the richest
 in obsidian, iron, and things worth digging up.
 """
-from place import (area, poi, gate, toll, house, inn, smithy, store, workshop,
-                   temple, stable, warehouse, guild, square, landmark, ruin,
-                   delve)
+from place import (
+    area, poi, gate, house, inn, smithy, store, warehouse, guild, square,
+    landmark, ruin, delve,
+)
 from dungeonkit import dungeon
 from prose import pool
 

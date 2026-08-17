@@ -4,9 +4,10 @@ Grass to every horizon in the south, broken only by burial mounds and the
 smoke of somebody's camp. One town that is really a permanent camp, two
 villages built round the only reliable water, and six stretches of grass.
 """
-from place import (area, poi, gate, toll, house, inn, smithy, store, workshop,
-                   temple, stable, warehouse, guild, square, landmark, ruin,
-                   delve)
+from place import (
+    area, poi, gate, toll, house, inn, smithy, store, workshop, temple,
+    stable, square, landmark, ruin, delve,
+)
 from dungeonkit import dungeon
 from prose import pool
 

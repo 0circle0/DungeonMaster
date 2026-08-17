@@ -4,9 +4,10 @@ Drowned cypress swamp in the south-east. Everything here stands on piles or
 does not stand. One town on a boardwalk, two villages, five stretches of black
 water, and paths that are only paths this season.
 """
-from place import (area, poi, gate, toll, house, inn, smithy, store, workshop,
-                   temple, stable, warehouse, guild, square, landmark, ruin,
-                   delve)
+from place import (
+    area, poi, gate, toll, house, inn, smithy, store, workshop, temple,
+    warehouse, square, landmark, ruin, delve,
+)
 from dungeonkit import dungeon
 from prose import pool
 

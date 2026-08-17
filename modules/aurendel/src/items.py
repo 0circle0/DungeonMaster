@@ -16,6 +16,7 @@ Two other rules worth stating once:
     `tags` travel with its damage, so `damageInteractions[].unless` can name
     one; that is how silver bites something that shrugs off ordinary steel.
 """
+from sidekit import gear
 
 
 def weapon(wid, name, dice, damage_type, value, description, *, stat="might",
@@ -67,6 +68,99 @@ def key(kid, name, description, *, kind="key"):
 
 
 HEAL = lambda dice: [{"heal": {"target": {"ref": "actor.id"}, "amount": {"roll": dice}}}]
+
+
+# --- what the side chains pay in -------------------------------------------
+# Every piece of this is in `head`, `cloak`, `ring` or `belt`, and every one of
+# those four slots was empty. The questline's gear is hands and bodies — six
+# weapons and three coats, tuned against the fights on the road — so a chain can
+# hand out real power without touching a single number the main line was
+# measured against.
+#
+# `skillBonuses` is the other half of the reason. `item.modifiers` is keyed by
+# `rules.derivedStats` and can only ever reach guard, initiative and carry;
+# `skillRankOf` in the engine reads `skillBonuses`, and both the dice and the
+# `minRank` gates go through it. Gear is the only way a skill ever improves in
+# this ruleset — nothing raises `entity.skills` after character creation.
+
+
+SIDE_GEAR = [
+    # -- act I -------------------------------------------------------------
+    gear("poachers_lamp", "A Poacher's Lamp", "belt", 60,
+         "Shuttered on three sides, and the fourth is shuttered too until you "
+         "want it. The eel-men make them and do not sell them.",
+         skills={"survival": 1, "stealth": 1}, weight=2),
+    gear("tallow_hood", "The Tallow Hood", "head", 75,
+         "Waxed against the drip, black against the dark, and cut so the "
+         "hearing is not covered. The guild issues them and takes them back.",
+         skills={"stealth": 2}, weight=1),
+    gear("wreckers_lantern", "A Wrecker's Lantern", "belt", 70,
+         "Shows a light that is the wrong colour for a harbour and exactly "
+         "the colour of one, at four miles, in rain.",
+         skills={"perception": 1, "deception": 1}, weight=2),
+    gear("pilots_glass", "A Pilot's Glass", "head", 110,
+         "Ground at Vashta Qal, mounted at Saltcliff, and worth more than the "
+         "boat it is usually in.",
+         skills={"perception": 2}, weight=1, rarity="uncommon"),
+
+    # -- act II -------------------------------------------------------------
+    gear("greenway_charm", "A Greenway Charm", "ring", 130,
+         "Laid thorn, three turns, grown rather than tied. Elderhollow makes "
+         "them for people going into the Witchwood and does not explain them.",
+         skills={"nature": 2}, weight=0.2, rarity="uncommon"),
+    gear("torc_of_the_ridge", "The Torc of the Ridge", "ring", 150,
+         "Off the undug end of the Long Barrow, and whoever it was sized for "
+         "was buried facing the other way from everybody else.",
+         skills={"insight": 1, "resolve": 1}, guard=1, weight=0.5,
+         rarity="rare"),
+    gear("horn_bow", "An Ilkhet Horn Bow", "hand", 145,
+         "Sinew, horn and forty years' seasoning, and it will outshoot yew at "
+         "twice the distance nobody on foot needs.",
+         damage=("1d8", "piercing", "agility"), properties=["two_handed"],
+         skills={"survival": 1}, weight=3, rarity="uncommon"),
+    gear("hold_hammer", "A Hold Hammer", "hand", 160,
+         "Karn Dolur's pattern, made for a hand that expects to be swinging "
+         "at stone and is not disappointed when it is not.",
+         damage=("1d10", "bludgeoning", "might"), properties=["heavy", "two_handed"],
+         skills={"craft": 1}, weight=8, rarity="uncommon"),
+    gear("cinder_cloak", "A Cinder Cloak", "cloak", 180,
+         "Woven from what the vent-readers pull out of the ash fall, which "
+         "they will tell you is a kind of rock and is not.",
+         skills={"resolve": 1}, resist=[("fire", 0.5)], weight=3,
+         rarity="rare"),
+    gear("bell_bronze_mace", "Bell-Bronze", "hand", 175,
+         "Cast from what came up with the old church, and it still has the "
+         "note in it. Things that have been under water a long time do not "
+         "care for the note.",
+         damage=("1d8", "radiant", "might"), skills={"resolve": 1}, weight=5,
+         rarity="rare"),
+
+    # -- act III ------------------------------------------------------------
+    gear("hold_plate", "Hold Plate", "body", 320,
+         "Karn Dolur's own, off the muster floor, and the ledger number is "
+         "struck into the inside of the shoulder where it will outlast you.",
+         guard=4, skills={"athletics": 1}, weight=26, rarity="rare"),
+    gear("sporeward_mask", "A Sporeward Mask", "head", 280,
+         "Charcoal, wet linen and a picker's patience. The Rot goes through "
+         "everything eventually and it goes through this last.",
+         skills={"medicine": 2}, resist=[("poison", 0.5)], weight=1,
+         rarity="rare"),
+    gear("fulgurite_lens", "The Fulgurite Lens", "head", 340,
+         "Crater glass, ground at the Glass Quarter over nine years by a man "
+         "who would not say what he was grinding it for.",
+         skills={"lore": 2, "arcana": 1}, weight=1, rarity="very_rare"),
+    gear("rimeward_coat", "The Rimeward Coat", "cloak", 300,
+         "The Ice Moot cuts them from what the glacier gives back, and will "
+         "not sell one to anybody who has not set a cairn.",
+         skills={"athletics": 1, "survival": 1}, resist=[("cold", 0.5)],
+         weight=6, rarity="rare"),
+    gear("drowned_blade", "The Drowned Blade", "hand", 360,
+         "Off the battery floor, green to the hilt, and silver under the "
+         "green because the fort's armoury knew what the passage held.",
+         damage=("1d10", "slashing", "might"), properties=["silvered"],
+         tags=["silvered"], skills={"intimidation": 1}, weight=3,
+         rarity="very_rare"),
+]
 
 
 ITEMS = [
@@ -160,7 +254,14 @@ ITEMS = [
     {"id": "fungus_cap", "name": "Lantern Cap", "kind": "material", "value": 4,
      "weight": 0.2, "stackable": True, "tags": ["material"],
      "description": "Glows enough to read by for about nine hours."},
-]
+    {"id": "eel_skin", "name": "Eel Skin", "kind": "material", "value": 6,
+     "weight": 0.3, "stackable": True, "tags": ["material"],
+     "description": "Cured, it will outlast the boot it is sewn to."},
+    {"id": "wreck_brass", "name": "Wreck Brass", "kind": "material", "value": 12,
+     "weight": 1.5, "stackable": True, "tags": ["material", "treasure"],
+     "description": "Fittings off something that did not make the passage. "
+                    "The Countinghouse would rather you did not say where."},
+] + SIDE_GEAR
 
 
 # --- what everybody walks out of character creation holding ----------------

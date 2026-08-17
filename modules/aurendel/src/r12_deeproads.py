@@ -5,9 +5,10 @@ places: Karn Dolur, the Black Tarn on the moor, the Ember Reach, and the crater
 in the Glasslands. Halls cut by hands and caverns cut by water, with no clean
 line between them. One town, one village, eight stretches of dark.
 """
-from place import (area, poi, gate, toll, house, inn, smithy, store, workshop,
-                   temple, stable, warehouse, guild, square, landmark, ruin,
-                   delve)
+from place import (
+    area, poi, gate, toll, house, inn, smithy, store, workshop, temple,
+    guild, landmark, ruin, delve,
+)
 from dungeonkit import dungeon
 from prose import pool
 

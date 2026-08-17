@@ -4,9 +4,10 @@ North of the Skarnspine, past the Ice Road. A glacier with a coastline, one
 whaling town, one village of cairn-keepers, and six stretches of ice that do
 not much care about any of it. The hardest overland country on the continent.
 """
-from place import (area, poi, gate, toll, house, inn, smithy, store, workshop,
-                   temple, stable, warehouse, guild, square, landmark, ruin,
-                   delve)
+from place import (
+    area, poi, gate, house, inn, smithy, store, workshop, temple, warehouse,
+    landmark, ruin, delve,
+)
 from dungeonkit import dungeon
 from prose import pool
 

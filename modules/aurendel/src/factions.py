@@ -9,9 +9,15 @@ the Library also declares it.
 of the game: standing drifts back toward neutral, never crossing it. A faction
 with no decay never forgives, which is the right reading for the thing under
 the Deeproads and the wrong one for a city.
-"""
 
-FACTIONS = [
+The nine regional powers the side chains brought with them live in
+`sidefactions.py` and are concatenated on at the bottom. Kept apart because the
+six below are the story of the Unsealing and are read by the act files, and
+mixing the two lists would make it hard to see which is which.
+"""
+import sidefactions
+
+MAIN_FACTIONS = [
     {
         "id": "the_crown",
         "name": "The Crown",
@@ -107,7 +113,7 @@ FACTIONS = [
 # `severity` moves the named faction's standing when somebody identifies you.
 # Kill the witnesses and it costs nothing; that is the design, not a hole.
 
-DEED_KINDS = [
+MAIN_DEED_KINDS = [
     {"id": "ward_restored", "name": "Restored a Ward", "faction": "the_keepers",
      "severity": 12, "memorability": 2.0, "distortion": 0.1},
     {"id": "ward_broken", "name": "Broke a Ward", "faction": "the_keepers",
@@ -129,6 +135,13 @@ DEED_KINDS = [
     {"id": "lantern_lit", "name": "Lit the Great Lantern", "faction": "the_wayfinders",
      "severity": 25, "memorability": 4.0, "distortion": 0.05},
 ]
+
+
+# --- and the nine the side chains brought with them ------------------------
+# Concatenated here so `build.py` still has one name to ask for.
+
+FACTIONS = MAIN_FACTIONS + sidefactions.FACTIONS
+DEED_KINDS = MAIN_DEED_KINDS + sidefactions.DEED_KINDS
 
 
 # --- how memory behaves in this world -----------------------------------

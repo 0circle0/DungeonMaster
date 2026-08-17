@@ -4,9 +4,10 @@ Heather to the skyline in the north-east, and under the heather more graves
 than living people. One town built on a barrow, two villages, five stretches of
 moor, and the Nine Sisters standing on the highest of it.
 """
-from place import (area, poi, gate, toll, house, inn, smithy, store, workshop,
-                   temple, stable, warehouse, guild, square, landmark, ruin,
-                   delve)
+from place import (
+    area, poi, gate, house, inn, smithy, store, temple, stable, square,
+    landmark, ruin, delve,
+)
 from dungeonkit import dungeon
 from prose import pool
 

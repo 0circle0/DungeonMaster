@@ -10,8 +10,8 @@ quest the other locks out, each moves two factions in opposite directions, and
 off a shelf it was not shown. The critical path does not care which.
 """
 from questkit import (
-    quest, stage, arc, obj, reach, kill, talk, flagged, resolved_either_way,
-    set_flag, rep, give, deed, either, node, option, take_job, dialogue, npc,
+    quest, stage, arc, reach, kill, talk, flagged, resolved_either_way,
+    set_flag, rep, deed, either, node, option, take_job, dialogue, npc,
     shop,
 )
 from prose import pool

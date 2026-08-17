@@ -4,9 +4,10 @@ An archipelago off the south-west, reached only through eleven miles of moving
 shoal. Everything here arrived by water or was left by it, and most of the
 buildings used to float. One free port, two villages, five stretches of sea.
 """
-from place import (area, poi, gate, toll, house, inn, smithy, store, workshop,
-                   temple, stable, warehouse, guild, square, landmark, ruin,
-                   delve)
+from place import (
+    area, poi, gate, house, inn, smithy, store, workshop, temple, warehouse,
+    guild, square, landmark, ruin, delve,
+)
 from dungeonkit import dungeon
 from prose import pool
 

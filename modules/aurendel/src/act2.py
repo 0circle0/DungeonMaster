@@ -22,8 +22,8 @@ completes when either flag is set. A quest whose objectives are all optional
 can never complete at all.
 """
 from questkit import (
-    quest, stage, arc, obj, reach, kill, flagged, resolved_either_way,
-    set_flag, rep, give, deed, either, node, option, dialogue, npc, shop,
+    quest, stage, arc, reach, kill, flagged, resolved_either_way, set_flag,
+    rep, deed, either, node, option, dialogue, npc, shop,
 )
 from prose import pool
 

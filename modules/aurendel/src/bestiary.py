@@ -59,6 +59,51 @@ ABILITIES = [
     bite("rime_touch", "Rime Touch", "2d6", "cold",
          "Everything it holds stops moving quite so freely.",
          condition=("slowed", 2)),
+    # --- what the side chains brought with them ---------------------------
+    bite("latch", "Latch On", "1d6", "piercing",
+         "It does not bite so much as attach, and then not let go.",
+         condition=("bleeding", 3)),
+    bite("drag_under", "Drag Under", "1d8", "bludgeoning",
+         "A hand at the ankle, and the water is closer than it was.",
+         stat="might", condition=("prone", 1), cooldown=2),
+    bite("cudgel", "Cudgel", "1d6", "bludgeoning",
+         "A length of ash with a nail through it, swung by somebody who has "
+         "done this before."),
+    bite("cut_and_run", "Cut and Run", "1d6", "slashing",
+         "A short blade, low, and then twenty yards of shingle.",
+         stat="agility", condition=("bleeding", 2)),
+    bite("digging_claw", "Digging Claw", "1d10", "slashing",
+         "Made for spoil, and it does not know the difference.",
+         cooldown=2),
+    bite("bleed_white", "Bleed White", "2d4", "necrotic",
+         "Nothing you can feel happening, which is the trouble with it.",
+         stat="endurance", condition=("bleeding", 4)),
+    # Bludgeoning rather than a sound: the ruleset has no thunder damage type,
+    # and inventing one in a side chain would put a damage type in the world
+    # that no resistance, immunity or piece of gear anywhere knows about.
+    bite("toll", "Toll", "2d6", "bludgeoning",
+         "One note, under the water, and it is in your chest before it is in "
+         "your ears.", stat="presence", range_=30, targeting="allEnemies",
+         condition=("stunned", 1), cooldown=5),
+    bite("root_and_branch", "Root and Branch", "2d6", "bludgeoning",
+         "The beech has been growing round the hollow for four hundred years "
+         "and has opinions about being disturbed.", cooldown=2),
+    bite("scouring_wind", "Scouring Wind", "2d6", "slashing",
+         "Grit off two hundred miles of open grass, at the speed the grass "
+         "grew used to.", stat="agility", range_=20, targeting="allEnemies",
+         condition=("blinded", 2), cooldown=4),
+    bite("calving", "Calving", "2d8", "cold",
+         "A face of ice the height of a hall deciding, all at once, to be "
+         "somewhere else.", stat="might", targeting="allEnemies", range_=20,
+         condition=("prone", 1), cooldown=4),
+    bite("salt_burn", "Salt Burn", "2d6", "acid",
+         "Nine hundred years of pan salt, and it takes the water out of "
+         "whatever it is on.", stat="endurance", range_=10,
+         condition=("bleeding", 3)),
+    bite("vent_breath", "Vent Breath", "2d8", "fire",
+         "What the throat has been doing quietly for nine hundred years, done "
+         "all at once and at you.", stat="endurance", range_=15,
+         targeting="allEnemies", condition=("burning", 3), cooldown=4),
     {
         "id": "unmaking_word", "name": "The Unmaking Word",
         "description": "Not shouted. Said, once, in a language the wards were "
@@ -167,6 +212,84 @@ MONSTERS = [
                          "effects": [{"setFlag": {"flag": "warden_saw_you",
                                                   "value": True}}]}]),
 
+    # -- the Kingsvale side chains: the Weirwater and the setts -------------
+    # Level 2 and no silver resistance, like the grave hound and for the same
+    # reason: these are fought at level 1 or 2 with whatever came out of
+    # character creation, and halving a starting party's only damage source is
+    # how a side chain becomes a wall instead of a detour.
+    creature("weir_lamprey", "Weir Lamprey", 2, 35, A(11, 13, 13, 2, 11, 4),
+             ["latch"],
+             "Two feet of it, and a mouth that is all of it.",
+             creature_type="beast", size="small", faction="the_unsealed",
+             descriptors=["a thrashing", "a grey"],
+             loot="weir_scraps", immunities=["prone"], hp=8),
+    creature("sett_delver", "The Delver", 3, 120, A(15, 10, 15, 4, 12, 6),
+             ["digging_claw", "rend"],
+             "Whatever cut the far end of the setts has been at it a long "
+             "while, and has stopped needing to come up.",
+             creature_type="aberration", descriptors=["a pale", "a blind"],
+             behaviour=[{"priority": 10, "use": "digging_claw",
+                         "when": {"chance": 0.4}},
+                        {"priority": 0, "use": "rend"}],
+             loot="setts_hoard", immunities=["blinded", "frightened"],
+             hp=28, guard=13),
+
+    # -- under Aurenhal ----------------------------------------------------
+    # `faction: the_library` is the whole plot of the Bone Alley chain in one
+    # field. The Library buys grave ash and will not say why; somebody is being
+    # paid to go and get it, and they are not guild.
+    creature("cellar_thief", "An Unliveried Digger", 2, 45,
+             A(11, 14, 11, 9, 12, 10), ["cut_and_run"],
+             "Working the under without a charter, for wages somebody in a "
+             "much cleaner coat is paying.",
+             creature_type="humanoid", faction="the_library",
+             descriptors=["a wiry", "a soot-black"],
+             loot="vermin_scraps", hp=12),
+    creature("the_gaoler", "The Gaoler", 4, 190, A(15, 11, 15, 7, 12, 15),
+             ["stone_fist", "grave_chill", "call_the_shut"],
+             "The old gaol was bricked up with its register still on the desk "
+             "and somebody still on the book.",
+             descriptors=["a keyed", "a patient"],
+             behaviour=[{"priority": 20, "use": "call_the_shut",
+                         "when": {"chance": 0.25}},
+                        {"priority": 10, "use": "grave_chill"},
+                        {"priority": 0, "use": "stone_fist"}],
+             loot="gaol_hoard", conditional=["silvered_cache"],
+             interactions=HALF_UNLESS_SILVER,
+             immunities=["frightened", "poisoned"], hp=40, guard=14),
+
+    # -- the Silver Coast and Sarnport --------------------------------------
+    # Living people, and the only faction in the bestiary that is not a thing
+    # out of a hole. `deadMenTellNoTales` means how you deal with them is a
+    # decision with consequences rather than a formality.
+    creature("strand_wrecker", "A Wrecker", 2, 50, A(13, 12, 12, 9, 12, 9),
+             ["cudgel"],
+             "Lime under the fingernails and a lantern they only light in "
+             "certain weather.",
+             creature_type="humanoid", faction="the_salvors",
+             descriptors=["a squat", "a weathered"],
+             loot="strand_scraps", hp=14),
+    creature("drowned_hand", "A Drowned Hand", 3, 110, A(14, 9, 14, 4, 11, 8),
+             ["drag_under", "rend"],
+             "Came off the reef with the rest of the cargo and did not stop "
+             "at the tide line.",
+             descriptors=["a bloated", "a weed-hung"],
+             loot="strand_scraps", interactions=HALF_UNLESS_SILVER,
+             immunities=["poisoned", "prone"], hp=26),
+    creature("wreck_shade", "The Light on the Point", 4, 200,
+             A(12, 15, 13, 12, 14, 16),
+             ["grave_chill", "wither", "drag_under"],
+             "Something has been showing a light off Gannet Head for ninety "
+             "years, and the lighthouse is not it.",
+             descriptors=["a cold", "a shining"],
+             behaviour=[{"priority": 10, "use": "wither"},
+                        {"priority": 0, "use": "grave_chill"}],
+             loot="saltcliff_hoard", conditional=["silvered_cache"],
+             interactions=HALF_UNLESS_SILVER + [
+                 {"damageType": "cold", "multiplier": 0.5},
+                 {"damageType": "radiant", "multiplier": 2}],
+             immunities=["frightened", "poisoned", "prone"], hp=38, guard=15),
+
     # -- act II: the ward sites -------------------------------------------
     creature("thorn_thing", "Thorn-Thing", 3, 90, A(13, 15, 12, 5, 15, 8),
              ["rend", "glass_shard"],
@@ -222,6 +345,123 @@ MONSTERS = [
                            {"damageType": "bludgeoning", "multiplier": 2}],
              hp=44, guard=16),
 
+    # -- the Act II side chains --------------------------------------------
+    # Levels 4 to 6, to sit beside the ward routes rather than above them: a
+    # party that detours here is level 4 or 5 and carrying whatever Act I left
+    # them, and the boss of a side chain should be the hardest fight of that
+    # week without being harder than the ward at the end of the road.
+    creature("beech_hollow", "The Hollow Beech", 5, 230, A(17, 7, 17, 6, 13, 9),
+             ["root_and_branch", "rend"],
+             "Four hundred years growing round a hole somebody dug, and it "
+             "has taken the shape of what it grew around.",
+             creature_type="plant", size="large",
+             descriptors=["a vast", "a split"],
+             behaviour=[{"priority": 10, "use": "root_and_branch",
+                         "when": {"chance": 0.4}},
+                        {"priority": 0, "use": "rend"}],
+             loot="beeches_hoard", conditional=["silvered_cache"],
+             interactions=[{"damageType": "fire", "multiplier": 2},
+                           {"damageType": "piercing", "multiplier": 0.5}],
+             immunities=["frightened", "prone", "poisoned"], hp=54, guard=13),
+
+    creature("long_barrow_wight", "The East End", 5, 245,
+             A(13, 12, 14, 11, 13, 16),
+             ["bleed_white", "grave_chill", "call_the_shut"],
+             "The Long Barrow has two ends and only one of them was ever "
+             "dug. This is the other one's opinion about that.",
+             descriptors=["a dry", "a crowned"],
+             behaviour=[{"priority": 15, "use": "call_the_shut",
+                         "when": {"chance": 0.3}},
+                        {"priority": 10, "use": "bleed_white"},
+                        {"priority": 0, "use": "grave_chill"}],
+             loot="diggers_hoard", conditional=["silvered_cache"],
+             interactions=HALF_UNLESS_SILVER + [
+                 {"damageType": "necrotic", "multiplier": 0},
+                 {"damageType": "radiant", "multiplier": 2}],
+             immunities=["frightened", "poisoned", "bleeding"],
+             hp=50, guard=15),
+
+    creature("dust_shade", "The Dry River", 5, 235, A(12, 16, 13, 10, 14, 14),
+             ["scouring_wind", "glass_shard"],
+             "The river went somewhere else in somebody's great-grandfather's "
+             "time and something stayed in the bed waiting for it.",
+             descriptors=["a turning", "a gritted"],
+             behaviour=[{"priority": 10, "use": "scouring_wind",
+                         "when": {"chance": 0.35}},
+                        {"priority": 0, "use": "glass_shard"}],
+             loot="dry_river_hoard",
+             interactions=[{"damageType": "slashing", "multiplier": 0.5},
+                           {"damageType": "bludgeoning", "multiplier": 0.5},
+                           {"damageType": "cold", "multiplier": 1.5}],
+             immunities=["bleeding", "prone", "blinded"], hp=44, guard=16),
+
+    creature("sink_thing", "What Is In the Sink", 5, 250,
+             A(16, 11, 16, 5, 12, 8),
+             ["drag_under", "stone_fist"],
+             "The Weirwater goes into the ground at the swallet and comes out "
+             "eleven miles away. Something in between has never needed to "
+             "leave.",
+             creature_type="aberration", size="large",
+             descriptors=["a pallid", "a folded"],
+             behaviour=[{"priority": 10, "use": "drag_under",
+                         "when": {"chance": 0.4}},
+                        {"priority": 0, "use": "stone_fist"}],
+             loot="sink_hoard", conditional=["silvered_cache"],
+             interactions=[{"damageType": "cold", "multiplier": 0.5},
+                           {"damageType": "lightning", "multiplier": 2}],
+             immunities=["prone", "blinded", "frightened"], hp=58, guard=14),
+
+    creature("vent_wyrm", "The Thing In the Throat", 6, 330,
+             A(17, 12, 18, 7, 13, 10),
+             ["vent_breath", "cinder_lash", "stone_fist"],
+             "Nine hundred years of the vent going quietly, and the reason it "
+             "went quietly.",
+             creature_type="elemental", size="large",
+             descriptors=["a red", "a slow-moving"],
+             behaviour=[{"priority": 20, "use": "vent_breath",
+                         "when": {"chance": 0.35}},
+                        {"priority": 10, "use": "cinder_lash"},
+                        {"priority": 0, "use": "stone_fist"}],
+             loot="throat_hoard",
+             interactions=[{"damageType": "fire", "multiplier": 0},
+                           {"damageType": "cold", "multiplier": 2}],
+             immunities=["burning", "poisoned", "frightened"], hp=62, guard=15),
+
+    # -- Thornmere, and the first monsters the drowned biome has ever had ---
+    creature("leech_swarm", "Leech Swarm", 3, 95, A(6, 15, 12, 1, 10, 4),
+             ["bleed_white"],
+             "The warm channels breed them and the marsh has never once "
+             "objected.",
+             creature_type="beast", size="small", faction="the_unsealed",
+             descriptors=["a boiling", "a spreading"],
+             loot="marsh_scraps",
+             interactions=[{"damageType": "slashing", "multiplier": 0.5},
+                           {"damageType": "piercing", "multiplier": 0.5},
+                           {"damageType": "fire", "multiplier": 2}],
+             immunities=["frightened", "bleeding", "prone"], hp=18),
+    creature("bog_walker", "A Bog Walker", 4, 165, A(15, 9, 16, 4, 11, 9),
+             ["drag_under", "rend"],
+             "The marsh keeps what it takes and occasionally gives some of it "
+             "back on its feet.",
+             descriptors=["a peat-black", "a dripping"],
+             loot="marsh_scraps", interactions=HALF_UNLESS_SILVER,
+             immunities=["poisoned", "prone", "slowed"], hp=36),
+    creature("bell_shade", "What Rings the Bell", 5, 255,
+             A(11, 14, 13, 13, 14, 17),
+             ["toll", "grave_chill", "bleed_white"],
+             "The old church went under in one night and the bell has been "
+             "heard since, which is a thing the new tower will not discuss.",
+             descriptors=["a tolling", "a drowned"],
+             behaviour=[{"priority": 20, "use": "toll", "when": {"chance": 0.35}},
+                        {"priority": 10, "use": "bleed_white"},
+                        {"priority": 0, "use": "grave_chill"}],
+             loot="bell_hoard", conditional=["silvered_cache"],
+             interactions=HALF_UNLESS_SILVER + [
+                 {"damageType": "necrotic", "multiplier": 0},
+                 {"damageType": "radiant", "multiplier": 2}],
+             immunities=["frightened", "poisoned", "prone", "silenced"],
+             hp=48, guard=15),
+
     # -- act III: the Deeproads -------------------------------------------
     creature("fungal_horror", "Fungal Horror", 6, 300, A(15, 8, 18, 4, 12, 8),
              ["spore_burst", "stone_fist"],
@@ -239,6 +479,100 @@ MONSTERS = [
              loot="deep_scraps", interactions=HALF_UNLESS_SILVER + [
                  {"damageType": "cold", "multiplier": 0}],
              immunities=["frightened", "slowed"], hp=46, guard=16),
+    # -- the Act III side chains -------------------------------------------
+    # Levels 7 and 8, beside the Deeproads rather than beyond it. A party here
+    # has two ward-keys and whatever Act II left them; these are meant to be
+    # the hardest fights available that are not the Keeper of the Ninth.
+    creature("seam_thing", "What Is In the Old Seams", 7, 400,
+             A(18, 10, 18, 6, 12, 9),
+             ["stone_fist", "digging_claw", "call_the_shut"],
+             "Karn Dolur stopped working the old seams in the year four "
+             "hundred and has never written down which year it stopped for.",
+             creature_type="elemental", size="large",
+             descriptors=["a seamed", "a grinding"],
+             behaviour=[{"priority": 15, "use": "call_the_shut",
+                         "when": {"chance": 0.25}},
+                        {"priority": 10, "use": "digging_claw"},
+                        {"priority": 0, "use": "stone_fist"}],
+             loot="seams_hoard", conditional=["silvered_cache"],
+             interactions=[{"damageType": "piercing", "multiplier": 0.5},
+                           {"damageType": "slashing", "multiplier": 0.5},
+                           {"damageType": "lightning", "multiplier": 1.5}],
+             immunities=["poisoned", "bleeding", "frightened", "blinded"],
+             hp=78, guard=17),
+
+    creature("rot_mother", "The Rot", 8, 700, A(16, 9, 19, 8, 13, 12),
+             ["spore_burst", "bleed_white", "stone_fist", "call_the_shut"],
+             "Mycelt grows what the Deeproads eat. This grows Mycelt, and has "
+             "been patient about the order of those two facts.",
+             creature_type="plant", size="large",
+             descriptors=["a luminous", "a breathing"],
+             behaviour=[{"priority": 25, "use": "spore_burst",
+                         "when": {"chance": 0.4}},
+                        {"priority": 15, "use": "call_the_shut",
+                         "when": {"chance": 0.25}},
+                        {"priority": 10, "use": "bleed_white"},
+                        {"priority": 0, "use": "stone_fist"}],
+             loot="rot_hoard", conditional=["silvered_cache"],
+             interactions=[{"damageType": "poison", "multiplier": 0},
+                           {"damageType": "necrotic", "multiplier": 0.5},
+                           {"damageType": "fire", "multiplier": 2}],
+             immunities=["poisoned", "bleeding", "frightened", "prone"],
+             hp=96, guard=16),
+
+    creature("salt_thing", "The Ninth Well", 7, 420, A(14, 13, 16, 11, 14, 13),
+             ["salt_burn", "glass_shard", "wither"],
+             "Eight wells were sunk for water. The ninth was sunk for "
+             "something else and the diggers' camp does not go near it.",
+             creature_type="aberration", descriptors=["a crusted", "a weeping"],
+             behaviour=[{"priority": 10, "use": "salt_burn"},
+                        {"priority": 0, "use": "glass_shard"}],
+             loot="ninth_well_hoard", conditional=["silvered_cache"],
+             interactions=[{"damageType": "acid", "multiplier": 0},
+                           {"damageType": "cold", "multiplier": 1.5},
+                           {"damageType": "bludgeoning", "multiplier": 1.5}],
+             immunities=["poisoned", "bleeding", "blinded"], hp=70, guard=16),
+
+    creature("cairn_thing", "What the Last Cairn Held", 7, 430,
+             A(17, 11, 17, 9, 13, 14),
+             ["rime_touch", "calving", "grave_chill"],
+             "The Ice Moot has kept eleven hundred cairns for nine hundred "
+             "years and this is the one they count from.",
+             size="large", descriptors=["a rimed", "a shouldered"],
+             behaviour=[{"priority": 20, "use": "calving",
+                         "when": {"chance": 0.3}},
+                        {"priority": 10, "use": "rime_touch"},
+                        {"priority": 0, "use": "grave_chill"}],
+             loot="last_cairn_hoard", conditional=["silvered_cache"],
+             interactions=HALF_UNLESS_SILVER + [
+                 {"damageType": "cold", "multiplier": 0},
+                 {"damageType": "fire", "multiplier": 1.5}],
+             immunities=["frightened", "slowed", "poisoned", "prone"],
+             hp=82, guard=17),
+
+    creature("reef_thing", "The Battery", 7, 410, A(16, 13, 16, 7, 14, 11),
+             ["drag_under", "glass_shard", "rend"],
+             "The drowned fort's guns are still pointed at the passage and "
+             "something down there is still minding them.",
+             size="large", descriptors=["a barnacled", "a green-black"],
+             behaviour=[{"priority": 10, "use": "drag_under",
+                         "when": {"chance": 0.35}},
+                        {"priority": 0, "use": "rend"}],
+             loot="drowned_fort_hoard", conditional=["silvered_cache"],
+             interactions=HALF_UNLESS_SILVER + [
+                 {"damageType": "cold", "multiplier": 0.5},
+                 {"damageType": "lightning", "multiplier": 2}],
+             immunities=["prone", "poisoned", "frightened"], hp=74, guard=16),
+
+    creature("rime_wight", "A Rime Wight", 6, 300, A(14, 12, 15, 8, 12, 13),
+             ["rime_touch", "grave_chill"],
+             "The ice gives them back in the order it took them, which is not "
+             "the order anybody would choose.",
+             descriptors=["a blue-white", "a stiffened"],
+             loot="ice_scraps", interactions=HALF_UNLESS_SILVER + [
+                 {"damageType": "cold", "multiplier": 0}],
+             immunities=["frightened", "slowed"], hp=42, guard=15),
+
     creature("door_keeper", "The Keeper of the Ninth", 8, 900,
              A(18, 13, 18, 16, 15, 18),
              ["unmaking_word", "wither", "stone_fist", "call_the_shut"],
