@@ -13,13 +13,13 @@ The branch is that, exactly: heed the reading and stop the works, or keep the
 ore moving and hope the eleven are wrong for the third time in nine hundred
 years. Neither faction is villainous. One of them is going to be wrong.
 """
-from questkit import (
+from dmkit.quests import (
     arc, stage, reach, kill, talk, flagged, resolved_either_way,
     set_flag, rep, give, deed, either, node, option, take_job, dialogue, npc,
     shop,
 )
-from sidekit import chain, link, ACT_GATES
-from prose import pool
+from acts import chain, link, ACT_GATES
+from dmkit.prose import pool
 
 KEY = "throat"
 

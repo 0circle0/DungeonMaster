@@ -15,49 +15,36 @@ canonical base module and this script copies its rules, its character content,
 and its 198 system-text messages into the world. One source of truth, two
 standalone modules on disk — which is what the tooling wants.
 """
-import collections
-import json
-import os
-import sys
-
-HERE = os.path.dirname(os.path.abspath(__file__))
-sys.path.insert(0, HERE)
+import _bootstrap  # noqa: F401  sys.path; must come first
+import os  # noqa: E402
 
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", ".."))
 OUT = os.path.join(ROOT, "modules/aurendel")
 BASE = os.path.join(ROOT, "modules/core_fantasy/module.json")
 
+from dmkit import assemble  # noqa: E402
 import materials  # noqa: E402
-import prose  # noqa: E402
+from dmkit import items as dmkit_items  # noqa: E402
+from dmkit import prose  # noqa: E402
 import factions  # noqa: E402
 import items  # noqa: E402
 import bestiary  # noqa: E402
 import loot  # noqa: E402
 import story  # noqa: E402
-
-try:
-    import regions  # noqa: E402
-except ImportError:
-    regions = None
-
-
-def load_base():
-    with open(BASE) as f:
-        return json.load(f)
+import regions  # noqa: E402
 
 
 def main():
-    base = load_base()
+    base = assemble.load_base(BASE)
 
-    areas = regions.areas() if regions else []
-    pois = regions.pois() if regions else []
-    gates = regions.gates() if regions else []
-    dungeons = regions.dungeons() if regions else []
-    room_templates = regions.room_templates() if regions else []
+    areas = regions.areas()
+    pois = regions.pois()
+    gates = regions.gates()
+    dungeons = regions.dungeons()
+    room_templates = regions.room_templates()
     biome_list = materials.biomes()
 
-    if regions:
-        regions.attach_room_templates(biome_list)
+    regions.attach_room_templates(biome_list)
     # The questline turns its own route live — encounters, loot, and rooms
     # that are not empty — and leaves the rest of the continent alone.
     story.attach_content(biome_list, dungeons, room_templates, areas)
@@ -89,33 +76,21 @@ def main():
     # equipped weapon (rules/combat/attack.ts) and there were no weapons.
     content = {k: list(base["content"][k])
                for k in ("skills", "abilities", "ancestries", "classes")}
-    content["classes"] = items.outfit(content["classes"])
+    content["classes"] = dmkit_items.outfit(content["classes"], items.CLASS_KIT)
     content["abilities"] = content["abilities"] + bestiary.ABILITIES
     content["items"] = items.ITEMS + story.items()
     content["lootTables"] = loot.LOOT_TABLES + story.loot_tables()
     content["monsters"] = bestiary.MONSTERS + story.monsters()
     content["factions"] = factions.FACTIONS
     content["npcs"] = story.npcs()
-    content["traps"] = regions.traps() if regions else []
+    content["traps"] = regions.traps()
 
     # The base module's sense-impression pools come along with `rules.senses`,
     # which points at them by name.
-    text_grammar = list(base["narrative"]["textGrammar"]) + prose.registered()
-    seen, merged = set(), []
-    for entry in text_grammar:
-        if entry["id"] in seen:
-            continue
-        seen.add(entry["id"])
-        merged.append(entry)
-    merged.sort(key=lambda e: e["id"])
+    merged = assemble.text_grammar(base["narrative"]["textGrammar"],
+                                   prose.registered())
 
-    doc = collections.OrderedDict()
-    doc["format"] = 1
-    doc["id"] = "aurendel"
-    doc["version"] = "1.0.0"
-    doc["engine"] = "^1.0.0"
-    doc["extends"] = None
-    doc["meta"] = {
+    meta = {
         "title": "Aurendel",
         "author": "DungeonMaster",
         "description": (
@@ -129,10 +104,7 @@ def main():
         "tags": ["world", "fantasy", "sandbox", "aurendel"],
         "license": "",
     }
-    doc["rules"] = base["rules"]
-    doc["content"] = content
-    doc["world"] = world
-    doc["narrative"] = {
+    narrative = {
         "textGrammar": merged,
         "systemText": base["narrative"]["systemText"],
         "deedKinds": factions.DEED_KINDS,
@@ -143,20 +115,20 @@ def main():
         "lore": story.lore(),
         "loreThreads": story.lore_threads(),
     }
-    doc["start"] = regions.start() if regions else {}
+    start = regions.start()
 
     # Winning the Unsealing does not end the run. Without this the engine sets
     # `outcome: 'victory'` and `settle` returns early ever after — no combat,
     # no encounters, no affordances — and every trial in `story.TRIAL_MODULES`
     # would validate perfectly and be unreachable, because all of them are
     # gated behind the flag `the_unsealing` writes on its way out.
-    doc["start"]["postVictory"] = "continue"
+    start["postVictory"] = "continue"
 
-    os.makedirs(OUT, exist_ok=True)
-    path = os.path.join(OUT, "module.json")
-    with open(path, "w") as f:
-        json.dump(doc, f, indent=2)
-        f.write("\n")
+    doc = assemble.document(
+        module_id="aurendel", version="1.0.0", engine="^1.0.0", meta=meta,
+        rules=base["rules"], content=content, world=world,
+        narrative=narrative, start=start)
+    path = assemble.write(doc, OUT)
 
     print(f"wrote {path}")
     print(f"  {len(areas)} areas, {len(pois)} points of interest, "

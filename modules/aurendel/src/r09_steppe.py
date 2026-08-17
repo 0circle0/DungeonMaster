@@ -8,8 +8,8 @@ from place import (
     area, poi, gate, toll, house, inn, smithy, store, workshop, temple,
     stable, square, landmark, ruin, delve,
 )
-from dungeonkit import dungeon
-from prose import pool
+from dmkit.dungeons import dungeon
+from dmkit.prose import pool
 
 WILD, TIMBER = "steppe", "urban_timber"
 TAGS = ["sunward_steppe"]

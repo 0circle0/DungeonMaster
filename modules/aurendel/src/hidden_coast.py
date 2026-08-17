@@ -20,8 +20,8 @@ survey was never filed.**
     entry each October, taken up and never collected, and the fee paid in coin
     by somebody.
 """
-from questkit import npc, shop, quest, reach, kill, flagged, arc
-from lorekit import (
+from dmkit.quests import npc, shop, quest, reach, kill, flagged, arc
+from lore import (
     clue, thread, rumour, favour, talk, coldshoulder, finding, rumoured,
     trophy, keepsake, carried, relic, sealed, blocked,
 )
@@ -348,7 +348,7 @@ NPCS = [
 ]
 
 from bestiary import creature, A, HALF_UNLESS_SILVER  # noqa: E402
-from loot import group, encounters  # noqa: E402
+from dmkit.loot import group, encounters  # noqa: E402
 
 _COAST = dict(creature_type="humanoid", faction="the_salvors")
 

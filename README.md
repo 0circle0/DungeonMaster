@@ -25,6 +25,8 @@ State is fully serializable *including RNG state*, so `seed + action log` reprod
 | `apps/play` | Browser play: click-first, command bar kept. |
 | `apps/editor` | The authoring studio. |
 | `modules/` | Game modules. `minimal` is the no-hardcoding proof. |
+| `modules/shared` | `dmkit`, the Python API a world of any size is authored against. Not a module — no `module.json` — see [modules/shared/README.md](modules/shared/README.md). |
+| `pyrightconfig.json` | Editor/`npx pyright` search paths for the module generators. Type checking off; missing imports and undefined names are errors. |
 | `mods/` | Installed mods, `engine/` and `editor/`. Not packaged with any game — see [mods/README.md](mods/README.md). |
 
 ## The DSL

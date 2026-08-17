@@ -14,12 +14,12 @@ If the Silver Coast chain has already been run, the salvors' standing arrives
 with you — informing on the Strand is severity -22 and travels, and the Isles
 are where it travels to.
 """
-from questkit import (
+from dmkit.quests import (
     arc, stage, reach, kill, talk, flagged, resolved_either_way, set_flag,
     rep, deed, either, node, option, take_job, dialogue, npc, shop,
 )
-from sidekit import chain, link, ACT_GATES
-from prose import pool
+from acts import chain, link, ACT_GATES
+from dmkit.prose import pool
 
 KEY = "drownedfort"
 

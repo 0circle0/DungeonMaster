@@ -13,12 +13,12 @@ it that — `the_ice_moot` relates to `the_keepers` at 0.4, so a party that has
 been restoring wards all game arrives here already trusted, and a party that
 has been breaking them arrives to a very short conversation.
 """
-from questkit import (
+from dmkit.quests import (
     arc, stage, reach, kill, talk, flagged, resolved_either_way, set_flag,
     rep, deed, either, node, option, take_job, dialogue, npc, shop,
 )
-from sidekit import chain, link, ACT_GATES
-from prose import pool
+from acts import chain, link, ACT_GATES
+from dmkit.prose import pool
 
 KEY = "lastcairn"
 

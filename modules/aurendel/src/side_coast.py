@@ -16,13 +16,13 @@ Informing is worth more coin and costs the Salvors a standing they do not give
 back: `wreck_informed` is severity -22 and travels, which on this coast means
 every hut between here and the Narrows by the end of the month.
 """
-from questkit import (
+from dmkit.quests import (
     arc, stage, reach, kill, talk, flagged, resolved_either_way,
     set_flag, rep, give, deed, either, node, option, take_job, dialogue, npc,
     shop,
 )
-from sidekit import chain, link, ACT_GATES
-from prose import pool
+from acts import chain, link, ACT_GATES
+from dmkit.prose import pool
 
 KEY = "strand"
 

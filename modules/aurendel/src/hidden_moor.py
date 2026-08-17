@@ -20,8 +20,8 @@ has been putting them back.**
   * **The Drive That Goes Over** — a roofless shooting house with fresh wear in
     eight places, and a beaters' line on the estate map that runs off the edge.
 """
-from questkit import npc, shop, quest, reach, kill, flagged, arc
-from lorekit import (
+from dmkit.quests import npc, shop, quest, reach, kill, flagged, arc
+from lore import (
     clue, thread, rumour, favour, talk, coldshoulder, finding, rumoured,
     trophy, keepsake, carried, relic, sealed, blocked,
 )
@@ -354,7 +354,7 @@ NPCS = [
 ]
 
 from bestiary import creature, A, HALF_UNLESS_SILVER  # noqa: E402
-from loot import group, encounters  # noqa: E402
+from dmkit.loot import group, encounters  # noqa: E402
 
 _MOOR = dict(creature_type="humanoid", faction="the_library")
 

@@ -9,27 +9,11 @@ Three things here that are easy to get wrong and invisible when you do:
     dungeon, silently.
   * `roomTemplate.encounterChance` is 0 on all fifty-six of Aurendel's
     templates and `world.generationDefaults.encounterChance` is 0 too, so a
-    dungeon stays empty however many monsters exist. `encounters.py` raises it
+    dungeon stays empty however many monsters exist. `story.attach_content` raises it
     on the biomes the questline actually crosses and leaves the rest of the
     continent quiet.
 """
-
-
-def w(weight, item, quantity="1", **kw):
-    entry = {"item": item, "quantity": quantity}
-    entry.update(kw)
-    return {"weight": weight, "value": entry}
-
-
-def table(tid, entries, *, rolls="1", empty=0.0, name=None, bonus_skill=None):
-    out = {"id": tid, "entries": entries, "rolls": rolls, "emptyChance": empty}
-    if name:
-        out["name"] = name
-    if bonus_skill:
-        out["bonusRollSkill"] = bonus_skill
-        out["bonusRolls"] = {"onSuccess": 1, "onCritical": 2}
-    return out
-
+from dmkit.loot import encounters, group, table, w  # noqa: F401
 
 LOOT_TABLES = [
     # -- what ordinary things leave --------------------------------------
@@ -201,20 +185,6 @@ LOOT_TABLES = [
 # --- encounters -----------------------------------------------------------
 # `minDepth: 0` throughout: area and POI entry pass no depth, so anything
 # higher never fires above ground.
-
-def group(gid, entries, *, weight=1, hostile=True, requires=None):
-    out = {"id": gid, "weight": weight, "hostile": hostile,
-           "entries": [{"monster": m, "count": c, "scaleWithLevel": s}
-                       for m, c, s in entries]}
-    if requires:
-        out["requires"] = requires
-    return out
-
-
-def encounters(eid, groups, *, chance=0.35, empty=6, scale=3, max_depth=999):
-    return {"id": eid, "minDepth": 0, "maxDepth": max_depth, "chance": chance,
-            "emptyWeight": empty, "scalePerLevels": scale, "groups": groups}
-
 
 ENCOUNTER_TABLES = [
     encounters("kingsvale_wanderers", [

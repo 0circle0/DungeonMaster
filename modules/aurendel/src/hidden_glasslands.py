@@ -25,8 +25,8 @@ The Crater Stair is the over-tuned one: level 7 ground at the bottom of a level
 6 district, sealed on a lens the cutters will not sell and something that turns
 heat.
 """
-from questkit import npc, shop, quest, reach, kill, flagged, arc
-from lorekit import (
+from dmkit.quests import npc, shop, quest, reach, kill, flagged, arc
+from lore import (
     clue, thread, rumour, favour, talk, coldshoulder, finding, rumoured,
     trophy, keepsake, carried, relic, sealed, blocked,
 )
@@ -472,7 +472,7 @@ NPCS = [
 # --- what is down there ----------------------------------------------------
 
 from bestiary import creature, A, HALF_UNLESS_SILVER  # noqa: E402
-from loot import group, encounters  # noqa: E402
+from dmkit.loot import group, encounters  # noqa: E402
 
 _TOWN = dict(creature_type="humanoid", faction="the_water_wardens")
 

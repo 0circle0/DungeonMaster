@@ -6,7 +6,7 @@ dungeon mouths, 20 ruins, 13 camps, 12 shrines and 159 shops and houses — all
 authored, all reachable, and all of it inert. Vashta Qal is on this list twice:
 the module's second city, two districts, and nobody in either of them.
 
-Hidden threads go here and nowhere else. That is rule 1 in `lorekit`, and this
+Hidden threads go here and nowhere else. That is rule 1 in `dmkit.lore`, and this
 is the list it is checked against.
 
 **Frozen deliberately.** Computing it at build time would be circular — the

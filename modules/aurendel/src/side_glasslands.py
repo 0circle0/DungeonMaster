@@ -13,12 +13,12 @@ The Fulgurite Lens is the best skill item in the module — two ranks of lore an
 one of arcana, ground over nine years by a man at the Glass Quarter who would
 not say what he was grinding it for. He knew.
 """
-from questkit import (
+from dmkit.quests import (
     arc, stage, reach, kill, talk, flagged, resolved_either_way, set_flag,
     rep, deed, either, node, option, take_job, dialogue, npc, shop,
 )
-from sidekit import chain, link, ACT_GATES
-from prose import pool
+from acts import chain, link, ACT_GATES
+from dmkit.prose import pool
 
 KEY = "ninthwell"
 

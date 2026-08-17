@@ -1,4 +1,4 @@
-"""Aurendel — quests, dialogue, and the shapes branching actually takes.
+"""Quests, dialogue, and the shapes branching actually takes.
 
 The engine has no branch primitive. A quest has one linear stage cursor and one
 completion test, and everything that forks is built out of flags and
@@ -29,7 +29,9 @@ Traps this file exists to avoid:
   * A stage whose objectives are all `optional` is skipped entirely — its
     `onStart` and `onComplete` never run.
   * **`objective.target` is not a ref.** A typo compiles perfectly clean and
-    the objective simply never fires. `check_quests.py` is the answer to that.
+    the objective simply never fires. `dmkit.lint.objective_targets` is the
+    answer to that, and it is the reason a module wants a linter of its own on
+    top of `npm run validate`.
 """
 
 

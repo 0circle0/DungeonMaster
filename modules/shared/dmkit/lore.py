@@ -1,4 +1,4 @@
-"""Aurendel — the hidden threads, and the five rules they keep.
+"""Hidden threads — content nobody hands you, and the rules it keeps.
 
 A hidden thread is a thing nobody hands you. You hear a partial fact in one
 village, another one four days away, and eventually you know where to go. There
@@ -35,7 +35,24 @@ Two engine facts this file exists to encode, both of which bite silently:
   * **`difficulty` is an `Expr`**, and evaluated against the *speaker's* scope,
     so `reputation.<faction>` in the formula is their faction's opinion of you.
 """
-from prose import pool
+import collections
+
+from dmkit.items import gear
+from dmkit.prose import pool
+
+# The player-facing English these constructors would otherwise have to invent.
+# A module supplies it once; there is no default, because a refusal line is
+# authored narration and a shared guess would be one world's register imposed
+# on every other. See `modules/aurendel/src/lore.py` for a worked set.
+Voice = collections.namedtuple("Voice", [
+    "go_on",           # take the next clue and return to the greeting
+    "leave_it",        # decline, or walk away from a cold shoulder
+    "thanks",          # accept a handed-over item
+    "then_no",         # decline a refused favour
+    "leave",           # end the conversation
+    "rumour_refused",  # what somebody who will not tell you says
+    "favour_refused",  # what somebody who will not give it up says
+])
 
 # --- clues ----------------------------------------------------------------
 
@@ -89,8 +106,9 @@ def standing_dc(base, faction, *, span=6, per=5):
         {"div": [{"ref": f"reputation.{faction}", "else": 0}, per]}, -span, span]}]}
 
 
-def rumour(key, ask, told, cid, *, skill="persuasion", base=12, faction=None,
-           refused=None, cost=1, back="greet", requires=None, span=6):
+def rumour(key, ask, told, cid, *, voice, skill="persuasion", base=12,
+           faction=None, refused=None, cost=1, back="greet", requires=None,
+           span=6):
     """A clue somebody has, behind a roll that their opinion of you moves.
 
     Returns `(option, nodes)` — three pieces, because the clue cannot live on
@@ -127,16 +145,15 @@ def rumour(key, ask, told, cid, *, skill="persuasion", base=12, faction=None,
 
     nodes = [
         {"id": yes, "says": [{"text": told}], "onEnter": [learn(cid)],
-         "options": [{"id": f"{key}_on", "text": "Go on.", "goto": back,
+         "options": [{"id": f"{key}_on", "text": voice.go_on, "goto": back,
                       "effects": [], "onceOnly": False,
                       "showWhenLocked": False, "lockedHint": ""}],
          "redirectWhen": []},
         {"id": no,
-         "says": [{"text": refused or "“I've said all I mean to,” "
-                              "they say, and go back to what they were doing."}],
+         "says": [{"text": refused or voice.rumour_refused}],
          "onEnter": ([{"adjustReputation": {"faction": faction, "amount": -cost}}]
                      if faction and cost else []),
-         "options": [{"id": f"{key}_drop", "text": "Leave it.", "goto": back,
+         "options": [{"id": f"{key}_drop", "text": voice.leave_it, "goto": back,
                       "effects": [], "onceOnly": False,
                       "showWhenLocked": False, "lockedHint": ""}],
          "redirectWhen": []},
@@ -144,8 +161,9 @@ def rumour(key, ask, told, cid, *, skill="persuasion", base=12, faction=None,
     return option, nodes
 
 
-def favour(key, ask, given_says, iid, *, skill="persuasion", base=14, faction=None,
-           refused=None, cost=2, back="greet", requires=None, span=6, extra=()):
+def favour(key, ask, given_says, iid, *, voice, skill="persuasion", base=14,
+           faction=None, refused=None, cost=2, back="greet", requires=None,
+           span=6, extra=()):
     """Asking somebody for the thing they are holding.
 
     The same three pieces as {@link rumour} and for the same reason — the item
@@ -178,16 +196,15 @@ def favour(key, ask, given_says, iid, *, skill="persuasion", base=14, faction=No
     nodes = [
         {"id": yes, "says": [{"text": given_says}],
          "onEnter": handover(iid) + list(extra),
-         "options": [{"id": f"{key}_thanks", "text": "Thank you.", "goto": back,
+         "options": [{"id": f"{key}_thanks", "text": voice.thanks, "goto": back,
                       "effects": [], "onceOnly": False,
                       "showWhenLocked": False, "lockedHint": ""}],
          "redirectWhen": []},
         {"id": no,
-         "says": [{"text": refused or "“No,” they say, and that is the whole "
-                              "of the answer you are getting."}],
+         "says": [{"text": refused or voice.favour_refused}],
          "onEnter": ([{"adjustReputation": {"faction": faction, "amount": -cost}}]
                      if faction and cost else []),
-         "options": [{"id": f"{key}_leave", "text": "Then no.", "goto": back,
+         "options": [{"id": f"{key}_leave", "text": voice.then_no, "goto": back,
                       "effects": [], "onceOnly": False,
                       "showWhenLocked": False, "lockedHint": ""}],
          "redirectWhen": []},
@@ -195,8 +212,8 @@ def favour(key, ask, given_says, iid, *, skill="persuasion", base=14, faction=No
     return option, nodes
 
 
-def talk(did, start, greet_says, pieces, *, extra_nodes=(), redirects=(),
-         extra_options=(), leave="Nothing."):
+def talk(did, start, greet_says, pieces, *, voice, extra_nodes=(), redirects=(),
+         extra_options=(), leave=None):
     """A conversation assembled from `rumour`/`favour` pieces.
 
     Each piece is an `(option, nodes)` pair. The greeting collects the options
@@ -205,7 +222,8 @@ def talk(did, start, greet_says, pieces, *, extra_nodes=(), redirects=(),
     added is a load error, and a node with no options ends the conversation.
     """
     options = [piece[0] for piece in pieces] + list(extra_options)
-    options.append({"id": f"{start}_leave", "text": leave, "effects": [],
+    options.append({"id": f"{start}_leave", "text": leave or voice.leave,
+                    "effects": [],
                     "onceOnly": False, "showWhenLocked": False, "lockedHint": ""})
 
     nodes = [{
@@ -221,7 +239,7 @@ def talk(did, start, greet_says, pieces, *, extra_nodes=(), redirects=(),
     return {"id": did, "start": start, "nodes": nodes}
 
 
-def coldshoulder(key, faction, at, says, *, back=None):
+def coldshoulder(key, faction, at, says, *, voice, back=None):
     """Below `at` standing, this person will not discuss it at all.
 
     Returns `(redirect, node)`. The node has one way out rather than none: a
@@ -235,7 +253,7 @@ def coldshoulder(key, faction, at, says, *, back=None):
     nid = f"{key}_cold"
     redirect = ({"factions": [{"faction": faction, "maxStanding": at}]}, nid)
     node = {"id": nid, "says": [{"text": says}], "onEnter": [],
-            "options": ([{"id": f"{key}_go", "text": "Leave it.", "goto": back,
+            "options": ([{"id": f"{key}_go", "text": voice.leave_it, "goto": back,
                           "effects": [], "onceOnly": False,
                           "showWhenLocked": False, "lockedHint": ""}]
                         if back else []),
@@ -370,11 +388,10 @@ def relic(gid, name, slot, description, *, value, rarity=None, skills=None,
           properties=(), weight=1, tags=()):
     """The payoff: gear no questline offers.
 
-    Same shape as `sidekit.gear`, and deliberately the same four slots — `head`,
+    Same shape as `dmkit.items.gear`, and deliberately the same four slots — `head`,
     `cloak`, `ring`, `belt` hold nothing the main line was tuned against, so a
     thread can pay in real power without touching those numbers.
     """
-    from sidekit import gear
     return gear(gid, name, slot, value, description, skills=skills, guard=guard,
                 initiative=initiative, carry=carry, resist=resist, weight=weight,
                 rarity=rarity, tags=["fabled", *tags], damage=damage,

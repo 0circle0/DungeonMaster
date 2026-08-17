@@ -1,0 +1,41 @@
+{
+  // Editor support for the module generators. Without this, every
+  // `from dmkit.x import y` in modules/*/src is an unresolved-import squiggle,
+  // because the path that makes it work is built at runtime by `_bootstrap.py`
+  // and no static analyser can see a `sys.path.insert`.
+  //
+  // Pylance and the pyright CLI both read this file, so the editor and
+  // `npx pyright` agree.
+  "include": ["modules"],
+  "exclude": ["**/__pycache__"],
+
+  // The Python here carries no type annotations and never has — it is a
+  // generator for a JSON document, checked by rebuilding and diffing the
+  // output (see modules/aurendel/src/readme.md). Turning type inference on
+  // would report a `weight=0.2` against an inferred `int` and little else of
+  // value, so this is deliberately off.
+  //
+  // A missing import is a different matter: it is a hard failure at runtime,
+  // so it stays an error rather than dropping to `off`'s default warning.
+  "typeCheckingMode": "off",
+  "reportMissingImports": "error",
+  "reportUndefinedVariable": "error",
+
+  // One entry per directory that gets its own sys.path, matching what
+  // `_bootstrap.py` builds: the shared package first, then the module's own
+  // src, because the region and story files import their siblings by bare
+  // name through importlib. A second world module gets a fourth entry here.
+  "executionEnvironments": [
+    {
+      "root": "modules/aurendel/src",
+      "extraPaths": ["modules/shared", "modules/aurendel/src"]
+    },
+    {
+      "root": "modules/shared",
+      "extraPaths": ["modules/shared"]
+    },
+    {
+      "root": "modules/core_fantasy"
+    }
+  ]
+}

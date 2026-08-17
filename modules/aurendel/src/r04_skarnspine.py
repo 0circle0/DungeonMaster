@@ -7,8 +7,8 @@ north to the ice go through here, and the pass is shut more often than not.
 from place import (area, poi, gate, toll, house, inn, smithy, store, workshop,
                    temple, stable, warehouse, guild, square, landmark, ruin,
                    delve)
-from dungeonkit import dungeon
-from prose import pool
+from dmkit.dungeons import dungeon
+from dmkit.prose import pool
 
 WILD, STONE, TIMBER, DELVED = "alpine", "urban_stone", "urban_timber", "urban_delved"
 TAGS = ["skarnspine"]

@@ -7,8 +7,8 @@ is where a party starts, so it is deliberately the safest ground on the
 continent and the densest in doors you can open.
 """
 from place import area, poi, gate, toll
-from dungeonkit import dungeon
-from prose import pool
+from dmkit.dungeons import dungeon
+from dmkit.prose import pool
 
 B_WILD = "vale"
 B_STONE = "urban_stone"

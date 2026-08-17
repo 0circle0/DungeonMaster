@@ -14,26 +14,28 @@ are there for the day it is not.
 
 # --- the abilities they attack with ---------------------------------------
 
-def bite(aid, name, dice, damage_type, description, *, stat="might", range_=0,
-         condition=None, cooldown=0, targeting="single", action="action"):
-    effects = [{"damage": {"target": {"ref": "target.id"},
-                           "amount": {"roll": dice}, "damageType": damage_type}}]
-    if condition:
-        effects.append({"applyCondition": {"target": {"ref": "target.id"},
-                                           "condition": condition[0],
-                                           "duration": condition[1]}})
-    out = {
-        "id": aid, "name": name, "description": description,
-        "actionType": action, "targeting": targeting,
-        "attack": {"stat": stat, "against": "guard"},
-        "onUse": effects,
-    }
-    if range_:
-        out["range"] = range_
-    if cooldown:
-        out["cooldown"] = cooldown
-    return out
+from dmkit import bestiary as _kit
+from dmkit.bestiary import A, bite  # noqa: F401  re-exported
 
+
+def creature(*args, faction="the_unsealed", creature_type="undead", **kw):
+    """`dmkit.bestiary.creature`, with Aurendel's defaults.
+
+    Everything the wards were built against belongs to `the_unsealed` and is
+    undead unless it says otherwise, which is most of this file. Neither
+    belongs in a shared constructor, and both are required there — so a file
+    that imports `creature` from `dmkit.bestiary` by mistake gets a `TypeError`
+    at import rather than a monster quietly fighting on the wrong side.
+    """
+    return _kit.creature(*args, faction=faction, creature_type=creature_type, **kw)
+
+
+# Silver is the questline's answer to the things the wards were built against,
+# and `unless` is how a weapon's tags get an exception to a resistance.
+HALF_UNLESS_SILVER = [
+    {"damageType": "slashing", "multiplier": 0.5, "unless": ["silvered"]},
+    {"damageType": "piercing", "multiplier": 0.5, "unless": ["silvered"]},
+]
 
 ABILITIES = [
     bite("rend", "Rend", "1d6", "slashing", "Teeth, and a great deal of "
@@ -130,50 +132,6 @@ ABILITIES = [
 
 
 # --- the creatures --------------------------------------------------------
-
-def creature(mid, name, level, xp, attrs, abilities, description, *,
-             behaviour=None, loot=None, conditional=(), faction="the_unsealed",
-             creature_type="undead", size="medium", descriptors=(),
-             interactions=(), immunities=(), special=(), reactions=(),
-             hp=None, guard=None):
-    out = {
-        "id": mid, "name": name, "description": description,
-        "level": level, "xp": xp,
-        "attributes": attrs,
-        "abilities": list(abilities),
-        "behaviour": behaviour or [{"priority": 0, "use": abilities[0]}],
-        "faction": faction, "creatureType": creature_type, "size": size,
-        "descriptors": list(descriptors),
-        "conditionalLoot": list(conditional),
-    }
-    if loot:
-        out["loot"] = loot
-    if interactions:
-        out["damageInteractions"] = list(interactions)
-    if immunities:
-        out["conditionImmunities"] = list(immunities)
-    if special:
-        out["specialTurns"] = list(special)
-    if reactions:
-        out["reactions"] = list(reactions)
-    if hp is not None:
-        out["resourceOverrides"] = {"hp": hp}
-    if guard is not None:
-        out["derivedOverrides"] = {"guard": guard}
-    return out
-
-
-A = lambda might, agility, endurance, intellect, instinct, presence: {
-    "might": might, "agility": agility, "endurance": endurance,
-    "intellect": intellect, "instinct": instinct, "presence": presence,
-}
-
-# Silver is the questline's answer to the things the wards were built against,
-# and `unless` is how a weapon's tags get an exception to a resistance.
-HALF_UNLESS_SILVER = [
-    {"damageType": "slashing", "multiplier": 0.5, "unless": ["silvered"]},
-    {"damageType": "piercing", "multiplier": 0.5, "unless": ["silvered"]},
-]
 
 MONSTERS = [
     # -- act I: what came out of the Dene Barrow ---------------------------

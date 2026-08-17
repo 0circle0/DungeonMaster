@@ -9,12 +9,12 @@ quest the other locks out, each moves two factions in opposite directions, and
 **both end with the Wardlist in your pack**. One is handed it. One copies it
 off a shelf it was not shown. The critical path does not care which.
 """
-from questkit import (
+from dmkit.quests import (
     quest, stage, arc, reach, kill, talk, flagged, resolved_either_way,
     set_flag, rep, deed, either, node, option, take_job, dialogue, npc,
     shop,
 )
-from prose import pool
+from dmkit.prose import pool
 
 # --- the people -----------------------------------------------------------
 

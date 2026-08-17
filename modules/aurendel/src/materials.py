@@ -13,6 +13,13 @@ Two engine facts shape this file:
     `int_*` palettes are for: a generated interior is a walled rectangle plus
     scatter, which makes scatter the furniture.
 """
+# `biomes()` below names an `<id>_ambience` pool for every non-dungeon biome.
+# Imported for that side effect: the file that names a pool is the file that
+# has to make sure something registered it.
+import ambience  # noqa: F401
+
+from dmkit import materials as _kit
+from dmkit.materials import sc
 
 # --- terrains ---------------------------------------------------------------
 # (id, name, glyph, colour, passable, opaque, moveCost, description)
@@ -176,34 +183,7 @@ TAGS = {
 }
 
 
-def terrains():
-    by_tag = {}
-    for tag, ids in TAGS.items():
-        for i in ids:
-            by_tag.setdefault(i, []).append(tag)
-
-    out = []
-    for tid, name, glyph, colour, passable, opaque, cost, desc in T:
-        entry = {
-            "id": tid, "name": name, "description": desc,
-            "glyph": glyph, "color": colour,
-            "passable": bool(passable), "opaque": bool(opaque),
-            "moveCost": cost,
-        }
-        if tid in by_tag:
-            entry["tags"] = by_tag[tid]
-        entry.update(TERRAIN_EXTRAS.get(tid, {}))
-        out.append(entry)
-    return out
-
-
 # --- palettes ---------------------------------------------------------------
-
-def sc(terrain, frequency, distribution="speckle", **kw):
-    entry = {"terrain": terrain, "frequency": frequency, "distribution": distribution}
-    entry.update(kw)
-    return entry
-
 
 PALETTES = [
     # -- wilderness ---------------------------------------------------------
@@ -318,6 +298,10 @@ PALETTES = [
     ]),
 
     # -- interiors ----------------------------------------------------------
+    # The nine `place.TRADE_PALETTE` names. Every id below — the floors, the
+    # walls, the scatter — is out of this file's own terrain vocabulary, which
+    # is why they live here and not in the kit.
+
     ("int_timber", "Timber Interior", "timber_floor", "wall_timber", "door", "wall_timber", [
         sc("table", 0.05, priority=0),
         sc("barrel", 0.03, priority=1),
@@ -419,17 +403,6 @@ PALETTES = [
 ]
 
 
-def palettes():
-    out = []
-    for pid, name, floor, wall, door, exterior, scatter in PALETTES:
-        entry = {"id": pid, "name": name, "floor": floor, "wall": wall,
-                 "exterior": exterior, "scatter": scatter}
-        if door:
-            entry["door"] = door
-        out.append(entry)
-    return out
-
-
 # --- biomes -----------------------------------------------------------------
 # (id, name, layer, palette, description)
 BIOMES = [
@@ -492,21 +465,6 @@ BIOMES = [
 ]
 
 
-def biomes():
-    out = []
-    for bid, name, layer, palette, desc in BIOMES:
-        entry = {"id": bid, "name": name, "description": desc, "layer": layer,
-                 "palette": palette, "roomTemplates": [],
-                 "encounterTables": [], "lootTables": [], "traps": []}
-        # Ambience fires on entering an *area* (sim/enter.ts). No area is ever
-        # in a dungeon biome — a dungeon is reached through a point of interest
-        # — so an ambience pool there would be prose nothing could ever read.
-        if not bid.startswith("dungeon_"):
-            entry["ambienceKey"] = f"{bid}_ambience"
-        out.append(entry)
-    return out
-
-
 # --- calendar ---------------------------------------------------------------
 
 TIME = {
@@ -529,3 +487,18 @@ TIME = {
     "minutesPerTile": 1,
     "actionMinutes": {"search": 10, "disarm": 10, "sense": 1, "wait": 10},
 }
+
+
+# --- the three the build asks for -------------------------------------------
+# Thin, because the shaping is `dmkit.materials`; what is here is the vocabulary.
+
+def terrains():
+    return _kit.terrains(T, extras=TERRAIN_EXTRAS, tags=TAGS)
+
+
+def palettes():
+    return _kit.palettes(PALETTES)
+
+
+def biomes():
+    return _kit.biomes(BIOMES)

@@ -17,8 +17,8 @@ keeping is older than the hold that thinks it is doing the keeping.**
   * **The Breathing Face** — a cave that draws and blows on a cycle you can
     time, warm, out of a face that is in shade eight months of the year.
 """
-from questkit import npc, shop, quest, reach, kill, flagged, arc
-from lorekit import (
+from dmkit.quests import npc, shop, quest, reach, kill, flagged, arc
+from lore import (
     clue, thread, rumour, favour, talk, coldshoulder, finding, rumoured,
     trophy, keepsake, carried, relic, sealed, blocked,
 )
@@ -347,7 +347,7 @@ NPCS = [
 ]
 
 from bestiary import creature, A, HALF_UNLESS_SILVER  # noqa: E402
-from loot import group, encounters  # noqa: E402
+from dmkit.loot import group, encounters  # noqa: E402
 
 _MOUNTAIN = dict(creature_type="humanoid", faction="karn_dolur")
 

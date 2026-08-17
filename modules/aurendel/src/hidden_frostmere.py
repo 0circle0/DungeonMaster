@@ -21,8 +21,8 @@ and three ways of noticing it.
 Nobody offers any of it. The first anyone hears of any of it is somebody
 mentioning, in passing, that the whales used to calve inside the face.
 """
-from questkit import npc, shop, quest, reach, kill, flagged, arc
-from lorekit import (
+from dmkit.quests import npc, shop, quest, reach, kill, flagged, arc
+from lore import (
     clue, thread, rumour, favour, talk, coldshoulder, finding, rumoured,
     trophy, keepsake, carried, relic, sealed, blocked,
 )
@@ -659,7 +659,7 @@ DIALOGUES.append(
 # the Frostmere dropping the tally.
 
 from bestiary import creature, A, HALF_UNLESS_SILVER  # noqa: E402
-from loot import group, encounters  # noqa: E402
+from dmkit.loot import group, encounters  # noqa: E402
 
 _HUMAN = dict(creature_type="humanoid", faction="the_ice_moot")
 

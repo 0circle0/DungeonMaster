@@ -9,8 +9,8 @@ from place import (
     area, poi, gate, house, inn, smithy, store, warehouse, guild, square,
     landmark, ruin, delve,
 )
-from dungeonkit import dungeon
-from prose import pool
+from dmkit.dungeons import dungeon
+from dmkit.prose import pool
 
 WILD, STONE, TIMBER = "volcanic", "urban_stone", "urban_timber"
 TAGS = ["ember_reach"]

@@ -1,10 +1,20 @@
-"""Shared constructors for Aurendel's places.
+"""Aurendel — the conventions its places are built on.
 
-The region files are meant to read like a gazetteer, not like JSON. These
-helpers hold the conventions so each region only has to say what is different:
-map sizes by role, `descriptionKey` naming, interior palettes by trade.
+`dmkit.places` shapes an area or a point of interest; this file decides what
+the shapes are for Aurendel. Four tables and the shorthands that use them:
+how big each kind of settlement's map is, which interior palette a trade gets,
+what an interior measures, and which pool a place falls back on when it has not
+earned prose of its own.
+
+The region files import from here rather than from `dmkit.places`, so they go
+on reading like a gazetteer.
 """
-import prose
+from dmkit import places as _kit
+from dmkit.places import gate, shared, toll  # noqa: F401  re-exported
+
+# The pools `KIND_POOL` and the shorthands name. Imported for the side effect:
+# the file that names a pool is the file that has to make sure it exists.
+import prose  # noqa: F401
 
 # Map sizes by the role a place plays. Wilderness is the biggest because it is
 # the only one you cross rather than arrive in.
@@ -38,28 +48,6 @@ ROOM_SIZES = {
     "large": ("15", "11"), "hall": ("19", "13"),
 }
 
-
-def area(aid, name, biome, role, danger, level, description, *,
-         entry=None, tags=(), faction=None, **kw):
-    """One place with a map. `role` picks the map size."""
-    width, height = SIZES[role]
-    entry_point = entry or {"x": int(width) // 2, "y": int(height) // 2}
-    out = {
-        "id": aid, "name": name, "description": description,
-        "biome": biome, "layer": kw.pop("layer", "overworld"),
-        "descriptionKey": f"{aid}_desc",
-        "dangerLevel": danger, "recommendedLevel": level,
-        "tags": list(tags),
-        "map": {"width": width, "height": height},
-        "entryPoint": entry_point,
-        "extra": {"role": role},
-    }
-    if faction:
-        out["controllingFaction"] = faction
-    out.update(kw)
-    return out
-
-
 # Where an ordinary place gets its prose from when it has not earned its own.
 # Four hundred points of interest cannot each have a hand-written pool, and
 # most of them should not: a house in Ashcott and a house in Slagfoot want the
@@ -73,46 +61,27 @@ KIND_POOL = {
 }
 
 
-def poi(pid, name, in_area, kind, description, *, at=None, minutes=5,
-        trade=None, size="medium", services=(), tags=(), desc_key=None,
-        unique=False, static=None, dungeon=None, gate=None, hidden=False,
-        discover=None, interior=True, **kw):
-    """A building, landmark, or way down.
+def area(aid, name, biome, role, danger, level, description, **kw):
+    """`dmkit.places.area`, with the map size Aurendel gives that role."""
+    return _kit.area(aid, name, biome, role, danger, level, description,
+                     size=SIZES[role], **kw)
+
+
+def poi(pid, name, in_area, kind, description, *, trade=None, size="medium",
+        desc_key=None, unique=False, interior=True, **kw):
+    """`dmkit.places.poi`, resolving trade and size against Aurendel's tables.
 
     `trade` picks the interior palette and, with `size`, the footprint. Pass
-    `interior=False` for something you stand *at* rather than *in* — a well, a
-    stone circle, a crossroads — which leaves the party on the area map.
-
-    Prose comes from `desc_key` if given, from a pool of the place's own name
-    if `unique`, and otherwise from the shared pool for its `kind`.
+    `interior=False` for something you stand *at* rather than *in*. Prose comes
+    from `desc_key` if given, from a pool of the place's own name if `unique`,
+    and otherwise from the shared pool for its `kind`.
     """
-    out = {
-        "id": pid, "name": name, "description": description,
-        "area": in_area, "kind": kind,
-        "descriptionKey": desc_key or (f"{pid}_desc" if unique else KIND_POOL[kind]),
-        "travelMinutes": minutes,
-        "tags": list(tags),
-    }
-    if at:
-        out["position"] = {"x": at[0], "y": at[1]}
-    if services:
-        out["services"] = list(services)
-    if gate:
-        out["gate"] = gate
-    if hidden:
-        out["hidden"] = True
-    if discover:
-        out["discover"] = {"skill": discover[0], "difficulty": discover[1]}
-    if dungeon:
-        out["dungeon"] = dungeon
-    elif static:
-        out["map"] = {"static": static}
-    elif interior and trade:
-        width, height = ROOM_SIZES[size]
-        out["map"] = {"width": width, "height": height,
-                      "palette": TRADE_PALETTE[trade]}
-    out.update(kw)
-    return out
+    return _kit.poi(
+        pid, name, in_area, kind, description,
+        desc_key=desc_key or (f"{pid}_desc" if unique else KIND_POOL[kind]),
+        palette=TRADE_PALETTE[trade] if trade else None,
+        footprint=ROOM_SIZES[size] if (interior and trade) else None,
+        **kw)
 
 
 # --- settlement shorthands --------------------------------------------------
@@ -200,39 +169,3 @@ def delve(pid, name, in_area, description, dungeon, at=None, minutes=12,
     return poi(pid, name, in_area, "dungeonEntrance", description, at=at,
                minutes=minutes, dungeon=dungeon,
                tags=list(tags) + ["dungeon"], **kw)
-
-
-def shared(pid, *texts):
-    """A pool many places point at — `int_house`, `int_smithy`, and friends."""
-    if not prose.has(pid):
-        prose.pool(pid, *texts)
-    return pid
-
-
-def gate(gid, name, kind, description, *, requires=None, bypass=None,
-         opens_with=(), on_open=(), stays_open=True, blocked_key=None):
-    out = {"id": gid, "name": name, "kind": kind, "description": description,
-           "staysOpen": stays_open}
-    if requires:
-        out["requires"] = requires
-    if bypass:
-        skill, difficulty = bypass[0], bypass[1]
-        out["bypass"] = {"skill": skill, "difficulty": difficulty,
-                         "retryable": bypass[2] if len(bypass) > 2 else True}
-    if opens_with:
-        out["opensWith"] = list(opens_with)
-    if on_open:
-        out["onOpen"] = list(on_open)
-    if blocked_key:
-        out["blockedTextKey"] = blocked_key
-    return out
-
-
-def toll(gid, name, amount, description, *, bypass=None, blocked_key=None):
-    """A way through that wants paying for, and usually can be got round."""
-    return gate(
-        gid, name, "toll", description,
-        requires={"description": f"{amount} marks", "currency": amount},
-        bypass=bypass, stays_open=False, blocked_key=blocked_key,
-        on_open=[{"adjustCurrency": {"amount": -amount}}],
-    )

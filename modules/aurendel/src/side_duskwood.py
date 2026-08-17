@@ -14,12 +14,12 @@ The branch is fire or grafting, and it is a real choice rather than a good
 option and a bad one. Fire ends it in an afternoon and takes four hundred
 years of the Greenway with it.
 """
-from questkit import (
+from dmkit.quests import (
     arc, stage, reach, kill, talk, flagged, resolved_either_way, set_flag,
     rep, deed, either, node, option, take_job, dialogue, npc,
 )
-from sidekit import chain, link, ACT_GATES
-from prose import pool
+from acts import chain, link, ACT_GATES
+from dmkit.prose import pool
 
 KEY = "beeches"
 

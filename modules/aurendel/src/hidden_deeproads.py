@@ -19,8 +19,8 @@ The Broken Stair is the over-tuned one. Level 10 ground at the bottom of level
 10 ground, which in the Deeproads means it is worse than the finale, and the
 seal says so.
 """
-from questkit import npc, shop, quest, reach, kill, flagged, arc
-from lorekit import (
+from dmkit.quests import npc, shop, quest, reach, kill, flagged, arc
+from lore import (
     clue, thread, rumour, favour, talk, coldshoulder, finding, rumoured,
     trophy, keepsake, carried, relic, sealed, blocked,
 )
@@ -343,7 +343,7 @@ NPCS = [
 ]
 
 from bestiary import creature, A, HALF_UNLESS_SILVER  # noqa: E402
-from loot import group, encounters  # noqa: E402
+from dmkit.loot import group, encounters  # noqa: E402
 
 _GUILD = dict(creature_type="humanoid", faction="the_wayfinders")
 

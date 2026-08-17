@@ -14,12 +14,12 @@ the Hedge Setts stocked with something worth the walk.
 The branch at the end is the small version of the questline's own: tell the
 Crown, or tell the Keepers. Both close the chapel. One puts it in a ledger.
 """
-from questkit import (
+from dmkit.quests import (
     arc, stage, reach, kill, talk, flagged, resolved_either_way,
     set_flag, rep, give, deed, either, node, option, take_job, dialogue, npc,
 )
-from sidekit import chain, link, ACT_GATES
-from prose import pool
+from acts import chain, link, ACT_GATES
+from dmkit.prose import pool
 
 KEY = "eelweir"
 

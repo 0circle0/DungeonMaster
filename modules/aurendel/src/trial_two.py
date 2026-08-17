@@ -11,9 +11,9 @@ without ever writing down what it was for.
 
 Level 16 at the door, and the door wants a relic worn.
 """
-from questkit import reach, kill, flagged, arc
-from prose import pool
-from trialkit import tier, link, warrant, proving, loosed
+from dmkit.quests import reach, kill, flagged, arc
+from dmkit.prose import pool
+from postgame import tier, link, warrant, proving, loosed
 
 KEY = "trial_two"
 
@@ -181,7 +181,7 @@ MONSTERS = [
              immunities=["frightened", "prone", "poisoned"], hp=170),
 ]
 
-from loot import group, encounters  # noqa: E402
+from dmkit.loot import group, encounters  # noqa: E402
 
 ENCOUNTER_TABLES = [
     encounters("trial_two_fourth", [group("b", [("fourth_through", "1", False)])],

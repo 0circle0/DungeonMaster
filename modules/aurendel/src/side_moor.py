@@ -12,13 +12,13 @@ a purse, and a shop of things the fourth gallery will not admit exists.
 
 Both endings put the east end back. One of them writes it down first.
 """
-from questkit import (
+from dmkit.quests import (
     arc, stage, reach, kill, talk, flagged, resolved_either_way,
     set_flag, rep, give, deed, either, node, option, take_job, dialogue, npc,
     shop,
 )
-from sidekit import chain, link, ACT_GATES
-from prose import pool
+from acts import chain, link, ACT_GATES
+from dmkit.prose import pool
 
 KEY = "diggers"
 

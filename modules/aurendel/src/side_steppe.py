@@ -14,13 +14,13 @@ The branch is about that last part. The Crown would pay well for a surveyed
 route to a working well, and the lines have spent four hundred years making
 sure nobody has one.
 """
-from questkit import (
+from dmkit.quests import (
     arc, stage, reach, kill, talk, flagged, resolved_either_way,
     set_flag, rep, give, deed, either, node, option, take_job, dialogue, npc,
     shop,
 )
-from sidekit import chain, link, ACT_GATES
-from prose import pool
+from acts import chain, link, ACT_GATES
+from dmkit.prose import pool
 
 KEY = "dryriver"
 

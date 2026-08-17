@@ -13,9 +13,9 @@ now.
 
 Level 14 at the door, and the door wants the relic worn.
 """
-from questkit import npc, shop, reach, kill, flagged, arc
-from prose import pool
-from trialkit import tier, link, warrant, proving, loosed
+from dmkit.quests import npc, shop, reach, kill, flagged, arc
+from dmkit.prose import pool
+from postgame import tier, link, warrant, proving, loosed
 
 KEY = "trial_one"
 KEEPERS = "the_keepers"
@@ -135,7 +135,7 @@ NPCS = [
         # All three heads, not just this tier's. Hesper is the giver for the
         # whole ladder and `offersQuests` is what actually puts a job in front
         # of a player — a head with a `giver` who does not list it is offered
-        # by nobody, which is the failure `sidekit` rule 4 exists for and which
+        # by nobody, which is the failure the side-chain rule 4 exists for and which
         # tiers two and three walked straight into.
         offers=["trial_one_cellars", "trial_two_galleries",
                 "trial_three_listening"],
@@ -204,7 +204,7 @@ MONSTERS = [
              immunities=["frightened", "prone"], hp=120),
 ]
 
-from loot import group, encounters  # noqa: E402
+from dmkit.loot import group, encounters  # noqa: E402
 
 ENCOUNTER_TABLES = [
     encounters("trial_one_first", [group("b", [("first_through", "1", False)])],
@@ -265,7 +265,7 @@ LOOT_TABLES = [
 
 # --- conversation ---------------------------------------------------------
 
-from questkit import dialogue, node, option, take_job, set_flag  # noqa: E402
+from dmkit.quests import dialogue, node, option, take_job, set_flag  # noqa: E402
 
 DIALOGUES = [
     dialogue("trial_hesper_talk", "greet", [

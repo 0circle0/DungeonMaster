@@ -14,11 +14,11 @@ The three endings are one quest with a `resolved_either_way` objective and an
 `if` chain in `onComplete`, because the engine has no branch primitive and this
 is what one is built out of.
 """
-from questkit import (
+from dmkit.quests import (
     quest, stage, reach, kill, flagged, resolved_either_way, set_flag, rep,
     deed, either, node, option, take_job, dialogue, npc, shop,
 )
-from prose import pool
+from dmkit.prose import pool
 
 # Two of the three, in any combination. `anyOf` is one level deep, which is
 # exactly deep enough for this and not deep enough for anything cleverer.

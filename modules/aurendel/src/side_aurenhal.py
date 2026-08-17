@@ -14,13 +14,13 @@ copyist in a pawnbroker's back room with a purse and a preference.
 Both endings close the gaol. One of them puts the guild's map in a place the
 guild cannot get it back from.
 """
-from questkit import (
+from dmkit.quests import (
     arc, stage, reach, kill, talk, flagged, resolved_either_way,
     set_flag, rep, give, deed, either, node, option, take_job, dialogue, npc,
     shop,
 )
-from sidekit import chain, link, ACT_GATES
-from prose import pool
+from acts import chain, link, ACT_GATES
+from dmkit.prose import pool
 
 KEY = "bonealley"
 

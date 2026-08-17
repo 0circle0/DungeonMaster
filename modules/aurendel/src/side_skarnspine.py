@@ -15,13 +15,13 @@ behind you, or they can be left open as the road under the pass that the
 muleteers have wanted for two centuries and the Hold has refused for the same
 two centuries.
 """
-from questkit import (
+from dmkit.quests import (
     arc, stage, reach, kill, talk, flagged, resolved_either_way,
     set_flag, rep, give, deed, either, node, option, take_job, dialogue, npc,
     shop,
 )
-from sidekit import chain, link, ACT_GATES
-from prose import pool
+from acts import chain, link, ACT_GATES
+from dmkit.prose import pool
 
 KEY = "thecut"
 

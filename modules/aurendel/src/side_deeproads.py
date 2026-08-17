@@ -13,12 +13,12 @@ It sits beside the Deeproads act rather than in it — the party is already down
 here for the Echo Halls, and this is what the people who live down here are
 worried about instead. The Wayfinders care because the Wayfinders eat.
 """
-from questkit import (
+from dmkit.quests import (
     arc, stage, reach, kill, talk, flagged, resolved_either_way, set_flag,
     rep, deed, either, node, option, take_job, dialogue, npc, shop,
 )
-from sidekit import chain, link, ACT_GATES
-from prose import pool
+from acts import chain, link, ACT_GATES
+from dmkit.prose import pool
 
 KEY = "rot"
 

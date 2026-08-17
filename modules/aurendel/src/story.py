@@ -9,9 +9,7 @@ file is only the gathering, plus the two things that belong to the questline as
 a whole rather than to any act: the ending arc, and the wiring that turns the
 continent's biomes and dungeons live along the route.
 """
-import importlib
-
-from questkit import arc
+from dmkit import story as _kit
 
 ACT_MODULES = ["act1", "act2", "act3"]
 
@@ -56,7 +54,7 @@ HIDDEN_MODULES = [
 # the same reason there is a third — the contract is different again. A hidden
 # thread is optional and level-appropriate; a trial is optional, only exists
 # once the game has been won, and is tuned for a party that has done the
-# threads. `trialkit.py` states the rules and `check_quests.py` asserts them.
+# threads. `postgame.py` states the rules and `check_quests.py` asserts them.
 #
 # Nothing here may go anywhere near `ACT_THREE_SPINE`: a trial that the ending
 # waited on would be a game you have to finish twice.
@@ -66,74 +64,55 @@ TRIAL_MODULES = [
     "trial_three",
 ]
 
-_LOADED = []
-for _name in ACT_MODULES + SIDE_MODULES + HIDDEN_MODULES + TRIAL_MODULES:
-    try:
-        _LOADED.append(importlib.import_module(_name))
-    except ImportError:
-        pass
-
-
-def _gather(attr):
-    out = []
-    for module in _LOADED:
-        out.extend(getattr(module, attr, []))
-    return out
+_LOADED = _kit.load(ACT_MODULES + SIDE_MODULES + HIDDEN_MODULES + TRIAL_MODULES)
 
 
 def npcs():
-    return _gather("NPCS")
+    return _kit.gather(_LOADED, "NPCS")
 
 
 def quests():
-    return _gather("QUESTS")
+    return _kit.gather(_LOADED, "QUESTS")
 
 
 def dialogues():
-    return _gather("DIALOGUES")
+    return _kit.gather(_LOADED, "DIALOGUES")
 
 
 def lore():
-    return _gather("LORE")
+    return _kit.gather(_LOADED, "LORE")
 
 
 def lore_threads():
-    return _gather("THREADS")
+    return _kit.gather(_LOADED, "THREADS")
 
 
 def items():
-    return _gather("ITEMS")
+    return _kit.gather(_LOADED, "ITEMS")
 
 
 def gates():
-    return _gather("GATES")
+    return _kit.gather(_LOADED, "GATES")
 
 
 def loot_tables():
-    return _gather("LOOT_TABLES")
+    return _kit.gather(_LOADED, "LOOT_TABLES")
 
 
 def monsters():
-    return _gather("MONSTERS")
+    return _kit.gather(_LOADED, "MONSTERS")
 
 
 def encounter_tables():
-    return _gather("ENCOUNTER_TABLES")
+    return _kit.gather(_LOADED, "ENCOUNTER_TABLES")
 
 
 def arcs():
-    out = _gather("ARCS")
-    # The ending arc is assembled here rather than in Act III, because whether
-    # a run is over is a fact about the whole questline. `isEnding` plus every
-    # quest in it complete is what `endingReached` wins on.
-    finale = [q for q in ACT_THREE_SPINE if any(x["id"] == q for x in quests())]
-    if finale:
-        out.append(arc(
-            "the_unsealing", "The Unsealing",
-            "Nine doors were shut on purpose. Somebody has been opening them "
-            "in order, and the ninth is the last.",
-            finale, ending=True))
-    return out
+    return _kit.arcs(_LOADED, ending=(
+        "the_unsealing", "The Unsealing",
+        "Nine doors were shut on purpose. Somebody has been opening them "
+        "in order, and the ninth is the last.",
+        ACT_THREE_SPINE))
 
 
 # The quests that must all be complete for the game to be won. Deliberately
@@ -168,115 +147,23 @@ POI_TRIGGERS = {
 
 
 def attach_triggers(poi_list):
-    """Arrival triggers, from the questline and from whichever chains want one.
-
-    A side chain reaches places the spine never named, and "you have found it"
-    is the only event some of them produce — a sunken barge does not talk. Each
-    module may export its own `POI_TRIGGERS` in the same shape, gathered here so
-    the geography files still do not have to know a quest exists.
-    """
-    wanted = dict(POI_TRIGGERS)
-    for module in _LOADED:
-        for poi_id, triggers in getattr(module, "POI_TRIGGERS", {}).items():
-            wanted.setdefault(poi_id, []).extend(triggers)
-
-    for poi in poi_list:
-        extra = wanted.get(poi["id"])
-        if extra:
-            poi["triggers"] = list(poi.get("triggers", [])) + extra
+    _kit.attach_triggers(_LOADED, poi_list, base=POI_TRIGGERS)
 
 
 def attach_patches(poi_list):
-    """Turn an existing place into a hidden one, or hang a door on it.
-
-    A hidden thread builds no geography — the anchors are points of interest
-    that have been standing there unmentioned since the continent was drawn. So
-    the only thing a thread does to the map is patch a place that already
-    exists: `hidden` plus a `discover` difficulty that falls as its thread
-    fills, and a `gate` that says in words what it wants.
-
-    Merged rather than replaced, so a patch cannot silently drop a place's
-    triggers or its residents.
-    """
-    wanted = {}
-    for module in _LOADED:
-        for poi_id, patch in getattr(module, "POI_PATCHES", {}).items():
-            wanted.setdefault(poi_id, {}).update(patch)
-
-    seen = set()
-    for poi in poi_list:
-        patch = wanted.get(poi["id"])
-        if patch:
-            poi.update(patch)
-            seen.add(poi["id"])
-
-    missing = sorted(set(wanted) - seen)
-    if missing:
-        # Loud, because a patch that lands on nothing is a thread whose anchor
-        # is not hidden, not gated, and reachable by walking in.
-        raise ValueError(f"POI_PATCHES names points of interest that do not exist: {missing}")
+    _kit.attach_patches(_LOADED, poi_list)
 
 
 def attach_content(biome_list, dungeon_list, room_templates, area_list):
-    """Turn the route live: encounters, loot, and rooms that are not empty.
-
-    Everything here is scoped to the questline. Aurendel has 25 biomes, 108
-    areas and 68 dungeons, and the great majority of them stay exactly as
-    quiet as they were — which is what "questline-scoped bestiary" means when
-    it comes time to write it down.
-    """
+    """What the questline turns live, and nothing else on the continent."""
+    # Function-scoped, as it always was: `story` is imported by `build.py`
+    # before `loot` is needed, and the tables are content rather than wiring.
     import loot
-
-    for biome in biome_list:
-        tables = loot.BIOME_ENCOUNTERS.get(biome["id"])
-        if tables:
-            biome["encounterTables"] = list(tables)
-        drops = loot.BIOME_LOOT.get(biome["id"])
-        if drops:
-            biome["lootTables"] = list(drops)
-
-    # An area's own tables, and then whatever a module wants to add to them.
-    # Appended rather than replaced, because the post-game content's whole
-    # claim is that a place the party already walked has something *else* in
-    # it now — replacing would quietly delete what was there and turn the
-    # change into a swap.
-    extra_area_tables = {}
-    for module in _LOADED:
-        for area_id, tables in getattr(module, "AREA_ENCOUNTERS", {}).items():
-            extra_area_tables.setdefault(area_id, []).extend(tables)
-
-    for area in area_list:
-        tables = list(loot.AREA_ENCOUNTERS.get(area["id"]) or [])
-        tables += [t for t in extra_area_tables.get(area["id"], [])
-                   if t not in tables]
-        if tables:
-            area["encounterTables"] = tables
-
-    # Bosses the questline named, then the ones a hidden thread claims. Forty
-    # of Aurendel's sixty-eight dungeons had a boss room carrying
-    # `alwaysEncounter` and no table for it to draw from; a thread that anchors
-    # on one fixes that as a side effect of using it.
-    bosses = dict(loot.DUNGEON_BOSSES)
-    for module in _LOADED:
-        bosses.update(getattr(module, "BOSSES", {}))
-
-    for dungeon in dungeon_list:
-        boss = bosses.get(dungeon["id"])
-        if boss:
-            dungeon["bossTable"] = boss
-
-    # Every room template in Aurendel ships `encounterChance: 0`, and
-    # `world.generationDefaults.encounterChance` is 0 as well — so a dungeon
-    # full of monsters generates empty. This is the switch.
-    for template in room_templates:
-        biome_id = template["id"].rsplit("_", 1)[0]
-        if biome_id not in loot.LIVE_ROOM_BIOMES:
-            continue
-        role = template.get("role", "chamber")
-        if role == "boss":
-            # The boss room draws from the dungeon's `bossTable`, once.
-            template["alwaysEncounter"] = True
-        elif role in ("entrance", "corridor"):
-            template["encounterChance"] = 0.15
-        else:
-            template["encounterChance"] = 0.4
+    _kit.attach_content(
+        _LOADED, biome_list, dungeon_list, room_templates, area_list,
+        population=_kit.Population(
+            biome_encounters=loot.BIOME_ENCOUNTERS,
+            biome_loot=loot.BIOME_LOOT,
+            area_encounters=loot.AREA_ENCOUNTERS,
+            dungeon_bosses=loot.DUNGEON_BOSSES,
+            live_room_biomes=loot.LIVE_ROOM_BIOMES))

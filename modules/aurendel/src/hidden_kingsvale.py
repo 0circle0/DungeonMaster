@@ -19,8 +19,8 @@ regions too late.
   * **The Ford Toll** — Pennyford's sluice house has a keeper's cottage and no
     keeper, and the sluice is worked.
 """
-from questkit import npc, shop, quest, reach, kill, flagged, arc
-from lorekit import (
+from dmkit.quests import npc, shop, quest, reach, kill, flagged, arc
+from lore import (
     clue, thread, rumour, favour, talk, coldshoulder, finding, rumoured,
     trophy, keepsake, carried, relic, sealed, blocked,
 )
@@ -340,7 +340,7 @@ NPCS = [
 ]
 
 from bestiary import creature, A, HALF_UNLESS_SILVER  # noqa: E402
-from loot import group, encounters  # noqa: E402
+from dmkit.loot import group, encounters  # noqa: E402
 
 _FOLK = dict(creature_type="humanoid", faction="the_crown")
 

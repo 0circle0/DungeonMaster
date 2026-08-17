@@ -21,7 +21,7 @@ Two rules, both learned the hard way elsewhere in this module:
     toward neutral without crossing it. A guild forgets. A drowned bell does
     not, and neither do people who count wrecks.
 """
-from sidekit import regional, deed_kind
+from dmkit.factions import regional, deed_kind
 
 FACTIONS = [
     regional(

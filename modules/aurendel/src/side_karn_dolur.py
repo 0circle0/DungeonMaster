@@ -14,12 +14,12 @@ The reward is the deep warrant fee waived and Hold Plate off the muster floor,
 which is the heaviest armour in Aurendel and the only body slot the questline
 does not already fill.
 """
-from questkit import (
+from dmkit.quests import (
     arc, stage, reach, kill, talk, flagged, resolved_either_way, set_flag,
     rep, deed, either, node, option, take_job, dialogue, npc, shop,
 )
-from sidekit import chain, link, ACT_GATES
-from prose import pool
+from acts import chain, link, ACT_GATES
+from dmkit.prose import pool
 
 KEY = "seams"
 

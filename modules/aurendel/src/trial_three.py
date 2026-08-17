@@ -13,9 +13,9 @@ count under a ring in the Witchwood the whole time.
 
 Level 18 at the door, and the door wants a relic worn.
 """
-from questkit import reach, kill, flagged, arc
-from prose import pool
-from trialkit import tier, link, warrant, proving, loosed
+from dmkit.quests import reach, kill, flagged, arc
+from dmkit.prose import pool
+from postgame import tier, link, warrant, proving, loosed
 
 KEY = "trial_three"
 
@@ -198,7 +198,7 @@ MONSTERS = [
              hp=200),
 ]
 
-from loot import group, encounters  # noqa: E402
+from dmkit.loot import group, encounters  # noqa: E402
 
 ENCOUNTER_TABLES = [
     encounters("trial_three_seventh",

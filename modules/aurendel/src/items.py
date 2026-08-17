@@ -16,58 +16,8 @@ Two other rules worth stating once:
     `tags` travel with its damage, so `damageInteractions[].unless` can name
     one; that is how silver bites something that shrugs off ordinary steel.
 """
-from sidekit import gear
-
-
-def weapon(wid, name, dice, damage_type, value, description, *, stat="might",
-           properties=(), tags=(), rarity=None):
-    out = {
-        "id": wid, "name": name, "description": description, "kind": "weapon",
-        "slot": "hand", "value": value, "weight": 3,
-        "damage": {"dice": dice, "damageType": damage_type, "stat": stat},
-        "properties": list(properties), "tags": list(tags),
-    }
-    if rarity:
-        out["rarity"] = rarity
-    return out
-
-
-def armour(aid, name, guard, value, description, *, weight=8, rarity=None):
-    out = {
-        "id": aid, "name": name, "description": description, "kind": "armor",
-        "slot": "body", "value": value, "weight": weight,
-        "modifiers": {"guard": guard},
-    }
-    if rarity:
-        out["rarity"] = rarity
-    return out
-
-
-def potion(pid, name, value, description, effects, *, tags=("consumable",)):
-    return {
-        "id": pid, "name": name, "description": description, "kind": "consumable",
-        "value": value, "weight": 0.5, "stackable": True, "consumedOnUse": True,
-        "onUse": effects, "tags": list(tags),
-    }
-
-
-def treasure(tid, name, value, description):
-    return {
-        "id": tid, "name": name, "description": description, "kind": "treasure",
-        "value": value, "weight": 1, "tags": ["treasure"],
-    }
-
-
-def key(kid, name, description, *, kind="key"):
-    # `value: 0` keeps it off every shop shelf in the world. A quest object is
-    # not merchandise, and `shopStock` enforces that by skipping it.
-    return {
-        "id": kid, "name": name, "description": description, "kind": kind,
-        "value": 0, "weight": 0.5, "tags": ["quest"],
-    }
-
-
-HEAL = lambda dice: [{"heal": {"target": {"ref": "actor.id"}, "amount": {"roll": dice}}}]
+from dmkit.items import (HEAL, armour, gear, key, potion,  # noqa: F401
+                         treasure, weapon)
 
 
 # --- what the side chains pay in -------------------------------------------
@@ -284,12 +234,3 @@ CLASS_KIT = {
 # Everybody gets these on top of their class kit. Measured rather than
 # guessed: the barrow was a two-in-ten party wipe without them.
 PARTY_KIT = [("bandages", 3), ("healing_draught", 2)]
-
-
-def outfit(classes):
-    """Give every class its gear. Mutates the list `build.py` is about to emit."""
-    for entry in classes:
-        kit = CLASS_KIT.get(entry["id"])
-        if kit:
-            entry["startingItems"] = [{"item": i, "quantity": q} for i, q in kit]
-    return classes
