@@ -82,6 +82,20 @@ export const startSchema = z
     /** Ends the game when it becomes true. */
     victoryWhen: PredicateSchema.optional(),
     defeatWhen: PredicateSchema.optional(),
+    /**
+     * What finishing an `isEnding` arc does.
+     *
+     * `end` stops the run, which is what winning has always meant. `continue`
+     * records the win and narrates it and then leaves the world live, so a
+     * module can put content on the far side of its own ending.
+     *
+     * ⚠️ `.optional()`, and it must stay that way, for the same reason `mods`
+     * is — `compileModule` hashes `parsed.data`, so a `.default('end')` here
+     * would insert the key into every document zod has ever parsed, change the
+     * content hash of every module, and make `load()` refuse every existing
+     * save. Optional means only a module that opts in moves.
+     */
+    postVictory: z.enum(['end', 'continue']).optional(),
   })
   .strict();
 

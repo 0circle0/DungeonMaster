@@ -2119,6 +2119,7 @@ rejects a module that drops one.
 | `initialFlags` | { string: [DSL](#the-dsl) } |  | `{}` |
 | `victoryWhen` | [DSL](#the-dsl) |  |  |
 | `defeatWhen` | [DSL](#the-dsl) |  |  |
+| `postVictory` | `end` \| `continue` |  |  |
 
 ### Module → `start` → `creation`
 

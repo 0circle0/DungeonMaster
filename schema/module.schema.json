@@ -8648,6 +8648,13 @@
             },
             "defeatWhen": {
               "$ref": "#/$defs/GameModule/properties/rules/properties/attributes/items/properties/modifier/anyOf/19/properties/cond"
+            },
+            "postVictory": {
+              "type": "string",
+              "enum": [
+                "end",
+                "continue"
+              ]
             }
           },
           "additionalProperties": false,

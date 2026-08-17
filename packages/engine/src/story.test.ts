@@ -1494,6 +1494,33 @@ describe('leaving a place', () => {
 });
 
 describe('story arcs', () => {
+  /** Greenmarch with its ending arc finished: both quests complete. */
+  function arcFinished(): GameState {
+    return {
+      ...fresh(),
+      quests: {
+        the_mill_door: {
+          quest: 'the_mill_door', status: 'complete', completedObjectives: [], startedAt: 0,
+        },
+        the_barrow_ward: {
+          quest: 'the_barrow_ward', status: 'complete', completedObjectives: [], startedAt: 0,
+        },
+      },
+    };
+  }
+
+  /** Greenmarch, recompiled with one `start` field changed. */
+  function withPostVictory(mode: 'end' | 'continue'): CompiledModule {
+    const dir = fileURLToPath(new URL('../../../modules/greenmarch', import.meta.url));
+    const doc = readAssembledModule(dir).doc as unknown as {
+      start: Record<string, unknown>;
+    };
+    doc.start.postVictory = mode;
+    const result = compileModule(doc);
+    if (!result.ok) throw new Error('postVictory fixture failed to compile');
+    return result.module;
+  }
+
   // `narrative.arcs` was never queried at all — a whole collection the schema
   // accepted, the linter cleared, the docs described, and nothing read.
   it('derives an arc\'s standing from its quests, storing nothing', () => {
@@ -1531,21 +1558,48 @@ describe('story arcs', () => {
 
   // `isEnding` promised the game would end and did nothing whatsoever.
   it('ends the run when an ending arc is finished', () => {
-    const done: GameState = {
-      ...fresh(),
-      quests: {
-        the_mill_door: {
-          quest: 'the_mill_door', status: 'complete', completedObjectives: [], startedAt: 0,
-        },
-        the_barrow_ward: {
-          quest: 'the_barrow_ward', status: 'complete', completedObjectives: [], startedAt: 0,
-        },
-      },
-    };
+    const done = arcFinished();
     expect(endingReached(GREENMARCH, done)?.id).toBe('the_greenmarch');
 
-    const { state } = reduce(done, { type: 'wait', minutes: 1 }, ctx);
+    const { state, events } = reduce(done, { type: 'wait', minutes: 1 }, ctx);
     expect(state.outcome).toBe('victory');
+    // The arc path used to emit only `custom/arcCompleted`, and `narrate`
+    // renders `game.victory` from `gameOver` alone — so a module whose ending
+    // was an arc announced its own ending to nobody.
+    expect(events.some((event) => event.type === 'gameOver')).toBe(true);
+  });
+
+  // `postVictory: 'continue'` is what lets a module put content on the far side
+  // of its own ending: the win is announced and the world stays live.
+  it('keeps the world live after the ending when the module asks it to', () => {
+    const module = withPostVictory('continue');
+    const done = arcFinished();
+
+    const won = reduce(done, { type: 'wait', minutes: 1 }, { module });
+    expect(won.state.outcome).toBe('playing');
+    expect(won.events.filter((event) => event.type === 'gameOver')).toHaveLength(1);
+
+    // Announced once. The arc stays complete for the rest of the run, so
+    // without a record of its own this would fire on every reduction.
+    const after = reduce(won.state, { type: 'wait', minutes: 1 }, { module });
+    expect(after.events.some((event) => event.type === 'gameOver')).toBe(false);
+    expect(after.state.outcome).toBe('playing');
+  });
+
+  // Winning does not make a party immortal.
+  it('can still be lost after the ending has been reached', () => {
+    const module = withPostVictory('continue');
+    const won = reduce(arcFinished(), { type: 'wait', minutes: 1 }, { module }).state;
+
+    const dead: GameState = {
+      ...won,
+      entities: Object.fromEntries(
+        Object.entries(won.entities).map(([id, entity]) =>
+          [id, won.party.includes(id) ? { ...entity, alive: false } : entity]),
+      ),
+    };
+    const { state } = reduce(dead, { type: 'wait', minutes: 1 }, { module });
+    expect(state.outcome).toBe('defeat');
   });
 
   it('puts every declared arc in scope, so a typo is loud', () => {

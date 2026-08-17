@@ -28,7 +28,7 @@ export {
 } from './sim/quests.js';
 export type { QuestDef, StageDef, ObjectiveDef } from './sim/quests.js';
 export { questJournal, currentObjective, journalByArc } from './sim/questview.js';
-export { arcsOf, endingReached, arcScope } from './sim/arcs.js';
+export { arcsOf, endingReached, endingFlag, arcScope } from './sim/arcs.js';
 export type { ArcView, ArcStatus, ArcDef } from './sim/arcs.js';
 export { loreByThread, looseLore, threadScope } from './sim/lore.js';
 export type { LoreThreadView, LoreEntryView, LoreDef, LoreThreadDef } from './sim/lore.js';

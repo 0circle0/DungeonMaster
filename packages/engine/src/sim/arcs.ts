@@ -90,6 +90,21 @@ export function endingReached(module: CompiledModule, state: GameState): ArcView
 }
 
 /**
+ * The engine's record that an ending has already been reached and announced.
+ *
+ * A flag rather than a field on `GameState`, in the same family as
+ * `gate:<id>:open` — an existing save reads it as absent, which is exactly
+ * right, so there is nothing to migrate.
+ *
+ * Needed because `start.postVictory: 'continue'` leaves `outcome` at `playing`,
+ * and an arc that has been finished stays finished: without a record of its own
+ * the ending would be reached again on every reduction for the rest of the run.
+ */
+export function endingFlag(arcId: string): string {
+  return `ending:${arcId}`;
+}
+
+/**
  * Arc status as the DSL sees it.
  *
  * Populated for **every** declared arc rather than only the started ones, so

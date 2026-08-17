@@ -43,7 +43,7 @@ import { openGate, markGateOpen, describeRequirement } from './sim/gates.js';
 import { startQuest, abandonQuest, advanceQuests, questsOffered } from './sim/quests.js';
 import { startDialogue, chooseOption, canTalkTo, endDialogue } from './sim/dialogue.js';
 import { dropDeathLoot } from './sim/spoils.js';
-import { endingReached } from './sim/arcs.js';
+import { endingReached, endingFlag } from './sim/arcs.js';
 import { buyItem, sellItem } from './sim/trade.js';
 import { springTrap, searchForTraps, disarmTrap } from './sim/traps.js';
 import { runTerrain } from './sim/terrain.js';
@@ -1429,19 +1429,32 @@ function settle(txn: Transaction, terrain: TerrainIndex, rng: Rng): void {
     dispatched = txn.finish().events.length;
   }
 
-  // The module says what winning is. Checked before the all-dead test on
-  // purpose: a party that falls on the blow that ends it has still won.
-  // Finishing an arc the module marked as the ending wins the game. Checked
-  // after `victoryWhen`, so a module declaring both keeps its own predicate as
-  // the primary answer and the arc is one more way to get there.
+  // The module says what winning is, and both ways of saying it are checked
+  // before the all-dead test on purpose: a party that falls on the blow that
+  // ends it has still won.
+  const start = txn.module.source.start;
   const ending = endingReached(txn.module, txn.state);
-  if (ending && txn.state.outcome === 'playing') {
-    txn.set({ ...txn.state, outcome: 'victory' });
+  if (ending && !txn.state.flags[endingFlag(ending.id)]) {
+    // `gameOver` as well as the arc event, because `gameOver` is the only thing
+    // `narrate` renders `game.victory` from — emitting a bare `custom` here is
+    // why finishing a module whose ending is an arc has always been silent.
+    //
+    // The flag is what makes this fire once. In `continue` mode `outcome` stays
+    // `playing`, so `endingReached` goes on being true for the rest of the run
+    // and the guard cannot be the outcome any more. `ending:<arc>` is the
+    // engine's own record, in the same family as `gate:<id>:open`.
+    txn.set({
+      ...txn.state,
+      flags: { ...txn.state.flags, [endingFlag(ending.id)]: true },
+    });
     txn.emit({ type: 'custom', event: 'arcCompleted', data: { arc: ending.id } });
-    return;
+    txn.emit({ type: 'gameOver', outcome: 'victory' });
+    if (start.postVictory !== 'continue') {
+      txn.set({ ...txn.state, outcome: 'victory' });
+      return;
+    }
   }
 
-  const start = txn.module.source.start;
   if (outcomeReached(txn, start.victoryWhen, rng)) {
     txn.set({ ...txn.state, outcome: 'victory' });
     txn.emit({ type: 'gameOver', outcome: 'victory' });
