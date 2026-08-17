@@ -4156,6 +4156,127 @@
           "heavy"
         ],
         "rarity": "very_rare"
+      },
+      {
+        "id": "posting_book",
+        "name": "The Posting House Book",
+        "description": "Eleven years of southbound carts at night, none of them licensed, all of them written down by somebody who was paid not to notice and noticed anyway.",
+        "kind": "key",
+        "value": 0,
+        "weight": 0,
+        "tags": [
+          "keepsake"
+        ],
+        "extra": {
+          "heldBy": "post_master_wend"
+        }
+      },
+      {
+        "id": "drain_sheet",
+        "name": "The Missing Drain Sheet",
+        "description": "One sheet out of four hundred years of Aurenhal's drains, in a copyist's hand rather than the Library's, because the original went and somebody copied it first.",
+        "kind": "key",
+        "value": 0,
+        "weight": 0,
+        "tags": [
+          "keepsake"
+        ],
+        "extra": {
+          "heldBy": "copyist_marn"
+        }
+      },
+      {
+        "id": "sluice_key",
+        "name": "The Sluice Key",
+        "description": "For a gate the parish stopped paying anybody to work ninety years ago, and which is worked to the day.",
+        "kind": "key",
+        "value": 0,
+        "weight": 0,
+        "tags": [
+          "keepsake"
+        ],
+        "extra": {
+          "heldBy": "ford_farmer_alsey"
+        }
+      },
+      {
+        "id": "second_face_stone",
+        "name": "A Piece off the Second Face",
+        "description": "Finer than roadstone, and there is none of it in any road.",
+        "kind": "treasure",
+        "value": 0,
+        "weight": 0,
+        "tags": [
+          "clue",
+          "proof"
+        ],
+        "onUse": [
+          {
+            "learnLore": {
+              "entry": "kings_quarry_stone"
+            }
+          }
+        ],
+        "consumedOnUse": false
+      },
+      {
+        "id": "masons_belt",
+        "name": "The Road Mason's Belt",
+        "description": "Tool-worn leather off somebody who worked both faces and was paid for one. It carries more than it looks like it should.",
+        "kind": "trinket",
+        "slot": "belt",
+        "value": 420,
+        "weight": 1,
+        "tags": [
+          "fabled"
+        ],
+        "modifiers": {
+          "carry": 4
+        },
+        "skillBonuses": {
+          "craft": 2
+        },
+        "rarity": "uncommon"
+      },
+      {
+        "id": "undercity_hood",
+        "name": "The Hood off the Third Turn",
+        "description": "Oiled canvas, sooted through, out of a passage that has been bricked since before the King's Gate.",
+        "kind": "armor",
+        "slot": "head",
+        "value": 520,
+        "weight": 1,
+        "tags": [
+          "fabled"
+        ],
+        "skillBonuses": {
+          "stealth": 3,
+          "perception": 2
+        },
+        "rarity": "rare"
+      },
+      {
+        "id": "ford_ring",
+        "name": "The Ring in the Ford Stone",
+        "description": "Iron worn thin by a rope nobody has tied in living memory. Cold water does not trouble the wearer.",
+        "kind": "trinket",
+        "slot": "ring",
+        "value": 480,
+        "weight": 1,
+        "tags": [
+          "fabled"
+        ],
+        "skillBonuses": {
+          "athletics": 2,
+          "survival": 2
+        },
+        "damageInteractions": [
+          {
+            "damageType": "cold",
+            "multiplier": 0.75
+          }
+        ],
+        "rarity": "uncommon"
       }
     ],
     "lootTables": [
@@ -6583,6 +6704,187 @@
             "weight": 2,
             "value": {
               "item": "warded_coat",
+              "quantity": "1"
+            }
+          }
+        ]
+      },
+      {
+        "id": "kings_book_carried",
+        "name": "What Wend Kept",
+        "rolls": "1",
+        "emptyChance": 0,
+        "entries": [
+          {
+            "weight": 1,
+            "value": {
+              "item": "posting_book",
+              "quantity": "1",
+              "unique": true,
+              "requirementScope": "party",
+              "requires": {
+                "without": {
+                  "flags": [
+                    {
+                      "flag": "given:posting_book"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        ]
+      },
+      {
+        "id": "kings_sheet_carried",
+        "name": "What Marn Kept",
+        "rolls": "1",
+        "emptyChance": 0,
+        "entries": [
+          {
+            "weight": 1,
+            "value": {
+              "item": "drain_sheet",
+              "quantity": "1",
+              "unique": true,
+              "requirementScope": "party",
+              "requires": {
+                "without": {
+                  "flags": [
+                    {
+                      "flag": "given:drain_sheet"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        ]
+      },
+      {
+        "id": "kings_key_carried",
+        "name": "What Alsey Kept",
+        "rolls": "1",
+        "emptyChance": 0,
+        "entries": [
+          {
+            "weight": 1,
+            "value": {
+              "item": "sluice_key",
+              "quantity": "1",
+              "unique": true,
+              "requirementScope": "party",
+              "requires": {
+                "without": {
+                  "flags": [
+                    {
+                      "flag": "given:sluice_key"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        ]
+      },
+      {
+        "id": "kings_quarry_hoard",
+        "name": "Bottom of the Second Face",
+        "rolls": "2",
+        "emptyChance": 0.1,
+        "bonusRollSkill": "perception",
+        "bonusRolls": {
+          "onSuccess": 1,
+          "onCritical": 2
+        },
+        "entries": [
+          {
+            "weight": 5,
+            "value": {
+              "item": "old_coin",
+              "quantity": "2d6"
+            }
+          },
+          {
+            "weight": 2,
+            "value": {
+              "item": "bandages",
+              "quantity": "1d2"
+            }
+          },
+          {
+            "weight": 1,
+            "value": {
+              "item": "second_face_stone",
+              "quantity": "1",
+              "unique": true
+            }
+          }
+        ]
+      },
+      {
+        "id": "kings_under_hoard",
+        "name": "Past the Third Turn",
+        "rolls": "2",
+        "emptyChance": 0.15,
+        "bonusRollSkill": "perception",
+        "bonusRolls": {
+          "onSuccess": 1,
+          "onCritical": 2
+        },
+        "entries": [
+          {
+            "weight": 5,
+            "value": {
+              "item": "old_coin",
+              "quantity": "2d6"
+            }
+          },
+          {
+            "weight": 2,
+            "value": {
+              "item": "healing_draught",
+              "quantity": "1"
+            }
+          },
+          {
+            "weight": 1,
+            "value": {
+              "item": "ward_salt",
+              "quantity": "1"
+            }
+          }
+        ]
+      },
+      {
+        "id": "kings_ford_hoard",
+        "name": "Under the Sluice",
+        "rolls": "2",
+        "emptyChance": 0.1,
+        "bonusRollSkill": "perception",
+        "bonusRolls": {
+          "onSuccess": 1,
+          "onCritical": 2
+        },
+        "entries": [
+          {
+            "weight": 5,
+            "value": {
+              "item": "old_coin",
+              "quantity": "3d6"
+            }
+          },
+          {
+            "weight": 2,
+            "value": {
+              "item": "eel_skin",
+              "quantity": "1d2"
+            }
+          },
+          {
+            "weight": 1,
+            "value": {
+              "item": "antidote",
               "quantity": "1"
             }
           }
@@ -10568,6 +10870,272 @@
         "resourceOverrides": {
           "hp": 110
         }
+      },
+      {
+        "id": "kings_postmaster",
+        "name": "Wend, at the Posting House",
+        "description": "Handles horses that do not want handling, all day.",
+        "level": 3,
+        "xp": 0,
+        "attributes": {
+          "might": 11,
+          "agility": 13,
+          "endurance": 12,
+          "intellect": 13,
+          "instinct": 14,
+          "presence": 13
+        },
+        "abilities": [
+          "strike"
+        ],
+        "behaviour": [
+          {
+            "priority": 0,
+            "use": "strike"
+          }
+        ],
+        "faction": "the_crown",
+        "creatureType": "humanoid",
+        "size": "medium",
+        "descriptors": [
+          "a brisk"
+        ],
+        "conditionalLoot": [],
+        "loot": "kings_book_carried",
+        "resourceOverrides": {
+          "hp": 18
+        }
+      },
+      {
+        "id": "kings_copyist",
+        "name": "Marn, a Copyist",
+        "description": "Sits still for a living and is not built for anything else.",
+        "level": 3,
+        "xp": 0,
+        "attributes": {
+          "might": 9,
+          "agility": 13,
+          "endurance": 10,
+          "intellect": 15,
+          "instinct": 13,
+          "presence": 11
+        },
+        "abilities": [
+          "strike"
+        ],
+        "behaviour": [
+          {
+            "priority": 0,
+            "use": "strike"
+          }
+        ],
+        "faction": "the_library",
+        "creatureType": "humanoid",
+        "size": "medium",
+        "descriptors": [
+          "an ink-stained"
+        ],
+        "conditionalLoot": [],
+        "loot": "kings_sheet_carried",
+        "resourceOverrides": {
+          "hp": 14
+        }
+      },
+      {
+        "id": "kings_farmer",
+        "name": "Alsey, at the Ford",
+        "description": "Farms two banks of a river, which is twice the walking.",
+        "level": 3,
+        "xp": 0,
+        "attributes": {
+          "might": 14,
+          "agility": 11,
+          "endurance": 14,
+          "intellect": 10,
+          "instinct": 13,
+          "presence": 12
+        },
+        "abilities": [
+          "strike"
+        ],
+        "behaviour": [
+          {
+            "priority": 0,
+            "use": "strike"
+          }
+        ],
+        "faction": "the_crown",
+        "creatureType": "humanoid",
+        "size": "medium",
+        "descriptors": [
+          "a red-faced"
+        ],
+        "conditionalLoot": [],
+        "loot": "kings_key_carried",
+        "resourceOverrides": {
+          "hp": 20
+        }
+      },
+      {
+        "id": "quarry_thing",
+        "name": "What the Fine Stone Was Cut For",
+        "description": "Eleven years of the best stone in the Kingsvale going south at night, and something at the bottom of the hole it came out of.",
+        "level": 4,
+        "xp": 220,
+        "attributes": {
+          "might": 15,
+          "agility": 11,
+          "endurance": 15,
+          "intellect": 8,
+          "instinct": 12,
+          "presence": 9
+        },
+        "abilities": [
+          "stone_fist",
+          "rend"
+        ],
+        "behaviour": [
+          {
+            "priority": 0,
+            "use": "stone_fist"
+          }
+        ],
+        "faction": "the_unsealed",
+        "creatureType": "undead",
+        "size": "medium",
+        "descriptors": [
+          "a dust-white",
+          "a heavy"
+        ],
+        "conditionalLoot": [],
+        "loot": "kings_quarry_hoard",
+        "conditionImmunities": [
+          "prone",
+          "frightened"
+        ],
+        "resourceOverrides": {
+          "hp": 38
+        }
+      },
+      {
+        "id": "under_warmth",
+        "name": "What Keeps the Third Turn Warm",
+        "description": "Warm air off a bricked passage under a city, all year, since before the King's Gate.",
+        "level": 4,
+        "xp": 240,
+        "attributes": {
+          "might": 12,
+          "agility": 14,
+          "endurance": 14,
+          "intellect": 12,
+          "instinct": 15,
+          "presence": 13
+        },
+        "abilities": [
+          "grave_chill",
+          "wither"
+        ],
+        "behaviour": [
+          {
+            "priority": 0,
+            "use": "grave_chill"
+          }
+        ],
+        "faction": "the_unsealed",
+        "creatureType": "undead",
+        "size": "medium",
+        "descriptors": [
+          "a close",
+          "a breathing"
+        ],
+        "conditionalLoot": [],
+        "loot": "kings_under_hoard",
+        "damageInteractions": [
+          {
+            "damageType": "slashing",
+            "multiplier": 0.5,
+            "unless": [
+              "silvered"
+            ]
+          },
+          {
+            "damageType": "piercing",
+            "multiplier": 0.5,
+            "unless": [
+              "silvered"
+            ]
+          }
+        ],
+        "conditionImmunities": [
+          "frightened"
+        ],
+        "resourceOverrides": {
+          "hp": 34
+        }
+      },
+      {
+        "id": "ford_keeper",
+        "name": "The Keeper",
+        "description": "Ninety years of a sluice worked to the day, by somebody the parish stopped paying and who did not stop.",
+        "level": 4,
+        "xp": 230,
+        "attributes": {
+          "might": 14,
+          "agility": 13,
+          "endurance": 15,
+          "intellect": 11,
+          "instinct": 14,
+          "presence": 12
+        },
+        "abilities": [
+          "drag_under",
+          "latch"
+        ],
+        "behaviour": [
+          {
+            "priority": 15,
+            "use": "drag_under",
+            "when": {
+              "chance": 0.4
+            }
+          },
+          {
+            "priority": 0,
+            "use": "latch"
+          }
+        ],
+        "faction": "the_unsealed",
+        "creatureType": "undead",
+        "size": "medium",
+        "descriptors": [
+          "a sodden",
+          "a dutiful"
+        ],
+        "conditionalLoot": [],
+        "loot": "kings_ford_hoard",
+        "damageInteractions": [
+          {
+            "damageType": "slashing",
+            "multiplier": 0.5,
+            "unless": [
+              "silvered"
+            ]
+          },
+          {
+            "damageType": "piercing",
+            "multiplier": 0.5,
+            "unless": [
+              "silvered"
+            ]
+          }
+        ],
+        "conditionImmunities": [
+          "frightened",
+          "prone"
+        ],
+        "resourceOverrides": {
+          "hp": 36
+        }
       }
     ],
     "factions": [
@@ -12420,6 +12988,107 @@
         "faction": "the_keepers",
         "dialogue": "isle_ilva_talk",
         "home": "cormorant_chapel"
+      },
+      {
+        "id": "post_master_wend",
+        "name": "Wend, at the Posting House",
+        "description": "Changes horses on the Kingsroad and writes down every cart that goes past, which the Crown has never asked her to do.",
+        "disposition": 4,
+        "gullibility": 0.3,
+        "memorySpan": 250,
+        "offersQuests": [],
+        "caresAbout": [],
+        "reactions": [],
+        "faction": "the_crown",
+        "dialogue": "kings_wend_talk",
+        "home": "kingsroad_south_posting_house",
+        "statblock": "kings_postmaster",
+        "shop": {
+          "lootTable": "hollowdene_stock",
+          "buysTags": [
+            "treasure"
+          ],
+          "priceMultiplier": 1.25
+        }
+      },
+      {
+        "id": "copyist_marn",
+        "name": "Marn, a Copyist",
+        "description": "Copies the Library's drain sheets for the Craftrow guilds and once copied one the week before it went missing.",
+        "disposition": 2,
+        "gullibility": 0.25,
+        "memorySpan": 200,
+        "offersQuests": [],
+        "caresAbout": [],
+        "reactions": [],
+        "faction": "the_library",
+        "dialogue": "kings_marn_talk",
+        "home": "craftrow_market_square",
+        "statblock": "kings_copyist"
+      },
+      {
+        "id": "ford_farmer_alsey",
+        "name": "Alsey, at the Ford",
+        "description": "Farms both banks at Pennyford and has watched the sluice go up in the spring and down at the harvest her whole life.",
+        "disposition": 8,
+        "gullibility": 0.45,
+        "memorySpan": 180,
+        "offersQuests": [],
+        "caresAbout": [],
+        "reactions": [],
+        "faction": "the_crown",
+        "dialogue": "kings_alsey_talk",
+        "home": "pennyford_house_a",
+        "statblock": "kings_farmer"
+      },
+      {
+        "id": "road_mason_hob",
+        "name": "Hob, Road Mason",
+        "description": "Lays and relays the Kingsroad and can tell you which quarry every stone in it came out of, which is why the second face bothers him.",
+        "disposition": 6,
+        "gullibility": 0.4,
+        "memorySpan": 150,
+        "offersQuests": [],
+        "caresAbout": [],
+        "reactions": [],
+        "faction": "the_crown",
+        "dialogue": "kings_hob_talk",
+        "home": "craftrow_great_forge"
+      },
+      {
+        "id": "boatman_tass",
+        "name": "Tass, of the Long Wharf",
+        "description": "Works lighters up and down the Aurenhal reach and has been past that grate four times a day for twenty years.",
+        "disposition": 6,
+        "gullibility": 0.45,
+        "memorySpan": 150,
+        "offersQuests": [],
+        "caresAbout": [],
+        "reactions": [],
+        "faction": "the_crown",
+        "dialogue": "kings_tass_talk",
+        "home": "riverside_long_wharf"
+      },
+      {
+        "id": "ox_landlord_nib",
+        "name": "Nib, at the Drowned Ox",
+        "description": "Keeps an inn named after an animal that drowned in eleven inches of water and has heard every joke about it.",
+        "disposition": 8,
+        "gullibility": 0.5,
+        "memorySpan": 120,
+        "offersQuests": [],
+        "caresAbout": [],
+        "reactions": [],
+        "faction": "the_crown",
+        "dialogue": "kings_nib_talk",
+        "home": "pennyford_the_drowned_ox",
+        "shop": {
+          "lootTable": "hollowdene_stock",
+          "buysTags": [
+            "treasure"
+          ],
+          "priceMultiplier": 1.3
+        }
       }
     ],
     "traps": [
@@ -20134,7 +20803,22 @@
           "width": "15",
           "height": "11",
           "palette": "int_stone"
-        }
+        },
+        "triggers": [
+          {
+            "id": "kings_found_customs",
+            "mode": "once",
+            "on": "enter",
+            "description": "Piles cut off level, under the mud, beside newer ones.",
+            "effects": [
+              {
+                "learnLore": {
+                  "entry": "kings_under_wharf"
+                }
+              }
+            ]
+          }
+        ]
       },
       {
         "id": "riverside_bonded_warehouse",
@@ -20328,7 +21012,58 @@
           "x": 36,
           "y": 8
         },
-        "dungeon": "aurenhal_undercity"
+        "dungeon": "aurenhal_undercity",
+        "triggers": [
+          {
+            "id": "kings_under_committed",
+            "mode": "once",
+            "on": "enter",
+            "description": "Down at the grate, with warm air coming up.",
+            "requires": {
+              "custom": {
+                "gte": [
+                  {
+                    "ref": "threads.kings_under.known"
+                  },
+                  2
+                ]
+              }
+            },
+            "effects": [
+              {
+                "emit": {
+                  "event": "startQuest",
+                  "data": {
+                    "quest": "kings_what_goes_under"
+                  }
+                }
+              }
+            ]
+          }
+        ],
+        "hidden": true,
+        "discover": {
+          "skill": "perception",
+          "difficulty": {
+            "max": [
+              6,
+              {
+                "sub": [
+                  18,
+                  {
+                    "mul": [
+                      3,
+                      {
+                        "ref": "threads.kings_under.known"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "gate": "kings_under_brick_wall"
       },
       {
         "id": "warrens_thieves_market",
@@ -21167,7 +21902,22 @@
         "position": {
           "x": 27,
           "y": 16
-        }
+        },
+        "triggers": [
+          {
+            "id": "kings_found_maze",
+            "mode": "once",
+            "on": "enter",
+            "description": "Fine stone in the maze's paths that is in no road in the Kingsvale.",
+            "effects": [
+              {
+                "learnLore": {
+                  "entry": "kings_quarry_stone"
+                }
+              }
+            ]
+          }
+        ]
       },
       {
         "id": "pennyford_ford",
@@ -21184,7 +21934,22 @@
           "x": 15,
           "y": 6
         },
-        "gate": "pennyford_sluice"
+        "gate": "pennyford_sluice",
+        "triggers": [
+          {
+            "id": "kings_found_ford",
+            "mode": "once",
+            "on": "enter",
+            "description": "A stone in the bed with a rope-worn hole.",
+            "effects": [
+              {
+                "learnLore": {
+                  "entry": "kings_ford_stone"
+                }
+              }
+            ]
+          }
+        ]
       },
       {
         "id": "pennyford_sluice_house",
@@ -21203,7 +21968,58 @@
           "width": "9",
           "height": "7",
           "palette": "int_stone"
-        }
+        },
+        "triggers": [
+          {
+            "id": "kings_ford_committed",
+            "mode": "once",
+            "on": "enter",
+            "description": "In the sluice house, with the gear oiled.",
+            "requires": {
+              "custom": {
+                "gte": [
+                  {
+                    "ref": "threads.kings_ford.known"
+                  },
+                  2
+                ]
+              }
+            },
+            "effects": [
+              {
+                "emit": {
+                  "event": "startQuest",
+                  "data": {
+                    "quest": "kings_the_ford_toll"
+                  }
+                }
+              }
+            ]
+          }
+        ],
+        "hidden": true,
+        "discover": {
+          "skill": "perception",
+          "difficulty": {
+            "max": [
+              4,
+              {
+                "sub": [
+                  16,
+                  {
+                    "mul": [
+                      3,
+                      {
+                        "ref": "threads.kings_ford.known"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "gate": "kings_ford_sluice"
       },
       {
         "id": "pennyford_store",
@@ -21502,7 +22318,22 @@
         "position": {
           "x": 12,
           "y": 26
-        }
+        },
+        "triggers": [
+          {
+            "id": "kings_found_gibbet",
+            "mode": "once",
+            "on": "enter",
+            "description": "A gibbet with nobody on the assize rolls for it.",
+            "effects": [
+              {
+                "learnLore": {
+                  "entry": "kings_quarry_gibbet"
+                }
+              }
+            ]
+          }
+        ]
       },
       {
         "id": "kingsroad_south_quarry",
@@ -21519,7 +22350,58 @@
           "x": 40,
           "y": 26
         },
-        "dungeon": "roadstone_quarry"
+        "dungeon": "roadstone_quarry",
+        "triggers": [
+          {
+            "id": "kings_quarry_committed",
+            "mode": "once",
+            "on": "enter",
+            "description": "At the foot of a face nobody was paid to cut.",
+            "requires": {
+              "custom": {
+                "gte": [
+                  {
+                    "ref": "threads.kings_quarry.known"
+                  },
+                  2
+                ]
+              }
+            },
+            "effects": [
+              {
+                "emit": {
+                  "event": "startQuest",
+                  "data": {
+                    "quest": "kings_the_second_face"
+                  }
+                }
+              }
+            ]
+          }
+        ],
+        "hidden": true,
+        "discover": {
+          "skill": "perception",
+          "difficulty": {
+            "max": [
+              5,
+              {
+                "sub": [
+                  17,
+                  {
+                    "mul": [
+                      3,
+                      {
+                        "ref": "threads.kings_quarry.known"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "gate": "kings_quarry_face"
       },
       {
         "id": "oxbow_heronry",
@@ -34439,6 +35321,93 @@
             }
           ]
         }
+      },
+      {
+        "id": "kings_quarry_face",
+        "name": "The Second Face",
+        "description": "Two faces worked, one warrant, and the second face has a way into the hill at the bottom of it.",
+        "kind": "ward",
+        "blockedTextKey": "kings_quarry_blocked",
+        "staysOpen": true,
+        "onOpen": [
+          {
+            "setFlag": {
+              "flag": "kings_quarry_open",
+              "value": true
+            }
+          }
+        ],
+        "onBlocked": [],
+        "opensWith": [],
+        "tags": [],
+        "requires": {
+          "items": [
+            {
+              "item": "posting_book",
+              "quantity": 1,
+              "consume": false,
+              "equipped": false
+            }
+          ]
+        }
+      },
+      {
+        "id": "kings_under_brick_wall",
+        "name": "The Brick at the Third Turn",
+        "description": "Newer than the city, older than the gate, and laid by somebody in a hurry who was nonetheless very good at it.",
+        "kind": "ward",
+        "blockedTextKey": "kings_under_blocked",
+        "staysOpen": true,
+        "onOpen": [
+          {
+            "setFlag": {
+              "flag": "kings_under_open",
+              "value": true
+            }
+          }
+        ],
+        "onBlocked": [],
+        "opensWith": [],
+        "tags": [],
+        "requires": {
+          "items": [
+            {
+              "item": "drain_sheet",
+              "quantity": 1,
+              "consume": false,
+              "equipped": false
+            }
+          ]
+        }
+      },
+      {
+        "id": "kings_ford_sluice",
+        "name": "Under the Sluice",
+        "description": "A gate worked to the day for ninety years by nobody the parish pays, and a chamber under it.",
+        "kind": "ward",
+        "blockedTextKey": "kings_ford_blocked",
+        "staysOpen": true,
+        "onOpen": [
+          {
+            "setFlag": {
+              "flag": "kings_ford_open",
+              "value": true
+            }
+          }
+        ],
+        "onBlocked": [],
+        "opensWith": [],
+        "tags": [],
+        "requires": {
+          "items": [
+            {
+              "item": "sluice_key",
+              "quantity": 1,
+              "consume": false,
+              "equipped": false
+            }
+          ]
+        }
       }
     ],
     "roomTemplates": [
@@ -35411,7 +36380,8 @@
           "minLeaf": 6
         },
         "width": "31",
-        "height": "31"
+        "height": "31",
+        "bossTable": "kings_quarry_boss"
       },
       {
         "id": "aurenhal_undercity",
@@ -35432,7 +36402,8 @@
         },
         "width": "75",
         "height": "75",
-        "corridorLength": "2d3"
+        "corridorLength": "2d3",
+        "bossTable": "kings_under_boss"
       },
       {
         "id": "warren_cellars",
@@ -38473,6 +39444,72 @@
             "entries": [
               {
                 "monster": "marker_holder",
+                "count": "1",
+                "scaleWithLevel": false
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "kings_quarry_boss",
+        "minDepth": 0,
+        "maxDepth": 999,
+        "chance": 1,
+        "emptyWeight": 0,
+        "scalePerLevels": 3,
+        "groups": [
+          {
+            "id": "b",
+            "weight": 1,
+            "hostile": true,
+            "entries": [
+              {
+                "monster": "quarry_thing",
+                "count": "1",
+                "scaleWithLevel": false
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "kings_under_boss",
+        "minDepth": 0,
+        "maxDepth": 999,
+        "chance": 1,
+        "emptyWeight": 0,
+        "scalePerLevels": 3,
+        "groups": [
+          {
+            "id": "b",
+            "weight": 1,
+            "hostile": true,
+            "entries": [
+              {
+                "monster": "under_warmth",
+                "count": "1d2",
+                "scaleWithLevel": true
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "kings_ford_boss",
+        "minDepth": 0,
+        "maxDepth": 999,
+        "chance": 1,
+        "emptyWeight": 0,
+        "scalePerLevels": 3,
+        "groups": [
+          {
+            "id": "b",
+            "weight": 1,
+            "hostile": true,
+            "entries": [
+              {
+                "monster": "ford_keeper",
                 "count": "1",
                 "scaleWithLevel": false
               }
@@ -42627,6 +43664,48 @@
           },
           {
             "text": "Two of the hold's own, one ledger, and no discussion."
+          }
+        ]
+      },
+      {
+        "id": "kings_ford_blocked",
+        "variants": [
+          {
+            "text": "The sluice is locked and the lock is oiled. There is one key, and the parish gave up trying to find out who has it."
+          },
+          {
+            "text": "Up in the spring, down at the harvest, on the day, every year. Somebody is doing this."
+          },
+          {
+            "text": "A stone in the ford bed with a rope-worn hole in it, and nothing tied there in living memory."
+          }
+        ]
+      },
+      {
+        "id": "kings_quarry_blocked",
+        "variants": [
+          {
+            "text": "The cut at the bottom of the second face is shored and the shoring is sound, which is not what eleven years of abandonment looks like. Somebody kept a book on this and the book will say who."
+          },
+          {
+            "text": "Timber this good does not stand for eleven years unless somebody has been replacing it."
+          },
+          {
+            "text": "Fine stone, cut and carried south at night, and a hole in the hill at the end of it. You would want to know whose carts before you went in."
+          }
+        ]
+      },
+      {
+        "id": "kings_under_blocked",
+        "variants": [
+          {
+            "text": "The brick is sound and the mortar is better than the city's. There is a sheet of the drains for the year it went in, and it is not in the Library's run any more."
+          },
+          {
+            "text": "Warm air comes through the joints, which brick should not permit and this brick is doing anyway."
+          },
+          {
+            "text": "Four hundred years of drain sheets and one of them gone. Somebody wanted this turn forgotten and very nearly managed it."
           }
         ]
       },
@@ -65355,6 +66434,1873 @@
             "redirectWhen": []
           }
         ]
+      },
+      {
+        "id": "kings_wend_talk",
+        "start": "greet",
+        "nodes": [
+          {
+            "id": "greet",
+            "says": [
+              {
+                "text": "A posting house on a straight road, four horses in the yard and a woman writing in a book on the counter."
+              },
+              {
+                "text": "\u201cHorses are hired by the stage. If it is the Kingshold road you want the earlier one.\u201d"
+              }
+            ],
+            "onEnter": [],
+            "options": [
+              {
+                "id": "kings_wend_night",
+                "text": "Do many carts go south off this road at night?",
+                "requires": {
+                  "without": {
+                    "lore": [
+                      "kings_quarry_night"
+                    ]
+                  }
+                },
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "check": {
+                  "skill": "persuasion",
+                  "difficulty": {
+                    "sub": [
+                      13,
+                      {
+                        "clamp": [
+                          {
+                            "div": [
+                              {
+                                "ref": "reputation.the_crown",
+                                "else": 0
+                              },
+                              5
+                            ]
+                          },
+                          -6,
+                          6
+                        ]
+                      }
+                    ]
+                  },
+                  "onSuccess": "kings_wend_night_told",
+                  "onFailure": "kings_wend_night_wont"
+                }
+              },
+              {
+                "id": "kings_wend_gibbet",
+                "text": "There is a gibbet down the road with nobody's name on it.",
+                "requires": {
+                  "without": {
+                    "lore": [
+                      "kings_quarry_gibbet"
+                    ]
+                  }
+                },
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "check": {
+                  "skill": "persuasion",
+                  "difficulty": {
+                    "sub": [
+                      14,
+                      {
+                        "clamp": [
+                          {
+                            "div": [
+                              {
+                                "ref": "reputation.the_crown",
+                                "else": 0
+                              },
+                              5
+                            ]
+                          },
+                          -6,
+                          6
+                        ]
+                      }
+                    ]
+                  },
+                  "onSuccess": "kings_wend_gibbet_told",
+                  "onFailure": "kings_wend_gibbet_wont"
+                }
+              },
+              {
+                "id": "kings_wend_worked",
+                "text": "You post horses over Pennyford. Is that sluice worked?",
+                "requires": {
+                  "without": {
+                    "lore": [
+                      "kings_ford_worked"
+                    ]
+                  }
+                },
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "check": {
+                  "skill": "insight",
+                  "difficulty": {
+                    "sub": [
+                      12,
+                      {
+                        "clamp": [
+                          {
+                            "div": [
+                              {
+                                "ref": "reputation.the_crown",
+                                "else": 0
+                              },
+                              5
+                            ]
+                          },
+                          -6,
+                          6
+                        ]
+                      }
+                    ]
+                  },
+                  "onSuccess": "kings_wend_worked_told",
+                  "onFailure": "kings_wend_worked_wont"
+                }
+              },
+              {
+                "id": "kings_wend_book",
+                "text": "Let me take the book.",
+                "requires": {
+                  "without": {
+                    "items": [
+                      "posting_book"
+                    ],
+                    "flags": [
+                      {
+                        "flag": "given:posting_book"
+                      }
+                    ]
+                  }
+                },
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "check": {
+                  "skill": "persuasion",
+                  "difficulty": {
+                    "sub": [
+                      14,
+                      {
+                        "clamp": [
+                          {
+                            "div": [
+                              {
+                                "ref": "reputation.the_crown",
+                                "else": 0
+                              },
+                              5
+                            ]
+                          },
+                          -6,
+                          6
+                        ]
+                      }
+                    ]
+                  },
+                  "onSuccess": "kings_wend_book_gave",
+                  "onFailure": "kings_wend_book_kept"
+                }
+              },
+              {
+                "id": "greet_leave",
+                "text": "Nothing.",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "kings_wend_night_told",
+            "says": [
+              {
+                "text": "\u201cThey did.\u201d She checks over her shoulder, which answers a different question. \u201cEleven years of them and not one licensed. I wrote every one down because a posting house writes things down, and nobody ever came and asked me for the book, which I have thought about a great deal.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "learnLore": {
+                  "entry": "kings_quarry_night"
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "kings_wend_night_on",
+                "text": "Go on.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "kings_wend_night_wont",
+            "says": [
+              {
+                "text": "\u201cI've said all I mean to,\u201d they say, and go back to what they were doing."
+              }
+            ],
+            "onEnter": [
+              {
+                "adjustReputation": {
+                  "faction": "the_crown",
+                  "amount": -1
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "kings_wend_night_drop",
+                "text": "Leave it.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "kings_wend_gibbet_told",
+            "says": [
+              {
+                "text": "\u201cWent up the same year the carts started.\u201d She says it flatly. \u201cNobody hanged on it \u2014 I have had the assize clerk look, he owed me a favour. It is a gibbet that has never been used, on a road with no highwaymen, put up the year something else started.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "learnLore": {
+                  "entry": "kings_quarry_gibbet"
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "kings_wend_gibbet_on",
+                "text": "Go on.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "kings_wend_gibbet_wont",
+            "says": [
+              {
+                "text": "\u201cI've said all I mean to,\u201d they say, and go back to what they were doing."
+              }
+            ],
+            "onEnter": [
+              {
+                "adjustReputation": {
+                  "faction": "the_crown",
+                  "amount": -1
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "kings_wend_gibbet_drop",
+                "text": "Leave it.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "kings_wend_worked_told",
+            "says": [
+              {
+                "text": "\u201cUp in the spring, down at the harvest, and I set my remounts by it.\u201d She says it without looking up, and then does look up. \u201cWhich I have just heard myself say out loud for the first time. The parish has not paid anybody to do that since before I was born.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "learnLore": {
+                  "entry": "kings_ford_worked"
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "kings_wend_worked_on",
+                "text": "Go on.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "kings_wend_worked_wont",
+            "says": [
+              {
+                "text": "\u201cI've said all I mean to,\u201d they say, and go back to what they were doing."
+              }
+            ],
+            "onEnter": [
+              {
+                "adjustReputation": {
+                  "faction": "the_crown",
+                  "amount": -1
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "kings_wend_worked_drop",
+                "text": "Leave it.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "kings_wend_book_gave",
+            "says": [
+              {
+                "text": "She gets it from under the counter, which is not where a posting house keeps its book. \u201cEleven years,\u201d she says. \u201cIf it turns out somebody at Kingshold has known this the whole time, I would rather hear it from you than from them.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "grantItem": {
+                  "target": {
+                    "ref": "actor.id"
+                  },
+                  "item": "posting_book",
+                  "quantity": 1
+                }
+              },
+              {
+                "setFlag": {
+                  "flag": "given:posting_book",
+                  "value": true
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "kings_wend_book_thanks",
+                "text": "Thank you.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "kings_wend_book_kept",
+            "says": [
+              {
+                "text": "\u201cNot the book,\u201d she says. \u201cI will tell you what is in it. The book stays where it is.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "adjustReputation": {
+                  "faction": "the_crown",
+                  "amount": -2
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "kings_wend_book_leave",
+                "text": "Then no.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          }
+        ]
+      },
+      {
+        "id": "kings_hob_talk",
+        "start": "greet",
+        "nodes": [
+          {
+            "id": "greet",
+            "says": [
+              {
+                "text": "A forge yard with a road mason's kit against the wall and a man sorting setts by size."
+              },
+              {
+                "text": "\u201cRoadwork. If the road did it to your cart, take it up with the Crown, not me.\u201d"
+              }
+            ],
+            "onEnter": [],
+            "options": [
+              {
+                "id": "kings_hob_two",
+                "text": "How many faces is that quarry worked from?",
+                "requires": {
+                  "without": {
+                    "lore": [
+                      "kings_quarry_two"
+                    ]
+                  }
+                },
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "check": {
+                  "skill": "persuasion",
+                  "difficulty": {
+                    "sub": [
+                      10,
+                      {
+                        "clamp": [
+                          {
+                            "div": [
+                              {
+                                "ref": "reputation.the_crown",
+                                "else": 0
+                              },
+                              5
+                            ]
+                          },
+                          -6,
+                          6
+                        ]
+                      }
+                    ]
+                  },
+                  "onSuccess": "kings_hob_two_told",
+                  "onFailure": "kings_hob_two_wont"
+                }
+              },
+              {
+                "id": "kings_hob_stone",
+                "text": "Is the stone the same off both?",
+                "requires": {
+                  "without": {
+                    "lore": [
+                      "kings_quarry_stone"
+                    ]
+                  }
+                },
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "check": {
+                  "skill": "insight",
+                  "difficulty": {
+                    "sub": [
+                      12,
+                      {
+                        "clamp": [
+                          {
+                            "div": [
+                              {
+                                "ref": "reputation.the_crown",
+                                "else": 0
+                              },
+                              5
+                            ]
+                          },
+                          -6,
+                          6
+                        ]
+                      }
+                    ]
+                  },
+                  "onSuccess": "kings_hob_stone_told",
+                  "onFailure": "kings_hob_stone_wont"
+                }
+              },
+              {
+                "id": "greet_leave",
+                "text": "Nothing.",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "kings_hob_two_told",
+            "says": [
+              {
+                "text": "\u201cTwo.\u201d He puts a sett down. \u201cThe warrant is for one. The tallies are for one. There are two, and I have laid road out of that quarry for nineteen years and I would like somebody to explain it who is not a clerk.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "learnLore": {
+                  "entry": "kings_quarry_two"
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "kings_hob_two_on",
+                "text": "Go on.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "kings_hob_two_wont",
+            "says": [
+              {
+                "text": "\u201cI've said all I mean to,\u201d they say, and go back to what they were doing."
+              }
+            ],
+            "onEnter": [
+              {
+                "adjustReputation": {
+                  "faction": "the_crown",
+                  "amount": -1
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "kings_hob_two_drop",
+                "text": "Leave it.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "kings_hob_stone_told",
+            "says": [
+              {
+                "text": "\u201cNo.\u201d Emphatic. \u201cSecond face is finer. Better stone than the Kingsroad has any use for, and there is *none of it* in the Kingsroad, or the Craftrow, or the King's Gate. I have looked at every road in this vale.\u201d A pause. \u201cIt went somewhere.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "learnLore": {
+                  "entry": "kings_quarry_stone"
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "kings_hob_stone_on",
+                "text": "Go on.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "kings_hob_stone_wont",
+            "says": [
+              {
+                "text": "\u201cI've said all I mean to,\u201d they say, and go back to what they were doing."
+              }
+            ],
+            "onEnter": [
+              {
+                "adjustReputation": {
+                  "faction": "the_crown",
+                  "amount": -1
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "kings_hob_stone_drop",
+                "text": "Leave it.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          }
+        ]
+      },
+      {
+        "id": "kings_tass_talk",
+        "start": "greet",
+        "nodes": [
+          {
+            "id": "greet",
+            "says": [
+              {
+                "text": "A lighter tied at the Long Wharf and a man coiling rope on it who has clearly done this ten thousand times."
+              },
+              {
+                "text": "\u201cCargo's by the ton and I do not take passengers past the watergate.\u201d"
+              }
+            ],
+            "onEnter": [],
+            "options": [
+              {
+                "id": "kings_tass_air",
+                "text": "That grate breathes.",
+                "requires": {
+                  "without": {
+                    "lore": [
+                      "kings_under_air"
+                    ]
+                  }
+                },
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "check": {
+                  "skill": "persuasion",
+                  "difficulty": {
+                    "sub": [
+                      10,
+                      {
+                        "clamp": [
+                          {
+                            "div": [
+                              {
+                                "ref": "reputation.the_crown",
+                                "else": 0
+                              },
+                              5
+                            ]
+                          },
+                          -6,
+                          6
+                        ]
+                      }
+                    ]
+                  },
+                  "onSuccess": "kings_tass_air_told",
+                  "onFailure": "kings_tass_air_wont"
+                }
+              },
+              {
+                "id": "kings_tass_brick",
+                "text": "How far in does it go?",
+                "requires": {
+                  "without": {
+                    "lore": [
+                      "kings_under_brick"
+                    ]
+                  }
+                },
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "check": {
+                  "skill": "persuasion",
+                  "difficulty": {
+                    "sub": [
+                      12,
+                      {
+                        "clamp": [
+                          {
+                            "div": [
+                              {
+                                "ref": "reputation.the_crown",
+                                "else": 0
+                              },
+                              5
+                            ]
+                          },
+                          -6,
+                          6
+                        ]
+                      }
+                    ]
+                  },
+                  "onSuccess": "kings_tass_brick_told",
+                  "onFailure": "kings_tass_brick_wont"
+                }
+              },
+              {
+                "id": "kings_tass_wharf",
+                "text": "The wharf was rebuilt?",
+                "requires": {
+                  "without": {
+                    "lore": [
+                      "kings_under_wharf"
+                    ]
+                  }
+                },
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "check": {
+                  "skill": "insight",
+                  "difficulty": {
+                    "sub": [
+                      13,
+                      {
+                        "clamp": [
+                          {
+                            "div": [
+                              {
+                                "ref": "reputation.the_crown",
+                                "else": 0
+                              },
+                              5
+                            ]
+                          },
+                          -6,
+                          6
+                        ]
+                      }
+                    ]
+                  },
+                  "onSuccess": "kings_tass_wharf_told",
+                  "onFailure": "kings_tass_wharf_wont"
+                }
+              },
+              {
+                "id": "greet_leave",
+                "text": "Nothing.",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "kings_tass_air_told",
+            "says": [
+              {
+                "text": "\u201cAll year.\u201d He does not stop coiling. \u201cWarm, and warmer than the river, which the river should not permit. Twenty years I have gone past it four times a day. Winter, summer, flood \u2014 same warm air.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "learnLore": {
+                  "entry": "kings_under_air"
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "kings_tass_air_on",
+                "text": "Go on.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "kings_tass_air_wont",
+            "says": [
+              {
+                "text": "\u201cI've said all I mean to,\u201d they say, and go back to what they were doing."
+              }
+            ],
+            "onEnter": [
+              {
+                "adjustReputation": {
+                  "faction": "the_crown",
+                  "amount": -1
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "kings_tass_air_drop",
+                "text": "Leave it.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "kings_tass_brick_told",
+            "says": [
+              {
+                "text": "\u201cThird turn, and then brick.\u201d He ties off. \u201cAnd the brick is newer than the city and older than the Gate, which every boatman on this reach knows and nobody has ever put in writing.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "learnLore": {
+                  "entry": "kings_under_brick"
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "kings_tass_brick_on",
+                "text": "Go on.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "kings_tass_brick_wont",
+            "says": [
+              {
+                "text": "\u201cI've said all I mean to,\u201d they say, and go back to what they were doing."
+              }
+            ],
+            "onEnter": [
+              {
+                "adjustReputation": {
+                  "faction": "the_crown",
+                  "amount": -1
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "kings_tass_brick_drop",
+                "text": "Leave it.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "kings_tass_wharf_told",
+            "says": [
+              {
+                "text": "\u201cNew piles, same year as the brick. Old ones are still down there, cut off level in the mud.\u201d He looks at the water. \u201cCut off *level*. You do not cut a pile off level under six feet of river for fun.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "learnLore": {
+                  "entry": "kings_under_wharf"
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "kings_tass_wharf_on",
+                "text": "Go on.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "kings_tass_wharf_wont",
+            "says": [
+              {
+                "text": "\u201cI've said all I mean to,\u201d they say, and go back to what they were doing."
+              }
+            ],
+            "onEnter": [
+              {
+                "adjustReputation": {
+                  "faction": "the_crown",
+                  "amount": -1
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "kings_tass_wharf_drop",
+                "text": "Leave it.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          }
+        ]
+      },
+      {
+        "id": "kings_marn_talk",
+        "start": "greet",
+        "nodes": [
+          {
+            "id": "greet",
+            "says": [
+              {
+                "text": "A stall on the market square with a board, a case of rolls and a man ruling a line with the concentration of a surgeon."
+              },
+              {
+                "text": "\u201cCopying is by the sheet and I do not do it while you wait.\u201d"
+              }
+            ],
+            "onEnter": [],
+            "options": [
+              {
+                "id": "kings_marn_maps",
+                "text": "The Library keeps the city's drains, doesn't it?",
+                "requires": {
+                  "without": {
+                    "lore": [
+                      "kings_under_maps"
+                    ]
+                  }
+                },
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "check": {
+                  "skill": "persuasion",
+                  "difficulty": {
+                    "sub": [
+                      15,
+                      {
+                        "clamp": [
+                          {
+                            "div": [
+                              {
+                                "ref": "reputation.the_library",
+                                "else": 0
+                              },
+                              5
+                            ]
+                          },
+                          -6,
+                          6
+                        ]
+                      }
+                    ]
+                  },
+                  "onSuccess": "kings_marn_maps_told",
+                  "onFailure": "kings_marn_maps_wont"
+                }
+              },
+              {
+                "id": "kings_marn_brick",
+                "text": "What is at the third turn under Riverside?",
+                "requires": {
+                  "without": {
+                    "lore": [
+                      "kings_under_brick"
+                    ]
+                  }
+                },
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "check": {
+                  "skill": "persuasion",
+                  "difficulty": {
+                    "sub": [
+                      13,
+                      {
+                        "clamp": [
+                          {
+                            "div": [
+                              {
+                                "ref": "reputation.the_library",
+                                "else": 0
+                              },
+                              5
+                            ]
+                          },
+                          -6,
+                          6
+                        ]
+                      }
+                    ]
+                  },
+                  "onSuccess": "kings_marn_brick_told",
+                  "onFailure": "kings_marn_brick_wont"
+                }
+              },
+              {
+                "id": "kings_marn_sheet",
+                "text": "You copied the sheet before it went. I want your copy.",
+                "requires": {
+                  "without": {
+                    "items": [
+                      "drain_sheet"
+                    ],
+                    "flags": [
+                      {
+                        "flag": "given:drain_sheet"
+                      }
+                    ]
+                  }
+                },
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "check": {
+                  "skill": "persuasion",
+                  "difficulty": {
+                    "sub": [
+                      16,
+                      {
+                        "clamp": [
+                          {
+                            "div": [
+                              {
+                                "ref": "reputation.the_library",
+                                "else": 0
+                              },
+                              5
+                            ]
+                          },
+                          -6,
+                          6
+                        ]
+                      }
+                    ]
+                  },
+                  "onSuccess": "kings_marn_sheet_gave",
+                  "onFailure": "kings_marn_sheet_kept"
+                }
+              },
+              {
+                "id": "greet_leave",
+                "text": "Nothing.",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": [
+              {
+                "requires": {
+                  "factions": [
+                    {
+                      "faction": "the_library",
+                      "maxStanding": -25
+                    }
+                  ]
+                },
+                "goto": "kings_marn_cold"
+              }
+            ]
+          },
+          {
+            "id": "kings_marn_maps_told",
+            "says": [
+              {
+                "text": "\u201cFour hundred years of them, and I copy them for the guilds.\u201d He lowers his voice without seeming to decide to. \u201cThere is a year missing out of the run. One sheet. And the run is bound, so somebody cut it out and rebound it, which is a week's work by somebody who knew how.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "learnLore": {
+                  "entry": "kings_under_maps"
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "kings_marn_maps_on",
+                "text": "Go on.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "kings_marn_maps_wont",
+            "says": [
+              {
+                "text": "\u201cI've said all I mean to,\u201d they say, and go back to what they were doing."
+              }
+            ],
+            "onEnter": [
+              {
+                "adjustReputation": {
+                  "faction": "the_library",
+                  "amount": -1
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "kings_marn_maps_drop",
+                "text": "Leave it.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "kings_marn_brick_told",
+            "says": [
+              {
+                "text": "\u201cBrick.\u201d He is precise about it, because he is a copyist. \u201cAnd I have the profile off my copy \u2014 it is a foot thick, English bond, and the mortar is better than anything the city was laying at the time.\u201d He sits back. \u201cSomebody good was in a hurry.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "learnLore": {
+                  "entry": "kings_under_brick"
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "kings_marn_brick_on",
+                "text": "Go on.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "kings_marn_brick_wont",
+            "says": [
+              {
+                "text": "\u201cI've said all I mean to,\u201d they say, and go back to what they were doing."
+              }
+            ],
+            "onEnter": [
+              {
+                "adjustReputation": {
+                  "faction": "the_library",
+                  "amount": -1
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "kings_marn_brick_drop",
+                "text": "Leave it.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "kings_marn_sheet_gave",
+            "says": [
+              {
+                "text": "He does not pretend not to have it. He gets it out of a case and unrolls the corner and rolls it back up again. \u201cI made this the week before. I have never shown it to the Library.\u201d He hands it over. \u201cI would like to not be the only person who has seen it.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "grantItem": {
+                  "target": {
+                    "ref": "actor.id"
+                  },
+                  "item": "drain_sheet",
+                  "quantity": 1
+                }
+              },
+              {
+                "setFlag": {
+                  "flag": "given:drain_sheet",
+                  "value": true
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "kings_marn_sheet_thanks",
+                "text": "Thank you.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "kings_marn_sheet_kept",
+            "says": [
+              {
+                "text": "\u201cI am a copyist in a city that has already cut one sheet out of a bound run,\u201d he says. \u201cNo.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "adjustReputation": {
+                  "faction": "the_library",
+                  "amount": -2
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "kings_marn_sheet_leave",
+                "text": "Then no.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "kings_marn_cold",
+            "says": [
+              {
+                "text": "He rolls what he was working on and puts it in the case and closes the case."
+              }
+            ],
+            "onEnter": [],
+            "options": [
+              {
+                "id": "kings_marn_go",
+                "text": "Leave it.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          }
+        ]
+      },
+      {
+        "id": "kings_alsey_talk",
+        "start": "greet",
+        "nodes": [
+          {
+            "id": "greet",
+            "says": [
+              {
+                "text": "A field gate being mended by somebody who has mended it many times and expects to again."
+              },
+              {
+                "text": "\u201cFord's eleven inches. Do not let the horse drink and walk at the same time.\u201d"
+              }
+            ],
+            "onEnter": [],
+            "options": [
+              {
+                "id": "kings_alsey_worked",
+                "text": "Somebody works that sluice.",
+                "requires": {
+                  "without": {
+                    "lore": [
+                      "kings_ford_worked"
+                    ]
+                  }
+                },
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "check": {
+                  "skill": "persuasion",
+                  "difficulty": {
+                    "sub": [
+                      11,
+                      {
+                        "clamp": [
+                          {
+                            "div": [
+                              {
+                                "ref": "reputation.the_crown",
+                                "else": 0
+                              },
+                              5
+                            ]
+                          },
+                          -6,
+                          6
+                        ]
+                      }
+                    ]
+                  },
+                  "onSuccess": "kings_alsey_worked_told",
+                  "onFailure": "kings_alsey_worked_wont"
+                }
+              },
+              {
+                "id": "kings_alsey_stone",
+                "text": "There is a stone in the ford with a hole through it.",
+                "requires": {
+                  "without": {
+                    "lore": [
+                      "kings_ford_stone"
+                    ]
+                  }
+                },
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "check": {
+                  "skill": "insight",
+                  "difficulty": {
+                    "sub": [
+                      13,
+                      {
+                        "clamp": [
+                          {
+                            "div": [
+                              {
+                                "ref": "reputation.the_crown",
+                                "else": 0
+                              },
+                              5
+                            ]
+                          },
+                          -6,
+                          6
+                        ]
+                      }
+                    ]
+                  },
+                  "onSuccess": "kings_alsey_stone_told",
+                  "onFailure": "kings_alsey_stone_wont"
+                }
+              },
+              {
+                "id": "kings_alsey_key",
+                "text": "Somebody has the sluice key. It is you.",
+                "requires": {
+                  "without": {
+                    "items": [
+                      "sluice_key"
+                    ],
+                    "flags": [
+                      {
+                        "flag": "given:sluice_key"
+                      }
+                    ]
+                  }
+                },
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "check": {
+                  "skill": "persuasion",
+                  "difficulty": {
+                    "sub": [
+                      15,
+                      {
+                        "clamp": [
+                          {
+                            "div": [
+                              {
+                                "ref": "reputation.the_crown",
+                                "else": 0
+                              },
+                              5
+                            ]
+                          },
+                          -6,
+                          6
+                        ]
+                      }
+                    ]
+                  },
+                  "onSuccess": "kings_alsey_key_gave",
+                  "onFailure": "kings_alsey_key_kept"
+                }
+              },
+              {
+                "id": "greet_leave",
+                "text": "Nothing.",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "kings_alsey_worked_told",
+            "says": [
+              {
+                "text": "\u201cUp in the spring, down at the harvest.\u201d She is entirely matter of fact, which is the unnerving part. \u201cOn the day. Every year of my life and my mother's.\u201d She goes back to the gate she is mending. \u201cThe parish stopped paying a keeper before I was born. I have never once seen it done.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "learnLore": {
+                  "entry": "kings_ford_worked"
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "kings_alsey_worked_on",
+                "text": "Go on.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "kings_alsey_worked_wont",
+            "says": [
+              {
+                "text": "\u201cI've said all I mean to,\u201d they say, and go back to what they were doing."
+              }
+            ],
+            "onEnter": [
+              {
+                "adjustReputation": {
+                  "faction": "the_crown",
+                  "amount": -1
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "kings_alsey_worked_drop",
+                "text": "Leave it.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "kings_alsey_stone_told",
+            "says": [
+              {
+                "text": "\u201cRope-worn.\u201d She nods at the water. \u201cWorn all the way through, which is a lot of rope. Nobody has tied anything there in living memory and the wear is fresh at the edges, and I have stopped mentioning that to people.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "learnLore": {
+                  "entry": "kings_ford_stone"
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "kings_alsey_stone_on",
+                "text": "Go on.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "kings_alsey_stone_wont",
+            "says": [
+              {
+                "text": "\u201cI've said all I mean to,\u201d they say, and go back to what they were doing."
+              }
+            ],
+            "onEnter": [
+              {
+                "adjustReputation": {
+                  "faction": "the_crown",
+                  "amount": -1
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "kings_alsey_stone_drop",
+                "text": "Leave it.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "kings_alsey_key_gave",
+            "says": [
+              {
+                "text": "She is quiet a long moment. \u201cIt was in the thatch when we retiled. My father put it back.\u201d She fetches it. \u201cI have never used it and I have never thrown it away, and I would be glad to have it out of the house.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "grantItem": {
+                  "target": {
+                    "ref": "actor.id"
+                  },
+                  "item": "sluice_key",
+                  "quantity": 1
+                }
+              },
+              {
+                "setFlag": {
+                  "flag": "given:sluice_key",
+                  "value": true
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "kings_alsey_key_thanks",
+                "text": "Thank you.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "kings_alsey_key_kept",
+            "says": [
+              {
+                "text": "\u201cI do not have a key,\u201d she says, which is a lie, and she is not good at it, and she is not going to change her mind today."
+              }
+            ],
+            "onEnter": [
+              {
+                "adjustReputation": {
+                  "faction": "the_crown",
+                  "amount": -2
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "kings_alsey_key_leave",
+                "text": "Then no.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          }
+        ]
+      },
+      {
+        "id": "kings_nib_talk",
+        "start": "greet",
+        "nodes": [
+          {
+            "id": "greet",
+            "says": [
+              {
+                "text": "A taproom with an ox's yoke over the fire and a landlord who has seen you look at it."
+              },
+              {
+                "text": "\u201cGo on then. Get it out of the way.\u201d"
+              }
+            ],
+            "onEnter": [],
+            "options": [
+              {
+                "id": "kings_nib_ox",
+                "text": "How does an ox drown in eleven inches of water?",
+                "requires": {
+                  "without": {
+                    "lore": [
+                      "kings_ford_ox"
+                    ]
+                  }
+                },
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "check": {
+                  "skill": "persuasion",
+                  "difficulty": {
+                    "sub": [
+                      11,
+                      {
+                        "clamp": [
+                          {
+                            "div": [
+                              {
+                                "ref": "reputation.the_crown",
+                                "else": 0
+                              },
+                              5
+                            ]
+                          },
+                          -6,
+                          6
+                        ]
+                      }
+                    ]
+                  },
+                  "onSuccess": "kings_nib_ox_told",
+                  "onFailure": "kings_nib_ox_wont"
+                }
+              },
+              {
+                "id": "kings_nib_keeper",
+                "text": "Who keeps the sluice house?",
+                "requires": {
+                  "without": {
+                    "lore": [
+                      "kings_ford_keeper"
+                    ]
+                  }
+                },
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "check": {
+                  "skill": "persuasion",
+                  "difficulty": {
+                    "sub": [
+                      10,
+                      {
+                        "clamp": [
+                          {
+                            "div": [
+                              {
+                                "ref": "reputation.the_crown",
+                                "else": 0
+                              },
+                              5
+                            ]
+                          },
+                          -6,
+                          6
+                        ]
+                      }
+                    ]
+                  },
+                  "onSuccess": "kings_nib_keeper_told",
+                  "onFailure": "kings_nib_keeper_wont"
+                }
+              },
+              {
+                "id": "greet_leave",
+                "text": "Nothing.",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "kings_nib_ox_told",
+            "says": [
+              {
+                "text": "\u201cIt does not.\u201d He says it before you have finished. \u201cThat is the joke and that is also the answer. It is in the parish register \u2014 drowned at the ford, and the ford is eleven inches, and it was eleven inches that year because the sluice was down.\u201d He wipes the counter. \u201cSomebody wrote *drowned* because there was no other word for what they found.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "learnLore": {
+                  "entry": "kings_ford_ox"
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "kings_nib_ox_on",
+                "text": "Go on.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "kings_nib_ox_wont",
+            "says": [
+              {
+                "text": "\u201cI've said all I mean to,\u201d they say, and go back to what they were doing."
+              }
+            ],
+            "onEnter": [
+              {
+                "adjustReputation": {
+                  "faction": "the_crown",
+                  "amount": -1
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "kings_nib_ox_drop",
+                "text": "Leave it.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "kings_nib_keeper_told",
+            "says": [
+              {
+                "text": "\u201cNobody. Ninety years, nobody.\u201d He shrugs. \u201cThere is a keeper's cottage on the end of it with a roof on it and a door that shuts, and the parish has not paid a keeper since my grandfather. Make of that what you like. Most people make nothing of it, which is restful.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "learnLore": {
+                  "entry": "kings_ford_keeper"
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "kings_nib_keeper_on",
+                "text": "Go on.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "kings_nib_keeper_wont",
+            "says": [
+              {
+                "text": "\u201cI've said all I mean to,\u201d they say, and go back to what they were doing."
+              }
+            ],
+            "onEnter": [
+              {
+                "adjustReputation": {
+                  "faction": "the_crown",
+                  "amount": -1
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "kings_nib_keeper_drop",
+                "text": "Leave it.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          }
+        ]
       }
     ],
     "quests": [
@@ -74016,6 +76962,177 @@
           ],
           "reputation": {}
         }
+      },
+      {
+        "id": "kings_the_second_face",
+        "name": "The Quarry's Second Face",
+        "description": "One warrant, two faces, eleven years of unlicensed carts going south at night, and a shored cut at the bottom of the wrong one.",
+        "autoStart": false,
+        "ordered": true,
+        "tags": [
+          "hidden",
+          "kingsvale",
+          "kings_quarry"
+        ],
+        "objectives": [
+          {
+            "id": "at_the_face",
+            "description": "Get to the second face.",
+            "kind": "reach",
+            "count": 1,
+            "hidden": true,
+            "optional": false,
+            "target": "kingsroad_south_quarry"
+          },
+          {
+            "id": "into_the_hill",
+            "description": "Get into the hill.",
+            "kind": "custom",
+            "count": 1,
+            "hidden": true,
+            "optional": false,
+            "when": {
+              "test": {
+                "ref": "flags.kings_quarry_open"
+              }
+            }
+          },
+          {
+            "id": "what_was_cut_for",
+            "description": "Find what the fine stone was cut for.",
+            "kind": "kill",
+            "count": 1,
+            "hidden": true,
+            "optional": false,
+            "target": "quarry_thing"
+          }
+        ],
+        "stages": [],
+        "unlocks": [],
+        "rewards": {
+          "xp": 90,
+          "items": [
+            {
+              "item": "masons_belt",
+              "quantity": 1
+            }
+          ],
+          "reputation": {}
+        }
+      },
+      {
+        "id": "kings_what_goes_under",
+        "name": "What Goes Under Aurenhal",
+        "description": "Brick newer than the city and older than the gate, warm air off the river, and one sheet missing from four hundred years of drains.",
+        "autoStart": false,
+        "ordered": true,
+        "tags": [
+          "hidden",
+          "kingsvale",
+          "kings_under"
+        ],
+        "objectives": [
+          {
+            "id": "at_the_grate",
+            "description": "Get down the undercity grate.",
+            "kind": "reach",
+            "count": 1,
+            "hidden": true,
+            "optional": false,
+            "target": "riverside_undercity_grate"
+          },
+          {
+            "id": "past_the_brick",
+            "description": "Get past the third turn.",
+            "kind": "custom",
+            "count": 1,
+            "hidden": true,
+            "optional": false,
+            "when": {
+              "test": {
+                "ref": "flags.kings_under_open"
+              }
+            }
+          },
+          {
+            "id": "what_is_warm",
+            "description": "Find what has been keeping it warm.",
+            "kind": "kill",
+            "count": 1,
+            "hidden": true,
+            "optional": false,
+            "target": "under_warmth"
+          }
+        ],
+        "stages": [],
+        "unlocks": [],
+        "rewards": {
+          "xp": 110,
+          "items": [
+            {
+              "item": "undercity_hood",
+              "quantity": 1
+            }
+          ],
+          "reputation": {}
+        }
+      },
+      {
+        "id": "kings_the_ford_toll",
+        "name": "The Ford Toll",
+        "description": "A sluice worked to the day for ninety years by a keeper the parish stopped paying, over a chamber nobody has opened.",
+        "autoStart": false,
+        "ordered": true,
+        "tags": [
+          "hidden",
+          "kingsvale",
+          "kings_ford"
+        ],
+        "objectives": [
+          {
+            "id": "in_the_sluice_house",
+            "description": "Get into the sluice house.",
+            "kind": "reach",
+            "count": 1,
+            "hidden": true,
+            "optional": false,
+            "target": "pennyford_sluice_house"
+          },
+          {
+            "id": "under_the_gate",
+            "description": "Get under the gate.",
+            "kind": "custom",
+            "count": 1,
+            "hidden": true,
+            "optional": false,
+            "when": {
+              "test": {
+                "ref": "flags.kings_ford_open"
+              }
+            }
+          },
+          {
+            "id": "the_keeper",
+            "description": "Meet the keeper.",
+            "kind": "kill",
+            "count": 1,
+            "hidden": true,
+            "optional": false,
+            "target": "ford_keeper"
+          }
+        ],
+        "stages": [],
+        "unlocks": [],
+        "rewards": {
+          "xp": 100,
+          "items": [
+            {
+              "item": "ford_ring",
+              "quantity": 1
+            }
+          ],
+          "reputation": {}
+        }
       }
     ],
     "arcs": [
@@ -74284,6 +77401,17 @@
           "isle_the_marker",
           "isle_what_the_terns_know",
           "isle_the_deep_wreck"
+        ],
+        "isEnding": false
+      },
+      {
+        "id": "kings_hidden",
+        "name": "The Kingsvale, Unwarranted",
+        "description": "Three things the Crown's paperwork does not cover, within two days' walk of where you started.",
+        "quests": [
+          "kings_the_second_face",
+          "kings_what_goes_under",
+          "kings_the_ford_toll"
         ],
         "isEnding": false
       },
@@ -74641,6 +77769,66 @@
         "id": "isle_wreck_shut",
         "name": "Her hatches are dogged from outside. Somebody shut the crew in and then the ship went down with her guns out.",
         "source": "cut on the salvors' capstan"
+      },
+      {
+        "id": "kings_quarry_two",
+        "name": "The quarry has been worked from two faces. The Crown's warrant is for one, and the tallies are for one, and there are two.",
+        "source": "a road mason"
+      },
+      {
+        "id": "kings_quarry_stone",
+        "name": "The stone off the second face is not roadstone. It is finer, and there is none of it in any road in the Kingsvale.",
+        "source": "the Craftrow masons"
+      },
+      {
+        "id": "kings_quarry_gibbet",
+        "name": "The gibbet on the Kingsroad was put up the year the second face opened, and the assize rolls have nobody hanged on it.",
+        "source": "the posting house"
+      },
+      {
+        "id": "kings_quarry_night",
+        "name": "Carts went south off that road at night for eleven years and the posting house has every one of them in the book, unlicensed.",
+        "source": "the posting house's book"
+      },
+      {
+        "id": "kings_under_brick",
+        "name": "The undercity is bricked off at the third turn. The brick is newer than the city and older than the King's Gate.",
+        "source": "a Riverside boatman"
+      },
+      {
+        "id": "kings_under_air",
+        "name": "Air comes out of that grate all year and it is warmer than the river, which the river should not permit.",
+        "source": "the fish market"
+      },
+      {
+        "id": "kings_under_maps",
+        "name": "The Library has the city's drains back four hundred years, and the sheet for the year the brick went in is missing from the run.",
+        "source": "a copyist"
+      },
+      {
+        "id": "kings_under_wharf",
+        "name": "The Long Wharf was rebuilt on new piles in the same year, and the old piles are still down there in the mud, cut off level.",
+        "source": "the boatyard"
+      },
+      {
+        "id": "kings_ford_keeper",
+        "name": "There is a keeper's cottage on the end of the gear at Pennyford, with a roof and a door that shuts, and the parish has not paid a keeper in ninety years.",
+        "source": "the Drowned Ox"
+      },
+      {
+        "id": "kings_ford_worked",
+        "name": "The sluice is worked. It is up in the spring and down at the harvest, every year, on the day.",
+        "source": "a ford-side farmer"
+      },
+      {
+        "id": "kings_ford_ox",
+        "name": "The inn is called the Drowned Ox for an ox that drowned at a ford eleven inches deep, which is a thing an ox cannot do.",
+        "source": "the parish register"
+      },
+      {
+        "id": "kings_ford_stone",
+        "name": "There is a stone in the ford bed with a hole through it, and the hole is worn by rope, and nobody has tied anything there in living memory.",
+        "source": "a ford-side farmer"
       }
     ],
     "loreThreads": [
@@ -74829,6 +78017,39 @@
           "isle_wreck_nothing",
           "isle_wreck_pointing",
           "isle_wreck_shut"
+        ]
+      },
+      {
+        "id": "kings_quarry",
+        "name": "The Quarry's Second Face",
+        "description": "One warrant, two faces, and eleven years of unlicensed carts going south at night.",
+        "entries": [
+          "kings_quarry_two",
+          "kings_quarry_stone",
+          "kings_quarry_gibbet",
+          "kings_quarry_night"
+        ]
+      },
+      {
+        "id": "kings_under",
+        "name": "What Goes Under Aurenhal",
+        "description": "Brick newer than the city and older than the gate, warm air off the river, and a missing sheet in the Library's run.",
+        "entries": [
+          "kings_under_brick",
+          "kings_under_air",
+          "kings_under_maps",
+          "kings_under_wharf"
+        ]
+      },
+      {
+        "id": "kings_ford",
+        "name": "The Ford Toll",
+        "description": "A sluice worked to the day by a keeper the parish stopped paying ninety years ago.",
+        "entries": [
+          "kings_ford_keeper",
+          "kings_ford_worked",
+          "kings_ford_ox",
+          "kings_ford_stone"
         ]
       }
     ]
