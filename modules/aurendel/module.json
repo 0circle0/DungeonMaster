@@ -4520,6 +4520,131 @@
           "persuasion": 3
         },
         "rarity": "uncommon"
+      },
+      {
+        "id": "mile_book",
+        "name": "The Wayhouse Mile Book",
+        "description": "Every stage, every fare and every mark on the road, kept by four generations of the same family, all of whom counted fourteen.",
+        "kind": "key",
+        "value": 0,
+        "weight": 0,
+        "tags": [
+          "keepsake"
+        ],
+        "extra": {
+          "heldBy": "wayhouse_keeper_pyle"
+        }
+      },
+      {
+        "id": "burners_charter",
+        "name": "The Burners' Charter",
+        "description": "The right to cut, in writing, with the line they may not cut inside drawn on the back of it in a hand nobody at Rooksrest writes.",
+        "kind": "key",
+        "value": 0,
+        "weight": 0,
+        "tags": [
+          "keepsake"
+        ],
+        "extra": {
+          "heldBy": "charcoal_burner_moll"
+        }
+      },
+      {
+        "id": "woodwards_rod",
+        "name": "The Woodward's Rod",
+        "description": "A perambulation rod, sixteen and a half feet, worn smooth at both ends by four hundred years of somebody's hands.",
+        "kind": "key",
+        "value": 0,
+        "weight": 0,
+        "tags": [
+          "keepsake"
+        ],
+        "extra": {
+          "heldBy": "woodward_kest"
+        }
+      },
+      {
+        "id": "oak_cutting",
+        "name": "A Cutting Off the Same Tree",
+        "description": "Live wood out of a mile-oak, and the leaf on it matches thirteen others and no tree anybody can find.",
+        "kind": "treasure",
+        "value": 0,
+        "weight": 0,
+        "tags": [
+          "clue",
+          "proof"
+        ],
+        "onUse": [
+          {
+            "learnLore": {
+              "entry": "dusk_miles_cuttings"
+            }
+          }
+        ],
+        "consumedOnUse": false
+      },
+      {
+        "id": "mile_oak_ring",
+        "name": "The Ring of the Fourteenth Mile",
+        "description": "Oak and iron off a mark that is not on the road. Distances stop surprising the wearer.",
+        "kind": "trinket",
+        "slot": "ring",
+        "value": 720,
+        "weight": 1,
+        "tags": [
+          "fabled"
+        ],
+        "skillBonuses": {
+          "survival": 3,
+          "athletics": 2
+        },
+        "rarity": "rare"
+      },
+      {
+        "id": "greenway_cloak",
+        "name": "The Cloak off the Green Bridge",
+        "description": "Kept sound for two hundred years over a stream that is not there. Whatever crosses at night does not notice the wearer.",
+        "kind": "armor",
+        "slot": "cloak",
+        "value": 820,
+        "weight": 1,
+        "tags": [
+          "fabled"
+        ],
+        "modifiers": {
+          "guard": 1
+        },
+        "skillBonuses": {
+          "stealth": 3,
+          "insight": 2
+        },
+        "damageInteractions": [
+          {
+            "damageType": "poison",
+            "multiplier": 0.75
+          }
+        ],
+        "rarity": "very_rare"
+      },
+      {
+        "id": "woodwards_belt",
+        "name": "The Woodward's Belt",
+        "description": "Sixteen and a half feet of rod hangs off it, and the wearer walks a line they have walked once as though they had walked it always.",
+        "kind": "trinket",
+        "slot": "belt",
+        "value": 760,
+        "weight": 1,
+        "tags": [
+          "fabled"
+        ],
+        "modifiers": {
+          "carry": 3
+        },
+        "skillBonuses": {
+          "perception": 3,
+          "survival": 2
+        },
+        "rarity": "rare"
       }
     ],
     "lootTables": [
@@ -7511,6 +7636,208 @@
             "weight": 1,
             "value": {
               "item": "barrow_torc",
+              "quantity": "1"
+            }
+          }
+        ]
+      },
+      {
+        "id": "dusk_book_carried",
+        "name": "What Pyle Kept",
+        "rolls": "1",
+        "emptyChance": 0,
+        "entries": [
+          {
+            "weight": 1,
+            "value": {
+              "item": "mile_book",
+              "quantity": "1",
+              "unique": true,
+              "requirementScope": "party",
+              "requires": {
+                "without": {
+                  "flags": [
+                    {
+                      "flag": "given:mile_book"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        ]
+      },
+      {
+        "id": "dusk_charter_carried",
+        "name": "What Moll Kept",
+        "rolls": "1",
+        "emptyChance": 0,
+        "entries": [
+          {
+            "weight": 1,
+            "value": {
+              "item": "burners_charter",
+              "quantity": "1",
+              "unique": true,
+              "requirementScope": "party",
+              "requires": {
+                "without": {
+                  "flags": [
+                    {
+                      "flag": "given:burners_charter"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        ]
+      },
+      {
+        "id": "dusk_rod_carried",
+        "name": "What Kest Kept",
+        "rolls": "1",
+        "emptyChance": 0,
+        "entries": [
+          {
+            "weight": 1,
+            "value": {
+              "item": "woodwards_rod",
+              "quantity": "1",
+              "unique": true,
+              "requirementScope": "party",
+              "requires": {
+                "without": {
+                  "flags": [
+                    {
+                      "flag": "given:woodwards_rod"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        ]
+      },
+      {
+        "id": "dusk_miles_hoard",
+        "name": "Down the Sunken Lane",
+        "rolls": "2",
+        "emptyChance": 0.1,
+        "bonusRollSkill": "perception",
+        "bonusRolls": {
+          "onSuccess": 1,
+          "onCritical": 2
+        },
+        "entries": [
+          {
+            "weight": 5,
+            "value": {
+              "item": "old_coin",
+              "quantity": "3d6"
+            }
+          },
+          {
+            "weight": 2,
+            "value": {
+              "item": "amber_lump",
+              "quantity": "1"
+            }
+          },
+          {
+            "weight": 2,
+            "value": {
+              "item": "healing_draught",
+              "quantity": "1"
+            }
+          },
+          {
+            "weight": 1,
+            "value": {
+              "item": "oak_cutting",
+              "quantity": "1",
+              "unique": true
+            }
+          }
+        ]
+      },
+      {
+        "id": "dusk_green_hoard",
+        "name": "Under the Dry Arch",
+        "rolls": "2",
+        "emptyChance": 0,
+        "bonusRollSkill": "perception",
+        "bonusRolls": {
+          "onSuccess": 1,
+          "onCritical": 2
+        },
+        "entries": [
+          {
+            "weight": 4,
+            "value": {
+              "item": "old_coin",
+              "quantity": "4d6"
+            }
+          },
+          {
+            "weight": 3,
+            "value": {
+              "item": "greenway_charm",
+              "quantity": "1"
+            }
+          },
+          {
+            "weight": 2,
+            "value": {
+              "item": "ward_salt",
+              "quantity": "1"
+            }
+          },
+          {
+            "weight": 1,
+            "value": {
+              "item": "torc_of_the_ridge",
+              "quantity": "1"
+            }
+          }
+        ]
+      },
+      {
+        "id": "dusk_ward_hoard",
+        "name": "Through the Re-Cut Face",
+        "rolls": "2",
+        "emptyChance": 0.05,
+        "bonusRollSkill": "perception",
+        "bonusRolls": {
+          "onSuccess": 1,
+          "onCritical": 2
+        },
+        "entries": [
+          {
+            "weight": 4,
+            "value": {
+              "item": "old_coin",
+              "quantity": "3d6"
+            }
+          },
+          {
+            "weight": 3,
+            "value": {
+              "item": "antidote",
+              "quantity": "1d2"
+            }
+          },
+          {
+            "weight": 2,
+            "value": {
+              "item": "wight_ash",
+              "quantity": "1"
+            }
+          },
+          {
+            "weight": 1,
+            "value": {
+              "item": "warded_coat",
               "quantity": "1"
             }
           }
@@ -12456,6 +12783,304 @@
         "resourceOverrides": {
           "hp": 50
         }
+      },
+      {
+        "id": "dusk_wayhouse_keeper",
+        "name": "Pyle, at the Wayhouse",
+        "description": "Turns horses, hauls trunks and settles arguments, all day, every day.",
+        "level": 5,
+        "xp": 0,
+        "attributes": {
+          "might": 13,
+          "agility": 12,
+          "endurance": 15,
+          "intellect": 13,
+          "instinct": 13,
+          "presence": 14
+        },
+        "abilities": [
+          "strike"
+        ],
+        "behaviour": [
+          {
+            "priority": 0,
+            "use": "strike"
+          }
+        ],
+        "faction": "the_keepers",
+        "creatureType": "humanoid",
+        "size": "medium",
+        "descriptors": [
+          "a broad"
+        ],
+        "conditionalLoot": [],
+        "loot": "dusk_book_carried",
+        "resourceOverrides": {
+          "hp": 30
+        }
+      },
+      {
+        "id": "dusk_burner",
+        "name": "Moll of the Burn",
+        "description": "Tends a burn for four days without sleeping when it is at the wrong stage, which most years it is.",
+        "level": 5,
+        "xp": 0,
+        "attributes": {
+          "might": 14,
+          "agility": 13,
+          "endurance": 15,
+          "intellect": 11,
+          "instinct": 14,
+          "presence": 11
+        },
+        "abilities": [
+          "strike",
+          "cut_and_run"
+        ],
+        "behaviour": [
+          {
+            "priority": 0,
+            "use": "strike"
+          }
+        ],
+        "faction": "the_keepers",
+        "creatureType": "humanoid",
+        "size": "medium",
+        "descriptors": [
+          "a soot-black"
+        ],
+        "conditionalLoot": [],
+        "loot": "dusk_charter_carried",
+        "resourceOverrides": {
+          "hp": 32
+        }
+      },
+      {
+        "id": "dusk_hutkeeper",
+        "name": "Kest, who Keeps the Hut",
+        "description": "Lives four days' walk from the nearest field and has not needed anybody in all that time.",
+        "level": 5,
+        "xp": 0,
+        "attributes": {
+          "might": 12,
+          "agility": 15,
+          "endurance": 14,
+          "intellect": 13,
+          "instinct": 16,
+          "presence": 10
+        },
+        "abilities": [
+          "strike",
+          "quick_shot"
+        ],
+        "behaviour": [
+          {
+            "priority": 0,
+            "use": "strike"
+          }
+        ],
+        "faction": "the_keepers",
+        "creatureType": "humanoid",
+        "size": "medium",
+        "descriptors": [
+          "a lean"
+        ],
+        "conditionalLoot": [],
+        "loot": "dusk_rod_carried",
+        "resourceOverrides": {
+          "hp": 28
+        }
+      },
+      {
+        "id": "mile_walker",
+        "name": "What Walks the Extra Three",
+        "description": "Three marks that are not on the road, sighting along each other, and a lane worn six feet deep by something that has been keeping to it.",
+        "level": 6,
+        "xp": 420,
+        "attributes": {
+          "might": 13,
+          "agility": 17,
+          "endurance": 14,
+          "intellect": 14,
+          "instinct": 16,
+          "presence": 12
+        },
+        "abilities": [
+          "cut_and_run",
+          "quick_shot",
+          "rend"
+        ],
+        "behaviour": [
+          {
+            "priority": 15,
+            "use": "cut_and_run",
+            "when": {
+              "chance": 0.45
+            }
+          },
+          {
+            "priority": 5,
+            "use": "quick_shot"
+          },
+          {
+            "priority": 0,
+            "use": "rend"
+          }
+        ],
+        "faction": "the_unsealed",
+        "creatureType": "undead",
+        "size": "medium",
+        "descriptors": [
+          "a long-strided",
+          "a sighting"
+        ],
+        "conditionalLoot": [],
+        "loot": "dusk_miles_hoard",
+        "conditionImmunities": [
+          "frightened",
+          "prone"
+        ],
+        "resourceOverrides": {
+          "hp": 58
+        }
+      },
+      {
+        "id": "the_ride",
+        "name": "What Goes Up It At Night",
+        "description": "Forty yards wide, nine miles straight, kept clear by something that has never once been seen doing it, and the deer will not cross.",
+        "level": 6,
+        "xp": 450,
+        "attributes": {
+          "might": 16,
+          "agility": 16,
+          "endurance": 15,
+          "intellect": 12,
+          "instinct": 15,
+          "presence": 15
+        },
+        "abilities": [
+          "gore",
+          "shove",
+          "root_and_branch"
+        ],
+        "behaviour": [
+          {
+            "priority": 20,
+            "use": "root_and_branch",
+            "when": {
+              "chance": 0.35
+            }
+          },
+          {
+            "priority": 10,
+            "use": "gore"
+          },
+          {
+            "priority": 0,
+            "use": "shove"
+          }
+        ],
+        "faction": "the_unsealed",
+        "creatureType": "undead",
+        "size": "medium",
+        "descriptors": [
+          "a antlered",
+          "a silent"
+        ],
+        "conditionalLoot": [],
+        "loot": "dusk_green_hoard",
+        "damageInteractions": [
+          {
+            "damageType": "slashing",
+            "multiplier": 0.5,
+            "unless": [
+              "silvered"
+            ]
+          },
+          {
+            "damageType": "piercing",
+            "multiplier": 0.5,
+            "unless": [
+              "silvered"
+            ]
+          }
+        ],
+        "conditionImmunities": [
+          "frightened",
+          "poisoned"
+        ],
+        "resourceOverrides": {
+          "hp": 64
+        }
+      },
+      {
+        "id": "the_woodward",
+        "name": "Whoever Has Been Earning the Fee",
+        "description": "Four hundred years of a quarterly payment to a post nobody has filled, and every mark on the edge of the wood re-cut on the same face, recently.",
+        "level": 6,
+        "xp": 430,
+        "attributes": {
+          "might": 15,
+          "agility": 14,
+          "endurance": 16,
+          "intellect": 13,
+          "instinct": 15,
+          "presence": 12
+        },
+        "abilities": [
+          "strike",
+          "wither",
+          "grave_chill"
+        ],
+        "behaviour": [
+          {
+            "priority": 15,
+            "use": "wither",
+            "when": {
+              "chance": 0.35
+            }
+          },
+          {
+            "priority": 5,
+            "use": "grave_chill"
+          },
+          {
+            "priority": 0,
+            "use": "strike"
+          }
+        ],
+        "faction": "the_unsealed",
+        "creatureType": "undead",
+        "size": "medium",
+        "descriptors": [
+          "a methodical",
+          "a bark-grey"
+        ],
+        "conditionalLoot": [],
+        "loot": "dusk_ward_hoard",
+        "damageInteractions": [
+          {
+            "damageType": "slashing",
+            "multiplier": 0.5,
+            "unless": [
+              "silvered"
+            ]
+          },
+          {
+            "damageType": "piercing",
+            "multiplier": 0.5,
+            "unless": [
+              "silvered"
+            ]
+          }
+        ],
+        "conditionImmunities": [
+          "frightened",
+          "poisoned"
+        ],
+        "resourceOverrides": {
+          "hp": 60
+        }
       }
     ],
     "factions": [
@@ -14596,6 +15221,121 @@
             "treasure"
           ],
           "priceMultiplier": 1.25
+        }
+      },
+      {
+        "id": "wayhouse_keeper_pyle",
+        "name": "Pyle, at the Wayhouse",
+        "description": "Fourth of the family to keep the stage on the Moot Road, and the fourth to count fourteen miles on an eleven-mile road.",
+        "disposition": 4,
+        "gullibility": 0.3,
+        "memorySpan": 200,
+        "offersQuests": [],
+        "caresAbout": [],
+        "reactions": [],
+        "faction": "the_keepers",
+        "dialogue": "dusk_pyle_talk",
+        "home": "moot_road_wayhouse",
+        "statblock": "dusk_wayhouse_keeper",
+        "shop": {
+          "lootTable": "keeper_stock",
+          "buysTags": [
+            "treasure"
+          ],
+          "priceMultiplier": 1.2
+        }
+      },
+      {
+        "id": "charcoal_burner_moll",
+        "name": "Moll of the Burn",
+        "description": "Burns charcoal in a clearing the smoke never leaves, and holds the charter that says where she may not do it.",
+        "disposition": 3,
+        "gullibility": 0.35,
+        "memorySpan": 180,
+        "offersQuests": [],
+        "caresAbout": [],
+        "reactions": [],
+        "faction": "the_keepers",
+        "dialogue": "dusk_moll_talk",
+        "home": "rooksrest_house_a",
+        "statblock": "dusk_burner"
+      },
+      {
+        "id": "woodward_kest",
+        "name": "Kest, who Keeps the Hut",
+        "description": "Lives in a woodward's hut, is not the woodward, and has stopped explaining the difference to people.",
+        "disposition": 1,
+        "gullibility": 0.2,
+        "memorySpan": 240,
+        "offersQuests": [],
+        "caresAbout": [],
+        "reactions": [],
+        "faction": "the_keepers",
+        "dialogue": "dusk_kest_talk",
+        "home": "undereaves_woodward_hut",
+        "statblock": "dusk_hutkeeper"
+      },
+      {
+        "id": "carter_dunn",
+        "name": "Dunn, who Carts",
+        "description": "Runs the coast road and the forest road in the same week and has opinions about both, mostly about the state of them.",
+        "disposition": 6,
+        "gullibility": 0.45,
+        "memorySpan": 140,
+        "offersQuests": [],
+        "caresAbout": [],
+        "reactions": [],
+        "faction": "the_keepers",
+        "dialogue": "dusk_dunn_talk",
+        "home": "fenny_cross_house_b",
+        "shop": {
+          "lootTable": "hollowdene_stock",
+          "buysTags": [
+            "material"
+          ],
+          "priceMultiplier": 1.2
+        }
+      },
+      {
+        "id": "store_keeper_ives",
+        "name": "Ives, at the Charcoal Store",
+        "description": "Weighs, bags and sells what comes out of the burns, and knows every burner's stretch of wood by the taste of the smoke.",
+        "disposition": 5,
+        "gullibility": 0.4,
+        "memorySpan": 160,
+        "offersQuests": [],
+        "caresAbout": [],
+        "reactions": [],
+        "faction": "the_keepers",
+        "dialogue": "dusk_ives_talk",
+        "home": "rooksrest_store",
+        "shop": {
+          "lootTable": "keeper_stock",
+          "buysTags": [
+            "material"
+          ],
+          "priceMultiplier": 1.15
+        }
+      },
+      {
+        "id": "boot_landlady_ferre",
+        "name": "Ferre, at the Wet Boot",
+        "description": "Keeps the only bed at a crossroads everybody arrives at wet, and hears the whole of both roads twice a day.",
+        "disposition": 7,
+        "gullibility": 0.5,
+        "memorySpan": 190,
+        "offersQuests": [],
+        "caresAbout": [],
+        "reactions": [],
+        "faction": "the_keepers",
+        "dialogue": "dusk_ferre_talk",
+        "home": "fenny_cross_the_wet_boot",
+        "shop": {
+          "lootTable": "hollowdene_stock",
+          "buysTags": [
+            "treasure"
+          ],
+          "priceMultiplier": 1.3
         }
       }
     ],
@@ -26182,7 +26922,22 @@
         "position": {
           "x": 3,
           "y": 3
-        }
+        },
+        "triggers": [
+          {
+            "id": "dusk_found_field",
+            "mode": "once",
+            "on": "enter",
+            "description": "Where the ploughing stops, against where the marks say it should.",
+            "effects": [
+              {
+                "learnLore": {
+                  "entry": "dusk_ward_moved"
+                }
+              }
+            ]
+          }
+        ]
       },
       {
         "id": "undereaves_woodward_hut",
@@ -26201,7 +26956,22 @@
         "position": {
           "x": 14,
           "y": 3
-        }
+        },
+        "triggers": [
+          {
+            "id": "dusk_found_hut",
+            "mode": "once",
+            "on": "enter",
+            "description": "A hut kept, a hearth used, and no woodward on the parish roll.",
+            "effects": [
+              {
+                "learnLore": {
+                  "entry": "dusk_ward_recut"
+                }
+              }
+            ]
+          }
+        ]
       },
       {
         "id": "undereaves_boundary_stone",
@@ -26222,7 +26992,62 @@
         "position": {
           "x": 25,
           "y": 3
-        }
+        },
+        "triggers": [
+          {
+            "id": "dusk_ward_committed",
+            "mode": "once",
+            "on": "enter",
+            "description": "At the mark that was cut all the way through.",
+            "requires": {
+              "custom": {
+                "gte": [
+                  {
+                    "ref": "threads.dusk_ward.known"
+                  },
+                  2
+                ]
+              }
+            },
+            "effects": [
+              {
+                "emit": {
+                  "event": "startQuest",
+                  "data": {
+                    "quest": "dusk_the_round"
+                  }
+                }
+              }
+            ]
+          }
+        ],
+        "hidden": true,
+        "discover": {
+          "skill": "perception",
+          "difficulty": {
+            "max": [
+              8,
+              {
+                "sub": [
+                  20,
+                  {
+                    "mul": [
+                      3,
+                      {
+                        "ref": "threads.dusk_ward.known"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "gate": "dusk_ward_mark",
+        "encounterTables": [
+          "dusk_ward_boss"
+        ],
+        "encounterChance": 1
       },
       {
         "id": "moot_road_mile_oaks",
@@ -26236,7 +27061,22 @@
         "position": {
           "x": 3,
           "y": 3
-        }
+        },
+        "triggers": [
+          {
+            "id": "dusk_found_oaks",
+            "mode": "once",
+            "on": "enter",
+            "description": "Standing at one and sighting along to the next two.",
+            "effects": [
+              {
+                "learnLore": {
+                  "entry": "dusk_miles_sunken"
+                }
+              }
+            ]
+          }
+        ]
       },
       {
         "id": "moot_road_wayhouse",
@@ -26277,7 +27117,58 @@
         "position": {
           "x": 25,
           "y": 3
-        }
+        },
+        "triggers": [
+          {
+            "id": "dusk_miles_committed",
+            "mode": "once",
+            "on": "enter",
+            "description": "Down in the lane, where the extra marks line up.",
+            "requires": {
+              "custom": {
+                "gte": [
+                  {
+                    "ref": "threads.dusk_miles.known"
+                  },
+                  2
+                ]
+              }
+            },
+            "effects": [
+              {
+                "emit": {
+                  "event": "startQuest",
+                  "data": {
+                    "quest": "dusk_the_extra_miles"
+                  }
+                }
+              }
+            ]
+          }
+        ],
+        "hidden": true,
+        "discover": {
+          "skill": "perception",
+          "difficulty": {
+            "max": [
+              7,
+              {
+                "sub": [
+                  19,
+                  {
+                    "mul": [
+                      3,
+                      {
+                        "ref": "threads.dusk_miles.known"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "gate": "dusk_miles_lane"
       },
       {
         "id": "hollow_beeches_the_king",
@@ -26415,7 +27306,22 @@
         "position": {
           "x": 3,
           "y": 3
-        }
+        },
+        "triggers": [
+          {
+            "id": "dusk_found_avenue",
+            "mode": "once",
+            "on": "enter",
+            "description": "Nine miles of it, and how old the edge trees are not.",
+            "effects": [
+              {
+                "learnLore": {
+                  "entry": "dusk_green_ages"
+                }
+              }
+            ]
+          }
+        ]
       },
       {
         "id": "greenway_elf_bridge",
@@ -26436,7 +27342,22 @@
         "position": {
           "x": 14,
           "y": 3
-        }
+        },
+        "triggers": [
+          {
+            "id": "dusk_found_bridge",
+            "mode": "once",
+            "on": "enter",
+            "description": "A sound bridge, pointed this decade, over a dry bed.",
+            "effects": [
+              {
+                "learnLore": {
+                  "entry": "dusk_green_bridge"
+                }
+              }
+            ]
+          }
+        ]
       },
       {
         "id": "greenway_barrow_of_the_ride",
@@ -26453,7 +27374,58 @@
         "position": {
           "x": 25,
           "y": 3
-        }
+        },
+        "triggers": [
+          {
+            "id": "dusk_green_committed",
+            "mode": "once",
+            "on": "enter",
+            "description": "On the road nobody cut, at the only thing built on it.",
+            "requires": {
+              "custom": {
+                "gte": [
+                  {
+                    "ref": "threads.dusk_green.known"
+                  },
+                  2
+                ]
+              }
+            },
+            "effects": [
+              {
+                "emit": {
+                  "event": "startQuest",
+                  "data": {
+                    "quest": "dusk_the_road"
+                  }
+                }
+              }
+            ]
+          }
+        ],
+        "hidden": true,
+        "discover": {
+          "skill": "survival",
+          "difficulty": {
+            "max": [
+              9,
+              {
+                "sub": [
+                  21,
+                  {
+                    "mul": [
+                      3,
+                      {
+                        "ref": "threads.dusk_green.known"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "gate": "dusk_green_span"
       },
       {
         "id": "witchwood_the_ring",
@@ -37576,6 +38548,93 @@
             }
           ]
         }
+      },
+      {
+        "id": "dusk_miles_lane",
+        "name": "Six Feet Down",
+        "description": "A lane worn deeper than a century of carts could wear it, going somewhere the road stopped going.",
+        "kind": "ward",
+        "blockedTextKey": "dusk_miles_blocked",
+        "staysOpen": true,
+        "onOpen": [
+          {
+            "setFlag": {
+              "flag": "dusk_miles_open",
+              "value": true
+            }
+          }
+        ],
+        "onBlocked": [],
+        "opensWith": [],
+        "tags": [],
+        "requires": {
+          "items": [
+            {
+              "item": "mile_book",
+              "quantity": 1,
+              "consume": false,
+              "equipped": false
+            }
+          ]
+        }
+      },
+      {
+        "id": "dusk_green_span",
+        "name": "Under the Span",
+        "description": "A bridge in good repair over a stream that moved two hundred years ago, and a dry arch under it that is not silted.",
+        "kind": "ward",
+        "blockedTextKey": "dusk_green_blocked",
+        "staysOpen": true,
+        "onOpen": [
+          {
+            "setFlag": {
+              "flag": "dusk_green_open",
+              "value": true
+            }
+          }
+        ],
+        "onBlocked": [],
+        "opensWith": [],
+        "tags": [],
+        "requires": {
+          "items": [
+            {
+              "item": "burners_charter",
+              "quantity": 1,
+              "consume": false,
+              "equipped": false
+            }
+          ]
+        }
+      },
+      {
+        "id": "dusk_ward_mark",
+        "name": "The Face That Was Re-Cut",
+        "description": "One stone of the several, cut on the same face as all the others, and the cut on this one goes all the way through.",
+        "kind": "ward",
+        "blockedTextKey": "dusk_ward_blocked",
+        "staysOpen": true,
+        "onOpen": [
+          {
+            "setFlag": {
+              "flag": "dusk_ward_open",
+              "value": true
+            }
+          }
+        ],
+        "onBlocked": [],
+        "opensWith": [],
+        "tags": [],
+        "requires": {
+          "items": [
+            {
+              "item": "woodwards_rod",
+              "quantity": 1,
+              "consume": false,
+              "equipped": false
+            }
+          ]
+        }
       }
     ],
     "roomTemplates": [
@@ -38713,7 +39772,8 @@
           "width": 2
         },
         "width": "79",
-        "height": "79"
+        "height": "79",
+        "bossTable": "dusk_miles_boss"
       },
       {
         "id": "duskwood_root_cellar",
@@ -38767,7 +39827,8 @@
         "roomSize": "2d2+3",
         "width": "57",
         "height": "57",
-        "corridorLength": "3d3"
+        "corridorLength": "3d3",
+        "bossTable": "dusk_green_boss"
       },
       {
         "id": "duskwood_under_ring",
@@ -41867,6 +42928,72 @@
             ]
           }
         ]
+      },
+      {
+        "id": "dusk_miles_boss",
+        "minDepth": 0,
+        "maxDepth": 999,
+        "chance": 1,
+        "emptyWeight": 0,
+        "scalePerLevels": 3,
+        "groups": [
+          {
+            "id": "b",
+            "weight": 1,
+            "hostile": true,
+            "entries": [
+              {
+                "monster": "mile_walker",
+                "count": "1d2",
+                "scaleWithLevel": true
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "dusk_green_boss",
+        "minDepth": 0,
+        "maxDepth": 999,
+        "chance": 1,
+        "emptyWeight": 0,
+        "scalePerLevels": 3,
+        "groups": [
+          {
+            "id": "b",
+            "weight": 1,
+            "hostile": true,
+            "entries": [
+              {
+                "monster": "the_ride",
+                "count": "1",
+                "scaleWithLevel": false
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "dusk_ward_boss",
+        "minDepth": 0,
+        "maxDepth": 999,
+        "chance": 1,
+        "emptyWeight": 0,
+        "scalePerLevels": 3,
+        "groups": [
+          {
+            "id": "b",
+            "weight": 1,
+            "hostile": true,
+            "entries": [
+              {
+                "monster": "the_woodward",
+                "count": "1",
+                "scaleWithLevel": false
+              }
+            ]
+          }
+        ]
       }
     ],
     "time": {
@@ -44173,6 +45300,48 @@
           },
           {
             "text": "A room that was a cellar before the drain was cut through the side of it."
+          }
+        ]
+      },
+      {
+        "id": "dusk_green_blocked",
+        "variants": [
+          {
+            "text": "The right to cut here is written down and so is the line nobody may cut inside. The line is on the back of the charter, in a hand nobody in the wood writes."
+          },
+          {
+            "text": "Somebody has been maintaining a bridge over nothing for two centuries, on a road nobody cut, and has never once asked the parish for the cost of it."
+          },
+          {
+            "text": "Deer will cross a turnpike. They will not cross this."
+          }
+        ]
+      },
+      {
+        "id": "dusk_miles_blocked",
+        "variants": [
+          {
+            "text": "Fourteen marks and eleven miles. Which three are the extra ones is in the wayhouse book and nowhere else, and without it you are standing in a ditch."
+          },
+          {
+            "text": "It takes a hundred years of loaded carts to wear a lane this deep. Nothing has used it in living memory, and the sides have not fallen in."
+          },
+          {
+            "text": "The three marks that do not fit sight along each other. This is where the line they make goes under."
+          }
+        ]
+      },
+      {
+        "id": "dusk_ward_blocked",
+        "variants": [
+          {
+            "text": "A round is walked with a rod, and the rod is the woodward's, and the woodward has it. Pacing it out will put you eighty yards wrong, which is the whole of the problem."
+          },
+          {
+            "text": "The marks are further out than the survey and the survey is not wrong. Something has been moving them, outward, slowly, and re-cutting the faces as it goes."
+          },
+          {
+            "text": "Four hundred years of quarterly payment to a post nobody has filled in living memory, and the work is being done."
           }
         ]
       },
@@ -74346,6 +75515,1683 @@
             "redirectWhen": []
           }
         ]
+      },
+      {
+        "id": "dusk_pyle_talk",
+        "start": "greet",
+        "nodes": [
+          {
+            "id": "greet",
+            "says": [
+              {
+                "text": "A stage house on a straight road, four horses out and four in, and a fare slate being rewritten faster than it can be read."
+              },
+              {
+                "text": "\u201cBed, bait, or the next coach. In that order of likelihood.\u201d"
+              }
+            ],
+            "onEnter": [],
+            "options": [
+              {
+                "id": "dusk_pyle_count",
+                "text": "How long is the Moot Road?",
+                "requires": {
+                  "without": {
+                    "lore": [
+                      "dusk_miles_count"
+                    ]
+                  }
+                },
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "check": {
+                  "skill": "persuasion",
+                  "difficulty": {
+                    "sub": [
+                      12,
+                      {
+                        "clamp": [
+                          {
+                            "div": [
+                              {
+                                "ref": "reputation.the_keepers",
+                                "else": 0
+                              },
+                              5
+                            ]
+                          },
+                          -6,
+                          6
+                        ]
+                      }
+                    ]
+                  },
+                  "onSuccess": "dusk_pyle_count_told",
+                  "onFailure": "dusk_pyle_count_wont"
+                }
+              },
+              {
+                "id": "dusk_pyle_sunken",
+                "text": "The oaks. Is there anything out by them?",
+                "requires": {
+                  "without": {
+                    "lore": [
+                      "dusk_miles_sunken"
+                    ]
+                  }
+                },
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "check": {
+                  "skill": "insight",
+                  "difficulty": {
+                    "sub": [
+                      14,
+                      {
+                        "clamp": [
+                          {
+                            "div": [
+                              {
+                                "ref": "reputation.the_keepers",
+                                "else": 0
+                              },
+                              5
+                            ]
+                          },
+                          -6,
+                          6
+                        ]
+                      }
+                    ]
+                  },
+                  "onSuccess": "dusk_pyle_sunken_told",
+                  "onFailure": "dusk_pyle_sunken_wont"
+                }
+              },
+              {
+                "id": "dusk_pyle_book",
+                "text": "The mile book. Let me take it.",
+                "requires": {
+                  "without": {
+                    "items": [
+                      "mile_book"
+                    ],
+                    "flags": [
+                      {
+                        "flag": "given:mile_book"
+                      }
+                    ]
+                  }
+                },
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "check": {
+                  "skill": "persuasion",
+                  "difficulty": {
+                    "sub": [
+                      13,
+                      {
+                        "clamp": [
+                          {
+                            "div": [
+                              {
+                                "ref": "reputation.the_keepers",
+                                "else": 0
+                              },
+                              5
+                            ]
+                          },
+                          -6,
+                          6
+                        ]
+                      }
+                    ]
+                  },
+                  "onSuccess": "dusk_pyle_book_gave",
+                  "onFailure": "dusk_pyle_book_kept"
+                }
+              },
+              {
+                "id": "greet_leave",
+                "text": "Nothing.",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "dusk_pyle_count_told",
+            "says": [
+              {
+                "text": "\u201cEleven miles.\u201d Pyle does not look up from the fare slate. \u201cAnd fourteen marks on it.\u201d A pause exactly long enough to be deliberate. \u201cMy great-grandmother opened this house and wrote fourteen in the book, and her son wrote fourteen, and I write fourteen. Nobody has ever bothered to be troubled by it but me.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "learnLore": {
+                  "entry": "dusk_miles_count"
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "dusk_pyle_count_on",
+                "text": "Go on.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "dusk_pyle_count_wont",
+            "says": [
+              {
+                "text": "\u201cI've said all I mean to,\u201d they say, and go back to what they were doing."
+              }
+            ],
+            "onEnter": [
+              {
+                "adjustReputation": {
+                  "faction": "the_keepers",
+                  "amount": -1
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "dusk_pyle_count_drop",
+                "text": "Leave it.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "dusk_pyle_sunken_told",
+            "says": [
+              {
+                "text": "\u201cThere is a lane.\u201d Now Pyle looks up. \u201cSix foot down into the ground, sides standing, no spoil either side of it. That is a hundred years of loaded carts.\u201d The slate goes down. \u201cNothing has been down there in my life, my father's life, or the book.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "learnLore": {
+                  "entry": "dusk_miles_sunken"
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "dusk_pyle_sunken_on",
+                "text": "Go on.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "dusk_pyle_sunken_wont",
+            "says": [
+              {
+                "text": "\u201cI've said all I mean to,\u201d they say, and go back to what they were doing."
+              }
+            ],
+            "onEnter": [
+              {
+                "adjustReputation": {
+                  "faction": "the_keepers",
+                  "amount": -1
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "dusk_pyle_sunken_drop",
+                "text": "Leave it.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "dusk_pyle_book_gave",
+            "says": [
+              {
+                "text": "It comes off the shelf with a cloth round it, which tells you what the family thinks of it. \u201cEvery stage and every fare since the house opened,\u201d Pyle says. \u201cAnd every one of us counting to fourteen. Find out which three, and come and tell me, and I will stand you whatever you like.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "grantItem": {
+                  "target": {
+                    "ref": "actor.id"
+                  },
+                  "item": "mile_book",
+                  "quantity": 1
+                }
+              },
+              {
+                "setFlag": {
+                  "flag": "given:mile_book",
+                  "value": true
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "dusk_pyle_book_thanks",
+                "text": "Thank you.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "dusk_pyle_book_kept",
+            "says": [
+              {
+                "text": "\u201cIt is the house's,\u201d Pyle says, and the cloth goes back round it, and back on the shelf."
+              }
+            ],
+            "onEnter": [
+              {
+                "adjustReputation": {
+                  "faction": "the_keepers",
+                  "amount": -2
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "dusk_pyle_book_leave",
+                "text": "Then no.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          }
+        ]
+      },
+      {
+        "id": "dusk_moll_talk",
+        "start": "greet",
+        "nodes": [
+          {
+            "id": "greet",
+            "says": [
+              {
+                "text": "A covered burn the size of a cottage giving off no visible smoke at all, which took forty years to learn, and a woman watching it."
+              },
+              {
+                "text": "\u201cDo not stand upwind and do not touch the sides.\u201d"
+              }
+            ],
+            "onEnter": [],
+            "options": [
+              {
+                "id": "dusk_moll_ages",
+                "text": "The trees along the Greenway.",
+                "requires": {
+                  "without": {
+                    "lore": [
+                      "dusk_green_ages"
+                    ]
+                  }
+                },
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "check": {
+                  "skill": "persuasion",
+                  "difficulty": {
+                    "sub": [
+                      12,
+                      {
+                        "clamp": [
+                          {
+                            "div": [
+                              {
+                                "ref": "reputation.the_keepers",
+                                "else": 0
+                              },
+                              5
+                            ]
+                          },
+                          -6,
+                          6
+                        ]
+                      }
+                    ]
+                  },
+                  "onSuccess": "dusk_moll_ages_told",
+                  "onFailure": "dusk_moll_ages_wont"
+                }
+              },
+              {
+                "id": "dusk_moll_line",
+                "text": "What is the line you will not cut inside?",
+                "requires": {
+                  "without": {
+                    "lore": [
+                      "dusk_ward_line"
+                    ]
+                  }
+                },
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "check": {
+                  "skill": "insight",
+                  "difficulty": {
+                    "sub": [
+                      15,
+                      {
+                        "clamp": [
+                          {
+                            "div": [
+                              {
+                                "ref": "reputation.the_keepers",
+                                "else": 0
+                              },
+                              5
+                            ]
+                          },
+                          -6,
+                          6
+                        ]
+                      }
+                    ]
+                  },
+                  "onSuccess": "dusk_moll_line_told",
+                  "onFailure": "dusk_moll_line_wont"
+                }
+              },
+              {
+                "id": "dusk_moll_charter",
+                "text": "The charter. I want to see the back of it.",
+                "requires": {
+                  "without": {
+                    "items": [
+                      "burners_charter"
+                    ],
+                    "flags": [
+                      {
+                        "flag": "given:burners_charter"
+                      }
+                    ]
+                  }
+                },
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "check": {
+                  "skill": "persuasion",
+                  "difficulty": {
+                    "sub": [
+                      14,
+                      {
+                        "clamp": [
+                          {
+                            "div": [
+                              {
+                                "ref": "reputation.the_keepers",
+                                "else": 0
+                              },
+                              5
+                            ]
+                          },
+                          -6,
+                          6
+                        ]
+                      }
+                    ]
+                  },
+                  "onSuccess": "dusk_moll_charter_gave",
+                  "onFailure": "dusk_moll_charter_kept"
+                }
+              },
+              {
+                "id": "greet_leave",
+                "text": "Nothing.",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": [
+              {
+                "requires": {
+                  "factions": [
+                    {
+                      "faction": "the_keepers",
+                      "maxStanding": -30
+                    }
+                  ]
+                },
+                "goto": "dusk_moll_cold"
+              }
+            ]
+          },
+          {
+            "id": "dusk_moll_ages_told",
+            "says": [
+              {
+                "text": "\u201cAll of an age and none of them old.\u201d Moll rakes over a section of the burn that does not need it. \u201cA wood does not do that. Leave any gap in this wood and in four years it is thicket and in twenty it is wood again. That has been forty yards wide for longer than the Moot Road has existed.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "learnLore": {
+                  "entry": "dusk_green_ages"
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "dusk_moll_ages_on",
+                "text": "Go on.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "dusk_moll_ages_wont",
+            "says": [
+              {
+                "text": "\u201cI've said all I mean to,\u201d they say, and go back to what they were doing."
+              }
+            ],
+            "onEnter": [
+              {
+                "adjustReputation": {
+                  "faction": "the_keepers",
+                  "amount": -1
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "dusk_moll_ages_drop",
+                "text": "Leave it.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "dusk_moll_line_told",
+            "says": [
+              {
+                "text": "She walks you to it, which takes a quarter of an hour, and stops at a place with nothing at it. \u201cHere.\u201d Then along, a hundred paces, still nothing. \u201cAnd here.\u201d She turns round. \u201cEvery burner in Rooksrest can do that and not one of us can tell you what we are walking. We learned it off the last lot. They learned it off theirs.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "learnLore": {
+                  "entry": "dusk_ward_line"
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "dusk_moll_line_on",
+                "text": "Go on.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "dusk_moll_line_wont",
+            "says": [
+              {
+                "text": "\u201cI've said all I mean to,\u201d they say, and go back to what they were doing."
+              }
+            ],
+            "onEnter": [
+              {
+                "adjustReputation": {
+                  "faction": "the_keepers",
+                  "amount": -1
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "dusk_moll_line_drop",
+                "text": "Leave it.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "dusk_moll_charter_gave",
+            "says": [
+              {
+                "text": "She unrolls it on a stump. The front is the parish's right to cut, in the parish's clerk's hand. The back is a line drawn freehand, closed, with no words on it at all. \u201cThat is not our writing,\u201d Moll says. \u201cThat is not anybody's writing. That is a shape.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "grantItem": {
+                  "target": {
+                    "ref": "actor.id"
+                  },
+                  "item": "burners_charter",
+                  "quantity": 1
+                }
+              },
+              {
+                "setFlag": {
+                  "flag": "given:burners_charter",
+                  "value": true
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "dusk_moll_charter_thanks",
+                "text": "Thank you.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "dusk_moll_charter_kept",
+            "says": [
+              {
+                "text": "\u201cIt is the right to feed forty people,\u201d she says, rolling it up. \u201cNo.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "adjustReputation": {
+                  "faction": "the_keepers",
+                  "amount": -2
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "dusk_moll_charter_leave",
+                "text": "Then no.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "dusk_moll_cold",
+            "says": [
+              {
+                "text": "She walks round to the far side of the burn and stays there."
+              }
+            ],
+            "onEnter": [],
+            "options": [
+              {
+                "id": "dusk_moll_go",
+                "text": "Leave it.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          }
+        ]
+      },
+      {
+        "id": "dusk_kest_talk",
+        "start": "greet",
+        "nodes": [
+          {
+            "id": "greet",
+            "says": [
+              {
+                "text": "A hut with a swept step, a hearth in use, and somebody in the doorway who heard you coming a long way off."
+              },
+              {
+                "text": "\u201cYou are four days from a field. Say what brought you.\u201d"
+              }
+            ],
+            "onEnter": [],
+            "options": [
+              {
+                "id": "dusk_kest_recut",
+                "text": "Who re-cuts the marks?",
+                "requires": {
+                  "without": {
+                    "lore": [
+                      "dusk_ward_recut"
+                    ]
+                  }
+                },
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "check": {
+                  "skill": "persuasion",
+                  "difficulty": {
+                    "sub": [
+                      15,
+                      {
+                        "clamp": [
+                          {
+                            "div": [
+                              {
+                                "ref": "reputation.the_keepers",
+                                "else": 0
+                              },
+                              5
+                            ]
+                          },
+                          -6,
+                          6
+                        ]
+                      }
+                    ]
+                  },
+                  "onSuccess": "dusk_kest_recut_told",
+                  "onFailure": "dusk_kest_recut_wont"
+                }
+              },
+              {
+                "id": "dusk_kest_moved",
+                "text": "The marks are further out than the survey.",
+                "requires": {
+                  "without": {
+                    "lore": [
+                      "dusk_ward_moved"
+                    ]
+                  }
+                },
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "check": {
+                  "skill": "insight",
+                  "difficulty": {
+                    "sub": [
+                      16,
+                      {
+                        "clamp": [
+                          {
+                            "div": [
+                              {
+                                "ref": "reputation.the_keepers",
+                                "else": 0
+                              },
+                              5
+                            ]
+                          },
+                          -6,
+                          6
+                        ]
+                      }
+                    ]
+                  },
+                  "onSuccess": "dusk_kest_moved_told",
+                  "onFailure": "dusk_kest_moved_wont"
+                }
+              },
+              {
+                "id": "dusk_kest_rod",
+                "text": "The rod. Lend it to me.",
+                "requires": {
+                  "without": {
+                    "items": [
+                      "woodwards_rod"
+                    ],
+                    "flags": [
+                      {
+                        "flag": "given:woodwards_rod"
+                      }
+                    ]
+                  }
+                },
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "check": {
+                  "skill": "persuasion",
+                  "difficulty": {
+                    "sub": [
+                      12,
+                      {
+                        "clamp": [
+                          {
+                            "div": [
+                              {
+                                "ref": "reputation.the_keepers",
+                                "else": 0
+                              },
+                              5
+                            ]
+                          },
+                          -6,
+                          6
+                        ]
+                      }
+                    ]
+                  },
+                  "onSuccess": "dusk_kest_rod_gave",
+                  "onFailure": "dusk_kest_rod_kept"
+                }
+              },
+              {
+                "id": "greet_leave",
+                "text": "Nothing.",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "dusk_kest_recut_told",
+            "says": [
+              {
+                "text": "\u201cNot me.\u201d Kest says it fast, which is the most interesting thing about the answer. \u201cI keep the hut. I have kept it eleven years. I am not on the parish roll and I have never been paid a quarter in my life.\u201d A long look out at the trees. \u201cThe faces get cut. I have sat up for it twice and both times I woke where I sat and it was done.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "learnLore": {
+                  "entry": "dusk_ward_recut"
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "dusk_kest_recut_on",
+                "text": "Go on.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "dusk_kest_recut_wont",
+            "says": [
+              {
+                "text": "\u201cI've said all I mean to,\u201d they say, and go back to what they were doing."
+              }
+            ],
+            "onEnter": [
+              {
+                "adjustReputation": {
+                  "faction": "the_keepers",
+                  "amount": -1
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "dusk_kest_recut_drop",
+                "text": "Leave it.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "dusk_kest_moved_told",
+            "says": [
+              {
+                "text": "\u201cEighty yards.\u201d No hesitation at all. \u201cI have chained it. Twice, in different years, and it was not the same eighty both times.\u201d Kest looks at you properly for the first time. \u201cIt is going out. Slowly. And the field is where the field has always been, so nobody in Fenny Cross has noticed a thing.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "learnLore": {
+                  "entry": "dusk_ward_moved"
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "dusk_kest_moved_on",
+                "text": "Go on.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "dusk_kest_moved_wont",
+            "says": [
+              {
+                "text": "\u201cI've said all I mean to,\u201d they say, and go back to what they were doing."
+              }
+            ],
+            "onEnter": [
+              {
+                "adjustReputation": {
+                  "faction": "the_keepers",
+                  "amount": -1
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "dusk_kest_moved_drop",
+                "text": "Leave it.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "dusk_kest_rod_gave",
+            "says": [
+              {
+                "text": "Kest takes it down off two pegs. \u201cSixteen and a half foot, and worn smooth at both ends,\u201d Kest says. \u201cI have had it eleven years. Somebody wore those ends and it was not me and it was not in eleven years.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "grantItem": {
+                  "target": {
+                    "ref": "actor.id"
+                  },
+                  "item": "woodwards_rod",
+                  "quantity": 1
+                }
+              },
+              {
+                "setFlag": {
+                  "flag": "given:woodwards_rod",
+                  "value": true
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "dusk_kest_rod_thanks",
+                "text": "Thank you.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "dusk_kest_rod_kept",
+            "says": [
+              {
+                "text": "\u201cIt came with the hut,\u201d Kest says. \u201cIt stays with the hut.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "adjustReputation": {
+                  "faction": "the_keepers",
+                  "amount": -1
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "dusk_kest_rod_leave",
+                "text": "Then no.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          }
+        ]
+      },
+      {
+        "id": "dusk_dunn_talk",
+        "start": "greet",
+        "nodes": [
+          {
+            "id": "greet",
+            "says": [
+              {
+                "text": "A cart backed under an eave, one wheel off, and a man doing something to the hub he is clearly not enjoying."
+              },
+              {
+                "text": "\u201cCoast road or forest road? I will complain about either.\u201d"
+              }
+            ],
+            "onEnter": [],
+            "options": [
+              {
+                "id": "dusk_dunn_three",
+                "text": "You've counted the marks on the Moot Road.",
+                "requires": {
+                  "without": {
+                    "lore": [
+                      "dusk_miles_three"
+                    ]
+                  }
+                },
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "check": {
+                  "skill": "insight",
+                  "difficulty": {
+                    "sub": [
+                      13,
+                      {
+                        "clamp": [
+                          {
+                            "div": [
+                              {
+                                "ref": "reputation.the_keepers",
+                                "else": 0
+                              },
+                              5
+                            ]
+                          },
+                          -6,
+                          6
+                        ]
+                      }
+                    ]
+                  },
+                  "onSuccess": "dusk_dunn_three_told",
+                  "onFailure": "dusk_dunn_three_wont"
+                }
+              },
+              {
+                "id": "dusk_dunn_bridge",
+                "text": "The bridge on the Greenway.",
+                "requires": {
+                  "without": {
+                    "lore": [
+                      "dusk_green_bridge"
+                    ]
+                  }
+                },
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "check": {
+                  "skill": "persuasion",
+                  "difficulty": {
+                    "sub": [
+                      12,
+                      {
+                        "clamp": [
+                          {
+                            "div": [
+                              {
+                                "ref": "reputation.the_keepers",
+                                "else": 0
+                              },
+                              5
+                            ]
+                          },
+                          -6,
+                          6
+                        ]
+                      }
+                    ]
+                  },
+                  "onSuccess": "dusk_dunn_bridge_told",
+                  "onFailure": "dusk_dunn_bridge_wont"
+                }
+              },
+              {
+                "id": "greet_leave",
+                "text": "Nothing.",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "dusk_dunn_three_told",
+            "says": [
+              {
+                "text": "\u201cEvery trip.\u201d Dunn wipes the hub. \u201cThree of them are not on the road. They are off it \u2014 twenty yards, forty, sixty. I used to think they had shifted the road round them.\u201d He straightens. \u201cThen I stood at one and sighted the other two and they line up with each other, and the line they make goes across the road, not along it.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "learnLore": {
+                  "entry": "dusk_miles_three"
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "dusk_dunn_three_on",
+                "text": "Go on.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "dusk_dunn_three_wont",
+            "says": [
+              {
+                "text": "\u201cI've said all I mean to,\u201d they say, and go back to what they were doing."
+              }
+            ],
+            "onEnter": [
+              {
+                "adjustReputation": {
+                  "faction": "the_keepers",
+                  "amount": -1
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "dusk_dunn_three_drop",
+                "text": "Leave it.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "dusk_dunn_bridge_told",
+            "says": [
+              {
+                "text": "\u201cCrosses nothing.\u201d He laughs, but not much. \u201cStream went round two hundred years back \u2014 there is the old bed, dry as a road. Bridge is pointed, parapet is sound, and I have carted every load of lime that has gone into this parish for twenty years and not one of them went there.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "learnLore": {
+                  "entry": "dusk_green_bridge"
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "dusk_dunn_bridge_on",
+                "text": "Go on.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "dusk_dunn_bridge_wont",
+            "says": [
+              {
+                "text": "\u201cI've said all I mean to,\u201d they say, and go back to what they were doing."
+              }
+            ],
+            "onEnter": [
+              {
+                "adjustReputation": {
+                  "faction": "the_keepers",
+                  "amount": -1
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "dusk_dunn_bridge_drop",
+                "text": "Leave it.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          }
+        ]
+      },
+      {
+        "id": "dusk_ives_talk",
+        "start": "greet",
+        "nodes": [
+          {
+            "id": "greet",
+            "says": [
+              {
+                "text": "Sacks by the hundredweight, a set of scales worn to a shine, and a man who has just told somebody their charcoal is damp."
+              },
+              {
+                "text": "\u201cBy the sack or by the load. Damp is half price and I will know.\u201d"
+              }
+            ],
+            "onEnter": [],
+            "options": [
+              {
+                "id": "dusk_ives_cuttings",
+                "text": "The mile oaks. Were they planted?",
+                "requires": {
+                  "without": {
+                    "lore": [
+                      "dusk_miles_cuttings"
+                    ]
+                  }
+                },
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "check": {
+                  "skill": "survival",
+                  "difficulty": {
+                    "sub": [
+                      13,
+                      {
+                        "clamp": [
+                          {
+                            "div": [
+                              {
+                                "ref": "reputation.the_keepers",
+                                "else": 0
+                              },
+                              5
+                            ]
+                          },
+                          -6,
+                          6
+                        ]
+                      }
+                    ]
+                  },
+                  "onSuccess": "dusk_ives_cuttings_told",
+                  "onFailure": "dusk_ives_cuttings_wont"
+                }
+              },
+              {
+                "id": "dusk_ives_paid",
+                "text": "Who is the woodward?",
+                "requires": {
+                  "without": {
+                    "lore": [
+                      "dusk_ward_paid"
+                    ]
+                  }
+                },
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "check": {
+                  "skill": "persuasion",
+                  "difficulty": {
+                    "sub": [
+                      14,
+                      {
+                        "clamp": [
+                          {
+                            "div": [
+                              {
+                                "ref": "reputation.the_keepers",
+                                "else": 0
+                              },
+                              5
+                            ]
+                          },
+                          -6,
+                          6
+                        ]
+                      }
+                    ]
+                  },
+                  "onSuccess": "dusk_ives_paid_told",
+                  "onFailure": "dusk_ives_paid_wont"
+                }
+              },
+              {
+                "id": "greet_leave",
+                "text": "Nothing.",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "dusk_ives_cuttings_told",
+            "says": [
+              {
+                "text": "\u201cStruck.\u201d Ives is definite. \u201cEvery one of them off the same tree \u2014 you can see it in the leaf, they are all the same leaf, and oak is not shy about being different.\u201d He weighs something. \u201cI have looked for the mother tree for thirty years. It is not on the road and it is not off it either, and I have been most of the way to Elderhollow looking.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "learnLore": {
+                  "entry": "dusk_miles_cuttings"
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "dusk_ives_cuttings_on",
+                "text": "Go on.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "dusk_ives_cuttings_wont",
+            "says": [
+              {
+                "text": "\u201cI've said all I mean to,\u201d they say, and go back to what they were doing."
+              }
+            ],
+            "onEnter": [
+              {
+                "adjustReputation": {
+                  "faction": "the_keepers",
+                  "amount": -1
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "dusk_ives_cuttings_drop",
+                "text": "Leave it.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "dusk_ives_paid_told",
+            "says": [
+              {
+                "text": "\u201cThe parish pays one.\u201d He puts the weight down. \u201cQuarterly. Four hundred years of quarters, in the parish book, never missed.\u201d He shrugs. \u201cAsk Fenny Cross who it is. Ask the vicar. Ask Kest, who lives in the hut and is not it. Nobody knows and the money goes.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "learnLore": {
+                  "entry": "dusk_ward_paid"
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "dusk_ives_paid_on",
+                "text": "Go on.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "dusk_ives_paid_wont",
+            "says": [
+              {
+                "text": "\u201cI've said all I mean to,\u201d they say, and go back to what they were doing."
+              }
+            ],
+            "onEnter": [
+              {
+                "adjustReputation": {
+                  "faction": "the_keepers",
+                  "amount": -1
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "dusk_ives_paid_drop",
+                "text": "Leave it.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          }
+        ]
+      },
+      {
+        "id": "dusk_ferre_talk",
+        "start": "greet",
+        "nodes": [
+          {
+            "id": "greet",
+            "says": [
+              {
+                "text": "A low taproom with everything in it damp, a fire that is winning, and a landlady who has already put a mat down for you."
+              },
+              {
+                "text": "\u201cBoots by the fire. Both roads meet here, so I hear both.\u201d"
+              }
+            ],
+            "onEnter": [],
+            "options": [
+              {
+                "id": "dusk_ferre_width",
+                "text": "The Greenway. Who cut it?",
+                "requires": {
+                  "without": {
+                    "lore": [
+                      "dusk_green_width"
+                    ]
+                  }
+                },
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "check": {
+                  "skill": "persuasion",
+                  "difficulty": {
+                    "sub": [
+                      11,
+                      {
+                        "clamp": [
+                          {
+                            "div": [
+                              {
+                                "ref": "reputation.the_keepers",
+                                "else": 0
+                              },
+                              5
+                            ]
+                          },
+                          -6,
+                          6
+                        ]
+                      }
+                    ]
+                  },
+                  "onSuccess": "dusk_ferre_width_told",
+                  "onFailure": "dusk_ferre_width_wont"
+                }
+              },
+              {
+                "id": "dusk_ferre_night",
+                "text": "Does anything cross it at night?",
+                "requires": {
+                  "without": {
+                    "lore": [
+                      "dusk_green_night"
+                    ]
+                  }
+                },
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "check": {
+                  "skill": "insight",
+                  "difficulty": {
+                    "sub": [
+                      13,
+                      {
+                        "clamp": [
+                          {
+                            "div": [
+                              {
+                                "ref": "reputation.the_keepers",
+                                "else": 0
+                              },
+                              5
+                            ]
+                          },
+                          -6,
+                          6
+                        ]
+                      }
+                    ]
+                  },
+                  "onSuccess": "dusk_ferre_night_told",
+                  "onFailure": "dusk_ferre_night_wont"
+                }
+              },
+              {
+                "id": "greet_leave",
+                "text": "Nothing.",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "dusk_ferre_width_told",
+            "says": [
+              {
+                "text": "\u201cThat is the question, is it not.\u201d She says it like somebody who has heard it before and never had a good answer. \u201cNine miles, dead straight, forty yards across. The Moot Road took the parish eleven years and a great deal of arguing with the wood.\u201d A cloth over the bar. \u201cNobody argued about the Greenway. It was there.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "learnLore": {
+                  "entry": "dusk_green_width"
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "dusk_ferre_width_on",
+                "text": "Go on.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "dusk_ferre_width_wont",
+            "says": [
+              {
+                "text": "\u201cI've said all I mean to,\u201d they say, and go back to what they were doing."
+              }
+            ],
+            "onEnter": [
+              {
+                "adjustReputation": {
+                  "faction": "the_keepers",
+                  "amount": -1
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "dusk_ferre_width_drop",
+                "text": "Leave it.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "dusk_ferre_night_told",
+            "says": [
+              {
+                "text": "\u201cNo.\u201d Flat, and she does not soften it. \u201cThe deer go up it and down it. They will cross the turnpike, the coast road and my yard, and they will not step over the Greenway after dark.\u201d She looks at the fire. \u201cI have had drovers in here who lost a night going round rather than over, and they were not men who lose nights.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "learnLore": {
+                  "entry": "dusk_green_night"
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "dusk_ferre_night_on",
+                "text": "Go on.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "dusk_ferre_night_wont",
+            "says": [
+              {
+                "text": "\u201cI've said all I mean to,\u201d they say, and go back to what they were doing."
+              }
+            ],
+            "onEnter": [
+              {
+                "adjustReputation": {
+                  "faction": "the_keepers",
+                  "amount": -1
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "dusk_ferre_night_drop",
+                "text": "Leave it.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          }
+        ]
       }
     ],
     "quests": [
@@ -83520,6 +86366,177 @@
           ],
           "reputation": {}
         }
+      },
+      {
+        "id": "dusk_the_extra_miles",
+        "name": "The Extra Miles",
+        "description": "Fourteen marked miles on an eleven-mile road, and the three that do not fit sight along a line of their own.",
+        "autoStart": false,
+        "ordered": true,
+        "tags": [
+          "hidden",
+          "duskwood",
+          "dusk_miles"
+        ],
+        "objectives": [
+          {
+            "id": "down_the_lane",
+            "description": "Get down into the sunken lane.",
+            "kind": "reach",
+            "count": 1,
+            "hidden": true,
+            "optional": false,
+            "target": "moot_road_hollow_way"
+          },
+          {
+            "id": "read_the_count",
+            "description": "Work out which three marks are the extra ones.",
+            "kind": "custom",
+            "count": 1,
+            "hidden": true,
+            "optional": false,
+            "when": {
+              "test": {
+                "ref": "flags.dusk_miles_open"
+              }
+            }
+          },
+          {
+            "id": "who_walks_them",
+            "description": "Find what has been walking them.",
+            "kind": "kill",
+            "count": 1,
+            "hidden": true,
+            "optional": false,
+            "target": "mile_walker"
+          }
+        ],
+        "stages": [],
+        "unlocks": [],
+        "rewards": {
+          "xp": 150,
+          "items": [
+            {
+              "item": "mile_oak_ring",
+              "quantity": 1
+            }
+          ],
+          "reputation": {}
+        }
+      },
+      {
+        "id": "dusk_the_road",
+        "name": "The Road Nobody Cut",
+        "description": "Forty yards wide and nine miles straight through a wood that closes any gap in four years, and nothing crosses it at night.",
+        "autoStart": false,
+        "ordered": true,
+        "tags": [
+          "hidden",
+          "duskwood",
+          "dusk_green"
+        ],
+        "objectives": [
+          {
+            "id": "onto_the_green",
+            "description": "Get to the only thing built on it.",
+            "kind": "reach",
+            "count": 1,
+            "hidden": true,
+            "optional": false,
+            "target": "greenway_barrow_of_the_ride"
+          },
+          {
+            "id": "under_the_span",
+            "description": "Open the dry arch under the bridge.",
+            "kind": "custom",
+            "count": 1,
+            "hidden": true,
+            "optional": false,
+            "when": {
+              "test": {
+                "ref": "flags.dusk_green_open"
+              }
+            }
+          },
+          {
+            "id": "what_uses_it",
+            "description": "Meet what uses it after dark.",
+            "kind": "kill",
+            "count": 1,
+            "hidden": true,
+            "optional": false,
+            "target": "the_ride"
+          }
+        ],
+        "stages": [],
+        "unlocks": [],
+        "rewards": {
+          "xp": 165,
+          "items": [
+            {
+              "item": "greenway_cloak",
+              "quantity": 1
+            }
+          ],
+          "reputation": {}
+        }
+      },
+      {
+        "id": "dusk_the_round",
+        "name": "The Round",
+        "description": "Four hundred years of quarterly payment to a woodward nobody can name, and marks that have moved eighty yards outward.",
+        "autoStart": false,
+        "ordered": true,
+        "tags": [
+          "hidden",
+          "duskwood",
+          "dusk_ward"
+        ],
+        "objectives": [
+          {
+            "id": "to_the_marks",
+            "description": "Get to the mark cut all the way through.",
+            "kind": "reach",
+            "count": 1,
+            "hidden": true,
+            "optional": false,
+            "target": "undereaves_boundary_stone"
+          },
+          {
+            "id": "walk_the_round",
+            "description": "Walk the round with the rod that measures it.",
+            "kind": "custom",
+            "count": 1,
+            "hidden": true,
+            "optional": false,
+            "when": {
+              "test": {
+                "ref": "flags.dusk_ward_open"
+              }
+            }
+          },
+          {
+            "id": "who_walks_it",
+            "description": "Meet whoever has been earning the fee.",
+            "kind": "kill",
+            "count": 1,
+            "hidden": true,
+            "optional": false,
+            "target": "the_woodward"
+          }
+        ],
+        "stages": [],
+        "unlocks": [],
+        "rewards": {
+          "xp": 155,
+          "items": [
+            {
+              "item": "woodwards_belt",
+              "quantity": 1
+            }
+          ],
+          "reputation": {}
+        }
       }
     ],
     "arcs": [
@@ -83821,6 +86838,17 @@
           "coast_the_scouring",
           "coast_the_signal",
           "coast_the_unclaimed"
+        ],
+        "isEnding": false
+      },
+      {
+        "id": "dusk_hidden",
+        "name": "The Duskwood, on Terms",
+        "description": "Three arrangements this forest was made to accept, all of them still being honoured by somebody.",
+        "quests": [
+          "dusk_the_extra_miles",
+          "dusk_the_road",
+          "dusk_the_round"
         ],
         "isEnding": false
       },
@@ -84358,6 +87386,66 @@
         "id": "coast_yard_paid",
         "name": "The fee is paid every October, in coin, into the parish box, for a beast nobody ever comes for. The parish stopped asking who pays.",
         "source": "Fennick's"
+      },
+      {
+        "id": "dusk_miles_count",
+        "name": "There are fourteen marked miles on a road that is eleven miles long, and the wayhouse book has counted it that way since it was opened.",
+        "source": "the wayhouse book"
+      },
+      {
+        "id": "dusk_miles_three",
+        "name": "Three of the marks do not sit on the road at all. Sighted from one another they make a straight line of their own, crossing it.",
+        "source": "a carter"
+      },
+      {
+        "id": "dusk_miles_cuttings",
+        "name": "The oaks were not planted. Every one of them is a cutting off the same tree, which you can see in the leaf, and that tree is not on this road.",
+        "source": "the charcoal store"
+      },
+      {
+        "id": "dusk_miles_sunken",
+        "name": "There is a lane out that way worn six feet down into the ground. It takes a hundred years of carts to wear a lane that deep and nothing has used it in living memory.",
+        "source": "the Mile Oaks"
+      },
+      {
+        "id": "dusk_green_width",
+        "name": "Forty yards wide and dead straight for nine miles, in a wood that shuts a cart track in four years if you stop using it.",
+        "source": "the Avenue"
+      },
+      {
+        "id": "dusk_green_ages",
+        "name": "Every tree along its edge is the same age, and none of them is old. Something clears it, and clears it often enough that nothing gets big.",
+        "source": "a charcoal burner"
+      },
+      {
+        "id": "dusk_green_bridge",
+        "name": "The bridge on it crosses nothing. The stream moved two hundred years ago and the bridge is still pointed, still sound, and somebody is still keeping it that way.",
+        "source": "the crossing at Fenny"
+      },
+      {
+        "id": "dusk_green_night",
+        "name": "Nothing crosses it after dark. Not the deer, which will cross a turnpike. They go up it or down it, and they do not go over.",
+        "source": "the Wet Boot"
+      },
+      {
+        "id": "dusk_ward_paid",
+        "name": "The parish has paid a woodward every quarter for four hundred years and nobody at Fenny Cross can tell you the name of the current one.",
+        "source": "the Wet Boot"
+      },
+      {
+        "id": "dusk_ward_moved",
+        "name": "The last field ends where it has always ended. The marks on the edge of the wood are eighty yards further out than the survey puts them, and the survey is not wrong.",
+        "source": "the Last Field"
+      },
+      {
+        "id": "dusk_ward_line",
+        "name": "The burners will not cut inside a line every one of them can walk you along and not one of them can account for.",
+        "source": "a charcoal burner"
+      },
+      {
+        "id": "dusk_ward_recut",
+        "name": "Every stone on the edge has been re-cut on the same face, and the cuts are fresh, and there is nobody the parish is paying to do it.",
+        "source": "the woodward's hut"
       }
     ],
     "loreThreads": [
@@ -84645,6 +87733,39 @@
           "coast_yard_wall",
           "coast_yard_horses",
           "coast_yard_paid"
+        ]
+      },
+      {
+        "id": "dusk_miles",
+        "name": "The Extra Miles",
+        "description": "Fourteen marked miles on an eleven-mile road, three of which sight along a line of their own.",
+        "entries": [
+          "dusk_miles_count",
+          "dusk_miles_three",
+          "dusk_miles_cuttings",
+          "dusk_miles_sunken"
+        ]
+      },
+      {
+        "id": "dusk_green",
+        "name": "The Road Nobody Cut",
+        "description": "Forty yards wide and nine miles straight through a wood that closes any gap in four years, and nothing crosses it at night.",
+        "entries": [
+          "dusk_green_width",
+          "dusk_green_ages",
+          "dusk_green_bridge",
+          "dusk_green_night"
+        ]
+      },
+      {
+        "id": "dusk_ward",
+        "name": "The Round",
+        "description": "Four hundred years of paying a woodward nobody can name, and marks that have moved outward.",
+        "entries": [
+          "dusk_ward_paid",
+          "dusk_ward_moved",
+          "dusk_ward_line",
+          "dusk_ward_recut"
         ]
       }
     ]
