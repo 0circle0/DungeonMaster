@@ -4899,6 +4899,137 @@
           }
         ],
         "rarity": "very_rare"
+      },
+      {
+        "id": "hearth_rota",
+        "name": "The Hearth Rota",
+        "description": "A hundred and sixty years of whose turn it was, unbroken, with two nights a year ruled through and nobody's name against them.",
+        "kind": "key",
+        "value": 0,
+        "weight": 0,
+        "tags": [
+          "keepsake"
+        ],
+        "extra": {
+          "heldBy": "fire_keeper_wenna"
+        }
+      },
+      {
+        "id": "cutters_book",
+        "name": "The Cutters' Book",
+        "description": "Forty-one out and forty-one back, in four clerks' hands, with two lines that describe a difference and do not remark on it.",
+        "kind": "key",
+        "value": 0,
+        "weight": 0,
+        "tags": [
+          "keepsake"
+        ],
+        "extra": {
+          "heldBy": "peat_cutter_hald"
+        }
+      },
+      {
+        "id": "estate_map",
+        "name": "The Old Estate Map",
+        "description": "Drives, butts and beaters' lines over the whole moor, and one line that goes over the scarp and keeps going.",
+        "kind": "key",
+        "value": 0,
+        "weight": 0,
+        "tags": [
+          "keepsake"
+        ],
+        "extra": {
+          "heldBy": "bothy_man_ferrin"
+        }
+      },
+      {
+        "id": "green_ash",
+        "name": "Ash That Burned Green",
+        "description": "Raked cold out of a fire that has been alight for two hundred years, off one of the two nights a year it changes colour.",
+        "kind": "treasure",
+        "value": 0,
+        "weight": 0,
+        "tags": [
+          "clue",
+          "proof"
+        ],
+        "onUse": [
+          {
+            "learnLore": {
+              "entry": "moor_fire_green"
+            }
+          }
+        ],
+        "consumedOnUse": false
+      },
+      {
+        "id": "hearth_ring",
+        "name": "The Ring off the Long Fire",
+        "description": "Iron out of a hearth nobody has let go out. What the wearer lights is hard to put out, and so is the wearer.",
+        "kind": "trinket",
+        "slot": "ring",
+        "value": 900,
+        "weight": 1,
+        "tags": [
+          "fabled"
+        ],
+        "skillBonuses": {
+          "resolve": 3,
+          "survival": 2
+        },
+        "damageInteractions": [
+          {
+            "damageType": "fire",
+            "multiplier": 0.5
+          }
+        ],
+        "rarity": "rare"
+      },
+      {
+        "id": "bog_belt",
+        "name": "The Belt Out of the Black Band",
+        "description": "Tanned by eleven thousand years of peat into something that is not leather any more. It does not rot and neither, for a while, does what it is buckled around.",
+        "kind": "trinket",
+        "slot": "belt",
+        "value": 940,
+        "weight": 1,
+        "tags": [
+          "fabled"
+        ],
+        "modifiers": {
+          "carry": 3
+        },
+        "skillBonuses": {
+          "medicine": 2,
+          "resolve": 3
+        },
+        "damageInteractions": [
+          {
+            "damageType": "poison",
+            "multiplier": 0.5
+          }
+        ],
+        "rarity": "very_rare"
+      },
+      {
+        "id": "beaters_cloak",
+        "name": "The Beater's Cloak",
+        "description": "Off the eighth place in the line, the one that stands where the ground stops. Whatever is driven, it does not come at the wearer first.",
+        "kind": "armor",
+        "slot": "cloak",
+        "value": 1000,
+        "weight": 1,
+        "tags": [
+          "fabled"
+        ],
+        "modifiers": {
+          "guard": 2
+        },
+        "skillBonuses": {
+          "stealth": 3,
+          "perception": 2
+        },
+        "rarity": "very_rare"
       }
     ],
     "lootTables": [
@@ -8489,6 +8620,208 @@
             "weight": 2,
             "value": {
               "item": "antidote",
+              "quantity": "1d2"
+            }
+          },
+          {
+            "weight": 1,
+            "value": {
+              "item": "warded_coat",
+              "quantity": "1"
+            }
+          }
+        ]
+      },
+      {
+        "id": "moor_rota_carried",
+        "name": "What Wenna Kept",
+        "rolls": "1",
+        "emptyChance": 0,
+        "entries": [
+          {
+            "weight": 1,
+            "value": {
+              "item": "hearth_rota",
+              "quantity": "1",
+              "unique": true,
+              "requirementScope": "party",
+              "requires": {
+                "without": {
+                  "flags": [
+                    {
+                      "flag": "given:hearth_rota"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        ]
+      },
+      {
+        "id": "moor_book_carried",
+        "name": "What Hald Kept",
+        "rolls": "1",
+        "emptyChance": 0,
+        "entries": [
+          {
+            "weight": 1,
+            "value": {
+              "item": "cutters_book",
+              "quantity": "1",
+              "unique": true,
+              "requirementScope": "party",
+              "requires": {
+                "without": {
+                  "flags": [
+                    {
+                      "flag": "given:cutters_book"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        ]
+      },
+      {
+        "id": "moor_map_carried",
+        "name": "What Ferrin Kept",
+        "rolls": "1",
+        "emptyChance": 0,
+        "entries": [
+          {
+            "weight": 1,
+            "value": {
+              "item": "estate_map",
+              "quantity": "1",
+              "unique": true,
+              "requirementScope": "party",
+              "requires": {
+                "without": {
+                  "flags": [
+                    {
+                      "flag": "given:estate_map"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        ]
+      },
+      {
+        "id": "moor_fire_hoard",
+        "name": "The Cold Room Under the Warm One",
+        "rolls": "2",
+        "emptyChance": 0.1,
+        "bonusRollSkill": "perception",
+        "bonusRolls": {
+          "onSuccess": 1,
+          "onCritical": 2
+        },
+        "entries": [
+          {
+            "weight": 5,
+            "value": {
+              "item": "old_coin",
+              "quantity": "4d6"
+            }
+          },
+          {
+            "weight": 3,
+            "value": {
+              "item": "healing_draught",
+              "quantity": "1d2"
+            }
+          },
+          {
+            "weight": 2,
+            "value": {
+              "item": "wight_ash",
+              "quantity": "1"
+            }
+          },
+          {
+            "weight": 1,
+            "value": {
+              "item": "green_ash",
+              "quantity": "1",
+              "unique": true
+            }
+          }
+        ]
+      },
+      {
+        "id": "moor_cut_hoard",
+        "name": "Below the Black Band",
+        "rolls": "3",
+        "emptyChance": 0,
+        "bonusRollSkill": "perception",
+        "bonusRolls": {
+          "onSuccess": 1,
+          "onCritical": 2
+        },
+        "entries": [
+          {
+            "weight": 4,
+            "value": {
+              "item": "old_coin",
+              "quantity": "5d6"
+            }
+          },
+          {
+            "weight": 3,
+            "value": {
+              "item": "barrow_torc",
+              "quantity": "1"
+            }
+          },
+          {
+            "weight": 2,
+            "value": {
+              "item": "antidote",
+              "quantity": "1d2"
+            }
+          },
+          {
+            "weight": 1,
+            "value": {
+              "item": "silvered_blade",
+              "quantity": "1"
+            }
+          }
+        ]
+      },
+      {
+        "id": "moor_shoot_hoard",
+        "name": "Under the Eighth Butt",
+        "rolls": "3",
+        "emptyChance": 0,
+        "bonusRollSkill": "perception",
+        "bonusRolls": {
+          "onSuccess": 1,
+          "onCritical": 2
+        },
+        "entries": [
+          {
+            "weight": 4,
+            "value": {
+              "item": "old_coin",
+              "quantity": "5d6"
+            }
+          },
+          {
+            "weight": 3,
+            "value": {
+              "item": "ward_salt",
+              "quantity": "1d2"
+            }
+          },
+          {
+            "weight": 2,
+            "value": {
+              "item": "amber_lump",
               "quantity": "1d2"
             }
           },
@@ -14353,6 +14686,305 @@
         "resourceOverrides": {
           "hp": 104
         }
+      },
+      {
+        "id": "moor_keeper",
+        "name": "Wenna, whose Turn It Is",
+        "description": "Has carried peat across open moor in weather that stopped the mail, on a rota, without comment.",
+        "level": 6,
+        "xp": 0,
+        "attributes": {
+          "might": 13,
+          "agility": 13,
+          "endurance": 16,
+          "intellect": 13,
+          "instinct": 15,
+          "presence": 13
+        },
+        "abilities": [
+          "strike"
+        ],
+        "behaviour": [
+          {
+            "priority": 0,
+            "use": "strike"
+          }
+        ],
+        "faction": "the_library",
+        "creatureType": "humanoid",
+        "size": "medium",
+        "descriptors": [
+          "a soot-marked"
+        ],
+        "conditionalLoot": [],
+        "loot": "moor_rota_carried",
+        "resourceOverrides": {
+          "hp": 36
+        }
+      },
+      {
+        "id": "moor_cutter",
+        "name": "Hald, who Cuts",
+        "description": "Swings a turf spade all day in ground that does not want to let go of it.",
+        "level": 6,
+        "xp": 0,
+        "attributes": {
+          "might": 16,
+          "agility": 13,
+          "endurance": 16,
+          "intellect": 11,
+          "instinct": 14,
+          "presence": 11
+        },
+        "abilities": [
+          "strike",
+          "shove"
+        ],
+        "behaviour": [
+          {
+            "priority": 0,
+            "use": "strike"
+          }
+        ],
+        "faction": "the_library",
+        "creatureType": "humanoid",
+        "size": "medium",
+        "descriptors": [
+          "a peat-black"
+        ],
+        "conditionalLoot": [],
+        "loot": "moor_book_carried",
+        "resourceOverrides": {
+          "hp": 40
+        }
+      },
+      {
+        "id": "moor_bothy",
+        "name": "Ferrin, at the Bothy",
+        "description": "Lives eleven miles from the nearest roof that is not his and prefers it.",
+        "level": 6,
+        "xp": 0,
+        "attributes": {
+          "might": 13,
+          "agility": 16,
+          "endurance": 15,
+          "intellect": 13,
+          "instinct": 16,
+          "presence": 10
+        },
+        "abilities": [
+          "strike",
+          "quick_shot"
+        ],
+        "behaviour": [
+          {
+            "priority": 0,
+            "use": "strike"
+          }
+        ],
+        "faction": "the_library",
+        "creatureType": "humanoid",
+        "size": "medium",
+        "descriptors": [
+          "a heather-brown"
+        ],
+        "conditionalLoot": [],
+        "loot": "moor_map_carried",
+        "resourceOverrides": {
+          "hp": 34
+        }
+      },
+      {
+        "id": "the_long_fire",
+        "name": "What the Fire Feeds",
+        "description": "Two hundred years alight on a third of the peat it burns, and two nights a year when it goes green and a village is indoors before dark without anybody saying so.",
+        "level": 7,
+        "xp": 720,
+        "attributes": {
+          "might": 14,
+          "agility": 14,
+          "endurance": 16,
+          "intellect": 15,
+          "instinct": 16,
+          "presence": 15
+        },
+        "abilities": [
+          "cinder_lash",
+          "wither",
+          "grave_chill"
+        ],
+        "behaviour": [
+          {
+            "priority": 20,
+            "use": "cinder_lash",
+            "when": {
+              "chance": 0.35
+            }
+          },
+          {
+            "priority": 10,
+            "use": "wither"
+          },
+          {
+            "priority": 0,
+            "use": "grave_chill"
+          }
+        ],
+        "faction": "the_unsealed",
+        "creatureType": "undead",
+        "size": "medium",
+        "descriptors": [
+          "a green-lit",
+          "a patient"
+        ],
+        "conditionalLoot": [],
+        "loot": "moor_fire_hoard",
+        "damageInteractions": [
+          {
+            "damageType": "slashing",
+            "multiplier": 0.5,
+            "unless": [
+              "silvered"
+            ]
+          },
+          {
+            "damageType": "piercing",
+            "multiplier": 0.5,
+            "unless": [
+              "silvered"
+            ]
+          }
+        ],
+        "conditionImmunities": [
+          "frightened",
+          "burning"
+        ],
+        "resourceOverrides": {
+          "hp": 84
+        }
+      },
+      {
+        "id": "the_returner",
+        "name": "What Puts Them Back",
+        "description": "Forty-one out of the deep peat and forty-one written down as returned, in four clerks' hands, two of the lines noting a difference and none of them remarking on it.",
+        "level": 8,
+        "xp": 880,
+        "attributes": {
+          "might": 16,
+          "agility": 14,
+          "endurance": 18,
+          "intellect": 12,
+          "instinct": 15,
+          "presence": 12
+        },
+        "abilities": [
+          "drag_under",
+          "latch",
+          "bleed_white"
+        ],
+        "behaviour": [
+          {
+            "priority": 20,
+            "use": "drag_under",
+            "when": {
+              "chance": 0.4
+            }
+          },
+          {
+            "priority": 10,
+            "use": "bleed_white"
+          },
+          {
+            "priority": 0,
+            "use": "latch"
+          }
+        ],
+        "faction": "the_unsealed",
+        "creatureType": "undead",
+        "size": "medium",
+        "descriptors": [
+          "a tanned",
+          "an unhurried"
+        ],
+        "conditionalLoot": [],
+        "loot": "moor_cut_hoard",
+        "damageInteractions": [
+          {
+            "damageType": "slashing",
+            "multiplier": 0.5,
+            "unless": [
+              "silvered"
+            ]
+          },
+          {
+            "damageType": "piercing",
+            "multiplier": 0.5,
+            "unless": [
+              "silvered"
+            ]
+          }
+        ],
+        "conditionImmunities": [
+          "frightened",
+          "poisoned",
+          "prone"
+        ],
+        "resourceOverrides": {
+          "hp": 100
+        }
+      },
+      {
+        "id": "the_driven",
+        "name": "What the Drive Drives",
+        "description": "Eight worn places in front of a roofless house, evenly spaced, and a line on the map that goes over the scarp and keeps going down.",
+        "level": 8,
+        "xp": 920,
+        "attributes": {
+          "might": 15,
+          "agility": 18,
+          "endurance": 16,
+          "intellect": 12,
+          "instinct": 17,
+          "presence": 11
+        },
+        "abilities": [
+          "quick_shot",
+          "cut_and_run",
+          "rend"
+        ],
+        "behaviour": [
+          {
+            "priority": 20,
+            "use": "cut_and_run",
+            "when": {
+              "chance": 0.45
+            }
+          },
+          {
+            "priority": 10,
+            "use": "quick_shot"
+          },
+          {
+            "priority": 0,
+            "use": "rend"
+          }
+        ],
+        "faction": "the_unsealed",
+        "creatureType": "undead",
+        "size": "medium",
+        "descriptors": [
+          "a broken-winged",
+          "a great many"
+        ],
+        "conditionalLoot": [],
+        "loot": "moor_shoot_hoard",
+        "conditionImmunities": [
+          "frightened",
+          "prone"
+        ],
+        "resourceOverrides": {
+          "hp": 94
+        }
       }
     ],
     "factions": [
@@ -16817,6 +17449,114 @@
             "material"
           ],
           "priceMultiplier": 1.15
+        }
+      },
+      {
+        "id": "fire_keeper_wenna",
+        "name": "Wenna, whose Turn It Is",
+        "description": "Holds the rota for a fire that has not gone out in two hundred years and has never once had to hurry.",
+        "disposition": 4,
+        "gullibility": 0.3,
+        "memorySpan": 230,
+        "offersQuests": [],
+        "caresAbout": [],
+        "reactions": [],
+        "faction": "the_library",
+        "dialogue": "moor_wenna_talk",
+        "home": "colders_hearth_house_a",
+        "statblock": "moor_keeper"
+      },
+      {
+        "id": "peat_cutter_hald",
+        "name": "Hald, who Cuts",
+        "description": "Takes turf out of the only firm ground for two miles and has carried three of the forty-one up the duckboards himself.",
+        "disposition": 3,
+        "gullibility": 0.3,
+        "memorySpan": 200,
+        "offersQuests": [],
+        "caresAbout": [],
+        "reactions": [],
+        "faction": "the_library",
+        "dialogue": "moor_hald_talk",
+        "home": "mirestead_house_a",
+        "statblock": "moor_cutter"
+      },
+      {
+        "id": "bothy_man_ferrin",
+        "name": "Ferrin, at the Bothy",
+        "description": "Lives in the only shelter in the Heatherlands and keeps the estate's old map because the estate stopped wanting it.",
+        "disposition": 2,
+        "gullibility": 0.25,
+        "memorySpan": 210,
+        "offersQuests": [],
+        "caresAbout": [],
+        "reactions": [],
+        "faction": "the_library",
+        "dialogue": "moor_ferrin_talk",
+        "home": "heatherlands_bothy",
+        "statblock": "moor_bothy"
+      },
+      {
+        "id": "hearth_store_ivy",
+        "name": "Ivy, at the Hearth Store",
+        "description": "Sells the parish its peat by the load and has done the arithmetic more than once.",
+        "disposition": 6,
+        "gullibility": 0.4,
+        "memorySpan": 180,
+        "offersQuests": [],
+        "caresAbout": [],
+        "reactions": [],
+        "faction": "the_library",
+        "dialogue": "moor_ivy_talk",
+        "home": "colders_hearth_store",
+        "shop": {
+          "lootTable": "keeper_stock",
+          "buysTags": [
+            "material"
+          ],
+          "priceMultiplier": 1.2
+        }
+      },
+      {
+        "id": "beacon_landlord_sask",
+        "name": "Sask, at the Beacon",
+        "description": "Keeps the inn a fire was lit to guide people to, and hears every version of every story on this moor twice a night.",
+        "disposition": 7,
+        "gullibility": 0.45,
+        "memorySpan": 190,
+        "offersQuests": [],
+        "caresAbout": [],
+        "reactions": [],
+        "faction": "the_library",
+        "dialogue": "moor_sask_talk",
+        "home": "colders_hearth_inn",
+        "shop": {
+          "lootTable": "hollowdene_stock",
+          "buysTags": [
+            "treasure"
+          ],
+          "priceMultiplier": 1.3
+        }
+      },
+      {
+        "id": "cutters_store_bram",
+        "name": "Bram, at the Cutters' Store",
+        "description": "Weighs turf, keeps the book, and wrote two of the lines in it that he would rather he had not.",
+        "disposition": 4,
+        "gullibility": 0.35,
+        "memorySpan": 220,
+        "offersQuests": [],
+        "caresAbout": [],
+        "reactions": [],
+        "faction": "the_library",
+        "dialogue": "moor_bram_talk",
+        "home": "mirestead_store",
+        "shop": {
+          "lootTable": "keeper_stock",
+          "buysTags": [
+            "treasure"
+          ],
+          "priceMultiplier": 1.2
         }
       }
     ],
@@ -31765,7 +32505,22 @@
         "position": {
           "x": 3,
           "y": 3
-        }
+        },
+        "triggers": [
+          {
+            "id": "moor_found_band",
+            "mode": "once",
+            "on": "enter",
+            "description": "The depth everybody stops at, and how exactly they all stop at it.",
+            "effects": [
+              {
+                "learnLore": {
+                  "entry": "moor_cut_band"
+                }
+              }
+            ]
+          }
+        ]
       },
       {
         "id": "mirestead_the_turf",
@@ -31896,7 +32651,58 @@
         "position": {
           "x": 27,
           "y": 17
-        }
+        },
+        "triggers": [
+          {
+            "id": "moor_cut_committed",
+            "mode": "once",
+            "on": "enter",
+            "description": "Below the band, on the face nobody opens.",
+            "requires": {
+              "custom": {
+                "gte": [
+                  {
+                    "ref": "threads.moor_cut.known"
+                  },
+                  2
+                ]
+              }
+            },
+            "effects": [
+              {
+                "emit": {
+                  "event": "startQuest",
+                  "data": {
+                    "quest": "moor_forty_one"
+                  }
+                }
+              }
+            ]
+          }
+        ],
+        "hidden": true,
+        "discover": {
+          "skill": "perception",
+          "difficulty": {
+            "max": [
+              9,
+              {
+                "sub": [
+                  21,
+                  {
+                    "mul": [
+                      3,
+                      {
+                        "ref": "threads.moor_cut.known"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "gate": "moor_cut_black_band"
       },
       {
         "id": "colders_hearth_the_fire",
@@ -31910,7 +32716,22 @@
         "position": {
           "x": 3,
           "y": 3
-        }
+        },
+        "triggers": [
+          {
+            "id": "moor_found_fire",
+            "mode": "once",
+            "on": "enter",
+            "description": "How much peat is stacked against it, and how long that would last.",
+            "effects": [
+              {
+                "learnLore": {
+                  "entry": "moor_fire_fuel"
+                }
+              }
+            ]
+          }
+        ]
       },
       {
         "id": "colders_hearth_inn",
@@ -31982,7 +32803,62 @@
         "position": {
           "x": 21,
           "y": 3
-        }
+        },
+        "triggers": [
+          {
+            "id": "moor_fire_committed",
+            "mode": "once",
+            "on": "enter",
+            "description": "In the cold room under the warm building.",
+            "requires": {
+              "custom": {
+                "gte": [
+                  {
+                    "ref": "threads.moor_fire.known"
+                  },
+                  2
+                ]
+              }
+            },
+            "effects": [
+              {
+                "emit": {
+                  "event": "startQuest",
+                  "data": {
+                    "quest": "moor_colders_fire"
+                  }
+                }
+              }
+            ]
+          }
+        ],
+        "hidden": true,
+        "discover": {
+          "skill": "perception",
+          "difficulty": {
+            "max": [
+              7,
+              {
+                "sub": [
+                  19,
+                  {
+                    "mul": [
+                      3,
+                      {
+                        "ref": "threads.moor_fire.known"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "gate": "moor_fire_undercroft",
+        "encounterTables": [
+          "moor_fire_boss"
+        ],
+        "encounterChance": 1
       },
       {
         "id": "colders_hearth_house_a",
@@ -32038,7 +32914,22 @@
         "position": {
           "x": 3,
           "y": 3
-        }
+        },
+        "triggers": [
+          {
+            "id": "moor_found_edge",
+            "mode": "once",
+            "on": "enter",
+            "description": "What goes out over the drop, and what comes back.",
+            "effects": [
+              {
+                "learnLore": {
+                  "entry": "moor_shoot_birds"
+                }
+              }
+            ]
+          }
+        ]
       },
       {
         "id": "kestrel_edge_shooting_house",
@@ -32059,7 +32950,22 @@
         "position": {
           "x": 14,
           "y": 3
-        }
+        },
+        "triggers": [
+          {
+            "id": "moor_found_house",
+            "mode": "once",
+            "on": "enter",
+            "description": "Eight worn places in front of a house with no roof.",
+            "effects": [
+              {
+                "learnLore": {
+                  "entry": "moor_shoot_wear"
+                }
+              }
+            ]
+          }
+        ]
       },
       {
         "id": "kestrel_edge_grit_caves",
@@ -32076,7 +32982,58 @@
         "position": {
           "x": 25,
           "y": 3
-        }
+        },
+        "triggers": [
+          {
+            "id": "moor_shoot_committed",
+            "mode": "once",
+            "on": "enter",
+            "description": "Under the scarp, where the eighth of the line stands.",
+            "requires": {
+              "custom": {
+                "gte": [
+                  {
+                    "ref": "threads.moor_shoot.known"
+                  },
+                  2
+                ]
+              }
+            },
+            "effects": [
+              {
+                "emit": {
+                  "event": "startQuest",
+                  "data": {
+                    "quest": "moor_the_drive"
+                  }
+                }
+              }
+            ]
+          }
+        ],
+        "hidden": true,
+        "discover": {
+          "skill": "survival",
+          "difficulty": {
+            "max": [
+              10,
+              {
+                "sub": [
+                  22,
+                  {
+                    "mul": [
+                      3,
+                      {
+                        "ref": "threads.moor_shoot.known"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "gate": "moor_shoot_eighth"
       },
       {
         "id": "heatherlands_the_crossing",
@@ -32133,7 +33090,22 @@
         "position": {
           "x": 25,
           "y": 3
-        }
+        },
+        "triggers": [
+          {
+            "id": "moor_found_draught",
+            "mode": "once",
+            "on": "enter",
+            "description": "Which way the air moves in the holes under the scarp.",
+            "effects": [
+              {
+                "learnLore": {
+                  "entry": "moor_shoot_draught"
+                }
+              }
+            ]
+          }
+        ]
       },
       {
         "id": "nine_sisters_the_ring",
@@ -40758,6 +41730,93 @@
             }
           ]
         }
+      },
+      {
+        "id": "moor_fire_undercroft",
+        "name": "Where the Fuel Goes",
+        "description": "A cold room under a warm building, and a floor that has been up and down more often than a floor is.",
+        "kind": "ward",
+        "blockedTextKey": "moor_fire_blocked",
+        "staysOpen": true,
+        "onOpen": [
+          {
+            "setFlag": {
+              "flag": "moor_fire_open",
+              "value": true
+            }
+          }
+        ],
+        "onBlocked": [],
+        "opensWith": [],
+        "tags": [],
+        "requires": {
+          "items": [
+            {
+              "item": "hearth_rota",
+              "quantity": 1,
+              "consume": false,
+              "equipped": false
+            }
+          ]
+        }
+      },
+      {
+        "id": "moor_cut_black_band",
+        "name": "Below the Black Band",
+        "description": "The depth every cutter here can find in the dark and none of them was taught, and one face of it opened.",
+        "kind": "ward",
+        "blockedTextKey": "moor_cut_blocked",
+        "staysOpen": true,
+        "onOpen": [
+          {
+            "setFlag": {
+              "flag": "moor_cut_open",
+              "value": true
+            }
+          }
+        ],
+        "onBlocked": [],
+        "opensWith": [],
+        "tags": [],
+        "requires": {
+          "items": [
+            {
+              "item": "cutters_book",
+              "quantity": 1,
+              "consume": false,
+              "equipped": false
+            }
+          ]
+        }
+      },
+      {
+        "id": "moor_shoot_eighth",
+        "name": "The Eighth Butt",
+        "description": "Eight worn places in front of a roofless house, evenly spaced, and the eighth of them stands where the ground stops.",
+        "kind": "ward",
+        "blockedTextKey": "moor_shoot_blocked",
+        "staysOpen": true,
+        "onOpen": [
+          {
+            "setFlag": {
+              "flag": "moor_shoot_open",
+              "value": true
+            }
+          }
+        ],
+        "onBlocked": [],
+        "opensWith": [],
+        "tags": [],
+        "requires": {
+          "items": [
+            {
+              "item": "estate_map",
+              "quantity": 1,
+              "consume": false,
+              "equipped": false
+            }
+          ]
+        }
       }
     ],
     "roomTemplates": [
@@ -42227,7 +43286,8 @@
         "safeEntrance": true,
         "width": "69",
         "height": "69",
-        "corridorLength": "3d3"
+        "corridorLength": "3d3",
+        "bossTable": "moor_cut_boss"
       },
       {
         "id": "moor_grit_caves",
@@ -42247,7 +43307,8 @@
           "birthThreshold": 5
         },
         "width": "43",
-        "height": "43"
+        "height": "43",
+        "bossTable": "moor_shoot_boss"
       },
       {
         "id": "moor_beneath_sisters",
@@ -45248,6 +46309,72 @@
                 "monster": "the_breath",
                 "count": "1",
                 "scaleWithLevel": false
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "moor_fire_boss",
+        "minDepth": 0,
+        "maxDepth": 999,
+        "chance": 1,
+        "emptyWeight": 0,
+        "scalePerLevels": 3,
+        "groups": [
+          {
+            "id": "b",
+            "weight": 1,
+            "hostile": true,
+            "entries": [
+              {
+                "monster": "the_long_fire",
+                "count": "1",
+                "scaleWithLevel": false
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "moor_cut_boss",
+        "minDepth": 0,
+        "maxDepth": 999,
+        "chance": 1,
+        "emptyWeight": 0,
+        "scalePerLevels": 3,
+        "groups": [
+          {
+            "id": "b",
+            "weight": 1,
+            "hostile": true,
+            "entries": [
+              {
+                "monster": "the_returner",
+                "count": "1",
+                "scaleWithLevel": false
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "moor_shoot_boss",
+        "minDepth": 0,
+        "maxDepth": 999,
+        "chance": 1,
+        "emptyWeight": 0,
+        "scalePerLevels": 3,
+        "groups": [
+          {
+            "id": "b",
+            "weight": 1,
+            "hostile": true,
+            "entries": [
+              {
+                "monster": "the_driven",
+                "count": "1d3",
+                "scaleWithLevel": true
               }
             ]
           }
@@ -49961,6 +51088,34 @@
         ]
       },
       {
+        "id": "moor_cut_blocked",
+        "variants": [
+          {
+            "text": "Forty-one out and forty-one back is a count, and a count is kept in a book. Which of them went back different is in two lines nobody thought worth remarking on."
+          },
+          {
+            "text": "Eleven thousand years of peat at that depth, and iron is four. Something was put in below the band long after the band was made."
+          },
+          {
+            "text": "Nobody cuts below it. Every cutter can walk to it blindfold. Not one of them can tell you who told them."
+          }
+        ]
+      },
+      {
+        "id": "moor_fire_blocked",
+        "variants": [
+          {
+            "text": "A hundred and sixty years of whose turn it was, and two nights a year ruled through with no name against them. Which two nights is on the rota and the rota is the keeper's."
+          },
+          {
+            "text": "The parish buys a third of the peat that fire eats and nobody has ever been short. The rest is coming from somewhere and it is not coming in through the door."
+          },
+          {
+            "text": "Colder is buried twice, forty years apart, in one hand, with the same three words after the name both times."
+          }
+        ]
+      },
+      {
         "id": "moor_heatherlands_desc",
         "variants": [
           {
@@ -50025,6 +51180,20 @@
           },
           {
             "text": "The wind goes through the ring and makes a noise that is not quite a note."
+          }
+        ]
+      },
+      {
+        "id": "moor_shoot_blocked",
+        "variants": [
+          {
+            "text": "The line is drawn on the estate map and the map is the bothy man's. Pacing it out will put you at seven butts and an empty ledge."
+          },
+          {
+            "text": "Eight places worn through this century, in front of a house that lost its roof in the last one."
+          },
+          {
+            "text": "The birds go out over the drop in numbers on one day a year, and the count out has never been the count back."
           }
         ]
       },
@@ -82888,6 +84057,1873 @@
             "redirectWhen": []
           }
         ]
+      },
+      {
+        "id": "moor_wenna_talk",
+        "start": "greet",
+        "nodes": [
+          {
+            "id": "greet",
+            "says": [
+              {
+                "text": "A cottage with a peat stack under the eave twice the size of the cottage, and a woman counting it who does not need to."
+              },
+              {
+                "text": "\u201cIt is my turn this fortnight. Talk while I carry.\u201d"
+              }
+            ],
+            "onEnter": [],
+            "options": [
+              {
+                "id": "moor_wenna_years",
+                "text": "How long has the fire been going?",
+                "requires": {
+                  "without": {
+                    "lore": [
+                      "moor_fire_years"
+                    ]
+                  }
+                },
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "check": {
+                  "skill": "persuasion",
+                  "difficulty": {
+                    "sub": [
+                      12,
+                      {
+                        "clamp": [
+                          {
+                            "div": [
+                              {
+                                "ref": "reputation.the_library",
+                                "else": 0
+                              },
+                              5
+                            ]
+                          },
+                          -6,
+                          6
+                        ]
+                      }
+                    ]
+                  },
+                  "onSuccess": "moor_wenna_years_told",
+                  "onFailure": "moor_wenna_years_wont"
+                }
+              },
+              {
+                "id": "moor_wenna_green",
+                "text": "What happens on the nights it burns green?",
+                "requires": {
+                  "without": {
+                    "lore": [
+                      "moor_fire_green"
+                    ]
+                  }
+                },
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "check": {
+                  "skill": "insight",
+                  "difficulty": {
+                    "sub": [
+                      16,
+                      {
+                        "clamp": [
+                          {
+                            "div": [
+                              {
+                                "ref": "reputation.the_library",
+                                "else": 0
+                              },
+                              5
+                            ]
+                          },
+                          -6,
+                          6
+                        ]
+                      }
+                    ]
+                  },
+                  "onSuccess": "moor_wenna_green_told",
+                  "onFailure": "moor_wenna_green_wont"
+                }
+              },
+              {
+                "id": "moor_wenna_rota",
+                "text": "The rota. Let me take it.",
+                "requires": {
+                  "without": {
+                    "items": [
+                      "hearth_rota"
+                    ],
+                    "flags": [
+                      {
+                        "flag": "given:hearth_rota"
+                      }
+                    ]
+                  }
+                },
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "check": {
+                  "skill": "persuasion",
+                  "difficulty": {
+                    "sub": [
+                      14,
+                      {
+                        "clamp": [
+                          {
+                            "div": [
+                              {
+                                "ref": "reputation.the_library",
+                                "else": 0
+                              },
+                              5
+                            ]
+                          },
+                          -6,
+                          6
+                        ]
+                      }
+                    ]
+                  },
+                  "onSuccess": "moor_wenna_rota_gave",
+                  "onFailure": "moor_wenna_rota_kept"
+                }
+              },
+              {
+                "id": "greet_leave",
+                "text": "Nothing.",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "moor_wenna_years_told",
+            "says": [
+              {
+                "text": "\u201cTwo hundred years and a bit.\u201d Wenna says it the way you say your own age. \u201cColder kept it forty. The parish has kept it since, on the rota, and there is no gap in the rota \u2014 I have been through it twice looking for one.\u201d A dry look. \u201cEvery parish record in Aurendel has a gap in it. Ours does not.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "learnLore": {
+                  "entry": "moor_fire_years"
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "moor_wenna_years_on",
+                "text": "Go on.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "moor_wenna_years_wont",
+            "says": [
+              {
+                "text": "\u201cI've said all I mean to,\u201d they say, and go back to what they were doing."
+              }
+            ],
+            "onEnter": [
+              {
+                "adjustReputation": {
+                  "faction": "the_library",
+                  "amount": -1
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "moor_wenna_years_drop",
+                "text": "Leave it.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "moor_wenna_green_told",
+            "says": [
+              {
+                "text": "The friendliness goes out of her, not unkindly. \u201cTwo nights a year. When the wind comes off the moor instead of the vale.\u201d She looks at the door. \u201cEverybody is inside by dark. Nobody rings a bell and nobody knocks and nobody has ever said out loud that we do it. I did it as a child before I knew I was doing it.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "learnLore": {
+                  "entry": "moor_fire_green"
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "moor_wenna_green_on",
+                "text": "Go on.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "moor_wenna_green_wont",
+            "says": [
+              {
+                "text": "\u201cI've said all I mean to,\u201d they say, and go back to what they were doing."
+              }
+            ],
+            "onEnter": [
+              {
+                "adjustReputation": {
+                  "faction": "the_library",
+                  "amount": -1
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "moor_wenna_green_drop",
+                "text": "Leave it.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "moor_wenna_rota_gave",
+            "says": [
+              {
+                "text": "She hands it over in an oilcloth. \u201cA hundred and sixty years of whose turn,\u201d she says. \u201cAnd two nights a year ruled straight through with nobody's name against them, every year, in every hand.\u201d A beat. \u201cSomebody keeps it those nights. It has never gone out.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "grantItem": {
+                  "target": {
+                    "ref": "actor.id"
+                  },
+                  "item": "hearth_rota",
+                  "quantity": 1
+                }
+              },
+              {
+                "setFlag": {
+                  "flag": "given:hearth_rota",
+                  "value": true
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "moor_wenna_rota_thanks",
+                "text": "Thank you.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "moor_wenna_rota_kept",
+            "says": [
+              {
+                "text": "\u201cIt is the parish's and it is my turn,\u201d Wenna says, and the oilcloth goes back in the dresser."
+              }
+            ],
+            "onEnter": [
+              {
+                "adjustReputation": {
+                  "faction": "the_library",
+                  "amount": -2
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "moor_wenna_rota_leave",
+                "text": "Then no.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          }
+        ]
+      },
+      {
+        "id": "moor_hald_talk",
+        "start": "greet",
+        "nodes": [
+          {
+            "id": "greet",
+            "says": [
+              {
+                "text": "Duckboards out over black water to a face of cut turf twelve feet high, and a man on the top of it working down."
+              },
+              {
+                "text": "\u201cStay on the boards. I mean that kindly.\u201d"
+              }
+            ],
+            "onEnter": [],
+            "options": [
+              {
+                "id": "moor_hald_buckle",
+                "text": "The bodies out of the deep peat.",
+                "requires": {
+                  "without": {
+                    "lore": [
+                      "moor_cut_buckle"
+                    ]
+                  }
+                },
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "check": {
+                  "skill": "insight",
+                  "difficulty": {
+                    "sub": [
+                      14,
+                      {
+                        "clamp": [
+                          {
+                            "div": [
+                              {
+                                "ref": "reputation.the_library",
+                                "else": 0
+                              },
+                              5
+                            ]
+                          },
+                          -6,
+                          6
+                        ]
+                      }
+                    ]
+                  },
+                  "onSuccess": "moor_hald_buckle_told",
+                  "onFailure": "moor_hald_buckle_wont"
+                }
+              },
+              {
+                "id": "moor_hald_band",
+                "text": "How deep do you cut?",
+                "requires": {
+                  "without": {
+                    "lore": [
+                      "moor_cut_band"
+                    ]
+                  }
+                },
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "check": {
+                  "skill": "persuasion",
+                  "difficulty": {
+                    "sub": [
+                      15,
+                      {
+                        "clamp": [
+                          {
+                            "div": [
+                              {
+                                "ref": "reputation.the_library",
+                                "else": 0
+                              },
+                              5
+                            ]
+                          },
+                          -6,
+                          6
+                        ]
+                      }
+                    ]
+                  },
+                  "onSuccess": "moor_hald_band_told",
+                  "onFailure": "moor_hald_band_wont"
+                }
+              },
+              {
+                "id": "moor_hald_book",
+                "text": "The cutters' book. I want the two lines.",
+                "requires": {
+                  "without": {
+                    "items": [
+                      "cutters_book"
+                    ],
+                    "flags": [
+                      {
+                        "flag": "given:cutters_book"
+                      }
+                    ]
+                  }
+                },
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "check": {
+                  "skill": "persuasion",
+                  "difficulty": {
+                    "sub": [
+                      15,
+                      {
+                        "clamp": [
+                          {
+                            "div": [
+                              {
+                                "ref": "reputation.the_library",
+                                "else": 0
+                              },
+                              5
+                            ]
+                          },
+                          -6,
+                          6
+                        ]
+                      }
+                    ]
+                  },
+                  "onSuccess": "moor_hald_book_gave",
+                  "onFailure": "moor_hald_book_kept"
+                }
+              },
+              {
+                "id": "greet_leave",
+                "text": "Nothing.",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "moor_hald_buckle_told",
+            "says": [
+              {
+                "text": "\u201cForty-one.\u201d Hald leans on the spade. \u201cI have carried three myself.\u201d He is quiet a moment. \u201cThe peat down there is eleven thousand year. Everybody knows that, it is why the Library pays. And one of the forty-one had an iron buckle on it.\u201d He meets your eye. \u201cIron is four thousand. I am a turf cutter and even I can do that sum.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "learnLore": {
+                  "entry": "moor_cut_buckle"
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "moor_hald_buckle_on",
+                "text": "Go on.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "moor_hald_buckle_wont",
+            "says": [
+              {
+                "text": "\u201cI've said all I mean to,\u201d they say, and go back to what they were doing."
+              }
+            ],
+            "onEnter": [
+              {
+                "adjustReputation": {
+                  "faction": "the_library",
+                  "amount": -1
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "moor_hald_buckle_drop",
+                "text": "Leave it.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "moor_hald_band_told",
+            "says": [
+              {
+                "text": "\u201cTo the black band and not past it.\u201d Instant. Then he hears the next question coming and answers it. \u201cNo, nobody told me. I was eleven and I stopped at it, and my hands stopped at it before I did.\u201d The spade goes back in. \u201cTake any cutter out there at night with no lamp and they will put a hand on that band first go.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "learnLore": {
+                  "entry": "moor_cut_band"
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "moor_hald_band_on",
+                "text": "Go on.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "moor_hald_band_wont",
+            "says": [
+              {
+                "text": "\u201cI've said all I mean to,\u201d they say, and go back to what they were doing."
+              }
+            ],
+            "onEnter": [
+              {
+                "adjustReputation": {
+                  "faction": "the_library",
+                  "amount": -1
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "moor_hald_band_drop",
+                "text": "Leave it.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "moor_hald_book_gave",
+            "says": [
+              {
+                "text": "He gets it from under a dry sack. \u201cForty-one out, forty-one back,\u201d he says. \u201cAnd two of them written up as going back different to how they came out, in Bram's grandfather's ordinary hand, as though it were an ordinary thing to write.\u201d He does not let go of it at once. \u201cI would rather know.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "grantItem": {
+                  "target": {
+                    "ref": "actor.id"
+                  },
+                  "item": "cutters_book",
+                  "quantity": 1
+                }
+              },
+              {
+                "setFlag": {
+                  "flag": "given:cutters_book",
+                  "value": true
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "moor_hald_book_thanks",
+                "text": "Thank you.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "moor_hald_book_kept",
+            "says": [
+              {
+                "text": "\u201cIt is the cut's book,\u201d Hald says, \u201cand the cut is all of ours,\u201d and it goes back under the sack."
+              }
+            ],
+            "onEnter": [
+              {
+                "adjustReputation": {
+                  "faction": "the_library",
+                  "amount": -2
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "moor_hald_book_leave",
+                "text": "Then no.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          }
+        ]
+      },
+      {
+        "id": "moor_ferrin_talk",
+        "start": "greet",
+        "nodes": [
+          {
+            "id": "greet",
+            "says": [
+              {
+                "text": "One room, one door, one window, eleven miles of heather, and somebody who has clearly been alone long enough to have views."
+              },
+              {
+                "text": "\u201cThere is tea. There is not much else.\u201d"
+              }
+            ],
+            "onEnter": [],
+            "options": [
+              {
+                "id": "moor_ferrin_wear",
+                "text": "The house on the edge.",
+                "requires": {
+                  "without": {
+                    "lore": [
+                      "moor_shoot_wear"
+                    ]
+                  }
+                },
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "check": {
+                  "skill": "persuasion",
+                  "difficulty": {
+                    "sub": [
+                      14,
+                      {
+                        "clamp": [
+                          {
+                            "div": [
+                              {
+                                "ref": "reputation.the_library",
+                                "else": 0
+                              },
+                              5
+                            ]
+                          },
+                          -6,
+                          6
+                        ]
+                      }
+                    ]
+                  },
+                  "onSuccess": "moor_ferrin_wear_told",
+                  "onFailure": "moor_ferrin_wear_wont"
+                }
+              },
+              {
+                "id": "moor_ferrin_line",
+                "text": "You keep the estate's old map.",
+                "requires": {
+                  "without": {
+                    "lore": [
+                      "moor_shoot_line"
+                    ]
+                  }
+                },
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "check": {
+                  "skill": "insight",
+                  "difficulty": {
+                    "sub": [
+                      15,
+                      {
+                        "clamp": [
+                          {
+                            "div": [
+                              {
+                                "ref": "reputation.the_library",
+                                "else": 0
+                              },
+                              5
+                            ]
+                          },
+                          -6,
+                          6
+                        ]
+                      }
+                    ]
+                  },
+                  "onSuccess": "moor_ferrin_line_told",
+                  "onFailure": "moor_ferrin_line_wont"
+                }
+              },
+              {
+                "id": "moor_ferrin_green",
+                "text": "You can see Colder's Fire from here.",
+                "requires": {
+                  "without": {
+                    "lore": [
+                      "moor_fire_green"
+                    ]
+                  }
+                },
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "check": {
+                  "skill": "persuasion",
+                  "difficulty": {
+                    "sub": [
+                      14,
+                      {
+                        "clamp": [
+                          {
+                            "div": [
+                              {
+                                "ref": "reputation.the_library",
+                                "else": 0
+                              },
+                              5
+                            ]
+                          },
+                          -6,
+                          6
+                        ]
+                      }
+                    ]
+                  },
+                  "onSuccess": "moor_ferrin_green_told",
+                  "onFailure": "moor_ferrin_green_wont"
+                }
+              },
+              {
+                "id": "moor_ferrin_map",
+                "text": "The map. Lend it to me.",
+                "requires": {
+                  "without": {
+                    "items": [
+                      "estate_map"
+                    ],
+                    "flags": [
+                      {
+                        "flag": "given:estate_map"
+                      }
+                    ]
+                  }
+                },
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "check": {
+                  "skill": "persuasion",
+                  "difficulty": {
+                    "sub": [
+                      14,
+                      {
+                        "clamp": [
+                          {
+                            "div": [
+                              {
+                                "ref": "reputation.the_library",
+                                "else": 0
+                              },
+                              5
+                            ]
+                          },
+                          -6,
+                          6
+                        ]
+                      }
+                    ]
+                  },
+                  "onSuccess": "moor_ferrin_map_gave",
+                  "onFailure": "moor_ferrin_map_kept"
+                }
+              },
+              {
+                "id": "greet_leave",
+                "text": "Nothing.",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": [
+              {
+                "requires": {
+                  "factions": [
+                    {
+                      "faction": "the_library",
+                      "maxStanding": -30
+                    }
+                  ]
+                },
+                "goto": "moor_ferrin_cold"
+              }
+            ]
+          },
+          {
+            "id": "moor_ferrin_wear_told",
+            "says": [
+              {
+                "text": "\u201cNo roof since my father's time.\u201d Ferrin does not look up from the fire. \u201cAnd eight worn places in the flags in front of it, even as fence posts.\u201d Now the look up. \u201cWorn through. Grit does not wear through in a century unless somebody is standing on it, and there has not been a shoot off that house since before the roof went.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "learnLore": {
+                  "entry": "moor_shoot_wear"
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "moor_ferrin_wear_on",
+                "text": "Go on.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "moor_ferrin_wear_wont",
+            "says": [
+              {
+                "text": "\u201cI've said all I mean to,\u201d they say, and go back to what they were doing."
+              }
+            ],
+            "onEnter": [
+              {
+                "adjustReputation": {
+                  "faction": "the_library",
+                  "amount": -1
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "moor_ferrin_wear_drop",
+                "text": "Leave it.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "moor_ferrin_line_told",
+            "says": [
+              {
+                "text": "\u201cThey did not want it and I did.\u201d He unrolls a corner of it without being asked, which tells you how often he looks at it. \u201cDrives, butts, beaters' lines, the whole moor.\u201d A finger on one line. \u201cThat one does not stop at the scarp. It is drawn over and down, and it is the same ink as the rest, which means whoever drew it drew it on the same afternoon and thought nothing of it.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "learnLore": {
+                  "entry": "moor_shoot_line"
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "moor_ferrin_line_on",
+                "text": "Go on.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "moor_ferrin_line_wont",
+            "says": [
+              {
+                "text": "\u201cI've said all I mean to,\u201d they say, and go back to what they were doing."
+              }
+            ],
+            "onEnter": [
+              {
+                "adjustReputation": {
+                  "faction": "the_library",
+                  "amount": -1
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "moor_ferrin_line_drop",
+                "text": "Leave it.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "moor_ferrin_green_told",
+            "says": [
+              {
+                "text": "\u201cEvery night of my life.\u201d Ferrin does not think it worth remarking on until he does. \u201cTwice a year it goes green. I can see it go from this door, eleven mile off, and the lamps in the village all come on inside the same quarter hour and then they all go out.\u201d He sets the cup down. \u201cNobody rings anything. They just go in.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "learnLore": {
+                  "entry": "moor_fire_green"
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "moor_ferrin_green_on",
+                "text": "Go on.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "moor_ferrin_green_wont",
+            "says": [
+              {
+                "text": "\u201cI've said all I mean to,\u201d they say, and go back to what they were doing."
+              }
+            ],
+            "onEnter": [
+              {
+                "adjustReputation": {
+                  "faction": "the_library",
+                  "amount": -1
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "moor_ferrin_green_drop",
+                "text": "Leave it.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "moor_ferrin_map_gave",
+            "says": [
+              {
+                "text": "He rolls it properly before he hands it over, which takes a while and is the whole of what he thinks about it. \u201cEight in the line,\u201d Ferrin says. \u201cSeven of them you can walk to. The eighth is drawn where there is no ground.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "grantItem": {
+                  "target": {
+                    "ref": "actor.id"
+                  },
+                  "item": "estate_map",
+                  "quantity": 1
+                }
+              },
+              {
+                "setFlag": {
+                  "flag": "given:estate_map",
+                  "value": true
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "moor_ferrin_map_thanks",
+                "text": "Thank you.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "moor_ferrin_map_kept",
+            "says": [
+              {
+                "text": "\u201cIt is the only thing in here worth anything,\u201d Ferrin says, \u201cand I am not sentimental about much,\u201d and rolls it up."
+              }
+            ],
+            "onEnter": [
+              {
+                "adjustReputation": {
+                  "faction": "the_library",
+                  "amount": -2
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "moor_ferrin_map_leave",
+                "text": "Then no.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "moor_ferrin_cold",
+            "says": [
+              {
+                "text": "He puts the map in the box, sits on the box, and looks at the fire."
+              }
+            ],
+            "onEnter": [],
+            "options": [
+              {
+                "id": "moor_ferrin_go",
+                "text": "Leave it.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          }
+        ]
+      },
+      {
+        "id": "moor_ivy_talk",
+        "start": "greet",
+        "nodes": [
+          {
+            "id": "greet",
+            "says": [
+              {
+                "text": "Peat by the load, tallow, rope, and a slate with the parish's account on it in a hand that has clearly added it up twice."
+              },
+              {
+                "text": "\u201cLoad, half load, or the parish's account. It is usually the parish's account.\u201d"
+              }
+            ],
+            "onEnter": [],
+            "options": [
+              {
+                "id": "moor_ivy_fuel",
+                "text": "How much peat does the parish buy for that fire?",
+                "requires": {
+                  "without": {
+                    "lore": [
+                      "moor_fire_fuel"
+                    ]
+                  }
+                },
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "check": {
+                  "skill": "craft",
+                  "difficulty": {
+                    "sub": [
+                      12,
+                      {
+                        "clamp": [
+                          {
+                            "div": [
+                              {
+                                "ref": "reputation.the_library",
+                                "else": 0
+                              },
+                              5
+                            ]
+                          },
+                          -6,
+                          6
+                        ]
+                      }
+                    ]
+                  },
+                  "onSuccess": "moor_ivy_fuel_told",
+                  "onFailure": "moor_ivy_fuel_wont"
+                }
+              },
+              {
+                "id": "moor_ivy_draught",
+                "text": "The holes under the scarp.",
+                "requires": {
+                  "without": {
+                    "lore": [
+                      "moor_shoot_draught"
+                    ]
+                  }
+                },
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "check": {
+                  "skill": "persuasion",
+                  "difficulty": {
+                    "sub": [
+                      13,
+                      {
+                        "clamp": [
+                          {
+                            "div": [
+                              {
+                                "ref": "reputation.the_library",
+                                "else": 0
+                              },
+                              5
+                            ]
+                          },
+                          -6,
+                          6
+                        ]
+                      }
+                    ]
+                  },
+                  "onSuccess": "moor_ivy_draught_told",
+                  "onFailure": "moor_ivy_draught_wont"
+                }
+              },
+              {
+                "id": "greet_leave",
+                "text": "Nothing.",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "moor_ivy_fuel_told",
+            "says": [
+              {
+                "text": "\u201cEleven loads a year.\u201d Ivy taps the slate. \u201cI have sold it eleven loads a year for nineteen years.\u201d She puts the chalk down. \u201cA fire that size, going day and night, eats thirty. I have said so to the vestry twice. Both times somebody said *well, it has never gone out, has it* and that was the end of the meeting.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "learnLore": {
+                  "entry": "moor_fire_fuel"
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "moor_ivy_fuel_on",
+                "text": "Go on.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "moor_ivy_fuel_wont",
+            "says": [
+              {
+                "text": "\u201cI've said all I mean to,\u201d they say, and go back to what they were doing."
+              }
+            ],
+            "onEnter": [
+              {
+                "adjustReputation": {
+                  "faction": "the_library",
+                  "amount": -1
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "moor_ivy_fuel_drop",
+                "text": "Leave it.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "moor_ivy_draught_told",
+            "says": [
+              {
+                "text": "\u201cDraw up.\u201d She is definite. \u201cEvery hole on this moor breathes down \u2014 cold air falls, that is all it does. Put a candle at any of the ones under that edge and it lies flat the wrong way.\u201d A shrug. \u201cThe shooting parties used to think it was funny. There have been no shooting parties for a while.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "learnLore": {
+                  "entry": "moor_shoot_draught"
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "moor_ivy_draught_on",
+                "text": "Go on.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "moor_ivy_draught_wont",
+            "says": [
+              {
+                "text": "\u201cI've said all I mean to,\u201d they say, and go back to what they were doing."
+              }
+            ],
+            "onEnter": [
+              {
+                "adjustReputation": {
+                  "faction": "the_library",
+                  "amount": -1
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "moor_ivy_draught_drop",
+                "text": "Leave it.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          }
+        ]
+      },
+      {
+        "id": "moor_sask_talk",
+        "start": "greet",
+        "nodes": [
+          {
+            "id": "greet",
+            "says": [
+              {
+                "text": "A taproom built to be found from a long way off, with the door on the moor side and a lamp in every window of that wall."
+              },
+              {
+                "text": "\u201cBed, fire, or the fire. Most people want the fire.\u201d"
+              }
+            ],
+            "onEnter": [],
+            "options": [
+              {
+                "id": "moor_sask_twice",
+                "text": "Colder. What do the parish records say about him?",
+                "requires": {
+                  "without": {
+                    "lore": [
+                      "moor_fire_twice"
+                    ]
+                  }
+                },
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "check": {
+                  "skill": "insight",
+                  "difficulty": {
+                    "sub": [
+                      15,
+                      {
+                        "clamp": [
+                          {
+                            "div": [
+                              {
+                                "ref": "reputation.the_library",
+                                "else": 0
+                              },
+                              5
+                            ]
+                          },
+                          -6,
+                          6
+                        ]
+                      }
+                    ]
+                  },
+                  "onSuccess": "moor_sask_twice_told",
+                  "onFailure": "moor_sask_twice_wont"
+                }
+              },
+              {
+                "id": "moor_sask_birds",
+                "text": "The birds over the edge.",
+                "requires": {
+                  "without": {
+                    "lore": [
+                      "moor_shoot_birds"
+                    ]
+                  }
+                },
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "check": {
+                  "skill": "persuasion",
+                  "difficulty": {
+                    "sub": [
+                      14,
+                      {
+                        "clamp": [
+                          {
+                            "div": [
+                              {
+                                "ref": "reputation.the_library",
+                                "else": 0
+                              },
+                              5
+                            ]
+                          },
+                          -6,
+                          6
+                        ]
+                      }
+                    ]
+                  },
+                  "onSuccess": "moor_sask_birds_told",
+                  "onFailure": "moor_sask_birds_wont"
+                }
+              },
+              {
+                "id": "moor_sask_buckle",
+                "text": "What do the cutters say comes out of the deep cut?",
+                "requires": {
+                  "without": {
+                    "lore": [
+                      "moor_cut_buckle"
+                    ]
+                  }
+                },
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "check": {
+                  "skill": "insight",
+                  "difficulty": {
+                    "sub": [
+                      15,
+                      {
+                        "clamp": [
+                          {
+                            "div": [
+                              {
+                                "ref": "reputation.the_library",
+                                "else": 0
+                              },
+                              5
+                            ]
+                          },
+                          -6,
+                          6
+                        ]
+                      }
+                    ]
+                  },
+                  "onSuccess": "moor_sask_buckle_told",
+                  "onFailure": "moor_sask_buckle_wont"
+                }
+              },
+              {
+                "id": "greet_leave",
+                "text": "Nothing.",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "moor_sask_twice_told",
+            "says": [
+              {
+                "text": "Sask leans on the bar with the air of a man who has been waiting years. \u201cBuried twice,\u201d he says. \u201cForty year apart. Same hand \u2014 the register was kept by one clerk for fifty years, so it *is* the same hand \u2014 and the same three words written after the name both times.\u201d He straightens. \u201cI have shown four people. Three said it was a copying error. The fourth was a Library man and he went very quiet.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "learnLore": {
+                  "entry": "moor_fire_twice"
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "moor_sask_twice_on",
+                "text": "Go on.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "moor_sask_twice_wont",
+            "says": [
+              {
+                "text": "\u201cI've said all I mean to,\u201d they say, and go back to what they were doing."
+              }
+            ],
+            "onEnter": [
+              {
+                "adjustReputation": {
+                  "faction": "the_library",
+                  "amount": -1
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "moor_sask_twice_drop",
+                "text": "Leave it.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "moor_sask_birds_told",
+            "says": [
+              {
+                "text": "\u201cOne day a year, in their thousands.\u201d He says it without wonder, which is worse. \u201cOut over the drop and down. My father counted them out and counted them back for eleven years because he did not believe the first ten.\u201d A cloth on the bar. \u201cFewer come back. Every year. Never once the same number.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "learnLore": {
+                  "entry": "moor_shoot_birds"
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "moor_sask_birds_on",
+                "text": "Go on.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "moor_sask_birds_wont",
+            "says": [
+              {
+                "text": "\u201cI've said all I mean to,\u201d they say, and go back to what they were doing."
+              }
+            ],
+            "onEnter": [
+              {
+                "adjustReputation": {
+                  "faction": "the_library",
+                  "amount": -1
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "moor_sask_birds_drop",
+                "text": "Leave it.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "moor_sask_buckle_told",
+            "says": [
+              {
+                "text": "\u201cForty-one, and I have heard about all forty-one in here twice.\u201d Sask is enjoying himself, and then is not. \u201cThe one they will not let go is the buckle. Iron buckle, on a body out of eleven-thousand-year peat.\u201d He turns a glass over. \u201cThe Library man said the face must have slumped. Hald carried that one up the boards himself and Hald says the face was clean.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "learnLore": {
+                  "entry": "moor_cut_buckle"
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "moor_sask_buckle_on",
+                "text": "Go on.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "moor_sask_buckle_wont",
+            "says": [
+              {
+                "text": "\u201cI've said all I mean to,\u201d they say, and go back to what they were doing."
+              }
+            ],
+            "onEnter": [
+              {
+                "adjustReputation": {
+                  "faction": "the_library",
+                  "amount": -1
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "moor_sask_buckle_drop",
+                "text": "Leave it.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          }
+        ]
+      },
+      {
+        "id": "moor_bram_talk",
+        "start": "greet",
+        "nodes": [
+          {
+            "id": "greet",
+            "says": [
+              {
+                "text": "Turf stacked by the thousand under a long open shed, scales, and a book on a stand that has been in that spot a very long time."
+              },
+              {
+                "text": "\u201cBy the thousand or by the load. The book stays here.\u201d"
+              }
+            ],
+            "onEnter": [],
+            "options": [
+              {
+                "id": "moor_bram_count",
+                "text": "How many have come out of the deep cut?",
+                "requires": {
+                  "without": {
+                    "lore": [
+                      "moor_cut_count"
+                    ]
+                  }
+                },
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "check": {
+                  "skill": "persuasion",
+                  "difficulty": {
+                    "sub": [
+                      13,
+                      {
+                        "clamp": [
+                          {
+                            "div": [
+                              {
+                                "ref": "reputation.the_library",
+                                "else": 0
+                              },
+                              5
+                            ]
+                          },
+                          -6,
+                          6
+                        ]
+                      }
+                    ]
+                  },
+                  "onSuccess": "moor_bram_count_told",
+                  "onFailure": "moor_bram_count_wont"
+                }
+              },
+              {
+                "id": "moor_bram_swapped",
+                "text": "Were the forty-one put back the ones that came out?",
+                "requires": {
+                  "without": {
+                    "lore": [
+                      "moor_cut_swapped"
+                    ]
+                  }
+                },
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "check": {
+                  "skill": "insight",
+                  "difficulty": {
+                    "sub": [
+                      17,
+                      {
+                        "clamp": [
+                          {
+                            "div": [
+                              {
+                                "ref": "reputation.the_library",
+                                "else": 0
+                              },
+                              5
+                            ]
+                          },
+                          -6,
+                          6
+                        ]
+                      }
+                    ]
+                  },
+                  "onSuccess": "moor_bram_swapped_told",
+                  "onFailure": "moor_bram_swapped_wont"
+                }
+              },
+              {
+                "id": "greet_leave",
+                "text": "Nothing.",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "moor_bram_count_told",
+            "says": [
+              {
+                "text": "\u201cForty-one.\u201d Bram does not have to check and does not pretend to. \u201cSince we started counting, which is my great-grandfather.\u201d He turns the stand slightly, not enough to show you the page. \u201cAnd forty-one put back. That is in there too. The Library takes them, the Library measures them, the Library sends them home, and we put them back where they came from.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "learnLore": {
+                  "entry": "moor_cut_count"
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "moor_bram_count_on",
+                "text": "Go on.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "moor_bram_count_wont",
+            "says": [
+              {
+                "text": "\u201cI've said all I mean to,\u201d they say, and go back to what they were doing."
+              }
+            ],
+            "onEnter": [
+              {
+                "adjustReputation": {
+                  "faction": "the_library",
+                  "amount": -1
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "moor_bram_count_drop",
+                "text": "Leave it.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "moor_bram_swapped_told",
+            "says": [
+              {
+                "text": "It takes him a long moment. \u201cNo,\u201d he says. \u201cTwo of them are written up different going in to coming out. Different height on one. Different hands on the other \u2014 *hands*, written just like that.\u201d He shuts the book. \u201cMy grandfather's hand, in among the weights and the dates, like it was a Tuesday.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "learnLore": {
+                  "entry": "moor_cut_swapped"
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "moor_bram_swapped_on",
+                "text": "Go on.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "moor_bram_swapped_wont",
+            "says": [
+              {
+                "text": "\u201cI've said all I mean to,\u201d they say, and go back to what they were doing."
+              }
+            ],
+            "onEnter": [
+              {
+                "adjustReputation": {
+                  "faction": "the_library",
+                  "amount": -1
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "moor_bram_swapped_drop",
+                "text": "Leave it.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          }
+        ]
       }
     ],
     "quests": [
@@ -92575,6 +95611,177 @@
           ],
           "reputation": {}
         }
+      },
+      {
+        "id": "moor_colders_fire",
+        "name": "Colder's Fire",
+        "description": "Two hundred years alight on a third of the fuel it needs, kept for a man the parish register buries twice.",
+        "autoStart": false,
+        "ordered": true,
+        "tags": [
+          "hidden",
+          "weeping_moor",
+          "moor_fire"
+        ],
+        "objectives": [
+          {
+            "id": "under_the_warm",
+            "description": "Get into the cold room underneath.",
+            "kind": "reach",
+            "count": 1,
+            "hidden": true,
+            "optional": false,
+            "target": "colders_hearth_chapel"
+          },
+          {
+            "id": "read_the_rota",
+            "description": "Find which two nights have no name against them.",
+            "kind": "custom",
+            "count": 1,
+            "hidden": true,
+            "optional": false,
+            "when": {
+              "test": {
+                "ref": "flags.moor_fire_open"
+              }
+            }
+          },
+          {
+            "id": "what_is_fed",
+            "description": "Meet what the fire has been feeding.",
+            "kind": "kill",
+            "count": 1,
+            "hidden": true,
+            "optional": false,
+            "target": "the_long_fire"
+          }
+        ],
+        "stages": [],
+        "unlocks": [],
+        "rewards": {
+          "xp": 185,
+          "items": [
+            {
+              "item": "hearth_ring",
+              "quantity": 1
+            }
+          ],
+          "reputation": {}
+        }
+      },
+      {
+        "id": "moor_forty_one",
+        "name": "Forty-One Out, Forty-One In",
+        "description": "Every body the deep peat gave up written down as returned, and not always the one that was taken.",
+        "autoStart": false,
+        "ordered": true,
+        "tags": [
+          "hidden",
+          "weeping_moor",
+          "moor_cut"
+        ],
+        "objectives": [
+          {
+            "id": "below_the_band",
+            "description": "Get below the band nobody cuts past.",
+            "kind": "reach",
+            "count": 1,
+            "hidden": true,
+            "optional": false,
+            "target": "mirestead_bog_body_cut"
+          },
+          {
+            "id": "match_the_count",
+            "description": "Work out which two went back different.",
+            "kind": "custom",
+            "count": 1,
+            "hidden": true,
+            "optional": false,
+            "when": {
+              "test": {
+                "ref": "flags.moor_cut_open"
+              }
+            }
+          },
+          {
+            "id": "what_swaps",
+            "description": "Meet what has been doing the returning.",
+            "kind": "kill",
+            "count": 1,
+            "hidden": true,
+            "optional": false,
+            "target": "the_returner"
+          }
+        ],
+        "stages": [],
+        "unlocks": [],
+        "rewards": {
+          "xp": 195,
+          "items": [
+            {
+              "item": "bog_belt",
+              "quantity": 1
+            }
+          ],
+          "reputation": {}
+        }
+      },
+      {
+        "id": "moor_the_drive",
+        "name": "The Drive That Goes Over",
+        "description": "A roofless shooting house with this century's wear in eight even places, and a beaters' line drawn over the scarp and down.",
+        "autoStart": false,
+        "ordered": true,
+        "tags": [
+          "hidden",
+          "weeping_moor",
+          "moor_shoot"
+        ],
+        "objectives": [
+          {
+            "id": "under_the_scarp",
+            "description": "Get under the scarp where the line goes.",
+            "kind": "reach",
+            "count": 1,
+            "hidden": true,
+            "optional": false,
+            "target": "kestrel_edge_grit_caves"
+          },
+          {
+            "id": "stand_the_eighth",
+            "description": "Take the eighth place in the line.",
+            "kind": "custom",
+            "count": 1,
+            "hidden": true,
+            "optional": false,
+            "when": {
+              "test": {
+                "ref": "flags.moor_shoot_open"
+              }
+            }
+          },
+          {
+            "id": "what_is_driven",
+            "description": "Meet what the drive has been driving.",
+            "kind": "kill",
+            "count": 1,
+            "hidden": true,
+            "optional": false,
+            "target": "the_driven"
+          }
+        ],
+        "stages": [],
+        "unlocks": [],
+        "rewards": {
+          "xp": 205,
+          "items": [
+            {
+              "item": "beaters_cloak",
+              "quantity": 1
+            }
+          ],
+          "reputation": {}
+        }
       }
     ],
     "arcs": [
@@ -92909,6 +96116,17 @@
           "skarn_nine_hundred_and_one",
           "skarn_rung_from_below",
           "skarn_the_breathing_face"
+        ],
+        "isEnding": false
+      },
+      {
+        "id": "moor_hidden",
+        "name": "The Weeping Moor, Returned",
+        "description": "Three counts this moor has been keeping, and all three of them balance, which is the trouble.",
+        "quests": [
+          "moor_colders_fire",
+          "moor_forty_one",
+          "moor_the_drive"
         ],
         "isEnding": false
       },
@@ -93626,6 +96844,66 @@
         "id": "skarn_wind_maps",
         "name": "Karn Dolur has mapped every hole in this mountain to the inch, and the survey stops at that mouth with a blank margin and no note saying why.",
         "source": "the forge"
+      },
+      {
+        "id": "moor_fire_years",
+        "name": "It has not been out in two hundred years. Colder kept it forty and the parish has kept it a hundred and sixty since, by rota, without one lapse anybody can find.",
+        "source": "the Beacon"
+      },
+      {
+        "id": "moor_fire_fuel",
+        "name": "The parish buys peat for it by the load and the load it buys is about a third of what a fire that size eats. Nobody has ever been short.",
+        "source": "the Hearth Store"
+      },
+      {
+        "id": "moor_fire_twice",
+        "name": "Colder is in the register twice, buried forty years apart, in the same hand, with the same three words after the name.",
+        "source": "a rota keeper"
+      },
+      {
+        "id": "moor_fire_green",
+        "name": "Two nights a year, when the wind comes off the moor rather than the vale, it burns green and the whole village is indoors by dark without anybody having said so.",
+        "source": "the chapel rota"
+      },
+      {
+        "id": "moor_cut_count",
+        "name": "Forty-one have come out of the deep peat since the cutters started keeping count, and the store's book records forty-one put back.",
+        "source": "the Cutters' Store"
+      },
+      {
+        "id": "moor_cut_swapped",
+        "name": "They are not always the same ones. Two were noted as returned in a different condition than they went in, and the note is in the clerk's ordinary hand, as though it were ordinary.",
+        "source": "the store book"
+      },
+      {
+        "id": "moor_cut_buckle",
+        "name": "The peat at that depth is eleven thousand years old. One of the forty-one had an iron buckle on it and iron is four thousand.",
+        "source": "a peat cutter"
+      },
+      {
+        "id": "moor_cut_band",
+        "name": "Nobody cuts below the black band, and every cutter here can find the black band in the dark, and not one of them was ever taught where it is.",
+        "source": "the Cuttings"
+      },
+      {
+        "id": "moor_shoot_wear",
+        "name": "The house has no roof and the flags in front of it are worn through in eight places, evenly spaced, and the wear is this century.",
+        "source": "the Heather Bothy"
+      },
+      {
+        "id": "moor_shoot_line",
+        "name": "The beaters' line on the old estate map does not stop at the scarp. It is drawn over it and down, and the ink is the same ink.",
+        "source": "the estate map"
+      },
+      {
+        "id": "moor_shoot_birds",
+        "name": "Birds go out over that drop on one day of the year, in numbers, and the count that goes out is not the count that comes back, and it never has been.",
+        "source": "the Edge"
+      },
+      {
+        "id": "moor_shoot_draught",
+        "name": "The holes under the scarp draw upward. Every other hole on this moor breathes down, because cold air falls, which is a thing cold air does everywhere.",
+        "source": "the Burnt Farm"
       }
     ],
     "loreThreads": [
@@ -94012,6 +97290,39 @@
           "skarn_wind_warm",
           "skarn_wind_ice",
           "skarn_wind_maps"
+        ]
+      },
+      {
+        "id": "moor_fire",
+        "name": "Colder's Fire",
+        "description": "Two hundred years alight on a third of the fuel it needs, kept for a man the parish register buries twice.",
+        "entries": [
+          "moor_fire_years",
+          "moor_fire_fuel",
+          "moor_fire_twice",
+          "moor_fire_green"
+        ]
+      },
+      {
+        "id": "moor_cut",
+        "name": "Forty-One Out, Forty-One In",
+        "description": "Every body the deep peat gave up written down as returned, and not always the one that was taken.",
+        "entries": [
+          "moor_cut_count",
+          "moor_cut_swapped",
+          "moor_cut_buckle",
+          "moor_cut_band"
+        ]
+      },
+      {
+        "id": "moor_shoot",
+        "name": "The Drive That Goes Over",
+        "description": "A roofless shooting house with this century's wear in eight even places, and a beaters' line drawn over the scarp and down.",
+        "entries": [
+          "moor_shoot_wear",
+          "moor_shoot_line",
+          "moor_shoot_birds",
+          "moor_shoot_draught"
         ]
       }
     ]
