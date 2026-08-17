@@ -4773,6 +4773,132 @@
           }
         ],
         "rarity": "very_rare"
+      },
+      {
+        "id": "sweeping_tally",
+        "name": "The Sweeper's Tally",
+        "description": "Four generations of somebody writing down that the steps were already clean, and the count they made each time.",
+        "kind": "key",
+        "value": 0,
+        "weight": 0,
+        "tags": [
+          "keepsake"
+        ],
+        "extra": {
+          "heldBy": "stair_sweeper_bel"
+        }
+      },
+      {
+        "id": "watch_book",
+        "name": "The Snowgate Watch Book",
+        "description": "Every night the road was shut, every night the bell was rung, and eleven nights on which those are not the same list.",
+        "kind": "key",
+        "value": 0,
+        "weight": 0,
+        "tags": [
+          "keepsake"
+        ],
+        "extra": {
+          "heldBy": "bell_watch_orn"
+        }
+      },
+      {
+        "id": "stopped_survey",
+        "name": "The Survey That Stops",
+        "description": "Karn Dolur's own mapping of the Cold Shoulder, to the inch, ending at a mouth with clean margin after it.",
+        "kind": "key",
+        "value": 0,
+        "weight": 0,
+        "tags": [
+          "keepsake"
+        ],
+        "extra": {
+          "heldBy": "ice_guide_vesk"
+        }
+      },
+      {
+        "id": "short_tread",
+        "name": "A Tread Off the Older Stair",
+        "description": "Cut shorter and deeper than any step on the hold's stair, worn in the middle by something that did not walk the way we walk.",
+        "kind": "treasure",
+        "value": 0,
+        "weight": 0,
+        "tags": [
+          "clue",
+          "proof"
+        ],
+        "onUse": [
+          {
+            "learnLore": {
+              "entry": "skarn_stair_two"
+            }
+          }
+        ],
+        "consumedOnUse": false
+      },
+      {
+        "id": "sweepers_belt",
+        "name": "The Sweeper's Belt",
+        "description": "Off somebody who climbed nine hundred and one steps a day for a wage nobody paid. Height stops mattering to the wearer's legs.",
+        "kind": "trinket",
+        "slot": "belt",
+        "value": 880,
+        "weight": 1,
+        "tags": [
+          "fabled"
+        ],
+        "modifiers": {
+          "carry": 3
+        },
+        "skillBonuses": {
+          "athletics": 3,
+          "perception": 2
+        },
+        "rarity": "rare"
+      },
+      {
+        "id": "bell_rope_ring",
+        "name": "The Ring in the Bell Rope",
+        "description": "Iron off the inside of the turn, worn by something that pulled from underneath. What the wearer signals is heard further than it should be.",
+        "kind": "trinket",
+        "slot": "ring",
+        "value": 920,
+        "weight": 1,
+        "tags": [
+          "fabled"
+        ],
+        "skillBonuses": {
+          "persuasion": 3,
+          "intimidation": 2,
+          "resolve": 2
+        },
+        "rarity": "very_rare"
+      },
+      {
+        "id": "breathing_hood",
+        "name": "The Hood off the Breathing Face",
+        "description": "Felt and hide out of a mouth that blows warm onto ice that will not form. Cold arrives at the wearer late and leaves early.",
+        "kind": "armor",
+        "slot": "head",
+        "value": 980,
+        "weight": 1,
+        "tags": [
+          "fabled"
+        ],
+        "modifiers": {
+          "guard": 1
+        },
+        "skillBonuses": {
+          "survival": 3,
+          "resolve": 2
+        },
+        "damageInteractions": [
+          {
+            "damageType": "cold",
+            "multiplier": 0.5
+          }
+        ],
+        "rarity": "very_rare"
       }
     ],
     "lootTables": [
@@ -8161,6 +8287,208 @@
             "weight": 2,
             "value": {
               "item": "glass_bead",
+              "quantity": "1d2"
+            }
+          },
+          {
+            "weight": 1,
+            "value": {
+              "item": "warded_coat",
+              "quantity": "1"
+            }
+          }
+        ]
+      },
+      {
+        "id": "skarn_tally_carried",
+        "name": "What Bel Kept",
+        "rolls": "1",
+        "emptyChance": 0,
+        "entries": [
+          {
+            "weight": 1,
+            "value": {
+              "item": "sweeping_tally",
+              "quantity": "1",
+              "unique": true,
+              "requirementScope": "party",
+              "requires": {
+                "without": {
+                  "flags": [
+                    {
+                      "flag": "given:sweeping_tally"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        ]
+      },
+      {
+        "id": "skarn_watch_carried",
+        "name": "What Orn Kept",
+        "rolls": "1",
+        "emptyChance": 0,
+        "entries": [
+          {
+            "weight": 1,
+            "value": {
+              "item": "watch_book",
+              "quantity": "1",
+              "unique": true,
+              "requirementScope": "party",
+              "requires": {
+                "without": {
+                  "flags": [
+                    {
+                      "flag": "given:watch_book"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        ]
+      },
+      {
+        "id": "skarn_survey_carried",
+        "name": "What Vesk Kept",
+        "rolls": "1",
+        "emptyChance": 0,
+        "entries": [
+          {
+            "weight": 1,
+            "value": {
+              "item": "stopped_survey",
+              "quantity": "1",
+              "unique": true,
+              "requirementScope": "party",
+              "requires": {
+                "without": {
+                  "flags": [
+                    {
+                      "flag": "given:stopped_survey"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        ]
+      },
+      {
+        "id": "skarn_stair_hoard",
+        "name": "On the Flight Nobody Uses",
+        "rolls": "2",
+        "emptyChance": 0.1,
+        "bonusRollSkill": "perception",
+        "bonusRolls": {
+          "onSuccess": 1,
+          "onCritical": 2
+        },
+        "entries": [
+          {
+            "weight": 5,
+            "value": {
+              "item": "old_coin",
+              "quantity": "4d6"
+            }
+          },
+          {
+            "weight": 3,
+            "value": {
+              "item": "hold_silver",
+              "quantity": "1d2"
+            }
+          },
+          {
+            "weight": 2,
+            "value": {
+              "item": "healing_draught",
+              "quantity": "1"
+            }
+          },
+          {
+            "weight": 1,
+            "value": {
+              "item": "short_tread",
+              "quantity": "1",
+              "unique": true
+            }
+          }
+        ]
+      },
+      {
+        "id": "skarn_bell_hoard",
+        "name": "Seventy Feet Back",
+        "rolls": "3",
+        "emptyChance": 0,
+        "bonusRollSkill": "perception",
+        "bonusRolls": {
+          "onSuccess": 1,
+          "onCritical": 2
+        },
+        "entries": [
+          {
+            "weight": 4,
+            "value": {
+              "item": "old_coin",
+              "quantity": "5d6"
+            }
+          },
+          {
+            "weight": 3,
+            "value": {
+              "item": "hold_silver",
+              "quantity": "1d2"
+            }
+          },
+          {
+            "weight": 2,
+            "value": {
+              "item": "iron_ore",
+              "quantity": "2d4"
+            }
+          },
+          {
+            "weight": 1,
+            "value": {
+              "item": "silvered_blade",
+              "quantity": "1"
+            }
+          }
+        ]
+      },
+      {
+        "id": "skarn_wind_hoard",
+        "name": "Past the Clean Margin",
+        "rolls": "3",
+        "emptyChance": 0,
+        "bonusRollSkill": "perception",
+        "bonusRolls": {
+          "onSuccess": 1,
+          "onCritical": 2
+        },
+        "entries": [
+          {
+            "weight": 4,
+            "value": {
+              "item": "old_coin",
+              "quantity": "5d6"
+            }
+          },
+          {
+            "weight": 3,
+            "value": {
+              "item": "ward_salt",
+              "quantity": "1d2"
+            }
+          },
+          {
+            "weight": 2,
+            "value": {
+              "item": "antidote",
               "quantity": "1d2"
             }
           },
@@ -13709,6 +14037,322 @@
         "resourceOverrides": {
           "hp": 70
         }
+      },
+      {
+        "id": "skarn_sweeper",
+        "name": "Bel, on the Steps",
+        "description": "Climbs nine hundred and one steps a day and has since she could carry the broom.",
+        "level": 6,
+        "xp": 0,
+        "attributes": {
+          "might": 14,
+          "agility": 14,
+          "endurance": 16,
+          "intellect": 12,
+          "instinct": 14,
+          "presence": 12
+        },
+        "abilities": [
+          "strike"
+        ],
+        "behaviour": [
+          {
+            "priority": 0,
+            "use": "strike"
+          }
+        ],
+        "faction": "karn_dolur",
+        "creatureType": "humanoid",
+        "size": "medium",
+        "descriptors": [
+          "a hard-legged"
+        ],
+        "conditionalLoot": [],
+        "loot": "skarn_tally_carried",
+        "resourceOverrides": {
+          "hp": 38
+        }
+      },
+      {
+        "id": "skarn_watch",
+        "name": "Orn, on Watch",
+        "description": "Stays awake for two nights when the sky looks wrong, which it does often here.",
+        "level": 6,
+        "xp": 0,
+        "attributes": {
+          "might": 13,
+          "agility": 13,
+          "endurance": 15,
+          "intellect": 13,
+          "instinct": 16,
+          "presence": 12
+        },
+        "abilities": [
+          "strike",
+          "quick_shot"
+        ],
+        "behaviour": [
+          {
+            "priority": 0,
+            "use": "strike"
+          }
+        ],
+        "faction": "karn_dolur",
+        "creatureType": "humanoid",
+        "size": "medium",
+        "descriptors": [
+          "a hollow-eyed"
+        ],
+        "conditionalLoot": [],
+        "loot": "skarn_watch_carried",
+        "resourceOverrides": {
+          "hp": 35
+        }
+      },
+      {
+        "id": "skarn_guide",
+        "name": "Vesk of the Ice Road",
+        "description": "Has brought parties off the shoulder in weather that took the parties behind them.",
+        "level": 6,
+        "xp": 0,
+        "attributes": {
+          "might": 15,
+          "agility": 15,
+          "endurance": 16,
+          "intellect": 12,
+          "instinct": 15,
+          "presence": 11
+        },
+        "abilities": [
+          "strike",
+          "guarded_stance"
+        ],
+        "behaviour": [
+          {
+            "priority": 0,
+            "use": "strike"
+          }
+        ],
+        "faction": "karn_dolur",
+        "creatureType": "humanoid",
+        "size": "medium",
+        "descriptors": [
+          "a frost-bitten"
+        ],
+        "conditionalLoot": [],
+        "loot": "skarn_survey_carried",
+        "resourceOverrides": {
+          "hp": 40
+        }
+      },
+      {
+        "id": "the_sweeper",
+        "name": "Whoever Sweeps Them",
+        "description": "Nine hundred steps swept every day of the year on a payroll that has no line for it, and a nine hundred and first that is swept as carefully as the rest.",
+        "level": 7,
+        "xp": 700,
+        "attributes": {
+          "might": 15,
+          "agility": 17,
+          "endurance": 15,
+          "intellect": 13,
+          "instinct": 16,
+          "presence": 11
+        },
+        "abilities": [
+          "cut_and_run",
+          "rend",
+          "shove"
+        ],
+        "behaviour": [
+          {
+            "priority": 15,
+            "use": "cut_and_run",
+            "when": {
+              "chance": 0.4
+            }
+          },
+          {
+            "priority": 5,
+            "use": "shove"
+          },
+          {
+            "priority": 0,
+            "use": "rend"
+          }
+        ],
+        "faction": "the_unsealed",
+        "creatureType": "undead",
+        "size": "medium",
+        "descriptors": [
+          "a stooped",
+          "a tireless"
+        ],
+        "conditionalLoot": [],
+        "loot": "skarn_stair_hoard",
+        "damageInteractions": [
+          {
+            "damageType": "slashing",
+            "multiplier": 0.5,
+            "unless": [
+              "silvered"
+            ]
+          },
+          {
+            "damageType": "piercing",
+            "multiplier": 0.5,
+            "unless": [
+              "silvered"
+            ]
+          }
+        ],
+        "conditionImmunities": [
+          "frightened",
+          "prone"
+        ],
+        "resourceOverrides": {
+          "hp": 80
+        }
+      },
+      {
+        "id": "the_ringer",
+        "name": "What Pulls From Underneath",
+        "description": "Eleven nights of a bell rung for a road that was open, and a rope worn on the face a standing hand cannot reach.",
+        "level": 8,
+        "xp": 860,
+        "attributes": {
+          "might": 17,
+          "agility": 13,
+          "endurance": 18,
+          "intellect": 12,
+          "instinct": 15,
+          "presence": 13
+        },
+        "abilities": [
+          "stone_fist",
+          "shove",
+          "rend"
+        ],
+        "behaviour": [
+          {
+            "priority": 20,
+            "use": "stone_fist",
+            "when": {
+              "chance": 0.35
+            }
+          },
+          {
+            "priority": 10,
+            "use": "shove"
+          },
+          {
+            "priority": 0,
+            "use": "rend"
+          }
+        ],
+        "faction": "the_unsealed",
+        "creatureType": "undead",
+        "size": "medium",
+        "descriptors": [
+          "a coal-warm",
+          "a deliberate"
+        ],
+        "conditionalLoot": [],
+        "loot": "skarn_bell_hoard",
+        "damageInteractions": [
+          {
+            "damageType": "slashing",
+            "multiplier": 0.5,
+            "unless": [
+              "silvered"
+            ]
+          },
+          {
+            "damageType": "piercing",
+            "multiplier": 0.5,
+            "unless": [
+              "silvered"
+            ]
+          }
+        ],
+        "conditionImmunities": [
+          "frightened",
+          "prone",
+          "blinded"
+        ],
+        "resourceOverrides": {
+          "hp": 98
+        }
+      },
+      {
+        "id": "the_breath",
+        "name": "What Does the Breathing",
+        "description": "In and out to the minute, in a gale or a calm, warm, out of a face that has been in shade since anybody began writing things down.",
+        "level": 8,
+        "xp": 900,
+        "attributes": {
+          "might": 14,
+          "agility": 16,
+          "endurance": 17,
+          "intellect": 14,
+          "instinct": 17,
+          "presence": 14
+        },
+        "abilities": [
+          "vent_breath",
+          "rime_touch",
+          "scouring_wind"
+        ],
+        "behaviour": [
+          {
+            "priority": 20,
+            "use": "vent_breath",
+            "when": {
+              "chance": 0.35
+            }
+          },
+          {
+            "priority": 10,
+            "use": "scouring_wind"
+          },
+          {
+            "priority": 0,
+            "use": "rime_touch"
+          }
+        ],
+        "faction": "the_unsealed",
+        "creatureType": "undead",
+        "size": "medium",
+        "descriptors": [
+          "a vast",
+          "a slow-lunged"
+        ],
+        "conditionalLoot": [],
+        "loot": "skarn_wind_hoard",
+        "damageInteractions": [
+          {
+            "damageType": "slashing",
+            "multiplier": 0.5,
+            "unless": [
+              "silvered"
+            ]
+          },
+          {
+            "damageType": "piercing",
+            "multiplier": 0.5,
+            "unless": [
+              "silvered"
+            ]
+          }
+        ],
+        "conditionImmunities": [
+          "frightened",
+          "slowed",
+          "prone"
+        ],
+        "resourceOverrides": {
+          "hp": 104
+        }
       }
     ],
     "factions": [
@@ -16065,6 +16709,114 @@
             "treasure"
           ],
           "priceMultiplier": 1.25
+        }
+      },
+      {
+        "id": "stair_sweeper_bel",
+        "name": "Bel, on the Steps",
+        "description": "Fourth of the family to sweep a stair that is always already clean, and the fourth to go on doing it anyway.",
+        "disposition": 4,
+        "gullibility": 0.3,
+        "memorySpan": 220,
+        "offersQuests": [],
+        "caresAbout": [],
+        "reactions": [],
+        "faction": "karn_dolur",
+        "dialogue": "skarn_bel_talk",
+        "home": "ironstair_halfway_house",
+        "statblock": "skarn_sweeper"
+      },
+      {
+        "id": "bell_watch_orn",
+        "name": "Orn, on Watch",
+        "description": "Sits up for the nights the road might shut, and has written down eleven he cannot account for.",
+        "disposition": 2,
+        "gullibility": 0.2,
+        "memorySpan": 250,
+        "offersQuests": [],
+        "caresAbout": [],
+        "reactions": [],
+        "faction": "karn_dolur",
+        "dialogue": "skarn_orn_talk",
+        "home": "snowgate_house_b",
+        "statblock": "skarn_watch"
+      },
+      {
+        "id": "ice_guide_vesk",
+        "name": "Vesk of the Ice Road",
+        "description": "Takes people over the shoulder to the ice and back, and holds the hold's survey of it because somebody has to.",
+        "disposition": 3,
+        "gullibility": 0.25,
+        "memorySpan": 200,
+        "offersQuests": [],
+        "caresAbout": [],
+        "reactions": [],
+        "faction": "karn_dolur",
+        "dialogue": "skarn_vesk_talk",
+        "home": "cold_shoulder_ice_road",
+        "statblock": "skarn_guide"
+      },
+      {
+        "id": "wayhouse_keeper_dorn",
+        "name": "Dorn, at the Broken Road",
+        "description": "Keeps a house on a road that has not been mended since the great rains and does perfectly well out of the fact.",
+        "disposition": 6,
+        "gullibility": 0.45,
+        "memorySpan": 170,
+        "offersQuests": [],
+        "caresAbout": [],
+        "reactions": [],
+        "faction": "karn_dolur",
+        "dialogue": "skarn_dorn_talk",
+        "home": "broken_road_wayhouse",
+        "shop": {
+          "lootTable": "hollowdene_stock",
+          "buysTags": [
+            "treasure"
+          ],
+          "priceMultiplier": 1.3
+        }
+      },
+      {
+        "id": "gate_store_hesk",
+        "name": "Hesk, at the Gate Store",
+        "description": "Sells rope, tallow, nails and boots to everybody going up and everybody coming down, and looks at both.",
+        "disposition": 5,
+        "gullibility": 0.4,
+        "memorySpan": 190,
+        "offersQuests": [],
+        "caresAbout": [],
+        "reactions": [],
+        "faction": "karn_dolur",
+        "dialogue": "skarn_hesk_talk",
+        "home": "snowgate_store",
+        "shop": {
+          "lootTable": "keeper_stock",
+          "buysTags": [
+            "material"
+          ],
+          "priceMultiplier": 1.2
+        }
+      },
+      {
+        "id": "snowgate_smith_ruvo",
+        "name": "Ruvo, at the Forge",
+        "description": "Works coal that comes up warm and has stopped mentioning it, which took some doing.",
+        "disposition": 3,
+        "gullibility": 0.3,
+        "memorySpan": 200,
+        "offersQuests": [],
+        "caresAbout": [],
+        "reactions": [],
+        "faction": "karn_dolur",
+        "dialogue": "skarn_ruvo_talk",
+        "home": "snowgate_forge",
+        "shop": {
+          "lootTable": "keeper_stock",
+          "buysTags": [
+            "material"
+          ],
+          "priceMultiplier": 1.15
         }
       }
     ],
@@ -29167,7 +29919,22 @@
         "position": {
           "x": 3,
           "y": 3
-        }
+        },
+        "triggers": [
+          {
+            "id": "skarn_found_rope",
+            "mode": "once",
+            "on": "enter",
+            "description": "Which face of the rope is worn.",
+            "effects": [
+              {
+                "learnLore": {
+                  "entry": "skarn_bell_rope"
+                }
+              }
+            ]
+          }
+        ]
       },
       {
         "id": "snowgate_store",
@@ -29260,7 +30027,62 @@
         "position": {
           "x": 27,
           "y": 3
-        }
+        },
+        "triggers": [
+          {
+            "id": "skarn_bell_committed",
+            "mode": "once",
+            "on": "enter",
+            "description": "Seventy feet into a slope everybody else stopped digging at twenty.",
+            "requires": {
+              "custom": {
+                "gte": [
+                  {
+                    "ref": "threads.skarn_bell.known"
+                  },
+                  2
+                ]
+              }
+            },
+            "effects": [
+              {
+                "emit": {
+                  "event": "startQuest",
+                  "data": {
+                    "quest": "skarn_rung_from_below"
+                  }
+                }
+              }
+            ]
+          }
+        ],
+        "hidden": true,
+        "discover": {
+          "skill": "perception",
+          "difficulty": {
+            "max": [
+              9,
+              {
+                "sub": [
+                  21,
+                  {
+                    "mul": [
+                      3,
+                      {
+                        "ref": "threads.skarn_bell.known"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "gate": "skarn_bell_backroom",
+        "encounterTables": [
+          "skarn_bell_boss"
+        ],
+        "encounterChance": 1
       },
       {
         "id": "snowgate_house_b",
@@ -29350,7 +30172,22 @@
         "position": {
           "x": 3,
           "y": 3
-        }
+        },
+        "triggers": [
+          {
+            "id": "skarn_found_steps",
+            "mode": "once",
+            "on": "enter",
+            "description": "Counting them on the way up, and again on the way down.",
+            "effects": [
+              {
+                "learnLore": {
+                  "entry": "skarn_stair_count"
+                }
+              }
+            ]
+          }
+        ]
       },
       {
         "id": "ironstair_halfway_house",
@@ -29395,7 +30232,62 @@
         "position": {
           "x": 25,
           "y": 3
-        }
+        },
+        "triggers": [
+          {
+            "id": "skarn_stair_committed",
+            "mode": "once",
+            "on": "enter",
+            "description": "On the flight the hold does not count.",
+            "requires": {
+              "custom": {
+                "gte": [
+                  {
+                    "ref": "threads.skarn_stair.known"
+                  },
+                  2
+                ]
+              }
+            },
+            "effects": [
+              {
+                "emit": {
+                  "event": "startQuest",
+                  "data": {
+                    "quest": "skarn_nine_hundred_and_one"
+                  }
+                }
+              }
+            ]
+          }
+        ],
+        "hidden": true,
+        "discover": {
+          "skill": "perception",
+          "difficulty": {
+            "max": [
+              8,
+              {
+                "sub": [
+                  20,
+                  {
+                    "mul": [
+                      3,
+                      {
+                        "ref": "threads.skarn_stair.known"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "gate": "skarn_stair_tread",
+        "encounterTables": [
+          "skarn_stair_boss"
+        ],
+        "encounterChance": 1
       },
       {
         "id": "cold_shoulder_north_face",
@@ -29409,7 +30301,22 @@
         "position": {
           "x": 3,
           "y": 3
-        }
+        },
+        "triggers": [
+          {
+            "id": "skarn_found_face",
+            "mode": "once",
+            "on": "enter",
+            "description": "Warm air off a face that has not thawed.",
+            "effects": [
+              {
+                "learnLore": {
+                  "entry": "skarn_wind_warm"
+                }
+              }
+            ]
+          }
+        ]
       },
       {
         "id": "cold_shoulder_ice_road",
@@ -29426,7 +30333,22 @@
         "position": {
           "x": 14,
           "y": 3
-        }
+        },
+        "triggers": [
+          {
+            "id": "skarn_found_ice",
+            "mode": "once",
+            "on": "enter",
+            "description": "Where the ice stops forming, and how sharply.",
+            "effects": [
+              {
+                "learnLore": {
+                  "entry": "skarn_wind_ice"
+                }
+              }
+            ]
+          }
+        ]
       },
       {
         "id": "cold_shoulder_wind_cave",
@@ -29443,7 +30365,58 @@
         "position": {
           "x": 25,
           "y": 3
-        }
+        },
+        "triggers": [
+          {
+            "id": "skarn_wind_committed",
+            "mode": "once",
+            "on": "enter",
+            "description": "In the mouth, on the draw, where the survey stops.",
+            "requires": {
+              "custom": {
+                "gte": [
+                  {
+                    "ref": "threads.skarn_wind.known"
+                  },
+                  2
+                ]
+              }
+            },
+            "effects": [
+              {
+                "emit": {
+                  "event": "startQuest",
+                  "data": {
+                    "quest": "skarn_the_breathing_face"
+                  }
+                }
+              }
+            ]
+          }
+        ],
+        "hidden": true,
+        "discover": {
+          "skill": "survival",
+          "difficulty": {
+            "max": [
+              10,
+              {
+                "sub": [
+                  22,
+                  {
+                    "mul": [
+                      3,
+                      {
+                        "ref": "threads.skarn_wind.known"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "gate": "skarn_wind_throat"
       },
       {
         "id": "weirwater_head_corrie_lake",
@@ -29525,7 +30498,22 @@
         "position": {
           "x": 3,
           "y": 3
-        }
+        },
+        "triggers": [
+          {
+            "id": "skarn_found_slip",
+            "mode": "once",
+            "on": "enter",
+            "description": "What the slip took out, and what was under it.",
+            "effects": [
+              {
+                "learnLore": {
+                  "entry": "skarn_stair_two"
+                }
+              }
+            ]
+          }
+        ]
       },
       {
         "id": "broken_road_wayhouse",
@@ -39683,6 +40671,93 @@
             }
           ]
         }
+      },
+      {
+        "id": "skarn_stair_tread",
+        "name": "The Step That Is Not Counted",
+        "description": "One tread on the broken flight that has been swept as carefully as the nine hundred that are used.",
+        "kind": "ward",
+        "blockedTextKey": "skarn_stair_blocked",
+        "staysOpen": true,
+        "onOpen": [
+          {
+            "setFlag": {
+              "flag": "skarn_stair_open",
+              "value": true
+            }
+          }
+        ],
+        "onBlocked": [],
+        "opensWith": [],
+        "tags": [],
+        "requires": {
+          "items": [
+            {
+              "item": "sweeping_tally",
+              "quantity": 1,
+              "consume": false,
+              "equipped": false
+            }
+          ]
+        }
+      },
+      {
+        "id": "skarn_bell_backroom",
+        "name": "Seventy Feet Back",
+        "description": "A house dug a room and a half into the slope like its eight neighbours, and then dug rather further.",
+        "kind": "ward",
+        "blockedTextKey": "skarn_bell_blocked",
+        "staysOpen": true,
+        "onOpen": [
+          {
+            "setFlag": {
+              "flag": "skarn_bell_open",
+              "value": true
+            }
+          }
+        ],
+        "onBlocked": [],
+        "opensWith": [],
+        "tags": [],
+        "requires": {
+          "items": [
+            {
+              "item": "watch_book",
+              "quantity": 1,
+              "consume": false,
+              "equipped": false
+            }
+          ]
+        }
+      },
+      {
+        "id": "skarn_wind_throat",
+        "name": "Past the Clean Margin",
+        "description": "Where the hold's survey stops: a throat the mapping did not measure, in a mountain the hold has measured to the inch.",
+        "kind": "ward",
+        "blockedTextKey": "skarn_wind_blocked",
+        "staysOpen": true,
+        "onOpen": [
+          {
+            "setFlag": {
+              "flag": "skarn_wind_open",
+              "value": true
+            }
+          }
+        ],
+        "onBlocked": [],
+        "opensWith": [],
+        "tags": [],
+        "requires": {
+          "items": [
+            {
+              "item": "stopped_survey",
+              "quantity": 1,
+              "consume": false,
+              "equipped": false
+            }
+          ]
+        }
       }
     ],
     "roomTemplates": [
@@ -40984,7 +42059,8 @@
           "birthThreshold": 5
         },
         "width": "47",
-        "height": "47"
+        "height": "47",
+        "bossTable": "skarn_wind_boss"
       },
       {
         "id": "skarn_the_sink",
@@ -44104,6 +45180,72 @@
             "entries": [
               {
                 "monster": "the_warm_thing",
+                "count": "1",
+                "scaleWithLevel": false
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "skarn_stair_boss",
+        "minDepth": 0,
+        "maxDepth": 999,
+        "chance": 1,
+        "emptyWeight": 0,
+        "scalePerLevels": 3,
+        "groups": [
+          {
+            "id": "b",
+            "weight": 1,
+            "hostile": true,
+            "entries": [
+              {
+                "monster": "the_sweeper",
+                "count": "1d2",
+                "scaleWithLevel": true
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "skarn_bell_boss",
+        "minDepth": 0,
+        "maxDepth": 999,
+        "chance": 1,
+        "emptyWeight": 0,
+        "scalePerLevels": 3,
+        "groups": [
+          {
+            "id": "b",
+            "weight": 1,
+            "hostile": true,
+            "entries": [
+              {
+                "monster": "the_ringer",
+                "count": "1",
+                "scaleWithLevel": false
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "skarn_wind_boss",
+        "minDepth": 0,
+        "maxDepth": 999,
+        "chance": 1,
+        "emptyWeight": 0,
+        "scalePerLevels": 3,
+        "groups": [
+          {
+            "id": "b",
+            "weight": 1,
+            "hostile": true,
+            "entries": [
+              {
+                "monster": "the_breath",
                 "count": "1",
                 "scaleWithLevel": false
               }
@@ -49371,6 +50513,48 @@
           },
           {
             "text": "It will be under again in about thirty years and everybody knows it and nobody is moving anything."
+          }
+        ]
+      },
+      {
+        "id": "skarn_bell_blocked",
+        "variants": [
+          {
+            "text": "Eleven nights the bell rang on an open road, and the watch book has the dates. Without the dates you are knocking on a neighbour's door about a draught."
+          },
+          {
+            "text": "The rope is worn on the inside of the turn. Stand where you would have to stand to wear it there and you are standing in the floor."
+          },
+          {
+            "text": "The coal comes up warmer than it went down. Nobody in Snowgate says so twice."
+          }
+        ]
+      },
+      {
+        "id": "skarn_stair_blocked",
+        "variants": [
+          {
+            "text": "Nine hundred and one by the foot, nine hundred by the lintel. Which step is the extra one is in four generations of a sweeper's count and nowhere else."
+          },
+          {
+            "text": "Cut shorter and deeper than the hold's stair, and worn in the middle rather than the front. Whatever wore that did not climb the way we climb."
+          },
+          {
+            "text": "Nothing nests in the shade of this flight, on a gritstone face, in a country where the birds nest in everything."
+          }
+        ]
+      },
+      {
+        "id": "skarn_wind_blocked",
+        "variants": [
+          {
+            "text": "The hold maps everything and this map ends. Where it ends and how cleanly is on the sheet itself, and the sheet is the guides' and they do not lend it."
+          },
+          {
+            "text": "In and out, to the minute, in a gale or a calm. Weather does not keep time."
+          },
+          {
+            "text": "Warm air off a face that has not thawed since anybody started writing things down."
           }
         ]
       },
@@ -80027,6 +81211,1683 @@
             "redirectWhen": []
           }
         ]
+      },
+      {
+        "id": "skarn_bel_talk",
+        "start": "greet",
+        "nodes": [
+          {
+            "id": "greet",
+            "says": [
+              {
+                "text": "A shelf of rock halfway up nine hundred steps, a bench, a brazier, and somebody sitting with a broom across her knees."
+              },
+              {
+                "text": "\u201cSit if you are climbing. Everybody sits.\u201d"
+              }
+            ],
+            "onEnter": [],
+            "options": [
+              {
+                "id": "skarn_bel_swept",
+                "text": "Who pays you to sweep the stair?",
+                "requires": {
+                  "without": {
+                    "lore": [
+                      "skarn_stair_swept"
+                    ]
+                  }
+                },
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "check": {
+                  "skill": "persuasion",
+                  "difficulty": {
+                    "sub": [
+                      12,
+                      {
+                        "clamp": [
+                          {
+                            "div": [
+                              {
+                                "ref": "reputation.karn_dolur",
+                                "else": 0
+                              },
+                              5
+                            ]
+                          },
+                          -6,
+                          6
+                        ]
+                      }
+                    ]
+                  },
+                  "onSuccess": "skarn_bel_swept_told",
+                  "onFailure": "skarn_bel_swept_wont"
+                }
+              },
+              {
+                "id": "skarn_bel_count",
+                "text": "How many steps is it?",
+                "requires": {
+                  "without": {
+                    "lore": [
+                      "skarn_stair_count"
+                    ]
+                  }
+                },
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "check": {
+                  "skill": "insight",
+                  "difficulty": {
+                    "sub": [
+                      14,
+                      {
+                        "clamp": [
+                          {
+                            "div": [
+                              {
+                                "ref": "reputation.karn_dolur",
+                                "else": 0
+                              },
+                              5
+                            ]
+                          },
+                          -6,
+                          6
+                        ]
+                      }
+                    ]
+                  },
+                  "onSuccess": "skarn_bel_count_told",
+                  "onFailure": "skarn_bel_count_wont"
+                }
+              },
+              {
+                "id": "skarn_bel_tally",
+                "text": "Four generations of counting. I want it.",
+                "requires": {
+                  "without": {
+                    "items": [
+                      "sweeping_tally"
+                    ],
+                    "flags": [
+                      {
+                        "flag": "given:sweeping_tally"
+                      }
+                    ]
+                  }
+                },
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "check": {
+                  "skill": "persuasion",
+                  "difficulty": {
+                    "sub": [
+                      13,
+                      {
+                        "clamp": [
+                          {
+                            "div": [
+                              {
+                                "ref": "reputation.karn_dolur",
+                                "else": 0
+                              },
+                              5
+                            ]
+                          },
+                          -6,
+                          6
+                        ]
+                      }
+                    ]
+                  },
+                  "onSuccess": "skarn_bel_tally_gave",
+                  "onFailure": "skarn_bel_tally_kept"
+                }
+              },
+              {
+                "id": "greet_leave",
+                "text": "Nothing.",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "skarn_bel_swept_told",
+            "says": [
+              {
+                "text": "\u201cNobody.\u201d Bel says it without any bitterness, which is the unsettling part. \u201cThe hold pays the railmen, the lampmen and the gate. Not the sweeping.\u201d A shrug. \u201cMy great-grandfather started coming up because it wanted doing. It has never wanted doing. It is clean when I get there, every day, and I sweep it anyway.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "learnLore": {
+                  "entry": "skarn_stair_swept"
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "skarn_bel_swept_on",
+                "text": "Go on.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "skarn_bel_swept_wont",
+            "says": [
+              {
+                "text": "\u201cI've said all I mean to,\u201d they say, and go back to what they were doing."
+              }
+            ],
+            "onEnter": [
+              {
+                "adjustReputation": {
+                  "faction": "karn_dolur",
+                  "amount": -1
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "skarn_bel_swept_drop",
+                "text": "Leave it.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "skarn_bel_count_told",
+            "says": [
+              {
+                "text": "\u201cNine hundred and one.\u201d Instantly. Then, watching your face: \u201cThe lintel says nine hundred. It has said nine hundred for six hundred years and the hold does not make that kind of mistake.\u201d Bel shoulders the broom. \u201cFour of us have counted. We all get nine hundred and one. We have never worked out which one is the extra.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "learnLore": {
+                  "entry": "skarn_stair_count"
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "skarn_bel_count_on",
+                "text": "Go on.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "skarn_bel_count_wont",
+            "says": [
+              {
+                "text": "\u201cI've said all I mean to,\u201d they say, and go back to what they were doing."
+              }
+            ],
+            "onEnter": [
+              {
+                "adjustReputation": {
+                  "faction": "karn_dolur",
+                  "amount": -1
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "skarn_bel_count_drop",
+                "text": "Leave it.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "skarn_bel_tally_gave",
+            "says": [
+              {
+                "text": "It is a folded sheaf, tied. \u201cEvery day, the count and the state of it,\u201d Bel says. \u201cFour hands and the same two things written down over and over: nine hundred and one, and already clean.\u201d A pause. \u201cIf you find the extra one, do not tell the hold before you tell me.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "grantItem": {
+                  "target": {
+                    "ref": "actor.id"
+                  },
+                  "item": "sweeping_tally",
+                  "quantity": 1
+                }
+              },
+              {
+                "setFlag": {
+                  "flag": "given:sweeping_tally",
+                  "value": true
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "skarn_bel_tally_thanks",
+                "text": "Thank you.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "skarn_bel_tally_kept",
+            "says": [
+              {
+                "text": "\u201cIt is the family's,\u201d Bel says, and the sheaf goes back inside her coat."
+              }
+            ],
+            "onEnter": [
+              {
+                "adjustReputation": {
+                  "faction": "karn_dolur",
+                  "amount": -2
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "skarn_bel_tally_leave",
+                "text": "Then no.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          }
+        ]
+      },
+      {
+        "id": "skarn_orn_talk",
+        "start": "greet",
+        "nodes": [
+          {
+            "id": "greet",
+            "says": [
+              {
+                "text": "A cottage with one window facing the road and a lamp burning in it at an hour that does not need a lamp."
+              },
+              {
+                "text": "\u201cRoad is open. If you have come to ask, it is open.\u201d"
+              }
+            ],
+            "onEnter": [],
+            "options": [
+              {
+                "id": "skarn_orn_open",
+                "text": "Has the bell ever rung on an open road?",
+                "requires": {
+                  "without": {
+                    "lore": [
+                      "skarn_bell_open"
+                    ]
+                  }
+                },
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "check": {
+                  "skill": "persuasion",
+                  "difficulty": {
+                    "sub": [
+                      15,
+                      {
+                        "clamp": [
+                          {
+                            "div": [
+                              {
+                                "ref": "reputation.karn_dolur",
+                                "else": 0
+                              },
+                              5
+                            ]
+                          },
+                          -6,
+                          6
+                        ]
+                      }
+                    ]
+                  },
+                  "onSuccess": "skarn_orn_open_told",
+                  "onFailure": "skarn_orn_open_wont"
+                }
+              },
+              {
+                "id": "skarn_orn_rope",
+                "text": "The rope.",
+                "requires": {
+                  "without": {
+                    "lore": [
+                      "skarn_bell_rope"
+                    ]
+                  }
+                },
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "check": {
+                  "skill": "insight",
+                  "difficulty": {
+                    "sub": [
+                      16,
+                      {
+                        "clamp": [
+                          {
+                            "div": [
+                              {
+                                "ref": "reputation.karn_dolur",
+                                "else": 0
+                              },
+                              5
+                            ]
+                          },
+                          -6,
+                          6
+                        ]
+                      }
+                    ]
+                  },
+                  "onSuccess": "skarn_orn_rope_told",
+                  "onFailure": "skarn_orn_rope_wont"
+                }
+              },
+              {
+                "id": "skarn_orn_book",
+                "text": "The watch book. The eleven nights.",
+                "requires": {
+                  "without": {
+                    "items": [
+                      "watch_book"
+                    ],
+                    "flags": [
+                      {
+                        "flag": "given:watch_book"
+                      }
+                    ]
+                  }
+                },
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "check": {
+                  "skill": "persuasion",
+                  "difficulty": {
+                    "sub": [
+                      12,
+                      {
+                        "clamp": [
+                          {
+                            "div": [
+                              {
+                                "ref": "reputation.karn_dolur",
+                                "else": 0
+                              },
+                              5
+                            ]
+                          },
+                          -6,
+                          6
+                        ]
+                      }
+                    ]
+                  },
+                  "onSuccess": "skarn_orn_book_gave",
+                  "onFailure": "skarn_orn_book_kept"
+                }
+              },
+              {
+                "id": "greet_leave",
+                "text": "Nothing.",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": [
+              {
+                "requires": {
+                  "factions": [
+                    {
+                      "faction": "karn_dolur",
+                      "maxStanding": -30
+                    }
+                  ]
+                },
+                "goto": "skarn_orn_cold"
+              }
+            ]
+          },
+          {
+            "id": "skarn_orn_open_told",
+            "says": [
+              {
+                "text": "Orn looks at you for a while. \u201cEleven times,\u201d he says. \u201cI have the nights. My predecessor had four of them and I have seven.\u201d He turns the book round without opening it. \u201cEvery one of those nights the watch was asleep. Including me. Twice.\u201d Flat. \u201cI do not sleep on watch.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "learnLore": {
+                  "entry": "skarn_bell_open"
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "skarn_orn_open_on",
+                "text": "Go on.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "skarn_orn_open_wont",
+            "says": [
+              {
+                "text": "\u201cI've said all I mean to,\u201d they say, and go back to what they were doing."
+              }
+            ],
+            "onEnter": [
+              {
+                "adjustReputation": {
+                  "faction": "karn_dolur",
+                  "amount": -1
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "skarn_orn_open_drop",
+                "text": "Leave it.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "skarn_orn_rope_told",
+            "says": [
+              {
+                "text": "\u201cWorn on the inside of the turn.\u201d He mimes it, hands round nothing. \u201cYou pull a bell rope, you wear the outside \u2014 the face away from the wall, where your grip drags.\u201d The hands drop. \u201cThat rope is worn on the other face. To wear it there you would have to be standing where the floor is.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "learnLore": {
+                  "entry": "skarn_bell_rope"
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "skarn_orn_rope_on",
+                "text": "Go on.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "skarn_orn_rope_wont",
+            "says": [
+              {
+                "text": "\u201cI've said all I mean to,\u201d they say, and go back to what they were doing."
+              }
+            ],
+            "onEnter": [
+              {
+                "adjustReputation": {
+                  "faction": "karn_dolur",
+                  "amount": -1
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "skarn_orn_rope_drop",
+                "text": "Leave it.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "skarn_orn_book_gave",
+            "says": [
+              {
+                "text": "He hands it over faster than you expected, and you realise he has been hoping somebody would ask. \u201cTake it. Read it in daylight.\u201d He does not quite manage a smile. \u201cEleven dates. See if they are anything. I have looked at them for nine years and they are not moons and they are not weather.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "grantItem": {
+                  "target": {
+                    "ref": "actor.id"
+                  },
+                  "item": "watch_book",
+                  "quantity": 1
+                }
+              },
+              {
+                "setFlag": {
+                  "flag": "given:watch_book",
+                  "value": true
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "skarn_orn_book_thanks",
+                "text": "Thank you.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "skarn_orn_book_kept",
+            "says": [
+              {
+                "text": "\u201cIt is the gate's book,\u201d Orn says, \u201cand the gate is mine tonight,\u201d and puts it under the lamp."
+              }
+            ],
+            "onEnter": [
+              {
+                "adjustReputation": {
+                  "faction": "karn_dolur",
+                  "amount": -1
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "skarn_orn_book_leave",
+                "text": "Then no.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "skarn_orn_cold",
+            "says": [
+              {
+                "text": "He turns the lamp down and goes on watching the road, and does not watch you."
+              }
+            ],
+            "onEnter": [],
+            "options": [
+              {
+                "id": "skarn_orn_go",
+                "text": "Leave it.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          }
+        ]
+      },
+      {
+        "id": "skarn_vesk_talk",
+        "start": "greet",
+        "nodes": [
+          {
+            "id": "greet",
+            "says": [
+              {
+                "text": "Rope, poles and crampons laid out in an order somebody would fight you about, on ice, in shade."
+              },
+              {
+                "text": "\u201cGoing to the ice? Then we talk about your boots first.\u201d"
+              }
+            ],
+            "onEnter": [],
+            "options": [
+              {
+                "id": "skarn_vesk_cycle",
+                "text": "The cave on the shoulder.",
+                "requires": {
+                  "without": {
+                    "lore": [
+                      "skarn_wind_cycle"
+                    ]
+                  }
+                },
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "check": {
+                  "skill": "persuasion",
+                  "difficulty": {
+                    "sub": [
+                      13,
+                      {
+                        "clamp": [
+                          {
+                            "div": [
+                              {
+                                "ref": "reputation.karn_dolur",
+                                "else": 0
+                              },
+                              5
+                            ]
+                          },
+                          -6,
+                          6
+                        ]
+                      }
+                    ]
+                  },
+                  "onSuccess": "skarn_vesk_cycle_told",
+                  "onFailure": "skarn_vesk_cycle_wont"
+                }
+              },
+              {
+                "id": "skarn_vesk_warm",
+                "text": "Warm or cold, what comes out of it?",
+                "requires": {
+                  "without": {
+                    "lore": [
+                      "skarn_wind_warm"
+                    ]
+                  }
+                },
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "check": {
+                  "skill": "persuasion",
+                  "difficulty": {
+                    "sub": [
+                      15,
+                      {
+                        "clamp": [
+                          {
+                            "div": [
+                              {
+                                "ref": "reputation.karn_dolur",
+                                "else": 0
+                              },
+                              5
+                            ]
+                          },
+                          -6,
+                          6
+                        ]
+                      }
+                    ]
+                  },
+                  "onSuccess": "skarn_vesk_warm_told",
+                  "onFailure": "skarn_vesk_warm_wont"
+                }
+              },
+              {
+                "id": "skarn_vesk_survey",
+                "text": "The hold's survey of the shoulder. Lend it to me.",
+                "requires": {
+                  "without": {
+                    "items": [
+                      "stopped_survey"
+                    ],
+                    "flags": [
+                      {
+                        "flag": "given:stopped_survey"
+                      }
+                    ]
+                  }
+                },
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "check": {
+                  "skill": "persuasion",
+                  "difficulty": {
+                    "sub": [
+                      15,
+                      {
+                        "clamp": [
+                          {
+                            "div": [
+                              {
+                                "ref": "reputation.karn_dolur",
+                                "else": 0
+                              },
+                              5
+                            ]
+                          },
+                          -6,
+                          6
+                        ]
+                      }
+                    ]
+                  },
+                  "onSuccess": "skarn_vesk_survey_gave",
+                  "onFailure": "skarn_vesk_survey_kept"
+                }
+              },
+              {
+                "id": "greet_leave",
+                "text": "Nothing.",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "skarn_vesk_cycle_told",
+            "says": [
+              {
+                "text": "\u201cBreathes.\u201d Vesk says it like a fact about a road, which to Vesk it is. \u201cIn, then out, and you can keep the count on a watch. I have. Same count in a gale, same count in a dead calm.\u201d A look up at the face. \u201cWeather does not keep time. That keeps time.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "learnLore": {
+                  "entry": "skarn_wind_cycle"
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "skarn_vesk_cycle_on",
+                "text": "Go on.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "skarn_vesk_cycle_wont",
+            "says": [
+              {
+                "text": "\u201cI've said all I mean to,\u201d they say, and go back to what they were doing."
+              }
+            ],
+            "onEnter": [
+              {
+                "adjustReputation": {
+                  "faction": "karn_dolur",
+                  "amount": -1
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "skarn_vesk_cycle_drop",
+                "text": "Leave it.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "skarn_vesk_warm_told",
+            "says": [
+              {
+                "text": "\u201cWarm.\u201d Vesk lets that sit. \u201cNorth face. Shade from Emberfall to Greening. That rock has not thawed in any year anybody has written down, and there is warm air coming out of a hole in it, on a count.\u201d A shrug that is not a shrug. \u201cI take parties past it. I do not take them in.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "learnLore": {
+                  "entry": "skarn_wind_warm"
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "skarn_vesk_warm_on",
+                "text": "Go on.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "skarn_vesk_warm_wont",
+            "says": [
+              {
+                "text": "\u201cI've said all I mean to,\u201d they say, and go back to what they were doing."
+              }
+            ],
+            "onEnter": [
+              {
+                "adjustReputation": {
+                  "faction": "karn_dolur",
+                  "amount": -1
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "skarn_vesk_warm_drop",
+                "text": "Leave it.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "skarn_vesk_survey_gave",
+            "says": [
+              {
+                "text": "Vesk unrolls it on a rock and puts stones on the corners. Every hole, every fault, every fall of scree, to the inch \u2014 and then, where the mouth is, the ink simply stops and there is good clean vellum after it. \u201cNo note,\u201d Vesk says. \u201cThe hold does not leave a margin. The hold has never once left a margin.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "grantItem": {
+                  "target": {
+                    "ref": "actor.id"
+                  },
+                  "item": "stopped_survey",
+                  "quantity": 1
+                }
+              },
+              {
+                "setFlag": {
+                  "flag": "given:stopped_survey",
+                  "value": true
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "skarn_vesk_survey_thanks",
+                "text": "Thank you.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "skarn_vesk_survey_kept",
+            "says": [
+              {
+                "text": "\u201cIt is the guides',\u201d Vesk says, rolling it. \u201cFour of us alive can read it. Ask one of the other three.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "adjustReputation": {
+                  "faction": "karn_dolur",
+                  "amount": -3
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "skarn_vesk_survey_leave",
+                "text": "Then no.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          }
+        ]
+      },
+      {
+        "id": "skarn_dorn_talk",
+        "start": "greet",
+        "nodes": [
+          {
+            "id": "greet",
+            "says": [
+              {
+                "text": "A wayhouse on a road with a hole in it, doing better trade than the road can account for, and a landlord who knows exactly why."
+              },
+              {
+                "text": "\u201cBeds, stew, and I will tell you the road is impassable whether it is or not.\u201d"
+              }
+            ],
+            "onEnter": [],
+            "options": [
+              {
+                "id": "skarn_dorn_dug",
+                "text": "The houses at Snowgate.",
+                "requires": {
+                  "without": {
+                    "lore": [
+                      "skarn_bell_dug"
+                    ]
+                  }
+                },
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "check": {
+                  "skill": "insight",
+                  "difficulty": {
+                    "sub": [
+                      14,
+                      {
+                        "clamp": [
+                          {
+                            "div": [
+                              {
+                                "ref": "reputation.karn_dolur",
+                                "else": 0
+                              },
+                              5
+                            ]
+                          },
+                          -6,
+                          6
+                        ]
+                      }
+                    ]
+                  },
+                  "onSuccess": "skarn_dorn_dug_told",
+                  "onFailure": "skarn_dorn_dug_wont"
+                }
+              },
+              {
+                "id": "skarn_dorn_ice",
+                "text": "The ice on the shoulder road.",
+                "requires": {
+                  "without": {
+                    "lore": [
+                      "skarn_wind_ice"
+                    ]
+                  }
+                },
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "check": {
+                  "skill": "persuasion",
+                  "difficulty": {
+                    "sub": [
+                      12,
+                      {
+                        "clamp": [
+                          {
+                            "div": [
+                              {
+                                "ref": "reputation.karn_dolur",
+                                "else": 0
+                              },
+                              5
+                            ]
+                          },
+                          -6,
+                          6
+                        ]
+                      }
+                    ]
+                  },
+                  "onSuccess": "skarn_dorn_ice_told",
+                  "onFailure": "skarn_dorn_ice_wont"
+                }
+              },
+              {
+                "id": "greet_leave",
+                "text": "Nothing.",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "skarn_dorn_dug_told",
+            "says": [
+              {
+                "text": "\u201cA room and a half, all of them, dug back into the slope.\u201d Dorn wipes a table. \u201cExcept one. That one goes back seventy foot \u2014 I have paced it from the outside and the door is where the others' doors are.\u201d He straightens. \u201cIn forty years nobody in that house has mentioned it and nobody next door has asked. That is not how villages work.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "learnLore": {
+                  "entry": "skarn_bell_dug"
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "skarn_dorn_dug_on",
+                "text": "Go on.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "skarn_dorn_dug_wont",
+            "says": [
+              {
+                "text": "\u201cI've said all I mean to,\u201d they say, and go back to what they were doing."
+              }
+            ],
+            "onEnter": [
+              {
+                "adjustReputation": {
+                  "faction": "karn_dolur",
+                  "amount": -1
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "skarn_dorn_dug_drop",
+                "text": "Leave it.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "skarn_dorn_ice_told",
+            "says": [
+              {
+                "text": "\u201cWill not form within forty foot of that mouth.\u201d He says it cheerfully. \u201cWhich is why the guides take the parties that way and why they charge what they charge. Ask Vesk about it and see how fast the conversation is about boots again.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "learnLore": {
+                  "entry": "skarn_wind_ice"
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "skarn_dorn_ice_on",
+                "text": "Go on.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "skarn_dorn_ice_wont",
+            "says": [
+              {
+                "text": "\u201cI've said all I mean to,\u201d they say, and go back to what they were doing."
+              }
+            ],
+            "onEnter": [
+              {
+                "adjustReputation": {
+                  "faction": "karn_dolur",
+                  "amount": -1
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "skarn_dorn_ice_drop",
+                "text": "Leave it.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          }
+        ]
+      },
+      {
+        "id": "skarn_hesk_talk",
+        "start": "greet",
+        "nodes": [
+          {
+            "id": "greet",
+            "says": [
+              {
+                "text": "Rope, tallow, nails, boots, and a counter positioned so its keeper can see both the up road and the down."
+              },
+              {
+                "text": "\u201cGoing up or coming down? It changes what you need and what I charge.\u201d"
+              }
+            ],
+            "onEnter": [],
+            "options": [
+              {
+                "id": "skarn_hesk_two",
+                "text": "There are two stairs on that cliff.",
+                "requires": {
+                  "without": {
+                    "lore": [
+                      "skarn_stair_two"
+                    ]
+                  }
+                },
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "check": {
+                  "skill": "craft",
+                  "difficulty": {
+                    "sub": [
+                      14,
+                      {
+                        "clamp": [
+                          {
+                            "div": [
+                              {
+                                "ref": "reputation.karn_dolur",
+                                "else": 0
+                              },
+                              5
+                            ]
+                          },
+                          -6,
+                          6
+                        ]
+                      }
+                    ]
+                  },
+                  "onSuccess": "skarn_hesk_two_told",
+                  "onFailure": "skarn_hesk_two_wont"
+                }
+              },
+              {
+                "id": "skarn_hesk_shade",
+                "text": "Does anything nest on the broken stair?",
+                "requires": {
+                  "without": {
+                    "lore": [
+                      "skarn_stair_shade"
+                    ]
+                  }
+                },
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "check": {
+                  "skill": "persuasion",
+                  "difficulty": {
+                    "sub": [
+                      13,
+                      {
+                        "clamp": [
+                          {
+                            "div": [
+                              {
+                                "ref": "reputation.karn_dolur",
+                                "else": 0
+                              },
+                              5
+                            ]
+                          },
+                          -6,
+                          6
+                        ]
+                      }
+                    ]
+                  },
+                  "onSuccess": "skarn_hesk_shade_told",
+                  "onFailure": "skarn_hesk_shade_wont"
+                }
+              },
+              {
+                "id": "greet_leave",
+                "text": "Nothing.",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "skarn_hesk_two_told",
+            "says": [
+              {
+                "text": "\u201cThere are.\u201d Hesk does not stop counting nails. \u201cThe one you climb and the one that came down in the rains. Go and stand on the broken one.\u201d Now the counting stops. \u201cThe treads are short and deep. Ours are long and shallow, because we have legs. Whoever cut that one was working to a different leg.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "learnLore": {
+                  "entry": "skarn_stair_two"
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "skarn_hesk_two_on",
+                "text": "Go on.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "skarn_hesk_two_wont",
+            "says": [
+              {
+                "text": "\u201cI've said all I mean to,\u201d they say, and go back to what they were doing."
+              }
+            ],
+            "onEnter": [
+              {
+                "adjustReputation": {
+                  "faction": "karn_dolur",
+                  "amount": -1
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "skarn_hesk_two_drop",
+                "text": "Leave it.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "skarn_hesk_shade_told",
+            "says": [
+              {
+                "text": "\u201cNo.\u201d He puts the nails down. \u201cGritstone face in this country, you cannot walk under an overhang without wearing it. Every ledge on that cliff is white with them.\u201d A hand toward the window. \u201cNot that flight. Not one nest, not one streak, the whole length of it.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "learnLore": {
+                  "entry": "skarn_stair_shade"
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "skarn_hesk_shade_on",
+                "text": "Go on.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "skarn_hesk_shade_wont",
+            "says": [
+              {
+                "text": "\u201cI've said all I mean to,\u201d they say, and go back to what they were doing."
+              }
+            ],
+            "onEnter": [
+              {
+                "adjustReputation": {
+                  "faction": "karn_dolur",
+                  "amount": -1
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "skarn_hesk_shade_drop",
+                "text": "Leave it.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          }
+        ]
+      },
+      {
+        "id": "skarn_ruvo_talk",
+        "start": "greet",
+        "nodes": [
+          {
+            "id": "greet",
+            "says": [
+              {
+                "text": "A forge dug into a slope, working, with the door open in weather that should have it shut."
+              },
+              {
+                "text": "\u201cMind the door stays open. I like it open.\u201d"
+              }
+            ],
+            "onEnter": [],
+            "options": [
+              {
+                "id": "skarn_ruvo_coal",
+                "text": "Your coal comes up warm.",
+                "requires": {
+                  "without": {
+                    "lore": [
+                      "skarn_bell_coal"
+                    ]
+                  }
+                },
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "check": {
+                  "skill": "persuasion",
+                  "difficulty": {
+                    "sub": [
+                      16,
+                      {
+                        "clamp": [
+                          {
+                            "div": [
+                              {
+                                "ref": "reputation.karn_dolur",
+                                "else": 0
+                              },
+                              5
+                            ]
+                          },
+                          -6,
+                          6
+                        ]
+                      }
+                    ]
+                  },
+                  "onSuccess": "skarn_ruvo_coal_told",
+                  "onFailure": "skarn_ruvo_coal_wont"
+                }
+              },
+              {
+                "id": "skarn_ruvo_maps",
+                "text": "The hold has surveyed this mountain.",
+                "requires": {
+                  "without": {
+                    "lore": [
+                      "skarn_wind_maps"
+                    ]
+                  }
+                },
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "check": {
+                  "skill": "insight",
+                  "difficulty": {
+                    "sub": [
+                      15,
+                      {
+                        "clamp": [
+                          {
+                            "div": [
+                              {
+                                "ref": "reputation.karn_dolur",
+                                "else": 0
+                              },
+                              5
+                            ]
+                          },
+                          -6,
+                          6
+                        ]
+                      }
+                    ]
+                  },
+                  "onSuccess": "skarn_ruvo_maps_told",
+                  "onFailure": "skarn_ruvo_maps_wont"
+                }
+              },
+              {
+                "id": "greet_leave",
+                "text": "Nothing.",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "skarn_ruvo_coal_told",
+            "says": [
+              {
+                "text": "Ruvo does not answer for a while, and works. \u201cIt does,\u201d he says eventually. \u201cGoes down cold in the basket. Comes up you can feel it through the wicker.\u201d The hammer goes down. \u201cI said so once, in the Drift, in front of eleven people. Nobody argued and nobody looked at me and the subject changed. I have not said it since. You are the first.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "learnLore": {
+                  "entry": "skarn_bell_coal"
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "skarn_ruvo_coal_on",
+                "text": "Go on.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "skarn_ruvo_coal_wont",
+            "says": [
+              {
+                "text": "\u201cI've said all I mean to,\u201d they say, and go back to what they were doing."
+              }
+            ],
+            "onEnter": [
+              {
+                "adjustReputation": {
+                  "faction": "karn_dolur",
+                  "amount": -1
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "skarn_ruvo_coal_drop",
+                "text": "Leave it.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "skarn_ruvo_maps_told",
+            "says": [
+              {
+                "text": "\u201cTo the inch.\u201d He is proud of it and then he is not. \u201cEvery hole, every seam, every fault, since the founding. I have seen the sheets \u2014 my father cut plate for the cases they keep them in.\u201d A look toward the shoulder. \u201cAnd the shoulder sheet stops at that mouth. Clean. No note. The hold *always* notes.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "learnLore": {
+                  "entry": "skarn_wind_maps"
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "skarn_ruvo_maps_on",
+                "text": "Go on.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "skarn_ruvo_maps_wont",
+            "says": [
+              {
+                "text": "\u201cI've said all I mean to,\u201d they say, and go back to what they were doing."
+              }
+            ],
+            "onEnter": [
+              {
+                "adjustReputation": {
+                  "faction": "karn_dolur",
+                  "amount": -1
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "skarn_ruvo_maps_drop",
+                "text": "Leave it.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          }
+        ]
       }
     ],
     "quests": [
@@ -89543,6 +92404,177 @@
           ],
           "reputation": {}
         }
+      },
+      {
+        "id": "skarn_nine_hundred_and_one",
+        "name": "Nine Hundred and One",
+        "description": "Two stairs where the hold admits to one, swept daily by nobody on any payroll, and a count that will not agree with the lintel.",
+        "autoStart": false,
+        "ordered": true,
+        "tags": [
+          "hidden",
+          "skarnspine",
+          "skarn_stair"
+        ],
+        "objectives": [
+          {
+            "id": "onto_the_older",
+            "description": "Get onto the flight nobody uses.",
+            "kind": "reach",
+            "count": 1,
+            "hidden": true,
+            "optional": false,
+            "target": "ironstair_fallen_stair"
+          },
+          {
+            "id": "find_the_extra",
+            "description": "Find which step is the one too many.",
+            "kind": "custom",
+            "count": 1,
+            "hidden": true,
+            "optional": false,
+            "when": {
+              "test": {
+                "ref": "flags.skarn_stair_open"
+              }
+            }
+          },
+          {
+            "id": "who_sweeps",
+            "description": "Meet whoever has been sweeping them.",
+            "kind": "kill",
+            "count": 1,
+            "hidden": true,
+            "optional": false,
+            "target": "the_sweeper"
+          }
+        ],
+        "stages": [],
+        "unlocks": [],
+        "rewards": {
+          "xp": 185,
+          "items": [
+            {
+              "item": "sweepers_belt",
+              "quantity": 1
+            }
+          ],
+          "reputation": {}
+        }
+      },
+      {
+        "id": "skarn_rung_from_below",
+        "name": "Rung From Below",
+        "description": "A bell for a shut road, rung eleven times on an open one, with the rope worn on the face a hand cannot reach.",
+        "autoStart": false,
+        "ordered": true,
+        "tags": [
+          "hidden",
+          "skarnspine",
+          "skarn_bell"
+        ],
+        "objectives": [
+          {
+            "id": "into_the_slope",
+            "description": "Get into the house that goes further.",
+            "kind": "reach",
+            "count": 1,
+            "hidden": true,
+            "optional": false,
+            "target": "snowgate_house_a"
+          },
+          {
+            "id": "match_the_nights",
+            "description": "Match the eleven nights to what was under them.",
+            "kind": "custom",
+            "count": 1,
+            "hidden": true,
+            "optional": false,
+            "when": {
+              "test": {
+                "ref": "flags.skarn_bell_open"
+              }
+            }
+          },
+          {
+            "id": "who_pulls",
+            "description": "Meet what has been pulling from underneath.",
+            "kind": "kill",
+            "count": 1,
+            "hidden": true,
+            "optional": false,
+            "target": "the_ringer"
+          }
+        ],
+        "stages": [],
+        "unlocks": [],
+        "rewards": {
+          "xp": 195,
+          "items": [
+            {
+              "item": "bell_rope_ring",
+              "quantity": 1
+            }
+          ],
+          "reputation": {}
+        }
+      },
+      {
+        "id": "skarn_the_breathing_face",
+        "name": "The Breathing Face",
+        "description": "A cave that draws and blows to the minute, warm, out of a north face that has never thawed.",
+        "autoStart": false,
+        "ordered": true,
+        "tags": [
+          "hidden",
+          "skarnspine",
+          "skarn_wind"
+        ],
+        "objectives": [
+          {
+            "id": "into_the_mouth",
+            "description": "Get into the mouth on the draw.",
+            "kind": "reach",
+            "count": 1,
+            "hidden": true,
+            "optional": false,
+            "target": "cold_shoulder_wind_cave"
+          },
+          {
+            "id": "past_the_margin",
+            "description": "Get past where the survey stops.",
+            "kind": "custom",
+            "count": 1,
+            "hidden": true,
+            "optional": false,
+            "when": {
+              "test": {
+                "ref": "flags.skarn_wind_open"
+              }
+            }
+          },
+          {
+            "id": "what_breathes",
+            "description": "Meet what has been doing the breathing.",
+            "kind": "kill",
+            "count": 1,
+            "hidden": true,
+            "optional": false,
+            "target": "the_breath"
+          }
+        ],
+        "stages": [],
+        "unlocks": [],
+        "rewards": {
+          "xp": 205,
+          "items": [
+            {
+              "item": "breathing_hood",
+              "quantity": 1
+            }
+          ],
+          "reputation": {}
+        }
       }
     ],
     "arcs": [
@@ -89866,6 +92898,17 @@
           "step_the_planting",
           "step_what_the_bank_shows",
           "step_the_last_water"
+        ],
+        "isEnding": false
+      },
+      {
+        "id": "skarn_hidden",
+        "name": "The Skarnspine, Kept",
+        "description": "Three pieces of upkeep on a mountain that has a hold on it, none of them the hold's.",
+        "quests": [
+          "skarn_nine_hundred_and_one",
+          "skarn_rung_from_below",
+          "skarn_the_breathing_face"
         ],
         "isEnding": false
       },
@@ -90523,6 +93566,66 @@
         "id": "step_water_wont",
         "name": "The Lines will water there and will not camp there, and they have twelve reasons between them and no two of the twelve agree.",
         "source": "the Pale Ground"
+      },
+      {
+        "id": "skarn_stair_swept",
+        "name": "Nine hundred steps, cut and railed, and swept every day of the year. The hold pays a great many people and not one of them for that.",
+        "source": "the Halfway House"
+      },
+      {
+        "id": "skarn_stair_two",
+        "name": "There are two of them. The broken one is older, and it was cut by a hand that worked to a different tread \u2014 shorter, deeper, and not for legs the length of ours.",
+        "source": "the Gate Store"
+      },
+      {
+        "id": "skarn_stair_count",
+        "name": "Walk it and count and you get nine hundred and one. The hold's own measure, cut into the gate lintel, says nine hundred.",
+        "source": "a sweeper"
+      },
+      {
+        "id": "skarn_stair_shade",
+        "name": "Nothing nests in the shade of the older one. On a gritstone face, in this country, that is the strangest sentence anybody has said to you all week.",
+        "source": "the Gate Store"
+      },
+      {
+        "id": "skarn_bell_open",
+        "name": "It is rung when the road is shut. The watch book has it rung eleven times on a night the road was open, and each time the watch was asleep and each time the watch was believed.",
+        "source": "the watch book"
+      },
+      {
+        "id": "skarn_bell_rope",
+        "name": "The rope is worn on the inside of the turn, which is the face a hand does not touch. Something has been pulling it from a direction nobody stands in.",
+        "source": "the Snowgate Bell"
+      },
+      {
+        "id": "skarn_bell_dug",
+        "name": "Nine houses dug into the slope, all of them a room and a half. One of them goes back seventy feet, and its people have never mentioned it, and their neighbours have never asked.",
+        "source": "the wayhouse"
+      },
+      {
+        "id": "skarn_bell_coal",
+        "name": "The forge's coal comes up out of the slope warmer than it went down into it, and the smith has stopped saying so out loud.",
+        "source": "the forge"
+      },
+      {
+        "id": "skarn_wind_cycle",
+        "name": "It draws and blows on a count you can keep with a watch. Weather does not keep time and this does, to the minute, in a gale or a calm.",
+        "source": "an ice-road guide"
+      },
+      {
+        "id": "skarn_wind_warm",
+        "name": "What comes out is warmer than what goes in, on a face that is in shade from Emberfall to Greening and has never once thawed.",
+        "source": "an ice-road guide"
+      },
+      {
+        "id": "skarn_wind_ice",
+        "name": "The road runs past its mouth and the ice will not form within forty feet of it, which the guides use and none of them will discuss.",
+        "source": "the Broken Road Wayhouse"
+      },
+      {
+        "id": "skarn_wind_maps",
+        "name": "Karn Dolur has mapped every hole in this mountain to the inch, and the survey stops at that mouth with a blank margin and no note saying why.",
+        "source": "the forge"
       }
     ],
     "loreThreads": [
@@ -90876,6 +93979,39 @@
           "step_water_warm",
           "step_water_shored",
           "step_water_wont"
+        ]
+      },
+      {
+        "id": "skarn_stair",
+        "name": "Nine Hundred and One",
+        "description": "Two stairs where the hold admits to one, swept daily by nobody on any payroll, and a count that will not agree with the lintel.",
+        "entries": [
+          "skarn_stair_swept",
+          "skarn_stair_two",
+          "skarn_stair_count",
+          "skarn_stair_shade"
+        ]
+      },
+      {
+        "id": "skarn_bell",
+        "name": "Rung From Below",
+        "description": "A bell for a shut road, rung eleven times on an open one, with the rope worn on the face a hand cannot reach.",
+        "entries": [
+          "skarn_bell_open",
+          "skarn_bell_rope",
+          "skarn_bell_dug",
+          "skarn_bell_coal"
+        ]
+      },
+      {
+        "id": "skarn_wind",
+        "name": "The Breathing Face",
+        "description": "A cave that draws and blows to the minute, warm, out of a north face that has never thawed.",
+        "entries": [
+          "skarn_wind_cycle",
+          "skarn_wind_warm",
+          "skarn_wind_ice",
+          "skarn_wind_maps"
         ]
       }
     ]
