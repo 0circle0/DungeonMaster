@@ -3,5 +3,11 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "description": "Dev tooling: port-freeing and project-coverage checks. Not imported by anything — these are scripts npm runs."
+  "description": "Dev tooling: port-freeing, project-coverage checks, and the side-chain driver. Not imported by anything — these are scripts npm runs.",
+  "dependencies": {
+    "@dm/core": "0.1.0",
+    "@dm/engine": "0.1.0",
+    "@dm/module": "0.1.0",
+    "@dm/play": "0.1.0"
+  }
 }
