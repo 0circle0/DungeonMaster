@@ -3732,6 +3732,180 @@
           "heavy"
         ],
         "rarity": "very_rare"
+      },
+      {
+        "id": "readers_rhythm",
+        "name": "The Reader's Rhythm",
+        "description": "Forty years of the tube's breathing, marked in soot on wood. It keeps no season, which is the entire point of it.",
+        "kind": "key",
+        "value": 0,
+        "weight": 0,
+        "tags": [
+          "keepsake"
+        ],
+        "extra": {
+          "heldBy": "tube_walker_esk"
+        }
+      },
+      {
+        "id": "ashfall_deed",
+        "name": "The Ashfall Deed",
+        "description": "Title to a village nine feet under, held by a family that has farmed the ash over it for six generations and never once dug.",
+        "kind": "key",
+        "value": 0,
+        "weight": 0,
+        "tags": [
+          "keepsake"
+        ],
+        "extra": {
+          "heldBy": "ash_farmer_borsa"
+        }
+      },
+      {
+        "id": "burners_core",
+        "name": "The Burner's Core",
+        "description": "A hand-span of trunk from the new treeline, bored out. Forty rings in eleven years of wood, running the wrong way.",
+        "kind": "key",
+        "value": 0,
+        "weight": 0,
+        "tags": [
+          "keepsake"
+        ],
+        "extra": {
+          "heldBy": "charcoal_burner_tenn"
+        }
+      },
+      {
+        "id": "cutters_rule",
+        "name": "The Cutter's Rule",
+        "description": "A brass rule the shelf-cutters use to find the true edge of the sheet. Laid on the glass it will not lie flat, and the way it lifts is a map.",
+        "kind": "key",
+        "value": 0,
+        "weight": 0,
+        "tags": [
+          "keepsake"
+        ],
+        "extra": {
+          "heldBy": "shelf_cutter_ovid"
+        }
+      },
+      {
+        "id": "tube_slag",
+        "name": "Slag from the Turn",
+        "description": "It was still moving when it cooled, and it cooled going upward.",
+        "kind": "treasure",
+        "value": 0,
+        "weight": 0,
+        "tags": [
+          "clue",
+          "proof"
+        ],
+        "onUse": [
+          {
+            "learnLore": {
+              "entry": "ember_warm_wrong"
+            }
+          }
+        ],
+        "consumedOnUse": false
+      },
+      {
+        "id": "kettle_ring",
+        "name": "The Kettle Ring",
+        "description": "Iron off the tube's dressed stone, which the lava went around. It has been warm continuously for as long as anybody has held it.",
+        "kind": "trinket",
+        "slot": "ring",
+        "value": 800,
+        "weight": 1,
+        "tags": [
+          "fabled"
+        ],
+        "skillBonuses": {
+          "survival": 2
+        },
+        "damageInteractions": [
+          {
+            "damageType": "fire",
+            "multiplier": 0.5
+          }
+        ],
+        "rarity": "rare"
+      },
+      {
+        "id": "ashfall_hood",
+        "name": "The Hood off the Ashfall",
+        "description": "Taken off a body that was not in a house. Nine feet of ash in one night and this came through it.",
+        "kind": "armor",
+        "slot": "head",
+        "value": 900,
+        "weight": 1,
+        "tags": [
+          "fabled"
+        ],
+        "modifiers": {
+          "guard": 1
+        },
+        "skillBonuses": {
+          "perception": 2,
+          "resolve": 2
+        },
+        "damageInteractions": [
+          {
+            "damageType": "fire",
+            "multiplier": 0.75
+          }
+        ],
+        "rarity": "rare"
+      },
+      {
+        "id": "wrong_ring_haft",
+        "name": "Haft of the Wrong Rings",
+        "description": "Cut from the new treeline. Forty rings in eleven years, and it takes an edge no wood of that age should hold.",
+        "kind": "weapon",
+        "slot": "hand",
+        "value": 1000,
+        "weight": 1,
+        "tags": [
+          "fabled"
+        ],
+        "damage": {
+          "dice": "1d8",
+          "damageType": "slashing",
+          "stat": "agility"
+        },
+        "properties": [
+          "finesse"
+        ],
+        "rarity": "very_rare"
+      },
+      {
+        "id": "sheet_lens",
+        "name": "A Pane out of the Sheet",
+        "description": "A sheet of the glass, worn across the shoulders, still faintly warm. The writing under it reads through from either side.",
+        "kind": "armor",
+        "slot": "cloak",
+        "value": 1400,
+        "weight": 1,
+        "tags": [
+          "fabled"
+        ],
+        "modifiers": {
+          "guard": 2
+        },
+        "skillBonuses": {
+          "lore": 3
+        },
+        "damageInteractions": [
+          {
+            "damageType": "fire",
+            "multiplier": 0.5
+          },
+          {
+            "damageType": "radiant",
+            "multiplier": 0.75
+          }
+        ],
+        "rarity": "very_rare"
       }
     ],
     "lootTables": [
@@ -5550,6 +5724,247 @@
             "value": {
               "item": "silvered_blade",
               "quantity": "1"
+            }
+          }
+        ]
+      },
+      {
+        "id": "ember_rhythm_carried",
+        "name": "What Esk Kept",
+        "rolls": "1",
+        "emptyChance": 0,
+        "entries": [
+          {
+            "weight": 1,
+            "value": {
+              "item": "readers_rhythm",
+              "quantity": "1",
+              "unique": true,
+              "requirementScope": "party",
+              "requires": {
+                "without": {
+                  "flags": [
+                    {
+                      "flag": "given:readers_rhythm"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        ]
+      },
+      {
+        "id": "ember_deed_carried",
+        "name": "What Borsa Kept",
+        "rolls": "1",
+        "emptyChance": 0,
+        "entries": [
+          {
+            "weight": 1,
+            "value": {
+              "item": "ashfall_deed",
+              "quantity": "1",
+              "unique": true,
+              "requirementScope": "party",
+              "requires": {
+                "without": {
+                  "flags": [
+                    {
+                      "flag": "given:ashfall_deed"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        ]
+      },
+      {
+        "id": "ember_core_carried",
+        "name": "What Tenn Kept",
+        "rolls": "1",
+        "emptyChance": 0,
+        "entries": [
+          {
+            "weight": 1,
+            "value": {
+              "item": "burners_core",
+              "quantity": "1",
+              "unique": true,
+              "requirementScope": "party",
+              "requires": {
+                "without": {
+                  "flags": [
+                    {
+                      "flag": "given:burners_core"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        ]
+      },
+      {
+        "id": "ember_rule_carried",
+        "name": "What Ovid Kept",
+        "rolls": "1",
+        "emptyChance": 0,
+        "entries": [
+          {
+            "weight": 1,
+            "value": {
+              "item": "cutters_rule",
+              "quantity": "1",
+              "unique": true,
+              "requirementScope": "party",
+              "requires": {
+                "without": {
+                  "flags": [
+                    {
+                      "flag": "given:cutters_rule"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        ]
+      },
+      {
+        "id": "ember_tube_hoard",
+        "name": "Past the Turn",
+        "rolls": "2",
+        "emptyChance": 0,
+        "bonusRollSkill": "perception",
+        "bonusRolls": {
+          "onSuccess": 1,
+          "onCritical": 2
+        },
+        "entries": [
+          {
+            "weight": 3,
+            "value": {
+              "item": "old_coin",
+              "quantity": "3d6"
+            }
+          },
+          {
+            "weight": 2,
+            "value": {
+              "item": "iron_ore",
+              "quantity": "1d3"
+            }
+          },
+          {
+            "weight": 1,
+            "value": {
+              "item": "tube_slag",
+              "quantity": "1",
+              "unique": true
+            }
+          }
+        ]
+      },
+      {
+        "id": "ember_roofs_hoard",
+        "name": "Behind a Barred Door",
+        "rolls": "2",
+        "emptyChance": 0.1,
+        "bonusRollSkill": "perception",
+        "bonusRolls": {
+          "onSuccess": 1,
+          "onCritical": 2
+        },
+        "entries": [
+          {
+            "weight": 4,
+            "value": {
+              "item": "old_coin",
+              "quantity": "2d6"
+            }
+          },
+          {
+            "weight": 2,
+            "value": {
+              "item": "wight_ash",
+              "quantity": "1d3"
+            }
+          },
+          {
+            "weight": 1,
+            "value": {
+              "item": "warded_coat",
+              "quantity": "1"
+            }
+          }
+        ]
+      },
+      {
+        "id": "ember_workings_hoard",
+        "name": "Under the New Treeline",
+        "rolls": "2",
+        "emptyChance": 0.1,
+        "bonusRollSkill": "perception",
+        "bonusRolls": {
+          "onSuccess": 1,
+          "onCritical": 2
+        },
+        "entries": [
+          {
+            "weight": 4,
+            "value": {
+              "item": "old_coin",
+              "quantity": "2d6"
+            }
+          },
+          {
+            "weight": 2,
+            "value": {
+              "item": "iron_ore",
+              "quantity": "1d4"
+            }
+          },
+          {
+            "weight": 1,
+            "value": {
+              "item": "silvered_blade",
+              "quantity": "1"
+            }
+          }
+        ]
+      },
+      {
+        "id": "ember_sheet_hoard",
+        "name": "Under the Sheet",
+        "rolls": "3",
+        "emptyChance": 0,
+        "bonusRollSkill": "lore",
+        "bonusRolls": {
+          "onSuccess": 1,
+          "onCritical": 2
+        },
+        "entries": [
+          {
+            "weight": 3,
+            "value": {
+              "item": "old_coin",
+              "quantity": "5d6"
+            }
+          },
+          {
+            "weight": 2,
+            "value": {
+              "item": "glass_bead",
+              "quantity": "2d3"
+            }
+          },
+          {
+            "weight": 2,
+            "value": {
+              "item": "amber_lump",
+              "quantity": "1d2"
             }
           }
         ]
@@ -8527,6 +8942,427 @@
         "resourceOverrides": {
           "hp": 88
         }
+      },
+      {
+        "id": "ember_walker",
+        "name": "Esk, who Walks the Tube",
+        "description": "Forty years of crawling up a hot tube builds a particular sort of person.",
+        "level": 6,
+        "xp": 0,
+        "attributes": {
+          "might": 13,
+          "agility": 15,
+          "endurance": 15,
+          "intellect": 12,
+          "instinct": 15,
+          "presence": 10
+        },
+        "abilities": [
+          "strike"
+        ],
+        "behaviour": [
+          {
+            "priority": 0,
+            "use": "strike"
+          }
+        ],
+        "faction": "the_vent_readers",
+        "creatureType": "humanoid",
+        "size": "medium",
+        "descriptors": [
+          "a soot-black"
+        ],
+        "conditionalLoot": [],
+        "loot": "ember_rhythm_carried",
+        "resourceOverrides": {
+          "hp": 34
+        }
+      },
+      {
+        "id": "ember_farmer",
+        "name": "Borsa of the Ash Farm",
+        "description": "Farms ash, which is heavier work than farming soil.",
+        "level": 5,
+        "xp": 0,
+        "attributes": {
+          "might": 15,
+          "agility": 11,
+          "endurance": 15,
+          "intellect": 11,
+          "instinct": 13,
+          "presence": 12
+        },
+        "abilities": [
+          "strike"
+        ],
+        "behaviour": [
+          {
+            "priority": 0,
+            "use": "strike"
+          }
+        ],
+        "faction": "the_vent_readers",
+        "creatureType": "humanoid",
+        "size": "medium",
+        "descriptors": [
+          "a broad"
+        ],
+        "conditionalLoot": [],
+        "loot": "ember_deed_carried",
+        "resourceOverrides": {
+          "hp": 32
+        }
+      },
+      {
+        "id": "ember_burner",
+        "name": "Tenn, Charcoal Burner",
+        "description": "Stacks and tends a burn for nine days at a stretch.",
+        "level": 5,
+        "xp": 0,
+        "attributes": {
+          "might": 14,
+          "agility": 12,
+          "endurance": 14,
+          "intellect": 11,
+          "instinct": 13,
+          "presence": 10
+        },
+        "abilities": [
+          "strike"
+        ],
+        "behaviour": [
+          {
+            "priority": 0,
+            "use": "strike"
+          }
+        ],
+        "faction": "the_vent_readers",
+        "creatureType": "humanoid",
+        "size": "medium",
+        "descriptors": [
+          "a smoke-cured"
+        ],
+        "conditionalLoot": [],
+        "loot": "ember_core_carried",
+        "resourceOverrides": {
+          "hp": 30
+        }
+      },
+      {
+        "id": "ember_cutter",
+        "name": "Ovid, Shelf-Cutter",
+        "description": "Works a material that opens a hand if you look away from it.",
+        "level": 6,
+        "xp": 0,
+        "attributes": {
+          "might": 14,
+          "agility": 16,
+          "endurance": 13,
+          "intellect": 13,
+          "instinct": 13,
+          "presence": 9
+        },
+        "abilities": [
+          "strike",
+          "cut_and_run"
+        ],
+        "behaviour": [
+          {
+            "priority": 0,
+            "use": "strike"
+          }
+        ],
+        "faction": "the_vent_readers",
+        "creatureType": "humanoid",
+        "size": "medium",
+        "descriptors": [
+          "a scarred"
+        ],
+        "conditionalLoot": [],
+        "loot": "ember_rule_carried",
+        "resourceOverrides": {
+          "hp": 33
+        }
+      },
+      {
+        "id": "tube_breather",
+        "name": "What Breathes in the Tube",
+        "description": "It has kept the same rhythm for longer than the village, and the village has never once been cold.",
+        "level": 8,
+        "xp": 800,
+        "attributes": {
+          "might": 16,
+          "agility": 13,
+          "endurance": 18,
+          "intellect": 12,
+          "instinct": 16,
+          "presence": 13
+        },
+        "abilities": [
+          "vent_breath",
+          "cinder_lash",
+          "rend"
+        ],
+        "behaviour": [
+          {
+            "priority": 20,
+            "use": "vent_breath",
+            "when": {
+              "chance": 0.4
+            }
+          },
+          {
+            "priority": 0,
+            "use": "cinder_lash"
+          }
+        ],
+        "faction": "the_unsealed",
+        "creatureType": "undead",
+        "size": "medium",
+        "descriptors": [
+          "a slow",
+          "a breathing"
+        ],
+        "conditionalLoot": [],
+        "loot": "ember_tube_hoard",
+        "conditionImmunities": [
+          "burning",
+          "frightened"
+        ],
+        "resourceOverrides": {
+          "hp": 94
+        }
+      },
+      {
+        "id": "ashfall_stayer",
+        "name": "What Stayed",
+        "description": "Two houses dug and no bodies in either. Somebody stayed, and it was not a body that did it.",
+        "level": 8,
+        "xp": 820,
+        "attributes": {
+          "might": 15,
+          "agility": 14,
+          "endurance": 17,
+          "intellect": 13,
+          "instinct": 16,
+          "presence": 15
+        },
+        "abilities": [
+          "grave_chill",
+          "wither",
+          "rend"
+        ],
+        "behaviour": [
+          {
+            "priority": 15,
+            "use": "wither"
+          },
+          {
+            "priority": 0,
+            "use": "grave_chill"
+          }
+        ],
+        "faction": "the_unsealed",
+        "creatureType": "undead",
+        "size": "medium",
+        "descriptors": [
+          "an ash-grey",
+          "a patient"
+        ],
+        "conditionalLoot": [],
+        "loot": "ember_roofs_hoard",
+        "damageInteractions": [
+          {
+            "damageType": "slashing",
+            "multiplier": 0.5,
+            "unless": [
+              "silvered"
+            ]
+          },
+          {
+            "damageType": "piercing",
+            "multiplier": 0.5,
+            "unless": [
+              "silvered"
+            ]
+          }
+        ],
+        "conditionImmunities": [
+          "frightened",
+          "poisoned"
+        ],
+        "resourceOverrides": {
+          "hp": 90
+        }
+      },
+      {
+        "id": "ring_counter",
+        "name": "What Has Been Counting",
+        "description": "Forty rings in eleven years is not fast growth. It is a count of something else kept in wood.",
+        "level": 8,
+        "xp": 850,
+        "attributes": {
+          "might": 17,
+          "agility": 12,
+          "endurance": 17,
+          "intellect": 14,
+          "instinct": 15,
+          "presence": 12
+        },
+        "abilities": [
+          "root_and_branch",
+          "stone_fist"
+        ],
+        "behaviour": [
+          {
+            "priority": 15,
+            "use": "root_and_branch",
+            "when": {
+              "chance": 0.4
+            }
+          },
+          {
+            "priority": 0,
+            "use": "stone_fist"
+          }
+        ],
+        "faction": "the_unsealed",
+        "creatureType": "undead",
+        "size": "medium",
+        "descriptors": [
+          "a knotted",
+          "a many-ringed"
+        ],
+        "conditionalLoot": [],
+        "loot": "ember_workings_hoard",
+        "conditionImmunities": [
+          "prone",
+          "frightened"
+        ],
+        "resourceOverrides": {
+          "hp": 100
+        }
+      },
+      {
+        "id": "sheet_founder",
+        "name": "What Held the Heat",
+        "description": "Nine hundred years under a mile of poured glass, and still too hot to put a hand flat on the treads above it.",
+        "level": 10,
+        "xp": 1550,
+        "attributes": {
+          "might": 20,
+          "agility": 13,
+          "endurance": 20,
+          "intellect": 17,
+          "instinct": 16,
+          "presence": 18
+        },
+        "abilities": [
+          "vent_breath",
+          "unmaking_word",
+          "glass_shard",
+          "cinder_lash"
+        ],
+        "behaviour": [
+          {
+            "priority": 30,
+            "use": "unmaking_word",
+            "when": {
+              "chance": 0.25
+            }
+          },
+          {
+            "priority": 20,
+            "use": "vent_breath",
+            "when": {
+              "chance": 0.35
+            }
+          },
+          {
+            "priority": 10,
+            "use": "glass_shard"
+          },
+          {
+            "priority": 0,
+            "use": "cinder_lash"
+          }
+        ],
+        "faction": "the_unsealed",
+        "creatureType": "undead",
+        "size": "medium",
+        "descriptors": [
+          "a white",
+          "a founding"
+        ],
+        "conditionalLoot": [],
+        "loot": "ember_sheet_hoard",
+        "damageInteractions": [
+          {
+            "damageType": "slashing",
+            "multiplier": 0.5,
+            "unless": [
+              "silvered"
+            ]
+          },
+          {
+            "damageType": "piercing",
+            "multiplier": 0.5,
+            "unless": [
+              "silvered"
+            ]
+          }
+        ],
+        "conditionImmunities": [
+          "frightened",
+          "poisoned",
+          "burning",
+          "prone"
+        ],
+        "resourceOverrides": {
+          "hp": 170
+        }
+      },
+      {
+        "id": "cathedral_slag",
+        "name": "The Thing in the Slag Cathedral",
+        "description": "Cinderhold built a temple over a vent and the vent has opinions.",
+        "level": 8,
+        "xp": 760,
+        "attributes": {
+          "might": 18,
+          "agility": 10,
+          "endurance": 18,
+          "intellect": 8,
+          "instinct": 13,
+          "presence": 10
+        },
+        "abilities": [
+          "cinder_lash",
+          "stone_fist"
+        ],
+        "behaviour": [
+          {
+            "priority": 0,
+            "use": "cinder_lash"
+          }
+        ],
+        "faction": "the_unsealed",
+        "creatureType": "undead",
+        "size": "medium",
+        "descriptors": [
+          "a fused",
+          "a lumbering"
+        ],
+        "conditionalLoot": [],
+        "loot": "ember_tube_hoard",
+        "conditionImmunities": [
+          "burning",
+          "prone",
+          "frightened"
+        ],
+        "resourceOverrides": {
+          "hp": 92
+        }
       }
     ],
     "factions": [
@@ -10050,6 +10886,116 @@
         "faction": "the_water_wardens",
         "dialogue": "glass_ferruh_talk",
         "home": "dry_cistern_the_drop"
+      },
+      {
+        "id": "tube_walker_esk",
+        "name": "Esk, who Walks the Tube",
+        "description": "Has been in and out of the lava tube for forty years and has forty years of its breathing marked in soot on a board.",
+        "disposition": 4,
+        "gullibility": 0.25,
+        "memorySpan": 300,
+        "offersQuests": [],
+        "caresAbout": [],
+        "reactions": [],
+        "faction": "the_vent_readers",
+        "dialogue": "ember_esk_talk",
+        "home": "slagfoot_house_a",
+        "statblock": "ember_walker"
+      },
+      {
+        "id": "ash_farmer_borsa",
+        "name": "Borsa of the Ash Farm",
+        "description": "Six generations of farming the ash over a village her family holds the deed to, and not one of them has ever put a spade in it.",
+        "disposition": 6,
+        "gullibility": 0.35,
+        "memorySpan": 250,
+        "offersQuests": [],
+        "caresAbout": [],
+        "reactions": [],
+        "faction": "the_vent_readers",
+        "dialogue": "ember_borsa_talk",
+        "home": "burnt_march_ash_farm",
+        "statblock": "ember_farmer",
+        "shop": {
+          "lootTable": "keeper_stock",
+          "buysTags": [
+            "material"
+          ],
+          "priceMultiplier": 1.2
+        }
+      },
+      {
+        "id": "charcoal_burner_tenn",
+        "name": "Tenn, Charcoal Burner",
+        "description": "Burns the new treeline for charcoal and has been bothered by the rings in it for eleven years.",
+        "disposition": 2,
+        "gullibility": 0.4,
+        "memorySpan": 150,
+        "offersQuests": [],
+        "caresAbout": [],
+        "reactions": [],
+        "faction": "the_vent_readers",
+        "dialogue": "ember_tenn_talk",
+        "home": "smoking_road_waystation",
+        "statblock": "ember_burner"
+      },
+      {
+        "id": "shelf_cutter_ovid",
+        "name": "Ovid, Shelf-Cutter",
+        "description": "Cuts obsidian off the sheet for the Reach's blades and owns the rule that finds its true edge, which will not lie flat on it.",
+        "disposition": -2,
+        "gullibility": 0.2,
+        "memorySpan": 200,
+        "offersQuests": [],
+        "caresAbout": [],
+        "reactions": [],
+        "faction": "the_vent_readers",
+        "dialogue": "ember_ovid_talk",
+        "home": "obsidian_shelf_cutters_camp",
+        "statblock": "ember_cutter",
+        "shop": {
+          "lootTable": "keeper_stock",
+          "buysTags": [
+            "material",
+            "treasure"
+          ],
+          "priceMultiplier": 1.35
+        }
+      },
+      {
+        "id": "kettle_landlord_vaso",
+        "name": "Vaso, at the Kettle",
+        "description": "Keeps the only inn on warm ground in the Reach and has never once had to light the fire for the floor.",
+        "disposition": 8,
+        "gullibility": 0.5,
+        "memorySpan": 120,
+        "offersQuests": [],
+        "caresAbout": [],
+        "reactions": [],
+        "faction": "the_vent_readers",
+        "dialogue": "ember_vaso_talk",
+        "home": "slagfoot_the_kettle",
+        "shop": {
+          "lootTable": "hollowdene_stock",
+          "buysTags": [
+            "treasure"
+          ],
+          "priceMultiplier": 1.3
+        }
+      },
+      {
+        "id": "drift_walker_iman",
+        "name": "Iman, who Walks the Drifts",
+        "description": "Crosses the Ashfall for a living because the road round it is four days, and knows exactly which drifts are warm.",
+        "disposition": 4,
+        "gullibility": 0.4,
+        "memorySpan": 150,
+        "offersQuests": [],
+        "caresAbout": [],
+        "reactions": [],
+        "faction": "the_vent_readers",
+        "dialogue": "ember_iman_talk",
+        "home": "ashfall_the_drifts"
       }
     ],
     "traps": [
@@ -24942,7 +25888,22 @@
         "position": {
           "x": 3,
           "y": 3
-        }
+        },
+        "triggers": [
+          {
+            "id": "ember_found_warm",
+            "mode": "once",
+            "on": "enter",
+            "description": "Ground that has never once been cold.",
+            "effects": [
+              {
+                "learnLore": {
+                  "entry": "ember_warm_never"
+                }
+              }
+            ]
+          }
+        ]
       },
       {
         "id": "slagfoot_the_kettle",
@@ -25073,7 +26034,58 @@
         "position": {
           "x": 27,
           "y": 17
-        }
+        },
+        "triggers": [
+          {
+            "id": "ember_warm_committed",
+            "mode": "once",
+            "on": "enter",
+            "description": "The mouth of it, breathing on its own schedule.",
+            "requires": {
+              "custom": {
+                "gte": [
+                  {
+                    "ref": "threads.ember_warm.known"
+                  },
+                  2
+                ]
+              }
+            },
+            "effects": [
+              {
+                "emit": {
+                  "event": "startQuest",
+                  "data": {
+                    "quest": "ember_the_warm_ground"
+                  }
+                }
+              }
+            ]
+          }
+        ],
+        "hidden": true,
+        "discover": {
+          "skill": "perception",
+          "difficulty": {
+            "max": [
+              8,
+              {
+                "sub": [
+                  20,
+                  {
+                    "mul": [
+                      3,
+                      {
+                        "ref": "threads.ember_warm.known"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "gate": "ember_tube_turn"
       },
       {
         "id": "ashfall_the_drifts",
@@ -25108,7 +26120,22 @@
         "position": {
           "x": 14,
           "y": 3
-        }
+        },
+        "triggers": [
+          {
+            "id": "ember_found_roofs",
+            "mode": "once",
+            "on": "enter",
+            "description": "Which way up the roofs are.",
+            "effects": [
+              {
+                "learnLore": {
+                  "entry": "ember_roofs_up"
+                }
+              }
+            ]
+          }
+        ]
       },
       {
         "id": "ashfall_under_the_roofs",
@@ -25125,7 +26152,58 @@
         "position": {
           "x": 25,
           "y": 3
-        }
+        },
+        "triggers": [
+          {
+            "id": "ember_roofs_committed",
+            "mode": "once",
+            "on": "enter",
+            "description": "Down through nine feet of it.",
+            "requires": {
+              "custom": {
+                "gte": [
+                  {
+                    "ref": "threads.ember_roofs.known"
+                  },
+                  2
+                ]
+              }
+            },
+            "effects": [
+              {
+                "emit": {
+                  "event": "startQuest",
+                  "data": {
+                    "quest": "ember_under_the_roofs"
+                  }
+                }
+              }
+            ]
+          }
+        ],
+        "hidden": true,
+        "discover": {
+          "skill": "perception",
+          "difficulty": {
+            "max": [
+              9,
+              {
+                "sub": [
+                  21,
+                  {
+                    "mul": [
+                      3,
+                      {
+                        "ref": "threads.ember_roofs.known"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "gate": "ember_roofs_door"
       },
       {
         "id": "obsidian_shelf_the_sheet",
@@ -25139,7 +26217,22 @@
         "position": {
           "x": 3,
           "y": 3
-        }
+        },
+        "triggers": [
+          {
+            "id": "ember_found_sheet",
+            "mode": "once",
+            "on": "enter",
+            "description": "A mile of glass, poured flat.",
+            "effects": [
+              {
+                "learnLore": {
+                  "entry": "ember_sheet_flat"
+                }
+              }
+            ]
+          }
+        ]
       },
       {
         "id": "obsidian_shelf_cutters_camp",
@@ -25175,7 +26268,58 @@
         "position": {
           "x": 25,
           "y": 3
-        }
+        },
+        "triggers": [
+          {
+            "id": "ember_sheet_committed",
+            "mode": "once",
+            "on": "enter",
+            "description": "The cut, and what the glass did around it.",
+            "requires": {
+              "custom": {
+                "gte": [
+                  {
+                    "ref": "threads.ember_sheet.known"
+                  },
+                  2
+                ]
+              }
+            },
+            "effects": [
+              {
+                "emit": {
+                  "event": "startQuest",
+                  "data": {
+                    "quest": "ember_the_sheet"
+                  }
+                }
+              }
+            ]
+          }
+        ],
+        "hidden": true,
+        "discover": {
+          "skill": "lore",
+          "difficulty": {
+            "max": [
+              8,
+              {
+                "sub": [
+                  24,
+                  {
+                    "mul": [
+                      4,
+                      {
+                        "ref": "threads.ember_sheet.known"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "gate": "ember_sheet_stair_seal"
       },
       {
         "id": "smoking_road_iron_posts",
@@ -25189,7 +26333,22 @@
         "position": {
           "x": 3,
           "y": 3
-        }
+        },
+        "triggers": [
+          {
+            "id": "ember_found_posts",
+            "mode": "once",
+            "on": "enter",
+            "description": "Posts set at the corners of something.",
+            "effects": [
+              {
+                "learnLore": {
+                  "entry": "ember_trees_posts"
+                }
+              }
+            ]
+          }
+        ]
       },
       {
         "id": "smoking_road_waystation",
@@ -25248,7 +26407,22 @@
         "position": {
           "x": 3,
           "y": 3
-        }
+        },
+        "triggers": [
+          {
+            "id": "ember_found_trees",
+            "mode": "once",
+            "on": "enter",
+            "description": "Eleven years of trees where ninety is the number.",
+            "effects": [
+              {
+                "learnLore": {
+                  "entry": "ember_trees_fast"
+                }
+              }
+            ]
+          }
+        ]
       },
       {
         "id": "burnt_march_ash_farm",
@@ -25284,7 +26458,58 @@
         "position": {
           "x": 25,
           "y": 3
-        }
+        },
+        "triggers": [
+          {
+            "id": "ember_trees_committed",
+            "mode": "once",
+            "on": "enter",
+            "description": "The adit, and the bar on the wrong side of it.",
+            "requires": {
+              "custom": {
+                "gte": [
+                  {
+                    "ref": "threads.ember_trees.known"
+                  },
+                  2
+                ]
+              }
+            },
+            "effects": [
+              {
+                "emit": {
+                  "event": "startQuest",
+                  "data": {
+                    "quest": "ember_the_new_treeline"
+                  }
+                }
+              }
+            ]
+          }
+        ],
+        "hidden": true,
+        "discover": {
+          "skill": "survival",
+          "difficulty": {
+            "max": [
+              9,
+              {
+                "sub": [
+                  21,
+                  {
+                    "mul": [
+                      3,
+                      {
+                        "ref": "threads.ember_trees.known"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "gate": "ember_workings_seal"
       },
       {
         "id": "vent_fields_the_chain",
@@ -31052,6 +32277,128 @@
             }
           ]
         }
+      },
+      {
+        "id": "ember_tube_turn",
+        "name": "Where the Tube Turns Up",
+        "description": "A mile of level tube, and then it goes up, past dressed stone the lava went round.",
+        "kind": "ward",
+        "blockedTextKey": "ember_tube_blocked",
+        "staysOpen": true,
+        "onOpen": [
+          {
+            "setFlag": {
+              "flag": "ember_warm_open",
+              "value": true
+            }
+          }
+        ],
+        "onBlocked": [],
+        "opensWith": [],
+        "tags": [],
+        "requires": {
+          "items": [
+            {
+              "item": "readers_rhythm",
+              "quantity": 1,
+              "consume": false,
+              "equipped": false
+            }
+          ]
+        }
+      },
+      {
+        "id": "ember_roofs_door",
+        "name": "A Door Under Nine Feet",
+        "description": "The roofs came up. The doors did not, and the doors are barred.",
+        "kind": "ward",
+        "blockedTextKey": "ember_roofs_blocked",
+        "staysOpen": true,
+        "onOpen": [
+          {
+            "setFlag": {
+              "flag": "ember_roofs_open",
+              "value": true
+            }
+          }
+        ],
+        "onBlocked": [],
+        "opensWith": [],
+        "tags": [],
+        "requires": {
+          "items": [
+            {
+              "item": "ashfall_deed",
+              "quantity": 1,
+              "consume": false,
+              "equipped": false
+            }
+          ]
+        }
+      },
+      {
+        "id": "ember_workings_seal",
+        "name": "Sealed from the Adit Side",
+        "description": "There is no way to bar this door from where you are standing, and it is barred.",
+        "kind": "ward",
+        "blockedTextKey": "ember_workings_blocked",
+        "staysOpen": true,
+        "onOpen": [
+          {
+            "setFlag": {
+              "flag": "ember_trees_open",
+              "value": true
+            }
+          }
+        ],
+        "onBlocked": [],
+        "opensWith": [],
+        "tags": [],
+        "requires": {
+          "items": [
+            {
+              "item": "burners_core",
+              "quantity": 1,
+              "consume": false,
+              "equipped": false
+            }
+          ]
+        }
+      },
+      {
+        "id": "ember_sheet_stair_seal",
+        "name": "The Cut in the Sheet",
+        "description": "A stair cut into a mile of poured glass, and the glass came up around the cut afterwards.",
+        "kind": "ward",
+        "blockedTextKey": "ember_sheet_blocked",
+        "staysOpen": true,
+        "onOpen": [
+          {
+            "setFlag": {
+              "flag": "ember_sheet_open",
+              "value": true
+            }
+          }
+        ],
+        "onBlocked": [],
+        "opensWith": [],
+        "tags": [],
+        "requires": {
+          "items": [
+            {
+              "item": "cutters_rule",
+              "quantity": 1,
+              "consume": false,
+              "equipped": false
+            },
+            {
+              "item": "kettle_ring",
+              "quantity": 1,
+              "consume": false,
+              "equipped": false
+            }
+          ]
+        }
       }
     ],
     "roomTemplates": [
@@ -32608,7 +33955,8 @@
         "branchiness": 0.3,
         "width": "73",
         "height": "73",
-        "corridorLength": "2d3"
+        "corridorLength": "2d3",
+        "bossTable": "ember_cathedral_boss"
       },
       {
         "id": "ember_lava_tube",
@@ -32629,7 +33977,8 @@
           "width": 2
         },
         "width": "73",
-        "height": "73"
+        "height": "73",
+        "bossTable": "ember_tube_boss"
       },
       {
         "id": "ember_buried_village",
@@ -32647,7 +33996,8 @@
           "minLeaf": 5
         },
         "width": "29",
-        "height": "29"
+        "height": "29",
+        "bossTable": "ember_roofs_boss"
       },
       {
         "id": "ember_glass_stair",
@@ -32664,7 +34014,8 @@
         "branchiness": 0.25,
         "width": "75",
         "height": "75",
-        "corridorLength": "2d3"
+        "corridorLength": "2d3",
+        "bossTable": "ember_sheet_boss"
       },
       {
         "id": "ember_old_workings",
@@ -32681,7 +34032,8 @@
         "branchiness": 0.5,
         "width": "77",
         "height": "77",
-        "corridorLength": "3d3"
+        "corridorLength": "3d3",
+        "bossTable": "ember_workings_boss"
       },
       {
         "id": "ember_the_throat",
@@ -34835,6 +36187,116 @@
             "entries": [
               {
                 "monster": "root_glass",
+                "count": "1",
+                "scaleWithLevel": false
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "ember_tube_boss",
+        "minDepth": 0,
+        "maxDepth": 999,
+        "chance": 1,
+        "emptyWeight": 0,
+        "scalePerLevels": 3,
+        "groups": [
+          {
+            "id": "b",
+            "weight": 1,
+            "hostile": true,
+            "entries": [
+              {
+                "monster": "tube_breather",
+                "count": "1",
+                "scaleWithLevel": false
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "ember_roofs_boss",
+        "minDepth": 0,
+        "maxDepth": 999,
+        "chance": 1,
+        "emptyWeight": 0,
+        "scalePerLevels": 3,
+        "groups": [
+          {
+            "id": "b",
+            "weight": 1,
+            "hostile": true,
+            "entries": [
+              {
+                "monster": "ashfall_stayer",
+                "count": "1d2",
+                "scaleWithLevel": true
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "ember_workings_boss",
+        "minDepth": 0,
+        "maxDepth": 999,
+        "chance": 1,
+        "emptyWeight": 0,
+        "scalePerLevels": 3,
+        "groups": [
+          {
+            "id": "b",
+            "weight": 1,
+            "hostile": true,
+            "entries": [
+              {
+                "monster": "ring_counter",
+                "count": "1",
+                "scaleWithLevel": false
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "ember_sheet_boss",
+        "minDepth": 0,
+        "maxDepth": 999,
+        "chance": 1,
+        "emptyWeight": 0,
+        "scalePerLevels": 3,
+        "groups": [
+          {
+            "id": "b",
+            "weight": 1,
+            "hostile": true,
+            "entries": [
+              {
+                "monster": "sheet_founder",
+                "count": "1",
+                "scaleWithLevel": false
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "ember_cathedral_boss",
+        "minDepth": 0,
+        "maxDepth": 999,
+        "chance": 1,
+        "emptyWeight": 0,
+        "scalePerLevels": 3,
+        "groups": [
+          {
+            "id": "b",
+            "weight": 1,
+            "hostile": true,
+            "entries": [
+              {
+                "monster": "cathedral_slag",
                 "count": "1",
                 "scaleWithLevel": false
               }
@@ -37397,6 +38859,34 @@
         ]
       },
       {
+        "id": "ember_roofs_blocked",
+        "variants": [
+          {
+            "text": "Barred from inside, under nine feet of ash, in a village with no bodies in it. Somebody owns this ground on paper and has never dug \u2014 that deed says who was here."
+          },
+          {
+            "text": "The bar is on the inside and the house is empty. Both of those can be true and neither of them should be."
+          },
+          {
+            "text": "Warm a foot down, and the rest of the Ashfall cold as stone. Whatever is under here has not finished."
+          }
+        ]
+      },
+      {
+        "id": "ember_sheet_blocked",
+        "variants": [
+          {
+            "text": "The writing under the glass has ends and the ends are down the stair. Reading it wants the cutters' rule \u2014 and the heat off the treads wants something that has already been through a fire and come out."
+          },
+          {
+            "text": "Nine hundred years and it is still too hot to put a hand flat on. Going down dressed for the Reach is going down dressed for somewhere cooler than this."
+          },
+          {
+            "text": "Cut, then poured over. Somebody made a way in and somebody else made very sure it stayed the only one."
+          }
+        ]
+      },
+      {
         "id": "ember_slagfoot_desc",
         "variants": [
           {
@@ -37465,6 +38955,20 @@
         ]
       },
       {
+        "id": "ember_tube_blocked",
+        "variants": [
+          {
+            "text": "The tube breathes past you on its own schedule and the schedule is the thing. Somebody has forty years of it written down in soot, and going up there without knowing when it breathes in is going up there once."
+          },
+          {
+            "text": "Dressed stone, and the lava went around it rather than over. You would want to be very sure of the rhythm."
+          },
+          {
+            "text": "Warm air, in, then out, then in. It has been doing that since before the village and it is not the mountain."
+          }
+        ]
+      },
+      {
         "id": "ember_vent_fields_desc",
         "variants": [
           {
@@ -37492,6 +38996,20 @@
           },
           {
             "text": "Iron posts, a chain, and forty people whose entire profession is knowing when this chain comes down."
+          }
+        ]
+      },
+      {
+        "id": "ember_workings_blocked",
+        "variants": [
+          {
+            "text": "Somebody shut this from in there and there is no handle out here. The trees over it grew forty rings in eleven years; whatever counts time down there does not count it the way you do."
+          },
+          {
+            "text": "It is barred, and the bar is on the far side, and the adit is the only way in. Work that one out before you start pulling."
+          },
+          {
+            "text": "Wood with the rings running the wrong way is what grew over this. That is not a coincidence and it is not botany."
           }
         ]
       },
@@ -55610,6 +57128,2396 @@
             "redirectWhen": []
           }
         ]
+      },
+      {
+        "id": "ember_esk_talk",
+        "start": "greet",
+        "nodes": [
+          {
+            "id": "greet",
+            "says": [
+              {
+                "text": "A cottage with a soot-marked board the size of a door on the wall, and a man who has clearly been waiting for somebody to ask about it."
+              },
+              {
+                "text": "\u201cReader,\u201d he says, of himself, without much conviction. \u201cRetired. Nobody reads the tube.\u201d"
+              }
+            ],
+            "onEnter": [],
+            "options": [
+              {
+                "id": "ember_esk_wrong",
+                "text": "Where does that tube actually go?",
+                "requires": {
+                  "without": {
+                    "lore": [
+                      "ember_warm_wrong"
+                    ]
+                  }
+                },
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "check": {
+                  "skill": "insight",
+                  "difficulty": {
+                    "sub": [
+                      12,
+                      {
+                        "clamp": [
+                          {
+                            "div": [
+                              {
+                                "ref": "reputation.the_vent_readers",
+                                "else": 0
+                              },
+                              5
+                            ]
+                          },
+                          -6,
+                          6
+                        ]
+                      }
+                    ]
+                  },
+                  "onSuccess": "ember_esk_wrong_told",
+                  "onFailure": "ember_esk_wrong_wont"
+                }
+              },
+              {
+                "id": "ember_esk_breath",
+                "text": "You have been marking its breathing.",
+                "requires": {
+                  "without": {
+                    "lore": [
+                      "ember_warm_breath"
+                    ]
+                  }
+                },
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "check": {
+                  "skill": "persuasion",
+                  "difficulty": {
+                    "sub": [
+                      14,
+                      {
+                        "clamp": [
+                          {
+                            "div": [
+                              {
+                                "ref": "reputation.the_vent_readers",
+                                "else": 0
+                              },
+                              5
+                            ]
+                          },
+                          -6,
+                          6
+                        ]
+                      }
+                    ]
+                  },
+                  "onSuccess": "ember_esk_breath_told",
+                  "onFailure": "ember_esk_breath_wont"
+                }
+              },
+              {
+                "id": "ember_esk_older",
+                "text": "Is there anything in there that is not rock?",
+                "requires": {
+                  "without": {
+                    "lore": [
+                      "ember_warm_older"
+                    ]
+                  }
+                },
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "check": {
+                  "skill": "persuasion",
+                  "difficulty": {
+                    "sub": [
+                      15,
+                      {
+                        "clamp": [
+                          {
+                            "div": [
+                              {
+                                "ref": "reputation.the_vent_readers",
+                                "else": 0
+                              },
+                              5
+                            ]
+                          },
+                          -6,
+                          6
+                        ]
+                      }
+                    ]
+                  },
+                  "onSuccess": "ember_esk_older_told",
+                  "onFailure": "ember_esk_older_wont"
+                }
+              },
+              {
+                "id": "ember_esk_reads",
+                "text": "Is there anything written on this Reach that is not the readers' own?",
+                "requires": {
+                  "without": {
+                    "lore": [
+                      "ember_sheet_reads"
+                    ]
+                  }
+                },
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "check": {
+                  "skill": "lore",
+                  "difficulty": {
+                    "sub": [
+                      16,
+                      {
+                        "clamp": [
+                          {
+                            "div": [
+                              {
+                                "ref": "reputation.the_vent_readers",
+                                "else": 0
+                              },
+                              5
+                            ]
+                          },
+                          -6,
+                          6
+                        ]
+                      }
+                    ]
+                  },
+                  "onSuccess": "ember_esk_reads_told",
+                  "onFailure": "ember_esk_reads_wont"
+                }
+              },
+              {
+                "id": "ember_esk_board",
+                "text": "I need the board. All forty years of it.",
+                "requires": {
+                  "without": {
+                    "items": [
+                      "readers_rhythm"
+                    ],
+                    "flags": [
+                      {
+                        "flag": "given:readers_rhythm"
+                      }
+                    ]
+                  }
+                },
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "check": {
+                  "skill": "persuasion",
+                  "difficulty": {
+                    "sub": [
+                      16,
+                      {
+                        "clamp": [
+                          {
+                            "div": [
+                              {
+                                "ref": "reputation.the_vent_readers",
+                                "else": 0
+                              },
+                              5
+                            ]
+                          },
+                          -6,
+                          6
+                        ]
+                      }
+                    ]
+                  },
+                  "onSuccess": "ember_esk_board_gave",
+                  "onFailure": "ember_esk_board_kept"
+                }
+              },
+              {
+                "id": "greet_leave",
+                "text": "Nothing.",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": [
+              {
+                "requires": {
+                  "factions": [
+                    {
+                      "faction": "the_vent_readers",
+                      "maxStanding": -30
+                    }
+                  ]
+                },
+                "goto": "ember_esk_cold"
+              }
+            ]
+          },
+          {
+            "id": "ember_esk_wrong_told",
+            "says": [
+              {
+                "text": "\u201cLevel.\u201d He says it like an accusation. \u201cA mile of it, dead level, and then it turns *up*. Lava does not go up. Lava has never gone up in the history of going anywhere.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "learnLore": {
+                  "entry": "ember_warm_wrong"
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "ember_esk_wrong_on",
+                "text": "Go on.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "ember_esk_wrong_wont",
+            "says": [
+              {
+                "text": "\u201cI've said all I mean to,\u201d they say, and go back to what they were doing."
+              }
+            ],
+            "onEnter": [
+              {
+                "adjustReputation": {
+                  "faction": "the_vent_readers",
+                  "amount": -1
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "ember_esk_wrong_drop",
+                "text": "Leave it.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "ember_esk_breath_told",
+            "says": [
+              {
+                "text": "He turns the board round. Forty years of soot marks, and the spacing does not change anywhere along it. \u201cThe mountain has seasons. Everything on this Reach has seasons.\u201d He taps the board. \u201cThat does not.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "learnLore": {
+                  "entry": "ember_warm_breath"
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "ember_esk_breath_on",
+                "text": "Go on.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "ember_esk_breath_wont",
+            "says": [
+              {
+                "text": "\u201cI've said all I mean to,\u201d they say, and go back to what they were doing."
+              }
+            ],
+            "onEnter": [
+              {
+                "adjustReputation": {
+                  "faction": "the_vent_readers",
+                  "amount": -1
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "ember_esk_breath_drop",
+                "text": "Leave it.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "ember_esk_older_told",
+            "says": [
+              {
+                "text": "\u201cDressed stone, quarter-mile in.\u201d He waits to see whether you have understood. \u201cThe lava went *round* it. Which means the stone was there first, and the stone is squared, and nobody squares stone a quarter-mile up a lava tube for fun.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "learnLore": {
+                  "entry": "ember_warm_older"
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "ember_esk_older_on",
+                "text": "Go on.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "ember_esk_older_wont",
+            "says": [
+              {
+                "text": "\u201cI've said all I mean to,\u201d they say, and go back to what they were doing."
+              }
+            ],
+            "onEnter": [
+              {
+                "adjustReputation": {
+                  "faction": "the_vent_readers",
+                  "amount": -1
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "ember_esk_older_drop",
+                "text": "Leave it.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "ember_esk_reads_told",
+            "says": [
+              {
+                "text": "\u201cUnder the sheet.\u201d He says it quietly, which for Esk is significant. \u201cA foot down in the glass, and *legible* \u2014 which means the glass went over it gently, and a mile of glass does not go over anything gently. We have rubbings. We have never been able to reach it.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "learnLore": {
+                  "entry": "ember_sheet_reads"
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "ember_esk_reads_on",
+                "text": "Go on.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "ember_esk_reads_wont",
+            "says": [
+              {
+                "text": "\u201cI've said all I mean to,\u201d they say, and go back to what they were doing."
+              }
+            ],
+            "onEnter": [
+              {
+                "adjustReputation": {
+                  "faction": "the_vent_readers",
+                  "amount": -1
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "ember_esk_reads_drop",
+                "text": "Leave it.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "ember_esk_board_gave",
+            "says": [
+              {
+                "text": "He lifts it off the pegs and looks at the wall behind it, which is clean where the board was. \u201cBring it back,\u201d he says. \u201cOr do not, if what you find means there is no point.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "grantItem": {
+                  "target": {
+                    "ref": "actor.id"
+                  },
+                  "item": "readers_rhythm",
+                  "quantity": 1
+                }
+              },
+              {
+                "setFlag": {
+                  "flag": "given:readers_rhythm",
+                  "value": true
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "ember_esk_board_thanks",
+                "text": "Thank you.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "ember_esk_board_kept",
+            "says": [
+              {
+                "text": "\u201cNo. It is forty years and it is one board.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "adjustReputation": {
+                  "faction": "the_vent_readers",
+                  "amount": -2
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "ember_esk_board_leave",
+                "text": "Then no.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "ember_esk_cold",
+            "says": [
+              {
+                "text": "He takes the board off the wall and puts it face to it."
+              }
+            ],
+            "onEnter": [],
+            "options": [
+              {
+                "id": "ember_esk_go",
+                "text": "Leave it.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          }
+        ]
+      },
+      {
+        "id": "ember_vaso_talk",
+        "start": "greet",
+        "nodes": [
+          {
+            "id": "greet",
+            "says": [
+              {
+                "text": "A taproom warm from the floor up, which is the wrong direction for a room to be warm in."
+              },
+              {
+                "text": "\u201cMind the flags, they're hot at the back. Ale's cold, at least.\u201d"
+              }
+            ],
+            "onEnter": [],
+            "options": [
+              {
+                "id": "ember_vaso_never",
+                "text": "Has this floor ever been cold?",
+                "requires": {
+                  "without": {
+                    "lore": [
+                      "ember_warm_never"
+                    ]
+                  }
+                },
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "check": {
+                  "skill": "persuasion",
+                  "difficulty": {
+                    "sub": [
+                      9,
+                      {
+                        "clamp": [
+                          {
+                            "div": [
+                              {
+                                "ref": "reputation.the_vent_readers",
+                                "else": 0
+                              },
+                              5
+                            ]
+                          },
+                          -6,
+                          6
+                        ]
+                      }
+                    ]
+                  },
+                  "onSuccess": "ember_vaso_never_told",
+                  "onFailure": "ember_vaso_never_wont"
+                }
+              },
+              {
+                "id": "ember_vaso_stone",
+                "text": "Anything odd ever come out of the tube?",
+                "requires": {
+                  "without": {
+                    "lore": [
+                      "ember_warm_older"
+                    ]
+                  }
+                },
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "check": {
+                  "skill": "persuasion",
+                  "difficulty": {
+                    "sub": [
+                      12,
+                      {
+                        "clamp": [
+                          {
+                            "div": [
+                              {
+                                "ref": "reputation.the_vent_readers",
+                                "else": 0
+                              },
+                              5
+                            ]
+                          },
+                          -6,
+                          6
+                        ]
+                      }
+                    ]
+                  },
+                  "onSuccess": "ember_vaso_stone_told",
+                  "onFailure": "ember_vaso_stone_wont"
+                }
+              },
+              {
+                "id": "greet_leave",
+                "text": "Nothing.",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "ember_vaso_never_told",
+            "says": [
+              {
+                "text": "\u201cNever.\u201d No hesitation at all. \u201cNot in the hard winter, not in the two years the mountain went quiet and everybody in Cinderhold froze. My grandfather's tally is on the beam \u2014 he started marking cold nights and gave up because there were none.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "learnLore": {
+                  "entry": "ember_warm_never"
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "ember_vaso_never_on",
+                "text": "Go on.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "ember_vaso_never_wont",
+            "says": [
+              {
+                "text": "\u201cI've said all I mean to,\u201d they say, and go back to what they were doing."
+              }
+            ],
+            "onEnter": [
+              {
+                "adjustReputation": {
+                  "faction": "the_vent_readers",
+                  "amount": -1
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "ember_vaso_never_drop",
+                "text": "Leave it.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "ember_vaso_stone_told",
+            "says": [
+              {
+                "text": "\u201cEsk talks about stone. Squared stone, a quarter-mile in.\u201d He wipes the counter. \u201cI have known him forty years and he has never once made a thing up, which is why I have stopped asking him about it.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "learnLore": {
+                  "entry": "ember_warm_older"
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "ember_vaso_stone_on",
+                "text": "Go on.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "ember_vaso_stone_wont",
+            "says": [
+              {
+                "text": "\u201cI've said all I mean to,\u201d they say, and go back to what they were doing."
+              }
+            ],
+            "onEnter": [
+              {
+                "adjustReputation": {
+                  "faction": "the_vent_readers",
+                  "amount": -1
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "ember_vaso_stone_drop",
+                "text": "Leave it.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          }
+        ]
+      },
+      {
+        "id": "ember_iman_talk",
+        "start": "greet",
+        "nodes": [
+          {
+            "id": "greet",
+            "says": [
+              {
+                "text": "A figure crossing the drifts with a pole, testing ahead of every step, and no apparent interest in stopping."
+              },
+              {
+                "text": "\u201cFollow my line exactly or do not follow it. The ash does not hold everywhere.\u201d"
+              }
+            ],
+            "onEnter": [],
+            "options": [
+              {
+                "id": "ember_iman_warm",
+                "text": "Which drifts are warm?",
+                "requires": {
+                  "without": {
+                    "lore": [
+                      "ember_roofs_warm"
+                    ]
+                  }
+                },
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "check": {
+                  "skill": "persuasion",
+                  "difficulty": {
+                    "sub": [
+                      11,
+                      {
+                        "clamp": [
+                          {
+                            "div": [
+                              {
+                                "ref": "reputation.the_vent_readers",
+                                "else": 0
+                              },
+                              5
+                            ]
+                          },
+                          -6,
+                          6
+                        ]
+                      }
+                    ]
+                  },
+                  "onSuccess": "ember_iman_warm_told",
+                  "onFailure": "ember_iman_warm_wont"
+                }
+              },
+              {
+                "id": "ember_iman_warmground",
+                "text": "You cross warm ground for a living. Is the village's ground the same as Slagfoot's?",
+                "requires": {
+                  "without": {
+                    "lore": [
+                      "ember_warm_never"
+                    ]
+                  }
+                },
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "check": {
+                  "skill": "insight",
+                  "difficulty": {
+                    "sub": [
+                      12,
+                      {
+                        "clamp": [
+                          {
+                            "div": [
+                              {
+                                "ref": "reputation.the_vent_readers",
+                                "else": 0
+                              },
+                              5
+                            ]
+                          },
+                          -6,
+                          6
+                        ]
+                      }
+                    ]
+                  },
+                  "onSuccess": "ember_iman_warmground_told",
+                  "onFailure": "ember_iman_warmground_wont"
+                }
+              },
+              {
+                "id": "ember_iman_one",
+                "text": "How long did the fall take?",
+                "requires": {
+                  "without": {
+                    "lore": [
+                      "ember_roofs_one"
+                    ]
+                  }
+                },
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "check": {
+                  "skill": "persuasion",
+                  "difficulty": {
+                    "sub": [
+                      13,
+                      {
+                        "clamp": [
+                          {
+                            "div": [
+                              {
+                                "ref": "reputation.the_vent_readers",
+                                "else": 0
+                              },
+                              5
+                            ]
+                          },
+                          -6,
+                          6
+                        ]
+                      }
+                    ]
+                  },
+                  "onSuccess": "ember_iman_one_told",
+                  "onFailure": "ember_iman_one_wont"
+                }
+              },
+              {
+                "id": "greet_leave",
+                "text": "Nothing.",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "ember_iman_warm_told",
+            "says": [
+              {
+                "text": "\u201cThe ones over the village.\u201d She does not break stride. \u201cA foot down and warm to the hand, and the rest of the Ashfall is stone cold. Nine years I have crossed this. It is the same ground every time.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "learnLore": {
+                  "entry": "ember_roofs_warm"
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "ember_iman_warm_on",
+                "text": "Go on.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "ember_iman_warm_wont",
+            "says": [
+              {
+                "text": "\u201cI've said all I mean to,\u201d they say, and go back to what they were doing."
+              }
+            ],
+            "onEnter": [
+              {
+                "adjustReputation": {
+                  "faction": "the_vent_readers",
+                  "amount": -1
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "ember_iman_warm_drop",
+                "text": "Leave it.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "ember_iman_warmground_told",
+            "says": [
+              {
+                "text": "\u201cNo.\u201d She is definite. \u201cSlagfoot is warm all the way down and always has been \u2014 you can stand on it barefoot in midwinter and I have. Mine is warm a foot down and cold under that.\u201d She moves on. \u201cDifferent things making it.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "learnLore": {
+                  "entry": "ember_warm_never"
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "ember_iman_warmground_on",
+                "text": "Go on.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "ember_iman_warmground_wont",
+            "says": [
+              {
+                "text": "\u201cI've said all I mean to,\u201d they say, and go back to what they were doing."
+              }
+            ],
+            "onEnter": [
+              {
+                "adjustReputation": {
+                  "faction": "the_vent_readers",
+                  "amount": -1
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "ember_iman_warmground_drop",
+                "text": "Leave it.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "ember_iman_one_told",
+            "says": [
+              {
+                "text": "\u201cOne night.\u201d She stops, which from her is a speech. \u201cNine feet, one night. The readers have the record. The Reach has never done nine feet in a night before it or since.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "learnLore": {
+                  "entry": "ember_roofs_one"
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "ember_iman_one_on",
+                "text": "Go on.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "ember_iman_one_wont",
+            "says": [
+              {
+                "text": "\u201cI've said all I mean to,\u201d they say, and go back to what they were doing."
+              }
+            ],
+            "onEnter": [
+              {
+                "adjustReputation": {
+                  "faction": "the_vent_readers",
+                  "amount": -1
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "ember_iman_one_drop",
+                "text": "Leave it.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          }
+        ]
+      },
+      {
+        "id": "ember_borsa_talk",
+        "start": "greet",
+        "nodes": [
+          {
+            "id": "greet",
+            "says": [
+              {
+                "text": "A farm on grey ground, growing something grey, with a woman working it who does not look up until you are close."
+              },
+              {
+                "text": "\u201cAsh farm. It grows two things and neither of them is what you are hoping.\u201d"
+              }
+            ],
+            "onEnter": [],
+            "options": [
+              {
+                "id": "ember_borsa_up",
+                "text": "The roofs down there. Which way up are they?",
+                "requires": {
+                  "without": {
+                    "lore": [
+                      "ember_roofs_up"
+                    ]
+                  }
+                },
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "check": {
+                  "skill": "persuasion",
+                  "difficulty": {
+                    "sub": [
+                      11,
+                      {
+                        "clamp": [
+                          {
+                            "div": [
+                              {
+                                "ref": "reputation.the_vent_readers",
+                                "else": 0
+                              },
+                              5
+                            ]
+                          },
+                          -6,
+                          6
+                        ]
+                      }
+                    ]
+                  },
+                  "onSuccess": "ember_borsa_up_told",
+                  "onFailure": "ember_borsa_up_wont"
+                }
+              },
+              {
+                "id": "ember_borsa_empty",
+                "text": "Anybody ever dug a house out?",
+                "requires": {
+                  "without": {
+                    "lore": [
+                      "ember_roofs_empty"
+                    ]
+                  }
+                },
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "check": {
+                  "skill": "insight",
+                  "difficulty": {
+                    "sub": [
+                      14,
+                      {
+                        "clamp": [
+                          {
+                            "div": [
+                              {
+                                "ref": "reputation.the_vent_readers",
+                                "else": 0
+                              },
+                              5
+                            ]
+                          },
+                          -6,
+                          6
+                        ]
+                      }
+                    ]
+                  },
+                  "onSuccess": "ember_borsa_empty_told",
+                  "onFailure": "ember_borsa_empty_wont"
+                }
+              },
+              {
+                "id": "ember_borsa_fast",
+                "text": "Your treeline came back fast.",
+                "requires": {
+                  "without": {
+                    "lore": [
+                      "ember_trees_fast"
+                    ]
+                  }
+                },
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "check": {
+                  "skill": "persuasion",
+                  "difficulty": {
+                    "sub": [
+                      12,
+                      {
+                        "clamp": [
+                          {
+                            "div": [
+                              {
+                                "ref": "reputation.the_vent_readers",
+                                "else": 0
+                              },
+                              5
+                            ]
+                          },
+                          -6,
+                          6
+                        ]
+                      }
+                    ]
+                  },
+                  "onSuccess": "ember_borsa_fast_told",
+                  "onFailure": "ember_borsa_fast_wont"
+                }
+              },
+              {
+                "id": "ember_borsa_deed",
+                "text": "The deed to the buried village. I want to know whose it was.",
+                "requires": {
+                  "without": {
+                    "items": [
+                      "ashfall_deed"
+                    ],
+                    "flags": [
+                      {
+                        "flag": "given:ashfall_deed"
+                      }
+                    ]
+                  }
+                },
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "check": {
+                  "skill": "persuasion",
+                  "difficulty": {
+                    "sub": [
+                      14,
+                      {
+                        "clamp": [
+                          {
+                            "div": [
+                              {
+                                "ref": "reputation.the_vent_readers",
+                                "else": 0
+                              },
+                              5
+                            ]
+                          },
+                          -6,
+                          6
+                        ]
+                      }
+                    ]
+                  },
+                  "onSuccess": "ember_borsa_deed_gave",
+                  "onFailure": "ember_borsa_deed_kept"
+                }
+              },
+              {
+                "id": "greet_leave",
+                "text": "Nothing.",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "ember_borsa_up_told",
+            "says": [
+              {
+                "text": "\u201cUp.\u201d She lets that sit. \u201cAsh presses a roof. It does not lift one. Every roof my family has ever uncovered a corner of has been the wrong way up, and we stopped uncovering corners.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "learnLore": {
+                  "entry": "ember_roofs_up"
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "ember_borsa_up_on",
+                "text": "Go on.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "ember_borsa_up_wont",
+            "says": [
+              {
+                "text": "\u201cI've said all I mean to,\u201d they say, and go back to what they were doing."
+              }
+            ],
+            "onEnter": [
+              {
+                "adjustReputation": {
+                  "faction": "the_vent_readers",
+                  "amount": -1
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "ember_borsa_up_drop",
+                "text": "Leave it.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "ember_borsa_empty_told",
+            "says": [
+              {
+                "text": "\u201cTwo, in my grandmother's time.\u201d She is not enjoying this. \u201cNo bodies in either. Doors barred and nobody home.\u201d A pause. \u201cA village that has time to leave does not bar its doors, and a village that bars its doors is still in them.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "learnLore": {
+                  "entry": "ember_roofs_empty"
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "ember_borsa_empty_on",
+                "text": "Go on.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "ember_borsa_empty_wont",
+            "says": [
+              {
+                "text": "\u201cI've said all I mean to,\u201d they say, and go back to what they were doing."
+              }
+            ],
+            "onEnter": [
+              {
+                "adjustReputation": {
+                  "faction": "the_vent_readers",
+                  "amount": -1
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "ember_borsa_empty_drop",
+                "text": "Leave it.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "ember_borsa_fast_told",
+            "says": [
+              {
+                "text": "\u201cEleven years. It is ninety, everywhere, always \u2014 my father wrote away to the Library to check and they wrote back ninety.\u201d She looks at the trees. \u201cI have not been comfortable in that wood since.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "learnLore": {
+                  "entry": "ember_trees_fast"
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "ember_borsa_fast_on",
+                "text": "Go on.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "ember_borsa_fast_wont",
+            "says": [
+              {
+                "text": "\u201cI've said all I mean to,\u201d they say, and go back to what they were doing."
+              }
+            ],
+            "onEnter": [
+              {
+                "adjustReputation": {
+                  "faction": "the_vent_readers",
+                  "amount": -1
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "ember_borsa_fast_drop",
+                "text": "Leave it.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "ember_borsa_deed_gave",
+            "says": [
+              {
+                "text": "She fetches it without a word and hands it over folded. \u201cSix generations of paying tithe on nine feet of ash,\u201d she says. \u201cIf it turns out we have been paying tithe on somebody who is still down there, I would rather know than not.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "grantItem": {
+                  "target": {
+                    "ref": "actor.id"
+                  },
+                  "item": "ashfall_deed",
+                  "quantity": 1
+                }
+              },
+              {
+                "setFlag": {
+                  "flag": "given:ashfall_deed",
+                  "value": true
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "ember_borsa_deed_thanks",
+                "text": "Thank you.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "ember_borsa_deed_kept",
+            "says": [
+              {
+                "text": "\u201cIt is the farm's,\u201d she says. \u201cI will tell you what is on it. I will not hand it to somebody I met this morning.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "adjustReputation": {
+                  "faction": "the_vent_readers",
+                  "amount": -2
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "ember_borsa_deed_leave",
+                "text": "Then no.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          }
+        ]
+      },
+      {
+        "id": "ember_tenn_talk",
+        "start": "greet",
+        "nodes": [
+          {
+            "id": "greet",
+            "says": [
+              {
+                "text": "A road station with a burn smoking behind it and a man watching the smoke the way other people watch a pot."
+              },
+              {
+                "text": "\u201cNine days in a burn. Talk if you like, I am not going anywhere.\u201d"
+              }
+            ],
+            "onEnter": [],
+            "options": [
+              {
+                "id": "ember_tenn_ring",
+                "text": "The rings in the new trees.",
+                "requires": {
+                  "without": {
+                    "lore": [
+                      "ember_trees_ring"
+                    ]
+                  }
+                },
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "check": {
+                  "skill": "insight",
+                  "difficulty": {
+                    "sub": [
+                      13,
+                      {
+                        "clamp": [
+                          {
+                            "div": [
+                              {
+                                "ref": "reputation.the_vent_readers",
+                                "else": 0
+                              },
+                              5
+                            ]
+                          },
+                          -6,
+                          6
+                        ]
+                      }
+                    ]
+                  },
+                  "onSuccess": "ember_tenn_ring_told",
+                  "onFailure": "ember_tenn_ring_wont"
+                }
+              },
+              {
+                "id": "ember_tenn_posts",
+                "text": "The iron posts on the road.",
+                "requires": {
+                  "without": {
+                    "lore": [
+                      "ember_trees_posts"
+                    ]
+                  }
+                },
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "check": {
+                  "skill": "persuasion",
+                  "difficulty": {
+                    "sub": [
+                      14,
+                      {
+                        "clamp": [
+                          {
+                            "div": [
+                              {
+                                "ref": "reputation.the_vent_readers",
+                                "else": 0
+                              },
+                              5
+                            ]
+                          },
+                          -6,
+                          6
+                        ]
+                      }
+                    ]
+                  },
+                  "onSuccess": "ember_tenn_posts_told",
+                  "onFailure": "ember_tenn_posts_wont"
+                }
+              },
+              {
+                "id": "ember_tenn_sealed",
+                "text": "Anybody been down the old workings?",
+                "requires": {
+                  "without": {
+                    "lore": [
+                      "ember_trees_sealed"
+                    ]
+                  }
+                },
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "check": {
+                  "skill": "persuasion",
+                  "difficulty": {
+                    "sub": [
+                      15,
+                      {
+                        "clamp": [
+                          {
+                            "div": [
+                              {
+                                "ref": "reputation.the_vent_readers",
+                                "else": 0
+                              },
+                              5
+                            ]
+                          },
+                          -6,
+                          6
+                        ]
+                      }
+                    ]
+                  },
+                  "onSuccess": "ember_tenn_sealed_told",
+                  "onFailure": "ember_tenn_sealed_wont"
+                }
+              },
+              {
+                "id": "ember_tenn_core",
+                "text": "Give me the core.",
+                "requires": {
+                  "without": {
+                    "items": [
+                      "burners_core"
+                    ],
+                    "flags": [
+                      {
+                        "flag": "given:burners_core"
+                      }
+                    ]
+                  }
+                },
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "check": {
+                  "skill": "persuasion",
+                  "difficulty": {
+                    "sub": [
+                      12,
+                      {
+                        "clamp": [
+                          {
+                            "div": [
+                              {
+                                "ref": "reputation.the_vent_readers",
+                                "else": 0
+                              },
+                              5
+                            ]
+                          },
+                          -6,
+                          6
+                        ]
+                      }
+                    ]
+                  },
+                  "onSuccess": "ember_tenn_core_gave",
+                  "onFailure": "ember_tenn_core_kept"
+                }
+              },
+              {
+                "id": "greet_leave",
+                "text": "Nothing.",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "ember_tenn_ring_told",
+            "says": [
+              {
+                "text": "He fetches a bored core without being asked. \u201cForty. In eleven years of wood.\u201d He turns it. \u201cAnd they run the wrong way out from the middle, which I have shown to three foresters and one of them walked off.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "learnLore": {
+                  "entry": "ember_trees_ring"
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "ember_tenn_ring_on",
+                "text": "Go on.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "ember_tenn_ring_wont",
+            "says": [
+              {
+                "text": "\u201cI've said all I mean to,\u201d they say, and go back to what they were doing."
+              }
+            ],
+            "onEnter": [
+              {
+                "adjustReputation": {
+                  "faction": "the_vent_readers",
+                  "amount": -1
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "ember_tenn_ring_drop",
+                "text": "Leave it.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "ember_tenn_posts_told",
+            "says": [
+              {
+                "text": "\u201cNot milestones. Wrong spacing, wrong iron.\u201d He draws it in the dirt with a stick: four posts, and a shape between them. \u201cThey are corners. And the middle of what they are the corners of is under the new trees.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "learnLore": {
+                  "entry": "ember_trees_posts"
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "ember_tenn_posts_on",
+                "text": "Go on.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "ember_tenn_posts_wont",
+            "says": [
+              {
+                "text": "\u201cI've said all I mean to,\u201d they say, and go back to what they were doing."
+              }
+            ],
+            "onEnter": [
+              {
+                "adjustReputation": {
+                  "faction": "the_vent_readers",
+                  "amount": -1
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "ember_tenn_posts_drop",
+                "text": "Leave it.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "ember_tenn_sealed_told",
+            "says": [
+              {
+                "text": "\u201cCannot be. It is barred.\u201d He is very clear about this. \u201cBarred from the inside, and the adit is the only way in, and I would like somebody cleverer than me to explain how both of those are true.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "learnLore": {
+                  "entry": "ember_trees_sealed"
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "ember_tenn_sealed_on",
+                "text": "Go on.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "ember_tenn_sealed_wont",
+            "says": [
+              {
+                "text": "\u201cI've said all I mean to,\u201d they say, and go back to what they were doing."
+              }
+            ],
+            "onEnter": [
+              {
+                "adjustReputation": {
+                  "faction": "the_vent_readers",
+                  "amount": -1
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "ember_tenn_sealed_drop",
+                "text": "Leave it.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "ember_tenn_core_gave",
+            "says": [
+              {
+                "text": "He hands it over end-first, like a tool. \u201cCount them yourself. I have counted them eleven times and I would like to be wrong.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "grantItem": {
+                  "target": {
+                    "ref": "actor.id"
+                  },
+                  "item": "burners_core",
+                  "quantity": 1
+                }
+              },
+              {
+                "setFlag": {
+                  "flag": "given:burners_core",
+                  "value": true
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "ember_tenn_core_thanks",
+                "text": "Thank you.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "ember_tenn_core_kept",
+            "says": [
+              {
+                "text": "\u201cBore your own,\u201d he says, not unkindly. \u201cThe saw is there.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "adjustReputation": {
+                  "faction": "the_vent_readers",
+                  "amount": -1
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "ember_tenn_core_leave",
+                "text": "Then no.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          }
+        ]
+      },
+      {
+        "id": "ember_ovid_talk",
+        "start": "greet",
+        "nodes": [
+          {
+            "id": "greet",
+            "says": [
+              {
+                "text": "A camp at the edge of a mile of black glass, and a man dressing a blade with his back to all of it."
+              },
+              {
+                "text": "\u201cObsidian by the pound, and I will not cut to order. Say what you want and be quick, the light goes off the sheet at noon.\u201d"
+              }
+            ],
+            "onEnter": [],
+            "options": [
+              {
+                "id": "ember_ovid_stair",
+                "text": "The stair into the sheet.",
+                "requires": {
+                  "without": {
+                    "lore": [
+                      "ember_sheet_stair"
+                    ]
+                  }
+                },
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "check": {
+                  "skill": "insight",
+                  "difficulty": {
+                    "sub": [
+                      14,
+                      {
+                        "clamp": [
+                          {
+                            "div": [
+                              {
+                                "ref": "reputation.the_vent_readers",
+                                "else": 0
+                              },
+                              5
+                            ]
+                          },
+                          -6,
+                          6
+                        ]
+                      }
+                    ]
+                  },
+                  "onSuccess": "ember_ovid_stair_told",
+                  "onFailure": "ember_ovid_stair_wont"
+                }
+              },
+              {
+                "id": "ember_ovid_flat",
+                "text": "A mile of it, and flat.",
+                "requires": {
+                  "without": {
+                    "lore": [
+                      "ember_sheet_flat"
+                    ]
+                  }
+                },
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "check": {
+                  "skill": "persuasion",
+                  "difficulty": {
+                    "sub": [
+                      12,
+                      {
+                        "clamp": [
+                          {
+                            "div": [
+                              {
+                                "ref": "reputation.the_vent_readers",
+                                "else": 0
+                              },
+                              5
+                            ]
+                          },
+                          -6,
+                          6
+                        ]
+                      }
+                    ]
+                  },
+                  "onSuccess": "ember_ovid_flat_told",
+                  "onFailure": "ember_ovid_flat_wont"
+                }
+              },
+              {
+                "id": "ember_ovid_heat",
+                "text": "It is still warm.",
+                "requires": {
+                  "without": {
+                    "lore": [
+                      "ember_sheet_heat"
+                    ]
+                  }
+                },
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "check": {
+                  "skill": "persuasion",
+                  "difficulty": {
+                    "sub": [
+                      15,
+                      {
+                        "clamp": [
+                          {
+                            "div": [
+                              {
+                                "ref": "reputation.the_vent_readers",
+                                "else": 0
+                              },
+                              5
+                            ]
+                          },
+                          -6,
+                          6
+                        ]
+                      }
+                    ]
+                  },
+                  "onSuccess": "ember_ovid_heat_told",
+                  "onFailure": "ember_ovid_heat_wont"
+                }
+              },
+              {
+                "id": "ember_ovid_rule",
+                "text": "Your rule. The one that will not lie flat.",
+                "requires": {
+                  "without": {
+                    "items": [
+                      "cutters_rule"
+                    ],
+                    "flags": [
+                      {
+                        "flag": "given:cutters_rule"
+                      }
+                    ]
+                  }
+                },
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "check": {
+                  "skill": "persuasion",
+                  "difficulty": {
+                    "sub": [
+                      17,
+                      {
+                        "clamp": [
+                          {
+                            "div": [
+                              {
+                                "ref": "reputation.the_vent_readers",
+                                "else": 0
+                              },
+                              5
+                            ]
+                          },
+                          -6,
+                          6
+                        ]
+                      }
+                    ]
+                  },
+                  "onSuccess": "ember_ovid_rule_gave",
+                  "onFailure": "ember_ovid_rule_kept"
+                }
+              },
+              {
+                "id": "greet_leave",
+                "text": "Nothing.",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": [
+              {
+                "requires": {
+                  "factions": [
+                    {
+                      "faction": "the_vent_readers",
+                      "maxStanding": -25
+                    }
+                  ]
+                },
+                "goto": "ember_ovid_cold"
+              }
+            ]
+          },
+          {
+            "id": "ember_ovid_stair_told",
+            "says": [
+              {
+                "text": "\u201cCut.\u201d He does not elaborate until you wait. \u201cNot melted through \u2014 cut, with tools, and then the glass came up around the cut. You can see the tool marks in the sides of it under the glass.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "learnLore": {
+                  "entry": "ember_sheet_stair"
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "ember_ovid_stair_on",
+                "text": "Go on.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "ember_ovid_stair_wont",
+            "says": [
+              {
+                "text": "\u201cI've said all I mean to,\u201d they say, and go back to what they were doing."
+              }
+            ],
+            "onEnter": [
+              {
+                "adjustReputation": {
+                  "faction": "the_vent_readers",
+                  "amount": -1
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "ember_ovid_stair_drop",
+                "text": "Leave it.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "ember_ovid_flat_told",
+            "says": [
+              {
+                "text": "\u201cWhich is the part nobody will discuss.\u201d He puts the blade down. \u201cLava pools. It cracks, it goes where the ground takes it, it is never flat. That is flat to the width of my rule over a mile.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "learnLore": {
+                  "entry": "ember_sheet_flat"
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "ember_ovid_flat_on",
+                "text": "Go on.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "ember_ovid_flat_wont",
+            "says": [
+              {
+                "text": "\u201cI've said all I mean to,\u201d they say, and go back to what they were doing."
+              }
+            ],
+            "onEnter": [
+              {
+                "adjustReputation": {
+                  "faction": "the_vent_readers",
+                  "amount": -1
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "ember_ovid_flat_drop",
+                "text": "Leave it.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "ember_ovid_heat_told",
+            "says": [
+              {
+                "text": "\u201cHot. Say hot.\u201d He shows you his palm, which is a map of old burns. \u201cNine hundred years by the readers' count and I cannot put a hand flat on the treads. Nothing on this Reach holds heat like that. Not the vents. Not the cathedral. Nothing.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "learnLore": {
+                  "entry": "ember_sheet_heat"
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "ember_ovid_heat_on",
+                "text": "Go on.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "ember_ovid_heat_wont",
+            "says": [
+              {
+                "text": "\u201cI've said all I mean to,\u201d they say, and go back to what they were doing."
+              }
+            ],
+            "onEnter": [
+              {
+                "adjustReputation": {
+                  "faction": "the_vent_readers",
+                  "amount": -1
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "ember_ovid_heat_drop",
+                "text": "Leave it.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "ember_ovid_rule_gave",
+            "says": [
+              {
+                "text": "He hands it over and watches your face rather than the rule. \u201cLay it on the sheet. It lifts, and where it lifts is not random, and I have spent six years pretending that is a flaw in the brass.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "grantItem": {
+                  "target": {
+                    "ref": "actor.id"
+                  },
+                  "item": "cutters_rule",
+                  "quantity": 1
+                }
+              },
+              {
+                "setFlag": {
+                  "flag": "given:cutters_rule",
+                  "value": true
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "ember_ovid_rule_thanks",
+                "text": "Thank you.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "ember_ovid_rule_kept",
+            "says": [
+              {
+                "text": "\u201cIt is my rule and it is how I make my living. No.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "adjustReputation": {
+                  "faction": "the_vent_readers",
+                  "amount": -3
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "ember_ovid_rule_leave",
+                "text": "Then no.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "ember_ovid_cold",
+            "says": [
+              {
+                "text": "He picks up the blade he was dressing and holds it, which is answer enough."
+              }
+            ],
+            "onEnter": [],
+            "options": [
+              {
+                "id": "ember_ovid_go",
+                "text": "Leave it.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          }
+        ]
       }
     ],
     "quests": [
@@ -63701,6 +67609,234 @@
           ],
           "reputation": {}
         }
+      },
+      {
+        "id": "ember_the_warm_ground",
+        "name": "The Warm Ground",
+        "description": "A village that has never been cold, over a tube that runs level for a mile and then turns up past stone the lava went round.",
+        "autoStart": false,
+        "ordered": true,
+        "tags": [
+          "hidden",
+          "ember_reach",
+          "ember_warm"
+        ],
+        "objectives": [
+          {
+            "id": "in_the_tube",
+            "description": "Get up the turn.",
+            "kind": "reach",
+            "count": 1,
+            "hidden": true,
+            "optional": false,
+            "target": "slagfoot_lava_tube"
+          },
+          {
+            "id": "past_the_stone",
+            "description": "Get past the dressed stone.",
+            "kind": "custom",
+            "count": 1,
+            "hidden": true,
+            "optional": false,
+            "when": {
+              "test": {
+                "ref": "flags.ember_warm_open"
+              }
+            }
+          },
+          {
+            "id": "what_breathes",
+            "description": "Find what has been breathing.",
+            "kind": "kill",
+            "count": 1,
+            "hidden": true,
+            "optional": false,
+            "target": "tube_breather"
+          }
+        ],
+        "stages": [],
+        "unlocks": [],
+        "rewards": {
+          "xp": 180,
+          "items": [
+            {
+              "item": "kettle_ring",
+              "quantity": 1
+            }
+          ],
+          "reputation": {}
+        }
+      },
+      {
+        "id": "ember_under_the_roofs",
+        "name": "Under the Roofs",
+        "description": "Nine feet of ash in a single night, two houses dug and no bodies in either, and every door barred from inside.",
+        "autoStart": false,
+        "ordered": true,
+        "tags": [
+          "hidden",
+          "ember_reach",
+          "ember_roofs"
+        ],
+        "objectives": [
+          {
+            "id": "under_the_ash",
+            "description": "Get under the roofs.",
+            "kind": "reach",
+            "count": 1,
+            "hidden": true,
+            "optional": false,
+            "target": "ashfall_under_the_roofs"
+          },
+          {
+            "id": "through_the_door",
+            "description": "Open a door that was barred from inside.",
+            "kind": "custom",
+            "count": 1,
+            "hidden": true,
+            "optional": false,
+            "when": {
+              "test": {
+                "ref": "flags.ember_roofs_open"
+              }
+            }
+          },
+          {
+            "id": "what_stayed",
+            "description": "Find what stayed.",
+            "kind": "kill",
+            "count": 1,
+            "hidden": true,
+            "optional": false,
+            "target": "ashfall_stayer"
+          }
+        ],
+        "stages": [],
+        "unlocks": [],
+        "rewards": {
+          "xp": 190,
+          "items": [
+            {
+              "item": "ashfall_hood",
+              "quantity": 1
+            }
+          ],
+          "reputation": {}
+        }
+      },
+      {
+        "id": "ember_the_new_treeline",
+        "name": "The New Treeline",
+        "description": "Eleven years of growth with forty rings in it, over workings somebody sealed from the inside.",
+        "autoStart": false,
+        "ordered": true,
+        "tags": [
+          "hidden",
+          "ember_reach",
+          "ember_trees"
+        ],
+        "objectives": [
+          {
+            "id": "at_the_adit",
+            "description": "Get into the old workings.",
+            "kind": "reach",
+            "count": 1,
+            "hidden": true,
+            "optional": false,
+            "target": "burnt_march_old_workings"
+          },
+          {
+            "id": "past_the_bar",
+            "description": "Get past a bar on the far side.",
+            "kind": "custom",
+            "count": 1,
+            "hidden": true,
+            "optional": false,
+            "when": {
+              "test": {
+                "ref": "flags.ember_trees_open"
+              }
+            }
+          },
+          {
+            "id": "what_counts",
+            "description": "Find what has been counting.",
+            "kind": "kill",
+            "count": 1,
+            "hidden": true,
+            "optional": false,
+            "target": "ring_counter"
+          }
+        ],
+        "stages": [],
+        "unlocks": [],
+        "rewards": {
+          "xp": 200,
+          "items": [
+            {
+              "item": "wrong_ring_haft",
+              "quantity": 1
+            }
+          ],
+          "reputation": {}
+        }
+      },
+      {
+        "id": "ember_the_sheet",
+        "name": "The Sheet",
+        "description": "A mile of glass poured flat over writing that is still legible, and something under it hot for nine hundred years.",
+        "autoStart": false,
+        "ordered": true,
+        "tags": [
+          "hidden",
+          "ember_reach",
+          "ember_sheet"
+        ],
+        "objectives": [
+          {
+            "id": "down_the_cut",
+            "description": "Get down the cut.",
+            "kind": "reach",
+            "count": 1,
+            "hidden": true,
+            "optional": false,
+            "target": "obsidian_shelf_broken_stair"
+          },
+          {
+            "id": "read_it",
+            "description": "Read what the glass went over.",
+            "kind": "custom",
+            "count": 1,
+            "hidden": true,
+            "optional": false,
+            "when": {
+              "test": {
+                "ref": "flags.ember_sheet_open"
+              }
+            }
+          },
+          {
+            "id": "what_holds_heat",
+            "description": "Meet what has held the heat.",
+            "kind": "kill",
+            "count": 1,
+            "hidden": true,
+            "optional": false,
+            "target": "sheet_founder"
+          }
+        ],
+        "stages": [],
+        "unlocks": [],
+        "rewards": {
+          "xp": 270,
+          "items": [
+            {
+              "item": "sheet_lens",
+              "quantity": 1
+            }
+          ],
+          "reputation": {}
+        }
       }
     ],
     "arcs": [
@@ -63939,6 +68075,18 @@
         "isEnding": false
       },
       {
+        "id": "ember_hidden",
+        "name": "The Ember Reach, Unread",
+        "description": "Four arguments the vent-readers have been losing for a century, and the ground agreeing with them the whole time.",
+        "quests": [
+          "ember_the_warm_ground",
+          "ember_under_the_roofs",
+          "ember_the_new_treeline",
+          "ember_the_sheet"
+        ],
+        "isEnding": false
+      },
+      {
         "id": "the_unsealing",
         "name": "The Unsealing",
         "description": "Nine doors were shut on purpose. Somebody has been opening them in order, and the ninth is the last.",
@@ -64092,6 +68240,86 @@
         "id": "glass_town_glass",
         "name": "There is glass in the streets that was not made in a kiln and did not come from lightning. It runs in lines, and the lines lead somewhere.",
         "source": "the Cutters' Hall"
+      },
+      {
+        "id": "ember_warm_never",
+        "name": "The ground under the village has never been cold. Not in a winter, not in the two years the mountain was quiet, not once.",
+        "source": "the Kettle's landlord"
+      },
+      {
+        "id": "ember_warm_wrong",
+        "name": "A tube burnt out by lava runs downhill, because that is what the lava was doing. The one under the village runs level for a mile and then turns up.",
+        "source": "a tube-walker"
+      },
+      {
+        "id": "ember_warm_breath",
+        "name": "Air comes out of it in the same rhythm all year, and it is not the mountain's rhythm. The mountain has seasons. This does not.",
+        "source": "the vent-readers' cottage"
+      },
+      {
+        "id": "ember_warm_older",
+        "name": "There is dressed stone in the tube a quarter-mile in, and the lava went round it rather than over it.",
+        "source": "cut on the forge lintel"
+      },
+      {
+        "id": "ember_roofs_up",
+        "name": "The roofs of the buried village are the wrong way up. Ash does not lift a roof; it presses one.",
+        "source": "an ash-farmer"
+      },
+      {
+        "id": "ember_roofs_empty",
+        "name": "They dug two houses out in living memory and found no bodies in either. A village that had time to leave does not bar its doors.",
+        "source": "the Road Station"
+      },
+      {
+        "id": "ember_roofs_one",
+        "name": "One fall of ash, one night, and nine feet of it. The Reach has never done nine feet in a night before or since.",
+        "source": "the vent-readers' record"
+      },
+      {
+        "id": "ember_roofs_warm",
+        "name": "The drifts over that village are warm to the hand a foot down, and the rest of the Ashfall is stone cold.",
+        "source": "a drift-walker"
+      },
+      {
+        "id": "ember_trees_fast",
+        "name": "The March burned to bare rock and had a treeline again in eleven years. Ninety is the number, everywhere, always.",
+        "source": "the Ash Farm"
+      },
+      {
+        "id": "ember_trees_ring",
+        "name": "The rings in them are wrong. Eleven years of growth and forty rings, and the rings run the wrong way out from the middle.",
+        "source": "a charcoal burner"
+      },
+      {
+        "id": "ember_trees_sealed",
+        "name": "Whatever they were mining under the March was shut up, and it was shut from the inside. There is no way to bar that door from the adit side.",
+        "source": "the Iron Posts"
+      },
+      {
+        "id": "ember_trees_posts",
+        "name": "The iron posts along the road are not milestones. They are set at the corners of something, and the something is under the trees.",
+        "source": "a carter on the Smoking Road"
+      },
+      {
+        "id": "ember_sheet_flat",
+        "name": "A mile of glass, poured flat. Lava does not pour flat; it pools and it cracks and it goes where the ground takes it.",
+        "source": "the Cutters' Camp"
+      },
+      {
+        "id": "ember_sheet_stair",
+        "name": "The stair into it was not melted through. It was cut, and then the glass came up around the cut.",
+        "source": "a shelf-cutter"
+      },
+      {
+        "id": "ember_sheet_reads",
+        "name": "There is writing under the sheet, a foot down, and it is legible, which means the glass went over it gently.",
+        "source": "the vent-readers"
+      },
+      {
+        "id": "ember_sheet_heat",
+        "name": "Whatever is under it is still hot after nine hundred years, and nothing on the Reach has held heat that long.",
+        "source": "cut into the Sheet's edge"
       }
     ],
     "loreThreads": [
@@ -64170,6 +68398,50 @@
           "glass_town_age",
           "glass_town_doors",
           "glass_town_glass"
+        ]
+      },
+      {
+        "id": "ember_warm",
+        "name": "The Warm Ground",
+        "description": "A village that has never been cold, over a tube that runs level for a mile and then turns up.",
+        "entries": [
+          "ember_warm_never",
+          "ember_warm_wrong",
+          "ember_warm_breath",
+          "ember_warm_older"
+        ]
+      },
+      {
+        "id": "ember_roofs",
+        "name": "Under the Roofs",
+        "description": "Nine feet of ash in one night, no bodies in two dug houses, and every roof the wrong way up.",
+        "entries": [
+          "ember_roofs_up",
+          "ember_roofs_empty",
+          "ember_roofs_one",
+          "ember_roofs_warm"
+        ]
+      },
+      {
+        "id": "ember_trees",
+        "name": "The New Treeline",
+        "description": "Eleven years of growth with forty rings in it, over workings that were sealed from the inside.",
+        "entries": [
+          "ember_trees_fast",
+          "ember_trees_ring",
+          "ember_trees_sealed",
+          "ember_trees_posts"
+        ]
+      },
+      {
+        "id": "ember_sheet",
+        "name": "The Sheet",
+        "description": "A mile of glass poured flat over writing that is still legible, and something under it that has been hot for nine hundred years.",
+        "entries": [
+          "ember_sheet_flat",
+          "ember_sheet_stair",
+          "ember_sheet_reads",
+          "ember_sheet_heat"
         ]
       }
     ]

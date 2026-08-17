@@ -40,6 +40,7 @@ SIDE_MODULES = [
 HIDDEN_MODULES = [
     "hidden_frostmere",
     "hidden_glasslands",
+    "hidden_ember",
 ]
 
 _LOADED = []
