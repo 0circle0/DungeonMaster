@@ -4407,6 +4407,119 @@
           }
         ],
         "rarity": "artifact"
+      },
+      {
+        "id": "scouring_tally",
+        "name": "The Scouring Tally",
+        "description": "A hazel rod notched once a year by whoever leads the clearing, and it has more notches on it than the parish has records.",
+        "kind": "key",
+        "value": 0,
+        "weight": 0,
+        "tags": [
+          "keepsake"
+        ],
+        "extra": {
+          "heldBy": "shepherd_ansel"
+        }
+      },
+      {
+        "id": "harbour_night_book",
+        "name": "The Harbour Master's Night Book",
+        "description": "Two hundred years of bearings off a headland, in fourteen hands, and the correction is the same in all fourteen.",
+        "kind": "key",
+        "value": 0,
+        "weight": 0,
+        "tags": [
+          "keepsake"
+        ],
+        "extra": {
+          "heldBy": "harbour_master_veir"
+        }
+      },
+      {
+        "id": "yard_book",
+        "name": "The Bailiff's Book",
+        "description": "One entry a year since the town was a crossroads. The October line is always the same eleven words.",
+        "kind": "key",
+        "value": 0,
+        "weight": 0,
+        "tags": [
+          "keepsake"
+        ],
+        "extra": {
+          "heldBy": "bailiff_hask"
+        }
+      },
+      {
+        "id": "corner_stone",
+        "name": "A Stone With a Corner On It",
+        "description": "Cut chalk out of a hill that has no cut chalk in it, square to within a finger's width over four feet.",
+        "kind": "treasure",
+        "value": 0,
+        "weight": 0,
+        "tags": [
+          "clue",
+          "proof"
+        ],
+        "onUse": [
+          {
+            "learnLore": {
+              "entry": "coast_horse_lines"
+            }
+          }
+        ],
+        "consumedOnUse": false
+      },
+      {
+        "id": "scourers_belt",
+        "name": "The Scourers' Belt",
+        "description": "Hazel-bark cord and a buckle worn thin by three parishes' worth of hands. On open ground the wearer knows what is turf and what is only growing over.",
+        "kind": "trinket",
+        "slot": "belt",
+        "value": 560,
+        "weight": 1,
+        "tags": [
+          "fabled"
+        ],
+        "skillBonuses": {
+          "survival": 3,
+          "perception": 2
+        },
+        "rarity": "rare"
+      },
+      {
+        "id": "signal_hood",
+        "name": "The Hood off the Signal Course",
+        "description": "Tarred canvas out of a tower with no stair in it. Light behaves oddly at the edge of it, and always has.",
+        "kind": "armor",
+        "slot": "head",
+        "value": 640,
+        "weight": 1,
+        "tags": [
+          "fabled"
+        ],
+        "skillBonuses": {
+          "perception": 3,
+          "insight": 2
+        },
+        "rarity": "rare"
+      },
+      {
+        "id": "unclaimed_ring",
+        "name": "The Ring Nobody Came For",
+        "description": "Off the October entry, the one year somebody looked. Worn, people find it hard to leave a question of yours unanswered.",
+        "kind": "trinket",
+        "slot": "ring",
+        "value": 580,
+        "weight": 1,
+        "tags": [
+          "fabled"
+        ],
+        "skillBonuses": {
+          "insight": 2,
+          "persuasion": 3
+        },
+        "rarity": "uncommon"
       }
     ],
     "lootTables": [
@@ -7203,6 +7316,201 @@
             "weight": 1,
             "value": {
               "item": "warded_coat",
+              "quantity": "1"
+            }
+          }
+        ]
+      },
+      {
+        "id": "coast_tally_carried",
+        "name": "What Ansel Kept",
+        "rolls": "1",
+        "emptyChance": 0,
+        "entries": [
+          {
+            "weight": 1,
+            "value": {
+              "item": "scouring_tally",
+              "quantity": "1",
+              "unique": true,
+              "requirementScope": "party",
+              "requires": {
+                "without": {
+                  "flags": [
+                    {
+                      "flag": "given:scouring_tally"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        ]
+      },
+      {
+        "id": "coast_book_carried",
+        "name": "What Veir Kept",
+        "rolls": "1",
+        "emptyChance": 0,
+        "entries": [
+          {
+            "weight": 1,
+            "value": {
+              "item": "harbour_night_book",
+              "quantity": "1",
+              "unique": true,
+              "requirementScope": "party",
+              "requires": {
+                "without": {
+                  "flags": [
+                    {
+                      "flag": "given:harbour_night_book"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        ]
+      },
+      {
+        "id": "coast_yard_carried",
+        "name": "What Hask Kept",
+        "rolls": "1",
+        "emptyChance": 0,
+        "entries": [
+          {
+            "weight": 1,
+            "value": {
+              "item": "yard_book",
+              "quantity": "1",
+              "unique": true,
+              "requirementScope": "party",
+              "requires": {
+                "without": {
+                  "flags": [
+                    {
+                      "flag": "given:yard_book"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        ]
+      },
+      {
+        "id": "coast_horse_hoard",
+        "name": "Under Where the Lines Cross",
+        "rolls": "2",
+        "emptyChance": 0.1,
+        "bonusRollSkill": "perception",
+        "bonusRolls": {
+          "onSuccess": 1,
+          "onCritical": 2
+        },
+        "entries": [
+          {
+            "weight": 5,
+            "value": {
+              "item": "old_coin",
+              "quantity": "2d6"
+            }
+          },
+          {
+            "weight": 2,
+            "value": {
+              "item": "bandages",
+              "quantity": "1d2"
+            }
+          },
+          {
+            "weight": 1,
+            "value": {
+              "item": "corner_stone",
+              "quantity": "1",
+              "unique": true
+            }
+          }
+        ]
+      },
+      {
+        "id": "coast_watch_hoard",
+        "name": "Below the Second Course",
+        "rolls": "2",
+        "emptyChance": 0.1,
+        "bonusRollSkill": "perception",
+        "bonusRolls": {
+          "onSuccess": 1,
+          "onCritical": 2
+        },
+        "entries": [
+          {
+            "weight": 4,
+            "value": {
+              "item": "old_coin",
+              "quantity": "3d6"
+            }
+          },
+          {
+            "weight": 3,
+            "value": {
+              "item": "wreck_brass",
+              "quantity": "1d2"
+            }
+          },
+          {
+            "weight": 2,
+            "value": {
+              "item": "wreckers_lantern",
+              "quantity": "1"
+            }
+          },
+          {
+            "weight": 1,
+            "value": {
+              "item": "ward_salt",
+              "quantity": "1"
+            }
+          }
+        ]
+      },
+      {
+        "id": "coast_yard_hoard",
+        "name": "Behind the Mortared Face",
+        "rolls": "2",
+        "emptyChance": 0.05,
+        "bonusRollSkill": "perception",
+        "bonusRolls": {
+          "onSuccess": 1,
+          "onCritical": 2
+        },
+        "entries": [
+          {
+            "weight": 5,
+            "value": {
+              "item": "old_coin",
+              "quantity": "4d6"
+            }
+          },
+          {
+            "weight": 2,
+            "value": {
+              "item": "hold_silver",
+              "quantity": "1"
+            }
+          },
+          {
+            "weight": 2,
+            "value": {
+              "item": "healing_draught",
+              "quantity": "1"
+            }
+          },
+          {
+            "weight": 1,
+            "value": {
+              "item": "barrow_torc",
               "quantity": "1"
             }
           }
@@ -11872,6 +12180,282 @@
         "resourceOverrides": {
           "hp": 130
         }
+      },
+      {
+        "id": "coast_shepherd",
+        "name": "Ansel, on the Downs",
+        "description": "Walks the chalk from dark to dark and has never once been hurried.",
+        "level": 4,
+        "xp": 0,
+        "attributes": {
+          "might": 13,
+          "agility": 13,
+          "endurance": 15,
+          "intellect": 10,
+          "instinct": 15,
+          "presence": 12
+        },
+        "abilities": [
+          "strike"
+        ],
+        "behaviour": [
+          {
+            "priority": 0,
+            "use": "strike"
+          }
+        ],
+        "faction": "the_salvors",
+        "creatureType": "humanoid",
+        "size": "medium",
+        "descriptors": [
+          "a weathered"
+        ],
+        "conditionalLoot": [],
+        "loot": "coast_tally_carried",
+        "resourceOverrides": {
+          "hp": 24
+        }
+      },
+      {
+        "id": "coast_harbourmaster",
+        "name": "Veir, Harbour Master",
+        "description": "Has talked forty tons of moving hull into the right berth without touching it.",
+        "level": 4,
+        "xp": 0,
+        "attributes": {
+          "might": 12,
+          "agility": 13,
+          "endurance": 13,
+          "intellect": 15,
+          "instinct": 14,
+          "presence": 14
+        },
+        "abilities": [
+          "strike"
+        ],
+        "behaviour": [
+          {
+            "priority": 0,
+            "use": "strike"
+          }
+        ],
+        "faction": "the_salvors",
+        "creatureType": "humanoid",
+        "size": "medium",
+        "descriptors": [
+          "a level"
+        ],
+        "conditionalLoot": [],
+        "loot": "coast_book_carried",
+        "resourceOverrides": {
+          "hp": 21
+        }
+      },
+      {
+        "id": "coast_bailiff",
+        "name": "Hask, Bailiff of Cobbleway",
+        "description": "Takes hold of other people's livestock for a living, which selects for a grip.",
+        "level": 4,
+        "xp": 0,
+        "attributes": {
+          "might": 14,
+          "agility": 12,
+          "endurance": 14,
+          "intellect": 13,
+          "instinct": 12,
+          "presence": 13
+        },
+        "abilities": [
+          "strike",
+          "shove"
+        ],
+        "behaviour": [
+          {
+            "priority": 0,
+            "use": "strike"
+          }
+        ],
+        "faction": "the_countinghouse",
+        "creatureType": "humanoid",
+        "size": "medium",
+        "descriptors": [
+          "a heavy-handed"
+        ],
+        "conditionalLoot": [],
+        "loot": "coast_yard_carried",
+        "resourceOverrides": {
+          "hp": 25
+        }
+      },
+      {
+        "id": "chalk_cutter",
+        "name": "What Cut Them Square",
+        "description": "Four feet of cut chalk square to a finger's width, on a hill with no cut chalk in it, kept clear by three parishes who think they are keeping a horse.",
+        "level": 5,
+        "xp": 300,
+        "attributes": {
+          "might": 14,
+          "agility": 16,
+          "endurance": 13,
+          "intellect": 13,
+          "instinct": 15,
+          "presence": 9
+        },
+        "abilities": [
+          "cut_and_run",
+          "rend",
+          "digging_claw"
+        ],
+        "behaviour": [
+          {
+            "priority": 15,
+            "use": "cut_and_run",
+            "when": {
+              "chance": 0.4
+            }
+          },
+          {
+            "priority": 0,
+            "use": "rend"
+          }
+        ],
+        "faction": "the_unsealed",
+        "creatureType": "undead",
+        "size": "medium",
+        "descriptors": [
+          "a chalk-pale",
+          "a patient"
+        ],
+        "conditionalLoot": [],
+        "loot": "coast_horse_hoard",
+        "conditionImmunities": [
+          "frightened"
+        ],
+        "resourceOverrides": {
+          "hp": 46
+        }
+      },
+      {
+        "id": "signal_keeper",
+        "name": "What Keeps the Correction True",
+        "description": "Four sightings in living memory, always the same week, in a tower with no stair \u2014 and two points to starboard is still the right correction.",
+        "level": 5,
+        "xp": 320,
+        "attributes": {
+          "might": 11,
+          "agility": 15,
+          "endurance": 14,
+          "intellect": 15,
+          "instinct": 16,
+          "presence": 14
+        },
+        "abilities": [
+          "wardlight",
+          "grave_chill",
+          "wither"
+        ],
+        "behaviour": [
+          {
+            "priority": 20,
+            "use": "wardlight",
+            "when": {
+              "chance": 0.35
+            }
+          },
+          {
+            "priority": 10,
+            "use": "grave_chill"
+          },
+          {
+            "priority": 0,
+            "use": "wither"
+          }
+        ],
+        "faction": "the_unsealed",
+        "creatureType": "undead",
+        "size": "medium",
+        "descriptors": [
+          "a steady",
+          "a lit"
+        ],
+        "conditionalLoot": [],
+        "loot": "coast_watch_hoard",
+        "damageInteractions": [
+          {
+            "damageType": "slashing",
+            "multiplier": 0.5,
+            "unless": [
+              "silvered"
+            ]
+          },
+          {
+            "damageType": "piercing",
+            "multiplier": 0.5,
+            "unless": [
+              "silvered"
+            ]
+          }
+        ],
+        "conditionImmunities": [
+          "frightened",
+          "blinded"
+        ],
+        "resourceOverrides": {
+          "hp": 44
+        }
+      },
+      {
+        "id": "the_unclaimed",
+        "name": "The October Entry",
+        "description": "Two hundred lines in a bailiff's book, all of them the same eleven words, and the fee paid in coin every year by somebody who has never once been seen at the yard.",
+        "level": 5,
+        "xp": 340,
+        "attributes": {
+          "might": 16,
+          "agility": 12,
+          "endurance": 16,
+          "intellect": 10,
+          "instinct": 13,
+          "presence": 11
+        },
+        "abilities": [
+          "gore",
+          "shove",
+          "rend"
+        ],
+        "behaviour": [
+          {
+            "priority": 15,
+            "use": "gore",
+            "when": {
+              "chance": 0.4
+            }
+          },
+          {
+            "priority": 5,
+            "use": "shove"
+          },
+          {
+            "priority": 0,
+            "use": "rend"
+          }
+        ],
+        "faction": "the_unsealed",
+        "creatureType": "undead",
+        "size": "medium",
+        "descriptors": [
+          "a hulking",
+          "an unshorn"
+        ],
+        "conditionalLoot": [],
+        "loot": "coast_yard_hoard",
+        "conditionImmunities": [
+          "frightened",
+          "prone"
+        ],
+        "resourceOverrides": {
+          "hp": 50
+        }
       }
     ],
     "factions": [
@@ -13905,6 +14489,114 @@
         "faction": "the_wayfinders",
         "dialogue": "deep_vess_talk",
         "home": "market_road_the_lamps"
+      },
+      {
+        "id": "shepherd_ansel",
+        "name": "Ansel, on the Downs",
+        "description": "Runs four hundred sheep over the white rock and leads the spring clearing because his mother did and hers did.",
+        "disposition": 5,
+        "gullibility": 0.4,
+        "memorySpan": 150,
+        "offersQuests": [],
+        "caresAbout": [],
+        "reactions": [],
+        "faction": "the_salvors",
+        "dialogue": "coast_ansel_talk",
+        "home": "chalk_downs_shepherds_hut",
+        "statblock": "coast_shepherd"
+      },
+      {
+        "id": "harbour_master_veir",
+        "name": "Veir, Harbour Master",
+        "description": "Berths every hull that comes into Sarnport and keeps the night book her predecessors kept, without ever having been told why.",
+        "disposition": 2,
+        "gullibility": 0.2,
+        "memorySpan": 260,
+        "offersQuests": [],
+        "caresAbout": [],
+        "reactions": [],
+        "faction": "the_salvors",
+        "dialogue": "coast_veir_talk",
+        "home": "harbourside_harbour_master",
+        "statblock": "coast_harbourmaster",
+        "shop": {
+          "lootTable": "salvors_stock",
+          "buysTags": [
+            "treasure"
+          ],
+          "priceMultiplier": 1.2
+        }
+      },
+      {
+        "id": "bailiff_hask",
+        "name": "Hask, Bailiff of Cobbleway",
+        "description": "Impounds strays, collects the fee, and writes one line every October that he did not put anything into.",
+        "disposition": 1,
+        "gullibility": 0.15,
+        "memorySpan": 280,
+        "offersQuests": [],
+        "caresAbout": [],
+        "reactions": [],
+        "faction": "the_countinghouse",
+        "dialogue": "coast_hask_talk",
+        "home": "cobbleway_house_a",
+        "statblock": "coast_bailiff"
+      },
+      {
+        "id": "downs_farmer_tibb",
+        "name": "Tibb, at Downs Farm",
+        "description": "Farms the last field before the cliff and has looked up at that hillside every day of a long life.",
+        "disposition": 7,
+        "gullibility": 0.45,
+        "memorySpan": 170,
+        "offersQuests": [],
+        "caresAbout": [],
+        "reactions": [],
+        "faction": "the_salvors",
+        "dialogue": "coast_tibb_talk",
+        "home": "thrift_house_a",
+        "shop": {
+          "lootTable": "keeper_stock",
+          "buysTags": [
+            "material"
+          ],
+          "priceMultiplier": 1.15
+        }
+      },
+      {
+        "id": "skipper_orsa",
+        "name": "Orsa, off the Haul",
+        "description": "Eleven boats work off that beach and hers is the one the other ten watch to see when it is worth going.",
+        "disposition": 4,
+        "gullibility": 0.35,
+        "memorySpan": 160,
+        "offersQuests": [],
+        "caresAbout": [],
+        "reactions": [],
+        "faction": "the_salvors",
+        "dialogue": "coast_orsa_talk",
+        "home": "gullmere_the_bass"
+      },
+      {
+        "id": "chandler_rell",
+        "name": "Rell, Chandler",
+        "description": "Sells rope, tar, lamp oil and charts, and has opinions about which of the charts are worth the paper.",
+        "disposition": 6,
+        "gullibility": 0.4,
+        "memorySpan": 180,
+        "offersQuests": [],
+        "caresAbout": [],
+        "reactions": [],
+        "faction": "the_countinghouse",
+        "dialogue": "coast_rell_talk",
+        "home": "harbourside_chandlery",
+        "shop": {
+          "lootTable": "countinghouse_stock",
+          "buysTags": [
+            "treasure"
+          ],
+          "priceMultiplier": 1.25
+        }
       }
     ],
     "traps": [
@@ -24174,7 +24866,22 @@
         "position": {
           "x": 29,
           "y": 23
-        }
+        },
+        "triggers": [
+          {
+            "id": "coast_found_stables",
+            "mode": "once",
+            "on": "enter",
+            "description": "What the stablers have stopped arguing with the horses about.",
+            "effects": [
+              {
+                "learnLore": {
+                  "entry": "coast_yard_horses"
+                }
+              }
+            ]
+          }
+        ]
       },
       {
         "id": "cobbleway_bakery",
@@ -24254,7 +24961,62 @@
         "position": {
           "x": 3,
           "y": 13
-        }
+        },
+        "triggers": [
+          {
+            "id": "coast_yard_committed",
+            "mode": "once",
+            "on": "enter",
+            "description": "In the yard, on the wrong night, with the book.",
+            "requires": {
+              "custom": {
+                "gte": [
+                  {
+                    "ref": "threads.coast_yard.known"
+                  },
+                  2
+                ]
+              }
+            },
+            "effects": [
+              {
+                "emit": {
+                  "event": "startQuest",
+                  "data": {
+                    "quest": "coast_the_unclaimed"
+                  }
+                }
+              }
+            ]
+          }
+        ],
+        "hidden": true,
+        "discover": {
+          "skill": "perception",
+          "difficulty": {
+            "max": [
+              6,
+              {
+                "sub": [
+                  18,
+                  {
+                    "mul": [
+                      3,
+                      {
+                        "ref": "threads.coast_yard.known"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "gate": "coast_yard_northface",
+        "encounterTables": [
+          "coast_yard_boss"
+        ],
+        "encounterChance": 1
       },
       {
         "id": "gullmere_haul",
@@ -24524,7 +25286,22 @@
         "position": {
           "x": 3,
           "y": 3
-        }
+        },
+        "triggers": [
+          {
+            "id": "coast_found_horse",
+            "mode": "once",
+            "on": "enter",
+            "description": "Close up, standing on it, what the shape is actually made of.",
+            "effects": [
+              {
+                "learnLore": {
+                  "entry": "coast_horse_shape"
+                }
+              }
+            ]
+          }
+        ]
       },
       {
         "id": "chalk_downs_dew_pond",
@@ -24538,7 +25315,22 @@
         "position": {
           "x": 14,
           "y": 3
-        }
+        },
+        "triggers": [
+          {
+            "id": "coast_found_pond",
+            "mode": "once",
+            "on": "enter",
+            "description": "Water on the top of a chalk hill, in August.",
+            "effects": [
+              {
+                "learnLore": {
+                  "entry": "coast_horse_pond"
+                }
+              }
+            ]
+          }
+        ]
       },
       {
         "id": "chalk_downs_shepherds_hut",
@@ -24574,7 +25366,58 @@
         "position": {
           "x": 36,
           "y": 3
-        }
+        },
+        "triggers": [
+          {
+            "id": "coast_horse_committed",
+            "mode": "once",
+            "on": "enter",
+            "description": "Under the place where the lines cross.",
+            "requires": {
+              "custom": {
+                "gte": [
+                  {
+                    "ref": "threads.coast_horse.known"
+                  },
+                  2
+                ]
+              }
+            },
+            "effects": [
+              {
+                "emit": {
+                  "event": "startQuest",
+                  "data": {
+                    "quest": "coast_the_scouring"
+                  }
+                }
+              }
+            ]
+          }
+        ],
+        "hidden": true,
+        "discover": {
+          "skill": "survival",
+          "difficulty": {
+            "max": [
+              5,
+              {
+                "sub": [
+                  17,
+                  {
+                    "mul": [
+                      3,
+                      {
+                        "ref": "threads.coast_horse.known"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "gate": "coast_horse_adit"
       },
       {
         "id": "wreckers_strand_bone_beach",
@@ -24698,7 +25541,22 @@
         "position": {
           "x": 14,
           "y": 3
-        }
+        },
+        "triggers": [
+          {
+            "id": "coast_found_path",
+            "mode": "once",
+            "on": "enter",
+            "description": "What the hill two miles inland looks like from four hundred feet up.",
+            "effects": [
+              {
+                "learnLore": {
+                  "entry": "coast_horse_lines"
+                }
+              }
+            ]
+          }
+        ]
       },
       {
         "id": "gannet_head_watchtower",
@@ -24719,7 +25577,22 @@
         "position": {
           "x": 25,
           "y": 3
-        }
+        },
+        "triggers": [
+          {
+            "id": "coast_found_tower",
+            "mode": "once",
+            "on": "enter",
+            "description": "The circle of bare rock at the foot of it, and how sharp its edge is.",
+            "effects": [
+              {
+                "learnLore": {
+                  "entry": "coast_watch_ring"
+                }
+              }
+            ]
+          }
+        ]
       },
       {
         "id": "gannet_head_seacaves",
@@ -24736,7 +25609,58 @@
         "position": {
           "x": 36,
           "y": 3
-        }
+        },
+        "triggers": [
+          {
+            "id": "coast_watch_committed",
+            "mode": "once",
+            "on": "enter",
+            "description": "In under the head, on the hour the tide allows.",
+            "requires": {
+              "custom": {
+                "gte": [
+                  {
+                    "ref": "threads.coast_watch.known"
+                  },
+                  2
+                ]
+              }
+            },
+            "effects": [
+              {
+                "emit": {
+                  "event": "startQuest",
+                  "data": {
+                    "quest": "coast_the_signal"
+                  }
+                }
+              }
+            ]
+          }
+        ],
+        "hidden": true,
+        "discover": {
+          "skill": "perception",
+          "difficulty": {
+            "max": [
+              7,
+              {
+                "sub": [
+                  19,
+                  {
+                    "mul": [
+                      3,
+                      {
+                        "ref": "threads.coast_watch.known"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "gate": "coast_watch_undercroft"
       },
       {
         "id": "elderhollow_moot_oak",
@@ -36565,6 +37489,93 @@
             }
           ]
         }
+      },
+      {
+        "id": "coast_horse_adit",
+        "name": "Where the Lines Cross",
+        "description": "Two of the cut lines meet square, and the turf over the meeting has been lifted and put back more than once.",
+        "kind": "ward",
+        "blockedTextKey": "coast_horse_blocked",
+        "staysOpen": true,
+        "onOpen": [
+          {
+            "setFlag": {
+              "flag": "coast_horse_open",
+              "value": true
+            }
+          }
+        ],
+        "onBlocked": [],
+        "opensWith": [],
+        "tags": [],
+        "requires": {
+          "items": [
+            {
+              "item": "scouring_tally",
+              "quantity": 1,
+              "consume": false,
+              "equipped": false
+            }
+          ]
+        }
+      },
+      {
+        "id": "coast_watch_undercroft",
+        "name": "Below the Second Course",
+        "description": "A tower with no stair going up, and a course of stone at the foot that is dressed on the inside face.",
+        "kind": "ward",
+        "blockedTextKey": "coast_watch_blocked",
+        "staysOpen": true,
+        "onOpen": [
+          {
+            "setFlag": {
+              "flag": "coast_watch_open",
+              "value": true
+            }
+          }
+        ],
+        "onBlocked": [],
+        "opensWith": [],
+        "tags": [],
+        "requires": {
+          "items": [
+            {
+              "item": "harbour_night_book",
+              "quantity": 1,
+              "consume": false,
+              "equipped": false
+            }
+          ]
+        }
+      },
+      {
+        "id": "coast_yard_northface",
+        "name": "The Mortared Face",
+        "description": "Three walls of dry-stone a bailiff's grandfather laid, and a fourth that was standing here before the road was.",
+        "kind": "ward",
+        "blockedTextKey": "coast_yard_blocked",
+        "staysOpen": true,
+        "onOpen": [
+          {
+            "setFlag": {
+              "flag": "coast_yard_open",
+              "value": true
+            }
+          }
+        ],
+        "onBlocked": [],
+        "opensWith": [],
+        "tags": [],
+        "requires": {
+          "items": [
+            {
+              "item": "yard_book",
+              "quantity": 1,
+              "consume": false,
+              "equipped": false
+            }
+          ]
+        }
       }
     ],
     "roomTemplates": [
@@ -37638,7 +38649,8 @@
         "corridorLength": "3d3",
         "roomSize": "2d2+2",
         "width": "69",
-        "height": "69"
+        "height": "69",
+        "bossTable": "coast_horse_boss"
       },
       {
         "id": "strand_smugglers_run",
@@ -37679,7 +38691,8 @@
           "birthThreshold": 5
         },
         "width": "41",
-        "height": "41"
+        "height": "41",
+        "bossTable": "coast_watch_boss"
       },
       {
         "id": "duskwood_hollow_way",
@@ -40788,6 +41801,72 @@
             ]
           }
         ]
+      },
+      {
+        "id": "coast_horse_boss",
+        "minDepth": 0,
+        "maxDepth": 999,
+        "chance": 1,
+        "emptyWeight": 0,
+        "scalePerLevels": 3,
+        "groups": [
+          {
+            "id": "b",
+            "weight": 1,
+            "hostile": true,
+            "entries": [
+              {
+                "monster": "chalk_cutter",
+                "count": "1d2",
+                "scaleWithLevel": true
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "coast_watch_boss",
+        "minDepth": 0,
+        "maxDepth": 999,
+        "chance": 1,
+        "emptyWeight": 0,
+        "scalePerLevels": 3,
+        "groups": [
+          {
+            "id": "b",
+            "weight": 1,
+            "hostile": true,
+            "entries": [
+              {
+                "monster": "signal_keeper",
+                "count": "1",
+                "scaleWithLevel": false
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "coast_yard_boss",
+        "minDepth": 0,
+        "maxDepth": 999,
+        "chance": 1,
+        "emptyWeight": 0,
+        "scalePerLevels": 3,
+        "groups": [
+          {
+            "id": "b",
+            "weight": 1,
+            "hostile": true,
+            "entries": [
+              {
+                "monster": "the_unclaimed",
+                "count": "1",
+                "scaleWithLevel": false
+              }
+            ]
+          }
+        ]
       }
     ],
     "time": {
@@ -41664,6 +42743,20 @@
         ]
       },
       {
+        "id": "coast_horse_blocked",
+        "variants": [
+          {
+            "text": "The clearing has been done to a count, every spring, and the count is kept on a rod rather than in the parish book. Without the rod you are looking at a hillside."
+          },
+          {
+            "text": "Lines that cross square on a hill nobody built anything on. Whoever cut them was working to a plan, and the plan is not the figure \u2014 the figure is the index to it."
+          },
+          {
+            "text": "The turf here lifts in one piece, which turf does not do unless it has been lifted before."
+          }
+        ]
+      },
+      {
         "id": "coast_thrift_desc",
         "variants": [
           {
@@ -41681,6 +42774,20 @@
         ]
       },
       {
+        "id": "coast_watch_blocked",
+        "variants": [
+          {
+            "text": "Fourteen hands of bearings all give the same correction off this headland, and the book says what they were correcting to. You do not have the book."
+          },
+          {
+            "text": "There is no way up and there has never been a way up. Whatever this was built to do, it was done from underneath."
+          },
+          {
+            "text": "Forty thousand birds on this head and a bare circle at the foot of it. Birds are not sentimental about ruins."
+          }
+        ]
+      },
+      {
         "id": "coast_wreckers_strand_desc",
         "variants": [
           {
@@ -41694,6 +42801,20 @@
           },
           {
             "text": "Nobody lives here. A good many people come here."
+          }
+        ]
+      },
+      {
+        "id": "coast_yard_blocked",
+        "variants": [
+          {
+            "text": "Two hundred years of one line a year, and the line names where the beast was put. The book is the bailiff's and the bailiff has it."
+          },
+          {
+            "text": "The mortar is not the town's mortar and is not the Crown's either. It is older than both and it was mixed with something that has not weathered."
+          },
+          {
+            "text": "Horses will not stand in this yard one night of the year. They are not wrong about much."
           }
         ]
       },
@@ -71453,6 +72574,1778 @@
             "redirectWhen": []
           }
         ]
+      },
+      {
+        "id": "coast_ansel_talk",
+        "start": "greet",
+        "nodes": [
+          {
+            "id": "greet",
+            "says": [
+              {
+                "text": "Four hundred sheep on short turf over white rock, and a man in the middle of them working a pair of shears without looking at them."
+              },
+              {
+                "text": "\u201cMind the flock. Say what you want, I will hear you.\u201d"
+              }
+            ],
+            "onEnter": [],
+            "options": [
+              {
+                "id": "coast_ansel_three",
+                "text": "Who clears the chalk?",
+                "requires": {
+                  "without": {
+                    "lore": [
+                      "coast_horse_three"
+                    ]
+                  }
+                },
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "check": {
+                  "skill": "persuasion",
+                  "difficulty": {
+                    "sub": [
+                      10,
+                      {
+                        "clamp": [
+                          {
+                            "div": [
+                              {
+                                "ref": "reputation.the_salvors",
+                                "else": 0
+                              },
+                              5
+                            ]
+                          },
+                          -6,
+                          6
+                        ]
+                      }
+                    ]
+                  },
+                  "onSuccess": "coast_ansel_three_told",
+                  "onFailure": "coast_ansel_three_wont"
+                }
+              },
+              {
+                "id": "coast_ansel_shape",
+                "text": "You have walked over it all your life. What shape is it?",
+                "requires": {
+                  "without": {
+                    "lore": [
+                      "coast_horse_shape"
+                    ]
+                  }
+                },
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "check": {
+                  "skill": "insight",
+                  "difficulty": {
+                    "sub": [
+                      13,
+                      {
+                        "clamp": [
+                          {
+                            "div": [
+                              {
+                                "ref": "reputation.the_salvors",
+                                "else": 0
+                              },
+                              5
+                            ]
+                          },
+                          -6,
+                          6
+                        ]
+                      }
+                    ]
+                  },
+                  "onSuccess": "coast_ansel_shape_told",
+                  "onFailure": "coast_ansel_shape_wont"
+                }
+              },
+              {
+                "id": "coast_ansel_tally",
+                "text": "The rod you keep the count on. Lend it to me.",
+                "requires": {
+                  "without": {
+                    "items": [
+                      "scouring_tally"
+                    ],
+                    "flags": [
+                      {
+                        "flag": "given:scouring_tally"
+                      }
+                    ]
+                  }
+                },
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "check": {
+                  "skill": "persuasion",
+                  "difficulty": {
+                    "sub": [
+                      12,
+                      {
+                        "clamp": [
+                          {
+                            "div": [
+                              {
+                                "ref": "reputation.the_salvors",
+                                "else": 0
+                              },
+                              5
+                            ]
+                          },
+                          -6,
+                          6
+                        ]
+                      }
+                    ]
+                  },
+                  "onSuccess": "coast_ansel_tally_gave",
+                  "onFailure": "coast_ansel_tally_kept"
+                }
+              },
+              {
+                "id": "greet_leave",
+                "text": "Nothing.",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "coast_ansel_three_told",
+            "says": [
+              {
+                "text": "\u201cThree parishes. Us, Thrift, and the Cobbleway lot who come out in carts and are no use.\u201d He shears on. \u201cAsk any of the three why and you will get the same answer, which is that the other two turn out and it would look bad not to. That is the whole of the reasoning and it has run four hundred years.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "learnLore": {
+                  "entry": "coast_horse_three"
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "coast_ansel_three_on",
+                "text": "Go on.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "coast_ansel_three_wont",
+            "says": [
+              {
+                "text": "\u201cI've said all I mean to,\u201d they say, and go back to what they were doing."
+              }
+            ],
+            "onEnter": [
+              {
+                "adjustReputation": {
+                  "faction": "the_salvors",
+                  "amount": -1
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "coast_ansel_three_drop",
+                "text": "Leave it.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "coast_ansel_shape_told",
+            "says": [
+              {
+                "text": "Ansel stops, which he does not do. \u201cIt has corners on it,\u201d he says, carefully, like a man who has never said it aloud. \u201cYou cannot see them from the road and you cannot see them from the green. You can see them from on it, and once you have you cannot stop.\u201d He goes back to the sheep. \u201cNothing that runs has corners.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "learnLore": {
+                  "entry": "coast_horse_shape"
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "coast_ansel_shape_on",
+                "text": "Go on.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "coast_ansel_shape_wont",
+            "says": [
+              {
+                "text": "\u201cI've said all I mean to,\u201d they say, and go back to what they were doing."
+              }
+            ],
+            "onEnter": [
+              {
+                "adjustReputation": {
+                  "faction": "the_salvors",
+                  "amount": -1
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "coast_ansel_shape_drop",
+                "text": "Leave it.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "coast_ansel_tally_gave",
+            "says": [
+              {
+                "text": "He fetches it out of the thatch, which is where it has always lived. \u201cThere are more notches on that than the parish has years of records,\u201d he says. \u201cI have never known what to do about that, so I have gone on cutting them.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "grantItem": {
+                  "target": {
+                    "ref": "actor.id"
+                  },
+                  "item": "scouring_tally",
+                  "quantity": 1
+                }
+              },
+              {
+                "setFlag": {
+                  "flag": "given:scouring_tally",
+                  "value": true
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "coast_ansel_tally_thanks",
+                "text": "Thank you.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "coast_ansel_tally_kept",
+            "says": [
+              {
+                "text": "\u201cIt goes back in the thatch,\u201d he says, and it does, and that is the end of the conversation."
+              }
+            ],
+            "onEnter": [
+              {
+                "adjustReputation": {
+                  "faction": "the_salvors",
+                  "amount": -2
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "coast_ansel_tally_leave",
+                "text": "Then no.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          }
+        ]
+      },
+      {
+        "id": "coast_veir_talk",
+        "start": "greet",
+        "nodes": [
+          {
+            "id": "greet",
+            "says": [
+              {
+                "text": "A first-floor office over the mole with every window facing water, and a berth list going down a slate faster than it comes off."
+              },
+              {
+                "text": "\u201cIf it is a berth you want, it is tomorrow. If it is anything else, be quick.\u201d"
+              }
+            ],
+            "onEnter": [],
+            "options": [
+              {
+                "id": "coast_veir_light",
+                "text": "The tower on the head. Has anything been in it?",
+                "requires": {
+                  "without": {
+                    "lore": [
+                      "coast_watch_light"
+                    ]
+                  }
+                },
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "check": {
+                  "skill": "persuasion",
+                  "difficulty": {
+                    "sub": [
+                      14,
+                      {
+                        "clamp": [
+                          {
+                            "div": [
+                              {
+                                "ref": "reputation.the_salvors",
+                                "else": 0
+                              },
+                              5
+                            ]
+                          },
+                          -6,
+                          6
+                        ]
+                      }
+                    ]
+                  },
+                  "onSuccess": "coast_veir_light_told",
+                  "onFailure": "coast_veir_light_wont"
+                }
+              },
+              {
+                "id": "coast_veir_tide",
+                "text": "The way in under the head.",
+                "requires": {
+                  "without": {
+                    "lore": [
+                      "coast_watch_tide"
+                    ]
+                  }
+                },
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "check": {
+                  "skill": "persuasion",
+                  "difficulty": {
+                    "sub": [
+                      15,
+                      {
+                        "clamp": [
+                          {
+                            "div": [
+                              {
+                                "ref": "reputation.the_salvors",
+                                "else": 0
+                              },
+                              5
+                            ]
+                          },
+                          -6,
+                          6
+                        ]
+                      }
+                    ]
+                  },
+                  "onSuccess": "coast_veir_tide_told",
+                  "onFailure": "coast_veir_tide_wont"
+                }
+              },
+              {
+                "id": "coast_veir_book",
+                "text": "The night book. I want to read it.",
+                "requires": {
+                  "without": {
+                    "items": [
+                      "harbour_night_book"
+                    ],
+                    "flags": [
+                      {
+                        "flag": "given:harbour_night_book"
+                      }
+                    ]
+                  }
+                },
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "check": {
+                  "skill": "persuasion",
+                  "difficulty": {
+                    "sub": [
+                      14,
+                      {
+                        "clamp": [
+                          {
+                            "div": [
+                              {
+                                "ref": "reputation.the_salvors",
+                                "else": 0
+                              },
+                              5
+                            ]
+                          },
+                          -6,
+                          6
+                        ]
+                      }
+                    ]
+                  },
+                  "onSuccess": "coast_veir_book_gave",
+                  "onFailure": "coast_veir_book_kept"
+                }
+              },
+              {
+                "id": "greet_leave",
+                "text": "Nothing.",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": [
+              {
+                "requires": {
+                  "factions": [
+                    {
+                      "faction": "the_salvors",
+                      "maxStanding": -30
+                    }
+                  ]
+                },
+                "goto": "coast_veir_cold"
+              }
+            ]
+          },
+          {
+            "id": "coast_veir_light_told",
+            "says": [
+              {
+                "text": "\u201cFour times.\u201d She does not look up from the berth list. \u201c1187, 1224, 1251, and eleven years ago, which I saw. Same week of the year every time.\u201d Now she looks up. \u201cThere is no stair in that tower. There has never been a stair in that tower. I have had the masons out.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "learnLore": {
+                  "entry": "coast_watch_light"
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "coast_veir_light_on",
+                "text": "Go on.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "coast_veir_light_wont",
+            "says": [
+              {
+                "text": "\u201cI've said all I mean to,\u201d they say, and go back to what they were doing."
+              }
+            ],
+            "onEnter": [
+              {
+                "adjustReputation": {
+                  "faction": "the_salvors",
+                  "amount": -1
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "coast_veir_light_drop",
+                "text": "Leave it.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "coast_veir_tide_told",
+            "says": [
+              {
+                "text": "\u201cBottom of a spring tide, and it shuts again inside the hour.\u201d She taps a tide table she has clearly consulted for other reasons. \u201cWhich means anybody who has ever gone in has either come out very fast or has not come out. We have never recovered one.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "learnLore": {
+                  "entry": "coast_watch_tide"
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "coast_veir_tide_on",
+                "text": "Go on.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "coast_veir_tide_wont",
+            "says": [
+              {
+                "text": "\u201cI've said all I mean to,\u201d they say, and go back to what they were doing."
+              }
+            ],
+            "onEnter": [
+              {
+                "adjustReputation": {
+                  "faction": "the_salvors",
+                  "amount": -1
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "coast_veir_tide_drop",
+                "text": "Leave it.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "coast_veir_book_gave",
+            "says": [
+              {
+                "text": "She puts it on the counter and keeps a hand on it. \u201cFourteen hands going back to before the mole was built,\u201d she says. \u201cEvery one of them writes the same correction and not one of them says what for. If you find out, come back. I will have kept the page.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "grantItem": {
+                  "target": {
+                    "ref": "actor.id"
+                  },
+                  "item": "harbour_night_book",
+                  "quantity": 1
+                }
+              },
+              {
+                "setFlag": {
+                  "flag": "given:harbour_night_book",
+                  "value": true
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "coast_veir_book_thanks",
+                "text": "Thank you.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "coast_veir_book_kept",
+            "says": [
+              {
+                "text": "\u201cIt is the office's,\u201d she says, \u201cand I am the office,\u201d and puts it back under the counter."
+              }
+            ],
+            "onEnter": [
+              {
+                "adjustReputation": {
+                  "faction": "the_salvors",
+                  "amount": -2
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "coast_veir_book_leave",
+                "text": "Then no.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "coast_veir_cold",
+            "says": [
+              {
+                "text": "She turns the berth list over and goes on writing on the back of it."
+              }
+            ],
+            "onEnter": [],
+            "options": [
+              {
+                "id": "coast_veir_go",
+                "text": "Leave it.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          }
+        ]
+      },
+      {
+        "id": "coast_hask_talk",
+        "start": "greet",
+        "nodes": [
+          {
+            "id": "greet",
+            "says": [
+              {
+                "text": "A front room with a table, a strongbox and a book, and a man who has been bailiff long enough that the room has stopped being a front room."
+              },
+              {
+                "text": "\u201cStrays, fees, and the pinfold. Which is it?\u201d"
+              }
+            ],
+            "onEnter": [],
+            "options": [
+              {
+                "id": "coast_hask_one",
+                "text": "The October entry.",
+                "requires": {
+                  "without": {
+                    "lore": [
+                      "coast_yard_one"
+                    ]
+                  }
+                },
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "check": {
+                  "skill": "persuasion",
+                  "difficulty": {
+                    "sub": [
+                      13,
+                      {
+                        "clamp": [
+                          {
+                            "div": [
+                              {
+                                "ref": "reputation.the_countinghouse",
+                                "else": 0
+                              },
+                              5
+                            ]
+                          },
+                          -6,
+                          6
+                        ]
+                      }
+                    ]
+                  },
+                  "onSuccess": "coast_hask_one_told",
+                  "onFailure": "coast_hask_one_wont"
+                }
+              },
+              {
+                "id": "coast_hask_horses",
+                "text": "Why will the coach horses not stand there?",
+                "requires": {
+                  "without": {
+                    "lore": [
+                      "coast_yard_horses"
+                    ]
+                  }
+                },
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "check": {
+                  "skill": "insight",
+                  "difficulty": {
+                    "sub": [
+                      12,
+                      {
+                        "clamp": [
+                          {
+                            "div": [
+                              {
+                                "ref": "reputation.the_countinghouse",
+                                "else": 0
+                              },
+                              5
+                            ]
+                          },
+                          -6,
+                          6
+                        ]
+                      }
+                    ]
+                  },
+                  "onSuccess": "coast_hask_horses_told",
+                  "onFailure": "coast_hask_horses_wont"
+                }
+              },
+              {
+                "id": "coast_hask_book",
+                "text": "Give me the book.",
+                "requires": {
+                  "without": {
+                    "items": [
+                      "yard_book"
+                    ],
+                    "flags": [
+                      {
+                        "flag": "given:yard_book"
+                      }
+                    ]
+                  }
+                },
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "check": {
+                  "skill": "persuasion",
+                  "difficulty": {
+                    "sub": [
+                      14,
+                      {
+                        "clamp": [
+                          {
+                            "div": [
+                              {
+                                "ref": "reputation.the_countinghouse",
+                                "else": 0
+                              },
+                              5
+                            ]
+                          },
+                          -6,
+                          6
+                        ]
+                      }
+                    ]
+                  },
+                  "onSuccess": "coast_hask_book_gave",
+                  "onFailure": "coast_hask_book_kept"
+                }
+              },
+              {
+                "id": "greet_leave",
+                "text": "Nothing.",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "coast_hask_one_told",
+            "says": [
+              {
+                "text": "The bailiff does not pretend not to know what you mean, which is itself an answer. \u201cOne a year. Same night. Taken up, unclaimed, and the fee paid.\u201d He closes the book. \u201cMy father wrote it. His father wrote it. I have written it nineteen times and I have never once been in that yard to see what I was writing about.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "learnLore": {
+                  "entry": "coast_yard_one"
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "coast_hask_one_on",
+                "text": "Go on.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "coast_hask_one_wont",
+            "says": [
+              {
+                "text": "\u201cI've said all I mean to,\u201d they say, and go back to what they were doing."
+              }
+            ],
+            "onEnter": [
+              {
+                "adjustReputation": {
+                  "faction": "the_countinghouse",
+                  "amount": -1
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "coast_hask_one_drop",
+                "text": "Leave it.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "coast_hask_horses_told",
+            "says": [
+              {
+                "text": "\u201cBecause they are not stupid.\u201d He says it flatly. \u201cOne night of the year they will not go through the gate and they will not be made to. The stablers stopped trying before I was born and put the night in the coaching timetable instead, which tells you how long this has been the arrangement.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "learnLore": {
+                  "entry": "coast_yard_horses"
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "coast_hask_horses_on",
+                "text": "Go on.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "coast_hask_horses_wont",
+            "says": [
+              {
+                "text": "\u201cI've said all I mean to,\u201d they say, and go back to what they were doing."
+              }
+            ],
+            "onEnter": [
+              {
+                "adjustReputation": {
+                  "faction": "the_countinghouse",
+                  "amount": -1
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "coast_hask_horses_drop",
+                "text": "Leave it.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "coast_hask_book_gave",
+            "says": [
+              {
+                "text": "He hands it across with both hands, which is not how a man hands over a ledger. \u201cThe October line is eleven words and it names where the beast was put,\u201d he says. \u201cI have read it nineteen times. I would rather somebody else went and looked.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "grantItem": {
+                  "target": {
+                    "ref": "actor.id"
+                  },
+                  "item": "yard_book",
+                  "quantity": 1
+                }
+              },
+              {
+                "setFlag": {
+                  "flag": "given:yard_book",
+                  "value": true
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "coast_hask_book_thanks",
+                "text": "Thank you.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "coast_hask_book_kept",
+            "says": [
+              {
+                "text": "\u201cIt is the town's book and I am the town's bailiff,\u201d he says, which is a sentence he has clearly had ready for years."
+              }
+            ],
+            "onEnter": [
+              {
+                "adjustReputation": {
+                  "faction": "the_countinghouse",
+                  "amount": -2
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "coast_hask_book_leave",
+                "text": "Then no.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          }
+        ]
+      },
+      {
+        "id": "coast_tibb_talk",
+        "start": "greet",
+        "nodes": [
+          {
+            "id": "greet",
+            "says": [
+              {
+                "text": "The last field before four hundred feet of nothing, and an old farmer leaning on a gate looking inland rather than out."
+              },
+              {
+                "text": "\u201cI have looked at that hill for sixty years. Go on, then.\u201d"
+              }
+            ],
+            "onEnter": [],
+            "options": [
+              {
+                "id": "coast_tibb_lines",
+                "text": "You have looked at it for sixty years. What is it?",
+                "requires": {
+                  "without": {
+                    "lore": [
+                      "coast_horse_lines"
+                    ]
+                  }
+                },
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "check": {
+                  "skill": "insight",
+                  "difficulty": {
+                    "sub": [
+                      11,
+                      {
+                        "clamp": [
+                          {
+                            "div": [
+                              {
+                                "ref": "reputation.the_salvors",
+                                "else": 0
+                              },
+                              5
+                            ]
+                          },
+                          -6,
+                          6
+                        ]
+                      }
+                    ]
+                  },
+                  "onSuccess": "coast_tibb_lines_told",
+                  "onFailure": "coast_tibb_lines_wont"
+                }
+              },
+              {
+                "id": "coast_tibb_ring",
+                "text": "The birds on the head. Is there anywhere they don't nest?",
+                "requires": {
+                  "without": {
+                    "lore": [
+                      "coast_watch_ring"
+                    ]
+                  }
+                },
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "check": {
+                  "skill": "persuasion",
+                  "difficulty": {
+                    "sub": [
+                      12,
+                      {
+                        "clamp": [
+                          {
+                            "div": [
+                              {
+                                "ref": "reputation.the_salvors",
+                                "else": 0
+                              },
+                              5
+                            ]
+                          },
+                          -6,
+                          6
+                        ]
+                      }
+                    ]
+                  },
+                  "onSuccess": "coast_tibb_ring_told",
+                  "onFailure": "coast_tibb_ring_wont"
+                }
+              },
+              {
+                "id": "coast_tibb_paid",
+                "text": "Somebody pays the October fee at Cobbleway.",
+                "requires": {
+                  "without": {
+                    "lore": [
+                      "coast_yard_paid"
+                    ]
+                  }
+                },
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "check": {
+                  "skill": "insight",
+                  "difficulty": {
+                    "sub": [
+                      14,
+                      {
+                        "clamp": [
+                          {
+                            "div": [
+                              {
+                                "ref": "reputation.the_salvors",
+                                "else": 0
+                              },
+                              5
+                            ]
+                          },
+                          -6,
+                          6
+                        ]
+                      }
+                    ]
+                  },
+                  "onSuccess": "coast_tibb_paid_told",
+                  "onFailure": "coast_tibb_paid_wont"
+                }
+              },
+              {
+                "id": "greet_leave",
+                "text": "Nothing.",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "coast_tibb_lines_told",
+            "says": [
+              {
+                "text": "\u201cIt is not a horse.\u201d Tibb says it without any weight at all, the way you say a thing you settled long ago. \u201cFrom up the cliff path you can see two of the cuts go square to each other, and they run on past where the beast would stop.\u201d A shrug. \u201cI told the vicar once. He wrote it down and nothing happened, which is what I expected.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "learnLore": {
+                  "entry": "coast_horse_lines"
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "coast_tibb_lines_on",
+                "text": "Go on.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "coast_tibb_lines_wont",
+            "says": [
+              {
+                "text": "\u201cI've said all I mean to,\u201d they say, and go back to what they were doing."
+              }
+            ],
+            "onEnter": [
+              {
+                "adjustReputation": {
+                  "faction": "the_salvors",
+                  "amount": -1
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "coast_tibb_lines_drop",
+                "text": "Leave it.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "coast_tibb_ring_told",
+            "says": [
+              {
+                "text": "\u201cRound the tower's foot. Forty feet of bare rock, near enough a circle.\u201d Tibb spits over the gate. \u201cThere is guano a foot deep on every other stone of that headland. Birds are not sentimental. If they will not sit there, there is a reason and it is not history.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "learnLore": {
+                  "entry": "coast_watch_ring"
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "coast_tibb_ring_on",
+                "text": "Go on.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "coast_tibb_ring_wont",
+            "says": [
+              {
+                "text": "\u201cI've said all I mean to,\u201d they say, and go back to what they were doing."
+              }
+            ],
+            "onEnter": [
+              {
+                "adjustReputation": {
+                  "faction": "the_salvors",
+                  "amount": -1
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "coast_tibb_ring_drop",
+                "text": "Leave it.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "coast_tibb_paid_told",
+            "says": [
+              {
+                "text": "\u201cIn coin, into the box, every year.\u201d Tibb has clearly thought about this. \u201cNow a fee is paid by the owner. So somebody owns it, and has for two hundred years, and has never once come and collected the animal they are paying for.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "learnLore": {
+                  "entry": "coast_yard_paid"
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "coast_tibb_paid_on",
+                "text": "Go on.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "coast_tibb_paid_wont",
+            "says": [
+              {
+                "text": "\u201cI've said all I mean to,\u201d they say, and go back to what they were doing."
+              }
+            ],
+            "onEnter": [
+              {
+                "adjustReputation": {
+                  "faction": "the_salvors",
+                  "amount": -1
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "coast_tibb_paid_drop",
+                "text": "Leave it.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          }
+        ]
+      },
+      {
+        "id": "coast_orsa_talk",
+        "start": "greet",
+        "nodes": [
+          {
+            "id": "greet",
+            "says": [
+              {
+                "text": "Eleven boats up the shingle above the tide line, and a woman going over the seams of the nearest one on her knees."
+              },
+              {
+                "text": "\u201cIf you are buying fish it is up the beach. If you are asking about the water, ask.\u201d"
+              }
+            ],
+            "onEnter": [],
+            "options": [
+              {
+                "id": "coast_orsa_correct",
+                "text": "Do you change course off the head at night?",
+                "requires": {
+                  "without": {
+                    "lore": [
+                      "coast_watch_correct"
+                    ]
+                  }
+                },
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "check": {
+                  "skill": "persuasion",
+                  "difficulty": {
+                    "sub": [
+                      11,
+                      {
+                        "clamp": [
+                          {
+                            "div": [
+                              {
+                                "ref": "reputation.the_salvors",
+                                "else": 0
+                              },
+                              5
+                            ]
+                          },
+                          -6,
+                          6
+                        ]
+                      }
+                    ]
+                  },
+                  "onSuccess": "coast_orsa_correct_told",
+                  "onFailure": "coast_orsa_correct_wont"
+                }
+              },
+              {
+                "id": "coast_orsa_pond",
+                "text": "The standing water on top of the downs.",
+                "requires": {
+                  "without": {
+                    "lore": [
+                      "coast_horse_pond"
+                    ]
+                  }
+                },
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "check": {
+                  "skill": "insight",
+                  "difficulty": {
+                    "sub": [
+                      13,
+                      {
+                        "clamp": [
+                          {
+                            "div": [
+                              {
+                                "ref": "reputation.the_salvors",
+                                "else": 0
+                              },
+                              5
+                            ]
+                          },
+                          -6,
+                          6
+                        ]
+                      }
+                    ]
+                  },
+                  "onSuccess": "coast_orsa_pond_told",
+                  "onFailure": "coast_orsa_pond_wont"
+                }
+              },
+              {
+                "id": "greet_leave",
+                "text": "Nothing.",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "coast_orsa_correct_told",
+            "says": [
+              {
+                "text": "\u201cTwo points to starboard.\u201d Immediately, without thinking. Then she hears herself. \u201cEverybody does. My father did. I have never asked him what for and he is dead now.\u201d She sits back on her heels. \u201cThere is nothing there to clear. I have sounded it. There is nothing there.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "learnLore": {
+                  "entry": "coast_watch_correct"
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "coast_orsa_correct_on",
+                "text": "Go on.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "coast_orsa_correct_wont",
+            "says": [
+              {
+                "text": "\u201cI've said all I mean to,\u201d they say, and go back to what they were doing."
+              }
+            ],
+            "onEnter": [
+              {
+                "adjustReputation": {
+                  "faction": "the_salvors",
+                  "amount": -1
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "coast_orsa_correct_drop",
+                "text": "Leave it.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "coast_orsa_pond_told",
+            "says": [
+              {
+                "text": "\u201cNever dry.\u201d She is definite. \u201cTwo summers ago the wells went at Thrift and the beasts were being walked four miles and that water was where it always is.\u201d A grin with no humour in it. \u201cOn chalk. On the *top* of chalk. Somebody made that, and it was not this century.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "learnLore": {
+                  "entry": "coast_horse_pond"
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "coast_orsa_pond_on",
+                "text": "Go on.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "coast_orsa_pond_wont",
+            "says": [
+              {
+                "text": "\u201cI've said all I mean to,\u201d they say, and go back to what they were doing."
+              }
+            ],
+            "onEnter": [
+              {
+                "adjustReputation": {
+                  "faction": "the_salvors",
+                  "amount": -1
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "coast_orsa_pond_drop",
+                "text": "Leave it.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          }
+        ]
+      },
+      {
+        "id": "coast_rell_talk",
+        "start": "greet",
+        "nodes": [
+          {
+            "id": "greet",
+            "says": [
+              {
+                "text": "Rope by the fathom, tar by the barrel, lamp oil, and a wall of charts with three of them turned face-in."
+              },
+              {
+                "text": "\u201cRope, tar, oil, glass. Charts if you promise not to sue me.\u201d"
+              }
+            ],
+            "onEnter": [],
+            "options": [
+              {
+                "id": "coast_rell_tide",
+                "text": "What is under the head?",
+                "requires": {
+                  "without": {
+                    "lore": [
+                      "coast_watch_tide"
+                    ]
+                  }
+                },
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "check": {
+                  "skill": "persuasion",
+                  "difficulty": {
+                    "sub": [
+                      12,
+                      {
+                        "clamp": [
+                          {
+                            "div": [
+                              {
+                                "ref": "reputation.the_countinghouse",
+                                "else": 0
+                              },
+                              5
+                            ]
+                          },
+                          -6,
+                          6
+                        ]
+                      }
+                    ]
+                  },
+                  "onSuccess": "coast_rell_tide_told",
+                  "onFailure": "coast_rell_tide_wont"
+                }
+              },
+              {
+                "id": "coast_rell_wall",
+                "text": "The pinfold wall at Cobbleway.",
+                "requires": {
+                  "without": {
+                    "lore": [
+                      "coast_yard_wall"
+                    ]
+                  }
+                },
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "check": {
+                  "skill": "craft",
+                  "difficulty": {
+                    "sub": [
+                      13,
+                      {
+                        "clamp": [
+                          {
+                            "div": [
+                              {
+                                "ref": "reputation.the_countinghouse",
+                                "else": 0
+                              },
+                              5
+                            ]
+                          },
+                          -6,
+                          6
+                        ]
+                      }
+                    ]
+                  },
+                  "onSuccess": "coast_rell_wall_told",
+                  "onFailure": "coast_rell_wall_wont"
+                }
+              },
+              {
+                "id": "greet_leave",
+                "text": "Nothing.",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "coast_rell_tide_told",
+            "says": [
+              {
+                "text": "\u201cA way in, at the bottom of a spring tide.\u201d He does not have to look it up. \u201cOpen about an hour. I have sold gear to four parties who meant to go in and I have had two of them back.\u201d He straightens a coil. \u201cI do not sell them the rope any more. They buy it at Gullmere and think I do not know.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "learnLore": {
+                  "entry": "coast_watch_tide"
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "coast_rell_tide_on",
+                "text": "Go on.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "coast_rell_tide_wont",
+            "says": [
+              {
+                "text": "\u201cI've said all I mean to,\u201d they say, and go back to what they were doing."
+              }
+            ],
+            "onEnter": [
+              {
+                "adjustReputation": {
+                  "faction": "the_countinghouse",
+                  "amount": -1
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "coast_rell_tide_drop",
+                "text": "Leave it.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "coast_rell_wall_told",
+            "says": [
+              {
+                "text": "\u201cThree sides are the town's and the fourth is not.\u201d He is pleased to be asked. \u201cI carted the lime up there when they repointed the good sides. Could not match the old face. Nobody can match the old face \u2014 it was mixed with something that is not in it any more, and it has not weathered in eight hundred years.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "learnLore": {
+                  "entry": "coast_yard_wall"
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "coast_rell_wall_on",
+                "text": "Go on.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "coast_rell_wall_wont",
+            "says": [
+              {
+                "text": "\u201cI've said all I mean to,\u201d they say, and go back to what they were doing."
+              }
+            ],
+            "onEnter": [
+              {
+                "adjustReputation": {
+                  "faction": "the_countinghouse",
+                  "amount": -1
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "coast_rell_wall_drop",
+                "text": "Leave it.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          }
+        ]
       }
     ],
     "quests": [
@@ -80456,6 +83349,177 @@
           ],
           "reputation": {}
         }
+      },
+      {
+        "id": "coast_the_scouring",
+        "name": "The Scouring",
+        "description": "A chalk figure three parishes clear every spring without knowing why, that reads as lines from the cliff and has corners in it.",
+        "autoStart": false,
+        "ordered": true,
+        "tags": [
+          "hidden",
+          "silver_coast",
+          "coast_horse"
+        ],
+        "objectives": [
+          {
+            "id": "under_the_cross",
+            "description": "Get under where the lines cross.",
+            "kind": "reach",
+            "count": 1,
+            "hidden": true,
+            "optional": false,
+            "target": "chalk_downs_flint_mines"
+          },
+          {
+            "id": "lift_the_turf",
+            "description": "Lift the turf the way it has been lifted before.",
+            "kind": "custom",
+            "count": 1,
+            "hidden": true,
+            "optional": false,
+            "when": {
+              "test": {
+                "ref": "flags.coast_horse_open"
+              }
+            }
+          },
+          {
+            "id": "what_cut_them",
+            "description": "Find what cut them square.",
+            "kind": "kill",
+            "count": 1,
+            "hidden": true,
+            "optional": false,
+            "target": "chalk_cutter"
+          }
+        ],
+        "stages": [],
+        "unlocks": [],
+        "rewards": {
+          "xp": 125,
+          "items": [
+            {
+              "item": "scourers_belt",
+              "quantity": 1
+            }
+          ],
+          "reputation": {}
+        }
+      },
+      {
+        "id": "coast_the_signal",
+        "name": "The Tower That Still Signals",
+        "description": "No roof, no stair, and every skipper on this coast correcting two points to starboard off the head after dark.",
+        "autoStart": false,
+        "ordered": true,
+        "tags": [
+          "hidden",
+          "silver_coast",
+          "coast_watch"
+        ],
+        "objectives": [
+          {
+            "id": "in_under_the_head",
+            "description": "Get in under the head on the tide.",
+            "kind": "reach",
+            "count": 1,
+            "hidden": true,
+            "optional": false,
+            "target": "gannet_head_seacaves"
+          },
+          {
+            "id": "below_the_course",
+            "description": "Open what the tower was worked from.",
+            "kind": "custom",
+            "count": 1,
+            "hidden": true,
+            "optional": false,
+            "when": {
+              "test": {
+                "ref": "flags.coast_watch_open"
+              }
+            }
+          },
+          {
+            "id": "what_lights_it",
+            "description": "Meet what has been keeping the correction true.",
+            "kind": "kill",
+            "count": 1,
+            "hidden": true,
+            "optional": false,
+            "target": "signal_keeper"
+          }
+        ],
+        "stages": [],
+        "unlocks": [],
+        "rewards": {
+          "xp": 140,
+          "items": [
+            {
+              "item": "signal_hood",
+              "quantity": 1
+            }
+          ],
+          "reputation": {}
+        }
+      },
+      {
+        "id": "coast_the_unclaimed",
+        "name": "One a Year, Unclaimed",
+        "description": "Two hundred years of one entry each October \u2014 taken up, never collected \u2014 and the fee paid in coin by somebody.",
+        "autoStart": false,
+        "ordered": true,
+        "tags": [
+          "hidden",
+          "silver_coast",
+          "coast_yard"
+        ],
+        "objectives": [
+          {
+            "id": "into_the_yard",
+            "description": "Be in the yard on the night.",
+            "kind": "reach",
+            "count": 1,
+            "hidden": true,
+            "optional": false,
+            "target": "cobbleway_pound"
+          },
+          {
+            "id": "open_the_face",
+            "description": "Open the wall that was here first.",
+            "kind": "custom",
+            "count": 1,
+            "hidden": true,
+            "optional": false,
+            "when": {
+              "test": {
+                "ref": "flags.coast_yard_open"
+              }
+            }
+          },
+          {
+            "id": "what_is_taken",
+            "description": "Meet what has been taken up every year.",
+            "kind": "kill",
+            "count": 1,
+            "hidden": true,
+            "optional": false,
+            "target": "the_unclaimed"
+          }
+        ],
+        "stages": [],
+        "unlocks": [],
+        "rewards": {
+          "xp": 130,
+          "items": [
+            {
+              "item": "unclaimed_ring",
+              "quantity": 1
+            }
+          ],
+          "reputation": {}
+        }
       }
     ],
     "arcs": [
@@ -80746,6 +83810,17 @@
           "deep_what_it_stands_on",
           "deep_the_ninth_column",
           "deep_the_lamps"
+        ],
+        "isEnding": false
+      },
+      {
+        "id": "coast_hidden",
+        "name": "The Silver Coast, Surveyed",
+        "description": "Three pieces of work somebody did carefully along this coast and never filed with anybody.",
+        "quests": [
+          "coast_the_scouring",
+          "coast_the_signal",
+          "coast_the_unclaimed"
         ],
         "isEnding": false
       },
@@ -81223,6 +84298,66 @@
         "id": "deep_vault_taste",
         "name": "The water weeping out of the vault's stonework is salt, and there is no sea within four hundred miles of straight down.",
         "source": "the fungus market"
+      },
+      {
+        "id": "coast_horse_three",
+        "name": "Three parishes turn out to clear the chalk every spring, and every one of them will tell you they only come because the other two do.",
+        "source": "a downland shepherd"
+      },
+      {
+        "id": "coast_horse_lines",
+        "name": "From four hundred feet up and two miles along it does not read as an animal at all. It reads as lines, and two of them cross square.",
+        "source": "the cliff path"
+      },
+      {
+        "id": "coast_horse_shape",
+        "name": "The turf is let grow everywhere on that hill but one shape, and the shape has corners in it. Nothing that runs has corners.",
+        "source": "Downs Farm"
+      },
+      {
+        "id": "coast_horse_pond",
+        "name": "There is standing water on the top of a chalk hill that has never once gone dry, in a drought, above the water table. Somebody built that, and building it took the same summer as the cutting.",
+        "source": "the water on the top"
+      },
+      {
+        "id": "coast_watch_correct",
+        "name": "Every skipper working out of the three villages comes two points to starboard off the head after dark, and not one of them can tell you what they are correcting for.",
+        "source": "a Gullmere skipper"
+      },
+      {
+        "id": "coast_watch_light",
+        "name": "There is no stair in it and no floor above the second course, and a light has been seen in the top of it four times in living memory, always in the same week of the year.",
+        "source": "the harbour master"
+      },
+      {
+        "id": "coast_watch_ring",
+        "name": "Forty thousand birds on that headland, and a circle of bare rock forty feet across at the tower's foot where nothing has ever nested.",
+        "source": "the cliff path"
+      },
+      {
+        "id": "coast_watch_tide",
+        "name": "The way in under the head opens at the bottom of a spring tide and stays open about an hour, which is not long enough to go in and come back out again.",
+        "source": "the chandlery"
+      },
+      {
+        "id": "coast_yard_one",
+        "name": "The bailiff's book has one entry a year and has had for two hundred years: the same night in October, one taken up, never collected.",
+        "source": "the bailiff"
+      },
+      {
+        "id": "coast_yard_wall",
+        "name": "The yard is dry-stone on three sides and mortared on the fourth, and the mortared face is older than the town by a very long way.",
+        "source": "a carter"
+      },
+      {
+        "id": "coast_yard_horses",
+        "name": "The coach horses will not stand in that yard on that night, and the stablers gave up arguing with them about it two generations ago.",
+        "source": "the coach stables"
+      },
+      {
+        "id": "coast_yard_paid",
+        "name": "The fee is paid every October, in coin, into the parish box, for a beast nobody ever comes for. The parish stopped asking who pays.",
+        "source": "Fennick's"
       }
     ],
     "loreThreads": [
@@ -81477,6 +84612,39 @@
           "deep_vault_shaft",
           "deep_vault_count",
           "deep_vault_taste"
+        ]
+      },
+      {
+        "id": "coast_horse",
+        "name": "The Scouring",
+        "description": "A chalk figure three parishes clear every spring without knowing why, that reads as lines from above and has corners in it.",
+        "entries": [
+          "coast_horse_three",
+          "coast_horse_lines",
+          "coast_horse_shape",
+          "coast_horse_pond"
+        ]
+      },
+      {
+        "id": "coast_watch",
+        "name": "The Tower That Still Signals",
+        "description": "A watchtower with no roof and no stair, off which every skipper on this coast corrects two points to starboard after dark.",
+        "entries": [
+          "coast_watch_correct",
+          "coast_watch_light",
+          "coast_watch_ring",
+          "coast_watch_tide"
+        ]
+      },
+      {
+        "id": "coast_yard",
+        "name": "One a Year, Unclaimed",
+        "description": "Two hundred years of one entry each October \u2014 taken up, never collected \u2014 and the fee paid in coin by somebody.",
+        "entries": [
+          "coast_yard_one",
+          "coast_yard_wall",
+          "coast_yard_horses",
+          "coast_yard_paid"
         ]
       }
     ]
