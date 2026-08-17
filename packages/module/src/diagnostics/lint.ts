@@ -556,17 +556,31 @@ function lintSemantics(ctx: Context, document: Record<string, unknown>): void {
     for (const id of asList(npc['offersQuests'])) offered.add(String(id));
   }
 
+  // `emit: {event: "startQuest"}` is the fifth way in, and the only one that
+  // does not name the quest in a field this pass can see. It is what a dialogue
+  // option uses to hand a job over, and what a trigger uses to start one the
+  // moment the party walks somewhere — so a quest nobody offers, nobody
+  // unlocks, and a doorway starts is correct rather than stranded.
+  const emitted = new Set<string>();
+  walkFor(document, 'emit', (value: unknown) => {
+    const spec = value as Record<string, unknown> | null;
+    if (spec?.['event'] !== 'startQuest') return;
+    const quest = (spec['data'] as Record<string, unknown> | undefined)?.['quest'];
+    if (typeof quest === 'string') emitted.add(quest);
+  });
+
   for (const [i, quest] of quests.entries()) {
     const id = String(quest['id']);
     if (quest['autoStart'] === true || unlocked.has(id) || offered.has(id)) continue;
+    if (emitted.has(id)) continue;
     if (quest['giver'] !== undefined) continue;
     report(
       ctx,
       'warning',
       'unobtainable_quest',
       `narrative.quests.${i}`,
-      `"${id}" has no giver, is not offered by an NPC, and is not unlocked by another quest`,
-      'set autoStart, give it a giver, or unlock it from another quest',
+      `"${id}" has no giver, is not offered by an NPC, is not unlocked by another quest, and nothing emits startQuest for it`,
+      'set autoStart, give it a giver, unlock it from another quest, or emit startQuest from a dialogue option or a trigger',
     );
   }
 

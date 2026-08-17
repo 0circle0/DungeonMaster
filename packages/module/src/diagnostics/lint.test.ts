@@ -284,6 +284,31 @@ describe('semantic checks', () => {
     expect(diagnostic.message).toContain('orphan_quest');
   });
 
+  it('accepts a quest that only a trigger starts', () => {
+    // The fifth way in, and the only one that does not name the quest in a
+    // field the pass can see. A hidden thread has no giver on purpose: the
+    // first the player hears of it is standing at the mouth of the place.
+    const document = JSON.parse(GREENMARCH) as Record<string, unknown>;
+    const narrative = document['narrative'] as Record<string, unknown>;
+    (narrative['quests'] as Record<string, unknown>[]).push({
+      id: 'found_it_yourself',
+      name: 'Found It Yourself',
+      objectives: [{ id: 'o', kind: 'kill', target: 'bog_hound' }],
+      stages: [],
+    });
+
+    const poi = (document['world'] as Record<string, unknown>)['pointsOfInterest'] as Record<string, unknown>[];
+    poi[0]!['triggers'] = [{
+      id: 'walked_in', mode: 'once', on: 'enter',
+      effects: [{ emit: { event: 'startQuest', data: { quest: 'found_it_yourself' } } }],
+    }];
+
+    const warned = lintModule(document).diagnostics
+      .filter((d) => d.code === 'unobtainable_quest')
+      .map((d) => d.message);
+    expect(warned.join(' ')).not.toContain('found_it_yourself');
+  });
+
   it('warns about a clue nothing can teach', () => {
     // The same shape of mistake as an unobtainable quest, and quieter: a quest
     // at least shows up in the journal saying nothing has happened, whereas a
