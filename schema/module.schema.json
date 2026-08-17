@@ -3764,6 +3764,17 @@
                     },
                     "default": {}
                   },
+                  "skillBonuses": {
+                    "type": "object",
+                    "additionalProperties": {
+                      "type": "integer"
+                    },
+                    "propertyNames": {
+                      "minLength": 1,
+                      "maxLength": 64,
+                      "pattern": "^[a-z][a-z0-9_]*$"
+                    }
+                  },
                   "onUse": {
                     "type": "array",
                     "items": {

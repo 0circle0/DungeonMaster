@@ -15,7 +15,7 @@ import { evalExpr } from '@dm/module';
 import type { CompiledModule, Expr, Scope, Value } from '@dm/module';
 import type { Entity } from '../state.js';
 import type { RollRecord } from '../events.js';
-import { statsOf, proficiencyOf, isSaveProficient } from '../stats.js';
+import { statsOf, proficiencyOf, isSaveProficient, skillRankOf } from '../stats.js';
 
 interface Resolution {
   checkDice: string;
@@ -105,12 +105,17 @@ export function succeeded(roll: RollRecord): boolean {
 /**
  * The bonus a character brings to a skill check: the governing attribute's
  * modifier plus their rank in the skill.
+ *
+ * Every uncertain outcome that names a skill comes through here — dialogue
+ * checks, gate bypasses, trap detection and disarming, opposed contests, the
+ * bonus roll on a loot table — so equipment reaches all of them by reaching
+ * `skillRankOf` and nothing else needs to know about gear.
  */
 export function skillModifier(module: CompiledModule, entity: Entity, skillId: string): number {
   const skill = module.find<{ attribute: string }>('content.skills', skillId);
   const stats = statsOf(module, entity);
   const attribute = skill ? (stats.mod[skill.attribute] ?? 0) : 0;
-  return attribute + (entity.skills[skillId] ?? 0);
+  return attribute + skillRankOf(module, entity, skillId);
 }
 
 export function attributeModifier(module: CompiledModule, entity: Entity, attributeId: string): number {

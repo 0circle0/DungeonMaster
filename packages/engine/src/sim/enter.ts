@@ -803,6 +803,22 @@ export function enterPoi(
   // about it. The event goes first, then the descent.
   if (poi.dungeon) {
     txn.emit({ type: 'custom', event: 'entered', data: { place: poiId, kind: 'poi' } });
+    // And its own triggers, for the same reason and before the descent. The
+    // `entered` event above was added when a `reach` on a barrow mouth turned
+    // out to be uncompletable; the triggers sat one line further down and were
+    // missed, so every trigger on all sixty-eight dungeon-fronting places in
+    // Aurendel was dead. That included the three that set `down_by_the_tarn`,
+    // `down_by_the_crater` and `down_by_karn_dolur` — the only three ways to
+    // finish `the_way_below`, and therefore the only three ways to reach the
+    // ending at all.
+    runTriggers(
+      txn,
+      triggersFor(txn, [{ collection: 'world.pointsOfInterest', id: poiId }]),
+      'enter',
+      { id: poiId, kind: 'poi' },
+      actor,
+      rng,
+    );
     return enterDungeon(txn, terrain, poi.dungeon, rng);
   }
 

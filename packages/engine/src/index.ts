@@ -73,7 +73,7 @@ export type {
 
 export {
   modifiersOf, maximaOf, minimaOf, initialOf, derivedOf, statsOf, buildScope,
-  proficiencyOf, carriedWeight,
+  proficiencyOf, carriedWeight, skillRankOf, skillRanksOf,
 } from './stats.js';
 export {
   sensesOf,

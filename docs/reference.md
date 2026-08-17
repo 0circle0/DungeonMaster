@@ -868,6 +868,7 @@ not anticipate there. It is the supported way to exceed what ships.
 | `slot` | [→ rules.equipmentSlots](#rulesequipmentSlots) |  |  |
 | `damage` | [object](#module-content-items-damage) |  |  |
 | `modifiers` | { [→ rules.derivedStats](#rulesderivedStats): [DSL](#the-dsl) } |  | `{}` |
+| `skillBonuses` | { [→ content.skills](#contentskills): number } |  |  |
 | `onUse` | [DSL](#the-dsl)[] |  | `[]` |
 | `consumedOnUse` | boolean |  | `false` |
 | `procs` | [object](#module-content-ancestries-traits)[] |  | `[]` |

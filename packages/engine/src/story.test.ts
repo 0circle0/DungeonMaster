@@ -158,6 +158,40 @@ describe('triggers', () => {
     expect(events.some((e) => e.type === 'triggerFired' && e.trigger === 'fens_first_sight')).toBe(true);
     expect(next.flags['seen_fens']).toBe(true);
   });
+
+  /**
+   * A place that fronts a dungeon is still a place you arrived at.
+   *
+   * `enterPoi` hands straight off to `enterDungeon` for these, and used to do
+   * it before running the point of interest's own triggers — so every trigger
+   * on every dungeon mouth was dead. In Aurendel that was all three ways into
+   * the Deeproads, which set the only three flags that can finish `the_way_
+   * below`, which is the only route to the ending arc: the questline was
+   * unwinnable and nothing anywhere said so.
+   */
+  it('fires a dungeon mouth\'s own triggers before descending', () => {
+    const dir = fileURLToPath(new URL('../../../modules/greenmarch', import.meta.url));
+    const doc = readAssembledModule(dir).doc as unknown as {
+      world: { pointsOfInterest: Record<string, unknown>[] };
+    };
+    const pois = doc.world.pointsOfInterest;
+    const mouth = pois.find((poi) => poi['dungeon'] !== undefined);
+    if (!mouth) throw new Error('fixture needs a point of interest that fronts a dungeon');
+    mouth['triggers'] = [{
+      id: 'mouth_noticed', mode: 'once', on: 'enter', description: 'Standing at it counts.',
+      effects: [{ setFlag: { flag: 'stood_at_the_mouth', value: true } }],
+    }];
+    const compiled = compileModule(doc);
+    if (!compiled.ok) throw new Error('fixture failed');
+
+    const module = compiled.module;
+    const base = newGame(module, { seed: 4, party: [defaultChoices(module, 'Ash')] });
+    const txn = new Transaction(base, module);
+    const actor = txn.entity(base.selected)!;
+    enterPoi(txn, new TerrainIndex(module), String(mouth['id']), actor, Rng.fromSeed(4), true);
+
+    expect(txn.finish().state.flags['stood_at_the_mouth']).toBe(true);
+  });
 });
 
 describe('gates', () => {

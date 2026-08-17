@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { fileURLToPath } from 'node:url';
 import { Rng } from '@dm/core';
-import { compileModule, evalEffects } from '@dm/module';
+import { compileModule, evalEffects, evalPredicate, compileRequirement, requirementSchema } from '@dm/module';
 import type { CompiledModule } from '@dm/module';
 import { loadModuleFrom } from '@dm/module/load';
 import { newGame, defaultChoices } from './newgame.js';
@@ -10,7 +10,7 @@ import { reduce, reduceAll } from './reduce.js';
 import { statesEqual } from './save.js';
 import { narrate } from './narrate/narrate.js';
 import { Transaction, applyOps } from './rules/apply.js';
-import { OPEN_NAMESPACES } from './stats.js';
+import { OPEN_NAMESPACES, buildScope } from './stats.js';
 import { check, skillCheck, savingThrow, succeeded, difficultyOf, opposedCheck } from './rules/check.js';
 import { rollInitiative, runReactions } from './rules/combat/turn.js';
 import { dispatchReactions } from './sim/reactions.js';
@@ -151,6 +151,62 @@ describe('resolution', () => {
     const a = skillCheck(GREENMARCH, Rng.fromSeed(3), trained, 'perception', 12);
     const b = skillCheck(GREENMARCH, Rng.fromSeed(3), untrained, 'perception', 12);
     expect(a.total - b.total).toBe(3);
+  });
+
+  // Gear is the only way a skill rank ever moves: `entity.skills` is written at
+  // character creation and never again, and no effect op raises one.
+  describe('skill bonuses from gear', () => {
+    /** Greenmarch, with its blade worth two ranks of lore to whoever holds it. */
+    const LENS = (() => {
+      const doc = JSON.parse(JSON.stringify(GREENMARCH.source)) as {
+        content: { items: { id: string; skillBonuses?: Record<string, number> }[] };
+      };
+      doc.content.items.find((item) => item.id === 'warded_blade')!.skillBonuses = { lore: 2 };
+      const compiled = compileModule(doc);
+      if (!compiled.ok) throw new Error('fixture failed');
+      return compiled.module;
+    })();
+
+    /** The party leader, holding or merely carrying the blade. */
+    function withBlade(equipped: boolean) {
+      const hero = arena([], LENS).entities['e:1']!;
+      return {
+        ...hero,
+        skills: {},
+        inventory: [{ item: 'warded_blade', quantity: 1 }],
+        equipped: equipped ? { hand: ['warded_blade'] } : {},
+      };
+    }
+
+    it('adds a worn item to a skill check', () => {
+      const worn = skillCheck(LENS, Rng.fromSeed(3), withBlade(true), 'lore', 12);
+      const packed = skillCheck(LENS, Rng.fromSeed(3), withBlade(false), 'lore', 12);
+      expect(worn.total - packed.total).toBe(2);
+    });
+
+    it('leaves a skill it says nothing about alone', () => {
+      const worn = skillCheck(LENS, Rng.fromSeed(3), withBlade(true), 'stealth', 12);
+      const packed = skillCheck(LENS, Rng.fromSeed(3), withBlade(false), 'stealth', 12);
+      expect(worn.total).toBe(packed.total);
+    });
+
+    // The half that is easy to leave out: gear that improves the roll but still
+    // reads as untrained at a gate would be a lie about what the wearer can do.
+    it('satisfies a minRank requirement the wearer could not meet unaided', () => {
+      const state = arena([], LENS);
+      const gate = compileRequirement(
+        requirementSchema.parse({ skills: [{ skill: 'lore', minRank: 2 }] }),
+      );
+      const holds = (equipped: boolean) =>
+        evalPredicate(gate, {
+          scope: buildScope(LENS, state, withBlade(equipped)),
+          rng: Rng.fromSeed(1),
+          openNamespaces: OPEN_NAMESPACES,
+        });
+
+      expect(holds(true)).toBe(true);
+      expect(holds(false)).toBe(false);
+    });
   });
 
   it('rolls saving throws using the declared attribute', () => {

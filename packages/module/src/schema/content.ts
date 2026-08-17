@@ -209,6 +209,20 @@ export const itemSchema = z
       .optional(),
     /** Additive modifiers to derived stats while equipped. */
     modifiers: z.record(ref('rules.derivedStats'), ExprSchema).default({}),
+    /**
+     * Skill ranks added while equipped.
+     *
+     * Read by both the roll and the gate: a lens worth `{"lore": 2}` improves
+     * every lore check *and* satisfies a `minRank` requirement that the wearer
+     * could not meet unaided. Keeping those two in step is the whole point —
+     * gear that helped you roll but still read as untrained would be a lie.
+     *
+     * `.optional()` rather than `.default({})`, deliberately: a defaulted field
+     * is written into every parsed item and so changes the hash of every module
+     * ever authored, which makes `load()` reject every existing save. See the
+     * hash test in `compile.test.ts`.
+     */
+    skillBonuses: z.record(ref('content.skills'), z.number().int()).optional(),
     /** Consumables and wands: what happens on use. */
     onUse: z.array(EffectSchema).default([]),
     consumedOnUse: z.boolean().default(false),

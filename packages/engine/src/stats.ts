@@ -106,6 +106,10 @@ interface ItemDef {
   properties?: string[];
 }
 
+interface SkillBonusDef {
+  skillBonuses?: Record<string, number>;
+}
+
 interface ConditionDef {
   id: string;
   modifiers: Record<string, Expr>;
@@ -323,6 +327,37 @@ export function proficiencyOf(module: CompiledModule, entity: Entity): number {
   return typeof value === 'number' && Number.isFinite(value) ? Math.floor(value) : 0;
 }
 
+/**
+ * A character's effective rank in a skill: what they trained, plus what they wear.
+ *
+ * `entity.skills` is written at character creation and at monster spawn and
+ * never again — the engine has no op that raises a skill — so equipment is the
+ * only way a rank ever moves during play. It is summed here rather than at the
+ * two call sites so a check and a `minRank` gate can never disagree about what
+ * someone is capable of.
+ *
+ * Only equipped items count. A lens in the pack is not a lens at the eye.
+ */
+export function skillRankOf(module: CompiledModule, entity: Entity, skillId: string): number {
+  let rank = entity.skills[skillId] ?? 0;
+  for (const itemIds of Object.values(entity.equipped)) {
+    for (const itemId of itemIds) {
+      const item = module.find<SkillBonusDef>('content.items', itemId);
+      rank += item?.skillBonuses?.[skillId] ?? 0;
+    }
+  }
+  return rank;
+}
+
+/** Every skill the module declares, at the rank this entity brings to it. */
+export function skillRanksOf(module: CompiledModule, entity: Entity): Record<string, number> {
+  const out: Record<string, number> = { ...entity.skills };
+  for (const skill of module.all<{ id: string }>('content.skills')) {
+    out[skill.id] = skillRankOf(module, entity, skill.id);
+  }
+  return out;
+}
+
 /** Everything an entity is carrying, by declared weight. */
 export function carriedWeight(module: CompiledModule, entity: Entity): number {
   let total = 0;
@@ -429,7 +464,9 @@ export function buildScope(
       inventory,
       equippedItems,
       abilities: [...actor.abilities],
-      skills: actor.skills as Record<string, Value>,
+      // Trained rank plus equipment, so `requirement.skills[].minRank` and the
+      // mastery tiers see the same number the dice do.
+      skills: skillRanksOf(module, actor) as Record<string, Value>,
       ancestry: actor.ancestry,
       class: actor.characterClass,
       // The proficiency-style bonus a module may declare, and the attribute its
