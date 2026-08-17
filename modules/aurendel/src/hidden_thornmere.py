@@ -187,8 +187,15 @@ POI_PATCHES = {
     "cypress_maze_the_mound": {**rumoured("thorn_knees", base=21, step=3, entries=4,
                                           skill="survival"),
                                "gate": "thorn_mound_rows"},
+    # The collector is not down a dungeon, so `BOSSES` cannot reach him: the
+    # anchor is a point of interest and the table has to hang on the place
+    # itself. Both halves are needed — `enterPoi` reads `poi.encounterChance ??
+    # 0`, so a place that declares a table and no chance spawns nothing at all,
+    # and the kill objective waits forever on a monster that is nowhere.
     "sunken_causeway_toll_ruin": {**rumoured("thorn_toll", base=19, step=3, entries=4),
-                                  "gate": "thorn_toll_strongroom"},
+                                  "gate": "thorn_toll_strongroom",
+                                  "encounterTables": ["thorn_toll_boss"],
+                                  "encounterChance": 1},
     "hummocks_the_deep_hummock": {**rumoured("thorn_hermit", base=22, step=3, entries=4,
                                              skill="survival"),
                                   "gate": "thorn_hummock_watch"},
@@ -202,9 +209,6 @@ POI_TRIGGERS = {
                                            "What you can see from up here that "
                                            "you cannot see from the water.",
                                            "thorn_knees_point")],
-    "sunken_causeway_toll_ruin": [finding("thorn_found_toll",
-                                          "A counting room, and the hinges "
-                                          "oiled.", "thorn_toll_paid")],
     "hummocks_hermit_hummock": [finding("thorn_found_hut",
                                         "Which way the hut is built to look.",
                                         "thorn_hermit_facing")],
@@ -219,13 +223,20 @@ POI_TRIGGERS = {
         "effects": [{"emit": {"event": "startQuest",
                               "data": {"quest": "thorn_the_knees"}}}],
     }],
-    "sunken_causeway_toll_ruin": [{
-        "id": "thorn_toll_committed", "mode": "once", "on": "enter",
-        "description": "Inside the counting room, with the ledger in hand.",
-        "requires": {"custom": {"gte": [{"ref": "threads.thorn_toll.known"}, 2]}},
-        "effects": [{"emit": {"event": "startQuest",
-                              "data": {"quest": "thorn_the_toll"}}}],
-    }],
+    # One key, one list. This is a plain dict literal and a repeated key
+    # silently discards the earlier value — which is how the toll ruin's
+    # `finding` was written, accepted, and never reached the module.
+    "sunken_causeway_toll_ruin": [
+        finding("thorn_found_toll",
+                "A counting room, and the hinges oiled.", "thorn_toll_paid"),
+        {
+            "id": "thorn_toll_committed", "mode": "once", "on": "enter",
+            "description": "Inside the counting room, with the ledger in hand.",
+            "requires": {"custom": {"gte": [{"ref": "threads.thorn_toll.known"}, 2]}},
+            "effects": [{"emit": {"event": "startQuest",
+                                  "data": {"quest": "thorn_the_toll"}}}],
+        },
+    ],
     "hummocks_the_deep_hummock": [{
         "id": "thorn_hermit_committed", "mode": "once", "on": "enter",
         "description": "On the thing the hut has been looking at.",

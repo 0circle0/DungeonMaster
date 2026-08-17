@@ -22835,7 +22835,11 @@
             ]
           }
         },
-        "gate": "kings_ford_sluice"
+        "gate": "kings_ford_sluice",
+        "encounterTables": [
+          "kings_ford_boss"
+        ],
+        "encounterChance": 1
       },
       {
         "id": "pennyford_store",
@@ -30376,6 +30380,19 @@
         },
         "triggers": [
           {
+            "id": "thorn_found_toll",
+            "mode": "once",
+            "on": "enter",
+            "description": "A counting room, and the hinges oiled.",
+            "effects": [
+              {
+                "learnLore": {
+                  "entry": "thorn_toll_paid"
+                }
+              }
+            ]
+          },
+          {
             "id": "thorn_toll_committed",
             "mode": "once",
             "on": "enter",
@@ -30424,7 +30441,11 @@
             ]
           }
         },
-        "gate": "thorn_toll_strongroom"
+        "gate": "thorn_toll_strongroom",
+        "encounterTables": [
+          "thorn_toll_boss"
+        ],
+        "encounterChance": 1
       },
       {
         "id": "black_water_the_crossing",
@@ -33852,7 +33873,11 @@
             ]
           }
         },
-        "gate": "isle_marker_hold"
+        "gate": "isle_marker_hold",
+        "encounterTables": [
+          "isle_marker_boss"
+        ],
+        "encounterChance": 1
       },
       {
         "id": "wreck_reef_the_reef",

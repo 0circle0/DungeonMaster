@@ -191,8 +191,13 @@ POI_PATCHES = {
                                "gate": "kings_quarry_face"},
     "riverside_undercity_grate": {**rumoured("kings_under", base=18, step=3, entries=4),
                                   "gate": "kings_under_brick_wall"},
+    # A point of interest rather than a dungeon mouth, so `BOSSES` cannot place
+    # what is in it and the table hangs on the place. `encounterChance` as well
+    # as the table: `enterPoi` reads `poi.encounterChance ?? 0`.
     "pennyford_sluice_house": {**rumoured("kings_ford", base=16, step=3, entries=4),
-                               "gate": "kings_ford_sluice"},
+                               "gate": "kings_ford_sluice",
+                               "encounterTables": ["kings_ford_boss"],
+                               "encounterChance": 1},
 }
 
 POI_TRIGGERS = {

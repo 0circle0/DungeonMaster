@@ -182,8 +182,13 @@ GATES = [
 ]
 
 POI_PATCHES = {
+    # A point of interest rather than a dungeon mouth, so `BOSSES` cannot place
+    # what is in it and the table hangs on the place. `encounterChance` as well
+    # as the table: `enterPoi` reads `poi.encounterChance ?? 0`.
     "narrows_marker_wreck": {**rumoured("isle_marker", base=20, step=3, entries=4),
-                             "gate": "isle_marker_hold"},
+                             "gate": "isle_marker_hold",
+                             "encounterTables": ["isle_marker_boss"],
+                             "encounterChance": 1},
     "tern_bank_the_cut": {**rumoured("isle_terns", base=20, step=3, entries=4),
                           "gate": "isle_cut_sand"},
     "wreck_reef_the_deep_wreck": {**rumoured("isle_wreck", base=23, step=4, entries=4,

@@ -624,6 +624,53 @@ def main():
             warnings.append(
                 f"{dungeon['id']}: boss room with no bossTable")
 
+    # 9j. A kill objective needs something that actually spawns.
+    #
+    #     Rule 1 proves the monster exists. It does not prove anything ever puts
+    #     it on a map, and an encounter table nothing references is invisible to
+    #     every other check here: it validates, it compiles, and the objective
+    #     waits forever. Three shipped threads were in exactly that state — a
+    #     boss whose anchor was a point of interest rather than a dungeon mouth,
+    #     so `BOSSES` could not reach it and its table was declared and orphaned.
+    #
+    #     `playlore.ts` cannot see this either, because it fakes kills on
+    #     purpose: what it tests is the wiring, not the fight.
+    reachable_tables = set()
+
+    def _tables(node):
+        if isinstance(node, dict):
+            for k, v in node.items():
+                if k in ("encounterTables", "bossTable"):
+                    if isinstance(v, str):
+                        reachable_tables.add(v)
+                    elif isinstance(v, list):
+                        reachable_tables.update(x for x in v if isinstance(x, str))
+                _tables(v)
+        elif isinstance(node, list):
+            for item in node:
+                _tables(item)
+
+    _tables(doc)
+
+    spawnable = set()
+    for table in doc["world"]["encounterTables"]:
+        if table["id"] not in reachable_tables:
+            continue
+        for group in table.get("groups", []):
+            for entry in group.get("entries", []):
+                spawnable.add(entry["monster"])
+
+    for quest in hidden + side:
+        for objective in objectives_of(quest):
+            if objective.get("kind") != "kill":
+                continue
+            target = objective.get("target")
+            if target and target not in spawnable:
+                problems.append(
+                    f"{quest['id']}/{objective['id']}: nothing spawns {target!r} — "
+                    f"no table any place, area, biome or dungeon draws from "
+                    f"contains it, so the objective can never complete")
+
     # 9i. Each thread's anchor must actually come down as the thread fills.
     for thread in threads:
         key = f'threads.{thread["id"]}.known'
