@@ -3906,6 +3906,131 @@
           }
         ],
         "rarity": "very_rare"
+      },
+      {
+        "id": "cutters_bill",
+        "name": "The Reed-Cutter's Bill",
+        "description": "A hooked blade on a long haft, the only tool in the marsh that will take a cypress knee off level. Its edge is older than its handle by a century.",
+        "kind": "key",
+        "value": 0,
+        "weight": 0,
+        "tags": [
+          "keepsake"
+        ],
+        "extra": {
+          "heldBy": "reed_cutter_maud"
+        }
+      },
+      {
+        "id": "toll_ledger",
+        "name": "The Toll Ledger",
+        "description": "Two hundred years of a shilling a head, balanced every year, in one hand with a broken g.",
+        "kind": "key",
+        "value": 0,
+        "weight": 0,
+        "tags": [
+          "keepsake"
+        ],
+        "extra": {
+          "heldBy": "ferryman_sarl"
+        }
+      },
+      {
+        "id": "hermits_tally",
+        "name": "The Hermit's Tally",
+        "description": "The door post itself, cut out and carried off: ninety years of fives, and the last ones not weathered.",
+        "kind": "key",
+        "value": 0,
+        "weight": 0,
+        "tags": [
+          "keepsake"
+        ],
+        "extra": {
+          "heldBy": "wader_pell"
+        }
+      },
+      {
+        "id": "knee_heart",
+        "name": "The Heart of a Knee",
+        "description": "Cut level and healed over forty years ago by something with a very good edge and no hands anybody would recognise.",
+        "kind": "treasure",
+        "value": 0,
+        "weight": 0,
+        "tags": [
+          "clue",
+          "proof"
+        ],
+        "onUse": [
+          {
+            "learnLore": {
+              "entry": "thorn_knees_cut"
+            }
+          }
+        ],
+        "consumedOnUse": false
+      },
+      {
+        "id": "marshlight_belt",
+        "name": "The Marshlight Belt",
+        "description": "Woven reed with something bright worked through it. In the maze it shows which rows are rows.",
+        "kind": "trinket",
+        "slot": "belt",
+        "value": 850,
+        "weight": 1,
+        "tags": [
+          "fabled"
+        ],
+        "skillBonuses": {
+          "survival": 3,
+          "perception": 2
+        },
+        "rarity": "rare"
+      },
+      {
+        "id": "shilling_ring",
+        "name": "The Shilling Ring",
+        "description": "Two hundred years of tolls, one shilling at a time, fused into a band. Worn, people ask you for less.",
+        "kind": "trinket",
+        "slot": "ring",
+        "value": 900,
+        "weight": 1,
+        "tags": [
+          "fabled"
+        ],
+        "skillBonuses": {
+          "persuasion": 3,
+          "insight": 2
+        },
+        "rarity": "rare"
+      },
+      {
+        "id": "hermits_watch_cloak",
+        "name": "The Hermit's Watching Cloak",
+        "description": "Oiled reed and something under it. Ninety years of sitting still facing the wrong way, and it has kept out every one of them.",
+        "kind": "armor",
+        "slot": "cloak",
+        "value": 1150,
+        "weight": 1,
+        "tags": [
+          "fabled"
+        ],
+        "modifiers": {
+          "guard": 2
+        },
+        "skillBonuses": {
+          "stealth": 3
+        },
+        "damageInteractions": [
+          {
+            "damageType": "poison",
+            "multiplier": 0.5
+          },
+          {
+            "damageType": "cold",
+            "multiplier": 0.75
+          }
+        ],
+        "rarity": "very_rare"
       }
     ],
     "lootTables": [
@@ -5965,6 +6090,187 @@
             "value": {
               "item": "amber_lump",
               "quantity": "1d2"
+            }
+          }
+        ]
+      },
+      {
+        "id": "thorn_bill_carried",
+        "name": "What Maud Kept",
+        "rolls": "1",
+        "emptyChance": 0,
+        "entries": [
+          {
+            "weight": 1,
+            "value": {
+              "item": "cutters_bill",
+              "quantity": "1",
+              "unique": true,
+              "requirementScope": "party",
+              "requires": {
+                "without": {
+                  "flags": [
+                    {
+                      "flag": "given:cutters_bill"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        ]
+      },
+      {
+        "id": "thorn_ledger_carried",
+        "name": "What Sarl Kept",
+        "rolls": "1",
+        "emptyChance": 0,
+        "entries": [
+          {
+            "weight": 1,
+            "value": {
+              "item": "toll_ledger",
+              "quantity": "1",
+              "unique": true,
+              "requirementScope": "party",
+              "requires": {
+                "without": {
+                  "flags": [
+                    {
+                      "flag": "given:toll_ledger"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        ]
+      },
+      {
+        "id": "thorn_tally_carried",
+        "name": "What Pell Kept",
+        "rolls": "1",
+        "emptyChance": 0,
+        "entries": [
+          {
+            "weight": 1,
+            "value": {
+              "item": "hermits_tally",
+              "quantity": "1",
+              "unique": true,
+              "requirementScope": "party",
+              "requires": {
+                "without": {
+                  "flags": [
+                    {
+                      "flag": "given:hermits_tally"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        ]
+      },
+      {
+        "id": "thorn_knees_hoard",
+        "name": "Where the Rows Meet",
+        "rolls": "2",
+        "emptyChance": 0.1,
+        "bonusRollSkill": "perception",
+        "bonusRolls": {
+          "onSuccess": 1,
+          "onCritical": 2
+        },
+        "entries": [
+          {
+            "weight": 4,
+            "value": {
+              "item": "old_coin",
+              "quantity": "2d6"
+            }
+          },
+          {
+            "weight": 2,
+            "value": {
+              "item": "amber_lump",
+              "quantity": "1"
+            }
+          },
+          {
+            "weight": 1,
+            "value": {
+              "item": "knee_heart",
+              "quantity": "1",
+              "unique": true
+            }
+          }
+        ]
+      },
+      {
+        "id": "thorn_toll_hoard",
+        "name": "Two Hundred Years of Shillings",
+        "rolls": "3",
+        "emptyChance": 0,
+        "bonusRollSkill": "perception",
+        "bonusRolls": {
+          "onSuccess": 1,
+          "onCritical": 2
+        },
+        "entries": [
+          {
+            "weight": 5,
+            "value": {
+              "item": "old_coin",
+              "quantity": "6d6"
+            }
+          },
+          {
+            "weight": 2,
+            "value": {
+              "item": "barrow_torc",
+              "quantity": "1"
+            }
+          },
+          {
+            "weight": 1,
+            "value": {
+              "item": "silvered_blade",
+              "quantity": "1"
+            }
+          }
+        ]
+      },
+      {
+        "id": "thorn_hummock_hoard",
+        "name": "Under the Deep Hummock",
+        "rolls": "2",
+        "emptyChance": 0,
+        "bonusRollSkill": "perception",
+        "bonusRolls": {
+          "onSuccess": 1,
+          "onCritical": 2
+        },
+        "entries": [
+          {
+            "weight": 3,
+            "value": {
+              "item": "old_coin",
+              "quantity": "3d6"
+            }
+          },
+          {
+            "weight": 2,
+            "value": {
+              "item": "antidote",
+              "quantity": "1d2"
+            }
+          },
+          {
+            "weight": 2,
+            "value": {
+              "item": "warded_coat",
+              "quantity": "1"
             }
           }
         ]
@@ -9363,6 +9669,300 @@
         "resourceOverrides": {
           "hp": 92
         }
+      },
+      {
+        "id": "thorn_cutter",
+        "name": "Maud, Reed-Cutter",
+        "description": "Swings a hooked bill all day in water to the thigh.",
+        "level": 5,
+        "xp": 0,
+        "attributes": {
+          "might": 14,
+          "agility": 14,
+          "endurance": 14,
+          "intellect": 10,
+          "instinct": 13,
+          "presence": 11
+        },
+        "abilities": [
+          "strike",
+          "cut_and_run"
+        ],
+        "behaviour": [
+          {
+            "priority": 0,
+            "use": "strike"
+          }
+        ],
+        "faction": "the_ferrymen",
+        "creatureType": "humanoid",
+        "size": "medium",
+        "descriptors": [
+          "a sinewy"
+        ],
+        "conditionalLoot": [],
+        "loot": "thorn_bill_carried",
+        "resourceOverrides": {
+          "hp": 31
+        }
+      },
+      {
+        "id": "thorn_ferryman",
+        "name": "Sarl of the Causeway",
+        "description": "Poles a loaded punt against a tide twice a day.",
+        "level": 5,
+        "xp": 0,
+        "attributes": {
+          "might": 15,
+          "agility": 13,
+          "endurance": 15,
+          "intellect": 12,
+          "instinct": 13,
+          "presence": 12
+        },
+        "abilities": [
+          "strike"
+        ],
+        "behaviour": [
+          {
+            "priority": 0,
+            "use": "strike"
+          }
+        ],
+        "faction": "the_ferrymen",
+        "creatureType": "humanoid",
+        "size": "medium",
+        "descriptors": [
+          "a weather-brown"
+        ],
+        "conditionalLoot": [],
+        "loot": "thorn_ledger_carried",
+        "resourceOverrides": {
+          "hp": 34
+        }
+      },
+      {
+        "id": "thorn_wader",
+        "name": "Pell, who Wades",
+        "description": "Goes where punts cannot, which selects for a certain nerve.",
+        "level": 5,
+        "xp": 0,
+        "attributes": {
+          "might": 13,
+          "agility": 16,
+          "endurance": 14,
+          "intellect": 10,
+          "instinct": 15,
+          "presence": 10
+        },
+        "abilities": [
+          "strike",
+          "quick_shot"
+        ],
+        "behaviour": [
+          {
+            "priority": 0,
+            "use": "strike"
+          }
+        ],
+        "faction": "the_ferrymen",
+        "creatureType": "humanoid",
+        "size": "medium",
+        "descriptors": [
+          "a mud-caked"
+        ],
+        "conditionalLoot": [],
+        "loot": "thorn_tally_carried",
+        "resourceOverrides": {
+          "hp": 29
+        }
+      },
+      {
+        "id": "knee_cutter",
+        "name": "What Cuts Them Level",
+        "description": "Forty years for a cypress knee to heal over a level cut. There are a hundred of them and they are in rows.",
+        "level": 7,
+        "xp": 720,
+        "attributes": {
+          "might": 15,
+          "agility": 18,
+          "endurance": 14,
+          "intellect": 12,
+          "instinct": 16,
+          "presence": 10
+        },
+        "abilities": [
+          "cut_and_run",
+          "rend",
+          "latch"
+        ],
+        "behaviour": [
+          {
+            "priority": 15,
+            "use": "cut_and_run",
+            "when": {
+              "chance": 0.45
+            }
+          },
+          {
+            "priority": 0,
+            "use": "rend"
+          }
+        ],
+        "faction": "the_unsealed",
+        "creatureType": "undead",
+        "size": "medium",
+        "descriptors": [
+          "a long-limbed",
+          "a silent"
+        ],
+        "conditionalLoot": [],
+        "loot": "thorn_knees_hoard",
+        "damageInteractions": [
+          {
+            "damageType": "slashing",
+            "multiplier": 0.5,
+            "unless": [
+              "silvered"
+            ]
+          },
+          {
+            "damageType": "piercing",
+            "multiplier": 0.5,
+            "unless": [
+              "silvered"
+            ]
+          }
+        ],
+        "conditionImmunities": [
+          "frightened"
+        ],
+        "resourceOverrides": {
+          "hp": 80
+        }
+      },
+      {
+        "id": "toll_collector",
+        "name": "The Collector",
+        "description": "Two hundred years of a balanced ledger. Somebody has been very conscientious about a road the Crown abandoned.",
+        "level": 7,
+        "xp": 750,
+        "attributes": {
+          "might": 13,
+          "agility": 14,
+          "endurance": 15,
+          "intellect": 16,
+          "instinct": 16,
+          "presence": 17
+        },
+        "abilities": [
+          "wither",
+          "grave_chill",
+          "toll"
+        ],
+        "behaviour": [
+          {
+            "priority": 20,
+            "use": "toll",
+            "when": {
+              "chance": 0.35
+            }
+          },
+          {
+            "priority": 10,
+            "use": "wither"
+          },
+          {
+            "priority": 0,
+            "use": "grave_chill"
+          }
+        ],
+        "faction": "the_unsealed",
+        "creatureType": "undead",
+        "size": "medium",
+        "descriptors": [
+          "a neat",
+          "a patient"
+        ],
+        "conditionalLoot": [],
+        "loot": "thorn_toll_hoard",
+        "damageInteractions": [
+          {
+            "damageType": "slashing",
+            "multiplier": 0.5,
+            "unless": [
+              "silvered"
+            ]
+          },
+          {
+            "damageType": "piercing",
+            "multiplier": 0.5,
+            "unless": [
+              "silvered"
+            ]
+          }
+        ],
+        "conditionImmunities": [
+          "frightened",
+          "poisoned"
+        ],
+        "resourceOverrides": {
+          "hp": 78
+        }
+      },
+      {
+        "id": "hummock_thing",
+        "name": "What Was Watched",
+        "description": "Ninety years of somebody sitting in a doorway cutting a mark for each year they went on looking at it.",
+        "level": 8,
+        "xp": 900,
+        "attributes": {
+          "might": 18,
+          "agility": 12,
+          "endurance": 19,
+          "intellect": 13,
+          "instinct": 16,
+          "presence": 14
+        },
+        "abilities": [
+          "drag_under",
+          "bleed_white",
+          "rend"
+        ],
+        "behaviour": [
+          {
+            "priority": 20,
+            "use": "drag_under",
+            "when": {
+              "chance": 0.35
+            }
+          },
+          {
+            "priority": 10,
+            "use": "bleed_white"
+          },
+          {
+            "priority": 0,
+            "use": "rend"
+          }
+        ],
+        "faction": "the_unsealed",
+        "creatureType": "undead",
+        "size": "medium",
+        "descriptors": [
+          "a swollen",
+          "a slow"
+        ],
+        "conditionalLoot": [],
+        "loot": "thorn_hummock_hoard",
+        "conditionImmunities": [
+          "prone",
+          "frightened",
+          "poisoned"
+        ],
+        "resourceOverrides": {
+          "hp": 105
+        }
       }
     ],
     "factions": [
@@ -10996,6 +11596,114 @@
         "faction": "the_vent_readers",
         "dialogue": "ember_iman_talk",
         "home": "ashfall_the_drifts"
+      },
+      {
+        "id": "reed_cutter_maud",
+        "name": "Maud, Reed-Cutter",
+        "description": "Cuts and bundles for the thatchers, and owns the only bill in Thornmere whose edge is a hundred years older than its handle.",
+        "disposition": 6,
+        "gullibility": 0.4,
+        "memorySpan": 150,
+        "offersQuests": [],
+        "caresAbout": [],
+        "reactions": [],
+        "faction": "the_ferrymen",
+        "dialogue": "thorn_maud_talk",
+        "home": "reedy_bottom_cuttings",
+        "statblock": "thorn_cutter"
+      },
+      {
+        "id": "ferryman_sarl",
+        "name": "Sarl of the Causeway",
+        "description": "Poles the crossing when the causeway is under, and keeps the ferrymen's book, which is where the toll ledger goes.",
+        "disposition": 2,
+        "gullibility": 0.25,
+        "memorySpan": 250,
+        "offersQuests": [],
+        "caresAbout": [],
+        "reactions": [],
+        "faction": "the_ferrymen",
+        "dialogue": "thorn_sarl_talk",
+        "home": "sunken_causeway_marker_house",
+        "statblock": "thorn_ferryman",
+        "shop": {
+          "lootTable": "keeper_stock",
+          "buysTags": [
+            "treasure"
+          ],
+          "priceMultiplier": 1.25
+        }
+      },
+      {
+        "id": "wader_pell",
+        "name": "Pell, who Wades",
+        "description": "Goes where the punts cannot and came back once with a door post nobody had asked for.",
+        "disposition": 4,
+        "gullibility": 0.45,
+        "memorySpan": 120,
+        "offersQuests": [],
+        "caresAbout": [],
+        "reactions": [],
+        "faction": "the_ferrymen",
+        "dialogue": "thorn_pell_talk",
+        "home": "hummocks_the_islands",
+        "statblock": "thorn_wader"
+      },
+      {
+        "id": "bundle_landlady_orin",
+        "name": "Orin, at the Bundle",
+        "description": "Knows every cutter, thatcher and leech-man in the Bottom by name, which is why the one she cannot name bothers her.",
+        "disposition": 8,
+        "gullibility": 0.5,
+        "memorySpan": 180,
+        "offersQuests": [],
+        "caresAbout": [],
+        "reactions": [],
+        "faction": "the_ferrymen",
+        "dialogue": "thorn_orin_talk",
+        "home": "reedy_bottom_the_bundle",
+        "shop": {
+          "lootTable": "hollowdene_stock",
+          "buysTags": [
+            "treasure"
+          ],
+          "priceMultiplier": 1.3
+        }
+      },
+      {
+        "id": "thatcher_bel",
+        "name": "Bel the Thatcher",
+        "description": "Roofs half of Thornmere and has an opinion about every cut surface in the marsh, professionally.",
+        "disposition": 6,
+        "gullibility": 0.4,
+        "memorySpan": 150,
+        "offersQuests": [],
+        "caresAbout": [],
+        "reactions": [],
+        "faction": "the_ferrymen",
+        "dialogue": "thorn_bel_talk",
+        "home": "reedy_bottom_thatcher",
+        "shop": {
+          "lootTable": "keeper_stock",
+          "buysTags": [
+            "material"
+          ],
+          "priceMultiplier": 1.15
+        }
+      },
+      {
+        "id": "leech_man_gost",
+        "name": "Gost of the Leech Camp",
+        "description": "Farms leeches for the temples and knows to the yard where they will not live.",
+        "disposition": 2,
+        "gullibility": 0.35,
+        "memorySpan": 150,
+        "offersQuests": [],
+        "caresAbout": [],
+        "reactions": [],
+        "faction": "the_ferrymen",
+        "dialogue": "thorn_gost_talk",
+        "home": "leech_channels_leech_camp"
       }
     ],
     "traps": [
@@ -27251,7 +27959,58 @@
         "position": {
           "x": 25,
           "y": 3
-        }
+        },
+        "triggers": [
+          {
+            "id": "thorn_toll_committed",
+            "mode": "once",
+            "on": "enter",
+            "description": "Inside the counting room, with the ledger in hand.",
+            "requires": {
+              "custom": {
+                "gte": [
+                  {
+                    "ref": "threads.thorn_toll.known"
+                  },
+                  2
+                ]
+              }
+            },
+            "effects": [
+              {
+                "emit": {
+                  "event": "startQuest",
+                  "data": {
+                    "quest": "thorn_the_toll"
+                  }
+                }
+              }
+            ]
+          }
+        ],
+        "hidden": true,
+        "discover": {
+          "skill": "perception",
+          "difficulty": {
+            "max": [
+              7,
+              {
+                "sub": [
+                  19,
+                  {
+                    "mul": [
+                      3,
+                      {
+                        "ref": "threads.thorn_toll.known"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "gate": "thorn_toll_strongroom"
       },
       {
         "id": "black_water_the_crossing",
@@ -27340,7 +28099,22 @@
         "position": {
           "x": 3,
           "y": 3
-        }
+        },
+        "triggers": [
+          {
+            "id": "thorn_found_knees",
+            "mode": "once",
+            "on": "enter",
+            "description": "Knees in rows, and the rows straight.",
+            "effects": [
+              {
+                "learnLore": {
+                  "entry": "thorn_knees_rows"
+                }
+              }
+            ]
+          }
+        ]
       },
       {
         "id": "cypress_maze_hunters_stand",
@@ -27359,7 +28133,22 @@
         "position": {
           "x": 14,
           "y": 3
-        }
+        },
+        "triggers": [
+          {
+            "id": "thorn_found_stand",
+            "mode": "once",
+            "on": "enter",
+            "description": "What you can see from up here that you cannot see from the water.",
+            "effects": [
+              {
+                "learnLore": {
+                  "entry": "thorn_knees_point"
+                }
+              }
+            ]
+          }
+        ]
       },
       {
         "id": "cypress_maze_the_mound",
@@ -27376,7 +28165,58 @@
         "position": {
           "x": 25,
           "y": 3
-        }
+        },
+        "triggers": [
+          {
+            "id": "thorn_knees_committed",
+            "mode": "once",
+            "on": "enter",
+            "description": "Standing where the rows meet.",
+            "requires": {
+              "custom": {
+                "gte": [
+                  {
+                    "ref": "threads.thorn_knees.known"
+                  },
+                  2
+                ]
+              }
+            },
+            "effects": [
+              {
+                "emit": {
+                  "event": "startQuest",
+                  "data": {
+                    "quest": "thorn_the_knees"
+                  }
+                }
+              }
+            ]
+          }
+        ],
+        "hidden": true,
+        "discover": {
+          "skill": "survival",
+          "difficulty": {
+            "max": [
+              9,
+              {
+                "sub": [
+                  21,
+                  {
+                    "mul": [
+                      3,
+                      {
+                        "ref": "threads.thorn_knees.known"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "gate": "thorn_mound_rows"
       },
       {
         "id": "leech_channels_the_warm",
@@ -27390,7 +28230,22 @@
         "position": {
           "x": 3,
           "y": 3
-        }
+        },
+        "triggers": [
+          {
+            "id": "thorn_found_warm",
+            "mode": "once",
+            "on": "enter",
+            "description": "Warm water, in a marsh, coming up.",
+            "effects": [
+              {
+                "learnLore": {
+                  "entry": "thorn_hermit_warm"
+                }
+              }
+            ]
+          }
+        ]
       },
       {
         "id": "leech_channels_leech_camp",
@@ -27465,7 +28320,22 @@
         "position": {
           "x": 14,
           "y": 3
-        }
+        },
+        "triggers": [
+          {
+            "id": "thorn_found_hut",
+            "mode": "once",
+            "on": "enter",
+            "description": "Which way the hut is built to look.",
+            "effects": [
+              {
+                "learnLore": {
+                  "entry": "thorn_hermit_facing"
+                }
+              }
+            ]
+          }
+        ]
       },
       {
         "id": "hummocks_the_deep_hummock",
@@ -27482,7 +28352,58 @@
         "position": {
           "x": 25,
           "y": 3
-        }
+        },
+        "triggers": [
+          {
+            "id": "thorn_hermit_committed",
+            "mode": "once",
+            "on": "enter",
+            "description": "On the thing the hut has been looking at.",
+            "requires": {
+              "custom": {
+                "gte": [
+                  {
+                    "ref": "threads.thorn_hermit.known"
+                  },
+                  2
+                ]
+              }
+            },
+            "effects": [
+              {
+                "emit": {
+                  "event": "startQuest",
+                  "data": {
+                    "quest": "thorn_what_it_watched"
+                  }
+                }
+              }
+            ]
+          }
+        ],
+        "hidden": true,
+        "discover": {
+          "skill": "survival",
+          "difficulty": {
+            "max": [
+              10,
+              {
+                "sub": [
+                  22,
+                  {
+                    "mul": [
+                      3,
+                      {
+                        "ref": "threads.thorn_hermit.known"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "gate": "thorn_hummock_watch"
       },
       {
         "id": "ilkhet_khans_yurt",
@@ -32399,6 +33320,93 @@
             }
           ]
         }
+      },
+      {
+        "id": "thorn_mound_rows",
+        "name": "Where the Rows Meet",
+        "description": "Two lines of cut knees converging over open water, and something under the water where they meet.",
+        "kind": "ward",
+        "blockedTextKey": "thorn_mound_blocked",
+        "staysOpen": true,
+        "onOpen": [
+          {
+            "setFlag": {
+              "flag": "thorn_knees_open",
+              "value": true
+            }
+          }
+        ],
+        "onBlocked": [],
+        "opensWith": [],
+        "tags": [],
+        "requires": {
+          "items": [
+            {
+              "item": "cutters_bill",
+              "quantity": 1,
+              "consume": false,
+              "equipped": false
+            }
+          ]
+        }
+      },
+      {
+        "id": "thorn_toll_strongroom",
+        "name": "Behind the Counting Room",
+        "description": "A toll house with nothing in it but a door that has been oiled more recently than the Crown has manned the place.",
+        "kind": "ward",
+        "blockedTextKey": "thorn_toll_blocked",
+        "staysOpen": true,
+        "onOpen": [
+          {
+            "setFlag": {
+              "flag": "thorn_toll_open",
+              "value": true
+            }
+          }
+        ],
+        "onBlocked": [],
+        "opensWith": [],
+        "tags": [],
+        "requires": {
+          "items": [
+            {
+              "item": "toll_ledger",
+              "quantity": 1,
+              "consume": false,
+              "equipped": false
+            }
+          ]
+        }
+      },
+      {
+        "id": "thorn_hummock_watch",
+        "name": "What the Hut Faces",
+        "description": "Ninety years of somebody sitting in a doorway looking at this, and cutting a mark for each year they went on looking.",
+        "kind": "ward",
+        "blockedTextKey": "thorn_hummock_blocked",
+        "staysOpen": true,
+        "onOpen": [
+          {
+            "setFlag": {
+              "flag": "thorn_hermit_open",
+              "value": true
+            }
+          }
+        ],
+        "onBlocked": [],
+        "opensWith": [],
+        "tags": [],
+        "requires": {
+          "items": [
+            {
+              "item": "hermits_tally",
+              "quantity": 1,
+              "consume": false,
+              "equipped": false
+            }
+          ]
+        }
       }
     ],
     "roomTemplates": [
@@ -34122,7 +35130,8 @@
         "safeEntrance": true,
         "width": "69",
         "height": "69",
-        "corridorLength": "3d3"
+        "corridorLength": "3d3",
+        "bossTable": "thorn_knees_boss"
       },
       {
         "id": "thornmere_deep_hummock",
@@ -34139,7 +35148,8 @@
         "branchiness": 0.35,
         "width": "81",
         "height": "81",
-        "corridorLength": "3d3"
+        "corridorLength": "3d3",
+        "bossTable": "thorn_hummock_boss"
       },
       {
         "id": "steppe_dry_well",
@@ -36297,6 +37307,72 @@
             "entries": [
               {
                 "monster": "cathedral_slag",
+                "count": "1",
+                "scaleWithLevel": false
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "thorn_knees_boss",
+        "minDepth": 0,
+        "maxDepth": 999,
+        "chance": 1,
+        "emptyWeight": 0,
+        "scalePerLevels": 3,
+        "groups": [
+          {
+            "id": "b",
+            "weight": 1,
+            "hostile": true,
+            "entries": [
+              {
+                "monster": "knee_cutter",
+                "count": "1d2",
+                "scaleWithLevel": true
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "thorn_hummock_boss",
+        "minDepth": 0,
+        "maxDepth": 999,
+        "chance": 1,
+        "emptyWeight": 0,
+        "scalePerLevels": 3,
+        "groups": [
+          {
+            "id": "b",
+            "weight": 1,
+            "hostile": true,
+            "entries": [
+              {
+                "monster": "hummock_thing",
+                "count": "1",
+                "scaleWithLevel": false
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "thorn_toll_boss",
+        "minDepth": 0,
+        "maxDepth": 999,
+        "chance": 1,
+        "emptyWeight": 0,
+        "scalePerLevels": 3,
+        "groups": [
+          {
+            "id": "b",
+            "weight": 1,
+            "hostile": true,
+            "entries": [
+              {
+                "monster": "toll_collector",
                 "count": "1",
                 "scaleWithLevel": false
               }
@@ -41997,6 +43073,48 @@
           },
           {
             "text": "Something upstream stopped being a wall."
+          }
+        ]
+      },
+      {
+        "id": "thorn_hummock_blocked",
+        "variants": [
+          {
+            "text": "The hut faces this and nothing else, and the marks go up the post in fives for ninety years. Reading what the hermit was counting would want the post, and the post is not on the hut any more."
+          },
+          {
+            "text": "It faces away from the water and away from the road, which leaves exactly one thing it faces."
+          },
+          {
+            "text": "The channels here run warm, which in this marsh means the water is coming up. Something below is warmer than the marsh, and has been for ninety years at least."
+          }
+        ]
+      },
+      {
+        "id": "thorn_mound_blocked",
+        "variants": [
+          {
+            "text": "The rows meet over deep water and there is nothing to stand on. Whatever cut these off level did it with an edge, and the only edge in the marsh that will do it is in Reedy Bottom."
+          },
+          {
+            "text": "Straight rows in a marsh, converging on a spot with nothing at it. You would want the bill to open a way, and you would want to have thought about what else uses it."
+          },
+          {
+            "text": "No leeches here. Nowhere else in Thornmere is there nowhere without leeches."
+          }
+        ]
+      },
+      {
+        "id": "thorn_toll_blocked",
+        "variants": [
+          {
+            "text": "Two hundred years of a balanced ledger is two hundred years of something being counted and put somewhere. The ledger says where. You do not have the ledger."
+          },
+          {
+            "text": "The lock is sound and the hinges are oiled and the Crown has not paid anybody to do either since the causeway sank."
+          },
+          {
+            "text": "Shilling a head, every year, balanced. Somebody has been keeping very careful books about a road nobody pays on."
           }
         ]
       },
@@ -59518,6 +60636,1683 @@
             "redirectWhen": []
           }
         ]
+      },
+      {
+        "id": "thorn_maud_talk",
+        "start": "greet",
+        "nodes": [
+          {
+            "id": "greet",
+            "says": [
+              {
+                "text": "Water to the thigh, a hooked bill going through reed like it is not there, and a stack of bundles behind her taller than she is."
+              },
+              {
+                "text": "\u201cBundles are sold. Talk if you want, I am not stopping.\u201d"
+              }
+            ],
+            "onEnter": [],
+            "options": [
+              {
+                "id": "thorn_maud_rows",
+                "text": "The knees in the deep maze are in rows.",
+                "requires": {
+                  "without": {
+                    "lore": [
+                      "thorn_knees_rows"
+                    ]
+                  }
+                },
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "check": {
+                  "skill": "persuasion",
+                  "difficulty": {
+                    "sub": [
+                      11,
+                      {
+                        "clamp": [
+                          {
+                            "div": [
+                              {
+                                "ref": "reputation.the_ferrymen",
+                                "else": 0
+                              },
+                              5
+                            ]
+                          },
+                          -6,
+                          6
+                        ]
+                      }
+                    ]
+                  },
+                  "onSuccess": "thorn_maud_rows_told",
+                  "onFailure": "thorn_maud_rows_wont"
+                }
+              },
+              {
+                "id": "thorn_maud_cut",
+                "text": "Something has been cutting them level.",
+                "requires": {
+                  "without": {
+                    "lore": [
+                      "thorn_knees_cut"
+                    ]
+                  }
+                },
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "check": {
+                  "skill": "insight",
+                  "difficulty": {
+                    "sub": [
+                      14,
+                      {
+                        "clamp": [
+                          {
+                            "div": [
+                              {
+                                "ref": "reputation.the_ferrymen",
+                                "else": 0
+                              },
+                              5
+                            ]
+                          },
+                          -6,
+                          6
+                        ]
+                      }
+                    ]
+                  },
+                  "onSuccess": "thorn_maud_cut_told",
+                  "onFailure": "thorn_maud_cut_wont"
+                }
+              },
+              {
+                "id": "thorn_maud_bill",
+                "text": "Lend me the bill.",
+                "requires": {
+                  "without": {
+                    "items": [
+                      "cutters_bill"
+                    ],
+                    "flags": [
+                      {
+                        "flag": "given:cutters_bill"
+                      }
+                    ]
+                  }
+                },
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "check": {
+                  "skill": "persuasion",
+                  "difficulty": {
+                    "sub": [
+                      13,
+                      {
+                        "clamp": [
+                          {
+                            "div": [
+                              {
+                                "ref": "reputation.the_ferrymen",
+                                "else": 0
+                              },
+                              5
+                            ]
+                          },
+                          -6,
+                          6
+                        ]
+                      }
+                    ]
+                  },
+                  "onSuccess": "thorn_maud_bill_gave",
+                  "onFailure": "thorn_maud_bill_kept"
+                }
+              },
+              {
+                "id": "greet_leave",
+                "text": "Nothing.",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "thorn_maud_rows_told",
+            "says": [
+              {
+                "text": "\u201cThey are.\u201d She keeps bundling. \u201cKnees come up where the roots run, and roots do not run straight. I have cut reed in this marsh for thirty years and I have never worked that stretch, and neither did my mother, and she gave a reason once and would not give it twice.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "learnLore": {
+                  "entry": "thorn_knees_rows"
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "thorn_maud_rows_on",
+                "text": "Go on.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "thorn_maud_rows_wont",
+            "says": [
+              {
+                "text": "\u201cI've said all I mean to,\u201d they say, and go back to what they were doing."
+              }
+            ],
+            "onEnter": [
+              {
+                "adjustReputation": {
+                  "faction": "the_ferrymen",
+                  "amount": -1
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "thorn_maud_rows_drop",
+                "text": "Leave it.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "thorn_maud_cut_told",
+            "says": [
+              {
+                "text": "She stops. \u201cYou have seen the healed ones.\u201d She holds up the bill. \u201cThis is the only edge in Thornmere that takes a knee off level, and this edge is a hundred years older than the handle, and I did not make either.\u201d A shrug that is not casual. \u201cThe cuts out there are forty years healed. I was six.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "learnLore": {
+                  "entry": "thorn_knees_cut"
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "thorn_maud_cut_on",
+                "text": "Go on.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "thorn_maud_cut_wont",
+            "says": [
+              {
+                "text": "\u201cI've said all I mean to,\u201d they say, and go back to what they were doing."
+              }
+            ],
+            "onEnter": [
+              {
+                "adjustReputation": {
+                  "faction": "the_ferrymen",
+                  "amount": -1
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "thorn_maud_cut_drop",
+                "text": "Leave it.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "thorn_maud_bill_gave",
+            "says": [
+              {
+                "text": "She hands it over haft first, which is how you hand somebody a bill if you have any sense. \u201cIt came with the cottage. Mind the hook, it comes back at you.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "grantItem": {
+                  "target": {
+                    "ref": "actor.id"
+                  },
+                  "item": "cutters_bill",
+                  "quantity": 1
+                }
+              },
+              {
+                "setFlag": {
+                  "flag": "given:cutters_bill",
+                  "value": true
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "thorn_maud_bill_thanks",
+                "text": "Thank you.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "thorn_maud_bill_kept",
+            "says": [
+              {
+                "text": "\u201cIt is how I eat,\u201d she says. \u201cBuy a new one at Bel's and see how it does on a knee.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "adjustReputation": {
+                  "faction": "the_ferrymen",
+                  "amount": -2
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "thorn_maud_bill_leave",
+                "text": "Then no.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          }
+        ]
+      },
+      {
+        "id": "thorn_bel_talk",
+        "start": "greet",
+        "nodes": [
+          {
+            "id": "greet",
+            "says": [
+              {
+                "text": "A yard of reed in every stage between cut and roofed, and a man sorting it by feel."
+              },
+              {
+                "text": "\u201cRoofing, thatching, or reed. If it is reed, Maud's your woman.\u201d"
+              }
+            ],
+            "onEnter": [],
+            "options": [
+              {
+                "id": "thorn_bel_cut",
+                "text": "You judge cut surfaces for a living. What cuts a cypress knee off level?",
+                "requires": {
+                  "without": {
+                    "lore": [
+                      "thorn_knees_cut"
+                    ]
+                  }
+                },
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "check": {
+                  "skill": "insight",
+                  "difficulty": {
+                    "sub": [
+                      12,
+                      {
+                        "clamp": [
+                          {
+                            "div": [
+                              {
+                                "ref": "reputation.the_ferrymen",
+                                "else": 0
+                              },
+                              5
+                            ]
+                          },
+                          -6,
+                          6
+                        ]
+                      }
+                    ]
+                  },
+                  "onSuccess": "thorn_bel_cut_told",
+                  "onFailure": "thorn_bel_cut_wont"
+                }
+              },
+              {
+                "id": "thorn_bel_hand",
+                "text": "Have you ever seen the toll ledger?",
+                "requires": {
+                  "without": {
+                    "lore": [
+                      "thorn_toll_hand"
+                    ]
+                  }
+                },
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "check": {
+                  "skill": "insight",
+                  "difficulty": {
+                    "sub": [
+                      13,
+                      {
+                        "clamp": [
+                          {
+                            "div": [
+                              {
+                                "ref": "reputation.the_ferrymen",
+                                "else": 0
+                              },
+                              5
+                            ]
+                          },
+                          -6,
+                          6
+                        ]
+                      }
+                    ]
+                  },
+                  "onSuccess": "thorn_bel_hand_told",
+                  "onFailure": "thorn_bel_hand_wont"
+                }
+              },
+              {
+                "id": "greet_leave",
+                "text": "Nothing.",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "thorn_bel_cut_told",
+            "says": [
+              {
+                "text": "\u201cNothing I sell.\u201d He is definite. \u201cBill will do it if it is Maud's bill and Maud is swinging it. Anything else crushes before it cuts.\u201d He turns a reed over. \u201cThere are a hundred of them out there cut clean and healed. Somebody had a very good edge and forty years ago.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "learnLore": {
+                  "entry": "thorn_knees_cut"
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "thorn_bel_cut_on",
+                "text": "Go on.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "thorn_bel_cut_wont",
+            "says": [
+              {
+                "text": "\u201cI've said all I mean to,\u201d they say, and go back to what they were doing."
+              }
+            ],
+            "onEnter": [
+              {
+                "adjustReputation": {
+                  "faction": "the_ferrymen",
+                  "amount": -1
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "thorn_bel_cut_drop",
+                "text": "Leave it.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "thorn_bel_hand_told",
+            "says": [
+              {
+                "text": "\u201cSarl has it. I have signed the book next to it for twenty years.\u201d He straightens up. \u201cSame hand the whole way back. Not a copied hand \u2014 I copy hands, it is half of thatching a name into a ridge. That is one hand with a broken g and it goes back two hundred years.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "learnLore": {
+                  "entry": "thorn_toll_hand"
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "thorn_bel_hand_on",
+                "text": "Go on.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "thorn_bel_hand_wont",
+            "says": [
+              {
+                "text": "\u201cI've said all I mean to,\u201d they say, and go back to what they were doing."
+              }
+            ],
+            "onEnter": [
+              {
+                "adjustReputation": {
+                  "faction": "the_ferrymen",
+                  "amount": -1
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "thorn_bel_hand_drop",
+                "text": "Leave it.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          }
+        ]
+      },
+      {
+        "id": "thorn_gost_talk",
+        "start": "greet",
+        "nodes": [
+          {
+            "id": "greet",
+            "says": [
+              {
+                "text": "Trays of dark water under reed shade, and a man moving them out of the sun with a hooked pole."
+              },
+              {
+                "text": "\u201cLeeches. Temples buy them. If you are squeamish, stand upwind.\u201d"
+              }
+            ],
+            "onEnter": [],
+            "options": [
+              {
+                "id": "thorn_gost_quiet",
+                "text": "Where in this marsh will leeches not live?",
+                "requires": {
+                  "without": {
+                    "lore": [
+                      "thorn_knees_quiet"
+                    ]
+                  }
+                },
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "check": {
+                  "skill": "persuasion",
+                  "difficulty": {
+                    "sub": [
+                      12,
+                      {
+                        "clamp": [
+                          {
+                            "div": [
+                              {
+                                "ref": "reputation.the_ferrymen",
+                                "else": 0
+                              },
+                              5
+                            ]
+                          },
+                          -6,
+                          6
+                        ]
+                      }
+                    ]
+                  },
+                  "onSuccess": "thorn_gost_quiet_told",
+                  "onFailure": "thorn_gost_quiet_wont"
+                }
+              },
+              {
+                "id": "thorn_gost_warm",
+                "text": "The channels out by the hummocks run warm.",
+                "requires": {
+                  "without": {
+                    "lore": [
+                      "thorn_hermit_warm"
+                    ]
+                  }
+                },
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "check": {
+                  "skill": "persuasion",
+                  "difficulty": {
+                    "sub": [
+                      13,
+                      {
+                        "clamp": [
+                          {
+                            "div": [
+                              {
+                                "ref": "reputation.the_ferrymen",
+                                "else": 0
+                              },
+                              5
+                            ]
+                          },
+                          -6,
+                          6
+                        ]
+                      }
+                    ]
+                  },
+                  "onSuccess": "thorn_gost_warm_told",
+                  "onFailure": "thorn_gost_warm_wont"
+                }
+              },
+              {
+                "id": "greet_leave",
+                "text": "Nothing.",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "thorn_gost_quiet_told",
+            "says": [
+              {
+                "text": "\u201cOne place.\u201d He does not have to think. \u201cThe deep maze. Not one, anywhere in it, and I have tried to seed it twice because it would be a fine quiet water for it.\u201d He moves another tray. \u201cThey will not stop in it. That is not a thing leeches do.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "learnLore": {
+                  "entry": "thorn_knees_quiet"
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "thorn_gost_quiet_on",
+                "text": "Go on.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "thorn_gost_quiet_wont",
+            "says": [
+              {
+                "text": "\u201cI've said all I mean to,\u201d they say, and go back to what they were doing."
+              }
+            ],
+            "onEnter": [
+              {
+                "adjustReputation": {
+                  "faction": "the_ferrymen",
+                  "amount": -1
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "thorn_gost_quiet_drop",
+                "text": "Leave it.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "thorn_gost_warm_told",
+            "says": [
+              {
+                "text": "\u201cThey do, and warm water in a marsh is water coming *up*.\u201d He looks out that way. \u201cDown here everything drains. Something out there is pushing, and it has been pushing since before I had this camp.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "learnLore": {
+                  "entry": "thorn_hermit_warm"
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "thorn_gost_warm_on",
+                "text": "Go on.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "thorn_gost_warm_wont",
+            "says": [
+              {
+                "text": "\u201cI've said all I mean to,\u201d they say, and go back to what they were doing."
+              }
+            ],
+            "onEnter": [
+              {
+                "adjustReputation": {
+                  "faction": "the_ferrymen",
+                  "amount": -1
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "thorn_gost_warm_drop",
+                "text": "Leave it.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          }
+        ]
+      },
+      {
+        "id": "thorn_sarl_talk",
+        "start": "greet",
+        "nodes": [
+          {
+            "id": "greet",
+            "says": [
+              {
+                "text": "A marker house at the end of a road that is under water half the year, and a man on a punt who has been watching you approach for a while."
+              },
+              {
+                "text": "\u201cCrossing's a penny when the causeway's under. It is under.\u201d"
+              }
+            ],
+            "onEnter": [],
+            "options": [
+              {
+                "id": "thorn_sarl_balance",
+                "text": "The toll ledger. Does it still come in?",
+                "requires": {
+                  "without": {
+                    "lore": [
+                      "thorn_toll_balance"
+                    ]
+                  }
+                },
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "check": {
+                  "skill": "persuasion",
+                  "difficulty": {
+                    "sub": [
+                      14,
+                      {
+                        "clamp": [
+                          {
+                            "div": [
+                              {
+                                "ref": "reputation.the_ferrymen",
+                                "else": 0
+                              },
+                              5
+                            ]
+                          },
+                          -6,
+                          6
+                        ]
+                      }
+                    ]
+                  },
+                  "onSuccess": "thorn_sarl_balance_told",
+                  "onFailure": "thorn_sarl_balance_wont"
+                }
+              },
+              {
+                "id": "thorn_sarl_paid",
+                "text": "Has anybody ever seen it collected?",
+                "requires": {
+                  "without": {
+                    "lore": [
+                      "thorn_toll_paid"
+                    ]
+                  }
+                },
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "check": {
+                  "skill": "persuasion",
+                  "difficulty": {
+                    "sub": [
+                      16,
+                      {
+                        "clamp": [
+                          {
+                            "div": [
+                              {
+                                "ref": "reputation.the_ferrymen",
+                                "else": 0
+                              },
+                              5
+                            ]
+                          },
+                          -6,
+                          6
+                        ]
+                      }
+                    ]
+                  },
+                  "onSuccess": "thorn_sarl_paid_told",
+                  "onFailure": "thorn_sarl_paid_wont"
+                }
+              },
+              {
+                "id": "thorn_sarl_ledger",
+                "text": "Give me the ledger.",
+                "requires": {
+                  "without": {
+                    "items": [
+                      "toll_ledger"
+                    ],
+                    "flags": [
+                      {
+                        "flag": "given:toll_ledger"
+                      }
+                    ]
+                  }
+                },
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "check": {
+                  "skill": "persuasion",
+                  "difficulty": {
+                    "sub": [
+                      15,
+                      {
+                        "clamp": [
+                          {
+                            "div": [
+                              {
+                                "ref": "reputation.the_ferrymen",
+                                "else": 0
+                              },
+                              5
+                            ]
+                          },
+                          -6,
+                          6
+                        ]
+                      }
+                    ]
+                  },
+                  "onSuccess": "thorn_sarl_ledger_gave",
+                  "onFailure": "thorn_sarl_ledger_kept"
+                }
+              },
+              {
+                "id": "greet_leave",
+                "text": "Nothing.",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": [
+              {
+                "requires": {
+                  "factions": [
+                    {
+                      "faction": "the_ferrymen",
+                      "maxStanding": -30
+                    }
+                  ]
+                },
+                "goto": "thorn_sarl_cold"
+              }
+            ]
+          },
+          {
+            "id": "thorn_sarl_balance_told",
+            "says": [
+              {
+                "text": "\u201cEvery year.\u201d He says it like a man who has decided not to think about it. \u201cShilling a head, balanced to the penny, and the Crown stopped manning that house when the causeway sank. I file it. My father filed it. I have never asked who sends it.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "learnLore": {
+                  "entry": "thorn_toll_balance"
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "thorn_sarl_balance_on",
+                "text": "Go on.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "thorn_sarl_balance_wont",
+            "says": [
+              {
+                "text": "\u201cI've said all I mean to,\u201d they say, and go back to what they were doing."
+              }
+            ],
+            "onEnter": [
+              {
+                "adjustReputation": {
+                  "faction": "the_ferrymen",
+                  "amount": -1
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "thorn_sarl_balance_drop",
+                "text": "Leave it.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "thorn_sarl_paid_told",
+            "says": [
+              {
+                "text": "\u201cNo.\u201d Flat. \u201cAnd nobody who walks that causeway is a shilling short afterwards, which I have checked, because I am not stupid.\u201d He coils a rope he has already coiled. \u201cSo something is paying. That is the sentence I have been avoiding for thirty years.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "learnLore": {
+                  "entry": "thorn_toll_paid"
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "thorn_sarl_paid_on",
+                "text": "Go on.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "thorn_sarl_paid_wont",
+            "says": [
+              {
+                "text": "\u201cI've said all I mean to,\u201d they say, and go back to what they were doing."
+              }
+            ],
+            "onEnter": [
+              {
+                "adjustReputation": {
+                  "faction": "the_ferrymen",
+                  "amount": -1
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "thorn_sarl_paid_drop",
+                "text": "Leave it.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "thorn_sarl_ledger_gave",
+            "says": [
+              {
+                "text": "He gets it out of the box under the seat and holds it a moment. \u201cTwo hundred years,\u201d he says. \u201cIf you find out who has been writing it, I would like it back with the answer in the margin.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "grantItem": {
+                  "target": {
+                    "ref": "actor.id"
+                  },
+                  "item": "toll_ledger",
+                  "quantity": 1
+                }
+              },
+              {
+                "setFlag": {
+                  "flag": "given:toll_ledger",
+                  "value": true
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "thorn_sarl_ledger_thanks",
+                "text": "Thank you.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "thorn_sarl_ledger_kept",
+            "says": [
+              {
+                "text": "\u201cIt is the ferrymen's,\u201d he says, and puts it back in the box, and sits on the box."
+              }
+            ],
+            "onEnter": [
+              {
+                "adjustReputation": {
+                  "faction": "the_ferrymen",
+                  "amount": -2
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "thorn_sarl_ledger_leave",
+                "text": "Then no.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "thorn_sarl_cold",
+            "says": [
+              {
+                "text": "He poles off from the stage without a word and stops just out of reach."
+              }
+            ],
+            "onEnter": [],
+            "options": [
+              {
+                "id": "thorn_sarl_go",
+                "text": "Leave it.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          }
+        ]
+      },
+      {
+        "id": "thorn_pell_talk",
+        "start": "greet",
+        "nodes": [
+          {
+            "id": "greet",
+            "says": [
+              {
+                "text": "Mud to the chest and cheerful about it, on a hummock barely big enough for the both of you."
+              },
+              {
+                "text": "\u201cDo not follow me,\u201d Pell says. \u201cNot being rude. You will go in.\u201d"
+              }
+            ],
+            "onEnter": [],
+            "options": [
+              {
+                "id": "thorn_pell_tally",
+                "text": "The hut on the far hummock.",
+                "requires": {
+                  "without": {
+                    "lore": [
+                      "thorn_hermit_tally"
+                    ]
+                  }
+                },
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "check": {
+                  "skill": "persuasion",
+                  "difficulty": {
+                    "sub": [
+                      12,
+                      {
+                        "clamp": [
+                          {
+                            "div": [
+                              {
+                                "ref": "reputation.the_ferrymen",
+                                "else": 0
+                              },
+                              5
+                            ]
+                          },
+                          -6,
+                          6
+                        ]
+                      }
+                    ]
+                  },
+                  "onSuccess": "thorn_pell_tally_told",
+                  "onFailure": "thorn_pell_tally_wont"
+                }
+              },
+              {
+                "id": "thorn_pell_facing",
+                "text": "Which way does it face?",
+                "requires": {
+                  "without": {
+                    "lore": [
+                      "thorn_hermit_facing"
+                    ]
+                  }
+                },
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "check": {
+                  "skill": "insight",
+                  "difficulty": {
+                    "sub": [
+                      13,
+                      {
+                        "clamp": [
+                          {
+                            "div": [
+                              {
+                                "ref": "reputation.the_ferrymen",
+                                "else": 0
+                              },
+                              5
+                            ]
+                          },
+                          -6,
+                          6
+                        ]
+                      }
+                    ]
+                  },
+                  "onSuccess": "thorn_pell_facing_told",
+                  "onFailure": "thorn_pell_facing_wont"
+                }
+              },
+              {
+                "id": "thorn_pell_post",
+                "text": "You took the post. I want it.",
+                "requires": {
+                  "without": {
+                    "items": [
+                      "hermits_tally"
+                    ],
+                    "flags": [
+                      {
+                        "flag": "given:hermits_tally"
+                      }
+                    ]
+                  }
+                },
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "check": {
+                  "skill": "persuasion",
+                  "difficulty": {
+                    "sub": [
+                      12,
+                      {
+                        "clamp": [
+                          {
+                            "div": [
+                              {
+                                "ref": "reputation.the_ferrymen",
+                                "else": 0
+                              },
+                              5
+                            ]
+                          },
+                          -6,
+                          6
+                        ]
+                      }
+                    ]
+                  },
+                  "onSuccess": "thorn_pell_post_gave",
+                  "onFailure": "thorn_pell_post_kept"
+                }
+              },
+              {
+                "id": "greet_leave",
+                "text": "Nothing.",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "thorn_pell_tally_told",
+            "says": [
+              {
+                "text": "\u201cDoor post is cut all up it. Fives.\u201d Pell holds up both hands and then, because that is not enough, does it again. \u201cNinety years of them, near enough. And the top ones are not weathered, and the post has been standing in this marsh, so the top ones are new.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "learnLore": {
+                  "entry": "thorn_hermit_tally"
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "thorn_pell_tally_on",
+                "text": "Go on.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "thorn_pell_tally_wont",
+            "says": [
+              {
+                "text": "\u201cI've said all I mean to,\u201d they say, and go back to what they were doing."
+              }
+            ],
+            "onEnter": [
+              {
+                "adjustReputation": {
+                  "faction": "the_ferrymen",
+                  "amount": -1
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "thorn_pell_tally_drop",
+                "text": "Leave it.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "thorn_pell_facing_told",
+            "says": [
+              {
+                "text": "\u201cAway from the water and away from the road.\u201d A pause. \u201cWhich leaves one island out there, and you do not build a hut facing an island unless the island is the point of the hut.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "learnLore": {
+                  "entry": "thorn_hermit_facing"
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "thorn_pell_facing_on",
+                "text": "Go on.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "thorn_pell_facing_wont",
+            "says": [
+              {
+                "text": "\u201cI've said all I mean to,\u201d they say, and go back to what they were doing."
+              }
+            ],
+            "onEnter": [
+              {
+                "adjustReputation": {
+                  "faction": "the_ferrymen",
+                  "amount": -1
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "thorn_pell_facing_drop",
+                "text": "Leave it.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "thorn_pell_post_gave",
+            "says": [
+              {
+                "text": "Pell fetches it out from under the bed, which answers the question of whether taking it was a good idea. \u201cCount them,\u201d Pell says. \u201cI have counted them and I would rather two of us were wrong.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "grantItem": {
+                  "target": {
+                    "ref": "actor.id"
+                  },
+                  "item": "hermits_tally",
+                  "quantity": 1
+                }
+              },
+              {
+                "setFlag": {
+                  "flag": "given:hermits_tally",
+                  "value": true
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "thorn_pell_post_thanks",
+                "text": "Thank you.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "thorn_pell_post_kept",
+            "says": [
+              {
+                "text": "\u201cIt is not mine to give twice,\u201d Pell says, which is not an answer and is clearly all you are getting."
+              }
+            ],
+            "onEnter": [
+              {
+                "adjustReputation": {
+                  "faction": "the_ferrymen",
+                  "amount": -1
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "thorn_pell_post_leave",
+                "text": "Then no.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          }
+        ]
+      },
+      {
+        "id": "thorn_orin_talk",
+        "start": "greet",
+        "nodes": [
+          {
+            "id": "greet",
+            "says": [
+              {
+                "text": "A low taproom smelling of wet reed, and a landlady who has already worked out you are not from here."
+              },
+              {
+                "text": "\u201cBed's a shilling, ale's a penny, and if you are after the leech-men they drink at the camp.\u201d"
+              }
+            ],
+            "onEnter": [],
+            "options": [
+              {
+                "id": "thorn_orin_none",
+                "text": "Is there anybody living out on the hummocks?",
+                "requires": {
+                  "without": {
+                    "lore": [
+                      "thorn_hermit_none"
+                    ]
+                  }
+                },
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "check": {
+                  "skill": "persuasion",
+                  "difficulty": {
+                    "sub": [
+                      11,
+                      {
+                        "clamp": [
+                          {
+                            "div": [
+                              {
+                                "ref": "reputation.the_ferrymen",
+                                "else": 0
+                              },
+                              5
+                            ]
+                          },
+                          -6,
+                          6
+                        ]
+                      }
+                    ]
+                  },
+                  "onSuccess": "thorn_orin_none_told",
+                  "onFailure": "thorn_orin_none_wont"
+                }
+              },
+              {
+                "id": "thorn_orin_abandoned",
+                "text": "The toll house on the causeway.",
+                "requires": {
+                  "without": {
+                    "lore": [
+                      "thorn_toll_abandoned"
+                    ]
+                  }
+                },
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "check": {
+                  "skill": "persuasion",
+                  "difficulty": {
+                    "sub": [
+                      10,
+                      {
+                        "clamp": [
+                          {
+                            "div": [
+                              {
+                                "ref": "reputation.the_ferrymen",
+                                "else": 0
+                              },
+                              5
+                            ]
+                          },
+                          -6,
+                          6
+                        ]
+                      }
+                    ]
+                  },
+                  "onSuccess": "thorn_orin_abandoned_told",
+                  "onFailure": "thorn_orin_abandoned_wont"
+                }
+              },
+              {
+                "id": "greet_leave",
+                "text": "Nothing.",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "thorn_orin_none_told",
+            "says": [
+              {
+                "text": "\u201cThere is a hut,\u201d she says, and stops, and starts again. \u201cI know every cutter, thatcher and leech-man between here and Stiltmarket by name. I have known them since they were children.\u201d She puts the cloth down. \u201cThere is a fire pit out there that has been used, and I cannot name who uses it, and that has never once been true of anybody else.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "learnLore": {
+                  "entry": "thorn_hermit_none"
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "thorn_orin_none_on",
+                "text": "Go on.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "thorn_orin_none_wont",
+            "says": [
+              {
+                "text": "\u201cI've said all I mean to,\u201d they say, and go back to what they were doing."
+              }
+            ],
+            "onEnter": [
+              {
+                "adjustReputation": {
+                  "faction": "the_ferrymen",
+                  "amount": -1
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "thorn_orin_none_drop",
+                "text": "Leave it.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "thorn_orin_abandoned_told",
+            "says": [
+              {
+                "text": "\u201cShut two hundred years. The Crown gave it up when the road sank \u2014 you cannot toll a road that is under water half the time.\u201d She refills something. \u201cAsk Sarl about the ledger, though. Ask him twice.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "learnLore": {
+                  "entry": "thorn_toll_abandoned"
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "thorn_orin_abandoned_on",
+                "text": "Go on.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "thorn_orin_abandoned_wont",
+            "says": [
+              {
+                "text": "\u201cI've said all I mean to,\u201d they say, and go back to what they were doing."
+              }
+            ],
+            "onEnter": [
+              {
+                "adjustReputation": {
+                  "faction": "the_ferrymen",
+                  "amount": -1
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "thorn_orin_abandoned_drop",
+                "text": "Leave it.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          }
+        ]
       }
     ],
     "quests": [
@@ -67837,6 +70632,177 @@
           ],
           "reputation": {}
         }
+      },
+      {
+        "id": "thorn_the_knees",
+        "name": "The Knees",
+        "description": "Straight rows of cypress knees converging over open water, half of them cut level and healed over forty years ago.",
+        "autoStart": false,
+        "ordered": true,
+        "tags": [
+          "hidden",
+          "thornmere",
+          "thorn_knees"
+        ],
+        "objectives": [
+          {
+            "id": "where_they_meet",
+            "description": "Get to where the rows meet.",
+            "kind": "reach",
+            "count": 1,
+            "hidden": true,
+            "optional": false,
+            "target": "cypress_maze_the_mound"
+          },
+          {
+            "id": "cut_a_way",
+            "description": "Open a way with the one edge that will.",
+            "kind": "custom",
+            "count": 1,
+            "hidden": true,
+            "optional": false,
+            "when": {
+              "test": {
+                "ref": "flags.thorn_knees_open"
+              }
+            }
+          },
+          {
+            "id": "what_cuts",
+            "description": "Find what has been cutting them level.",
+            "kind": "kill",
+            "count": 1,
+            "hidden": true,
+            "optional": false,
+            "target": "knee_cutter"
+          }
+        ],
+        "stages": [],
+        "unlocks": [],
+        "rewards": {
+          "xp": 190,
+          "items": [
+            {
+              "item": "marshlight_belt",
+              "quantity": 1
+            }
+          ],
+          "reputation": {}
+        }
+      },
+      {
+        "id": "thorn_the_toll",
+        "name": "The Toll That Is Still Collected",
+        "description": "Two hundred years of a balanced ledger in one unbroken hand, for a shilling a head nobody has ever seen taken.",
+        "autoStart": false,
+        "ordered": true,
+        "tags": [
+          "hidden",
+          "thornmere",
+          "thorn_toll"
+        ],
+        "objectives": [
+          {
+            "id": "in_the_counting_room",
+            "description": "Get into the counting room.",
+            "kind": "reach",
+            "count": 1,
+            "hidden": true,
+            "optional": false,
+            "target": "sunken_causeway_toll_ruin"
+          },
+          {
+            "id": "open_the_strongroom",
+            "description": "Open what the ledger says is there.",
+            "kind": "custom",
+            "count": 1,
+            "hidden": true,
+            "optional": false,
+            "when": {
+              "test": {
+                "ref": "flags.thorn_toll_open"
+              }
+            }
+          },
+          {
+            "id": "the_collector",
+            "description": "Meet the collector.",
+            "kind": "kill",
+            "count": 1,
+            "hidden": true,
+            "optional": false,
+            "target": "toll_collector"
+          }
+        ],
+        "stages": [],
+        "unlocks": [],
+        "rewards": {
+          "xp": 185,
+          "items": [
+            {
+              "item": "shilling_ring",
+              "quantity": 1
+            }
+          ],
+          "reputation": {}
+        }
+      },
+      {
+        "id": "thorn_what_it_watched",
+        "name": "What the Hermit Was Watching",
+        "description": "Ninety years of tally marks up a door post, a fire pit still in use, and a hut built facing away from everything except one island.",
+        "autoStart": false,
+        "ordered": true,
+        "tags": [
+          "hidden",
+          "thornmere",
+          "thorn_hermit"
+        ],
+        "objectives": [
+          {
+            "id": "on_the_hummock",
+            "description": "Get onto the deep hummock.",
+            "kind": "reach",
+            "count": 1,
+            "hidden": true,
+            "optional": false,
+            "target": "hummocks_the_deep_hummock"
+          },
+          {
+            "id": "read_the_post",
+            "description": "Read what the marks were counting.",
+            "kind": "custom",
+            "count": 1,
+            "hidden": true,
+            "optional": false,
+            "when": {
+              "test": {
+                "ref": "flags.thorn_hermit_open"
+              }
+            }
+          },
+          {
+            "id": "what_was_watched",
+            "description": "Meet what ninety years of watching was for.",
+            "kind": "kill",
+            "count": 1,
+            "hidden": true,
+            "optional": false,
+            "target": "hummock_thing"
+          }
+        ],
+        "stages": [],
+        "unlocks": [],
+        "rewards": {
+          "xp": 215,
+          "items": [
+            {
+              "item": "hermits_watch_cloak",
+              "quantity": 1
+            }
+          ],
+          "reputation": {}
+        }
       }
     ],
     "arcs": [
@@ -68087,6 +71053,17 @@
         "isEnding": false
       },
       {
+        "id": "thorn_hidden",
+        "name": "Thornmere, in Account",
+        "description": "Three sets of books the marsh has been keeping, none of them for anybody who asked.",
+        "quests": [
+          "thorn_the_knees",
+          "thorn_the_toll",
+          "thorn_what_it_watched"
+        ],
+        "isEnding": false
+      },
+      {
         "id": "the_unsealing",
         "name": "The Unsealing",
         "description": "Nine doors were shut on purpose. Somebody has been opening them in order, and the ninth is the last.",
@@ -68320,6 +71297,66 @@
         "id": "ember_sheet_heat",
         "name": "Whatever is under it is still hot after nine hundred years, and nothing on the Reach has held heat that long.",
         "source": "cut into the Sheet's edge"
+      },
+      {
+        "id": "thorn_knees_rows",
+        "name": "Cypress knees come up where the roots run, which is to say anywhere. In the deep maze they are in rows, and the rows are straight.",
+        "source": "a reed-cutter"
+      },
+      {
+        "id": "thorn_knees_point",
+        "name": "The rows converge. Follow two of them far enough and they meet, and they meet over the water rather than at a tree.",
+        "source": "the hunter's stand"
+      },
+      {
+        "id": "thorn_knees_cut",
+        "name": "Half of them are cut off level at the top, and the cuts have healed over, which takes forty years. Nobody has worked that maze in a hundred.",
+        "source": "the thatcher"
+      },
+      {
+        "id": "thorn_knees_quiet",
+        "name": "There are no leeches in the deep maze. There are leeches in every other inch of this marsh.",
+        "source": "the leech camp"
+      },
+      {
+        "id": "thorn_toll_abandoned",
+        "name": "The toll house on the causeway has taken nothing in two hundred years. The Crown stopped manning it when the causeway sank.",
+        "source": "the Marker House"
+      },
+      {
+        "id": "thorn_toll_balance",
+        "name": "Somebody still sends a ledger in every year, and every year it balances, and the takings on it are a shilling a head.",
+        "source": "the ferrymen's book"
+      },
+      {
+        "id": "thorn_toll_hand",
+        "name": "It has been the same hand for two hundred years. Not a copied hand \u2014 the same one, with the same slant and the same broken g.",
+        "source": "a ferryman"
+      },
+      {
+        "id": "thorn_toll_paid",
+        "name": "Nobody has ever seen it collected and nobody who walks the causeway is short a shilling afterwards. Something is paying.",
+        "source": "the old toll house"
+      },
+      {
+        "id": "thorn_hermit_none",
+        "name": "There is a hut on the far hummock with a fire pit that has been used and nobody in this marsh can name who lives in it.",
+        "source": "the Bundle's landlady"
+      },
+      {
+        "id": "thorn_hermit_tally",
+        "name": "Ninety years of tally marks up the door post, five and five and five, and the newest of them are not weathered.",
+        "source": "a wader"
+      },
+      {
+        "id": "thorn_hermit_facing",
+        "name": "The hut faces away from the water and away from the road, which leaves one island, and that is a thing to build a hut looking at.",
+        "source": "the hunter's stand"
+      },
+      {
+        "id": "thorn_hermit_warm",
+        "name": "The channels near it run warm, and warm water in this marsh means the water is coming up rather than down.",
+        "source": "the leech camp"
       }
     ],
     "loreThreads": [
@@ -68442,6 +71479,39 @@
           "ember_sheet_stair",
           "ember_sheet_reads",
           "ember_sheet_heat"
+        ]
+      },
+      {
+        "id": "thorn_knees",
+        "name": "The Knees",
+        "description": "Cypress knees standing in straight rows that converge over open water, half of them cut level and healed.",
+        "entries": [
+          "thorn_knees_rows",
+          "thorn_knees_point",
+          "thorn_knees_cut",
+          "thorn_knees_quiet"
+        ]
+      },
+      {
+        "id": "thorn_toll",
+        "name": "The Toll That Is Still Collected",
+        "description": "Two hundred years of a balanced ledger in one unbroken hand, for a toll nobody has ever seen taken.",
+        "entries": [
+          "thorn_toll_abandoned",
+          "thorn_toll_balance",
+          "thorn_toll_hand",
+          "thorn_toll_paid"
+        ]
+      },
+      {
+        "id": "thorn_hermit",
+        "name": "What the Hermit Was Watching",
+        "description": "Ninety years of tally marks on a door post, a fire pit still in use, and a hut built facing the wrong way on purpose.",
+        "entries": [
+          "thorn_hermit_none",
+          "thorn_hermit_tally",
+          "thorn_hermit_facing",
+          "thorn_hermit_warm"
         ]
       }
     ]
