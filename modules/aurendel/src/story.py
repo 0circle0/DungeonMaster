@@ -42,6 +42,7 @@ HIDDEN_MODULES = [
     "hidden_glasslands",
     "hidden_ember",
     "hidden_thornmere",
+    "hidden_isles",
 ]
 
 _LOADED = []

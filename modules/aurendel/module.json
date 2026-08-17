@@ -4031,6 +4031,131 @@
           }
         ],
         "rarity": "very_rare"
+      },
+      {
+        "id": "pilots_book",
+        "name": "The Pilot's Book",
+        "description": "Two hundred springs of the Narrows redrawn, and one bearing that has never been rubbed out.",
+        "kind": "key",
+        "value": 0,
+        "weight": 0,
+        "tags": [
+          "keepsake"
+        ],
+        "extra": {
+          "heldBy": "narrows_pilot_hesk"
+        }
+      },
+      {
+        "id": "takers_count",
+        "name": "The Bird-Taker's Count",
+        "description": "Eggs off the Bank by the season, back four generations. There is a year in it where the cut's column stops.",
+        "kind": "key",
+        "value": 0,
+        "weight": 0,
+        "tags": [
+          "keepsake"
+        ],
+        "extra": {
+          "heldBy": "bird_taker_nella"
+        }
+      },
+      {
+        "id": "capstan_plate",
+        "name": "The Plate off the Capstan",
+        "description": "Brass off the salvors' capstan with a line cut into it by somebody who came up and did not want to say it out loud.",
+        "kind": "key",
+        "value": 0,
+        "weight": 0,
+        "tags": [
+          "keepsake"
+        ],
+        "extra": {
+          "heldBy": "salvor_bren"
+        }
+      },
+      {
+        "id": "dogged_pin",
+        "name": "A Pin off a Dogged Hatch",
+        "description": "Driven from the outside, and bent by whatever was on the inside.",
+        "kind": "treasure",
+        "value": 0,
+        "weight": 0,
+        "tags": [
+          "clue",
+          "proof"
+        ],
+        "onUse": [
+          {
+            "learnLore": {
+              "entry": "isle_wreck_shut"
+            }
+          }
+        ],
+        "consumedOnUse": false
+      },
+      {
+        "id": "pilots_glass_ring",
+        "name": "The Pilot's Ring",
+        "description": "Two hundred years of a bearing that should have moved, cast into a band. Worn, a road you have walked once does not go wrong.",
+        "kind": "trinket",
+        "slot": "ring",
+        "value": 880,
+        "weight": 1,
+        "tags": [
+          "fabled"
+        ],
+        "skillBonuses": {
+          "survival": 3,
+          "perception": 2
+        },
+        "rarity": "rare"
+      },
+      {
+        "id": "tern_cloak",
+        "name": "The Cloak of Forty Thousand",
+        "description": "Tern feather over oiled canvas, out of a cut where no tern will nest. Nothing calls when you are wearing it.",
+        "kind": "armor",
+        "slot": "cloak",
+        "value": 1000,
+        "weight": 1,
+        "tags": [
+          "fabled"
+        ],
+        "modifiers": {
+          "guard": 1
+        },
+        "skillBonuses": {
+          "stealth": 4
+        },
+        "damageInteractions": [
+          {
+            "damageType": "cold",
+            "multiplier": 0.75
+          }
+        ],
+        "rarity": "very_rare"
+      },
+      {
+        "id": "run_out_gun",
+        "name": "The Gun That Was Run Out",
+        "description": "A ship's swivel cut down to a haft. It came up loaded and it is still loaded, and nobody has been able to draw it.",
+        "kind": "weapon",
+        "slot": "hand",
+        "value": 1250,
+        "weight": 1,
+        "tags": [
+          "fabled"
+        ],
+        "damage": {
+          "dice": "1d10",
+          "damageType": "piercing",
+          "stat": "agility"
+        },
+        "properties": [
+          "heavy"
+        ],
+        "rarity": "very_rare"
       }
     ],
     "lootTables": [
@@ -6264,6 +6389,194 @@
             "value": {
               "item": "antidote",
               "quantity": "1d2"
+            }
+          },
+          {
+            "weight": 2,
+            "value": {
+              "item": "warded_coat",
+              "quantity": "1"
+            }
+          }
+        ]
+      },
+      {
+        "id": "isle_book_carried",
+        "name": "What Hesk Kept",
+        "rolls": "1",
+        "emptyChance": 0,
+        "entries": [
+          {
+            "weight": 1,
+            "value": {
+              "item": "pilots_book",
+              "quantity": "1",
+              "unique": true,
+              "requirementScope": "party",
+              "requires": {
+                "without": {
+                  "flags": [
+                    {
+                      "flag": "given:pilots_book"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        ]
+      },
+      {
+        "id": "isle_count_carried",
+        "name": "What Nella Kept",
+        "rolls": "1",
+        "emptyChance": 0,
+        "entries": [
+          {
+            "weight": 1,
+            "value": {
+              "item": "takers_count",
+              "quantity": "1",
+              "unique": true,
+              "requirementScope": "party",
+              "requires": {
+                "without": {
+                  "flags": [
+                    {
+                      "flag": "given:takers_count"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        ]
+      },
+      {
+        "id": "isle_plate_carried",
+        "name": "What Bren Kept",
+        "rolls": "1",
+        "emptyChance": 0,
+        "entries": [
+          {
+            "weight": 1,
+            "value": {
+              "item": "capstan_plate",
+              "quantity": "1",
+              "unique": true,
+              "requirementScope": "party",
+              "requires": {
+                "without": {
+                  "flags": [
+                    {
+                      "flag": "given:capstan_plate"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        ]
+      },
+      {
+        "id": "isle_marker_hoard",
+        "name": "Under the Marker",
+        "rolls": "2",
+        "emptyChance": 0.1,
+        "bonusRollSkill": "perception",
+        "bonusRolls": {
+          "onSuccess": 1,
+          "onCritical": 2
+        },
+        "entries": [
+          {
+            "weight": 4,
+            "value": {
+              "item": "old_coin",
+              "quantity": "2d6"
+            }
+          },
+          {
+            "weight": 2,
+            "value": {
+              "item": "wreck_brass",
+              "quantity": "1d3"
+            }
+          },
+          {
+            "weight": 1,
+            "value": {
+              "item": "amber_lump",
+              "quantity": "1"
+            }
+          }
+        ]
+      },
+      {
+        "id": "isle_cut_hoard",
+        "name": "Under the Cut",
+        "rolls": "2",
+        "emptyChance": 0,
+        "bonusRollSkill": "perception",
+        "bonusRolls": {
+          "onSuccess": 1,
+          "onCritical": 2
+        },
+        "entries": [
+          {
+            "weight": 3,
+            "value": {
+              "item": "old_coin",
+              "quantity": "3d6"
+            }
+          },
+          {
+            "weight": 2,
+            "value": {
+              "item": "ward_salt",
+              "quantity": "1d2"
+            }
+          },
+          {
+            "weight": 1,
+            "value": {
+              "item": "silvered_blade",
+              "quantity": "1"
+            }
+          }
+        ]
+      },
+      {
+        "id": "isle_wreck_hoard",
+        "name": "Below Her Hatches",
+        "rolls": "3",
+        "emptyChance": 0,
+        "bonusRollSkill": "perception",
+        "bonusRolls": {
+          "onSuccess": 1,
+          "onCritical": 2
+        },
+        "entries": [
+          {
+            "weight": 4,
+            "value": {
+              "item": "old_coin",
+              "quantity": "5d6"
+            }
+          },
+          {
+            "weight": 2,
+            "value": {
+              "item": "wreck_brass",
+              "quantity": "2d3"
+            }
+          },
+          {
+            "weight": 1,
+            "value": {
+              "item": "dogged_pin",
+              "quantity": "1",
+              "unique": true
             }
           },
           {
@@ -9963,6 +10276,298 @@
         "resourceOverrides": {
           "hp": 105
         }
+      },
+      {
+        "id": "isle_pilot",
+        "name": "Hesk, Pilot of the Narrows",
+        "description": "Forty years of standing on a heeling deck reading water.",
+        "level": 6,
+        "xp": 0,
+        "attributes": {
+          "might": 13,
+          "agility": 16,
+          "endurance": 14,
+          "intellect": 14,
+          "instinct": 16,
+          "presence": 12
+        },
+        "abilities": [
+          "strike"
+        ],
+        "behaviour": [
+          {
+            "priority": 0,
+            "use": "strike"
+          }
+        ],
+        "faction": "the_salvors",
+        "creatureType": "humanoid",
+        "size": "medium",
+        "descriptors": [
+          "a salt-cured"
+        ],
+        "conditionalLoot": [],
+        "loot": "isle_book_carried",
+        "resourceOverrides": {
+          "hp": 34
+        }
+      },
+      {
+        "id": "isle_taker",
+        "name": "Nella, Bird-Taker",
+        "description": "Goes down a cliff on a rope for a living.",
+        "level": 5,
+        "xp": 0,
+        "attributes": {
+          "might": 12,
+          "agility": 17,
+          "endurance": 13,
+          "intellect": 10,
+          "instinct": 15,
+          "presence": 11
+        },
+        "abilities": [
+          "strike",
+          "quick_shot"
+        ],
+        "behaviour": [
+          {
+            "priority": 0,
+            "use": "strike"
+          }
+        ],
+        "faction": "the_salvors",
+        "creatureType": "humanoid",
+        "size": "medium",
+        "descriptors": [
+          "a wiry"
+        ],
+        "conditionalLoot": [],
+        "loot": "isle_count_carried",
+        "resourceOverrides": {
+          "hp": 28
+        }
+      },
+      {
+        "id": "isle_salvor",
+        "name": "Bren of the Reef Camp",
+        "description": "Dives a hundred feet on one breath, repeatedly, by choice.",
+        "level": 6,
+        "xp": 0,
+        "attributes": {
+          "might": 16,
+          "agility": 14,
+          "endurance": 17,
+          "intellect": 11,
+          "instinct": 14,
+          "presence": 10
+        },
+        "abilities": [
+          "strike"
+        ],
+        "behaviour": [
+          {
+            "priority": 0,
+            "use": "strike"
+          }
+        ],
+        "faction": "the_salvors",
+        "creatureType": "humanoid",
+        "size": "medium",
+        "descriptors": [
+          "a barrel-chested"
+        ],
+        "conditionalLoot": [],
+        "loot": "isle_plate_carried",
+        "resourceOverrides": {
+          "hp": 38
+        }
+      },
+      {
+        "id": "marker_holder",
+        "name": "What Holds Her",
+        "description": "Two hundred years of one bearing in a channel that redraws every spring. Something down there has been very patient.",
+        "level": 7,
+        "xp": 740,
+        "attributes": {
+          "might": 17,
+          "agility": 13,
+          "endurance": 17,
+          "intellect": 11,
+          "instinct": 15,
+          "presence": 12
+        },
+        "abilities": [
+          "latch",
+          "drag_under",
+          "rend"
+        ],
+        "behaviour": [
+          {
+            "priority": 20,
+            "use": "latch",
+            "when": {
+              "chance": 0.4
+            }
+          },
+          {
+            "priority": 10,
+            "use": "drag_under"
+          },
+          {
+            "priority": 0,
+            "use": "rend"
+          }
+        ],
+        "faction": "the_unsealed",
+        "creatureType": "undead",
+        "size": "medium",
+        "descriptors": [
+          "a barnacled",
+          "a rooted"
+        ],
+        "conditionalLoot": [],
+        "loot": "isle_marker_hoard",
+        "conditionImmunities": [
+          "prone",
+          "frightened"
+        ],
+        "resourceOverrides": {
+          "hp": 86
+        }
+      },
+      {
+        "id": "cut_silence",
+        "name": "What the Birds Left",
+        "description": "Forty thousand pairs will nest on a gun or a corpse. They will not nest here, and they have been right about it for a lifetime.",
+        "level": 7,
+        "xp": 720,
+        "attributes": {
+          "might": 14,
+          "agility": 16,
+          "endurance": 15,
+          "intellect": 13,
+          "instinct": 18,
+          "presence": 16
+        },
+        "abilities": [
+          "wither",
+          "grave_chill",
+          "bleed_white"
+        ],
+        "behaviour": [
+          {
+            "priority": 15,
+            "use": "bleed_white"
+          },
+          {
+            "priority": 0,
+            "use": "wither"
+          }
+        ],
+        "faction": "the_unsealed",
+        "creatureType": "undead",
+        "size": "medium",
+        "descriptors": [
+          "a soundless",
+          "a pale"
+        ],
+        "conditionalLoot": [],
+        "loot": "isle_cut_hoard",
+        "damageInteractions": [
+          {
+            "damageType": "slashing",
+            "multiplier": 0.5,
+            "unless": [
+              "silvered"
+            ]
+          },
+          {
+            "damageType": "piercing",
+            "multiplier": 0.5,
+            "unless": [
+              "silvered"
+            ]
+          }
+        ],
+        "conditionImmunities": [
+          "frightened",
+          "poisoned"
+        ],
+        "resourceOverrides": {
+          "hp": 80
+        }
+      },
+      {
+        "id": "hold_thing",
+        "name": "What They Shut In",
+        "description": "Her guns were run out at the island and her hatches were dogged from the deck. The crew made both of those decisions.",
+        "level": 8,
+        "xp": 950,
+        "attributes": {
+          "might": 19,
+          "agility": 14,
+          "endurance": 18,
+          "intellect": 12,
+          "instinct": 16,
+          "presence": 13
+        },
+        "abilities": [
+          "drag_under",
+          "rend",
+          "bleed_white",
+          "latch"
+        ],
+        "behaviour": [
+          {
+            "priority": 20,
+            "use": "drag_under",
+            "when": {
+              "chance": 0.35
+            }
+          },
+          {
+            "priority": 10,
+            "use": "latch"
+          },
+          {
+            "priority": 0,
+            "use": "rend"
+          }
+        ],
+        "faction": "the_unsealed",
+        "creatureType": "undead",
+        "size": "medium",
+        "descriptors": [
+          "a bloated",
+          "a long-drowned"
+        ],
+        "conditionalLoot": [],
+        "loot": "isle_wreck_hoard",
+        "damageInteractions": [
+          {
+            "damageType": "slashing",
+            "multiplier": 0.5,
+            "unless": [
+              "silvered"
+            ]
+          },
+          {
+            "damageType": "piercing",
+            "multiplier": 0.5,
+            "unless": [
+              "silvered"
+            ]
+          }
+        ],
+        "conditionImmunities": [
+          "frightened",
+          "poisoned",
+          "prone"
+        ],
+        "resourceOverrides": {
+          "hp": 110
+        }
       }
     ],
     "factions": [
@@ -11704,6 +12309,117 @@
         "faction": "the_ferrymen",
         "dialogue": "thorn_gost_talk",
         "home": "leech_channels_leech_camp"
+      },
+      {
+        "id": "narrows_pilot_hesk",
+        "name": "Hesk, Pilot of the Narrows",
+        "description": "Takes hulls through a channel that redraws itself every spring, and keeps the book that says how it redrew.",
+        "disposition": 2,
+        "gullibility": 0.25,
+        "memorySpan": 300,
+        "offersQuests": [],
+        "caresAbout": [],
+        "reactions": [],
+        "faction": "the_salvors",
+        "dialogue": "isle_hesk_talk",
+        "home": "narrows_pilot_station",
+        "statblock": "isle_pilot",
+        "shop": {
+          "lootTable": "salvors_stock",
+          "buysTags": [
+            "treasure"
+          ],
+          "priceMultiplier": 1.3
+        }
+      },
+      {
+        "id": "bird_taker_nella",
+        "name": "Nella, Bird-Taker",
+        "description": "Takes eggs off Tern Bank in season, as her mother did, and keeps four generations of the count.",
+        "disposition": 6,
+        "gullibility": 0.4,
+        "memorySpan": 200,
+        "offersQuests": [],
+        "caresAbout": [],
+        "reactions": [],
+        "faction": "the_salvors",
+        "dialogue": "isle_nella_talk",
+        "home": "tern_bank_hut",
+        "statblock": "isle_taker"
+      },
+      {
+        "id": "salvor_bren",
+        "name": "Bren of the Reef Camp",
+        "description": "Dives the reef for the Salvors and came up off the deep wreck once with a line cut into a brass plate and nothing to say.",
+        "disposition": 0,
+        "gullibility": 0.3,
+        "memorySpan": 200,
+        "offersQuests": [],
+        "caresAbout": [],
+        "reactions": [],
+        "faction": "the_salvors",
+        "dialogue": "isle_bren_talk",
+        "home": "wreck_reef_salvors_camp",
+        "statblock": "isle_salvor"
+      },
+      {
+        "id": "gunner_othe",
+        "name": "Othe, at the Gun Forge",
+        "description": "Keeps Halfmast's guns for a fort with no garrison, and knows what iron of what age looks like.",
+        "disposition": 4,
+        "gullibility": 0.3,
+        "memorySpan": 180,
+        "offersQuests": [],
+        "caresAbout": [],
+        "reactions": [],
+        "faction": "the_salvors",
+        "dialogue": "isle_othe_talk",
+        "home": "halfmast_forge",
+        "shop": {
+          "lootTable": "salvors_stock",
+          "buysTags": [
+            "material"
+          ],
+          "priceMultiplier": 1.2
+        }
+      },
+      {
+        "id": "shag_landlord_dree",
+        "name": "Dree, at the Shag",
+        "description": "Keeps the only roof on Cormorant that will take a stranger, and listens to the water for a living without meaning to.",
+        "disposition": 8,
+        "gullibility": 0.5,
+        "memorySpan": 150,
+        "offersQuests": [],
+        "caresAbout": [],
+        "reactions": [],
+        "faction": "the_salvors",
+        "dialogue": "isle_dree_talk",
+        "home": "cormorant_the_shag",
+        "shop": {
+          "lootTable": "hollowdene_stock",
+          "buysTags": [
+            "treasure"
+          ],
+          "priceMultiplier": 1.35
+        }
+      },
+      {
+        "id": "rock_chaplain_ilva",
+        "name": "Ilva, at the Rock Chapel",
+        "description": "Buries what the sea gives back, which on Cormorant is a full-time occupation, and has views about which way things are pointing.",
+        "disposition": 8,
+        "gullibility": 0.4,
+        "memorySpan": 200,
+        "offersQuests": [],
+        "caresAbout": [
+          "ward_restored",
+          "ward_broken"
+        ],
+        "reactions": [],
+        "faction": "the_keepers",
+        "dialogue": "isle_ilva_talk",
+        "home": "cormorant_chapel"
       }
     ],
     "traps": [
@@ -31033,7 +31749,22 @@
         "position": {
           "x": 3,
           "y": 3
-        }
+        },
+        "triggers": [
+          {
+            "id": "isle_found_jetty",
+            "mode": "once",
+            "on": "enter",
+            "description": "Ice on everything but one strand of sand across the water.",
+            "effects": [
+              {
+                "learnLore": {
+                  "entry": "isle_terns_warm"
+                }
+              }
+            ]
+          }
+        ]
       },
       {
         "id": "cormorant_the_shag",
@@ -31168,7 +31899,22 @@
         "position": {
           "x": 3,
           "y": 3
-        }
+        },
+        "triggers": [
+          {
+            "id": "isle_found_fort",
+            "mode": "once",
+            "on": "enter",
+            "description": "What the fort's own guns are laid on, and what they are not.",
+            "effects": [
+              {
+                "learnLore": {
+                  "entry": "isle_wreck_pointing"
+                }
+              }
+            ]
+          }
+        ]
       },
       {
         "id": "halfmast_the_half_mast",
@@ -31299,7 +32045,22 @@
         "position": {
           "x": 3,
           "y": 3
-        }
+        },
+        "triggers": [
+          {
+            "id": "isle_found_passage",
+            "mode": "once",
+            "on": "enter",
+            "description": "One bearing on a chart that has been redrawn two hundred times.",
+            "effects": [
+              {
+                "learnLore": {
+                  "entry": "isle_marker_still"
+                }
+              }
+            ]
+          }
+        ]
       },
       {
         "id": "narrows_pilot_station",
@@ -31342,7 +32103,58 @@
         "position": {
           "x": 25,
           "y": 3
-        }
+        },
+        "triggers": [
+          {
+            "id": "isle_marker_committed",
+            "mode": "once",
+            "on": "enter",
+            "description": "Alongside her at slack water.",
+            "requires": {
+              "custom": {
+                "gte": [
+                  {
+                    "ref": "threads.isle_marker.known"
+                  },
+                  2
+                ]
+              }
+            },
+            "effects": [
+              {
+                "emit": {
+                  "event": "startQuest",
+                  "data": {
+                    "quest": "isle_the_marker"
+                  }
+                }
+              }
+            ]
+          }
+        ],
+        "hidden": true,
+        "discover": {
+          "skill": "perception",
+          "difficulty": {
+            "max": [
+              8,
+              {
+                "sub": [
+                  20,
+                  {
+                    "mul": [
+                      3,
+                      {
+                        "ref": "threads.isle_marker.known"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "gate": "isle_marker_hold"
       },
       {
         "id": "wreck_reef_the_reef",
@@ -31356,7 +32168,22 @@
         "position": {
           "x": 3,
           "y": 3
-        }
+        },
+        "triggers": [
+          {
+            "id": "isle_found_reef",
+            "mode": "once",
+            "on": "enter",
+            "description": "Guns run out, on one side, at nothing.",
+            "effects": [
+              {
+                "learnLore": {
+                  "entry": "isle_wreck_guns"
+                }
+              }
+            ]
+          }
+        ]
       },
       {
         "id": "wreck_reef_salvors_camp",
@@ -31392,7 +32219,58 @@
         "position": {
           "x": 25,
           "y": 3
-        }
+        },
+        "triggers": [
+          {
+            "id": "isle_wreck_committed",
+            "mode": "once",
+            "on": "enter",
+            "description": "On her deck, with the guns run out beside you.",
+            "requires": {
+              "custom": {
+                "gte": [
+                  {
+                    "ref": "threads.isle_wreck.known"
+                  },
+                  2
+                ]
+              }
+            },
+            "effects": [
+              {
+                "emit": {
+                  "event": "startQuest",
+                  "data": {
+                    "quest": "isle_the_deep_wreck"
+                  }
+                }
+              }
+            ]
+          }
+        ],
+        "hidden": true,
+        "discover": {
+          "skill": "survival",
+          "difficulty": {
+            "max": [
+              7,
+              {
+                "sub": [
+                  23,
+                  {
+                    "mul": [
+                      4,
+                      {
+                        "ref": "threads.isle_wreck.known"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "gate": "isle_wreck_hatch"
       },
       {
         "id": "gullstone_the_stair",
@@ -31524,7 +32402,22 @@
         "position": {
           "x": 3,
           "y": 3
-        }
+        },
+        "triggers": [
+          {
+            "id": "isle_found_bank",
+            "mode": "once",
+            "on": "enter",
+            "description": "Where forty thousand birds stop.",
+            "effects": [
+              {
+                "learnLore": {
+                  "entry": "isle_terns_nest"
+                }
+              }
+            ]
+          }
+        ]
       },
       {
         "id": "tern_bank_hut",
@@ -31560,13 +32453,59 @@
         "hidden": true,
         "discover": {
           "skill": "perception",
-          "difficulty": 13
+          "difficulty": {
+            "max": [
+              8,
+              {
+                "sub": [
+                  20,
+                  {
+                    "mul": [
+                      3,
+                      {
+                        "ref": "threads.isle_terns.known"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
         },
         "dungeon": "isles_bank_cut",
         "position": {
           "x": 25,
           "y": 3
-        }
+        },
+        "triggers": [
+          {
+            "id": "isle_terns_committed",
+            "mode": "once",
+            "on": "enter",
+            "description": "In the quiet part of the Bank.",
+            "requires": {
+              "custom": {
+                "gte": [
+                  {
+                    "ref": "threads.isle_terns.known"
+                  },
+                  2
+                ]
+              }
+            },
+            "effects": [
+              {
+                "emit": {
+                  "event": "startQuest",
+                  "data": {
+                    "quest": "isle_what_the_terns_know"
+                  }
+                }
+              }
+            ]
+          }
+        ],
+        "gate": "isle_cut_sand"
       },
       {
         "id": "lantern_deep_fungus_market",
@@ -33401,6 +34340,99 @@
           "items": [
             {
               "item": "hermits_tally",
+              "quantity": 1,
+              "consume": false,
+              "equipped": false
+            }
+          ]
+        }
+      },
+      {
+        "id": "isle_marker_hold",
+        "name": "What Holds Her",
+        "description": "She is not aground. Two hundred years on one bearing and she is held, and what she is held by is not rock.",
+        "kind": "ward",
+        "blockedTextKey": "isle_marker_blocked",
+        "staysOpen": true,
+        "onOpen": [
+          {
+            "setFlag": {
+              "flag": "isle_marker_open",
+              "value": true
+            }
+          }
+        ],
+        "onBlocked": [],
+        "opensWith": [],
+        "tags": [],
+        "requires": {
+          "items": [
+            {
+              "item": "pilots_book",
+              "quantity": 1,
+              "consume": false,
+              "equipped": false
+            }
+          ]
+        }
+      },
+      {
+        "id": "isle_cut_sand",
+        "name": "Under the Sand That Will Not Freeze",
+        "description": "A cut through a bank of forty thousand birds, and no bird in it.",
+        "kind": "ward",
+        "blockedTextKey": "isle_cut_blocked",
+        "staysOpen": true,
+        "onOpen": [
+          {
+            "setFlag": {
+              "flag": "isle_terns_open",
+              "value": true
+            }
+          }
+        ],
+        "onBlocked": [],
+        "opensWith": [],
+        "tags": [],
+        "requires": {
+          "items": [
+            {
+              "item": "takers_count",
+              "quantity": 1,
+              "consume": false,
+              "equipped": false
+            }
+          ]
+        }
+      },
+      {
+        "id": "isle_wreck_hatch",
+        "name": "The Dogged Hatch",
+        "description": "Every hatch on her is dogged, and every dog was driven from outside.",
+        "kind": "ward",
+        "blockedTextKey": "isle_wreck_blocked",
+        "staysOpen": true,
+        "onOpen": [
+          {
+            "setFlag": {
+              "flag": "isle_wreck_open",
+              "value": true
+            }
+          }
+        ],
+        "onBlocked": [],
+        "opensWith": [],
+        "tags": [],
+        "requires": {
+          "items": [
+            {
+              "item": "capstan_plate",
+              "quantity": 1,
+              "consume": false,
+              "equipped": false
+            },
+            {
+              "item": "tern_cloak",
               "quantity": 1,
               "consume": false,
               "equipped": false
@@ -35383,7 +36415,8 @@
           "minLeaf": 5
         },
         "width": "27",
-        "height": "27"
+        "height": "27",
+        "bossTable": "isle_wreck_boss"
       },
       {
         "id": "isles_gullstone_chimney",
@@ -35439,7 +36472,8 @@
           "birthThreshold": 5
         },
         "width": "41",
-        "height": "41"
+        "height": "41",
+        "bossTable": "isle_cut_boss"
       },
       {
         "id": "deeproads_lower_workings",
@@ -37373,6 +38407,72 @@
             "entries": [
               {
                 "monster": "toll_collector",
+                "count": "1",
+                "scaleWithLevel": false
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "isle_cut_boss",
+        "minDepth": 0,
+        "maxDepth": 999,
+        "chance": 1,
+        "emptyWeight": 0,
+        "scalePerLevels": 3,
+        "groups": [
+          {
+            "id": "b",
+            "weight": 1,
+            "hostile": true,
+            "entries": [
+              {
+                "monster": "cut_silence",
+                "count": "1",
+                "scaleWithLevel": false
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "isle_wreck_boss",
+        "minDepth": 0,
+        "maxDepth": 999,
+        "chance": 1,
+        "emptyWeight": 0,
+        "scalePerLevels": 3,
+        "groups": [
+          {
+            "id": "b",
+            "weight": 1,
+            "hostile": true,
+            "entries": [
+              {
+                "monster": "hold_thing",
+                "count": "1",
+                "scaleWithLevel": false
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "isle_marker_boss",
+        "minDepth": 0,
+        "maxDepth": 999,
+        "chance": 1,
+        "emptyWeight": 0,
+        "scalePerLevels": 3,
+        "groups": [
+          {
+            "id": "b",
+            "weight": 1,
+            "hostile": true,
+            "entries": [
+              {
+                "monster": "marker_holder",
                 "count": "1",
                 "scaleWithLevel": false
               }
@@ -41222,6 +42322,48 @@
           },
           {
             "text": "There is a man with a broom, and he starts again at the bottom when he gets to the top."
+          }
+        ]
+      },
+      {
+        "id": "isle_cut_blocked",
+        "variants": [
+          {
+            "text": "The sand goes down further than sand does and it is warm the whole way. There is a year the birds came off this and somebody's count has that year in it."
+          },
+          {
+            "text": "Silent, a hundred yards from forty thousand birds. You can hear how silent it is, which is not a thing silence usually does."
+          },
+          {
+            "text": "It does not freeze. The Bank freezes, the hut freezes, the water in the hut freezes. This does not."
+          }
+        ]
+      },
+      {
+        "id": "isle_marker_blocked",
+        "variants": [
+          {
+            "text": "Getting under her wants a slack that comes twice a year and lasts an hour. The pilots have two hundred springs of when \u2014 you do not have the book."
+          },
+          {
+            "text": "The tide runs through here at four knots and there is nothing to hold on to. You would want to know exactly when it stops, and only one book knows."
+          },
+          {
+            "text": "She has been on this bearing since before the fort. Whatever is under her has been holding her there the whole time."
+          }
+        ]
+      },
+      {
+        "id": "isle_wreck_blocked",
+        "variants": [
+          {
+            "text": "The pins are bent from the inside and driven from the outside, and getting one out wants the leverage the salvors use \u2014 and a very clear head about what the guns were run out at."
+          },
+          {
+            "text": "A hundred feet down and her guns run out at an island with nothing on it. Whatever the crew were shut in with, they were shut in with it on purpose."
+          },
+          {
+            "text": "Dogged from outside. Somebody stood on this deck and hammered these home while the ship was going down."
           }
         ]
       },
@@ -62313,6 +63455,1906 @@
             "redirectWhen": []
           }
         ]
+      },
+      {
+        "id": "isle_hesk_talk",
+        "start": "greet",
+        "nodes": [
+          {
+            "id": "greet",
+            "says": [
+              {
+                "text": "A station on a rock with a chart table bolted to the floor and a chart on it that has been redrawn so often it is furry."
+              },
+              {
+                "text": "\u201cPilotage is by the hull and I do not take passengers.\u201d"
+              }
+            ],
+            "onEnter": [],
+            "options": [
+              {
+                "id": "isle_hesk_still",
+                "text": "How much does the Narrows move in a year?",
+                "requires": {
+                  "without": {
+                    "lore": [
+                      "isle_marker_still"
+                    ]
+                  }
+                },
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "check": {
+                  "skill": "persuasion",
+                  "difficulty": {
+                    "sub": [
+                      12,
+                      {
+                        "clamp": [
+                          {
+                            "div": [
+                              {
+                                "ref": "reputation.the_salvors",
+                                "else": 0
+                              },
+                              5
+                            ]
+                          },
+                          -6,
+                          6
+                        ]
+                      }
+                    ]
+                  },
+                  "onSuccess": "isle_hesk_still_told",
+                  "onFailure": "isle_hesk_still_wont"
+                }
+              },
+              {
+                "id": "isle_hesk_held",
+                "text": "Has anybody been under her?",
+                "requires": {
+                  "without": {
+                    "lore": [
+                      "isle_marker_held"
+                    ]
+                  }
+                },
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "check": {
+                  "skill": "persuasion",
+                  "difficulty": {
+                    "sub": [
+                      15,
+                      {
+                        "clamp": [
+                          {
+                            "div": [
+                              {
+                                "ref": "reputation.the_salvors",
+                                "else": 0
+                              },
+                              5
+                            ]
+                          },
+                          -6,
+                          6
+                        ]
+                      }
+                    ]
+                  },
+                  "onSuccess": "isle_hesk_held_told",
+                  "onFailure": "isle_hesk_held_wont"
+                }
+              },
+              {
+                "id": "isle_hesk_bearing",
+                "text": "Lay her bearing off properly. Where does it go?",
+                "requires": {
+                  "without": {
+                    "lore": [
+                      "isle_marker_bearing"
+                    ]
+                  }
+                },
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "check": {
+                  "skill": "insight",
+                  "difficulty": {
+                    "sub": [
+                      16,
+                      {
+                        "clamp": [
+                          {
+                            "div": [
+                              {
+                                "ref": "reputation.the_salvors",
+                                "else": 0
+                              },
+                              5
+                            ]
+                          },
+                          -6,
+                          6
+                        ]
+                      }
+                    ]
+                  },
+                  "onSuccess": "isle_hesk_bearing_told",
+                  "onFailure": "isle_hesk_bearing_wont"
+                }
+              },
+              {
+                "id": "isle_hesk_book",
+                "text": "The book. Two hundred springs of it.",
+                "requires": {
+                  "without": {
+                    "items": [
+                      "pilots_book"
+                    ],
+                    "flags": [
+                      {
+                        "flag": "given:pilots_book"
+                      }
+                    ]
+                  }
+                },
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "check": {
+                  "skill": "persuasion",
+                  "difficulty": {
+                    "sub": [
+                      17,
+                      {
+                        "clamp": [
+                          {
+                            "div": [
+                              {
+                                "ref": "reputation.the_salvors",
+                                "else": 0
+                              },
+                              5
+                            ]
+                          },
+                          -6,
+                          6
+                        ]
+                      }
+                    ]
+                  },
+                  "onSuccess": "isle_hesk_book_gave",
+                  "onFailure": "isle_hesk_book_kept"
+                }
+              },
+              {
+                "id": "greet_leave",
+                "text": "Nothing.",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": [
+              {
+                "requires": {
+                  "factions": [
+                    {
+                      "faction": "the_salvors",
+                      "maxStanding": -30
+                    }
+                  ]
+                },
+                "goto": "isle_hesk_cold"
+              }
+            ]
+          },
+          {
+            "id": "isle_hesk_still_told",
+            "says": [
+              {
+                "text": "\u201cA cable, sometimes two.\u201d He taps the chart, which has been rubbed out and redrawn until it is furry. \u201cEverything on here has been moved in my lifetime except one bearing, and that bearing is a wreck, and a wreck is the last thing that ought to stay put.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "learnLore": {
+                  "entry": "isle_marker_still"
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "isle_hesk_still_on",
+                "text": "Go on.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "isle_hesk_still_wont",
+            "says": [
+              {
+                "text": "\u201cI've said all I mean to,\u201d they say, and go back to what they were doing."
+              }
+            ],
+            "onEnter": [
+              {
+                "adjustReputation": {
+                  "faction": "the_salvors",
+                  "amount": -1
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "isle_hesk_still_drop",
+                "text": "Leave it.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "isle_hesk_held_told",
+            "says": [
+              {
+                "text": "\u201cTwice.\u201d He does not enjoy saying it. \u201cBren went the second time. She is not aground \u2014 she is *held*, and what she is held by is not rock, and Bren came up and would not put it in words.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "learnLore": {
+                  "entry": "isle_marker_held"
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "isle_hesk_held_on",
+                "text": "Go on.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "isle_hesk_held_wont",
+            "says": [
+              {
+                "text": "\u201cI've said all I mean to,\u201d they say, and go back to what they were doing."
+              }
+            ],
+            "onEnter": [
+              {
+                "adjustReputation": {
+                  "faction": "the_salvors",
+                  "amount": -1
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "isle_hesk_held_drop",
+                "text": "Leave it.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "isle_hesk_bearing_told",
+            "says": [
+              {
+                "text": "He does it, because a pilot cannot resist a chart. The rule stops. \u201cThrough the Bank,\u201d he says, \u201cand out the far side. Which is not the channel, and never has been, and I have taken hulls through here for forty years on a mark that points at nothing.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "learnLore": {
+                  "entry": "isle_marker_bearing"
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "isle_hesk_bearing_on",
+                "text": "Go on.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "isle_hesk_bearing_wont",
+            "says": [
+              {
+                "text": "\u201cI've said all I mean to,\u201d they say, and go back to what they were doing."
+              }
+            ],
+            "onEnter": [
+              {
+                "adjustReputation": {
+                  "faction": "the_salvors",
+                  "amount": -1
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "isle_hesk_bearing_drop",
+                "text": "Leave it.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "isle_hesk_book_gave",
+            "says": [
+              {
+                "text": "He gets it out of the oilskin and does not hand it over so much as surrender it. \u201cSlack is in there. Twice a year, an hour of it.\u201d A hard look. \u201cIf you are going under her, go at the slack, and do not be the third person who will not put it in words.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "grantItem": {
+                  "target": {
+                    "ref": "actor.id"
+                  },
+                  "item": "pilots_book",
+                  "quantity": 1
+                }
+              },
+              {
+                "setFlag": {
+                  "flag": "given:pilots_book",
+                  "value": true
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "isle_hesk_book_thanks",
+                "text": "Thank you.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "isle_hesk_book_kept",
+            "says": [
+              {
+                "text": "\u201cIt is the station's,\u201d he says, \u201cand there is one of it.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "adjustReputation": {
+                  "faction": "the_salvors",
+                  "amount": -3
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "isle_hesk_book_leave",
+                "text": "Then no.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "isle_hesk_cold",
+            "says": [
+              {
+                "text": "He rolls the chart up, which on a bolted table takes some doing and makes the point."
+              }
+            ],
+            "onEnter": [],
+            "options": [
+              {
+                "id": "isle_hesk_go",
+                "text": "Leave it.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          }
+        ]
+      },
+      {
+        "id": "isle_othe_talk",
+        "start": "greet",
+        "nodes": [
+          {
+            "id": "greet",
+            "says": [
+              {
+                "text": "A forge in a casemate, with a fort's worth of guns outside it and no garrison to fire them."
+              },
+              {
+                "text": "\u201cIron work, and I will not do locks. Ask at Blackrigging for locks.\u201d"
+              }
+            ],
+            "onEnter": [],
+            "options": [
+              {
+                "id": "isle_othe_iron",
+                "text": "The marker wreck in the Narrows. What is she fastened with?",
+                "requires": {
+                  "without": {
+                    "lore": [
+                      "isle_marker_iron"
+                    ]
+                  }
+                },
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "check": {
+                  "skill": "insight",
+                  "difficulty": {
+                    "sub": [
+                      12,
+                      {
+                        "clamp": [
+                          {
+                            "div": [
+                              {
+                                "ref": "reputation.the_salvors",
+                                "else": 0
+                              },
+                              5
+                            ]
+                          },
+                          -6,
+                          6
+                        ]
+                      }
+                    ]
+                  },
+                  "onSuccess": "isle_othe_iron_told",
+                  "onFailure": "isle_othe_iron_wont"
+                }
+              },
+              {
+                "id": "isle_othe_guns",
+                "text": "The deep wreck went down with her guns run out.",
+                "requires": {
+                  "without": {
+                    "lore": [
+                      "isle_wreck_guns"
+                    ]
+                  }
+                },
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "check": {
+                  "skill": "persuasion",
+                  "difficulty": {
+                    "sub": [
+                      13,
+                      {
+                        "clamp": [
+                          {
+                            "div": [
+                              {
+                                "ref": "reputation.the_salvors",
+                                "else": 0
+                              },
+                              5
+                            ]
+                          },
+                          -6,
+                          6
+                        ]
+                      }
+                    ]
+                  },
+                  "onSuccess": "isle_othe_guns_told",
+                  "onFailure": "isle_othe_guns_wont"
+                }
+              },
+              {
+                "id": "greet_leave",
+                "text": "Nothing.",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "isle_othe_iron_told",
+            "says": [
+              {
+                "text": "\u201cIron.\u201d He puts down the hammer, because this is his subject. \u201cNobody was iron-fastening hulls when she is supposed to have gone down. Either she is a hundred years younger than the story or somebody was iron-fastening a hundred years before anybody else, and I would like to know which.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "learnLore": {
+                  "entry": "isle_marker_iron"
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "isle_othe_iron_on",
+                "text": "Go on.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "isle_othe_iron_wont",
+            "says": [
+              {
+                "text": "\u201cI've said all I mean to,\u201d they say, and go back to what they were doing."
+              }
+            ],
+            "onEnter": [
+              {
+                "adjustReputation": {
+                  "faction": "the_salvors",
+                  "amount": -1
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "isle_othe_iron_drop",
+                "text": "Leave it.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "isle_othe_guns_told",
+            "says": [
+              {
+                "text": "\u201cRun out and *loaded*.\u201d He is grim about it. \u201cBren brought a swivel up and it is still charged. A ship that founders houses her guns. A ship with her guns run out was fighting, and there is nothing on that reef to fight.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "learnLore": {
+                  "entry": "isle_wreck_guns"
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "isle_othe_guns_on",
+                "text": "Go on.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "isle_othe_guns_wont",
+            "says": [
+              {
+                "text": "\u201cI've said all I mean to,\u201d they say, and go back to what they were doing."
+              }
+            ],
+            "onEnter": [
+              {
+                "adjustReputation": {
+                  "faction": "the_salvors",
+                  "amount": -1
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "isle_othe_guns_drop",
+                "text": "Leave it.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          }
+        ]
+      },
+      {
+        "id": "isle_dree_talk",
+        "start": "greet",
+        "nodes": [
+          {
+            "id": "greet",
+            "says": [
+              {
+                "text": "A low room with the window shuttered against spray and a fire that smells of driftwood."
+              },
+              {
+                "text": "\u201cBed, ale, or the boat times. The boat times are a lie, mind, they come when they come.\u201d"
+              }
+            ],
+            "onEnter": [],
+            "options": [
+              {
+                "id": "isle_dree_quiet",
+                "text": "You hear the Bank from here. What does the cut sound like?",
+                "requires": {
+                  "without": {
+                    "lore": [
+                      "isle_terns_quiet"
+                    ]
+                  }
+                },
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "check": {
+                  "skill": "persuasion",
+                  "difficulty": {
+                    "sub": [
+                      11,
+                      {
+                        "clamp": [
+                          {
+                            "div": [
+                              {
+                                "ref": "reputation.the_salvors",
+                                "else": 0
+                              },
+                              5
+                            ]
+                          },
+                          -6,
+                          6
+                        ]
+                      }
+                    ]
+                  },
+                  "onSuccess": "isle_dree_quiet_told",
+                  "onFailure": "isle_dree_quiet_wont"
+                }
+              },
+              {
+                "id": "isle_dree_warm",
+                "text": "There is ice on everything here and none on the Bank sand.",
+                "requires": {
+                  "without": {
+                    "lore": [
+                      "isle_terns_warm"
+                    ]
+                  }
+                },
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "check": {
+                  "skill": "persuasion",
+                  "difficulty": {
+                    "sub": [
+                      12,
+                      {
+                        "clamp": [
+                          {
+                            "div": [
+                              {
+                                "ref": "reputation.the_salvors",
+                                "else": 0
+                              },
+                              5
+                            ]
+                          },
+                          -6,
+                          6
+                        ]
+                      }
+                    ]
+                  },
+                  "onSuccess": "isle_dree_warm_told",
+                  "onFailure": "isle_dree_warm_wont"
+                }
+              },
+              {
+                "id": "greet_leave",
+                "text": "Nothing.",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "isle_dree_quiet_told",
+            "says": [
+              {
+                "text": "\u201cNothing.\u201d She says it and then makes sure you have got it. \u201cForty thousand birds on the Bank, and you can hear them here on a still night, and there is a strip in the middle of it that is *silent*. You can hear the shape of the silence. It has a hundred yards of edges.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "learnLore": {
+                  "entry": "isle_terns_quiet"
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "isle_dree_quiet_on",
+                "text": "Go on.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "isle_dree_quiet_wont",
+            "says": [
+              {
+                "text": "\u201cI've said all I mean to,\u201d they say, and go back to what they were doing."
+              }
+            ],
+            "onEnter": [
+              {
+                "adjustReputation": {
+                  "faction": "the_salvors",
+                  "amount": -1
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "isle_dree_quiet_drop",
+                "text": "Leave it.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "isle_dree_warm_told",
+            "says": [
+              {
+                "text": "\u201cOne strip of it.\u201d She nods out at the water. \u201cThe jetty ices, the hut ices, the water in the hut ices. That strip does not, and it has not in my time or my father's.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "learnLore": {
+                  "entry": "isle_terns_warm"
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "isle_dree_warm_on",
+                "text": "Go on.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "isle_dree_warm_wont",
+            "says": [
+              {
+                "text": "\u201cI've said all I mean to,\u201d they say, and go back to what they were doing."
+              }
+            ],
+            "onEnter": [
+              {
+                "adjustReputation": {
+                  "faction": "the_salvors",
+                  "amount": -1
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "isle_dree_warm_drop",
+                "text": "Leave it.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          }
+        ]
+      },
+      {
+        "id": "isle_ilva_talk",
+        "start": "greet",
+        "nodes": [
+          {
+            "id": "greet",
+            "says": [
+              {
+                "text": "A chapel cut into rock, with more graves outside it than Cormorant has ever had living people."
+              },
+              {
+                "text": "\u201cI bury what the sea gives back,\u201d she says. \u201cIt gives back a great deal. Sit down.\u201d"
+              }
+            ],
+            "onEnter": [],
+            "options": [
+              {
+                "id": "isle_ilva_pointing",
+                "text": "The deep wreck's guns. Which way are they run out?",
+                "requires": {
+                  "without": {
+                    "lore": [
+                      "isle_wreck_pointing"
+                    ]
+                  }
+                },
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "check": {
+                  "skill": "persuasion",
+                  "difficulty": {
+                    "sub": [
+                      13,
+                      {
+                        "clamp": [
+                          {
+                            "div": [
+                              {
+                                "ref": "reputation.the_keepers",
+                                "else": 0
+                              },
+                              5
+                            ]
+                          },
+                          -6,
+                          6
+                        ]
+                      }
+                    ]
+                  },
+                  "onSuccess": "isle_ilva_pointing_told",
+                  "onFailure": "isle_ilva_pointing_wont"
+                }
+              },
+              {
+                "id": "isle_ilva_year",
+                "text": "When did the terns come off the cut?",
+                "requires": {
+                  "without": {
+                    "lore": [
+                      "isle_terns_year"
+                    ]
+                  }
+                },
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "check": {
+                  "skill": "persuasion",
+                  "difficulty": {
+                    "sub": [
+                      12,
+                      {
+                        "clamp": [
+                          {
+                            "div": [
+                              {
+                                "ref": "reputation.the_keepers",
+                                "else": 0
+                              },
+                              5
+                            ]
+                          },
+                          -6,
+                          6
+                        ]
+                      }
+                    ]
+                  },
+                  "onSuccess": "isle_ilva_year_told",
+                  "onFailure": "isle_ilva_year_wont"
+                }
+              },
+              {
+                "id": "greet_leave",
+                "text": "Nothing.",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "isle_ilva_pointing_told",
+            "says": [
+              {
+                "text": "\u201cOne side. All of them.\u201d She lets it sit. \u201cAt the island. Not at the open water, not at the reef \u2014 at the island, which has a chapel on it and eleven houses and nothing else and never has had.\u201d A pause. \u201cI have thought about that a great deal, at night.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "learnLore": {
+                  "entry": "isle_wreck_pointing"
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "isle_ilva_pointing_on",
+                "text": "Go on.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "isle_ilva_pointing_wont",
+            "says": [
+              {
+                "text": "\u201cI've said all I mean to,\u201d they say, and go back to what they were doing."
+              }
+            ],
+            "onEnter": [
+              {
+                "adjustReputation": {
+                  "faction": "the_keepers",
+                  "amount": -1
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "isle_ilva_pointing_drop",
+                "text": "Leave it.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "isle_ilva_year_told",
+            "says": [
+              {
+                "text": "\u201cIn my mother's time. One year, and never again.\u201d She folds her hands. \u201cThere are people alive who took eggs off that strip as children. Nella's count has the column and the column stops.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "learnLore": {
+                  "entry": "isle_terns_year"
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "isle_ilva_year_on",
+                "text": "Go on.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "isle_ilva_year_wont",
+            "says": [
+              {
+                "text": "\u201cI've said all I mean to,\u201d they say, and go back to what they were doing."
+              }
+            ],
+            "onEnter": [
+              {
+                "adjustReputation": {
+                  "faction": "the_keepers",
+                  "amount": -1
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "isle_ilva_year_drop",
+                "text": "Leave it.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          }
+        ]
+      },
+      {
+        "id": "isle_nella_talk",
+        "start": "greet",
+        "nodes": [
+          {
+            "id": "greet",
+            "says": [
+              {
+                "text": "A hut on a sandbank, with a ledger on the table and forty thousand birds outside making it impossible to think."
+              },
+              {
+                "text": "\u201cEggs are in season or they are not. This week they are not.\u201d"
+              }
+            ],
+            "onEnter": [],
+            "options": [
+              {
+                "id": "isle_nella_nest",
+                "text": "How much of the Bank do they nest?",
+                "requires": {
+                  "without": {
+                    "lore": [
+                      "isle_terns_nest"
+                    ]
+                  }
+                },
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "check": {
+                  "skill": "persuasion",
+                  "difficulty": {
+                    "sub": [
+                      10,
+                      {
+                        "clamp": [
+                          {
+                            "div": [
+                              {
+                                "ref": "reputation.the_salvors",
+                                "else": 0
+                              },
+                              5
+                            ]
+                          },
+                          -6,
+                          6
+                        ]
+                      }
+                    ]
+                  },
+                  "onSuccess": "isle_nella_nest_told",
+                  "onFailure": "isle_nella_nest_wont"
+                }
+              },
+              {
+                "id": "isle_nella_year",
+                "text": "When did they stop?",
+                "requires": {
+                  "without": {
+                    "lore": [
+                      "isle_terns_year"
+                    ]
+                  }
+                },
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "check": {
+                  "skill": "persuasion",
+                  "difficulty": {
+                    "sub": [
+                      13,
+                      {
+                        "clamp": [
+                          {
+                            "div": [
+                              {
+                                "ref": "reputation.the_salvors",
+                                "else": 0
+                              },
+                              5
+                            ]
+                          },
+                          -6,
+                          6
+                        ]
+                      }
+                    ]
+                  },
+                  "onSuccess": "isle_nella_year_told",
+                  "onFailure": "isle_nella_year_wont"
+                }
+              },
+              {
+                "id": "isle_nella_count",
+                "text": "The count. All four generations.",
+                "requires": {
+                  "without": {
+                    "items": [
+                      "takers_count"
+                    ],
+                    "flags": [
+                      {
+                        "flag": "given:takers_count"
+                      }
+                    ]
+                  }
+                },
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "check": {
+                  "skill": "persuasion",
+                  "difficulty": {
+                    "sub": [
+                      13,
+                      {
+                        "clamp": [
+                          {
+                            "div": [
+                              {
+                                "ref": "reputation.the_salvors",
+                                "else": 0
+                              },
+                              5
+                            ]
+                          },
+                          -6,
+                          6
+                        ]
+                      }
+                    ]
+                  },
+                  "onSuccess": "isle_nella_count_gave",
+                  "onFailure": "isle_nella_count_kept"
+                }
+              },
+              {
+                "id": "greet_leave",
+                "text": "Nothing.",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "isle_nella_nest_told",
+            "says": [
+              {
+                "text": "\u201cAll of it but the cut.\u201d She is unbothered discussing it and bothered by the fact. \u201cA tern will nest on a wreck. On a gun. On a dead seal. I have seen a pair raise two on a capstan.\u201d She looks across at the strip. \u201cNot there.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "learnLore": {
+                  "entry": "isle_terns_nest"
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "isle_nella_nest_on",
+                "text": "Go on.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "isle_nella_nest_wont",
+            "says": [
+              {
+                "text": "\u201cI've said all I mean to,\u201d they say, and go back to what they were doing."
+              }
+            ],
+            "onEnter": [
+              {
+                "adjustReputation": {
+                  "faction": "the_salvors",
+                  "amount": -1
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "isle_nella_nest_drop",
+                "text": "Leave it.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "isle_nella_year_told",
+            "says": [
+              {
+                "text": "\u201cOne season, in my grandmother's count.\u201d She says it precisely, because it is a number and she keeps numbers. \u201cFull column the year before. Nothing the year after. Nothing since.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "learnLore": {
+                  "entry": "isle_terns_year"
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "isle_nella_year_on",
+                "text": "Go on.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "isle_nella_year_wont",
+            "says": [
+              {
+                "text": "\u201cI've said all I mean to,\u201d they say, and go back to what they were doing."
+              }
+            ],
+            "onEnter": [
+              {
+                "adjustReputation": {
+                  "faction": "the_salvors",
+                  "amount": -1
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "isle_nella_year_drop",
+                "text": "Leave it.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "isle_nella_count_gave",
+            "says": [
+              {
+                "text": "She fetches it wrapped in oilcloth, which tells you what it is worth to her. \u201cThe year it stops is marked. My grandmother put a line under it and did not write why, and I have wanted to know why since I could read.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "grantItem": {
+                  "target": {
+                    "ref": "actor.id"
+                  },
+                  "item": "takers_count",
+                  "quantity": 1
+                }
+              },
+              {
+                "setFlag": {
+                  "flag": "given:takers_count",
+                  "value": true
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "isle_nella_count_thanks",
+                "text": "Thank you.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "isle_nella_count_kept",
+            "says": [
+              {
+                "text": "\u201cIt is the family's,\u201d she says. \u201cAsk me anything out of it.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "adjustReputation": {
+                  "faction": "the_salvors",
+                  "amount": -2
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "isle_nella_count_leave",
+                "text": "Then no.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          }
+        ]
+      },
+      {
+        "id": "isle_bren_talk",
+        "start": "greet",
+        "nodes": [
+          {
+            "id": "greet",
+            "says": [
+              {
+                "text": "A salvors' camp on a shingle spit, gear drying on every line, and a big man sitting where he can see the reef."
+              },
+              {
+                "text": "\u201cCamp's the Salvors'. If you are here to dive, you are not.\u201d"
+              }
+            ],
+            "onEnter": [],
+            "options": [
+              {
+                "id": "isle_bren_nothing",
+                "text": "What was she fighting?",
+                "requires": {
+                  "without": {
+                    "lore": [
+                      "isle_wreck_nothing"
+                    ]
+                  }
+                },
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "check": {
+                  "skill": "persuasion",
+                  "difficulty": {
+                    "sub": [
+                      13,
+                      {
+                        "clamp": [
+                          {
+                            "div": [
+                              {
+                                "ref": "reputation.the_salvors",
+                                "else": 0
+                              },
+                              5
+                            ]
+                          },
+                          -6,
+                          6
+                        ]
+                      }
+                    ]
+                  },
+                  "onSuccess": "isle_bren_nothing_told",
+                  "onFailure": "isle_bren_nothing_wont"
+                }
+              },
+              {
+                "id": "isle_bren_shut",
+                "text": "Her hatches.",
+                "requires": {
+                  "without": {
+                    "lore": [
+                      "isle_wreck_shut"
+                    ]
+                  }
+                },
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "check": {
+                  "skill": "persuasion",
+                  "difficulty": {
+                    "sub": [
+                      17,
+                      {
+                        "clamp": [
+                          {
+                            "div": [
+                              {
+                                "ref": "reputation.the_salvors",
+                                "else": 0
+                              },
+                              5
+                            ]
+                          },
+                          -6,
+                          6
+                        ]
+                      }
+                    ]
+                  },
+                  "onSuccess": "isle_bren_shut_told",
+                  "onFailure": "isle_bren_shut_wont"
+                }
+              },
+              {
+                "id": "isle_bren_held",
+                "text": "You went under the marker wreck.",
+                "requires": {
+                  "without": {
+                    "lore": [
+                      "isle_marker_held"
+                    ]
+                  }
+                },
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "check": {
+                  "skill": "persuasion",
+                  "difficulty": {
+                    "sub": [
+                      18,
+                      {
+                        "clamp": [
+                          {
+                            "div": [
+                              {
+                                "ref": "reputation.the_salvors",
+                                "else": 0
+                              },
+                              5
+                            ]
+                          },
+                          -6,
+                          6
+                        ]
+                      }
+                    ]
+                  },
+                  "onSuccess": "isle_bren_held_told",
+                  "onFailure": "isle_bren_held_wont"
+                }
+              },
+              {
+                "id": "isle_bren_plate",
+                "text": "The plate off the capstan. The one with the line on it.",
+                "requires": {
+                  "without": {
+                    "items": [
+                      "capstan_plate"
+                    ],
+                    "flags": [
+                      {
+                        "flag": "given:capstan_plate"
+                      }
+                    ]
+                  }
+                },
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "check": {
+                  "skill": "persuasion",
+                  "difficulty": {
+                    "sub": [
+                      16,
+                      {
+                        "clamp": [
+                          {
+                            "div": [
+                              {
+                                "ref": "reputation.the_salvors",
+                                "else": 0
+                              },
+                              5
+                            ]
+                          },
+                          -6,
+                          6
+                        ]
+                      }
+                    ]
+                  },
+                  "onSuccess": "isle_bren_plate_gave",
+                  "onFailure": "isle_bren_plate_kept"
+                }
+              },
+              {
+                "id": "greet_leave",
+                "text": "Nothing.",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": [
+              {
+                "requires": {
+                  "factions": [
+                    {
+                      "faction": "the_salvors",
+                      "maxStanding": -25
+                    }
+                  ]
+                },
+                "goto": "isle_bren_cold"
+              }
+            ]
+          },
+          {
+            "id": "isle_bren_nothing_told",
+            "says": [
+              {
+                "text": "\u201cNothing.\u201d He is very short about it. \u201cI have been over that reef for eleven years. No second wreck. No shot in the rock. Nothing down there that anybody ever fired at.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "learnLore": {
+                  "entry": "isle_wreck_nothing"
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "isle_bren_nothing_on",
+                "text": "Go on.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "isle_bren_nothing_wont",
+            "says": [
+              {
+                "text": "\u201cI've said all I mean to,\u201d they say, and go back to what they were doing."
+              }
+            ],
+            "onEnter": [
+              {
+                "adjustReputation": {
+                  "faction": "the_salvors",
+                  "amount": -1
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "isle_bren_nothing_drop",
+                "text": "Leave it.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "isle_bren_shut_told",
+            "says": [
+              {
+                "text": "It takes him a while. \u201cDogged. From the outside.\u201d He puts his cup down. \u201cThe pins are bent from the *inside*. Somebody stood on that deck and hammered them home, and something under the deck did its best about it, and she went down with her guns out.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "learnLore": {
+                  "entry": "isle_wreck_shut"
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "isle_bren_shut_on",
+                "text": "Go on.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "isle_bren_shut_wont",
+            "says": [
+              {
+                "text": "\u201cI've said all I mean to,\u201d they say, and go back to what they were doing."
+              }
+            ],
+            "onEnter": [
+              {
+                "adjustReputation": {
+                  "faction": "the_salvors",
+                  "amount": -1
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "isle_bren_shut_drop",
+                "text": "Leave it.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "isle_bren_held_told",
+            "says": [
+              {
+                "text": "\u201cOnce.\u201d Nothing else comes for a moment. \u201cShe is not aground.\u201d He looks at the fire. \u201cI am not going to describe what she is on. Hesk has asked me for eleven years and I have not described it to him either.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "learnLore": {
+                  "entry": "isle_marker_held"
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "isle_bren_held_on",
+                "text": "Go on.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "isle_bren_held_wont",
+            "says": [
+              {
+                "text": "\u201cI've said all I mean to,\u201d they say, and go back to what they were doing."
+              }
+            ],
+            "onEnter": [
+              {
+                "adjustReputation": {
+                  "faction": "the_salvors",
+                  "amount": -1
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "isle_bren_held_drop",
+                "text": "Leave it.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "isle_bren_plate_gave",
+            "says": [
+              {
+                "text": "He gets it out without a word and puts it down face up, which is the first time anybody has seen it face up in eleven years. \u201cI cut that coming up,\u201d he says. \u201cI did not want to say it and I did not want to forget it.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "grantItem": {
+                  "target": {
+                    "ref": "actor.id"
+                  },
+                  "item": "capstan_plate",
+                  "quantity": 1
+                }
+              },
+              {
+                "setFlag": {
+                  "flag": "given:capstan_plate",
+                  "value": true
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "isle_bren_plate_thanks",
+                "text": "Thank you.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "isle_bren_plate_kept",
+            "says": [
+              {
+                "text": "He turns it face down under his hand. \u201cNo.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "adjustReputation": {
+                  "faction": "the_salvors",
+                  "amount": -3
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "isle_bren_plate_leave",
+                "text": "Then no.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "isle_bren_cold",
+            "says": [
+              {
+                "text": "He stands up, which is a considerable amount of standing up, and looks past you at the reef until you go."
+              }
+            ],
+            "onEnter": [],
+            "options": [
+              {
+                "id": "isle_bren_go",
+                "text": "Leave it.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          }
+        ]
       }
     ],
     "quests": [
@@ -70803,6 +73845,177 @@
           ],
           "reputation": {}
         }
+      },
+      {
+        "id": "isle_the_marker",
+        "name": "The Marker That Does Not Move",
+        "description": "Two hundred years on one bearing in a channel that redraws every spring, held by something that divers say is not rock.",
+        "autoStart": false,
+        "ordered": true,
+        "tags": [
+          "hidden",
+          "sundered_isles",
+          "isle_marker"
+        ],
+        "objectives": [
+          {
+            "id": "alongside",
+            "description": "Get alongside her at slack water.",
+            "kind": "reach",
+            "count": 1,
+            "hidden": true,
+            "optional": false,
+            "target": "narrows_marker_wreck"
+          },
+          {
+            "id": "get_under",
+            "description": "Get under her.",
+            "kind": "custom",
+            "count": 1,
+            "hidden": true,
+            "optional": false,
+            "when": {
+              "test": {
+                "ref": "flags.isle_marker_open"
+              }
+            }
+          },
+          {
+            "id": "what_holds",
+            "description": "Find what has been holding her.",
+            "kind": "kill",
+            "count": 1,
+            "hidden": true,
+            "optional": false,
+            "target": "marker_holder"
+          }
+        ],
+        "stages": [],
+        "unlocks": [],
+        "rewards": {
+          "xp": 180,
+          "items": [
+            {
+              "item": "pilots_glass_ring",
+              "quantity": 1
+            }
+          ],
+          "reputation": {}
+        }
+      },
+      {
+        "id": "isle_what_the_terns_know",
+        "name": "What the Terns Know",
+        "description": "Forty thousand pairs on the Bank, not one in the cut, and sand in the cut that will not freeze.",
+        "autoStart": false,
+        "ordered": true,
+        "tags": [
+          "hidden",
+          "sundered_isles",
+          "isle_terns"
+        ],
+        "objectives": [
+          {
+            "id": "in_the_cut",
+            "description": "Get into the cut.",
+            "kind": "reach",
+            "count": 1,
+            "hidden": true,
+            "optional": false,
+            "target": "tern_bank_the_cut"
+          },
+          {
+            "id": "down_the_sand",
+            "description": "Get under the sand.",
+            "kind": "custom",
+            "count": 1,
+            "hidden": true,
+            "optional": false,
+            "when": {
+              "test": {
+                "ref": "flags.isle_terns_open"
+              }
+            }
+          },
+          {
+            "id": "what_silences",
+            "description": "Find what the birds are avoiding.",
+            "kind": "kill",
+            "count": 1,
+            "hidden": true,
+            "optional": false,
+            "target": "cut_silence"
+          }
+        ],
+        "stages": [],
+        "unlocks": [],
+        "rewards": {
+          "xp": 185,
+          "items": [
+            {
+              "item": "tern_cloak",
+              "quantity": 1
+            }
+          ],
+          "reputation": {}
+        }
+      },
+      {
+        "id": "isle_the_deep_wreck",
+        "name": "The Deep Wreck",
+        "description": "Guns run out at an island with nothing on it, and every hatch dogged from the outside.",
+        "autoStart": false,
+        "ordered": true,
+        "tags": [
+          "hidden",
+          "sundered_isles",
+          "isle_wreck"
+        ],
+        "objectives": [
+          {
+            "id": "on_her_deck",
+            "description": "Get onto her deck.",
+            "kind": "reach",
+            "count": 1,
+            "hidden": true,
+            "optional": false,
+            "target": "wreck_reef_the_deep_wreck"
+          },
+          {
+            "id": "open_a_hatch",
+            "description": "Get a hatch open.",
+            "kind": "custom",
+            "count": 1,
+            "hidden": true,
+            "optional": false,
+            "when": {
+              "test": {
+                "ref": "flags.isle_wreck_open"
+              }
+            }
+          },
+          {
+            "id": "what_was_shut_in_her",
+            "description": "Meet what they shut in.",
+            "kind": "kill",
+            "count": 1,
+            "hidden": true,
+            "optional": false,
+            "target": "hold_thing"
+          }
+        ],
+        "stages": [],
+        "unlocks": [],
+        "rewards": {
+          "xp": 230,
+          "items": [
+            {
+              "item": "run_out_gun",
+              "quantity": 1
+            }
+          ],
+          "reputation": {}
+        }
       }
     ],
     "arcs": [
@@ -71060,6 +74273,17 @@
           "thorn_the_knees",
           "thorn_the_toll",
           "thorn_what_it_watched"
+        ],
+        "isEnding": false
+      },
+      {
+        "id": "isle_hidden",
+        "name": "The Isles, Off the Chart",
+        "description": "Three things the sea has been consistent about, in a place where the sea is consistent about nothing.",
+        "quests": [
+          "isle_the_marker",
+          "isle_what_the_terns_know",
+          "isle_the_deep_wreck"
         ],
         "isEnding": false
       },
@@ -71357,6 +74581,66 @@
         "id": "thorn_hermit_warm",
         "name": "The channels near it run warm, and warm water in this marsh means the water is coming up rather than down.",
         "source": "the leech camp"
+      },
+      {
+        "id": "isle_marker_still",
+        "name": "Everything in the Narrows moves. Banks shift a cable a winter and the pilots redraw every spring. One wreck has been on the same bearing for two hundred years.",
+        "source": "a Narrows pilot"
+      },
+      {
+        "id": "isle_marker_iron",
+        "name": "She is iron-fastened, and nobody was iron-fastening hulls when she went down. She is either much younger than the wreck or much older than the practice.",
+        "source": "the gun forge"
+      },
+      {
+        "id": "isle_marker_held",
+        "name": "She is not aground. Divers have been under her twice and she is held, and what she is held by is not rock.",
+        "source": "the pilot station"
+      },
+      {
+        "id": "isle_marker_bearing",
+        "name": "The bearing she keeps is not the channel. Laid off properly it runs through the Bank and out the far side.",
+        "source": "cut into the pilot station's rail"
+      },
+      {
+        "id": "isle_terns_nest",
+        "name": "Forty thousand pairs nest the Bank and not one pair nests the cut. Terns will nest on a wreck, on a gun, on a corpse.",
+        "source": "the Bank hut"
+      },
+      {
+        "id": "isle_terns_year",
+        "name": "They came off the cut in one year, within living memory, and they had nested it for as long as anybody kept count before that.",
+        "source": "an old bird-taker"
+      },
+      {
+        "id": "isle_terns_quiet",
+        "name": "Nothing calls in the cut. Forty thousand birds a hundred yards off and the cut is silent, which is a thing you can hear.",
+        "source": "the Shag's landlord"
+      },
+      {
+        "id": "isle_terns_warm",
+        "name": "The sand in the cut does not freeze. Nothing else on the Bank stays unfrozen and it does not.",
+        "source": "a bird-taker"
+      },
+      {
+        "id": "isle_wreck_guns",
+        "name": "She went down with her guns run out. A ship that founders does not have her guns run out; a ship that was fighting does.",
+        "source": "the Salvors' Camp"
+      },
+      {
+        "id": "isle_wreck_nothing",
+        "name": "There is nothing on the reef for her to have been fighting. No second wreck, no shot in the rock, nothing.",
+        "source": "a salvor"
+      },
+      {
+        "id": "isle_wreck_pointing",
+        "name": "Every gun that is still run out is run out to one side, and that side is the island.",
+        "source": "the Rock Chapel"
+      },
+      {
+        "id": "isle_wreck_shut",
+        "name": "Her hatches are dogged from outside. Somebody shut the crew in and then the ship went down with her guns out.",
+        "source": "cut on the salvors' capstan"
       }
     ],
     "loreThreads": [
@@ -71512,6 +74796,39 @@
           "thorn_hermit_tally",
           "thorn_hermit_facing",
           "thorn_hermit_warm"
+        ]
+      },
+      {
+        "id": "isle_marker",
+        "name": "The Marker That Does Not Move",
+        "description": "Two hundred years on one bearing in a channel that redraws every spring, held by something that is not rock.",
+        "entries": [
+          "isle_marker_still",
+          "isle_marker_iron",
+          "isle_marker_held",
+          "isle_marker_bearing"
+        ]
+      },
+      {
+        "id": "isle_terns",
+        "name": "What the Terns Know",
+        "description": "Forty thousand pairs on the Bank, none in the cut, and sand in the cut that will not freeze.",
+        "entries": [
+          "isle_terns_nest",
+          "isle_terns_year",
+          "isle_terns_quiet",
+          "isle_terns_warm"
+        ]
+      },
+      {
+        "id": "isle_wreck",
+        "name": "The Deep Wreck",
+        "description": "Guns run out on one side with nothing to fire at, and hatches dogged from outside.",
+        "entries": [
+          "isle_wreck_guns",
+          "isle_wreck_nothing",
+          "isle_wreck_pointing",
+          "isle_wreck_shut"
         ]
       }
     ]
