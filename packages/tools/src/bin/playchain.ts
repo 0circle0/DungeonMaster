@@ -22,7 +22,8 @@ import { loadModuleFrom } from '@dm/module/load';
 import type { CompiledModule } from '@dm/module';
 import {
   Transaction, applyOps, buildScope, skillRankOf, startQuest, advanceQuests,
-  enterArea, enterPoi, enterDungeon, TerrainIndex, spawnMonster,
+  enterArea, enterPoi, enterDungeon, TerrainIndex, spawnMonster, openGate,
+  equipItem, unequipItem,
 } from '@dm/engine';
 import type { GameState, Entity, GameEvent } from '@dm/engine';
 import { startSession } from '@dm/play';
@@ -56,6 +57,16 @@ const SHOW_TRANSCRIPT = argv.includes('--transcript');
 const SEED = Number(argv.find((a) => a.startsWith('--seed='))?.slice(7) ?? 11);
 /** Which way to go at a fork. Run a branching chain once per alternative. */
 const BRANCH = Number(argv.find((a) => a.startsWith('--branch='))?.slice(9) ?? 0);
+/**
+ * A trial is post-game content, so the party it needs is a different party.
+ *
+ * Everything behind `aurendel_finished` is unreachable to the ordinary setup
+ * below — not because the wiring is wrong but because the run is supposed to be
+ * over. Recognised by the key rather than by a flag, because `trialkit.tier`
+ * writes the tier key as the second tag and there is nothing else to confuse it
+ * with.
+ */
+const TRIAL = CHAIN.startsWith('trial_');
 
 if (!CHAIN) {
   console.error('usage: playchain <chain-key> [--transcript] [--seed=N]');
@@ -79,10 +90,15 @@ const quests = module_.source.narrative.quests as unknown as QuestLike[];
 // Hidden threads are neither: nobody offers them, they start from a trigger on
 // a doorway, and `playlore.ts` is what walks them. Sweeping them in here made
 // the spine run fail on three quests it has no way to begin.
+//
+// Trials are the same mistake one level further out, and made again: they are
+// gated on the ending the spine run is trying to *reach*, so a spine walk that
+// includes them reports nine quests that would not start and twelve rewards
+// that never landed, all of which is the content behaving exactly as designed.
 const chainQuests = CHAIN === 'spine'
   ? quests.filter((q) => {
       const tags = q.tags ?? [];
-      return !tags.includes('side') && !tags.includes('hidden');
+      return !tags.includes('side') && !tags.includes('hidden') && !tags.includes('trial');
     })
   : quests.filter((q) => (q.tags ?? []).includes(CHAIN));
 if (chainQuests.length === 0) {
@@ -91,6 +107,15 @@ if (chainQuests.length === 0) {
       !['side', 'act1', 'act2', 'act3', 'branch', 'ending'].includes(t)))].join(', ')}`);
   process.exit(2);
 }
+
+/**
+ * The level the tier itself asks for, taken from the content rather than
+ * restated here, so retuning a tier retunes its driver with it.
+ */
+const trialLevel = Math.max(
+  14,
+  ...chainQuests.map((q) => (q.requires as { minLevel?: number } | undefined)?.minLevel ?? 0),
+);
 
 // --- a party good enough to be the subject of the experiment ---------------
 // Level 6 with the ward-keys in the pack clears every act gate, so one driver
@@ -138,6 +163,22 @@ session.state = edit(session.state, (txn) => {
   }
   for (const item of ['grown_key', 'cast_key', 'the_wardlist']) {
     applyOps(txn, [{ op: 'grantItem', target: txn.state.selected, item, quantity: 1 }], txn.state.selected);
+  }
+
+  // A party that has finished the game: the ending flag every trial is gated
+  // on, the level the tier's own head asks for, and the warrants the tiers
+  // below pay out. The relic the door wants is *not* granted here — proving
+  // that the door refuses an empty-handed party is the point of the check
+  // below, so it is handed over there and only after the refusal.
+  if (TRIAL) {
+    for (const id of txn.state.party) {
+      const member = txn.entity(id);
+      if (member) txn.putEntity({ ...member, level: trialLevel, xp: 20000 });
+    }
+    applyOps(txn, [{ op: 'setFlag', flag: 'aurendel_finished', value: true }], txn.state.selected);
+    for (const item of ['first_warrant', 'second_warrant']) {
+      applyOps(txn, [{ op: 'grantItem', target: txn.state.selected, item, quantity: 1 }], txn.state.selected);
+    }
   }
 });
 
@@ -246,6 +287,61 @@ if (!head) {
     }
     if (npc.home && !goTo(npc.home)) fail(`${giver}'s home ${npc.home} is not a place`);
     else note(`giver ${giver} is at ${npc.home}`);
+  }
+}
+
+// --- 1b. the door that wants the relic worn -------------------------------
+//
+// Only trials have one, and it is the claim worth checking: a tier tuned for
+// fabled gear should refuse a party that has not brought any, say so in words,
+// and open once they have put it on. Driven through `openGate` rather than by
+// setting the flag the objective waits on, because setting the flag proves the
+// objective is wired and proves nothing whatever about the door.
+if (TRIAL) {
+  const door = module_.all<{ id: string; tags?: string[]; requires?: unknown }>('world.gates')
+    .find((g) => (g.tags ?? []).includes('trial') && JSON.stringify(g).includes(CHAIN));
+
+  if (!door) {
+    fail(`${CHAIN}: no door tagged trial mentions this tier`);
+  } else {
+    const worn = JSON.stringify(door.requires ?? {}).match(/"item":"([a-z_]+)"/g) ?? [];
+    const relic = worn.map((m) => m.slice(8, -1)).find((id) =>
+      module_.find<{ id: string; slot?: string }>('content.items', id)?.slot);
+
+    const tryOpen = () => {
+      let opened = false;
+      session.state = edit(session.state, (txn) => {
+        const actor = txn.entity(txn.state.selected);
+        if (!actor) return;
+        opened = openGate(txn, door.id, actor,
+                          Rng.fromSeed(SEED).derive(`door:${door.id}`)).opened;
+      });
+      return opened;
+    };
+
+    if (tryOpen()) fail(`${door.id}: opened for a party wearing nothing it asked for`);
+    else note(`${door.id}: refuses an empty-handed party`);
+
+    if (!relic) {
+      fail(`${door.id}: asks for no equippable item, so there is nothing to come dressed in`);
+    } else {
+      session.state = edit(session.state, (txn) => {
+        applyOps(txn, [{ op: 'grantItem', target: txn.state.selected, item: relic, quantity: 1 }], txn.state.selected);
+        const actor = txn.entity(txn.state.selected);
+        if (actor) equipItem(txn, actor, relic);
+      });
+      if (tryOpen()) note(`${door.id}: opens once ${relic} is worn`);
+      else fail(`${door.id}: refuses a party wearing ${relic}, which is what it asked for`);
+
+      // And take it off again. The relic was only ever worn to prove the door
+      // checks for it, and leaving it on makes the reward check downstream
+      // measure a *swap* rather than a gain — a reward ring reads as +1 resolve
+      // when it grants +3 because the one it displaced granted +2.
+      session.state = edit(session.state, (txn) => {
+        const actor = txn.entity(txn.state.selected);
+        if (actor) unequipItem(txn, actor, relic);
+      });
+    }
   }
 }
 

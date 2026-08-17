@@ -5030,6 +5030,271 @@
           "perception": 2
         },
         "rarity": "very_rare"
+      },
+      {
+        "id": "first_warrant",
+        "name": "The Warrant of the First Three",
+        "description": "Hesper's own list, with the first three lines struck through and countersigned, which is a thing the Keepers have not had cause to do in nine hundred years.",
+        "kind": "key",
+        "value": 0,
+        "weight": 0,
+        "tags": [
+          "warrant",
+          "trial"
+        ]
+      },
+      {
+        "id": "eighth_list_cloak",
+        "name": "The Cloak of the Eighth List",
+        "description": "Keeper's oilcloth with eight lines stitched inside the collar and three of them picked out again in red.",
+        "kind": "armor",
+        "slot": "cloak",
+        "value": 1600,
+        "weight": 2,
+        "rarity": "very_rare",
+        "tags": [
+          "fabled",
+          "trial"
+        ],
+        "modifiers": {
+          "guard": 2
+        },
+        "skillBonuses": {
+          "resolve": 3,
+          "lore": 3,
+          "perception": 2
+        },
+        "damageInteractions": [
+          {
+            "damageType": "necrotic",
+            "multiplier": 0.5
+          }
+        ]
+      },
+      {
+        "id": "cellar_belt",
+        "name": "The Belt Out of the Ward Cellars",
+        "description": "Strapping off something that had been holding a door shut from the wrong side for a very long time.",
+        "kind": "trinket",
+        "slot": "belt",
+        "value": 1450,
+        "weight": 1,
+        "rarity": "very_rare",
+        "tags": [
+          "fabled",
+          "trial"
+        ],
+        "modifiers": {
+          "guard": 1,
+          "carry": 4
+        },
+        "skillBonuses": {
+          "athletics": 3,
+          "intimidation": 3
+        }
+      },
+      {
+        "id": "underkeep_ring",
+        "name": "The Ring Under the Keep",
+        "description": "Found on the sixth finger of a hand that had five.",
+        "kind": "trinket",
+        "slot": "ring",
+        "value": 1500,
+        "weight": 0,
+        "rarity": "very_rare",
+        "tags": [
+          "fabled",
+          "trial"
+        ],
+        "skillBonuses": {
+          "arcana": 3,
+          "insight": 3,
+          "medicine": 2
+        }
+      },
+      {
+        "id": "second_warrant",
+        "name": "The Warrant of the Middle Three",
+        "description": "Six lines struck through now. Hesper has stopped countersigning and started writing the date beside each one, which is what the order does when it expects to be read a long time from now.",
+        "kind": "key",
+        "value": 0,
+        "weight": 0,
+        "tags": [
+          "warrant",
+          "trial"
+        ]
+      },
+      {
+        "id": "gallery_head",
+        "name": "The Helm Out of the Cut",
+        "slot": "head",
+        "description": "Quarry iron beaten over something that was already the right shape, by a mason who never said what for.",
+        "kind": "armor",
+        "value": 2100,
+        "weight": 3,
+        "rarity": "very_rare",
+        "tags": [
+          "fabled",
+          "trial"
+        ],
+        "modifiers": {
+          "guard": 3
+        },
+        "skillBonuses": {
+          "craft": 3,
+          "perception": 3,
+          "resolve": 2
+        },
+        "damageInteractions": [
+          {
+            "damageType": "bludgeoning",
+            "multiplier": 0.5
+          }
+        ]
+      },
+      {
+        "id": "sunken_hall_ring",
+        "name": "The Ring of the Sunken Hall",
+        "description": "Off a hand still resting on the arm of a chair, in a hall that was a hall before the water was water.",
+        "kind": "trinket",
+        "slot": "ring",
+        "value": 2000,
+        "weight": 0,
+        "rarity": "very_rare",
+        "tags": [
+          "fabled",
+          "trial"
+        ],
+        "modifiers": {
+          "initiative": 2
+        },
+        "skillBonuses": {
+          "insight": 3,
+          "persuasion": 3,
+          "resolve": 3
+        },
+        "damageInteractions": [
+          {
+            "damageType": "cold",
+            "multiplier": 0.5
+          }
+        ]
+      },
+      {
+        "id": "milepost_belt",
+        "name": "The Belt off the Milepost",
+        "slot": "belt",
+        "description": "A surveyor's belt with four hundred feet of vault under the stone it was left leaning against.",
+        "kind": "trinket",
+        "value": 2200,
+        "weight": 1,
+        "rarity": "very_rare",
+        "tags": [
+          "fabled",
+          "trial"
+        ],
+        "modifiers": {
+          "guard": 2,
+          "carry": 5
+        },
+        "skillBonuses": {
+          "athletics": 3,
+          "lore": 3,
+          "arcana": 2
+        }
+      },
+      {
+        "id": "last_warrant",
+        "name": "The List, Struck Out",
+        "description": "Eight lines and a ninth written underneath in a different hand, and all nine of them struck through. Hesper has signed the bottom of it and then written the date twice, which she says is an order convention and is not.",
+        "kind": "key",
+        "value": 0,
+        "weight": 0,
+        "tags": [
+          "warrant",
+          "trial"
+        ]
+      },
+      {
+        "id": "listening_hood",
+        "name": "The Hood off the Listening Room",
+        "description": "Taken off the wall of a room built to hear a corridor four miles long. It hears rather more than that.",
+        "kind": "armor",
+        "slot": "head",
+        "value": 3000,
+        "weight": 2,
+        "rarity": "artifact",
+        "tags": [
+          "fabled",
+          "trial"
+        ],
+        "modifiers": {
+          "guard": 3,
+          "initiative": 3
+        },
+        "skillBonuses": {
+          "perception": 4,
+          "insight": 4,
+          "stealth": 2
+        },
+        "damageInteractions": [
+          {
+            "damageType": "necrotic",
+            "multiplier": 0.5
+          }
+        ]
+      },
+      {
+        "id": "signal_deep_belt",
+        "name": "The Belt out of the Signal Deep",
+        "description": "Six hundred years of vent-readers signalling past this and never to it, and it has been wearing this the whole time.",
+        "kind": "trinket",
+        "slot": "belt",
+        "value": 3000,
+        "weight": 1,
+        "rarity": "artifact",
+        "tags": [
+          "fabled",
+          "trial"
+        ],
+        "modifiers": {
+          "guard": 3,
+          "carry": 6
+        },
+        "skillBonuses": {
+          "athletics": 4,
+          "resolve": 4
+        },
+        "damageInteractions": [
+          {
+            "damageType": "fire",
+            "multiplier": 0.5
+          }
+        ]
+      },
+      {
+        "id": "the_counters_ring",
+        "name": "The Counter's Ring",
+        "description": "Nine doors in eleven hundred years is not weather. This was on the hand that kept the tally, and the tally goes to more than nine.",
+        "kind": "trinket",
+        "slot": "ring",
+        "value": 3600,
+        "weight": 0,
+        "rarity": "artifact",
+        "tags": [
+          "fabled",
+          "trial"
+        ],
+        "modifiers": {
+          "guard": 2,
+          "initiative": 3
+        },
+        "skillBonuses": {
+          "arcana": 4,
+          "lore": 4,
+          "resolve": 3,
+          "insight": 3
+        }
       }
     ],
     "lootTables": [
@@ -8829,6 +9094,439 @@
             "weight": 1,
             "value": {
               "item": "warded_coat",
+              "quantity": "1"
+            }
+          }
+        ]
+      },
+      {
+        "id": "trial_one_hoard_a",
+        "name": "Behind the Chewed Bar",
+        "rolls": "3",
+        "emptyChance": 0,
+        "bonusRollSkill": "perception",
+        "bonusRolls": {
+          "onSuccess": 2,
+          "onCritical": 3
+        },
+        "entries": [
+          {
+            "weight": 4,
+            "value": {
+              "item": "old_coin",
+              "quantity": "8d6"
+            }
+          },
+          {
+            "weight": 3,
+            "value": {
+              "item": "hold_silver",
+              "quantity": "2d4"
+            }
+          },
+          {
+            "weight": 2,
+            "value": {
+              "item": "ward_salt",
+              "quantity": "1d3"
+            }
+          },
+          {
+            "weight": 1,
+            "value": {
+              "item": "silvered_blade",
+              "quantity": "1"
+            }
+          }
+        ]
+      },
+      {
+        "id": "trial_one_hoard_b",
+        "name": "The Dry Undercroft",
+        "rolls": "3",
+        "emptyChance": 0,
+        "bonusRollSkill": "perception",
+        "bonusRolls": {
+          "onSuccess": 2,
+          "onCritical": 3
+        },
+        "entries": [
+          {
+            "weight": 4,
+            "value": {
+              "item": "old_coin",
+              "quantity": "8d6"
+            }
+          },
+          {
+            "weight": 3,
+            "value": {
+              "item": "healing_draught",
+              "quantity": "1d3"
+            }
+          },
+          {
+            "weight": 2,
+            "value": {
+              "item": "barrow_torc",
+              "quantity": "1d2"
+            }
+          },
+          {
+            "weight": 1,
+            "value": {
+              "item": "warded_coat",
+              "quantity": "1"
+            }
+          }
+        ]
+      },
+      {
+        "id": "trial_one_hoard_c",
+        "name": "Under the Floor Under the Floor",
+        "rolls": "4",
+        "emptyChance": 0,
+        "bonusRollSkill": "perception",
+        "bonusRolls": {
+          "onSuccess": 2,
+          "onCritical": 3
+        },
+        "entries": [
+          {
+            "weight": 4,
+            "value": {
+              "item": "old_coin",
+              "quantity": "9d6"
+            }
+          },
+          {
+            "weight": 3,
+            "value": {
+              "item": "antidote",
+              "quantity": "1d3"
+            }
+          },
+          {
+            "weight": 3,
+            "value": {
+              "item": "ward_salt",
+              "quantity": "1d3"
+            }
+          },
+          {
+            "weight": 1,
+            "value": {
+              "item": "amber_lump",
+              "quantity": "1d3"
+            }
+          }
+        ]
+      },
+      {
+        "id": "trial_loose_drop",
+        "name": "Off a Door-Walker",
+        "rolls": "1",
+        "emptyChance": 0.4,
+        "entries": [
+          {
+            "weight": 5,
+            "value": {
+              "item": "old_coin",
+              "quantity": "2d6"
+            }
+          },
+          {
+            "weight": 2,
+            "value": {
+              "item": "wight_ash",
+              "quantity": "1"
+            }
+          },
+          {
+            "weight": 1,
+            "value": {
+              "item": "ward_salt",
+              "quantity": "1"
+            }
+          }
+        ]
+      },
+      {
+        "id": "trial_two_hoard_a",
+        "name": "Past the Face the Quarry Left",
+        "rolls": "4",
+        "emptyChance": 0,
+        "bonusRollSkill": "perception",
+        "bonusRolls": {
+          "onSuccess": 2,
+          "onCritical": 3
+        },
+        "entries": [
+          {
+            "weight": 4,
+            "value": {
+              "item": "old_coin",
+              "quantity": "10d6"
+            }
+          },
+          {
+            "weight": 3,
+            "value": {
+              "item": "hold_silver",
+              "quantity": "3d4"
+            }
+          },
+          {
+            "weight": 2,
+            "value": {
+              "item": "ward_salt",
+              "quantity": "2d3"
+            }
+          },
+          {
+            "weight": 1,
+            "value": {
+              "item": "silvered_blade",
+              "quantity": "1"
+            }
+          }
+        ]
+      },
+      {
+        "id": "trial_two_hoard_b",
+        "name": "The Hall Under the Black Water",
+        "rolls": "4",
+        "emptyChance": 0,
+        "bonusRollSkill": "perception",
+        "bonusRolls": {
+          "onSuccess": 2,
+          "onCritical": 3
+        },
+        "entries": [
+          {
+            "weight": 4,
+            "value": {
+              "item": "old_coin",
+              "quantity": "10d6"
+            }
+          },
+          {
+            "weight": 3,
+            "value": {
+              "item": "barrow_torc",
+              "quantity": "1d3"
+            }
+          },
+          {
+            "weight": 3,
+            "value": {
+              "item": "healing_draught",
+              "quantity": "1d3"
+            }
+          },
+          {
+            "weight": 1,
+            "value": {
+              "item": "warded_coat",
+              "quantity": "1"
+            }
+          }
+        ]
+      },
+      {
+        "id": "trial_two_hoard_c",
+        "name": "Four Hundred Feet Under a Milepost",
+        "rolls": "5",
+        "emptyChance": 0,
+        "bonusRollSkill": "perception",
+        "bonusRolls": {
+          "onSuccess": 2,
+          "onCritical": 3
+        },
+        "entries": [
+          {
+            "weight": 4,
+            "value": {
+              "item": "old_coin",
+              "quantity": "12d6"
+            }
+          },
+          {
+            "weight": 3,
+            "value": {
+              "item": "glass_bead",
+              "quantity": "2d4"
+            }
+          },
+          {
+            "weight": 3,
+            "value": {
+              "item": "antidote",
+              "quantity": "1d3"
+            }
+          },
+          {
+            "weight": 2,
+            "value": {
+              "item": "ward_salt",
+              "quantity": "2d3"
+            }
+          },
+          {
+            "weight": 1,
+            "value": {
+              "item": "amber_lump",
+              "quantity": "1d4"
+            }
+          }
+        ]
+      },
+      {
+        "id": "trial_three_hoard_a",
+        "name": "What the Room Had Kept",
+        "rolls": "5",
+        "emptyChance": 0,
+        "bonusRollSkill": "perception",
+        "bonusRolls": {
+          "onSuccess": 2,
+          "onCritical": 4
+        },
+        "entries": [
+          {
+            "weight": 4,
+            "value": {
+              "item": "old_coin",
+              "quantity": "12d6"
+            }
+          },
+          {
+            "weight": 3,
+            "value": {
+              "item": "hold_silver",
+              "quantity": "3d4"
+            }
+          },
+          {
+            "weight": 3,
+            "value": {
+              "item": "ward_salt",
+              "quantity": "2d3"
+            }
+          },
+          {
+            "weight": 2,
+            "value": {
+              "item": "healing_draught",
+              "quantity": "2d3"
+            }
+          },
+          {
+            "weight": 1,
+            "value": {
+              "item": "silvered_blade",
+              "quantity": "1"
+            }
+          }
+        ]
+      },
+      {
+        "id": "trial_three_hoard_b",
+        "name": "The Bottom of the Signal Deep",
+        "rolls": "5",
+        "emptyChance": 0,
+        "bonusRollSkill": "perception",
+        "bonusRolls": {
+          "onSuccess": 2,
+          "onCritical": 4
+        },
+        "entries": [
+          {
+            "weight": 4,
+            "value": {
+              "item": "old_coin",
+              "quantity": "14d6"
+            }
+          },
+          {
+            "weight": 3,
+            "value": {
+              "item": "amber_lump",
+              "quantity": "2d4"
+            }
+          },
+          {
+            "weight": 3,
+            "value": {
+              "item": "antidote",
+              "quantity": "2d3"
+            }
+          },
+          {
+            "weight": 2,
+            "value": {
+              "item": "warded_coat",
+              "quantity": "1"
+            }
+          },
+          {
+            "weight": 1,
+            "value": {
+              "item": "wreck_brass",
+              "quantity": "2d4"
+            }
+          }
+        ]
+      },
+      {
+        "id": "trial_three_hoard_c",
+        "name": "Under the Ring, Where the Tally Is",
+        "rolls": "6",
+        "emptyChance": 0,
+        "bonusRollSkill": "perception",
+        "bonusRolls": {
+          "onSuccess": 3,
+          "onCritical": 4
+        },
+        "entries": [
+          {
+            "weight": 4,
+            "value": {
+              "item": "old_coin",
+              "quantity": "20d6"
+            }
+          },
+          {
+            "weight": 3,
+            "value": {
+              "item": "hold_silver",
+              "quantity": "4d4"
+            }
+          },
+          {
+            "weight": 3,
+            "value": {
+              "item": "barrow_torc",
+              "quantity": "1d3"
+            }
+          },
+          {
+            "weight": 3,
+            "value": {
+              "item": "healing_draught",
+              "quantity": "2d3"
+            }
+          },
+          {
+            "weight": 2,
+            "value": {
+              "item": "ward_salt",
+              "quantity": "2d4"
+            }
+          },
+          {
+            "weight": 1,
+            "value": {
+              "item": "silvered_blade",
               "quantity": "1"
             }
           }
@@ -14985,6 +15683,910 @@
         "resourceOverrides": {
           "hp": 94
         }
+      },
+      {
+        "id": "first_through",
+        "name": "What Came Through the First",
+        "description": "A cellar bar chewed through and put back up from the inside, every year, for as long as there has been a ward-house over it.",
+        "level": 13,
+        "xp": 3400,
+        "attributes": {
+          "might": 20,
+          "agility": 17,
+          "endurance": 21,
+          "intellect": 16,
+          "instinct": 18,
+          "presence": 15
+        },
+        "abilities": [
+          "stone_fist",
+          "rend",
+          "shove",
+          "grave_chill"
+        ],
+        "behaviour": [
+          {
+            "priority": 25,
+            "use": "stone_fist",
+            "when": {
+              "chance": 0.4
+            }
+          },
+          {
+            "priority": 15,
+            "use": "grave_chill"
+          },
+          {
+            "priority": 5,
+            "use": "shove"
+          },
+          {
+            "priority": 0,
+            "use": "rend"
+          }
+        ],
+        "faction": "the_unsealed",
+        "creatureType": "undead",
+        "size": "medium",
+        "descriptors": [
+          "a hunched",
+          "a patient"
+        ],
+        "conditionalLoot": [],
+        "loot": "trial_one_hoard_a",
+        "damageInteractions": [
+          {
+            "damageType": "slashing",
+            "multiplier": 0.5,
+            "unless": [
+              "silvered"
+            ]
+          },
+          {
+            "damageType": "piercing",
+            "multiplier": 0.5,
+            "unless": [
+              "silvered"
+            ]
+          }
+        ],
+        "conditionImmunities": [
+          "frightened",
+          "prone",
+          "blinded",
+          "poisoned"
+        ],
+        "resourceOverrides": {
+          "hp": 210
+        }
+      },
+      {
+        "id": "second_through",
+        "name": "What Came Through the Second",
+        "description": "Four hundred years of a moor taking a keep back, and an undercroft under it that has stayed dry.",
+        "level": 14,
+        "xp": 4000,
+        "attributes": {
+          "might": 18,
+          "agility": 19,
+          "endurance": 20,
+          "intellect": 19,
+          "instinct": 20,
+          "presence": 18
+        },
+        "abilities": [
+          "wither",
+          "unmaking_word",
+          "bleed_white",
+          "grave_chill"
+        ],
+        "behaviour": [
+          {
+            "priority": 25,
+            "use": "unmaking_word",
+            "when": {
+              "chance": 0.3
+            }
+          },
+          {
+            "priority": 15,
+            "use": "wither"
+          },
+          {
+            "priority": 5,
+            "use": "bleed_white"
+          },
+          {
+            "priority": 0,
+            "use": "grave_chill"
+          }
+        ],
+        "faction": "the_unsealed",
+        "creatureType": "undead",
+        "size": "medium",
+        "descriptors": [
+          "a dry",
+          "an articulate"
+        ],
+        "conditionalLoot": [],
+        "loot": "trial_one_hoard_b",
+        "damageInteractions": [
+          {
+            "damageType": "slashing",
+            "multiplier": 0.5,
+            "unless": [
+              "silvered"
+            ]
+          },
+          {
+            "damageType": "piercing",
+            "multiplier": 0.5,
+            "unless": [
+              "silvered"
+            ]
+          }
+        ],
+        "conditionImmunities": [
+          "frightened",
+          "poisoned",
+          "silenced",
+          "slowed"
+        ],
+        "resourceOverrides": {
+          "hp": 196
+        }
+      },
+      {
+        "id": "third_through",
+        "name": "What Came Through the Third",
+        "description": "A root cellar with a floor under the floor, and the third line on a Keeper's list struck through in red by somebody who was not the Keeper.",
+        "level": 15,
+        "xp": 4800,
+        "attributes": {
+          "might": 21,
+          "agility": 18,
+          "endurance": 22,
+          "intellect": 17,
+          "instinct": 19,
+          "presence": 17
+        },
+        "abilities": [
+          "rend",
+          "drag_under",
+          "spore_burst",
+          "cut_and_run"
+        ],
+        "behaviour": [
+          {
+            "priority": 25,
+            "use": "spore_burst",
+            "when": {
+              "chance": 0.35
+            }
+          },
+          {
+            "priority": 15,
+            "use": "drag_under"
+          },
+          {
+            "priority": 5,
+            "use": "cut_and_run"
+          },
+          {
+            "priority": 0,
+            "use": "rend"
+          }
+        ],
+        "faction": "the_unsealed",
+        "creatureType": "undead",
+        "size": "medium",
+        "descriptors": [
+          "a many-rooted",
+          "a spreading"
+        ],
+        "conditionalLoot": [],
+        "loot": "trial_one_hoard_c",
+        "damageInteractions": [
+          {
+            "damageType": "slashing",
+            "multiplier": 0.5,
+            "unless": [
+              "silvered"
+            ]
+          },
+          {
+            "damageType": "piercing",
+            "multiplier": 0.5,
+            "unless": [
+              "silvered"
+            ]
+          }
+        ],
+        "conditionImmunities": [
+          "frightened",
+          "prone",
+          "poisoned",
+          "bleeding"
+        ],
+        "resourceOverrides": {
+          "hp": 240
+        }
+      },
+      {
+        "id": "door_walker",
+        "name": "A Door-Walker",
+        "description": "Eight doors were opened and only the ninth was watched. These are what has been walking between them since.",
+        "level": 11,
+        "xp": 1800,
+        "attributes": {
+          "might": 17,
+          "agility": 16,
+          "endurance": 17,
+          "intellect": 13,
+          "instinct": 16,
+          "presence": 12
+        },
+        "abilities": [
+          "rend",
+          "shove",
+          "grave_chill"
+        ],
+        "behaviour": [
+          {
+            "priority": 10,
+            "use": "grave_chill",
+            "when": {
+              "chance": 0.3
+            }
+          },
+          {
+            "priority": 0,
+            "use": "rend"
+          }
+        ],
+        "faction": "the_unsealed",
+        "creatureType": "undead",
+        "size": "medium",
+        "descriptors": [
+          "a lean",
+          "a wrong-jointed"
+        ],
+        "conditionalLoot": [],
+        "loot": "trial_loose_drop",
+        "damageInteractions": [
+          {
+            "damageType": "slashing",
+            "multiplier": 0.5,
+            "unless": [
+              "silvered"
+            ]
+          },
+          {
+            "damageType": "piercing",
+            "multiplier": 0.5,
+            "unless": [
+              "silvered"
+            ]
+          }
+        ],
+        "conditionImmunities": [
+          "frightened",
+          "prone"
+        ],
+        "resourceOverrides": {
+          "hp": 120
+        }
+      },
+      {
+        "id": "fourth_through",
+        "name": "What Came Through the Fourth",
+        "description": "Eight hundred feet of gallery cut along a seam that does not exist, to a face nobody ever put a pick into.",
+        "level": 16,
+        "xp": 5600,
+        "attributes": {
+          "might": 22,
+          "agility": 18,
+          "endurance": 23,
+          "intellect": 17,
+          "instinct": 19,
+          "presence": 16
+        },
+        "abilities": [
+          "stone_fist",
+          "rend",
+          "shove",
+          "digging_claw"
+        ],
+        "behaviour": [
+          {
+            "priority": 25,
+            "use": "stone_fist",
+            "when": {
+              "chance": 0.4
+            }
+          },
+          {
+            "priority": 15,
+            "use": "digging_claw"
+          },
+          {
+            "priority": 5,
+            "use": "shove"
+          },
+          {
+            "priority": 0,
+            "use": "rend"
+          }
+        ],
+        "faction": "the_unsealed",
+        "creatureType": "undead",
+        "size": "medium",
+        "descriptors": [
+          "a quarry-grey",
+          "an enormous"
+        ],
+        "conditionalLoot": [],
+        "loot": "trial_two_hoard_a",
+        "damageInteractions": [
+          {
+            "damageType": "slashing",
+            "multiplier": 0.5,
+            "unless": [
+              "silvered"
+            ]
+          },
+          {
+            "damageType": "piercing",
+            "multiplier": 0.5,
+            "unless": [
+              "silvered"
+            ]
+          }
+        ],
+        "conditionImmunities": [
+          "frightened",
+          "prone",
+          "blinded",
+          "slowed"
+        ],
+        "resourceOverrides": {
+          "hp": 280
+        }
+      },
+      {
+        "id": "fifth_through",
+        "name": "What Came Through the Fifth",
+        "description": "A hall the marsh covered, still arranged, and one chair in it that has been occupied the whole time.",
+        "level": 17,
+        "xp": 6400,
+        "attributes": {
+          "might": 19,
+          "agility": 20,
+          "endurance": 21,
+          "intellect": 21,
+          "instinct": 21,
+          "presence": 20
+        },
+        "abilities": [
+          "unmaking_word",
+          "grave_chill",
+          "drag_under",
+          "wither"
+        ],
+        "behaviour": [
+          {
+            "priority": 25,
+            "use": "unmaking_word",
+            "when": {
+              "chance": 0.35
+            }
+          },
+          {
+            "priority": 15,
+            "use": "drag_under"
+          },
+          {
+            "priority": 5,
+            "use": "wither"
+          },
+          {
+            "priority": 0,
+            "use": "grave_chill"
+          }
+        ],
+        "faction": "the_unsealed",
+        "creatureType": "undead",
+        "size": "medium",
+        "descriptors": [
+          "a seated",
+          "a courteous"
+        ],
+        "conditionalLoot": [],
+        "loot": "trial_two_hoard_b",
+        "damageInteractions": [
+          {
+            "damageType": "slashing",
+            "multiplier": 0.5,
+            "unless": [
+              "silvered"
+            ]
+          },
+          {
+            "damageType": "piercing",
+            "multiplier": 0.5,
+            "unless": [
+              "silvered"
+            ]
+          }
+        ],
+        "conditionImmunities": [
+          "frightened",
+          "poisoned",
+          "silenced",
+          "prone",
+          "slowed"
+        ],
+        "resourceOverrides": {
+          "hp": 252
+        }
+      },
+      {
+        "id": "sixth_through",
+        "name": "What Came Through the Sixth",
+        "description": "Four hundred feet of dressed vault under a milepost on a road that measures nothing, and one way down into it.",
+        "level": 18,
+        "xp": 7400,
+        "attributes": {
+          "might": 23,
+          "agility": 19,
+          "endurance": 24,
+          "intellect": 18,
+          "instinct": 20,
+          "presence": 18
+        },
+        "abilities": [
+          "salt_burn",
+          "scouring_wind",
+          "rend",
+          "cinder_lash"
+        ],
+        "behaviour": [
+          {
+            "priority": 25,
+            "use": "scouring_wind",
+            "when": {
+              "chance": 0.35
+            }
+          },
+          {
+            "priority": 15,
+            "use": "salt_burn"
+          },
+          {
+            "priority": 5,
+            "use": "cinder_lash"
+          },
+          {
+            "priority": 0,
+            "use": "rend"
+          }
+        ],
+        "faction": "the_unsealed",
+        "creatureType": "undead",
+        "size": "medium",
+        "descriptors": [
+          "a glass-scoured",
+          "a towering"
+        ],
+        "conditionalLoot": [],
+        "loot": "trial_two_hoard_c",
+        "damageInteractions": [
+          {
+            "damageType": "slashing",
+            "multiplier": 0.5,
+            "unless": [
+              "silvered"
+            ]
+          },
+          {
+            "damageType": "piercing",
+            "multiplier": 0.5,
+            "unless": [
+              "silvered"
+            ]
+          }
+        ],
+        "conditionImmunities": [
+          "frightened",
+          "prone",
+          "blinded",
+          "burning"
+        ],
+        "resourceOverrides": {
+          "hp": 310
+        }
+      },
+      {
+        "id": "door_keeper_loosed",
+        "name": "A Keeper of the Middle",
+        "description": "Stone was put over three doors carefully. Something has been checking on the stone.",
+        "level": 14,
+        "xp": 3200,
+        "attributes": {
+          "might": 19,
+          "agility": 18,
+          "endurance": 19,
+          "intellect": 16,
+          "instinct": 18,
+          "presence": 15
+        },
+        "abilities": [
+          "rend",
+          "wither",
+          "cut_and_run"
+        ],
+        "behaviour": [
+          {
+            "priority": 15,
+            "use": "wither",
+            "when": {
+              "chance": 0.3
+            }
+          },
+          {
+            "priority": 5,
+            "use": "cut_and_run"
+          },
+          {
+            "priority": 0,
+            "use": "rend"
+          }
+        ],
+        "faction": "the_unsealed",
+        "creatureType": "undead",
+        "size": "medium",
+        "descriptors": [
+          "a stone-dusted",
+          "a checking"
+        ],
+        "conditionalLoot": [],
+        "loot": "trial_loose_drop",
+        "damageInteractions": [
+          {
+            "damageType": "slashing",
+            "multiplier": 0.5,
+            "unless": [
+              "silvered"
+            ]
+          },
+          {
+            "damageType": "piercing",
+            "multiplier": 0.5,
+            "unless": [
+              "silvered"
+            ]
+          }
+        ],
+        "conditionImmunities": [
+          "frightened",
+          "prone",
+          "poisoned"
+        ],
+        "resourceOverrides": {
+          "hp": 170
+        }
+      },
+      {
+        "id": "seventh_through",
+        "name": "What Came Through the Seventh",
+        "description": "A room built to hear four miles of corridor, and something in it that has heard every footfall on that floor since there was a floor.",
+        "level": 18,
+        "xp": 8000,
+        "attributes": {
+          "might": 20,
+          "agility": 22,
+          "endurance": 22,
+          "intellect": 23,
+          "instinct": 23,
+          "presence": 21
+        },
+        "abilities": [
+          "unmaking_word",
+          "call_the_shut",
+          "grave_chill",
+          "wither"
+        ],
+        "behaviour": [
+          {
+            "priority": 30,
+            "use": "call_the_shut",
+            "when": {
+              "chance": 0.3
+            }
+          },
+          {
+            "priority": 20,
+            "use": "unmaking_word"
+          },
+          {
+            "priority": 10,
+            "use": "wither"
+          },
+          {
+            "priority": 0,
+            "use": "grave_chill"
+          }
+        ],
+        "faction": "the_unsealed",
+        "creatureType": "undead",
+        "size": "medium",
+        "descriptors": [
+          "an attentive",
+          "a listening"
+        ],
+        "conditionalLoot": [],
+        "loot": "trial_three_hoard_a",
+        "damageInteractions": [
+          {
+            "damageType": "slashing",
+            "multiplier": 0.5,
+            "unless": [
+              "silvered"
+            ]
+          },
+          {
+            "damageType": "piercing",
+            "multiplier": 0.5,
+            "unless": [
+              "silvered"
+            ]
+          }
+        ],
+        "conditionImmunities": [
+          "frightened",
+          "silenced",
+          "blinded",
+          "poisoned",
+          "slowed"
+        ],
+        "resourceOverrides": {
+          "hp": 300
+        }
+      },
+      {
+        "id": "eighth_through",
+        "name": "What Came Through the Eighth",
+        "description": "Six hundred years of vent-readers signalling past a deep and never to it, and not one of them ever told why.",
+        "level": 19,
+        "xp": 9000,
+        "attributes": {
+          "might": 24,
+          "agility": 20,
+          "endurance": 25,
+          "intellect": 19,
+          "instinct": 21,
+          "presence": 19
+        },
+        "abilities": [
+          "vent_breath",
+          "cinder_lash",
+          "salt_burn",
+          "rend"
+        ],
+        "behaviour": [
+          {
+            "priority": 30,
+            "use": "vent_breath",
+            "when": {
+              "chance": 0.35
+            }
+          },
+          {
+            "priority": 20,
+            "use": "cinder_lash"
+          },
+          {
+            "priority": 10,
+            "use": "salt_burn"
+          },
+          {
+            "priority": 0,
+            "use": "rend"
+          }
+        ],
+        "faction": "the_unsealed",
+        "creatureType": "undead",
+        "size": "medium",
+        "descriptors": [
+          "a furnace-hearted",
+          "a vast"
+        ],
+        "conditionalLoot": [],
+        "loot": "trial_three_hoard_b",
+        "damageInteractions": [
+          {
+            "damageType": "slashing",
+            "multiplier": 0.5,
+            "unless": [
+              "silvered"
+            ]
+          },
+          {
+            "damageType": "piercing",
+            "multiplier": 0.5,
+            "unless": [
+              "silvered"
+            ]
+          }
+        ],
+        "conditionImmunities": [
+          "frightened",
+          "burning",
+          "prone",
+          "blinded"
+        ],
+        "resourceOverrides": {
+          "hp": 360
+        }
+      },
+      {
+        "id": "the_counter",
+        "name": "Whatever Kept the Count",
+        "description": "Nine doors in eleven hundred years, opened in order, by somebody. The tally is cut into the underside of a ring of stones in a wood nobody goes into, and it does not stop at nine.",
+        "level": 20,
+        "xp": 12000,
+        "attributes": {
+          "might": 24,
+          "agility": 23,
+          "endurance": 25,
+          "intellect": 24,
+          "instinct": 24,
+          "presence": 23
+        },
+        "abilities": [
+          "unmaking_word",
+          "call_the_shut",
+          "wither",
+          "drag_under",
+          "rend"
+        ],
+        "behaviour": [
+          {
+            "priority": 35,
+            "use": "call_the_shut",
+            "when": {
+              "chance": 0.3
+            }
+          },
+          {
+            "priority": 25,
+            "use": "unmaking_word",
+            "when": {
+              "chance": 0.4
+            }
+          },
+          {
+            "priority": 15,
+            "use": "drag_under"
+          },
+          {
+            "priority": 5,
+            "use": "wither"
+          },
+          {
+            "priority": 0,
+            "use": "rend"
+          }
+        ],
+        "faction": "the_unsealed",
+        "creatureType": "undead",
+        "size": "medium",
+        "descriptors": [
+          "a patient",
+          "an unhurried",
+          "a counting"
+        ],
+        "conditionalLoot": [],
+        "loot": "trial_three_hoard_c",
+        "damageInteractions": [
+          {
+            "damageType": "slashing",
+            "multiplier": 0.5,
+            "unless": [
+              "silvered"
+            ]
+          },
+          {
+            "damageType": "piercing",
+            "multiplier": 0.5,
+            "unless": [
+              "silvered"
+            ]
+          }
+        ],
+        "conditionImmunities": [
+          "frightened",
+          "prone",
+          "blinded",
+          "silenced",
+          "poisoned",
+          "slowed",
+          "stunned"
+        ],
+        "resourceOverrides": {
+          "hp": 440
+        }
+      },
+      {
+        "id": "tally_keeper",
+        "name": "A Tally-Keeper",
+        "description": "Somebody had to walk between nine doors over eleven hundred years and know which were still shut. These are what did the walking.",
+        "level": 16,
+        "xp": 4800,
+        "attributes": {
+          "might": 20,
+          "agility": 19,
+          "endurance": 20,
+          "intellect": 19,
+          "instinct": 20,
+          "presence": 18
+        },
+        "abilities": [
+          "wither",
+          "grave_chill",
+          "cut_and_run"
+        ],
+        "behaviour": [
+          {
+            "priority": 15,
+            "use": "wither",
+            "when": {
+              "chance": 0.35
+            }
+          },
+          {
+            "priority": 5,
+            "use": "cut_and_run"
+          },
+          {
+            "priority": 0,
+            "use": "grave_chill"
+          }
+        ],
+        "faction": "the_unsealed",
+        "creatureType": "undead",
+        "size": "medium",
+        "descriptors": [
+          "a soundless",
+          "a tallying"
+        ],
+        "conditionalLoot": [],
+        "loot": "trial_loose_drop",
+        "damageInteractions": [
+          {
+            "damageType": "slashing",
+            "multiplier": 0.5,
+            "unless": [
+              "silvered"
+            ]
+          },
+          {
+            "damageType": "piercing",
+            "multiplier": 0.5,
+            "unless": [
+              "silvered"
+            ]
+          }
+        ],
+        "conditionImmunities": [
+          "frightened",
+          "prone",
+          "poisoned",
+          "silenced"
+        ],
+        "resourceOverrides": {
+          "hp": 200
+        }
       }
     ],
     "factions": [
@@ -17557,6 +19159,34 @@
             "treasure"
           ],
           "priceMultiplier": 1.2
+        }
+      },
+      {
+        "id": "keeper_hesper",
+        "name": "Hesper, of the Eighth List",
+        "description": "Has spent a working life on the eight doors nobody cared about, and came down to Lantern Deep the week the ninth stopped being interesting.",
+        "disposition": 3,
+        "gullibility": 0.15,
+        "memorySpan": 365,
+        "offersQuests": [
+          "trial_one_cellars",
+          "trial_two_galleries",
+          "trial_three_listening"
+        ],
+        "caresAbout": [
+          "lantern_lit",
+          "hold_honoured"
+        ],
+        "reactions": [],
+        "faction": "the_keepers",
+        "dialogue": "trial_hesper_talk",
+        "home": "lantern_deep_fungus_market",
+        "shop": {
+          "lootTable": "keeper_stock",
+          "buysTags": [
+            "treasure"
+          ],
+          "priceMultiplier": 1.1
         }
       }
     ],
@@ -20941,7 +22571,8 @@
           }
         ],
         "encounterTables": [
-          "kingsvale_wanderers"
+          "kingsvale_wanderers",
+          "the_loosed"
         ]
       },
       {
@@ -21355,7 +22986,8 @@
           }
         ],
         "encounterTables": [
-          "coast_things"
+          "coast_things",
+          "the_loosed"
         ]
       },
       {
@@ -21620,7 +23252,8 @@
           }
         ],
         "encounterTables": [
-          "duskwood_things"
+          "duskwood_things",
+          "the_loosed"
         ]
       },
       {
@@ -21737,7 +23370,8 @@
           }
         ],
         "encounterTables": [
-          "duskwood_things"
+          "duskwood_things",
+          "the_tallied"
         ]
       },
       {
@@ -21896,6 +23530,9 @@
             "to": "skarnspine_snowgate",
             "travelMinutes": 40
           }
+        ],
+        "encounterTables": [
+          "the_loosed"
         ]
       },
       {
@@ -21972,7 +23609,8 @@
           }
         ],
         "encounterTables": [
-          "alpine_things"
+          "alpine_things",
+          "the_checked"
         ]
       },
       {
@@ -22290,6 +23928,9 @@
             "to": "frostmere_whalebone_landing",
             "travelMinutes": 70
           }
+        ],
+        "encounterTables": [
+          "the_tallied"
         ]
       },
       {
@@ -22471,6 +24112,9 @@
             "to": "moor_black_tarn",
             "travelMinutes": 60
           }
+        ],
+        "encounterTables": [
+          "the_loosed"
         ]
       },
       {
@@ -23047,7 +24691,8 @@
           }
         ],
         "encounterTables": [
-          "ember_things"
+          "ember_things",
+          "the_checked"
         ]
       },
       {
@@ -23877,6 +25522,9 @@
             "to": "steppe_the_south_reach",
             "travelMinutes": 240
           }
+        ],
+        "encounterTables": [
+          "the_checked"
         ]
       },
       {
@@ -23952,7 +25600,8 @@
           }
         ],
         "encounterTables": [
-          "glasslands_things"
+          "glasslands_things",
+          "the_tallied"
         ]
       },
       {
@@ -24445,7 +26094,8 @@
           }
         ],
         "encounterTables": [
-          "deeproads_things"
+          "deeproads_things",
+          "the_tallied"
         ]
       },
       {
@@ -24631,7 +26281,8 @@
           }
         ],
         "encounterTables": [
-          "deeproads_things"
+          "deeproads_things",
+          "the_tallied"
         ]
       },
       {
@@ -30645,7 +32296,8 @@
         "position": {
           "x": 3,
           "y": 23
-        }
+        },
+        "gate": "trial_one_door"
       },
       {
         "id": "snowgate_bell",
@@ -30898,7 +32550,8 @@
         "position": {
           "x": 25,
           "y": 3
-        }
+        },
+        "gate": "trial_two_door"
       },
       {
         "id": "ironstair_the_steps",
@@ -39872,7 +41525,8 @@
               }
             ]
           }
-        ]
+        ],
+        "gate": "trial_three_door"
       },
       {
         "id": "broken_stair_the_stair",
@@ -41817,6 +43471,247 @@
             }
           ]
         }
+      },
+      {
+        "id": "trial_one_door",
+        "name": "The First of the Eight",
+        "description": "A cellar door under a ward-house, barred on the inside by something that was inside.",
+        "kind": "ward",
+        "blockedTextKey": "trial_one_blocked",
+        "staysOpen": true,
+        "onOpen": [
+          {
+            "setFlag": {
+              "flag": "trial_one_open",
+              "value": true
+            }
+          }
+        ],
+        "onBlocked": [],
+        "opensWith": [],
+        "tags": [
+          "trial"
+        ],
+        "requires": {
+          "flags": [
+            {
+              "flag": "aurendel_finished",
+              "equals": true
+            }
+          ],
+          "anyOf": [
+            {
+              "items": [
+                {
+                  "item": "greenway_cloak",
+                  "quantity": 1,
+                  "consume": false,
+                  "equipped": true
+                }
+              ]
+            },
+            {
+              "items": [
+                {
+                  "item": "hermits_watch_cloak",
+                  "quantity": 1,
+                  "consume": false,
+                  "equipped": true
+                }
+              ]
+            },
+            {
+              "items": [
+                {
+                  "item": "signal_hood",
+                  "quantity": 1,
+                  "consume": false,
+                  "equipped": true
+                }
+              ]
+            },
+            {
+              "items": [
+                {
+                  "item": "warm_water_hood",
+                  "quantity": 1,
+                  "consume": false,
+                  "equipped": true
+                }
+              ]
+            },
+            {
+              "items": [
+                {
+                  "item": "breathing_hood",
+                  "quantity": 1,
+                  "consume": false,
+                  "equipped": true
+                }
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "trial_two_door",
+        "name": "The Fourth of the Eight",
+        "description": "A quarry gallery following a seam that is not there, ending in dressed stone the quarry did not dress.",
+        "kind": "ward",
+        "blockedTextKey": "trial_two_blocked",
+        "staysOpen": true,
+        "onOpen": [
+          {
+            "setFlag": {
+              "flag": "trial_two_open",
+              "value": true
+            }
+          }
+        ],
+        "onBlocked": [],
+        "opensWith": [],
+        "tags": [
+          "trial"
+        ],
+        "requires": {
+          "items": [
+            {
+              "item": "first_warrant"
+            }
+          ],
+          "anyOf": [
+            {
+              "items": [
+                {
+                  "item": "beaters_cloak",
+                  "quantity": 1,
+                  "consume": false,
+                  "equipped": true
+                }
+              ]
+            },
+            {
+              "items": [
+                {
+                  "item": "bog_belt",
+                  "quantity": 1,
+                  "consume": false,
+                  "equipped": true
+                }
+              ]
+            },
+            {
+              "items": [
+                {
+                  "item": "ninth_column_coat",
+                  "quantity": 1,
+                  "consume": false,
+                  "equipped": true
+                }
+              ]
+            },
+            {
+              "items": [
+                {
+                  "item": "rime_singers_torc",
+                  "quantity": 1,
+                  "consume": false,
+                  "equipped": true
+                }
+              ]
+            },
+            {
+              "items": [
+                {
+                  "item": "marshlight_belt",
+                  "quantity": 1,
+                  "consume": false,
+                  "equipped": true
+                }
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "trial_three_door",
+        "name": "The Seventh of the Eight",
+        "description": "A room off the Long Hall with no furniture, dressed to the inch, and built so that a sound made in it comes back changed.",
+        "kind": "ward",
+        "blockedTextKey": "trial_three_blocked",
+        "staysOpen": true,
+        "onOpen": [
+          {
+            "setFlag": {
+              "flag": "trial_three_open",
+              "value": true
+            }
+          }
+        ],
+        "onBlocked": [],
+        "opensWith": [],
+        "tags": [
+          "trial"
+        ],
+        "requires": {
+          "items": [
+            {
+              "item": "second_warrant"
+            }
+          ],
+          "anyOf": [
+            {
+              "items": [
+                {
+                  "item": "bell_rope_ring",
+                  "quantity": 1,
+                  "consume": false,
+                  "equipped": true
+                }
+              ]
+            },
+            {
+              "items": [
+                {
+                  "item": "shilling_ring",
+                  "quantity": 1,
+                  "consume": false,
+                  "equipped": true
+                }
+              ]
+            },
+            {
+              "items": [
+                {
+                  "item": "hearth_ring",
+                  "quantity": 1,
+                  "consume": false,
+                  "equipped": true
+                }
+              ]
+            },
+            {
+              "items": [
+                {
+                  "item": "pilots_glass_ring",
+                  "quantity": 1,
+                  "consume": false,
+                  "equipped": true
+                }
+              ]
+            },
+            {
+              "items": [
+                {
+                  "item": "cistern_keepers_ring",
+                  "quantity": 1,
+                  "consume": false,
+                  "equipped": true
+                }
+              ]
+            }
+          ]
+        }
       }
     ],
     "roomTemplates": [
@@ -42971,7 +44866,8 @@
         "safeEntrance": true,
         "width": "65",
         "height": "65",
-        "corridorLength": "3d3"
+        "corridorLength": "3d3",
+        "bossTable": "trial_one_third"
       },
       {
         "id": "duskwood_deadfall",
@@ -43028,7 +44924,8 @@
           "minLeaf": 5
         },
         "width": "29",
-        "height": "29"
+        "height": "29",
+        "bossTable": "trial_three_counter"
       },
       {
         "id": "karn_dolur_deeps",
@@ -43081,7 +44978,8 @@
         "safeEntrance": true,
         "width": "69",
         "height": "69",
-        "corridorLength": "3d3"
+        "corridorLength": "3d3",
+        "bossTable": "trial_one_first"
       },
       {
         "id": "skarn_cut_galleries",
@@ -43098,7 +44996,8 @@
         "branchiness": 0.45,
         "width": "73",
         "height": "73",
-        "corridorLength": "2d3"
+        "corridorLength": "2d3",
+        "bossTable": "trial_two_fourth"
       },
       {
         "id": "skarn_wind_cave",
@@ -43270,7 +45169,8 @@
         "safeEntrance": true,
         "width": "73",
         "height": "73",
-        "corridorLength": "3d3"
+        "corridorLength": "3d3",
+        "bossTable": "trial_one_second"
       },
       {
         "id": "moor_deep_cutting",
@@ -43499,7 +45399,8 @@
           "minLeaf": 6
         },
         "width": "33",
-        "height": "33"
+        "height": "33",
+        "bossTable": "trial_three_eighth"
       },
       {
         "id": "thornmere_old_church",
@@ -43533,7 +45434,8 @@
         "branchiness": 0.3,
         "width": "77",
         "height": "77",
-        "corridorLength": "3d3"
+        "corridorLength": "3d3",
+        "bossTable": "trial_two_fifth"
       },
       {
         "id": "thornmere_cypress_mound",
@@ -43710,7 +45612,8 @@
         "safeEntrance": true,
         "width": "69",
         "height": "69",
-        "corridorLength": "3d3"
+        "corridorLength": "3d3",
+        "bossTable": "trial_two_sixth"
       },
       {
         "id": "glasslands_uncovered_town",
@@ -43977,7 +45880,8 @@
         "branchiness": 0.2,
         "width": "73",
         "height": "73",
-        "corridorLength": "3d3"
+        "corridorLength": "3d3",
+        "bossTable": "trial_three_seventh"
       },
       {
         "id": "deeproads_beneath_treads",
@@ -46377,6 +48281,354 @@
                 "scaleWithLevel": true
               }
             ]
+          }
+        ]
+      },
+      {
+        "id": "trial_one_first",
+        "minDepth": 0,
+        "maxDepth": 999,
+        "chance": 1,
+        "emptyWeight": 0,
+        "scalePerLevels": 3,
+        "groups": [
+          {
+            "id": "b",
+            "weight": 1,
+            "hostile": true,
+            "entries": [
+              {
+                "monster": "first_through",
+                "count": "1",
+                "scaleWithLevel": false
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "trial_one_second",
+        "minDepth": 0,
+        "maxDepth": 999,
+        "chance": 1,
+        "emptyWeight": 0,
+        "scalePerLevels": 3,
+        "groups": [
+          {
+            "id": "b",
+            "weight": 1,
+            "hostile": true,
+            "entries": [
+              {
+                "monster": "second_through",
+                "count": "1",
+                "scaleWithLevel": false
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "trial_one_third",
+        "minDepth": 0,
+        "maxDepth": 999,
+        "chance": 1,
+        "emptyWeight": 0,
+        "scalePerLevels": 3,
+        "groups": [
+          {
+            "id": "b",
+            "weight": 1,
+            "hostile": true,
+            "entries": [
+              {
+                "monster": "third_through",
+                "count": "1",
+                "scaleWithLevel": false
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "the_loosed",
+        "minDepth": 0,
+        "maxDepth": 999,
+        "chance": 0.4,
+        "emptyWeight": 4,
+        "scalePerLevels": 2,
+        "groups": [
+          {
+            "id": "walkers",
+            "weight": 5,
+            "hostile": true,
+            "entries": [
+              {
+                "monster": "door_walker",
+                "count": "1d2",
+                "scaleWithLevel": true
+              }
+            ],
+            "requires": {
+              "flags": [
+                {
+                  "flag": "aurendel_finished",
+                  "equals": true
+                }
+              ]
+            }
+          },
+          {
+            "id": "a_pair",
+            "weight": 2,
+            "hostile": true,
+            "entries": [
+              {
+                "monster": "door_walker",
+                "count": "2",
+                "scaleWithLevel": false
+              }
+            ],
+            "requires": {
+              "flags": [
+                {
+                  "flag": "aurendel_finished",
+                  "equals": true
+                }
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "id": "trial_two_fourth",
+        "minDepth": 0,
+        "maxDepth": 999,
+        "chance": 1,
+        "emptyWeight": 0,
+        "scalePerLevels": 3,
+        "groups": [
+          {
+            "id": "b",
+            "weight": 1,
+            "hostile": true,
+            "entries": [
+              {
+                "monster": "fourth_through",
+                "count": "1",
+                "scaleWithLevel": false
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "trial_two_fifth",
+        "minDepth": 0,
+        "maxDepth": 999,
+        "chance": 1,
+        "emptyWeight": 0,
+        "scalePerLevels": 3,
+        "groups": [
+          {
+            "id": "b",
+            "weight": 1,
+            "hostile": true,
+            "entries": [
+              {
+                "monster": "fifth_through",
+                "count": "1",
+                "scaleWithLevel": false
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "trial_two_sixth",
+        "minDepth": 0,
+        "maxDepth": 999,
+        "chance": 1,
+        "emptyWeight": 0,
+        "scalePerLevels": 3,
+        "groups": [
+          {
+            "id": "b",
+            "weight": 1,
+            "hostile": true,
+            "entries": [
+              {
+                "monster": "sixth_through",
+                "count": "1",
+                "scaleWithLevel": false
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "the_checked",
+        "minDepth": 0,
+        "maxDepth": 999,
+        "chance": 0.35,
+        "emptyWeight": 5,
+        "scalePerLevels": 2,
+        "groups": [
+          {
+            "id": "keepers",
+            "weight": 5,
+            "hostile": true,
+            "entries": [
+              {
+                "monster": "door_keeper_loosed",
+                "count": "1",
+                "scaleWithLevel": false
+              }
+            ],
+            "requires": {
+              "flags": [
+                {
+                  "flag": "aurendel_finished",
+                  "equals": true
+                }
+              ]
+            }
+          },
+          {
+            "id": "a_pair",
+            "weight": 2,
+            "hostile": true,
+            "entries": [
+              {
+                "monster": "door_keeper_loosed",
+                "count": "1d2",
+                "scaleWithLevel": true
+              }
+            ],
+            "requires": {
+              "flags": [
+                {
+                  "flag": "aurendel_finished",
+                  "equals": true
+                }
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "id": "trial_three_seventh",
+        "minDepth": 0,
+        "maxDepth": 999,
+        "chance": 1,
+        "emptyWeight": 0,
+        "scalePerLevels": 3,
+        "groups": [
+          {
+            "id": "b",
+            "weight": 1,
+            "hostile": true,
+            "entries": [
+              {
+                "monster": "seventh_through",
+                "count": "1",
+                "scaleWithLevel": false
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "trial_three_eighth",
+        "minDepth": 0,
+        "maxDepth": 999,
+        "chance": 1,
+        "emptyWeight": 0,
+        "scalePerLevels": 3,
+        "groups": [
+          {
+            "id": "b",
+            "weight": 1,
+            "hostile": true,
+            "entries": [
+              {
+                "monster": "eighth_through",
+                "count": "1",
+                "scaleWithLevel": false
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "trial_three_counter",
+        "minDepth": 0,
+        "maxDepth": 999,
+        "chance": 1,
+        "emptyWeight": 0,
+        "scalePerLevels": 3,
+        "groups": [
+          {
+            "id": "b",
+            "weight": 1,
+            "hostile": true,
+            "entries": [
+              {
+                "monster": "the_counter",
+                "count": "1",
+                "scaleWithLevel": false
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "the_tallied",
+        "minDepth": 0,
+        "maxDepth": 999,
+        "chance": 0.4,
+        "emptyWeight": 4,
+        "scalePerLevels": 2,
+        "groups": [
+          {
+            "id": "keeper",
+            "weight": 5,
+            "hostile": true,
+            "entries": [
+              {
+                "monster": "tally_keeper",
+                "count": "1",
+                "scaleWithLevel": false
+              }
+            ],
+            "requires": {
+              "flags": [
+                {
+                  "flag": "aurendel_finished",
+                  "equals": true
+                }
+              ]
+            }
+          },
+          {
+            "id": "two",
+            "weight": 3,
+            "hostile": true,
+            "entries": [
+              {
+                "monster": "tally_keeper",
+                "count": "1d2",
+                "scaleWithLevel": true
+              }
+            ],
+            "requires": {
+              "flags": [
+                {
+                  "flag": "aurendel_finished",
+                  "equals": true
+                }
+              ]
+            }
           }
         ]
       }
@@ -52657,6 +54909,48 @@
           },
           {
             "text": "Ilka takes that as a courtesy to whoever went next."
+          }
+        ]
+      },
+      {
+        "id": "trial_one_blocked",
+        "variants": [
+          {
+            "text": "The bar is on this side of the door and it has been chewed rather than cut. Whatever is down there put it up itself, and has kept it up, and would rather you came dressed."
+          },
+          {
+            "text": "Hesper's list has eight lines on it. Three are struck through in red and the red is not old. She did not strike them through herself."
+          },
+          {
+            "text": "You have walked past this door before, in an act of your life that is over now, and it was a cellar door then."
+          }
+        ]
+      },
+      {
+        "id": "trial_three_blocked",
+        "variants": [
+          {
+            "text": "Say anything in the doorway and it comes back to you a beat late and a word short. This room was built to listen, and it is not finished listening."
+          },
+          {
+            "text": "Seven of Hesper's eight lines are struck out. This is the seventh, and she has stopped writing dates beside them, which she has not explained."
+          },
+          {
+            "text": "Four miles of Long Hall on the other side of that wall, and this room hears all of it, and has heard everything that has ever walked it including you, twice."
+          }
+        ]
+      },
+      {
+        "id": "trial_two_blocked",
+        "variants": [
+          {
+            "text": "The gallery runs eight hundred feet along a seam the geology says stops at forty. It was not cut to get stone out. It was cut to get to this."
+          },
+          {
+            "text": "Hesper's fourth line has a date beside it now instead of a countersignature. She has started writing for whoever reads this after her."
+          },
+          {
+            "text": "The face at the end is dressed, and the dressing is older than the quarry, and the quarrymen worked around it for nine generations without once putting a pick in it."
           }
         ]
       },
@@ -85924,6 +88218,180 @@
             "redirectWhen": []
           }
         ]
+      },
+      {
+        "id": "trial_hesper_talk",
+        "start": "greet",
+        "nodes": [
+          {
+            "id": "greet",
+            "says": [
+              {
+                "text": "A Keeper in a fungus market four miles under the world, with a board in front of her and one sheet pinned to it."
+              },
+              {
+                "text": "\"You are the one who did the ninth,\" says Hesper. \"Sit down. I have a list.\""
+              }
+            ],
+            "options": [
+              {
+                "id": "what_list",
+                "text": "What list?",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "goto": "the_list"
+              },
+              {
+                "id": "leave",
+                "text": "Not now.",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "onEnter": [],
+            "redirectWhen": [
+              {
+                "requires": {
+                  "quests": [
+                    {
+                      "quest": "trial_one_rootcellar",
+                      "status": "complete"
+                    }
+                  ]
+                },
+                "goto": "three_down"
+              }
+            ]
+          },
+          {
+            "id": "the_list",
+            "says": [
+              {
+                "text": "\"Nine doors. Opened in order, over eleven hundred years, and everybody in my order has spent their career on the ninth because the ninth was open.\" She turns the sheet round. Eight lines. \"These are the eight nobody watched. They were opened first. Whatever came out of them has had between four hundred and eleven hundred years to find somewhere quiet.\""
+              }
+            ],
+            "options": [
+              {
+                "id": "where",
+                "text": "Where is somewhere quiet?",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "goto": "the_quiet"
+              },
+              {
+                "id": "back",
+                "text": "Hm.",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "goto": "greet"
+              }
+            ],
+            "onEnter": [],
+            "redirectWhen": []
+          },
+          {
+            "id": "the_quiet",
+            "says": [
+              {
+                "text": "\"Under the places you made safe.\" She does not soften it. \"The ward cellars at Highpass. The undercroft at Barrowgate. A root cellar in the Hollow Beeches with a floor under the floor.\" A finger on the first three lines, each struck through in red. \"Those three are already struck out. In red. I did not strike them out and neither did any Keeper living.\""
+              }
+            ],
+            "options": [
+              {
+                "id": "take",
+                "text": "Then we start at the first one.",
+                "effects": [
+                  {
+                    "emit": {
+                      "event": "startQuest",
+                      "data": {
+                        "quest": "trial_one_cellars"
+                      }
+                    }
+                  }
+                ],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "goto": "the_terms",
+                "requires": {
+                  "quests": [
+                    {
+                      "quest": "trial_one_cellars",
+                      "status": "unstarted"
+                    }
+                  ]
+                }
+              },
+              {
+                "id": "back",
+                "text": "Give me a moment.",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "goto": "greet"
+              }
+            ],
+            "onEnter": [],
+            "redirectWhen": []
+          },
+          {
+            "id": "the_terms",
+            "says": [
+              {
+                "text": "\"Two conditions and they are not mine, they are the door's.\" Hesper counts them off. \"Come at it properly levelled, because the thing behind it has had four hundred years and you have had one. And wear something out of the quiet half of this continent \u2014 a cloak, a hood, whatever you brought up out of a thread nobody set you on.\""
+              },
+              {
+                "text": "\"The bar on that cellar door is on the inside. Think about what that means before you pull on it.\""
+              }
+            ],
+            "options": [
+              {
+                "id": "understood",
+                "text": "Understood.",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "goto": "greet"
+              }
+            ],
+            "onEnter": [],
+            "redirectWhen": []
+          },
+          {
+            "id": "three_down",
+            "says": [
+              {
+                "text": "Hesper has the sheet off the board and flat on the table. Three lines struck through in her own hand now, over the red."
+              },
+              {
+                "text": "\"Three,\" she says. \"In one season. My order has managed nine in eleven hundred years and eight of those were the same door twice.\" She signs the bottom of it and pushes it across. \"That is a warrant. There are five lines left on it and the next two are worse.\""
+              }
+            ],
+            "options": [
+              {
+                "id": "done",
+                "text": "Then there are five left.",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "onEnter": [],
+            "redirectWhen": []
+          }
+        ]
       }
     ],
     "quests": [
@@ -95782,6 +98250,557 @@
           ],
           "reputation": {}
         }
+      },
+      {
+        "id": "trial_one_cellars",
+        "name": "The First Door",
+        "description": "Hesper's list says the first of the eight was opened under a ward-house in the Skarnspine, and that the bar on its cellar door is on the inside.",
+        "autoStart": false,
+        "ordered": true,
+        "tags": [
+          "trial",
+          "trial_one"
+        ],
+        "objectives": [
+          {
+            "id": "to_the_cellars",
+            "description": "Get down to the ward cellars.",
+            "kind": "reach",
+            "count": 1,
+            "hidden": false,
+            "optional": false,
+            "target": "highpass_ward_cellars"
+          },
+          {
+            "id": "past_the_bar",
+            "description": "Get past a bar that was put up from inside.",
+            "kind": "custom",
+            "count": 1,
+            "hidden": false,
+            "optional": false,
+            "when": {
+              "test": {
+                "ref": "flags.trial_one_open"
+              }
+            }
+          },
+          {
+            "id": "the_first",
+            "description": "Finish what came through the first door.",
+            "kind": "kill",
+            "count": 1,
+            "hidden": false,
+            "optional": false,
+            "target": "first_through"
+          }
+        ],
+        "stages": [],
+        "unlocks": [
+          "trial_one_underkeep"
+        ],
+        "rewards": {
+          "xp": 1400,
+          "items": [
+            {
+              "item": "cellar_belt",
+              "quantity": 1
+            }
+          ],
+          "reputation": {
+            "the_keepers": 20
+          }
+        },
+        "giver": "keeper_hesper",
+        "requires": {
+          "flags": [
+            {
+              "flag": "aurendel_finished",
+              "equals": true
+            }
+          ],
+          "minLevel": 14
+        }
+      },
+      {
+        "id": "trial_one_underkeep",
+        "name": "The Second Door",
+        "description": "The moor took Barrowgate's keep back four hundred years ago. Something has been keeping the undercroft dry the whole time.",
+        "autoStart": false,
+        "ordered": true,
+        "tags": [
+          "trial",
+          "trial_one"
+        ],
+        "objectives": [
+          {
+            "id": "under_the_keep",
+            "description": "Get into the undercroft.",
+            "kind": "reach",
+            "count": 1,
+            "hidden": false,
+            "optional": false,
+            "target": "barrowgate_under_keep"
+          },
+          {
+            "id": "the_second",
+            "description": "Finish what came through the second door.",
+            "kind": "kill",
+            "count": 1,
+            "hidden": false,
+            "optional": false,
+            "target": "second_through"
+          }
+        ],
+        "stages": [],
+        "unlocks": [
+          "trial_one_rootcellar"
+        ],
+        "rewards": {
+          "xp": 1500,
+          "items": [
+            {
+              "item": "underkeep_ring",
+              "quantity": 1
+            }
+          ],
+          "reputation": {
+            "the_keepers": 20
+          }
+        },
+        "requires": {
+          "quests": [
+            {
+              "quest": "trial_one_cellars",
+              "status": "complete"
+            }
+          ]
+        }
+      },
+      {
+        "id": "trial_one_rootcellar",
+        "name": "The Third Door",
+        "description": "A root cellar in the Hollow Beeches with a floor under the floor, and the Keepers' third line struck through in red by a hand that was not Hesper's.",
+        "autoStart": false,
+        "ordered": true,
+        "tags": [
+          "trial",
+          "trial_one"
+        ],
+        "objectives": [
+          {
+            "id": "into_the_cellar",
+            "description": "Get into the root cellar.",
+            "kind": "reach",
+            "count": 1,
+            "hidden": false,
+            "optional": false,
+            "target": "hollow_beeches_root_cellar"
+          },
+          {
+            "id": "the_third",
+            "description": "Finish what came through the third door.",
+            "kind": "kill",
+            "count": 1,
+            "hidden": false,
+            "optional": false,
+            "target": "third_through"
+          }
+        ],
+        "stages": [],
+        "unlocks": [],
+        "rewards": {
+          "xp": 1700,
+          "items": [
+            {
+              "item": "eighth_list_cloak",
+              "quantity": 1
+            },
+            {
+              "item": "first_warrant",
+              "quantity": 1
+            }
+          ],
+          "reputation": {
+            "the_keepers": 30
+          }
+        },
+        "requires": {
+          "quests": [
+            {
+              "quest": "trial_one_underkeep",
+              "status": "complete"
+            }
+          ]
+        }
+      },
+      {
+        "id": "trial_two_galleries",
+        "name": "The Fourth Door",
+        "description": "Eight hundred feet of quarry gallery along a seam that stops at forty, ending at a face nine generations of quarrymen worked around and never into.",
+        "autoStart": false,
+        "ordered": true,
+        "tags": [
+          "trial",
+          "trial_two"
+        ],
+        "objectives": [
+          {
+            "id": "into_the_galleries",
+            "description": "Get into the quarry galleries.",
+            "kind": "reach",
+            "count": 1,
+            "hidden": false,
+            "optional": false,
+            "target": "the_cut_quarry_galleries"
+          },
+          {
+            "id": "through_the_face",
+            "description": "Open the face the quarry never cut.",
+            "kind": "custom",
+            "count": 1,
+            "hidden": false,
+            "optional": false,
+            "when": {
+              "test": {
+                "ref": "flags.trial_two_open"
+              }
+            }
+          },
+          {
+            "id": "the_fourth",
+            "description": "Finish what came through the fourth door.",
+            "kind": "kill",
+            "count": 1,
+            "hidden": false,
+            "optional": false,
+            "target": "fourth_through"
+          }
+        ],
+        "stages": [],
+        "unlocks": [
+          "trial_two_sunken_hall"
+        ],
+        "rewards": {
+          "xp": 2000,
+          "items": [
+            {
+              "item": "gallery_head",
+              "quantity": 1
+            }
+          ],
+          "reputation": {
+            "the_keepers": 25,
+            "karn_dolur": 20
+          }
+        },
+        "giver": "keeper_hesper",
+        "requires": {
+          "items": [
+            {
+              "item": "first_warrant"
+            }
+          ],
+          "minLevel": 16
+        }
+      },
+      {
+        "id": "trial_two_sunken_hall",
+        "name": "The Fifth Door",
+        "description": "The Black Water covered a hall. The hall is still furnished, still arranged, and still occupied by one thing that was sitting down when the water came.",
+        "autoStart": false,
+        "ordered": true,
+        "tags": [
+          "trial",
+          "trial_two"
+        ],
+        "objectives": [
+          {
+            "id": "into_the_hall",
+            "description": "Get into the sunken hall.",
+            "kind": "reach",
+            "count": 1,
+            "hidden": false,
+            "optional": false,
+            "target": "black_water_sunken_hall"
+          },
+          {
+            "id": "the_fifth",
+            "description": "Finish what came through the fifth door.",
+            "kind": "kill",
+            "count": 1,
+            "hidden": false,
+            "optional": false,
+            "target": "fifth_through"
+          }
+        ],
+        "stages": [],
+        "unlocks": [
+          "trial_two_milepost"
+        ],
+        "rewards": {
+          "xp": 2200,
+          "items": [
+            {
+              "item": "sunken_hall_ring",
+              "quantity": 1
+            }
+          ],
+          "reputation": {
+            "the_keepers": 25,
+            "the_ferrymen": 20
+          }
+        },
+        "requires": {
+          "quests": [
+            {
+              "quest": "trial_two_galleries",
+              "status": "complete"
+            }
+          ]
+        }
+      },
+      {
+        "id": "trial_two_milepost",
+        "name": "The Sixth Door",
+        "description": "A milepost on a road that measures nothing, with four hundred feet of dressed vault under it and one way down.",
+        "autoStart": false,
+        "ordered": true,
+        "tags": [
+          "trial",
+          "trial_two"
+        ],
+        "objectives": [
+          {
+            "id": "under_the_milepost",
+            "description": "Get into the vault under the milepost.",
+            "kind": "reach",
+            "count": 1,
+            "hidden": false,
+            "optional": false,
+            "target": "sunken_road_milepost_vault"
+          },
+          {
+            "id": "the_sixth",
+            "description": "Finish what came through the sixth door.",
+            "kind": "kill",
+            "count": 1,
+            "hidden": false,
+            "optional": false,
+            "target": "sixth_through"
+          }
+        ],
+        "stages": [],
+        "unlocks": [],
+        "rewards": {
+          "xp": 2500,
+          "items": [
+            {
+              "item": "milepost_belt",
+              "quantity": 1
+            },
+            {
+              "item": "second_warrant",
+              "quantity": 1
+            }
+          ],
+          "reputation": {
+            "the_keepers": 35,
+            "the_library": 25
+          }
+        },
+        "requires": {
+          "quests": [
+            {
+              "quest": "trial_two_sunken_hall",
+              "status": "complete"
+            }
+          ]
+        }
+      },
+      {
+        "id": "trial_three_listening",
+        "name": "The Seventh Door",
+        "description": "A room four miles down the Long Hall, dressed to the inch, with no furniture and no purpose except to hear \u2014 and it has heard everything that ever walked past it, including you.",
+        "autoStart": false,
+        "ordered": true,
+        "tags": [
+          "trial",
+          "trial_three"
+        ],
+        "objectives": [
+          {
+            "id": "into_the_room",
+            "description": "Get into the listening room.",
+            "kind": "reach",
+            "count": 1,
+            "hidden": false,
+            "optional": false,
+            "target": "echo_halls_the_listening_room"
+          },
+          {
+            "id": "stop_the_listening",
+            "description": "Stop it listening.",
+            "kind": "custom",
+            "count": 1,
+            "hidden": false,
+            "optional": false,
+            "when": {
+              "test": {
+                "ref": "flags.trial_three_open"
+              }
+            }
+          },
+          {
+            "id": "the_seventh",
+            "description": "Finish what came through the seventh door.",
+            "kind": "kill",
+            "count": 1,
+            "hidden": false,
+            "optional": false,
+            "target": "seventh_through"
+          }
+        ],
+        "stages": [],
+        "unlocks": [
+          "trial_three_signal"
+        ],
+        "rewards": {
+          "xp": 3000,
+          "items": [
+            {
+              "item": "listening_hood",
+              "quantity": 1
+            }
+          ],
+          "reputation": {
+            "the_keepers": 30,
+            "the_wayfinders": 25
+          }
+        },
+        "giver": "keeper_hesper",
+        "requires": {
+          "items": [
+            {
+              "item": "second_warrant"
+            }
+          ],
+          "minLevel": 18
+        }
+      },
+      {
+        "id": "trial_three_signal",
+        "name": "The Eighth Door",
+        "description": "The vent-readers have signalled past the Signal Deep for six hundred years and never once signalled to it, and not one of them was ever told not to.",
+        "autoStart": false,
+        "ordered": true,
+        "tags": [
+          "trial",
+          "trial_three"
+        ],
+        "objectives": [
+          {
+            "id": "into_the_deep",
+            "description": "Get down into the Signal Deep.",
+            "kind": "reach",
+            "count": 1,
+            "hidden": false,
+            "optional": false,
+            "target": "firewatch_ridge_signal_deep"
+          },
+          {
+            "id": "the_eighth",
+            "description": "Finish what came through the eighth door.",
+            "kind": "kill",
+            "count": 1,
+            "hidden": false,
+            "optional": false,
+            "target": "eighth_through"
+          }
+        ],
+        "stages": [],
+        "unlocks": [
+          "trial_three_counter"
+        ],
+        "rewards": {
+          "xp": 3400,
+          "items": [
+            {
+              "item": "signal_deep_belt",
+              "quantity": 1
+            }
+          ],
+          "reputation": {
+            "the_keepers": 30,
+            "the_vent_readers": 30
+          }
+        },
+        "requires": {
+          "quests": [
+            {
+              "quest": "trial_three_listening",
+              "status": "complete"
+            }
+          ]
+        }
+      },
+      {
+        "id": "trial_three_counter",
+        "name": "The Ninth Line",
+        "description": "Nine doors opened in order over eleven hundred years is not weather and it is not luck. Somebody has been keeping the count, and the count does not stop at nine.",
+        "autoStart": false,
+        "ordered": true,
+        "tags": [
+          "trial",
+          "trial_three"
+        ],
+        "objectives": [
+          {
+            "id": "under_the_ring",
+            "description": "Get under the ring in the Witchwood.",
+            "kind": "reach",
+            "count": 1,
+            "hidden": false,
+            "optional": false,
+            "target": "witchwood_under_the_ring"
+          },
+          {
+            "id": "the_counter",
+            "description": "Finish whatever has been keeping the count.",
+            "kind": "kill",
+            "count": 1,
+            "hidden": false,
+            "optional": false,
+            "target": "the_counter"
+          }
+        ],
+        "stages": [],
+        "unlocks": [],
+        "rewards": {
+          "xp": 4500,
+          "items": [
+            {
+              "item": "the_counters_ring",
+              "quantity": 1
+            },
+            {
+              "item": "last_warrant",
+              "quantity": 1
+            }
+          ],
+          "reputation": {
+            "the_keepers": 50,
+            "the_library": 30,
+            "the_crown": 25
+          }
+        },
+        "requires": {
+          "quests": [
+            {
+              "quest": "trial_three_signal",
+              "status": "complete"
+            }
+          ]
+        }
       }
     ],
     "arcs": [
@@ -96127,6 +99146,39 @@
           "moor_colders_fire",
           "moor_forty_one",
           "moor_the_drive"
+        ],
+        "isEnding": false
+      },
+      {
+        "id": "trial_one_arc",
+        "name": "The First Three",
+        "description": "Three of the eight doors nobody was watching, and what walked out of them while everybody was looking at the ninth.",
+        "quests": [
+          "trial_one_cellars",
+          "trial_one_underkeep",
+          "trial_one_rootcellar"
+        ],
+        "isEnding": false
+      },
+      {
+        "id": "trial_two_arc",
+        "name": "The Middle Three",
+        "description": "Three doors somebody found before the Keepers did, and put four hundred feet of careful stone over without ever saying why.",
+        "quests": [
+          "trial_two_galleries",
+          "trial_two_sunken_hall",
+          "trial_two_milepost"
+        ],
+        "isEnding": false
+      },
+      {
+        "id": "trial_three_arc",
+        "name": "The Ninth Line",
+        "description": "The last two doors, and the thing that had been opening them in order and writing down how many were left.",
+        "quests": [
+          "trial_three_listening",
+          "trial_three_signal",
+          "trial_three_counter"
         ],
         "isEnding": false
       },
@@ -97362,6 +100414,7 @@
     "partyFollow": {
       "catchUpDistance": 3,
       "catchUpSteps": 2
-    }
+    },
+    "postVictory": "continue"
   }
 }

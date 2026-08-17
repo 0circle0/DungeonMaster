@@ -52,8 +52,22 @@ HIDDEN_MODULES = [
     "hidden_moor",
 ]
 
+# The trials: post-game content, behind `aurendel_finished`. A fourth list for
+# the same reason there is a third — the contract is different again. A hidden
+# thread is optional and level-appropriate; a trial is optional, only exists
+# once the game has been won, and is tuned for a party that has done the
+# threads. `trialkit.py` states the rules and `check_quests.py` asserts them.
+#
+# Nothing here may go anywhere near `ACT_THREE_SPINE`: a trial that the ending
+# waited on would be a game you have to finish twice.
+TRIAL_MODULES = [
+    "trial_one",
+    "trial_two",
+    "trial_three",
+]
+
 _LOADED = []
-for _name in ACT_MODULES + SIDE_MODULES + HIDDEN_MODULES:
+for _name in ACT_MODULES + SIDE_MODULES + HIDDEN_MODULES + TRIAL_MODULES:
     try:
         _LOADED.append(importlib.import_module(_name))
     except ImportError:
@@ -221,10 +235,22 @@ def attach_content(biome_list, dungeon_list, room_templates, area_list):
         if drops:
             biome["lootTables"] = list(drops)
 
+    # An area's own tables, and then whatever a module wants to add to them.
+    # Appended rather than replaced, because the post-game content's whole
+    # claim is that a place the party already walked has something *else* in
+    # it now — replacing would quietly delete what was there and turn the
+    # change into a swap.
+    extra_area_tables = {}
+    for module in _LOADED:
+        for area_id, tables in getattr(module, "AREA_ENCOUNTERS", {}).items():
+            extra_area_tables.setdefault(area_id, []).extend(tables)
+
     for area in area_list:
-        tables = loot.AREA_ENCOUNTERS.get(area["id"])
+        tables = list(loot.AREA_ENCOUNTERS.get(area["id"]) or [])
+        tables += [t for t in extra_area_tables.get(area["id"], [])
+                   if t not in tables]
         if tables:
-            area["encounterTables"] = list(tables)
+            area["encounterTables"] = tables
 
     # Bosses the questline named, then the ones a hidden thread claims. Forty
     # of Aurendel's sixty-eight dungeons had a boss room carrying

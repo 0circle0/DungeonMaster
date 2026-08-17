@@ -145,6 +145,13 @@ def main():
     }
     doc["start"] = regions.start() if regions else {}
 
+    # Winning the Unsealing does not end the run. Without this the engine sets
+    # `outcome: 'victory'` and `settle` returns early ever after — no combat,
+    # no encounters, no affordances — and every trial in `story.TRIAL_MODULES`
+    # would validate perfectly and be unreachable, because all of them are
+    # gated behind the flag `the_unsealing` writes on its way out.
+    doc["start"]["postVictory"] = "continue"
+
     os.makedirs(OUT, exist_ok=True)
     path = os.path.join(OUT, "module.json")
     with open(path, "w") as f:

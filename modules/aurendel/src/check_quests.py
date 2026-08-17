@@ -222,8 +222,13 @@ def main():
 
     side = [q for q in quests if "side" in q.get("tags", [])]
     hidden = [q for q in quests if "hidden" in q.get("tags", [])]
-    spine = [q for q in quests if "side" not in q.get("tags", [])
-             and "hidden" not in q.get("tags", [])]
+    trials = [q for q in quests if "trial" in q.get("tags", [])]
+    # The spine is what is left when every kind of optional content is taken
+    # out. Each new kind has to be subtracted here as well as checked below —
+    # a trial counted as spine would be a trial the XP budget attributed to the
+    # main line and the skippability rules never looked at.
+    spine = [q for q in quests
+             if not {"side", "hidden", "trial"} & set(q.get("tags", []))]
     side_ids = {q["id"] for q in side}
 
     # A chain is the set of quests sharing a key; the key is the third tag that
@@ -660,7 +665,7 @@ def main():
             for entry in group.get("entries", []):
                 spawnable.add(entry["monster"])
 
-    for quest in hidden + side:
+    for quest in hidden + side + trials:
         for objective in objectives_of(quest):
             if objective.get("kind") != "kill":
                 continue
@@ -680,6 +685,149 @@ def main():
                 f"thread {thread['id']!r}: no place gets easier to find as it "
                 f"fills, so the clues inform nothing")
 
+    # --- 10. the trials ----------------------------------------------------
+    #
+    # Post-game content, and the contract is different again from the other
+    # two kinds of optional work. A side chain must not be required; a hidden
+    # thread must not be required and must stand on empty ground; a trial must
+    # not be required, must be *unreachable* until the game is won, and must
+    # form an ordered ladder. All of it is invisible to the schema.
+    import trialkit
+
+    trial_ids = {q["id"] for q in trials}
+    tiers = {}
+    for quest in trials:
+        tags = quest.get("tags", [])
+        if len(tags) < 2:
+            problems.append(
+                f"{quest['id']}: tagged trial but not by trialkit.tier — "
+                f"expected [trial, key], got {tags}")
+            continue
+        tiers.setdefault(tags[1], []).append(quest)
+
+    # 10a. Nothing about the ending may depend on a trial — the same rule the
+    #      side chains keep, in the same direction. A game you had to finish
+    #      twice would be the failure here.
+    for arc in ending:
+        for quest_id in arc["quests"]:
+            if quest_id in trial_ids:
+                problems.append(
+                    f"{arc['id']}: the ending arc contains {quest_id}, which is "
+                    f"post-game content the ending is the gate for")
+
+    # 10b. Trials own the `trial_` prefix, and nothing that can be played
+    #      before the ending may read one of their flags.
+    #
+    #      Written, not merely mentioned. `walk(…, "flag")` cannot tell a
+    #      `setFlag` from a `requires.flags[].flag`, and every trial door reads
+    #      `aurendel_finished` on purpose — that is the gate, not a trespass.
+    def set_flags(node, out):
+        if isinstance(node, dict):
+            written = node.get("setFlag")
+            if isinstance(written, dict) and isinstance(written.get("flag"), str):
+                out.add(written["flag"])
+            for value in node.values():
+                set_flags(value, out)
+        elif isinstance(node, list):
+            for item in node:
+                set_flags(item, out)
+        return out
+
+    trial_flags = set()
+    for quest in trials:
+        set_flags(quest, trial_flags)
+    for gate in doc["world"]["gates"]:
+        if "trial" in (gate.get("tags") or []):
+            set_flags(gate, trial_flags)
+    for flag in sorted(trial_flags):
+        if not flag.startswith("trial_"):
+            problems.append(
+                f"trial content owns the flag {flag!r}, which is not prefixed "
+                f"'trial_' — the prefix is what makes the next check a string "
+                f"comparison instead of a dataflow analysis")
+    for quest in spine + side + hidden:
+        for flag in sorted(flag_refs(quest, set()) & trial_flags):
+            problems.append(
+                f"{quest['id']}: reads {flag!r}, which a trial owns — content "
+                f"playable before the ending would then wait on content that "
+                f"only exists after it")
+
+    # 10c. The ladder is ordered and it starts behind the ending. Each tier's
+    #      head states its own gate; `unlocks` marks a quest available and does
+    #      not gate starting it, which is the trap `sidekit` documents.
+    for key, members in sorted(tiers.items()):
+        unlocked_within = {u for q in members for u in q.get("unlocks", [])
+                           if u in {m["id"] for m in members}}
+        heads = [q for q in members if q["id"] not in unlocked_within]
+        if len(heads) != 1:
+            problems.append(
+                f"{key}: expected exactly one head, found "
+                f"{sorted(q['id'] for q in heads)}")
+            continue
+        head = heads[0]
+        giver = head.get("giver")
+        if not giver:
+            problems.append(f"{head['id']}: the head of {key} has no giver")
+        elif giver not in offers.get(head["id"], []):
+            # `giver` is a label; `offersQuests` is what puts the job in front
+            # of a player. Tiers two and three had the first and not the
+            # second, and were therefore offered by nobody.
+            problems.append(
+                f"{head['id']}: {giver} is its giver but does not list it in "
+                f"offersQuests, so nothing will offer it in play")
+
+        wanted = trialkit.TIER_GATES.get(key, {})
+        gate = head.get("requires") or {}
+        for field, clauses in wanted.items():
+            if json.dumps(clauses) not in json.dumps(gate.get(field, [])):
+                problems.append(
+                    f"{head['id']}: the head of {key} does not require "
+                    f"{clauses} — the rung below it is not the gate")
+
+        for quest in members:
+            if quest["id"] != head["id"] and quest["id"] not in unlocked_within:
+                problems.append(
+                    f"{quest['id']}: nothing in the {key} tier unlocks it")
+
+    # 10d. Every tier's door asks for the relic to be *worn*. Owning it proves
+    #      you traded for it; wearing it proves you came dressed, which is the
+    #      whole distinction `equipped` exists to make.
+    def wants_equipped(node):
+        if isinstance(node, dict):
+            if node.get("equipped") is True:
+                return True
+            return any(wants_equipped(v) for v in node.values())
+        if isinstance(node, list):
+            return any(wants_equipped(i) for i in node)
+        return False
+
+    for key in sorted(tiers):
+        doors = [g for g in doc["world"]["gates"]
+                 if "trial" in (g.get("tags") or []) and key in json.dumps(g)]
+        if not any(wants_equipped(g.get("requires", {})) for g in doors):
+            gated = [g["id"] for g in doors]
+            problems.append(
+                f"{key}: no door asks for a relic equipped (gates: {gated or 'none'}) "
+                f"— a tier tuned for fabled gear must check for it")
+
+    # 10e. Post-game encounter groups must actually be gated on the ending.
+    #      A group that gets left out is a level-nineteen monster the party
+    #      meets in Act I.
+    for module_name in ("trial_one", "trial_two", "trial_three"):
+        module = __import__(module_name)
+        for table_id in {t for tables in getattr(module, "AREA_ENCOUNTERS", {}).values()
+                         for t in tables}:
+            table = next((t for t in doc["world"]["encounterTables"]
+                          if t["id"] == table_id), None)
+            if not table:
+                problems.append(f"{module_name}: no encounter table {table_id!r}")
+                continue
+            for group in table["groups"]:
+                if "aurendel_finished" not in json.dumps(group.get("requires", {})):
+                    problems.append(
+                        f"{table_id}/{group['id']}: a post-game group that is "
+                        f"not gated on the ending — this draws in Act I")
+
     # --- report ------------------------------------------------------------
     if problems:
         print(f"✗ {len(problems)} problem(s) the schema cannot see\n")
@@ -688,9 +836,13 @@ def main():
         return 1
 
     print(f"✓ {len(quests)} quests ({len(spine)} spine, {len(side)} side in "
-          f"{len(chains)} chains, {len(hidden)} hidden): every objective target "
-          f"resolves, every flag waited on is set, the ending is reachable, and "
-          f"neither side chains nor hidden threads touch it")
+          f"{len(chains)} chains, {len(hidden)} hidden, {len(trials)} trial in "
+          f"{len(tiers)} tiers): every objective target resolves, every flag "
+          f"waited on is set, the ending is reachable, and none of the optional "
+          f"content touches it")
+    print(f"✓ {len(tiers)} tiers behind the ending: an ordered ladder, each rung "
+          f"gated on the one below, every door asking for a fabled relic worn, "
+          f"and nothing playable before the ending reading a trial flag")
     print(f"✓ {len(lore)} clues in {len(threads)} threads: every one teachable, "
           f"two tellers in two areas each, and none of them names the place it "
           f"points at")
