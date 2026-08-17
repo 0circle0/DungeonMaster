@@ -954,6 +954,27 @@
                         {
                           "type": "object",
                           "properties": {
+                            "learnLore": {
+                              "type": "object",
+                              "properties": {
+                                "entry": {
+                                  "$ref": "#/$defs/GameModule/properties/rules/properties/attributes/items/properties/modifier"
+                                }
+                              },
+                              "required": [
+                                "entry"
+                              ],
+                              "additionalProperties": false
+                            }
+                          },
+                          "required": [
+                            "learnLore"
+                          ],
+                          "additionalProperties": false
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
                             "grantItem": {
                               "type": "object",
                               "properties": {
@@ -2949,6 +2970,29 @@
                         },
                         "default": []
                       },
+                      "lore": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "entry": {
+                              "type": "string",
+                              "minLength": 1,
+                              "maxLength": 64,
+                              "pattern": "^[a-z][a-z0-9_]*$",
+                              "description": "ref:narrative.lore"
+                            },
+                            "known": {
+                              "type": "boolean",
+                              "default": true
+                            }
+                          },
+                          "required": [
+                            "entry"
+                          ],
+                          "additionalProperties": false
+                        }
+                      },
                       "without": {
                         "type": "object",
                         "properties": {
@@ -3009,6 +3053,16 @@
                               "description": "ref:rules.conditions"
                             },
                             "default": []
+                          },
+                          "lore": {
+                            "type": "array",
+                            "items": {
+                              "type": "string",
+                              "minLength": 1,
+                              "maxLength": 64,
+                              "pattern": "^[a-z][a-z0-9_]*$",
+                              "description": "ref:narrative.lore"
+                            }
                           }
                         },
                         "additionalProperties": false,
@@ -3072,6 +3126,9 @@
                             },
                             "flags": {
                               "$ref": "#/$defs/GameModule/properties/content/properties/abilities/items/properties/requires/properties/flags"
+                            },
+                            "lore": {
+                              "$ref": "#/$defs/GameModule/properties/content/properties/abilities/items/properties/requires/properties/lore"
                             },
                             "without": {
                               "$ref": "#/$defs/GameModule/properties/content/properties/abilities/items/properties/requires/properties/without"
@@ -4181,7 +4238,7 @@
                               "description": "ref:rules.attributes"
                             },
                             "difficulty": {
-                              "type": "integer",
+                              "$ref": "#/$defs/GameModule/properties/rules/properties/attributes/items/properties/modifier",
                               "default": 12
                             },
                             "opposedBy": {
@@ -4453,7 +4510,7 @@
                         "description": "ref:content.skills"
                       },
                       "difficulty": {
-                        "type": "integer"
+                        "$ref": "#/$defs/GameModule/properties/rules/properties/attributes/items/properties/modifier"
                       }
                     },
                     "required": [
@@ -4473,7 +4530,7 @@
                         "description": "ref:content.skills"
                       },
                       "difficulty": {
-                        "type": "integer"
+                        "$ref": "#/$defs/GameModule/properties/rules/properties/attributes/items/properties/modifier"
                       }
                     },
                     "required": [
@@ -5413,7 +5470,7 @@
                         "description": "ref:content.skills"
                       },
                       "difficulty": {
-                        "type": "integer"
+                        "$ref": "#/$defs/GameModule/properties/rules/properties/attributes/items/properties/modifier"
                       }
                     },
                     "required": [
@@ -5570,7 +5627,7 @@
                         "description": "ref:content.skills"
                       },
                       "difficulty": {
-                        "type": "integer"
+                        "$ref": "#/$defs/GameModule/properties/rules/properties/attributes/items/properties/modifier"
                       },
                       "onSuccess": {
                         "type": "array",
@@ -6918,6 +6975,16 @@
                   "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
                   "description": "An ability a requirement asks for."
                 },
+                "lore.learned": {
+                  "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
+                  "default": "You note it down: {lore}",
+                  "description": "The party works something out. Nobody asked them to, so it is a note, not a quest."
+                },
+                "lore.learned.sourced": {
+                  "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
+                  "default": "You note it down: {lore} ({source})",
+                  "description": "The same, when the entry records where it came from."
+                },
                 "quest.offered": {
                   "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
                   "default": "{who} has work for you: {quest}.",
@@ -7627,7 +7694,7 @@
                                     "description": "ref:content.skills"
                                   },
                                   "difficulty": {
-                                    "type": "integer",
+                                    "$ref": "#/$defs/GameModule/properties/rules/properties/attributes/items/properties/modifier",
                                     "default": 12
                                   },
                                   "opposedBy": {
@@ -7986,6 +8053,79 @@
                 "additionalProperties": false
               },
               "default": []
+            },
+            "lore": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "$ref": "#/$defs/GameModule/properties/id"
+                  },
+                  "name": {
+                    "$ref": "#/$defs/GameModule/properties/meta/properties/title"
+                  },
+                  "description": {
+                    "$ref": "#/$defs/GameModule/properties/meta/properties/description",
+                    "default": ""
+                  },
+                  "tags": {
+                    "$ref": "#/$defs/GameModule/properties/meta/properties/tags"
+                  },
+                  "textKey": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 64,
+                    "pattern": "^[a-z][a-z0-9_]*$",
+                    "description": "ref:narrative.textGrammar"
+                  },
+                  "source": {
+                    "type": "string",
+                    "maxLength": 200,
+                    "default": ""
+                  }
+                },
+                "required": [
+                  "id",
+                  "name"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "loreThreads": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "$ref": "#/$defs/GameModule/properties/id"
+                  },
+                  "name": {
+                    "$ref": "#/$defs/GameModule/properties/meta/properties/title"
+                  },
+                  "description": {
+                    "$ref": "#/$defs/GameModule/properties/meta/properties/description",
+                    "default": ""
+                  },
+                  "entries": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 64,
+                      "pattern": "^[a-z][a-z0-9_]*$",
+                      "description": "ref:narrative.lore"
+                    },
+                    "minItems": 1
+                  }
+                },
+                "required": [
+                  "id",
+                  "name",
+                  "entries"
+                ],
+                "additionalProperties": false
+              }
             },
             "deedKinds": {
               "type": "array",

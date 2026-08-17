@@ -23,7 +23,7 @@ import type { Effect } from '@dm/module';
 import type { Entity, MapInstance } from '../state.js';
 import { buildScope, OPEN_NAMESPACES } from '../stats.js';
 import { Transaction, applyOps } from '../rules/apply.js';
-import { skillCheck, succeeded } from '../rules/check.js';
+import { skillCheck, succeeded, difficultyFrom } from '../rules/check.js';
 import { key as packKey, unkey } from '../grid/tiles.js';
 import { distance } from '../grid/geometry.js';
 import { message } from '../narrate/systemText.js';
@@ -31,8 +31,8 @@ import { message } from '../narrate/systemText.js';
 export interface TrapDef {
   id: string;
   name: string;
-  detect: { skill: string; difficulty: number };
-  disarm: { skill: string; difficulty: number };
+  detect: { skill: string; difficulty: unknown };
+  disarm: { skill: string; difficulty: unknown };
   onTrigger: Effect[];
   onDisarm: Effect[];
   reusable: boolean;
@@ -117,8 +117,8 @@ export function searchForTraps(txn: Transaction, searcher: Entity, rng: Rng): bo
     if (!definition) continue;
 
     const roll = skillCheck(
-      txn.module, rng.derive(`detect:${tile}`), searcher,
-      definition.detect.skill, definition.detect.difficulty,
+      txn.module, rng.derive(`detect:${tile}`), searcher, definition.detect.skill,
+      difficultyFrom(txn.module, txn.state, searcher, definition.detect.difficulty, rng.derive(`detectDc:${tile}`)),
     );
     txn.emit({ type: 'checked', entity: searcher.id, skill: definition.detect.skill, attribute: null, roll });
     if (!succeeded(roll)) continue;
@@ -162,7 +162,8 @@ export function disarmTrap(txn: Transaction, actor: Entity, rng: Rng): boolean {
   if (!definition) return false;
 
   const roll = skillCheck(
-    txn.module, rng, actor, definition.disarm.skill, definition.disarm.difficulty,
+    txn.module, rng, actor, definition.disarm.skill,
+    difficultyFrom(txn.module, txn.state, actor, definition.disarm.difficulty, rng.derive('disarmDc')),
   );
   txn.emit({ type: 'checked', entity: actor.id, skill: definition.disarm.skill, attribute: null, roll });
 

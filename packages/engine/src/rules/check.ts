@@ -13,9 +13,11 @@
 import { Rng, parseDice, rollDice } from '@dm/core';
 import { evalExpr } from '@dm/module';
 import type { CompiledModule, Expr, Scope, Value } from '@dm/module';
-import type { Entity } from '../state.js';
+import type { Entity, GameState } from '../state.js';
 import type { RollRecord } from '../events.js';
-import { statsOf, proficiencyOf, isSaveProficient, skillRankOf } from '../stats.js';
+import {
+  statsOf, proficiencyOf, isSaveProficient, skillRankOf, buildScope, OPEN_NAMESPACES,
+} from '../stats.js';
 
 interface Resolution {
   checkDice: string;
@@ -50,6 +52,42 @@ export function difficultyOf(module: CompiledModule, value: number | string | un
     return resolution.difficulties[value]!;
   }
   return resolution.defaultDifficulty;
+}
+
+/**
+ * A difficulty the module wrote as a formula rather than as a number.
+ *
+ * `difficultyOf` answers *what number is `hard`*. This answers *what number is
+ * fourteen, less what they think of you* — which is the difference between a
+ * gate and a price. A door that needs a key is shut until you have the key; a
+ * person who dislikes you is harder to talk round, and that is a number, not a
+ * wall.
+ *
+ * Every `difficulty` in the format takes an {@link Expr}, and a bare integer is
+ * a valid one, so content written before this reads exactly as it always did.
+ * A formula that fails to produce a finite number yields `undefined` rather
+ * than zero: the caller then falls back to the module's default difficulty,
+ * because a check that silently became automatic is worse than one that is
+ * merely mistuned.
+ */
+export function difficultyFrom(
+  module: CompiledModule,
+  state: GameState,
+  actor: Entity,
+  declared: unknown,
+  rng: Rng,
+  extra: Scope = {},
+): number | undefined {
+  if (declared === undefined) return undefined;
+  // A plain number is the common case and needs no scope built for it — which
+  // also keeps the hot paths (every trap search, every locked door) free of a
+  // scope construction they never used before.
+  if (typeof declared === 'number') return Math.floor(declared);
+  if (typeof declared === 'string') return difficultyOf(module, declared);
+
+  const scope = { ...buildScope(module, state, actor), ...extra };
+  const value = evalExpr(declared as Expr, { scope, rng, openNamespaces: OPEN_NAMESPACES });
+  return typeof value === 'number' && Number.isFinite(value) ? Math.floor(value) : undefined;
 }
 
 /**

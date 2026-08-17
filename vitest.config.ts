@@ -8,6 +8,11 @@ export default defineConfig({
     include: ['packages/**/*.test.ts', 'apps/**/*.test.ts'],
     environment: 'node',
   },
+  // Next compiles JSX with the automatic runtime, so the components never
+  // import React. esbuild's default here is the classic runtime, which renders
+  // them to `React.createElement` and throws `React is not defined` — a failure
+  // of the harness that reads exactly like a failure of the component.
+  esbuild: { jsx: 'automatic' },
   resolve: {
     alias: {
       // Before '@dm/module': aliases prefix-match, and the bare one would

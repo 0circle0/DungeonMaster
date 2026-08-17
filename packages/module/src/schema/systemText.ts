@@ -183,6 +183,10 @@ export const SYSTEM_TEXT = [
   entry('requirement.level', 'fragment', 'level {level}', 'A level a requirement asks for.', ['level']),
   entry('requirement.ability', 'fragment', 'the {ability} ability', 'An ability a requirement asks for.', ['ability']),
 
+  // — lore ———————————————————————————————————————————————————
+  entry('lore.learned', 'message', 'You note it down: {lore}', 'The party works something out. Nobody asked them to, so it is a note, not a quest.', ['lore']),
+  entry('lore.learned.sourced', 'message', 'You note it down: {lore} ({source})', 'The same, when the entry records where it came from.', ['lore', 'source']),
+
   // — quests —————————————————————————————————————————————————
   entry('quest.offered', 'message', '{who} has work for you: {quest}.', 'Somebody offers a job.', ['who', 'quest']),
   entry('quest.started', 'message', 'New quest: {quest} — {description}', 'A job taken, with what it is — the title alone says nothing.', ['quest', 'description']),

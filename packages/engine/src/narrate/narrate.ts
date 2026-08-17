@@ -442,6 +442,26 @@ export function narrateEvent(context: NarratorContext, event: GameEvent): Line |
         kind: 'prose',
       };
 
+    case 'loreLearned': {
+      const lore = context.module.find<{ name: string; source: string; textKey?: string }>(
+        'narrative.lore',
+        event.entry,
+      );
+      // A clue may be authored as a pool so the same fact reads differently
+      // depending on who told it to you. Seeded on the entry rather than the
+      // scene: it is learned once, and the wording it was learned in is the
+      // wording the journal has to keep showing.
+      const said = lore?.textKey
+        ? narrateFrom(module, lore.textKey, context.seed, { sceneKey: `lore:${event.entry}` })
+        : lore?.name ?? event.entry.replace(/_/g, ' ');
+      return {
+        text: lore?.source
+          ? text(module, 'lore.learned.sourced', { lore: said, source: lore.source })
+          : text(module, 'lore.learned', { lore: said }),
+        kind: 'note',
+      };
+    }
+
     case 'questStarted': {
       const quest = questShape(context, event.quest);
       const name = quest?.name ?? contentName(context, 'narrative.quests', event.quest);

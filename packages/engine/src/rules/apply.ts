@@ -585,6 +585,18 @@ export function applyOps(txn: Transaction, ops: readonly EffectOp[], source: Ent
         break;
       }
 
+      case 'learnLore': {
+        // Learning twice is not an event. Content teaches the same clue from
+        // several places on purpose — a thread that dies with one missed
+        // conversation is a thread nobody finishes — so the second telling has
+        // to be silent, and the recorded minute has to stay the first one.
+        if (!txn.module.find('narrative.lore', op.entry)) break;
+        if (op.entry in txn.state.lore) break;
+        txn.set({ ...txn.state, lore: { ...txn.state.lore, [op.entry]: txn.state.minute } });
+        txn.emit({ type: 'loreLearned', entry: op.entry });
+        break;
+      }
+
       case 'adjustReputation':
         adjustReputation(txn, op.faction, op.amount);
         break;

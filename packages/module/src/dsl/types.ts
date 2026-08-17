@@ -106,6 +106,7 @@ export type Effect =
       };
     }
   | { readonly setFlag: { readonly flag: Expr; readonly value?: Expr } }
+  | { readonly learnLore: { readonly entry: Expr } }
   | {
       readonly grantItem: {
         readonly target: Expr;
@@ -164,6 +165,7 @@ export type EffectOp =
   | { readonly op: 'removeCondition'; readonly target: Value; readonly condition: string }
   | { readonly op: 'adjustResource'; readonly target: Value; readonly resource: string; readonly amount: number }
   | { readonly op: 'setFlag'; readonly flag: string; readonly value: Value }
+  | { readonly op: 'learnLore'; readonly entry: string }
   | { readonly op: 'grantItem'; readonly target: Value; readonly item: string; readonly quantity: number }
   | { readonly op: 'removeItem'; readonly target: Value; readonly item: string; readonly quantity: number }
   | { readonly op: 'adjustReputation'; readonly faction: string; readonly amount: number }

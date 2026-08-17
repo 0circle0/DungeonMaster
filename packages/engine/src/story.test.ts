@@ -21,7 +21,7 @@ import { arcsOf, endingReached } from './sim/arcs.js';
 import { startDialogue, visibleOptions, chooseOption, canTalkTo } from './sim/dialogue.js';
 import { recordDeed, witnessesOf, knowledgeOf } from './sim/deeds.js';
 import { enterDungeon, enterArea, enterPoi, placeParty } from './sim/enter.js';
-import { savingThrow } from './rules/check.js';
+import { savingThrow, difficultyFrom, skillCheck } from './rules/check.js';
 import { buildScope } from './stats.js';
 import { TerrainIndex, createMap, MapBuilder } from './grid/tiles.js';
 import type { GameState } from './state.js';
@@ -319,8 +319,10 @@ describe('gates', () => {
       description: '', minLevel: 3, items: [{ item: 'brass_key', quantity: 1, consume: false, equipped: false }],
       classes: [], ancestries: [], abilities: [], attributes: [], skills: [], quests: [], factions: [],
       creatureTypes: [], alignments: [], languages: [],
-      memories: [], flags: [], anyOf: [],
-      without: { classes: [], abilities: [], items: [], quests: [], flags: [], conditions: [] },
+      memories: [], flags: [], lore: [], anyOf: [],
+      without: {
+        classes: [], abilities: [], items: [], quests: [], flags: [], conditions: [], lore: [],
+      },
     });
     const words = described.map((need) => render(GREENMARCH, need)).join(' ');
     expect(words).toMatch(/brass key/);
@@ -891,6 +893,57 @@ describe('dialogue', () => {
     expect(txn.state.dialogue).toBeNull();
   });
 
+  /**
+   * `onceOnly` says "selectable once, ever" and meant "once per conversation":
+   * it was checked against `state.dialogue.taken`, which `startDialogue` clears
+   * every time you walk up to someone. So anything a person could only tell you
+   * once, they told you as often as you asked.
+   */
+  describe('an option marked once-only', () => {
+    // `haggle` is greenmarch's only shipped one-shot, and it is gated on the
+    // mill job being active — so the quest has to be running for it to show.
+    const once = (state = withVess()) => {
+      const txn = transact(state);
+      startQuest(txn, 'the_mill_door', Rng.fromSeed(1));
+      startDialogue(txn, txn.entity('e:1')!, txn.entity('vess')!, Rng.fromSeed(1));
+      return txn;
+    };
+
+    it('is gone from a second conversation, not just from this one', () => {
+      const first = once();
+      expect(visibleOptions(first, first.entity('e:1')!, Rng.fromSeed(1)).map((o) => o.id))
+        .toContain('haggle');
+      chooseOption(first, 'haggle', first.entity('e:1')!, Rng.fromSeed(1));
+
+      // Walk away and come back — the part that used to reset it.
+      const second = transact(first.finish().state);
+      startDialogue(second, second.entity('e:1')!, second.entity('vess')!, Rng.fromSeed(1));
+      expect(visibleOptions(second, second.entity('e:1')!, Rng.fromSeed(1)).map((o) => o.id))
+        .not.toContain('haggle');
+    });
+
+    it('is refused when asked for by id, not merely hidden', () => {
+      // A front end that dispatches by id, or a player typing the reply back,
+      // walked straight past the filter in `visibleOptions`. An option that
+      // hands over an item cannot be answerable twice.
+      const first = once();
+      chooseOption(first, 'haggle', first.entity('e:1')!, Rng.fromSeed(1));
+
+      const second = transact(first.finish().state);
+      startDialogue(second, second.entity('e:1')!, second.entity('vess')!, Rng.fromSeed(1));
+      expect(chooseOption(second, 'haggle', second.entity('e:1')!, Rng.fromSeed(1))).toBe(false);
+    });
+
+    it('leaves repeatable options alone', () => {
+      const first = once();
+      const repeatable = first.entity('e:1')!;
+      chooseOption(first, 'haggle', repeatable, Rng.fromSeed(1));
+      const flags = Object.keys(first.finish().state.flags).filter((f) => f.startsWith('said:'));
+      // Exactly one, so the save does not grow by the size of the script read.
+      expect(flags).toEqual(['said:vess_talk:opening:haggle']);
+    });
+  });
+
   it('resolves an opposed persuasion check to one of two nodes', () => {
     const outcomes = new Set<string>();
     for (let seed = 0; seed < 40; seed += 1) {
@@ -903,6 +956,93 @@ describe('dialogue', () => {
       if (node) outcomes.add(node);
     }
     expect(outcomes.has('haggle_won') || outcomes.has('haggle_lost')).toBe(true);
+  });
+});
+
+/**
+ * `difficulty` used to be `z.number().int()` in six places and `ExprSchema` in
+ * three, which meant a lock could scale with the world and a conversation could
+ * not. Widening the six is only safe if a bare integer is untouched by it, so
+ * that is the first thing asserted here.
+ */
+describe('a difficulty is a formula', () => {
+  const hero = () => {
+    const state = fresh();
+    return { state, actor: state.entities[state.party[0]!]! };
+  };
+
+  it('leaves a bare integer exactly as it was', () => {
+    const { state, actor } = hero();
+    expect(difficultyFrom(GREENMARCH, state, actor, 14, Rng.fromSeed(1))).toBe(14);
+  });
+
+  it('still resolves a named difficulty from the ruleset', () => {
+    const { state, actor } = hero();
+    expect(difficultyFrom(GREENMARCH, state, actor, 'hard', Rng.fromSeed(1))).toBe(16);
+  });
+
+  it('evaluates a formula against the character it is asked about', () => {
+    const { state, actor } = hero();
+    const levelled = { ...actor, level: 4 };
+    const expr = { sub: [20, { mul: [2, { ref: 'actor.level' }] }] };
+
+    expect(difficultyFrom(GREENMARCH, state, actor, expr, Rng.fromSeed(1))).toBe(18);
+    expect(difficultyFrom(GREENMARCH, state, levelled, expr, Rng.fromSeed(1))).toBe(12);
+  });
+
+  it('reads standing, which is the point of the change', () => {
+    // Hostility raises the bar rather than closing the door: at -30 with the
+    // wardens this is a hard roll, at +30 it is a formality. Neither is a gate.
+    const { state, actor } = hero();
+    const expr = { sub: [14, { clamp: [{ div: [{ ref: 'reputation.wardens', else: 0 }, 5] }, -6, 6] }] };
+    const at = (standing: number) =>
+      difficultyFrom(GREENMARCH, { ...state, reputation: { wardens: standing } }, actor, expr, Rng.fromSeed(1));
+
+    expect(at(30)).toBe(8);
+    expect(at(0)).toBe(14);
+    expect(at(-30)).toBe(20);
+  });
+
+  it('falls back rather than becoming automatic when a formula yields no number', () => {
+    // The failure that matters. Returning 0 would turn a mistuned gate into one
+    // that opens on any roll, which is worse than one that is merely wrong.
+    const { state, actor } = hero();
+    expect(difficultyFrom(GREENMARCH, state, actor, { concat: ['not', 'a number'] }, Rng.fromSeed(1)))
+      .toBeUndefined();
+    // `skillCheck` hands `undefined` to `difficultyOf`, which is the module's
+    // own default — 12 for greenmarch.
+    const roll = skillCheck(GREENMARCH, Rng.fromSeed(1), actor, 'lockpicking', undefined);
+    expect(roll.against).toBe(12);
+  });
+
+  it('a gate written with a formula is rolled against that number', () => {
+    // End to end through `openGate`, so the wiring is proven and not just the
+    // helper: greenmarch's mill door is a flat 14, and the same door written as
+    // a formula over level has to land somewhere else.
+    const { state, actor } = hero();
+    const flat = GREENMARCH.get<{ bypass?: { difficulty: unknown } }>('world.gates', 'mill_door');
+    expect(flat.bypass?.difficulty).toBe(14);
+
+    const rolls = (difficulty: unknown) => {
+      const txn = transact(state);
+      const patched = { ...flat, bypass: { ...flat.bypass, difficulty } };
+      const module = {
+        ...GREENMARCH,
+        find: (collection: string, id: string) =>
+          collection === 'world.gates' && id === 'mill_door'
+            ? patched
+            : GREENMARCH.find(collection, id),
+        get: GREENMARCH.get.bind(GREENMARCH),
+        all: GREENMARCH.all.bind(GREENMARCH),
+        source: GREENMARCH.source,
+      } as unknown as CompiledModule;
+      const scoped = new Transaction(txn.state, module);
+      openGate(scoped, 'mill_door', actor, Rng.fromSeed(3), { force: true });
+      return scoped.finish().events.flatMap((e) => (e.type === 'checked' ? [e.roll.against] : []));
+    };
+
+    expect(rolls(14)).toContain(14);
+    expect(rolls({ add: [10, { ref: 'actor.level' }] })).toContain(11);
   });
 });
 

@@ -42,6 +42,10 @@ const IMPORTANT: Record<string, readonly string[]> = {
   // statblock, so what leads here is what it can do and what it drops.
   'content.monsters': ['attributes', 'abilities', 'behaviour', 'loot', 'level', 'xp'],
   'narrative.quests': ['autoStart', 'giver', 'objectives', 'rewards', 'unlocks'],
+  // A clue is its wording and where it came from; `tags` and the pool are not
+  // what an author is reaching for when they open one.
+  'narrative.lore': ['source', 'textKey'],
+  'narrative.loreThreads': ['entries'],
   // Not `npc`: the pointer runs the other way, from `content.npcs.dialogue`.
   'narrative.dialogues': ['start', 'nodes'],
 };

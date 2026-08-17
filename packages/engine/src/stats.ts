@@ -24,6 +24,7 @@ import { evalExpr } from '@dm/module';
 import type { Entity, GameState } from './state.js';
 import { dateOf, phaseOf, layerOf } from './sim/clock.js';
 import { arcScope } from './sim/arcs.js';
+import { threadScope } from './sim/lore.js';
 import { memoryScope } from './sim/memoryscope.js';
 
 /** Formulas must not consume randomness; a stat that changes when re-read is a bug. */
@@ -309,8 +310,13 @@ export function statsOf(module: CompiledModule, entity: Entity): EntityStats {
  * rather than written during play, so a missing key is a misspelled tier rather
  * than a "not yet" — and being open is what let the miss resolve to `null` and
  * then throw inside the comparison it was feeding.
+ *
+ * `lore` is open and `threads` is not, which looks inconsistent and is not: a
+ * lore id is absent from state until the party learns it, exactly as a flag is,
+ * while a thread is declared by the module and `threadScope` populates every
+ * one of them.
  */
-export const OPEN_NAMESPACES = ['flags', 'quests', 'memory', 'reputation'] as const;
+export const OPEN_NAMESPACES = ['flags', 'quests', 'memory', 'reputation', 'lore'] as const;
 
 /**
  * The module's proficiency-style bonus for a character, if it declares one.
@@ -496,6 +502,12 @@ export function buildScope(
     purse: state.purse,
     ...thresholdsOf(module),
     arcs: arcScope(module, state),
+    // What the party has found out, and how far along each thread it is. `lore`
+    // is open (a bare id, absent until learned) and `threads` is closed, for
+    // the reason `arcs` is closed: a thread is declared, so a misspelling is a
+    // typo rather than a "not yet".
+    lore: state.lore,
+    threads: threadScope(module, state),
     world: worldScope(module, state),
     party: state.party.map((id) => {
       const member = state.entities[id];

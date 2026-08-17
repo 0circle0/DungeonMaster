@@ -17,7 +17,7 @@ import type { Value } from '@dm/module';
 import type { Position, TileMap } from './grid/tiles.js';
 
 /** Bumped when the shape changes in a way that needs migrating. */
-export const SAVE_VERSION = 8;
+export const SAVE_VERSION = 9;
 
 export type EntityId = string;
 
@@ -316,6 +316,23 @@ export interface GameState {
   readonly dialogue: { readonly npc: EntityId; readonly dialogue: string; readonly node: string; readonly taken: readonly string[] } | null;
 
   readonly flags: Readonly<Record<string, Value>>;
+
+  /**
+   * `narrative.lore` the party has learned, and the world minute it learned it.
+   *
+   * Separate from `flags` rather than a `lore:` prefix inside it, for the same
+   * reason `quests` is separate: it is a declared collection with a closed set
+   * of ids, so the journal can list what is *missing* as well as what is known,
+   * and a misspelling is catchable. Flags cannot do either — they are free
+   * strings by design.
+   *
+   * A record rather than an array, on the `modState` argument below: two runs
+   * that learn the same things in a different order must still compare equal,
+   * and `statesEqual` goes through `canonical()`, which sorts keys at every
+   * level.
+   */
+  readonly lore: Readonly<Record<string, number>>;
+
   /**
    * What the party has to spend.
    *

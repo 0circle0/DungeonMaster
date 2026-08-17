@@ -62,7 +62,12 @@ export const dialogueOptionSchema = z
     check: z
       .object({
         skill: ref('content.skills'),
-        difficulty: z.number().int().default(12),
+        /**
+         * The number to beat, as a formula. Standing belongs here rather than
+         * in `requires`: someone you have wronged should be harder to talk
+         * round, not impossible to talk to.
+         */
+        difficulty: ExprSchema.default(12),
         /** The NPC's own roll opposes it, rather than a fixed number. */
         opposedBy: ref('content.skills').optional(),
         onSuccess: idSchema.optional(),
@@ -248,6 +253,57 @@ export const questSchema = z
     }
   });
 
+/**
+ * One thing the party can come to know.
+ *
+ * A quest records what you were *told to do*; lore records what you *found
+ * out*. They are separate because most of what a world knows about itself is
+ * nobody's errand — a tide that only falls that far at the turn of the year, a
+ * door that answers to an older name. Content teaches an entry with the
+ * `learnLore` effect from wherever it likes: a line of dialogue, a trigger on
+ * arriving somewhere, an object picked up off a corpse.
+ *
+ * Learning is permanent and unordered, so an entry says only what it is. Where
+ * it sits in a story is the thread's business.
+ */
+export const loreSchema = z
+  .object({
+    id: idSchema,
+    /** The clue itself, in the words the player reads it in. */
+    name: displayName,
+    /** Longer context, when a single line is not enough. */
+    description: description.default(''),
+    tags,
+    /**
+     * Vary the wording instead of fixing it, for entries a player may meet
+     * more than one way. Takes precedence over `name` when the journal has a
+     * scene to expand it against.
+     */
+    textKey: ref('narrative.textGrammar').optional(),
+    /** Where it came from — "Netmender Ossa, Sarnport", "cut into the lintel". */
+    source: z.string().max(200).default(''),
+  })
+  .strict();
+
+/**
+ * A heading several lore entries hang under, so a partial answer reads as one.
+ *
+ * The same shape as {@link arcSchema}, and for the same reason: without it the
+ * journal shows a flat list of unrelated facts, and the player cannot tell
+ * which three of them are about the same drowned church. Declaring the whole
+ * set is also what lets the journal say *three of five* — the count of what is
+ * still missing is the part that makes a thread worth pulling.
+ */
+export const loreThreadSchema = z
+  .object({
+    id: idSchema,
+    name: displayName,
+    description: description.default(''),
+    /** In reading order, not discovery order. */
+    entries: z.array(ref('narrative.lore')).min(1),
+  })
+  .strict();
+
 /** A story arc: a gated sequence of quests. */
 export const arcSchema = z
   .object({
@@ -299,6 +355,19 @@ export const narrativeSchema = z
     dialogues: z.array(dialogueSchema).default([]),
     quests: z.array(questSchema).default([]),
     arcs: z.array(arcSchema).default([]),
+    /**
+     * What the party can find out, and the headings it hangs under.
+     *
+     * `.optional()` rather than `.default([])`, unlike every collection above
+     * it. `compileModule` hashes the document *after* zod applies defaults, and
+     * `load` refuses a save whose recorded module hash has moved — so a new
+     * defaulted top-level field breaks every save file ever written. An absent
+     * key stays absent; `collectionAt` and `CompiledModule.all` both already
+     * read a missing collection as empty. See `compile.test.ts`, which pins
+     * `minimal`'s hash precisely to catch this.
+     */
+    lore: z.array(loreSchema).optional(),
+    loreThreads: z.array(loreThreadSchema).optional(),
     deedKinds: z.array(deedKindSchema).default([]),
     /**
      * Memory, gossip, forgetting, and learning — the GM's dials on emergence.
@@ -312,5 +381,7 @@ export const narrativeSchema = z
 export type TextPool = z.infer<typeof textPoolSchema>;
 export type TextVariant = z.infer<typeof textVariantSchema>;
 export type Quest = z.infer<typeof questSchema>;
+export type Lore = z.infer<typeof loreSchema>;
+export type LoreThread = z.infer<typeof loreThreadSchema>;
 export type Narrative = z.infer<typeof narrativeSchema>;
 export { weighted };

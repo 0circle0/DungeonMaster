@@ -90,7 +90,7 @@ export const gateSchema = z
     bypass: z
       .object({
         skill: ref('content.skills'),
-        difficulty: z.number().int(),
+        difficulty: ExprSchema,
         /** Failing badly enough may spring a trap or raise an alarm. */
         onSuccess: z.array(EffectSchema).default([]),
         onFailure: z.array(EffectSchema).default([]),
@@ -253,7 +253,7 @@ export const pointOfInterestSchema = z
     /** Hidden until found, by a check or by a trigger. */
     hidden: z.boolean().default(false),
     discover: z
-      .object({ skill: ref('content.skills'), difficulty: z.number().int() })
+      .object({ skill: ref('content.skills'), difficulty: ExprSchema })
       .strict()
       .optional(),
 

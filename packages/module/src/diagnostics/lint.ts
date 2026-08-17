@@ -570,6 +570,30 @@ function lintSemantics(ctx: Context, document: Record<string, unknown>): void {
     );
   }
 
+  // A clue nothing teaches can never be learned, so the thread it belongs to
+  // can never be finished and the gate that reads it can never open. The same
+  // shape of mistake as `unobtainable_quest`, and harder to notice: a quest at
+  // least appears in the journal saying nothing has happened.
+  const taught = new Set<string>();
+  walkFor(document, 'learnLore', (value: unknown) => {
+    const entry = (value as Record<string, unknown> | null)?.['entry'];
+    if (typeof entry === 'string') taught.add(entry);
+  });
+
+  const lore = asList((document['narrative'] as Record<string, unknown>)?.['lore']);
+  for (const [i, entry] of lore.entries()) {
+    const id = String(entry['id']);
+    if (taught.has(id)) continue;
+    report(
+      ctx,
+      'warning',
+      'unlearnable_lore',
+      `narrative.lore.${i}`,
+      `"${id}" is not taught by anything, so the party can never learn it`,
+      'add a `learnLore` effect to a dialogue option, a trigger, or an item\'s `onUse`',
+    );
+  }
+
   // Points of interest whose parent area does not exist never appear anywhere.
   const areaIds = new Set(areas.map((a) => String(a['id'])));
   for (const [i, poi] of pois.entries()) {
@@ -954,6 +978,25 @@ function lintTrapPlacement(ctx: Context, doc: Record<string, unknown>): void {
 
 function asList(value: unknown): Record<string, unknown>[] {
   return Array.isArray(value) ? (value as Record<string, unknown>[]) : [];
+}
+
+/**
+ * Every value of a named key, anywhere in the document.
+ *
+ * Effects can hang off a dialogue option, a trigger, a quest stage, an item's
+ * `onUse` or a monster's reaction, and a registry of those places is a registry
+ * somebody forgets to update. Walking for the key itself cannot go stale.
+ */
+function walkFor(node: unknown, key: string, seen: (value: unknown) => void, depth = 0): void {
+  if (depth > 24 || typeof node !== 'object' || node === null) return;
+  if (Array.isArray(node)) {
+    for (const item of node) walkFor(item, key, seen, depth + 1);
+    return;
+  }
+  for (const [name, child] of Object.entries(node as Record<string, unknown>)) {
+    if (name === key) seen(child);
+    walkFor(child, key, seen, depth + 1);
+  }
 }
 
 // ---------------------------------------------------------------------------

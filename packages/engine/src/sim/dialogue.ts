@@ -17,7 +17,7 @@ import type { Effect, Predicate, Requirement } from '@dm/module';
 import type { Entity, EntityId } from '../state.js';
 import { buildScope, OPEN_NAMESPACES } from '../stats.js';
 import { Transaction, applyOps } from '../rules/apply.js';
-import { skillCheck, check, succeeded, skillModifier } from '../rules/check.js';
+import { skillCheck, check, succeeded, skillModifier, difficultyFrom } from '../rules/check.js';
 import { memoryScope } from './memoryscope.js';
 import { npcIdOf } from '../character.js';
 import { message, literal } from '../narrate/systemText.js';
@@ -38,7 +38,7 @@ interface OptionDef {
   lockedHint: string;
   check?: {
     skill: string;
-    difficulty: number;
+    difficulty: unknown;
     opposedBy?: string;
     onSuccess?: string;
     onFailure?: string;
@@ -197,6 +197,32 @@ function enterNode(
 }
 
 /** The options a player can currently see. */
+/**
+ * The flag that makes `onceOnly` mean what the schema says it means.
+ *
+ * `onceOnly` is documented as "selectable once, ever" and was implemented
+ * against `state.dialogue.taken`, which `startDialogue` clears on every
+ * conversation — so it meant *once per conversation*, and walking out and back
+ * in reset it. Anything a person can only tell you once was therefore something
+ * they told you as often as you liked.
+ *
+ * Recorded as a flag rather than a new state field: it is the same kind of fact
+ * as `found:<poi>`, `looted:<poi>` and `gate:<id>:open`, all of which live here
+ * already, and it needs no migration.
+ */
+function saidKey(dialogue: string, node: string, option: string): string {
+  return `said:${dialogue}:${node}:${option}`;
+}
+
+function takenBefore(
+  txn: Transaction,
+  conversation: { dialogue: string; node: string; taken: readonly string[] },
+  optionId: string,
+): boolean {
+  if (conversation.taken.includes(optionId)) return true;
+  return txn.state.flags[saidKey(conversation.dialogue, conversation.node, optionId)] === true;
+}
+
 export function visibleOptions(txn: Transaction, actor: Entity, rng: Rng): VisibleOption[] {
   const conversation = txn.state.dialogue;
   if (!conversation) return [];
@@ -210,7 +236,7 @@ export function visibleOptions(txn: Transaction, actor: Entity, rng: Rng): Visib
   const out: VisibleOption[] = [];
 
   for (const option of node.options) {
-    if (option.onceOnly && conversation.taken.includes(option.id)) continue;
+    if (option.onceOnly && takenBefore(txn, conversation, option.id)) continue;
 
     const allowed = passes(option.requires, option.when, scope, rng);
     if (allowed) {
@@ -249,6 +275,14 @@ export function chooseOption(
     return false;
   }
 
+  // `visibleOptions` hides a spent one-shot, but a front end that dispatches by
+  // id — or a player typing the reply back — went straight past that filter. An
+  // option that hands over an item has to refuse the second asking.
+  if (option.onceOnly && takenBefore(txn, conversation, option.id)) {
+    txn.emit({ type: 'refused', action: 'choose', reason: message('refused.reply.unknown') });
+    return false;
+  }
+
   const scope = conversationScope(txn, actor, speaker);
   if (!passes(option.requires, option.when, scope, rng)) {
     txn.emit({ type: 'refused', action: 'choose', reason: option.lockedHint ? literal(option.lockedHint) : message('refused.reply.locked') });
@@ -258,6 +292,11 @@ export function chooseOption(
   txn.set({
     ...txn.state,
     dialogue: { ...conversation, taken: [...conversation.taken, option.id] },
+    // Only `onceOnly` options are recorded. Writing a flag for every reply
+    // would grow the save by the size of the script the player has read.
+    flags: option.onceOnly
+      ? { ...txn.state.flags, [saidKey(conversation.dialogue, conversation.node, option.id)]: true }
+      : txn.state.flags,
   });
 
   if (option.effects.length > 0) {
@@ -272,7 +311,13 @@ export function chooseOption(
           modifier: skillModifier(txn.module, actor, option.check.skill),
           difficulty: 10 + skillModifier(txn.module, speaker, option.check.opposedBy),
         })
-      : skillCheck(txn.module, rng, actor, option.check.skill, option.check.difficulty);
+      : skillCheck(
+          txn.module, rng, actor, option.check.skill,
+          // Evaluated against the *speaker's* scope, not the party's: the number
+          // is how hard this person is to move, and the formula that says so
+          // reads their faction's standing and their own disposition.
+          difficultyFrom(txn.module, txn.state, speaker, option.check.difficulty, rng.derive('talkDc')),
+        );
 
     txn.emit({ type: 'checked', entity: actor.id, skill: option.check.skill, attribute: null, roll });
     destination = succeeded(roll) ? option.check.onSuccess : option.check.onFailure;

@@ -202,8 +202,22 @@ describe('hashModule', () => {
    * field `.optional()` (an absent key stays absent in `parsed.data`, so the
    * hash is untouched), not to re-stamp the numbers below.
    *
-   * These are the hashes as of the mod-system work, which added
-   * `gameModuleSchema.mods` as `.optional()` for exactly this reason.
+   * There is **one** change that cannot take that fix, and it is worth naming
+   * so the next person does not go looking for a way out that is not there:
+   * **a new sentence for the engine to say.** `systemTextSchema` gives every
+   * `message` a `.default()` so an author writes only what they want to change,
+   * which means a new `SYSTEM_TEXT` entry appears in `parsed.data` for every
+   * module that has not declared it. Making messages `.optional()` with the
+   * reader falling back would not avoid it either — the nine messages `minimal`
+   * currently leaves to their defaults would then vanish from the document, and
+   * the hash would move by exactly as much. Adding engine prose moves the hash.
+   * Everything else has a way not to.
+   *
+   * The number below was re-stamped once, for the `lore.learned` pair. The lore
+   * feature's three *structural* additions — `narrative.lore`,
+   * `narrative.loreThreads` and `requirement.lore` — are all `.optional()`
+   * precisely so they contributed nothing to that move; the sentences were the
+   * whole of it. Saves written before it need `allowModuleDrift`.
    */
   it('is unchanged for a module that declares no mods', () => {
     // `minimal` is the witness, and deliberately not greenmarch: greenmarch
@@ -212,7 +226,7 @@ describe('hashModule', () => {
     // no mods and is the no-hardcoding control, so the only thing that can
     // move this number is the schema itself.
     const at = (name: string) => fileURLToPath(new URL(`../../../modules/${name}`, import.meta.url));
-    expect(loadModuleFrom(at('minimal')).hash).toBe('4ce71bf8aa4ef5f0');
+    expect(loadModuleFrom(at('minimal')).hash).toBe('d7ea24c99548de83');
   });
 
   it('treats an absent `mods` key as absent, not as an empty list', () => {

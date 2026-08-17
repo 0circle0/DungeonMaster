@@ -227,6 +227,15 @@ const MIGRATIONS: Readonly<Record<number, Migration>> = {
    * migration at all: an older file simply has neither, and both are optional.
    */
   7: (state) => ({ ...state, saveVersion: 8, modState: state['modState'] ?? {} }),
+
+  /**
+   * 8 → 9: lore.
+   *
+   * The party gained a record of what it has found out. Knowing nothing is the
+   * state every save before this one was in, so an empty bag is not a default
+   * standing in for lost information — it is the information.
+   */
+  8: (state) => ({ ...state, saveVersion: 9, lore: state['lore'] ?? {} }),
 };
 
 export function load(

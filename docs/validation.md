@@ -53,6 +53,7 @@ Problems a schema cannot catch:
 | `unreachable_area` | No path of connections reaches it from the start |
 | `impassable_gate` | No requirement, bypass, or opening ability — nothing behind it is reachable |
 | `unobtainable_quest` | No giver, not offered by an NPC, not unlocked, not auto-starting |
+| `unlearnable_lore` | No `learnLore` effect anywhere teaches it, so it can never be known |
 | `orphan_poi` | Its area does not exist, so it never appears |
 | `thin_text_pool` | Too few phrasings; players will notice the repetition |
 

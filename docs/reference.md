@@ -610,6 +610,7 @@ not anticipate there. It is the supported way to exceed what ships.
 | `factions` | [object](#module-content-abilities-requires-factions)[] |  | `[]` |
 | `memories` | [object](#module-content-abilities-requires-memories)[] |  | `[]` |
 | `flags` | [object](#module-content-abilities-requires-flags)[] |  | `[]` |
+| `lore` | [object](#module-content-abilities-requires-lore)[] |  |  |
 | `without` | [object](#module-content-abilities-requires-without) |  | `{}` |
 | `custom` | [DSL](#the-dsl) |  |  |
 | `anyOf` | [object](#module-content-abilities-requires-anyOf)[] |  | `[]` |
@@ -686,6 +687,15 @@ not anticipate there. It is the supported way to exceed what ships.
 | `flag` | string | **yes** |  |
 | `equals` | [DSL](#the-dsl) |  |  |
 
+### Module → `content` → `abilities` → `requires` → `lore`
+
+<a id="module-content-abilities-requires-lore"></a>
+
+| Field | Type | Required | Default |
+| --- | --- | --- | --- |
+| `entry` | [→ narrative.lore](#narrativelore) | **yes** |  |
+| `known` | boolean |  | `true` |
+
 ### Module → `content` → `abilities` → `requires` → `without`
 
 <a id="module-content-abilities-requires-without"></a>
@@ -698,6 +708,7 @@ not anticipate there. It is the supported way to exceed what ships.
 | `quests` | [object](#module-content-abilities-requires-quests)[] |  | `[]` |
 | `flags` | [object](#module-content-abilities-requires-flags)[] |  | `[]` |
 | `conditions` | [→ rules.conditions](#rulesconditions)[] |  | `[]` |
+| `lore` | [→ narrative.lore](#narrativelore)[] |  |  |
 
 ### Module → `content` → `abilities` → `requires` → `anyOf`
 
@@ -722,6 +733,7 @@ not anticipate there. It is the supported way to exceed what ships.
 | `factions` | [object](#module-content-abilities-requires-factions)[] |  | `[]` |
 | `memories` | [object](#module-content-abilities-requires-memories)[] |  | `[]` |
 | `flags` | [object](#module-content-abilities-requires-flags)[] |  | `[]` |
+| `lore` | [object](#module-content-abilities-requires-lore)[] |  |  |
 | `without` | [object](#module-content-abilities-requires-without) |  | `{}` |
 | `custom` | [DSL](#the-dsl) |  |  |
 
@@ -1026,7 +1038,7 @@ not anticipate there. It is the supported way to exceed what ships.
 | --- | --- | --- | --- |
 | `skill` | [→ content.skills](#contentskills) |  |  |
 | `attribute` | [→ rules.attributes](#rulesattributes) |  |  |
-| `difficulty` | number |  | `12` |
+| `difficulty` | [DSL](#the-dsl) |  | `12` |
 | `opposedBy` | [→ content.skills](#contentskills) |  |  |
 
 ### Module → `content` → `monsters` → `specialTurns`
@@ -1064,7 +1076,7 @@ not anticipate there. It is the supported way to exceed what ships.
 | Field | Type | Required | Default |
 | --- | --- | --- | --- |
 | `skill` | [→ content.skills](#contentskills) | **yes** |  |
-| `difficulty` | number | **yes** |  |
+| `difficulty` | [DSL](#the-dsl) | **yes** |  |
 
 ### Module → `content` → `traps` → `disarm`
 
@@ -1073,7 +1085,7 @@ not anticipate there. It is the supported way to exceed what ships.
 | Field | Type | Required | Default |
 | --- | --- | --- | --- |
 | `skill` | [→ content.skills](#contentskills) | **yes** |  |
-| `difficulty` | number | **yes** |  |
+| `difficulty` | [DSL](#the-dsl) | **yes** |  |
 
 ### Module → `content` → `factions`
 
@@ -1342,7 +1354,7 @@ not anticipate there. It is the supported way to exceed what ships.
 | Field | Type | Required | Default |
 | --- | --- | --- | --- |
 | `skill` | [→ content.skills](#contentskills) | **yes** |  |
-| `difficulty` | number | **yes** |  |
+| `difficulty` | [DSL](#the-dsl) | **yes** |  |
 
 ### Module → `world` → `gates`
 
@@ -1370,7 +1382,7 @@ not anticipate there. It is the supported way to exceed what ships.
 | Field | Type | Required | Default |
 | --- | --- | --- | --- |
 | `skill` | [→ content.skills](#contentskills) | **yes** |  |
-| `difficulty` | number | **yes** |  |
+| `difficulty` | [DSL](#the-dsl) | **yes** |  |
 | `onSuccess` | [DSL](#the-dsl)[] |  | `[]` |
 | `onFailure` | [DSL](#the-dsl)[] |  | `[]` |
 | `retryable` | boolean |  | `true` |
@@ -1571,6 +1583,8 @@ not anticipate there. It is the supported way to exceed what ships.
 | `dialogues` | [object](#module-narrative-dialogues)[] |  | `[]` |
 | `quests` | [object](#module-narrative-quests)[] |  | `[]` |
 | `arcs` | [object](#module-narrative-arcs)[] |  | `[]` |
+| `lore` | [object](#module-narrative-lore)[] |  |  |
+| `loreThreads` | [object](#module-narrative-loreThreads)[] |  |  |
 | `deedKinds` | [object](#module-narrative-deedKinds)[] |  | `[]` |
 | `memory` | [object](#module-narrative-memory) |  | `{}` |
 
@@ -1689,6 +1703,8 @@ rejects a module that drops one.
 | `requirement.faction` | fragment | `{faction}` | `"standing with the {faction}"` |
 | `requirement.level` | fragment | `{level}` | `"level {level}"` |
 | `requirement.ability` | fragment | `{ability}` | `"the {ability} ability"` |
+| `lore.learned` | message | `{lore}` | `"You note it down: {lore}"` |
+| `lore.learned.sourced` | message | `{lore}` `{source}` | `"You note it down: {lore} ({source})"` |
 | `quest.offered` | message | `{who}` `{quest}` | `"{who} has work for you: {quest}."` |
 | `quest.started` | message | `{quest}` `{description}` | `"New quest: {quest} — {description}"` |
 | `quest.started.plain` | message | `{quest}` | `"New quest: {quest}."` |
@@ -1952,6 +1968,30 @@ rejects a module that drops one.
 | `quests` | [→ narrative.quests](#narrativequests)[] | **yes** |  |
 | `isEnding` | boolean |  | `false` |
 
+### Module → `narrative` → `lore`
+
+<a id="module-narrative-lore"></a>
+
+| Field | Type | Required | Default |
+| --- | --- | --- | --- |
+| `id` | string | **yes** |  |
+| `name` | string | **yes** |  |
+| `description` | string |  | `""` |
+| `tags` | string[] |  | `[]` |
+| `textKey` | [→ narrative.textGrammar](#narrativetextGrammar) |  |  |
+| `source` | string |  | `""` |
+
+### Module → `narrative` → `loreThreads`
+
+<a id="module-narrative-loreThreads"></a>
+
+| Field | Type | Required | Default |
+| --- | --- | --- | --- |
+| `id` | string | **yes** |  |
+| `name` | string | **yes** |  |
+| `description` | string |  | `""` |
+| `entries` | [→ narrative.lore](#narrativelore)[] | **yes** |  |
+
 ### Module → `narrative` → `deedKinds`
 
 <a id="module-narrative-deedKinds"></a>
@@ -2123,7 +2163,7 @@ trap triggers, dialogue gates, loot rules, and quest objectives.
 
 **Predicate operators** — `all`, `any`, `not`, `eq`, `ne`, `gt`, `gte`, `lt`, `lte`, `in`, `chance`, `exists`, `test`
 
-**Effect operators** — `damage`, `heal`, `applyCondition`, `removeCondition`, `adjustResource`, `setFlag`, `grantItem`, `removeItem`, `adjustReputation`, `setDisposition`, `adjustCurrency`, `move`, `emit`, `noise`, `if`, `repeat`, `forEach`, `let`
+**Effect operators** — `damage`, `heal`, `applyCondition`, `removeCondition`, `adjustResource`, `setFlag`, `learnLore`, `grantItem`, `removeItem`, `adjustReputation`, `setDisposition`, `adjustCurrency`, `move`, `emit`, `noise`, `if`, `repeat`, `forEach`, `let`
 
 Reads go through one mechanism: `{ "ref": "actor.attr.might" }` walks the scope
 the engine supplies. There is deliberately no `hasFlag` or `hasItem` operator,
@@ -2190,6 +2230,8 @@ Every addressable collection, each entry identified by its `id`:
 - `narrative.dialogues`
 - `narrative.quests`
 - `narrative.arcs`
+- `narrative.lore`
+- `narrative.loreThreads`
 - `narrative.deedKinds`
 
 ## Rules

@@ -21,7 +21,9 @@ import { passiveBase, configOf } from '../config.js';
 import { Transaction, applyOps } from '../apply.js';
 import { tickConditions, rollConditionSaves } from '../conditions.js';
 import { runTerrain } from '../../sim/terrain.js';
-import { check, savingThrow, succeeded, skillModifier, difficultyOf, opposedCheck } from '../check.js';
+import {
+  check, savingThrow, succeeded, skillModifier, difficultyOf, difficultyFrom, opposedCheck,
+} from '../check.js';
 import type { TargetingContext } from './targeting.js';
 import { useAbility } from './attack.js';
 import { recordEncounter } from '../../sim/agenda.js';
@@ -46,7 +48,7 @@ interface ReactionDef {
   requires?: Requirement;
   when?: Predicate;
   chance: number;
-  roll?: { skill?: string; attribute?: string; difficulty: number; opposedBy?: string };
+  roll?: { skill?: string; attribute?: string; difficulty: unknown; opposedBy?: string };
   onSuccess: Effect[];
   onFailure: Effect[];
   effects: Effect[];
@@ -629,7 +631,9 @@ export function runReactions(
         ? opposedRoll(txn, rng, reactor, modifier, subject, reaction.roll.opposedBy)
         : check(txn.module, rng, {
             modifier,
-            difficulty: difficultyOf(txn.module, reaction.roll.difficulty),
+            difficulty: difficultyFrom(
+              txn.module, txn.state, reactor, reaction.roll.difficulty, rng.derive('reactionDc'),
+            ) ?? difficultyOf(txn.module, undefined),
           });
 
       txn.emit({

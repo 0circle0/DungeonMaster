@@ -127,6 +127,12 @@ export const EffectSchema: z.ZodType<Effect> = z.lazy(() =>
       .strict(),
     z
       .object({
+        /** Record that the party now knows a `narrative.lore` entry. */
+        learnLore: z.object({ entry: ExprSchema }).strict(),
+      })
+      .strict(),
+    z
+      .object({
         grantItem: z
           .object({ target: ExprSchema, item: ExprSchema, quantity: ExprSchema.optional() })
           .strict(),

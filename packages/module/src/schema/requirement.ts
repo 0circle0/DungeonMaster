@@ -92,6 +92,21 @@ export const flagRequirementSchema = z
   })
   .strict();
 
+/**
+ * Something the party has found out — "they know the tide runs the other way".
+ *
+ * Distinct from a flag because a lore id is declared: the journal can list what
+ * is still missing, and the linter can prove the clue is teachable somewhere.
+ * `known: false` is the common half — a rumour worth hearing only from someone
+ * who has not already told you.
+ */
+export const loreRequirementSchema = z
+  .object({
+    entry: ref('narrative.lore'),
+    known: z.boolean().default(true),
+  })
+  .strict();
+
 export const attributeRequirementSchema = z
   .object({
     attribute: ref('rules.attributes'),
@@ -130,6 +145,14 @@ const requirementClauses = {
   factions: z.array(factionRequirementSchema).default([]),
   memories: z.array(memoryRequirementSchema).default([]),
   flags: z.array(flagRequirementSchema).default([]),
+  /**
+   * `.optional()` where its neighbours default to `[]`, and deliberately: a
+   * requirement is nested in hundreds of places, so defaulting this would write
+   * `lore: []` into every gate in every module and move every module hash —
+   * which `load` reads as "this save was made against a different module". The
+   * `clause()` helper below already reads undefined as empty.
+   */
+  lore: z.array(loreRequirementSchema).optional(),
 
   /** Conditions that must NOT hold — "only before you have met her". */
   without: z
@@ -140,6 +163,8 @@ const requirementClauses = {
       quests: z.array(questRequirementSchema).default([]),
       flags: z.array(flagRequirementSchema).default([]),
       conditions: z.array(ref('rules.conditions')).default([]),
+      /** `.optional()` for the hash reason given on the positive clause above. */
+      lore: z.array(ref('narrative.lore')).optional(),
     })
     .strict()
     .default({}),
@@ -193,6 +218,7 @@ function withoutOf(req: Requirement | RequirementBranch): {
   quests: readonly z.infer<typeof questRequirementSchema>[];
   flags: readonly z.infer<typeof flagRequirementSchema>[];
   conditions: readonly string[];
+  lore: readonly string[];
 } {
   const raw = (req.without ?? {}) as Partial<Requirement['without']>;
   return {
@@ -202,6 +228,7 @@ function withoutOf(req: Requirement | RequirementBranch): {
     quests: clause(raw.quests),
     flags: clause(raw.flags),
     conditions: clause(raw.conditions),
+    lore: clause(raw.lore),
   };
 }
 
@@ -226,6 +253,7 @@ export function isEmptyRequirement(req: Requirement | RequirementBranch | undefi
     clause(req.factions).length === 0 &&
     clause(req.memories).length === 0 &&
     clause(req.flags).length === 0 &&
+    clause(req.lore).length === 0 &&
     alternativesOf(req).length === 0 &&
     req.custom === undefined &&
     without.classes.length === 0 &&
@@ -233,7 +261,8 @@ export function isEmptyRequirement(req: Requirement | RequirementBranch | undefi
     without.items.length === 0 &&
     without.quests.length === 0 &&
     without.flags.length === 0 &&
-    without.conditions.length === 0
+    without.conditions.length === 0 &&
+    without.lore.length === 0
   );
 }
 
@@ -335,6 +364,14 @@ export function compileRequirement(req: Requirement | RequirementBranch | undefi
 
   for (const flag of clause(r.flags)) clauses.push(flagClause(flag));
 
+  // `lore.<id>` is the minute it was learned, so `exists` is the whole test —
+  // and it has to be `exists` rather than `test`, because a clue learned in the
+  // first minute of the game stores a 0 and would read as false.
+  for (const lore of clause(r.lore)) {
+    const known: Predicate = { exists: `lore.${lore.entry}` };
+    clauses.push(lore.known ? known : { not: known });
+  }
+
   // Negations.
   const without = withoutOf(r);
   for (const cls of without.classes) clauses.push({ not: { eq: [{ ref: 'actor.class' }, cls] } });
@@ -346,6 +383,7 @@ export function compileRequirement(req: Requirement | RequirementBranch | undefi
   }
   for (const quest of without.quests) clauses.push({ not: questClause(quest) });
   for (const flag of without.flags) clauses.push({ not: flagClause(flag) });
+  for (const entry of without.lore) clauses.push({ not: { exists: `lore.${entry}` } });
   for (const condition of without.conditions) {
     clauses.push({ not: { exists: `actor.conditions.${condition}` } });
   }

@@ -9,7 +9,7 @@
  */
 
 import { useMemo, useRef } from 'react';
-import { questJournal, narrateFrom } from '@dm/engine';
+import { journalByArc, loreByThread, looseLore, narrateFrom } from '@dm/engine';
 import { sheetView, inventoryView, shopView, VERB_SPECS } from '@dm/play';
 import type { SessionApi } from '../lib/useSession.js';
 import { useSaves } from '../lib/useSaves.js';
@@ -40,50 +40,125 @@ const STATUS_PILL: Record<string, string> = {
   active: 'active', available: 'available', complete: 'done', failed: 'failed',
 };
 
-export function Journal({ session }: { session: SessionApi }) {
+/**
+ * The quest log, grouped by the acts the module declares.
+ *
+ * `journalByArc` had existed and been called by nothing, so a story written in
+ * three acts showed the player one flat list of jobs. Quests belonging to no arc
+ * come last under no heading, which is exactly what a module with no arcs sees.
+ */
+export function Quests({ session }: { session: SessionApi }) {
   const { module, frame } = session;
-  const entries = useMemo(() => questJournal(module, frame.state), [module, frame.state]);
+  const groups = useMemo(() => journalByArc(module, frame.state), [module, frame.state]);
 
-  if (entries.length === 0) return <p className="empty">No quests yet. Talk to somebody.</p>;
+  if (groups.length === 0) return <p className="empty">No quests yet. Talk to somebody.</p>;
 
   return (
     <>
-      {entries.map((entry) => (
-        <div className="quest-card" key={entry.quest}>
-          <h4>
-            {entry.name}
-            <span className={`pill ${entry.status === 'complete' ? 'done' : entry.status}`}>
-              {STATUS_PILL[entry.status]}
-            </span>
-          </h4>
-          {entry.description && <p className="desc">{entry.description}</p>}
-          {entry.status === 'active' && (
-            <>
-              {entry.stageCount > 1 && (
-                <div className="stage">
-                  Stage {entry.stageNumber}/{entry.stageCount}
-                  {entry.stageName ? ` — ${entry.stageName}` : ''}
-                </div>
-              )}
-              {entry.objectives.map((objective) => (
-                <div key={objective.id} className={`objective ${objective.done ? 'done' : ''}`}>
-                  {objective.done ? '✓' : '▸'} {objective.description}
-                  {!objective.done && objective.count > 1 && (
-                    <span className="count"> {objective.progress}/{objective.count}</span>
-                  )}
-                </div>
-              ))}
-              {entry.journalKey && (
-                <p className="prose">
-                  “{narrateFrom(module, entry.journalKey, frame.seed, {
-                    sceneKey: `stage:${entry.quest}:${entry.stageNumber}`,
-                  })}”
-                </p>
-              )}
-            </>
+      {groups.map((group) => (
+        <section key={group.arc?.id ?? 'loose'}>
+          {group.arc && (
+            <h3 className="arc">
+              {group.arc.name}
+              <span className="count"> {group.arc.done}/{group.arc.total}</span>
+            </h3>
           )}
+          {group.entries.map((entry) => (
+            <div className="quest-card" key={entry.quest}>
+              <h4>
+                {entry.name}
+                <span className={`pill ${entry.status === 'complete' ? 'done' : entry.status}`}>
+                  {STATUS_PILL[entry.status]}
+                </span>
+              </h4>
+              {entry.description && <p className="desc">{entry.description}</p>}
+              {entry.status === 'active' && (
+                <>
+                  {entry.stageCount > 1 && (
+                    <div className="stage">
+                      Stage {entry.stageNumber}/{entry.stageCount}
+                      {entry.stageName ? ` — ${entry.stageName}` : ''}
+                    </div>
+                  )}
+                  {entry.objectives.map((objective) => (
+                    <div key={objective.id} className={`objective ${objective.done ? 'done' : ''}`}>
+                      {objective.done ? '✓' : '▸'} {objective.description}
+                      {!objective.done && objective.count > 1 && (
+                        <span className="count"> {objective.progress}/{objective.count}</span>
+                      )}
+                    </div>
+                  ))}
+                  {entry.journalKey && (
+                    <p className="prose">
+                      “{narrateFrom(module, entry.journalKey, frame.seed, {
+                        sceneKey: `stage:${entry.quest}:${entry.stageNumber}`,
+                      })}”
+                    </p>
+                  )}
+                </>
+              )}
+            </div>
+          ))}
+        </section>
+      ))}
+    </>
+  );
+}
+
+/**
+ * What the party has worked out, as opposed to what it was told to do.
+ *
+ * A thread nothing is known about still gets its heading — the heading is the
+ * only thing you have, and hiding it would hide that there is anything to find.
+ * Unknown clues render as a rule rather than as text, because `loreByThread`
+ * does not hand out words for a clue that has not been earned.
+ */
+export function Lore({ session }: { session: SessionApi }) {
+  const { module, frame } = session;
+  const threads = useMemo(() => loreByThread(module, frame.state), [module, frame.state]);
+  const loose = useMemo(() => looseLore(module, frame.state), [module, frame.state]);
+
+  if (threads.length === 0 && loose.length === 0) {
+    return <p className="empty">Nothing yet. People talk, if you let them.</p>;
+  }
+
+  const said = (entry: (typeof loose)[number]): string =>
+    entry.textKey
+      ? narrateFrom(module, entry.textKey, frame.seed, { sceneKey: `lore:${entry.id}` })
+      : entry.name;
+
+  return (
+    <>
+      {threads.map((thread) => (
+        <div className="quest-card" key={thread.id}>
+          <h4>
+            {thread.name}
+            <span className="count"> {thread.known}/{thread.total}</span>
+          </h4>
+          {thread.description && thread.known > 0 && <p className="desc">{thread.description}</p>}
+          {thread.entries.map((entry) => (
+            entry.known ? (
+              <div className="clue" key={entry.id}>
+                ▸ {said(entry)}
+                {entry.source && <span className="source"> — {entry.source}</span>}
+              </div>
+            ) : (
+              <div className="clue unknown" key={entry.id}>▸ ———</div>
+            )
+          ))}
         </div>
       ))}
+      {loose.length > 0 && (
+        <section>
+          <h3 className="arc">Odds and ends</h3>
+          {loose.map((entry) => (
+            <div className="clue" key={entry.id}>
+              ▸ {said(entry)}
+              {entry.source && <span className="source"> — {entry.source}</span>}
+            </div>
+          ))}
+        </section>
+      )}
     </>
   );
 }

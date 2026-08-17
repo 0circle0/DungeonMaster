@@ -39,6 +39,7 @@ export type MetaCommand =
   | { readonly kind: 'shop' }
   | { readonly kind: 'sheet' }
   | { readonly kind: 'journal' }
+  | { readonly kind: 'lore' }
   | { readonly kind: 'save'; readonly path: string }
   | { readonly kind: 'load'; readonly path: string };
 
@@ -108,6 +109,7 @@ export const VERB_SPECS: readonly VerbSpec[] = [
   { verb: 'inventory', spellings: ['inventory', 'inv', 'i'], takes: 'nothing', summary: 'what you are carrying', meta: true },
   { verb: 'sheet', spellings: ['sheet', 'character', 'stats'], takes: 'nothing', summary: 'the character sheet', meta: true },
   { verb: 'journal', spellings: ['journal', 'quests', 'q'], takes: 'nothing', summary: 'the quest journal', meta: true },
+  { verb: 'lore', spellings: ['lore', 'clues'], takes: 'nothing', summary: 'what you have pieced together', meta: true },
   { verb: 'help', spellings: ['help', '?'], takes: 'nothing', summary: 'this list', meta: true },
   { verb: 'quit', spellings: ['quit', 'exit'], takes: 'nothing', summary: 'stop playing', meta: true },
   { verb: 'save', spellings: ['save'], takes: 'text', summary: 'save the game', meta: true },
@@ -631,6 +633,8 @@ export function parse(input: string, context: ParseContext): ParseResult {
       return { kind: 'meta', meta: { kind: 'sheet' } };
     case 'journal':
       return { kind: 'meta', meta: { kind: 'journal' } };
+    case 'lore':
+      return { kind: 'meta', meta: { kind: 'lore' } };
     case 'help':
       return { kind: 'meta', meta: { kind: 'help' } };
     case 'quit':
@@ -664,7 +668,7 @@ export const HELP: string = (() => {
     ['Items', ['take', 'drop', 'equip', 'unequip', 'open']],
     ['People', ['talk', 'say']],
     ['Pace', ['sneak', 'stroll', 'dash']],
-    ['Party', ['follow', 'unfollow', 'select', 'sheet', 'inventory', 'journal']],
+    ['Party', ['follow', 'unfollow', 'select', 'sheet', 'inventory', 'journal', 'lore']],
     ['Time', ['rest', 'wait']],
     ['Session', ['save', 'load', 'help', 'quit']],
   ];

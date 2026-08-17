@@ -154,6 +154,7 @@ export type GameEvent =
   | { readonly type: 'discovered'; readonly what: string; readonly kind: 'poi' | 'trap' | 'secret' }
 
   // — narrative —————————————————————————————————————————————
+  | { readonly type: 'loreLearned'; readonly entry: string }
   | { readonly type: 'questStarted'; readonly quest: string }
   | { readonly type: 'objectiveCompleted'; readonly quest: string; readonly objective: string }
   | { readonly type: 'questCompleted'; readonly quest: string }

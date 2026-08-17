@@ -17,7 +17,7 @@ import type { Effect, Requirement } from '@dm/module';
 import type { Entity } from '../state.js';
 import { buildScope, OPEN_NAMESPACES } from '../stats.js';
 import { Transaction, applyOps, changeInventory } from '../rules/apply.js';
-import { skillCheck, succeeded } from '../rules/check.js';
+import { skillCheck, succeeded, difficultyFrom } from '../rules/check.js';
 import { message, literal } from '../narrate/systemText.js';
 import type { Message } from '../narrate/systemText.js';
 
@@ -28,7 +28,7 @@ export interface GateDef {
   requires?: Requirement;
   bypass?: {
     skill: string;
-    difficulty: number;
+    difficulty: unknown;
     onSuccess: Effect[];
     onFailure: Effect[];
     retryable: boolean;
@@ -135,7 +135,10 @@ export function openGate(
   // never bars you from coming back with the key.
   const spent = txn.state.flags[`gate:${gate.id}:tried`] === true;
   if (gate.bypass && options.force !== false && !(spent && !gate.bypass.retryable)) {
-    const roll = skillCheck(txn.module, rng, actor, gate.bypass.skill, gate.bypass.difficulty);
+    const difficulty = difficultyFrom(
+      txn.module, txn.state, actor, gate.bypass.difficulty, rng.derive('bypassDc'),
+    );
+    const roll = skillCheck(txn.module, rng, actor, gate.bypass.skill, difficulty);
     txn.emit({ type: 'checked', entity: actor.id, skill: gate.bypass.skill, attribute: null, roll });
 
     if (succeeded(roll)) {

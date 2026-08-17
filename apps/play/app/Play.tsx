@@ -31,10 +31,10 @@ import { Sidebar } from '@/components/Sidebar';
 import { Transcript } from '@/components/Transcript';
 import { Dialogue } from '@/components/Dialogue';
 import { CommandBar } from '@/components/CommandBar';
-import { Overlay, Journal, Sheet, Inventory, Shop, SaveMenu, Help } from '@/components/Overlays';
+import { Overlay, Quests, Lore, Sheet, Inventory, Shop, SaveMenu, Help } from '@/components/Overlays';
 import { Creation } from '@/components/Creation';
 
-type Panel = 'journal' | 'sheet' | 'inventory' | 'shop' | 'saves' | 'help' | 'creation' | 'mods' | null;
+type Panel = 'journal' | 'lore' | 'sheet' | 'inventory' | 'shop' | 'saves' | 'help' | 'creation' | 'mods' | null;
 
 export function Play({ shipped, mods }: { shipped: readonly ModuleChoice[]; mods: readonly ModWire[] }) {
   const [chosen, setChosen] = useState<ModuleChoice | null>(shipped[0] ?? null);
@@ -153,6 +153,7 @@ function Game({
   const onMeta = (command: MetaCommand) => {
     switch (command.kind) {
       case 'journal': setPanel('journal'); break;
+      case 'lore': setPanel('lore'); break;
       case 'sheet': setPanel('sheet'); break;
       case 'inventory': setPanel('inventory'); break;
       case 'shop': setPanel('shop'); break;
@@ -266,8 +267,23 @@ function Game({
           <ModsPanel api={modsApi} setup={setup} modState={frame.state.modState} />
         </Overlay>
       )}
-      {panel === 'journal' && (
-        <Overlay title="Journal" onClose={() => setPanel(null)}><Journal session={session} /></Overlay>
+      {(panel === 'journal' || panel === 'lore') && (
+        <Overlay title="Journal" onClose={() => setPanel(null)}>
+          {/* Two halves of one book: what you were asked to do, and what you
+              worked out. Tabs rather than two panels, because the second is
+              worthless without the first to read it against. */}
+          <div className="tabs">
+            <button
+              className={`btn ${panel === 'journal' ? 'on' : ''}`}
+              onClick={() => setPanel('journal')}
+            >Quests</button>
+            <button
+              className={`btn ${panel === 'lore' ? 'on' : ''}`}
+              onClick={() => setPanel('lore')}
+            >Lore</button>
+          </div>
+          {panel === 'journal' ? <Quests session={session} /> : <Lore session={session} />}
+        </Overlay>
       )}
       {panel === 'sheet' && (
         <Overlay title="Character" onClose={() => setPanel(null)}><Sheet session={session} /></Overlay>

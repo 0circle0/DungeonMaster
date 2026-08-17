@@ -334,7 +334,7 @@ export const reactionSchema = z
       .object({
         skill: ref('content.skills').optional(),
         attribute: ref('rules.attributes').optional(),
-        difficulty: z.number().int().default(12),
+        difficulty: ExprSchema.default(12),
         /** Contest the party's roll instead of a fixed difficulty. */
         opposedBy: ref('content.skills').optional(),
       })
@@ -429,8 +429,8 @@ export const trapSchema = z
     description: description.default(''),
     tags,
     /** Check to notice it before it fires. */
-    detect: z.object({ skill: ref('content.skills'), difficulty: z.number().int() }).strict(),
-    disarm: z.object({ skill: ref('content.skills'), difficulty: z.number().int() }).strict(),
+    detect: z.object({ skill: ref('content.skills'), difficulty: ExprSchema }).strict(),
+    disarm: z.object({ skill: ref('content.skills'), difficulty: ExprSchema }).strict(),
     onTrigger: z.array(EffectSchema).default([]),
     onDisarm: z.array(EffectSchema).default([]),
     /** Whether it fires once or persists. */

@@ -284,6 +284,29 @@ describe('semantic checks', () => {
     expect(diagnostic.message).toContain('orphan_quest');
   });
 
+  it('warns about a clue nothing can teach', () => {
+    // The same shape of mistake as an unobtainable quest, and quieter: a quest
+    // at least shows up in the journal saying nothing has happened, whereas a
+    // clue nobody can learn is simply a thread that never fills.
+    const document = JSON.parse(GREENMARCH) as Record<string, unknown>;
+    const narrative = document['narrative'] as Record<string, unknown>;
+    narrative['lore'] = [
+      { id: 'never_told', name: 'Something nobody says.' },
+      { id: 'told_by_vess', name: 'Something she mentions.' },
+    ];
+
+    // Taught from a dialogue option, which is one of several places effects can
+    // hang — the lint walks for the key rather than keeping a list of them.
+    const dialogue = (narrative['dialogues'] as Record<string, unknown>[])[0]!;
+    const node = (dialogue['nodes'] as Record<string, unknown>[])[0]!;
+    const option = (node['options'] as Record<string, unknown>[])[0]!;
+    option['effects'] = [{ learnLore: { entry: 'told_by_vess' } }];
+
+    const codes = lintModule(document).diagnostics.filter((d) => d.code === 'unlearnable_lore');
+    expect(codes).toHaveLength(1);
+    expect(codes[0]!.message).toContain('never_told');
+  });
+
   it('errors on a place whose area does not exist', () => {
     const document = JSON.parse(GREENMARCH) as Record<string, unknown>;
     const world = document['world'] as Record<string, unknown>;

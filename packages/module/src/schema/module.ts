@@ -204,6 +204,8 @@ export const COLLECTION_PATHS = [
   'narrative.dialogues',
   'narrative.quests',
   'narrative.arcs',
+  'narrative.lore',
+  'narrative.loreThreads',
   'narrative.deedKinds',
   // `narrative.memory` is deliberately absent: it is a settings block edited as
   // one section, not a collection of independently addressable entries. Its

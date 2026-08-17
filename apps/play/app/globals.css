@@ -399,3 +399,22 @@ button, input, select, textarea { font: inherit; color: inherit; }
 .picker button:hover { background: var(--panel); }
 .picker button:disabled { color: var(--muted); cursor: default; }
 .picker button .why { color: var(--muted); font-size: 12px; margin-left: auto; }
+
+/* Journal tabs: quests and lore are two halves of one book, not two panels. */
+.tabs { display: flex; gap: 6px; margin-bottom: 12px; }
+.tabs .btn.on { color: var(--tone-cyan); border-color: var(--tone-cyan); }
+
+/* The act a group of quests belongs to, and the thread a set of clues does. */
+.arc {
+  margin: 14px 0 8px; font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase;
+  color: var(--muted); border-bottom: 1px solid var(--line); padding-bottom: 4px;
+}
+.arc .count { letter-spacing: normal; text-transform: none; }
+.quest-card h4 .count { color: var(--muted); font-weight: normal; font-size: 12px; }
+
+/* A clue is not a task, so it is neither ticked nor struck through. An unknown
+   one is a rule rather than words: the engine withholds the text, and the blank
+   is what makes a half-finished thread read as half finished. */
+.clue { margin: 3px 0; color: var(--text); }
+.clue .source { color: var(--muted); font-style: italic; }
+.clue.unknown { color: var(--line); letter-spacing: 0.15em; }

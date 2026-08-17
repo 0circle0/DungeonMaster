@@ -52,7 +52,7 @@ import { recordDeed } from './sim/deeds.js';
 import { dispatchReactions, dispatchNoticed } from './sim/reactions.js';
 import { tickDay } from './sim/agenda.js';
 import { takeItem, dropItem, equipItem, unequipItem, useItem, giveItem, rechargeItems } from './sim/items.js';
-import { skillCheck, succeeded } from './rules/check.js';
+import { skillCheck, succeeded, difficultyFrom } from './rules/check.js';
 import type { TargetingContext } from './rules/combat/targeting.js';
 import { TerrainIndex, key, unkey, terrainFor } from './grid/tiles.js';
 import type { Position } from './grid/tiles.js';
@@ -440,7 +440,7 @@ export function reduce(state: GameState, action: Action, context: ReduceContext)
       const here = txn.state.location;
       const areaId = here.kind === 'area' ? here.area : here.kind === 'poi' ? here.area : null;
       const hidden = module
-        .all<{ id: string; area: string; hidden: boolean; discover?: { skill: string; difficulty: number } }>(
+        .all<{ id: string; area: string; hidden: boolean; discover?: { skill: string; difficulty: unknown } }>(
           'world.pointsOfInterest',
         )
         .filter((poi) => poi.area === areaId && poi.hidden && poi.discover)
@@ -460,7 +460,13 @@ export function reduce(state: GameState, action: Action, context: ReduceContext)
       }
 
       for (const poi of hidden) {
-        const roll = skillCheck(module, rng, actor, poi.discover!.skill, poi.discover!.difficulty);
+        // A formula here is how a clue makes a place findable without making
+        // it a prerequisite: the number falls as the party learns more, so a
+        // party that knows nothing can still turn it up and rarely does.
+        const roll = skillCheck(
+          module, rng, actor, poi.discover!.skill,
+          difficultyFrom(module, txn.state, actor, poi.discover!.difficulty, rng.derive(`findDc:${poi.id}`)),
+        );
         txn.emit({ type: 'checked', entity: actor.id, skill: poi.discover!.skill, attribute: null, roll });
         if (!succeeded(roll)) continue;
 
