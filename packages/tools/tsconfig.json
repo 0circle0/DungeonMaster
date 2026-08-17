@@ -1,4 +1,19 @@
 {
   "extends": "../../tsconfig.base.json",
+
+  // Node types, explicitly, because nothing else here drags them in.
+  //
+  // Every other package gets `@types/node` by accident: their test files import
+  // vitest, whose own types reference it, so the editor's project happens to
+  // have Node in scope. `packages/tools` has no tests — it is three CLI scripts
+  // and nothing else — so its project had no Node types at all, and every
+  // `process`, `console` and `node:fs` in it was an error in the editor while
+  // `npm run typecheck` stayed green, because the typecheck runs the root
+  // project and the root sets `types: ["node"]` itself.
+  //
+  // Set here rather than in `tsconfig.base.json` on purpose: the isomorphic
+  // configs beside it set `types: []` to forbid exactly this, and giving the
+  // base Node types would quietly hollow that guarantee out.
+  "compilerOptions": { "types": ["node"] },
   "include": ["src/**/*.ts"]
 }
