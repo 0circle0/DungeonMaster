@@ -4277,6 +4277,136 @@
           }
         ],
         "rarity": "uncommon"
+      },
+      {
+        "id": "wayfinders_rule",
+        "name": "The Wayfinders' Rule",
+        "description": "Four hundred years of the Deeproads measured and set down, including the two pages the guild reads aloud to nobody.",
+        "kind": "key",
+        "value": 0,
+        "weight": 0,
+        "tags": [
+          "keepsake"
+        ],
+        "extra": {
+          "heldBy": "wayfinder_ost"
+        }
+      },
+      {
+        "id": "toll_tally",
+        "name": "The Old Toll's Tally",
+        "description": "What was taken on the market road, by whom, and in what \u2014 and the three years the column is in a different ink.",
+        "kind": "key",
+        "value": 0,
+        "weight": 0,
+        "tags": [
+          "keepsake"
+        ],
+        "extra": {
+          "heldBy": "toll_keeper_bruk"
+        }
+      },
+      {
+        "id": "survey_plate",
+        "name": "The Survey Plate",
+        "description": "Brass, scribed with the vault's section. The shaft on it runs off the top of the plate and somebody has written a number beside it and then scratched it out.",
+        "kind": "key",
+        "value": 0,
+        "weight": 0,
+        "tags": [
+          "keepsake"
+        ],
+        "extra": {
+          "heldBy": "surveyor_ilde"
+        }
+      },
+      {
+        "id": "lamp_glass",
+        "name": "Glass out of a Lamp",
+        "description": "It has been burning without oil for four hundred years and it is cold to the touch.",
+        "kind": "treasure",
+        "value": 0,
+        "weight": 0,
+        "tags": [
+          "clue",
+          "proof"
+        ],
+        "onUse": [
+          {
+            "learnLore": {
+              "entry": "deep_lamps_lit"
+            }
+          }
+        ],
+        "consumedOnUse": false
+      },
+      {
+        "id": "lampwrights_lens",
+        "name": "The Lampwright's Lens",
+        "description": "Ground from the glass of a lamp that needs no oil. Worn, the marks between the lamps are legible, and so is a great deal else.",
+        "kind": "armor",
+        "slot": "head",
+        "value": 1500,
+        "weight": 1,
+        "tags": [
+          "fabled"
+        ],
+        "skillBonuses": {
+          "perception": 4,
+          "lore": 3
+        },
+        "rarity": "very_rare"
+      },
+      {
+        "id": "footing_maul",
+        "name": "The Footing Maul",
+        "description": "Off the older stonework under the span. It is heavier than it is and it rings on nothing.",
+        "kind": "weapon",
+        "slot": "hand",
+        "value": 1600,
+        "weight": 1,
+        "tags": [
+          "fabled"
+        ],
+        "damage": {
+          "dice": "2d6",
+          "damageType": "bludgeoning",
+          "stat": "might"
+        },
+        "properties": [
+          "heavy"
+        ],
+        "rarity": "very_rare"
+      },
+      {
+        "id": "ninth_column_coat",
+        "name": "The Ninth Column's Coat",
+        "description": "Salt-stiffened, off a body at the foot of the column that should not be there. It is still warm.",
+        "kind": "armor",
+        "slot": "cloak",
+        "value": 1700,
+        "weight": 1,
+        "tags": [
+          "fabled"
+        ],
+        "modifiers": {
+          "guard": 3
+        },
+        "skillBonuses": {
+          "resolve": 3,
+          "arcana": 2
+        },
+        "damageInteractions": [
+          {
+            "damageType": "necrotic",
+            "multiplier": 0.5
+          },
+          {
+            "damageType": "cold",
+            "multiplier": 0.5
+          }
+        ],
+        "rarity": "artifact"
       }
     ],
     "lootTables": [
@@ -6885,6 +7015,194 @@
             "weight": 1,
             "value": {
               "item": "antidote",
+              "quantity": "1"
+            }
+          }
+        ]
+      },
+      {
+        "id": "deep_rule_carried",
+        "name": "What Ost Kept",
+        "rolls": "1",
+        "emptyChance": 0,
+        "entries": [
+          {
+            "weight": 1,
+            "value": {
+              "item": "wayfinders_rule",
+              "quantity": "1",
+              "unique": true,
+              "requirementScope": "party",
+              "requires": {
+                "without": {
+                  "flags": [
+                    {
+                      "flag": "given:wayfinders_rule"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        ]
+      },
+      {
+        "id": "deep_tally_carried",
+        "name": "What Bruk Kept",
+        "rolls": "1",
+        "emptyChance": 0,
+        "entries": [
+          {
+            "weight": 1,
+            "value": {
+              "item": "toll_tally",
+              "quantity": "1",
+              "unique": true,
+              "requirementScope": "party",
+              "requires": {
+                "without": {
+                  "flags": [
+                    {
+                      "flag": "given:toll_tally"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        ]
+      },
+      {
+        "id": "deep_plate_carried",
+        "name": "What Ilde Kept",
+        "rolls": "1",
+        "emptyChance": 0,
+        "entries": [
+          {
+            "weight": 1,
+            "value": {
+              "item": "survey_plate",
+              "quantity": "1",
+              "unique": true,
+              "requirementScope": "party",
+              "requires": {
+                "without": {
+                  "flags": [
+                    {
+                      "flag": "given:survey_plate"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        ]
+      },
+      {
+        "id": "deep_footing_hoard",
+        "name": "Inside the Footings",
+        "rolls": "3",
+        "emptyChance": 0,
+        "bonusRollSkill": "lore",
+        "bonusRolls": {
+          "onSuccess": 1,
+          "onCritical": 2
+        },
+        "entries": [
+          {
+            "weight": 3,
+            "value": {
+              "item": "old_coin",
+              "quantity": "6d6"
+            }
+          },
+          {
+            "weight": 2,
+            "value": {
+              "item": "hold_silver",
+              "quantity": "2d4"
+            }
+          },
+          {
+            "weight": 2,
+            "value": {
+              "item": "warded_coat",
+              "quantity": "1"
+            }
+          }
+        ]
+      },
+      {
+        "id": "deep_vault_hoard",
+        "name": "At the Ninth Column",
+        "rolls": "3",
+        "emptyChance": 0,
+        "bonusRollSkill": "lore",
+        "bonusRolls": {
+          "onSuccess": 1,
+          "onCritical": 2
+        },
+        "entries": [
+          {
+            "weight": 3,
+            "value": {
+              "item": "old_coin",
+              "quantity": "6d6"
+            }
+          },
+          {
+            "weight": 2,
+            "value": {
+              "item": "barrow_torc",
+              "quantity": "1"
+            }
+          },
+          {
+            "weight": 2,
+            "value": {
+              "item": "silvered_blade",
+              "quantity": "1"
+            }
+          }
+        ]
+      },
+      {
+        "id": "deep_stair_hoard",
+        "name": "Beneath the Treads",
+        "rolls": "4",
+        "emptyChance": 0,
+        "bonusRollSkill": "lore",
+        "bonusRolls": {
+          "onSuccess": 1,
+          "onCritical": 2
+        },
+        "entries": [
+          {
+            "weight": 3,
+            "value": {
+              "item": "old_coin",
+              "quantity": "8d6"
+            }
+          },
+          {
+            "weight": 2,
+            "value": {
+              "item": "lamp_glass",
+              "quantity": "1",
+              "unique": true
+            }
+          },
+          {
+            "weight": 2,
+            "value": {
+              "item": "hold_silver",
+              "quantity": "3d4"
+            }
+          },
+          {
+            "weight": 1,
+            "value": {
+              "item": "warded_coat",
               "quantity": "1"
             }
           }
@@ -11136,6 +11454,424 @@
         "resourceOverrides": {
           "hp": 36
         }
+      },
+      {
+        "id": "deep_wayfinder",
+        "name": "Ost of the Wayfinders",
+        "description": "Forty years of walking the Deeproads under load.",
+        "level": 8,
+        "xp": 0,
+        "attributes": {
+          "might": 14,
+          "agility": 15,
+          "endurance": 16,
+          "intellect": 16,
+          "instinct": 17,
+          "presence": 13
+        },
+        "abilities": [
+          "strike",
+          "guarded_stance"
+        ],
+        "behaviour": [
+          {
+            "priority": 0,
+            "use": "strike"
+          }
+        ],
+        "faction": "the_wayfinders",
+        "creatureType": "humanoid",
+        "size": "medium",
+        "descriptors": [
+          "a lamp-lit"
+        ],
+        "conditionalLoot": [],
+        "loot": "deep_rule_carried",
+        "resourceOverrides": {
+          "hp": 52
+        }
+      },
+      {
+        "id": "deep_tollkeeper",
+        "name": "Bruk, at the Old Toll",
+        "description": "Sits at a post nobody pays at, and has for thirty years.",
+        "level": 7,
+        "xp": 0,
+        "attributes": {
+          "might": 16,
+          "agility": 12,
+          "endurance": 17,
+          "intellect": 12,
+          "instinct": 14,
+          "presence": 11
+        },
+        "abilities": [
+          "strike"
+        ],
+        "behaviour": [
+          {
+            "priority": 0,
+            "use": "strike"
+          }
+        ],
+        "faction": "the_wayfinders",
+        "creatureType": "humanoid",
+        "size": "medium",
+        "descriptors": [
+          "a stolid"
+        ],
+        "conditionalLoot": [],
+        "loot": "deep_tally_carried",
+        "resourceOverrides": {
+          "hp": 48
+        }
+      },
+      {
+        "id": "deep_surveyor",
+        "name": "Ilde, Surveyor",
+        "description": "Carries a plate, a rule and a light into places nobody has measured.",
+        "level": 7,
+        "xp": 0,
+        "attributes": {
+          "might": 12,
+          "agility": 16,
+          "endurance": 14,
+          "intellect": 17,
+          "instinct": 16,
+          "presence": 12
+        },
+        "abilities": [
+          "strike",
+          "quick_shot"
+        ],
+        "behaviour": [
+          {
+            "priority": 0,
+            "use": "strike"
+          }
+        ],
+        "faction": "the_wayfinders",
+        "creatureType": "humanoid",
+        "size": "medium",
+        "descriptors": [
+          "a careful"
+        ],
+        "conditionalLoot": [],
+        "loot": "deep_plate_carried",
+        "resourceOverrides": {
+          "hp": 42
+        }
+      },
+      {
+        "id": "footing_hum",
+        "name": "What Hums in the Footings",
+        "description": "A bridge over nothing, standing on footings, and the hum comes up through the stone rather than down off the span.",
+        "level": 10,
+        "xp": 1600,
+        "attributes": {
+          "might": 19,
+          "agility": 12,
+          "endurance": 20,
+          "intellect": 15,
+          "instinct": 16,
+          "presence": 16
+        },
+        "abilities": [
+          "unmaking_word",
+          "stone_fist",
+          "grave_chill"
+        ],
+        "behaviour": [
+          {
+            "priority": 25,
+            "use": "unmaking_word",
+            "when": {
+              "chance": 0.3
+            }
+          },
+          {
+            "priority": 10,
+            "use": "grave_chill"
+          },
+          {
+            "priority": 0,
+            "use": "stone_fist"
+          }
+        ],
+        "faction": "the_unsealed",
+        "creatureType": "undead",
+        "size": "medium",
+        "descriptors": [
+          "a sounding",
+          "a rooted"
+        ],
+        "conditionalLoot": [],
+        "loot": "deep_footing_hoard",
+        "damageInteractions": [
+          {
+            "damageType": "slashing",
+            "multiplier": 0.5,
+            "unless": [
+              "silvered"
+            ]
+          },
+          {
+            "damageType": "piercing",
+            "multiplier": 0.5,
+            "unless": [
+              "silvered"
+            ]
+          }
+        ],
+        "conditionImmunities": [
+          "prone",
+          "frightened",
+          "poisoned"
+        ],
+        "resourceOverrides": {
+          "hp": 175
+        }
+      },
+      {
+        "id": "column_weeper",
+        "name": "What Weeps",
+        "description": "Eight columns hold the roof. This one has been holding something else, and it is warm, and it is salt.",
+        "level": 10,
+        "xp": 1700,
+        "attributes": {
+          "might": 18,
+          "agility": 14,
+          "endurance": 20,
+          "intellect": 17,
+          "instinct": 18,
+          "presence": 19
+        },
+        "abilities": [
+          "wither",
+          "drag_under",
+          "unmaking_word",
+          "grave_chill"
+        ],
+        "behaviour": [
+          {
+            "priority": 30,
+            "use": "unmaking_word",
+            "when": {
+              "chance": 0.25
+            }
+          },
+          {
+            "priority": 20,
+            "use": "drag_under",
+            "when": {
+              "chance": 0.3
+            }
+          },
+          {
+            "priority": 10,
+            "use": "wither"
+          },
+          {
+            "priority": 0,
+            "use": "grave_chill"
+          }
+        ],
+        "faction": "the_unsealed",
+        "creatureType": "undead",
+        "size": "medium",
+        "descriptors": [
+          "a weeping",
+          "a warm"
+        ],
+        "conditionalLoot": [],
+        "loot": "deep_vault_hoard",
+        "damageInteractions": [
+          {
+            "damageType": "slashing",
+            "multiplier": 0.5,
+            "unless": [
+              "silvered"
+            ]
+          },
+          {
+            "damageType": "piercing",
+            "multiplier": 0.5,
+            "unless": [
+              "silvered"
+            ]
+          }
+        ],
+        "conditionImmunities": [
+          "frightened",
+          "poisoned",
+          "prone",
+          "bleeding"
+        ],
+        "resourceOverrides": {
+          "hp": 190
+        }
+      },
+      {
+        "id": "tread_lifter",
+        "name": "What Lifted the Course Out",
+        "description": "A course of treads taken out of the middle of a stair, cleanly, from below. Nine landings, and the ninth is where it stopped.",
+        "level": 11,
+        "xp": 2000,
+        "attributes": {
+          "might": 21,
+          "agility": 15,
+          "endurance": 21,
+          "intellect": 18,
+          "instinct": 18,
+          "presence": 20
+        },
+        "abilities": [
+          "unmaking_word",
+          "call_the_shut",
+          "grave_chill",
+          "stone_fist"
+        ],
+        "behaviour": [
+          {
+            "priority": 35,
+            "use": "unmaking_word",
+            "when": {
+              "chance": 0.3
+            }
+          },
+          {
+            "priority": 25,
+            "use": "call_the_shut",
+            "when": {
+              "chance": 0.3
+            }
+          },
+          {
+            "priority": 10,
+            "use": "grave_chill"
+          },
+          {
+            "priority": 0,
+            "use": "stone_fist"
+          }
+        ],
+        "faction": "the_unsealed",
+        "creatureType": "undead",
+        "size": "medium",
+        "descriptors": [
+          "a patient",
+          "an unhurried"
+        ],
+        "conditionalLoot": [],
+        "loot": "deep_stair_hoard",
+        "damageInteractions": [
+          {
+            "damageType": "slashing",
+            "multiplier": 0.5,
+            "unless": [
+              "silvered"
+            ]
+          },
+          {
+            "damageType": "piercing",
+            "multiplier": 0.5,
+            "unless": [
+              "silvered"
+            ]
+          }
+        ],
+        "conditionImmunities": [
+          "frightened",
+          "poisoned",
+          "prone",
+          "stunned"
+        ],
+        "resourceOverrides": {
+          "hp": 215
+        }
+      },
+      {
+        "id": "river_thing",
+        "name": "What Goes Downstream",
+        "description": "The Sunless River goes somewhere and nobody has followed it there.",
+        "level": 10,
+        "xp": 1400,
+        "attributes": {
+          "might": 18,
+          "agility": 16,
+          "endurance": 18,
+          "intellect": 10,
+          "instinct": 16,
+          "presence": 12
+        },
+        "abilities": [
+          "drag_under",
+          "latch",
+          "bleed_white"
+        ],
+        "behaviour": [
+          {
+            "priority": 0,
+            "use": "drag_under"
+          }
+        ],
+        "faction": "the_unsealed",
+        "creatureType": "undead",
+        "size": "medium",
+        "descriptors": [
+          "a pale",
+          "a long"
+        ],
+        "conditionalLoot": [],
+        "loot": "deep_footing_hoard",
+        "conditionImmunities": [
+          "prone",
+          "frightened"
+        ],
+        "resourceOverrides": {
+          "hp": 150
+        }
+      },
+      {
+        "id": "workings_thing",
+        "name": "What Is in the Lower Workings",
+        "description": "Lantern Deep dug down and stopped, and did not say why.",
+        "level": 9,
+        "xp": 1100,
+        "attributes": {
+          "might": 18,
+          "agility": 13,
+          "endurance": 18,
+          "intellect": 9,
+          "instinct": 14,
+          "presence": 10
+        },
+        "abilities": [
+          "stone_fist",
+          "rend"
+        ],
+        "behaviour": [
+          {
+            "priority": 0,
+            "use": "stone_fist"
+          }
+        ],
+        "faction": "the_unsealed",
+        "creatureType": "undead",
+        "size": "medium",
+        "descriptors": [
+          "a hunched",
+          "a rock-pale"
+        ],
+        "conditionalLoot": [],
+        "loot": "deep_vault_hoard",
+        "conditionImmunities": [
+          "prone",
+          "frightened"
+        ],
+        "resourceOverrides": {
+          "hp": 130
+        }
       }
     ],
     "factions": [
@@ -13089,6 +13825,86 @@
           ],
           "priceMultiplier": 1.3
         }
+      },
+      {
+        "id": "wayfinder_ost",
+        "name": "Ost of the Wayfinders",
+        "description": "Keeps the guild's rule, which is four hundred years of the Deeproads measured, and two pages of it he has never read aloud.",
+        "disposition": 2,
+        "gullibility": 0.2,
+        "memorySpan": 365,
+        "offersQuests": [],
+        "caresAbout": [],
+        "reactions": [],
+        "faction": "the_wayfinders",
+        "dialogue": "deep_ost_talk",
+        "home": "market_road_waystation",
+        "statblock": "deep_wayfinder",
+        "shop": {
+          "lootTable": "deep_stock",
+          "buysTags": [
+            "treasure"
+          ],
+          "priceMultiplier": 1.3
+        }
+      },
+      {
+        "id": "toll_keeper_bruk",
+        "name": "Bruk, at the Old Toll",
+        "description": "Sits at a toll post on a road the guild stopped tolling, because somebody has to, and keeps the tally because his father did.",
+        "disposition": 0,
+        "gullibility": 0.25,
+        "memorySpan": 300,
+        "offersQuests": [],
+        "caresAbout": [],
+        "reactions": [],
+        "faction": "the_wayfinders",
+        "dialogue": "deep_bruk_talk",
+        "home": "market_road_old_toll",
+        "statblock": "deep_tollkeeper"
+      },
+      {
+        "id": "surveyor_ilde",
+        "name": "Ilde, Surveyor",
+        "description": "Scribes the guild's sections onto brass and once put a number beside a shaft and then scratched it out.",
+        "disposition": 4,
+        "gullibility": 0.2,
+        "memorySpan": 300,
+        "offersQuests": [],
+        "caresAbout": [],
+        "reactions": [],
+        "faction": "the_wayfinders",
+        "dialogue": "deep_ilde_talk",
+        "home": "sunless_river_the_crossing",
+        "statblock": "deep_surveyor"
+      },
+      {
+        "id": "bridge_walker_hral",
+        "name": "Hral, who Walks the Span",
+        "description": "Crosses the Black Bridge twice a day with a load and has dropped more lights down that chasm than the guild has.",
+        "disposition": 4,
+        "gullibility": 0.35,
+        "memorySpan": 200,
+        "offersQuests": [],
+        "caresAbout": [],
+        "reactions": [],
+        "faction": "karn_dolur",
+        "dialogue": "deep_hral_talk",
+        "home": "black_bridge_the_span"
+      },
+      {
+        "id": "lamp_keeper_vess",
+        "name": "Vess, who Keeps the Lamps",
+        "description": "Holds an office that has nothing to do, since the lamps have not needed anything for four hundred years, and walks the road anyway.",
+        "disposition": 6,
+        "gullibility": 0.4,
+        "memorySpan": 250,
+        "offersQuests": [],
+        "caresAbout": [],
+        "reactions": [],
+        "faction": "the_wayfinders",
+        "dialogue": "deep_vess_talk",
+        "home": "market_road_the_lamps"
       }
     ],
     "traps": [
@@ -33848,7 +34664,22 @@
         "position": {
           "x": 3,
           "y": 3
-        }
+        },
+        "triggers": [
+          {
+            "id": "deep_found_lamps",
+            "mode": "once",
+            "on": "enter",
+            "description": "Lit, and nobody has carried oil down here in four hundred years.",
+            "effects": [
+              {
+                "learnLore": {
+                  "entry": "deep_lamps_lit"
+                }
+              }
+            ]
+          }
+        ]
       },
       {
         "id": "market_road_waystation",
@@ -33893,7 +34724,22 @@
         "position": {
           "x": 25,
           "y": 3
-        }
+        },
+        "triggers": [
+          {
+            "id": "deep_found_toll",
+            "mode": "once",
+            "on": "enter",
+            "description": "Which three lamps are out.",
+            "effects": [
+              {
+                "learnLore": {
+                  "entry": "deep_lamps_out"
+                }
+              }
+            ]
+          }
+        ]
       },
       {
         "id": "fungus_gallery_the_canopy",
@@ -33974,7 +34820,22 @@
         "position": {
           "x": 14,
           "y": 3
-        }
+        },
+        "triggers": [
+          {
+            "id": "deep_found_water",
+            "mode": "once",
+            "on": "enter",
+            "description": "Salt, four hundred miles from any sea.",
+            "effects": [
+              {
+                "learnLore": {
+                  "entry": "deep_vault_taste"
+                }
+              }
+            ]
+          }
+        ]
       },
       {
         "id": "sunless_river_downstream",
@@ -34022,7 +34883,22 @@
         "position": {
           "x": 14,
           "y": 3
-        }
+        },
+        "triggers": [
+          {
+            "id": "deep_found_chasm",
+            "mode": "once",
+            "on": "enter",
+            "description": "Four hundred years of dropped lights and no bottom.",
+            "effects": [
+              {
+                "learnLore": {
+                  "entry": "deep_bridge_bottom"
+                }
+              }
+            ]
+          }
+        ]
       },
       {
         "id": "black_bridge_the_footings",
@@ -34039,7 +34915,58 @@
         "position": {
           "x": 25,
           "y": 3
-        }
+        },
+        "triggers": [
+          {
+            "id": "deep_bridge_committed",
+            "mode": "once",
+            "on": "enter",
+            "description": "Down at the footings, with the hum coming up.",
+            "requires": {
+              "custom": {
+                "gte": [
+                  {
+                    "ref": "threads.deep_bridge.known"
+                  },
+                  2
+                ]
+              }
+            },
+            "effects": [
+              {
+                "emit": {
+                  "event": "startQuest",
+                  "data": {
+                    "quest": "deep_what_it_stands_on"
+                  }
+                }
+              }
+            ]
+          }
+        ],
+        "hidden": true,
+        "discover": {
+          "skill": "perception",
+          "difficulty": {
+            "max": [
+              10,
+              {
+                "sub": [
+                  22,
+                  {
+                    "mul": [
+                      3,
+                      {
+                        "ref": "threads.deep_bridge.known"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "gate": "deep_footing_way"
       },
       {
         "id": "echo_halls_the_eleventh",
@@ -34155,7 +35082,58 @@
         "position": {
           "x": 25,
           "y": 3
-        }
+        },
+        "triggers": [
+          {
+            "id": "deep_lamps_committed",
+            "mode": "once",
+            "on": "enter",
+            "description": "At the ninth landing, where a course was lifted out.",
+            "requires": {
+              "custom": {
+                "gte": [
+                  {
+                    "ref": "threads.deep_lamps.known"
+                  },
+                  2
+                ]
+              }
+            },
+            "effects": [
+              {
+                "emit": {
+                  "event": "startQuest",
+                  "data": {
+                    "quest": "deep_the_lamps"
+                  }
+                }
+              }
+            ]
+          }
+        ],
+        "hidden": true,
+        "discover": {
+          "skill": "lore",
+          "difficulty": {
+            "max": [
+              9,
+              {
+                "sub": [
+                  25,
+                  {
+                    "mul": [
+                      4,
+                      {
+                        "ref": "threads.deep_lamps.known"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "gate": "deep_stair_under"
       },
       {
         "id": "weeping_vault_the_roof",
@@ -34169,7 +35147,22 @@
         "position": {
           "x": 3,
           "y": 3
-        }
+        },
+        "triggers": [
+          {
+            "id": "deep_found_roof",
+            "mode": "once",
+            "on": "enter",
+            "description": "How many columns are holding it, and how many there are.",
+            "effects": [
+              {
+                "learnLore": {
+                  "entry": "deep_vault_count"
+                }
+              }
+            ]
+          }
+        ]
       },
       {
         "id": "weeping_vault_the_shaft",
@@ -34202,14 +35195,60 @@
         ],
         "hidden": true,
         "discover": {
-          "skill": "perception",
-          "difficulty": 15
+          "skill": "arcana",
+          "difficulty": {
+            "max": [
+              11,
+              {
+                "sub": [
+                  23,
+                  {
+                    "mul": [
+                      3,
+                      {
+                        "ref": "threads.deep_vault.known"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
         },
         "dungeon": "deeproads_the_columns",
         "position": {
           "x": 25,
           "y": 3
-        }
+        },
+        "triggers": [
+          {
+            "id": "deep_vault_committed",
+            "mode": "once",
+            "on": "enter",
+            "description": "At the foot of a column that holds nothing.",
+            "requires": {
+              "custom": {
+                "gte": [
+                  {
+                    "ref": "threads.deep_vault.known"
+                  },
+                  2
+                ]
+              }
+            },
+            "effects": [
+              {
+                "emit": {
+                  "event": "startQuest",
+                  "data": {
+                    "quest": "deep_the_ninth_column"
+                  }
+                }
+              }
+            ]
+          }
+        ],
+        "gate": "deep_vault_ninth"
       }
     ],
     "gates": [
@@ -35402,6 +36441,99 @@
           "items": [
             {
               "item": "sluice_key",
+              "quantity": 1,
+              "consume": false,
+              "equipped": false
+            }
+          ]
+        }
+      },
+      {
+        "id": "deep_stair_under",
+        "name": "Beneath the Treads",
+        "description": "The stair is broken at the ninth landing and the break is not damage. Something was taken out of it.",
+        "kind": "ward",
+        "blockedTextKey": "deep_stair_blocked",
+        "staysOpen": true,
+        "onOpen": [
+          {
+            "setFlag": {
+              "flag": "deep_stair_open",
+              "value": true
+            }
+          }
+        ],
+        "onBlocked": [],
+        "opensWith": [],
+        "tags": [],
+        "requires": {
+          "items": [
+            {
+              "item": "wayfinders_rule",
+              "quantity": 1,
+              "consume": false,
+              "equipped": false
+            },
+            {
+              "item": "ninth_column_coat",
+              "quantity": 1,
+              "consume": false,
+              "equipped": false
+            }
+          ]
+        }
+      },
+      {
+        "id": "deep_footing_way",
+        "name": "Into the Footings",
+        "description": "There is a way into the footings and it was made from inside them.",
+        "kind": "ward",
+        "blockedTextKey": "deep_footing_blocked",
+        "staysOpen": true,
+        "onOpen": [
+          {
+            "setFlag": {
+              "flag": "deep_bridge_open",
+              "value": true
+            }
+          }
+        ],
+        "onBlocked": [],
+        "opensWith": [],
+        "tags": [],
+        "requires": {
+          "items": [
+            {
+              "item": "toll_tally",
+              "quantity": 1,
+              "consume": false,
+              "equipped": false
+            }
+          ]
+        }
+      },
+      {
+        "id": "deep_vault_ninth",
+        "name": "The Ninth Column",
+        "description": "Eight columns hold the roof. The ninth holds nothing and it is the only one that weeps.",
+        "kind": "ward",
+        "blockedTextKey": "deep_vault_blocked",
+        "staysOpen": true,
+        "onOpen": [
+          {
+            "setFlag": {
+              "flag": "deep_vault_open",
+              "value": true
+            }
+          }
+        ],
+        "onBlocked": [],
+        "opensWith": [],
+        "tags": [],
+        "requires": {
+          "items": [
+            {
+              "item": "survey_plate",
               "quantity": 1,
               "consume": false,
               "equipped": false
@@ -37461,7 +38593,8 @@
         "branchiness": 0.5,
         "width": "73",
         "height": "73",
-        "corridorLength": "2d3"
+        "corridorLength": "2d3",
+        "bossTable": "deep_workings_boss"
       },
       {
         "id": "deeproads_ninth_door",
@@ -37522,7 +38655,8 @@
           "width": 2
         },
         "width": "73",
-        "height": "73"
+        "height": "73",
+        "bossTable": "deep_river_boss"
       },
       {
         "id": "deeproads_footings",
@@ -37539,7 +38673,8 @@
         "branchiness": 0.25,
         "width": "77",
         "height": "77",
-        "corridorLength": "3d3"
+        "corridorLength": "3d3",
+        "bossTable": "deep_footing_boss"
       },
       {
         "id": "deeproads_listening_room",
@@ -37574,7 +38709,8 @@
           "minLeaf": 5
         },
         "width": "29",
-        "height": "29"
+        "height": "29",
+        "bossTable": "deep_stair_boss"
       },
       {
         "id": "deeproads_the_columns",
@@ -37594,7 +38730,8 @@
           "birthThreshold": 5
         },
         "width": "45",
-        "height": "45"
+        "height": "45",
+        "bossTable": "deep_vault_boss"
       }
     ],
     "encounterTables": [
@@ -39516,6 +40653,116 @@
             ]
           }
         ]
+      },
+      {
+        "id": "deep_footing_boss",
+        "minDepth": 0,
+        "maxDepth": 999,
+        "chance": 1,
+        "emptyWeight": 0,
+        "scalePerLevels": 3,
+        "groups": [
+          {
+            "id": "b",
+            "weight": 1,
+            "hostile": true,
+            "entries": [
+              {
+                "monster": "footing_hum",
+                "count": "1",
+                "scaleWithLevel": false
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "deep_vault_boss",
+        "minDepth": 0,
+        "maxDepth": 999,
+        "chance": 1,
+        "emptyWeight": 0,
+        "scalePerLevels": 3,
+        "groups": [
+          {
+            "id": "b",
+            "weight": 1,
+            "hostile": true,
+            "entries": [
+              {
+                "monster": "column_weeper",
+                "count": "1",
+                "scaleWithLevel": false
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "deep_stair_boss",
+        "minDepth": 0,
+        "maxDepth": 999,
+        "chance": 1,
+        "emptyWeight": 0,
+        "scalePerLevels": 3,
+        "groups": [
+          {
+            "id": "b",
+            "weight": 1,
+            "hostile": true,
+            "entries": [
+              {
+                "monster": "tread_lifter",
+                "count": "1",
+                "scaleWithLevel": false
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "deep_river_boss",
+        "minDepth": 0,
+        "maxDepth": 999,
+        "chance": 1,
+        "emptyWeight": 0,
+        "scalePerLevels": 3,
+        "groups": [
+          {
+            "id": "b",
+            "weight": 1,
+            "hostile": true,
+            "entries": [
+              {
+                "monster": "river_thing",
+                "count": "1d2",
+                "scaleWithLevel": true
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "deep_workings_boss",
+        "minDepth": 0,
+        "maxDepth": 999,
+        "chance": 1,
+        "emptyWeight": 0,
+        "scalePerLevels": 3,
+        "groups": [
+          {
+            "id": "b",
+            "weight": 1,
+            "hostile": true,
+            "entries": [
+              {
+                "monster": "workings_thing",
+                "count": "1d2",
+                "scaleWithLevel": true
+              }
+            ]
+          }
+        ]
       }
     ],
     "time": {
@@ -40506,6 +41753,48 @@
           },
           {
             "text": "The note underfoot here is so low you feel it rather than hear it."
+          }
+        ]
+      },
+      {
+        "id": "deep_footing_blocked",
+        "variants": [
+          {
+            "text": "The footings are hollow and the way in is barred, and the bar is on the far side. The toll post kept a tally of everything that crossed this bridge, and three of its years are in a different ink."
+          },
+          {
+            "text": "A bridge over nothing, standing on footings, and the footings ring hollow the whole way round."
+          },
+          {
+            "text": "The hum comes up through the stone here rather than down off the span. It has been coming up the whole time."
+          }
+        ]
+      },
+      {
+        "id": "deep_stair_blocked",
+        "variants": [
+          {
+            "text": "The break in the stair is a *removal*: a course of treads lifted out clean, from below. Reading what is cut on the risers wants the guild's rule \u2014 and going down after it wants whatever the ninth column had on when it stopped."
+          },
+          {
+            "text": "Nine landings and the ninth is gone, and the ones above and below it are sound. Nobody breaks a stair in the middle."
+          },
+          {
+            "text": "Cold comes up through the gap that is colder than the Deeproads, and the Deeproads are the coldest inhabited place on the continent."
+          }
+        ]
+      },
+      {
+        "id": "deep_vault_blocked",
+        "variants": [
+          {
+            "text": "Eight columns, evenly set, holding a roof. And a ninth, off the pattern, holding nothing, weeping warm salt water in a place four hundred miles from any sea. The guild's own section of this hall is on a brass plate and it has eight."
+          },
+          {
+            "text": "It is warm. Everything else down here takes the warmth out of you and this gives it back, which is worse."
+          },
+          {
+            "text": "The shaft above goes up further than there is rock to go up through. Somebody worked that out once and scratched out the number."
           }
         ]
       },
@@ -68301,6 +69590,1844 @@
             "redirectWhen": []
           }
         ]
+      },
+      {
+        "id": "deep_ost_talk",
+        "start": "greet",
+        "nodes": [
+          {
+            "id": "greet",
+            "says": [
+              {
+                "text": "A waystation on the market road, lit by lamps nobody carries oil for, and a man with a bound rule open on the table."
+              },
+              {
+                "text": "\u201cWayfinders. Guiding is by the stage and I will not guide past the Black Bridge after the third bell.\u201d"
+              }
+            ],
+            "onEnter": [],
+            "options": [
+              {
+                "id": "deep_ost_spacing",
+                "text": "How are the market road's lamps set?",
+                "requires": {
+                  "without": {
+                    "lore": [
+                      "deep_lamps_spacing"
+                    ]
+                  }
+                },
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "check": {
+                  "skill": "insight",
+                  "difficulty": {
+                    "sub": [
+                      15,
+                      {
+                        "clamp": [
+                          {
+                            "div": [
+                              {
+                                "ref": "reputation.the_wayfinders",
+                                "else": 0
+                              },
+                              5
+                            ]
+                          },
+                          -6,
+                          6
+                        ]
+                      }
+                    ]
+                  },
+                  "onSuccess": "deep_ost_spacing_told",
+                  "onFailure": "deep_ost_spacing_wont"
+                }
+              },
+              {
+                "id": "deep_ost_footings",
+                "text": "The Black Bridge. Abutments or footings?",
+                "requires": {
+                  "without": {
+                    "lore": [
+                      "deep_bridge_footings"
+                    ]
+                  }
+                },
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "check": {
+                  "skill": "persuasion",
+                  "difficulty": {
+                    "sub": [
+                      16,
+                      {
+                        "clamp": [
+                          {
+                            "div": [
+                              {
+                                "ref": "reputation.the_wayfinders",
+                                "else": 0
+                              },
+                              5
+                            ]
+                          },
+                          -6,
+                          6
+                        ]
+                      }
+                    ]
+                  },
+                  "onSuccess": "deep_ost_footings_told",
+                  "onFailure": "deep_ost_footings_wont"
+                }
+              },
+              {
+                "id": "deep_ost_count",
+                "text": "How many columns in the Weeping Vault?",
+                "requires": {
+                  "without": {
+                    "lore": [
+                      "deep_vault_count"
+                    ]
+                  }
+                },
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "check": {
+                  "skill": "insight",
+                  "difficulty": {
+                    "sub": [
+                      17,
+                      {
+                        "clamp": [
+                          {
+                            "div": [
+                              {
+                                "ref": "reputation.the_wayfinders",
+                                "else": 0
+                              },
+                              5
+                            ]
+                          },
+                          -6,
+                          6
+                        ]
+                      }
+                    ]
+                  },
+                  "onSuccess": "deep_ost_count_told",
+                  "onFailure": "deep_ost_count_wont"
+                }
+              },
+              {
+                "id": "deep_ost_rule",
+                "text": "The guild's rule. Including the two pages.",
+                "requires": {
+                  "without": {
+                    "items": [
+                      "wayfinders_rule"
+                    ],
+                    "flags": [
+                      {
+                        "flag": "given:wayfinders_rule"
+                      }
+                    ]
+                  }
+                },
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "check": {
+                  "skill": "persuasion",
+                  "difficulty": {
+                    "sub": [
+                      19,
+                      {
+                        "clamp": [
+                          {
+                            "div": [
+                              {
+                                "ref": "reputation.the_wayfinders",
+                                "else": 0
+                              },
+                              5
+                            ]
+                          },
+                          -6,
+                          6
+                        ]
+                      }
+                    ]
+                  },
+                  "onSuccess": "deep_ost_rule_gave",
+                  "onFailure": "deep_ost_rule_kept"
+                }
+              },
+              {
+                "id": "greet_leave",
+                "text": "Nothing.",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": [
+              {
+                "requires": {
+                  "factions": [
+                    {
+                      "faction": "the_wayfinders",
+                      "maxStanding": -30
+                    }
+                  ]
+                },
+                "goto": "deep_ost_cold"
+              }
+            ]
+          },
+          {
+            "id": "deep_ost_spacing_told",
+            "says": [
+              {
+                "text": "\u201cTwice the interval you would light a road at, and exact to the inch between one and the next.\u201d He does not need the rule for this. \u201cYou do not light a road that way. You *mark* something that way.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "learnLore": {
+                  "entry": "deep_lamps_spacing"
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "deep_ost_spacing_on",
+                "text": "Go on.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "deep_ost_spacing_wont",
+            "says": [
+              {
+                "text": "\u201cI've said all I mean to,\u201d they say, and go back to what they were doing."
+              }
+            ],
+            "onEnter": [
+              {
+                "adjustReputation": {
+                  "faction": "the_wayfinders",
+                  "amount": -1
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "deep_ost_spacing_drop",
+                "text": "Leave it.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "deep_ost_footings_told",
+            "says": [
+              {
+                "text": "\u201cPiers.\u201d He waits to see whether you know the difference, and is pleased when you do. \u201cAn abutment leans on the cliff. A pier *stands on something*. That bridge has piers, over a chasm four hundred years of dropped lights have not found the bottom of.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "learnLore": {
+                  "entry": "deep_bridge_footings"
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "deep_ost_footings_on",
+                "text": "Go on.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "deep_ost_footings_wont",
+            "says": [
+              {
+                "text": "\u201cI've said all I mean to,\u201d they say, and go back to what they were doing."
+              }
+            ],
+            "onEnter": [
+              {
+                "adjustReputation": {
+                  "faction": "the_wayfinders",
+                  "amount": -1
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "deep_ost_footings_drop",
+                "text": "Leave it.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "deep_ost_count_told",
+            "says": [
+              {
+                "text": "\u201cEight.\u201d He says it, and then does not say anything else for a moment. \u201cOur section has eight pillars. Every hall down here is built in eights.\u201d He looks at the lamp. \u201cGo and count them.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "learnLore": {
+                  "entry": "deep_vault_count"
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "deep_ost_count_on",
+                "text": "Go on.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "deep_ost_count_wont",
+            "says": [
+              {
+                "text": "\u201cI've said all I mean to,\u201d they say, and go back to what they were doing."
+              }
+            ],
+            "onEnter": [
+              {
+                "adjustReputation": {
+                  "faction": "the_wayfinders",
+                  "amount": -1
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "deep_ost_count_drop",
+                "text": "Leave it.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "deep_ost_rule_gave",
+            "says": [
+              {
+                "text": "He is a long time deciding, and what decides him is not you. \u201cFour hundred years of measuring and two pages we do not read out.\u201d He hands it over. \u201cI have read them. I would rather somebody else had.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "grantItem": {
+                  "target": {
+                    "ref": "actor.id"
+                  },
+                  "item": "wayfinders_rule",
+                  "quantity": 1
+                }
+              },
+              {
+                "setFlag": {
+                  "flag": "given:wayfinders_rule",
+                  "value": true
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "deep_ost_rule_thanks",
+                "text": "Thank you.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "deep_ost_rule_kept",
+            "says": [
+              {
+                "text": "\u201cIt is the guild's, and the guild is eleven people, and I am the one who has it,\u201d he says. \u201cNo.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "adjustReputation": {
+                  "faction": "the_wayfinders",
+                  "amount": -3
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "deep_ost_rule_leave",
+                "text": "Then no.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "deep_ost_cold",
+            "says": [
+              {
+                "text": "He shuts the rule, and the sound it makes in here goes a long way."
+              }
+            ],
+            "onEnter": [],
+            "options": [
+              {
+                "id": "deep_ost_go",
+                "text": "Leave it.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          }
+        ]
+      },
+      {
+        "id": "deep_vess_talk",
+        "start": "greet",
+        "nodes": [
+          {
+            "id": "greet",
+            "says": [
+              {
+                "text": "A woman walking a lit road with a pole she has never once used, checking lamps that have not needed checking in four hundred years."
+              },
+              {
+                "text": "\u201cLamp-keeper,\u201d she says, and shrugs at the obvious. \u201cSomebody has the office. It may as well be somebody who walks it.\u201d"
+              }
+            ],
+            "onEnter": [],
+            "options": [
+              {
+                "id": "deep_vess_lit",
+                "text": "Who oils these?",
+                "requires": {
+                  "without": {
+                    "lore": [
+                      "deep_lamps_lit"
+                    ]
+                  }
+                },
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "check": {
+                  "skill": "persuasion",
+                  "difficulty": {
+                    "sub": [
+                      11,
+                      {
+                        "clamp": [
+                          {
+                            "div": [
+                              {
+                                "ref": "reputation.the_wayfinders",
+                                "else": 0
+                              },
+                              5
+                            ]
+                          },
+                          -6,
+                          6
+                        ]
+                      }
+                    ]
+                  },
+                  "onSuccess": "deep_vess_lit_told",
+                  "onFailure": "deep_vess_lit_wont"
+                }
+              },
+              {
+                "id": "deep_vess_reading",
+                "text": "Do they light the road evenly?",
+                "requires": {
+                  "without": {
+                    "lore": [
+                      "deep_lamps_reading"
+                    ]
+                  }
+                },
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "check": {
+                  "skill": "perception",
+                  "difficulty": {
+                    "sub": [
+                      13,
+                      {
+                        "clamp": [
+                          {
+                            "div": [
+                              {
+                                "ref": "reputation.the_wayfinders",
+                                "else": 0
+                              },
+                              5
+                            ]
+                          },
+                          -6,
+                          6
+                        ]
+                      }
+                    ]
+                  },
+                  "onSuccess": "deep_vess_reading_told",
+                  "onFailure": "deep_vess_reading_wont"
+                }
+              },
+              {
+                "id": "deep_vess_out",
+                "text": "Are any of them out?",
+                "requires": {
+                  "without": {
+                    "lore": [
+                      "deep_lamps_out"
+                    ]
+                  }
+                },
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "check": {
+                  "skill": "persuasion",
+                  "difficulty": {
+                    "sub": [
+                      12,
+                      {
+                        "clamp": [
+                          {
+                            "div": [
+                              {
+                                "ref": "reputation.the_wayfinders",
+                                "else": 0
+                              },
+                              5
+                            ]
+                          },
+                          -6,
+                          6
+                        ]
+                      }
+                    ]
+                  },
+                  "onSuccess": "deep_vess_out_told",
+                  "onFailure": "deep_vess_out_wont"
+                }
+              },
+              {
+                "id": "greet_leave",
+                "text": "Nothing.",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "deep_vess_lit_told",
+            "says": [
+              {
+                "text": "\u201cNobody.\u201d She is cheerful about it in a way that takes a moment to land. \u201cNot in four hundred years. There is no oil in them \u2014 I have had one down. There is no wick. They are lit.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "learnLore": {
+                  "entry": "deep_lamps_lit"
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "deep_vess_lit_on",
+                "text": "Go on.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "deep_vess_lit_wont",
+            "says": [
+              {
+                "text": "\u201cI've said all I mean to,\u201d they say, and go back to what they were doing."
+              }
+            ],
+            "onEnter": [
+              {
+                "adjustReputation": {
+                  "faction": "the_wayfinders",
+                  "amount": -1
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "deep_vess_lit_drop",
+                "text": "Leave it.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "deep_vess_reading_told",
+            "says": [
+              {
+                "text": "\u201cNo, and that is the thing I would tell somebody if anybody asked.\u201d She stops walking. \u201cStand in the dark *between* two of them and look at the floor. There are marks. Under a lamp you cannot see them at all.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "learnLore": {
+                  "entry": "deep_lamps_reading"
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "deep_vess_reading_on",
+                "text": "Go on.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "deep_vess_reading_wont",
+            "says": [
+              {
+                "text": "\u201cI've said all I mean to,\u201d they say, and go back to what they were doing."
+              }
+            ],
+            "onEnter": [
+              {
+                "adjustReputation": {
+                  "faction": "the_wayfinders",
+                  "amount": -1
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "deep_vess_reading_drop",
+                "text": "Leave it.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "deep_vess_out_told",
+            "says": [
+              {
+                "text": "\u201cThree.\u201d No hesitation. \u201cAnd the three are the three nearest the old toll, which I have mentioned to the guild twice.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "learnLore": {
+                  "entry": "deep_lamps_out"
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "deep_vess_out_on",
+                "text": "Go on.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "deep_vess_out_wont",
+            "says": [
+              {
+                "text": "\u201cI've said all I mean to,\u201d they say, and go back to what they were doing."
+              }
+            ],
+            "onEnter": [
+              {
+                "adjustReputation": {
+                  "faction": "the_wayfinders",
+                  "amount": -1
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "deep_vess_out_drop",
+                "text": "Leave it.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          }
+        ]
+      },
+      {
+        "id": "deep_hral_talk",
+        "start": "greet",
+        "nodes": [
+          {
+            "id": "greet",
+            "says": [
+              {
+                "text": "A dwarf with a carrying frame, halfway across a span over nothing, entirely unbothered."
+              },
+              {
+                "text": "\u201cMind the kerb. It is not the drop that gets people, it is the kerb.\u201d"
+              }
+            ],
+            "onEnter": [],
+            "options": [
+              {
+                "id": "deep_hral_bottom",
+                "text": "Has anyone found the bottom of this?",
+                "requires": {
+                  "without": {
+                    "lore": [
+                      "deep_bridge_bottom"
+                    ]
+                  }
+                },
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "check": {
+                  "skill": "persuasion",
+                  "difficulty": {
+                    "sub": [
+                      12,
+                      {
+                        "clamp": [
+                          {
+                            "div": [
+                              {
+                                "ref": "reputation.karn_dolur",
+                                "else": 0
+                              },
+                              5
+                            ]
+                          },
+                          -6,
+                          6
+                        ]
+                      }
+                    ]
+                  },
+                  "onSuccess": "deep_hral_bottom_told",
+                  "onFailure": "deep_hral_bottom_wont"
+                }
+              },
+              {
+                "id": "deep_hral_hum",
+                "text": "It hums.",
+                "requires": {
+                  "without": {
+                    "lore": [
+                      "deep_bridge_older"
+                    ]
+                  }
+                },
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "check": {
+                  "skill": "persuasion",
+                  "difficulty": {
+                    "sub": [
+                      15,
+                      {
+                        "clamp": [
+                          {
+                            "div": [
+                              {
+                                "ref": "reputation.karn_dolur",
+                                "else": 0
+                              },
+                              5
+                            ]
+                          },
+                          -6,
+                          6
+                        ]
+                      }
+                    ]
+                  },
+                  "onSuccess": "deep_hral_hum_told",
+                  "onFailure": "deep_hral_hum_wont"
+                }
+              },
+              {
+                "id": "deep_hral_hum2",
+                "text": "How long has it been humming?",
+                "requires": {
+                  "without": {
+                    "lore": [
+                      "deep_bridge_hum"
+                    ]
+                  }
+                },
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "check": {
+                  "skill": "insight",
+                  "difficulty": {
+                    "sub": [
+                      16,
+                      {
+                        "clamp": [
+                          {
+                            "div": [
+                              {
+                                "ref": "reputation.karn_dolur",
+                                "else": 0
+                              },
+                              5
+                            ]
+                          },
+                          -6,
+                          6
+                        ]
+                      }
+                    ]
+                  },
+                  "onSuccess": "deep_hral_hum2_told",
+                  "onFailure": "deep_hral_hum2_wont"
+                }
+              },
+              {
+                "id": "greet_leave",
+                "text": "Nothing.",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "deep_hral_bottom_told",
+            "says": [
+              {
+                "text": "\u201cNo.\u201d He shifts the frame. \u201cGuild drops a light every year on the anniversary. Four hundred lights. I have dropped a few of my own out of curiosity and I have stopped, because you keep watching, and there is a point where you notice you are still watching.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "learnLore": {
+                  "entry": "deep_bridge_bottom"
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "deep_hral_bottom_on",
+                "text": "Go on.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "deep_hral_bottom_wont",
+            "says": [
+              {
+                "text": "\u201cI've said all I mean to,\u201d they say, and go back to what they were doing."
+              }
+            ],
+            "onEnter": [
+              {
+                "adjustReputation": {
+                  "faction": "karn_dolur",
+                  "amount": -1
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "deep_hral_bottom_drop",
+                "text": "Leave it.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "deep_hral_hum_told",
+            "says": [
+              {
+                "text": "He goes quiet, which for Hral is out of character. \u201cIt does. In a wind there is no wind for.\u201d He starts walking again. \u201cKarn Dolur laid that span. The hold will tell you the span is dwarf work, which it is, and will not discuss what it was laid *on*, which it did not make.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "learnLore": {
+                  "entry": "deep_bridge_older"
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "deep_hral_hum_on",
+                "text": "Go on.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "deep_hral_hum_wont",
+            "says": [
+              {
+                "text": "\u201cI've said all I mean to,\u201d they say, and go back to what they were doing."
+              }
+            ],
+            "onEnter": [
+              {
+                "adjustReputation": {
+                  "faction": "karn_dolur",
+                  "amount": -1
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "deep_hral_hum_drop",
+                "text": "Leave it.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "deep_hral_hum2_told",
+            "says": [
+              {
+                "text": "\u201cBefore the hold, and the hold is old.\u201d He does not slow down. \u201cThere is no wind down here. There has never been a wind down here. It hums in one anyway, and Karn Dolur will tell you that is the span settling, and the span has been settling for nine hundred years.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "learnLore": {
+                  "entry": "deep_bridge_hum"
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "deep_hral_hum2_on",
+                "text": "Go on.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "deep_hral_hum2_wont",
+            "says": [
+              {
+                "text": "\u201cI've said all I mean to,\u201d they say, and go back to what they were doing."
+              }
+            ],
+            "onEnter": [
+              {
+                "adjustReputation": {
+                  "faction": "karn_dolur",
+                  "amount": -1
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "deep_hral_hum2_drop",
+                "text": "Leave it.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          }
+        ]
+      },
+      {
+        "id": "deep_bruk_talk",
+        "start": "greet",
+        "nodes": [
+          {
+            "id": "greet",
+            "says": [
+              {
+                "text": "A toll post on a road the guild stopped tolling, three dark lamps above it, and a man sitting under them with a book."
+              },
+              {
+                "text": "\u201cNo toll,\u201d he says. \u201cHas not been for two hundred years. I sit here.\u201d"
+              }
+            ],
+            "onEnter": [],
+            "options": [
+              {
+                "id": "deep_bruk_out",
+                "text": "Three lamps out, all by you.",
+                "requires": {
+                  "without": {
+                    "lore": [
+                      "deep_lamps_out"
+                    ]
+                  }
+                },
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "check": {
+                  "skill": "persuasion",
+                  "difficulty": {
+                    "sub": [
+                      13,
+                      {
+                        "clamp": [
+                          {
+                            "div": [
+                              {
+                                "ref": "reputation.the_wayfinders",
+                                "else": 0
+                              },
+                              5
+                            ]
+                          },
+                          -6,
+                          6
+                        ]
+                      }
+                    ]
+                  },
+                  "onSuccess": "deep_bruk_out_told",
+                  "onFailure": "deep_bruk_out_wont"
+                }
+              },
+              {
+                "id": "deep_bruk_hollow",
+                "text": "You are the only person who sits on this road. Does the bridge sound right to you?",
+                "requires": {
+                  "without": {
+                    "lore": [
+                      "deep_bridge_footings"
+                    ]
+                  }
+                },
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "check": {
+                  "skill": "insight",
+                  "difficulty": {
+                    "sub": [
+                      15,
+                      {
+                        "clamp": [
+                          {
+                            "div": [
+                              {
+                                "ref": "reputation.the_wayfinders",
+                                "else": 0
+                              },
+                              5
+                            ]
+                          },
+                          -6,
+                          6
+                        ]
+                      }
+                    ]
+                  },
+                  "onSuccess": "deep_bruk_hollow_told",
+                  "onFailure": "deep_bruk_hollow_wont"
+                }
+              },
+              {
+                "id": "deep_bruk_tally",
+                "text": "The tally. Every year of it.",
+                "requires": {
+                  "without": {
+                    "items": [
+                      "toll_tally"
+                    ],
+                    "flags": [
+                      {
+                        "flag": "given:toll_tally"
+                      }
+                    ]
+                  }
+                },
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "check": {
+                  "skill": "persuasion",
+                  "difficulty": {
+                    "sub": [
+                      15,
+                      {
+                        "clamp": [
+                          {
+                            "div": [
+                              {
+                                "ref": "reputation.the_wayfinders",
+                                "else": 0
+                              },
+                              5
+                            ]
+                          },
+                          -6,
+                          6
+                        ]
+                      }
+                    ]
+                  },
+                  "onSuccess": "deep_bruk_tally_gave",
+                  "onFailure": "deep_bruk_tally_kept"
+                }
+              },
+              {
+                "id": "greet_leave",
+                "text": "Nothing.",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "deep_bruk_out_told",
+            "says": [
+              {
+                "text": "\u201cAll three, and I have sat under them for thirty years.\u201d He does not look up. \u201cThey went out one after another, a year apart, and they went out in order going away from me.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "learnLore": {
+                  "entry": "deep_lamps_out"
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "deep_bruk_out_on",
+                "text": "Go on.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "deep_bruk_out_wont",
+            "says": [
+              {
+                "text": "\u201cI've said all I mean to,\u201d they say, and go back to what they were doing."
+              }
+            ],
+            "onEnter": [
+              {
+                "adjustReputation": {
+                  "faction": "the_wayfinders",
+                  "amount": -1
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "deep_bruk_out_drop",
+                "text": "Leave it.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "deep_bruk_hollow_told",
+            "says": [
+              {
+                "text": "\u201cIt sounds hollow at the ends.\u201d He says it as a fact about masonry, which is how he has kept it bearable. \u201cRing what it stands on and it answers. Ring the cliff and it does not. There is a room in each pier and there has been the whole time.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "learnLore": {
+                  "entry": "deep_bridge_footings"
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "deep_bruk_hollow_on",
+                "text": "Go on.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "deep_bruk_hollow_wont",
+            "says": [
+              {
+                "text": "\u201cI've said all I mean to,\u201d they say, and go back to what they were doing."
+              }
+            ],
+            "onEnter": [
+              {
+                "adjustReputation": {
+                  "faction": "the_wayfinders",
+                  "amount": -1
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "deep_bruk_hollow_drop",
+                "text": "Leave it.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "deep_bruk_tally_gave",
+            "says": [
+              {
+                "text": "He hands it over without looking at it. \u201cThree years in a different ink,\u201d he says. \u201cNot my father's hand and not mine. I have never worked out whose, and I have had thirty years of sitting here to work it out in.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "grantItem": {
+                  "target": {
+                    "ref": "actor.id"
+                  },
+                  "item": "toll_tally",
+                  "quantity": 1
+                }
+              },
+              {
+                "setFlag": {
+                  "flag": "given:toll_tally",
+                  "value": true
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "deep_bruk_tally_thanks",
+                "text": "Thank you.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "deep_bruk_tally_kept",
+            "says": [
+              {
+                "text": "\u201cIt is the post's,\u201d he says. \u201cI am the post.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "adjustReputation": {
+                  "faction": "the_wayfinders",
+                  "amount": -2
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "deep_bruk_tally_leave",
+                "text": "Then no.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          }
+        ]
+      },
+      {
+        "id": "deep_ilde_talk",
+        "start": "greet",
+        "nodes": [
+          {
+            "id": "greet",
+            "says": [
+              {
+                "text": "A crossing over the Sunless River, a lamp on a tripod, and a woman scribing onto brass with the river going past under her."
+              },
+              {
+                "text": "\u201cDo not stand in the light. I am taking an angle off the far bank.\u201d"
+              }
+            ],
+            "onEnter": [],
+            "options": [
+              {
+                "id": "deep_ilde_shaft",
+                "text": "The shaft above the Weeping Vault.",
+                "requires": {
+                  "without": {
+                    "lore": [
+                      "deep_vault_shaft"
+                    ]
+                  }
+                },
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "check": {
+                  "skill": "persuasion",
+                  "difficulty": {
+                    "sub": [
+                      17,
+                      {
+                        "clamp": [
+                          {
+                            "div": [
+                              {
+                                "ref": "reputation.the_wayfinders",
+                                "else": 0
+                              },
+                              5
+                            ]
+                          },
+                          -6,
+                          6
+                        ]
+                      }
+                    ]
+                  },
+                  "onSuccess": "deep_ilde_shaft_told",
+                  "onFailure": "deep_ilde_shaft_wont"
+                }
+              },
+              {
+                "id": "deep_ilde_warm",
+                "text": "The columns weep warm.",
+                "requires": {
+                  "without": {
+                    "lore": [
+                      "deep_vault_warm"
+                    ]
+                  }
+                },
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "check": {
+                  "skill": "persuasion",
+                  "difficulty": {
+                    "sub": [
+                      14,
+                      {
+                        "clamp": [
+                          {
+                            "div": [
+                              {
+                                "ref": "reputation.the_wayfinders",
+                                "else": 0
+                              },
+                              5
+                            ]
+                          },
+                          -6,
+                          6
+                        ]
+                      }
+                    ]
+                  },
+                  "onSuccess": "deep_ilde_warm_told",
+                  "onFailure": "deep_ilde_warm_wont"
+                }
+              },
+              {
+                "id": "deep_ilde_spacing",
+                "text": "You measure things. What is the interval on the market road's lamps?",
+                "requires": {
+                  "without": {
+                    "lore": [
+                      "deep_lamps_spacing"
+                    ]
+                  }
+                },
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "check": {
+                  "skill": "insight",
+                  "difficulty": {
+                    "sub": [
+                      15,
+                      {
+                        "clamp": [
+                          {
+                            "div": [
+                              {
+                                "ref": "reputation.the_wayfinders",
+                                "else": 0
+                              },
+                              5
+                            ]
+                          },
+                          -6,
+                          6
+                        ]
+                      }
+                    ]
+                  },
+                  "onSuccess": "deep_ilde_spacing_told",
+                  "onFailure": "deep_ilde_spacing_wont"
+                }
+              },
+              {
+                "id": "deep_ilde_plate",
+                "text": "The plate. The one with the number scratched out.",
+                "requires": {
+                  "without": {
+                    "items": [
+                      "survey_plate"
+                    ],
+                    "flags": [
+                      {
+                        "flag": "given:survey_plate"
+                      }
+                    ]
+                  }
+                },
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": "",
+                "check": {
+                  "skill": "persuasion",
+                  "difficulty": {
+                    "sub": [
+                      16,
+                      {
+                        "clamp": [
+                          {
+                            "div": [
+                              {
+                                "ref": "reputation.the_wayfinders",
+                                "else": 0
+                              },
+                              5
+                            ]
+                          },
+                          -6,
+                          6
+                        ]
+                      }
+                    ]
+                  },
+                  "onSuccess": "deep_ilde_plate_gave",
+                  "onFailure": "deep_ilde_plate_kept"
+                }
+              },
+              {
+                "id": "greet_leave",
+                "text": "Nothing.",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "deep_ilde_shaft_told",
+            "says": [
+              {
+                "text": "She puts the scriber down. \u201cIt goes up further than there is rock above it.\u201d She lets you have that. \u201cI sectioned it. I took the depth from the surface and I took the height of the shaft and the second is bigger. I wrote the number down and then I scratched it out, because a number like that gets a surveyor retired.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "learnLore": {
+                  "entry": "deep_vault_shaft"
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "deep_ilde_shaft_on",
+                "text": "Go on.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "deep_ilde_shaft_wont",
+            "says": [
+              {
+                "text": "\u201cI've said all I mean to,\u201d they say, and go back to what they were doing."
+              }
+            ],
+            "onEnter": [
+              {
+                "adjustReputation": {
+                  "faction": "the_wayfinders",
+                  "amount": -1
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "deep_ilde_shaft_drop",
+                "text": "Leave it.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "deep_ilde_warm_told",
+            "says": [
+              {
+                "text": "\u201cWarm and salt.\u201d She is precise. \u201cThere is no sea within four hundred miles of straight down from that hall. I have tasted it and I have had it tasted by somebody who did not know where it came from, and they said seawater.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "learnLore": {
+                  "entry": "deep_vault_warm"
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "deep_ilde_warm_on",
+                "text": "Go on.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "deep_ilde_warm_wont",
+            "says": [
+              {
+                "text": "\u201cI've said all I mean to,\u201d they say, and go back to what they were doing."
+              }
+            ],
+            "onEnter": [
+              {
+                "adjustReputation": {
+                  "faction": "the_wayfinders",
+                  "amount": -1
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "deep_ilde_warm_drop",
+                "text": "Leave it.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "deep_ilde_spacing_told",
+            "says": [
+              {
+                "text": "\u201cTwice what you would light a road at, and exact between one and the next.\u201d She does not have to check. \u201cI took it as a young surveyor because it looked wrong. It is wrong, and it is *consistent*, which is worse. A lamp interval drifts. That does not.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "learnLore": {
+                  "entry": "deep_lamps_spacing"
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "deep_ilde_spacing_on",
+                "text": "Go on.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "deep_ilde_spacing_wont",
+            "says": [
+              {
+                "text": "\u201cI've said all I mean to,\u201d they say, and go back to what they were doing."
+              }
+            ],
+            "onEnter": [
+              {
+                "adjustReputation": {
+                  "faction": "the_wayfinders",
+                  "amount": -1
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "deep_ilde_spacing_drop",
+                "text": "Leave it.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "deep_ilde_plate_gave",
+            "says": [
+              {
+                "text": "She fetches it and turns it so the scratched-out corner is toward you first, which is either honesty or relief. \u201cEight pillars on it,\u201d she says. \u201cGo and count them, and then come back and tell me I sectioned it wrong.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "grantItem": {
+                  "target": {
+                    "ref": "actor.id"
+                  },
+                  "item": "survey_plate",
+                  "quantity": 1
+                }
+              },
+              {
+                "setFlag": {
+                  "flag": "given:survey_plate",
+                  "value": true
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "deep_ilde_plate_thanks",
+                "text": "Thank you.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          },
+          {
+            "id": "deep_ilde_plate_kept",
+            "says": [
+              {
+                "text": "\u201cIt is scribed for the guild,\u201d she says, and does not look at the corner. \u201cAsk me the measurements.\u201d"
+              }
+            ],
+            "onEnter": [
+              {
+                "adjustReputation": {
+                  "faction": "the_wayfinders",
+                  "amount": -2
+                }
+              }
+            ],
+            "options": [
+              {
+                "id": "deep_ilde_plate_leave",
+                "text": "Then no.",
+                "goto": "greet",
+                "effects": [],
+                "onceOnly": false,
+                "showWhenLocked": false,
+                "lockedHint": ""
+              }
+            ],
+            "redirectWhen": []
+          }
+        ]
       }
     ],
     "quests": [
@@ -77133,6 +80260,177 @@
           ],
           "reputation": {}
         }
+      },
+      {
+        "id": "deep_what_it_stands_on",
+        "name": "What the Bridge Was Built Over",
+        "description": "Footings rather than abutments, on a chasm four hundred years of dropped lights have not found the bottom of, older than the span laid onto them.",
+        "autoStart": false,
+        "ordered": true,
+        "tags": [
+          "hidden",
+          "deeproads",
+          "deep_bridge"
+        ],
+        "objectives": [
+          {
+            "id": "at_the_footings",
+            "description": "Get down into the footings.",
+            "kind": "reach",
+            "count": 1,
+            "hidden": true,
+            "optional": false,
+            "target": "black_bridge_the_footings"
+          },
+          {
+            "id": "past_the_bar",
+            "description": "Get past a bar on the far side.",
+            "kind": "custom",
+            "count": 1,
+            "hidden": true,
+            "optional": false,
+            "when": {
+              "test": {
+                "ref": "flags.deep_bridge_open"
+              }
+            }
+          },
+          {
+            "id": "what_hums",
+            "description": "Find what has been humming.",
+            "kind": "kill",
+            "count": 1,
+            "hidden": true,
+            "optional": false,
+            "target": "footing_hum"
+          }
+        ],
+        "stages": [],
+        "unlocks": [],
+        "rewards": {
+          "xp": 300,
+          "items": [
+            {
+              "item": "footing_maul",
+              "quantity": 1
+            }
+          ],
+          "reputation": {}
+        }
+      },
+      {
+        "id": "deep_the_ninth_column",
+        "name": "The Ninth Column",
+        "description": "Eight columns holding a roof and a ninth holding nothing, weeping warm salt water four hundred miles from any sea.",
+        "autoStart": false,
+        "ordered": true,
+        "tags": [
+          "hidden",
+          "deeproads",
+          "deep_vault"
+        ],
+        "objectives": [
+          {
+            "id": "at_the_columns",
+            "description": "Get to the columns.",
+            "kind": "reach",
+            "count": 1,
+            "hidden": true,
+            "optional": false,
+            "target": "weeping_vault_the_columns"
+          },
+          {
+            "id": "open_the_ninth",
+            "description": "Open what the ninth column is.",
+            "kind": "custom",
+            "count": 1,
+            "hidden": true,
+            "optional": false,
+            "when": {
+              "test": {
+                "ref": "flags.deep_vault_open"
+              }
+            }
+          },
+          {
+            "id": "what_weeps",
+            "description": "Find what has been weeping.",
+            "kind": "kill",
+            "count": 1,
+            "hidden": true,
+            "optional": false,
+            "target": "column_weeper"
+          }
+        ],
+        "stages": [],
+        "unlocks": [],
+        "rewards": {
+          "xp": 330,
+          "items": [
+            {
+              "item": "ninth_column_coat",
+              "quantity": 1
+            }
+          ],
+          "reputation": {}
+        }
+      },
+      {
+        "id": "deep_the_lamps",
+        "name": "The Lamps That Are Still Lit",
+        "description": "Four hundred unoiled years of light, at a spacing no road needs, over marks on the floor you can only read in the dark between them \u2014 and a stair with a course lifted out from below.",
+        "autoStart": false,
+        "ordered": true,
+        "tags": [
+          "hidden",
+          "deeproads",
+          "deep_lamps"
+        ],
+        "objectives": [
+          {
+            "id": "at_the_break",
+            "description": "Get to the ninth landing.",
+            "kind": "reach",
+            "count": 1,
+            "hidden": true,
+            "optional": false,
+            "target": "broken_stair_beneath_the_treads"
+          },
+          {
+            "id": "read_the_risers",
+            "description": "Read what is cut on the risers.",
+            "kind": "custom",
+            "count": 1,
+            "hidden": true,
+            "optional": false,
+            "when": {
+              "test": {
+                "ref": "flags.deep_stair_open"
+              }
+            }
+          },
+          {
+            "id": "what_lifted_it",
+            "description": "Meet what lifted the course out.",
+            "kind": "kill",
+            "count": 1,
+            "hidden": true,
+            "optional": false,
+            "target": "tread_lifter"
+          }
+        ],
+        "stages": [],
+        "unlocks": [],
+        "rewards": {
+          "xp": 400,
+          "items": [
+            {
+              "item": "lampwrights_lens",
+              "quantity": 1
+            }
+          ],
+          "reputation": {}
+        }
       }
     ],
     "arcs": [
@@ -77412,6 +80710,17 @@
           "kings_the_second_face",
           "kings_what_goes_under",
           "kings_the_ford_toll"
+        ],
+        "isEnding": false
+      },
+      {
+        "id": "deep_hidden",
+        "name": "The Deeproads, Unsurveyed",
+        "description": "Three things the Wayfinders have measured for four hundred years and never once written down.",
+        "quests": [
+          "deep_what_it_stands_on",
+          "deep_the_ninth_column",
+          "deep_the_lamps"
         ],
         "isEnding": false
       },
@@ -77829,6 +81138,66 @@
         "id": "kings_ford_stone",
         "name": "There is a stone in the ford bed with a hole through it, and the hole is worn by rope, and nobody has tied anything there in living memory.",
         "source": "a ford-side farmer"
+      },
+      {
+        "id": "deep_lamps_lit",
+        "name": "Nobody has oiled the market road in four hundred years. The lamps along it are lit.",
+        "source": "a waystation keeper"
+      },
+      {
+        "id": "deep_lamps_spacing",
+        "name": "They are set at a spacing no lamp needs. Twice as far apart as you would light a road, and exactly as far apart as each other.",
+        "source": "the Wayfinders' rule"
+      },
+      {
+        "id": "deep_lamps_out",
+        "name": "Three of them are out, and the three that are out are the three nearest the toll post.",
+        "source": "the old toll"
+      },
+      {
+        "id": "deep_lamps_reading",
+        "name": "They do not light the road evenly. Stand in the dark between two and the floor has marks on it that you cannot see under a lamp.",
+        "source": "a wayfinder"
+      },
+      {
+        "id": "deep_bridge_bottom",
+        "name": "The chasm has no bottom that anybody has found, and the Wayfinders have dropped lights down it for four hundred years.",
+        "source": "a bridge-walker"
+      },
+      {
+        "id": "deep_bridge_footings",
+        "name": "A bridge over a bottomless chasm has abutments, which lean on the cliff. The Black Bridge does not have abutments. It has piers, and a pier stands on something.",
+        "source": "the Wayfinders' rule"
+      },
+      {
+        "id": "deep_bridge_older",
+        "name": "The span is dwarf work and what it rests on is not. The lower stonework is older, and the span was laid onto it.",
+        "source": "the deep market"
+      },
+      {
+        "id": "deep_bridge_hum",
+        "name": "The bridge hums in a wind there is no wind for. It has done since before Karn Dolur, and the dwarves will not discuss it.",
+        "source": "cut on the span's kerb"
+      },
+      {
+        "id": "deep_vault_warm",
+        "name": "The vault weeps, and what runs off its stonework is warm. Nothing else this deep is warm.",
+        "source": "a picker"
+      },
+      {
+        "id": "deep_vault_shaft",
+        "name": "There is a shaft up out of the vault, and it goes up further than there is rock above it before you reach the sky.",
+        "source": "the Wayfinders' survey"
+      },
+      {
+        "id": "deep_vault_count",
+        "name": "Nine pillars in the vault. Every hall in the Deeproads is built in eights, and the wayfinders' survey has that hall in eights too.",
+        "source": "a wayfinder"
+      },
+      {
+        "id": "deep_vault_taste",
+        "name": "The water weeping out of the vault's stonework is salt, and there is no sea within four hundred miles of straight down.",
+        "source": "the fungus market"
       }
     ],
     "loreThreads": [
@@ -78050,6 +81419,39 @@
           "kings_ford_worked",
           "kings_ford_ox",
           "kings_ford_stone"
+        ]
+      },
+      {
+        "id": "deep_lamps",
+        "name": "The Lamps That Are Still Lit",
+        "description": "Four hundred years unoiled, burning, at a spacing no road needs, and three of them out at the toll post.",
+        "entries": [
+          "deep_lamps_lit",
+          "deep_lamps_spacing",
+          "deep_lamps_out",
+          "deep_lamps_reading"
+        ]
+      },
+      {
+        "id": "deep_bridge",
+        "name": "What the Bridge Was Built Over",
+        "description": "Footings, not abutments, on a chasm with no bottom, older than the span laid onto them.",
+        "entries": [
+          "deep_bridge_bottom",
+          "deep_bridge_footings",
+          "deep_bridge_older",
+          "deep_bridge_hum"
+        ]
+      },
+      {
+        "id": "deep_vault",
+        "name": "The Weeping Vault",
+        "description": "Nine columns in a world built in eights, weeping salt water that is warm, under a shaft with too much rock above it.",
+        "entries": [
+          "deep_vault_warm",
+          "deep_vault_shaft",
+          "deep_vault_count",
+          "deep_vault_taste"
         ]
       }
     ]
