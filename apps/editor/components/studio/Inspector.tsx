@@ -23,6 +23,8 @@ import { Roads } from './Roads';
 import { DialoguePieces } from './DialoguePieces';
 import { QuestChain } from './QuestChain';
 import { Description } from './Description';
+import { Hidden } from './Hidden';
+import { ThreadPanel } from './ThreadPanel';
 import { derivePrefab } from '@dm/module';
 import type { ProjectAuthoring } from '@/lib/modulesOnDisk';
 import type { OwnedField } from '@/lib/modRuntime';
@@ -287,6 +289,12 @@ function InspectorPanel(props: InspectorProps) {
             index={selection.index}
             entry={entry}
           />
+        )}
+        {info.path === 'world.pointsOfInterest' && (
+          <Hidden store={store} index={selection.index} entry={entry} />
+        )}
+        {info.path === 'narrative.loreThreads' && (
+          <ThreadPanel store={store} entry={entry} onOpen={props.onOpenItem} />
         )}
         {info.path === 'world.areas' && <Roads store={store} areaIndex={selection.index} />}
         {info.path === 'narrative.quests' && (

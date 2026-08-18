@@ -21,6 +21,8 @@ import {
   flagWritersCanRun,
   roadsAreTwoWay,
   effectsRunBeforeChecks,
+  hiddenPlacesCanBeFound,
+  discoverNamesAThread,
   questsAreReachable,
   killTargetsCanSpawn,
   dialoguesAreReachable,
@@ -209,6 +211,48 @@ describe('effects before checks', () => {
       d.narrative.dialogues[0].nodes[0].options[0].effects = [{ setFlag: { flag: 'x', value: true } }];
     });
     expect(runRules(doc, [effectsRunBeforeChecks])).toEqual([]);
+  });
+});
+
+/**
+ * Secrets. Aurendel hides 50 places and every one of them has a way in, and
+ * all 38 of its threads are anchored — so both of these are silent on what
+ * ships, which is the point: the failures they catch are edits away, not
+ * present.
+ */
+describe('hidden places', () => {
+  it('says nothing about the modules that ship', () => {
+    for (const name of ['greenmarch', 'aurendel']) {
+      expect(runRules(load(name), [hiddenPlacesCanBeFound, discoverNamesAThread])).toEqual([]);
+    }
+  });
+
+  it('catches a place hidden with no way of being found, and it compiles', () => {
+    const doc = broken('aurendel', (d) => {
+      const poi = d.world.pointsOfInterest.find((p: any) => p.hidden === true);
+      delete poi.discover;
+    });
+    const found = runRules(doc, [hiddenPlacesCanBeFound]);
+    expect(found).toHaveLength(1);
+    expect(found[0]?.message).toMatch(/no way of being discovered/);
+    expect(compileModule(doc).ok).toBe(true);
+  });
+
+  it('catches a difficulty that names a thread nobody wrote, and suggests the one that exists', () => {
+    const doc = broken('aurendel', (d) => {
+      const poi = d.world.pointsOfInterest.find(
+        (p: any) => JSON.stringify(p.discover ?? null).includes('threads.'),
+      );
+      poi.discover = JSON.parse(
+        JSON.stringify(poi.discover).replace(/threads\.([^".]+)\.known/, 'threads.$1s.known'),
+      );
+    });
+    const found = runRules(doc, [discoverNamesAThread]);
+    expect(found).toHaveLength(1);
+    expect(found[0]?.message).toMatch(/never gets easier/);
+    expect(found[0]?.hint).toMatch(/did you mean/);
+    // The whole point: this is invisible to everything else.
+    expect(compileModule(doc).ok).toBe(true);
   });
 });
 

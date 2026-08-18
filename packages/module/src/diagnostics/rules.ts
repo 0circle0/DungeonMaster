@@ -546,6 +546,74 @@ export const effectsRunBeforeChecks: Rule = {
   },
 };
 
+/**
+ * A hidden place is not a locked door: it is somewhere the party walks past
+ * until they look. `discover` is how they look. Without it there is no check to
+ * make, so the place is not hidden — it is gone.
+ */
+export const hiddenPlacesCanBeFound: Rule = {
+  code: 'hidden_place_unfindable',
+  title: 'A hidden place has a way of being found',
+  why:
+    '`hidden` takes a place off the list of what is here. `discover` is the check that puts ' +
+    'it back. A place with the first and not the second cannot be arrived at by any route.',
+  severity: 'warning',
+  reads: ['world.pointsOfInterest'],
+  run(ctx) {
+    for (const [i, poi] of collectionOf(ctx.doc, 'world.pointsOfInterest').entries()) {
+      if (poi['hidden'] !== true || poi['discover'] !== undefined) continue;
+      ctx.report(
+        this,
+        `world.pointsOfInterest.${i}`,
+        `${JSON.stringify(String(poi['id']))} is hidden and has no way of being discovered`,
+        'give it a `discover` check, or stop hiding it',
+      );
+    }
+  },
+};
+
+/**
+ * The difficulty of finding a hidden place usually falls as the party collects
+ * a thread's clues, and the link is a `threads.<id>.known` reference buried in
+ * the formula. It is the only link there is — nothing records a thread's
+ * anchors anywhere else, which is also how the Python's linter finds them.
+ *
+ * So a misspelling there is silent and total. The reference reads as nothing,
+ * the difficulty never falls, and the place sits at its hardest check forever
+ * while the clues that were meant to open it pile up unread.
+ */
+export const discoverNamesAThread: Rule = {
+  code: 'discover_names_no_thread',
+  title: 'A discovery formula names a thread that exists',
+  why:
+    'The only thing tying a hidden place to the clues that reveal it is a `threads.<id>.known` ' +
+    'reference inside its difficulty. A name that matches no thread never changes, so the ' +
+    'place stays at its hardest and no amount of investigation helps.',
+  severity: 'warning',
+  reads: ['world.pointsOfInterest', 'narrative.loreThreads'],
+  run(ctx) {
+    const threads = ctx.ids('narrative.loreThreads');
+    for (const [i, poi] of collectionOf(ctx.doc, 'world.pointsOfInterest').entries()) {
+      const named = new Set<string>();
+      walkFor(poi['discover'], 'ref', (value) => {
+        if (typeof value !== 'string') return;
+        const thread = /^threads\.(.+)\.known$/.exec(value)?.[1];
+        if (thread) named.add(thread);
+      });
+      for (const thread of named) {
+        if (threads.has(thread)) continue;
+        ctx.report(
+          this,
+          `world.pointsOfInterest.${i}.discover`,
+          `${JSON.stringify(String(poi['id']))} gets easier to find as ${JSON.stringify(thread)} ` +
+            'fills, and there is no such thread — so it never gets easier',
+          nearest(thread, [...threads]),
+        );
+      }
+    }
+  },
+};
+
 export const questsAreReachable: Rule = {
   code: 'quest_unreachable',
   title: 'Every quest can be arrived at',
@@ -628,6 +696,8 @@ export const DEFAULT_RULES: readonly Rule[] = [
   flagWritersCanRun,
   roadsAreTwoWay,
   effectsRunBeforeChecks,
+  hiddenPlacesCanBeFound,
+  discoverNamesAThread,
   questsAreReachable,
   killTargetsCanSpawn,
   dialoguesAreReachable,

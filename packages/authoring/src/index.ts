@@ -27,3 +27,6 @@ export type { ChainLink, ChainOptions, ChainCheckOptions } from './chain.js';
 
 export { rumour, favour, talk, givenFlag } from './dialogue.js';
 export type { Voice, Fragment } from './dialogue.js';
+
+export { rumoured, readRumoured, threadAnchored, noticing, dcKnowing, floorOf } from './discover.js';
+export type { Rumoured, Discover, Noticing } from './discover.js';
