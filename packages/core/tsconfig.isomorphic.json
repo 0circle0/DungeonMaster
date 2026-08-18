@@ -1,0 +1,11 @@
+{
+  "extends": "../../tsconfig.base.json",
+
+  // Dice, hashing, ids, noise and the RNG are pure by construction and have no
+  // dependencies at all. `types: []` is what keeps it that way: the client-side
+  // library compresses and hashes documents in the browser, and a Node API
+  // reaching in here would not be caught anywhere else.
+  "compilerOptions": { "types": [] },
+  "include": ["src/**/*.ts"],
+  "exclude": ["src/**/*.test.ts"]
+}

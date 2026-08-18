@@ -7,8 +7,9 @@
     "dev": "next dev -p 4400",
     "build": "next build",
     "start": "next start -p 4400",
-    "predev": "tsx ../../packages/tools/src/bin/free-port.ts 4400",
-    "prestart": "tsx ../../packages/tools/src/bin/free-port.ts 4400"
+    "predev": "tsx ../../packages/tools/src/bin/free-port.ts 4400 && tsx ../../packages/tools/src/bin/build-content.ts editor",
+    "prebuild": "tsx ../../packages/tools/src/bin/build-content.ts editor",
+    "prestart": "tsx ../../packages/tools/src/bin/free-port.ts 4400 && tsx ../../packages/tools/src/bin/build-content.ts editor"
   },
   "dependencies": {
     "@dm/core": "0.1.0",

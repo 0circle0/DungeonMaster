@@ -7,6 +7,7 @@
   "dependencies": {
     "@dm/core": "0.1.0",
     "@dm/engine": "0.1.0",
+    "@dm/library": "0.1.0",
     "@dm/module": "0.1.0",
     "@dm/play": "0.1.0"
   }

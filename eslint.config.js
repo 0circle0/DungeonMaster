@@ -20,6 +20,8 @@ export default tseslint.config(
       '**/node_modules/**',
       '**/dist/**',
       '**/.next/**',
+      // `output: 'export'` writes a built copy of the app here.
+      '**/out/**',
       'schema/**',
       'docs/**',
       // Authored mod JavaScript is third-party content, not our source. It
@@ -100,17 +102,36 @@ export default tseslint.config(
   },
 
   /**
-   * The engine must stay isomorphic, so that a browser play surface is a UI
+   * The shared packages must stay isomorphic, so that a browser surface is a UI
    * layer rather than a rewrite. `tsconfig.isomorphic.json` already fails the
    * build on this; the rule exists as well because a lint error names the
    * reason at the line, and finding out at review time beats finding out from
    * a compiler flag whose purpose has to be looked up.
+   *
+   * `@dm/module` and `@dm/core` are held to it too, because the studio and the
+   * player now compile, split, hash and store documents entirely in the browser
+   * — the filesystem lives in `@dm/module/load` and `src/bin/**`, and nowhere
+   * else.
    */
   {
-    files: ['packages/engine/src/**/*.ts', 'packages/play/src/**/*.ts', 'packages/mods/src/**/*.ts'],
+    files: [
+      'packages/engine/src/**/*.ts',
+      'packages/play/src/**/*.ts',
+      'packages/mods/src/**/*.ts',
+      'packages/module/src/**/*.ts',
+      'packages/core/src/**/*.ts',
+      'packages/library/src/**/*.ts',
+    ],
     ignores: [
       'packages/engine/src/**/*.test.ts',
       'packages/play/src/**/*.test.ts',
+      'packages/module/src/**/*.test.ts',
+      'packages/core/src/**/*.test.ts',
+      'packages/library/src/**/*.test.ts',
+      // The one file allowed to read a module off disk, which is why it is a
+      // separate export entry, and the tools that write them.
+      'packages/module/src/load.ts',
+      'packages/module/src/bin/**/*.ts',
       // The mod runtime has to run in a browser too, so it is held to the same
       // rule — except `load.ts`, which is the one file allowed to read a mod
       // off disk, exactly as `@dm/module/load` is.
@@ -123,15 +144,15 @@ export default tseslint.config(
     rules: {
       'no-restricted-globals': [
         'error',
-        { name: 'process', message: 'The engine and the play layer are isomorphic — Node APIs belong in the app layer or `@dm/module/load`.' },
-        { name: '__dirname', message: 'The engine and the play layer are isomorphic — Node APIs belong in the app layer or `@dm/module/load`.' },
-        { name: 'require', message: 'The engine and the play layer are isomorphic — Node APIs belong in the app layer or `@dm/module/load`.' },
+        { name: 'process', message: 'This package runs in the browser — Node APIs belong in `src/bin/**` or `@dm/module/load`.' },
+        { name: '__dirname', message: 'This package runs in the browser — Node APIs belong in `src/bin/**` or `@dm/module/load`.' },
+        { name: 'require', message: 'This package runs in the browser — Node APIs belong in `src/bin/**` or `@dm/module/load`.' },
       ],
       'no-restricted-imports': [
         'error',
         {
           patterns: [
-            { group: ['node:*', 'fs', 'path', 'os'], message: 'The engine and the play layer are isomorphic — Node APIs belong in the app layer or `@dm/module/load`.' },
+            { group: ['node:*', 'fs', 'path', 'os'], message: 'This package runs in the browser — Node APIs belong in `src/bin/**` or `@dm/module/load`.' },
             { group: ['picocolors'], message: 'The play layer emits data, not escape codes — colour belongs to the front end.' },
           ],
         },

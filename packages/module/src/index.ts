@@ -44,6 +44,8 @@ export type { ProjectManifest, SplitProject, JoinIssue } from './project.js';
 
 export * from './diagnostics/index.js';
 export { runRules, RuleContext, DEFAULT_RULES } from './diagnostics/rules.js';
+export { recomputeInstances } from './prefabInstances.js';
+
 export type { Rule, Contract } from './diagnostics/rules.js';
 export * from './analysis/index.js';
 

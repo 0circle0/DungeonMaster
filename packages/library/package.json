@@ -1,0 +1,16 @@
+{
+  "name": "@dm/library",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "The world library: worlds stored in the browser, compressed, plus the export envelope both apps read.",
+  "main": "./src/index.ts",
+  "exports": {
+    ".": "./src/index.ts",
+    "./envelope": "./src/envelope.ts"
+  },
+  "dependencies": {
+    "@dm/core": "0.1.0",
+    "@dm/module": "0.1.0"
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "extends": "../../tsconfig.base.json",
+
+  // `DOM` is the point of this package: IndexedDB, CompressionStream, Blob and
+  // fetch are its whole subject, and the base config's `lib: ["ES2023"]` knows
+  // none of them.
+  "compilerOptions": { "lib": ["ES2023", "DOM", "DOM.Iterable"] },
+  "include": ["src/**/*.ts"]
+}

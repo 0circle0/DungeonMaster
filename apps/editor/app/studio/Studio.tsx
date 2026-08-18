@@ -10,12 +10,12 @@
  * at, the way selecting an asset in a game engine doesn't close the scene.
  */
 
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useModuleStore, exportModule, getAt } from '@/lib/store';
 import type { ModuleDoc } from '@/lib/store';
 import { collectionAt } from '@/lib/schema';
 import { startOf } from '@/lib/worldModel';
-import type { Diagnostic } from '@dm/module';
+import type { Diagnostic, Prefab, PrefabLink } from '@dm/module';
 import { Toolbar } from '@/components/studio/Toolbar';
 import { Dock } from '@/components/studio/Dock';
 import { Viewport } from '@/components/studio/Viewport';
@@ -26,9 +26,13 @@ import { RulesPanel } from '@/components/studio/RulesPanel';
 import { useRules } from '@/lib/useRules';
 import { useEditorMods } from '@/lib/useEditorMods';
 import type { ModWire } from '@/lib/modWire';
-import type { ProjectAuthoring } from '@/lib/modulesOnDisk';
-import type { Draft } from '@/lib/drafts';
-import { useAutosave } from '@/lib/useAutosave';
+import type { WorldAuthoring, WorldMeta } from '@dm/library';
+import { NO_AUTHORING, clearDraft, lastOpened, rememberLastOpened } from '@dm/library';
+import { useEditorLibrary, loadWorld } from '@/lib/useEditorLibrary';
+import type { LoadedWorld } from '@/lib/useEditorLibrary';
+import type { EditorLibraryApi } from '@/lib/useEditorLibrary';
+import { useAutosave, interruptedAt, clearInterrupted } from '@/lib/useAutosave';
+import { Welcome } from '@/components/studio/Welcome';
 import { rememberPlace, readPlace, placeStillExists } from '@/lib/place';
 import { runRules } from '@dm/module';
 import { NewModuleDialog } from '@/components/studio/NewModuleDialog';
@@ -40,15 +44,34 @@ import type { MapTarget, Selection, ViewId, ViewportKind } from './selection';
 import { mapTargetFor, selectionForDiagnostic } from './selection';
 import styles from './studio.module.css';
 
-export function Studio(props: {
+/**
+ * Mods, which nothing currently installs.
+ *
+ * The machinery is intact and the shipped examples declare none, so this is the
+ * unmodded studio by construction. Distributing mods to a static deployment has
+ * no story yet; they remain a local-development feature until it does.
+ */
+const NO_MODS: readonly ModWire[] = [];
+
+/**
+ * The studio, once a world is in hand.
+ *
+ * Split from the loader below so that everything here can go on assuming it has
+ * a document — the alternative is every panel learning to render "still
+ * loading", which is a lot of code to describe a tenth of a second.
+ */
+function StudioShell(props: {
   initialDoc: ModuleDoc;
   initialName: string;
-  templates: readonly string[];
-  mods: readonly ModWire[];
-  /** Prefabs, style tables and instance links, when the module is a project. */
-  authoring: ProjectAuthoring;
+  world: WorldMeta;
+  library: EditorLibraryApi;
+  /** Prefabs, style tables and instance links, when the world has them. */
+  authoring: WorldAuthoring;
+  onAuthoringChange: (next: WorldAuthoring) => void;
   /** Work that did not validate last session, kept rather than lost. */
-  draft: Draft | null;
+  draft: { savedAt: number; doc: Record<string, unknown> } | null;
+  onOpenWorld: (key: string) => void;
+  onNewWorld: (doc: ModuleDoc, filename: string) => void;
 }) {
   const store = useModuleStore(props.initialDoc, props.initialName);
   const [selection, setSelection] = useState<Selection>({ kind: 'start' });
@@ -73,7 +96,7 @@ export function Studio(props: {
         .filter(Boolean),
     [store.doc],
   );
-  const mods = useEditorMods(props.mods, declaredMods);
+  const mods = useEditorMods(NO_MODS, declaredMods);
 
   const { validation } = store;
 
@@ -147,14 +170,16 @@ export function Studio(props: {
 
 
   /**
-   * Saving back to `modules/<name>/`.
+   * Saving, which now always has somewhere to go.
    *
-   * Only for a document that came from one — a file dropped in from elsewhere
-   * has no home in this repository to be written to, and guessing one would
-   * overwrite whatever happens to share its name.
+   * This used to be gated on the document matching a directory in the
+   * repository, which meant a brand-new module — the one case where losing work
+   * costs the most — autosaved nowhere at all and survived only if somebody
+   * remembered to export it. Every world is a row in the library from the
+   * moment it exists, so the gate is gone.
    */
   const moduleName = store.filename.replace(/\.module\.json$|\.json$/, '');
-  const canSave = props.templates.includes(moduleName);
+  const canSave = true;
 
   /**
    * Work from a previous session that never validated.
@@ -165,6 +190,7 @@ export function Studio(props: {
    * opened the module and do not yet know what is in either version.
    */
   const [draft, setDraft] = useState(props.draft);
+  const [interrupted, setInterrupted] = useState(() => interruptedAt(props.world));
 
   /**
    * Put the author back where they were.
@@ -179,7 +205,7 @@ export function Studio(props: {
    */
   useEffect(() => {
     const place = readPlace();
-    if (!place || place.module !== moduleName) return;
+    if (!place || place.module !== props.world.key) return;
     if (!placeStillExists(place, store.doc)) return;
 
     setSelection(place.selection);
@@ -193,10 +219,36 @@ export function Studio(props: {
   // And remember it, whenever it moves.
   useEffect(() => {
     if (!canSave) return;
-    rememberPlace({ module: moduleName, selection, viewportKind, tablePath, mapTarget });
-  }, [canSave, moduleName, selection, viewportKind, tablePath, mapTarget]);
+    rememberPlace({ module: props.world.key, selection, viewportKind, tablePath, mapTarget });
+  }, [canSave, props.world.key, selection, viewportKind, tablePath, mapTarget]);
 
-  const autosave = useAutosave(store, moduleName, canSave);
+  /**
+   * The authoring sidecar's two mutations.
+   *
+   * Both used to be `fetch` calls to routes that wrote files, followed — in the
+   * prefab case — by a full page reload, because the list they changed was a
+   * server prop and there was no other way to see it. They are state now, and
+   * the next autosave carries them to the library alongside the document, so a
+   * prefab and the entries made from it can never be written apart.
+   */
+  const savePrefab = useCallback((prefab: Prefab) => {
+    props.onAuthoringChange({
+      ...props.authoring,
+      prefabs: [...props.authoring.prefabs.filter((p) => p.id !== prefab.id), prefab],
+    });
+  }, [props]);
+
+  const linkInstance = useCallback((collection: string, entryId: string, link: PrefabLink) => {
+    props.onAuthoringChange({
+      ...props.authoring,
+      instances: {
+        ...props.authoring.instances,
+        [collection]: { ...(props.authoring.instances[collection] ?? {}), [entryId]: link },
+      },
+    });
+  }, [props]);
+
+  const autosave = useAutosave(store, props.world, props.authoring, canSave);
   const saveToDisk = autosave.flush;
 
   /**
@@ -256,11 +308,11 @@ export function Studio(props: {
       { kind: 'action', id: 'act:undo', label: 'Undo', hint: '⌘Z', run: () => store.undo() },
       { kind: 'action', id: 'act:redo', label: 'Redo', hint: '⌘⇧Z', run: () => store.redo() },
       { kind: 'action', id: 'act:start', label: 'Start & creation', hint: 'where play begins', run: () => openStart() },
-      { kind: 'action', id: 'act:mods', label: 'Mods', hint: `${props.mods.length} installed`, run: () => setModsOpen((open) => !open) },
+      { kind: 'action', id: 'act:mods', label: 'Mods', hint: `${NO_MODS.length} installed`, run: () => setModsOpen((open) => !open) },
     ],
     // The navigation helpers are redefined every render and close over nothing
     // that changes, so they are deliberately not dependencies.
-    [store, saveToDisk, props.mods.length],
+    [store, saveToDisk],
   );
 
   /**
@@ -436,9 +488,11 @@ export function Studio(props: {
         onOpenStart={openStart}
         onOpenMods={() => setModsOpen((open) => !open)}
         onOpenRules={() => setRulesOpen((open) => !open)}
-        moduleNames={props.templates}
+        worlds={props.library.worlds}
+        worldKey={props.world.key}
+        onOpenWorld={props.onOpenWorld}
         ruleFindings={semanticReady ? semantic.length : null}
-        modCount={props.mods.length}
+        modCount={NO_MODS.length}
         onSave={() => void saveToDisk()}
         canSave={canSave}
         moduleName={moduleName}
@@ -476,7 +530,7 @@ export function Studio(props: {
           onPlaceFromPrefab={setPlacing}
           prefabCollections={prefabCollections}
           authoring={props.authoring}
-          moduleName={moduleName}
+          onSavePrefab={savePrefab}
         />
 
         <Inspector
@@ -485,6 +539,7 @@ export function Studio(props: {
           diagnostics={validationWithMods}
           modFields={modFields}
           authoring={props.authoring}
+          onAuthoringChange={props.onAuthoringChange}
           onOpenItem={openItem}
           onDuplicate={duplicateEntry}
           onDelete={deleteEntry}
@@ -532,6 +587,22 @@ export function Studio(props: {
         />
       )}
 
+      {interrupted !== null && (
+        <div className={styles.recovery}>
+          <span>
+            The last few seconds before this world was closed on{' '}
+            {new Date(interrupted).toLocaleString()} may not have been saved — a browser can
+            cut a write short while a tab is closing.
+          </span>
+          <button
+            className="btn tiny"
+            onClick={() => { clearInterrupted(); setInterrupted(null); }}
+          >
+            Dismiss
+          </button>
+        </div>
+      )}
+
       {draft && (
         <div className={styles.recovery}>
           <span>
@@ -550,7 +621,7 @@ export function Studio(props: {
           <button
             className="btn tiny"
             onClick={() => {
-              void fetch(`/api/modules/${moduleName}/draft`, { method: 'DELETE' });
+              void clearDraft(props.world.key);
               setDraft(null);
             }}
           >
@@ -564,7 +635,7 @@ export function Studio(props: {
           store={store}
           prefabs={props.authoring.prefabs}
           style={props.authoring.style}
-          moduleName={moduleName}
+          onLinkInstance={linkInstance}
           collection={placing}
           onClose={() => setPlacing(null)}
           onPlaced={(index) => openItem(placing, index)}
@@ -587,16 +658,17 @@ export function Studio(props: {
 
       {newDialog && (
         <NewModuleDialog
-          templates={props.templates}
+          library={props.library}
           dirty={store.dirty}
           onExportFirst={() => {
             exportModule(store.doc, store.filename);
             store.markSaved();
           }}
           onCreate={(doc, filename) => {
-            store.load(doc, filename);
+            // A new world is a library row before it is a document on screen,
+            // so there is never a state where typing goes nowhere.
+            props.onNewWorld(doc, filename);
             setNewDialog(false);
-            openStart();
           }}
           onClose={() => setNewDialog(false)}
         />
@@ -612,4 +684,91 @@ function uniqueId(entries: readonly Record<string, unknown>[], base: string): st
     const candidate = `${base}_${i}`;
     if (!taken.has(candidate)) return candidate;
   }
+}
+
+/**
+ * Choosing a world, and getting it into the shell.
+ *
+ * This replaces a server component that read `modules/` from disk on every
+ * request, picked a starting module from a cookie, and handed the whole thing
+ * across the boundary. All of that is here now, in the browser, against the
+ * library — which is what makes the studio a page a static host can serve.
+ *
+ * First paint is a skeleton rather than a guess. The old arrangement existed
+ * partly to avoid the wrong document appearing and being swapped a moment
+ * later; with no server render there is nothing to be wrong, so there is
+ * nothing to hide.
+ */
+export function Studio() {
+  const library = useEditorLibrary();
+  const [world, setWorld] = useState<LoadedWorld | null>(null);
+  const [opening, setOpening] = useState<string | null>(null);
+  const [failed, setFailed] = useState<string | null>(null);
+
+  const open = useCallback(async (key: string): Promise<void> => {
+    setOpening(key);
+    try {
+      const loaded = await loadWorld(key);
+      if (!loaded) { setFailed('That world is no longer in your library.'); return; }
+      setFailed(null);
+      setWorld(loaded);
+      void rememberLastOpened(key);
+    } finally {
+      setOpening(null);
+    }
+  }, []);
+
+  // Resume where the author was, if that world is still here. No fallback to
+  // "some other world": opening something nobody asked for is worse than
+  // showing the shelf.
+  useEffect(() => {
+    if (library.loading || world) return;
+    let live = true;
+    void (async () => {
+      const remembered = await lastOpened();
+      if (!live || !remembered) return;
+      if (!library.worlds.some((candidate) => candidate.key === remembered)) return;
+      await open(remembered);
+    })();
+    return () => { live = false; };
+  }, [library.loading, library.worlds, world, open]);
+
+  const newWorld = useCallback(async (doc: ModuleDoc, filename: string): Promise<void> => {
+    const meta = await library.createFrom(doc, filename);
+    if (meta) await open(meta.key);
+  }, [library, open]);
+
+  if (!world) {
+    return (
+      <Welcome
+        library={library}
+        opening={opening}
+        error={failed}
+        onOpen={(key) => void open(key)}
+        onNew={(doc, filename) => void newWorld(doc, filename)}
+      />
+    );
+  }
+
+  return (
+    <StudioShell
+      // Remounting on the world is the point: the store, the selection and the
+      // undo history all belong to one document, and carrying any of them
+      // across a switch is how an edit lands in the wrong world.
+      key={world.meta.key}
+      initialDoc={world.envelope.doc}
+      initialName={world.envelope.filename}
+      world={world.meta}
+      library={library}
+      authoring={world.envelope.authoring ?? NO_AUTHORING}
+      onAuthoringChange={(next) => {
+        setWorld((current) => (current
+          ? { ...current, envelope: { ...current.envelope, authoring: next } }
+          : current));
+      }}
+      draft={world.draft}
+      onOpenWorld={(key) => void open(key)}
+      onNewWorld={(doc, filename) => void newWorld(doc, filename)}
+    />
+  );
 }

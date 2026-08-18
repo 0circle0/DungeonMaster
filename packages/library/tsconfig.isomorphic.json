@@ -1,0 +1,11 @@
+{
+  "extends": "../../tsconfig.base.json",
+
+  // Browser yes, Node no. `types: []` drops the ambient Node globals while the
+  // DOM lib stays, which is exactly the shape this package has to hold: it is
+  // the only place that touches storage, and it may never be temped into
+  // reading a file off a disk that a browser does not have.
+  "compilerOptions": { "types": [], "lib": ["ES2023", "DOM", "DOM.Iterable"] },
+  "include": ["src/**/*.ts"],
+  "exclude": ["src/**/*.test.ts"]
+}

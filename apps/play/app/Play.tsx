@@ -3,13 +3,17 @@
 /**
  * The play shell.
  *
- * One client component owns everything: which module is compiled, the session
+ * One client component owns everything: which world is compiled, the session
  * hook, which overlay is open. View routing is a discriminated union in state,
  * not Next routes — the editor's pattern, and the right one for an app that is
  * a single continuous scene.
+ *
+ * Nothing here talks to a server. Worlds come out of the library on this
+ * machine; the examples a deployment carries are static files, fetched once
+ * when somebody asks for one.
  */
 
-import { useMemo, useRef, useState } from 'react';
+import { useCallback, useMemo, useRef, useState } from 'react';
 import type { CharacterChoices } from '@dm/engine';
 import { placeNameOf } from '@dm/engine';
 import type { CompiledModule } from '@dm/module';
@@ -17,12 +21,15 @@ import type { MetaCommand } from '@dm/play';
 import { traderNearby } from '@dm/play';
 import type { ModuleChoice } from '@/lib/modules';
 import { compileDoc } from '@/lib/modules';
+import { useLibrary } from '@/lib/useLibrary';
+import type { LibraryApi } from '@/lib/useLibrary';
 import type { ModWire, ModSetup } from '@/lib/mods';
 import { useMods } from '@/lib/useMods';
 import type { ModsApi } from '@/lib/useMods';
 import { ModsPanel, ModBanner } from '@/components/Mods';
 import { useSession } from '@/lib/useSession';
 import type { SessionApi } from '@/lib/useSession';
+import { Launcher } from '@/components/Launcher';
 import { MapView } from '@/components/MapView';
 import { ContextBar } from '@/components/ContextBar';
 import { StatusBar } from '@/components/StatusBar';
@@ -36,33 +43,50 @@ import { Creation } from '@/components/Creation';
 
 type Panel = 'journal' | 'lore' | 'sheet' | 'inventory' | 'shop' | 'saves' | 'help' | 'creation' | 'mods' | null;
 
-export function Play({ shipped, mods }: { shipped: readonly ModuleChoice[]; mods: readonly ModWire[] }) {
-  const [chosen, setChosen] = useState<ModuleChoice | null>(shipped[0] ?? null);
-  const [dropped, setDropped] = useState<ModuleChoice | null>(null);
+/**
+ * Mods, which nothing currently installs.
+ *
+ * The engine-side machinery is intact and the shipped examples declare no mods,
+ * so this is the unmodded engine by construction. Distributing mods to a static
+ * deployment has no story yet: they are a local-development feature until it
+ * does.
+ */
+const NO_MODS: readonly ModWire[] = [];
 
-  const active = dropped ?? chosen;
+export function Play() {
+  const library = useLibrary();
+  const [active, setActive] = useState<ModuleChoice | null>(null);
+
   const compiled = useMemo(() => (active ? compileDoc(active.doc) : null), [active]);
+  const leave = useCallback(() => setActive(null), []);
 
   if (!active || !compiled) {
-    return <div className="app"><p className="error-note">No modules found in modules/.</p></div>;
+    return <Launcher library={library} onOpen={setActive} />;
   }
+
   if (!compiled.ok) {
     return (
-      <div className="app">
-        <p className="error-note">{active.title} does not compile: {compiled.error}</p>
+      <div className="app launcher">
+        <div className="launcher-inner">
+          <p className="error-note">{active.title} does not compile: {compiled.error}</p>
+          <button className="btn" onClick={leave}>Back to your worlds</button>
+        </div>
       </div>
     );
   }
 
   return (
     <Gate
-      key={active.id}
+      // Composite, never the module id: two worlds may both be called
+      // `aurendel`, and keying on the id would carry a live session from one
+      // into the other.
+      key={active.key}
       module={compiled.module}
-      installed={mods}
-      shipped={shipped}
-      activeId={active.id}
-      onChoose={(choice) => { setDropped(null); setChosen(choice); }}
-      onDrop={setDropped}
+      installed={NO_MODS}
+      choice={active}
+      library={library}
+      onLeave={leave}
+      onOpen={setActive}
     />
   );
 }
@@ -76,14 +100,14 @@ export function Play({ shipped, mods }: { shipped: readonly ModuleChoice[]; mods
  * on the first render exactly as it did before mods existed.
  */
 function Gate({
-  module, installed, shipped, activeId, onChoose, onDrop,
+  module, installed, choice, library, onLeave, onOpen,
 }: {
   module: CompiledModule;
   installed: readonly ModWire[];
-  shipped: readonly ModuleChoice[];
-  activeId: string;
-  onChoose: (choice: ModuleChoice) => void;
-  onDrop: (choice: ModuleChoice) => void;
+  choice: ModuleChoice;
+  library: LibraryApi;
+  onLeave: () => void;
+  onOpen: (choice: ModuleChoice) => void;
 }) {
   const mods = useMods(module, installed);
 
@@ -108,7 +132,7 @@ function Gate({
               </li>
             ))}
           </ul>
-          <p>Install them under <code>mods/engine/</code> and reload.</p>
+          <p>Mods are not distributed to this build yet.</p>
           {issues.filter((i) => i.severity === 'error').map((issue, i) => (
             <p key={i}>{issue.message}</p>
           ))}
@@ -122,24 +146,24 @@ function Gate({
       module={module}
       setup={mods.state.setup}
       modsApi={mods}
-      shipped={shipped}
-      activeId={activeId}
-      onChoose={onChoose}
-      onDrop={onDrop}
+      choice={choice}
+      library={library}
+      onLeave={onLeave}
+      onOpen={onOpen}
     />
   );
 }
 
 function Game({
-  module, setup, modsApi, shipped, activeId, onChoose, onDrop,
+  module, setup, modsApi, choice, library, onLeave, onOpen,
 }: {
   module: CompiledModule;
   setup: ModSetup | null;
   modsApi: ModsApi;
-  shipped: readonly ModuleChoice[];
-  activeId: string;
-  onChoose: (choice: ModuleChoice) => void;
-  onDrop: (choice: ModuleChoice) => void;
+  choice: ModuleChoice;
+  library: LibraryApi;
+  onLeave: () => void;
+  onOpen: (choice: ModuleChoice) => void;
 }) {
   const session: SessionApi = useSession(module, 12345, setup);
   // Who the party could trade with, so the panel and its button agree.
@@ -179,46 +203,21 @@ function Game({
     <div className="app">
       <div className="topbar">
         <span className="title">DungeonMaster</span>
-        <select
-          value={activeId}
-          onChange={(event) => {
-            const next = shipped.find((choice) => choice.id === event.target.value);
-            if (next) onChoose(next);
-          }}
-          style={{ background: 'var(--panel-2)', border: '1px solid var(--line)', borderRadius: 6, padding: '4px 8px' }}
-        >
-          {shipped.map((choice) => (
-            <option key={choice.id} value={choice.id}>{choice.title}</option>
-          ))}
-          {!shipped.some((choice) => choice.id === activeId) && (
-            <option value={activeId}>{activeId} (opened)</option>
-          )}
-        </select>
+        <button className="btn" onClick={onLeave} title="Your worlds">◄ Worlds</button>
+        <span className="world-title">{choice.title}</span>
         <button className="btn" onClick={() => file.current?.click()}>Open…</button>
         <input
           ref={file}
           type="file"
-          accept="application/json,.json"
+          accept="application/json,.json,.gz"
           hidden
           onChange={(event) => {
             const picked = event.target.files?.[0];
-            if (picked) {
-              void picked.text().then((text) => {
-                try {
-                  const doc = JSON.parse(text) as Record<string, unknown>;
-                  const meta = (doc['meta'] ?? {}) as Record<string, unknown>;
-                  onDrop({
-                    id: String(doc['id'] ?? picked.name),
-                    title: String(meta['title'] ?? picked.name),
-                    description: '',
-                    doc,
-                  });
-                } catch (error) {
-                  window.alert(`Could not parse ${picked.name}: ${(error as Error).message}`);
-                }
-              });
-            }
             event.target.value = '';
+            // Imported worlds join the library rather than living in this
+            // tab's memory: the file was opened once, and it should be here
+            // next time without being found again.
+            if (picked) void library.importFile(picked).then((next) => { if (next) onOpen(next); });
           }}
         />
         <span className="spacer" />
@@ -298,7 +297,7 @@ function Game({
       )}
       {panel === 'saves' && (
         <Overlay title="Saved games" onClose={() => setPanel(null)}>
-          <SaveMenu session={session} onClose={() => setPanel(null)} />
+          <SaveMenu session={session} worldKey={choice.worldKey} onClose={() => setPanel(null)} />
         </Overlay>
       )}
       {panel === 'help' && (

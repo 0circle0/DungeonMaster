@@ -1,0 +1,13 @@
+{
+  "extends": "../../tsconfig.base.json",
+
+  // No Node types: everything the studio and the play surface import from
+  // `@dm/module` runs in a browser, and the whole client-side design rests on
+  // that being true rather than merely believed. `src/load.ts` is the one file
+  // allowed to read a module off disk — it is a separate export entry for
+  // exactly that reason — and `src/bin/**` is filesystem policy that runs on a
+  // developer's machine.
+  "compilerOptions": { "types": [] },
+  "include": ["src/**/*.ts"],
+  "exclude": ["src/load.ts", "src/bin/**/*.ts", "src/**/*.test.ts"]
+}

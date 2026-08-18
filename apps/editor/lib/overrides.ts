@@ -22,7 +22,7 @@ import type { Prefab, PrefabLink } from '@dm/module';
 import type { ExpandIssue } from '@dm/module';
 import type { OverrideInfo } from '@/components/Field';
 import type { ModuleStore, Path } from '@/lib/store';
-import type { ProjectAuthoring } from '@/lib/modulesOnDisk';
+import type { WorldAuthoring } from '@dm/library';
 
 export interface PrefabState {
   /** Null when this entry did not come from a prefab. */
@@ -41,7 +41,7 @@ export function usePrefabState(args: {
   basePath: Path;
   entry: Record<string, unknown>;
   collection: string;
-  authoring: ProjectAuthoring;
+  authoring: WorldAuthoring;
 }): PrefabState {
   const { store, basePath, entry, collection, authoring } = args;
   const id = typeof entry['id'] === 'string' ? entry['id'] : '';

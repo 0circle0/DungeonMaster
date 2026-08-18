@@ -1,0 +1,17 @@
+{
+  "format": 1,
+  "modules": [
+    {
+      "id": "aurendel",
+      "version": "1.0.0",
+      "hash": "aadbe3ed301f80af",
+      "rawBytes": 1624903
+    },
+    {
+      "id": "core_fantasy",
+      "version": "1.0.0",
+      "hash": "40c06bf47cb1fdd4",
+      "rawBytes": 37899
+    }
+  ]
+}

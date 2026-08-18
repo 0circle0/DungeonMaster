@@ -60,10 +60,6 @@ export function MapPainter(props: { store: ModuleStore; mapId: string }) {
   const [hover, setHover] = useState<{ x: number; y: number } | null>(null);
   const [rectStart, setRectStart] = useState<{ x: number; y: number } | null>(null);
   const [resize, setResize] = useState<{ w: number; h: number }>({ w: width, h: height });
-  const [save, setSave] = useState<{ state: 'idle' | 'saving' | 'ok' | 'error'; note: string }>({
-    state: 'idle',
-    note: '',
-  });
 
   // Pending stroke: packed cell -> id, drawn as an overlay until pointer-up.
   const strokeRef = useRef<Map<number, string> | null>(null);
@@ -297,28 +293,14 @@ export function MapPainter(props: { store: ModuleStore; mapId: string }) {
     store.set(['world', 'maps', index, 'layers'], next);
   };
 
-  // — save ——————————————————————————————————————————————————
-  const moduleName = store.filename.replace(/\.module\.json$|\.json$/, '');
-  const savable = /^[a-z][a-z0-9_]*$/.test(moduleName);
-
-  const saveToDisk = async () => {
-    setSave({ state: 'saving', note: '' });
-    try {
-      const response = await fetch(`/api/modules/${moduleName}/maps/${mapId}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(entry),
-      });
-      const body = (await response.json()) as { written?: string[]; error?: string; issues?: string[] };
-      if (!response.ok) {
-        setSave({ state: 'error', note: [body.error, ...(body.issues ?? [])].filter(Boolean).join('; ') });
-        return;
-      }
-      setSave({ state: 'ok', note: `wrote ${body.written?.length ?? 0} file(s)` });
-    } catch (err) {
-      setSave({ state: 'error', note: (err as Error).message });
-    }
-  };
+  // — saving —————————————————————————————————————————————————
+  //
+  // There isn't any, here. A painted map already lives at
+  // `store.doc.world.maps[index]`, and the studio's autosave carries the whole
+  // document to the library — so this panel's "Save to disk" button was a
+  // second write path to a second destination, which only ever meant something
+  // while that destination was a git repository on the machine serving the
+  // page. One document, one save.
 
   const hoverCells = hover
     ? layers
@@ -466,22 +448,6 @@ export function MapPainter(props: { store: ModuleStore; mapId: string }) {
           </div>
         </div>
 
-        <div>
-          <button
-            className={styles.viewportTab}
-            disabled={!savable || save.state === 'saving'}
-            title={savable ? `writes modules/${moduleName}/maps/${mapId}/` : 'load a bundled module to save to disk'}
-            onClick={() => void saveToDisk()}
-          >
-            {save.state === 'saving' ? 'Saving…' : 'Save to disk'}
-          </button>
-          <div className="hint" style={{ marginTop: 4 }}>
-            {save.state === 'ok' && `✓ ${save.note}`}
-            {save.state === 'error' && `✗ ${save.note}`}
-            {save.state === 'idle' && savable && `→ modules/${moduleName}/maps/${mapId}/`}
-            {!savable && 'Export instead: this document is not a bundled module.'}
-          </div>
-        </div>
       </aside>
     </div>
   );

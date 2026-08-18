@@ -9,13 +9,11 @@
  * and having to find your way to the quest you were three edits into is its own
  * small tax, paid every time.
  *
- * Two halves, stored differently on purpose:
- *
- * - **which module** goes in a cookie, because the server chooses the starting
- *   document and reading it there means the right module renders first rather
- *   than the wrong one flashing up and being replaced;
- * - **where inside it** goes in local storage, because it is browser state
- *   rather than content and has no business travelling to another machine.
+ * Local storage, not a cookie. Which world was last open used to be a cookie
+ * because a server component read it to choose the starting document; there is
+ * no server component now, and the library remembers that itself. What is left
+ * here is where you were *inside* a world, which is browser state rather than
+ * content and has no business travelling to another machine.
  *
  * Nothing here is authoritative. A remembered place that no longer exists — an
  * entry deleted, a collection emptied — is dropped rather than restored, since
@@ -23,14 +21,11 @@
  */
 
 import type { Selection, ViewportKind, MapTarget } from '@/app/studio/selection';
-import { MODULE_COOKIE } from './placeCookie';
-
-export { MODULE_COOKIE };
 
 const PLACE_KEY = 'dm.studio.place';
 
 export interface Place {
-  /** The module this place is inside; a place in another one means nothing. */
+  /** The world key this place is inside; a place in another one means nothing. */
   readonly module: string;
   readonly selection: Selection;
   readonly viewportKind: ViewportKind;
@@ -41,11 +36,9 @@ export interface Place {
 export function rememberPlace(place: Place): void {
   try {
     localStorage.setItem(PLACE_KEY, JSON.stringify(place));
-    // A year, and same-site: this only ever decides which file an editor opens.
-    document.cookie = `${MODULE_COOKIE}=${encodeURIComponent(place.module)}; path=/; max-age=31536000; samesite=lax`;
   } catch {
-    // Private browsing, a full quota, a cookie policy — none of which are worth
-    // interrupting an author over. Losing the place is the whole cost.
+    // Private browsing or a full quota, neither worth interrupting an author
+    // over. Losing the place is the whole cost.
   }
 }
 

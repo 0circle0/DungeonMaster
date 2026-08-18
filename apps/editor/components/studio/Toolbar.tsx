@@ -2,6 +2,7 @@ import { useRef } from 'react';
 import type { ModuleStore } from '@/lib/store';
 import { exportModule } from '@/lib/store';
 import { resolveStart } from '@/lib/worldModel';
+import type { WorldMeta } from '@dm/library';
 import { OpenModule } from './OpenModule';
 import styles from '@/app/studio/studio.module.css';
 
@@ -41,8 +42,10 @@ export function Toolbar(props: {
   onSave: () => void;
   canSave: boolean;
   moduleName: string;
+  worldKey: string;
+  worlds: readonly WorldMeta[];
+  onOpenWorld: (key: string) => void;
   /** Every module in this repository, for the switcher. */
-  moduleNames: readonly string[];
   saveState: 'idle' | 'pending' | 'saving' | 'saved' | 'draft' | 'error';
   saveNote: string;
 }) {
@@ -56,7 +59,12 @@ export function Toolbar(props: {
       <span className={styles.brand}>DungeonMaster</span>
       <span className={styles.brandSub}>studio</span>
 
-      <OpenModule names={props.moduleNames} current={props.moduleName} dirty={store.dirty} />
+      <OpenModule
+        worlds={props.worlds}
+        current={props.worldKey}
+        dirty={store.dirty}
+        onOpen={props.onOpenWorld}
+      />
       {!props.canSave && <span className={styles.filename}>{store.filename}</span>}
       {store.dirty && <span className={styles.dirty}>●</span>}
 
@@ -74,7 +82,7 @@ export function Toolbar(props: {
           disabled={!props.canSave}
           title={
             props.canSave
-              ? `Autosaving to modules/${props.moduleName}/ — ⌘S writes now`
+              ? 'Autosaving to your library on this device — ⌘S writes now'
               : 'Autosave writes back to a module in this repository; this document did not come from one'
           }
           onClick={props.onSave}

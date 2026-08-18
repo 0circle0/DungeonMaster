@@ -29,7 +29,7 @@ import { Hidden } from './Hidden';
 import { Noticing } from './Noticing';
 import { ThreadPanel } from './ThreadPanel';
 import { derivePrefab } from '@dm/module';
-import type { ProjectAuthoring } from '@/lib/modulesOnDisk';
+import type { WorldAuthoring } from '@dm/library';
 import type { OwnedField } from '@/lib/modRuntime';
 import { Coverage } from './Coverage';
 import { ItemForm } from './ItemForm';
@@ -46,7 +46,8 @@ interface InspectorProps {
   onPreviewStart: () => void;
   /** Fields the installed mods add to the current selection. */
   modFields: readonly OwnedField[];
-  authoring: ProjectAuthoring;
+  authoring: WorldAuthoring;
+  onAuthoringChange: (next: WorldAuthoring) => void;
   /**
    * Everything wrong with the module, mods and rules included.
    *
@@ -189,33 +190,28 @@ function InspectorPanel(props: InspectorProps) {
    * finished safe. What varies is a starting guess; the prefab is a file and
    * the next thing anyone does is decide what else should.
    */
-  const saveAsPrefab = async () => {
+  const saveAsPrefab = () => {
     const entryId = String(entry['id'] ?? '');
     if (!entryId) return;
     const prefabId = window.prompt('Call the prefab:', `${entryId}_like`)?.trim();
     if (!prefabId || !/^[a-z][a-z0-9_]*$/.test(prefabId)) return;
 
     const { prefab, params } = derivePrefab(entry, info.path, prefabId);
-    const module = props.authoring.moduleName;
 
-    const written = await fetch(`/api/modules/${module}/prefabs/${prefabId}`, {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(prefab),
+    // Client state, and that is the whole change: the prefab list used to be a
+    // server prop, so the only way to see a new one was to reload the page and
+    // read it again. It lives in the studio now, and the panel re-renders.
+    props.onAuthoringChange({
+      ...props.authoring,
+      prefabs: [...props.authoring.prefabs.filter((p) => p.id !== prefabId), prefab],
+      instances: {
+        ...props.authoring.instances,
+        [info.path]: {
+          ...(props.authoring.instances[info.path] ?? {}),
+          [entryId]: { id: prefabId, params, overrides: [] },
+        },
+      },
     });
-    if (!written.ok) return;
-
-    await fetch(`/api/modules/${module}/instances`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        collection: info.path,
-        entryId,
-        link: { id: prefabId, params, overrides: [] },
-      }),
-    });
-    // The prefab list is read on the server, so the new one appears on reload.
-    window.location.reload();
   };
 
   /**
@@ -261,11 +257,11 @@ function InspectorPanel(props: InspectorProps) {
         <button className="btn tiny" onClick={() => setRenaming(true)}>
           Rename…
         </button>
-        {props.authoring.isProject && !prefabState.link && (
+        {!prefabState.link && (
           <button
             className="btn tiny"
             title="Turn this into a prefab, so the next thirty like it are three fields"
-            onClick={() => void saveAsPrefab()}
+            onClick={saveAsPrefab}
           >
             Save as prefab…
           </button>

@@ -7,6 +7,11 @@
   // of the project is what put twenty-one files into the editor's inferred
   // project, where there are no path mappings and no Node types, and every one
   // of them lit up red while `npm run typecheck` passed.
+  // …except `@dm/library`, which is the one package whose subject is the
+  // browser: IndexedDB, CompressionStream and Blob need `lib: ["DOM"]`, and
+  // adding DOM here would hand `document` to the engine as well, quietly
+  // undoing what the isomorphic configs exist to enforce. It has its own
+  // project instead, and `check:projects` knows to ask it.
   "include": ["packages/*/src/**/*.ts", "vitest.config.ts", "eslint.config.js"],
-  "exclude": ["**/dist/**"]
+  "exclude": ["**/dist/**", "packages/library/src/**/*.ts"]
 }

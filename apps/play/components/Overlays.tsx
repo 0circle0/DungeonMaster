@@ -231,9 +231,13 @@ export function Inventory({ session }: { session: SessionApi }) {
   );
 }
 
-export function SaveMenu({ session, onClose }: { session: SessionApi; onClose: () => void }) {
+export function SaveMenu({ session, worldKey, onClose }: {
+  session: SessionApi;
+  worldKey: string | null;
+  onClose: () => void;
+}) {
   const { module, restore, note, serialize } = session;
-  const saves = useSaves(module, serialize);
+  const saves = useSaves(module, worldKey, serialize);
   const file = useRef<HTMLInputElement>(null);
 
   const load = (text: string) => {

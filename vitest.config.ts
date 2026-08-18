@@ -24,6 +24,10 @@ export default defineConfig({
       '@dm/mods': r('./packages/mods/src/index.ts'),
       '@dm/engine': r('./packages/engine/src/index.ts'),
       '@dm/core': r('./packages/core/src/index.ts'),
+      // Before '@dm/library': aliases prefix-match, and the bare one would
+      // otherwise swallow the subpath.
+      '@dm/library/envelope': r('./packages/library/src/envelope.ts'),
+      '@dm/library': r('./packages/library/src/index.ts'),
       '@dm/play': r('./packages/play/src/index.ts'),
       '@': r('./apps/editor'),
     },

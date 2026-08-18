@@ -11,7 +11,8 @@ import type { ModuleDoc, ModuleStore } from '@/lib/store';
 import { EventsView } from '@/components/EventsView';
 import { OrphansView } from '@/components/OrphansView';
 import { PrefabsView } from '@/components/PrefabsView';
-import type { ProjectAuthoring } from '@/lib/modulesOnDisk';
+import type { WorldAuthoring } from '@dm/library';
+import type { Prefab } from '@dm/module';
 import { BalanceView } from '@/components/BalanceView';
 import { DialogueGraph } from '@/components/DialogueGraph';
 import { TimelineView } from '@/components/TimelineView';
@@ -40,8 +41,8 @@ export function Viewport(props: {
   onPlaceFromPrefab: (path: string) => void;
   /** Collections a prefab in this project can make. */
   prefabCollections: ReadonlySet<string>;
-  authoring: ProjectAuthoring;
-  moduleName: string;
+  authoring: WorldAuthoring;
+  onSavePrefab: (prefab: Prefab) => void;
 }) {
   const { store, kind } = props;
   const doc = store.doc;
@@ -109,7 +110,7 @@ export function Viewport(props: {
             prefabs={props.authoring.prefabs}
             instances={props.authoring.instances}
             style={props.authoring.style}
-            moduleName={props.moduleName}
+            onSavePrefab={props.onSavePrefab}
             onOpen={props.onSelectItem}
           />
         )}

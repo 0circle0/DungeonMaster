@@ -25,7 +25,8 @@ export function PrefabsView(props: {
   prefabs: readonly Prefab[];
   instances: InstanceMap;
   style: StyleTables;
-  moduleName: string;
+  /** Record the edited definition. Persisted by the studio's autosave. */
+  onSavePrefab: (prefab: Prefab) => void;
   onOpen: (collection: string, index: number) => void;
 }) {
   const [selectedId, setSelectedId] = useState(props.prefabs[0]?.id ?? '');
@@ -50,20 +51,14 @@ export function PrefabsView(props: {
     [current, props.store.doc, props.instances, props.style],
   );
 
-  const apply = async () => {
+  const apply = () => {
     if (!current || !plan || plan.changed.length === 0) return;
     setSaving(true);
     try {
-      const response = await fetch(`/api/modules/${props.moduleName}/prefabs/${current.id}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(current),
-      });
-      if (!response.ok) {
-        const body = (await response.json()) as { error?: string };
-        setNote(body.error ?? 'could not write the prefab');
-        return;
-      }
+      // The definition and the entries it produced move together, and both are
+      // carried to the library by the same autosave — so there is no window
+      // where a prefab on disk describes entries that were never updated.
+      props.onSavePrefab(current);
       // One undo step for the whole fan-out, and every entry the plan did not
       // name comes back as the same object.
       props.store.setMany(fanoutEdits(plan));
@@ -173,7 +168,7 @@ export function PrefabsView(props: {
               <button
                 className="btn primary"
                 disabled={!edited || !plan || plan.changed.length === 0 || saving}
-                onClick={() => void apply()}
+                onClick={() => apply()}
               >
                 {saving ? 'Applying…' : `Apply to ${plan?.changed.length ?? 0}`}
               </button>

@@ -19,7 +19,7 @@
 
 import { useMemo, useState } from 'react';
 import { expandPrefab, checkParams, withDefaults } from '@dm/module';
-import type { Prefab, PrefabParam, StyleTables } from '@dm/module';
+import type { Prefab, PrefabParam, PrefabLink, StyleTables } from '@dm/module';
 import { Field } from '@/components/Field';
 import { JsonBox } from '@/components/JsonBox';
 import type { FieldSpec } from '@/lib/schema';
@@ -49,7 +49,8 @@ export function PlaceFromPrefab(props: {
   store: ModuleStore;
   prefabs: readonly Prefab[];
   style: StyleTables;
-  moduleName: string;
+  /** Record where this entry came from. Persisted by the studio's autosave. */
+  onLinkInstance: (collection: string, entryId: string, link: PrefabLink) => void;
   collection: string;
   onClose: () => void;
   onPlaced: (index: number) => void;
@@ -75,7 +76,7 @@ export function PlaceFromPrefab(props: {
     : new Set<string>();
   const duplicate = typeof filled['id'] === 'string' && taken.has(filled['id']);
 
-  const place = async () => {
+  const place = () => {
     if (!chosen || problems.length > 0 || duplicate) return;
     setBusy(true);
 
@@ -110,14 +111,10 @@ export function PlaceFromPrefab(props: {
     // One edit, so placing a thing is one press of undo.
     props.store.setMany(edits);
     try {
-      await fetch(`/api/modules/${props.moduleName}/instances`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          collection: props.collection,
-          entryId,
-          link: { id: chosen.id, params: filled, overrides: [] },
-        }),
+      props.onLinkInstance(props.collection, entryId, {
+        id: chosen.id,
+        params: filled,
+        overrides: [],
       });
     } finally {
       setBusy(false);
