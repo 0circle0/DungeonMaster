@@ -52,7 +52,8 @@ export function ModsPanel({
       <ul className={styles.modsList}>
         {mods.installed.map((mod) => {
           const editable = mod.manifest.target === 'editor';
-          const on = !mods.disabled.has(mod.manifest.id);
+          const on = mods.isActive(mod.manifest.id);
+          const pinned = mods.declares(mod.manifest.id);
           const drifted = mod.issues.some((issue) => issue.code === 'mod_hash_drift');
           return (
             <li key={`${mod.manifest.id}-${mod.hash}`}>
@@ -60,6 +61,13 @@ export function ModsPanel({
                 <input
                   type="checkbox"
                   checked={editable ? on : true}
+                  title={
+                    !editable
+                      ? 'Engine mods belong to the play app'
+                      : pinned
+                        ? 'This module pins it, so its opinions apply here'
+                        : 'This module does not pin it — switch it on to borrow it while you try it out'
+                  }
                   // Engine mods are listed here but belong to the play app;
                   // toggling one in the studio would promise something this
                   // app cannot deliver.
@@ -69,6 +77,11 @@ export function ModsPanel({
                 <strong>{mod.manifest.meta.title}</strong>{' '}
                 <span className={styles.modsHint}>
                   {mod.manifest.target} · <code>{mod.hash.slice(0, 8)}</code>
+                  {/* Whose module this is the business of. A mod the module does
+                      not pin used to be run against it anyway, which is how a
+                      world with no morale in it collected 127 notes about
+                      morale. */}
+                  {editable && (pinned ? ' · pinned by this module' : on ? ' · borrowed' : ' · not used here')}
                   {drifted && ' · hash drifted'}
                 </span>
               </label>

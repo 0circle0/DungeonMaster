@@ -10,7 +10,7 @@
  * do to all of them at once — see `BulkBar`.
  */
 
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import type { Diagnostic } from '@dm/module';
 import { collectionAt } from '@/lib/schema';
 import { parseQuery, matchesQuery, QUERY_HELP } from '@/lib/query';
@@ -31,6 +31,8 @@ export function CollectionTable(props: {
   onPlace?: (() => void) | undefined;
 }) {
   const [filter, setFilter] = useState('');
+  /** The selected row, so a jump from elsewhere can bring it into view. */
+  const activeRow = useRef<HTMLTableRowElement | null>(null);
   const [checked, setChecked] = useState<ReadonlySet<number>>(new Set());
   /** The last row checked, so shift-click has a range to work from. */
   const [anchor, setAnchor] = useState<number | null>(null);
@@ -65,13 +67,46 @@ export function CollectionTable(props: {
     setAnchor(null);
   }
 
-  if (!info) return <p className={styles.treeEmpty}>Unknown collection.</p>;
-
   const selectedIndex =
     props.selection.kind === 'item' && props.selection.path === props.path ? props.selection.index : -1;
-
   const visibleIndices = visible.map((v) => v.index);
+
+  /**
+   * Bring the selected entry into view when the selection came from somewhere
+   * else — clicking a problem in the console, or a link in another panel.
+   *
+   * Opening the right table and highlighting a row four hundred down is, from
+   * the author's side, indistinguishable from nothing happening: the inspector
+   * fills in on the far side of the screen and the middle of it looks untouched.
+   *
+   * A filter makes it worse, because the row is not rendered at all. Clearing
+   * the filter takes a render to take effect, so the jump stays *pending* until
+   * the row exists and can be scrolled to — one attempt, dropped after it lands,
+   * which is what keeps this from dragging the view around while somebody is
+   * narrowing a filter by hand.
+   */
+  const pendingJump = useRef(false);
+  useEffect(() => {
+    pendingJump.current = selectedIndex >= 0;
+  }, [selectedIndex, props.path]);
+
+  useEffect(() => {
+    if (!pendingJump.current || selectedIndex < 0) return;
+    // Hidden by the filter rather than absent. That cannot happen from a click
+    // in this table — every row you can click is one you can see — so clearing
+    // it never fights a filter somebody is typing.
+    if (selectedIndex < props.entries.length && !visibleIndices.includes(selectedIndex)) {
+      setFilter('');
+      return;
+    }
+    pendingJump.current = false;
+    activeRow.current?.scrollIntoView({ block: 'center', behavior: 'smooth' });
+  }, [selectedIndex, props.path, props.entries.length, visibleIndices]);
+
+  if (!info) return <p className={styles.treeEmpty}>Unknown collection.</p>;
+
   const allShown = visibleIndices.length > 0 && visibleIndices.every((i) => checked.has(i));
+
 
   const toggle = (index: number, shift: boolean) => {
     const next = new Set(checked);
@@ -163,6 +198,7 @@ export function CollectionTable(props: {
           {visible.map(({ entry, index }) => (
             <tr
               key={index}
+              ref={index === selectedIndex ? activeRow : undefined}
               className={index === selectedIndex ? styles.rowActive : ''}
               onClick={() => props.onSelect(index)}
             >

@@ -61,7 +61,19 @@ export function Studio(props: {
   const rules = useRules();
   const [paletteOpen, setPaletteOpen] = useState(false);
   const [placing, setPlacing] = useState<string | null>(null);
-  const mods = useEditorMods(props.mods);
+  /**
+   * What this module pins, which is what decides whose opinions apply to it.
+   * Read from the document rather than passed in, so adopting a mod takes
+   * effect as soon as the pin is written.
+   */
+  const declaredMods = useMemo(
+    () =>
+      (Array.isArray(store.doc['mods']) ? (store.doc['mods'] as { id?: unknown }[]) : [])
+        .map((entry) => String(entry?.id ?? ''))
+        .filter(Boolean),
+    [store.doc],
+  );
+  const mods = useEditorMods(props.mods, declaredMods);
 
   const { validation } = store;
 
