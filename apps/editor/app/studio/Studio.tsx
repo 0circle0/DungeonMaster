@@ -174,6 +174,26 @@ export function Studio(props: {
     [store, saveToDisk, props.mods.length],
   );
 
+  /**
+   * Fields the installed mods want on whatever is selected.
+   *
+   * Keyed on the selected entry rather than the document: the hook is handed
+   * the module's meta and the one entry, so it costs a QuickJS call per
+   * selection and not one per keystroke.
+   */
+  const selectedEntry = useMemo(() => {
+    if (selection.kind !== 'item') return null;
+    const entries = getAt(store.doc, selection.path.split('.'));
+    const value = Array.isArray(entries) ? entries[selection.index] : undefined;
+    if (value === undefined) return null;
+    return { path: [...selection.path.split('.'), selection.index] as (string | number)[], value };
+  }, [store.doc, selection]);
+
+  const modFields = useMemo(
+    () => (mods.runtime ? mods.runtime.fields(store.doc, selectedEntry) : []),
+    [mods.runtime, store.doc, selectedEntry],
+  );
+
   const errorsByCollection = useMemo(() => {
     const out: Record<string, number> = {};
     for (const issue of validation.errors) {
@@ -360,6 +380,7 @@ export function Studio(props: {
         <Inspector
           store={store}
           selection={selection}
+          modFields={modFields}
           onOpenItem={openItem}
           onDuplicate={duplicateEntry}
           onDelete={deleteEntry}

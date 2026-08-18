@@ -1439,7 +1439,8 @@
                         "minLength": 1,
                         "maxLength": 64,
                         "pattern": "^[a-z][a-z0-9_]*$",
-                        "description": "ref:rules.savingThrows"
+                        "description": "An id from rules.savingThrows.",
+                        "x-dm-ref": "rules.savingThrows"
                       },
                       "difficulty": {
                         "$ref": "#/$defs/GameModule/properties/rules/properties/attributes/items/properties/modifier"
@@ -1853,7 +1854,8 @@
                     "minLength": 1,
                     "maxLength": 64,
                     "pattern": "^[a-z][a-z0-9_]*$",
-                    "description": "ref:rules.attributes"
+                    "description": "An id from rules.attributes.",
+                    "x-dm-ref": "rules.attributes"
                   },
                   "defaultDifficulty": {
                     "$ref": "#/$defs/GameModule/properties/rules/properties/attributes/items/properties/modifier"
@@ -2020,21 +2022,24 @@
                     "minLength": 1,
                     "maxLength": 64,
                     "pattern": "^[a-z][a-z0-9_]*$",
-                    "description": "ref:narrative.textGrammar"
+                    "description": "An id from narrative.textGrammar.",
+                    "x-dm-ref": "narrative.textGrammar"
                   },
                   "faintImpressionTextKey": {
                     "type": "string",
                     "minLength": 1,
                     "maxLength": 64,
                     "pattern": "^[a-z][a-z0-9_]*$",
-                    "description": "ref:narrative.textGrammar"
+                    "description": "An id from narrative.textGrammar.",
+                    "x-dm-ref": "narrative.textGrammar"
                   },
                   "emptyTextKey": {
                     "type": "string",
                     "minLength": 1,
                     "maxLength": 64,
                     "pattern": "^[a-z][a-z0-9_]*$",
-                    "description": "ref:narrative.textGrammar"
+                    "description": "An id from narrative.textGrammar.",
+                    "x-dm-ref": "narrative.textGrammar"
                   },
                   "thresholds": {
                     "type": "object",
@@ -2111,7 +2116,8 @@
                     "minLength": 1,
                     "maxLength": 64,
                     "pattern": "^[a-z][a-z0-9_]*$",
-                    "description": "ref:content.skills"
+                    "description": "An id from content.skills.",
+                    "x-dm-ref": "content.skills"
                   },
                   "concealmentPerPoint": {
                     "type": "number",
@@ -2266,14 +2272,16 @@
                     "minLength": 1,
                     "maxLength": 64,
                     "pattern": "^[a-z][a-z0-9_]*$",
-                    "description": "ref:rules.actionTypes"
+                    "description": "An id from rules.actionTypes.",
+                    "x-dm-ref": "rules.actionTypes"
                   },
                   "use": {
                     "type": "string",
                     "minLength": 1,
                     "maxLength": 64,
                     "pattern": "^[a-z][a-z0-9_]*$",
-                    "description": "ref:content.abilities"
+                    "description": "An id from content.abilities.",
+                    "x-dm-ref": "content.abilities"
                   },
                   "requires": {
                     "$ref": "#/$defs/GameModule/properties/rules/properties/attributes/items/properties/modifier/anyOf/19/properties/cond"
@@ -2367,7 +2375,8 @@
                   "minLength": 1,
                   "maxLength": 64,
                   "pattern": "^[a-z][a-z0-9_]*$",
-                  "description": "ref:rules.resources"
+                  "description": "An id from rules.resources.",
+                  "x-dm-ref": "rules.resources"
                 },
                 "pointCosts": {
                   "type": "object",
@@ -2395,7 +2404,8 @@
                       "minLength": 1,
                       "maxLength": 64,
                       "pattern": "^[a-z][a-z0-9_]*$",
-                      "description": "ref:rules.savingThrows"
+                      "description": "An id from rules.savingThrows.",
+                      "x-dm-ref": "rules.savingThrows"
                     },
                     "difficulty": {
                       "$ref": "#/$defs/GameModule/properties/rules/properties/attributes/items/properties/modifier"
@@ -2416,7 +2426,8 @@
                     "minLength": 1,
                     "maxLength": 64,
                     "pattern": "^[a-z][a-z0-9_]*$",
-                    "description": "ref:rules.rests"
+                    "description": "An id from rules.rests.",
+                    "x-dm-ref": "rules.rests"
                   },
                   "default": []
                 },
@@ -2432,14 +2443,16 @@
                       "minLength": 1,
                       "maxLength": 64,
                       "pattern": "^[a-z][a-z0-9_]*$",
-                      "description": "ref:rules.actionTypes"
+                      "description": "An id from rules.actionTypes.",
+                      "x-dm-ref": "rules.actionTypes"
                     },
                     "somatic": {
                       "type": "string",
                       "minLength": 1,
                       "maxLength": 64,
                       "pattern": "^[a-z][a-z0-9_]*$",
-                      "description": "ref:rules.actionTypes"
+                      "description": "An id from rules.actionTypes.",
+                      "x-dm-ref": "rules.actionTypes"
                     }
                   },
                   "additionalProperties": false,
@@ -2460,7 +2473,8 @@
                   "minLength": 1,
                   "maxLength": 64,
                   "pattern": "^[a-z][a-z0-9_]*$",
-                  "description": "ref:rules.senses"
+                  "description": "An id from rules.senses.",
+                  "x-dm-ref": "rules.senses"
                 },
                 "curiosityMinutes": {
                   "type": "number",
@@ -2472,7 +2486,8 @@
                   "minLength": 1,
                   "maxLength": 64,
                   "pattern": "^[a-z][a-z0-9_]*$",
-                  "description": "ref:rules.stances"
+                  "description": "An id from rules.stances.",
+                  "x-dm-ref": "rules.stances"
                 },
                 "minimumEmission": {
                   "type": "number",
@@ -2512,28 +2527,32 @@
               "minLength": 1,
               "maxLength": 64,
               "pattern": "^[a-z][a-z0-9_]*$",
-              "description": "ref:rules.resources"
+              "description": "An id from rules.resources.",
+              "x-dm-ref": "rules.resources"
             },
             "initiativeStat": {
               "type": "string",
               "minLength": 1,
               "maxLength": 64,
               "pattern": "^[a-z][a-z0-9_]*$",
-              "description": "ref:rules.derivedStats"
+              "description": "An id from rules.derivedStats.",
+              "x-dm-ref": "rules.derivedStats"
             },
             "defaultSize": {
               "type": "string",
               "minLength": 1,
               "maxLength": 64,
               "pattern": "^[a-z][a-z0-9_]*$",
-              "description": "ref:rules.sizes"
+              "description": "An id from rules.sizes.",
+              "x-dm-ref": "rules.sizes"
             },
             "defaultMovementMode": {
               "type": "string",
               "minLength": 1,
               "maxLength": 64,
               "pattern": "^[a-z][a-z0-9_]*$",
-              "description": "ref:rules.movementModes"
+              "description": "An id from rules.movementModes.",
+              "x-dm-ref": "rules.movementModes"
             },
             "interactionRange": {
               "type": "object",
@@ -2645,7 +2664,8 @@
                     "minLength": 1,
                     "maxLength": 64,
                     "pattern": "^[a-z][a-z0-9_]*$",
-                    "description": "ref:rules.actionTypes"
+                    "description": "An id from rules.actionTypes.",
+                    "x-dm-ref": "rules.actionTypes"
                   },
                   "costs": {
                     "type": "object",
@@ -2691,7 +2711,8 @@
                           "minLength": 1,
                           "maxLength": 64,
                           "pattern": "^[a-z][a-z0-9_]*$",
-                          "description": "ref:content.classes"
+                          "description": "An id from content.classes.",
+                          "x-dm-ref": "content.classes"
                         },
                         "default": []
                       },
@@ -2702,7 +2723,8 @@
                           "minLength": 1,
                           "maxLength": 64,
                           "pattern": "^[a-z][a-z0-9_]*$",
-                          "description": "ref:content.ancestries"
+                          "description": "An id from content.ancestries.",
+                          "x-dm-ref": "content.ancestries"
                         },
                         "default": []
                       },
@@ -2713,7 +2735,8 @@
                           "minLength": 1,
                           "maxLength": 64,
                           "pattern": "^[a-z][a-z0-9_]*$",
-                          "description": "ref:content.abilities"
+                          "description": "An id from content.abilities.",
+                          "x-dm-ref": "content.abilities"
                         },
                         "default": []
                       },
@@ -2727,7 +2750,8 @@
                               "minLength": 1,
                               "maxLength": 64,
                               "pattern": "^[a-z][a-z0-9_]*$",
-                              "description": "ref:rules.attributes"
+                              "description": "An id from rules.attributes.",
+                              "x-dm-ref": "rules.attributes"
                             },
                             "min": {
                               "type": "integer"
@@ -2753,7 +2777,8 @@
                               "minLength": 1,
                               "maxLength": 64,
                               "pattern": "^[a-z][a-z0-9_]*$",
-                              "description": "ref:content.skills"
+                              "description": "An id from content.skills.",
+                              "x-dm-ref": "content.skills"
                             },
                             "minRank": {
                               "type": "integer",
@@ -2765,7 +2790,8 @@
                               "minLength": 1,
                               "maxLength": 64,
                               "pattern": "^[a-z][a-z0-9_]*$",
-                              "description": "ref:rules.masteryTiers"
+                              "description": "An id from rules.masteryTiers.",
+                              "x-dm-ref": "rules.masteryTiers"
                             }
                           },
                           "required": [
@@ -2782,7 +2808,8 @@
                           "minLength": 1,
                           "maxLength": 64,
                           "pattern": "^[a-z][a-z0-9_]*$",
-                          "description": "ref:rules.creatureTypes"
+                          "description": "An id from rules.creatureTypes.",
+                          "x-dm-ref": "rules.creatureTypes"
                         },
                         "default": []
                       },
@@ -2793,7 +2820,8 @@
                           "minLength": 1,
                           "maxLength": 64,
                           "pattern": "^[a-z][a-z0-9_]*$",
-                          "description": "ref:rules.alignments"
+                          "description": "An id from rules.alignments.",
+                          "x-dm-ref": "rules.alignments"
                         },
                         "default": []
                       },
@@ -2804,7 +2832,8 @@
                           "minLength": 1,
                           "maxLength": 64,
                           "pattern": "^[a-z][a-z0-9_]*$",
-                          "description": "ref:rules.languages"
+                          "description": "An id from rules.languages.",
+                          "x-dm-ref": "rules.languages"
                         },
                         "default": []
                       },
@@ -2822,7 +2851,8 @@
                               "minLength": 1,
                               "maxLength": 64,
                               "pattern": "^[a-z][a-z0-9_]*$",
-                              "description": "ref:content.items"
+                              "description": "An id from content.items.",
+                              "x-dm-ref": "content.items"
                             },
                             "quantity": {
                               "type": "integer",
@@ -2855,7 +2885,8 @@
                               "minLength": 1,
                               "maxLength": 64,
                               "pattern": "^[a-z][a-z0-9_]*$",
-                              "description": "ref:narrative.quests"
+                              "description": "An id from narrative.quests.",
+                              "x-dm-ref": "narrative.quests"
                             },
                             "status": {
                               "type": "string",
@@ -2889,7 +2920,8 @@
                               "minLength": 1,
                               "maxLength": 64,
                               "pattern": "^[a-z][a-z0-9_]*$",
-                              "description": "ref:content.factions"
+                              "description": "An id from content.factions.",
+                              "x-dm-ref": "content.factions"
                             },
                             "minStanding": {
                               "type": "integer"
@@ -2918,7 +2950,8 @@
                               "minLength": 1,
                               "maxLength": 64,
                               "pattern": "^[a-z][a-z0-9_]*$",
-                              "description": "ref:narrative.deedKinds"
+                              "description": "An id from narrative.deedKinds.",
+                              "x-dm-ref": "narrative.deedKinds"
                             },
                             "who": {
                               "type": "string",
@@ -2980,7 +3013,8 @@
                               "minLength": 1,
                               "maxLength": 64,
                               "pattern": "^[a-z][a-z0-9_]*$",
-                              "description": "ref:narrative.lore"
+                              "description": "An id from narrative.lore.",
+                              "x-dm-ref": "narrative.lore"
                             },
                             "known": {
                               "type": "boolean",
@@ -3003,7 +3037,8 @@
                               "minLength": 1,
                               "maxLength": 64,
                               "pattern": "^[a-z][a-z0-9_]*$",
-                              "description": "ref:content.classes"
+                              "description": "An id from content.classes.",
+                              "x-dm-ref": "content.classes"
                             },
                             "default": []
                           },
@@ -3014,7 +3049,8 @@
                               "minLength": 1,
                               "maxLength": 64,
                               "pattern": "^[a-z][a-z0-9_]*$",
-                              "description": "ref:content.abilities"
+                              "description": "An id from content.abilities.",
+                              "x-dm-ref": "content.abilities"
                             },
                             "default": []
                           },
@@ -3025,7 +3061,8 @@
                               "minLength": 1,
                               "maxLength": 64,
                               "pattern": "^[a-z][a-z0-9_]*$",
-                              "description": "ref:content.items"
+                              "description": "An id from content.items.",
+                              "x-dm-ref": "content.items"
                             },
                             "default": []
                           },
@@ -3050,7 +3087,8 @@
                               "minLength": 1,
                               "maxLength": 64,
                               "pattern": "^[a-z][a-z0-9_]*$",
-                              "description": "ref:rules.conditions"
+                              "description": "An id from rules.conditions.",
+                              "x-dm-ref": "rules.conditions"
                             },
                             "default": []
                           },
@@ -3061,7 +3099,8 @@
                               "minLength": 1,
                               "maxLength": 64,
                               "pattern": "^[a-z][a-z0-9_]*$",
-                              "description": "ref:narrative.lore"
+                              "description": "An id from narrative.lore.",
+                              "x-dm-ref": "narrative.lore"
                             }
                           }
                         },
@@ -3167,14 +3206,16 @@
                         "minLength": 1,
                         "maxLength": 64,
                         "pattern": "^[a-z][a-z0-9_]*$",
-                        "description": "ref:rules.attributes"
+                        "description": "An id from rules.attributes.",
+                        "x-dm-ref": "rules.attributes"
                       },
                       "against": {
                         "type": "string",
                         "minLength": 1,
                         "maxLength": 64,
                         "pattern": "^[a-z][a-z0-9_]*$",
-                        "description": "ref:rules.derivedStats"
+                        "description": "An id from rules.derivedStats.",
+                        "x-dm-ref": "rules.derivedStats"
                       }
                     },
                     "required": [
@@ -3191,7 +3232,8 @@
                         "minLength": 1,
                         "maxLength": 64,
                         "pattern": "^[a-z][a-z0-9_]*$",
-                        "description": "ref:rules.savingThrows"
+                        "description": "An id from rules.savingThrows.",
+                        "x-dm-ref": "rules.savingThrows"
                       },
                       "difficulty": {
                         "$ref": "#/$defs/GameModule/properties/rules/properties/attributes/items/properties/modifier"
@@ -3257,7 +3299,8 @@
                     "minLength": 1,
                     "maxLength": 64,
                     "pattern": "^[a-z][a-z0-9_]*$",
-                    "description": "ref:content.items"
+                    "description": "An id from content.items.",
+                    "x-dm-ref": "content.items"
                   },
                   "areaOfEffect": {
                     "type": "object",
@@ -3360,7 +3403,8 @@
                     "minLength": 1,
                     "maxLength": 64,
                     "pattern": "^[a-z][a-z0-9_]*$",
-                    "description": "ref:rules.attributes"
+                    "description": "An id from rules.attributes.",
+                    "x-dm-ref": "rules.attributes"
                   },
                   "tags": {
                     "$ref": "#/$defs/GameModule/properties/meta/properties/tags"
@@ -3415,7 +3459,8 @@
                       "minLength": 1,
                       "maxLength": 64,
                       "pattern": "^[a-z][a-z0-9_]*$",
-                      "description": "ref:content.abilities"
+                      "description": "An id from content.abilities.",
+                      "x-dm-ref": "content.abilities"
                     },
                     "default": []
                   },
@@ -3458,14 +3503,16 @@
                     "minLength": 1,
                     "maxLength": 64,
                     "pattern": "^[a-z][a-z0-9_]*$",
-                    "description": "ref:rules.sizes"
+                    "description": "An id from rules.sizes.",
+                    "x-dm-ref": "rules.sizes"
                   },
                   "creatureType": {
                     "type": "string",
                     "minLength": 1,
                     "maxLength": 64,
                     "pattern": "^[a-z][a-z0-9_]*$",
-                    "description": "ref:rules.creatureTypes"
+                    "description": "An id from rules.creatureTypes.",
+                    "x-dm-ref": "rules.creatureTypes"
                   },
                   "speeds": {
                     "type": "object",
@@ -3498,7 +3545,8 @@
                       "minLength": 1,
                       "maxLength": 64,
                       "pattern": "^[a-z][a-z0-9_]*$",
-                      "description": "ref:rules.languages"
+                      "description": "An id from rules.languages.",
+                      "x-dm-ref": "rules.languages"
                     },
                     "default": []
                   },
@@ -3512,7 +3560,8 @@
                           "minLength": 1,
                           "maxLength": 64,
                           "pattern": "^[a-z][a-z0-9_]*$",
-                          "description": "ref:rules.damageTypes"
+                          "description": "An id from rules.damageTypes.",
+                          "x-dm-ref": "rules.damageTypes"
                         },
                         "multiplier": {
                           "type": "number",
@@ -3586,7 +3635,8 @@
                     "minLength": 1,
                     "maxLength": 64,
                     "pattern": "^[a-z][a-z0-9_]*$",
-                    "description": "ref:rules.attributes"
+                    "description": "An id from rules.attributes.",
+                    "x-dm-ref": "rules.attributes"
                   },
                   "skillProficiencies": {
                     "type": "array",
@@ -3597,7 +3647,8 @@
                           "minLength": 1,
                           "maxLength": 64,
                           "pattern": "^[a-z][a-z0-9_]*$",
-                          "description": "ref:content.skills"
+                          "description": "An id from content.skills.",
+                          "x-dm-ref": "content.skills"
                         },
                         {
                           "type": "object",
@@ -3607,7 +3658,8 @@
                               "minLength": 1,
                               "maxLength": 64,
                               "pattern": "^[a-z][a-z0-9_]*$",
-                              "description": "ref:content.skills"
+                              "description": "An id from content.skills.",
+                              "x-dm-ref": "content.skills"
                             },
                             "rank": {
                               "type": "integer",
@@ -3634,7 +3686,8 @@
                           "minLength": 1,
                           "maxLength": 64,
                           "pattern": "^[a-z][a-z0-9_]*$",
-                          "description": "ref:content.items"
+                          "description": "An id from content.items.",
+                          "x-dm-ref": "content.items"
                         },
                         "quantity": {
                           "type": "integer",
@@ -3658,7 +3711,8 @@
                         "minLength": 1,
                         "maxLength": 64,
                         "pattern": "^[a-z][a-z0-9_]*$",
-                        "description": "ref:content.abilities"
+                        "description": "An id from content.abilities.",
+                        "x-dm-ref": "content.abilities"
                       }
                     },
                     "default": {}
@@ -3670,7 +3724,8 @@
                       "minLength": 1,
                       "maxLength": 64,
                       "pattern": "^[a-z][a-z0-9_]*$",
-                      "description": "ref:rules.savingThrows"
+                      "description": "An id from rules.savingThrows.",
+                      "x-dm-ref": "rules.savingThrows"
                     },
                     "default": []
                   },
@@ -3682,7 +3737,8 @@
                         "minLength": 1,
                         "maxLength": 64,
                         "pattern": "^[a-z][a-z0-9_]*$",
-                        "description": "ref:rules.attributes"
+                        "description": "An id from rules.attributes.",
+                        "x-dm-ref": "rules.attributes"
                       },
                       "spellList": {
                         "type": "array",
@@ -3691,7 +3747,8 @@
                           "minLength": 1,
                           "maxLength": 64,
                           "pattern": "^[a-z][a-z0-9_]*$",
-                          "description": "ref:content.abilities"
+                          "description": "An id from content.abilities.",
+                          "x-dm-ref": "content.abilities"
                         },
                         "default": []
                       },
@@ -3780,7 +3837,8 @@
                     "minLength": 1,
                     "maxLength": 64,
                     "pattern": "^[a-z][a-z0-9_]*$",
-                    "description": "ref:rules.equipmentSlots"
+                    "description": "An id from rules.equipmentSlots.",
+                    "x-dm-ref": "rules.equipmentSlots"
                   },
                   "damage": {
                     "type": "object",
@@ -3793,14 +3851,16 @@
                         "minLength": 1,
                         "maxLength": 64,
                         "pattern": "^[a-z][a-z0-9_]*$",
-                        "description": "ref:rules.damageTypes"
+                        "description": "An id from rules.damageTypes.",
+                        "x-dm-ref": "rules.damageTypes"
                       },
                       "stat": {
                         "type": "string",
                         "minLength": 1,
                         "maxLength": 64,
                         "pattern": "^[a-z][a-z0-9_]*$",
-                        "description": "ref:rules.attributes"
+                        "description": "An id from rules.attributes.",
+                        "x-dm-ref": "rules.attributes"
                       }
                     },
                     "required": [
@@ -3857,7 +3917,8 @@
                       "minLength": 1,
                       "maxLength": 64,
                       "pattern": "^[a-z][a-z0-9_]*$",
-                      "description": "ref:content.abilities"
+                      "description": "An id from content.abilities.",
+                      "x-dm-ref": "content.abilities"
                     },
                     "default": []
                   },
@@ -3895,7 +3956,8 @@
                         "minLength": 1,
                         "maxLength": 64,
                         "pattern": "^[a-z][a-z0-9_]*$",
-                        "description": "ref:rules.rests"
+                        "description": "An id from rules.rests.",
+                        "x-dm-ref": "rules.rests"
                       },
                       "rechargeAmount": {
                         "$ref": "#/$defs/GameModule/properties/rules/properties/resolution/properties/checkDice"
@@ -3917,7 +3979,8 @@
                       "minLength": 1,
                       "maxLength": 64,
                       "pattern": "^[a-z][a-z0-9_]*$",
-                      "description": "ref:rules.itemProperties"
+                      "description": "An id from rules.itemProperties.",
+                      "x-dm-ref": "rules.itemProperties"
                     },
                     "default": []
                   },
@@ -3935,7 +3998,8 @@
                       "minLength": 1,
                       "maxLength": 64,
                       "pattern": "^[a-z][a-z0-9_]*$",
-                      "description": "ref:content.classes"
+                      "description": "An id from content.classes.",
+                      "x-dm-ref": "content.classes"
                     },
                     "default": []
                   },
@@ -3989,7 +4053,8 @@
                               "minLength": 1,
                               "maxLength": 64,
                               "pattern": "^[a-z][a-z0-9_]*$",
-                              "description": "ref:content.items"
+                              "description": "An id from content.items.",
+                              "x-dm-ref": "content.items"
                             },
                             "quantity": {
                               "$ref": "#/$defs/GameModule/properties/rules/properties/resolution/properties/checkDice",
@@ -4039,7 +4104,8 @@
                     "minLength": 1,
                     "maxLength": 64,
                     "pattern": "^[a-z][a-z0-9_]*$",
-                    "description": "ref:content.skills"
+                    "description": "An id from content.skills.",
+                    "x-dm-ref": "content.skills"
                   },
                   "bonusRolls": {
                     "type": "object",
@@ -4137,7 +4203,8 @@
                       "minLength": 1,
                       "maxLength": 64,
                       "pattern": "^[a-z][a-z0-9_]*$",
-                      "description": "ref:content.abilities"
+                      "description": "An id from content.abilities.",
+                      "x-dm-ref": "content.abilities"
                     },
                     "default": []
                   },
@@ -4161,7 +4228,8 @@
                           "minLength": 1,
                           "maxLength": 64,
                           "pattern": "^[a-z][a-z0-9_]*$",
-                          "description": "ref:content.abilities"
+                          "description": "An id from content.abilities.",
+                          "x-dm-ref": "content.abilities"
                         }
                       },
                       "required": [
@@ -4228,14 +4296,16 @@
                               "minLength": 1,
                               "maxLength": 64,
                               "pattern": "^[a-z][a-z0-9_]*$",
-                              "description": "ref:content.skills"
+                              "description": "An id from content.skills.",
+                              "x-dm-ref": "content.skills"
                             },
                             "attribute": {
                               "type": "string",
                               "minLength": 1,
                               "maxLength": 64,
                               "pattern": "^[a-z][a-z0-9_]*$",
-                              "description": "ref:rules.attributes"
+                              "description": "An id from rules.attributes.",
+                              "x-dm-ref": "rules.attributes"
                             },
                             "difficulty": {
                               "$ref": "#/$defs/GameModule/properties/rules/properties/attributes/items/properties/modifier",
@@ -4246,7 +4316,8 @@
                               "minLength": 1,
                               "maxLength": 64,
                               "pattern": "^[a-z][a-z0-9_]*$",
-                              "description": "ref:content.skills"
+                              "description": "An id from content.skills.",
+                              "x-dm-ref": "content.skills"
                             }
                           },
                           "additionalProperties": false
@@ -4277,14 +4348,16 @@
                           "minLength": 1,
                           "maxLength": 64,
                           "pattern": "^[a-z][a-z0-9_]*$",
-                          "description": "ref:content.abilities"
+                          "description": "An id from content.abilities.",
+                          "x-dm-ref": "content.abilities"
                         },
                         "textKey": {
                           "type": "string",
                           "minLength": 1,
                           "maxLength": 64,
                           "pattern": "^[a-z][a-z0-9_]*$",
-                          "description": "ref:narrative.textGrammar"
+                          "description": "An id from narrative.textGrammar.",
+                          "x-dm-ref": "narrative.textGrammar"
                         },
                         "oncePerEncounter": {
                           "type": "boolean",
@@ -4303,7 +4376,8 @@
                     "minLength": 1,
                     "maxLength": 64,
                     "pattern": "^[a-z][a-z0-9_]*$",
-                    "description": "ref:content.lootTables"
+                    "description": "An id from content.lootTables.",
+                    "x-dm-ref": "content.lootTables"
                   },
                   "conditionalLoot": {
                     "type": "array",
@@ -4312,7 +4386,8 @@
                       "minLength": 1,
                       "maxLength": 64,
                       "pattern": "^[a-z][a-z0-9_]*$",
-                      "description": "ref:content.lootTables"
+                      "description": "Drawn as well as loot, and only when the finder qualifies.",
+                      "x-dm-ref": "content.lootTables"
                     },
                     "default": []
                   },
@@ -4321,7 +4396,8 @@
                     "minLength": 1,
                     "maxLength": 64,
                     "pattern": "^[a-z][a-z0-9_]*$",
-                    "description": "ref:content.factions"
+                    "description": "An id from content.factions.",
+                    "x-dm-ref": "content.factions"
                   },
                   "descriptors": {
                     "type": "array",
@@ -4335,21 +4411,24 @@
                     "minLength": 1,
                     "maxLength": 64,
                     "pattern": "^[a-z][a-z0-9_]*$",
-                    "description": "ref:rules.sizes"
+                    "description": "An id from rules.sizes.",
+                    "x-dm-ref": "rules.sizes"
                   },
                   "creatureType": {
                     "type": "string",
                     "minLength": 1,
                     "maxLength": 64,
                     "pattern": "^[a-z][a-z0-9_]*$",
-                    "description": "ref:rules.creatureTypes"
+                    "description": "An id from rules.creatureTypes.",
+                    "x-dm-ref": "rules.creatureTypes"
                   },
                   "alignment": {
                     "type": "string",
                     "minLength": 1,
                     "maxLength": 64,
                     "pattern": "^[a-z][a-z0-9_]*$",
-                    "description": "ref:rules.alignments"
+                    "description": "An id from rules.alignments.",
+                    "x-dm-ref": "rules.alignments"
                   },
                   "damageInteractions": {
                     "type": "array",
@@ -4365,7 +4444,8 @@
                       "minLength": 1,
                       "maxLength": 64,
                       "pattern": "^[a-z][a-z0-9_]*$",
-                      "description": "ref:rules.conditions"
+                      "description": "An id from rules.conditions.",
+                      "x-dm-ref": "rules.conditions"
                     },
                     "default": []
                   },
@@ -4424,7 +4504,8 @@
                       "minLength": 1,
                       "maxLength": 64,
                       "pattern": "^[a-z][a-z0-9_]*$",
-                      "description": "ref:rules.languages"
+                      "description": "An id from rules.languages.",
+                      "x-dm-ref": "rules.languages"
                     },
                     "default": []
                   },
@@ -4448,7 +4529,8 @@
                           "minLength": 1,
                           "maxLength": 64,
                           "pattern": "^[a-z][a-z0-9_]*$",
-                          "description": "ref:content.abilities"
+                          "description": "An id from content.abilities.",
+                          "x-dm-ref": "content.abilities"
                         },
                         "uses": {
                           "type": "integer",
@@ -4507,7 +4589,8 @@
                         "minLength": 1,
                         "maxLength": 64,
                         "pattern": "^[a-z][a-z0-9_]*$",
-                        "description": "ref:content.skills"
+                        "description": "An id from content.skills.",
+                        "x-dm-ref": "content.skills"
                       },
                       "difficulty": {
                         "$ref": "#/$defs/GameModule/properties/rules/properties/attributes/items/properties/modifier"
@@ -4527,7 +4610,8 @@
                         "minLength": 1,
                         "maxLength": 64,
                         "pattern": "^[a-z][a-z0-9_]*$",
-                        "description": "ref:content.skills"
+                        "description": "An id from content.skills.",
+                        "x-dm-ref": "content.skills"
                       },
                       "difficulty": {
                         "$ref": "#/$defs/GameModule/properties/rules/properties/attributes/items/properties/modifier"
@@ -4665,28 +4749,32 @@
                     "minLength": 1,
                     "maxLength": 64,
                     "pattern": "^[a-z][a-z0-9_]*$",
-                    "description": "ref:content.factions"
+                    "description": "An id from content.factions.",
+                    "x-dm-ref": "content.factions"
                   },
                   "statblock": {
                     "type": "string",
                     "minLength": 1,
                     "maxLength": 64,
                     "pattern": "^[a-z][a-z0-9_]*$",
-                    "description": "ref:content.monsters"
+                    "description": "An id from content.monsters.",
+                    "x-dm-ref": "content.monsters"
                   },
                   "dialogue": {
                     "type": "string",
                     "minLength": 1,
                     "maxLength": 64,
                     "pattern": "^[a-z][a-z0-9_]*$",
-                    "description": "ref:narrative.dialogues"
+                    "description": "An id from narrative.dialogues.",
+                    "x-dm-ref": "narrative.dialogues"
                   },
                   "home": {
                     "type": "string",
                     "minLength": 1,
                     "maxLength": 64,
                     "pattern": "^[a-z][a-z0-9_]*$",
-                    "description": "ref:world.pointsOfInterest"
+                    "description": "Enough to place them: the engine gathers everyone whose home is here when the party arrives.",
+                    "x-dm-ref": "world.pointsOfInterest"
                   },
                   "gullibility": {
                     "type": "number",
@@ -4719,7 +4807,8 @@
                       "minLength": 1,
                       "maxLength": 64,
                       "pattern": "^[a-z][a-z0-9_]*$",
-                      "description": "ref:narrative.quests"
+                      "description": "An id from narrative.quests.",
+                      "x-dm-ref": "narrative.quests"
                     },
                     "default": []
                   },
@@ -4731,7 +4820,8 @@
                         "minLength": 1,
                         "maxLength": 64,
                         "pattern": "^[a-z][a-z0-9_]*$",
-                        "description": "ref:content.lootTables"
+                        "description": "An id from content.lootTables.",
+                        "x-dm-ref": "content.lootTables"
                       },
                       "buysTags": {
                         "type": "array",
@@ -4758,7 +4848,8 @@
                       "minLength": 1,
                       "maxLength": 64,
                       "pattern": "^[a-z][a-z0-9_]*$",
-                      "description": "ref:narrative.deedKinds"
+                      "description": "An id from narrative.deedKinds.",
+                      "x-dm-ref": "narrative.deedKinds"
                     },
                     "default": []
                   }
@@ -4835,7 +4926,8 @@
                       "minLength": 1,
                       "maxLength": 64,
                       "pattern": "^[a-z][a-z0-9_]*$",
-                      "description": "ref:rules.movementModes"
+                      "description": "An id from rules.movementModes.",
+                      "x-dm-ref": "rules.movementModes"
                     },
                     "default": []
                   },
@@ -4844,7 +4936,8 @@
                     "minLength": 1,
                     "maxLength": 64,
                     "pattern": "^[a-z][a-z0-9_]*$",
-                    "description": "ref:rules.coverTypes"
+                    "description": "An id from rules.coverTypes.",
+                    "x-dm-ref": "rules.coverTypes"
                   },
                   "onEnter": {
                     "type": "array",
@@ -4897,21 +4990,24 @@
                     "minLength": 1,
                     "maxLength": 64,
                     "pattern": "^[a-z][a-z0-9_]*$",
-                    "description": "ref:world.terrains"
+                    "description": "An id from world.terrains.",
+                    "x-dm-ref": "world.terrains"
                   },
                   "wall": {
                     "type": "string",
                     "minLength": 1,
                     "maxLength": 64,
                     "pattern": "^[a-z][a-z0-9_]*$",
-                    "description": "ref:world.terrains"
+                    "description": "An id from world.terrains.",
+                    "x-dm-ref": "world.terrains"
                   },
                   "door": {
                     "type": "string",
                     "minLength": 1,
                     "maxLength": 64,
                     "pattern": "^[a-z][a-z0-9_]*$",
-                    "description": "ref:world.terrains"
+                    "description": "An id from world.terrains.",
+                    "x-dm-ref": "world.terrains"
                   },
                   "scatter": {
                     "type": "array",
@@ -4923,7 +5019,8 @@
                           "minLength": 1,
                           "maxLength": 64,
                           "pattern": "^[a-z][a-z0-9_]*$",
-                          "description": "ref:world.terrains"
+                          "description": "An id from world.terrains.",
+                          "x-dm-ref": "world.terrains"
                         },
                         "frequency": {
                           "type": "number",
@@ -4956,7 +5053,8 @@
                           "minLength": 1,
                           "maxLength": 64,
                           "pattern": "^[a-z][a-z0-9_]*$",
-                          "description": "ref:world.terrains"
+                          "description": "An id from world.terrains.",
+                          "x-dm-ref": "world.terrains"
                         },
                         "edgeWidth": {
                           "type": "integer",
@@ -4981,7 +5079,8 @@
                     "minLength": 1,
                     "maxLength": 64,
                     "pattern": "^[a-z][a-z0-9_]*$",
-                    "description": "ref:world.terrains"
+                    "description": "An id from world.terrains.",
+                    "x-dm-ref": "world.terrains"
                   },
                   "extra": {
                     "$ref": "#/$defs/GameModule/properties/rules/properties/conditions/items/properties/extra"
@@ -5030,7 +5129,8 @@
                       "minLength": 1,
                       "maxLength": 64,
                       "pattern": "^[a-z][a-z0-9_]*$",
-                      "description": "ref:world.roomTemplates"
+                      "description": "An id from world.roomTemplates.",
+                      "x-dm-ref": "world.roomTemplates"
                     },
                     "default": []
                   },
@@ -5041,7 +5141,8 @@
                       "minLength": 1,
                       "maxLength": 64,
                       "pattern": "^[a-z][a-z0-9_]*$",
-                      "description": "ref:world.encounterTables"
+                      "description": "An id from world.encounterTables.",
+                      "x-dm-ref": "world.encounterTables"
                     },
                     "default": []
                   },
@@ -5052,7 +5153,8 @@
                       "minLength": 1,
                       "maxLength": 64,
                       "pattern": "^[a-z][a-z0-9_]*$",
-                      "description": "ref:content.lootTables"
+                      "description": "An id from content.lootTables.",
+                      "x-dm-ref": "content.lootTables"
                     },
                     "default": []
                   },
@@ -5063,7 +5165,8 @@
                       "minLength": 1,
                       "maxLength": 64,
                       "pattern": "^[a-z][a-z0-9_]*$",
-                      "description": "ref:content.traps"
+                      "description": "An id from content.traps.",
+                      "x-dm-ref": "content.traps"
                     },
                     "default": []
                   },
@@ -5072,7 +5175,8 @@
                     "minLength": 1,
                     "maxLength": 64,
                     "pattern": "^[a-z][a-z0-9_]*$",
-                    "description": "ref:narrative.textGrammar"
+                    "description": "An id from narrative.textGrammar.",
+                    "x-dm-ref": "narrative.textGrammar"
                   },
                   "triggers": {
                     "type": "array",
@@ -5150,7 +5254,8 @@
                           "minLength": 1,
                           "maxLength": 64,
                           "pattern": "^[a-z][a-z0-9_]*$",
-                          "description": "ref:narrative.textGrammar"
+                          "description": "An id from narrative.textGrammar.",
+                          "x-dm-ref": "narrative.textGrammar"
                         }
                       },
                       "required": [
@@ -5165,7 +5270,8 @@
                     "minLength": 1,
                     "maxLength": 64,
                     "pattern": "^[a-z][a-z0-9_]*$",
-                    "description": "ref:world.palettes"
+                    "description": "An id from world.palettes.",
+                    "x-dm-ref": "world.palettes"
                   },
                   "extra": {
                     "$ref": "#/$defs/GameModule/properties/rules/properties/conditions/items/properties/extra"
@@ -5202,7 +5308,8 @@
                     "minLength": 1,
                     "maxLength": 64,
                     "pattern": "^[a-z][a-z0-9_]*$",
-                    "description": "ref:world.biomes"
+                    "description": "An id from world.biomes.",
+                    "x-dm-ref": "world.biomes"
                   },
                   "layer": {
                     "type": "string",
@@ -5217,7 +5324,8 @@
                     "minLength": 1,
                     "maxLength": 64,
                     "pattern": "^[a-z][a-z0-9_]*$",
-                    "description": "ref:narrative.textGrammar"
+                    "description": "An id from narrative.textGrammar.",
+                    "x-dm-ref": "narrative.textGrammar"
                   },
                   "connections": {
                     "type": "array",
@@ -5229,7 +5337,8 @@
                           "minLength": 1,
                           "maxLength": 64,
                           "pattern": "^[a-z][a-z0-9_]*$",
-                          "description": "ref:world.areas"
+                          "description": "An id from world.areas.",
+                          "x-dm-ref": "world.areas"
                         },
                         "travelMinutes": {
                           "type": "integer",
@@ -5241,7 +5350,8 @@
                           "minLength": 1,
                           "maxLength": 64,
                           "pattern": "^[a-z][a-z0-9_]*$",
-                          "description": "ref:world.gates"
+                          "description": "An id from world.gates.",
+                          "x-dm-ref": "world.gates"
                         },
                         "oneWay": {
                           "type": "boolean",
@@ -5254,7 +5364,8 @@
                             "minLength": 1,
                             "maxLength": 64,
                             "pattern": "^[a-z][a-z0-9_]*$",
-                            "description": "ref:world.encounterTables"
+                            "description": "An id from world.encounterTables.",
+                            "x-dm-ref": "world.encounterTables"
                           },
                           "default": []
                         }
@@ -5280,7 +5391,8 @@
                       "minLength": 1,
                       "maxLength": 64,
                       "pattern": "^[a-z][a-z0-9_]*$",
-                      "description": "ref:world.encounterTables"
+                      "description": "An id from world.encounterTables.",
+                      "x-dm-ref": "world.encounterTables"
                     },
                     "default": []
                   },
@@ -5289,7 +5401,8 @@
                     "minLength": 1,
                     "maxLength": 64,
                     "pattern": "^[a-z][a-z0-9_]*$",
-                    "description": "ref:content.factions"
+                    "description": "An id from content.factions.",
+                    "x-dm-ref": "content.factions"
                   },
                   "dangerLevel": {
                     "type": "integer",
@@ -5335,14 +5448,16 @@
                         "minLength": 1,
                         "maxLength": 64,
                         "pattern": "^[a-z][a-z0-9_]*$",
-                        "description": "ref:world.palettes"
+                        "description": "An id from world.palettes.",
+                        "x-dm-ref": "world.palettes"
                       },
                       "static": {
                         "type": "string",
                         "minLength": 1,
                         "maxLength": 64,
                         "pattern": "^[a-z][a-z0-9_]*$",
-                        "description": "ref:world.maps"
+                        "description": "An id from world.maps.",
+                        "x-dm-ref": "world.maps"
                       },
                       "layout": {
                         "type": "array",
@@ -5358,7 +5473,8 @@
                           "minLength": 1,
                           "maxLength": 64,
                           "pattern": "^[a-z][a-z0-9_]*$",
-                          "description": "ref:world.terrains"
+                          "description": "An id from world.terrains.",
+                          "x-dm-ref": "world.terrains"
                         },
                         "default": {}
                       },
@@ -5423,7 +5539,8 @@
                     "minLength": 1,
                     "maxLength": 64,
                     "pattern": "^[a-z][a-z0-9_]*$",
-                    "description": "ref:world.areas"
+                    "description": "An id from world.areas.",
+                    "x-dm-ref": "world.areas"
                   },
                   "kind": {
                     "type": "string",
@@ -5446,14 +5563,16 @@
                     "minLength": 1,
                     "maxLength": 64,
                     "pattern": "^[a-z][a-z0-9_]*$",
-                    "description": "ref:narrative.textGrammar"
+                    "description": "An id from narrative.textGrammar.",
+                    "x-dm-ref": "narrative.textGrammar"
                   },
                   "gate": {
                     "type": "string",
                     "minLength": 1,
                     "maxLength": 64,
                     "pattern": "^[a-z][a-z0-9_]*$",
-                    "description": "ref:world.gates"
+                    "description": "An id from world.gates.",
+                    "x-dm-ref": "world.gates"
                   },
                   "hidden": {
                     "type": "boolean",
@@ -5467,7 +5586,8 @@
                         "minLength": 1,
                         "maxLength": 64,
                         "pattern": "^[a-z][a-z0-9_]*$",
-                        "description": "ref:content.skills"
+                        "description": "An id from content.skills.",
+                        "x-dm-ref": "content.skills"
                       },
                       "difficulty": {
                         "$ref": "#/$defs/GameModule/properties/rules/properties/attributes/items/properties/modifier"
@@ -5493,7 +5613,8 @@
                       "minLength": 1,
                       "maxLength": 64,
                       "pattern": "^[a-z][a-z0-9_]*$",
-                      "description": "ref:world.encounterTables"
+                      "description": "An id from world.encounterTables.",
+                      "x-dm-ref": "world.encounterTables"
                     },
                     "default": []
                   },
@@ -5509,7 +5630,8 @@
                       "minLength": 1,
                       "maxLength": 64,
                       "pattern": "^[a-z][a-z0-9_]*$",
-                      "description": "ref:content.npcs"
+                      "description": "Anyone this place names, plus anyone who names it as home.",
+                      "x-dm-ref": "content.npcs"
                     },
                     "default": []
                   },
@@ -5520,7 +5642,8 @@
                       "minLength": 1,
                       "maxLength": 64,
                       "pattern": "^[a-z][a-z0-9_]*$",
-                      "description": "ref:content.lootTables"
+                      "description": "An id from content.lootTables.",
+                      "x-dm-ref": "content.lootTables"
                     },
                     "default": []
                   },
@@ -5529,7 +5652,8 @@
                     "minLength": 1,
                     "maxLength": 64,
                     "pattern": "^[a-z][a-z0-9_]*$",
-                    "description": "ref:world.dungeons"
+                    "description": "An id from world.dungeons.",
+                    "x-dm-ref": "world.dungeons"
                   },
                   "services": {
                     "type": "array",
@@ -5557,7 +5681,8 @@
                     "minLength": 1,
                     "maxLength": 64,
                     "pattern": "^[a-z][a-z0-9_]*$",
-                    "description": "ref:content.factions"
+                    "description": "An id from content.factions.",
+                    "x-dm-ref": "content.factions"
                   },
                   "travelMinutes": {
                     "type": "integer",
@@ -5624,7 +5749,8 @@
                         "minLength": 1,
                         "maxLength": 64,
                         "pattern": "^[a-z][a-z0-9_]*$",
-                        "description": "ref:content.skills"
+                        "description": "An id from content.skills.",
+                        "x-dm-ref": "content.skills"
                       },
                       "difficulty": {
                         "$ref": "#/$defs/GameModule/properties/rules/properties/attributes/items/properties/modifier"
@@ -5661,7 +5787,8 @@
                       "minLength": 1,
                       "maxLength": 64,
                       "pattern": "^[a-z][a-z0-9_]*$",
-                      "description": "ref:content.abilities"
+                      "description": "An id from content.abilities.",
+                      "x-dm-ref": "content.abilities"
                     },
                     "default": []
                   },
@@ -5684,7 +5811,8 @@
                     "minLength": 1,
                     "maxLength": 64,
                     "pattern": "^[a-z][a-z0-9_]*$",
-                    "description": "ref:narrative.textGrammar"
+                    "description": "An id from narrative.textGrammar.",
+                    "x-dm-ref": "narrative.textGrammar"
                   },
                   "staysOpen": {
                     "type": "boolean",
@@ -5718,7 +5846,8 @@
                     "minLength": 1,
                     "maxLength": 64,
                     "pattern": "^[a-z][a-z0-9_]*$",
-                    "description": "ref:narrative.textGrammar"
+                    "description": "An id from narrative.textGrammar.",
+                    "x-dm-ref": "narrative.textGrammar"
                   },
                   "weight": {
                     "type": "number",
@@ -5875,7 +6004,8 @@
                                 "minLength": 1,
                                 "maxLength": 64,
                                 "pattern": "^[a-z][a-z0-9_]*$",
-                                "description": "ref:content.monsters"
+                                "description": "An id from content.monsters.",
+                                "x-dm-ref": "content.monsters"
                               },
                               "count": {
                                 "$ref": "#/$defs/GameModule/properties/rules/properties/resolution/properties/checkDice",
@@ -5905,7 +6035,8 @@
                           "minLength": 1,
                           "maxLength": 64,
                           "pattern": "^[a-z][a-z0-9_]*$",
-                          "description": "ref:narrative.textGrammar"
+                          "description": "An id from narrative.textGrammar.",
+                          "x-dm-ref": "narrative.textGrammar"
                         },
                         "hostile": {
                           "type": "boolean",
@@ -5949,7 +6080,8 @@
                     "minLength": 1,
                     "maxLength": 64,
                     "pattern": "^[a-z][a-z0-9_]*$",
-                    "description": "ref:world.biomes"
+                    "description": "An id from world.biomes.",
+                    "x-dm-ref": "world.biomes"
                   },
                   "roomCount": {
                     "$ref": "#/$defs/GameModule/properties/rules/properties/resolution/properties/checkDice",
@@ -5978,7 +6110,8 @@
                       "minLength": 1,
                       "maxLength": 64,
                       "pattern": "^[a-z][a-z0-9_]*$",
-                      "description": "ref:world.gates"
+                      "description": "An id from world.gates.",
+                      "x-dm-ref": "world.gates"
                     },
                     "default": []
                   },
@@ -6001,7 +6134,8 @@
                     "minLength": 1,
                     "maxLength": 64,
                     "pattern": "^[a-z][a-z0-9_]*$",
-                    "description": "ref:world.encounterTables"
+                    "description": "Drawn in the boss room. Without one the deepest room generates like any other.",
+                    "x-dm-ref": "world.encounterTables"
                   },
                   "completionTriggers": {
                     "type": "array",
@@ -6015,7 +6149,8 @@
                     "minLength": 1,
                     "maxLength": 64,
                     "pattern": "^[a-z][a-z0-9_]*$",
-                    "description": "ref:world.palettes"
+                    "description": "An id from world.palettes.",
+                    "x-dm-ref": "world.palettes"
                   },
                   "corridorLength": {
                     "$ref": "#/$defs/GameModule/properties/rules/properties/resolution/properties/checkDice",
@@ -6093,7 +6228,8 @@
                     "minLength": 1,
                     "maxLength": 64,
                     "pattern": "^[a-z][a-z0-9_]*$",
-                    "description": "ref:world.maps"
+                    "description": "An id from world.maps.",
+                    "x-dm-ref": "world.maps"
                   },
                   "rollEncounters": {
                     "type": "boolean",
@@ -6191,7 +6327,8 @@
                                       "minLength": 1,
                                       "maxLength": 64,
                                       "pattern": "^[a-z][a-z0-9_]*$",
-                                      "description": "ref:world.terrains"
+                                      "description": "An id from world.terrains.",
+                                      "x-dm-ref": "world.terrains"
                                     }
                                   ]
                                 }
@@ -6232,7 +6369,8 @@
                                       "minLength": 1,
                                       "maxLength": 64,
                                       "pattern": "^[a-z][a-z0-9_]*$",
-                                      "description": "ref:content.items"
+                                      "description": "An id from content.items.",
+                                      "x-dm-ref": "content.items"
                                     }
                                   ]
                                 }
@@ -6273,7 +6411,8 @@
                                       "minLength": 1,
                                       "maxLength": 64,
                                       "pattern": "^[a-z][a-z0-9_]*$",
-                                      "description": "ref:content.monsters"
+                                      "description": "An id from content.monsters.",
+                                      "x-dm-ref": "content.monsters"
                                     }
                                   ]
                                 }
@@ -6314,7 +6453,8 @@
                                       "minLength": 1,
                                       "maxLength": 64,
                                       "pattern": "^[a-z][a-z0-9_]*$",
-                                      "description": "ref:content.npcs"
+                                      "description": "An id from content.npcs.",
+                                      "x-dm-ref": "content.npcs"
                                     }
                                   ]
                                 }
@@ -6355,7 +6495,8 @@
                                       "minLength": 1,
                                       "maxLength": 64,
                                       "pattern": "^[a-z][a-z0-9_]*$",
-                                      "description": "ref:world.gates"
+                                      "description": "An id from world.gates.",
+                                      "x-dm-ref": "world.gates"
                                     }
                                   ]
                                 }
@@ -6396,7 +6537,8 @@
                                       "minLength": 1,
                                       "maxLength": 64,
                                       "pattern": "^[a-z][a-z0-9_]*$",
-                                      "description": "ref:content.traps"
+                                      "description": "An id from content.traps.",
+                                      "x-dm-ref": "content.traps"
                                     }
                                   ]
                                 }
@@ -6640,7 +6782,8 @@
                           "minLength": 1,
                           "maxLength": 64,
                           "pattern": "^[a-z][a-z0-9_]*$",
-                          "description": "ref:narrative.textGrammar"
+                          "description": "An id from narrative.textGrammar.",
+                          "x-dm-ref": "narrative.textGrammar"
                         }
                       },
                       "required": [
@@ -7635,7 +7778,8 @@
                           "minLength": 1,
                           "maxLength": 64,
                           "pattern": "^[a-z][a-z0-9_]*$",
-                          "description": "ref:narrative.deedKinds"
+                          "description": "An id from narrative.deedKinds.",
+                          "x-dm-ref": "narrative.deedKinds"
                         },
                         "redirectWhen": {
                           "type": "array",
@@ -7691,7 +7835,8 @@
                                     "minLength": 1,
                                     "maxLength": 64,
                                     "pattern": "^[a-z][a-z0-9_]*$",
-                                    "description": "ref:content.skills"
+                                    "description": "An id from content.skills.",
+                                    "x-dm-ref": "content.skills"
                                   },
                                   "difficulty": {
                                     "$ref": "#/$defs/GameModule/properties/rules/properties/attributes/items/properties/modifier",
@@ -7702,7 +7847,8 @@
                                     "minLength": 1,
                                     "maxLength": 64,
                                     "pattern": "^[a-z][a-z0-9_]*$",
-                                    "description": "ref:content.skills"
+                                    "description": "An id from content.skills.",
+                                    "x-dm-ref": "content.skills"
                                   },
                                   "onSuccess": {
                                     "$ref": "#/$defs/GameModule/properties/id"
@@ -7788,7 +7934,8 @@
                     "minLength": 1,
                     "maxLength": 64,
                     "pattern": "^[a-z][a-z0-9_]*$",
-                    "description": "ref:content.npcs"
+                    "description": "A label. What actually puts the job in front of a player is that NPC’s offersQuests.",
+                    "x-dm-ref": "content.npcs"
                   },
                   "requires": {
                     "$ref": "#/$defs/GameModule/properties/content/properties/abilities/items/properties/requires"
@@ -7887,7 +8034,8 @@
                           "minLength": 1,
                           "maxLength": 64,
                           "pattern": "^[a-z][a-z0-9_]*$",
-                          "description": "ref:narrative.textGrammar"
+                          "description": "An id from narrative.textGrammar.",
+                          "x-dm-ref": "narrative.textGrammar"
                         }
                       },
                       "required": [
@@ -7949,7 +8097,8 @@
                               "minLength": 1,
                               "maxLength": 64,
                               "pattern": "^[a-z][a-z0-9_]*$",
-                              "description": "ref:content.items"
+                              "description": "An id from content.items.",
+                              "x-dm-ref": "content.items"
                             },
                             "quantity": {
                               "$ref": "#/$defs/GameModule/properties/rules/properties/attributes/items/properties/modifier",
@@ -7986,7 +8135,8 @@
                       "minLength": 1,
                       "maxLength": 64,
                       "pattern": "^[a-z][a-z0-9_]*$",
-                      "description": "ref:narrative.quests"
+                      "description": "An id from narrative.quests.",
+                      "x-dm-ref": "narrative.quests"
                     },
                     "default": []
                   },
@@ -7995,7 +8145,8 @@
                     "minLength": 1,
                     "maxLength": 64,
                     "pattern": "^[a-z][a-z0-9_]*$",
-                    "description": "ref:narrative.deedKinds"
+                    "description": "An id from narrative.deedKinds.",
+                    "x-dm-ref": "narrative.deedKinds"
                   },
                   "repeatable": {
                     "type": "boolean",
@@ -8036,7 +8187,8 @@
                       "minLength": 1,
                       "maxLength": 64,
                       "pattern": "^[a-z][a-z0-9_]*$",
-                      "description": "ref:narrative.quests"
+                      "description": "An id from narrative.quests.",
+                      "x-dm-ref": "narrative.quests"
                     },
                     "minItems": 1
                   },
@@ -8077,7 +8229,8 @@
                     "minLength": 1,
                     "maxLength": 64,
                     "pattern": "^[a-z][a-z0-9_]*$",
-                    "description": "ref:narrative.textGrammar"
+                    "description": "An id from narrative.textGrammar.",
+                    "x-dm-ref": "narrative.textGrammar"
                   },
                   "source": {
                     "type": "string",
@@ -8114,7 +8267,8 @@
                       "minLength": 1,
                       "maxLength": 64,
                       "pattern": "^[a-z][a-z0-9_]*$",
-                      "description": "ref:narrative.lore"
+                      "description": "An id from narrative.lore.",
+                      "x-dm-ref": "narrative.lore"
                     },
                     "minItems": 1
                   }
@@ -8150,7 +8304,8 @@
                     "minLength": 1,
                     "maxLength": 64,
                     "pattern": "^[a-z][a-z0-9_]*$",
-                    "description": "ref:content.factions"
+                    "description": "An id from content.factions.",
+                    "x-dm-ref": "content.factions"
                   },
                   "memorability": {
                     "type": "number",
@@ -8236,7 +8391,8 @@
                         "minLength": 1,
                         "maxLength": 64,
                         "pattern": "^[a-z][a-z0-9_]*$",
-                        "description": "ref:narrative.deedKinds"
+                        "description": "An id from narrative.deedKinds.",
+                        "x-dm-ref": "narrative.deedKinds"
                       },
                       "default": []
                     },
@@ -8428,7 +8584,8 @@
                           "minLength": 1,
                           "maxLength": 64,
                           "pattern": "^[a-z][a-z0-9_]*$",
-                          "description": "ref:narrative.deedKinds"
+                          "description": "An id from narrative.deedKinds.",
+                          "x-dm-ref": "narrative.deedKinds"
                         },
                         "default": []
                       },
@@ -8442,7 +8599,8 @@
                           "minLength": 1,
                           "maxLength": 64,
                           "pattern": "^[a-z][a-z0-9_]*$",
-                          "description": "ref:content.npcs"
+                          "description": "An id from content.npcs.",
+                          "x-dm-ref": "content.npcs"
                         },
                         "default": []
                       },
@@ -8453,7 +8611,8 @@
                           "minLength": 1,
                           "maxLength": 64,
                           "pattern": "^[a-z][a-z0-9_]*$",
-                          "description": "ref:content.npcs"
+                          "description": "An id from content.npcs.",
+                          "x-dm-ref": "content.npcs"
                         },
                         "default": []
                       },
@@ -8538,7 +8697,8 @@
                     "minLength": 1,
                     "maxLength": 64,
                     "pattern": "^[a-z][a-z0-9_]*$",
-                    "description": "ref:content.ancestries"
+                    "description": "An id from content.ancestries.",
+                    "x-dm-ref": "content.ancestries"
                   },
                   "default": []
                 },
@@ -8549,7 +8709,8 @@
                     "minLength": 1,
                     "maxLength": 64,
                     "pattern": "^[a-z][a-z0-9_]*$",
-                    "description": "ref:content.classes"
+                    "description": "An id from content.classes.",
+                    "x-dm-ref": "content.classes"
                   },
                   "default": []
                 },
@@ -8563,7 +8724,8 @@
                         "minLength": 1,
                         "maxLength": 64,
                         "pattern": "^[a-z][a-z0-9_]*$",
-                        "description": "ref:content.items"
+                        "description": "An id from content.items.",
+                        "x-dm-ref": "content.items"
                       },
                       "quantity": {
                         "type": "integer",
@@ -8592,28 +8754,32 @@
               "minLength": 1,
               "maxLength": 64,
               "pattern": "^[a-z][a-z0-9_]*$",
-              "description": "ref:world.areas"
+              "description": "Used only if no starting point of interest or dungeon is set.",
+              "x-dm-ref": "world.areas"
             },
             "startingPoi": {
               "type": "string",
               "minLength": 1,
               "maxLength": 64,
               "pattern": "^[a-z][a-z0-9_]*$",
-              "description": "ref:world.pointsOfInterest"
+              "description": "An id from world.pointsOfInterest.",
+              "x-dm-ref": "world.pointsOfInterest"
             },
             "startingDungeon": {
               "type": "string",
               "minLength": 1,
               "maxLength": 64,
               "pattern": "^[a-z][a-z0-9_]*$",
-              "description": "ref:world.dungeons"
+              "description": "An id from world.dungeons.",
+              "x-dm-ref": "world.dungeons"
             },
             "openingTextKey": {
               "type": "string",
               "minLength": 1,
               "maxLength": 64,
               "pattern": "^[a-z][a-z0-9_]*$",
-              "description": "ref:narrative.textGrammar"
+              "description": "An id from narrative.textGrammar.",
+              "x-dm-ref": "narrative.textGrammar"
             },
             "partyFollow": {
               "type": "object",

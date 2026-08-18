@@ -13,10 +13,10 @@
  */
 
 import { z } from 'zod';
-import { gameModuleSchema, COLLECTION_PATHS } from '@dm/module';
+import { gameModuleSchema, COLLECTION_PATHS, refTarget, refHelp } from '@dm/module';
 
 export type FieldSpec =
-  | { kind: 'string'; ref: string | null; long: boolean; pattern: string | null }
+  | { kind: 'string'; ref: string | null; refHelp: string | null; long: boolean; pattern: string | null }
   | { kind: 'number'; int: boolean; min: number | null; max: number | null }
   | { kind: 'boolean' }
   | { kind: 'enum'; options: readonly string[] }
@@ -79,10 +79,14 @@ function unwrap(schema: z.ZodTypeAny): Unwrapped {
   return { schema: current, optional, defaultValue, description };
 }
 
-/** `ref:content.items` markers become dropdowns bound to that collection. */
-function refTarget(description: string | null): string | null {
-  return description?.startsWith('ref:') ? description.slice(4) : null;
-}
+/**
+ * `ref:` markers become dropdowns bound to that collection.
+ *
+ * Read through `@dm/module` rather than parsed here. This file used to carry
+ * its own `description.slice(4)`, which was the same thing right up until the
+ * marker learned to carry help text after a `|` — at which point a second
+ * parser is just a second place to be wrong.
+ */
 
 /** Which recursive DSL schema this is, so the JSON editor can label it. */
 function dslFlavour(schema: z.ZodTypeAny): 'expr' | 'predicate' | 'effect' | 'rule' | 'unknown' {
@@ -108,7 +112,8 @@ export function describeSchema(schema: z.ZodTypeAny, depth = 0): FieldSpec {
       const regex = checks.find((c) => c.kind === 'regex')?.regex;
       return {
         kind: 'string',
-        ref: refTarget(description),
+        ref: refTarget(description ?? undefined),
+        refHelp: refHelp(description ?? undefined),
         long: max > 500,
         pattern: regex ? String(regex) : null,
       };
@@ -157,7 +162,7 @@ export function describeSchema(schema: z.ZodTypeAny, depth = 0): FieldSpec {
     case 'ZodRecord':
       return {
         kind: 'record',
-        keyRef: refTarget(unwrap(def['keyType'] as z.ZodTypeAny).description),
+        keyRef: refTarget(unwrap(def['keyType'] as z.ZodTypeAny).description ?? undefined),
         value: describeSchema(def['valueType'] as z.ZodTypeAny, depth + 1),
       };
 

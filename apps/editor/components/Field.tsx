@@ -134,7 +134,7 @@ export function Field(props: FieldProps) {
         const current = typeof value === 'string' ? value : '';
         const missing = current !== '' && !options.includes(current);
         return (
-          <Labelled path={path} label={label} description={description ?? `→ ${spec.ref}`}>
+          <Labelled path={path} label={label} description={description ?? spec.refHelp ?? `→ ${spec.ref}`}>
             <select
               className={`input ${missing ? 'invalid' : ''}`}
               value={current}

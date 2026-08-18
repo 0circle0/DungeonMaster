@@ -10,7 +10,7 @@ export * from './analysis/index.js';
 
 // Shared field primitives. Exported so the mod format reuses the same id
 // grammar and version rules rather than re-deriving them slightly differently.
-export { idSchema, versionSchema, displayName, description, refTarget } from './schema/common.js';
+export { idSchema, versionSchema, displayName, description, refTarget, refHelp } from './schema/common.js';
 
 export { gameModuleSchema, FORMAT_VERSION, COLLECTION_PATHS } from './schema/module.js';
 export type { GameModule, CollectionPath, ModuleMeta, Creation, Start } from './schema/module.js';

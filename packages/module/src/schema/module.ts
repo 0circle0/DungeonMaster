@@ -58,7 +58,7 @@ export const startSchema = z
     partySize: z.number().int().min(1).max(8).default(4),
     creation: creationSchema.default({}),
     /** Where play begins: a region for story mode, or a dungeon to dive straight in. */
-    startingArea: ref('world.areas').optional(),
+    startingArea: ref('world.areas', 'Used only if no starting point of interest or dungeon is set.').optional(),
     startingPoi: ref('world.pointsOfInterest').optional(),
     startingDungeon: ref('world.dungeons').optional(),
     /** Text-grammar pool for the opening scene. */

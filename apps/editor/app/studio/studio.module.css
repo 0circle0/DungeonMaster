@@ -628,3 +628,32 @@
 .paletteLabel { flex: 1; font-size: 13px; }
 .paletteHint { font-family: var(--mono); font-size: 10.5px; color: #5d6478; }
 .paletteEmpty { padding: 16px; margin: 0; color: #4e5468; font-size: 12px; font-style: italic; }
+
+/* — fields a mod added ————————————————————————————————————— */
+
+.modFields {
+  margin-top: 18px;
+  border-top: 1px solid var(--line, #23262f);
+  padding-top: 12px;
+}
+.modFieldsHead {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #5d6478;
+  margin-bottom: 8px;
+}
+.modField { position: relative; }
+/* Whose it is. An unattributed field reads as part of the format, and would be
+   looked for in the schema by whoever inherits the module. */
+.modFieldOwner {
+  position: absolute;
+  top: 0;
+  right: 0;
+  font-family: var(--mono);
+  font-size: 10px;
+  color: #5d6478;
+}

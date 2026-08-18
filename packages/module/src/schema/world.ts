@@ -262,7 +262,7 @@ export const pointOfInterestSchema = z
     /** Odds of an encounter per visit here, overriding the table's own. */
     encounterChance: z.number().min(0).max(1).optional(),
 
-    residents: z.array(ref('content.npcs')).default([]),
+    residents: z.array(ref('content.npcs', 'Anyone this place names, plus anyone who names it as home.')).default([]),
     loot: z.array(ref('content.lootTables')).default([]),
     /** Entering leads into a generated dungeon. */
     dungeon: ref('world.dungeons').optional(),
@@ -354,7 +354,7 @@ export const dungeonGenSchema = z
      * horror module wanting the door to close behind you turns it off.
      */
     safeEntrance: z.boolean().default(true),
-    bossTable: ref('world.encounterTables').optional(),
+    bossTable: ref('world.encounterTables', 'Drawn in the boss room. Without one the deepest room generates like any other.').optional(),
     completionTriggers: z.array(triggerSchema).default([]),
     /** Overrides the biome's palette for this dungeon. */
     palette: ref('world.palettes').optional(),

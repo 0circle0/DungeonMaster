@@ -381,7 +381,7 @@ export const monsterSchema = z
     reactions: z.array(reactionSchema).default([]),
     loot: ref('content.lootTables').optional(),
     /** Extra tables drawn only when the finder qualifies. */
-    conditionalLoot: z.array(ref('content.lootTables')).default([]),
+    conditionalLoot: z.array(ref('content.lootTables', 'Drawn as well as loot, and only when the finder qualifies.')).default([]),
     /** Faction whose standing changes when this creature is killed. */
     faction: ref('content.factions').optional(),
     /** How it reads in prose: "a hulking", "two skittering". */
@@ -474,7 +474,7 @@ export const npcSchema = z
      * simply never appears. Naming a home is enough to place someone: listing
      * them in that place's `residents` says the same thing from the other end.
      */
-    home: ref('world.pointsOfInterest').optional(),
+    home: ref('world.pointsOfInterest', 'Enough to place them: the engine gathers everyone whose home is here when the party arrives.').optional(),
     /** How readily they believe rumours about the party, 0..1. */
     gullibility: z.number().min(0).max(1).default(0.5),
     /** How long they remember a deed, in in-world days. */

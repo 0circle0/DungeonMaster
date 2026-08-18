@@ -30,14 +30,30 @@ export const description = z.string().max(4000);
  * in the schema description so both the compiler and the editor know where the
  * id should resolve.
  */
-export function ref(collection: string) {
-  return idSchema.describe(`ref:${collection}`);
+export function ref(collection: string, help?: string) {
+  return idSchema.describe(help ? `ref:${collection}|${help}` : `ref:${collection}`);
 }
 
 /** Extract the target collection from a `ref:` marker. */
 export function refTarget(description: string | undefined): string | null {
   if (!description?.startsWith('ref:')) return null;
-  return description.slice(4);
+  const rest = description.slice(4);
+  const bar = rest.indexOf('|');
+  return bar < 0 ? rest : rest.slice(0, bar);
+}
+
+/**
+ * The sentence after the collection, if the field carries one.
+ *
+ * `.describe()` is the only annotation slot zod gives a string, and `ref:` took
+ * it — so a reference field is the one kind that could never explain itself,
+ * which is backwards: "what does `giver` mean" is a better question than "what
+ * does `name` mean". Everything after the first `|` is prose for a person.
+ */
+export function refHelp(description: string | undefined): string | null {
+  if (!description?.startsWith('ref:')) return null;
+  const bar = description.indexOf('|');
+  return bar < 0 ? null : description.slice(bar + 1);
 }
 
 /** A weighted table row, used for encounters, loot, and text variation. */

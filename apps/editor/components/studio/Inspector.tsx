@@ -15,6 +15,8 @@ import { UsedBy } from '@/components/UsedBy';
 import { FieldDiagnostics, diagnosticsByPath } from '@/components/Field';
 import { planMove } from '@/lib/bulk';
 import { RenamePanel } from './RenamePanel';
+import { ModFields } from './ModFields';
+import type { OwnedField } from '@/lib/modRuntime';
 import { Coverage } from './Coverage';
 import { ItemForm } from './ItemForm';
 import { StartInspector } from './StartInspector';
@@ -28,6 +30,8 @@ interface InspectorProps {
   onDuplicate: (path: string, index: number) => void;
   onDelete: (path: string, index: number) => void;
   onPreviewStart: () => void;
+  /** Fields the installed mods add to the current selection. */
+  modFields: readonly OwnedField[];
 }
 
 export function Inspector(props: InspectorProps) {
@@ -192,6 +196,7 @@ function InspectorPanel(props: InspectorProps) {
           // editor would render them as a wall of inputs. The painter owns them.
           {...(info.path === 'world.maps' ? { omit: new Set(['layers']) } : {})}
         />
+        <ModFields store={store} basePath={basePath} fields={props.modFields} />
         <UsedBy
           doc={store.doc}
           collection={info.path}

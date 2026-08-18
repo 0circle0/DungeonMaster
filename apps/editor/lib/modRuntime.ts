@@ -58,6 +58,21 @@ export function createEditorModRuntime(
    * One crossing. Never throws — a broken mod must not be able to stop the
    * studio from rendering the document the author is trying to fix.
    */
+  /**
+   * A mod hook that fails should say so.
+   *
+   * `lint` turns its failures into diagnostics, which is why a broken lint hook
+   * gets noticed. `fields` and `commands` passed `() => {}` and dropped theirs
+   * on the floor — so a mod whose field never appeared looked exactly like a
+   * mod that had decided not to add one, and there was nowhere to look. The
+   * console is not a great channel, but it beats silence, and these are
+   * developer-facing failures in code the studio did not write.
+   */
+  function warn(message: string): void {
+    // eslint-disable-next-line no-console
+    console.warn(`[mod] ${message}`);
+  }
+
   function call(
     mod: LoadedMod,
     hook: string,
@@ -124,7 +139,7 @@ export function createEditorModRuntime(
           meta: metaOf(doc),
           selection: selection ? { path: selection.path, value: selection.value } : null,
         };
-        for (const directive of call(mod, 'editor.fields', payload, () => {})) {
+        for (const directive of call(mod, 'editor.fields', payload, warn)) {
           if (directive.kind !== 'fields') continue;
           for (const field of directive.fields) out.push({ ...field, modId: mod.manifest.id });
         }
@@ -136,7 +151,7 @@ export function createEditorModRuntime(
       const out: OwnedCommand[] = [];
       for (const mod of mods) {
         if (!declares(mod, 'editor.commands')) continue;
-        for (const directive of call(mod, 'editor.commands', { meta: metaOf(doc) }, () => {})) {
+        for (const directive of call(mod, 'editor.commands', { meta: metaOf(doc) }, warn)) {
           if (directive.kind !== 'commands') continue;
           for (const command of directive.commands) out.push({ ...command, modId: mod.manifest.id });
         }

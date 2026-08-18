@@ -66,7 +66,13 @@ describe('describeSchema', () => {
   it('marks arrays of references', () => {
     expect(field('abilities').spec).toEqual({
       kind: 'array',
-      element: { kind: 'string', ref: 'content.abilities', long: false, pattern: expect.anything() },
+      element: {
+        kind: 'string',
+        ref: 'content.abilities',
+        refHelp: null,
+        long: false,
+        pattern: expect.anything(),
+      },
     });
   });
 
@@ -366,7 +372,7 @@ describe('empty nested sections fold away', () => {
     for (const spec of kinds) expect(rendersAsGroup(spec), spec.kind).toBe(true);
 
     const rows: FieldSpec[] = [
-      { kind: 'string', ref: null, long: false, pattern: null },
+      { kind: 'string', ref: null, refHelp: null, long: false, pattern: null },
       { kind: 'number', int: true, min: null, max: null },
       { kind: 'boolean' },
       { kind: 'enum', options: ['a'] },

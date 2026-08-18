@@ -179,7 +179,7 @@ export const questSchema = z
     available: PredicateSchema.optional(),
     /** Starts automatically rather than needing to be accepted. */
     autoStart: z.boolean().default(false),
-    giver: ref('content.npcs').optional(),
+    giver: ref('content.npcs', 'A label. What actually puts the job in front of a player is that NPC\u2019s offersQuests.').optional(),
     /** Gate on development, items, factions, memory, or other quests. */
     requires: requirementSchema.optional(),
     /**
