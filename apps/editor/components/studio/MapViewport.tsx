@@ -11,6 +11,7 @@
 
 import { useEffect, useMemo, useRef, useState } from 'react';
 import type { ModuleStore } from '@/lib/store';
+import { getAt } from '@/lib/store';
 import {
   previewArea, previewDungeon, previewPoi, previewRoomTemplate, previewStart,
 } from '@/lib/preview';
@@ -53,6 +54,21 @@ export function MapViewport(props: { store: ModuleStore; target: PreviewTarget }
         return previewRoomTemplate(module, props.target.id, seed);
     }
   }, [module, props.target, seed]);
+
+  /**
+   * Put a point of interest somewhere else.
+   *
+   * Positions were typed as two numbers, which is a strange way to say "over
+   * there" about a map you are looking at. Writing on drop rather than on every
+   * pointer move keeps it one undo step and one revalidation, instead of one of
+   * each per tile crossed.
+   */
+  const movePoi = (id: string, x: number, y: number) => {
+    const pois = (getAt(props.store.doc, ['world', 'pointsOfInterest']) ?? []) as Record<string, unknown>[];
+    const index = pois.findIndex((poi) => String(poi['id']) === id);
+    if (index < 0) return;
+    props.store.set(['world', 'pointsOfInterest', index, 'position'], { x, y });
+  };
 
   const title =
     props.target.type === 'start' ? 'Game start' : `${props.target.type}: ${props.target.id}`;
@@ -130,6 +146,7 @@ export function MapViewport(props: { store: ModuleStore; target: PreviewTarget }
               <MapCanvas
                 preview={result.preview}
                 showMarkers={showMarkers}
+                onMovePoi={movePoi}
                 showRooms={showRooms}
               />
               <div className={styles.mapSide}>
@@ -166,13 +183,40 @@ export function MapViewport(props: { store: ModuleStore; target: PreviewTarget }
 }
 
 function MapCanvas(props: {
-  preview: { tiles: { width: number; height: number; tiles: readonly string[] }; markers: readonly { x: number; y: number; glyph: string; label: string }[]; rooms: readonly { x: number; y: number; width: number; height: number; role: string }[] };
+  preview: {
+    tiles: { width: number; height: number; tiles: readonly string[] };
+    markers: readonly { x: number; y: number; glyph: string; label: string; poi?: string }[];
+    rooms: readonly { x: number; y: number; width: number; height: number; role: string }[];
+  };
   showMarkers: boolean;
   showRooms: boolean;
+  /** Absent for a dungeon or a room template, where nothing here is movable. */
+  onMovePoi?: (id: string, x: number, y: number) => void;
 }) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [hover, setHover] = useState<{ x: number; y: number; terrain: string } | null>(null);
+  /**
+   * Where a marker is being dragged to, before it is written.
+   *
+   * The ref is the truth and the state is only so it draws. A drag reads its
+   * own position in the very next pointer event, and React state is not applied
+   * by then — so keeping it in state alone means every move handler sees the
+   * drag as not started, and the drop writes nothing.
+   */
+  const dragRef = useRef<{ poi: string; x: number; y: number } | null>(null);
+  const [dragging, setDragging] = useState<{ poi: string; x: number; y: number } | null>(null);
   const { tiles, markers, rooms } = props.preview;
+
+  /** The tile under a pointer, or null off the edge of the map. */
+  const tileUnder = (clientX: number, clientY: number): { x: number; y: number } | null => {
+    const canvas = canvasRef.current;
+    if (!canvas) return null;
+    const rect = canvas.getBoundingClientRect();
+    const x = Math.floor((clientX - rect.left) / TILE);
+    const y = Math.floor((clientY - rect.top) / TILE);
+    if (x < 0 || y < 0 || x >= tiles.width || y >= tiles.height) return null;
+    return { x, y };
+  };
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -239,16 +283,53 @@ function MapCanvas(props: {
           onMouseLeave={() => setHover(null)}
         />
         {props.showMarkers &&
-          markers.map((marker, i) => (
-            <span
-              key={i}
-              className={styles.mapMarker}
-              style={{ left: 24 + marker.x * TILE + TILE / 2, top: 24 + marker.y * TILE + TILE / 2 }}
-              title={marker.label}
-            >
-              {marker.glyph}
-            </span>
-          ))}
+          markers.map((marker, i) => {
+            const movable = Boolean(marker.poi && props.onMovePoi);
+            const at = dragging !== null && dragging.poi === marker.poi ? dragging : marker;
+            return (
+              <span
+                key={i}
+                className={`${styles.mapMarker}${movable ? ` ${styles.mapMarkerDrag}` : ''}`}
+                style={{ left: 24 + at.x * TILE + TILE / 2, top: 24 + at.y * TILE + TILE / 2 }}
+                title={movable ? `${marker.label}\n\nDrag to move it.` : marker.label}
+                onPointerDown={(e) => {
+                  if (!movable || !marker.poi) return;
+                  e.preventDefault();
+                  // Capture keeps the drag alive when the pointer leaves the
+                  // glyph, which it does immediately. A pointer the browser
+                  // does not know is not a reason to refuse the drag.
+                  try {
+                    e.currentTarget.setPointerCapture(e.pointerId);
+                  } catch {
+                    /* not capturable; the move handler still tracks it */
+                  }
+                  dragRef.current = { poi: marker.poi, x: marker.x, y: marker.y };
+                  setDragging(dragRef.current);
+                }}
+                onPointerMove={(e) => {
+                  const drag = dragRef.current;
+                  if (!drag || drag.poi !== marker.poi) return;
+                  const spot = tileUnder(e.clientX, e.clientY);
+                  if (!spot) return;
+                  dragRef.current = { poi: drag.poi, ...spot };
+                  setDragging(dragRef.current);
+                }}
+                onPointerUp={() => {
+                  const drag = dragRef.current;
+                  dragRef.current = null;
+                  setDragging(null);
+                  if (!drag || drag.poi !== marker.poi) return;
+                  // Written once, on drop: a write per tile crossed would be a
+                  // revalidation per tile and an undo step per tile with it.
+                  if (drag.x !== marker.x || drag.y !== marker.y) {
+                    props.onMovePoi?.(drag.poi, drag.x, drag.y);
+                  }
+                }}
+              >
+                {marker.glyph}
+              </span>
+            );
+          })}
         {hover && (
           <span
             className={styles.mapHover}

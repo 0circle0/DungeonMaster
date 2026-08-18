@@ -37,6 +37,15 @@ export interface Marker {
   readonly y: number;
   readonly glyph: string;
   readonly label: string;
+  /**
+   * The point of interest this marker *is*, when it is one.
+   *
+   * A marker drawn from a map's own layers is a picture of the layer; a marker
+   * drawn from `poi.position` is a picture of an entry, and an entry can be
+   * moved. Carrying the id is what lets the viewport put it back somewhere
+   * else — without it a drag knows where it landed and not what it moved.
+   */
+  readonly poi?: string;
 }
 
 export interface RoomOutline {
@@ -202,6 +211,7 @@ export function previewArea(
     const isHighlighted = poi.id === options.highlightPoi;
     markers.push({
       ...poi.position,
+      poi: poi.id,
       glyph: isHighlighted ? '◉' : isStart ? '▶' : '⌂',
       label:
         (isHighlighted ? 'The POI you selected. ' : '') +

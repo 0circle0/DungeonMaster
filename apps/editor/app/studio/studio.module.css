@@ -806,3 +806,7 @@
 .layoutList > li { display: flex; align-items: baseline; gap: 8px; padding: 2px 0; border-bottom: 1px solid var(--line); }
 .layoutList > li > span { flex: 1; }
 .layoutList code { color: var(--muted); font-variant-numeric: tabular-nums; }
+
+/* A marker you can pick up. */
+.mapMarkerDrag { cursor: grab; touch-action: none; }
+.mapMarkerDrag:active { cursor: grabbing; }
