@@ -308,3 +308,10 @@ textarea.input { resize: vertical; font-family: inherit; }
 .spark-bar { flex: 1; background: #2f4a5c; border-radius: 1px; cursor: pointer; min-height: 2px; }
 .spark-bar:hover { background: #4a7290; }
 .spark-bar.current { background: var(--accent); }
+
+/* Reordering an array item. Kept beside the remove button, small, because most
+   lists are not ordered and the controls should not claim otherwise. */
+.reorder { display: inline-flex; gap: 2px; }
+.reorder .btn { padding: 0 5px; line-height: 1.4; }
+
+.orphans { padding: 4px 2px; }

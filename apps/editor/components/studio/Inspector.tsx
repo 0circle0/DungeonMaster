@@ -13,6 +13,7 @@ import { singletonLabel } from '@/lib/labels';
 import { JsonBox } from '@/components/JsonBox';
 import { UsedBy } from '@/components/UsedBy';
 import { FieldDiagnostics, diagnosticsByPath } from '@/components/Field';
+import { planMove } from '@/lib/bulk';
 import { RenamePanel } from './RenamePanel';
 import { Coverage } from './Coverage';
 import { ItemForm } from './ItemForm';
@@ -118,6 +119,21 @@ function InspectorPanel(props: InspectorProps) {
   }
 
   const basePath: Path = [...selection.path.split('.'), selection.index];
+
+  /**
+   * Move this entry one place, and follow it.
+   *
+   * The selection is by index, so leaving it where it was would silently open
+   * whichever entry took this one's place.
+   */
+  const moveEntry = (delta: number) => {
+    const list = Array.isArray(entries) ? (entries as Record<string, unknown>[]) : [];
+    const plan = planMove(list, selection.path, selection.index, selection.index + delta);
+    if (plan.edits.length === 0) return;
+    store.setMany(plan.edits);
+    props.onOpenItem(selection.path, selection.index + delta);
+  };
+
   return (
     <aside className={styles.inspector}>
       <div className={styles.inspectorHead}>
@@ -125,6 +141,25 @@ function InspectorPanel(props: InspectorProps) {
         <code className={styles.inspectorPath}>{info.path}</code>
       </div>
       <div className={styles.inspectorActions}>
+        {/* Where an entry sits in its collection is part of the document, and
+            there has been no way to change it. Emitted order is what a diff
+            reads, and for some collections it is what the engine reads too. */}
+        <button
+          className="btn tiny"
+          title="Move earlier in the collection"
+          disabled={selection.index === 0}
+          onClick={() => moveEntry(-1)}
+        >
+          ↑
+        </button>
+        <button
+          className="btn tiny"
+          title="Move later in the collection"
+          disabled={selection.index >= (Array.isArray(entries) ? entries.length : 0) - 1}
+          onClick={() => moveEntry(1)}
+        >
+          ↓
+        </button>
         <button className="btn tiny" onClick={() => setRenaming(true)}>
           Rename…
         </button>

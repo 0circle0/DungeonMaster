@@ -80,6 +80,19 @@ export interface FieldProps {
   onHide?: () => void;
 }
 
+/**
+ * The same list with one item somewhere else.
+ *
+ * Every other item comes back as the same object, so moving a dialogue option
+ * re-checks that option rather than the whole entry it lives in.
+ */
+function moved(items: readonly unknown[], from: number, to: number): unknown[] {
+  const next = [...items];
+  const [item] = next.splice(from, 1);
+  next.splice(to, 0, item);
+  return next;
+}
+
 /** A sensible empty value, so "Add" produces something the schema accepts. */
 export function emptyValue(spec: FieldSpec): unknown {
   switch (spec.kind) {
@@ -240,6 +253,31 @@ export function Field(props: FieldProps) {
                   context={name}
                   onHide={undefined}
                 />
+                {/* Order is content here, not presentation: quest objectives
+                    are checked in order unless `ordered` is off, and dialogue
+                    options are read top to bottom by whoever is playing. Until
+                    now the only way to move one was to delete it and retype it
+                    at the end. */}
+                {items.length > 1 && (
+                  <div className="reorder">
+                    <button
+                      className="btn tiny"
+                      title="Move up"
+                      disabled={i === 0}
+                      onClick={() => onChange(path, moved(items, i, i - 1))}
+                    >
+                      ↑
+                    </button>
+                    <button
+                      className="btn tiny"
+                      title="Move down"
+                      disabled={i === items.length - 1}
+                      onClick={() => onChange(path, moved(items, i, i + 1))}
+                    >
+                      ↓
+                    </button>
+                  </div>
+                )}
                 <button className="btn tiny danger" title="Remove" onClick={() => onRemove([...path, i])}>
                   ×
                 </button>

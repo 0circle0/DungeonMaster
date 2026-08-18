@@ -14,45 +14,8 @@
 import { useDeferredValue, useMemo } from 'react';
 import { buildReferenceIndex, referencesTo } from '@dm/module';
 import type { ModuleDoc } from '@/lib/store';
+import { REACHED_INDIRECTLY } from '@/lib/reachability';
 
-/**
- * Collections whose entries are legitimately reached without a static
- * reference, and so must never be reported as orphaned.
- *
- * Most of these are named from inside DSL strings — `applyCondition` takes a
- * condition id as an *expression*, not a typed reference — or chosen by the
- * player at creation. Reporting them would train the author to ignore this
- * panel, which costs more than the check is worth.
- */
-const REACHED_INDIRECTLY = new Set([
-  'narrative.textGrammar', // named by key from prose fields
-  'narrative.arcs', // top-level containers
-  'narrative.quests', // may be reached by dialogue effects
-  'narrative.deedKinds', // emitted from DSL
-  'world.areas', // reached by travel
-  'world.pointsOfInterest', // reached from their area
-  'rules.attributes', // read through formula paths
-  'rules.resources',
-  'rules.derivedStats',
-  'rules.damageTypes', // named inside damage effects
-  'rules.conditions', // named inside applyCondition effects
-  'rules.equipmentSlots',
-  'rules.masteryTiers',
-  'rules.rests',
-  'rules.actionTypes',
-  'rules.savingThrows',
-  'rules.sizes',
-  'rules.creatureTypes',
-  'rules.senses',
-  'rules.movementModes',
-  'rules.languages',
-  'rules.alignments',
-  'rules.opportunities',
-  'rules.coverTypes',
-  'content.ancestries', // chosen at character creation
-  'content.classes',
-  'content.monsters', // may be placed only by a generator
-]);
 
 export function UsedBy({
   doc,

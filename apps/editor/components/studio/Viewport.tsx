@@ -9,6 +9,7 @@ import { collectionAt } from '@/lib/schema';
 import { getAt } from '@/lib/store';
 import type { ModuleDoc, ModuleStore } from '@/lib/store';
 import { EventsView } from '@/components/EventsView';
+import { OrphansView } from '@/components/OrphansView';
 import { BalanceView } from '@/components/BalanceView';
 import { DialogueGraph } from '@/components/DialogueGraph';
 import { TimelineView } from '@/components/TimelineView';
@@ -21,7 +22,7 @@ import type { MapTarget, Selection, ViewId, ViewportKind } from '@/app/studio/se
 import { VIEW_LABELS } from '@/app/studio/selection';
 import styles from '@/app/studio/studio.module.css';
 
-const VIEW_TABS: readonly ViewId[] = ['balance', 'dialogue', 'timeline', 'perception', 'events', 'rawjson'];
+const VIEW_TABS: readonly ViewId[] = ['balance', 'dialogue', 'timeline', 'perception', 'events', 'orphans', 'rawjson'];
 
 export function Viewport(props: {
   kind: ViewportKind;
@@ -87,6 +88,8 @@ export function Viewport(props: {
             onAdd={() => props.onAddEntry(props.tablePath!)}
           />
         )}
+
+        {kind === 'orphans' && <OrphansView doc={doc} onOpen={props.onSelectItem} />}
 
         {kind === 'balance' && <BalanceView doc={doc} />}
         {kind === 'dialogue' && <DialogueGraph doc={doc} />}

@@ -38,7 +38,7 @@ const VIEWS_FOR_TAB: Record<DockTab, readonly ViewId[]> = {
   content: [],
   rules: ['balance'],
   story: ['dialogue', 'timeline', 'events'],
-  module: ['perception', 'rawjson'],
+  module: ['perception', 'orphans', 'rawjson'],
 };
 
 export function Dock(props: {
