@@ -27,6 +27,8 @@ export function CollectionTable(props: {
   store: ModuleStore;
   onSelect: (index: number) => void;
   onAdd: () => void;
+  /** Offered when a prefab in this project makes this kind of entry. */
+  onPlace?: (() => void) | undefined;
 }) {
   const [filter, setFilter] = useState('');
   const [checked, setChecked] = useState<ReadonlySet<number>>(new Set());
@@ -114,6 +116,11 @@ export function CollectionTable(props: {
         <button className="btn primary" onClick={props.onAdd}>
           + New
         </button>
+        {props.onPlace && (
+          <button className="btn" onClick={props.onPlace} title="Fill in a few fields; the prefab writes the rest">
+            + From prefab
+          </button>
+        )}
       </div>
 
       {filter !== '' && <p className={styles.queryHelp}>{QUERY_HELP}</p>}

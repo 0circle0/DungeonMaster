@@ -30,6 +30,7 @@ import { useAutosave } from '@/lib/useAutosave';
 import { rememberPlace, readPlace, placeStillExists } from '@/lib/place';
 import { NewModuleDialog } from '@/components/studio/NewModuleDialog';
 import { CommandPalette } from '@/components/studio/CommandPalette';
+import { PlaceFromPrefab } from '@/components/studio/PlaceFromPrefab';
 import type { Command } from '@/lib/palette';
 import { emptyValue } from '@/components/Field';
 import type { MapTarget, Selection, ViewId, ViewportKind } from './selection';
@@ -54,6 +55,7 @@ export function Studio(props: {
   const [newDialog, setNewDialog] = useState(false);
   const [modsOpen, setModsOpen] = useState(false);
   const [paletteOpen, setPaletteOpen] = useState(false);
+  const [placing, setPlacing] = useState<string | null>(null);
   const mods = useEditorMods(props.mods);
 
   const { validation } = store;
@@ -219,6 +221,12 @@ export function Studio(props: {
   const modFields = useMemo(
     () => (mods.runtime ? mods.runtime.fields(store.doc, selectedEntry) : []),
     [mods.runtime, store.doc, selectedEntry],
+  );
+
+  /** Which collections a prefab can make, so the button only offers real work. */
+  const prefabCollections = useMemo(
+    () => new Set(props.authoring.prefabs.map((prefab) => prefab.collection)),
+    [props.authoring.prefabs],
   );
 
   const errorsByCollection = useMemo(() => {
@@ -402,6 +410,8 @@ export function Studio(props: {
           onShowView={openView}
           onSelectItem={openItem}
           onAddEntry={addEntry}
+          onPlaceFromPrefab={setPlacing}
+          prefabCollections={prefabCollections}
         />
 
         <Inspector
@@ -465,6 +475,18 @@ export function Studio(props: {
             Discard
           </button>
         </div>
+      )}
+
+      {placing && (
+        <PlaceFromPrefab
+          store={store}
+          prefabs={props.authoring.prefabs}
+          style={props.authoring.style}
+          moduleName={moduleName}
+          collection={placing}
+          onClose={() => setPlacing(null)}
+          onPlaced={(index) => openItem(placing, index)}
+        />
       )}
 
       {paletteOpen && (

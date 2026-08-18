@@ -707,3 +707,9 @@
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
   z-index: 70;
 }
+
+.prefabPicker { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 8px; }
+/* Form on the left, what it makes on the right — the preview is the point. */
+.placeBody { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; align-items: start; }
+.placeForm { max-height: 46vh; overflow-y: auto; padding-right: 4px; }
+.placePreview { min-width: 0; }

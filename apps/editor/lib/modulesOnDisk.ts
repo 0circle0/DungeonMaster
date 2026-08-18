@@ -111,6 +111,33 @@ export function readAuthoring(name: string): ProjectAuthoring {
   };
 }
 
+/**
+ * Record that an entry was placed from a prefab.
+ *
+ * Merged into whatever is on disk rather than written over it, because a save
+ * may land between placing the entry and recording where it came from — and
+ * the two orders have to produce the same file. `recomputeInstances` then keeps
+ * it in step from here on.
+ */
+export function addInstanceLink(
+  name: string,
+  collection: string,
+  entryId: string,
+  link: PrefabLink,
+): void {
+  const projectDir = join(MODULES_DIR, name, 'project');
+  if (!existsSync(projectDir)) throw new Error(`${name} is not a project`);
+
+  const target = join(projectDir, 'prefabs', 'instances.json');
+  const current: Record<string, Record<string, PrefabLink>> = existsSync(target)
+    ? (JSON.parse(readFileSync(target, 'utf8')) as Record<string, Record<string, PrefabLink>>)
+    : {};
+
+  current[collection] = { ...(current[collection] ?? {}), [entryId]: link };
+  mkdirSync(dirname(target), { recursive: true });
+  writeFileSync(target, `${JSON.stringify(current, null, 2)}\n`);
+}
+
 /** Is this module authored as a directory of files? */
 export function isProject(name: string): boolean {
   return existsSync(join(MODULES_DIR, name, 'project', 'project.json'));

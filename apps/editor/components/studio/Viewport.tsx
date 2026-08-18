@@ -35,6 +35,9 @@ export function Viewport(props: {
   onShowView: (id: ViewId) => void;
   onSelectItem: (path: string, index: number) => void;
   onAddEntry: (path: string) => void;
+  onPlaceFromPrefab: (path: string) => void;
+  /** Collections a prefab in this project can make. */
+  prefabCollections: ReadonlySet<string>;
 }) {
   const { store, kind } = props;
   const doc = store.doc;
@@ -86,6 +89,11 @@ export function Viewport(props: {
             store={store}
             onSelect={(index) => props.onSelectItem(props.tablePath!, index)}
             onAdd={() => props.onAddEntry(props.tablePath!)}
+            onPlace={
+              props.prefabCollections.has(props.tablePath)
+                ? () => props.onPlaceFromPrefab(props.tablePath!)
+                : undefined
+            }
           />
         )}
 
