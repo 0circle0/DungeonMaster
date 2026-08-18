@@ -520,8 +520,33 @@ doc["start"] = {
     "startingArea": "nowhere",
 }
 
+def jsonable(value):
+    """A document Python and JavaScript serialize identically.
+
+    A whole float becomes an int: JSON has one number type, but Python writes
+    `1.0` where `JSON.stringify` writes `1`. Same value, same hash, pure diff.
+
+    This mirrors `dmkit.assemble.jsonable`, copied rather than imported because
+    this module is generated with nothing but the standard library on the path —
+    `core_fantasy` is the base every other module composes in, so it does not
+    depend on the shared kit.
+    """
+    if isinstance(value, bool):
+        return value
+    if isinstance(value, float) and value.is_integer():
+        return int(value)
+    if isinstance(value, dict):
+        return {k: jsonable(v) for k, v in value.items()}
+    if isinstance(value, list):
+        return [jsonable(v) for v in value]
+    return value
+
+
 os.makedirs(OUT, exist_ok=True)
-with open(os.path.join(OUT, "module.json"), "w") as f:
-    json.dump(doc, f, indent=2)
+# `ensure_ascii=False`: the studio writes these files too, and `JSON.stringify`
+# emits an em dash as itself. Escaping here makes the editor's first save rewrite
+# lines nobody touched.
+with open(os.path.join(OUT, "module.json"), "w", encoding="utf-8") as f:
+    json.dump(jsonable(doc), f, indent=2, ensure_ascii=False)
     f.write("\n")
 print("wrote", os.path.join(OUT, "module.json"))

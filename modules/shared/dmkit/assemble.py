@@ -58,11 +58,39 @@ def document(*, module_id, version, engine, meta, rules, content, world,
     return doc
 
 
+def jsonable(value):
+    """A document Python and JavaScript serialize identically.
+
+    One conversion: a float that happens to be whole becomes an int. JSON has a
+    single number type, but the two writers disagree about how to spell one —
+    Python writes `emptyChance: 0.0` where `JSON.stringify` writes `0`. The
+    value is the same either way and neither the schema nor the content hash can
+    tell them apart, so the only thing the difference produces is a diff.
+    """
+    if isinstance(value, bool):
+        return value
+    if isinstance(value, float) and value.is_integer():
+        return int(value)
+    if isinstance(value, dict):
+        return {k: jsonable(v) for k, v in value.items()}
+    if isinstance(value, list):
+        return [jsonable(v) for v in value]
+    return value
+
+
 def write(doc, out_dir, *, name="module.json", indent=2):
-    """Write the document and return the path."""
+    """Write the document and return the path.
+
+    `ensure_ascii=False` because the studio writes these files too, and
+    `JSON.stringify` emits an em dash as itself. Escaping it here would mean the
+    first save of any module through the editor rewrote several hundred lines
+    that had not changed — see `jsonable` above for the other half of the same
+    problem. `modules/core_fantasy/gen_core.py` keeps its own copy of this,
+    deliberately: that module is generated without dmkit on the path.
+    """
     os.makedirs(out_dir, exist_ok=True)
     path = os.path.join(out_dir, name)
-    with open(path, "w") as f:
-        json.dump(doc, f, indent=indent)
+    with open(path, "w", encoding="utf-8") as f:
+        json.dump(jsonable(doc), f, indent=indent, ensure_ascii=False)
         f.write("\n")
     return path

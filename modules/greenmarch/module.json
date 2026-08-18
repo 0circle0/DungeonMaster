@@ -1327,7 +1327,7 @@
         "reactions": [
           {
             "id": "pack_fury",
-            "description": "A hound that watches a packmate die goes berserk \u2014 creatures act on each other, not only on the party.",
+            "description": "A hound that watches a packmate die goes berserk — creatures act on each other, not only on the party.",
             "on": "allyKilled",
             "priority": 10,
             "effects": [
@@ -1526,7 +1526,7 @@
         "reactions": [
           {
             "id": "turns_cold_on_thieves",
-            "description": "If she has heard you steal, she stops dealing with you \u2014 memory changing behaviour, not just dialogue.",
+            "description": "If she has heard you steal, she stops dealing with you — memory changing behaviour, not just dialogue.",
             "on": "seePlayer",
             "requires": {
               "memories": [
@@ -1799,7 +1799,7 @@
         "triggers": [
           {
             "id": "fens_first_sight",
-            "description": "Fires once, and is remembered \u2014 the world keeps a record that you have been here.",
+            "description": "Fires once, and is remembered — the world keeps a record that you have been here.",
             "mode": "once",
             "on": "enter",
             "remember": true,
@@ -1941,7 +1941,7 @@
         "triggers": [
           {
             "id": "barrow_resets",
-            "description": "Leave it unfinished and the barrow reorders itself \u2014 the restart mode.",
+            "description": "Leave it unfinished and the barrow reorders itself — the restart mode.",
             "mode": "restart",
             "on": "enter",
             "requires": {
@@ -2686,7 +2686,7 @@
             "id": "given_key",
             "says": [
               {
-                "text": "\"Then take the key. Brass one. Don't lose it \u2014 there isn't another.\""
+                "text": "\"Then take the key. Brass one. Don't lose it — there isn't another.\""
               },
               {
                 "text": "\"Here. It sticks. Lean on it.\""
@@ -3090,9 +3090,9 @@
       "combat.attack.unnamed": "attacks",
       "combat.check.unnamed": "check",
       "combat.damaged.resisted": " ({raw} before resistance)",
-      "combat.attacked": "{attacker} \u2014 {ability} on {target}: {roll} \u2014 {outcome}.",
-      "combat.checked": "{who} \u2014 {what}: {roll}.",
-      "combat.saved": "{who} \u2014 {save} save: {roll}.",
+      "combat.attacked": "{attacker} — {ability} on {target}: {roll} — {outcome}.",
+      "combat.checked": "{who} — {what}: {roll}.",
+      "combat.saved": "{who} — {save} save: {roll}.",
       "combat.damaged": "{who} takes {amount}{type} damage{resisted}.",
       "combat.healed": "{who} recovers {amount}.",
       "combat.died": "{who} falls.",
@@ -3100,11 +3100,11 @@
       "combat.conditionExpired": "{who} is no longer {condition}.",
       "combat.conditionResisted": "{who} shrugs off {condition}.",
       "combat.reacted": "{who} reacts.",
-      "combat.started": "Combat begins \u2014 {who}.",
+      "combat.started": "Combat begins — {who}.",
       "combat.ended.victory": "The fight is over.",
       "combat.ended.fled": "You are not followed.",
       "combat.ended.defeat": "The party falls.",
-      "combat.round": "\u2014 round {round} \u2014",
+      "combat.round": "— round {round} —",
       "combat.turn": "{who}'s turn.",
       "move.blocked": "Blocked by {what}.",
       "move.blocked.edge": "the edge of the world",
@@ -3121,8 +3121,8 @@
       "discovered.place": "You find {what}.",
       "progress.xp": "{who} gains {amount} experience.",
       "progress.level": "{who} reaches level {level}.",
-      "gate.opened.bypass": " \u2014 forced",
-      "gate.opened.ability": " \u2014 by power",
+      "gate.opened.bypass": " — forced",
+      "gate.opened.ability": " — by power",
       "gate.blocked.missing": " You would need {what}.",
       "gate.opened": "{gate} opens{how}.",
       "gate.blocked": "{gate} will not open.{missing}",
@@ -3133,13 +3133,13 @@
       "requirement.level": "level {level}",
       "requirement.ability": "the {ability} ability",
       "quest.offered": "{who} has work for you: {quest}.",
-      "quest.started": "New quest: {quest} \u2014 {description}",
+      "quest.started": "New quest: {quest} — {description}",
       "quest.started.plain": "New quest: {quest}.",
       "quest.stage": "{stage}",
-      "quest.stage.journal": "{stage} \u2014 {journal}",
+      "quest.stage.journal": "{stage} — {journal}",
       "quest.objective": "Objective complete: {objective}",
       "quest.completed": "Quest complete: {quest}.",
-      "quest.failed": "Quest failed: {quest} \u2014 {reason}.",
+      "quest.failed": "Quest failed: {quest} — {reason}.",
       "quest.failed.abandoned": "abandoned",
       "quest.failed.conditions": "conditions changed",
       "quest.failed.timedOut": "too much time passed",
@@ -3182,7 +3182,7 @@
       "refused.travel.noRoute": "no way through",
       "refused.travel.noRoad": "there is no road that way",
       "refused.travel.noWayUp": "there is no way back up",
-      "refused.travel.notYet": "not yet \u2014 {missing}",
+      "refused.travel.notYet": "not yet — {missing}",
       "refused.travel.notYet.plain": "not yet",
       "refused.travel.unknownArea": "no area \"{area}\"",
       "refused.leave.noExitFound": "find the way out first",
@@ -3245,9 +3245,9 @@
       "refused.buy.tooExpensive": "you cannot afford that",
       "refused.sell.notBuying": "they are not buying",
       "refused.sell.unwanted": "they have no use for that",
-      "refused.trade.barred": "they will not deal with you \u2014 {missing}",
+      "refused.trade.barred": "they will not deal with you — {missing}",
       "refused.trade.barred.plain": "they will not deal with you",
-      "affordance.barred": "barred \u2014 needs {what}",
+      "affordance.barred": "barred — needs {what}",
       "affordance.needs": "needs {what}",
       "refused.quest.unknown": "no quest \"{quest}\"",
       "refused.quest.unavailable": "{quest} is not available yet",
