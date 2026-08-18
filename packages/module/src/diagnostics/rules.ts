@@ -455,6 +455,54 @@ export const flagWritersCanRun: Rule = {
   },
 };
 
+/**
+ * A road is a thing between two places, and the format stores it twice.
+ *
+ * `connections` is per area, so a road from A to B is one entry in A and
+ * another in B, and nothing makes the second follow from the first. Declaring
+ * it once and emitting both ways is what `dmkit.regions.edges` does, and the
+ * result is visible: across Aurendel's 296 roads there is not one that goes
+ * only one way by accident.
+ *
+ * A hand-authored world has no such guarantee, and the failure is quiet — the
+ * party walks somewhere and finds they cannot walk back, which reads as design
+ * rather than as a missing line. `oneWay` says it was meant.
+ */
+export const roadsAreTwoWay: Rule = {
+  code: 'road_is_one_sided',
+  title: 'Roads go both ways unless they say otherwise',
+  why:
+    'A connection lives on the area it leaves from, so the return trip is a separate entry ' +
+    'that nothing requires. A missing one is indistinguishable from a deliberate one-way road, ' +
+    'except to whoever walks it.',
+  severity: 'warning',
+  reads: ['world.areas'],
+  run(ctx) {
+    const areas = collectionOf(ctx.doc, 'world.areas');
+    const byId = new Map(areas.map((area) => [String(area['id']), area]));
+
+    for (const [i, area] of areas.entries()) {
+      const from = String(area['id']);
+      for (const [j, road] of asList(area['connections']).entries()) {
+        if (road['oneWay'] === true) continue;
+        const to = String(road['to']);
+        const far = byId.get(to);
+        // A road to somewhere that does not exist is a dangling reference, and
+        // the compiler has already said so. Saying it again helps nobody.
+        if (!far) continue;
+        const returns = asList(far['connections']).some((back) => String(back['to']) === from);
+        if (returns) continue;
+        ctx.report(
+          this,
+          `world.areas.${i}.connections.${j}`,
+          `${JSON.stringify(from)} has a road to ${JSON.stringify(to)}, but ${JSON.stringify(to)} has none back`,
+          `add the return road to ${JSON.stringify(to)}, or mark this one oneWay if it is meant`,
+        );
+      }
+    }
+  },
+};
+
 export const questsAreReachable: Rule = {
   code: 'quest_unreachable',
   title: 'Every quest can be arrived at',
@@ -535,6 +583,7 @@ export const DEFAULT_RULES: readonly Rule[] = [
   objectiveTargetsResolve,
   flagsHaveWriters,
   flagWritersCanRun,
+  roadsAreTwoWay,
   questsAreReachable,
   killTargetsCanSpawn,
   dialoguesAreReachable,

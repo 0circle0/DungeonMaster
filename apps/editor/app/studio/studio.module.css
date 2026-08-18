@@ -735,3 +735,14 @@
 .fitFigure { margin-left: auto; font-size: 13px; letter-spacing: 0; text-transform: none; color: var(--fg); font-variant-numeric: tabular-nums; }
 .fitPanel[data-ok='false'] .fitFigure { color: var(--warn); }
 .fitProblem { color: var(--warn); font-size: 12px; margin: 6px 0; }
+
+/* Roads, edited from one end. */
+.roads { border: 1px solid var(--line); border-radius: 6px; padding: 8px 10px; margin: 12px 0; }
+.roadTable { width: 100%; border-collapse: collapse; font-size: 12px; margin: 6px 0; }
+.roadTable td { padding: 3px 4px; border-bottom: 1px solid var(--line); vertical-align: middle; }
+.roadTable td:first-child { width: 45%; }
+.roadUnit { color: var(--muted); font-size: 11px; margin-left: 4px; }
+.roadOneWay { display: flex; align-items: center; gap: 4px; font-size: 11px; color: var(--muted); }
+.roadBad { color: var(--err); font-size: 11px; }
+.roadAdd { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; margin-top: 6px; }
+.roadAdd select { max-width: 200px; font-size: 12px; }

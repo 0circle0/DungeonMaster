@@ -19,6 +19,7 @@ import {
   objectiveTargetsResolve,
   flagsHaveWriters,
   flagWritersCanRun,
+  roadsAreTwoWay,
   questsAreReachable,
   killTargetsCanSpawn,
   dialoguesAreReachable,
@@ -138,6 +139,44 @@ describe('a flag whose writer cannot be reached', () => {
 
   it('and the broken one compiles', () => {
     expect(compileModule(stranded(false)).ok).toBe(true);
+  });
+});
+
+/**
+ * Zero one-sided roads across 296 in Aurendel is not luck — `edges()` emits
+ * both directions from one declaration. A world authored by hand has no such
+ * guarantee, and the symptom is a party that walks somewhere and cannot walk
+ * back, which reads as design.
+ */
+describe('roads', () => {
+  it('says nothing about the modules that ship', () => {
+    for (const name of ['greenmarch', 'aurendel']) {
+      expect(runRules(load(name), [roadsAreTwoWay])).toEqual([]);
+    }
+  });
+
+  it('catches a road with no return, and the module still compiles', () => {
+    const doc = broken('aurendel', (d) => {
+      const areas = d.world.areas;
+      const from = areas[0];
+      const to = areas.find((a: any) => a.id === from.connections[0].to);
+      to.connections = to.connections.filter((c: any) => c.id !== from.id && c.to !== from.id);
+    });
+    const found = runRules(doc, [roadsAreTwoWay]);
+    expect(found).toHaveLength(1);
+    expect(found[0]?.message).toMatch(/has none back/);
+    expect(compileModule(doc).ok).toBe(true);
+  });
+
+  it('accepts one that says it is one-way', () => {
+    const doc = broken('aurendel', (d) => {
+      const areas = d.world.areas;
+      const from = areas[0];
+      const to = areas.find((a: any) => a.id === from.connections[0].to);
+      to.connections = to.connections.filter((c: any) => c.to !== from.id);
+      from.connections[0].oneWay = true;
+    });
+    expect(runRules(doc, [roadsAreTwoWay])).toEqual([]);
   });
 });
 
