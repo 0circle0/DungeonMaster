@@ -26,7 +26,14 @@ import {
   isAuthoringFile,
   overriddenPaths,
 } from '@dm/module';
-import type { ProjectManifest, Prefab, InstanceMap, PrefabLink, StyleTables } from '@dm/module';
+import type {
+  ProjectManifest,
+  Prefab,
+  InstanceMap,
+  PrefabLink,
+  StyleTables,
+  Contract,
+} from '@dm/module';
 
 const MODULES_DIR = join(process.cwd(), '..', '..', 'modules');
 
@@ -80,6 +87,8 @@ export interface ProjectAuthoring {
   readonly moduleName: string;
   /** Prefabs need a `project/` to live in; without one there is nowhere. */
   readonly isProject: boolean;
+  /** The few facts about this module a shared checker cannot know. */
+  readonly contract: Contract;
 }
 
 export const NO_AUTHORING: ProjectAuthoring = {
@@ -88,6 +97,7 @@ export const NO_AUTHORING: ProjectAuthoring = {
   style: {},
   moduleName: '',
   isProject: false,
+  contract: {},
 };
 
 export function readAuthoring(name: string): ProjectAuthoring {
@@ -120,6 +130,7 @@ export function readAuthoring(name: string): ProjectAuthoring {
     style: (read('style.json') ?? {}) as StyleTables,
     moduleName: name,
     isProject: true,
+    contract: read('contract.json') ?? {},
   };
 }
 

@@ -28,6 +28,7 @@ import type { ProjectAuthoring } from '@/lib/modulesOnDisk';
 import type { Draft } from '@/lib/drafts';
 import { useAutosave } from '@/lib/useAutosave';
 import { rememberPlace, readPlace, placeStillExists } from '@/lib/place';
+import { runRules } from '@dm/module';
 import { NewModuleDialog } from '@/components/studio/NewModuleDialog';
 import { CommandPalette } from '@/components/studio/CommandPalette';
 import { PlaceFromPrefab } from '@/components/studio/PlaceFromPrefab';
@@ -66,16 +67,53 @@ export function Studio(props: {
    * Merged rather than shown separately: an author fixing a module wants one
    * list of what is wrong with it, and a mod's complaint is prefixed with the
    * mod that raised it so its origin is never a guess.
+   *
+   * On the idle tier, with the semantic rules. This pushes the whole document
+   * across the QuickJS boundary, which was flagged as a per-keystroke cost when
+   * the scale work was planned and then not acted on — it is only visible on a
+   * module that a mod has a lot to say about, and Aurendel with the morale mod
+   * installed is 127 notes an edit.
    */
-  const modDiagnostics = useMemo(
-    () => (mods.runtime ? mods.runtime.lint(store.doc) : []),
-    [mods.runtime, store.doc],
-  );
+  const [modDiagnostics, setModDiagnostics] = useState<readonly Diagnostic[]>([]);
+  useEffect(() => {
+    if (!mods.runtime) {
+      setModDiagnostics([]);
+      return;
+    }
+    const runtime = mods.runtime;
+    const timer = setTimeout(() => setModDiagnostics(runtime.lint(store.doc)), 600);
+    return () => clearTimeout(timer);
+  }, [mods.runtime, store.doc]);
+
+  /**
+   * The contracts the schema cannot see — a flag nothing sets, a quest nobody
+   * can be offered — on the idle tier with the line numbers and the hash.
+   *
+   * They cost about 32 ms on Aurendel, which is half a keystroke budget, and
+   * almost all of it is indexing the document once so the rules themselves are
+   * free. Nothing here changes while a word is being typed, so waiting for a
+   * pause costs an author nothing and running per keystroke would cost them
+   * half the gain of the last three weeks.
+   */
+  const [semantic, setSemantic] = useState<readonly Diagnostic[]>([]);
+  useEffect(() => {
+    if (!validation.ok) {
+      // A document that does not compile has nothing coherent to check, and
+      // the errors it already has are the ones worth reading first.
+      setSemantic([]);
+      return;
+    }
+    const timer = setTimeout(() => {
+      setSemantic(runRules(store.doc, undefined, props.authoring.contract));
+    }, 600);
+    return () => clearTimeout(timer);
+  }, [store.doc, validation.ok, props.authoring.contract]);
 
   const validationWithMods = useMemo(() => {
-    if (modDiagnostics.length === 0) return validation;
-    const errors = modDiagnostics.filter((d) => d.severity === 'error');
-    const warnings = modDiagnostics.filter((d) => d.severity !== 'error');
+    const extra = [...modDiagnostics, ...semantic];
+    if (extra.length === 0) return validation;
+    const errors = extra.filter((d) => d.severity === 'error');
+    const warnings = extra.filter((d) => d.severity !== 'error');
     return {
       ...validation,
       // A mod can raise an error, but it cannot make a valid module invalid:
@@ -83,7 +121,7 @@ export function Studio(props: {
       errors: [...validation.errors, ...errors],
       warnings: [...validation.warnings, ...warnings],
     };
-  }, [validation, modDiagnostics]);
+  }, [validation, modDiagnostics, semantic]);
 
 
   /**

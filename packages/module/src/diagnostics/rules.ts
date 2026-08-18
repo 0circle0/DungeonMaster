@@ -126,6 +126,15 @@ export class RuleContext {
   /** Dialogues something names. `talk` is the only way into one. */
   readonly ownedDialogues = new Set<string>();
 
+  /**
+   * Trigger ids, which a `reach` objective may name.
+   *
+   * On the context rather than in the rule because it means walking the whole
+   * document, and the rule asks per objective — which on Aurendel is a hundred
+   * and one walks of a 2.9 MB document to answer one question.
+   */
+  readonly triggerIds = new Set<string>();
+
   constructor(doc: Entry, contract: Contract = {}) {
     this.doc = doc;
     this.contract = contract;
@@ -137,6 +146,11 @@ export class RuleContext {
     this.collectStartable();
     this.collectSpawnable();
     this.collectOwnedDialogues();
+    walkFor(doc, 'triggers', (value) => {
+      for (const trigger of asList(value)) {
+        if (typeof trigger['id'] === 'string') this.triggerIds.add(trigger['id']);
+      }
+    });
   }
 
   report(rule: Rule, path: string, message: string, hint: string | null = null): void {
@@ -297,17 +311,9 @@ export const objectiveTargetsResolve: Rule = {
 
         // `reach` may name a trigger, which lives inside a point of interest
         // rather than in a collection of its own.
-        const triggers = new Set<string>();
-        if (kind === 'reach') {
-          walkFor(ctx.doc, 'triggers', (value) => {
-            for (const trigger of asList(value)) {
-              if (typeof trigger['id'] === 'string') triggers.add(trigger['id']);
-            }
-          });
-        }
-
         const found =
-          collections.some((collection) => known(collection).has(target)) || triggers.has(target);
+          collections.some((collection) => known(collection).has(target)) ||
+          (kind === 'reach' && ctx.triggerIds.has(target));
         if (found) continue;
 
         ctx.report(

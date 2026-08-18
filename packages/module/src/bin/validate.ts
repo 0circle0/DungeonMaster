@@ -5,9 +5,11 @@
  * lints. This is the gate a module passes before it can be played or shared.
  */
 
-import { readFileSync } from 'node:fs';
-import { dirname, basename } from 'node:path';
+import { readFileSync, existsSync } from 'node:fs';
+import { dirname, basename, join } from 'node:path';
 import { lintModule, formatDiagnostics } from '../diagnostics/lint.js';
+import { runRules } from '../diagnostics/rules.js';
+import type { Contract } from '../diagnostics/rules.js';
 import { resolveExtends } from '../merge.js';
 import {
   readAssembledModule,
@@ -104,7 +106,29 @@ function main(): number {
     return 1;
   }
 
-  const warnings = lintWarnings;
+  /**
+   * The contracts the schema cannot see.
+   *
+   * Run after the module is known to be valid, because they read a document
+   * rather than check its shape: asking whether a flag has a writer only means
+   * something once the document is known to *have* flags where flags go.
+   *
+   * A module may ship its own `project/contract.json` — the few facts a shared
+   * checker cannot know, like which quests gate an act.
+   */
+  const contractPath = join(assembled.dir, 'project', 'contract.json');
+  let contract: Contract = {};
+  if (existsSync(contractPath)) {
+    try {
+      contract = JSON.parse(readFileSync(contractPath, 'utf8')) as Contract;
+    } catch (err) {
+      process.stderr.write(`✗ ${contractPath}: ${(err as Error).message}\n`);
+      return 1;
+    }
+  }
+  const semantic = runRules(subject ?? {}, undefined, contract);
+
+  const warnings = [...lintWarnings, ...semantic];
   process.stdout.write(`✓ ${module.identity}  (hash ${module.hash})\n`);
 
   const counts = [
