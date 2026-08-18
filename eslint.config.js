@@ -12,6 +12,7 @@
  */
 
 import tseslint from 'typescript-eslint';
+import reactHooks from 'eslint-plugin-react-hooks';
 
 export default tseslint.config(
   {
@@ -144,6 +145,30 @@ export default tseslint.config(
   {
     files: ['packages/*/src/bin/**/*.ts'],
     rules: { 'no-console': 'off' },
+  },
+
+  /**
+   * The rules of hooks, in the two apps that have components.
+   *
+   * Added because a conditional hook shipped: `usePrefabState` was called
+   * after four early returns in the inspector, which is a crash of the whole
+   * page — "Rendered more hooks than during the previous render" — and it
+   * passed the typecheck and all 1,284 tests without a murmur. It could not
+   * have been caught by either. The tests run in a node environment with no
+   * DOM, so nothing renders a component; the compiler has no idea that
+   * `useMemo` is special.
+   *
+   * `exhaustive-deps` stays a warning: a dependency deliberately keyed by
+   * value rather than identity is a real pattern here, and an error would make
+   * it unwritable.
+   */
+  {
+    files: ['apps/*/**/*.{ts,tsx}'],
+    plugins: { 'react-hooks': reactHooks },
+    rules: {
+      'react-hooks/rules-of-hooks': 'error',
+      'react-hooks/exhaustive-deps': 'warn',
+    },
   },
 
   /**

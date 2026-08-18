@@ -29,7 +29,13 @@ const DAYS = 180;
 export function TimelineView({ doc }: { doc: ModuleDoc }) {
   const deedKinds = list(doc, 'narrative.deedKinds');
   const npcs = list(doc, 'content.npcs');
-  const memory = (getAt(doc, ['narrative', 'memory']) as Row | undefined) ?? {};
+  // `narrative.memory` is optional, and `?? {}` is a new object each render;
+  // the simulation memo below keys on it, so without this it re-runs forever
+  // on exactly the modules that do not configure memory.
+  const memory = useMemo(
+    () => (getAt(doc, ['narrative', 'memory']) as Row | undefined) ?? {},
+    [doc],
+  );
 
   const [deedKind, setDeedKind] = useState(String(deedKinds[0]?.['id'] ?? ''));
   const [witness, setWitness] = useState<string>('');

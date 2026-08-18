@@ -1,0 +1,6 @@
+{
+  "id": "walk",
+  "name": "Walk",
+  "defaultSpeed": 30,
+  "terrainMultiplier": 1
+}

@@ -1,0 +1,51 @@
+{
+  "id": "fen_wanderers",
+  "name": "Fen Wanderers",
+  "chance": 0.35,
+  "emptyWeight": 20,
+  "minDepth": 0,
+  "maxDepth": 999,
+  "groups": [
+    {
+      "id": "lone_hound",
+      "name": "A lone hound",
+      "weight": 50,
+      "entries": [
+        {
+          "monster": "bog_hound",
+          "count": "1"
+        }
+      ]
+    },
+    {
+      "id": "hound_pack",
+      "name": "A pack",
+      "weight": 30,
+      "requires": {
+        "minLevel": 2
+      },
+      "entries": [
+        {
+          "monster": "bog_hound",
+          "count": "1d3+1"
+        }
+      ]
+    },
+    {
+      "id": "wight_abroad",
+      "name": "Something older",
+      "weight": 8,
+      "requires": {
+        "minLevel": 3,
+        "description": "Only stalks parties that have made a name."
+      },
+      "entries": [
+        {
+          "monster": "barrow_wight",
+          "count": "1"
+        }
+      ],
+      "textKey": "wight_arrives"
+    }
+  ]
+}

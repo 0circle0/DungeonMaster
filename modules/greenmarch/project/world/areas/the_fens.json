@@ -1,0 +1,46 @@
+{
+  "id": "the_fens",
+  "name": "The Fens",
+  "description": "Standing water and older things under it.",
+  "biome": "greenmarch",
+  "layer": "overworld",
+  "descriptionKey": "fens_desc",
+  "dangerLevel": 3,
+  "recommendedLevel": 2,
+  "encounterTables": [
+    "fen_wanderers"
+  ],
+  "connections": [
+    {
+      "to": "millford",
+      "travelMinutes": 90
+    }
+  ],
+  "triggers": [
+    {
+      "id": "fens_first_sight",
+      "description": "Fires once, and is remembered — the world keeps a record that you have been here.",
+      "mode": "once",
+      "on": "enter",
+      "remember": true,
+      "effects": [
+        {
+          "setFlag": {
+            "flag": "seen_fens",
+            "value": true
+          }
+        }
+      ],
+      "textKey": "fens_desc"
+    }
+  ],
+  "map": {
+    "width": "31",
+    "height": "21",
+    "palette": "fen"
+  },
+  "entryPoint": {
+    "x": 15,
+    "y": 10
+  }
+}

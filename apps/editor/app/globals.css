@@ -65,7 +65,7 @@ button, input, select, textarea { font: inherit; color: inherit; }
 
 .form { display: flex; flex-direction: column; gap: 12px; }
 .field { display: flex; flex-direction: column; gap: 4px; margin-bottom: 10px; }
-.label { font-size: 12px; color: var(--muted); }
+.label { font-size: 12px; color: var(--muted); display: flex; align-items: center; gap: 6px; }
 .hint { font-size: 11px; color: #5d6478; font-style: normal; margin: 2px 0 0; }
 
 /* A problem, shown on the field it is about rather than only in the console.
@@ -74,6 +74,28 @@ button, input, select, textarea { font: inherit; color: inherit; }
 .field-problem { font-size: 11px; font-style: normal; margin: 2px 0 0; }
 .field-problem.error { color: var(--err); }
 .field-problem.warning { color: var(--warn); }
+/* A field that no longer follows its prefab.
+
+   The two states an author must be able to tell apart are "editing the prefab
+   still reaches this" and "this is mine now", and until this existed they
+   looked identical in the only place anybody looks. So the value is emphasised
+   rather than the label — the value is the thing that stopped being shared —
+   and the way back sits beside the name. */
+.field-overridden > .label { color: var(--fg); }
+.field-overridden > .input,
+.field-overridden > .code,
+.field-overridden > select { border-left: 2px solid var(--accent); font-weight: 600; }
+.override-mark {
+  font-size: 9px; text-transform: uppercase; letter-spacing: .06em;
+  color: var(--accent); border: 1px solid var(--accent); border-radius: 3px;
+  padding: 0 4px; font-weight: 500;
+}
+.override-reset {
+  font: inherit; font-size: 10px; color: var(--muted);
+  background: none; border: 0; padding: 0; cursor: pointer; text-decoration: underline;
+}
+.override-reset:hover { color: var(--accent); }
+
 .field-error > .input, .field-error > .code { border-color: var(--err); }
 .field-warning > .input { border-color: var(--warn); }
 

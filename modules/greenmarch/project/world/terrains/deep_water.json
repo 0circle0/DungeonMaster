@@ -1,0 +1,15 @@
+{
+  "id": "deep_water",
+  "name": "Deep Water",
+  "glyph": "~",
+  "color": "blue",
+  "tags": [
+    "water"
+  ],
+  "passable": true,
+  "opaque": false,
+  "moveCost": 2,
+  "requiresMode": [
+    "swim"
+  ]
+}

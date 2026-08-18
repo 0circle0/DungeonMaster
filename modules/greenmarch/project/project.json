@@ -1,0 +1,320 @@
+{
+  "format": 1,
+  "keyOrder": [
+    "format",
+    "id",
+    "version",
+    "engine",
+    "extends",
+    "meta",
+    "rules",
+    "content",
+    "world",
+    "narrative",
+    "start",
+    "mods"
+  ],
+  "sections": {
+    "rules": {
+      "keyOrder": [
+        "attributes",
+        "resources",
+        "derivedStats",
+        "damageTypes",
+        "conditions",
+        "savingThrows",
+        "actionTypes",
+        "equipmentSlots",
+        "itemProperties",
+        "masteryTiers",
+        "creatureTypes",
+        "languages",
+        "sizes",
+        "rests",
+        "resolution",
+        "progression",
+        "vitalResource",
+        "initiativeStat",
+        "senses",
+        "stances",
+        "perception",
+        "movementModes",
+        "opportunities",
+        "coverTypes",
+        "defaultSize",
+        "currency",
+        "spellcasting"
+      ],
+      "collections": {
+        "attributes": [
+          "might.json",
+          "agility.json",
+          "endurance.json",
+          "intellect.json",
+          "instinct.json",
+          "presence.json"
+        ],
+        "resources": [
+          "hp.json",
+          "focus.json"
+        ],
+        "derivedStats": [
+          "guard.json",
+          "initiative.json"
+        ],
+        "damageTypes": [
+          "slashing.json",
+          "piercing.json",
+          "fire.json",
+          "cold.json"
+        ],
+        "conditions": [
+          "bleeding.json",
+          "frightened.json",
+          "emboldened.json",
+          "silenced.json"
+        ],
+        "actionTypes": [
+          "action.json",
+          "quick.json",
+          "speak.json",
+          "gesture.json"
+        ],
+        "equipmentSlots": [
+          "hand.json",
+          "body.json"
+        ],
+        "itemProperties": [
+          "silvered.json"
+        ],
+        "masteryTiers": [
+          "novice.json",
+          "adept.json",
+          "master.json"
+        ],
+        "rests": [
+          "breather.json",
+          "camp.json"
+        ],
+        "savingThrows": [
+          "will.json"
+        ],
+        "sizes": [
+          "medium.json",
+          "large.json"
+        ],
+        "creatureTypes": [
+          "humanoid.json",
+          "beast.json",
+          "undead.json"
+        ],
+        "senses": [
+          "sight.json",
+          "hearing.json",
+          "smell.json"
+        ],
+        "stances": [
+          "sneak.json",
+          "walk.json",
+          "dash.json"
+        ],
+        "movementModes": [
+          "walk.json",
+          "swim.json"
+        ],
+        "languages": [
+          "common.json",
+          "old_tongue.json"
+        ],
+        "opportunities": [
+          "parting_blow.json"
+        ],
+        "coverTypes": [
+          "half.json",
+          "three_quarters.json"
+        ]
+      }
+    },
+    "content": {
+      "keyOrder": [
+        "skills",
+        "abilities",
+        "ancestries",
+        "classes",
+        "items",
+        "lootTables",
+        "factions",
+        "monsters",
+        "traps",
+        "npcs"
+      ],
+      "collections": {
+        "abilities": [
+          "strike.json",
+          "rally.json",
+          "read_runes.json",
+          "howl.json",
+          "grave_chill.json",
+          "wardlight.json",
+          "barrow_bolt.json",
+          "read_the_stones.json"
+        ],
+        "skills": [
+          "lockpicking.json",
+          "lore.json",
+          "perception.json",
+          "stealth.json",
+          "persuasion.json",
+          "resolve.json"
+        ],
+        "ancestries": [
+          "human.json",
+          "dwarf.json"
+        ],
+        "classes": [
+          "warden.json",
+          "stalker.json",
+          "fenwise.json"
+        ],
+        "items": [
+          "iron_sword.json",
+          "lockpicks.json",
+          "rope.json",
+          "brass_key.json",
+          "warded_blade.json",
+          "rune_tablet.json",
+          "millers_ledger.json",
+          "grave_ash.json"
+        ],
+        "lootTables": [
+          "fen_scavenge.json",
+          "millers_effects.json",
+          "vess_stock.json"
+        ],
+        "monsters": [
+          "bog_hound.json",
+          "barrow_wight.json"
+        ],
+        "traps": [
+          "snare.json"
+        ],
+        "factions": [
+          "wardens.json",
+          "fen_things.json"
+        ],
+        "npcs": [
+          "vess.json"
+        ]
+      }
+    },
+    "world": {
+      "keyOrder": [
+        "terrains",
+        "palettes",
+        "biomes",
+        "areas",
+        "pointsOfInterest",
+        "gates",
+        "roomTemplates",
+        "encounterTables",
+        "dungeons",
+        "time"
+      ],
+      "collections": {
+        "terrains": [
+          "floor.json",
+          "wall.json",
+          "door.json",
+          "deep_water.json",
+          "shallow_water.json",
+          "reeds.json",
+          "briar.json",
+          "rubble.json",
+          "brazier.json"
+        ],
+        "palettes": [
+          "fen.json",
+          "barrow_stone.json"
+        ],
+        "biomes": [
+          "greenmarch.json"
+        ],
+        "areas": [
+          "millford.json",
+          "the_fens.json"
+        ],
+        "pointsOfInterest": [
+          "millford_village.json",
+          "the_mill.json",
+          "sunken_caves.json",
+          "fen_barrow.json"
+        ],
+        "gates": [
+          "mill_door.json",
+          "barrow_ward.json",
+          "ferry_toll.json"
+        ],
+        "roomTemplates": [
+          "barrow_mouth.json",
+          "barrow_hall.json",
+          "barrow_deep.json"
+        ],
+        "encounterTables": [
+          "fen_wanderers.json",
+          "mill_things.json",
+          "barrow_boss.json"
+        ],
+        "dungeons": [
+          "barrow_depths.json",
+          "fen_caves.json"
+        ]
+      }
+    },
+    "narrative": {
+      "keyOrder": [
+        "deedKinds",
+        "textGrammar",
+        "dialogues",
+        "quests",
+        "arcs",
+        "memory",
+        "systemText"
+      ],
+      "collections": {
+        "textGrammar": [
+          "heard_something.json",
+          "heard_something_faint.json",
+          "smelled_something.json",
+          "smelled_something_faint.json",
+          "millford_desc.json",
+          "fens_desc.json",
+          "fen_ambience.json",
+          "barrow_room.json",
+          "mill_door_blocked.json",
+          "hound_fury.json",
+          "wight_arrives.json",
+          "heard_nothing.json",
+          "smelled_nothing.json",
+          "millford_village_desc.json",
+          "vess_journal.json"
+        ],
+        "dialogues": [
+          "vess_talk.json"
+        ],
+        "quests": [
+          "arrive_in_millford.json",
+          "the_mill_door.json",
+          "the_barrow_ward.json"
+        ],
+        "arcs": [
+          "the_greenmarch.json"
+        ],
+        "deedKinds": [
+          "mill_cleared.json",
+          "theft.json",
+          "barrow_robbed.json"
+        ]
+      }
+    }
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "id": "iron_sword",
+  "name": "Iron Sword",
+  "kind": "weapon",
+  "slot": "hand",
+  "value": 15,
+  "weight": 3,
+  "damage": {
+    "dice": "1d8",
+    "damageType": "slashing",
+    "stat": "might"
+  }
+}

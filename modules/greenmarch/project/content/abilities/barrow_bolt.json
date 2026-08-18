@@ -1,0 +1,45 @@
+{
+  "id": "barrow_bolt",
+  "name": "Barrow Bolt",
+  "description": "A splinter of the cold below, thrown.",
+  "actionType": "action",
+  "targeting": "single",
+  "range": 30,
+  "spellLevel": 1,
+  "components": [
+    "verbal",
+    "somatic",
+    "material"
+  ],
+  "materialComponent": "grave_ash",
+  "attack": {
+    "stat": "intellect",
+    "against": "guard"
+  },
+  "onUse": [
+    {
+      "damage": {
+        "target": {
+          "ref": "target.id"
+        },
+        "amount": {
+          "roll": "2d6"
+        },
+        "damageType": "cold"
+      }
+    }
+  ],
+  "upcast": [
+    {
+      "damage": {
+        "target": {
+          "ref": "target.id"
+        },
+        "amount": {
+          "roll": "1d6"
+        },
+        "damageType": "cold"
+      }
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "id": "mill_things",
+  "name": "In the Mill",
+  "chance": 1,
+  "minDepth": 0,
+  "maxDepth": 999,
+  "groups": [
+    {
+      "id": "mill_hounds",
+      "weight": 1,
+      "entries": [
+        {
+          "monster": "bog_hound",
+          "count": "2"
+        }
+      ],
+      "onEncounter": [
+        {
+          "setFlag": {
+            "flag": "mill_fight_started",
+            "value": true
+          }
+        }
+      ]
+    }
+  ]
+}

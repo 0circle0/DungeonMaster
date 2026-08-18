@@ -73,6 +73,40 @@ const FOUR_STRINGS = {
 };
 
 describe('expandPrefab', () => {
+  /**
+   * A row that decides several fields at once is the reason a style table is a
+   * table. `place.py`'s SIZES maps one size to a width and a height together,
+   * and a lookup that could only fetch whole rows would force an author to
+   * split exactly the values that exist to stay in step.
+   */
+  it('walks into a row, so one key can decide several fields', () => {
+    const { entry, issues } = expandPrefab(
+      {
+        ...INN,
+        template: {
+          id: '{{id}}',
+          width: { '@lookup': ['roomSizes', '{{size}}', 'width'] },
+          height: { '@lookup': ['roomSizes', '{{size}}', 'height'] },
+        },
+      },
+      { ...FOUR_STRINGS, size: 'large' },
+      STYLE,
+    );
+    expect(issues).toEqual([]);
+    expect(entry).toEqual({ id: 'barrowgate_rest', width: '15', height: '11' });
+  });
+
+  it('says which step of the path was missing', () => {
+    const { issues } = expandPrefab(
+      { ...INN, template: { depth: { '@lookup': ['roomSizes', '{{size}}', 'depth'] } } },
+      { ...FOUR_STRINGS, size: 'large' },
+      STYLE,
+    );
+    expect(issues.map((issue) => issue.message)).toEqual([
+      'roomSizes["large"]["depth"] is not in the style tables',
+    ]);
+  });
+
   it('turns four strings into a whole entry', () => {
     const { entry, issues } = expandPrefab(INN, FOUR_STRINGS, STYLE);
     expect(issues).toEqual([]);

@@ -1,0 +1,14 @@
+{
+  "id": "barrow_deep",
+  "name": "The Deep Cell",
+  "descriptionKey": "barrow_room",
+  "role": "boss",
+  "minExits": 1,
+  "maxExits": 1,
+  "encounterChance": 1,
+  "lootChance": 1,
+  "map": {
+    "static": "barrow_deep_cell"
+  },
+  "alwaysEncounter": true
+}

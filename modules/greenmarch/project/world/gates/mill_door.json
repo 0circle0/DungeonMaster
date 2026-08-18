@@ -1,0 +1,41 @@
+{
+  "id": "mill_door",
+  "name": "The Mill Door",
+  "description": "Barred from the inside. The brass key opens it; a good hand with picks can manage without.",
+  "kind": "lock",
+  "requires": {
+    "description": "Vess's brass key.",
+    "items": [
+      {
+        "item": "brass_key",
+        "consume": false
+      }
+    ]
+  },
+  "bypass": {
+    "skill": "lockpicking",
+    "difficulty": 14,
+    "retryable": true,
+    "onFailure": [
+      {
+        "emit": {
+          "event": "noise_made",
+          "data": {
+            "where": "the_mill"
+          }
+        }
+      }
+    ]
+  },
+  "onOpen": [
+    {
+      "setFlag": {
+        "flag": "mill_open",
+        "value": true
+      }
+    }
+  ],
+  "onBlocked": [],
+  "blockedTextKey": "mill_door_blocked",
+  "staysOpen": true
+}

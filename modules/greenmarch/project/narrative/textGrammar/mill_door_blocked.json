@@ -1,0 +1,14 @@
+{
+  "id": "mill_door_blocked",
+  "variants": [
+    {
+      "text": "The door does not give. Something heavy is set against it on the inside."
+    },
+    {
+      "text": "Barred. You can hear the beam shift when you push."
+    },
+    {
+      "text": "It holds. Whatever is in there wants to stay in there."
+    }
+  ]
+}

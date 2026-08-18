@@ -1,0 +1,18 @@
+{
+  "id": "briar",
+  "name": "Briar",
+  "description": "Thorn scrub, chest high and mean with it.",
+  "tags": [
+    "thorny"
+  ],
+  "glyph": "*",
+  "passable": true,
+  "moveCost": 3,
+  "opaque": false,
+  "requiresMode": [],
+  "onEnter": [],
+  "onOccupy": [],
+  "lightRadius": 0,
+  "isDoor": false,
+  "extra": {}
+}

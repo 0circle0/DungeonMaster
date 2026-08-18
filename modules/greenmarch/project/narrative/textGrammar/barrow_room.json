@@ -1,0 +1,14 @@
+{
+  "id": "barrow_room",
+  "variants": [
+    {
+      "text": "Dressed stone, laid dry, still true after all this time."
+    },
+    {
+      "text": "The passage narrows. Carvings run along the lintel, worn past reading."
+    },
+    {
+      "text": "Cold air moves against your face from somewhere ahead."
+    }
+  ]
+}

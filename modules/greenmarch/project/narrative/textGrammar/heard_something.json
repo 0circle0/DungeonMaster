@@ -1,0 +1,14 @@
+{
+  "id": "heard_something",
+  "variants": [
+    {
+      "text": "Something moves out there, {direction} of you, and does not care who knows it."
+    },
+    {
+      "text": "A heavy splash, {direction}. Then nothing."
+    },
+    {
+      "text": "Reeds crack somewhere {direction}."
+    }
+  ]
+}

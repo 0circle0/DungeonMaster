@@ -1,0 +1,8 @@
+{
+  "id": "rubble",
+  "name": "Rubble",
+  "glyph": "%",
+  "passable": false,
+  "opaque": false,
+  "providesCover": "half"
+}

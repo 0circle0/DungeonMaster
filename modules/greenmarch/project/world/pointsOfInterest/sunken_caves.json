@@ -1,0 +1,12 @@
+{
+  "id": "sunken_caves",
+  "name": "The Sunken Caves",
+  "area": "the_fens",
+  "kind": "dungeonEntrance",
+  "dungeon": "fen_caves",
+  "position": {
+    "x": 8,
+    "y": 16
+  },
+  "travelMinutes": 30
+}

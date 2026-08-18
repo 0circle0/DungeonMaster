@@ -1,0 +1,7 @@
+{
+  "id": "camp",
+  "name": "Make Camp",
+  "kind": "long",
+  "duration": 480,
+  "interruptChance": 0.25
+}

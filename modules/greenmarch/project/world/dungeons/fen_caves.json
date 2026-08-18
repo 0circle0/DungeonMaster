@@ -1,0 +1,12 @@
+{
+  "id": "fen_caves",
+  "name": "The Sunken Caves",
+  "description": "Water-cut hollows under the fen, no two chambers alike and none of them square.",
+  "biome": "greenmarch",
+  "algorithm": "caverns",
+  "roomCount": "5",
+  "depth": "1",
+  "palette": "fen",
+  "width": "34",
+  "height": "26"
+}

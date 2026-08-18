@@ -422,6 +422,7 @@ export function Studio(props: {
         onOpenStart={openStart}
         onOpenMods={() => setModsOpen((open) => !open)}
         onOpenRules={() => setRulesOpen((open) => !open)}
+        moduleNames={props.templates}
         ruleFindings={semanticReady ? semantic.length : null}
         modCount={props.mods.length}
         onSave={() => void saveToDisk()}

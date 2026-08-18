@@ -1,0 +1,12 @@
+{
+  "id": "sneak",
+  "name": "Sneak",
+  "description": "Slow and careful. Half pace, a fifth the noise, and rather less of your smell on the wind.",
+  "speedMultiplier": 0.5,
+  "emits": {
+    "hearing": 0.2,
+    "smell": 0.6
+  },
+  "concealedBy": "stealth",
+  "concealmentPerPoint": 0.04
+}

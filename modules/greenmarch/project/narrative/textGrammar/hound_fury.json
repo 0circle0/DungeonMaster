@@ -1,0 +1,14 @@
+{
+  "id": "hound_fury",
+  "variants": [
+    {
+      "text": "The hound sees its packmate fall and comes apart with rage."
+    },
+    {
+      "text": "A shriek goes up, and the survivor stops being careful."
+    },
+    {
+      "text": "It abandons the circling and simply comes at you."
+    }
+  ]
+}

@@ -1,0 +1,8 @@
+{
+  "id": "brazier",
+  "name": "Brazier",
+  "glyph": "*",
+  "passable": false,
+  "opaque": false,
+  "lightRadius": 6
+}

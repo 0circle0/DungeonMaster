@@ -1,0 +1,67 @@
+{
+  "id": "the_mill",
+  "name": "The Old Mill",
+  "area": "millford",
+  "kind": "ruin",
+  "position": {
+    "x": 24,
+    "y": 5
+  },
+  "gate": "mill_door",
+  "map": {
+    "static": "mill_interior"
+  },
+  "travelMinutes": 20,
+  "encounterTables": [
+    "mill_things"
+  ],
+  "encounterChance": 0.8,
+  "loot": [
+    "millers_effects"
+  ],
+  "triggers": [
+    {
+      "id": "mill_cleared",
+      "description": "Repeats until the mill is actually clear, then stops for good.",
+      "mode": "untilComplete",
+      "on": "combatEnd",
+      "completeWhen": {
+        "test": {
+          "ref": "flags.mill_clear"
+        }
+      },
+      "remember": true,
+      "effects": [
+        {
+          "setFlag": {
+            "flag": "mill_clear",
+            "value": true
+          }
+        },
+        {
+          "adjustReputation": {
+            "faction": "wardens",
+            "amount": 15
+          }
+        },
+        {
+          "emit": {
+            "event": "deed",
+            "data": {
+              "kind": "mill_cleared"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "mill_creaks",
+      "description": "Ambient, on a cooldown, forever.",
+      "mode": "loop",
+      "on": "enter",
+      "cooldownMinutes": 240,
+      "chance": 0.5,
+      "remember": false
+    }
+  ]
+}

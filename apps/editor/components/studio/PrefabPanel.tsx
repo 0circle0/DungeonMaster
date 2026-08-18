@@ -7,52 +7,29 @@
  * silently stops following its prefab, or silently starts, is worse than one
  * that was never linked.
  *
- * So overridden fields are named here and can be handed back individually. The
- * comparison is live rather than stored: what counts as an override is
- * whatever differs from what the prefab would produce *now*, which is the only
- * definition that stays true when the prefab changes.
+ * The marking that matters is on the fields themselves, in `Field.tsx`, where
+ * the author already is. This panel is the summary: the whole list in one
+ * place, a value beside each so a changed field can be recognised without
+ * hunting for it, and one way back for all of them. Both read the same
+ * `usePrefabState`, so they cannot disagree about what an override is.
  */
 
 'use client';
 
-import { useMemo } from 'react';
-import { expandPrefab, overriddenPaths } from '@dm/module';
-import type { Prefab, PrefabLink, StyleTables } from '@dm/module';
+import type { ExpandIssue, Prefab } from '@dm/module';
+import type { OverrideInfo } from '@/components/Field';
 import { getAt } from '@/lib/store';
-import type { ModuleStore, Path } from '@/lib/store';
 import styles from '@/app/studio/studio.module.css';
 
 export function PrefabPanel(props: {
-  store: ModuleStore;
-  basePath: Path;
   entry: Record<string, unknown>;
   prefab: Prefab;
-  link: PrefabLink;
-  style: StyleTables;
+  overrides: OverrideInfo;
+  issues: readonly ExpandIssue[];
+  onResetAll: () => void;
 }) {
-  const { store, basePath, entry, prefab, link, style } = props;
-
-  const { overrides, issues } = useMemo(() => {
-    const paths = overriddenPaths(prefab, entry, link, style);
-    return { overrides: paths, issues: expandPrefab(prefab, link.params, style).issues };
-  }, [prefab, entry, link, style]);
-
-  /** Hand one field back to the prefab. */
-  const reset = (path: string) => {
-    const { entry: fresh } = expandPrefab(prefab, link.params, style);
-    const segments = path.split('.');
-    const value = segments.reduce<unknown>(
-      (node, key) => (typeof node === 'object' && node !== null ? (node as Record<string, unknown>)[key] : undefined),
-      fresh,
-    );
-    if (value === undefined) store.remove([...basePath, ...segments]);
-    else store.set([...basePath, ...segments], value);
-  };
-
-  const resetAll = () => {
-    const { entry: fresh } = expandPrefab(prefab, link.params, style);
-    store.set(basePath, fresh);
-  };
+  const { entry, prefab, overrides, issues } = props;
+  const paths = [...overrides.paths].sort();
 
   return (
     <div className={styles.prefabPanel}>
@@ -68,7 +45,7 @@ export function PrefabPanel(props: {
         </p>
       )}
 
-      {overrides.length === 0 ? (
+      {paths.length === 0 ? (
         <p className={styles.prefabNote}>
           Every field is the prefab&rsquo;s. Editing <code>{prefab.id}</code> updates this entry with
           the rest.
@@ -76,23 +53,27 @@ export function PrefabPanel(props: {
       ) : (
         <>
           <p className={styles.prefabNote}>
-            {overrides.length} field{overrides.length === 1 ? '' : 's'} changed here.{' '}
-            {overrides.length === 1 ? 'It stays' : 'They stay'} as {overrides.length === 1 ? 'it is' : 'they are'}{' '}
-            when the prefab changes.
+            {paths.length} field{paths.length === 1 ? '' : 's'} changed here — marked in the form
+            above. {paths.length === 1 ? 'It stays' : 'They stay'} as{' '}
+            {paths.length === 1 ? 'it is' : 'they are'} when the prefab changes.
           </p>
           <ul className={styles.prefabOverrides}>
-            {overrides.map((path) => (
+            {paths.map((path) => (
               <li key={path}>
                 <code>{path}</code>
                 <span className={styles.prefabValue}>{preview(getAt(entry, path.split('.')))}</span>
-                <button className="btn tiny" title="Take the prefab's value" onClick={() => reset(path)}>
+                <button
+                  className="btn tiny"
+                  title="Take the prefab's value"
+                  onClick={() => overrides.reset(path)}
+                >
                   Reset
                 </button>
               </li>
             ))}
           </ul>
-          <button className="btn tiny" onClick={resetAll}>
-            Reset all {overrides.length}
+          <button className="btn tiny" onClick={props.onResetAll}>
+            Reset all {paths.length}
           </button>
         </>
       )}

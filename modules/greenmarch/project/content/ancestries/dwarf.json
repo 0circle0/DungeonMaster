@@ -1,0 +1,41 @@
+{
+  "id": "dwarf",
+  "name": "Dwarf",
+  "attributeBonuses": {
+    "endurance": 1
+  },
+  "skillBonuses": {
+    "lore": 1
+  },
+  "creatureType": "humanoid",
+  "size": "medium",
+  "languages": [
+    "common",
+    "old_tongue"
+  ],
+  "traits": [
+    {
+      "when": {
+        "not": {
+          "test": {
+            "ref": "flags.dwarf_footing"
+          }
+        }
+      },
+      "then": [
+        {
+          "setFlag": {
+            "flag": "dwarf_footing",
+            "value": true
+          }
+        }
+      ]
+    }
+  ],
+  "damageInteractions": [
+    {
+      "damageType": "piercing",
+      "multiplier": 0.5
+    }
+  ]
+}

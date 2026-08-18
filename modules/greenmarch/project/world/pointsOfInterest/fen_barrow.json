@@ -1,0 +1,36 @@
+{
+  "id": "fen_barrow",
+  "name": "The Fen Barrow",
+  "area": "the_fens",
+  "kind": "dungeonEntrance",
+  "gate": "barrow_ward",
+  "hidden": true,
+  "discover": {
+    "skill": "perception",
+    "difficulty": 14
+  },
+  "dungeon": "barrow_depths",
+  "travelMinutes": 45,
+  "triggers": [
+    {
+      "id": "barrow_resets",
+      "description": "Leave it unfinished and the barrow reorders itself — the restart mode.",
+      "mode": "restart",
+      "on": "enter",
+      "requires": {
+        "without": {
+          "flags": [
+            {
+              "flag": "barrow_finished"
+            }
+          ]
+        }
+      },
+      "remember": true
+    }
+  ],
+  "position": {
+    "x": 21,
+    "y": 15
+  }
+}

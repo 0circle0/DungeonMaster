@@ -1,0 +1,8 @@
+{
+  "id": "barrow_robbed",
+  "name": "Opened the barrow",
+  "severity": -10,
+  "faction": "fen_things",
+  "memorability": 3,
+  "distortion": 0.2
+}

@@ -1,0 +1,30 @@
+{
+  "id": "millford",
+  "name": "Millford",
+  "description": "A handful of roofs where the road meets the water.",
+  "biome": "greenmarch",
+  "layer": "overworld",
+  "descriptionKey": "millford_desc",
+  "dangerLevel": 0,
+  "recommendedLevel": 1,
+  "controllingFaction": "wardens",
+  "connections": [
+    {
+      "to": "the_fens",
+      "travelMinutes": 90,
+      "encounterTables": [
+        "fen_wanderers"
+      ],
+      "gate": "ferry_toll"
+    }
+  ],
+  "map": {
+    "width": "31",
+    "height": "21",
+    "palette": "fen"
+  },
+  "entryPoint": {
+    "x": 15,
+    "y": 10
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "id": "hp",
+  "name": "Hit Points",
+  "max": {
+    "max": [
+      1,
+      {
+        "add": [
+          8,
+          {
+            "mul": [
+              {
+                "ref": "actor.mod.endurance"
+              },
+              {
+                "ref": "actor.level"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "onDepleted": [
+    {
+      "emit": {
+        "event": "died",
+        "data": {
+          "who": {
+            "ref": "actor.id"
+          }
+        }
+      }
+    }
+  ]
+}

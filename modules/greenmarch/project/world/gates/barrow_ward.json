@@ -1,0 +1,35 @@
+{
+  "id": "barrow_ward",
+  "name": "The Barrow Ward",
+  "description": "A carved seal. It answers to spoken runes, or to someone the Wardens vouch for.",
+  "kind": "ward",
+  "opensWith": [
+    "read_runes"
+  ],
+  "requires": {
+    "anyOf": [
+      {
+        "abilities": [
+          "read_runes"
+        ]
+      },
+      {
+        "factions": [
+          {
+            "faction": "wardens",
+            "minStanding": 40
+          }
+        ]
+      }
+    ]
+  },
+  "onOpen": [
+    {
+      "setFlag": {
+        "flag": "barrow_open",
+        "value": true
+      }
+    }
+  ],
+  "staysOpen": true
+}

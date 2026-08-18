@@ -1,0 +1,50 @@
+{
+  "id": "fenwise",
+  "name": "Fenwise",
+  "description": "They learned the old words from the water, and the water wants them back.",
+  "hitDie": "1d6",
+  "primaryAttribute": "intellect",
+  "attributeBonuses": {
+    "intellect": 2
+  },
+  "skillProficiencies": [
+    "lore",
+    "perception"
+  ],
+  "saveProficiencies": [
+    "will"
+  ],
+  "startingItems": [
+    {
+      "item": "grave_ash",
+      "quantity": 3
+    },
+    {
+      "item": "iron_sword",
+      "quantity": 1
+    }
+  ],
+  "abilitiesByLevel": {
+    "1": [
+      "strike",
+      "wardlight",
+      "barrow_bolt"
+    ],
+    "2": [
+      "read_the_stones"
+    ]
+  },
+  "spellcasting": {
+    "castingAttribute": "intellect",
+    "spellList": [
+      "wardlight",
+      "barrow_bolt",
+      "read_the_stones"
+    ],
+    "progression": 1,
+    "knownByLevel": {
+      "1": 2,
+      "2": 3
+    }
+  }
+}

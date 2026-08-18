@@ -1,0 +1,57 @@
+{
+  "id": "vess",
+  "name": "Vess the Miller",
+  "description": "Ran the mill until something moved into it.",
+  "faction": "wardens",
+  "dialogue": "vess_talk",
+  "home": "millford_village",
+  "disposition": 10,
+  "memorySpan": 120,
+  "gullibility": 0.4,
+  "offersQuests": [
+    "the_mill_door"
+  ],
+  "caresAbout": [
+    "mill_cleared",
+    "theft"
+  ],
+  "reactions": [
+    {
+      "id": "turns_cold_on_thieves",
+      "description": "If she has heard you steal, she stops dealing with you — memory changing behaviour, not just dialogue.",
+      "on": "seePlayer",
+      "requires": {
+        "memories": [
+          {
+            "deedKind": "theft",
+            "who": "speaker",
+            "withinDays": 60
+          }
+        ]
+      },
+      "effects": [
+        {
+          "setFlag": {
+            "flag": "vess_cold",
+            "value": true
+          }
+        }
+      ]
+    }
+  ],
+  "shop": {
+    "lootTable": "vess_stock",
+    "buysTags": [
+      "treasure"
+    ],
+    "priceMultiplier": 1.2,
+    "requires": {
+      "factions": [
+        {
+          "faction": "wardens",
+          "minStanding": 5
+        }
+      ]
+    }
+  }
+}

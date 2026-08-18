@@ -1,0 +1,7 @@
+{
+  "id": "breather",
+  "name": "Breather",
+  "kind": "short",
+  "duration": 60,
+  "interruptChance": 0.1
+}

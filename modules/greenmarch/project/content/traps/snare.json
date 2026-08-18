@@ -1,0 +1,25 @@
+{
+  "id": "snare",
+  "name": "Fen Snare",
+  "detect": {
+    "skill": "perception",
+    "difficulty": 12
+  },
+  "disarm": {
+    "skill": "lockpicking",
+    "difficulty": 12
+  },
+  "onTrigger": [
+    {
+      "damage": {
+        "target": {
+          "ref": "target.id"
+        },
+        "amount": {
+          "roll": "1d6"
+        },
+        "damageType": "piercing"
+      }
+    }
+  ]
+}

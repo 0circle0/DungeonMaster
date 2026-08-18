@@ -1,0 +1,18 @@
+{
+  "id": "ferry_toll",
+  "name": "The Fen Ferry",
+  "description": "The ferryman wants ten marks to pole you across.",
+  "kind": "toll",
+  "requires": {
+    "description": "ten marks for the ferryman",
+    "currency": 10
+  },
+  "onOpen": [
+    {
+      "adjustCurrency": {
+        "amount": -10
+      }
+    }
+  ],
+  "staysOpen": false
+}

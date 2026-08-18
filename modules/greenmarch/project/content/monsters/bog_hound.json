@@ -1,0 +1,86 @@
+{
+  "id": "bog_hound",
+  "name": "Bog Hound",
+  "level": 1,
+  "xp": 25,
+  "faction": "fen_things",
+  "attributes": {
+    "might": 12,
+    "agility": 13,
+    "endurance": 11,
+    "intellect": 4,
+    "instinct": 12,
+    "presence": 6
+  },
+  "abilities": [
+    "strike",
+    "howl"
+  ],
+  "behaviour": [
+    {
+      "priority": 10,
+      "use": "howl",
+      "when": {
+        "chance": 0.3
+      }
+    },
+    {
+      "priority": 0,
+      "use": "strike"
+    }
+  ],
+  "reactions": [
+    {
+      "id": "pack_fury",
+      "description": "A hound that watches a packmate die goes berserk — creatures act on each other, not only on the party.",
+      "on": "allyKilled",
+      "priority": 10,
+      "effects": [
+        {
+          "applyCondition": {
+            "target": {
+              "ref": "actor.id"
+            },
+            "condition": "emboldened",
+            "duration": 3
+          }
+        }
+      ],
+      "textKey": "hound_fury"
+    },
+    {
+      "id": "flee_when_alone",
+      "description": "Last one standing, badly hurt: it tests its nerve and may break.",
+      "on": "lowHealth",
+      "priority": 5,
+      "roll": {
+        "attribute": "presence",
+        "difficulty": 12
+      },
+      "onFailure": [
+        {
+          "applyCondition": {
+            "target": {
+              "ref": "actor.id"
+            },
+            "condition": "frightened",
+            "duration": 3
+          }
+        }
+      ]
+    }
+  ],
+  "loot": "fen_scavenge",
+  "descriptors": [
+    "a lean, mud-slicked"
+  ],
+  "creatureType": "beast",
+  "size": "medium",
+  "skillBonuses": {
+    "perception": 3,
+    "stealth": 2
+  },
+  "extra": {
+    "morale": 4
+  }
+}

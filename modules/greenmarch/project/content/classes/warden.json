@@ -1,0 +1,34 @@
+{
+  "id": "warden",
+  "name": "Warden",
+  "hitDie": "1d10",
+  "primaryAttribute": "might",
+  "attributeBonuses": {
+    "might": 1
+  },
+  "skillProficiencies": [
+    "perception",
+    "resolve"
+  ],
+  "startingItems": [
+    {
+      "item": "iron_sword",
+      "quantity": 1
+    },
+    {
+      "item": "rope",
+      "quantity": 1
+    }
+  ],
+  "abilitiesByLevel": {
+    "1": [
+      "strike"
+    ],
+    "2": [
+      "rally"
+    ]
+  },
+  "saveProficiencies": [
+    "will"
+  ]
+}

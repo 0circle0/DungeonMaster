@@ -1,0 +1,32 @@
+{
+  "id": "greenmarch",
+  "name": "The Greenmarch",
+  "layer": "overworld",
+  "roomTemplates": [
+    "barrow_hall",
+    "barrow_mouth",
+    "barrow_deep"
+  ],
+  "encounterTables": [
+    "fen_wanderers"
+  ],
+  "lootTables": [
+    "fen_scavenge"
+  ],
+  "traps": [
+    "snare"
+  ],
+  "ambienceKey": "fen_ambience",
+  "triggers": [
+    {
+      "id": "fen_mist",
+      "description": "Ambient colour, every visit, never remembered.",
+      "mode": "everyEntry",
+      "on": "enter",
+      "chance": 0.4,
+      "remember": false,
+      "textKey": "fen_ambience"
+    }
+  ],
+  "palette": "fen"
+}

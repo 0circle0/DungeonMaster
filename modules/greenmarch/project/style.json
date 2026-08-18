@@ -1,0 +1,7 @@
+{
+  "settlementSize": {
+    "hamlet":  { "rumourReach": 1.0, "services": ["inn"] },
+    "village": { "rumourReach": 1.5, "services": ["inn", "market"] },
+    "town":    { "rumourReach": 2.5, "services": ["inn", "market", "smith", "temple"] }
+  }
+}

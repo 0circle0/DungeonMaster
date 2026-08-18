@@ -1,0 +1,14 @@
+{
+  "id": "frightened",
+  "name": "Frightened",
+  "stacking": "refresh",
+  "defaultDuration": 2,
+  "modifiers": {
+    "guard": -2
+  },
+  "savingThrow": {
+    "save": "will",
+    "difficulty": 12,
+    "timing": "endOfTurn"
+  }
+}

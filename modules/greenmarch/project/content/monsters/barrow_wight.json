@@ -1,0 +1,98 @@
+{
+  "id": "barrow_wight",
+  "name": "Barrow Wight",
+  "level": 3,
+  "xp": 120,
+  "faction": "fen_things",
+  "attributes": {
+    "might": 15,
+    "agility": 10,
+    "endurance": 14,
+    "intellect": 10,
+    "instinct": 12,
+    "presence": 14
+  },
+  "abilities": [
+    "strike",
+    "howl",
+    "grave_chill"
+  ],
+  "behaviour": [
+    {
+      "priority": 0,
+      "use": "strike"
+    }
+  ],
+  "reactions": [
+    {
+      "id": "remembers_the_thief",
+      "description": "It knows who robbed the barrow, and goes for them first.",
+      "on": "seePlayer",
+      "requires": {
+        "memories": [
+          {
+            "deedKind": "barrow_robbed",
+            "who": "speaker"
+          }
+        ]
+      },
+      "effects": [
+        {
+          "applyCondition": {
+            "target": {
+              "ref": "target.id"
+            },
+            "condition": "frightened",
+            "duration": 2
+          }
+        }
+      ]
+    },
+    {
+      "id": "death_wail",
+      "description": "It shrieks once, when first it is struck.",
+      "on": "selfHurt",
+      "oncePerEncounter": true,
+      "effects": [
+        {
+          "setFlag": {
+            "flag": "wight_wailed",
+            "value": true
+          }
+        }
+      ]
+    }
+  ],
+  "loot": "fen_scavenge",
+  "descriptors": [
+    "a grey, patient"
+  ],
+  "damageInteractions": [
+    {
+      "damageType": "slashing",
+      "multiplier": 0.5,
+      "unless": [
+        "silvered"
+      ]
+    }
+  ],
+  "creatureType": "undead",
+  "size": "medium",
+  "languages": [
+    "old_tongue"
+  ],
+  "skillBonuses": {
+    "resolve": 4
+  },
+  "specialTurns": [
+    {
+      "id": "lair_chill",
+      "name": "The Barrow Stirs",
+      "use": "grave_chill",
+      "uses": 1
+    }
+  ],
+  "extra": {
+    "morale": 0
+  }
+}

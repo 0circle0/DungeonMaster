@@ -1,0 +1,7 @@
+{
+  "id": "will",
+  "name": "Will",
+  "description": "Holding your nerve when the fen gets into your head.",
+  "attribute": "presence",
+  "defaultDifficulty": 12
+}

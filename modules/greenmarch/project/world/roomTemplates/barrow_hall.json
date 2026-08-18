@@ -1,0 +1,16 @@
+{
+  "id": "barrow_hall",
+  "name": "Barrow Hall",
+  "descriptionKey": "barrow_room",
+  "role": "chamber",
+  "minExits": 1,
+  "maxExits": 3,
+  "encounterChance": 0.45,
+  "trapChance": 0.2,
+  "lootChance": 0.3,
+  "map": {
+    "width": "2d4+5",
+    "height": "2d3+5",
+    "palette": "barrow_stone"
+  }
+}

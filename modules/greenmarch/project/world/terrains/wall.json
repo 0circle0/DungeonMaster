@@ -1,0 +1,7 @@
+{
+  "id": "wall",
+  "name": "Wall",
+  "glyph": "#",
+  "passable": false,
+  "opaque": true
+}

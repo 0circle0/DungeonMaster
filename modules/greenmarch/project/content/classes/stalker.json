@@ -1,0 +1,29 @@
+{
+  "id": "stalker",
+  "name": "Stalker",
+  "hitDie": "1d8",
+  "primaryAttribute": "agility",
+  "attributeBonuses": {
+    "agility": 1
+  },
+  "skillProficiencies": [
+    "lockpicking",
+    "perception"
+  ],
+  "startingItems": [
+    {
+      "item": "iron_sword",
+      "quantity": 1
+    },
+    {
+      "item": "lockpicks",
+      "quantity": 1
+    }
+  ],
+  "abilitiesByLevel": {
+    "1": [
+      "strike"
+    ]
+  },
+  "saveProficiencies": []
+}

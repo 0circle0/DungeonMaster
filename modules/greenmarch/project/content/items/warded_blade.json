@@ -1,0 +1,22 @@
+{
+  "id": "warded_blade",
+  "name": "Warded Blade",
+  "kind": "weapon",
+  "slot": "hand",
+  "value": 200,
+  "weight": 3,
+  "damage": {
+    "dice": "1d8+2",
+    "damageType": "slashing",
+    "stat": "might"
+  },
+  "modifiers": {
+    "guard": 1
+  },
+  "properties": [
+    "silvered"
+  ],
+  "tags": [
+    "silvered"
+  ]
+}

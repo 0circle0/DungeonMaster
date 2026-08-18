@@ -1,0 +1,12 @@
+{
+  "id": "guard",
+  "name": "Guard",
+  "formula": {
+    "add": [
+      10,
+      {
+        "ref": "actor.mod.agility"
+      }
+    ]
+  }
+}

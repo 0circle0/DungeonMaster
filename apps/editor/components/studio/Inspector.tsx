@@ -12,12 +12,13 @@ import { SINGLETONS, collectionAt, labelFor } from '@/lib/schema';
 import { singletonLabel } from '@/lib/labels';
 import { JsonBox } from '@/components/JsonBox';
 import { UsedBy } from '@/components/UsedBy';
-import { FieldDiagnostics, diagnosticsByPath } from '@/components/Field';
+import { FieldDiagnostics, FieldOverrides, diagnosticsByPath } from '@/components/Field';
 import { planMove } from '@/lib/bulk';
 import { RenamePanel } from './RenamePanel';
 import { ModFields } from './ModFields';
 import { PrefabPanel } from './PrefabPanel';
-import { linkFor, derivePrefab } from '@dm/module';
+import { usePrefabState } from '@/lib/overrides';
+import { derivePrefab } from '@dm/module';
 import type { ProjectAuthoring } from '@/lib/modulesOnDisk';
 import type { OwnedField } from '@/lib/modRuntime';
 import { Coverage } from './Coverage';
@@ -71,6 +72,30 @@ function InspectorPanel(props: InspectorProps) {
     setRenaming(false);
   }
 
+  // Derived before the early returns below, because the hook that follows must
+  // run on every render of this component and several of those returns sit
+  // between here and where the values are used.
+  const info = selection.kind === 'item' ? collectionAt(selection.path) : null;
+  const entries = selection.kind === 'item' ? getAt(store.doc, selection.path.split('.')) : null;
+  const entry =
+    selection.kind === 'item' && Array.isArray(entries)
+      ? (entries[selection.index] as Record<string, unknown> | undefined)
+      : undefined;
+  // Memoized so its identity is stable: `usePrefabState` keys on it, and a
+  // fresh array per render would make that memo do nothing at all.
+  const basePath: Path = useMemo(
+    () => (selection.kind === 'item' ? [...selection.path.split('.'), selection.index] : []),
+    [selection],
+  );
+
+  const prefabState = usePrefabState({
+    store,
+    basePath,
+    entry: entry ?? {},
+    collection: info?.path ?? '',
+    authoring: props.authoring,
+  });
+
   if (selection.kind === 'none') {
     return (
       <aside className={styles.inspector}>
@@ -115,9 +140,6 @@ function InspectorPanel(props: InspectorProps) {
     );
   }
 
-  const info = collectionAt(selection.path);
-  const entries = getAt(store.doc, selection.path.split('.'));
-  const entry = Array.isArray(entries) ? (entries[selection.index] as Record<string, unknown>) : undefined;
   if (!info || !entry) {
     return (
       <aside className={styles.inspector}>
@@ -125,8 +147,6 @@ function InspectorPanel(props: InspectorProps) {
       </aside>
     );
   }
-
-  const basePath: Path = [...selection.path.split('.'), selection.index];
 
   /**
    * Turn this entry into a prefab and link it to the result.
@@ -208,7 +228,7 @@ function InspectorPanel(props: InspectorProps) {
         <button className="btn tiny" onClick={() => setRenaming(true)}>
           Rename…
         </button>
-        {props.authoring.isProject && !linkFor(props.authoring.instances, info.path, String(entry['id'] ?? '')) && (
+        {props.authoring.isProject && !prefabState.link && (
           <button
             className="btn tiny"
             title="Turn this into a prefab, so the next thirty like it are three fields"
@@ -237,22 +257,32 @@ function InspectorPanel(props: InspectorProps) {
         {info.path === 'world.maps' && (
           <p className="hint">The grid itself is painted in the map viewport, not here.</p>
         )}
-        <ItemForm
-          spec={info.spec}
-          registryPath={info.path}
-          basePath={basePath}
-          store={store}
-          // A static map's layers are thousands of cells; the generic array
-          // editor would render them as a wall of inputs. The painter owns them.
-          {...(info.path === 'world.maps' ? { omit: new Set(['layers']) } : {})}
-        />
-        <PrefabFor
-          store={store}
-          basePath={basePath}
-          entry={entry}
-          collection={info.path}
-          authoring={props.authoring}
-        />
+        <FieldOverrides.Provider value={prefabState.info}>
+          <ItemForm
+            spec={info.spec}
+            registryPath={info.path}
+            basePath={basePath}
+            store={store}
+            // A static map's layers are thousands of cells; the generic array
+            // editor would render them as a wall of inputs. The painter owns them.
+            {...(info.path === 'world.maps' ? { omit: new Set(['layers']) } : {})}
+          />
+        </FieldOverrides.Provider>
+        {prefabState.danglingLink && (
+          <p className="hint">
+            Placed from a prefab called <code>{prefabState.danglingLink}</code>, which is not in
+            this project.
+          </p>
+        )}
+        {prefabState.prefab && prefabState.info && (
+          <PrefabPanel
+            entry={entry}
+            prefab={prefabState.prefab}
+            overrides={prefabState.info}
+            issues={prefabState.issues}
+            onResetAll={prefabState.resetAll}
+          />
+        )}
         <ModFields store={store} basePath={basePath} fields={props.modFields} />
         <UsedBy
           doc={store.doc}
@@ -270,38 +300,3 @@ function InspectorPanel(props: InspectorProps) {
   );
 }
 
-/** The prefab panel, when this entry came from one. */
-function PrefabFor(props: {
-  store: ModuleStore;
-  basePath: Path;
-  entry: Record<string, unknown>;
-  collection: string;
-  authoring: ProjectAuthoring;
-}) {
-  const id = typeof props.entry['id'] === 'string' ? props.entry['id'] : '';
-  const link = id ? linkFor(props.authoring.instances, props.collection, id) : null;
-  const prefab = link ? props.authoring.prefabs.find((p) => p.id === link.id) : undefined;
-
-  // A link naming a prefab nobody can find is worth saying out loud: it means
-  // the entry will never follow anything again, and silence looks like "not
-  // generated" rather than "generated by something that is gone".
-  if (link && !prefab) {
-    return (
-      <p className="hint">
-        Placed from a prefab called <code>{link.id}</code>, which is not in this project.
-      </p>
-    );
-  }
-  if (!link || !prefab) return null;
-
-  return (
-    <PrefabPanel
-      store={props.store}
-      basePath={props.basePath}
-      entry={props.entry}
-      prefab={prefab}
-      link={link}
-      style={props.authoring.style}
-    />
-  );
-}

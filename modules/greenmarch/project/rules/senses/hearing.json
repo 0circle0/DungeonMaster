@@ -1,0 +1,18 @@
+{
+  "id": "hearing",
+  "name": "Hearing",
+  "description": "Sound travels in a straight line and stops at stone, but passes reeds and open doorways perfectly well. It fades with distance, so a far-off clatter is worth walking towards and a near one is worth drawing steel for.",
+  "defaultRange": 120,
+  "propagation": "line",
+  "blockedBy": "impassable",
+  "falloff": "linear",
+  "rememberMinutes": 30,
+  "impressionTextKey": "heard_something",
+  "faintImpressionTextKey": "heard_something_faint",
+  "emptyTextKey": "heard_nothing",
+  "thresholds": {
+    "detect": 0.05,
+    "investigate": 0.25,
+    "aggro": 0.8
+  }
+}

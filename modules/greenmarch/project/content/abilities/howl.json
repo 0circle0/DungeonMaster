@@ -1,0 +1,17 @@
+{
+  "id": "howl",
+  "name": "Howl",
+  "actionType": "action",
+  "targeting": "allEnemies",
+  "onUse": [
+    {
+      "applyCondition": {
+        "target": {
+          "ref": "target.id"
+        },
+        "condition": "frightened",
+        "duration": 2
+      }
+    }
+  ]
+}

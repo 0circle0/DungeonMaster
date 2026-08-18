@@ -1,0 +1,19 @@
+{
+  "id": "barrow_boss",
+  "name": "The Deep Cell",
+  "chance": 1,
+  "minDepth": 0,
+  "maxDepth": 999,
+  "groups": [
+    {
+      "id": "the_wight",
+      "weight": 1,
+      "entries": [
+        {
+          "monster": "barrow_wight",
+          "count": "1"
+        }
+      ]
+    }
+  ]
+}

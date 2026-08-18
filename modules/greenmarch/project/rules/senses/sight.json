@@ -1,0 +1,9 @@
+{
+  "id": "sight",
+  "name": "Sight",
+  "description": "What you can see, which is nothing at all through a wall. Either something is in view or it is not, so every threshold is the same.",
+  "defaultRange": 60,
+  "propagation": "line",
+  "blockedBy": "opaque",
+  "falloff": "cliff"
+}

@@ -1,0 +1,6 @@
+{
+  "id": "swim",
+  "name": "Swim",
+  "defaultSpeed": 15,
+  "terrainMultiplier": 1
+}

@@ -1,0 +1,8 @@
+{
+  "id": "reeds",
+  "name": "Reeds",
+  "glyph": "\"",
+  "passable": true,
+  "opaque": true,
+  "moveCost": 2
+}

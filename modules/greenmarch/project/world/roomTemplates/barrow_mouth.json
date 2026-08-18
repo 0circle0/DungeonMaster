@@ -1,0 +1,14 @@
+{
+  "id": "barrow_mouth",
+  "name": "Barrow Mouth",
+  "descriptionKey": "barrow_room",
+  "role": "entrance",
+  "minExits": 1,
+  "maxExits": 2,
+  "encounterChance": 0,
+  "map": {
+    "width": "5",
+    "height": "5",
+    "palette": "barrow_stone"
+  }
+}

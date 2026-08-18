@@ -1,0 +1,12 @@
+{
+  "id": "human",
+  "name": "Human",
+  "attributeBonuses": {
+    "presence": 1
+  },
+  "creatureType": "humanoid",
+  "size": "medium",
+  "languages": [
+    "common"
+  ]
+}

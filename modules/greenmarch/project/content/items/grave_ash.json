@@ -1,0 +1,9 @@
+{
+  "id": "grave_ash",
+  "name": "Grave Ash",
+  "kind": "material",
+  "description": "A pinch of the barrow, for the words that need it.",
+  "value": 4,
+  "weight": 0,
+  "stackable": true
+}

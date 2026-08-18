@@ -1,0 +1,14 @@
+{
+  "id": "smelled_something_faint",
+  "variants": [
+    {
+      "text": "The wind turns and brings something sour off the {direction} water."
+    },
+    {
+      "text": "A trace of musk in the reeds, going cold."
+    },
+    {
+      "text": "Something passed this way. Hours ago, by the smell."
+    }
+  ]
+}

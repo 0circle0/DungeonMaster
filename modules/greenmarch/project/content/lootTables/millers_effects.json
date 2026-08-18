@@ -1,0 +1,14 @@
+{
+  "id": "millers_effects",
+  "name": "Miller's Effects",
+  "rolls": "1",
+  "entries": [
+    {
+      "weight": 1,
+      "value": {
+        "item": "millers_ledger",
+        "quantity": "1"
+      }
+    }
+  ]
+}

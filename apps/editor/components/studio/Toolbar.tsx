@@ -2,6 +2,7 @@ import { useRef } from 'react';
 import type { ModuleStore } from '@/lib/store';
 import { exportModule } from '@/lib/store';
 import { resolveStart } from '@/lib/worldModel';
+import { OpenModule } from './OpenModule';
 import styles from '@/app/studio/studio.module.css';
 
 const START_KIND_LABEL = { poi: 'POI', area: 'area', dungeon: 'dungeon' } as const;
@@ -40,6 +41,8 @@ export function Toolbar(props: {
   onSave: () => void;
   canSave: boolean;
   moduleName: string;
+  /** Every module in this repository, for the switcher. */
+  moduleNames: readonly string[];
   saveState: 'idle' | 'pending' | 'saving' | 'saved' | 'draft' | 'error';
   saveNote: string;
 }) {
@@ -53,7 +56,8 @@ export function Toolbar(props: {
       <span className={styles.brand}>DungeonMaster</span>
       <span className={styles.brandSub}>studio</span>
 
-      <span className={styles.filename}>{store.filename}</span>
+      <OpenModule names={props.moduleNames} current={props.moduleName} dirty={store.dirty} />
+      {!props.canSave && <span className={styles.filename}>{store.filename}</span>}
       {store.dirty && <span className={styles.dirty}>●</span>}
 
       <div className={styles.toolGroup}>

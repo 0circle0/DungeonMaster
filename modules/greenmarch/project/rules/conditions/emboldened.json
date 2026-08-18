@@ -1,0 +1,9 @@
+{
+  "id": "emboldened",
+  "name": "Emboldened",
+  "stacking": "refresh",
+  "defaultDuration": 3,
+  "modifiers": {
+    "guard": 2
+  }
+}

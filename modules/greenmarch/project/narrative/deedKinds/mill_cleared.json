@@ -1,0 +1,8 @@
+{
+  "id": "mill_cleared",
+  "name": "Cleared the mill",
+  "severity": 15,
+  "faction": "wardens",
+  "memorability": 1.5,
+  "distortion": 0.1
+}

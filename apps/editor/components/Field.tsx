@@ -43,6 +43,26 @@ const MAX_PINNED = 4;
  */
 export const FieldDiagnostics = createContext<ReadonlyMap<string, readonly Diagnostic[]>>(new Map());
 
+/**
+ * Which fields of the entry being edited no longer follow their prefab.
+ *
+ * The prefab panel already lists them, and that is not the same thing. An
+ * author changing a value needs to know *at the value* that they have just
+ * unlinked it — otherwise the two states that matter most, "this follows the
+ * prefab" and "this is mine now", look identical in the only place anybody
+ * looks. Overridden fields render marked, with the way back next to them.
+ *
+ * `base` is the entry's own path, so a leaf can work out what it is called
+ * relative to the entry, which is the spelling `overriddenPaths` returns.
+ */
+export interface OverrideInfo {
+  readonly base: Path;
+  readonly paths: ReadonlySet<string>;
+  readonly reset: (relativePath: string) => void;
+}
+
+export const FieldOverrides = createContext<OverrideInfo | null>(null);
+
 /** Group diagnostics by path, for the context above. */
 export function diagnosticsByPath(
   diagnostics: readonly Diagnostic[],
@@ -535,9 +555,37 @@ function Labelled(props: {
   const problems = props.path ? (byPath.get(props.path.join('.')) ?? []) : [];
   const worst = problems.find((d) => d.severity === 'error') ?? problems[0];
 
+  const overrides = useContext(FieldOverrides);
+  // Only inside the entry the override info is about. A nested inspector or a
+  // path that is not under `base` must not borrow another entry's marks.
+  const relative =
+    overrides && props.path && props.path.length > overrides.base.length &&
+    overrides.base.every((segment, i) => props.path?.[i] === segment)
+      ? props.path.slice(overrides.base.length).join('.')
+      : null;
+  const overridden = relative !== null && overrides !== null && overrides.paths.has(relative);
+
   return (
-    <div className={`field${worst ? ` field-${worst.severity}` : ''}`}>
-      {props.label && <label className="label">{props.label}</label>}
+    <div className={`field${worst ? ` field-${worst.severity}` : ''}${overridden ? ' field-overridden' : ''}`}>
+      {props.label && (
+        <label className="label">
+          {props.label}
+          {overridden && (
+            <>
+              <span className="override-mark" title="Changed here — the prefab no longer sets this">
+                overridden
+              </span>
+              <button
+                className="override-reset"
+                title="Take the prefab's value back"
+                onClick={() => overrides.reset(relative)}
+              >
+                reset
+              </button>
+            </>
+          )}
+        </label>
+      )}
       {props.children}
       {/* The problem where the field is, rather than only in the console. The
           hint is what says how to fix it, so it is shown when there is one. */}

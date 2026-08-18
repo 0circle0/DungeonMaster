@@ -1,0 +1,8 @@
+{
+  "id": "door",
+  "name": "Door",
+  "glyph": "+",
+  "passable": true,
+  "opaque": true,
+  "isDoor": true
+}

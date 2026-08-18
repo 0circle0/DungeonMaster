@@ -1,0 +1,20 @@
+{
+  "id": "millford_village",
+  "name": "Millford Village",
+  "area": "millford",
+  "kind": "settlement",
+  "descriptionKey": "millford_village_desc",
+  "residents": [
+    "vess"
+  ],
+  "services": [
+    "inn",
+    "market"
+  ],
+  "rumourReach": 1.5,
+  "controllingFaction": "wardens",
+  "position": {
+    "x": 6,
+    "y": 6
+  }
+}

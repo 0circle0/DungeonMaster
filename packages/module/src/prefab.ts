@@ -161,17 +161,31 @@ function evaluate(
 
   // `{ "@lookup": ["roomSizes", "{{size}}"] }` — the project's own tables, which
   // is where `SIZES`, `TRADE_PALETTE`, `ROOM_SIZES` and `KIND_POOL` live.
+  //
+  // More than two segments walks into the row: `place.py`'s tables map one key
+  // to several fields at once, which is the whole reason they are tables —
+  // a settlement's size decides both what it offers and how far word of it
+  // travels, and those two must not be able to drift apart. Requiring one
+  // table per field would split exactly the rows that exist to stay together.
   if ('@lookup' in record) {
     const spec = record['@lookup'];
-    if (!Array.isArray(spec) || spec.length !== 2) {
-      issues.push({ path, message: '@lookup takes a table name and a key' });
+    if (!Array.isArray(spec) || spec.length < 2) {
+      issues.push({ path, message: '@lookup takes a table name, a key, and optionally a path into the row' });
       return undefined;
     }
-    const table = String(evaluate(spec[0], params, style, path, issues) ?? '');
-    const key = String(evaluate(spec[1], params, style, path, issues) ?? '');
-    const found = style[table]?.[key];
+    const segments = spec.map((part) => String(evaluate(part, params, style, path, issues) ?? ''));
+    const [table, key, ...rest] = segments as [string, string, ...string[]];
+    let found: unknown = style[table]?.[key];
+    for (const segment of rest) {
+      if (typeof found !== 'object' || found === null) {
+        found = undefined;
+        break;
+      }
+      found = (found as Record<string, unknown>)[segment];
+    }
     if (found === undefined) {
-      issues.push({ path, message: `${table}[${JSON.stringify(key)}] is not in the style tables` });
+      const where = [key, ...rest].map((segment) => `[${JSON.stringify(segment)}]`).join('');
+      issues.push({ path, message: `${table}${where} is not in the style tables` });
       return record['else'];
     }
     return found;

@@ -724,3 +724,6 @@
 .ruleFinding { display: block; width: 100%; text-align: left; font: inherit; font-size: 11px; color: var(--fg); background: none; border: 0; padding: 2px 0; cursor: pointer; }
 .ruleFinding:hover { color: var(--accent); }
 .ruleFinding code { color: var(--muted); margin-right: 6px; }
+
+/* The module switcher, which sits where the filename used to. */
+.openModule { font-size: 12px; padding: 2px 6px; max-width: 170px; }

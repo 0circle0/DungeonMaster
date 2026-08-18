@@ -1,0 +1,13 @@
+{
+  "id": "shallow_water",
+  "name": "Shallow Water",
+  "description": "Ankle deep and slow going, but you can wade it.",
+  "glyph": ",",
+  "color": "cyan",
+  "tags": [
+    "water"
+  ],
+  "passable": true,
+  "opaque": false,
+  "moveCost": 2
+}

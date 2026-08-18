@@ -1,0 +1,9 @@
+{
+  "id": "the_greenmarch",
+  "name": "The Greenmarch",
+  "quests": [
+    "the_mill_door",
+    "the_barrow_ward"
+  ],
+  "isEnding": true
+}

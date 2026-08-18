@@ -1,0 +1,28 @@
+{
+  "id": "vess_stock",
+  "name": "Vess's Shelf",
+  "rolls": "3",
+  "entries": [
+    {
+      "weight": 3,
+      "value": {
+        "item": "rope",
+        "quantity": "2"
+      }
+    },
+    {
+      "weight": 2,
+      "value": {
+        "item": "lockpicks",
+        "quantity": "1"
+      }
+    },
+    {
+      "weight": 1,
+      "value": {
+        "item": "iron_sword",
+        "quantity": "1"
+      }
+    }
+  ]
+}

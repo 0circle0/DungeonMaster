@@ -1,0 +1,76 @@
+{
+  "id": "the_barrow_ward",
+  "name": "The Barrow Ward",
+  "description": "There is older trouble under the fens, and the mill was only its edge.",
+  "requires": {
+    "description": "Only once the mill is done and the party can survive it.",
+    "minLevel": 2,
+    "quests": [
+      {
+        "quest": "the_mill_door",
+        "status": "complete"
+      }
+    ]
+  },
+  "ordered": true,
+  "remembersAs": "barrow_robbed",
+  "stages": [
+    {
+      "id": "find_it",
+      "name": "Find the barrow",
+      "objectives": [
+        {
+          "id": "discover",
+          "kind": "reach",
+          "target": "fen_barrow",
+          "description": "Find what the fens are hiding."
+        }
+      ]
+    },
+    {
+      "id": "open_it",
+      "name": "Past the ward",
+      "objectives": [
+        {
+          "id": "pass_ward",
+          "kind": "custom",
+          "when": {
+            "test": {
+              "ref": "flags.barrow_open"
+            }
+          },
+          "description": "Open the sealed way."
+        }
+      ]
+    },
+    {
+      "id": "end_it",
+      "name": "The deep cell",
+      "objectives": [
+        {
+          "id": "kill_wight",
+          "kind": "kill",
+          "target": "barrow_wight",
+          "count": 1,
+          "description": "Put the wight down."
+        }
+      ]
+    }
+  ],
+  "objectives": [],
+  "onComplete": [
+    {
+      "setFlag": {
+        "flag": "barrow_finished",
+        "value": true
+      }
+    }
+  ],
+  "rewards": {
+    "xp": 400,
+    "reputation": {
+      "wardens": 25,
+      "fen_things": -20
+    }
+  }
+}

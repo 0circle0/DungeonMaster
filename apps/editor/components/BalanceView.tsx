@@ -99,7 +99,13 @@ export function BalanceView({ doc }: { doc: ModuleDoc }) {
   const lootTables = list(doc, 'content.lootTables');
   const monsters = list(doc, 'content.monsters');
   const items = list(doc, 'content.items');
-  const levels = (getAt(doc, ['rules', 'progression', 'levels']) as Row[]) ?? [];
+  // Memoized for the fallback, not the lookup: `?? []` builds a fresh array
+  // whenever the field is absent, and the budget memo below keys on it — so a
+  // module without a progression table would recompute on every render.
+  const levels = useMemo(
+    () => (getAt(doc, ['rules', 'progression', 'levels']) as Row[]) ?? [],
+    [doc],
+  );
   const defaultPartySize = Number(getAt(doc, ['start', 'partySize']) ?? 4);
 
   const [level, setLevel] = useState(1);

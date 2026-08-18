@@ -1,0 +1,17 @@
+{
+  "id": "bleeding",
+  "name": "Bleeding",
+  "stacking": "refresh",
+  "defaultDuration": 3,
+  "onTick": [
+    {
+      "damage": {
+        "target": {
+          "ref": "actor.id"
+        },
+        "amount": 1,
+        "damageType": "slashing"
+      }
+    }
+  ]
+}

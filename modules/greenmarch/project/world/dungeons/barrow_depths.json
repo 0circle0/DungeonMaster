@@ -1,0 +1,40 @@
+{
+  "id": "barrow_depths",
+  "name": "Barrow Depths",
+  "biome": "greenmarch",
+  "roomCount": "6",
+  "depth": "2",
+  "branchiness": 0.4,
+  "lockedDoorChance": 0.2,
+  "doorGates": [
+    "barrow_ward"
+  ],
+  "bossTable": "barrow_boss",
+  "completionTriggers": [
+    {
+      "id": "barrow_finished",
+      "mode": "once",
+      "on": "custom",
+      "event": "dungeonCleared",
+      "remember": true,
+      "effects": [
+        {
+          "setFlag": {
+            "flag": "barrow_finished",
+            "value": true
+          }
+        },
+        {
+          "emit": {
+            "event": "deed",
+            "data": {
+              "kind": "barrow_robbed"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "palette": "barrow_stone",
+  "corridorLength": "2d3"
+}

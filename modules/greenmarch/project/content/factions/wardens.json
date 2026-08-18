@@ -1,0 +1,26 @@
+{
+  "id": "wardens",
+  "name": "The Wardens",
+  "initialStanding": 0,
+  "decayPerDay": 0.1,
+  "ranks": [
+    {
+      "id": "suspect",
+      "name": "Suspect",
+      "atLeast": -100
+    },
+    {
+      "id": "known",
+      "name": "Known",
+      "atLeast": 10
+    },
+    {
+      "id": "trusted",
+      "name": "Trusted",
+      "atLeast": 40
+    }
+  ],
+  "relations": {
+    "fen_things": -0.5
+  }
+}

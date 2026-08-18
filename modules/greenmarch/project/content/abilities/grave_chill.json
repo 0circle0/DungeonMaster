@@ -1,0 +1,21 @@
+{
+  "id": "grave_chill",
+  "name": "Grave Chill",
+  "description": "The cold of the barrow reaches for the living.",
+  "actionType": "quick",
+  "targeting": "allEnemies",
+  "range": 30,
+  "onUse": [
+    {
+      "damage": {
+        "target": {
+          "ref": "target.id"
+        },
+        "amount": {
+          "roll": "1d4"
+        },
+        "damageType": "cold"
+      }
+    }
+  ]
+}

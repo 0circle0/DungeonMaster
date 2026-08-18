@@ -1,0 +1,14 @@
+{
+  "id": "barrow_stone",
+  "name": "Barrow Stone",
+  "floor": "floor",
+  "wall": "wall",
+  "door": "door",
+  "scatter": [
+    {
+      "terrain": "rubble",
+      "frequency": 0.06
+    }
+  ],
+  "exterior": "wall"
+}

@@ -1,0 +1,36 @@
+{
+  "id": "fen",
+  "name": "The Fens",
+  "floor": "floor",
+  "wall": "reeds",
+  "door": "door",
+  "scatter": [
+    {
+      "terrain": "deep_water",
+      "frequency": 0.16,
+      "distribution": "patch",
+      "scale": 9,
+      "octaves": 2,
+      "edgeTerrain": "shallow_water",
+      "edgeWidth": 1,
+      "priority": 0
+    },
+    {
+      "terrain": "reeds",
+      "frequency": 0.1,
+      "distribution": "patch",
+      "scale": 5,
+      "octaves": 3,
+      "priority": 1
+    },
+    {
+      "terrain": "briar",
+      "frequency": 0.12,
+      "distribution": "patch",
+      "scale": 4,
+      "octaves": 2,
+      "edgeWidth": 1,
+      "priority": 0
+    }
+  ]
+}

@@ -1,0 +1,9 @@
+{
+  "id": "silenced",
+  "name": "Silenced",
+  "description": "The fen swallows every sound you make.",
+  "prevents": [
+    "speak"
+  ],
+  "defaultDuration": 2
+}

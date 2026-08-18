@@ -1,0 +1,12 @@
+{
+  "id": "strike",
+  "name": "Strike",
+  "actionType": "action",
+  "targeting": "single",
+  "attack": {
+    "stat": "might",
+    "against": "guard"
+  },
+  "onUse": [],
+  "description": "A swing with whatever you are holding."
+}

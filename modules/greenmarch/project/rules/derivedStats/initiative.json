@@ -1,0 +1,7 @@
+{
+  "id": "initiative",
+  "name": "Initiative",
+  "formula": {
+    "ref": "actor.mod.agility"
+  }
+}

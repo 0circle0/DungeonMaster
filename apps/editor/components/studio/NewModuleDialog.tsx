@@ -25,7 +25,11 @@ export function NewModuleDialog(props: {
         if (!response.ok) throw new Error((await response.json() as { error?: string }).error ?? response.statusText);
         return response.json() as Promise<ModuleDoc>;
       })
-      .then((doc) => props.onCreate(doc, `${name}.json`))
+      // A *copy*, under no name, so it cannot be mistaken for opening the
+      // original — with autosave on, "From greenmarch" writing back to
+      // greenmarch is editing it, not starting from it. Opening is the
+      // switcher in the toolbar.
+      .then((doc) => props.onCreate(doc, 'untitled.module.json'))
       .catch((err: Error) => setError(`Could not load template: ${err.message}`));
   };
 
@@ -55,7 +59,10 @@ export function NewModuleDialog(props: {
           {props.templates.map((name) => (
             <button key={name} className={styles.dialogOption} onClick={() => fromTemplate(name)}>
               From “{name}”
-              <em>Start from a copy of the bundled {name} module.</em>
+              <em>
+                A copy of the bundled {name} module, unnamed — export it, or save it once it has a
+                home. To edit {name} itself, open it from the toolbar.
+              </em>
             </button>
           ))}
         </div>

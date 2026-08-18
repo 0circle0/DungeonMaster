@@ -14,7 +14,8 @@
  */
 
 import { describe, it, expect } from 'vitest';
-import { readFileSync } from 'node:fs';
+import { readFileSync, existsSync, readdirSync, statSync } from 'node:fs';
+import { join, relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { splitProject, joinProject, isAuthoringFile } from './project.js';
 import { compileModule, hashModule } from './compile.js';
@@ -35,6 +36,52 @@ describe('splitProject / joinProject', () => {
 
     expect(issues).toEqual([]);
     expect(`${JSON.stringify(document, null, 2)}\n`).toBe(text);
+  });
+
+  /**
+   * The gate for a project that is actually committed.
+   *
+   * The test above proves the round trip on a document held in memory. This
+   * one proves it on the files in the repository: `modules/greenmarch/project`
+   * is the authored form, `modules/greenmarch/module.json` is its build
+   * output, and both are committed. Two representations of one world drift
+   * unless something checks — that is the hazard `modules/aurendel/src/readme.md`
+   * spells out for the generators, and committing a project takes it on.
+   *
+   * Any module that grows a `project/` is covered automatically, which is the
+   * point: adopting the format opts you into the check, rather than into a
+   * checklist somebody has to remember.
+   */
+  it.each(MODULES)('%s: a committed project still builds its module.json', (name) => {
+    const dir = fileURLToPath(new URL(`../../../modules/${name}`, import.meta.url));
+    const projectDir = join(dir, 'project');
+    if (!existsSync(projectDir)) return;
+
+    const files: Record<string, string> = {};
+    const walk = (current: string): void => {
+      for (const entry of readdirSync(current)) {
+        const path = join(current, entry);
+        if (statSync(path).isDirectory()) walk(path);
+        else if (path.endsWith('.json')) {
+          files[relative(projectDir, path).split('\\').join('/')] = readFileSync(path, 'utf8');
+        }
+      }
+    };
+    walk(projectDir);
+
+    const manifestText = files['project.json'];
+    expect(manifestText, `${name}/project has no project.json`).toBeDefined();
+    delete files['project.json'];
+    // Prefabs, style tables and the contract describe how the world is
+    // authored, not what it contains, so they are not part of the build.
+    for (const path of Object.keys(files)) if (isAuthoringFile(path)) delete files[path];
+
+    const { document, issues } = joinProject(
+      JSON.parse(manifestText!) as ReturnType<typeof splitProject>['manifest'],
+      files,
+    );
+    expect(issues).toEqual([]);
+    expect(`${JSON.stringify(document, null, 2)}\n`).toBe(raw(name));
   });
 
   it('does not touch the document it is given', () => {

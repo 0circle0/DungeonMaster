@@ -1,0 +1,95 @@
+{
+  "id": "the_mill_door",
+  "name": "The Mill Door",
+  "description": "Vess wants her mill back.",
+  "giver": "vess",
+  "requires": {
+    "description": "Offered once the Wardens are not actively suspicious.",
+    "factions": [
+      {
+        "faction": "wardens",
+        "minStanding": -10
+      }
+    ]
+  },
+  "ordered": true,
+  "remembersAs": "mill_cleared",
+  "stages": [
+    {
+      "id": "get_in",
+      "name": "Get inside",
+      "description": "The door is barred. The key or the picks.",
+      "journalKey": "vess_journal",
+      "objectives": [
+        {
+          "id": "open_door",
+          "kind": "reach",
+          "target": "the_mill",
+          "description": "Get through the mill door."
+        }
+      ]
+    },
+    {
+      "id": "clear_it",
+      "name": "Clear the mill",
+      "objectives": [
+        {
+          "id": "kill_hounds",
+          "kind": "kill",
+          "target": "bog_hound",
+          "count": 2,
+          "description": "Deal with what moved in."
+        }
+      ],
+      "onComplete": [
+        {
+          "setFlag": {
+            "flag": "mill_clear",
+            "value": true
+          }
+        }
+      ]
+    },
+    {
+      "id": "tell_her",
+      "name": "Tell Vess",
+      "objectives": [
+        {
+          "id": "report",
+          "kind": "talk",
+          "target": "vess",
+          "description": "Bring word back to Vess."
+        }
+      ]
+    }
+  ],
+  "objectives": [],
+  "onComplete": [
+    {
+      "adjustReputation": {
+        "faction": "wardens",
+        "amount": 20
+      }
+    }
+  ],
+  "failWhen": {
+    "test": {
+      "ref": "flags.vess_dead"
+    }
+  },
+  "rewards": {
+    "xp": 150,
+    "items": [
+      {
+        "item": "brass_key",
+        "quantity": 1
+      }
+    ],
+    "reputation": {
+      "wardens": 10
+    }
+  },
+  "unlocks": [
+    "the_barrow_ward"
+  ]
+}

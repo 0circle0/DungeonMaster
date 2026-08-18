@@ -1,0 +1,14 @@
+{
+  "id": "heard_nothing",
+  "variants": [
+    {
+      "text": "You hold still. Water, reeds, your own breathing. Nothing else."
+    },
+    {
+      "text": "Nothing but the fen shifting about, and none of it in a hurry."
+    },
+    {
+      "text": "You listen a while. Whatever is out there is not moving."
+    }
+  ]
+}

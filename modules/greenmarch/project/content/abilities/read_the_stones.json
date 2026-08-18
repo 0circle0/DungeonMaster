@@ -1,0 +1,21 @@
+{
+  "id": "read_the_stones",
+  "name": "Read the Stones",
+  "description": "An hour with a hand on the barrow, and it tells you something.",
+  "actionType": "action",
+  "targeting": "none",
+  "spellLevel": 1,
+  "ritual": true,
+  "castingTime": "60 minutes",
+  "components": [
+    "verbal"
+  ],
+  "onUse": [
+    {
+      "setFlag": {
+        "flag": "stones_read",
+        "value": true
+      }
+    }
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "id": "arrive_in_millford",
+  "name": "Wet Boots",
+  "description": "The Wardens sent you down to Millford because someone here asked for help and nobody else would come.",
+  "autoStart": true,
+  "ordered": true,
+  "objectives": [
+    {
+      "id": "find_vess",
+      "kind": "talk",
+      "target": "vess",
+      "description": "Find Vess the miller and hear what she wants."
+    }
+  ],
+  "rewards": {
+    "xp": 25
+  }
+}

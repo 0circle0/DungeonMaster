@@ -1,0 +1,261 @@
+{
+  "id": "vess_talk",
+  "start": "opening",
+  "nodes": [
+    {
+      "id": "opening",
+      "says": [
+        {
+          "text": "\"You'll be the ones the Wardens sent. Good. I want my mill back.\""
+        },
+        {
+          "text": "\"Sit if you like. I'd offer better, but everything I own is in that mill.\""
+        },
+        {
+          "text": "\"You came. I'd half stopped expecting anyone.\"",
+          "requires": {
+            "factions": [
+              {
+                "faction": "wardens",
+                "minStanding": 20
+              }
+            ]
+          }
+        }
+      ],
+      "redirectWhen": [
+        {
+          "requires": {
+            "flags": [
+              {
+                "flag": "vess_cold"
+              }
+            ]
+          },
+          "goto": "cold"
+        }
+      ],
+      "options": [
+        {
+          "id": "ask_mill",
+          "text": "What happened at the mill?",
+          "goto": "about_mill"
+        },
+        {
+          "id": "take_job",
+          "text": "We'll clear it.",
+          "requires": {
+            "quests": [
+              {
+                "quest": "the_mill_door",
+                "status": "unstarted"
+              }
+            ]
+          },
+          "effects": [
+            {
+              "emit": {
+                "event": "startQuest",
+                "data": {
+                  "quest": "the_mill_door"
+                }
+              }
+            },
+            {
+              "grantItem": {
+                "target": {
+                  "ref": "actor.id"
+                },
+                "item": "brass_key"
+              }
+            }
+          ],
+          "goto": "given_key"
+        },
+        {
+          "id": "done_it",
+          "text": "It's done. The mill is clear.",
+          "requires": {
+            "flags": [
+              {
+                "flag": "mill_clear"
+              }
+            ]
+          },
+          "effects": [
+            {
+              "adjustReputation": {
+                "faction": "wardens",
+                "amount": 10
+              }
+            }
+          ],
+          "goto": "thanks"
+        },
+        {
+          "id": "haggle",
+          "text": "It'll cost you more than thanks.",
+          "requires": {
+            "quests": [
+              {
+                "quest": "the_mill_door",
+                "status": "active"
+              }
+            ]
+          },
+          "check": {
+            "skill": "persuasion",
+            "difficulty": 14,
+            "opposedBy": "resolve",
+            "onSuccess": "haggle_won",
+            "onFailure": "haggle_lost"
+          },
+          "onceOnly": true
+        },
+        {
+          "id": "shop",
+          "text": "What are you selling?",
+          "requires": {
+            "factions": [
+              {
+                "faction": "wardens",
+                "minStanding": 5
+              }
+            ]
+          },
+          "showWhenLocked": true,
+          "lockedHint": "She doesn't know you well enough to open the chest.",
+          "goto": "opening"
+        },
+        {
+          "id": "farewell",
+          "text": "We'll be getting on."
+        }
+      ]
+    },
+    {
+      "id": "about_mill",
+      "says": [
+        {
+          "text": "\"Wheel stopped. I went to see why. I did not go in.\""
+        },
+        {
+          "text": "\"Something took it in the wet season. I heard it before I saw the door barred.\""
+        },
+        {
+          "text": "\"You want the truth? I ran. I'm not ashamed of it.\""
+        }
+      ],
+      "remembers": "mill_cleared",
+      "options": [
+        {
+          "id": "back",
+          "text": "Back.",
+          "goto": "opening"
+        }
+      ]
+    },
+    {
+      "id": "given_key",
+      "says": [
+        {
+          "text": "\"Then take the key. Brass one. Don't lose it — there isn't another.\""
+        },
+        {
+          "text": "\"Here. It sticks. Lean on it.\""
+        },
+        {
+          "text": "\"The key, and my thanks, and that's all I have.\""
+        }
+      ],
+      "options": [
+        {
+          "id": "back",
+          "text": "Back.",
+          "goto": "opening"
+        }
+      ]
+    },
+    {
+      "id": "haggle_won",
+      "says": [
+        {
+          "text": "\"...Fine. Fine. There's coin under the floor. It's yours when it's done.\""
+        },
+        {
+          "text": "She looks at you a long moment. \"You drive a hard bargain for a wet village.\""
+        },
+        {
+          "text": "\"Take it, then. I'd rather be poor and sleeping.\""
+        }
+      ],
+      "onEnter": [
+        {
+          "setFlag": {
+            "flag": "haggled_up",
+            "value": true
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "back",
+          "text": "Back.",
+          "goto": "opening"
+        }
+      ]
+    },
+    {
+      "id": "haggle_lost",
+      "says": [
+        {
+          "text": "\"I've nothing to give that I haven't offered. Take it or don't.\""
+        },
+        {
+          "text": "\"You can see what I have. It's all in that mill.\""
+        },
+        {
+          "text": "She doesn't answer. That is an answer."
+        }
+      ],
+      "options": [
+        {
+          "id": "back",
+          "text": "Back.",
+          "goto": "opening"
+        }
+      ]
+    },
+    {
+      "id": "thanks",
+      "says": [
+        {
+          "text": "\"Then I'll sleep tonight. That's worth more than the coin.\""
+        },
+        {
+          "text": "\"You have my thanks, and the Wardens will hear of it.\""
+        },
+        {
+          "text": "She sits down slowly, as if she had been standing for weeks."
+        }
+      ],
+      "remembers": "mill_cleared",
+      "options": []
+    },
+    {
+      "id": "cold",
+      "says": [
+        {
+          "text": "\"I've heard what you are. Get off my step.\""
+        },
+        {
+          "text": "She does not open the door all the way. \"No. Not you.\""
+        },
+        {
+          "text": "\"Word travels, even out here. Go on.\""
+        }
+      ],
+      "options": []
+    }
+  ]
+}

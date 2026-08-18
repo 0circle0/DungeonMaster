@@ -1,0 +1,52 @@
+{
+  "id": "fen_scavenge",
+  "name": "Fen Scavenge",
+  "rolls": "1",
+  "emptyChance": 0.3,
+  "bonusRollSkill": "perception",
+  "entries": [
+    {
+      "weight": 60,
+      "value": {
+        "item": "rope",
+        "quantity": "1"
+      }
+    },
+    {
+      "weight": 25,
+      "value": {
+        "item": "rune_tablet",
+        "quantity": "1",
+        "requirementScope": "anyMember",
+        "requires": {
+          "description": "Only a reader of runes recognises it as more than a rock.",
+          "skills": [
+            {
+              "skill": "lore",
+              "minRank": 2
+            }
+          ]
+        }
+      }
+    },
+    {
+      "weight": 15,
+      "value": {
+        "item": "warded_blade",
+        "quantity": "1",
+        "unique": true,
+        "requirementScope": "party",
+        "requires": {
+          "description": "The barrow only yields its blade to a proven party.",
+          "minLevel": 3,
+          "quests": [
+            {
+              "quest": "the_mill_door",
+              "status": "complete"
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

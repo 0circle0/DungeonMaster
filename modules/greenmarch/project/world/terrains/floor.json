@@ -1,0 +1,8 @@
+{
+  "id": "floor",
+  "name": "Floor",
+  "glyph": ".",
+  "passable": true,
+  "opaque": false,
+  "moveCost": 1
+}
