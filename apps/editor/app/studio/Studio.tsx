@@ -412,6 +412,8 @@ export function Studio(props: {
           onAddEntry={addEntry}
           onPlaceFromPrefab={setPlacing}
           prefabCollections={prefabCollections}
+          authoring={props.authoring}
+          moduleName={moduleName}
         />
 
         <Inspector

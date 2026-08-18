@@ -10,6 +10,8 @@ import { getAt } from '@/lib/store';
 import type { ModuleDoc, ModuleStore } from '@/lib/store';
 import { EventsView } from '@/components/EventsView';
 import { OrphansView } from '@/components/OrphansView';
+import { PrefabsView } from '@/components/PrefabsView';
+import type { ProjectAuthoring } from '@/lib/modulesOnDisk';
 import { BalanceView } from '@/components/BalanceView';
 import { DialogueGraph } from '@/components/DialogueGraph';
 import { TimelineView } from '@/components/TimelineView';
@@ -22,7 +24,7 @@ import type { MapTarget, Selection, ViewId, ViewportKind } from '@/app/studio/se
 import { VIEW_LABELS } from '@/app/studio/selection';
 import styles from '@/app/studio/studio.module.css';
 
-const VIEW_TABS: readonly ViewId[] = ['balance', 'dialogue', 'timeline', 'perception', 'events', 'orphans', 'rawjson'];
+const VIEW_TABS: readonly ViewId[] = ['balance', 'dialogue', 'timeline', 'perception', 'events', 'orphans', 'prefabs', 'rawjson'];
 
 export function Viewport(props: {
   kind: ViewportKind;
@@ -38,6 +40,8 @@ export function Viewport(props: {
   onPlaceFromPrefab: (path: string) => void;
   /** Collections a prefab in this project can make. */
   prefabCollections: ReadonlySet<string>;
+  authoring: ProjectAuthoring;
+  moduleName: string;
 }) {
   const { store, kind } = props;
   const doc = store.doc;
@@ -98,6 +102,17 @@ export function Viewport(props: {
         )}
 
         {kind === 'orphans' && <OrphansView doc={doc} onOpen={props.onSelectItem} />}
+
+        {kind === 'prefabs' && (
+          <PrefabsView
+            store={store}
+            prefabs={props.authoring.prefabs}
+            instances={props.authoring.instances}
+            style={props.authoring.style}
+            moduleName={props.moduleName}
+            onOpen={props.onSelectItem}
+          />
+        )}
 
         {kind === 'balance' && <BalanceView doc={doc} />}
         {kind === 'dialogue' && <DialogueGraph doc={doc} />}

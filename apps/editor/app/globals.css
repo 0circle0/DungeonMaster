@@ -315,3 +315,20 @@ textarea.input { resize: vertical; font-family: inherit; }
 .reorder .btn { padding: 0 5px; line-height: 1.4; }
 
 .orphans { padding: 4px 2px; }
+
+/* — prefabs view ———————————————————————————————————————————— */
+
+.prefabs { padding: 4px 2px; }
+.prefab-list { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 14px; }
+/* Definition on the left, consequences on the right. The right half is the
+   reason this screen exists. */
+.prefab-body { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; align-items: start; }
+.fanout-row { border-left: 2px solid var(--line); padding-left: 8px; margin-bottom: 8px; }
+.fanout-field { display: flex; gap: 6px; align-items: baseline; font-size: 11px; padding-left: 8px; }
+.fanout-from { color: #5d6478; text-decoration: line-through; }
+.fanout-arrow { opacity: 0.4; }
+.fanout-to { color: var(--accent); }
+/* Not a warning: the author asked for this, and the prefab simply lost. */
+.fanout-kept { font-size: 11px; color: var(--warn); padding-left: 8px; margin-top: 2px; }
+.fanout-kept code { margin-right: 6px; }
+.dialog-actions { display: flex; gap: 8px; align-items: center; margin-top: 12px; }

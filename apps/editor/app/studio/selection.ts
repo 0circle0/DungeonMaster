@@ -18,7 +18,7 @@ export type Selection =
   | { kind: 'item'; path: string; index: number };
 
 /** Simulation and analysis views hosted in the viewport. */
-export type ViewId = 'balance' | 'dialogue' | 'timeline' | 'perception' | 'events' | 'orphans' | 'rawjson';
+export type ViewId = 'balance' | 'dialogue' | 'timeline' | 'perception' | 'events' | 'orphans' | 'prefabs' | 'rawjson';
 
 export const VIEW_LABELS: Record<ViewId, string> = {
   balance: 'Balance',
@@ -27,6 +27,7 @@ export const VIEW_LABELS: Record<ViewId, string> = {
   perception: 'Perception preview',
   events: 'Events',
   orphans: 'Unreferenced',
+  prefabs: 'Prefabs',
   rawjson: 'Raw JSON',
 };
 

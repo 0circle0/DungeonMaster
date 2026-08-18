@@ -138,6 +138,15 @@ export function addInstanceLink(
   writeFileSync(target, `${JSON.stringify(current, null, 2)}\n`);
 }
 
+/** Write a prefab definition. Authored, so it is written where it is read from. */
+export function writePrefab(name: string, prefabId: string, prefab: Record<string, unknown>): void {
+  const projectDir = join(MODULES_DIR, name, 'project');
+  if (!existsSync(projectDir)) throw new Error(`${name} is not a project`);
+  const target = join(projectDir, 'prefabs', `${prefabId}.json`);
+  mkdirSync(dirname(target), { recursive: true });
+  writeFileSync(target, `${JSON.stringify(prefab, null, 2)}\n`);
+}
+
 /** Is this module authored as a directory of files? */
 export function isProject(name: string): boolean {
   return existsSync(join(MODULES_DIR, name, 'project', 'project.json'));
