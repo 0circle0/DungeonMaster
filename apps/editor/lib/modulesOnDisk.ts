@@ -19,8 +19,14 @@ import {
 import { dirname, join, relative } from 'node:path';
 import { stableStringify } from '@dm/core';
 import { readAssembledModule, assembleMapFolders, listModules } from '@dm/module/load';
-import { splitStaticMap, splitProject, joinProject, isAuthoringFile } from '@dm/module';
-import type { ProjectManifest, Prefab, InstanceMap, StyleTables } from '@dm/module';
+import {
+  splitStaticMap,
+  splitProject,
+  joinProject,
+  isAuthoringFile,
+  overriddenPaths,
+} from '@dm/module';
+import type { ProjectManifest, Prefab, InstanceMap, PrefabLink, StyleTables } from '@dm/module';
 
 const MODULES_DIR = join(process.cwd(), '..', '..', 'modules');
 
@@ -312,6 +318,24 @@ function writeProject(name: string, doc: Record<string, unknown>): {
     written += 1;
   }
 
+  // Which fields are the author's rather than the prefab's, worked out from
+  // the document that is being written. Derived rather than tracked, so it
+  // matches what the inspector shows by construction: an override is whatever
+  // differs from what the prefab produces *now*.
+  const instances = recomputeInstances(name, doc);
+  if (instances) {
+    const target = join(projectDir, 'prefabs', 'instances.json');
+    const contents = `${JSON.stringify(instances, null, 2)}\n`;
+    if (!existsSync(target) || readFileSync(target, 'utf8') !== contents) {
+      mkdirSync(dirname(target), { recursive: true });
+      writeFileSync(target, contents);
+      written += 1;
+    } else {
+      unchanged += 1;
+    }
+    wanted.set('prefabs/instances.json', contents);
+  }
+
   let removed = 0;
   for (const file of Object.keys(readTree(projectDir))) {
     // Prefabs and the style tables are authored, not derived: nothing in the
@@ -324,6 +348,48 @@ function writeProject(name: string, doc: Record<string, unknown>): {
   pruneEmptyDirs(projectDir);
 
   return { written, unchanged, removed };
+}
+
+/**
+ * The instance sidecar, brought up to date with the document.
+ *
+ * Half of it is authored and half derived, which is worth being explicit about:
+ * the `params` are what somebody typed when they placed the entry and are
+ * carried through untouched, while `overrides` are recomputed every time,
+ * because "a field I changed by hand" is not a thing to remember — it is a
+ * thing to observe. A link whose entry has since been deleted goes with it.
+ *
+ * Returns null when the module has no prefabs, so a project that does not use
+ * them never grows the file.
+ */
+function recomputeInstances(name: string, doc: Record<string, unknown>): InstanceMap | null {
+  const { prefabs, instances, style } = readAuthoring(name);
+  if (prefabs.length === 0) return null;
+
+  const byId = new Map(prefabs.map((prefab) => [prefab.id, prefab]));
+  const out: Record<string, Record<string, PrefabLink>> = {};
+
+  for (const [collection, links] of Object.entries(instances)) {
+    const [section, listName] = collection.split('.') as [string, string];
+    const entries = (doc[section] as Record<string, unknown> | undefined)?.[listName];
+    if (!Array.isArray(entries)) continue;
+
+    for (const [id, link] of Object.entries(links)) {
+      const entry = (entries as Record<string, unknown>[]).find((e) => e['id'] === id);
+      const prefab = byId.get(link.id);
+      // An entry that is gone, or a prefab that is, keeps no link: the first
+      // has nothing to describe and the second can never be followed again.
+      if (!entry || !prefab) continue;
+
+      (out[collection] ??= {})[id] = {
+        id: link.id,
+        params: link.params,
+        overrides: [...overriddenPaths(prefab, entry, link, style)],
+      };
+    }
+  }
+
+  return out;
 }
 
 /** A collection emptied of its last entry should not leave its folder behind. */
