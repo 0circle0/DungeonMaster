@@ -21,6 +21,7 @@ import { usePrefabState } from '@/lib/overrides';
 import { DungeonFit } from './DungeonFit';
 import { Roads } from './Roads';
 import { DialoguePieces } from './DialoguePieces';
+import { QuestChain } from './QuestChain';
 import { derivePrefab } from '@dm/module';
 import type { ProjectAuthoring } from '@/lib/modulesOnDisk';
 import type { OwnedField } from '@/lib/modRuntime';
@@ -272,6 +273,9 @@ function InspectorPanel(props: InspectorProps) {
           />
         </FieldOverrides.Provider>
         {info.path === 'world.areas' && <Roads store={store} areaIndex={selection.index} />}
+        {info.path === 'narrative.quests' && (
+          <QuestChain store={store} questIndex={selection.index} />
+        )}
         {info.path === 'narrative.dialogues' && (
           <DialoguePieces store={store} dialogueIndex={selection.index} />
         )}
