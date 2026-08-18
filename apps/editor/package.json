@@ -17,7 +17,8 @@
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "zod": "^3.24.1",
-    "@dm/engine": "0.1.0"
+    "@dm/engine": "0.1.0",
+    "@dm/authoring": "0.1.0"
   },
   "devDependencies": {
     "@types/react": "^19.0.2",

@@ -13,8 +13,8 @@
  * being user script in a sandbox.
  */
 
-export { fit, roomsThatFit, PACKING, MAX_SIDE } from './dungeon.js';
-export type { FitRequest, FitResult } from './dungeon.js';
+export { fit, sizeToFit, measureRooms, PACKING, MAX_SIDE } from './dungeon.js';
+export type { FitRequest, FitResult, RoomMeasurement } from './dungeon.js';
 
 export { layOut, ringSpot } from './layout.js';
 export type { Positioned, AreaSize, Placement } from './layout.js';

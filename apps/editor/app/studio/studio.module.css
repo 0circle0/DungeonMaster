@@ -727,3 +727,11 @@
 
 /* The module switcher, which sits where the filename used to. */
 .openModule { font-size: 12px; padding: 2px 6px; max-width: 170px; }
+
+/* What a dungeon will really generate. */
+.fitPanel { border: 1px solid var(--line); border-radius: 6px; padding: 8px 10px; margin: 12px 0; }
+.fitPanel[data-ok='false'] { border-color: var(--warn); }
+.fitHead { display: flex; width: 100%; font: inherit; background: none; border: 0; padding: 0; cursor: pointer; text-align: left; align-items: baseline; gap: 8px; font-size: 11px; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); }
+.fitFigure { margin-left: auto; font-size: 13px; letter-spacing: 0; text-transform: none; color: var(--fg); font-variant-numeric: tabular-nums; }
+.fitPanel[data-ok='false'] .fitFigure { color: var(--warn); }
+.fitProblem { color: var(--warn); font-size: 12px; margin: 6px 0; }

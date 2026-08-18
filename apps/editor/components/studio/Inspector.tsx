@@ -18,6 +18,7 @@ import { RenamePanel } from './RenamePanel';
 import { ModFields } from './ModFields';
 import { PrefabPanel } from './PrefabPanel';
 import { usePrefabState } from '@/lib/overrides';
+import { DungeonFit } from './DungeonFit';
 import { derivePrefab } from '@dm/module';
 import type { ProjectAuthoring } from '@/lib/modulesOnDisk';
 import type { OwnedField } from '@/lib/modRuntime';
@@ -268,6 +269,9 @@ function InspectorPanel(props: InspectorProps) {
             {...(info.path === 'world.maps' ? { omit: new Set(['layers']) } : {})}
           />
         </FieldOverrides.Provider>
+        {info.path === 'world.dungeons' && (
+          <DungeonFit store={store} basePath={basePath} entry={entry} />
+        )}
         {prefabState.danglingLink && (
           <p className="hint">
             Placed from a prefab called <code>{prefabState.danglingLink}</code>, which is not in

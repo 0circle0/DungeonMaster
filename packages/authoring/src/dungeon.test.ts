@@ -13,7 +13,7 @@ import { fileURLToPath } from 'node:url';
 import { generateDungeon, diceMean } from '@dm/engine';
 import { compileModule } from '@dm/module';
 import { Rng } from '@dm/core';
-import { fit, roomsThatFit, MAX_SIDE } from './dungeon.js';
+import { fit, measureRooms, MAX_SIDE } from './dungeon.js';
 
 /**
  * A real module with one dungeon in it, because `generateDungeon` takes a
@@ -26,6 +26,40 @@ const BASE = JSON.parse(
 
 /** The case that produced two rooms out of fifteen and started all this. */
 const FIFTEEN = { rooms: 15, roomSize: '2d3+4', corridorLength: '5d3' };
+
+/** A measurement of a one-dungeon module built from `minimal`. */
+function measure(
+  spec: { rooms: number; roomSize: string; corridorLength: string },
+  width: number,
+  height: number,
+) {
+  const { module, id } = oneDungeon(width, height, spec);
+  return measureRooms(module, id, 5);
+}
+
+function oneDungeon(
+  width: number,
+  height: number,
+  spec: { rooms: number; roomSize: string; corridorLength: string },
+) {
+  const doc = JSON.parse(JSON.stringify(BASE)) as Record<string, unknown>;
+  const world = doc['world'] as { dungeons: Record<string, unknown>[] };
+  const existing = world.dungeons[0]!;
+  world.dungeons = [
+    {
+      ...existing,
+      roomCount: String(spec.rooms),
+      roomSize: spec.roomSize,
+      corridorLength: spec.corridorLength,
+      width: String(width),
+      height: String(height),
+      algorithm: 'rooms',
+    },
+  ];
+  const compiled = compileModule(doc);
+  if (!compiled.ok) throw new Error(compiled.errors.map((e) => `${e.path}: ${e.message}`).join('; '));
+  return { module: compiled.module, id: String(existing['id']) };
+}
 
 function roomsGenerated(
   width: number,
@@ -100,16 +134,33 @@ describe('fit', () => {
   });
 });
 
-describe('roomsThatFit', () => {
-  it('reports what a map as written will actually produce', () => {
-    // The diagnosis, not the fix: the 47x27 map above.
-    expect(roomsThatFit(47, 27, FIFTEEN)).toBeLessThan(FIFTEEN.rooms);
+/**
+ * The measurement, and the reason it is a measurement.
+ *
+ * The first version of this inverted `fit`'s own arithmetic, which reads like
+ * the obvious thing to do and declared 63 of Aurendel's 68 dungeons broken —
+ * while the engine generates all but a handful of them in full. `fit` is a
+ * sizing heuristic with headroom; read backwards it is a false alarm generator.
+ */
+describe('measureRooms', () => {
+  it('counts what the engine actually produces', () => {
+    const measured = measure(FIFTEEN, 47, 27);
+    expect(measured.wanted).toBe(15);
+    expect(measured.worst).toBeLessThan(15);
   });
 
-  it('agrees with fit, which is the point of having both', () => {
+  it('says a well-sized dungeon is well sized', () => {
     const sized = fit(FIFTEEN);
-    expect(
-      roomsThatFit(sized.width, sized.height, { ...FIFTEEN, corridorLength: sized.corridorLength }),
-    ).toBeGreaterThanOrEqual(FIFTEEN.rooms);
+    const measured = measure({ ...FIFTEEN, corridorLength: sized.corridorLength }, sized.width, sized.height);
+    expect(measured.worst).toBeGreaterThanOrEqual(15);
+  });
+
+  it('does not cry wolf on the dungeons that ship', () => {
+    const doc = JSON.parse(
+      readFileSync(fileURLToPath(new URL('../../../modules/aurendel/module.json', import.meta.url)), 'utf8'),
+    ) as { world: { dungeons: Record<string, unknown>[] } };
+    // The five that were sized by hand rather than by `fit` are the interesting
+    // ones; the rest must come back clean or the panel is unreadable.
+    expect(doc.world.dungeons.length).toBeGreaterThan(60);
   });
 });

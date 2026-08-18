@@ -213,6 +213,46 @@ function depthsFrom(entranceIndex: number, edges: readonly [number, number][]): 
 }
 
 /** Generate a dungeon from its module definition. */
+export interface PlacementInputs {
+  readonly templates: readonly PlaceableTemplate[];
+  readonly roomCount: number;
+  readonly guaranteedRoles: readonly string[];
+  /** Rounded and clamped exactly as generation does. */
+  readonly spacing: number;
+  readonly defaultSize: string | undefined;
+  /** What generation would use if the dungeon declares no size. */
+  readonly derivedSize: number;
+}
+
+/**
+ * The inputs `placeRooms` will be handed for this dungeon.
+ *
+ * Exposed so authoring tools can ask "would these rooms fit in a map of *this*
+ * size" without generating the whole dungeon, and — more importantly — without
+ * a second, approximate copy of how the inputs are derived. The spacing is the
+ * part that bites: generation *rounds and clamps* the corridor mean to 1..12,
+ * so a tool computing the raw mean disagrees with the engine on exactly the
+ * long corridors that make rooms not fit.
+ */
+export function placementInputs(module: CompiledModule, dungeonId: string): PlacementInputs {
+  const definition = module.get<DungeonDef>('world.dungeons', dungeonId);
+  const biome = module.find<BiomeDef>('world.biomes', definition.biome);
+  const templates = (biome?.roomTemplates ?? [])
+    .map((id) => module.find<PlaceableTemplate>('world.roomTemplates', id))
+    .filter((entry): entry is PlaceableTemplate => Boolean(entry));
+
+  const roomCount = Math.max(2, diceMean(definition.roomCount ?? '', 6));
+  const spacing = Math.max(1, Math.min(12, Math.round(diceMean(definition.corridorLength, 1))));
+  return {
+    templates,
+    roomCount: Math.round(roomCount),
+    guaranteedRoles: definition.guaranteedRoles ?? [],
+    spacing,
+    defaultSize: definition.roomSize,
+    derivedSize: Math.max(20, Math.ceil(Math.sqrt(roomCount) * (8 + spacing)) + 6),
+  };
+}
+
 export function generateDungeon(
   module: CompiledModule,
   dungeonId: string,
