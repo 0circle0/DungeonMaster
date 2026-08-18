@@ -53,6 +53,12 @@ export type { ShopDef, StockEntry } from './sim/trade.js';
 export type { ScopeSet, LootOptions } from './world/populate.js';
 export type { Population, PlacedMonster, PlacedLoot, PlacedTrap, LootDraw, EncounterDraw } from './world/populate.js';
 export { generateDungeon, gatesOf } from './world/dungeon.js';
+// The spacing arithmetic a generator has to agree with. `placeRooms` uses the
+// *mean* of `corridorLength` as the distance every room keeps from every
+// other, so anything that sizes a map has to compute the same number the
+// engine will — from the same function, not from a second implementation of
+// it. `@dm/authoring`'s `fit` is the caller.
+export { diceMean } from './world/dungeon/rooms.js';
 export type { GeneratedDungeon, Room, Door } from './world/dungeon.js';
 export { buildMap, resolvePalette } from './world/mapgen.js';
 export type { BuiltMap, Palette, MapSpec } from './world/mapgen.js';

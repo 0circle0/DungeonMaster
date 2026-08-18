@@ -1,0 +1,21 @@
+{
+  "name": "@dm/authoring",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Authoring-time algorithms: the arithmetic a generator has to get right for a module to play the way it reads. Knows engine semantics; the engine does not know it.",
+  "main": "./src/index.ts",
+  "exports": {
+    ".": {
+      "types": "./src/index.ts",
+      "import": "./src/index.ts",
+      "default": "./src/index.ts"
+    }
+  },
+  "types": "./src/index.ts",
+  "dependencies": {
+    "@dm/core": "0.1.0",
+    "@dm/engine": "0.1.0",
+    "@dm/module": "0.1.0"
+  }
+}
