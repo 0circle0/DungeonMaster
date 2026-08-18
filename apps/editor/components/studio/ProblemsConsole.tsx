@@ -44,15 +44,20 @@ export function ProblemsConsole(props: {
               title="Jump to this problem"
               onClick={() => props.onOpen(issue)}
             >
+              {/* Where, once. The left column prefers a line and column when
+                  the idle tier has resolved one, and falls back to the path;
+                  repeating the path underneath in that case cost every row a
+                  line to say the same thing twice — and most rows have no
+                  position, because rules and mods never carry one. */}
               <span className="problem-where">
                 {issue.position ? `${issue.position.line}:${issue.position.column}` : issue.path || '<root>'}
               </span>
               <span className="problem-body">
                 <span className="problem-message">{issue.message}</span>
                 {issue.hint && <span className="problem-hint">→ {issue.hint}</span>}
-                {issue.path && <code className="problem-path">{issue.path}</code>}
+                {issue.position && issue.path && <code className="problem-path">{issue.path}</code>}
               </span>
-              <span className="code">{issue.code}</span>
+              <span className="problem-code">{issue.code}</span>
             </button>
           ))}
         </div>
