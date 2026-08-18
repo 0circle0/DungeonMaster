@@ -17,7 +17,7 @@ import { planMove } from '@/lib/bulk';
 import { RenamePanel } from './RenamePanel';
 import { ModFields } from './ModFields';
 import { PrefabPanel } from './PrefabPanel';
-import { linkFor } from '@dm/module';
+import { linkFor, derivePrefab } from '@dm/module';
 import type { ProjectAuthoring } from '@/lib/modulesOnDisk';
 import type { OwnedField } from '@/lib/modRuntime';
 import { Coverage } from './Coverage';
@@ -129,6 +129,43 @@ function InspectorPanel(props: InspectorProps) {
   const basePath: Path = [...selection.path.split('.'), selection.index];
 
   /**
+   * Turn this entry into a prefab and link it to the result.
+   *
+   * The derived prefab expands back to exactly this entry, so linking it is a
+   * no-op on the content — which is what makes doing it to something already
+   * finished safe. What varies is a starting guess; the prefab is a file and
+   * the next thing anyone does is decide what else should.
+   */
+  const saveAsPrefab = async () => {
+    const entryId = String(entry['id'] ?? '');
+    if (!entryId) return;
+    const prefabId = window.prompt('Call the prefab:', `${entryId}_like`)?.trim();
+    if (!prefabId || !/^[a-z][a-z0-9_]*$/.test(prefabId)) return;
+
+    const { prefab, params } = derivePrefab(entry, info.path, prefabId);
+    const module = props.authoring.moduleName;
+
+    const written = await fetch(`/api/modules/${module}/prefabs/${prefabId}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(prefab),
+    });
+    if (!written.ok) return;
+
+    await fetch(`/api/modules/${module}/instances`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        collection: info.path,
+        entryId,
+        link: { id: prefabId, params, overrides: [] },
+      }),
+    });
+    // The prefab list is read on the server, so the new one appears on reload.
+    window.location.reload();
+  };
+
+  /**
    * Move this entry one place, and follow it.
    *
    * The selection is by index, so leaving it where it was would silently open
@@ -171,6 +208,15 @@ function InspectorPanel(props: InspectorProps) {
         <button className="btn tiny" onClick={() => setRenaming(true)}>
           Rename…
         </button>
+        {props.authoring.isProject && !linkFor(props.authoring.instances, info.path, String(entry['id'] ?? '')) && (
+          <button
+            className="btn tiny"
+            title="Turn this into a prefab, so the next thirty like it are three fields"
+            onClick={() => void saveAsPrefab()}
+          >
+            Save as prefab…
+          </button>
+        )}
         <button className="btn tiny" onClick={() => props.onDuplicate(selection.path, selection.index)}>
           Duplicate
         </button>

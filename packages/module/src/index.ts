@@ -25,6 +25,8 @@ export {
   checkParams,
   withDefaults,
   linkFor,
+  derivePrefab,
+  IDENTITY_FIELDS,
   INSTANCES_FILE,
 } from './prefab.js';
 export type {

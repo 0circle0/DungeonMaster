@@ -324,3 +324,66 @@ export function overriddenPaths(
   walk(mine, entry, '');
   return out;
 }
+
+// ---------------------------------------------------------------------------
+// Going the other way
+// ---------------------------------------------------------------------------
+
+/**
+ * Fields that become parameters when a prefab is derived from an entry.
+ *
+ * The ones that are *this* thing rather than *this kind of* thing. Everything
+ * else is what the prefab is for — a settlement's services and its kind are the
+ * pattern; its name is not.
+ *
+ * A starting point rather than a rule: the prefab is a file, and the first thing
+ * anyone does with a derived one is decide what else should vary.
+ */
+export const IDENTITY_FIELDS = ['id', 'name', 'description'] as const;
+
+/**
+ * Turn an entry that already exists into a prefab, plus the parameters that
+ * reproduce it.
+ *
+ * This is how a prefab gets written in practice. Nobody designs the template
+ * first — they build one place, get it right, and then want thirty more like
+ * it. So the entry is the specification, and the derived prefab has to expand
+ * back to exactly it: that equality is what makes linking the original safe,
+ * because linking it is the same as replacing it with the expansion.
+ */
+export function derivePrefab(
+  entry: Record<string, unknown>,
+  collection: string,
+  prefabId: string,
+  parameterise: readonly string[] = IDENTITY_FIELDS,
+): { prefab: Prefab; params: Record<string, unknown> } {
+  const params: Record<string, unknown> = {};
+  const template: Record<string, unknown> = {};
+  const declared: PrefabParam[] = [];
+
+  for (const [key, value] of Object.entries(entry)) {
+    if (parameterise.includes(key) && (typeof value === 'string' || typeof value === 'number')) {
+      params[key] = value;
+      template[key] = `{{${key}}}`;
+      declared.push({
+        key,
+        label: key === 'id' ? 'Id' : key[0]!.toUpperCase() + key.slice(1),
+        kind: key === 'id' ? 'id' : typeof value === 'number' ? 'number' : key === 'description' ? 'text' : 'string',
+        required: key === 'id' || key === 'name',
+      });
+      continue;
+    }
+    template[key] = value;
+  }
+
+  return {
+    prefab: {
+      id: prefabId,
+      label: typeof entry['name'] === 'string' ? `Like ${entry['name']}` : prefabId,
+      collection,
+      params: declared,
+      template,
+    },
+    params,
+  };
+}

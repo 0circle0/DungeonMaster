@@ -9,7 +9,14 @@
  */
 
 import { describe, it, expect } from 'vitest';
-import { expandPrefab, reexpand, overriddenPaths, linkFor, checkParams } from './prefab.js';
+import {
+  expandPrefab,
+  reexpand,
+  overriddenPaths,
+  linkFor,
+  checkParams,
+  derivePrefab,
+} from './prefab.js';
 import type { Prefab, StyleTables, InstanceMap, PrefabLink } from './prefab.js';
 
 /** The four tables `place.py` keeps, as a project would hold them. */
@@ -208,5 +215,64 @@ describe('instances', () => {
 
     expect(reexpand(copy, entry, copiedLink, STYLE).entry['travelMinutes']).toBe(9);
     expect(reexpand(INN, entry, link, STYLE).entry['travelMinutes']).toBe(3);
+  });
+});
+
+/**
+ * Nobody designs a template first. They build one place, get it right, and then
+ * want thirty more like it — so the entry is the specification, and a prefab
+ * derived from it has to expand back to exactly that entry. Linking the
+ * original is the same as replacing it with the expansion, so anything less
+ * than exact would silently edit the thing it was derived from.
+ */
+describe('derivePrefab', () => {
+  const entry = {
+    id: 'millford_village',
+    name: 'Millford Village',
+    area: 'millford',
+    kind: 'settlement',
+    services: ['inn', 'market'],
+    rumourReach: 1.5,
+    position: { x: 6, y: 6 },
+  };
+
+  it('expands back to the entry it came from', () => {
+    const { prefab, params } = derivePrefab(entry, 'world.pointsOfInterest', 'settlement');
+    expect(expandPrefab(prefab, params).entry).toEqual(entry);
+  });
+
+  it('parameterises what is this thing, and keeps what is this kind of thing', () => {
+    const { prefab } = derivePrefab(entry, 'world.pointsOfInterest', 'settlement');
+    expect(prefab.params.map((p) => p.key)).toEqual(['id', 'name']);
+    // The pattern stays literal — that is the part worth reusing.
+    expect((prefab.template as Record<string, unknown>)['services']).toEqual(['inn', 'market']);
+    expect((prefab.template as Record<string, unknown>)['kind']).toBe('settlement');
+  });
+
+  it('takes a different set of fields when asked', () => {
+    const { prefab, params } = derivePrefab(entry, 'world.pointsOfInterest', 'settlement', [
+      'id',
+      'name',
+      'area',
+      'rumourReach',
+    ]);
+    expect(prefab.params.map((p) => p.key)).toEqual(['id', 'name', 'area', 'rumourReach']);
+    expect(params['rumourReach']).toBe(1.5);
+    // Still exact: a number parameter comes back a number, not its digits.
+    expect(expandPrefab(prefab, params).entry).toEqual(entry);
+  });
+
+  it('leaves a field it cannot parameterise alone', () => {
+    // `position` is an object; making it a placeholder would stringify it.
+    const { prefab } = derivePrefab(entry, 'world.pointsOfInterest', 'settlement', ['id', 'position']);
+    expect(prefab.params.map((p) => p.key)).toEqual(['id']);
+    expect((prefab.template as Record<string, unknown>)['position']).toEqual({ x: 6, y: 6 });
+  });
+
+  it('links the original without changing it', () => {
+    const { prefab, params } = derivePrefab(entry, 'world.pointsOfInterest', 'settlement');
+    const link = { id: 'settlement', params, overrides: [] };
+    expect(overriddenPaths(prefab, entry, link)).toEqual([]);
+    expect(reexpand(prefab, entry, link).entry).toEqual(entry);
   });
 });

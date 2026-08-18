@@ -76,9 +76,19 @@ export interface ProjectAuthoring {
   readonly prefabs: readonly Prefab[];
   readonly instances: InstanceMap;
   readonly style: StyleTables;
+  /** Which module this is, so the client can address its endpoints. */
+  readonly moduleName: string;
+  /** Prefabs need a `project/` to live in; without one there is nowhere. */
+  readonly isProject: boolean;
 }
 
-export const NO_AUTHORING: ProjectAuthoring = { prefabs: [], instances: {}, style: {} };
+export const NO_AUTHORING: ProjectAuthoring = {
+  prefabs: [],
+  instances: {},
+  style: {},
+  moduleName: '',
+  isProject: false,
+};
 
 export function readAuthoring(name: string): ProjectAuthoring {
   const projectDir = join(MODULES_DIR, name, 'project');
@@ -108,6 +118,8 @@ export function readAuthoring(name: string): ProjectAuthoring {
     prefabs,
     instances: (read('prefabs/instances.json') ?? {}) as InstanceMap,
     style: (read('style.json') ?? {}) as StyleTables,
+    moduleName: name,
+    isProject: true,
   };
 }
 
