@@ -109,6 +109,7 @@ export function Studio(props: {
       const body = (await response.json()) as {
         maps?: string[];
         removed?: string[];
+        project?: { written: number; unchanged: number; removed: number } | null;
         error?: string;
         issues?: string[];
       };
@@ -118,8 +119,12 @@ export function Studio(props: {
       }
       store.markSaved();
       const bits = [`saved modules/${moduleName}`];
+      // What a project save touched, because "wrote 3 files" and "wrote 2,760"
+      // are very different things to have just done to a repository.
+      if (body.project) bits.push(`${body.project.written} file(s)`);
+      if (body.project?.removed) bits.push(`removed ${body.project.removed}`);
       if (body.maps?.length) bits.push(`${body.maps.length} map(s)`);
-      if (body.removed?.length) bits.push(`removed ${body.removed.length}`);
+      if (body.removed?.length) bits.push(`removed ${body.removed.length} map(s)`);
       setSave({ state: 'ok', note: bits.join(' · ') });
     } catch (err) {
       setSave({ state: 'error', note: (err as Error).message });

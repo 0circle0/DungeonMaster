@@ -5,6 +5,11 @@ export type { CompileIssue, CompileResult, RefSite } from './compile.js';
 
 export { mergeModules, resolveExtends, parseExtends, DELETE_MARKER } from './merge.js';
 
+// A module as a directory of files, and back. Pure — the studio uses both
+// directions in the browser, filesystem policy lives in `bin/project.ts`.
+export { splitProject, joinProject, projectFiles, PROJECT_FORMAT } from './project.js';
+export type { ProjectManifest, SplitProject, JoinIssue } from './project.js';
+
 export * from './diagnostics/index.js';
 export * from './analysis/index.js';
 

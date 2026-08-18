@@ -5,11 +5,22 @@
  * the template API route. Never import this from a client component.
  */
 
-import { mkdirSync, writeFileSync, readdirSync, unlinkSync, existsSync, rmdirSync } from 'node:fs';
-import { join } from 'node:path';
+import {
+  mkdirSync,
+  writeFileSync,
+  readFileSync,
+  readdirSync,
+  unlinkSync,
+  existsSync,
+  rmdirSync,
+  rmSync,
+  statSync,
+} from 'node:fs';
+import { dirname, join, relative } from 'node:path';
 import { stableStringify } from '@dm/core';
-import { readAssembledModule, listModules } from '@dm/module/load';
-import { splitStaticMap } from '@dm/module';
+import { readAssembledModule, assembleMapFolders, listModules } from '@dm/module/load';
+import { splitStaticMap, splitProject, joinProject } from '@dm/module';
+import type { ProjectManifest } from '@dm/module';
 
 const MODULES_DIR = join(process.cwd(), '..', '..', 'modules');
 
@@ -29,12 +40,58 @@ export function listModuleNames(): string[] {
  */
 export function readModuleByName(name: string): Record<string, unknown> | null {
   if (!listModuleNames().includes(name)) return null;
-  const assembled = readAssembledModule(join(MODULES_DIR, name));
-  if (assembled.issues.length > 0) {
-    const first = assembled.issues[0];
+  const dir = join(MODULES_DIR, name);
+
+  // A `project/` is the authored form when there is one, and `module.json` is
+  // its build output — so reading the built file instead would show an author
+  // the last build rather than what they last wrote.
+  const project = readProject(dir);
+  const raw = project ?? readAssembledModule(dir).doc;
+  const { doc, issues } = project
+    ? assembleMapFolders(project, dir)
+    : { doc: raw, issues: readAssembledModule(dir).issues };
+
+  const first = issues[0];
+  if (first) {
     throw new Error(`${name}: ${first.file}:${first.line}:${first.col} ${first.message}`);
   }
-  return assembled.doc;
+  return doc;
+}
+
+/** Is this module authored as a directory of files? */
+export function isProject(name: string): boolean {
+  return existsSync(join(MODULES_DIR, name, 'project', 'project.json'));
+}
+
+/** Every `.json` under a directory, by path relative to it. */
+function readTree(root: string): Record<string, string> {
+  const out: Record<string, string> = {};
+  const walk = (dir: string): void => {
+    for (const entry of readdirSync(dir)) {
+      const path = join(dir, entry);
+      if (statSync(path).isDirectory()) walk(path);
+      else if (path.endsWith('.json')) out[relative(root, path).split('\\').join('/')] = readFileSync(path, 'utf8');
+    }
+  };
+  walk(root);
+  return out;
+}
+
+/** The document a `project/` builds to, or null if the module has none. */
+function readProject(dir: string): Record<string, unknown> | null {
+  const projectDir = join(dir, 'project');
+  if (!existsSync(join(projectDir, 'project.json'))) return null;
+
+  const files = readTree(projectDir);
+  const manifestText = files['project.json'];
+  if (manifestText === undefined) return null;
+  delete files['project.json'];
+
+  const manifest = JSON.parse(manifestText) as ProjectManifest;
+  const { document, issues } = joinProject(manifest, files);
+  const problem = issues[0];
+  if (problem) throw new Error(`${dir}: ${problem.message}`);
+  return document;
 }
 
 /**
@@ -97,7 +154,13 @@ export function writeStaticMap(
 export function writeModule(
   name: string,
   doc: Record<string, unknown>,
-): { path: string; maps: string[]; unchanged: string[]; removed: string[] } {
+): {
+  path: string;
+  maps: string[];
+  unchanged: string[];
+  removed: string[];
+  project: { written: number; unchanged: number; removed: number } | null;
+} {
   if (!listModuleNames().includes(name)) throw new Error(`no bundled module "${name}"`);
 
   const world = doc['world'] as Record<string, unknown> | undefined;
@@ -157,8 +220,70 @@ export function writeModule(
   }
 
   const path = join(MODULES_DIR, name, 'module.json');
-  writeFileSync(path, `${JSON.stringify(out, null, 2)}\n`);
-  return { path, maps: written, unchanged: kept, removed };
+  const text = `${JSON.stringify(out, null, 2)}\n`;
+
+  // A project-authored module keeps both: the files are what a person edits and
+  // what a diff reads, `module.json` is what the game loads. Writing only one
+  // of them is how the two stop agreeing.
+  const project = isProject(name) ? writeProject(name, out) : null;
+
+  writeFileSync(path, text);
+  return { path, maps: written, unchanged: kept, removed, project };
+}
+
+/**
+ * Write the authored files, touching only the ones that changed.
+ *
+ * Aurendel is 2,760 entry files. Rewriting all of them to change one monster's
+ * xp would make every save a diff of the whole world, which is the problem the
+ * format exists to solve — so each file is compared with what is already there.
+ * Files for entries that no longer exist are removed, so the directory always
+ * equals the document rather than accumulating what used to be true.
+ */
+function writeProject(name: string, doc: Record<string, unknown>): {
+  written: number;
+  unchanged: number;
+  removed: number;
+} {
+  const projectDir = join(MODULES_DIR, name, 'project');
+  const split = splitProject(doc);
+  const wanted = new Map<string, string>([
+    ['project.json', `${JSON.stringify(split.manifest, null, 2)}\n`],
+    ...Object.entries(split.files),
+  ]);
+
+  let written = 0;
+  let unchanged = 0;
+  for (const [file, contents] of wanted) {
+    const target = join(projectDir, file);
+    if (existsSync(target) && readFileSync(target, 'utf8') === contents) {
+      unchanged += 1;
+      continue;
+    }
+    mkdirSync(dirname(target), { recursive: true });
+    writeFileSync(target, contents);
+    written += 1;
+  }
+
+  let removed = 0;
+  for (const file of Object.keys(readTree(projectDir))) {
+    if (wanted.has(file)) continue;
+    rmSync(join(projectDir, file));
+    removed += 1;
+  }
+  pruneEmptyDirs(projectDir);
+
+  return { written, unchanged, removed };
+}
+
+/** A collection emptied of its last entry should not leave its folder behind. */
+function pruneEmptyDirs(root: string): void {
+  for (const entry of readdirSync(root)) {
+    const path = join(root, entry);
+    if (!statSync(path).isDirectory()) continue;
+    pruneEmptyDirs(path);
+    if (readdirSync(path).length === 0) rmdirSync(path);
+  }
 }
 
 /** Delete a static map folder outright. */
