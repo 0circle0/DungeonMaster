@@ -20,10 +20,12 @@ import { PrefabPanel } from './PrefabPanel';
 import { usePrefabState } from '@/lib/overrides';
 import { DungeonFit } from './DungeonFit';
 import { Roads } from './Roads';
+import { LayOut } from './LayOut';
 import { DialoguePieces } from './DialoguePieces';
 import { QuestChain } from './QuestChain';
 import { Description } from './Description';
 import { Hidden } from './Hidden';
+import { Noticing } from './Noticing';
 import { ThreadPanel } from './ThreadPanel';
 import { derivePrefab } from '@dm/module';
 import type { ProjectAuthoring } from '@/lib/modulesOnDisk';
@@ -293,9 +295,13 @@ function InspectorPanel(props: InspectorProps) {
         {info.path === 'world.pointsOfInterest' && (
           <Hidden store={store} index={selection.index} entry={entry} />
         )}
+        {info.path === 'world.pointsOfInterest' && (
+          <Noticing store={store} index={selection.index} entry={entry} />
+        )}
         {info.path === 'narrative.loreThreads' && (
           <ThreadPanel store={store} entry={entry} onOpen={props.onOpenItem} />
         )}
+        {info.path === 'world.areas' && <LayOut store={store} area={entry} />}
         {info.path === 'world.areas' && <Roads store={store} areaIndex={selection.index} />}
         {info.path === 'narrative.quests' && (
           <QuestChain store={store} questIndex={selection.index} />

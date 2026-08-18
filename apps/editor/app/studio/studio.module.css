@@ -789,3 +789,20 @@
 .threadAnchor:hover { color: var(--accent); }
 .threadDc { color: var(--muted); font-size: 11px; font-variant-numeric: tabular-nums; }
 .threadDc em { font-style: normal; margin-left: 5px; }
+
+/* What a place gives up on arrival. */
+.noticing { border: 1px solid var(--line); border-radius: 6px; padding: 8px 10px; margin: 12px 0; }
+.noticing textarea { width: 100%; margin: 4px 0; }
+.noticeList { list-style: none; margin: 6px 0; padding: 0; font-size: 12px; }
+.noticeList > li { display: flex; align-items: baseline; gap: 8px; padding: 3px 0; border-bottom: 1px solid var(--line); }
+.noticeList > li > span { flex: 1; }
+.noticeList code { color: var(--muted); font-size: 11px; }
+.noticeRow { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-top: 6px; }
+.noticeRow select { max-width: 220px; font-size: 12px; }
+
+/* Places with nowhere to stand. */
+.layout { border: 1px solid var(--line); border-radius: 6px; padding: 8px 10px; margin: 12px 0; }
+.layoutList { list-style: none; margin: 6px 0; padding: 0; font-size: 12px; max-height: 220px; overflow: auto; }
+.layoutList > li { display: flex; align-items: baseline; gap: 8px; padding: 2px 0; border-bottom: 1px solid var(--line); }
+.layoutList > li > span { flex: 1; }
+.layoutList code { color: var(--muted); font-variant-numeric: tabular-nums; }
