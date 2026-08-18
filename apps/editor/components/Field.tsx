@@ -13,7 +13,8 @@
 
 'use client';
 
-import { useState } from 'react';
+import { createContext, useContext, useState } from 'react';
+import type { Diagnostic } from '@dm/module';
 import type { FieldEntry, FieldSpec } from '@/lib/schema';
 import { labelFor, stepFor } from '@/lib/schema';
 import { fieldLabel } from '@/lib/labels';
@@ -30,6 +31,32 @@ import { JsonBox } from './JsonBox';
  */
 const HEAD_ROW = 26;
 const MAX_PINNED = 4;
+
+/**
+ * Problems, keyed by the path they are about.
+ *
+ * The console at the bottom of the studio has always known what is wrong and
+ * where, but a path is not where the author is looking — the field is. Passing
+ * this through context rather than as a prop keeps the recursive renderer's
+ * signature unchanged; every leaf is wrapped by `Labelled`, so one lookup there
+ * covers every content type there will ever be.
+ */
+export const FieldDiagnostics = createContext<ReadonlyMap<string, readonly Diagnostic[]>>(new Map());
+
+/** Group diagnostics by path, for the context above. */
+export function diagnosticsByPath(
+  diagnostics: readonly Diagnostic[],
+): ReadonlyMap<string, readonly Diagnostic[]> {
+  const out = new Map<string, Diagnostic[]>();
+  for (const diagnostic of diagnostics) {
+    // The compiler writes `monsters[0]`; form paths are dotted. One spelling.
+    const key = diagnostic.path.replace(/\[(\d+)\]/g, '.$1');
+    const bucket = out.get(key);
+    if (bucket) bucket.push(diagnostic);
+    else out.set(key, [diagnostic]);
+  }
+  return out;
+}
 
 export interface FieldProps {
   spec: FieldSpec;
@@ -94,7 +121,7 @@ export function Field(props: FieldProps) {
         const current = typeof value === 'string' ? value : '';
         const missing = current !== '' && !options.includes(current);
         return (
-          <Labelled label={label} description={description ?? `→ ${spec.ref}`}>
+          <Labelled path={path} label={label} description={description ?? `→ ${spec.ref}`}>
             <select
               className={`input ${missing ? 'invalid' : ''}`}
               value={current}
@@ -114,7 +141,7 @@ export function Field(props: FieldProps) {
 
       const text = typeof value === 'string' ? value : '';
       return (
-        <Labelled label={label} description={description}>
+        <Labelled path={path} label={label} description={description}>
           {spec.long ? (
             <textarea className="input" rows={3} value={text} onChange={(e) => onChange(path, e.target.value)} />
           ) : (
@@ -127,7 +154,7 @@ export function Field(props: FieldProps) {
     case 'number': {
       const step = stepFor(spec);
       return (
-        <Labelled label={label} description={description}>
+        <Labelled path={path} label={label} description={description}>
           <input
             className="input narrow"
             type="number"
@@ -162,7 +189,7 @@ export function Field(props: FieldProps) {
 
     case 'enum':
       return (
-        <Labelled label={label} description={description}>
+        <Labelled path={path} label={label} description={description}>
           <select
             className="input"
             value={typeof value === 'string' ? value : ''}
@@ -460,12 +487,29 @@ function ObjectField(props: FieldProps & { spec: Extract<FieldSpec, { kind: 'obj
   );
 }
 
-function Labelled(props: { label?: string; description?: string | null; children: React.ReactNode }) {
+function Labelled(props: {
+  label?: string;
+  description?: string | null;
+  path?: Path;
+  children: React.ReactNode;
+}) {
+  const byPath = useContext(FieldDiagnostics);
+  const problems = props.path ? (byPath.get(props.path.join('.')) ?? []) : [];
+  const worst = problems.find((d) => d.severity === 'error') ?? problems[0];
+
   return (
-    <div className="field">
+    <div className={`field${worst ? ` field-${worst.severity}` : ''}`}>
       {props.label && <label className="label">{props.label}</label>}
       {props.children}
-      {props.description && <em className="hint">{props.description}</em>}
+      {/* The problem where the field is, rather than only in the console. The
+          hint is what says how to fix it, so it is shown when there is one. */}
+      {worst && (
+        <em className={`field-problem ${worst.severity}`}>
+          {worst.message}
+          {worst.hint ? ` — ${worst.hint}` : ''}
+        </em>
+      )}
+      {props.description && !worst && <em className="hint">{props.description}</em>}
     </div>
   );
 }

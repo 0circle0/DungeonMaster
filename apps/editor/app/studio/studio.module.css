@@ -26,6 +26,17 @@
 .brandSub { color: var(--muted); font-size: 11px; margin-right: 12px; }
 .filename { font-family: var(--mono); font-size: 12px; color: var(--muted); }
 .dirty { color: var(--accent); font-size: 12px; }
+
+/* What the last save did. Quiet by default; only an error asks to be read. */
+.saveNote {
+  font-size: 11px;
+  opacity: 0.7;
+  max-width: 22ch;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.saveNote[data-state='error'] { color: var(--err, #d66); opacity: 1; }
 .toolGroup { display: flex; gap: 6px; align-items: center; }
 .spacer { flex: 1; }
 

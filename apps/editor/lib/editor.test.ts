@@ -5,7 +5,7 @@ import { readAssembledModule } from '@dm/module/load';
 import { resolvePalette } from '@dm/engine';
 import { COLLECTIONS, SECTIONS, SINGLETONS, collectionAt, labelFor, stepFor } from './schema.js';
 import type { FieldEntry, FieldSpec } from './schema.js';
-import { getAt, setAt, deleteAt } from './store.js';
+import { getAt, setAt, setAtMany, deleteAt } from './store.js';
 import type { ModuleDoc } from './store.js';
 import { hasContent, rendersAsGroup } from './fieldContent.js';
 import { resolveMapSubjects } from './mapSubject.js';
@@ -213,6 +213,61 @@ describe('immutable editing', () => {
     const spliced = deleteAt(doc, ['rules', 'attributes', 0]) as ModuleDoc;
     expect((getAt(spliced, ['rules', 'attributes']) as unknown[]).length).toBe(1);
     expect(getAt(spliced, ['rules', 'attributes', 0, 'id'])).toBe('wits');
+  });
+
+  /**
+   * The contract bulk editing has to keep.
+   *
+   * Validation caches per entry, keyed on the entry *object*, so an edit is
+   * cheap only because `setAt` leaves every untouched entry as the same object.
+   * A bulk operation written the obvious way — clone the document, mutate it —
+   * satisfies every other test in this file and quietly makes validation an
+   * order of magnitude slower. So it is asserted rather than assumed.
+   */
+  describe('setAtMany keeps untouched entries identical', () => {
+    it('shares every entry it did not edit', () => {
+      const doc = loadGreenmarch();
+      const before = getAt(doc, ['content', 'monsters']) as Record<string, unknown>[];
+      expect(before.length).toBeGreaterThan(1);
+
+      const next = setAtMany(doc, [
+        { path: ['content', 'monsters', 0, 'xp'], value: 11 },
+      ]) as ModuleDoc;
+      const after = getAt(next, ['content', 'monsters']) as Record<string, unknown>[];
+
+      expect(after[0]).not.toBe(before[0]);
+      for (let i = 1; i < before.length; i += 1) {
+        expect(after[i], `monsters[${i}] should be the same object`).toBe(before[i]);
+      }
+      // A whole other collection must not be disturbed at all.
+      expect(getAt(next, ['content', 'items'])).toBe(getAt(doc, ['content', 'items']));
+    });
+
+    it('applies every edit and leaves the original alone', () => {
+      const doc = loadMinimal();
+      const snapshot = JSON.stringify(doc);
+      const next = setAtMany(doc, [
+        { path: ['content', 'monsters', 0, 'xp'], value: 7 },
+        { path: ['content', 'monsters', 0, 'name'], value: 'Renamed' },
+        { path: ['rules', 'attributes', 1, 'name'], value: 'Cunning' },
+      ]) as ModuleDoc;
+
+      expect(getAt(next, ['content', 'monsters', 0, 'xp'])).toBe(7);
+      expect(getAt(next, ['content', 'monsters', 0, 'name'])).toBe('Renamed');
+      expect(getAt(next, ['rules', 'attributes', 1, 'name'])).toBe('Cunning');
+      expect(JSON.stringify(doc)).toBe(snapshot);
+    });
+
+    it('is the same document as applying the edits one at a time', () => {
+      const doc = loadMinimal();
+      const edits = [
+        { path: ['content', 'monsters', 0, 'xp'] as const, value: 3 },
+        { path: ['rules', 'attributes', 0, 'name'] as const, value: 'Brawn' },
+      ];
+      const batched = setAtMany(doc, edits);
+      const oneByOne = edits.reduce<unknown>((acc, e) => setAt(acc, e.path, e.value), doc);
+      expect(batched).toEqual(oneByOne);
+    });
   });
 });
 

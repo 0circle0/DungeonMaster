@@ -10,7 +10,7 @@
  * at, the way selecting an asset in a game engine doesn't close the scene.
  */
 
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useModuleStore, exportModule, getAt } from '@/lib/store';
 import type { ModuleDoc } from '@/lib/store';
 import { collectionAt } from '@/lib/schema';
@@ -79,6 +79,70 @@ export function Studio(props: {
     window.addEventListener('beforeunload', guard);
     return () => window.removeEventListener('beforeunload', guard);
   }, [store.dirty]);
+
+  /**
+   * Saving back to `modules/<name>/`.
+   *
+   * Only for a document that came from one — a file dropped in from elsewhere
+   * has no home in this repository to be written to, and guessing one would
+   * overwrite whatever happens to share its name.
+   */
+  const moduleName = store.filename.replace(/\.module\.json$|\.json$/, '');
+  const canSave = props.templates.includes(moduleName);
+  const [save, setSave] = useState<{ state: 'idle' | 'saving' | 'ok' | 'error'; note: string }>({
+    state: 'idle',
+    note: '',
+  });
+
+  const saveToDisk = useCallback(async () => {
+    if (!canSave) return;
+    setSave({ state: 'saving', note: '' });
+    try {
+      const response = await fetch(`/api/modules/${moduleName}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(store.doc),
+      });
+      const body = (await response.json()) as {
+        maps?: string[];
+        removed?: string[];
+        error?: string;
+        issues?: string[];
+      };
+      if (!response.ok) {
+        setSave({ state: 'error', note: [body.error, ...(body.issues ?? [])].filter(Boolean).join('; ') });
+        return;
+      }
+      store.markSaved();
+      const bits = [`saved modules/${moduleName}`];
+      if (body.maps?.length) bits.push(`${body.maps.length} map(s)`);
+      if (body.removed?.length) bits.push(`removed ${body.removed.length}`);
+      setSave({ state: 'ok', note: bits.join(' · ') });
+    } catch (err) {
+      setSave({ state: 'error', note: (err as Error).message });
+    }
+  }, [canSave, moduleName, store]);
+
+  // The three shortcuts the editor had none of. Undo was a button only, which
+  // on a tool people type into all day is the wrong shape.
+  useEffect(() => {
+    const onKey = (event: KeyboardEvent) => {
+      if (!event.metaKey && !event.ctrlKey) return;
+      const key = event.key.toLowerCase();
+      if (key === 's') {
+        event.preventDefault();
+        void saveToDisk();
+      } else if (key === 'z' && !event.shiftKey) {
+        event.preventDefault();
+        store.undo();
+      } else if ((key === 'z' && event.shiftKey) || key === 'y') {
+        event.preventDefault();
+        store.redo();
+      }
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [saveToDisk, store]);
 
   const errorsByCollection = useMemo(() => {
     const out: Record<string, number> = {};
@@ -227,6 +291,11 @@ export function Studio(props: {
         onOpenStart={openStart}
         onOpenMods={() => setModsOpen((open) => !open)}
         modCount={props.mods.length}
+        onSave={() => void saveToDisk()}
+        canSave={canSave}
+        moduleName={moduleName}
+        saveState={save.state}
+        saveNote={save.note}
       />
 
       <div className={styles.main}>

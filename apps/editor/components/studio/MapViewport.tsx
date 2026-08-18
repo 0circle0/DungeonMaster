@@ -12,7 +12,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import type { ModuleStore } from '@/lib/store';
 import {
-  compileForPreview, previewArea, previewDungeon, previewPoi, previewRoomTemplate, previewStart,
+  previewArea, previewDungeon, previewPoi, previewRoomTemplate, previewStart,
 } from '@/lib/preview';
 import type { PreviewResult } from '@/lib/preview';
 import { terrainColor } from '@/lib/terrainColors';
@@ -31,8 +31,12 @@ export function MapViewport(props: { store: ModuleStore; target: PreviewTarget }
   // be found, and a drawer that starts shut would not answer it.
   const [showControls, setShowControls] = useState(true);
 
-  const doc = props.store.doc;
-  const module = useMemo(() => compileForPreview(doc), [doc]);
+  // The compiled module comes from validation rather than being compiled here.
+  // Compiling is a `gameModuleSchema.safeParse`, which on a large module costs
+  // more than everything else a keystroke does put together — and validation
+  // has already paid for it. `null` while the document has errors, which is
+  // what `compileForPreview` returned too, so the guards below are unchanged.
+  const module = props.store.validation.compiled;
 
   const result: PreviewResult | null = useMemo(() => {
     if (!module) return null;

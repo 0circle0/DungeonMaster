@@ -20,6 +20,12 @@ export function Toolbar(props: {
   onOpenMods: () => void;
   /** How many mods are installed, so the button can say. */
   modCount: number;
+  /** Write back to `modules/<name>/`. Absent for a document loaded from a file. */
+  onSave: () => void;
+  canSave: boolean;
+  moduleName: string;
+  saveState: 'idle' | 'saving' | 'ok' | 'error';
+  saveNote: string;
 }) {
   const { store } = props;
   const { validation } = store;
@@ -43,6 +49,18 @@ export function Toolbar(props: {
         </button>
         <button
           className="btn primary"
+          disabled={!props.canSave || props.saveState === 'saving'}
+          title={
+            props.canSave
+              ? `Write modules/${props.moduleName}/ (⌘S)`
+              : 'Save writes back to a module in this repository; this document did not come from one'
+          }
+          onClick={props.onSave}
+        >
+          {props.saveState === 'saving' ? 'Saving…' : 'Save'}
+        </button>
+        <button
+          className="btn"
           onClick={() => {
             exportModule(store.doc, store.filename);
             store.markSaved();
@@ -50,6 +68,15 @@ export function Toolbar(props: {
         >
           Export
         </button>
+        {props.saveNote && (
+          <span
+            className={styles.saveNote}
+            data-state={props.saveState}
+            title={props.saveNote}
+          >
+            {props.saveNote}
+          </span>
+        )}
         <input
           ref={fileInput}
           type="file"
@@ -101,7 +128,16 @@ export function Toolbar(props: {
         {validation.ok ? (
           <>
             <span className="ok-dot" /> {validation.identity}
-            <code className="hash">{validation.hash.slice(0, 8)}</code>
+            {/* Hashing serializes the whole document, so it waits for a pause
+                in typing. Showing the previous hash dimmed says "this is one
+                edit behind" rather than quietly asserting it is current. */}
+            <code
+              className="hash"
+              style={validation.settling ? { opacity: 0.45 } : undefined}
+              title={validation.settling ? 'Recomputing…' : 'Content hash'}
+            >
+              {validation.hash.slice(0, 8)}
+            </code>
           </>
         ) : (
           <>

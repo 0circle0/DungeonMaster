@@ -5,26 +5,51 @@
  * engine-coverage notes.
  */
 
+import { useMemo } from 'react';
 import { getAt } from '@/lib/store';
 import type { ModuleStore, Path } from '@/lib/store';
 import { SINGLETONS, collectionAt, labelFor } from '@/lib/schema';
 import { singletonLabel } from '@/lib/labels';
 import { JsonBox } from '@/components/JsonBox';
 import { UsedBy } from '@/components/UsedBy';
+import { FieldDiagnostics, diagnosticsByPath } from '@/components/Field';
 import { Coverage } from './Coverage';
 import { ItemForm } from './ItemForm';
 import { StartInspector } from './StartInspector';
 import type { Selection } from '@/app/studio/selection';
 import styles from '@/app/studio/studio.module.css';
 
-export function Inspector(props: {
+interface InspectorProps {
   store: ModuleStore;
   selection: Selection;
   onOpenItem: (path: string, index: number) => void;
   onDuplicate: (path: string, index: number) => void;
   onDelete: (path: string, index: number) => void;
   onPreviewStart: () => void;
-}) {
+}
+
+export function Inspector(props: InspectorProps) {
+  /**
+   * Problems, indexed for the forms inside.
+   *
+   * The console has always said what is wrong; this puts it on the field it is
+   * about, so fixing happens where the author already is rather than after a
+   * round trip through the path at the bottom of the screen. Warnings are
+   * included — a thin text pool is worth seeing beside the pool.
+   */
+  const problems = useMemo(
+    () => diagnosticsByPath([...props.store.validation.errors, ...props.store.validation.warnings]),
+    [props.store.validation],
+  );
+
+  return (
+    <FieldDiagnostics.Provider value={problems}>
+      <InspectorPanel {...props} />
+    </FieldDiagnostics.Provider>
+  );
+}
+
+function InspectorPanel(props: InspectorProps) {
   const { store, selection } = props;
 
   if (selection.kind === 'none') {

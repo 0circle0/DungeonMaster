@@ -11,7 +11,7 @@
 
 'use client';
 
-import { useMemo } from 'react';
+import { useDeferredValue, useMemo } from 'react';
 import { buildReferenceIndex, referencesTo } from '@dm/module';
 import type { ModuleDoc } from '@/lib/store';
 
@@ -66,7 +66,13 @@ export function UsedBy({
   onOpen: (collection: string, index: number) => void;
 }) {
   // Rebuilding per entry would be wasteful; the index covers the whole module.
-  const index = useMemo(() => buildReferenceIndex(doc), [doc]);
+  //
+  // Deferred, because building it walks the schema alongside the whole document
+  // — ~23 ms on a large module, on every keystroke, for a panel nobody is
+  // looking at while they type. `useDeferredValue` lets the field they *are*
+  // looking at paint first and rebuilds this behind it.
+  const deferredDoc = useDeferredValue(doc);
+  const index = useMemo(() => buildReferenceIndex(deferredDoc), [deferredDoc]);
   const references = useMemo(() => referencesTo(index, collection, id), [index, collection, id]);
 
   if (!id) return null;
