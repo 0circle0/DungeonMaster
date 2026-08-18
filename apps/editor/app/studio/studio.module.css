@@ -552,3 +552,28 @@
 .renameWarn ul { margin: 4px 0 0; padding-left: 16px; }
 .renameWarn li { margin: 2px 0; }
 .renameInline { opacity: 0.6; font-style: italic; }
+
+/* — filtering and bulk editing ————————————————————————————— */
+
+.queryInput { min-width: 220px; }
+.tableCount { font-size: 11px; opacity: 0.6; margin-left: 4px; }
+.queryHelp { margin: 0 0 6px; font-size: 11px; opacity: 0.55; font-family: var(--mono); }
+.cellCheck { width: 26px; text-align: center; }
+
+/* Only present while something is checked, so it never costs space it is not
+   using — the table is what the viewport is for. */
+.bulkBar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+  padding: 6px 8px;
+  margin-bottom: 6px;
+  border: 1px solid var(--line, #23262f);
+  border-radius: 4px;
+  background: var(--panel-alt, #191c23);
+}
+.bulkCount { font-size: 11px; opacity: 0.75; }
+.bulkModes { display: flex; gap: 2px; }
+.bulkWarn { font-size: 11px; color: var(--warn, #d9a441); }
+.bulkClear { margin-left: auto; }

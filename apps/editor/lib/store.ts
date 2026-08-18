@@ -70,6 +70,31 @@ export function setAtMany(
   return out;
 }
 
+/**
+ * Delete several things at once, without the indices moving under each other.
+ *
+ * Deleting entry 2 and then entry 5 deletes the wrong second entry, because
+ * removing the first one renumbered everything after it. Applying deepest and
+ * last-first makes each delete see the list it was chosen against.
+ */
+export function deleteAtMany(doc: unknown, paths: readonly Path[]): unknown {
+  const ordered = [...paths].sort((a, b) => {
+    if (a.length !== b.length) return b.length - a.length;
+    for (let i = 0; i < a.length; i += 1) {
+      const x = a[i];
+      const y = b[i];
+      if (x === y) continue;
+      if (typeof x === 'number' && typeof y === 'number') return y - x;
+      return String(y).localeCompare(String(x));
+    }
+    return 0;
+  });
+
+  let out = doc;
+  for (const path of ordered) out = deleteAt(out, path);
+  return out;
+}
+
 /** Immutable delete, used when an optional field is cleared. */
 export function deleteAt(doc: unknown, path: Path): unknown {
   if (path.length === 0) return undefined;
@@ -141,6 +166,7 @@ type Action =
   | { type: 'delete'; path: Path }
   | { type: 'replace'; doc: ModuleDoc }
   | { type: 'setMany'; edits: readonly { path: Path; value: unknown }[] }
+  | { type: 'removeMany'; paths: readonly Path[] }
   | { type: 'undo' }
   | { type: 'redo' }
   | { type: 'saved' };
@@ -173,6 +199,9 @@ function reducer(state: State, action: Action): State {
     // author did, so one press of undo should put it back.
     case 'setMany':
       return pushHistory(state, setAtMany(state.doc, action.edits) as ModuleDoc);
+
+    case 'removeMany':
+      return pushHistory(state, deleteAtMany(state.doc, action.paths) as ModuleDoc);
 
     case 'undo': {
       const previous = state.past.at(-1);
@@ -342,6 +371,8 @@ export function useModuleStore(initial: ModuleDoc, initialName = 'module.json') 
       (edits: readonly { path: Path; value: unknown }[]) => dispatch({ type: 'setMany', edits }),
       [],
     ),
+    /** Delete several entries as one undo step, last-first so indices hold. */
+    removeMany: useCallback((paths: readonly Path[]) => dispatch({ type: 'removeMany', paths }), []),
     undo: useCallback(() => dispatch({ type: 'undo' }), []),
     redo: useCallback(() => dispatch({ type: 'redo' }), []),
     markSaved: useCallback(() => dispatch({ type: 'saved' }), []),

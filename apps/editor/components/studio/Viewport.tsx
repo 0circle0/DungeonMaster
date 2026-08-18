@@ -82,6 +82,7 @@ export function Viewport(props: {
             entries={entriesAt(doc, props.tablePath)}
             errors={store.validation.errors}
             selection={props.selection}
+            store={store}
             onSelect={(index) => props.onSelectItem(props.tablePath!, index)}
             onAdd={() => props.onAddEntry(props.tablePath!)}
           />
