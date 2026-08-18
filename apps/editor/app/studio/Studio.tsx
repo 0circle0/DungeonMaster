@@ -27,6 +27,7 @@ import type { ModWire } from '@/lib/modWire';
 import type { ProjectAuthoring } from '@/lib/modulesOnDisk';
 import type { Draft } from '@/lib/drafts';
 import { useAutosave } from '@/lib/useAutosave';
+import { rememberPlace, readPlace, placeStillExists } from '@/lib/place';
 import { NewModuleDialog } from '@/components/studio/NewModuleDialog';
 import { CommandPalette } from '@/components/studio/CommandPalette';
 import type { Command } from '@/lib/palette';
@@ -102,6 +103,36 @@ export function Studio(props: {
    * opened the module and do not yet know what is in either version.
    */
   const [draft, setDraft] = useState(props.draft);
+
+  /**
+   * Put the author back where they were.
+   *
+   * Once, on mount, and only if the place is still somewhere the document can
+   * go — an entry that has since been deleted would open onto "nothing here",
+   * which is a worse greeting than the default.
+   *
+   * The module itself is chosen on the server from a cookie, so by the time
+   * this runs the right document is already loaded and only the position
+   * inside it is missing.
+   */
+  useEffect(() => {
+    const place = readPlace();
+    if (!place || place.module !== moduleName) return;
+    if (!placeStillExists(place, store.doc)) return;
+
+    setSelection(place.selection);
+    setViewportKind(place.viewportKind);
+    setTablePath(place.tablePath);
+    setMapTarget(place.mapTarget);
+    // Deliberately once, with no dependencies: this restores a position, it
+    // does not keep enforcing one, and re-running it would fight every click.
+  }, []);
+
+  // And remember it, whenever it moves.
+  useEffect(() => {
+    if (!canSave) return;
+    rememberPlace({ module: moduleName, selection, viewportKind, tablePath, mapTarget });
+  }, [canSave, moduleName, selection, viewportKind, tablePath, mapTarget]);
 
   const autosave = useAutosave(store, moduleName, canSave);
   const saveToDisk = autosave.flush;

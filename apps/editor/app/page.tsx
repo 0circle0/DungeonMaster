@@ -8,6 +8,8 @@ import { listModuleNames, readModuleByName } from '@/lib/modulesOnDisk';
 import { readInstalledMods } from '@/lib/modsOnDisk';
 import { readAuthoring, NO_AUTHORING } from '@/lib/modulesOnDisk';
 import { readDraft } from '@/lib/drafts';
+import { cookies } from 'next/headers';
+import { MODULE_COOKIE } from '@/lib/placeCookie';
 import { Studio } from './studio/Studio';
 
 /**
@@ -27,9 +29,17 @@ export const metadata: Metadata = {
   description: 'World-first module authoring: a scene tree, a live map preview, and an inspector.',
 };
 
-export default function Page() {
+export default async function Page() {
   const names = listModuleNames();
-  const starter = ['greenmarch', 'core_fantasy', 'minimal'].find((name) => names.includes(name)) ?? names[0];
+
+  // The module someone was last in wins over the default. Chosen here rather
+  // than on the client so the right document renders first, instead of the
+  // wrong one appearing and being swapped out a moment later.
+  const remembered = (await cookies()).get(MODULE_COOKIE)?.value;
+  const starter =
+    (remembered && names.includes(remembered) ? remembered : null) ??
+    ['greenmarch', 'core_fantasy', 'minimal'].find((name) => names.includes(name)) ??
+    names[0];
   const doc = starter ? readModuleByName(starter) : null;
 
   return (
