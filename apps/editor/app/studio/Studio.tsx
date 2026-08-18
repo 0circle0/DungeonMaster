@@ -25,6 +25,8 @@ import { ModsPanel } from '@/components/studio/ModsPanel';
 import { useEditorMods } from '@/lib/useEditorMods';
 import type { ModWire } from '@/lib/modWire';
 import { NewModuleDialog } from '@/components/studio/NewModuleDialog';
+import { CommandPalette } from '@/components/studio/CommandPalette';
+import type { Command } from '@/lib/palette';
 import { emptyValue } from '@/components/Field';
 import type { MapTarget, Selection, ViewId, ViewportKind } from './selection';
 import { mapTargetFor, selectionForDiagnostic } from './selection';
@@ -43,6 +45,7 @@ export function Studio(props: {
   const [tablePath, setTablePath] = useState<string | null>(null);
   const [newDialog, setNewDialog] = useState(false);
   const [modsOpen, setModsOpen] = useState(false);
+  const [paletteOpen, setPaletteOpen] = useState(false);
   const mods = useEditorMods(props.mods);
 
   const { validation } = store;
@@ -129,7 +132,10 @@ export function Studio(props: {
     const onKey = (event: KeyboardEvent) => {
       if (!event.metaKey && !event.ctrlKey) return;
       const key = event.key.toLowerCase();
-      if (key === 's') {
+      if (key === 'k') {
+        event.preventDefault();
+        setPaletteOpen((open) => !open);
+      } else if (key === 's') {
         event.preventDefault();
         void saveToDisk();
       } else if (key === 'z' && !event.shiftKey) {
@@ -143,6 +149,30 @@ export function Studio(props: {
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
   }, [saveToDisk, store]);
+
+  /**
+   * The commands that are not simply somewhere to go.
+   *
+   * Memoised on what they close over, so the palette's own index is not
+   * rebuilt every time the studio re-renders behind it.
+   */
+  const paletteActions: readonly Command[] = useMemo(
+    () => [
+      { kind: 'action', id: 'act:save', label: 'Save to disk', hint: '⌘S', run: () => void saveToDisk() },
+      { kind: 'action', id: 'act:export', label: 'Export module', hint: 'download', run: () => {
+        exportModule(store.doc, store.filename);
+        store.markSaved();
+      } },
+      { kind: 'action', id: 'act:new', label: 'New module…', hint: 'from a template', run: () => setNewDialog(true) },
+      { kind: 'action', id: 'act:undo', label: 'Undo', hint: '⌘Z', run: () => store.undo() },
+      { kind: 'action', id: 'act:redo', label: 'Redo', hint: '⌘⇧Z', run: () => store.redo() },
+      { kind: 'action', id: 'act:start', label: 'Start & creation', hint: 'where play begins', run: () => openStart() },
+      { kind: 'action', id: 'act:mods', label: 'Mods', hint: `${props.mods.length} installed`, run: () => setModsOpen((open) => !open) },
+    ],
+    // The navigation helpers are redefined every render and close over nothing
+    // that changes, so they are deliberately not dependencies.
+    [store, saveToDisk, props.mods.length],
+  );
 
   const errorsByCollection = useMemo(() => {
     const out: Record<string, number> = {};
@@ -357,6 +387,20 @@ export function Studio(props: {
               if (patch.op === 'set') store.set(patch.path, patch.value);
               else store.remove(patch.path);
             }
+          }}
+        />
+      )}
+
+      {paletteOpen && (
+        <CommandPalette
+          doc={store.doc}
+          actions={paletteActions}
+          onClose={() => setPaletteOpen(false)}
+          onRun={(command) => {
+            if (command.kind === 'entry') openItem(command.collection, command.index);
+            else if (command.kind === 'collection') openCollection(command.path);
+            else if (command.kind === 'view') openView(command.view);
+            else command.run();
           }}
         />
       )}

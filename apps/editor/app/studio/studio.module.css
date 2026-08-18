@@ -577,3 +577,54 @@
 .bulkModes { display: flex; gap: 2px; }
 .bulkWarn { font-size: 11px; color: var(--warn, #d9a441); }
 .bulkClear { margin-left: auto; }
+
+/* — command palette ————————————————————————————————————————— */
+
+.paletteBackdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding-top: 12vh;
+  z-index: 60;
+}
+.palette {
+  width: min(640px, 92vw);
+  background: var(--panel, #14171d);
+  border: 1px solid var(--line, #23262f);
+  border-radius: 8px;
+  box-shadow: 0 18px 48px rgba(0, 0, 0, 0.5);
+  overflow: hidden;
+}
+.paletteInput {
+  width: 100%;
+  border: 0;
+  border-bottom: 1px solid var(--line, #23262f);
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  font-size: 15px;
+  padding: 14px 16px;
+  outline: none;
+}
+.paletteList { max-height: 52vh; overflow-y: auto; }
+.paletteRow {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  width: 100%;
+  text-align: left;
+  padding: 7px 16px;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+}
+.paletteRowActive { background: var(--panel-2, #1d212a); }
+.paletteGlyph { opacity: 0.45; width: 14px; }
+.paletteLabel { flex: 1; font-size: 13px; }
+.paletteHint { font-family: var(--mono); font-size: 10.5px; color: #5d6478; }
+.paletteEmpty { padding: 16px; margin: 0; color: #4e5468; font-size: 12px; font-style: italic; }
