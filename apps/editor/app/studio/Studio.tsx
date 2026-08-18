@@ -319,7 +319,7 @@ export function Studio(props: {
   const openView = (id: ViewId) => setViewportKind(id);
 
   const openDiagnostic = (diagnostic: Diagnostic) => {
-    const resolved = selectionForDiagnostic(diagnostic);
+    const resolved = selectionForDiagnostic(diagnostic, store.doc);
     if (resolved.kind === 'raw') {
       setViewportKind('rawjson');
       return;
@@ -468,6 +468,7 @@ export function Studio(props: {
         <Inspector
           store={store}
           selection={selection}
+          diagnostics={validationWithMods}
           modFields={modFields}
           authoring={props.authoring}
           onOpenItem={openItem}

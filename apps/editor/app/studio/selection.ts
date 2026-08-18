@@ -8,7 +8,8 @@
  */
 
 import type { Diagnostic } from '@dm/module';
-import { COLLECTIONS, SINGLETONS } from '@/lib/schema';
+import { SINGLETONS } from '@/lib/schema';
+import { splitEntryPath } from '@/lib/diagnosticPath';
 
 /** What the inspector is editing. */
 export type Selection =
@@ -69,15 +70,17 @@ export function mapTargetFor(path: string, entry: Record<string, unknown> | unde
  * entry so the fix happens in a form, not in raw JSON; anything unrecognized
  * falls back to the raw view, which can always show the offending line.
  */
-export function selectionForDiagnostic(diagnostic: Diagnostic): Selection | { kind: 'raw' } {
+export function selectionForDiagnostic(
+  diagnostic: Diagnostic,
+  /** Needed to turn an id into an index; a mod names entries by id. */
+  doc: unknown,
+): Selection | { kind: 'raw' } {
   const path = diagnostic.path;
   if (path === 'start' || path.startsWith('start.')) return { kind: 'start' };
 
-  for (const collection of COLLECTIONS) {
-    if (!path.startsWith(`${collection.path}.`)) continue;
-    const rest = path.slice(collection.path.length + 1);
-    const index = Number.parseInt(rest, 10);
-    if (Number.isInteger(index)) return { kind: 'item', path: collection.path, index };
+  const entry = splitEntryPath(doc, path);
+  if (entry && entry.index >= 0) {
+    return { kind: 'item', path: entry.collection, index: entry.index };
   }
 
   for (const singleton of SINGLETONS) {

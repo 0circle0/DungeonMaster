@@ -186,7 +186,14 @@ export class RuleContext {
     return this.out;
   }
 
-  /** Both spellings: the DSL's `flags.x` path, and a requirement's `flag`. */
+  /**
+   * Both spellings: the DSL's `flags.x` path, and a requirement's `flag`.
+   *
+   * What is recorded is *where the read is*, not what it reads. Recording the
+   * reference itself — `flags.vess_dead` — reads well in a report and is not a
+   * place: clicking it in the console found no entry and opened the raw
+   * document, which is the answer "somewhere in here".
+   */
   private collectFlags(): void {
     walkFor(this.doc, 'setFlag', (value) => {
       const flag = (value as Entry | null)?.['flag'];
@@ -196,7 +203,7 @@ export class RuleContext {
     walkFor(this.doc, 'ref', (value, path) => {
       if (typeof value === 'string' && value.startsWith('flags.')) {
         const flag = value.slice('flags.'.length);
-        if (!this.flagReads.has(flag)) this.flagReads.set(flag, value);
+        if (!this.flagReads.has(flag)) this.flagReads.set(flag, path);
         if (!negated(path)) this.positiveFlagReads.add(flag);
       }
     });

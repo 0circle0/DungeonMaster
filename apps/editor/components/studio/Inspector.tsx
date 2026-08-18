@@ -12,6 +12,7 @@ import { SINGLETONS, collectionAt, labelFor } from '@/lib/schema';
 import { singletonLabel } from '@/lib/labels';
 import { JsonBox } from '@/components/JsonBox';
 import { UsedBy } from '@/components/UsedBy';
+import type { Diagnostic } from '@dm/module';
 import { FieldDiagnostics, FieldOverrides, diagnosticsByPath } from '@/components/Field';
 import { planMove } from '@/lib/bulk';
 import { RenamePanel } from './RenamePanel';
@@ -46,6 +47,14 @@ interface InspectorProps {
   /** Fields the installed mods add to the current selection. */
   modFields: readonly OwnedField[];
   authoring: ProjectAuthoring;
+  /**
+   * Everything wrong with the module, mods and rules included.
+   *
+   * Not `store.validation`, which is the schema alone: a mod that says which
+   * field is wrong, and a rule that says which entry is, were both being told
+   * to the console and to nobody else.
+   */
+  diagnostics: { errors: readonly Diagnostic[]; warnings: readonly Diagnostic[] };
 }
 
 /**
@@ -65,8 +74,12 @@ export function Inspector(props: InspectorProps) {
    * included — a thin text pool is worth seeing beside the pool.
    */
   const problems = useMemo(
-    () => diagnosticsByPath([...props.store.validation.errors, ...props.store.validation.warnings]),
-    [props.store.validation],
+    () =>
+      diagnosticsByPath(
+        [...props.diagnostics.errors, ...props.diagnostics.warnings],
+        props.store.doc,
+      ),
+    [props.diagnostics, props.store.doc],
   );
 
   return (

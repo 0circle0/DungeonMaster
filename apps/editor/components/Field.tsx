@@ -21,6 +21,7 @@ import { fieldLabel } from '@/lib/labels';
 import { hasContent, rendersAsGroup } from '@/lib/fieldContent';
 import type { Path } from '@/lib/store';
 import { JsonBox } from './JsonBox';
+import { withEntryIndex } from '@/lib/diagnosticPath';
 
 /**
  * Height of one pinned header, and how many may stack.
@@ -63,14 +64,23 @@ export interface OverrideInfo {
 
 export const FieldOverrides = createContext<OverrideInfo | null>(null);
 
-/** Group diagnostics by path, for the context above. */
+/**
+ * Group diagnostics by path, for the context above.
+ *
+ * Two spellings have to be flattened into the one the form uses. The compiler
+ * writes `monsters[0]` where a form path is dotted, and a mod names an entry by
+ * id — `content.monsters.grave_hound` — where a form path counts. Without the
+ * second, a mod could say which field was wrong and the field would never know.
+ */
 export function diagnosticsByPath(
   diagnostics: readonly Diagnostic[],
+  /** The document, for turning an id into an index. */
+  doc?: unknown,
 ): ReadonlyMap<string, readonly Diagnostic[]> {
   const out = new Map<string, Diagnostic[]>();
   for (const diagnostic of diagnostics) {
-    // The compiler writes `monsters[0]`; form paths are dotted. One spelling.
-    const key = diagnostic.path.replace(/\[(\d+)\]/g, '.$1');
+    const dotted = diagnostic.path.replace(/\[(\d+)\]/g, '.$1');
+    const key = doc === undefined ? dotted : (withEntryIndex(doc, dotted) ?? dotted);
     const bucket = out.get(key);
     if (bucket) bucket.push(diagnostic);
     else out.set(key, [diagnostic]);
