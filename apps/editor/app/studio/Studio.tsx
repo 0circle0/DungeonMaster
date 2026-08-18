@@ -503,10 +503,16 @@ export function Studio(props: {
             required: entry.required ?? false,
           })) ?? []}
           onPatch={(patches) => {
-            for (const patch of patches) {
-              if (patch.op === 'set') store.set(patch.path, patch.value);
-              else store.remove(patch.path);
+            // Batched, because a mod command is one thing the author did and
+            // should be one press of undo. Applying them one at a time made a
+            // forty-patch transform need forty undos — which is the opposite
+            // of what both this panel and the mod ABI say happens.
+            const writes = patches.filter((patch) => patch.op === 'set');
+            const deletes = patches.filter((patch) => patch.op === 'delete');
+            if (writes.length > 0) {
+              store.setMany(writes.map((patch) => ({ path: patch.path, value: patch.value })));
             }
+            if (deletes.length > 0) store.removeMany(deletes.map((patch) => patch.path));
           }}
         />
       )}

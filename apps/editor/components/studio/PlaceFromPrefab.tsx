@@ -83,10 +83,32 @@ export function PlaceFromPrefab(props: {
     const index = list.length;
     const entryId = String(filled['id']);
 
-    // The entry first, so the link never names something that is not there.
-    // A save landing between the two is fine: the link is merged rather than
-    // written over, and the sidecar is recomputed from the document anyway.
-    props.store.set([...props.collection.split('.'), index], preview);
+    // The entry, and any prose bundle it names that does not exist yet.
+    //
+    // A template can say `descriptionKey: "{{id}}_desc"` — the settlement
+    // prefab does — which is the right convention and produced a dangling
+    // reference every time, because naming a bundle is not creating one. If a
+    // `description` parameter was collected, that is the words; without one the
+    // bundle is still made, so the module stays valid and the inspector's
+    // description panel has something to edit.
+    const edits: { path: (string | number)[]; value: unknown }[] = [
+      { path: [...props.collection.split('.'), index], value: preview },
+    ];
+    const named = typeof preview['descriptionKey'] === 'string' ? preview['descriptionKey'] : '';
+    const pools = (getAt(props.store.doc, ['narrative', 'textGrammar']) ?? []) as { id?: unknown }[];
+    if (named && !pools.some((pool) => String(pool['id']) === named)) {
+      const words = typeof filled['description'] === 'string' ? filled['description'].trim() : '';
+      edits.push({
+        path: ['narrative', 'textGrammar', pools.length],
+        value: {
+          id: named,
+          description: '',
+          variants: [{ text: words || `${String(filled['name'] ?? named)}.` }],
+        },
+      });
+    }
+    // One edit, so placing a thing is one press of undo.
+    props.store.setMany(edits);
     try {
       await fetch(`/api/modules/${props.moduleName}/instances`, {
         method: 'POST',

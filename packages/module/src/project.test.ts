@@ -175,6 +175,9 @@ describe('authored files are not derived files', () => {
     expect(isAuthoringFile('prefabs/inn.json')).toBe(true);
     expect(isAuthoringFile('prefabs/instances.json')).toBe(true);
     expect(isAuthoringFile('style.json')).toBe(true);
+    // Read by the editor, the CLI and the Rules panel, and once absent from
+    // this list — which made the first save of a project with one delete it.
+    expect(isAuthoringFile('contract.json')).toBe(true);
 
     expect(isAuthoringFile('shell.json')).toBe(false);
     expect(isAuthoringFile('content/monsters/bog_hound.json')).toBe(false);

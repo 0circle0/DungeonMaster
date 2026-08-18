@@ -22,6 +22,7 @@ import { DungeonFit } from './DungeonFit';
 import { Roads } from './Roads';
 import { DialoguePieces } from './DialoguePieces';
 import { QuestChain } from './QuestChain';
+import { Description } from './Description';
 import { derivePrefab } from '@dm/module';
 import type { ProjectAuthoring } from '@/lib/modulesOnDisk';
 import type { OwnedField } from '@/lib/modRuntime';
@@ -42,6 +43,13 @@ interface InspectorProps {
   modFields: readonly OwnedField[];
   authoring: ProjectAuthoring;
 }
+
+/**
+ * Collections whose entries carry a `descriptionKey` — the three that name a
+ * bundle of arrival prose. Dungeons and biomes carry a plain `description`
+ * string instead, which the generated form already handles.
+ */
+const DESCRIBED = new Set(['world.pointsOfInterest', 'world.areas', 'world.roomTemplates']);
 
 export function Inspector(props: InspectorProps) {
   /**
@@ -272,6 +280,14 @@ function InspectorPanel(props: InspectorProps) {
             {...(info.path === 'world.maps' ? { omit: new Set(['layers']) } : {})}
           />
         </FieldOverrides.Provider>
+        {DESCRIBED.has(info.path) && (
+          <Description
+            store={store}
+            collection={info.path}
+            index={selection.index}
+            entry={entry}
+          />
+        )}
         {info.path === 'world.areas' && <Roads store={store} areaIndex={selection.index} />}
         {info.path === 'narrative.quests' && (
           <QuestChain store={store} questIndex={selection.index} />

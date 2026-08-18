@@ -764,3 +764,11 @@
 .chainNote { color: var(--muted); font-size: 11px; font-style: normal; }
 .chainBad { color: var(--warn); font-size: 11px; font-style: normal; }
 .chainProblems { margin: 6px 0; padding-left: 18px; color: var(--warn); font-size: 12px; }
+
+/* Arrival prose, written where the place is. */
+.describe { border: 1px solid var(--line); border-radius: 6px; padding: 8px 10px; margin: 12px 0; }
+.describe textarea { width: 100%; margin: 4px 0; }
+.variantList { list-style: none; margin: 6px 0; padding: 0; }
+.variantList > li { display: flex; align-items: flex-start; gap: 6px; margin-bottom: 4px; }
+.variantList > li > textarea { flex: 1; }
+.variantShared { display: block; color: var(--muted); font-size: 12px; padding: 2px 0; border-bottom: 1px solid var(--line); }

@@ -197,8 +197,13 @@ export function joinProject(
  * them away because the document did not mention them would delete the work.
  *
  * `joinProject` never reads them: it reads exactly what the manifest names.
+ *
+ * `contract.json` belongs here for the same reason and was missing: it is read
+ * by the editor, by `npm run validate` and by the Rules panel, and none of that
+ * put it on this list — so the first save of a project that had one would have
+ * swept it away. Nothing had hit it only because no project has a contract yet.
  */
-export const AUTHORING_PATHS = ['prefabs/', 'style.json'] as const;
+export const AUTHORING_PATHS = ['prefabs/', 'style.json', 'contract.json'] as const;
 
 export function isAuthoringFile(path: string): boolean {
   return AUTHORING_PATHS.some((prefix) =>

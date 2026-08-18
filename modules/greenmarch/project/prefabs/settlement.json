@@ -4,11 +4,50 @@
   "description": "A place people live in. Size decides what it offers and how far word of it travels, so the two things that always move together cannot drift apart.",
   "collection": "world.pointsOfInterest",
   "params": [
-    { "key": "id", "kind": "id", "label": "Id", "required": true, "help": "Also names its description pool, as <id>_desc." },
-    { "key": "name", "kind": "string", "label": "Name", "required": true },
-    { "key": "area", "kind": "ref", "target": "world.areas", "label": "Area", "required": true },
-    { "key": "size", "kind": "enum", "label": "Size", "options": ["hamlet", "village", "town"], "default": "village" },
-    { "key": "faction", "kind": "ref", "target": "content.factions", "label": "Held by", "help": "Left out when nobody holds it." }
+    {
+      "key": "id",
+      "kind": "id",
+      "label": "Id",
+      "required": true,
+      "help": "Also names its description pool, as <id>_desc."
+    },
+    {
+      "key": "name",
+      "kind": "string",
+      "label": "Name",
+      "required": true
+    },
+    {
+      "key": "description",
+      "kind": "text",
+      "label": "What they see arriving",
+      "help": "Becomes the place's description bundle. Add more ways of saying it afterwards."
+    },
+    {
+      "key": "area",
+      "kind": "ref",
+      "target": "world.areas",
+      "label": "Area",
+      "required": true
+    },
+    {
+      "key": "size",
+      "kind": "enum",
+      "label": "Size",
+      "options": [
+        "hamlet",
+        "village",
+        "town"
+      ],
+      "default": "village"
+    },
+    {
+      "key": "faction",
+      "kind": "ref",
+      "target": "content.factions",
+      "label": "Held by",
+      "help": "Left out when nobody holds it."
+    }
   ],
   "template": {
     "id": "{{id}}",
@@ -16,8 +55,23 @@
     "area": "{{area}}",
     "kind": "settlement",
     "descriptionKey": "{{id}}_desc",
-    "rumourReach": { "@lookup": ["settlementSize", "{{size}}", "rumourReach"] },
-    "services": { "@lookup": ["settlementSize", "{{size}}", "services"] },
-    "controllingFaction": { "@when": "faction", "then": "{{faction}}" }
+    "rumourReach": {
+      "@lookup": [
+        "settlementSize",
+        "{{size}}",
+        "rumourReach"
+      ]
+    },
+    "services": {
+      "@lookup": [
+        "settlementSize",
+        "{{size}}",
+        "services"
+      ]
+    },
+    "controllingFaction": {
+      "@when": "faction",
+      "then": "{{faction}}"
+    }
   }
 }
