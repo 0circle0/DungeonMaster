@@ -31,6 +31,9 @@ export function Toolbar(props: {
   onLoadFile: (file: File) => void;
   onOpenStart: () => void;
   onOpenMods: () => void;
+  onOpenRules: () => void;
+  /** How many findings the enabled rules have, or null before they first run. */
+  ruleFindings: number | null;
   /** How many mods are installed, so the button can say. */
   modCount: number;
   /** Write back to `modules/<name>/`. Absent for a document loaded from a file. */
@@ -135,6 +138,16 @@ export function Toolbar(props: {
         title="Mods installed under mods/, and what this module pins."
       >
         Mods{props.modCount > 0 ? ` (${props.modCount})` : ''}
+      </button>
+
+      {/* Separate from the problems console on purpose: the console says what
+          is wrong, this says what the studio thinks "wrong" means. */}
+      <button
+        className="btn"
+        onClick={props.onOpenRules}
+        title="Contracts the schema cannot check — what each one is for, and a switch."
+      >
+        Rules{props.ruleFindings ? ` (${props.ruleFindings})` : ''}
       </button>
 
       <span className={styles.spacer} />

@@ -22,6 +22,8 @@ import { Viewport } from '@/components/studio/Viewport';
 import { Inspector } from '@/components/studio/Inspector';
 import { ProblemsConsole } from '@/components/studio/ProblemsConsole';
 import { ModsPanel } from '@/components/studio/ModsPanel';
+import { RulesPanel } from '@/components/studio/RulesPanel';
+import { useRules } from '@/lib/useRules';
 import { useEditorMods } from '@/lib/useEditorMods';
 import type { ModWire } from '@/lib/modWire';
 import type { ProjectAuthoring } from '@/lib/modulesOnDisk';
@@ -55,6 +57,8 @@ export function Studio(props: {
   const [tablePath, setTablePath] = useState<string | null>(null);
   const [newDialog, setNewDialog] = useState(false);
   const [modsOpen, setModsOpen] = useState(false);
+  const [rulesOpen, setRulesOpen] = useState(false);
+  const rules = useRules();
   const [paletteOpen, setPaletteOpen] = useState(false);
   const [placing, setPlacing] = useState<string | null>(null);
   const mods = useEditorMods(props.mods);
@@ -96,18 +100,22 @@ export function Studio(props: {
    * half the gain of the last three weeks.
    */
   const [semantic, setSemantic] = useState<readonly Diagnostic[]>([]);
+  /** False until the idle tier has run once, so the panel does not claim 0. */
+  const [semanticReady, setSemanticReady] = useState(false);
   useEffect(() => {
     if (!validation.ok) {
       // A document that does not compile has nothing coherent to check, and
       // the errors it already has are the ones worth reading first.
       setSemantic([]);
+      setSemanticReady(false);
       return;
     }
     const timer = setTimeout(() => {
-      setSemantic(runRules(store.doc, undefined, props.authoring.contract));
+      setSemantic(runRules(store.doc, rules.enabled, props.authoring.contract));
+      setSemanticReady(true);
     }, 600);
     return () => clearTimeout(timer);
-  }, [store.doc, validation.ok, props.authoring.contract]);
+  }, [store.doc, validation.ok, props.authoring.contract, rules.enabled]);
 
   const validationWithMods = useMemo(() => {
     const extra = [...modDiagnostics, ...semantic];
@@ -413,6 +421,8 @@ export function Studio(props: {
         onLoadFile={loadFile}
         onOpenStart={openStart}
         onOpenMods={() => setModsOpen((open) => !open)}
+        onOpenRules={() => setRulesOpen((open) => !open)}
+        ruleFindings={semanticReady ? semantic.length : null}
         modCount={props.mods.length}
         onSave={() => void saveToDisk()}
         canSave={canSave}
@@ -470,6 +480,16 @@ export function Studio(props: {
       </div>
 
       <ProblemsConsole validation={validationWithMods} onOpen={openDiagnostic} />
+
+      {rulesOpen && (
+        <RulesPanel
+          rules={rules}
+          findings={semantic}
+          contract={props.authoring.contract}
+          ready={semanticReady}
+          onOpen={openDiagnostic}
+        />
+      )}
 
       {modsOpen && (
         <ModsPanel

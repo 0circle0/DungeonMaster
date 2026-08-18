@@ -133,6 +133,16 @@ export class RuleContext {
   readonly ownedDialogues = new Set<string>();
 
   /**
+   * Flags whose every writer sits inside a dialogue no NPC owns.
+   *
+   * Distinct from a flag nothing writes, and worse: the writer is right there
+   * in the file, so `flag_never_set` is correctly silent and a search for the
+   * flag name finds it. What is missing is any way to reach the prose that
+   * runs it.
+   */
+  readonly strandedFlags = new Set<string>();
+
+  /**
    * Trigger ids, which a `reach` objective may name.
    *
    * On the context rather than in the rule because it means walking the whole
@@ -152,6 +162,7 @@ export class RuleContext {
     this.collectStartable();
     this.collectSpawnable();
     this.collectOwnedDialogues();
+    this.collectStranded();
     walkFor(doc, 'triggers', (value) => {
       for (const trigger of asList(value)) {
         if (typeof trigger['id'] === 'string') this.triggerIds.add(trigger['id']);
@@ -260,6 +271,30 @@ export class RuleContext {
         if (typeof value === 'string') this.spawnable.add(value);
       });
     }
+  }
+
+  /**
+   * One walk, sorting each write by whether it is inside an unreachable
+   * dialogue. A flag is only stranded if *nothing else* writes it, so the two
+   * sets are collected together and subtracted.
+   */
+  private collectStranded(): void {
+    const unowned = new Set<number>();
+    this.dialogues.forEach((dialogue, i) => {
+      if (!this.ownedDialogues.has(String(dialogue['id']))) unowned.add(i);
+    });
+    if (unowned.size === 0) return;
+
+    const stranded = new Set<string>();
+    const live = new Set<string>();
+    walkFor(this.doc, 'setFlag', (value, path) => {
+      const flag = (value as Entry | null)?.['flag'];
+      if (typeof flag !== 'string') return;
+      const inDialogue = /^narrative\.dialogues\.(\d+)\./.exec(path);
+      const isStranded = inDialogue !== null && unowned.has(Number(inDialogue[1]));
+      (isStranded ? stranded : live).add(flag);
+    });
+    for (const flag of stranded) if (!live.has(flag)) this.strandedFlags.add(flag);
   }
 
   private collectOwnedDialogues(): void {
@@ -392,6 +427,34 @@ export const flagsHaveWriters: Rule = {
   },
 };
 
+/**
+ * Deliberately separate from `flag_never_set` rather than folded into it. The
+ * two look alike in a report and are opposite to fix: one is a name nobody
+ * wrote, the other is prose nobody can open.
+ */
+export const flagWritersCanRun: Rule = {
+  code: 'flag_writer_unreachable',
+  title: 'The thing that sets a flag can be reached',
+  why:
+    'A flag whose only writer is inside a dialogue no NPC owns has a writer that never ' +
+    'runs. The flag is in the file, so searching for it finds it and every other check ' +
+    'stays quiet, and the objective waiting on it can never complete.',
+  severity: 'warning',
+  reads: ['narrative.quests', 'narrative.dialogues', 'content.npcs'],
+  run(ctx) {
+    for (const [flag, path] of ctx.flagReads) {
+      if (!ctx.strandedFlags.has(flag)) continue;
+      ctx.report(
+        this,
+        path,
+        `the flag ${JSON.stringify(flag)} is only ever set inside a dialogue no NPC owns, ` +
+          'so nothing can reach the thing that sets it',
+        'give that dialogue an owner, or set the flag somewhere reachable',
+      );
+    }
+  },
+};
+
 export const questsAreReachable: Rule = {
   code: 'quest_unreachable',
   title: 'Every quest can be arrived at',
@@ -471,6 +534,7 @@ export const dialoguesAreReachable: Rule = {
 export const DEFAULT_RULES: readonly Rule[] = [
   objectiveTargetsResolve,
   flagsHaveWriters,
+  flagWritersCanRun,
   questsAreReachable,
   killTargetsCanSpawn,
   dialoguesAreReachable,

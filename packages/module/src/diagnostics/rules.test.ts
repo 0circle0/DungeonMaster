@@ -18,6 +18,7 @@ import {
   DEFAULT_RULES,
   objectiveTargetsResolve,
   flagsHaveWriters,
+  flagWritersCanRun,
   questsAreReachable,
   killTargetsCanSpawn,
   dialoguesAreReachable,
@@ -89,6 +90,55 @@ describe('what the rules find in the modules that ship', () => {
     expect(gate({ without: { flags: [{ flag: 'ghost_flag' }] } })).toContain('always open');
   });
 
+});
+
+/**
+ * The pair that looks like one rule in a report and is two problems to fix.
+ *
+ * A flag nobody wrote is a typo. A flag written only inside a dialogue no NPC
+ * owns is worse: the writer is in the file, so searching for the name finds it,
+ * `flag_never_set` is correctly silent, and the objective still never
+ * completes. Splitting them is the whole point, so the test proves each stays
+ * quiet on the other's case.
+ */
+describe('a flag whose writer cannot be reached', () => {
+  /** Add a dialogue nobody owns that sets `ghost_flag`, and wait on it. */
+  const stranded = (own: boolean) =>
+    broken('greenmarch', (doc) => {
+      doc.narrative.dialogues.push({
+        id: 'orphan_talk',
+        start: 'greet',
+        nodes: [
+          {
+            id: 'greet',
+            says: [{ text: 'A voice from nowhere.' }],
+            options: [
+              { id: 'go', text: 'Leave.', effects: [{ setFlag: { flag: 'ghost_flag', value: true } }] },
+            ],
+          },
+        ],
+      });
+      if (own) doc.content.npcs[0].dialogue = 'orphan_talk';
+      doc.narrative.quests[0].requires = { flags: [{ flag: 'ghost_flag' }] };
+    });
+
+  it('fires where flag_never_set is correctly silent', () => {
+    const found = runRules(stranded(false)).filter((d) => d.message.includes('ghost_flag'));
+    expect(found.map((d) => d.code)).toEqual(['flag_writer_unreachable']);
+    // And on its own, so the finding is this rule and not an interaction.
+    expect(runRules(stranded(false), [flagWritersCanRun]).map((d) => d.code)).toEqual([
+      'flag_writer_unreachable',
+    ]);
+    expect(found[0]?.message).toContain('no NPC owns');
+  });
+
+  it('says nothing once somebody owns the dialogue', () => {
+    expect(runRules(stranded(true)).filter((d) => d.message.includes('ghost_flag'))).toEqual([]);
+  });
+
+  it('and the broken one compiles', () => {
+    expect(compileModule(stranded(false)).ok).toBe(true);
+  });
 });
 
 /**
