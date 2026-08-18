@@ -1,0 +1,486 @@
+/**
+ * Contracts the schema cannot see.
+ *
+ * `validate` proves a document is well-formed and that every declared reference
+ * resolves. That is most of what can go wrong and none of what goes wrong
+ * *quietly*. Three things in this format fail at play time rather than at load
+ * time, and a module carrying any of them passes every existing check:
+ *
+ * - **`objective.target` is a plain id, not a `ref()`** — because a `reach`
+ *   objective's target may be a point of interest, a map, a trigger or a gate,
+ *   and there is no single collection to name. So a `kill` objective naming a
+ *   monster that does not exist compiles clean and simply never completes.
+ * - **Flags are free strings.** `sisters_restord` and `sisters_restored` both
+ *   validate; the quest waiting on the second hangs forever.
+ * - **Per-quest validity is not reachability.** Every quest can be individually
+ *   fine while nothing offers half of them.
+ *
+ * The Python side has caught these for a long time — `modules/shared/dmkit/lint.py`
+ * is 900 lines of it — and the shape is worth taking rather than the code: a
+ * `Context` that indexes once and shares its derived sets, a `Contract` of the
+ * few facts a shared checker cannot know, and a caller-owned list of rules,
+ * because the order of the list is the order of the report.
+ *
+ * A rule is data. It carries what it reads, so the incremental validator can
+ * one day skip it, and why it exists, so the studio can explain itself instead
+ * of just complaining.
+ */
+
+import type { CollectionPath } from '../schema/module.js';
+import type { Diagnostic, Severity } from './lint.js';
+
+/**
+ * The few facts about a *particular* module that no shared checker can know.
+ *
+ * Passed as data rather than guessed. Aurendel's act gates are quest ids; a
+ * different world has different ones, or none.
+ */
+export interface Contract {
+  /** Quests that gate an act, so a chain waiting on one is contained. */
+  readonly actGateQuests?: readonly string[];
+  /** Factions that are deliberately inert, so silence about them is correct. */
+  readonly exemptFactions?: readonly string[];
+  /** Collections whose entries are reached without a static reference. */
+  readonly reachedIndirectly?: readonly string[];
+}
+
+export interface Rule {
+  readonly code: string;
+  readonly title: string;
+  /** Why this matters, in a sentence an author can act on. */
+  readonly why: string;
+  readonly severity: Severity;
+  /** What it reads. Metadata for scoping, and documentation either way. */
+  readonly reads: readonly CollectionPath[];
+  run(ctx: RuleContext): void;
+}
+
+type Entry = Record<string, unknown>;
+
+/** What each objective kind's `target` should resolve against. */
+const TARGET_COLLECTION: Readonly<Record<string, readonly string[]>> = {
+  kill: ['content.monsters'],
+  collect: ['content.items'],
+  talk: ['content.npcs'],
+  // A `reach` target may be any of these, which is exactly why the schema
+  // cannot mark it as a reference.
+  reach: ['world.pointsOfInterest', 'world.areas', 'world.dungeons', 'world.gates'],
+  custom: [],
+};
+
+function asList(value: unknown): Entry[] {
+  return Array.isArray(value) ? (value as Entry[]) : [];
+}
+
+function collectionOf(doc: Entry, path: string): Entry[] {
+  const [section, name] = path.split('.') as [string, string];
+  const container = doc[section];
+  if (typeof container !== 'object' || container === null) return [];
+  return asList((container as Entry)[name]);
+}
+
+function idsOf(doc: Entry, path: string): Set<string> {
+  return new Set(collectionOf(doc, path).map((entry) => String(entry['id'] ?? '')));
+}
+
+/** Walk anything, calling back for each object that carries `key`. */
+function walkFor(node: unknown, key: string, seen: (value: unknown, path: string) => void, path = '', depth = 0): void {
+  if (depth > 40 || typeof node !== 'object' || node === null) return;
+  if (Array.isArray(node)) {
+    node.forEach((item, i) => walkFor(item, key, seen, `${path}.${i}`, depth + 1));
+    return;
+  }
+  for (const [k, child] of Object.entries(node as Entry)) {
+    const childPath = path ? `${path}.${k}` : k;
+    if (k === key) seen(child, childPath);
+    walkFor(child, key, seen, childPath, depth + 1);
+  }
+}
+
+/**
+ * The document, indexed once, with the derived sets every rule wants.
+ *
+ * Built before any rule runs, because half of them ask the same questions —
+ * which flags are written, which quests can be started — and computing that per
+ * rule would be both slower and a place for two rules to disagree.
+ */
+export class RuleContext {
+  readonly doc: Entry;
+  readonly contract: Contract;
+  private readonly out: Diagnostic[] = [];
+
+  readonly quests: readonly Entry[];
+  readonly npcs: readonly Entry[];
+  readonly dialogues: readonly Entry[];
+
+  /** Flags something writes, and flags something waits on. */
+  readonly flagWrites = new Set<string>();
+  readonly flagReads = new Map<string, string>();
+
+  /** Quests a player can actually arrive at, transitively through `unlocks`. */
+  readonly startable = new Set<string>();
+
+  /** Monsters some referenced encounter table can produce. */
+  readonly spawnable = new Set<string>();
+
+  /** Dialogues something names. `talk` is the only way into one. */
+  readonly ownedDialogues = new Set<string>();
+
+  constructor(doc: Entry, contract: Contract = {}) {
+    this.doc = doc;
+    this.contract = contract;
+    this.quests = collectionOf(doc, 'narrative.quests');
+    this.npcs = collectionOf(doc, 'content.npcs');
+    this.dialogues = collectionOf(doc, 'narrative.dialogues');
+
+    this.collectFlags();
+    this.collectStartable();
+    this.collectSpawnable();
+    this.collectOwnedDialogues();
+  }
+
+  report(rule: Rule, path: string, message: string, hint: string | null = null): void {
+    this.out.push({
+      severity: rule.severity,
+      code: rule.code,
+      path,
+      message,
+      hint,
+      position: null,
+      excerpt: null,
+    });
+  }
+
+  diagnostics(): readonly Diagnostic[] {
+    return this.out;
+  }
+
+  /** Both spellings: the DSL's `flags.x` path, and a requirement's `flag`. */
+  private collectFlags(): void {
+    walkFor(this.doc, 'setFlag', (value) => {
+      const flag = (value as Entry | null)?.['flag'];
+      if (typeof flag === 'string') this.flagWrites.add(flag);
+    });
+
+    walkFor(this.doc, 'ref', (value) => {
+      if (typeof value === 'string' && value.startsWith('flags.')) {
+        const flag = value.slice('flags.'.length);
+        if (!this.flagReads.has(flag)) this.flagReads.set(flag, value);
+      }
+    });
+    walkFor(this.doc, 'flags', (value, path) => {
+      for (const clause of asList(value)) {
+        const flag = clause['flag'];
+        if (typeof flag === 'string' && !this.flagReads.has(flag)) this.flagReads.set(flag, path);
+      }
+    });
+  }
+
+  /**
+   * A quest is startable if a player can be offered it, or if something that
+   * is startable unlocks it. Five ways in, mirroring the engine.
+   */
+  private collectStartable(): void {
+    const byId = new Map(this.quests.map((quest) => [String(quest['id']), quest]));
+
+    const emitted = new Set<string>();
+    walkFor(this.doc, 'emit', (value) => {
+      const emit = value as Entry | null;
+      if (emit?.['event'] !== 'startQuest') return;
+      const quest = (emit['data'] as Entry | undefined)?.['quest'];
+      if (typeof quest === 'string') emitted.add(quest);
+    });
+
+    const offered = new Set<string>();
+    for (const npc of this.npcs) {
+      for (const quest of asList(npc['offersQuests'])) offered.add(String(quest));
+    }
+
+    const frontier: string[] = [];
+    for (const quest of this.quests) {
+      const id = String(quest['id']);
+      if (quest['autoStart'] === true || quest['giver'] || emitted.has(id) || offered.has(id)) {
+        frontier.push(id);
+      }
+    }
+
+    // Transitive closure over `unlocks`, which is how a chain is reached.
+    while (frontier.length > 0) {
+      const id = frontier.pop()!;
+      if (this.startable.has(id)) continue;
+      this.startable.add(id);
+      for (const next of asList(byId.get(id)?.['unlocks'])) {
+        if (typeof next === 'string' && !this.startable.has(next)) frontier.push(next);
+      }
+    }
+  }
+
+  /**
+   * A monster is spawnable only through a table something actually draws from.
+   *
+   * A table nothing references is invisible to the world, so a `kill` objective
+   * naming a creature that only appears there can never be completed — and a
+   * play harness that fakes kills cannot see that either.
+   */
+  private collectSpawnable(): void {
+    const referenced = new Set<string>();
+    walkFor(this.doc, 'encounterTables', (value) => {
+      for (const table of asList(value)) if (typeof table === 'string') referenced.add(table);
+    });
+    walkFor(this.doc, 'bossTable', (value) => {
+      if (typeof value === 'string') referenced.add(value);
+    });
+
+    for (const table of collectionOf(this.doc, 'world.encounterTables')) {
+      if (!referenced.has(String(table['id']))) continue;
+      walkFor(table, 'monster', (value) => {
+        if (typeof value === 'string') this.spawnable.add(value);
+      });
+    }
+  }
+
+  private collectOwnedDialogues(): void {
+    walkFor(this.doc, 'dialogue', (value) => {
+      if (typeof value === 'string') this.ownedDialogues.add(value);
+    });
+  }
+
+  ids(path: string): Set<string> {
+    return idsOf(this.doc, path);
+  }
+
+  /** Every objective in a quest, stages included, with where it lives. */
+  objectivesOf(quest: Entry, questIndex: number): { objective: Entry; path: string }[] {
+    const out: { objective: Entry; path: string }[] = [];
+    asList(quest['objectives']).forEach((objective, i) => {
+      out.push({ objective, path: `narrative.quests.${questIndex}.objectives.${i}` });
+    });
+    asList(quest['stages']).forEach((stage, s) => {
+      asList(stage['objectives']).forEach((objective, i) => {
+        out.push({ objective, path: `narrative.quests.${questIndex}.stages.${s}.objectives.${i}` });
+      });
+    });
+    return out;
+  }
+}
+
+// ---------------------------------------------------------------------------
+// The rules
+// ---------------------------------------------------------------------------
+
+export const objectiveTargetsResolve: Rule = {
+  code: 'objective_target_missing',
+  title: 'Objective targets resolve',
+  why:
+    'An objective target is a plain id rather than a reference, because a `reach` target ' +
+    'may be a place, a map, a trigger or a gate. Nothing checks it, so a typo compiles ' +
+    'cleanly and the objective simply never completes.',
+  severity: 'warning',
+  reads: ['narrative.quests', 'content.monsters', 'content.items', 'content.npcs'],
+  run(ctx) {
+    const cache = new Map<string, Set<string>>();
+    const known = (path: string): Set<string> => {
+      let ids = cache.get(path);
+      if (!ids) {
+        ids = ctx.ids(path);
+        cache.set(path, ids);
+      }
+      return ids;
+    };
+
+    ctx.quests.forEach((quest, questIndex) => {
+      for (const { objective, path } of ctx.objectivesOf(quest, questIndex)) {
+        const kind = String(objective['kind'] ?? 'custom');
+        const target = objective['target'];
+        const collections = TARGET_COLLECTION[kind];
+        if (!collections || collections.length === 0 || typeof target !== 'string') continue;
+
+        // `reach` may name a trigger, which lives inside a point of interest
+        // rather than in a collection of its own.
+        const triggers = new Set<string>();
+        if (kind === 'reach') {
+          walkFor(ctx.doc, 'triggers', (value) => {
+            for (const trigger of asList(value)) {
+              if (typeof trigger['id'] === 'string') triggers.add(trigger['id']);
+            }
+          });
+        }
+
+        const found =
+          collections.some((collection) => known(collection).has(target)) || triggers.has(target);
+        if (found) continue;
+
+        ctx.report(
+          this,
+          `${path}.target`,
+          `${JSON.stringify(target)} is not ${
+            kind === 'reach' ? 'a place, dungeon, gate or trigger' : `in ${collections.join(' or ')}`
+          }, so this objective can never complete`,
+          'Objective targets are not checked by the schema — the id has to be right by hand.',
+        );
+      }
+    });
+  },
+};
+
+/**
+ * Flags the *engine* writes, which no module will ever be seen setting.
+ *
+ * The engine keeps its own records in the same flag space — a trigger that has
+ * fired, a place that has been found, a door that has been opened — under
+ * computed names. Content is allowed to read them, and a rule that did not know
+ * this would call every one of them a broken flag, which is how a checker
+ * teaches people to ignore it.
+ *
+ * Prefixes rather than names, because the second half is an id. Kept honest by
+ * `rules.test.ts`, which greps the engine for each one.
+ */
+export const ENGINE_FLAG_PREFIXES = [
+  'trigger:',
+  'found:',
+  'gate:',
+  'spoils:',
+  'unique:',
+  'detect:',
+  'ending:',
+  'concentration:',
+  'seen:',
+] as const;
+
+function engineWritten(flag: string): boolean {
+  return ENGINE_FLAG_PREFIXES.some((prefix) => flag.startsWith(prefix));
+}
+
+export const flagsHaveWriters: Rule = {
+  code: 'flag_never_set',
+  title: 'Every flag waited on is set by something',
+  why:
+    'Flags are free strings, so a misspelling validates perfectly and the thing waiting ' +
+    'on it waits forever.',
+  severity: 'warning',
+  reads: ['narrative.quests', 'narrative.dialogues', 'world.pointsOfInterest'],
+  run(ctx) {
+    for (const [flag, path] of ctx.flagReads) {
+      if (ctx.flagWrites.has(flag)) continue;
+      if (engineWritten(flag)) continue;
+      ctx.report(
+        this,
+        path,
+        `nothing ever sets the flag ${JSON.stringify(flag)}, so whatever waits on it never comes true`,
+        nearest(flag, [...ctx.flagWrites]),
+      );
+    }
+  },
+};
+
+export const questsAreReachable: Rule = {
+  code: 'quest_unreachable',
+  title: 'Every quest can be arrived at',
+  why:
+    'A quest with no giver, not offered by anyone, not auto-starting, not unlocked and not ' +
+    'started by any effect is content nobody can reach — which each quest being individually ' +
+    'valid does nothing to catch.',
+  severity: 'warning',
+  reads: ['narrative.quests', 'content.npcs'],
+  run(ctx) {
+    ctx.quests.forEach((quest, index) => {
+      const id = String(quest['id']);
+      if (ctx.startable.has(id)) return;
+      ctx.report(
+        this,
+        `narrative.quests.${index}`,
+        `nothing can start ${JSON.stringify(id)}: no giver offers it, nothing unlocks it, and no effect emits it`,
+        'A giver is a label; what puts the job in front of a player is that NPC’s offersQuests.',
+      );
+    });
+  },
+};
+
+export const killTargetsCanSpawn: Rule = {
+  code: 'kill_target_never_spawns',
+  title: 'Kill targets can appear',
+  why:
+    'A creature that exists in the content but that no referenced encounter table produces ' +
+    'is never on any map, so the objective naming it cannot be completed by playing.',
+  severity: 'warning',
+  reads: ['narrative.quests', 'content.monsters', 'world.encounterTables'],
+  run(ctx) {
+    ctx.quests.forEach((quest, questIndex) => {
+      for (const { objective, path } of ctx.objectivesOf(quest, questIndex)) {
+        if (objective['kind'] !== 'kill') continue;
+        const target = objective['target'];
+        if (typeof target !== 'string') continue;
+        // A target that does not exist at all is the other rule's business.
+        if (!ctx.ids('content.monsters').has(target)) continue;
+        if (ctx.spawnable.has(target)) continue;
+
+        ctx.report(
+          this,
+          `${path}.target`,
+          `${JSON.stringify(target)} exists but no encounter table anything draws from can produce it`,
+          'A table nothing references is invisible to the world.',
+        );
+      }
+    });
+  },
+};
+
+export const dialoguesAreReachable: Rule = {
+  code: 'dialogue_unowned',
+  title: 'Every dialogue can be opened',
+  why: 'Talking is the only way into a dialogue, so one nothing names is prose nobody reads.',
+  severity: 'warning',
+  reads: ['narrative.dialogues', 'content.npcs'],
+  run(ctx) {
+    ctx.dialogues.forEach((dialogue, index) => {
+      const id = String(dialogue['id']);
+      if (ctx.ownedDialogues.has(id)) return;
+      ctx.report(
+        this,
+        `narrative.dialogues.${index}`,
+        `nothing opens ${JSON.stringify(id)} — no npc names it`,
+        'Give it to an npc, or delete it.',
+      );
+    });
+  },
+};
+
+/**
+ * The order is the report. Callers own the list, exactly as `dmkit/lint.py`
+ * ships none: a module with no quests wants a different set from Aurendel.
+ */
+export const DEFAULT_RULES: readonly Rule[] = [
+  objectiveTargetsResolve,
+  flagsHaveWriters,
+  questsAreReachable,
+  killTargetsCanSpawn,
+  dialoguesAreReachable,
+];
+
+export function runRules(
+  doc: Entry,
+  rules: readonly Rule[] = DEFAULT_RULES,
+  contract: Contract = {},
+): readonly Diagnostic[] {
+  const ctx = new RuleContext(doc, contract);
+  for (const rule of rules) rule.run(ctx);
+  return ctx.diagnostics();
+}
+
+/** "did you mean" for a flag, which is the mistake this catches most often. */
+function nearest(want: string, candidates: readonly string[]): string | null {
+  let best: string | null = null;
+  let bestScore = Infinity;
+  for (const candidate of candidates) {
+    if (Math.abs(candidate.length - want.length) > 3) continue;
+    let differences = 0;
+    for (let i = 0; i < Math.max(candidate.length, want.length); i += 1) {
+      if (candidate[i] !== want[i]) differences += 1;
+    }
+    if (differences < bestScore) {
+      bestScore = differences;
+      best = candidate;
+    }
+  }
+  return best && bestScore <= 3 ? `did you mean ${JSON.stringify(best)}?` : null;
+}

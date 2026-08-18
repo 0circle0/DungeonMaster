@@ -43,6 +43,8 @@ export type { FanoutPlan, InstanceChange, FieldChange } from './prefabFanout.js'
 export type { ProjectManifest, SplitProject, JoinIssue } from './project.js';
 
 export * from './diagnostics/index.js';
+export { runRules, RuleContext, DEFAULT_RULES } from './diagnostics/rules.js';
+export type { Rule, Contract } from './diagnostics/rules.js';
 export * from './analysis/index.js';
 
 // Shared field primitives. Exported so the mod format reuses the same id
