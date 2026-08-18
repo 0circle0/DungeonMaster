@@ -35,6 +35,9 @@ export type {
   StyleTables,
   ExpandIssue,
 } from './prefab.js';
+
+export { planFanout, fanoutEdits } from './prefabFanout.js';
+export type { FanoutPlan, InstanceChange, FieldChange } from './prefabFanout.js';
 export type { ProjectManifest, SplitProject, JoinIssue } from './project.js';
 
 export * from './diagnostics/index.js';
