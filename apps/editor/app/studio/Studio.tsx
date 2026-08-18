@@ -10,7 +10,7 @@
  * at, the way selecting an asset in a game engine doesn't close the scene.
  */
 
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useModuleStore, exportModule, getAt } from '@/lib/store';
 import type { ModuleDoc } from '@/lib/store';
 import { collectionAt } from '@/lib/schema';
@@ -25,6 +25,8 @@ import { ModsPanel } from '@/components/studio/ModsPanel';
 import { useEditorMods } from '@/lib/useEditorMods';
 import type { ModWire } from '@/lib/modWire';
 import type { ProjectAuthoring } from '@/lib/modulesOnDisk';
+import type { Draft } from '@/lib/drafts';
+import { useAutosave } from '@/lib/useAutosave';
 import { NewModuleDialog } from '@/components/studio/NewModuleDialog';
 import { CommandPalette } from '@/components/studio/CommandPalette';
 import type { Command } from '@/lib/palette';
@@ -40,6 +42,8 @@ export function Studio(props: {
   mods: readonly ModWire[];
   /** Prefabs, style tables and instance links, when the module is a project. */
   authoring: ProjectAuthoring;
+  /** Work that did not validate last session, kept rather than lost. */
+  draft: Draft | null;
 }) {
   const store = useModuleStore(props.initialDoc, props.initialName);
   const [selection, setSelection] = useState<Selection>({ kind: 'start' });
@@ -78,13 +82,6 @@ export function Studio(props: {
     };
   }, [validation, modDiagnostics]);
 
-  // Leaving the page with unsaved edits deserves one browser prompt.
-  useEffect(() => {
-    if (!store.dirty) return;
-    const guard = (event: BeforeUnloadEvent) => event.preventDefault();
-    window.addEventListener('beforeunload', guard);
-    return () => window.removeEventListener('beforeunload', guard);
-  }, [store.dirty]);
 
   /**
    * Saving back to `modules/<name>/`.
@@ -95,44 +92,35 @@ export function Studio(props: {
    */
   const moduleName = store.filename.replace(/\.module\.json$|\.json$/, '');
   const canSave = props.templates.includes(moduleName);
-  const [save, setSave] = useState<{ state: 'idle' | 'saving' | 'ok' | 'error'; note: string }>({
-    state: 'idle',
-    note: '',
-  });
 
-  const saveToDisk = useCallback(async () => {
-    if (!canSave) return;
-    setSave({ state: 'saving', note: '' });
-    try {
-      const response = await fetch(`/api/modules/${moduleName}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(store.doc),
-      });
-      const body = (await response.json()) as {
-        maps?: string[];
-        removed?: string[];
-        project?: { written: number; unchanged: number; removed: number } | null;
-        error?: string;
-        issues?: string[];
-      };
-      if (!response.ok) {
-        setSave({ state: 'error', note: [body.error, ...(body.issues ?? [])].filter(Boolean).join('; ') });
-        return;
-      }
-      store.markSaved();
-      const bits = [`saved modules/${moduleName}`];
-      // What a project save touched, because "wrote 3 files" and "wrote 2,760"
-      // are very different things to have just done to a repository.
-      if (body.project) bits.push(`${body.project.written} file(s)`);
-      if (body.project?.removed) bits.push(`removed ${body.project.removed}`);
-      if (body.maps?.length) bits.push(`${body.maps.length} map(s)`);
-      if (body.removed?.length) bits.push(`removed ${body.removed.length} map(s)`);
-      setSave({ state: 'ok', note: bits.join(' · ') });
-    } catch (err) {
-      setSave({ state: 'error', note: (err as Error).message });
-    }
-  }, [canSave, moduleName, store]);
+  /**
+   * Work from a previous session that never validated.
+   *
+   * Offered rather than applied. The document on disk is the last thing that
+   * *worked*, and quietly replacing it with a half-finished edit would take a
+   * choice away at the moment an author has least context — they have just
+   * opened the module and do not yet know what is in either version.
+   */
+  const [draft, setDraft] = useState(props.draft);
+
+  const autosave = useAutosave(store, moduleName, canSave);
+  const saveToDisk = autosave.flush;
+
+  /**
+   * The "are you sure" prompt, now only when it is true.
+   *
+   * It used to fire on any unsaved edit, which was right when `⌘S` was the only
+   * way to disk. Autosave writes as you type and a beacon catches whatever is
+   * still in the idle window, so a dirty document is not lost work — it is work
+   * that is about to be written. Prompting anyway trains people to dismiss the
+   * one case that matters: a save that actually failed.
+   */
+  useEffect(() => {
+    if (autosave.state !== 'error') return;
+    const guard = (event: BeforeUnloadEvent) => event.preventDefault();
+    window.addEventListener('beforeunload', guard);
+    return () => window.removeEventListener('beforeunload', guard);
+  }, [autosave.state]);
 
   // The three shortcuts the editor had none of. Undo was a button only, which
   // on a tool people type into all day is the wrong shape.
@@ -352,8 +340,8 @@ export function Studio(props: {
         onSave={() => void saveToDisk()}
         canSave={canSave}
         moduleName={moduleName}
-        saveState={save.state}
-        saveNote={save.note}
+        saveState={autosave.state}
+        saveNote={autosave.note}
       />
 
       <div className={styles.main}>
@@ -419,6 +407,33 @@ export function Studio(props: {
             }
           }}
         />
+      )}
+
+      {draft && (
+        <div className={styles.recovery}>
+          <span>
+            Unsaved work from {new Date(draft.savedAt).toLocaleString()} — it had errors, so it was
+            kept here rather than written to the module.
+          </span>
+          <button
+            className="btn tiny primary"
+            onClick={() => {
+              store.replace(draft.doc);
+              setDraft(null);
+            }}
+          >
+            Restore it
+          </button>
+          <button
+            className="btn tiny"
+            onClick={() => {
+              void fetch(`/api/modules/${moduleName}/draft`, { method: 'DELETE' });
+              setDraft(null);
+            }}
+          >
+            Discard
+          </button>
+        </div>
       )}
 
       {paletteOpen && (

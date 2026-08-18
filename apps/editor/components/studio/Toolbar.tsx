@@ -7,6 +7,19 @@ import styles from '@/app/studio/studio.module.css';
 const START_KIND_LABEL = { poi: 'POI', area: 'area', dungeon: 'dungeon' } as const;
 
 /**
+ * What autosave last did. `draft` is the one worth reading: the work is kept,
+ * but the module on disk is still the last valid one.
+ */
+const AUTOSAVE_LABEL: Record<string, string> = {
+  idle: 'Saved',
+  pending: 'Saving…',
+  saving: 'Saving…',
+  saved: 'Saved',
+  draft: 'Draft',
+  error: 'Not saved',
+};
+
+/**
  * Module-level operations plus the two facts worth keeping permanently in
  * view: whether the module validates, and where play begins. The start chip
  * exists because a missing start location is the one error that otherwise
@@ -24,7 +37,7 @@ export function Toolbar(props: {
   onSave: () => void;
   canSave: boolean;
   moduleName: string;
-  saveState: 'idle' | 'saving' | 'ok' | 'error';
+  saveState: 'idle' | 'pending' | 'saving' | 'saved' | 'draft' | 'error';
   saveNote: string;
 }) {
   const { store } = props;
@@ -47,17 +60,19 @@ export function Toolbar(props: {
         <button className="btn" onClick={() => fileInput.current?.click()}>
           Load…
         </button>
+        {/* Not a Save button. The studio writes as you type; this only says
+            what it last did, and gives ⌘S somewhere to point. */}
         <button
-          className="btn primary"
-          disabled={!props.canSave || props.saveState === 'saving'}
+          className="btn"
+          disabled={!props.canSave}
           title={
             props.canSave
-              ? `Write modules/${props.moduleName}/ (⌘S)`
-              : 'Save writes back to a module in this repository; this document did not come from one'
+              ? `Autosaving to modules/${props.moduleName}/ — ⌘S writes now`
+              : 'Autosave writes back to a module in this repository; this document did not come from one'
           }
           onClick={props.onSave}
         >
-          {props.saveState === 'saving' ? 'Saving…' : 'Save'}
+          {AUTOSAVE_LABEL[props.saveState]}
         </button>
         <button
           className="btn"

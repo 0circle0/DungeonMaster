@@ -10,3 +10,6 @@ saves/
 .DS_Store
 *.pyc
 __pycache__/
+
+# Studio drafts: unsaved work, recovered on reopen. Never content.
+.studio/

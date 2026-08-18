@@ -7,7 +7,20 @@ import type { Metadata } from 'next';
 import { listModuleNames, readModuleByName } from '@/lib/modulesOnDisk';
 import { readInstalledMods } from '@/lib/modsOnDisk';
 import { readAuthoring, NO_AUTHORING } from '@/lib/modulesOnDisk';
+import { readDraft } from '@/lib/drafts';
 import { Studio } from './studio/Studio';
+
+/**
+ * Rendered per request, not once at build.
+ *
+ * This page reads `modules/` from disk — the starter document, the project's
+ * prefabs, and any recovered draft. Next prerenders a page like this by
+ * default, which bakes whatever was on disk when the editor was *built* and
+ * then serves it forever: edits made in one session would be invisible in the
+ * next, and a recovered draft could never appear at all, because it did not
+ * exist when the page was rendered.
+ */
+export const dynamic = 'force-dynamic';
 
 export const metadata: Metadata = {
   title: 'DungeonMaster — studio',
@@ -26,6 +39,7 @@ export default function Page() {
       templates={names}
       mods={readInstalledMods()}
       authoring={starter ? readAuthoring(starter) : NO_AUTHORING}
+      draft={starter ? readDraft(starter) : null}
     />
   );
 }
