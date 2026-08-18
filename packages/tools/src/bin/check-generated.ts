@@ -22,7 +22,7 @@
  */
 
 import { execFileSync } from 'node:child_process';
-import { readFileSync, writeFileSync, readdirSync, statSync, existsSync } from 'node:fs';
+import { readFileSync, writeFileSync, readdirSync, statSync, existsSync, rmSync } from 'node:fs';
 import { join, relative, resolve } from 'node:path';
 
 const root = resolve(process.cwd());
@@ -67,6 +67,16 @@ function main(): number {
     return 0;
   }
 
+  // Stale bytecode makes this lie in both directions.
+  //
+  // A `__pycache__` left by an earlier run can outlive the source it was
+  // compiled from — which turned a clean tree into 504 points of interest that
+  // had all apparently moved one tile, from a generator whose source was
+  // byte-for-byte what git had. The same mechanism can hide a real change just
+  // as easily, and a check that can silently pass is worse than none. So: no
+  // caches on the way in, and none written on the way out.
+  clearBytecode(join(root, 'modules'));
+
   const before = snapshot();
   process.stdout.write(`${before.size} generated files\n`);
 
@@ -76,7 +86,11 @@ function main(): number {
       return 1;
     }
     try {
-      execFileSync('python3', [script], { cwd: root, stdio: 'pipe' });
+      execFileSync('python3', ['-B', script], {
+        cwd: root,
+        stdio: 'pipe',
+        env: { ...process.env, PYTHONDONTWRITEBYTECODE: '1' },
+      });
     } catch (err) {
       const detail = err instanceof Error && 'stderr' in err ? String((err as { stderr: Buffer }).stderr) : '';
       process.stderr.write(`✗ ${script} failed\n${detail}\n`);
@@ -113,6 +127,17 @@ function main(): number {
       'generators no longer describe them.\n',
   );
   return 1;
+}
+
+/** Every `__pycache__` under a directory, gone. */
+function clearBytecode(dir: string): void {
+  if (!existsSync(dir)) return;
+  for (const entry of readdirSync(dir)) {
+    const path = join(dir, entry);
+    if (!statSync(path).isDirectory()) continue;
+    if (entry === '__pycache__') rmSync(path, { recursive: true, force: true });
+    else clearBytecode(path);
+  }
 }
 
 function restore(before: ReadonlyMap<string, string>): void {
