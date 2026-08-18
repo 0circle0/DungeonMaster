@@ -70,6 +70,23 @@ export function readAssembledModule(input: string): AssembledModule {
   const path = resolveModulePath(input);
   const dir = dirname(path);
   const doc = readJson(path);
+  const { doc: assembled, issues } = assembleMapFolders(doc, dir);
+  return { doc: assembled, dir, issues };
+}
+
+/**
+ * Inline a module directory's `maps/<id>/` folders into a document it is given.
+ *
+ * Separate from reading the file because a document does not always come from
+ * one: `bin/project.ts` builds `module.json` out of `project/` and has to
+ * validate the *assembled* form before writing the raw one, or every module
+ * that keeps its maps in folders fails its own build on references assembly
+ * would have resolved.
+ */
+export function assembleMapFolders(
+  doc: Record<string, unknown>,
+  dir: string,
+): { doc: Record<string, unknown>; issues: MapFileIssue[] } {
   const issues: MapFileIssue[] = [];
 
   const mapsDir = join(dir, 'maps');
@@ -124,7 +141,7 @@ export function readAssembledModule(input: string): AssembledModule {
     }
   }
 
-  if (entries.length === 0) return { doc, dir, issues };
+  if (entries.length === 0) return { doc, issues };
 
   const world =
     doc['world'] !== null && typeof doc['world'] === 'object' && !Array.isArray(doc['world'])
@@ -132,7 +149,7 @@ export function readAssembledModule(input: string): AssembledModule {
       : {};
   const inline = Array.isArray(world['maps']) ? (world['maps'] as unknown[]) : [];
   const merged = { ...doc, world: { ...world, maps: [...inline, ...entries] } };
-  return { doc: sortWorldMaps(merged), dir, issues };
+  return { doc: sortWorldMaps(merged), issues };
 }
 
 export function formatMapIssues(issues: readonly MapFileIssue[]): string {

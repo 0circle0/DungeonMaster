@@ -16,6 +16,7 @@
     "test:watch": "vitest",
     "typecheck": "tsc -p tsconfig.json && tsc -p packages/core/tsconfig.json && tsc -p packages/module/tsconfig.json && tsc -p packages/engine/tsconfig.json && tsc -p packages/play/tsconfig.json && tsc -p packages/tools/tsconfig.json && tsc -p packages/engine/tsconfig.isomorphic.json && tsc -p packages/play/tsconfig.isomorphic.json && tsc -p packages/mods/tsconfig.isomorphic.json && tsc -p apps/editor/tsconfig.json && tsc -p apps/play/tsconfig.json",
     "validate": "tsx packages/module/src/bin/validate.ts",
+    "project": "tsx packages/module/src/bin/project.ts",
     "bench": "tsx packages/tools/src/bin/bench-validate.ts",
     "schema": "tsx packages/module/src/bin/emit-schema.ts",
     "editor": "npm run dev --workspace @dm/editor",
