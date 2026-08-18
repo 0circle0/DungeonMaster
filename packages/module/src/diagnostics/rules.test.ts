@@ -70,6 +70,25 @@ describe('what the rules find in the modules that ship', () => {
       'strand_informed',
     ]);
   });
+
+  /**
+   * The same missing flag breaks two opposite ways, and an author sent looking
+   * for the wrong one looks in the wrong place. Two of aurendel's three are
+   * read only under `without`: the gate they guard never closes, and telling
+   * that author it "never comes true" points them at the wrong end of it.
+   */
+  it('says which way the gate is stuck', () => {
+    const gate = (requires: unknown) =>
+      runRules(
+        broken('greenmarch', (doc) => {
+          doc.narrative.quests[0].requires = requires;
+        }),
+      ).find((d) => d.message.includes('ghost_flag'))?.message ?? '';
+
+    expect(gate({ flags: [{ flag: 'ghost_flag' }] })).toContain('never comes true');
+    expect(gate({ without: { flags: [{ flag: 'ghost_flag' }] } })).toContain('always open');
+  });
+
 });
 
 /**

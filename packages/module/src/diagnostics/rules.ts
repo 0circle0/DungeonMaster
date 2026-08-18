@@ -116,6 +116,12 @@ export class RuleContext {
   /** Flags something writes, and flags something waits on. */
   readonly flagWrites = new Set<string>();
   readonly flagReads = new Map<string, string>();
+  /**
+   * Flags read at least once *positively*. A flag read only under `without`
+   * fails the opposite way when nothing sets it — the gate never closes rather
+   * than never opening — and that is a different place to go looking.
+   */
+  readonly positiveFlagReads = new Set<string>();
 
   /** Quests a player can actually arrive at, transitively through `unlocks`. */
   readonly startable = new Set<string>();
@@ -176,16 +182,19 @@ export class RuleContext {
       if (typeof flag === 'string') this.flagWrites.add(flag);
     });
 
-    walkFor(this.doc, 'ref', (value) => {
+    walkFor(this.doc, 'ref', (value, path) => {
       if (typeof value === 'string' && value.startsWith('flags.')) {
         const flag = value.slice('flags.'.length);
         if (!this.flagReads.has(flag)) this.flagReads.set(flag, value);
+        if (!negated(path)) this.positiveFlagReads.add(flag);
       }
     });
     walkFor(this.doc, 'flags', (value, path) => {
       for (const clause of asList(value)) {
         const flag = clause['flag'];
-        if (typeof flag === 'string' && !this.flagReads.has(flag)) this.flagReads.set(flag, path);
+        if (typeof flag !== 'string') continue;
+        if (!this.flagReads.has(flag)) this.flagReads.set(flag, path);
+        if (!negated(path)) this.positiveFlagReads.add(flag);
       }
     });
   }
@@ -369,10 +378,14 @@ export const flagsHaveWriters: Rule = {
     for (const [flag, path] of ctx.flagReads) {
       if (ctx.flagWrites.has(flag)) continue;
       if (engineWritten(flag)) continue;
+      const name = JSON.stringify(flag);
       ctx.report(
         this,
         path,
-        `nothing ever sets the flag ${JSON.stringify(flag)}, so whatever waits on it never comes true`,
+        ctx.positiveFlagReads.has(flag)
+          ? `nothing ever sets the flag ${name}, so whatever waits on it never comes true`
+          : `nothing ever sets the flag ${name}, and it is only ever checked for absence — ` +
+            'so that gate is always open',
         nearest(flag, [...ctx.flagWrites]),
       );
     }
@@ -471,6 +484,14 @@ export function runRules(
   const ctx = new RuleContext(doc, contract);
   for (const rule of rules) rule.run(ctx);
   return ctx.diagnostics();
+}
+
+/**
+ * Whether a requirement path sits under a negation. `without` is the schema's
+ * only negation for a flag clause; `not` is the DSL's.
+ */
+function negated(path: string): boolean {
+  return /(^|\.)(without|not)(\.|$)/.test(path);
 }
 
 /** "did you mean" for a flag, which is the mistake this catches most often. */
