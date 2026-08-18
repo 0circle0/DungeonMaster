@@ -24,6 +24,7 @@ import { ProblemsConsole } from '@/components/studio/ProblemsConsole';
 import { ModsPanel } from '@/components/studio/ModsPanel';
 import { useEditorMods } from '@/lib/useEditorMods';
 import type { ModWire } from '@/lib/modWire';
+import type { ProjectAuthoring } from '@/lib/modulesOnDisk';
 import { NewModuleDialog } from '@/components/studio/NewModuleDialog';
 import { CommandPalette } from '@/components/studio/CommandPalette';
 import type { Command } from '@/lib/palette';
@@ -37,6 +38,8 @@ export function Studio(props: {
   initialName: string;
   templates: readonly string[];
   mods: readonly ModWire[];
+  /** Prefabs, style tables and instance links, when the module is a project. */
+  authoring: ProjectAuthoring;
 }) {
   const store = useModuleStore(props.initialDoc, props.initialName);
   const [selection, setSelection] = useState<Selection>({ kind: 'start' });
@@ -386,6 +389,7 @@ export function Studio(props: {
           store={store}
           selection={selection}
           modFields={modFields}
+          authoring={props.authoring}
           onOpenItem={openItem}
           onDuplicate={duplicateEntry}
           onDelete={deleteEntry}

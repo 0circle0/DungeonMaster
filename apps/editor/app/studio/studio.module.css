@@ -657,3 +657,34 @@
   font-size: 10px;
   color: #5d6478;
 }
+
+/* — prefabs ————————————————————————————————————————————————— */
+
+.prefabPanel {
+  margin-top: 18px;
+  border-top: 1px solid var(--line, #23262f);
+  padding-top: 12px;
+  font-size: 12px;
+}
+.prefabHead {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #5d6478;
+  margin-bottom: 6px;
+}
+.prefabNote { margin: 0 0 8px; opacity: 0.75; }
+.prefabProblem { margin: 0 0 8px; color: var(--warn, #d9a441); }
+.prefabOverrides { list-style: none; margin: 0 0 8px; padding: 0; }
+.prefabOverrides li {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  padding: 3px 0;
+}
+/* The value a person put there, not the prefab's — shown so "reset" is a
+   decision rather than a leap. */
+.prefabValue { flex: 1; opacity: 0.6; font-family: var(--mono); font-size: 10.5px; }

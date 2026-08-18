@@ -19,8 +19,8 @@ import {
 import { dirname, join, relative } from 'node:path';
 import { stableStringify } from '@dm/core';
 import { readAssembledModule, assembleMapFolders, listModules } from '@dm/module/load';
-import { splitStaticMap, splitProject, joinProject } from '@dm/module';
-import type { ProjectManifest } from '@dm/module';
+import { splitStaticMap, splitProject, joinProject, isAuthoringFile } from '@dm/module';
+import type { ProjectManifest, Prefab, InstanceMap, StyleTables } from '@dm/module';
 
 const MODULES_DIR = join(process.cwd(), '..', '..', 'modules');
 
@@ -56,6 +56,53 @@ export function readModuleByName(name: string): Record<string, unknown> | null {
     throw new Error(`${name}: ${first.file}:${first.line}:${first.col} ${first.message}`);
   }
   return doc;
+}
+
+/**
+ * The authored side of a project: its prefabs, its style tables, and which
+ * entries were placed from which prefab.
+ *
+ * Empty for a module with no `project/`, which is every module today — the
+ * studio then behaves exactly as it did, because a world with no prefabs is
+ * simply a world where nothing was generated.
+ */
+export interface ProjectAuthoring {
+  readonly prefabs: readonly Prefab[];
+  readonly instances: InstanceMap;
+  readonly style: StyleTables;
+}
+
+export const NO_AUTHORING: ProjectAuthoring = { prefabs: [], instances: {}, style: {} };
+
+export function readAuthoring(name: string): ProjectAuthoring {
+  const projectDir = join(MODULES_DIR, name, 'project');
+  if (!existsSync(projectDir)) return NO_AUTHORING;
+
+  const read = (file: string): unknown => {
+    const path = join(projectDir, file);
+    if (!existsSync(path)) return null;
+    try {
+      return JSON.parse(readFileSync(path, 'utf8'));
+    } catch (err) {
+      throw new Error(`${name}: project/${file}: ${(err as Error).message}`);
+    }
+  };
+
+  const prefabDir = join(projectDir, 'prefabs');
+  const prefabs: Prefab[] = [];
+  if (existsSync(prefabDir)) {
+    for (const file of readdirSync(prefabDir).sort()) {
+      if (!file.endsWith('.json') || file === 'instances.json') continue;
+      const value = read(`prefabs/${file}`);
+      if (value && typeof value === 'object') prefabs.push(value as Prefab);
+    }
+  }
+
+  return {
+    prefabs,
+    instances: (read('prefabs/instances.json') ?? {}) as InstanceMap,
+    style: (read('style.json') ?? {}) as StyleTables,
+  };
 }
 
 /** Is this module authored as a directory of files? */
@@ -267,7 +314,10 @@ function writeProject(name: string, doc: Record<string, unknown>): {
 
   let removed = 0;
   for (const file of Object.keys(readTree(projectDir))) {
-    if (wanted.has(file)) continue;
+    // Prefabs and the style tables are authored, not derived: nothing in the
+    // document mentions them, and tidying them away because of that would
+    // delete the thing the entries were generated from.
+    if (wanted.has(file) || isAuthoringFile(file)) continue;
     rmSync(join(projectDir, file));
     removed += 1;
   }

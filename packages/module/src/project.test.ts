@@ -16,7 +16,7 @@
 import { describe, it, expect } from 'vitest';
 import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
-import { splitProject, joinProject } from './project.js';
+import { splitProject, joinProject, isAuthoringFile } from './project.js';
 import { compileModule, hashModule } from './compile.js';
 import { gameModuleSchema } from './schema/module.js';
 
@@ -112,6 +112,46 @@ describe('splitProject / joinProject', () => {
       expect(issues[0]?.code).toBe('project_bad_json');
       expect(issues[0]?.file).toBe(victim);
     });
+  });
+});
+
+/**
+ * A project holds two kinds of file, and confusing them deletes work.
+ *
+ * Most of it is derived — split the document and the same files come back, so
+ * anything outside that set is stale. Prefabs and the style tables are not:
+ * they are what entries were generated *from*, and the document never mentions
+ * them. A save that swept up everything it did not recognise would take them.
+ */
+describe('authored files are not derived files', () => {
+  it('knows which is which', () => {
+    expect(isAuthoringFile('prefabs/inn.json')).toBe(true);
+    expect(isAuthoringFile('prefabs/instances.json')).toBe(true);
+    expect(isAuthoringFile('style.json')).toBe(true);
+
+    expect(isAuthoringFile('shell.json')).toBe(false);
+    expect(isAuthoringFile('content/monsters/bog_hound.json')).toBe(false);
+    // Not a prefix match on a name that merely starts the same way.
+    expect(isAuthoringFile('prefabsomething.json')).toBe(false);
+  });
+
+  it('never produces an authored path when splitting', () => {
+    const doc = JSON.parse(raw('greenmarch')) as Record<string, unknown>;
+    const split = splitProject(doc);
+    expect(Object.keys(split.files).filter(isAuthoringFile)).toEqual([]);
+  });
+
+  it('ignores one when rejoining, rather than mistaking it for an entry', () => {
+    const doc = JSON.parse(raw('minimal')) as Record<string, unknown>;
+    const split = splitProject(doc);
+    const withPrefabs = {
+      ...split.files,
+      'prefabs/inn.json': '{"id":"inn"}',
+      'style.json': '{"roomSizes":{}}',
+    };
+    const { document, issues } = joinProject(split.manifest, withPrefabs);
+    expect(issues).toEqual([]);
+    expect(document).toEqual(JSON.parse(raw('minimal')));
   });
 });
 

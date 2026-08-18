@@ -187,6 +187,25 @@ export function joinProject(
   return { document, issues };
 }
 
+/**
+ * Files a project keeps that no document produces.
+ *
+ * A project holds two kinds of thing. Most of it is *derived*: split the
+ * document and you get the same files back, so anything not in that set is
+ * stale and should go. Prefabs and the style tables are not — they are the
+ * authored source that entries were generated *from*, and a save that tidied
+ * them away because the document did not mention them would delete the work.
+ *
+ * `joinProject` never reads them: it reads exactly what the manifest names.
+ */
+export const AUTHORING_PATHS = ['prefabs/', 'style.json'] as const;
+
+export function isAuthoringFile(path: string): boolean {
+  return AUTHORING_PATHS.some((prefix) =>
+    prefix.endsWith('/') ? path.startsWith(prefix) : path === prefix,
+  );
+}
+
 /** Every path a split project writes, manifest included. Handy for cleanup. */
 export function projectFiles(split: SplitProject): readonly string[] {
   return ['project.json', ...Object.keys(split.files)].sort();

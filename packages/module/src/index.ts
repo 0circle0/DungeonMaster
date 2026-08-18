@@ -7,7 +7,14 @@ export { mergeModules, resolveExtends, parseExtends, DELETE_MARKER } from './mer
 
 // A module as a directory of files, and back. Pure — the studio uses both
 // directions in the browser, filesystem policy lives in `bin/project.ts`.
-export { splitProject, joinProject, projectFiles, PROJECT_FORMAT } from './project.js';
+export {
+  splitProject,
+  joinProject,
+  projectFiles,
+  isAuthoringFile,
+  AUTHORING_PATHS,
+  PROJECT_FORMAT,
+} from './project.js';
 
 // Prefabs: an entry described once and placed many times. Pure — the studio
 // expands and previews in the browser.

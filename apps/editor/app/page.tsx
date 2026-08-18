@@ -6,6 +6,7 @@
 import type { Metadata } from 'next';
 import { listModuleNames, readModuleByName } from '@/lib/modulesOnDisk';
 import { readInstalledMods } from '@/lib/modsOnDisk';
+import { readAuthoring, NO_AUTHORING } from '@/lib/modulesOnDisk';
 import { Studio } from './studio/Studio';
 
 export const metadata: Metadata = {
@@ -24,6 +25,7 @@ export default function Page() {
       initialName={starter ? `${starter}.json` : 'untitled.module.json'}
       templates={names}
       mods={readInstalledMods()}
+      authoring={starter ? readAuthoring(starter) : NO_AUTHORING}
     />
   );
 }
