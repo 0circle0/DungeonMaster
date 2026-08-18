@@ -5,7 +5,7 @@
  * engine-coverage notes.
  */
 
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { getAt } from '@/lib/store';
 import type { ModuleStore, Path } from '@/lib/store';
 import { SINGLETONS, collectionAt, labelFor } from '@/lib/schema';
@@ -13,6 +13,7 @@ import { singletonLabel } from '@/lib/labels';
 import { JsonBox } from '@/components/JsonBox';
 import { UsedBy } from '@/components/UsedBy';
 import { FieldDiagnostics, diagnosticsByPath } from '@/components/Field';
+import { RenamePanel } from './RenamePanel';
 import { Coverage } from './Coverage';
 import { ItemForm } from './ItemForm';
 import { StartInspector } from './StartInspector';
@@ -51,6 +52,15 @@ export function Inspector(props: InspectorProps) {
 
 function InspectorPanel(props: InspectorProps) {
   const { store, selection } = props;
+  const [renaming, setRenaming] = useState(false);
+
+  // A different entry is a different rename, so the panel does not carry over.
+  const selectionKey = selection.kind === 'item' ? `${selection.path}.${selection.index}` : selection.kind;
+  const [lastKey, setLastKey] = useState(selectionKey);
+  if (lastKey !== selectionKey) {
+    setLastKey(selectionKey);
+    setRenaming(false);
+  }
 
   if (selection.kind === 'none') {
     return (
@@ -115,6 +125,9 @@ function InspectorPanel(props: InspectorProps) {
         <code className={styles.inspectorPath}>{info.path}</code>
       </div>
       <div className={styles.inspectorActions}>
+        <button className="btn tiny" onClick={() => setRenaming(true)}>
+          Rename…
+        </button>
         <button className="btn tiny" onClick={() => props.onDuplicate(selection.path, selection.index)}>
           Duplicate
         </button>
@@ -122,6 +135,15 @@ function InspectorPanel(props: InspectorProps) {
           Delete
         </button>
       </div>
+      {renaming && typeof entry['id'] === 'string' && (
+        <RenamePanel
+          store={store}
+          collection={selection.path}
+          id={entry['id']}
+          onClose={() => setRenaming(false)}
+          onRenamed={() => props.onOpenItem(selection.path, selection.index)}
+        />
+      )}
       <div className={styles.inspectorBody}>
         {info.path === 'world.maps' && (
           <p className="hint">The grid itself is painted in the map viewport, not here.</p>

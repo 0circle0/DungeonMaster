@@ -1,7 +1,7 @@
 export * from './dsl/index.js';
 
 export { compileModule, compileParsed, CompiledModule, hashModule, formatIssues } from './compile.js';
-export type { CompileIssue, CompileResult } from './compile.js';
+export type { CompileIssue, CompileResult, RefSite } from './compile.js';
 
 export { mergeModules, resolveExtends, parseExtends, DELETE_MARKER } from './merge.js';
 

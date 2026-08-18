@@ -183,6 +183,24 @@ function collectionAt(module: GameModule, path: string): Identified[] {
 }
 
 /**
+ * One reference found in a document.
+ *
+ * `kind` matters to anything that wants to *change* an id rather than merely
+ * check it. A `value` reference is a string field holding the id, so its path
+ * addresses something to overwrite. A `key` reference is a record key that *is*
+ * the id — attribute bonuses keyed by attribute — and its path addresses the
+ * entry beside the name, not the name. Renaming one means rebuilding the record,
+ * and telling them apart by looking at the value would misread the case where a
+ * record maps an id to itself.
+ */
+export interface RefSite {
+  readonly path: string;
+  readonly target: string;
+  readonly id: string;
+  readonly kind: 'value' | 'key';
+}
+
+/**
  * Walk a Zod schema alongside a value, collecting every `ref:` marked string.
  *
  * Traversing the schema rather than hand-listing reference sites means a new
@@ -193,7 +211,7 @@ export function collectRefs(
   schema: z.ZodTypeAny,
   value: unknown,
   path: string,
-  out: { path: string; target: string; id: string }[],
+  out: RefSite[],
 ): void {
   if (value === undefined || value === null) return;
 
@@ -256,7 +274,7 @@ export function collectRefs(
       // keyed by attribute id.
       const keyTarget = refTarget(keyType.description);
       for (const [key, child] of Object.entries(value as Record<string, unknown>)) {
-        if (keyTarget) out.push({ path: `${path}.${key}`, target: keyTarget, id: key });
+        if (keyTarget) out.push({ path: `${path}.${key}`, target: keyTarget, id: key, kind: 'key' });
         collectRefs(valueType, child, `${path}.${key}`, out);
       }
       return;
@@ -276,7 +294,7 @@ export function collectRefs(
 
     case 'ZodString': {
       const target = refTarget(schema.description);
-      if (target && typeof value === 'string') out.push({ path, target, id: value });
+      if (target && typeof value === 'string') out.push({ path, target, id: value, kind: 'value' });
       return;
     }
 
@@ -395,7 +413,7 @@ export function compileParsed(module: GameModule): CompileResult {
 
   // Prove every reference resolves. This is the check that keeps a typo from
   // becoming a crash three rooms into a dungeon.
-  const refs: { path: string; target: string; id: string }[] = [];
+  const refs: RefSite[] = [];
   collectRefs(gameModuleSchema, module, '', refs);
 
   for (const reference of refs) {

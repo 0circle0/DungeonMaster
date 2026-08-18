@@ -525,3 +525,30 @@
 .modsTable th { text-align: left; color: var(--muted); font-weight: 500; border-bottom: 1px solid var(--line); padding: 3px 6px; }
 .modsTable td { padding: 3px 6px; border-bottom: 1px solid var(--line); }
 .modsMissing { color: var(--err); }
+
+/* — rename ————————————————————————————————————————————————— */
+
+.renamePanel {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--line, #23262f);
+  background: var(--panel-alt, #191c23);
+}
+.renameHead { font-size: 12px; opacity: 0.75; }
+.renameProblem { margin: 0; font-size: 11px; color: var(--err, #e06c6c); }
+.renameCount { margin: 0; font-size: 11px; opacity: 0.75; }
+.renameActions { display: flex; gap: 6px; }
+
+/* The half the rename cannot do for you. Deliberately not styled as an error:
+   nothing is wrong yet, but somebody has to go and look. */
+.renameWarn {
+  font-size: 11px;
+  border-left: 2px solid var(--warn, #d9a441);
+  padding-left: 8px;
+}
+.renameWarn p { margin: 4px 0; opacity: 0.75; }
+.renameWarn ul { margin: 4px 0 0; padding-left: 16px; }
+.renameWarn li { margin: 2px 0; }
+.renameInline { opacity: 0.6; font-style: italic; }
