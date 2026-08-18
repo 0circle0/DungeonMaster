@@ -24,3 +24,6 @@ export type { StandingOptions } from './standing.js';
 
 export { buildChain, chainProblems } from './chain.js';
 export type { ChainLink, ChainOptions, ChainCheckOptions } from './chain.js';
+
+export { rumour, favour, talk, givenFlag } from './dialogue.js';
+export type { Voice, Fragment } from './dialogue.js';

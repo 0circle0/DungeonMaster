@@ -503,6 +503,49 @@ export const roadsAreTwoWay: Rule = {
   },
 };
 
+/**
+ * The engine runs an option's effects *before* its check, and regardless of the
+ * result. That ordering is not a bug and it is not going to change; what it
+ * means is that anything given away from `option.effects` is given away on a
+ * failed roll too.
+ */
+const GRANTS = ['learnLore', 'grantItem', 'grantXp', 'setFlag', 'startQuest', 'completeQuest'];
+
+export const effectsRunBeforeChecks: Rule = {
+  code: 'effect_before_check',
+  title: 'Nothing is given away before the roll that decides it',
+  why:
+    "An option's effects run before its check and whether or not it passes, so a reward on " +
+    'the option is handed over on a failure too. It belongs on the success node, which is ' +
+    'reached only when the roll passes.',
+  severity: 'warning',
+  reads: ['narrative.dialogues'],
+  run(ctx) {
+    for (const [d, dialogue] of collectionOf(ctx.doc, 'narrative.dialogues').entries()) {
+      for (const [n, node] of asList(dialogue['nodes']).entries()) {
+        for (const [o, option] of asList(node['options']).entries()) {
+          const check = option['check'];
+          if (typeof check !== 'object' || check === null) continue;
+          for (const [e, effect] of asList(option['effects']).entries()) {
+            const kind = Object.keys(effect).find((key) => GRANTS.includes(key));
+            if (!kind) continue;
+            const success = (check as Entry)['onSuccess'];
+            ctx.report(
+              this,
+              `narrative.dialogues.${d}.nodes.${n}.options.${o}.effects.${e}`,
+              `this option rolls ${JSON.stringify((check as Entry)['skill'] ?? 'a check')} and ` +
+                `runs ${JSON.stringify(kind)} either way — failing the roll costs nothing`,
+              typeof success === 'string'
+                ? `move it to the onEnter of ${JSON.stringify(success)}`
+                : 'move it to the onEnter of the node the check succeeds into',
+            );
+          }
+        }
+      }
+    }
+  },
+};
+
 export const questsAreReachable: Rule = {
   code: 'quest_unreachable',
   title: 'Every quest can be arrived at',
@@ -584,6 +627,7 @@ export const DEFAULT_RULES: readonly Rule[] = [
   flagsHaveWriters,
   flagWritersCanRun,
   roadsAreTwoWay,
+  effectsRunBeforeChecks,
   questsAreReachable,
   killTargetsCanSpawn,
   dialoguesAreReachable,

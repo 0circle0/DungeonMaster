@@ -746,3 +746,9 @@
 .roadBad { color: var(--err); font-size: 11px; }
 .roadAdd { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; margin-top: 6px; }
 .roadAdd select { max-width: 200px; font-size: 12px; }
+
+/* Adding a piece of conversation. */
+.pieces { border: 1px solid var(--line); border-radius: 6px; padding: 8px 10px; margin: 12px 0; }
+.pieceShapes { display: flex; gap: 6px; flex-wrap: wrap; margin: 6px 0; }
+.pieceForm { display: flex; flex-direction: column; gap: 8px; margin: 8px 0; }
+.pieceForm .label { display: flex; flex-direction: column; gap: 3px; }

@@ -20,6 +20,7 @@ import {
   flagsHaveWriters,
   flagWritersCanRun,
   roadsAreTwoWay,
+  effectsRunBeforeChecks,
   questsAreReachable,
   killTargetsCanSpawn,
   dialoguesAreReachable,
@@ -177,6 +178,37 @@ describe('roads', () => {
       from.connections[0].oneWay = true;
     });
     expect(runRules(doc, [roadsAreTwoWay])).toEqual([]);
+  });
+});
+
+/**
+ * The ordering that makes a persuasion check free.
+ */
+describe('effects before checks', () => {
+  it('says nothing about the modules that ship', () => {
+    for (const name of ['greenmarch', 'aurendel']) {
+      expect(runRules(load(name), [effectsRunBeforeChecks])).toEqual([]);
+    }
+  });
+
+  it('catches a reward that is handed over on a failed roll, and it compiles', () => {
+    const doc = broken('greenmarch', (d) => {
+      const node = d.narrative.dialogues[0].nodes[0];
+      node.options[0].check = { skill: 'persuasion', difficulty: 12, onSuccess: node.id, onFailure: node.id };
+      node.options[0].effects = [{ setFlag: { flag: 'paid_early', value: true } }];
+    });
+    const found = runRules(doc, [effectsRunBeforeChecks]);
+    expect(found).toHaveLength(1);
+    expect(found[0]?.message).toMatch(/either way/);
+    expect(found[0]?.hint).toMatch(/move it to the onEnter/);
+    expect(compileModule(doc).ok).toBe(true);
+  });
+
+  it('leaves an option with no check alone', () => {
+    const doc = broken('greenmarch', (d) => {
+      d.narrative.dialogues[0].nodes[0].options[0].effects = [{ setFlag: { flag: 'x', value: true } }];
+    });
+    expect(runRules(doc, [effectsRunBeforeChecks])).toEqual([]);
   });
 });
 
