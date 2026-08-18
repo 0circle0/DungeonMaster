@@ -17,7 +17,10 @@
 
 import { z } from 'zod';
 import { gameModuleSchema, COLLECTION_PATHS } from '../schema/module.js';
-import { compileModule } from '../compile.js';
+import type { GameModule } from '../schema/module.js';
+import { compileParsed } from '../compile.js';
+import type { CompiledModule } from '../compile.js';
+import { ValidationIndex } from './incremental.js';
 import { EXPR_OPS, PREDICATE_OPS, EFFECT_OPS } from '../dsl/eval.js';
 import { parseJsonWithSource, JsonSyntaxError, excerpt } from './source.js';
 import type { Position, Span } from './source.js';
@@ -44,6 +47,14 @@ export interface LintResult {
   readonly diagnostics: readonly Diagnostic[];
   /** Present when the document parsed and passed the schema. */
   readonly value: unknown;
+  /**
+   * The compiled module, when the document compiled cleanly.
+   *
+   * Linting already pays for the schema parse and the compile, so a caller
+   * wanting the identity or the content hash — the editor does, on every
+   * keystroke — should read them from here rather than compiling again.
+   */
+  readonly compiled?: CompiledModule | undefined;
 }
 
 const ALL_DSL_OPS = [...EXPR_OPS, ...PREDICATE_OPS, ...EFFECT_OPS];
@@ -91,6 +102,42 @@ function report(
 ): void {
   const { position, excerpt: snippet } = locate(ctx, path);
   ctx.out.push({ severity, code, path, message, hint, position, excerpt: snippet });
+}
+
+/**
+ * Give path-only diagnostics their line and column back.
+ *
+ * Linting a document rather than its text is what makes an edit cheap — parsing
+ * the text builds a new object graph every keystroke and defeats the parse
+ * cache — but it is also what costs the line numbers, since only the text knows
+ * where anything is. So the editor lints the document on every keystroke and
+ * calls this once things go quiet, which is the only moment a person is going
+ * to read the problems list anyway.
+ *
+ * The positions are resolved exactly as `lintModule(text)` resolves them, by
+ * the same `locate`, so a diagnostic ends up on the line it would have had.
+ */
+export function attachPositions(
+  diagnostics: readonly Diagnostic[],
+  text: string,
+): readonly Diagnostic[] {
+  if (diagnostics.length === 0) return diagnostics;
+
+  let spans: ReadonlyMap<string, Span>;
+  try {
+    spans = parseJsonWithSource(text).spans;
+  } catch {
+    // Unparseable text cannot locate anything; the diagnostics still stand.
+    return diagnostics;
+  }
+
+  const ctx: Context = { text, spans, out: [] };
+  return diagnostics.map((d) => {
+    if (d.position) return d;
+    const { position, excerpt: snippet } = locate(ctx, d.path);
+    if (!position) return d;
+    return { ...d, position, excerpt: snippet };
+  });
 }
 
 // ---------------------------------------------------------------------------
@@ -332,9 +379,20 @@ function walkForDsl(ctx: Context, node: unknown, path: string, depth = 0): void 
 // Schema issues, with suggestions
 // ---------------------------------------------------------------------------
 
-function lintSchema(ctx: Context, document: unknown): boolean {
+/**
+ * The schema pass — and the only place a module is parsed.
+ *
+ * It returns the parsed document rather than a bare `ok`, because the compile
+ * pass below needs exactly the same parse and `safeParse` is ~610 ms on a large
+ * module. Handing the result on is what takes `lintModule` from three parses to
+ * one.
+ */
+function lintSchema(
+  ctx: Context,
+  document: unknown,
+): { ok: true; data: GameModule } | { ok: false } {
   const parsed = gameModuleSchema.safeParse(document);
-  if (parsed.success) return true;
+  if (parsed.success) return { ok: true, data: parsed.data };
 
   for (const issue of parsed.error.issues) {
     const path = issue.path.join('.');
@@ -386,7 +444,7 @@ function lintSchema(ctx: Context, document: unknown): boolean {
     report(ctx, 'error', 'schema', path, issue.message, null);
   }
 
-  return false;
+  return { ok: false };
 }
 
 /** The property names allowed at a path, for suggesting a correction. */
@@ -1028,6 +1086,18 @@ export interface LintOptions {
    * input; every text-positioned lint still runs on the input itself.
    */
   readonly assembled?: Record<string, unknown>;
+
+  /**
+   * A parse cache carried across edits, for a caller linting the same document
+   * over and over — which is what the editor does on every keystroke.
+   *
+   * The schema parse is ~95% of a lint on a large module, and almost all of it
+   * is re-checking entries that did not change. Passing the same index back in
+   * each time drops that to the one entry that did. When the document has
+   * schema errors the index steps aside and the ordinary pass runs, because its
+   * messages are the ones worth reading — see `incremental.ts`.
+   */
+  readonly index?: ValidationIndex | undefined;
 }
 
 /**
@@ -1077,18 +1147,33 @@ export function lintModule(input: string | unknown, options: LintOptions = {}): 
   // the schema pass would otherwise produce for the same mistake.
   walkForDsl(ctx, document, '');
 
-  const schemaOk = lintSchema(ctx, document);
+  // Everything below checks the assembled document when one is provided — the
+  // static-map rules are about maps that live in folders the raw text never
+  // mentions, and the raw form carries dangling references that assembly
+  // resolves. Paths reachable only through assembly have no span, and
+  // `locate()` already degrades to a null position for those: they lose exact
+  // line numbers and keep everything else.
+  const subject: unknown = options.assembled ?? document;
 
-  if (schemaOk && typeof document === 'object' && document !== null) {
-    // Semantic checks see the assembled document when one is provided — the
-    // static-map rules are about maps that live in folders the raw text never
-    // mentions. Their diagnostics lose exact line numbers and keep everything
-    // else, the same trade the compile pass below makes.
-    lintSemantics(ctx, (options.assembled ?? document) as Record<string, unknown>);
+  // The one and only schema parse. `safeParse` costs ~610 ms on a large module
+  // against single-digit milliseconds for every other pass here, so the result
+  // is handed to the compile pass rather than earned twice.
+  //
+  // With an index, the happy path skips that parse almost entirely: only the
+  // entries that changed are re-checked. A failure falls back to the ordinary
+  // pass, whose diagnostics carry the suggestions ("did you mean …?") that
+  // make a schema error worth reading.
+  const fast = options.index?.parse(subject);
+  const schema = fast?.ok === true ? fast : lintSchema(ctx, subject);
+
+  let compiledModule: CompiledModule | undefined;
+
+  if (schema.ok && typeof document === 'object' && document !== null) {
+    lintSemantics(ctx, subject as Record<string, unknown>);
 
     // Reference integrity and duplicate ids come from the compiler, so the
     // editor and the engine agree on what counts as valid.
-    const compiled = compileModule(options.assembled ?? document);
+    const compiled = compileParsed(schema.data);
     if (!compiled.ok) {
       for (const issue of compiled.errors) {
         const hint =
@@ -1098,6 +1183,7 @@ export function lintModule(input: string | unknown, options: LintOptions = {}): 
         report(ctx, 'error', issue.code, issue.path, issue.message, hint);
       }
     } else {
+      compiledModule = compiled.module;
       for (const warning of compiled.warnings) {
         report(ctx, 'warning', warning.code, warning.path, warning.message, null);
       }
@@ -1125,6 +1211,7 @@ export function lintModule(input: string | unknown, options: LintOptions = {}): 
     ok: !ordered.some((d) => d.severity === 'error'),
     diagnostics: ordered,
     value: document,
+    compiled: compiledModule,
   };
 }
 

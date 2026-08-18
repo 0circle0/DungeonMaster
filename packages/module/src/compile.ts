@@ -45,20 +45,32 @@ interface Identified {
  */
 export class CompiledModule {
   readonly source: GameModule;
-  readonly hash: string;
   readonly warnings: readonly CompileIssue[];
   private readonly index: ReadonlyMap<string, ReadonlyMap<string, Identified>>;
+  private cachedHash: string | null = null;
 
   constructor(
     source: GameModule,
     index: ReadonlyMap<string, ReadonlyMap<string, Identified>>,
-    hash: string,
     warnings: readonly CompileIssue[],
   ) {
     this.source = source;
     this.index = index;
-    this.hash = hash;
     this.warnings = warnings;
+  }
+
+  /**
+   * Content hash — computed on first read, then kept.
+   *
+   * Most compilations never ask for it. The editor compiles on every keystroke
+   * and only wants the hash for a chip in the toolbar, and hashing means
+   * walking and serializing the whole document: on `modules/aurendel` that is
+   * ~36 ms of a ~60 ms budget, spent on something nobody reads mid-word. Play
+   * and save still get it the moment they ask.
+   */
+  get hash(): string {
+    this.cachedHash ??= hashModule(this.source);
+    return this.cachedHash;
   }
 
   /** `id@version`, the identity a save records. */
@@ -177,7 +189,7 @@ function collectionAt(module: GameModule, path: string): Identified[] {
  * `ref()` field is checked the moment it is added, with no separate manifest to
  * forget to update.
  */
-function collectRefs(
+export function collectRefs(
   schema: z.ZodTypeAny,
   value: unknown,
   path: string,
@@ -342,7 +354,23 @@ export function compileModule(raw: unknown): CompileResult {
     };
   }
 
-  const module = parsed.data;
+  return compileParsed(parsed.data);
+}
+
+/**
+ * Compile a document that has already been through the schema.
+ *
+ * `gameModuleSchema.safeParse` is by far the most expensive thing either the
+ * compiler or the linter does — on a 2.9 MB module it is ~610 ms against
+ * single-digit milliseconds for everything below. `lintModule` used to pay for
+ * it three times over (its own schema pass, then this one, then the editor
+ * compiling again for the hash), so the parse is hoisted out and the result
+ * handed down instead.
+ *
+ * Callers that already hold a parsed `GameModule` should use this; anything
+ * starting from raw JSON wants `compileModule`.
+ */
+export function compileParsed(module: GameModule): CompileResult {
   const errors: CompileIssue[] = [];
   const warnings: CompileIssue[] = [];
 
@@ -408,7 +436,7 @@ export function compileModule(raw: unknown): CompileResult {
 
   return {
     ok: true,
-    module: new CompiledModule(module, index, hashModule(module), warnings),
+    module: new CompiledModule(module, index, warnings),
     warnings,
   };
 }

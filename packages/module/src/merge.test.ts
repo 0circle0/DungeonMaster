@@ -3,6 +3,7 @@ import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { mergeModules, resolveExtends, parseExtends, DELETE_MARKER } from './merge.js';
 import { compileModule } from './compile.js';
+import { lintModule } from './diagnostics/lint.js';
 
 const MINIMAL_PATH = fileURLToPath(new URL('../../../modules/minimal/module.json', import.meta.url));
 const loadMinimal = () => JSON.parse(readFileSync(MINIMAL_PATH, 'utf8')) as Record<string, unknown>;
@@ -185,6 +186,57 @@ describe('resolveExtends', () => {
   it('rejects a malformed extends value', () => {
     const result = resolveExtends({ id: 'p', version: '1.0.0', extends: 'not-an-identity' }, () => undefined);
     expect(result.ok).toBe(false);
+  });
+});
+
+/**
+ * `extends` was unusable for a long time, and the merge machinery was never the
+ * reason: the lint ran ahead of the resolution and every pass saw the raw child.
+ * These pin the ordering that fixed it.
+ */
+describe('linting a module that extends another', () => {
+  const base = loadMinimal();
+  const pack = {
+    format: 1,
+    id: 'more_husks',
+    version: '0.1.0',
+    extends: 'minimal@1.0.0',
+    meta: { title: 'More Husks' },
+    content: { monsters: [{ id: 'husk', xp: 25 }] },
+  };
+  const resolve = () =>
+    resolveExtends(pack, (identity) => (identity === 'minimal@1.0.0' ? base : undefined));
+
+  it('passes when handed the resolved document', () => {
+    const resolved = resolve();
+    expect(resolved.ok).toBe(true);
+    if (!resolved.ok) return;
+
+    const lint = lintModule(JSON.stringify(pack, null, 2), {
+      assembled: resolved.document,
+    });
+    expect(lint.diagnostics.filter((d) => d.severity === 'error')).toEqual([]);
+    expect(lint.ok).toBe(true);
+  });
+
+  it('exposes the compiled module rather than making the caller compile again', () => {
+    const resolved = resolve();
+    if (!resolved.ok) return;
+
+    const lint = lintModule(JSON.stringify(pack, null, 2), {
+      assembled: resolved.document,
+    });
+    expect(lint.compiled?.identity).toBe('more_husks@0.1.0');
+    // The base's content is present, so the whole document really was checked.
+    expect(lint.compiled?.get<{ name: string }>('content.monsters', 'husk').name).toBe('Husk');
+  });
+
+  it('fails on the raw child alone, which is why resolution has to come first', () => {
+    const lint = lintModule(JSON.stringify(pack, null, 2));
+    const errors = lint.diagnostics.filter((d) => d.severity === 'error');
+    // It leans on its parent for the ruleset, so the schema has nothing to read.
+    expect(errors.some((d) => d.path.startsWith('rules') || d.path === '')).toBe(true);
+    expect(lint.compiled).toBeUndefined();
   });
 });
 

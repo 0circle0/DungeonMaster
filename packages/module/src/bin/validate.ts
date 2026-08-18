@@ -7,7 +7,6 @@
 
 import { readFileSync } from 'node:fs';
 import { dirname, basename } from 'node:path';
-import { compileModule } from '../compile.js';
 import { lintModule, formatDiagnostics } from '../diagnostics/lint.js';
 import { resolveExtends } from '../merge.js';
 import {
@@ -55,9 +54,30 @@ function main(): number {
     return 1;
   }
 
+  // Resolve `extends` *before* linting, not after.
+  //
+  // This used to run below the lint, which meant every pass saw the unresolved
+  // document: a module leaning on a parent for its ruleset failed the schema
+  // with "attributes is required", and every reference into the parent came
+  // back dangling — so `extends` was unusable and modules composed their base
+  // in at build time instead. Handing the resolved document down as `assembled`
+  // fixes that, using a channel that already carries exactly this meaning: a
+  // document containing things the raw text never mentions. Inherited paths
+  // have no span and `locate()` already reports those without a position.
+  let subject: Record<string, unknown> | null = null;
+  if (assembled) {
+    const modulesRoot = dirname(assembled.dir);
+    const resolved = resolveExtends(assembled.doc, siblingLoader(modulesRoot));
+    if (!resolved.ok) {
+      process.stderr.write(`✗ ${basename(path)}: ${resolved.error}\n`);
+      return 1;
+    }
+    subject = sortWorldMaps(resolved.document);
+  }
+
   // Lint the raw text: it is the only pass that can report line and column
   // numbers, and it produces far better messages than the schema alone.
-  const lint = lintModule(rawText, assembled ? { assembled: assembled.doc } : {});
+  const lint = lintModule(rawText, subject ? { assembled: subject } : {});
   const errors = lint.diagnostics.filter((d) => d.severity === 'error');
   const lintWarnings = lint.diagnostics.filter((d) => d.severity === 'warning');
 
@@ -76,24 +96,14 @@ function main(): number {
     return 1;
   }
 
-  const modulesRoot = dirname(assembled.dir);
-  const resolved = resolveExtends(assembled.doc, siblingLoader(modulesRoot));
-  if (!resolved.ok) {
-    process.stderr.write(`✗ ${basename(path)}: ${resolved.error}\n`);
+  // The lint compiled the resolved document to prove its references resolve,
+  // so its result is reused rather than the module being parsed a second time.
+  const module = lint.compiled;
+  if (!module) {
+    process.stderr.write(`✗ ${arg}: passed the lint but did not compile\n`);
     return 1;
   }
 
-  const result = compileModule(sortWorldMaps(resolved.document));
-
-  if (!result.ok) {
-    process.stderr.write(`✗ ${arg} — ${result.errors.length} error(s) after resolving extends\n`);
-    for (const issue of result.errors) {
-      process.stderr.write(`  ${issue.path}: ${issue.message} [${issue.code}]\n`);
-    }
-    return 1;
-  }
-
-  const { module } = result;
   const warnings = lintWarnings;
   process.stdout.write(`✓ ${module.identity}  (hash ${module.hash})\n`);
 

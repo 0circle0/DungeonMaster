@@ -1,6 +1,6 @@
 export * from './dsl/index.js';
 
-export { compileModule, CompiledModule, hashModule, formatIssues } from './compile.js';
+export { compileModule, compileParsed, CompiledModule, hashModule, formatIssues } from './compile.js';
 export type { CompileIssue, CompileResult } from './compile.js';
 
 export { mergeModules, resolveExtends, parseExtends, DELETE_MARKER } from './merge.js';
@@ -14,6 +14,11 @@ export { idSchema, versionSchema, displayName, description, refTarget } from './
 
 export { gameModuleSchema, FORMAT_VERSION, COLLECTION_PATHS } from './schema/module.js';
 export type { GameModule, CollectionPath, ModuleMeta, Creation, Start } from './schema/module.js';
+
+// The element schema behind each collection. The editor generates a form from
+// it and the incremental validator checks one entry against it, so both are
+// reading the same derivation rather than two that can drift.
+export { COLLECTION_SCHEMAS, collectionSchema, unwrapSchema } from './schema/collections.js';
 
 export { rulesSchema } from './schema/rules.js';
 export type { Rules, Attribute, Resource, DerivedStat, Condition } from './schema/rules.js';
