@@ -14,14 +14,23 @@ export function ProblemsConsole(props: {
   onOpen: (diagnostic: Diagnostic) => void;
 }) {
   const [open, setOpen] = useState(true);
-  const { errors, warnings } = props.validation;
-  const all = [...errors, ...warnings];
+  /**
+   * Notes are hidden by default, and that is the point of having them.
+   *
+   * A note is a thing worth knowing, not a thing to fix — "this monster has no
+   * morale, so it fights to the death" is a choice somebody made. There are 127
+   * of those on aurendel and three real findings, and a list where the three
+   * are outnumbered forty to one is a list nobody reads to the end of.
+   */
+  const [showNotes, setShowNotes] = useState(false);
+  const { errors, warnings, infos } = props.validation;
+  const all = [...errors, ...warnings, ...(showNotes ? infos : [])];
 
   return (
     <footer className={styles.console}>
       <button className={styles.consoleHead} onClick={() => setOpen(!open)}>
         {open ? '▾' : '▸'} Console
-        {all.length === 0 ? (
+        {errors.length === 0 && warnings.length === 0 && infos.length === 0 ? (
           <span className={`${styles.consoleCount} ${styles.consoleOk}`}>no problems</span>
         ) : (
           <span className={styles.consoleCount}>
@@ -32,14 +41,31 @@ export function ProblemsConsole(props: {
             <span className={warnings.length > 0 ? styles.consoleCountWarn : ''}>
               {warnings.length} warning{warnings.length === 1 ? '' : 's'}
             </span>
+            {infos.length > 0 && (
+              <>
+                {', '}
+                <span className={styles.consoleCountInfo}>{infos.length} notes</span>
+              </>
+            )}
           </span>
         )}
       </button>
+      {open && infos.length > 0 && (
+        <label className={styles.consoleNotes}>
+          <input
+            type="checkbox"
+            checked={showNotes}
+            onChange={(e) => setShowNotes(e.target.checked)}
+          />
+          show {infos.length} note{infos.length === 1 ? '' : 's'} — things worth knowing rather
+          than things to fix
+        </label>
+      )}
       {open && all.length > 0 && (
         <div className={styles.consoleList}>
           {all.map((issue, i) => (
             <button
-              className={`problem ${issue.severity === 'error' ? 'err' : 'warn'}`}
+              className={`problem ${issue.severity === 'error' ? 'err' : issue.severity === 'warning' ? 'warn' : 'note'}`}
               key={i}
               title="Jump to this problem"
               onClick={() => props.onOpen(issue)}

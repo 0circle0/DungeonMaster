@@ -54,7 +54,11 @@ interface InspectorProps {
    * field is wrong, and a rule that says which entry is, were both being told
    * to the console and to nobody else.
    */
-  diagnostics: { errors: readonly Diagnostic[]; warnings: readonly Diagnostic[] };
+  diagnostics: {
+    errors: readonly Diagnostic[];
+    warnings: readonly Diagnostic[];
+    infos: readonly Diagnostic[];
+  };
 }
 
 /**
@@ -76,7 +80,7 @@ export function Inspector(props: InspectorProps) {
   const problems = useMemo(
     () =>
       diagnosticsByPath(
-        [...props.diagnostics.errors, ...props.diagnostics.warnings],
+        [...props.diagnostics.errors, ...props.diagnostics.warnings, ...props.diagnostics.infos],
         props.store.doc,
       ),
     [props.diagnostics, props.store.doc],

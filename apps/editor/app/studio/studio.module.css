@@ -810,3 +810,11 @@
 /* A marker you can pick up. */
 .mapMarkerDrag { cursor: grab; touch-action: none; }
 .mapMarkerDrag:active { cursor: grabbing; }
+
+/* Notes in the console: counted, and off by default. */
+.consoleCountInfo { color: var(--muted); }
+.consoleNotes {
+  display: flex; align-items: center; gap: 6px;
+  padding: 5px 14px; font-size: 11.5px; color: var(--muted);
+  border-bottom: 1px solid var(--line); cursor: pointer;
+}

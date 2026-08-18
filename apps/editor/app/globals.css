@@ -204,6 +204,9 @@ textarea.input { resize: vertical; font-family: inherit; }
 .problem:hover { background: var(--panel-2); }
 .problem.err { border-left: 2px solid var(--err); }
 .problem.warn { border-left: 2px solid var(--warn); }
+/* A note is not a problem; it should not look like one. */
+.problem.note { border-left: 2px solid #3a3f52; }
+.problem.note .problem-message { color: var(--muted); }
 .problem-where {
   font-family: var(--mono); font-size: 11.5px; color: var(--accent);
   flex: none; min-width: 62px; max-width: 220px;

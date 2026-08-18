@@ -127,6 +127,17 @@ export interface Validation {
   readonly ok: boolean;
   readonly errors: readonly Diagnostic[];
   readonly warnings: readonly Diagnostic[];
+  /**
+   * Notes, kept apart from warnings because they are not the same claim.
+   *
+   * `Severity` has had three values all along and the studio had two, so
+   * anything that was not an error was counted and coloured as a warning. A
+   * mod noting that a monster has no morale — which is a legitimate choice, and
+   * which the mod itself marked `info` — arrived as 127 warnings, and a console
+   * reading "130 warnings" about a module with nothing wrong with it is a
+   * console people stop reading.
+   */
+  readonly infos: readonly Diagnostic[];
   readonly identity: string;
   readonly hash: string;
   /** The document as it would be exported — line numbers refer to this. */
@@ -322,11 +333,13 @@ export function useModuleStore(initial: ModuleDoc, initialName = 'module.json') 
   const validation: Validation = useMemo(() => {
     const diagnostics = settled?.diagnostics ?? fresh.diagnostics;
     const errors = diagnostics.filter((d) => d.severity === 'error');
-    const warnings = diagnostics.filter((d) => d.severity !== 'error');
+    const warnings = diagnostics.filter((d) => d.severity === 'warning');
+    const infos = diagnostics.filter((d) => d.severity === 'info');
     return {
       ok: errors.length === 0,
       errors,
       warnings,
+      infos,
       identity: fresh.identity,
       hash: settled?.hash ?? lastHash.current,
       settling: settled === null,

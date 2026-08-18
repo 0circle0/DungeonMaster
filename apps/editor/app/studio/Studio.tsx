@@ -121,13 +121,15 @@ export function Studio(props: {
     const extra = [...modDiagnostics, ...semantic];
     if (extra.length === 0) return validation;
     const errors = extra.filter((d) => d.severity === 'error');
-    const warnings = extra.filter((d) => d.severity !== 'error');
+    const warnings = extra.filter((d) => d.severity === 'warning');
+    const infos = extra.filter((d) => d.severity === 'info');
     return {
       ...validation,
       // A mod can raise an error, but it cannot make a valid module invalid:
       // `ok` still reflects the format, so a mod's opinion never blocks export.
       errors: [...validation.errors, ...errors],
       warnings: [...validation.warnings, ...warnings],
+      infos: [...validation.infos, ...infos],
     };
   }, [validation, modDiagnostics, semantic]);
 
