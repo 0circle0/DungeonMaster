@@ -241,21 +241,40 @@ Declared and never read. `../apps/editor/lib/inertFields.ts` is the registry and
 its drift test fails if a listed field turns out to be read, so each of these
 needs a decision rather than a shrug.
 
-| Field | Note |
-| --- | --- |
-| `rules.conditions[].implies` | The schema cites "unconscious implies prone". `impliedConditions` has no non-test caller, so it grants nothing. |
-| `rules.senses[].ignores` | "Blindsight ignores blinded" does not work. |
-| `content.items[].requiresAttunement`, `.attunementRequires` | Typed on the engine's `ItemDef` and never read. No three-item limit. |
-| `rules.sizes[].carryMultiplier` | No encumbrance model, by decision — see Choices. |
-| `rules.movementModes[].fallsWhenDisabled` | Nothing takes a movement mode away. |
-| `rules.languages[].exotic` | Dialogue and readable content are not language-gated. |
-| `content.items[].stackable`, `.rarity` | Carried, never interpreted. |
+**Two were wired**, and left the registry:
 
-**One contradiction rather than an absence.** `rules.movementModes[].terrainMultiplier`
-is documented in `../packages/module/src/schema/space.ts` as combining
-multiplicatively with a tile's `moveCost`, but `TerrainIndex.costOf` returns the
-raw cost and `findPath` never applies the multiplier. The schema and the engine
-disagree; one of the two readings should go.
+- `rules.conditions[].implies` — the schema cites "unconscious implies prone",
+  and now all three places a condition's static properties are read consult the
+  implied set. An implied condition is a derived view with no lifecycle of its
+  own, and never one the creature already holds directly.
+- `rules.senses[].ignores` — it was the exception clause to a rule nobody had
+  written, since no condition could shut a sense off. `rules.conditions[].suppressesSenses`
+  is the other half; `blinded` now names `sight`.
+
+**Two are deferred, and the note says why rather than "yet":**
+
+| Field | What it is waiting on |
+| --- | --- |
+| `content.items[].requiresAttunement`, `.attunementRequires` | Enforcing a limit needs an attuned list on the entity — persisted state, and therefore a save-format migration. |
+| `rules.movementModes[].fallsWhenDisabled` | Two missing pieces, not one: nothing takes a movement mode away, and there is no falling model for what would happen next. |
+
+**The rest are settled**, and the registry note is the decision:
+`world.areas[].map` (a biome's palette wins), `world.terrains[].lightRadius`
+(there is no light model; a sense carries its own reach),
+`world.terrains[].isDoor` (doors live on the map's gate record),
+`content.items[].stackable` (inventory merges by id; there is no item instance
+to keep apart), `content.items[].rarity` (display and filtering),
+`rules.sizes[].carryMultiplier` (encumbrance is deliberately absent — see
+Choices), `rules.languages[].exotic` (content is not language-gated).
+
+**The contradiction that was not one.** `rules.movementModes[].terrainMultiplier`
+was recorded here as a case of the schema and the engine disagreeing. It was
+not: `costOf` applies it and `findPath` passes modes through. It was two
+narrower faults instead. The running minimum started at 1, so a multiplier
+*above* 1 could never win and a mode declared as worse over some ground was
+quietly free. And `PathOptions.terrainMultiplier` was a second knob nobody
+passed that would have double-applied on top of `costOf` if anyone had. Both
+fixed; the dead option is gone.
 
 ---
 

@@ -41,10 +41,16 @@ const INERT: Record<string, readonly CoverageNote[]> = {
       note: 'inventory merges by item id regardless; there is no item instance to keep apart',
     },
     { field: 'rarity', note: 'not read by the engine — for display and filtering' },
-    { field: 'requiresAttunement', note: 'not read by the engine yet, and neither is attunementRequires' },
+    {
+      field: 'requiresAttunement',
+      note: 'not read, and neither is attunementRequires — enforcing a limit needs an attuned list on the entity, which is saved state and a save migration',
+    },
   ],
   'rules.movementModes': [
-    { field: 'fallsWhenDisabled', note: 'not read by the engine yet — nothing takes a movement mode away' },
+    {
+      field: 'fallsWhenDisabled',
+      note: 'not read — two things are missing, not one: nothing takes a movement mode away, and there is no falling model for what would happen next',
+    },
   ],
   'rules.sizes': [
     {
