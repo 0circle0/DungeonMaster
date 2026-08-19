@@ -5,9 +5,9 @@ departs from them, and which of those departures were decisions rather than
 accidents.
 
 > **Status: first pass, 2026-08-19.** The defects in *[Defects](#defects)* are
-> fixed. The gaps in *[Gaps](#gaps)* are recorded, not built; each says what it
-> would cost. The entries under *[Choices](#choices)* are settled and need no
-> further action.
+> fixed, and so is G1, which was the largest gap. The rest of *[Gaps](#gaps)*
+> are recorded, not built; each says what it would cost. The entries under
+> *[Choices](#choices)* are settled and need no further action.
 
 **Why this document exists.** The header of `../packages/module/src/schema/rules.ts`
 promises that "the engine has no idea what Might is, that hit points exist, that
@@ -113,14 +113,14 @@ building anything. The audit predates that move.
 
 ## Gaps
 
-### G1. Advantage and disadvantage are built and unreachable
+### G1. Advantage and disadvantage were built and unreachable — **closed**
 
-**The headline finding.** Every part of the mechanism exists: `Swing` is a type
-in `../packages/engine/src/rules/check.ts`, `check()` selects `advantageDice` or
-`disadvantageDice` when handed one, the roll event carries `swing`, the
-`roll.swing` system-text fragment narrates it, and `core_fantasy` declares
-`2d20kh1` and `2d20kl1`. **No call site ever passes one, and no schema field
-anywhere produces one.**
+**The headline finding, and now fixed.** Every part of the mechanism existed:
+`Swing` was a type in `../packages/engine/src/rules/check.ts`, `check()` selected
+`advantageDice` or `disadvantageDice` when handed one, the roll event carried
+`swing`, the `roll.swing` fragment narrated it, and `core_fantasy` declared
+`2d20kh1` and `2d20kl1`. **No call site ever passed one, and no schema field
+anywhere produced one.**
 
 This matters more than any other entry here. In the official rules,
 advantage is *the* universal situational modifier: Dodge, Help, attacking an
@@ -134,18 +134,36 @@ shift in the mean that leaves the critical rate alone. Advantage is a change in
 variance that also lifts the critical rate from 5% to about 9.75%, because with
 `2d20kh1` the kept die is the natural roll.
 
-**Cost.** Moderate and well understood. Conditions gain a `swings` record and
-abilities a `swing` field, both static enums; one pure `resolveSwing` inside
-`check()` owns the advantage-cancels-disadvantage rule so no call site can
-forget it; four call sites reach fourteen of the eighteen places a roll is made.
-No persisted state and no save migration. A predicate-driven rule list was
-considered and rejected: every predicate needs `buildScope`, which re-runs
-`statsOf` and `skillRanksOf` on paths that currently build no scope at all.
+**What it became.** `rules.conditions[].swings` names four scopes — the attacks
+its bearer makes, the attacks made against them, their ability checks, their
+saving throws — and `content.abilities[].swing` and `.savingThrow.swing` cover
+what is inherent to an ability rather than to the moment. `resolveSwing` inside
+`check()` owns the reconciling, so no call site can forget it, and
+`rules.resolution.swingStacking` makes the policy the ruleset's: `cancel` is the
+common table reading, `net` goes by the sign of the count. There is deliberately
+no `stack`, because `advantageDice` is a single notation and two levels of
+advantage cannot be named.
+
+Four call sites reach almost everything: `skillCheck` covers traps, dialogue,
+gates, loot and discovery at once, `savingThrow` covers condition and
+concentration saves, and the attack roll asks both sides.
+
+A predicate-driven rule list was considered and rejected. Every predicate needs
+`buildScope`, which re-runs `statsOf` and `skillRanksOf` on paths that build no
+scope at all today — and a `when` may contain `{"chance": …}`, which would make
+swing *selection* consume randomness. That is a far worse determinism story than
+applying one.
 
 **Determinism.** `2d20kh1` consumes two draws where `1d20` consumed one, and
 `../packages/engine/src/reduce.ts` threads one generator per action, so a swing
-shifts every later draw in that reduce. With no module declaring one, nothing
-changes: the same argument the mod runtime already makes for itself.
+shifts every later draw in that reduce. Each slice landed with nothing declaring
+a swing, so each was verifiably inert until the content commit that used it.
+
+**In the shipped ruleset.** Poisoned, frightened and blinded keep their `guard`
+penalties and gain disadvantage on the attacks their bearer makes — not a double
+penalty, because a defence penalty never said anything about aiming. Two
+conditions are new because neither was expressible before: `dodging` and
+`helped`, applied by `dodge` and `assist`, granted to every class at level 1.
 
 ### G2. The proficiency bonus applies to one of the three d20 tests
 
@@ -208,10 +226,12 @@ make the field honest.
 
 ### G7. The named tactical actions are absent
 
-No Dodge, Dash, Disengage, Help, Hide or Ready. Most of these are
-advantage-shaped and so sit behind G1; Disengage is independently expressible as
-an opportunity suppression, and Dash exists as a stance multiplier of 1.5
-against the official 2.
+**Partly closed with G1.** Dodge and Help were the two that could not be
+written at all, and both now exist in `core_fantasy` as `dodge` and `assist`.
+Dash exists as a stance multiplier of 1.5 against the official 2. Disengage is
+independently expressible as an opportunity suppression and is not built. Hide
+would mean something different here, because stealth is stance emission rather
+than a roll — see Choices. Ready has no equivalent.
 
 ---
 
@@ -261,8 +281,11 @@ cap at a single halving; this expresses immunity, vulnerability, healing from a
 damage type, and "immune to slashing except silvered" in one field.
 
 **Conditions carry more than a name** — `stacking`, `magnitude`, `onTick`,
-`onExpire`, and a saving throw with timing. Save-ends is a first-class concept
-here and a per-effect footnote there.
+`onExpire`, a saving throw with timing, and `swings`. Save-ends is a first-class
+concept here and a per-effect footnote there. A condition can express itself as
+a modifier to a derived stat or as a swing, and those are different mechanics
+rather than two spellings of one: choose between them, and do not write both for
+the same reason.
 
 **Legendary and lair actions are first-class** `specialTurns`, running outside
 initiative.
