@@ -24,6 +24,7 @@ State is fully serializable *including RNG state*, so `seed + action log` reprod
 | `packages/tools` | Dev tooling: port-freeing and project-coverage checks. Imported by nothing; npm runs it. |
 | `apps/play` | Browser play: click-first, command bar kept. |
 | `apps/editor` | The authoring studio. |
+| `apps/site` | The documentation site: the format field by field, the engine, and the studio. |
 | `modules/` | Game modules. `minimal` is the no-hardcoding proof. |
 | `modules/shared` | `dmkit`, the Python API a world of any size is authored against. Not a module — no `module.json` — see [modules/shared/README.md](modules/shared/README.md). |
 | `pyrightconfig.json` | Editor/`npx pyright` search paths for the module generators. Type checking off; missing imports and undefined names are errors. |

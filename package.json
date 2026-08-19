@@ -14,7 +14,7 @@
   "scripts": {
     "test": "vitest run",
     "test:watch": "vitest",
-    "typecheck": "tsc -p tsconfig.json && tsc -p packages/core/tsconfig.json && tsc -p packages/module/tsconfig.json && tsc -p packages/engine/tsconfig.json && tsc -p packages/play/tsconfig.json && tsc -p packages/authoring/tsconfig.json && tsc -p packages/tools/tsconfig.json && tsc -p packages/engine/tsconfig.isomorphic.json && tsc -p packages/play/tsconfig.isomorphic.json && tsc -p packages/mods/tsconfig.isomorphic.json && tsc -p packages/module/tsconfig.isomorphic.json && tsc -p packages/core/tsconfig.isomorphic.json && tsc -p packages/library/tsconfig.json && tsc -p packages/library/tsconfig.isomorphic.json && tsc -p apps/editor/tsconfig.json && tsc -p apps/play/tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json && tsc -p packages/core/tsconfig.json && tsc -p packages/module/tsconfig.json && tsc -p packages/engine/tsconfig.json && tsc -p packages/play/tsconfig.json && tsc -p packages/authoring/tsconfig.json && tsc -p packages/tools/tsconfig.json && tsc -p packages/engine/tsconfig.isomorphic.json && tsc -p packages/play/tsconfig.isomorphic.json && tsc -p packages/mods/tsconfig.isomorphic.json && tsc -p packages/module/tsconfig.isomorphic.json && tsc -p packages/core/tsconfig.isomorphic.json && tsc -p packages/library/tsconfig.json && tsc -p packages/library/tsconfig.isomorphic.json && tsc -p apps/editor/tsconfig.json && tsc -p apps/play/tsconfig.json && tsc -p apps/site/tsconfig.json",
     "validate": "tsx packages/module/src/bin/validate.ts",
     "project": "tsx packages/module/src/bin/project.ts",
     "bench": "tsx packages/tools/src/bin/bench-validate.ts",
@@ -32,6 +32,9 @@
     "play": "npm run dev --workspace @dm/play-app",
     "play:build": "npm run build --workspace @dm/play-app",
     "play:stop": "tsx packages/tools/src/bin/free-port.ts 4500",
+    "site": "npm run dev --workspace @dm/site-app",
+    "site:build": "npm run build --workspace @dm/site-app",
+    "site:stop": "tsx packages/tools/src/bin/free-port.ts 4600",
     "mod": "tsx packages/mods/src/bin/mod-tool.ts",
     "content": "tsx packages/tools/src/bin/build-content.ts",
     "check:content": "tsx packages/tools/src/bin/check-content.ts",

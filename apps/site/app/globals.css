@@ -1,0 +1,294 @@
+/* Dark and dense, matching the studio. A reference page is read for a long
+   time in one sitting, so the chrome stays quiet and the tables carry the
+   contrast. */
+
+:root {
+  --bg: #12131a;
+  --panel: #181a23;
+  --panel-2: #1e212c;
+  --line: #2a2e3d;
+  --text: #dfe3ee;
+  --muted: #8890a6;
+  --accent: #d9a441;
+  --accent-dim: #8a6a2c;
+  --ref: #7fb3e8;
+  --ok: #5fb87a;
+  --err: #e06c6c;
+  --mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font: 15px/1.6 system-ui, -apple-system, "Segoe UI", sans-serif;
+  scroll-behavior: smooth;
+}
+
+a { color: var(--ref); text-decoration: none; }
+a:hover { text-decoration: underline; }
+code { font-family: var(--mono); font-size: 0.9em; }
+
+/* ── shell ───────────────────────────────────────────────── */
+
+.shell { display: flex; align-items: flex-start; min-height: 100vh; }
+
+.side {
+  position: sticky;
+  top: 0;
+  flex: 0 0 232px;
+  height: 100vh;
+  overflow-y: auto;
+  padding: 22px 16px;
+  border-right: 1px solid var(--line);
+  background: var(--panel);
+}
+
+.main { flex: 1 1 auto; min-width: 0; padding: 30px 38px 120px; max-width: 1080px; }
+
+.nav .brand {
+  display: block;
+  font-weight: 650;
+  letter-spacing: 0.2px;
+  color: var(--accent);
+  margin-bottom: 18px;
+}
+
+.nav-group { margin-bottom: 16px; }
+.nav-head {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.9px;
+  color: var(--muted);
+  margin-bottom: 6px;
+}
+.nav-item {
+  display: block;
+  padding: 3px 8px;
+  margin-left: -8px;
+  border-radius: 4px;
+  color: var(--text);
+  font-size: 14px;
+}
+.nav-item:hover { background: var(--panel-2); text-decoration: none; }
+.nav-item.on { background: var(--panel-2); color: var(--accent); }
+
+/* ── page head ───────────────────────────────────────────── */
+
+.page-head { border-bottom: 1px solid var(--line); padding-bottom: 14px; margin-bottom: 22px; }
+h1 { font-size: 26px; margin: 0 0 6px; font-weight: 650; }
+h2 { font-size: 19px; margin: 34px 0 10px; font-weight: 650; }
+/* The title and the dotted path sit on one line where there is room and stack
+   where there is not. Without the wrap a path like
+   `rules.spellcasting.componentActionTypes` is a flex item that will not shrink
+   below its own width, and it pushes the whole page sideways on a phone. */
+h3 {
+  font-size: 15px;
+  margin: 26px 0 8px;
+  font-weight: 600;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 2px 10px;
+}
+.lede { color: var(--muted); margin: 0; max-width: 70ch; }
+p { max-width: 78ch; }
+
+.sec-anchor { color: var(--text); }
+.sec-path { color: var(--muted); font-size: 12px; font-weight: 400; min-width: 0; overflow-wrap: anywhere; }
+
+/* ── tables ──────────────────────────────────────────────── */
+
+.table-wrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 6px; }
+table { border-collapse: collapse; width: 100%; font-size: 13.5px; }
+thead th {
+  position: sticky;
+  top: 0;
+  text-align: left;
+  background: var(--panel-2);
+  color: var(--muted);
+  font-weight: 500;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.7px;
+  padding: 7px 10px;
+  border-bottom: 1px solid var(--line);
+}
+tbody td { padding: 6px 10px; border-top: 1px solid var(--line); vertical-align: top; }
+tbody tr:nth-child(odd) { background: rgba(255, 255, 255, 0.012); }
+
+.f-key { color: var(--accent); }
+.f-req .req { color: var(--ok); font-size: 12px; }
+.f-def code { color: var(--muted); }
+/* Wide enough that a one line gloss stays close to one line. On a desktop the
+   column is already wider than this and the floor does nothing; on a phone it
+   is what stops every row growing to four lines of wrapped text. */
+.f-doc { color: var(--text); min-width: 34ch; }
+
+/* The type column carries everything from `number` to a twelve value enum.
+   Under automatic table layout a `max-width` on the cell is ignored, so the
+   bound goes on an inline-block inside it, which the column does respect.
+   Below that width types wrap; above it nothing can force a horizontal
+   scrollbar on the whole table. */
+.f-type { color: var(--muted); }
+.f-type .t-wrap { display: inline-block; max-width: 34ch; }
+
+/* Atoms never break internally, only between each other. */
+.t-scalar, .t-ref, .t-link, .t-arr, .t-record { white-space: nowrap; }
+.t-ref, .t-link { color: var(--ref); }
+.t-scalar, .t-arr, .t-record { color: var(--muted); }
+.t-bar { color: var(--muted); opacity: 0.55; white-space: nowrap; }
+
+/* Enum values as chips. They wrap as a group and read better than a run of
+   pipes once there are more than three or four of them. */
+/* Plain `inline`, not `inline-flex`: a flex container is block level enough
+   that a following `[]` cannot sit beside the last chip and drops to a line of
+   its own. Inline chips wrap the same way and keep the `[]` attached. */
+.t-enum { display: inline; }
+.t-enum code {
+  display: inline-block;
+  color: var(--text);
+  background: var(--panel-2);
+  border: 1px solid var(--line);
+  border-radius: 3px;
+  padding: 0 4px;
+  margin: 0 0 3px;
+  white-space: nowrap;
+  font-size: 11.5px;
+  line-height: 1.45;
+}
+.t-enum code:not(:last-child) { margin-right: 3px; }
+.t-enum + .t-arr { margin-left: 1px; }
+
+/* ── filter ──────────────────────────────────────────────── */
+
+.filter { display: flex; gap: 8px; margin: 0 0 20px; }
+.filter input {
+  flex: 1 1 auto;
+  max-width: 380px;
+  padding: 7px 11px;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 5px;
+  color: var(--text);
+  font: inherit;
+  font-size: 14px;
+}
+.filter input:focus { outline: none; border-color: var(--accent-dim); }
+.filter button {
+  background: var(--panel-2);
+  border: 1px solid var(--line);
+  border-radius: 5px;
+  color: var(--muted);
+  padding: 0 12px;
+  cursor: pointer;
+}
+
+/* A row of code chips that wraps.
+   Not a plain run of inline <code>: JSX emits no whitespace between mapped
+   elements, so there is no break opportunity and the row runs off the page
+   however narrow its container is. Flex supplies both the wrap and the gap. */
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px 10px;
+  max-width: 78ch;
+}
+/* A single chip may be longer than a narrow screen, so let one break inside
+   itself as a last resort. Short chips never reach this. */
+.chips code { color: var(--muted); min-width: 0; overflow-wrap: anywhere; }
+
+/* ── prose blocks ────────────────────────────────────────── */
+
+.code {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 12px 14px;
+  overflow-x: auto;
+  font-family: var(--mono);
+  font-size: 12.5px;
+  line-height: 1.55;
+  color: #cbd3e4;
+}
+
+.note {
+  border-left: 2px solid var(--accent-dim);
+  background: var(--panel);
+  padding: 10px 14px;
+  border-radius: 0 6px 6px 0;
+  margin: 16px 0;
+  max-width: 78ch;
+}
+.note strong { display: block; color: var(--accent); font-size: 13px; margin-bottom: 3px; }
+
+.sec-note { color: var(--muted); font-size: 13.5px; margin: 0 0 8px; }
+
+ul, ol { max-width: 78ch; }
+li { margin: 3px 0; }
+
+/* ── landing ─────────────────────────────────────────────── */
+
+.hero { padding: 46px 0 8px; }
+.hero h1 { font-size: 38px; letter-spacing: -0.4px; }
+.hero .tag { color: var(--accent); font-size: 15px; margin: 0 0 14px; }
+
+.stats { display: flex; flex-wrap: wrap; gap: 26px; margin: 22px 0 6px; }
+.stat b { display: block; font-size: 22px; font-weight: 650; }
+.stat span { color: var(--muted); font-size: 12.5px; }
+
+.cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(238px, 1fr)); gap: 12px; margin: 18px 0; }
+.card {
+  display: block;
+  padding: 13px 15px;
+  border: 1px solid var(--line);
+  border-radius: 7px;
+  background: var(--panel);
+  color: var(--text);
+}
+.card:hover { border-color: var(--accent-dim); text-decoration: none; }
+.card b { display: block; color: var(--accent); font-weight: 600; margin-bottom: 3px; }
+.card span { color: var(--muted); font-size: 13px; }
+
+/* ── worked examples ─────────────────────────────────────── */
+
+.ex { margin: 16px 0 22px; max-width: 82ch; }
+.ex-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 10px; margin-bottom: 6px; }
+.ex-head b { font-weight: 600; }
+.ex-kind {
+  font-size: 10.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: var(--muted);
+  border: 1px solid var(--line);
+  border-radius: 3px;
+  padding: 1px 5px;
+}
+.ex-note { color: var(--muted); font-size: 13px; margin: 6px 0 0; }
+.ex-what { margin: 0 0 6px; }
+.ex-where { color: var(--muted); font-size: 12.5px; margin-bottom: 6px; }
+.ex-where code { color: var(--accent); }
+.ex-big { border-left: 2px solid var(--line); padding-left: 16px; margin: 26px 0 30px; }
+
+/* ── misc tables in prose ────────────────────────────────── */
+
+/* Prose tables carry paths and keys that must not be broken mid token, so
+   rather than wrap them the table scrolls inside itself, the same affordance
+   the generated field tables get. `display: block` is what makes the overflow
+   apply; the rows still lay out as a table through anonymous boxes. */
+.plain {
+  display: block;
+  overflow-x: auto;
+  max-width: 100%;
+  margin: 14px 0;
+}
+.plain td:first-child { white-space: nowrap; }
+.plain code { color: var(--accent); }
+
+@media (max-width: 860px) {
+  .shell { display: block; }
+  .side { position: static; height: auto; width: auto; flex: none; border-right: 0; border-bottom: 1px solid var(--line); }
+  .main { padding: 22px 18px 80px; }
+}

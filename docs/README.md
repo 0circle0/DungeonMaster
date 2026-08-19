@@ -15,6 +15,11 @@ You are the Dungeon Master. You write the rules; the engine follows them exactly
 | [Validation](validation.md) | What the validator catches, and how to read what it tells you |
 | [Reference](reference.md) | Every field in the format — generated from the schemas |
 
+All of this, plus a writeup of the engine and of the studio, is also a site:
+`npm run site` serves it on http://localhost:4600. Its field tables are generated
+from the same schemas as [reference.md](reference.md), with a one-line
+description per field from `packages/module/src/schema/fieldDocs.ts`.
+
 ## The five-minute version
 
 A module has five parts:

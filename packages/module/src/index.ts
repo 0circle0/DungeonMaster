@@ -61,6 +61,12 @@ export type { GameModule, CollectionPath, ModuleMeta, Creation, Start } from './
 // reading the same derivation rather than two that can drift.
 export { COLLECTION_SCHEMAS, collectionSchema, unwrapSchema } from './schema/collections.js';
 
+// The schema walk and the sentence per field. Shared by `npm run docs`, the
+// coverage test that keeps the two in step, and the documentation site.
+export { walkModuleSchema, fieldPaths, sectionsByArea, MAX_SECTION_DEPTH, SYSTEM_TEXT_PATH } from './schema/walk.js';
+export type { FieldRow, SectionRow, TypeNode, DslKind } from './schema/walk.js';
+export { FIELD_DOCS } from './schema/fieldDocs.js';
+
 export { rulesSchema } from './schema/rules.js';
 export type { Rules, Attribute, Resource, DerivedStat, Condition } from './schema/rules.js';
 

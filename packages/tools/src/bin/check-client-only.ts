@@ -21,7 +21,7 @@ import { fileURLToPath } from 'node:url';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..', '..', '..', '..');
 
-const APPS = ['apps/editor', 'apps/play'];
+const APPS = ['apps/editor', 'apps/play', 'apps/site'];
 const SKIP = new Set(['node_modules', '.next', 'out', 'dist']);
 
 interface Rule {
@@ -95,7 +95,7 @@ function main(): number {
     return 1;
   }
 
-  process.stdout.write('✓ both apps are client-only: no routes, no server APIs, no filesystem\n');
+  process.stdout.write(`✓ all ${APPS.length} apps are client-only: no routes, no server APIs, no filesystem\n`);
   return 0;
 }
 

@@ -143,7 +143,7 @@ export const SYSTEM_TEXT = [
   entry('combat.ended.fled', 'message', 'You are not followed.', 'The party escaped.'),
   entry('combat.ended.defeat', 'message', 'The party falls.', 'The party lost.'),
   entry('combat.round', 'message', '— round {round} —', 'A new round begins.', ['round']),
-  entry('combat.turn', 'message', "{who}'s turn.", 'Whose turn it is — without this a player only learns it from a refusal.', ['who']),
+  entry('combat.turn', 'message', "{who}'s turn.", 'Whose turn it is.', ['who']),
 
   // — movement ———————————————————————————————————————————————
   entry('move.blocked', 'message', 'Blocked by {what}.', 'Something stopped a step: a wall, or somebody standing there.', ['what']),
@@ -152,7 +152,7 @@ export const SYSTEM_TEXT = [
   // — items and coin —————————————————————————————————————————
   entry('item.taken', 'message', 'Taken: {items}.', 'Picked up.', ['items']),
   entry('item.lost', 'message', 'Lost: {items}.', 'Gone from the party\'s hands.', ['items']),
-  entry('item.dropped', 'message', '{who} leaves {items} behind.', 'A body\'s spoils — a silent drop is a drop the player never picks up.', ['who', 'items']),
+  entry('item.dropped', 'message', '{who} leaves {items} behind.', 'A body\'s spoils, named so they get picked up.', ['who', 'items']),
   entry('trade.bought', 'message', 'Bought {items} from {who} for {price}.', 'A purchase.', ['items', 'who', 'price']),
   entry('trade.sold', 'message', 'Sold {items} to {who} for {price}.', 'A sale.', ['items', 'who', 'price']),
   entry('currency.gained', 'message', 'You are {amount} the richer.', 'Coin arriving any way other than a sale.', ['amount']),
@@ -189,7 +189,7 @@ export const SYSTEM_TEXT = [
 
   // — quests —————————————————————————————————————————————————
   entry('quest.offered', 'message', '{who} has work for you: {quest}.', 'Somebody offers a job.', ['who', 'quest']),
-  entry('quest.started', 'message', 'New quest: {quest} — {description}', 'A job taken, with what it is — the title alone says nothing.', ['quest', 'description']),
+  entry('quest.started', 'message', 'New quest: {quest} — {description}', 'A job taken, with what it asks of you.', ['quest', 'description']),
   entry('quest.started.plain', 'message', 'New quest: {quest}.', 'A job taken that has no description.', ['quest']),
   entry('quest.stage', 'message', '{stage}', 'A quest moves on, when the stage wrote no journal prose.', ['stage']),
   entry('quest.stage.journal', 'message', '{stage} — {journal}', 'A quest moves on, with the stage\'s own journal line.', ['stage', 'journal']),
@@ -199,7 +199,7 @@ export const SYSTEM_TEXT = [
   entry('quest.failed.abandoned', 'fragment', 'abandoned', 'Why a quest was lost: the party walked away from it.'),
   entry('quest.failed.conditions', 'fragment', 'conditions changed', 'Why a quest was lost: its `failWhen` became true.'),
   entry('quest.failed.timedOut', 'fragment', 'too much time passed', 'Why a quest was lost: its deadline ran out.'),
-  entry('quest.failed.expired', 'fragment', 'time ran out', 'Why a quest was lost: it expired off-screen.'),
+  entry('quest.failed.expired', 'fragment', 'time ran out', 'Why a quest was lost: its time ran out while you were elsewhere.'),
 
   // — the party ——————————————————————————————————————————————
   entry('party.stance', 'message', 'You move at a {stance}.', 'The party changes how carefully it moves.', ['stance']),
@@ -213,7 +213,7 @@ export const SYSTEM_TEXT = [
   entry('reputation.changed', 'message', '{faction}: {direction} ({delta}).', 'Standing with a faction moved.', ['faction', 'direction', 'delta']),
   entry('deed.witness', 'fragment', 'witness', 'One witness.'),
   entry('deed.witnesses', 'fragment', 'witnesses', 'Several witnesses.'),
-  entry('deed.unseen', 'message', 'Nobody saw that.', 'A deed nobody witnessed — which is what makes stealth mechanically different.'),
+  entry('deed.unseen', 'message', 'Nobody saw that.', 'A deed nobody witnessed.'),
   entry('deed.witnessed', 'message', '{witnesses} to that.', 'A deed that was seen.', ['witnesses']),
   entry('game.victory', 'message', 'You have won.', 'The game is won.'),
   entry('game.defeat', 'message', 'Your party is dead.', 'The game is lost.'),
@@ -226,7 +226,7 @@ export const SYSTEM_TEXT = [
   entry('perception.investigating', 'message', '{who} casts about, and starts toward something.', 'A creature goes to look at what it noticed.', ['who']),
   entry('perception.lostInterest', 'message', '{who} loses the thread of it.', 'A creature gives up looking.', ['who']),
   entry('sense.empty', 'message', 'You stop. Nothing reaches you.', 'Using a sense that turns nothing up, when the sense has no name.'),
-  entry('sense.empty.named', 'message', 'You stop. Nothing reaches you by {sense}.', 'Using a sense that turns nothing up. Always says something — silence reads as a broken command.', ['sense']),
+  entry('sense.empty.named', 'message', 'You stop. Nothing reaches you by {sense}.', 'Using a sense that turns nothing up. Always says something.', ['sense']),
   entry('sense.impression', 'message', '{nearness}, something you can {sense}.', 'Noticing something, when the sense wrote no phrasing of its own.', ['nearness', 'sense']),
 
   // — looking around —————————————————————————————————————————
@@ -238,7 +238,7 @@ export const SYSTEM_TEXT = [
 
   // — refusals: acting at all ————————————————————————————————
   entry('refused.actor.missing', 'message', 'no such character', 'The action named somebody who is not in the game.'),
-  entry('refused.action.unknown', 'message', '"{action}" is not something you can do', 'An action this build has never heard of — a save or a caller can hand one over.', ['action']),
+  entry('refused.action.unknown', 'message', '"{action}" is not something you can do', 'An action this version does not recognise.', ['action']),
   entry('refused.turn.other', 'message', "it is {who}'s turn", 'Acting out of turn.', ['who']),
   entry('refused.select.notParty', 'message', 'not in the party', 'Selecting somebody who is not yours to command.'),
 
@@ -306,7 +306,7 @@ export const SYSTEM_TEXT = [
   entry('refused.stance.unknown', 'message', 'there is no way of moving called "{stance}"', 'Setting a stance the module does not declare.', ['stance']),
   entry('refused.follow.inCombat', 'message', 'in a fight everyone acts on their own initiative', 'Setting follow while fighting.'),
   entry('refused.rest.notHere', 'message', 'cannot rest like that here', 'This place does not allow that kind of rest.'),
-  entry('refused.rest.inCombat', 'message', 'not while fighting', 'Resting mid-fight.'),
+  entry('refused.rest.inCombat', 'message', 'not while fighting', 'Resting during a fight.'),
   entry('refused.rest.interrupted', 'message', 'something came looking before you could settle', 'A rest broken into.'),
 
   // — refusals: talking and trading ——————————————————————————
