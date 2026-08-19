@@ -56,6 +56,23 @@ code { font-family: var(--mono); font-size: 0.9em; }
   margin-bottom: 18px;
 }
 
+/* The two applications, at the top of the sidebar on every page. Filled rather than outlined,
+   and full width rather than paired side by side: everything else in this column is a link to
+   prose about the software, and these two are the software. They should not read as the first
+   two entries of a list of documentation pages. */
+.nav-apps { display: grid; gap: 8px; margin: 0 0 22px; }
+.nav-app {
+  display: block;
+  padding: 11px 14px;
+  border-radius: 6px;
+  background: var(--accent);
+  color: var(--bg);
+  font-weight: 650;
+  font-size: 14.5px;
+  text-align: center;
+}
+.nav-app:hover { filter: brightness(1.09); text-decoration: none; }
+
 .nav-group { margin-bottom: 16px; }
 .nav-head {
   font-size: 11px;

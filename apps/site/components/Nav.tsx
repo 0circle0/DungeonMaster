@@ -1,8 +1,35 @@
 /**
  * The site's one navigation list, so a new page is added in one place.
+ *
+ * `APPS` is here for the same reason, though it is not part of the nav: the studio and the
+ * player are separate deployments on their own subdomains, so they are plain `<a>` links rather
+ * than routes, and a hostname written in two files is a hostname that will be changed in one.
  */
 
 import Link from 'next/link';
+
+/**
+ * The two apps this site documents. Absolute, because they are different origins -- a relative
+ * href would resolve against the docs site and 404.
+ *
+ * Hard-coded rather than read from the environment: all three apps are static exports with no
+ * runtime configuration, and these hostnames are as fixed as the domain itself. The cost is that
+ * following one of these from a local dev server lands on production, which is the right
+ * trade -- the alternative is a build-time variable that is wrong in exactly one direction and
+ * silently.
+ */
+export const APPS: readonly { href: string; label: string; blurb: string }[] = [
+  {
+    href: 'https://studio.dnddungeon.com',
+    label: 'Studio',
+    blurb: 'Build and edit worlds in the browser. Nothing is uploaded.',
+  },
+  {
+    href: 'https://play.dnddungeon.com',
+    label: 'Player',
+    blurb: 'Open a world file and play it. Examples included.',
+  },
+];
 
 export const NAV: readonly { href: string; label: string; blurb: string; group: string }[] = [
   { group: 'Start', href: '/', label: 'Overview', blurb: 'What a world is, in five minutes.' },
@@ -30,6 +57,18 @@ export function Nav({ here }: { here: string }) {
   return (
     <nav className="nav">
       <Link href="/" className="brand">DungeonMaster</Link>
+
+      {/*
+        Above the documentation, not among it. These are the two applications; everything below
+        is writing about them. A reader three pages into the format reference should be one click
+        from the studio, without going back to the landing page to find it.
+      */}
+      <div className="nav-apps">
+        {APPS.map((app) => (
+          <a key={app.href} href={app.href} className="nav-app">{app.label}</a>
+        ))}
+      </div>
+
       {GROUPS.map((group) => (
         <div key={group} className="nav-group">
           <div className="nav-head">{group}</div>

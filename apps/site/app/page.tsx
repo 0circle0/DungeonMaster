@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { Nav, NAV } from '../components/Nav';
+import { Nav, NAV, APPS } from '../components/Nav';
 import { Code } from '../components/Page';
 import { formatSize } from '../lib/fields';
 
@@ -79,10 +79,13 @@ export default function Home() {
 
         <h2>Getting started</h2>
         <ol>
-          <li>Open the studio. Pick <b>New world</b>, <b>Examples</b>, or <b>Open a file</b>.</li>
+          <li>
+            Open <a href={APPS[0].href}>the studio</a>. Pick <b>New world</b>, <b>Examples</b>, or{' '}
+            <b>Open a file</b>.
+          </li>
           <li>Build. Worlds save in your browser as you work. Nothing is uploaded.</li>
           <li><b>Export</b> to get a world file.</li>
-          <li>Open that file in the player.</li>
+          <li>Open that file in <a href={APPS[1].href}>the player</a>.</li>
         </ol>
         <p>
           <Link href="/editor">The studio</Link> covers the editor.{' '}
