@@ -26,6 +26,7 @@ import { dateOf, phaseOf, layerOf } from './sim/clock.js';
 import { arcScope } from './sim/arcs.js';
 import { threadScope } from './sim/lore.js';
 import { memoryScope } from './sim/memoryscope.js';
+import { impliedConditions } from './rules/implied.js';
 
 /** Formulas must not consume randomness; a stat that changes when re-read is a bug. */
 const FORBIDDEN_RNG: Rng = Rng.fromSeed(0);
@@ -255,6 +256,17 @@ function externalModifiers(
     for (const [statId, expr] of Object.entries(condition.modifiers)) {
       const magnitudeScope: Scope = { ...scope, magnitude: active.magnitude ?? 1 };
       add(statId, evaluate(expr, magnitudeScope, `modifier from condition ${active.condition}`));
+    }
+  }
+
+  // What those conditions imply counts too, at magnitude 1: an implied
+  // condition was never applied, so there is no magnitude to inherit and
+  // nothing sensible to inherit it from.
+  for (const id of impliedConditions(module, entity)) {
+    const condition = module.find<ConditionDef>('rules.conditions', id);
+    if (!condition) continue;
+    for (const [statId, expr] of Object.entries(condition.modifiers)) {
+      add(statId, evaluate(expr, { ...scope, magnitude: 1 }, `modifier implied by ${id}`));
     }
   }
 

@@ -208,17 +208,22 @@ export class TerrainIndex {
    * nothing did — `movementModes[].terrainMultiplier` was authored, validated,
    * and read by no one, so a flier waded through a bog at a walker's pace. A
    * creature with several modes uses whichever crosses this ground best.
+   *
+   * "Best of the modes it has", not "best of those and also 1": the running
+   * minimum used to start at 1, so a multiplier above 1 could never win and a
+   * mode declared as *worse* over some ground was quietly free.
    */
   costOf(map: TileMap, position: Position, modes: readonly string[] = []): number {
     if (!this.isPassable(map, position, modes)) return Infinity;
     const base = Math.max(0, this.at(map, position).moveCost);
 
-    let multiplier = 1;
+    let best: number | undefined;
     for (const mode of modes) {
       const declared = this.modeMultiplier.get(mode);
-      if (declared !== undefined && declared < multiplier) multiplier = declared;
+      if (declared === undefined) continue;
+      if (best === undefined || declared < best) best = declared;
     }
-    return base * multiplier;
+    return base * (best ?? 1);
   }
 }
 

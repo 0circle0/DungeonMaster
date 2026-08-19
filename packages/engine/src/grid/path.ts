@@ -83,8 +83,6 @@ export interface PathOptions {
   readonly to: Position;
   /** Movement modes the mover has, e.g. `["walk", "swim"]`. */
   readonly modes?: readonly string[];
-  /** Multiplier on terrain cost, from the mode being used. */
-  readonly terrainMultiplier?: number;
   /** Tiles that cannot be entered — other creatures, usually. */
   readonly blocked?: ReadonlySet<number>;
   /** Give up after this much accumulated cost. */
@@ -111,7 +109,6 @@ const NO_PATH: Path = { steps: [], cost: Infinity, found: false };
 export function findPath(options: PathOptions): Path {
   const { map, terrain, from, to } = options;
   const modes = options.modes ?? [];
-  const multiplier = options.terrainMultiplier ?? 1;
   const blocked = options.blocked ?? new Set<number>();
   const maxCost = options.maxCost ?? Infinity;
   const diagonal = options.diagonal !== false;
@@ -148,7 +145,7 @@ export function findPath(options: PathOptions): Path {
       const step = terrain.costOf(map, next, modes);
       if (!Number.isFinite(step)) continue;
 
-      const newCost = currentCost + step * multiplier;
+      const newCost = currentCost + step;
       if (newCost > maxCost) continue;
 
       const previous = costSoFar.get(nextKey);
@@ -192,7 +189,6 @@ export function reachable(
 ): Map<number, number> {
   const { map, terrain, from, budget } = options;
   const modes = options.modes ?? [];
-  const multiplier = options.terrainMultiplier ?? 1;
   const blocked = options.blocked ?? new Set<number>();
   const diagonal = options.diagonal !== false;
 
@@ -214,7 +210,7 @@ export function reachable(
       const step = terrain.costOf(map, next, modes);
       if (!Number.isFinite(step)) continue;
 
-      const newCost = currentCost + step * multiplier;
+      const newCost = currentCost + step;
       if (newCost > budget) continue;
 
       const previous = costs.get(nextKey);

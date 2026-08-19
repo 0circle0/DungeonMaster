@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { fileURLToPath } from 'node:url';
+import { compileModule } from '@dm/module';
 import type { CompiledModule } from '@dm/module';
 import { loadModuleFrom } from '@dm/module/load';
 import { Rng } from '@dm/core';
@@ -72,6 +73,68 @@ describe('tiles', () => {
     expect(terrainAt(map, { x: 0, y: 0 })).toBe('wall');
     expect(terrainAt(map, { x: 2, y: 2 })).toBe('floor');
     expect(inBounds(map, { x: 5, y: 0 })).toBe(false);
+  });
+});
+
+/**
+ * `moveCost` is documented as combining multiplicatively with the mover's
+ * `movementModes[].terrainMultiplier`, and `costOf` does that. It had no test,
+ * which is how a field goes back to being read by no one without anybody
+ * noticing -- and this one had already spent a while that way.
+ *
+ * Every shipped mode declares a multiplier of 1, so the fixture has to invent
+ * one: the assertion is about the arithmetic, not about greenmarch.
+ */
+describe('terrain cost and the mover', () => {
+  /** Greenmarch where wading is half price and walking is double. */
+  const waders = (): TerrainIndex => {
+    const doc = JSON.parse(JSON.stringify(GREENMARCH.source)) as never as {
+      rules: { movementModes: Record<string, unknown>[] };
+    };
+    for (const mode of doc.rules.movementModes) {
+      if (mode['id'] === 'swim') mode['terrainMultiplier'] = 0.5;
+      if (mode['id'] === 'walk') mode['terrainMultiplier'] = 2;
+    }
+    const compiled = compileModule(doc);
+    if (!compiled.ok) throw new Error('fixture failed to compile');
+    return new TerrainIndex(compiled.module);
+  };
+
+  const map = fromRows(['~~~', '...', '~~~']);
+  const water: Position = { x: 1, y: 0 };
+  const floor: Position = { x: 1, y: 1 };
+
+  it('charges the terrain\'s own cost when the mode is neutral', () => {
+    expect(terrain.costOf(map, floor, ['walk'])).toBe(1);
+    expect(terrain.costOf(map, water, ['swim'])).toBe(2);
+  });
+
+  it('scales that cost by the mode crossing it', () => {
+    const index = waders();
+    expect(index.costOf(map, water, ['swim'])).toBe(1);
+    expect(index.costOf(map, floor, ['walk'])).toBe(2);
+  });
+
+  // A creature that can both walk and swim should not be slowed by owning a
+  // clumsier way of getting about than the one it is using.
+  it('uses whichever of a creature\'s modes crosses the ground best', () => {
+    expect(waders().costOf(map, water, ['walk', 'swim'])).toBe(1);
+  });
+
+  it('still refuses ground no mode admits it to', () => {
+    expect(waders().costOf(map, water, ['walk'])).toBe(Infinity);
+  });
+
+  // The multiplier has to reach pathfinding too, or a route is chosen by one
+  // set of numbers and paid for with another.
+  it('reaches findPath, which is where a route is actually chosen', () => {
+    const across = (index: TerrainIndex): number => findPath({
+      map, terrain: index, from: { x: 0, y: 1 }, to: { x: 2, y: 1 },
+      modes: ['walk'], diagonal: false,
+    }).cost;
+    // Two floor tiles entered, at 1 each and then at 2 each.
+    expect(across(terrain)).toBe(2);
+    expect(across(waders())).toBe(4);
   });
 });
 

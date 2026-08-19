@@ -19,6 +19,7 @@ import { buildScope, OPEN_NAMESPACES } from '../stats.js';
 import { Transaction, applyOps } from './apply.js';
 import { savingThrow, succeeded } from './check.js';
 import type { Swing } from './check.js';
+import { conditionsInForce } from './implied.js';
 
 /** The four ways a condition can lean a roll. */
 export type SwingScope = 'ownAttacks' | 'attacksAgainstSelf' | 'checks' | 'saves';
@@ -108,8 +109,8 @@ function difficultyFor(
 
 /** Whether a condition forbids an action type, e.g. `stunned` blocking actions. */
 export function preventsAction(txn: Transaction, entity: Entity, actionType: string): boolean {
-  for (const active of entity.conditions) {
-    const definition = txn.module.find<ConditionDef>('rules.conditions', active.condition);
+  for (const id of conditionsInForce(txn.module, entity)) {
+    const definition = txn.module.find<ConditionDef>('rules.conditions', id);
     if (definition?.prevents.includes(actionType)) return true;
   }
   return false;
@@ -132,29 +133,12 @@ export function swingsFrom(
   scope: SwingScope,
 ): Swing[] {
   const out: Swing[] = [];
-  for (const active of entity.conditions) {
-    const definition = module.find<ConditionDef>('rules.conditions', active.condition);
+  for (const id of conditionsInForce(module, entity)) {
+    const definition = module.find<ConditionDef>('rules.conditions', id);
     const swing = definition?.swings?.[scope];
     if (swing) out.push(swing);
   }
   return out;
-}
-
-/** Conditions implied by the ones an entity already has, transitively. */
-export function impliedConditions(txn: Transaction, entity: Entity): string[] {
-  const out = new Set<string>();
-  const queue = entity.conditions.map((active) => active.condition);
-
-  while (queue.length > 0) {
-    const current = queue.pop()!;
-    const definition = txn.module.find<ConditionDef>('rules.conditions', current);
-    for (const implied of definition?.implies ?? []) {
-      if (out.has(implied)) continue;
-      out.add(implied);
-      queue.push(implied);
-    }
-  }
-  return [...out];
 }
 
 /**

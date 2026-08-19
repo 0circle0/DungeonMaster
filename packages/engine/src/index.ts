@@ -129,8 +129,9 @@ export type { GameEvent, EventType, RollRecord } from './events.js';
 
 export { Transaction, applyOps, adjustResource, applyCondition, removeCondition, changeInventory, adjustReputation } from './rules/apply.js';
 export {
-  tickConditions, tickAllConditions, preventsAction, impliedConditions, swingsFrom,
+  tickConditions, tickAllConditions, preventsAction, swingsFrom,
 } from './rules/conditions.js';
+export { impliedConditions, conditionsInForce } from './rules/implied.js';
 export type { SwingScope } from './rules/conditions.js';
 
 export {
