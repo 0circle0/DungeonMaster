@@ -40,7 +40,7 @@ import {
 import { runAiTurns, runIdleTurns } from './rules/combat/ai.js';
 import { enterDungeon, enterArea, enterPoi, placeParty } from './sim/enter.js';
 import { openGate, markGateOpen, describeRequirement } from './sim/gates.js';
-import { startQuest, abandonQuest, advanceQuests, questsOffered } from './sim/quests.js';
+import { startQuest, abandonQuest, advanceQuests, questsOffered, awardKillXp } from './sim/quests.js';
 import { startDialogue, chooseOption, canTalkTo, endDialogue } from './sim/dialogue.js';
 import { dropDeathLoot } from './sim/spoils.js';
 import { endingReached, endingFlag } from './sim/arcs.js';
@@ -899,6 +899,10 @@ function processEmissions(
   // The dead leave what they were carrying. Before quests advance, so a "bring
   // me its hide" objective can be satisfied by the same batch that killed it.
   dropDeathLoot(txn, terrain, events, rng.derive(`spoils${suffix}`));
+
+  // What the party killed is worth something. Before quests, so a level gained
+  // for the kill is already in hand when the quest that asked for it pays out.
+  awardKillXp(txn, events, rng.derive(`killxp${suffix}`));
 
   // Quests watch everything that just happened.
   advanceQuests(txn, events, rng.derive(`quests${suffix}`));

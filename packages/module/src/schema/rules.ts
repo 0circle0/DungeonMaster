@@ -207,6 +207,19 @@ export const resolutionSchema = z
     criticalSuccessAt: z.number().int().nullable().default(20),
     criticalFailureAt: z.number().int().nullable().default(1),
     /**
+     * Which kinds of roll a critical and a fumble can happen on.
+     *
+     * `criticalSuccessAt` is all or nothing: setting it to null switches
+     * criticals off everywhere, including on attacks. This is the narrower
+     * dial. The default lists all three because that is what the engine has
+     * always done, and it is worth seeing rather than inheriting: with
+     * `check` in the list, a natural 20 picks a lock that no amount of skill
+     * could open, and a natural 1 fumbles a formality.
+     */
+    criticalScope: z
+      .array(z.enum(['attack', 'save', 'check']))
+      .default(['attack', 'save', 'check']),
+    /**
      * What a critical hit multiplies damage by.
      *
      * The whole amount, modifier included, not the dice alone. Tabletop

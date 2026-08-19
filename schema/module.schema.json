@@ -1728,6 +1728,22 @@
                   ],
                   "default": 1
                 },
+                "criticalScope": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "enum": [
+                      "attack",
+                      "save",
+                      "check"
+                    ]
+                  },
+                  "default": [
+                    "attack",
+                    "save",
+                    "check"
+                  ]
+                },
                 "criticalDamageMultiplier": {
                   "type": "number",
                   "minimum": 1,

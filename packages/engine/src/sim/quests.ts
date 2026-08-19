@@ -509,6 +509,42 @@ function evalNumber(expr: unknown, txn: Transaction, actorId: string, rng: Rng):
  * order, because a module may reasonably grant something at 2 that something at
  * 3 depends on.
  */
+/**
+ * Experience for what the party killed.
+ *
+ * `content.monsters[].xp` was authored, validated, copied onto every spawned
+ * creature -- and converted into party experience by nothing, so the only way
+ * to gain a level was to finish a quest. Aurendel's numbers say plainly what
+ * they were written for: a barrow rat is worth 15 and level 2 costs 100.
+ *
+ * There is no switch for this, because the module already has one. A ruleset
+ * that does not want experience for killing gives its creatures none, which is
+ * the schema default; the field means what it says and nothing has to be
+ * declared twice.
+ *
+ * Read from the statblock rather than from the corpse. `Entity.xp` holds what
+ * a character has earned and what a monster is worth, which is one field
+ * carrying two meanings, and the authored number is the one to trust.
+ */
+export function awardKillXp(txn: Transaction, events: readonly GameEvent[], rng: Rng): void {
+  for (const event of events) {
+    if (event.type !== 'died') continue;
+
+    // Only what the party brought down. A creature killed by another creature,
+    // or by the ground it was standing on, teaches the party nothing.
+    if (!event.killer || !txn.state.party.includes(event.killer)) continue;
+
+    const corpse = txn.entity(event.entity);
+    if (!corpse?.statblock) continue;
+
+    const statblock = txn.module.find<{ xp?: number }>('content.monsters', corpse.statblock);
+    const worth = statblock?.xp ?? 0;
+    if (worth <= 0) continue;
+
+    grantXp(txn, worth, rng.derive(`kill:${corpse.id}`));
+  }
+}
+
 export function grantXp(txn: Transaction, amount: number, rng: Rng): void {
   if (amount <= 0) return;
   const levels = txn.module.source.rules.progression.levels as {

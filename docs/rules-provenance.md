@@ -5,9 +5,10 @@ departs from them, and which of those departures were decisions rather than
 accidents.
 
 > **Status: first pass, 2026-08-19.** The defects in *[Defects](#defects)* are
-> fixed, and so is G1, which was the largest gap. The rest of *[Gaps](#gaps)*
-> are recorded, not built; each says what it would cost. The entries under
-> *[Choices](#choices)* are settled and need no further action.
+> fixed, and so are G1, G3, G6 and most of G7. What remains open is G2 (the
+> proficiency question), G4 (creature footprints) and G5 (finesse); each says
+> what it would cost. The entries under *[Choices](#choices)* are settled and
+> need no further action.
 
 **Why this document exists.** The header of `../packages/module/src/schema/rules.ts`
 promises that "the engine has no idea what Might is, that hit points exist, that
@@ -186,7 +187,7 @@ Aurendel's casters now read DC 11 / +3 at level 1 rising to DC 15 / +7 at level
 old formula omitted the bonus entirely rather than hardcoding it, so this is a
 real if small difficulty increase at low level.
 
-### G3. A natural 20 or 1 resolves every roll, not just attacks
+### G3. A natural 20 or 1 resolved every roll, not just attacks — **closed**
 
 The critical branch in `check()` runs before the difficulty comparison, and
 `check()` is the single door for attacks, saves, skill checks and opposed
@@ -194,10 +195,21 @@ checks. A level-1 character therefore auto-succeeds a DC 30 check 5% of the
 time. The official rules confine criticals to attack rolls; Pathfinder 2e
 shifts the degree of success instead of overriding it.
 
-`criticalSuccessAt: null` disables criticals entirely, so the knob is
-all-or-nothing — there is no way to say "attacks only". Worth a decision rather
-than a shrug, and cheap to make one: a third enum value beside the existing
-field.
+**What it became.** `rules.resolution.criticalScope` lists which kinds of roll
+may crit or fumble — `attack`, `save`, `check` — and `check()` now carries the
+kind of test it is resolving. `criticalSuccessAt: null` remains the blunt
+instrument that switches criticals off everywhere, including on attacks; this is
+the narrower dial beside it.
+
+The default lists all three, because that is what the engine has always done and
+the change should not move a number silently. It is declared rather than
+implied so an author can see the opinion they are holding: with `check` in the
+list, a natural 20 picks a lock no amount of skill could open.
+
+**The decision for this project** is that anything attacked with, cast with or
+defended against may crit; an item is not expected to but has no reason it could
+not. Note that using an item is not a d20 test at all, so an item "critting"
+means its attack or its proc, which travels the attack path under any setting.
 
 ### G4. Every creature occupies exactly one tile
 
@@ -218,11 +230,24 @@ reach) carry empty `modifiers`; only `silvered` does anything at all, and only
 because it matches a resistance's `unless` tag. `reach` on an item is unrelated
 to `reachOf`, which reads creature size alone.
 
-### G6. No experience from combat
+### G6. No experience from combat — **closed**
 
-`content.monsters[].xp` is stored on a spawned entity and never converted into
-party experience. `grantXp` has one caller: quest rewards. Either wire it or
-make the field honest.
+`content.monsters[].xp` was authored on 89 of Aurendel's 127 creatures, copied
+onto every spawned one, and converted into party experience by nothing —
+finishing a quest was the only way to gain a level. The numbers say plainly what
+they were written for: a barrow rat is worth 15 and level 2 costs 100.
+
+**What it became.** `awardKillXp` sweeps the events of an action for a `died`
+whose killer is a party member, and pays the creature's authored worth. It runs
+beside `dropDeathLoot`, which is the same shape of post-action sweep, and before
+quests advance, so a level gained for a kill is in hand when the quest that
+asked for it pays out.
+
+There is no switch, because the module already had one: a ruleset that does not
+want experience for killing gives its creatures none, which is the schema
+default. The worth is read from the statblock rather than the corpse, because
+`Entity.xp` holds what a character has earned *and* what a monster is worth —
+one field carrying two meanings, and the authored number is the one to trust.
 
 ### G7. The named tactical actions are absent
 

@@ -170,6 +170,7 @@ export const FIELD_DOCS: Record<string, string> = {
   'rules.resolution.swingStacking': 'What a roll does with more than one swing: cancel them out, or go by the count.',
   'rules.resolution.criticalSuccessAt': 'Natural roll at or above which a check crits. Null for no crits.',
   'rules.resolution.criticalFailureAt': 'Natural roll at or below which a check fumbles. Null for no fumbles.',
+  'rules.resolution.criticalScope': 'Which kinds of roll can crit or fumble: attack, save, check.',
   'rules.resolution.criticalDamageMultiplier': 'What a critical hit multiplies damage by.',
   'rules.resolution.saveSuccessMultiplier': 'Damage kept on a successful save when the ability says half.',
   'rules.resolution.passiveBase': 'Number a passive score adds its modifier to instead of rolling.',

@@ -229,6 +229,10 @@ describe('hashModule', () => {
    * and the number below did not budge for it — which is the distinction
    * working: a policy the ruleset holds an opinion about is declared, and
    * per entry structure that is usually absent stays absent.
+   *
+   * Re-stamped a third time for `rules.resolution.criticalScope`, on the same
+   * reasoning: which rolls can crit is an opinion, and an author who cannot
+   * see it in their own document cannot tell they hold it.
    */
   it('is unchanged for a module that declares no mods', () => {
     // `minimal` is the witness, and deliberately not greenmarch: greenmarch
@@ -237,7 +241,7 @@ describe('hashModule', () => {
     // no mods and is the no-hardcoding control, so the only thing that can
     // move this number is the schema itself.
     const at = (name: string) => fileURLToPath(new URL(`../../../modules/${name}`, import.meta.url));
-    expect(loadModuleFrom(at('minimal')).hash).toBe('a47615c96ab87183');
+    expect(loadModuleFrom(at('minimal')).hash).toBe('601a1f7d06eb69df');
   });
 
   it('treats an absent `mods` key as absent, not as an empty list', () => {

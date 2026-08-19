@@ -27,12 +27,22 @@ interface Resolution {
   swingStacking: 'cancel' | 'net';
   criticalSuccessAt: number | null;
   criticalFailureAt: number | null;
+  criticalScope: readonly RollKind[];
   criticalDamageMultiplier: number;
   defaultDifficulty: number;
   difficulties: Record<string, number>;
 }
 
 export type Swing = 'advantage' | 'disadvantage' | null;
+
+/**
+ * What kind of d20 test this is.
+ *
+ * Only `criticalScope` reads it. A ruleset that wants a natural 20 to mean
+ * something on a swung sword and nothing on a lockpick needs the engine to
+ * know which it is holding, and `check` is one door for all of them.
+ */
+export type RollKind = 'attack' | 'save' | 'check';
 
 export interface CheckOptions {
   /** Added to the roll: attribute modifiers, skill ranks, situational bonuses. */
@@ -48,6 +58,8 @@ export interface CheckOptions {
    * is not a step a caller can forget.
    */
   readonly swing?: Swing | readonly Swing[] | undefined;
+  /** Defaults to `check`, the least privileged of the three. */
+  readonly kind?: RollKind;
 }
 
 /** One swing or many, always as many. */
@@ -162,10 +174,16 @@ export function check(module: CompiledModule, rng: Rng, options: CheckOptions = 
   const natural = kept.reduce((sum, die) => sum + die.value, 0) - rolled.modifier;
   const total = rolled.total + modifier;
 
+  // A roll of a kind the ruleset does not let crit is decided on its total
+  // alone, the same as any roll between the two thresholds.
+  const canCrit = resolution.criticalScope.includes(options.kind ?? 'check');
+
   let outcome: RollRecord['outcome'];
-  if (resolution.criticalSuccessAt !== null && natural >= resolution.criticalSuccessAt) {
+  if (canCrit && resolution.criticalSuccessAt !== null && natural >= resolution.criticalSuccessAt) {
     outcome = 'critical';
-  } else if (resolution.criticalFailureAt !== null && natural <= resolution.criticalFailureAt) {
+  } else if (
+    canCrit && resolution.criticalFailureAt !== null && natural <= resolution.criticalFailureAt
+  ) {
     outcome = 'fumble';
   } else {
     outcome = total >= difficulty ? 'success' : 'failure';
@@ -322,6 +340,7 @@ export function savingThrow(
     modifier,
     difficulty: difficultyOf(module, against),
     swing: [...asList(swing), ...swingsFrom(module, entity, 'saves')],
+    kind: 'save',
   });
 }
 

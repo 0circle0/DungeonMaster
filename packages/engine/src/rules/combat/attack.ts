@@ -361,6 +361,7 @@ function resolveAgainst(
         ...swingsFrom(module, actor, 'ownAttacks'),
         ...swingsFrom(module, current, 'attacksAgainstSelf'),
       ],
+      kind: 'attack',
     });
 
     txn.emit({ type: 'attacked', attacker: actor.id, target: current.id, ability: ability.id, roll });

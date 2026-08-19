@@ -271,6 +271,7 @@ not anticipate there. It is the supported way to exceed what ships.
 | `swingStacking` | `cancel` \| `net` |  | `"cancel"` | What a roll does with more than one swing: cancel them out, or go by the count. |
 | `criticalSuccessAt` | number |  | `20` | Natural roll at or above which a check crits. Null for no crits. |
 | `criticalFailureAt` | number |  | `1` | Natural roll at or below which a check fumbles. Null for no fumbles. |
+| `criticalScope` | `attack` \| `save` \| `check`[] |  | `["attack","save","check"]` | Which kinds of roll can crit or fumble: attack, save, check. |
 | `criticalDamageMultiplier` | number |  | `2` | What a critical hit multiplies damage by. |
 | `saveSuccessMultiplier` | number |  | `0.5` | Damage kept on a successful save when the ability says half. |
 | `passiveBase` | number |  | `10` | Number a passive score adds its modifier to instead of rolling. |
