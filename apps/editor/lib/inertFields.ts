@@ -52,9 +52,6 @@ const INERT: Record<string, readonly CoverageNote[]> = {
       note: 'not read by the engine — build encumbrance from actor.carried and a derived stat',
     },
   ],
-  'rules.senses': [
-    { field: 'ignores', note: 'not read by the engine yet — no condition currently suppresses a sense' },
-  ],
   'rules.languages': [
     {
       field: 'exotic',

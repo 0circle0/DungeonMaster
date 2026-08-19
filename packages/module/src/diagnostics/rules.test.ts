@@ -26,6 +26,7 @@ import {
   questsAreReachable,
   killTargetsCanSpawn,
   dialoguesAreReachable,
+  senseLinksResolve,
   ENGINE_FLAG_PREFIXES,
 } from './rules.js';
 
@@ -406,6 +407,43 @@ describe('dialogues', () => {
 
     expect(codes(doc, [dialoguesAreReachable])).toEqual(['dialogue_unowned']);
     expect(compileModule(doc).ok).toBe(true);
+  });
+});
+
+describe('sense suppression', () => {
+  it('says nothing about the modules that ship', () => {
+    for (const name of ['greenmarch', 'aurendel']) {
+      expect(runRules(load(name), [senseLinksResolve])).toEqual([]);
+    }
+  });
+
+  it('catches a condition shutting off a sense nobody declared', () => {
+    const doc = broken('aurendel', (d) => {
+      d.rules.conditions.find((c: any) => c.id === 'blinded').suppressesSenses = ['sigth'];
+    });
+    const found = runRules(doc, [senseLinksResolve]);
+    expect(found).toHaveLength(1);
+    expect(found[0]?.message).toMatch(/shuts off nothing/);
+    expect(found[0]?.hint).toMatch(/did you mean/);
+    // Invisible to everything else, which is why this layer exists.
+    expect(compileModule(doc).ok).toBe(true);
+  });
+
+  it('catches a sense working through a condition nobody wrote', () => {
+    const doc = broken('aurendel', (d) => {
+      d.rules.senses.find((s: any) => s.id === 'sight').ignores = ['blinded', 'dazzld'];
+    });
+    const found = runRules(doc, [senseLinksResolve]);
+    expect(found).toHaveLength(1);
+    expect(found[0]?.message).toMatch(/the exception never applies/);
+    expect(compileModule(doc).ok).toBe(true);
+  });
+
+  it('is quiet when both halves name real things', () => {
+    const doc = broken('aurendel', (d) => {
+      d.rules.senses.find((s: any) => s.id === 'sight').ignores = ['blinded'];
+    });
+    expect(runRules(doc, [senseLinksResolve])).toEqual([]);
   });
 });
 

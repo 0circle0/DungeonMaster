@@ -113,7 +113,7 @@ CONDITIONS = [
      "stacking": "refresh", "defaultDuration": 3, "modifiers": {"guard": 2}},
     {"id": "blinded", "name": "Blinded", "description": "Sight gone, whether from dark, dazzle, or injury.",
      "stacking": "refresh", "defaultDuration": 2, "modifiers": {"guard": -3},
-     "swings": {"ownAttacks": "disadvantage"}},
+     "swings": {"ownAttacks": "disadvantage"}, "suppressesSenses": ["sight"]},
     {"id": "dodging", "name": "Dodging", "description": "Giving ground on purpose, and watching the hands.",
      "stacking": "refresh", "defaultDuration": 1,
      "swings": {"attacksAgainstSelf": "disadvantage"}},

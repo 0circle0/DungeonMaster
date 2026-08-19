@@ -26,6 +26,7 @@ import { fieldOfView } from '../grid/fov.js';
 import { hasLineOfSight } from '../grid/fov.js';
 import { distance } from '../grid/geometry.js';
 import { toTiles, isHostileTo } from '../rules/combat/targeting.js';
+import { conditionsInForce } from '../rules/implied.js';
 import type { Transaction } from '../rules/apply.js';
 
 /** How a signal gets from there to here. */
@@ -54,6 +55,8 @@ export interface SenseDef {
   readonly falloff: Falloff;
   /** Baseline reach in **tiles**, converted from module units exactly once. */
   readonly range: number;
+  /** Conditions this sense works through anyway, e.g. blindsight and blinded. */
+  readonly ignores: readonly string[];
   /** Minutes a trace stays perceptible. Zero means this sense leaves none. */
   readonly lingerMinutes: number;
   /** Tiles a lingering trace spreads outward per minute as it thins. */
@@ -104,6 +107,7 @@ function implicitSense(module: CompiledModule): SenseDef {
     blockedBy: 'opaque',
     falloff: 'cliff',
     range: toTiles(module, IMPLICIT_RANGE_UNITS),
+    ignores: [],
     lingerMinutes: 0,
     spreadPerMinute: 0,
     spreadRetention: 0.5,
@@ -121,6 +125,7 @@ function implicitSense(module: CompiledModule): SenseDef {
 interface DeclaredSense {
   id: string;
   defaultRange: number;
+  ignores: string[];
   propagation: Propagation;
   blockedBy: Barrier;
   falloff: Falloff;
@@ -152,6 +157,7 @@ export function sensesOf(module: CompiledModule): readonly SenseDef[] {
         // Converted from module units to tiles once, here, so nothing
         // downstream has to remember which it is holding.
         range: toTiles(module, sense.defaultRange),
+        ignores: sense.ignores,
         lingerMinutes: sense.lingerMinutes,
         spreadPerMinute: sense.spreadPerMinute,
         spreadRetention: sense.spreadRetention,
@@ -199,12 +205,39 @@ export function rangeOf(
       : undefined,
   ];
 
+  // Shut off entirely by something the creature is under, unless this sense is
+  // the kind that does not care. Checked here because every use of a sense's
+  // reach comes through this function, so there is one place to close it.
+  if (senseSuppressed(module, observer, sense)) return 0;
+
   for (const source of sources) {
     const declared = source?.senses?.[sense.id];
     if (declared !== undefined) return toTiles(module, declared);
   }
 
   return sense.range;
+}
+
+/**
+ * Whether anything the creature is under closes this sense.
+ *
+ * The two halves have to be read together. A condition names the senses it
+ * shuts off; a sense names the conditions it works through anyway. `ignores`
+ * shipped on its own for a long time, which made it an exception to a rule
+ * nobody had written -- blindsight ignored a blindness that was never applied
+ * to it in the first place.
+ */
+export function senseSuppressed(
+  module: CompiledModule,
+  observer: Entity,
+  sense: SenseDef,
+): boolean {
+  for (const id of conditionsInForce(module, observer)) {
+    if (sense.ignores.includes(id)) continue;
+    const condition = module.find<{ suppressesSenses?: string[] }>('rules.conditions', id);
+    if (condition?.suppressesSenses?.includes(sense.id)) return true;
+  }
+  return false;
 }
 
 /**

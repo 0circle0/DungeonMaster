@@ -425,7 +425,10 @@
         },
         "swings": {
           "ownAttacks": "disadvantage"
-        }
+        },
+        "suppressesSenses": [
+          "sight"
+        ]
       },
       {
         "id": "dodging",

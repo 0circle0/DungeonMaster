@@ -121,6 +121,21 @@ export const conditionSchema = z
     /** Actions the condition forbids, e.g. `stunned` blocking `action`. */
     prevents: z.array(idSchema).default([]),
     /**
+     * Senses this shuts off, e.g. `blinded` closing `sight`.
+     *
+     * The sense's own `ignores` is the exception: a sense that ignores this
+     * condition keeps working through it, which is what blindsight is. Without
+     * one of these two halves the other means nothing, and for a long time
+     * only `ignores` existed.
+     *
+     * A bare id rather than a `ref`, matching `ignores` on the other side of
+     * the pair. A checked reference here would make the composer's `damage`
+     * section depend on `movement`, and `movement` already reaches back to
+     * `damage` through `skills` -- a cycle, for a link the semantic rules can
+     * check instead. See `diagnostics/rules.ts`.
+     */
+    suppressesSenses: z.array(idSchema).optional(),
+    /**
      * Which way the dice lean while this is on you.
      *
      * The four scopes a condition can reach: your own attacks, attacks made

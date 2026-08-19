@@ -173,6 +173,7 @@ not anticipate there. It is the supported way to exceed what ships.
 | `onExpire` | [effect](#the-dsl)[] |  | `[]` | Effects run once, when it ends. |
 | `modifiers` | { id: [expression](#the-dsl) } |  | `{}` | Derived stat adjustments while it holds. Magnitude is in scope. |
 | `prevents` | id[] |  | `[]` | Action type ids this forbids. A bare id, not a checked reference. |
+| `suppressesSenses` | id[] |  |  | Senses this shuts off, unless the sense itself ignores this condition. |
 | `swings` | [object](#module-rules-conditions-swings) |  |  | Which way the dice lean while this is on you. Prefer it or modifiers, not both. |
 | `concealsIdentity` | boolean |  | `false` | Makes a witness less able to name who did the deed. |
 | `savingThrow` | [object](#module-rules-conditions-savingThrow) |  |  | A save to shrug it off, and when that save is offered. |

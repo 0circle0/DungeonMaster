@@ -697,6 +697,59 @@ export const dialoguesAreReachable: Rule = {
  * The order is the report. Callers own the list, exactly as `dmkit/lint.py`
  * ships none: a module with no quests wants a different set from Aurendel.
  */
+/**
+ * The two halves of sense suppression name each other, and neither can be a
+ * schema reference.
+ *
+ * `conditions[].suppressesSenses` cannot be a `ref` because it would make the
+ * composer's `damage` section depend on `movement`, which already reaches back
+ * to `damage` through `skills`. `senses[].ignores` has the mirror image of the
+ * same problem. So both are bare ids, and a typo in either is silent: the
+ * condition closes nothing, or the sense shrugs off a condition that does not
+ * exist. Exactly the shape of thing this layer is for.
+ */
+export const senseLinksResolve: Rule = {
+  code: 'sense_link_dangling',
+  title: 'Sense suppression names things that exist',
+  why:
+    'A condition names the senses it shuts off and a sense names the conditions it works ' +
+    'through anyway. Neither can be checked by the schema, so a misspelling does nothing at ' +
+    'all rather than failing: the blindness never lands, or the blindsight is an exception to ' +
+    'nothing.',
+  severity: 'warning',
+  reads: ['rules.conditions', 'rules.senses'],
+  run(ctx) {
+    const senses = ctx.ids('rules.senses');
+    const conditions = ctx.ids('rules.conditions');
+
+    for (const [i, condition] of collectionOf(ctx.doc, 'rules.conditions').entries()) {
+      for (const [j, named] of asList(condition['suppressesSenses']).entries()) {
+        if (typeof named !== 'string' || senses.has(named)) continue;
+        ctx.report(
+          this,
+          `rules.conditions.${i}.suppressesSenses.${j}`,
+          `${JSON.stringify(String(condition['id']))} shuts off ${JSON.stringify(named)}, and ` +
+            'there is no such sense — so it shuts off nothing',
+          nearest(named, [...senses]),
+        );
+      }
+    }
+
+    for (const [i, sense] of collectionOf(ctx.doc, 'rules.senses').entries()) {
+      for (const [j, named] of asList(sense['ignores']).entries()) {
+        if (typeof named !== 'string' || conditions.has(named)) continue;
+        ctx.report(
+          this,
+          `rules.senses.${i}.ignores.${j}`,
+          `${JSON.stringify(String(sense['id']))} works through ${JSON.stringify(named)}, and ` +
+            'there is no such condition — so the exception never applies',
+          nearest(named, [...conditions]),
+        );
+      }
+    }
+  },
+};
+
 export const DEFAULT_RULES: readonly Rule[] = [
   objectiveTargetsResolve,
   flagsHaveWriters,
@@ -708,6 +761,7 @@ export const DEFAULT_RULES: readonly Rule[] = [
   questsAreReachable,
   killTargetsCanSpawn,
   dialoguesAreReachable,
+  senseLinksResolve,
 ];
 
 export function runRules(

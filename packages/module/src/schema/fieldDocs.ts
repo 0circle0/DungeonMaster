@@ -121,6 +121,7 @@ export const FIELD_DOCS: Record<string, string> = {
   'rules.conditions.onExpire': 'Effects run once, when it ends.',
   'rules.conditions.modifiers': 'Derived stat adjustments while it holds. Magnitude is in scope.',
   'rules.conditions.prevents': 'Action type ids this forbids. A bare id, not a checked reference.',
+  'rules.conditions.suppressesSenses': 'Senses this shuts off, unless the sense itself ignores this condition.',
   'rules.conditions.swings': 'Which way the dice lean while this is on you. Prefer it or modifiers, not both.',
   'rules.conditions.swings.ownAttacks': 'How attack rolls made by the afflicted creature lean.',
   'rules.conditions.swings.attacksAgainstSelf': 'How attack rolls made against the afflicted creature lean.',

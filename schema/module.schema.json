@@ -1427,6 +1427,12 @@
                     },
                     "default": []
                   },
+                  "suppressesSenses": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/$defs/GameModule/properties/id"
+                    }
+                  },
                   "swings": {
                     "type": "object",
                     "properties": {

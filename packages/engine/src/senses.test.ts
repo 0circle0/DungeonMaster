@@ -345,6 +345,82 @@ describe('a declared sense reproduces the constant it replaced', () => {
   });
 });
 
+/**
+ * A sense can be shut off, and a sense can be the kind that does not care.
+ *
+ * `senses[].ignores` shipped for a long time on its own, which made it an
+ * exception to a rule nobody had written: no condition suppressed a sense, so
+ * ignoring one bought nothing. Both halves are now read together.
+ */
+describe('a sense that has been closed', () => {
+  /** Greenmarch where `dazzled` shuts sight, and optionally sight shrugs it off. */
+  function dazzling(sightIgnores: boolean): CompiledModule {
+    const doc = JSON.parse(JSON.stringify(GREENMARCH.source)) as never as {
+      rules: { conditions: Record<string, unknown>[]; senses: Record<string, unknown>[] };
+    };
+    doc.rules.conditions.push({ id: 'dazzled', name: 'Dazzled', suppressesSenses: ['sight'] });
+    if (sightIgnores) {
+      doc.rules.senses.find((sense) => sense['id'] === 'sight')!['ignores'] = ['dazzled'];
+    }
+    const compiled = compileModule(doc);
+    if (!compiled.ok) throw new Error('fixture failed to compile');
+    return compiled.module;
+  }
+
+  /** How far the hero sees, given a module and the conditions they are under. */
+  function reach(module: CompiledModule, conditions: string[]): number {
+    const state = field([{ at: { x: HERO.x + 3, y: HERO.y } }], { module });
+    const hero = state.entities['e:1']!;
+    const under: Entity = {
+      ...hero,
+      conditions: conditions.map((condition) => ({
+        condition, remaining: null, magnitude: null, source: null,
+      })),
+    };
+    const context = { module, state, terrain: new TerrainIndex(module) };
+    const sight = sensesOf(module).find((sense) => sense.id === 'sight')!;
+    return rangeOf(context, under, sight);
+  }
+
+  it('reaches nothing at all', () => {
+    const module = dazzling(false);
+    expect(reach(module, [])).toBeGreaterThan(0);
+    expect(reach(module, ['dazzled'])).toBe(0);
+  });
+
+  it('leaves the creature\'s other senses alone', () => {
+    const module = dazzling(false);
+    const state = field([], { module });
+    const under: Entity = {
+      ...state.entities['e:1']!,
+      conditions: [{ condition: 'dazzled', remaining: null, magnitude: null, source: null }],
+    };
+    const context = { module, state, terrain: new TerrainIndex(module) };
+    const hearing = sensesOf(module).find((sense) => sense.id === 'hearing')!;
+    expect(rangeOf(context, under, hearing)).toBeGreaterThan(0);
+  });
+
+  // The whole point of `ignores`, and what it never bought before.
+  it('works through it when the sense ignores that condition', () => {
+    const module = dazzling(true);
+    expect(reach(module, ['dazzled'])).toBeGreaterThan(0);
+  });
+
+  // Suppression follows `implies`, like everything else a condition carries.
+  it('follows a condition that only implies the suppressing one', () => {
+    const doc = JSON.parse(JSON.stringify(GREENMARCH.source)) as never as {
+      rules: { conditions: Record<string, unknown>[] };
+    };
+    doc.rules.conditions.push(
+      { id: 'dazzled', name: 'Dazzled', suppressesSenses: ['sight'] },
+      { id: 'flashbanged', name: 'Flashbanged', implies: ['dazzled'] },
+    );
+    const compiled = compileModule(doc);
+    if (!compiled.ok) throw new Error('fixture failed to compile');
+    expect(reach(compiled.module, ['flashbanged'])).toBe(0);
+  });
+});
+
 describe('hearing', () => {
   const hearing = () => sensesOf(GREENMARCH).find((sense) => sense.id === 'hearing')!;
   const listener = (state: GameState) => ({ module: GREENMARCH, state, terrain });
