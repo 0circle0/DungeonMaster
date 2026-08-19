@@ -149,6 +149,7 @@ export const FIELD_DOCS: Record<string, string> = {
   'rules.itemProperties.name': 'Display name.',
   'rules.itemProperties.description': 'What carrying this property means.',
   'rules.itemProperties.modifiers': 'Derived stat adjustments an item with this property grants.',
+  'rules.itemProperties.attackStats': 'Attributes a weapon with this may also attack with. The best is used, for damage too.',
   'rules.itemProperties.extra': 'Open bag of your own data on this property.',
 
   'rules.masteryTiers.id': 'Id of the tier, asked for by a requirement as minTier.',
@@ -178,6 +179,7 @@ export const FIELD_DOCS: Record<string, string> = {
   'rules.resolution.damageRounding': 'How fractional damage resolves to a whole number.',
   'rules.resolution.reputationRounding': 'How fractional reputation change resolves to a whole number.',
   'rules.resolution.defaultDifficulty': 'Difficulty used when a check names none.',
+  'rules.resolution.attackBonus': 'What a weapon attack adds. Omitted, just the attribute modifier, which never grows.',
   'rules.resolution.difficulties': 'Named difficulties, so content can ask for hard rather than 18.',
 
   'rules.progression.maxLevel': 'Level the curve stops at. Experience past it is kept but grants nothing.',

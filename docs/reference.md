@@ -232,6 +232,7 @@ not anticipate there. It is the supported way to exceed what ships.
 | `name` | string | **yes** |  | Display name. |
 | `description` | string |  | `""` | What carrying this property means. |
 | `modifiers` | { id: [expression](#the-dsl) } |  | `{}` | Derived stat adjustments an item with this property grants. |
+| `attackStats` | [→ rules.attributes](#module-rules-attributes)[] |  |  | Attributes a weapon with this may also attack with. The best is used, for damage too. |
 | `extra` | { string: any } |  | `{}` | Open bag of your own data on this property. |
 
 ### Module → `rules` → `masteryTiers`
@@ -278,6 +279,7 @@ not anticipate there. It is the supported way to exceed what ships.
 | `opposedMode` | `passive` \| `contested` |  | `"passive"` | Whether an opposed check rolls both sides or rolls against a passive score. |
 | `damageRounding` | `floor` \| `round` \| `ceil` |  | `"round"` | How fractional damage resolves to a whole number. |
 | `reputationRounding` | `floor` \| `round` \| `ceil` \| `trunc` |  | `"trunc"` | How fractional reputation change resolves to a whole number. |
+| `attackBonus` | [expression](#the-dsl) |  |  | What a weapon attack adds. Omitted, just the attribute modifier, which never grows. |
 | `defaultDifficulty` | number |  | `12` | Difficulty used when a check names none. |
 | `difficulties` | { id: number } |  | `{}` | Named difficulties, so content can ask for hard rather than 18. |
 

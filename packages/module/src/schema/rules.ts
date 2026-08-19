@@ -265,6 +265,20 @@ export const resolutionSchema = z
      * decision rather than an arithmetic one.
      */
     reputationRounding: z.enum(['floor', 'round', 'ceil', 'trunc']).default('trunc'),
+    /**
+     * What a weapon attack adds, when the ruleset wants more than the bare
+     * attribute modifier.
+     *
+     * `actor.attackMod` is the modifier for whichever attribute the attack
+     * resolved to, and `actor.proficiency` is the module's own curve. Omitted,
+     * an attack adds the attribute modifier alone, which is what the engine
+     * always did -- and which means a weapon never improves with level, since
+     * nothing raises an attribute after character creation.
+     *
+     * The mirror of `spellcasting.attackBonus`. A ruleset that scales one and
+     * not the other is choosing that, rather than inheriting it.
+     */
+    attackBonus: ExprSchema.optional(),
     defaultDifficulty: z.number().int().default(12),
     /** Named difficulties content can refer to instead of raw numbers. */
     difficulties: z.record(idSchema, z.number().int()).default({}),
@@ -387,6 +401,20 @@ export const itemPropertySchema = z
     description: description.default(''),
     /** Additive modifiers to derived stats while a weapon with this is wielded. */
     modifiers: z.record(idSchema, ExprSchema).default({}),
+    /**
+     * Attributes a weapon with this property may attack with, on top of the
+     * one the ability names. The best of them is used, for the attack roll and
+     * for the weapon's damage alike.
+     *
+     * This is what finesse is: not a bonus to anything, but a *choice* of
+     * which attribute the roll uses. `modifiers` cannot express it, because
+     * there is no number you can add to a defence that means "use agility
+     * instead of might" -- which is why the property shipped doing nothing.
+     *
+     * It belongs to the property rather than the ability so that the weapon in
+     * your hand decides, and one authored `strike` still serves everyone.
+     */
+    attackStats: z.array(ref('rules.attributes')).optional(),
     extra,
   })
   .strict();

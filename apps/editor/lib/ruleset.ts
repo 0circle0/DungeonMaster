@@ -106,7 +106,11 @@ export const RULESET_SECTIONS: readonly RulesetSection[] = [
     label: 'Equipment & economy',
     detail: 'Where gear goes, what it can be, and what it costs.',
     paths: ['rules.equipmentSlots', 'rules.itemProperties', 'rules.currency'],
-    requires: [],
+    // A property may name the attributes a weapon carrying it can be swung
+    // with, which is what finesse is. The tenth cross-reference, and the first
+    // that cost nothing: `attributes` requires nothing, so there is no cycle
+    // to route around.
+    requires: ['attributes'],
   },
   {
     id: 'taxonomy',

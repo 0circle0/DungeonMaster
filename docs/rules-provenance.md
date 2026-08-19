@@ -5,10 +5,10 @@ departs from them, and which of those departures were decisions rather than
 accidents.
 
 > **Status: first pass, 2026-08-19.** The defects in *[Defects](#defects)* are
-> fixed, and so are G1, G3, G6 and most of G7. What remains open is G2 (the
-> proficiency question), G4 (creature footprints) and G5 (finesse); each says
-> what it would cost. The entries under *[Choices](#choices)* are settled and
-> need no further action.
+> fixed, and so are G1, G2, G3, G5, G6 and most of G7. **G4, creature
+> footprints, is deliberately held** — there are larger plans for that part of
+> the engine, and it says what it would cost. The entries under
+> *[Choices](#choices)* are settled and need no further action.
 
 **Why this document exists.** The header of `../packages/module/src/schema/rules.ts`
 promises that "the engine has no idea what Might is, that hit points exist, that
@@ -166,7 +166,7 @@ penalty, because a defence penalty never said anything about aiming. Two
 conditions are new because neither was expressible before: `dodging` and
 `helped`, applied by `dodge` and `assist`, granted to every class at level 1.
 
-### G2. The proficiency bonus applies to one of the three d20 tests
+### G2. The proficiency bonus applied to one of the three d20 tests — **closed**
 
 `proficiencyOf` is used mechanically only for saving throws. Attack rolls use
 the bare attribute modifier, and a skill check is attribute plus rank. Whether
@@ -174,7 +174,27 @@ that is right is a real question — this engine uses a **rank ladder** where th
 official rules use binary proficiency, and the two do not obviously compose —
 but at present the bonus exists and reaches a third of what it names.
 
-**Resolved in part.** The shipped consequence is fixed. `core_fantasy` had
+**What it became.** `rules.resolution.attackBonus` is an optional formula for
+what a weapon attack adds, with `actor.attackMod` (the modifier for whichever
+attribute the attack resolved to) and `actor.proficiency` in scope. Omitted, an
+attack adds the bare attribute modifier, which is what the engine always did.
+
+That "always did" was the whole problem. Nothing raises an attribute after
+character creation — there are no ability-score improvements, and no effect op
+can change one — so a weapon attack was **flat across all twenty levels**. In
+Aurendel a warden hit at +0 at level 1 and +0 at level 20. Fixing the caster
+side first had made this worse rather than better, which is the argument for
+treating the two as one finding: a ruleset that scales one and not the other
+should be choosing that. `core_fantasy` now scales both, and a warden's weapon
+runs +2 to +6 beside an adept's spell at +2 to +7.
+
+**Skills keep the rank ladder, and that is the decision.** Adding the
+proficiency bonus on top of a skill's rank would count progression twice. The
+ladder is the deliberate divergence recorded under Choices; the bonus reaching
+saves, attacks and spells but not skills is now a choice rather than an
+accident.
+
+**The consequence for casters, fixed earlier.** `core_fantasy` had
 `saveDifficulty: 8 + castingMod` and `attackBonus: 2 + castingMod`, where the
 literal `2` was a level-1 proficiency bonus frozen in place: a level-20 caster
 threw spells exactly as easy to dodge as a level-1 one. Both now name
@@ -221,14 +241,34 @@ past, and `space` is a unit-conversion constant with a misleading name.
 **Cost.** A project in itself: occupancy, pathfinding, targeting and reach all
 assume one tile per creature.
 
-### G5. Finesse cannot be expressed
+### G5. Finesse could not be expressed — **closed**
 
-`itemProperties[].modifiers` maps a property to derived-stat modifiers, but
-finesse is a *choice of attack attribute*, not a stat modifier. All six
-properties `core_fantasy` ships (silvered, two_handed, finesse, thrown, heavy,
-reach) carry empty `modifiers`; only `silvered` does anything at all, and only
-because it matches a resistance's `unless` tag. `reach` on an item is unrelated
-to `reachOf`, which reads creature size alone.
+`itemProperties[].modifiers` maps a property to derived-stat modifiers, and
+finesse is a *choice of attack attribute*, not a modifier: there is no number
+you can add to a defence that means "use agility instead of might". So the
+property shipped with an empty body, and Aurendel's one finesse weapon declared
+agility damage while `strike` named might — aimed with one arm and hit with the
+other.
+
+**What it became.** `rules.itemProperties[].attackStats` lists attributes a
+weapon carrying that property may *also* be swung with; the best of them wins,
+and the chosen one governs the weapon's damage as well, so the two halves can
+no longer disagree. Ties keep the ability's own attribute, so an offer that is
+no improvement changes nothing.
+
+It belongs to the property rather than the ability because the weapon in the
+hand is what decides, and one authored `strike` still serves every class. The
+weapon lookup moved above the attack roll to make that possible — it used to
+happen afterwards, when only the damage needed it.
+
+This was the tenth cross-reference in the ruleset composer, `equipment` →
+`attributes`, and the first that cost nothing: `attributes` requires nothing,
+so there was no cycle to route around.
+
+**Still inert among the properties:** `two_handed`, `thrown`, `heavy` and
+`reach` do nothing, and `reach` on an item is unrelated to `reachOf`, which
+reads creature size alone. `silvered` works, by matching a resistance's
+`unless` tag.
 
 ### G6. No experience from combat — **closed**
 

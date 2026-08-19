@@ -25,7 +25,7 @@ import type { Expr } from '@dm/module';
 import type { CompiledModule, Effect, EffectOp, Scope, Predicate, Requirement } from '@dm/module';
 import type { Entity, EntityId } from '../../state.js';
 import type { Position } from '../../grid/tiles.js';
-import { buildScope, statsOf, OPEN_NAMESPACES } from '../../stats.js';
+import { buildScope, statsOf, proficiencyOf, OPEN_NAMESPACES } from '../../stats.js';
 import { Transaction, applyOps, adjustResource } from '../apply.js';
 import { preventsAction, swingsFrom } from '../conditions.js';
 import { check, savingThrow, succeeded, criticalMultiplier, difficultyOf } from '../check.js';
@@ -348,11 +348,17 @@ function resolveAgainst(
     const reach = reachability(context, actor.position, current.position, range);
     const defenceWithCover = defence + coverBonus(module, reach.cover);
 
+    // The weapon is chosen before the roll, not after it: which attribute the
+    // blow uses can depend on what is in the hand, which is what finesse means.
+    const wielded = weaponOf(module, actor);
+    const attackStat = attackStatFor(module, actor, ability.attack.stat, wielded);
+    const attackMod = stats.mod[attackStat] ?? 0;
+
     // A spell attack uses the caster's own bonus, when the module declares one
     // — the single most-felt number in casting, and it was unreachable.
     const spellBonus = isSpell(ability) ? attackBonusOf(module, actor) : undefined;
     const roll = check(module, rng, {
-      modifier: spellBonus ?? stats.mod[ability.attack.stat] ?? 0,
+      modifier: spellBonus ?? weaponAttackBonus(module, actor, attackMod),
       difficulty: defenceWithCover,
       // Both sides of the blow: what the attacker is carrying, and what the
       // target's own conditions do to anyone swinging at them.
@@ -379,10 +385,9 @@ function resolveAgainst(
     // own qualities travel with it — a resistance's `unless` is asking about the
     // weapon, not about the ability. Damage the ability tagged itself is left
     // alone. Then, if the ability named no damage at all, the weapon supplies it.
-    const weapon = weaponOf(module, actor);
     const ops = [
-      ...withWeaponTags(declared, weapon),
-      ...weaponDamage(module, actor, current, declared, weapon, rng),
+      ...withWeaponTags(declared, wielded),
+      ...weaponDamage(module, actor, current, declared, wielded, rng, attackStat),
     ];
     // A critical multiplies damage by whatever the module says, and then runs
     // any extra `onCritical` effects on top.
@@ -465,6 +470,78 @@ export function weaponOf(module: CompiledModule, actor: Entity): WeaponDef | nul
 }
 
 /**
+ * Which attribute this blow is actually swung with.
+ *
+ * The ability names one; the weapon's properties may offer others, and the
+ * best of them wins. That is finesse: a choice of attribute rather than a
+ * bonus, which is why `itemProperties[].modifiers` could never express it.
+ *
+ * Ties keep the ability's own attribute, so a weapon that offers nothing
+ * better changes nothing at all.
+ */
+/** Whether any of this weapon's properties offer a choice of attack attribute. */
+function offersAttackStats(module: CompiledModule, weapon: WeaponDef | null): boolean {
+  return (weapon?.properties ?? []).some((propertyId) => {
+    const property = module.find<{ attackStats?: string[] }>('rules.itemProperties', propertyId);
+    return (property?.attackStats?.length ?? 0) > 0;
+  });
+}
+
+export function attackStatFor(
+  module: CompiledModule,
+  actor: Entity,
+  declared: string,
+  weapon: WeaponDef | null,
+): string {
+  const offered = new Set<string>();
+  for (const propertyId of weapon?.properties ?? []) {
+    const property = module.find<{ attackStats?: string[] }>('rules.itemProperties', propertyId);
+    for (const stat of property?.attackStats ?? []) offered.add(stat);
+  }
+  if (offered.size === 0) return declared;
+
+  const mod = statsOf(module, actor).mod;
+  let best = declared;
+  for (const candidate of offered) {
+    if ((mod[candidate] ?? 0) > (mod[best] ?? 0)) best = candidate;
+  }
+  return best;
+}
+
+/**
+ * What a weapon attack adds to the die.
+ *
+ * The attribute modifier alone unless the ruleset says otherwise, which is
+ * what the engine always did -- and what meant a weapon never improved with
+ * level, since nothing raises an attribute after character creation. Spells
+ * had `spellcasting.attackBonus` and weapons had nothing, so fixing the caster
+ * side alone would have left the martial side further behind than it started.
+ */
+function weaponAttackBonus(
+  module: CompiledModule,
+  actor: Entity,
+  attackMod: number,
+): number {
+  const declared = module.source.rules.resolution.attackBonus;
+  if (declared === undefined) return attackMod;
+
+  const stats = statsOf(module, actor);
+  const scope: Scope = {
+    actor: {
+      level: actor.level,
+      mod: stats.mod,
+      derived: stats.derived,
+      proficiency: proficiencyOf(module, actor),
+      // The modifier for whichever attribute the attack resolved to, so one
+      // formula covers a might swing and an agility one.
+      attackMod,
+    },
+  };
+  const value = evalExpr(declared, { scope, rng: Rng.fromSeed(0), openNamespaces: OPEN_NAMESPACES });
+  return typeof value === 'number' && Number.isFinite(value) ? Math.floor(value) : attackMod;
+}
+
+/**
  * Damage from the wielded weapon, when the ability produced none of its own.
  *
  * `content.items[].damage` was unread, so a bare `strike` dealt whatever the
@@ -479,12 +556,18 @@ function weaponDamage(
   produced: readonly EffectOp[],
   weapon: WeaponDef | null,
   rng: Rng,
+  attackStat: string,
 ): EffectOp[] {
   if (produced.some((op) => op.op === 'damage')) return [];
   if (!weapon?.damage) return [];
 
   const stats = statsOf(module, actor);
-  const bonus = weapon.damage.stat ? (stats.mod[weapon.damage.stat] ?? 0) : 0;
+  // The attribute the blow was swung with, when the weapon offered a choice of
+  // them. Choosing once and using it for both halves is the whole point: a
+  // finesse weapon that was aimed with agility and hit with might is the
+  // incoherence this replaces.
+  const chosen = offersAttackStats(module, weapon) ? attackStat : weapon.damage.stat;
+  const bonus = chosen ? (stats.mod[chosen] ?? 0) : 0;
 
   let rolled: number;
   try {

@@ -1592,6 +1592,17 @@
                     },
                     "default": {}
                   },
+                  "attackStats": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 64,
+                      "pattern": "^[a-z][a-z0-9_]*$",
+                      "description": "An id from rules.attributes.",
+                      "x-dm-ref": "rules.attributes"
+                    }
+                  },
                   "extra": {
                     "$ref": "#/$defs/GameModule/properties/rules/properties/conditions/items/properties/extra"
                   }
@@ -1785,6 +1796,9 @@
                     "trunc"
                   ],
                   "default": "trunc"
+                },
+                "attackBonus": {
+                  "$ref": "#/$defs/GameModule/properties/rules/properties/attributes/items/properties/modifier"
                 },
                 "defaultDifficulty": {
                   "type": "integer",

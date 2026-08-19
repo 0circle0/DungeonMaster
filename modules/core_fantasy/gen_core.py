@@ -309,7 +309,11 @@ rules = {
     "itemProperties": [
         {"id": "silvered", "name": "Silvered", "description": "Chased with silver along the edge. Old things feel it."},
         {"id": "two_handed", "name": "Two-Handed", "description": "Needs both hands, and gives up the shield to get them."},
-        {"id": "finesse", "name": "Finesse", "description": "Rewards a quick hand over a heavy one."},
+        # The property that gives the word its meaning: a finesse weapon may be
+        # swung with agility instead, and the better of the two is used for the
+        # damage as well as for the roll.
+        {"id": "finesse", "name": "Finesse", "description": "Rewards a quick hand over a heavy one.",
+         "attackStats": ["agility"]},
         {"id": "thrown", "name": "Thrown", "description": "Meant to leave your hand and be regretted at a distance."},
         {"id": "heavy", "name": "Heavy", "description": "Slow to bring round, and worth it when it lands."},
         {"id": "reach", "name": "Reach", "description": "Keeps them a step further away than they would like."},
@@ -342,6 +346,10 @@ rules = {
         "checkDice": "1d20", "advantageDice": "2d20kh1", "disadvantageDice": "2d20kl1",
         "criticalSuccessAt": 20, "criticalFailureAt": 1, "criticalDamageMultiplier": 2,
         "saveSuccessMultiplier": 0.5, "passiveBase": 10, "defaultDifficulty": 12,
+        # A swung weapon scales the same way a cast spell does. Without this a
+        # warden hits exactly as often at level 20 as at level 1, because
+        # nothing raises an attribute after character creation.
+        "attackBonus": {"add": [{"ref": "actor.proficiency"}, {"ref": "actor.attackMod"}]},
         "difficulties": {"trivial": 5, "easy": 8, "standard": 12, "hard": 16, "daunting": 20, "heroic": 25},
     },
     "progression": {

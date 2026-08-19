@@ -162,7 +162,7 @@ export {
 } from './rules/combat/targeting.js';
 export type { TargetingContext, Reachability } from './rules/combat/targeting.js';
 
-export { useAbility, defaultAttackAbility } from './rules/combat/attack.js';
+export { useAbility, defaultAttackAbility, weaponOf, attackStatFor } from './rules/combat/attack.js';
 export {
   rollInitiative,
   maybeStartCombat,

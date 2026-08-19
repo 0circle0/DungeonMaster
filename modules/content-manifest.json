@@ -4,14 +4,14 @@
     {
       "id": "aurendel",
       "version": "1.0.0",
-      "hash": "a47d57f385876fd5",
-      "rawBytes": 1626078
+      "hash": "706c57b4bd0c0e14",
+      "rawBytes": 1626182
     },
     {
       "id": "core_fantasy",
       "version": "1.0.0",
-      "hash": "0f4ae4825fa41972",
-      "rawBytes": 39074
+      "hash": "3bec98a1a08b387b",
+      "rawBytes": 39178
     }
   ]
 }

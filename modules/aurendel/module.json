@@ -602,7 +602,10 @@
       {
         "id": "finesse",
         "name": "Finesse",
-        "description": "Rewards a quick hand over a heavy one."
+        "description": "Rewards a quick hand over a heavy one.",
+        "attackStats": [
+          "agility"
+        ]
       },
       {
         "id": "thrown",
@@ -868,6 +871,16 @@
       "saveSuccessMultiplier": 0.5,
       "passiveBase": 10,
       "defaultDifficulty": 12,
+      "attackBonus": {
+        "add": [
+          {
+            "ref": "actor.proficiency"
+          },
+          {
+            "ref": "actor.attackMod"
+          }
+        ]
+      },
       "difficulties": {
         "trivial": 5,
         "easy": 8,
