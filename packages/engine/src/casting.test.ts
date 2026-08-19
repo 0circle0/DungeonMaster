@@ -10,6 +10,7 @@
 import { describe, it, expect } from 'vitest';
 import { fileURLToPath } from 'node:url';
 import { Rng } from '@dm/core';
+import { compileModule } from '@dm/module';
 import type { CompiledModule } from '@dm/module';
 import { loadModuleFrom } from '@dm/module/load';
 import { newGame, defaultChoices } from './newgame.js';
@@ -133,6 +134,37 @@ describe('the numbers a caster imposes', () => {
     const hero = caster(1).entities['e:1']!;
     const expected = 2 + Math.floor((hero.attributes['intellect']! - 10) / 2);
     expect(attackBonusOf(GREENMARCH, hero)).toBe(expected);
+  });
+
+  /**
+   * This scope is built here rather than by `buildScope`, so it holds only
+   * what is listed in it. Without `actor.proficiency` a ruleset could name the
+   * level but not its own proficiency curve, and the only way to make a caster
+   * improve was to write the curve out a second time inside each formula.
+   *
+   * Greenmarch keeps the flat numbers, so this proves the scope rather than
+   * the fixture: same module, one formula swapped.
+   */
+  it('lets those formulas name the module\'s proficiency curve', () => {
+    const doc = JSON.parse(JSON.stringify(GREENMARCH.source)) as never as {
+      rules: { spellcasting: Record<string, unknown> };
+    };
+    doc.rules.spellcasting['saveDifficulty'] = {
+      add: [8, { ref: 'actor.proficiency' }, { ref: 'actor.castingMod' }],
+    };
+    const compiled = compileModule(doc);
+    if (!compiled.ok) throw new Error('fixture failed to compile');
+
+    // greenmarch's curve is 2 + floor((level - 1) / 4), so the DC moves at 5.
+    const dcAt = (level: number): number | undefined =>
+      saveDifficultyOf(compiled.module, caster(level).entities['e:1']!);
+
+    expect(dcAt(5)! - dcAt(1)!).toBe(1);
+    expect(dcAt(17)! - dcAt(1)!).toBe(4);
+
+    // And the flat original does not move at all, which is the bug this is about.
+    expect(saveDifficultyOf(GREENMARCH, caster(17).entities['e:1']!))
+      .toBe(saveDifficultyOf(GREENMARCH, caster(1).entities['e:1']!));
   });
 
   it('uses the caster\'s bonus for a spell attack, not the raw attribute', () => {

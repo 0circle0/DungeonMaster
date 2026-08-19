@@ -21,7 +21,7 @@ import { Rng } from '@dm/core';
 import { evalExpr } from '@dm/module';
 import type { CompiledModule, Expr, Scope, Value, Spellcasting } from '@dm/module';
 import type { Entity } from '../state.js';
-import { buildScope, statsOf, OPEN_NAMESPACES } from '../stats.js';
+import { buildScope, statsOf, proficiencyOf, OPEN_NAMESPACES } from '../stats.js';
 import { Transaction, changeInventory } from './apply.js';
 import { preventsAction } from './conditions.js';
 import { savingThrow } from './check.js';
@@ -166,6 +166,11 @@ function evaluate(module: CompiledModule, actor: Entity, expr: Expr): number | u
       derived: stats.derived,
       // The attribute the class casts with, so one formula covers every caster.
       castingMod: caster ? (stats.mod[caster.castingAttribute] ?? 0) : 0,
+      // Without this a caster's save DC and attack bonus cannot grow with
+      // level, because this scope is built here rather than by `buildScope`:
+      // a formula could name `actor.level` but not the module's own
+      // proficiency curve, which is the number a ruleset actually tunes.
+      proficiency: proficiencyOf(module, actor),
     },
   };
   const value = evalExpr(expr, { scope, rng: Rng.fromSeed(0), openNamespaces: OPEN_NAMESPACES });

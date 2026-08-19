@@ -398,8 +398,11 @@ rules = {
         "slotTable": {"1": [2], "2": [3], "3": [4, 2], "4": [4, 3], "5": [4, 3, 2],
                       "6": [4, 3, 3], "7": [4, 3, 3, 1], "8": [4, 3, 3, 2],
                       "9": [4, 3, 3, 3, 1], "10": [4, 3, 3, 3, 2]},
-        "saveDifficulty": {"add": [8, {"ref": "actor.castingMod"}]},
-        "attackBonus": {"add": [2, {"ref": "actor.castingMod"}]},
+        # Both scale with the proficiency curve. The literal 2 that used to
+        # stand in for it was a level-1 caster's bonus, so a level-20 one
+        # threw spells that were exactly as easy to dodge.
+        "saveDifficulty": {"add": [8, {"ref": "actor.proficiency"}, {"ref": "actor.castingMod"}]},
+        "attackBonus": {"add": [{"ref": "actor.proficiency"}, {"ref": "actor.castingMod"}]},
         "concentration": {"enabled": True, "savingThrow": "will",
                           "difficulty": {"max": [10, {"floor": {"div": [{"ref": "damage"}, 2]}}]},
                           "maxConcurrent": 1},

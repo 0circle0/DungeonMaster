@@ -1180,13 +1180,18 @@
         "add": [
           8,
           {
+            "ref": "actor.proficiency"
+          },
+          {
             "ref": "actor.castingMod"
           }
         ]
       },
       "attackBonus": {
         "add": [
-          2,
+          {
+            "ref": "actor.proficiency"
+          },
           {
             "ref": "actor.castingMod"
           }
