@@ -29,6 +29,7 @@ import { buildScope, statsOf, OPEN_NAMESPACES } from '../../stats.js';
 import { Transaction, applyOps, adjustResource } from '../apply.js';
 import { preventsAction } from '../conditions.js';
 import { check, savingThrow, succeeded, criticalMultiplier, difficultyOf } from '../check.js';
+import type { Swing } from '../check.js';
 import type { TargetingContext } from './targeting.js';
 import { resolveTargets, reachability, coverBonus, toTiles, reachOf } from './targeting.js';
 import { message, text, grammarOf } from '../../narrate/systemText.js';
@@ -93,11 +94,14 @@ export interface AbilityDef {
   requires?: Requirement;
   when?: Predicate;
   attack?: { stat: string; against: string };
+  /** Which way this ability's own roll always leans. */
+  swing?: Swing;
   savingThrow?: {
     save: string;
     difficulty?: unknown;
     onSuccess: 'none' | 'half' | 'negates' | 'partial';
     onSuccessEffects: Effect[];
+    swing?: Swing;
   };
   areaOfEffect?: {
     shape: never; size: number; angle: number;
@@ -350,6 +354,8 @@ function resolveAgainst(
     const roll = check(module, rng, {
       modifier: spellBonus ?? stats.mod[ability.attack.stat] ?? 0,
       difficulty: defenceWithCover,
+      // A list, because this is the seam every other swing will arrive at.
+      swing: [ability.swing ?? null],
     });
 
     txn.emit({ type: 'attacked', attacker: actor.id, target: current.id, ability: ability.id, roll });
@@ -390,7 +396,9 @@ function resolveAgainst(
     const declared = ability.savingThrow.difficulty as number | undefined;
     const casterDc = isSpell(ability) ? saveDifficultyOf(module, actor) : undefined;
     const difficulty = difficultyOf(module, declared ?? casterDc);
-    const roll = savingThrow(module, rng, current, ability.savingThrow.save, difficulty);
+    const roll = savingThrow(module, rng, current, ability.savingThrow.save, difficulty, [
+      ability.savingThrow.swing ?? null,
+    ]);
     txn.emit({ type: 'saved', entity: current.id, save: ability.savingThrow.save, roll });
 
     const ops = [

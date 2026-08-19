@@ -3232,6 +3232,13 @@
                     ],
                     "additionalProperties": false
                   },
+                  "swing": {
+                    "type": "string",
+                    "enum": [
+                      "advantage",
+                      "disadvantage"
+                    ]
+                  },
                   "savingThrow": {
                     "type": "object",
                     "properties": {
@@ -3262,6 +3269,13 @@
                           "$ref": "#/$defs/GameModule/properties/rules/properties/resources/items/properties/onDepleted/items"
                         },
                         "default": []
+                      },
+                      "swing": {
+                        "type": "string",
+                        "enum": [
+                          "advantage",
+                          "disadvantage"
+                        ]
                       }
                     },
                     "required": [

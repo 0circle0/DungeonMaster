@@ -442,6 +442,8 @@ export const FIELD_DOCS: Record<string, string> = {
 
   'content.abilities.attack.stat': 'Attribute whose modifier is added to the attack roll.',
   'content.abilities.attack.against': 'Derived stat on the target the roll must meet or beat.',
+  'content.abilities.swing': 'Which way this ability\'s own attack roll always leans, before circumstance.',
+  'content.abilities.savingThrow.swing': 'Which way the target\'s save against this ability always leans.',
 
   'content.abilities.savingThrow.save': 'Which save the target rolls.',
   'content.abilities.savingThrow.difficulty': 'Difficulty of that save. Falls back to the save\'s own default.',

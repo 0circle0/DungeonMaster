@@ -18,11 +18,16 @@ import { compileModule } from '@dm/module';
 import type { CompiledModule } from '@dm/module';
 import { loadModuleFrom } from '@dm/module/load';
 import { newGame, defaultChoices } from './newgame.js';
+import { spawnMonster } from './character.js';
+import { reduce } from './reduce.js';
+import { createMap } from './grid/tiles.js';
 import { reduceAll } from './reduce.js';
 import { statesEqual } from './save.js';
 import { check, resolveSwing } from './rules/check.js';
 import type { Swing } from './rules/check.js';
 import type { Action } from './actions.js';
+import type { RollRecord } from './events.js';
+import type { GameState } from './state.js';
 
 function loadModule(name: string): CompiledModule {
   return loadModuleFrom(fileURLToPath(new URL(`../../../modules/${name}`, import.meta.url)));
@@ -114,6 +119,56 @@ describe('a resolved swing reaches the dice', () => {
 });
 
 /**
+ * The first thing that can actually declare one.
+ *
+ * Two schema fields and two engine lines, chosen before anything harder
+ * because they exercise the entire pipe: schema, compile, engine, the notation
+ * that gets rolled, and the `swing` that comes back out on the event.
+ */
+describe('an ability that always leans', () => {
+  /** Greenmarch with `barrow_bolt` made surer, or wilder, than it was. */
+  function bolt(swing: 'advantage' | 'disadvantage'): CompiledModule {
+    const doc = JSON.parse(JSON.stringify(GREENMARCH.source)) as never as {
+      content: { abilities: Record<string, unknown>[] };
+    };
+    doc.content.abilities.find((a) => a['id'] === 'barrow_bolt')!['swing'] = swing;
+    const compiled = compileModule(doc);
+    if (!compiled.ok) throw new Error('fixture failed to compile');
+    return compiled.module;
+  }
+
+  const cast = (module: CompiledModule): RollRecord => {
+    const state = caster(module);
+    const { events } = reduce(
+      state,
+      { type: 'useAbility', ability: 'barrow_bolt', target: 'e:99' },
+      { module },
+    );
+    const attacked = events.find((event) => event.type === 'attacked');
+    if (!attacked || attacked.type !== 'attacked') throw new Error('the bolt was never thrown');
+    return attacked.roll;
+  };
+
+  it('rolls the module\'s own notation for it', () => {
+    expect(cast(bolt('advantage')).notation).toBe('2d20kh1');
+    expect(cast(bolt('disadvantage')).notation).toBe('2d20kl1');
+    // Untouched, the same ability rolls one die -- so this is the field
+    // talking and not the fixture.
+    expect(cast(GREENMARCH).notation).toBe('1d20');
+  });
+
+  it('says so on the event, which is what a transcript reads', () => {
+    expect(cast(bolt('advantage')).swing).toBe('advantage');
+    expect(cast(GREENMARCH).swing).toBeNull();
+  });
+
+  it('keeps the two dice it rolled, so the arithmetic can be shown', () => {
+    expect(cast(bolt('advantage')).dice).toHaveLength(2);
+    expect(cast(GREENMARCH).dice).toHaveLength(1);
+  });
+});
+
+/**
  * The whole safety argument for this slice.
  *
  * `2d20kh1` draws twice where `1d20` draws once, and a reduce threads one
@@ -135,3 +190,27 @@ describe('nothing declared, nothing changed', () => {
     expect(statesEqual(once.state, twice.state)).toBe(true);
   });
 });
+
+/** A fenwise caster with a hound in range of the bolt. */
+function caster(module: CompiledModule): GameState {
+  const choices = { ...defaultChoices(module, 'Ash'), characterClass: 'fenwise' };
+  const base = newGame(module, { seed: 4, party: [choices] });
+  const hero = base.entities[base.party[0]!]!;
+  const hound = spawnMonster(module, 'e:99', 'bog_hound');
+
+  return {
+    ...base,
+    currentMap: 'here',
+    maps: {
+      here: {
+        id: 'here', tiles: createMap(11, 11, 'floor'), kind: 'area', source: 'millford',
+        explored: [], gates: {}, exits: {}, items: {}, marks: {}, traps: {}, rooms: [], depth: 1,
+      },
+    },
+    entities: {
+      ...base.entities,
+      [hero.id]: { ...hero, level: 3, map: 'here', position: { x: 5, y: 5 } },
+      'e:99': { ...hound, map: 'here', position: { x: 7, y: 5 }, disposition: 'hostile' },
+    },
+  };
+}

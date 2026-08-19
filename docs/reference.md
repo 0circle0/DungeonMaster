@@ -580,6 +580,7 @@ not anticipate there. It is the supported way to exceed what ships.
 | `when` | [predicate](#the-dsl) |  |  | Predicate checked at the moment of use, on top of requires. |
 | `targeting` | `self` \| `single` \| `allEnemies` \| `allAllies` \| `all` \| `none` |  | `"single"` | How many and which side it picks. |
 | `attack` | [object](#module-content-abilities-attack) |  |  | Makes it an attack roll, and says what it rolls against. |
+| `swing` | `advantage` \| `disadvantage` |  |  | Which way this ability's own attack roll always leans, before circumstance. |
 | `savingThrow` | [object](#module-content-abilities-savingThrow) |  |  | Makes it a save instead, and says what a success is worth. |
 | `spellLevel` | number |  |  | Slot level it is cast at. Absent means it is not a spell. |
 | `concentration` | boolean |  | `false` | Whether holding it occupies the caster's concentration. |
@@ -764,6 +765,7 @@ not anticipate there. It is the supported way to exceed what ships.
 | `difficulty` | [expression](#the-dsl) |  |  | Difficulty of that save. Falls back to the save's own default. |
 | `onSuccess` | `none` \| `half` \| `negates` \| `partial` |  | `"negates"` | What a success is worth. Nothing, half damage, negated, or partial. |
 | `onSuccessEffects` | [effect](#the-dsl)[] |  | `[]` | Effects run on a successful save, used with partial. |
+| `swing` | `advantage` \| `disadvantage` |  |  | Which way the target's save against this ability always leans. |
 
 ### Module → `content` → `abilities` → `areaOfEffect`
 

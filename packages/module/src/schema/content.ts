@@ -41,6 +41,16 @@ export const abilitySchema = z
       })
       .strict()
       .optional(),
+    /**
+     * Which way this ability's own attack roll leans, always.
+     *
+     * For an ability that is *inherently* surer or wilder than an ordinary
+     * one: a blessed strike, a shot loosed blind. Circumstance belongs
+     * elsewhere; this is a property of the ability itself, so it applies every
+     * time and needs no condition to carry it. Combined with every other swing
+     * that applies by `rules.resolution.swingStacking`.
+     */
+    swing: z.enum(['advantage', 'disadvantage']).optional(),
     /** A save the target makes instead of the caster rolling to hit. */
     savingThrow: z
       .object({
@@ -50,6 +60,8 @@ export const abilitySchema = z
         onSuccess: z.enum(['none', 'half', 'negates', 'partial']).default('negates'),
         /** Effects applied only when the save succeeds. */
         onSuccessEffects: z.array(EffectSchema).default([]),
+        /** Which way the target's save against this leans, always. */
+        swing: z.enum(['advantage', 'disadvantage']).optional(),
       })
       .strict()
       .optional(),
