@@ -365,6 +365,10 @@
         "modifiers": {
           "guard": -1
         },
+        "swings": {
+          "ownAttacks": "disadvantage",
+          "checks": "disadvantage"
+        },
         "savingThrow": {
           "save": "fortitude",
           "difficulty": 12,
@@ -391,6 +395,10 @@
         "modifiers": {
           "guard": -2
         },
+        "swings": {
+          "ownAttacks": "disadvantage",
+          "checks": "disadvantage"
+        },
         "savingThrow": {
           "save": "will",
           "difficulty": 12,
@@ -415,6 +423,29 @@
         "defaultDuration": 2,
         "modifiers": {
           "guard": -3
+        },
+        "swings": {
+          "ownAttacks": "disadvantage"
+        }
+      },
+      {
+        "id": "dodging",
+        "name": "Dodging",
+        "description": "Giving ground on purpose, and watching the hands.",
+        "stacking": "refresh",
+        "defaultDuration": 1,
+        "swings": {
+          "attacksAgainstSelf": "disadvantage"
+        }
+      },
+      {
+        "id": "helped",
+        "name": "Helped",
+        "description": "Someone steadying the ladder, holding the light, taking the weight.",
+        "stacking": "refresh",
+        "defaultDuration": 1,
+        "swings": {
+          "checks": "advantage"
         }
       },
       {
@@ -1367,6 +1398,43 @@
               },
               "condition": "emboldened",
               "duration": 2
+            }
+          }
+        ]
+      },
+      {
+        "id": "dodge",
+        "name": "Dodge",
+        "description": "Spend the moment on not being hit.",
+        "actionType": "action",
+        "targeting": "self",
+        "onUse": [
+          {
+            "applyCondition": {
+              "target": {
+                "ref": "actor.id"
+              },
+              "condition": "dodging",
+              "duration": 1
+            }
+          }
+        ]
+      },
+      {
+        "id": "assist",
+        "name": "Assist",
+        "description": "Take the other half of whatever they are trying to do.",
+        "actionType": "quick",
+        "targeting": "single",
+        "range": 5,
+        "onUse": [
+          {
+            "applyCondition": {
+              "target": {
+                "ref": "target.id"
+              },
+              "condition": "helped",
+              "duration": 1
             }
           }
         ]
@@ -2507,7 +2575,9 @@
         "abilitiesByLevel": {
           "1": [
             "strike",
-            "guarded_stance"
+            "guarded_stance",
+            "dodge",
+            "assist"
           ],
           "2": [
             "rally"
@@ -2548,7 +2618,9 @@
         "abilitiesByLevel": {
           "1": [
             "strike",
-            "quick_shot"
+            "quick_shot",
+            "dodge",
+            "assist"
           ],
           "3": [
             "shove"
@@ -2591,7 +2663,9 @@
         "abilitiesByLevel": {
           "1": [
             "strike",
-            "quick_shot"
+            "quick_shot",
+            "dodge",
+            "assist"
           ],
           "2": [
             "first_aid"
@@ -2633,7 +2707,9 @@
           "1": [
             "strike",
             "wardlight",
-            "arcane_bolt"
+            "arcane_bolt",
+            "dodge",
+            "assist"
           ],
           "2": [
             "read_runes"
@@ -2693,7 +2769,9 @@
         "abilitiesByLevel": {
           "1": [
             "strike",
-            "mend_flesh"
+            "mend_flesh",
+            "dodge",
+            "assist"
           ],
           "2": [
             "first_aid",
