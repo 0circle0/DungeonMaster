@@ -14,6 +14,7 @@ You are the Dungeon Master. You write the rules; the engine follows them exactly
 | [Memory & gossip](memory.md) | Emergence: witnessing, forgetting, rumour, and simulated learning |
 | [Validation](validation.md) | What the validator catches, and how to read what it tells you |
 | [Reference](reference.md) | Every field in the format — generated from the schemas |
+| [Rules provenance](rules-provenance.md) | Where this engine agrees with tabletop convention, and where it departs |
 
 All of this, plus a writeup of the engine and of the studio, is also a site:
 `npm run site` serves it on http://localhost:4600. Its field tables are generated
