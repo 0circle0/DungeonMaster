@@ -151,7 +151,15 @@ export const resolutionSchema = z
     /** Natural roll at or above this is a critical success; null disables crits. */
     criticalSuccessAt: z.number().int().nullable().default(20),
     criticalFailureAt: z.number().int().nullable().default(1),
-    /** A critical hit multiplies damage dice by this. */
+    /**
+     * What a critical hit multiplies damage by.
+     *
+     * The whole amount, modifier included, not the dice alone. Tabletop
+     * convention is usually to double the dice and add the modifier once; a
+     * damage op carries a rolled number rather than the expression that
+     * produced it, so the distinction is not available here. It matters most
+     * with a large modifier and a small die.
+     */
     criticalDamageMultiplier: z.number().min(1).default(2),
     /**
      * What a successful save against `onSuccess: "half"` leaves, as a fraction.

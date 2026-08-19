@@ -32,7 +32,7 @@ import { check, savingThrow, succeeded, criticalMultiplier, difficultyOf } from 
 import type { TargetingContext } from './targeting.js';
 import { resolveTargets, reachability, coverBonus, toTiles, reachOf } from './targeting.js';
 import { message, text, grammarOf } from '../../narrate/systemText.js';
-import { saveMultiplier } from '../config.js';
+import { saveMultiplier, roundDamageOf } from '../config.js';
 import { count } from '../../narrate/grammar.js';
 import type { Message } from '../../narrate/systemText.js';
 
@@ -123,11 +123,22 @@ export interface UseResult {
   readonly reason: Message | null;
 }
 
-/** Scale damage in a set of ops — used for criticals and half-damage saves. */
-function scaleDamage(ops: readonly EffectOp[], factor: number): EffectOp[] {
+/**
+ * Scale damage in a set of ops — used for criticals and half-damage saves.
+ *
+ * Rounded the module's way. `damageRounding` claims resistance, a save for
+ * half, and a critical; it governed only resistance, because this rounded with
+ * a hardcoded floor. At the default `round`, seven halved is four, not three.
+ */
+function scaleDamage(
+  module: CompiledModule,
+  ops: readonly EffectOp[],
+  factor: number,
+): EffectOp[] {
   if (factor === 1) return [...ops];
+  const round = roundDamageOf(module);
   return ops.map((op) =>
-    op.op === 'damage' ? { ...op, amount: Math.max(0, Math.floor(op.amount * factor)) } : op,
+    op.op === 'damage' ? { ...op, amount: Math.max(0, round(op.amount * factor)) } : op,
   );
 }
 
@@ -364,7 +375,7 @@ function resolveAgainst(
     // A critical multiplies damage by whatever the module says, and then runs
     // any extra `onCritical` effects on top.
     const factor = roll.outcome === 'critical' ? criticalMultiplier(module) : 1;
-    applyOps(txn, scaleDamage(ops, factor), actor.id);
+    applyOps(txn, scaleDamage(module, ops, factor), actor.id);
 
     if (roll.outcome === 'critical' && ability.onCritical.length > 0) {
       applyOps(txn, evalEffects(ability.onCritical, { scope: scopeFor(), rng }), actor.id);
@@ -392,7 +403,7 @@ function resolveAgainst(
         case 'negates':
           break;
         case 'half':
-          applyOps(txn, scaleDamage(ops, saveMultiplier(module)), actor.id);
+          applyOps(txn, scaleDamage(module, ops, saveMultiplier(module)), actor.id);
           break;
         default:
           applyOps(txn, ops, actor.id);

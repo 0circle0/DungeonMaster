@@ -84,6 +84,17 @@ export function saveMultiplier(module: CompiledModule): number {
   return configOf(module).saveMultiplier;
 }
 
+/**
+ * How a scaled damage number is rounded.
+ *
+ * Every path that scales damage goes through this: resistance, a critical, and
+ * a save for half. `damageRounding` says so, and a second rounding rule hidden
+ * in one of them is a systematic difference, not an incidental one.
+ */
+export function roundDamageOf(module: CompiledModule): (n: number) => number {
+  return configOf(module).roundDamage;
+}
+
 /** The baseline a passive score is measured from. */
 export function passiveBase(module: CompiledModule): number {
   return configOf(module).passiveBase;
