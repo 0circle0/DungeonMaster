@@ -1,0 +1,422 @@
+name: Deploy
+
+# Push to main -> build whichever of the three static sites actually changed, and rsync their
+# `out/` directories to the host that serves them. That host runs Caddy on three plain-HTTP
+# ports (:8081 apex, :8082 studio, :8083 play), and a TLS-terminating reverse proxy in front
+# publishes them as https://dnddungeon.com, https://studio.dnddungeon.com and
+# https://play.dnddungeon.com. `deploy/bootstrap.sh` sets the serving host up; read it first.
+#
+# NOTHING ABOUT THE INFRASTRUCTURE IS IN THIS FILE. The repository is public, so the user, the
+# addresses and the host keys are repository secrets (listed under "Set up SSH" below) and the
+# workflow is written to be useless to anyone who does not hold them. The only hard-coded names
+# are the project's own: the three site names, their ports, and the public hostnames.
+#
+# TRIGGERS, AND WHY FORK PRs CANNOT REACH THE SECRETS: this runs on `push` to main and on manual
+# dispatch. Neither is an event a fork can cause. A `pull_request` trigger would be the mistake
+# to avoid here -- on a public repo that runs a contributor's branch, and while GitHub withholds
+# secrets from fork PRs by default, the safe version is not to ask for them at all.
+#
+# NO CI GATE. This deploys straight off the push rather than waiting for a green test run.
+# `npm run check` is content validation, several tsconfig projects, eslint and vitest -- minutes,
+# for a site with no users yet. To add the gate later, move the trigger to
+# `workflow_run: {workflows: ["CI"], types: [completed]}` and check the conclusion; the rest of
+# this file is unaffected.
+#
+# WHY THE BUILD HAPPENS ON THE RUNNER: all three apps are `output: 'export'`, so the artifact is
+# a directory of HTML. The serving host gets files and nothing else -- no Node, no node_modules,
+# no sudo, no service restart. Caddy resolves the `current` symlink per request, so each release
+# swap is one atomic rename with zero downtime.
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      force:
+        description: "Rebuild and ship all three sites even if their inputs are unchanged"
+        type: boolean
+        default: false
+
+concurrency:
+  group: deploy-dungeonmaster
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    env:
+      APP_BASE: /opt/dungeonmaster
+
+    steps:
+      # Pinned to a SHA, not the mutable v4 tag: a tag can be repointed at any commit by whoever
+      # controls the action's repo, and this job holds a key to a machine.
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Work out what each site is built from
+        run: |
+          set -euo pipefail
+          # WHICH SITES NEED BUILDING, part 1: hash each app's inputs.
+          #
+          # Not `git diff` against the previous commit. A diff answers "what changed in this
+          # push", which is the wrong question on a re-run, a force-push, a revert, or a first
+          # deploy after bootstrap. Hashing the inputs answers "what would this build be made
+          # of", and comparing that against what the host is CURRENTLY SERVING is the question
+          # that actually decides whether a build is redundant.
+          #
+          # `git ls-tree -r` emits mode, type, blob SHA and path, sorted -- so this is a content
+          # hash of the whole subtree, stable across clones and checkouts.
+          #
+          # The path lists below are each app's real dependency closure, taken from its
+          # package.json dependencies and its next.config.ts `transpilePackages`. Getting one
+          # WRONG BY OMISSION is the failure mode to fear: the site would silently keep serving
+          # a stale build after a change to a package it really does use. When in doubt, add the
+          # path -- a spurious rebuild costs two minutes and nothing else.
+          #
+          #   site   docs + landing. Reads the schemas at build time. Ships no modules.
+          #   studio apps/editor. Ships aurendel + core_fantasy via prebuild, hence modules/.
+          #   play   apps/play. Ships aurendel via prebuild, hence modules/.
+          #
+          # packages/tools is in two of them because `prebuild` runs build-content.ts from it.
+          COMMON="package.json package-lock.json tsconfig.json"
+          SITE_PATHS="apps/site packages/module packages/core $COMMON"
+          STUDIO_PATHS="apps/editor packages/module packages/core packages/engine packages/authoring packages/mods packages/library packages/tools modules $COMMON"
+          PLAY_PATHS="apps/play packages/play packages/module packages/core packages/engine packages/mods packages/library packages/tools modules $COMMON"
+
+          hash_of() {
+            # Every path must exist. `git ls-tree` prints nothing and exits 0 for a path that is
+            # gone, so a renamed package would quietly drop out of the hash and freeze that
+            # site's deploys at the last build -- the exact bug this mechanism exists to avoid,
+            # reintroduced silently.
+            for p in $2; do
+              git cat-file -e "HEAD:$p" 2>/dev/null || {
+                echo "::error::$1: input path '$p' does not exist at HEAD. Update the path list in this workflow."
+                exit 1; }
+            done
+            git ls-tree -r HEAD -- $2 | sha256sum | cut -d' ' -f1
+          }
+
+          {
+            echo "SITE_INPUTS=$(hash_of site "$SITE_PATHS")"
+            echo "STUDIO_INPUTS=$(hash_of studio "$STUDIO_PATHS")"
+            echo "PLAY_INPUTS=$(hash_of play "$PLAY_PATHS")"
+            echo "RELEASE=$(date -u +%Y%m%dT%H%M%SZ)-${GITHUB_SHA:0:7}"
+            echo "GIT_SHA=$GITHUB_SHA"
+          } >> "$GITHUB_ENV"
+
+      - name: Set up SSH
+        env:
+          # Six repository secrets, at Settings > Secrets and variables > Actions. Secrets, not
+          # variables: the addresses are as much of the exposure as the key is, on a public repo.
+          #
+          #   DEPLOY_SSH_KEY_B64      base64 of the private key CI authenticates with
+          #   DEPLOY_SSH_USER         the account it logs in as, on both hops
+          #   DEPLOY_JUMP_HOST        the internet-facing host
+          #   DEPLOY_JUMP_HOST_KEY    that host's known_hosts line
+          #   DEPLOY_TARGET_HOST      the serving host, reachable only from the jump host
+          #   DEPLOY_TARGET_HOST_KEY  its known_hosts line
+          #
+          # THE TWO HOPS ARE THE POINT. The serving host has no port forwarded to it from the
+          # internet; it is reached across the LAN from the jump host. Do not "simplify" this by
+          # exposing it directly.
+          SSH_KEY_B64: ${{ secrets.DEPLOY_SSH_KEY_B64 }}
+          SSH_USER: ${{ secrets.DEPLOY_SSH_USER }}
+          JUMP_HOST: ${{ secrets.DEPLOY_JUMP_HOST }}
+          JUMP_HOST_KEY: ${{ secrets.DEPLOY_JUMP_HOST_KEY }}
+          TARGET_HOST: ${{ secrets.DEPLOY_TARGET_HOST }}
+          TARGET_HOST_KEY: ${{ secrets.DEPLOY_TARGET_HOST_KEY }}
+        run: |
+          set -euo pipefail
+          mkdir -p "$HOME/.ssh"
+          chmod 700 "$HOME/.ssh"
+
+          # Checked one at a time, and the failure NAMES the offending secret. Reporting a
+          # combined "found 4 of 6" does not say which two are missing, and that is exactly the
+          # thing you need told. An unset secret expands to "", so a length check alone would
+          # pass on a stray newline.
+          MISSING=0
+          need() {
+            if [ -z "${2:-}" ]; then
+              echo "  MISSING $1"; echo "::error::$1 is unset on this repository."; MISSING=1
+            else
+              echo "  ok      $1"
+            fi
+          }
+          need DEPLOY_SSH_KEY_B64     "$SSH_KEY_B64"
+          need DEPLOY_SSH_USER        "$SSH_USER"
+          need DEPLOY_JUMP_HOST       "$JUMP_HOST"
+          need DEPLOY_TARGET_HOST     "$TARGET_HOST"
+
+          # These two get a stricter check than "non-empty": a known_hosts line that is present
+          # but malformed fails later, during the connection, as an opaque host-key error.
+          add_key() {
+            if printf '%s' "$2" | grep -q 'ssh-ed25519 AAAA'; then
+              printf '%s\n' "$2" >> "$HOME/.ssh/known_hosts"
+              echo "  ok      $1"
+            else
+              echo "  MISSING $1"
+              echo "::error::$1 is unset or malformed (expected a line containing 'ssh-ed25519 AAAA')."
+              MISSING=1
+            fi
+          }
+          : > "$HOME/.ssh/known_hosts"
+          chmod 600 "$HOME/.ssh/known_hosts"
+          add_key DEPLOY_JUMP_HOST_KEY   "$JUMP_HOST_KEY"
+          add_key DEPLOY_TARGET_HOST_KEY "$TARGET_HOST_KEY"
+
+          if [ "$MISSING" != "0" ]; then
+            echo "::error::Set the missing ones at Settings > Secrets and variables > Actions on"
+            echo "::error::this repository -- repository secrets, not environment secrets, not"
+            echo "::error::variables. Names are case-sensitive. Print a host key on its own host:"
+            echo '::error::  echo "<host-as-ssh-addresses-it> $(cut -d" " -f1,2 /etc/ssh/ssh_host_ed25519_key.pub)"'
+            exit 1
+          fi
+
+          printf '%s' "$SSH_KEY_B64" | base64 -d > "$HOME/.ssh/id_ci"
+          chmod 600 "$HOME/.ssh/id_ci"
+
+          # HOST KEYS ARE PINNED FROM SECRETS, NOT SCANNED. `ssh-keyscan` on a fresh runner
+          # immediately before connecting with StrictHostKeyChecking=yes verifies the host
+          # against a key fetched seconds earlier over the same network path, which proves
+          # nothing: an on-path attacker answers the scan and the session alike, and then runs
+          # this job's commands on the far end. Both hops are pinned.
+          #
+          # A config file rather than `-o ProxyJump=...` on the command line. OpenSSH spawns a
+          # SEPARATE ssh process for the jump hop, and that process does NOT inherit `-i` from
+          # the outer command line -- so the -o form authenticates hop 1 with whatever default
+          # identity the runner has (none), and hangs or fails. Naming IdentityFile in both Host
+          # blocks is the version that works, and it makes `rsync -e ssh` trivial.
+          cat > "$HOME/.ssh/config" <<EOF
+          Host ci-jump
+            HostName $JUMP_HOST
+            Port 22
+            User $SSH_USER
+            IdentityFile ~/.ssh/id_ci
+            IdentitiesOnly yes
+            StrictHostKeyChecking yes
+
+          Host target
+            HostName $TARGET_HOST
+            Port 22
+            User $SSH_USER
+            IdentityFile ~/.ssh/id_ci
+            IdentitiesOnly yes
+            StrictHostKeyChecking yes
+            ProxyJump ci-jump
+          EOF
+          chmod 600 "$HOME/.ssh/config"
+
+      - name: Decide which sites to build
+        run: |
+          set -euo pipefail
+          # WHICH SITES NEED BUILDING, part 2: ask the host what it is serving.
+          #
+          # Read from the RELEASE DIRECTORY `current` points at, over ssh, rather than curling
+          # the origin. A curl could be answered from a response cache, and a stale answer here
+          # means "skip the build" -- the one wrong answer that produces a silently outdated site
+          # rather than a loud failure. The file on disk cannot be stale about itself.
+          FORCE="${{ github.event.inputs.force }}"
+
+          decide() {
+            NAME="$1"; WANT="$2"
+            if [ "$FORCE" = "true" ]; then
+              echo "  $NAME: build (forced)"
+              echo "BUILD_${3}=1" >> "$GITHUB_ENV"; return
+            fi
+            HAVE="$(ssh target "cat '$APP_BASE/$NAME/current/build-inputs' 2>/dev/null" | tr -d '[:space:]' || true)"
+            if [ -n "$HAVE" ] && [ "$HAVE" = "$WANT" ]; then
+              echo "  $NAME: SKIP (already serving inputs ${WANT:0:12})"
+              echo "BUILD_${3}=0" >> "$GITHUB_ENV"
+            else
+              echo "  $NAME: build (serving '${HAVE:0:12}', want ${WANT:0:12})"
+              echo "BUILD_${3}=1" >> "$GITHUB_ENV"
+            fi
+          }
+
+          decide site   "$SITE_INPUTS"   SITE
+          decide studio "$STUDIO_INPUTS" STUDIO
+          decide play   "$PLAY_INPUTS"   PLAY
+
+      - name: Install dependencies
+        # Skipped entirely when all three sites are unchanged -- the common case for a push that
+        # only touches deploy config, docs prose, or a package no app imports.
+        if: ${{ env.BUILD_SITE == '1' || env.BUILD_STUDIO == '1' || env.BUILD_PLAY == '1' }}
+        run: npm ci
+
+      - name: Build
+        if: ${{ env.BUILD_SITE == '1' || env.BUILD_STUDIO == '1' || env.BUILD_PLAY == '1' }}
+        run: |
+          set -euo pipefail
+          # Each app's `prebuild` runs build-content.ts, which writes apps/*/public/content.
+          # That is why modules/ and packages/tools are in the studio and play input lists.
+          build_one() {
+            NAME="$1"; DIR="$2"; WORKSPACE="$3"; INPUTS="$4"
+            echo "::group::build $NAME"
+            npm run build --workspace "$WORKSPACE" || {
+              echo "::error::$NAME: the build failed for $WORKSPACE"; exit 1; }
+
+            # The deploy rsyncs `out/` and nothing else, so an empty or partial export is the one
+            # failure that would sail through the build exiting 0 and take the live site down to
+            # a 404.
+            test -f "$DIR/out/index.html" || { echo "::error::$DIR/out/index.html missing after build"; exit 1; }
+            ls "$DIR/out/_next/static" >/dev/null 2>&1 || { echo "::error::no _next/static in $DIR/out"; exit 1; }
+
+            # The deploy's real proof of success. `curl /` returning 200 only shows that Caddy is
+            # up and serving SOMETHING -- it stays 200 across a release that never landed,
+            # because the previous release is still there.
+            #
+            # build-id is the commit, for a human reading the host. build-inputs is the hash the
+            # NEXT run compares against to decide whether it can skip this build, and it is what
+            # the verify step checks. Writing it only after the build has been asserted sane
+            # matters: stamping it earlier would let a broken build claim those inputs and
+            # suppress every retry.
+            printf '%s\n' "$GIT_SHA" > "$DIR/out/build-id"
+            printf '%s\n' "$INPUTS" > "$DIR/out/build-inputs"
+            echo "::endgroup::"
+          }
+
+          # Plain `if`, not `[ ... ] && build_one ... || true`. In that form `set -e` is suspended
+          # for everything but the last command of the list, and a trailing `|| true` swallows a
+          # non-zero build -- so a failed build would be reported as a successful step and the
+          # next one would rsync a stale or absent out/.
+          if [ "$BUILD_SITE" = "1" ]; then
+            build_one site apps/site @dm/site-app "$SITE_INPUTS"
+          fi
+          if [ "$BUILD_STUDIO" = "1" ]; then
+            build_one studio apps/editor @dm/editor "$STUDIO_INPUTS"
+          fi
+          if [ "$BUILD_PLAY" = "1" ]; then
+            build_one play apps/play @dm/play-app "$PLAY_INPUTS"
+          fi
+
+      - name: Ship and activate
+        run: |
+          set -euo pipefail
+          ship() {
+            NAME="$1"; DIR="$2"; BUILT="$3"
+            if [ "$BUILT" != "1" ]; then echo "  $NAME: nothing to ship"; return; fi
+            echo "::group::ship $NAME"
+
+            ssh target "BASE='$APP_BASE/$NAME' REL='$RELEASE' bash -s" <<'REMOTE'
+            set -euo pipefail
+            # Bootstrap must have run first. Creating these here instead would paper over a host
+            # with no Caddy config for this site, and the deploy would go green while nothing was
+            # ever served.
+            [ -d "$BASE/releases" ] || {
+              echo "::error::$BASE/releases does not exist -- run deploy/bootstrap.sh on the serving host once"
+              exit 1; }
+            mkdir -p "$BASE/releases/$REL"
+          REMOTE
+
+            # Trailing slash on the source: copy the CONTENTS of out/, not the directory itself.
+            # --delete so a file removed from the build is removed from the release; the release
+            # dir is fresh each time, so this only matters on a re-run of the same RELEASE.
+            rsync -az --delete -e ssh "./$DIR/out/" "target:$APP_BASE/$NAME/releases/$RELEASE/"
+
+            ssh target "BASE='$APP_BASE/$NAME' REL='$RELEASE' bash -s" <<'REMOTE'
+            set -euo pipefail
+            REL_DIR="$BASE/releases/$REL"
+
+            # Never point `current` at a directory that cannot serve a page. rsync exiting 0 with
+            # an empty source would otherwise swap the live site to a 404 and report success.
+            [ -f "$REL_DIR/index.html" ]   || { echo "::error::$REL_DIR/index.html missing after rsync"; exit 1; }
+            [ -f "$REL_DIR/build-inputs" ] || { echo "::error::$REL_DIR/build-inputs missing after rsync"; exit 1; }
+
+            # Atomic swap. `ln -sfn` onto an existing symlink is NOT atomic (it unlinks, then
+            # creates -- a request landing in that gap gets a 404), so build the new link beside
+            # the old one and rename over it. `mv -T` treats the destination as a file rather
+            # than descending into the directory it points at.
+            ln -sfn "$REL_DIR" "$BASE/.current.tmp"
+            mv -Tf "$BASE/.current.tmp" "$BASE/current"
+            echo "current -> $(readlink -f "$BASE/current")"
+
+            # Keep the 5 newest releases; the live one is always the newest, so this can never
+            # delete what `current` points at. Rollback is `ln -sfn` at one of the survivors.
+            # `|| true`: the swap above already succeeded and the release is LIVE. Under
+            # `set -euo pipefail` a hiccup in the prune (an unreadable dir, a glob that matched
+            # nothing) would fail the step and report a working deploy as broken.
+            ls -1dt "$BASE"/releases/*/ 2>/dev/null | tail -n +6 | xargs -r rm -rf || true
+          REMOTE
+            echo "::endgroup::"
+          }
+
+          ship site   apps/site   "$BUILD_SITE"
+          ship studio apps/editor "$BUILD_STUDIO"
+          ship play   apps/play   "$BUILD_PLAY"
+
+      - name: Verify each origin is serving the right build
+        run: |
+          set -euo pipefail
+          # Runs ON the serving host, against 127.0.0.1, so it tests Caddy and the symlink
+          # without depending on DNS, the reverse proxy or the internet -- and without this
+          # public file needing to know the host's address.
+          #
+          # ALL THREE are checked, including ones this run skipped. "We decided not to rebuild
+          # it" is a claim about the host, and this is where that claim gets tested rather than
+          # assumed.
+          ssh target "SITE='$SITE_INPUTS' STUDIO='$STUDIO_INPUTS' PLAY='$PLAY_INPUTS' bash -s" <<'REMOTE'
+          set -euo pipefail
+          FAIL=0
+          check() {
+            NAME="$1"; PORT="$2"; WANT="$3"; DEEP="$4"
+            ORIGIN="http://127.0.0.1:$PORT"
+
+            # A retry loop rather than a single curl: a Caddy restarted by hand moments earlier
+            # is a plausible way to get one spurious connection refused.
+            SERVED=""
+            for i in $(seq 1 15); do
+              SERVED="$(curl -fsS --max-time 5 "$ORIGIN/build-inputs" 2>/dev/null | tr -d '[:space:]' || true)"
+              [ "$SERVED" = "$WANT" ] && break
+              sleep 1
+            done
+            if [ "$SERVED" != "$WANT" ]; then
+              echo "::error::$NAME ($ORIGIN) never served ${WANT:0:12} (last saw: '${SERVED:-<nothing>}')"
+              FAIL=1; return
+            fi
+            echo "$NAME: serving ${WANT:0:12}"
+
+            # The .html routing arm is load-bearing and silently breakable: `output: 'export'`
+            # writes /format.html for the route /format, so without `try_files {path}.html` every
+            # route but / is a 404. The docs site is made almost entirely of such routes.
+            CODE="$(curl -s -o /dev/null -w '%{http_code}' --max-time 5 "$ORIGIN$DEEP" || echo 000)"
+            [ "$CODE" = "200" ] || {
+              echo "::error::$NAME: $DEEP returned $CODE, expected 200 -- the try_files line is missing from conf.d/dungeonmaster.caddy"
+              FAIL=1; }
+          }
+
+          # The deep path for the apex is a real docs route. studio and play are single-page
+          # exports with no server-side routes, so / is the only thing to assert.
+          check site   8081 "$SITE"   /format.html
+          check studio 8082 "$STUDIO" /
+          check play   8083 "$PLAY"   /
+
+          [ "$FAIL" = "0" ] || {
+            systemctl is-active caddy || true
+            journalctl -u caddy -n 40 --no-pager 2>/dev/null || true
+            exit 1; }
+          REMOTE
+
+      - name: Check the public URLs
+        run: |
+          # Runs from the RUNNER, over the internet, through the reverse proxy and its TLS. This
+          # is the only step that exercises DNS and the public path, and it is the one most
+          # likely to be red for reasons that are not this repo's fault: DNS not pointed yet, a
+          # certificate not issued, a home IP rotated faster than dynamic DNS caught up, the
+          # front end down. So it WARNS, it does not fail -- the releases are already verified
+          # good by the step above, which is the check that speaks to whether this deploy worked.
+          set -uo pipefail
+          for pair in "dnddungeon.com:$SITE_INPUTS" "studio.dnddungeon.com:$STUDIO_INPUTS" "play.dnddungeon.com:$PLAY_INPUTS"; do
+            HOST="${pair%%:*}"; WANT="${pair#*:}"
+            SERVED="$(curl -fsS --max-time 15 "https://$HOST/build-inputs" 2>/dev/null | tr -d '[:space:]' || true)"
+            if [ "$SERVED" = "$WANT" ]; then
+              echo "https://$HOST is serving ${WANT:0:12}"
+            else
+              echo "::warning::https://$HOST did not return ${WANT:0:12} (saw: '${SERVED:-<nothing>}')."
+            fi
+          done
+          echo "::notice::If any of the three warned, check in order: the A records for @, studio"
+          echo "::notice::and play resolve to the public IP; the three vhosts exist on the reverse"
+          echo "::notice::proxy; dynamic DNS is still following the IP."
