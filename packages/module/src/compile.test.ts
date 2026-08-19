@@ -218,6 +218,13 @@ describe('hashModule', () => {
    * `narrative.loreThreads` and `requirement.lore` — are all `.optional()`
    * precisely so they contributed nothing to that move; the sentences were the
    * whole of it. Saves written before it need `allowModuleDrift`.
+   *
+   * Re-stamped a second time for `rules.resolution.swingStacking`. That one
+   * could have been `.optional()` with the engine falling back to `cancel`,
+   * and the hash would not have moved — but an invented fallback is the thing
+   * `hardcoded-audit.md` spent a pass removing, and a resolution policy an
+   * author cannot see in their own document is not a policy they can change.
+   * A declared default is worth a hash move.
    */
   it('is unchanged for a module that declares no mods', () => {
     // `minimal` is the witness, and deliberately not greenmarch: greenmarch
@@ -226,7 +233,7 @@ describe('hashModule', () => {
     // no mods and is the no-hardcoding control, so the only thing that can
     // move this number is the schema itself.
     const at = (name: string) => fileURLToPath(new URL(`../../../modules/${name}`, import.meta.url));
-    expect(loadModuleFrom(at('minimal')).hash).toBe('d7ea24c99548de83');
+    expect(loadModuleFrom(at('minimal')).hash).toBe('a47615c96ab87183');
   });
 
   it('treats an absent `mods` key as absent, not as an empty list', () => {

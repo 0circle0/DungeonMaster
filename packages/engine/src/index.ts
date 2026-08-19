@@ -140,6 +140,7 @@ export {
   skillModifier,
   attributeModifier,
   criticalMultiplier,
+  resolveSwing,
 } from './rules/check.js';
 export type { CheckOptions, Swing } from './rules/check.js';
 

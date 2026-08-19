@@ -23,6 +23,7 @@ interface Resolution {
   checkDice: string;
   advantageDice: string;
   disadvantageDice: string;
+  swingStacking: 'cancel' | 'net';
   criticalSuccessAt: number | null;
   criticalFailureAt: number | null;
   criticalDamageMultiplier: number;
@@ -37,7 +38,46 @@ export interface CheckOptions {
   readonly modifier?: number;
   /** The number to beat. Defaults to the module's `defaultDifficulty`. */
   readonly difficulty?: number;
-  readonly swing?: Swing;
+  /**
+   * Which way the dice lean, and why this may be a list.
+   *
+   * A roll can be pulled in both directions at once — poisoned and helped,
+   * blinded and attacking something that cannot see you either. Callers hand
+   * over everything that applies and `check` reconciles it, so reconciling it
+   * is not a step a caller can forget.
+   */
+  readonly swing?: Swing | readonly Swing[] | undefined;
+}
+
+/**
+ * One swing from however many apply, the module's way.
+ *
+ * Exported because it is worth testing directly: it is a pure function of a
+ * list of enums, with no module state and no dice involved.
+ */
+export function resolveSwing(
+  module: CompiledModule,
+  given: Swing | readonly Swing[] | undefined,
+): Swing {
+  if (given === undefined || given === null) return null;
+  if (!Array.isArray(given)) return given as Swing;
+
+  let up = 0;
+  let down = 0;
+  for (const swing of given) {
+    if (swing === 'advantage') up += 1;
+    else if (swing === 'disadvantage') down += 1;
+  }
+  if (up === 0 && down === 0) return null;
+
+  if (resolutionOf(module).swingStacking === 'net') {
+    if (up === down) return null;
+    return up > down ? 'advantage' : 'disadvantage';
+  }
+
+  // `cancel`: one of each is enough to leave nothing, however many there are.
+  if (up > 0 && down > 0) return null;
+  return up > 0 ? 'advantage' : 'disadvantage';
 }
 
 function resolutionOf(module: CompiledModule): Resolution {
@@ -101,10 +141,11 @@ export function check(module: CompiledModule, rng: Rng, options: CheckOptions = 
   const modifier = options.modifier ?? 0;
   const difficulty = options.difficulty ?? resolution.defaultDifficulty;
 
+  const swing = resolveSwing(module, options.swing);
   const notation =
-    options.swing === 'advantage'
+    swing === 'advantage'
       ? resolution.advantageDice
-      : options.swing === 'disadvantage'
+      : swing === 'disadvantage'
         ? resolution.disadvantageDice
         : resolution.checkDice;
 
@@ -131,7 +172,7 @@ export function check(module: CompiledModule, rng: Rng, options: CheckOptions = 
     total,
     against: difficulty,
     outcome,
-    swing: options.swing ?? null,
+    swing,
   };
 }
 
@@ -167,7 +208,7 @@ export function skillCheck(
   entity: Entity,
   skillId: string,
   difficulty: number | string | undefined,
-  swing: Swing = null,
+  swing: Swing | readonly Swing[] = null,
 ): RollRecord {
   return check(module, rng, {
     modifier: skillModifier(module, entity, skillId),
@@ -191,16 +232,20 @@ export function skillCheck(
 export function opposedCheck(
   module: CompiledModule,
   rng: Rng,
-  attacker: { entity: Entity; skill: string },
-  defender: { entity: Entity; skill: string },
+  attacker: { entity: Entity; skill: string; swing?: Swing | readonly Swing[] },
+  defender: { entity: Entity; skill: string; swing?: Swing | readonly Swing[] },
 ): { attacker: RollRecord; defender: RollRecord; attackerWins: boolean } {
+  // Each side is asked separately: a contest between a poisoned grappler and a
+  // blinded one pulls both ways at once, and neither swing is the other's.
   const attackerRoll = check(module, rng, {
     modifier: skillModifier(module, attacker.entity, attacker.skill),
     difficulty: 0,
+    swing: attacker.swing,
   });
   const defenderRoll = check(module, rng, {
     modifier: skillModifier(module, defender.entity, defender.skill),
     difficulty: 0,
+    swing: defender.swing,
   });
 
   const attackerWins = attackerRoll.total > defenderRoll.total;
@@ -241,6 +286,7 @@ export function savingThrow(
   entity: Entity,
   saveId: string,
   difficulty: number | undefined,
+  swing: Swing | readonly Swing[] = null,
 ): RollRecord {
   const definition = module.find<SaveDef>('rules.savingThrows', saveId);
   const stats = statsOf(module, entity);
@@ -262,7 +308,7 @@ export function savingThrow(
   // an ordinary check — that is the whole point of writing one — so it wins over
   // the global difficulty whenever the caller named none.
   const against = difficulty ?? defaultDifficultyOf(module, definition, entity);
-  return check(module, rng, { modifier, difficulty: difficultyOf(module, against) });
+  return check(module, rng, { modifier, difficulty: difficultyOf(module, against), swing });
 }
 
 /** The save's own `defaultDifficulty`, which the module may write as a formula. */

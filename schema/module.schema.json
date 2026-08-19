@@ -1670,6 +1670,14 @@
                   "$ref": "#/$defs/GameModule/properties/rules/properties/resolution/properties/checkDice",
                   "default": "2d20kl1"
                 },
+                "swingStacking": {
+                  "type": "string",
+                  "enum": [
+                    "cancel",
+                    "net"
+                  ],
+                  "default": "cancel"
+                },
                 "criticalSuccessAt": {
                   "anyOf": [
                     {
@@ -6996,7 +7004,7 @@
                 "combat.turn": {
                   "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
                   "default": "{who}'s turn.",
-                  "description": "Whose turn it is — without this a player only learns it from a refusal."
+                  "description": "Whose turn it is."
                 },
                 "move.blocked": {
                   "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
@@ -7020,7 +7028,7 @@
                 "item.dropped": {
                   "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
                   "default": "{who} leaves {items} behind.",
-                  "description": "A body's spoils — a silent drop is a drop the player never picks up."
+                  "description": "A body's spoils, named so they get picked up."
                 },
                 "trade.bought": {
                   "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
@@ -7136,7 +7144,7 @@
                 "quest.started": {
                   "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
                   "default": "New quest: {quest} — {description}",
-                  "description": "A job taken, with what it is — the title alone says nothing."
+                  "description": "A job taken, with what it asks of you."
                 },
                 "quest.started.plain": {
                   "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
@@ -7182,7 +7190,7 @@
                 },
                 "quest.failed.expired": {
                   "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
-                  "description": "Why a quest was lost: it expired off-screen."
+                  "description": "Why a quest was lost: its time ran out while you were elsewhere."
                 },
                 "party.stance": {
                   "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
@@ -7228,7 +7236,7 @@
                 "deed.unseen": {
                   "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
                   "default": "Nobody saw that.",
-                  "description": "A deed nobody witnessed — which is what makes stealth mechanically different."
+                  "description": "A deed nobody witnessed."
                 },
                 "deed.witnessed": {
                   "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
@@ -7279,7 +7287,7 @@
                 "sense.empty.named": {
                   "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
                   "default": "You stop. Nothing reaches you by {sense}.",
-                  "description": "Using a sense that turns nothing up. Always says something — silence reads as a broken command."
+                  "description": "Using a sense that turns nothing up. Always says something."
                 },
                 "sense.impression": {
                   "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
@@ -7319,7 +7327,7 @@
                 "refused.action.unknown": {
                   "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
                   "default": "\"{action}\" is not something you can do",
-                  "description": "An action this build has never heard of — a save or a caller can hand one over."
+                  "description": "An action this version does not recognise."
                 },
                 "refused.turn.other": {
                   "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
@@ -7619,7 +7627,7 @@
                 "refused.rest.inCombat": {
                   "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",
                   "default": "not while fighting",
-                  "description": "Resting mid-fight."
+                  "description": "Resting during a fight."
                 },
                 "refused.rest.interrupted": {
                   "$ref": "#/$defs/GameModule/properties/narrative/properties/systemText/properties/grammar.and",

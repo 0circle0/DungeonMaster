@@ -161,6 +161,7 @@ export const FIELD_DOCS: Record<string, string> = {
   'rules.resolution.checkDice': 'The notation every check rolls.',
   'rules.resolution.advantageDice': 'Notation rolled instead when a check has advantage.',
   'rules.resolution.disadvantageDice': 'Notation rolled instead when a check has disadvantage.',
+  'rules.resolution.swingStacking': 'What a roll does with more than one swing: cancel them out, or go by the count.',
   'rules.resolution.criticalSuccessAt': 'Natural roll at or above which a check crits. Null for no crits.',
   'rules.resolution.criticalFailureAt': 'Natural roll at or below which a check fumbles. Null for no fumbles.',
   'rules.resolution.criticalDamageMultiplier': 'What a critical hit multiplies damage by.',

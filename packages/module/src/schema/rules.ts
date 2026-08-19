@@ -148,6 +148,19 @@ export const resolutionSchema = z
     checkDice: diceNotation.default('1d20'),
     advantageDice: diceNotation.default('2d20kh1'),
     disadvantageDice: diceNotation.default('2d20kl1'),
+    /**
+     * What happens when a roll is handed more than one swing.
+     *
+     * `cancel` is the common table reading: any advantage and any
+     * disadvantage together leave neither, and neither ever stacks past one.
+     * `net` goes by the sign of the count, so three advantages against one
+     * disadvantage still swing up.
+     *
+     * There is no `stack`, because `advantageDice` is a single notation:
+     * there is no way to name two levels of advantage, so offering the option
+     * would be offering something the ruleset cannot express.
+     */
+    swingStacking: z.enum(['cancel', 'net']).default('cancel'),
     /** Natural roll at or above this is a critical success; null disables crits. */
     criticalSuccessAt: z.number().int().nullable().default(20),
     criticalFailureAt: z.number().int().nullable().default(1),

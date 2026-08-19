@@ -255,6 +255,7 @@ not anticipate there. It is the supported way to exceed what ships.
 | `checkDice` | [dice](#dice-notation) |  | `"1d20"` | The notation every check rolls. |
 | `advantageDice` | [dice](#dice-notation) |  | `"2d20kh1"` | Notation rolled instead when a check has advantage. |
 | `disadvantageDice` | [dice](#dice-notation) |  | `"2d20kl1"` | Notation rolled instead when a check has disadvantage. |
+| `swingStacking` | `cancel` \| `net` |  | `"cancel"` | What a roll does with more than one swing: cancel them out, or go by the count. |
 | `criticalSuccessAt` | number |  | `20` | Natural roll at or above which a check crits. Null for no crits. |
 | `criticalFailureAt` | number |  | `1` | Natural roll at or below which a check fumbles. Null for no fumbles. |
 | `criticalDamageMultiplier` | number |  | `2` | What a critical hit multiplies damage by. |
