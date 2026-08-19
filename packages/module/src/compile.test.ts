@@ -224,7 +224,11 @@ describe('hashModule', () => {
    * and the hash would not have moved — but an invented fallback is the thing
    * `hardcoded-audit.md` spent a pass removing, and a resolution policy an
    * author cannot see in their own document is not a policy they can change.
-   * A declared default is worth a hash move.
+   * A declared default is worth a hash move. Its companion
+   * `rules.conditions[].swings` landed in the same pass and is `.optional()`,
+   * and the number below did not budge for it — which is the distinction
+   * working: a policy the ruleset holds an opinion about is declared, and
+   * per entry structure that is usually absent stays absent.
    */
   it('is unchanged for a module that declares no mods', () => {
     // `minimal` is the witness, and deliberately not greenmarch: greenmarch

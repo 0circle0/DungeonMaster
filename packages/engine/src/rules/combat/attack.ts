@@ -27,7 +27,7 @@ import type { Entity, EntityId } from '../../state.js';
 import type { Position } from '../../grid/tiles.js';
 import { buildScope, statsOf, OPEN_NAMESPACES } from '../../stats.js';
 import { Transaction, applyOps, adjustResource } from '../apply.js';
-import { preventsAction } from '../conditions.js';
+import { preventsAction, swingsFrom } from '../conditions.js';
 import { check, savingThrow, succeeded, criticalMultiplier, difficultyOf } from '../check.js';
 import type { Swing } from '../check.js';
 import type { TargetingContext } from './targeting.js';
@@ -354,8 +354,13 @@ function resolveAgainst(
     const roll = check(module, rng, {
       modifier: spellBonus ?? stats.mod[ability.attack.stat] ?? 0,
       difficulty: defenceWithCover,
-      // A list, because this is the seam every other swing will arrive at.
-      swing: [ability.swing ?? null],
+      // Both sides of the blow: what the attacker is carrying, and what the
+      // target's own conditions do to anyone swinging at them.
+      swing: [
+        ability.swing ?? null,
+        ...swingsFrom(module, actor, 'ownAttacks'),
+        ...swingsFrom(module, current, 'attacksAgainstSelf'),
+      ],
     });
 
     txn.emit({ type: 'attacked', attacker: actor.id, target: current.id, ability: ability.id, roll });

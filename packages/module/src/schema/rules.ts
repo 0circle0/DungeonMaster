@@ -100,6 +100,9 @@ export const stackingSchema = z.enum([
   'ignore', // the first application wins
 ]);
 
+/** Which way a roll leans. Named once: conditions and abilities both use it. */
+export const swingSchema = z.enum(['advantage', 'disadvantage']);
+
 export const conditionSchema = z
   .object({
     id: idSchema,
@@ -117,6 +120,30 @@ export const conditionSchema = z
     modifiers: z.record(idSchema, ExprSchema).default({}),
     /** Actions the condition forbids, e.g. `stunned` blocking `action`. */
     prevents: z.array(idSchema).default([]),
+    /**
+     * Which way the dice lean while this is on you.
+     *
+     * The four scopes a condition can reach: your own attacks, attacks made
+     * against you, your ability checks, and your saving throws. Every swing
+     * that applies is collected and reconciled by
+     * `rules.resolution.swingStacking`, so being both helped and poisoned is a
+     * question the ruleset answers rather than the engine.
+     *
+     * Not a substitute for `modifiers`, and worth choosing between rather than
+     * writing both. A penalty to a defence shifts the mean and leaves the
+     * critical rate alone; a swing changes the spread and moves criticals with
+     * it. Giving one condition both is a double penalty that nothing will warn
+     * you about.
+     */
+    swings: z
+      .object({
+        ownAttacks: swingSchema.optional(),
+        attacksAgainstSelf: swingSchema.optional(),
+        checks: swingSchema.optional(),
+        saves: swingSchema.optional(),
+      })
+      .strict()
+      .optional(),
     /**
      * Whether being under this hides who you are, so a witness is less likely
      * to name you. Typed rather than a magic tag the engine knows: a module

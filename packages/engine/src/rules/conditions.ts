@@ -13,11 +13,15 @@
 
 import { Rng } from '@dm/core';
 import { evalEffects, evalExpr } from '@dm/module';
-import type { Effect, Expr } from '@dm/module';
+import type { CompiledModule, Effect, Expr } from '@dm/module';
 import type { ActiveCondition, Entity, EntityId } from '../state.js';
 import { buildScope, OPEN_NAMESPACES } from '../stats.js';
 import { Transaction, applyOps } from './apply.js';
 import { savingThrow, succeeded } from './check.js';
+import type { Swing } from './check.js';
+
+/** The four ways a condition can lean a roll. */
+export type SwingScope = 'ownAttacks' | 'attacksAgainstSelf' | 'checks' | 'saves';
 
 interface ConditionDef {
   id: string;
@@ -25,6 +29,7 @@ interface ConditionDef {
   onExpire: Effect[];
   prevents: string[];
   implies: string[];
+  swings?: Partial<Record<SwingScope, Swing>>;
   savingThrow?: {
     save: string;
     difficulty?: unknown;
@@ -108,6 +113,31 @@ export function preventsAction(txn: Transaction, entity: Entity, actionType: str
     if (definition?.prevents.includes(actionType)) return true;
   }
   return false;
+}
+
+/**
+ * Every swing an entity's conditions impose on one kind of roll.
+ *
+ * A list rather than a single answer, because reconciling them is
+ * `resolveSwing`'s job and `check`'s alone to do — collecting here and
+ * deciding there is what stops two call sites disagreeing about what being
+ * both helped and poisoned means.
+ *
+ * Takes a module rather than a transaction, unlike `preventsAction` beside it,
+ * because the roll sites that need this do not all have one.
+ */
+export function swingsFrom(
+  module: CompiledModule,
+  entity: Entity,
+  scope: SwingScope,
+): Swing[] {
+  const out: Swing[] = [];
+  for (const active of entity.conditions) {
+    const definition = module.find<ConditionDef>('rules.conditions', active.condition);
+    const swing = definition?.swings?.[scope];
+    if (swing) out.push(swing);
+  }
+  return out;
 }
 
 /** Conditions implied by the ones an entity already has, transitively. */

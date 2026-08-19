@@ -1427,6 +1427,28 @@
                     },
                     "default": []
                   },
+                  "swings": {
+                    "type": "object",
+                    "properties": {
+                      "ownAttacks": {
+                        "type": "string",
+                        "enum": [
+                          "advantage",
+                          "disadvantage"
+                        ]
+                      },
+                      "attacksAgainstSelf": {
+                        "$ref": "#/$defs/GameModule/properties/rules/properties/conditions/items/properties/swings/properties/ownAttacks"
+                      },
+                      "checks": {
+                        "$ref": "#/$defs/GameModule/properties/rules/properties/conditions/items/properties/swings/properties/ownAttacks"
+                      },
+                      "saves": {
+                        "$ref": "#/$defs/GameModule/properties/rules/properties/conditions/items/properties/swings/properties/ownAttacks"
+                      }
+                    },
+                    "additionalProperties": false
+                  },
                   "concealsIdentity": {
                     "type": "boolean",
                     "default": false

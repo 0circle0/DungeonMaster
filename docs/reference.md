@@ -173,10 +173,22 @@ not anticipate there. It is the supported way to exceed what ships.
 | `onExpire` | [effect](#the-dsl)[] |  | `[]` | Effects run once, when it ends. |
 | `modifiers` | { id: [expression](#the-dsl) } |  | `{}` | Derived stat adjustments while it holds. Magnitude is in scope. |
 | `prevents` | id[] |  | `[]` | Action type ids this forbids. A bare id, not a checked reference. |
+| `swings` | [object](#module-rules-conditions-swings) |  |  | Which way the dice lean while this is on you. Prefer it or modifiers, not both. |
 | `concealsIdentity` | boolean |  | `false` | Makes a witness less able to name who did the deed. |
 | `savingThrow` | [object](#module-rules-conditions-savingThrow) |  |  | A save to shrug it off, and when that save is offered. |
 | `implies` | id[] |  | `[]` | Condition ids that come with this one. A bare id, not a checked reference. |
 | `extra` | { string: any } |  | `{}` | Open bag of your own data on this condition. |
+
+### Module → `rules` → `conditions` → `swings`
+
+<a id="module-rules-conditions-swings"></a>
+
+| Field | Type | Required | Default | What it does |
+| --- | --- | --- | --- | --- |
+| `ownAttacks` | `advantage` \| `disadvantage` |  |  | How attack rolls made by the afflicted creature lean. |
+| `attacksAgainstSelf` | `advantage` \| `disadvantage` |  |  | How attack rolls made against the afflicted creature lean. |
+| `checks` | `advantage` \| `disadvantage` |  |  | How the afflicted creature's ability checks lean. |
+| `saves` | `advantage` \| `disadvantage` |  |  | How the afflicted creature's saving throws lean. |
 
 ### Module → `rules` → `conditions` → `savingThrow`
 

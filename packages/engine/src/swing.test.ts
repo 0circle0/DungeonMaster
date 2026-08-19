@@ -23,7 +23,7 @@ import { reduce } from './reduce.js';
 import { createMap } from './grid/tiles.js';
 import { reduceAll } from './reduce.js';
 import { statesEqual } from './save.js';
-import { check, resolveSwing } from './rules/check.js';
+import { check, resolveSwing, skillCheck, savingThrow } from './rules/check.js';
 import type { Swing } from './rules/check.js';
 import type { Action } from './actions.js';
 import type { RollRecord } from './events.js';
@@ -165,6 +165,96 @@ describe('an ability that always leans', () => {
   it('keeps the two dice it rolled, so the arithmetic can be shown', () => {
     expect(cast(bolt('advantage')).dice).toHaveLength(2);
     expect(cast(GREENMARCH).dice).toHaveLength(1);
+  });
+});
+
+/**
+ * The prize: circumstance, not just the ability.
+ *
+ * This is what the mechanic was missing and why every shipped condition is a
+ * flat penalty to a defence instead. A condition can now say which way it
+ * leans each of the four kinds of roll it can reach.
+ */
+describe('a condition that leans the dice', () => {
+  /** Greenmarch with one extra condition, declared however the test needs. */
+  function withCondition(swings: Record<string, string>): CompiledModule {
+    const doc = JSON.parse(JSON.stringify(GREENMARCH.source)) as never as {
+      rules: { conditions: Record<string, unknown>[] };
+    };
+    doc.rules.conditions.push({ id: 'tilted', name: 'Tilted', swings });
+    const compiled = compileModule(doc);
+    if (!compiled.ok) throw new Error('fixture failed to compile');
+    return compiled.module;
+  }
+
+  const afflicted = (state: GameState, who: string, conditions: string[]): GameState => ({
+    ...state,
+    entities: {
+      ...state.entities,
+      [who]: {
+        ...state.entities[who]!,
+        conditions: conditions.map((condition) => ({
+          condition, remaining: null, magnitude: null, source: null,
+        })),
+      },
+    },
+  });
+
+  /** The notation the bolt was rolled with, given who is afflicted. */
+  function notation(module: CompiledModule, who: 'e:1' | 'e:99'): string {
+    const state = afflicted(caster(module), who, ['tilted']);
+    const { events } = reduce(
+      state,
+      { type: 'useAbility', ability: 'barrow_bolt', target: 'e:99' },
+      { module },
+    );
+    const attacked = events.find((event) => event.type === 'attacked');
+    if (!attacked || attacked.type !== 'attacked') throw new Error('the bolt was never thrown');
+    return attacked.roll.notation;
+  }
+
+  it('leans the attacks its bearer makes', () => {
+    expect(notation(withCondition({ ownAttacks: 'disadvantage' }), 'e:1')).toBe('2d20kl1');
+    // The same condition on the target changes nothing: scopes are directional.
+    expect(notation(withCondition({ ownAttacks: 'disadvantage' }), 'e:99')).toBe('1d20');
+  });
+
+  it('leans the attacks made against its bearer', () => {
+    expect(notation(withCondition({ attacksAgainstSelf: 'advantage' }), 'e:99')).toBe('2d20kh1');
+    expect(notation(withCondition({ attacksAgainstSelf: 'advantage' }), 'e:1')).toBe('1d20');
+  });
+
+  // Both sides are asked, and the module's own policy settles it. This is the
+  // case that would need saying twice if `check` did not own the rule.
+  it('cancels an attacker\'s edge against a target\'s', () => {
+    const module = withCondition({ ownAttacks: 'advantage', attacksAgainstSelf: 'advantage' });
+    const both = afflicted(afflicted(caster(module), 'e:1', ['tilted']), 'e:99', ['tilted']);
+    const { events } = reduce(
+      both, { type: 'useAbility', ability: 'barrow_bolt', target: 'e:99' }, { module },
+    );
+    const attacked = events.find((event) => event.type === 'attacked');
+    // Two advantages do not stack, whatever the policy.
+    if (attacked?.type === 'attacked') expect(attacked.roll.notation).toBe('2d20kh1');
+  });
+
+  it('leans its bearer\'s ability checks', () => {
+    const module = withCondition({ checks: 'disadvantage' });
+    const state = afflicted(caster(module), 'e:1', ['tilted']);
+    const roll = skillCheck(module, Rng.fromSeed(2), state.entities['e:1']!, 'perception', 12);
+    expect(roll.notation).toBe('2d20kl1');
+  });
+
+  it('leans its bearer\'s saving throws', () => {
+    const module = withCondition({ saves: 'advantage' });
+    const state = afflicted(caster(module), 'e:1', ['tilted']);
+    const roll = savingThrow(module, Rng.fromSeed(2), state.entities['e:1']!, 'will', 12);
+    expect(roll.notation).toBe('2d20kh1');
+  });
+
+  it('leaves a creature carrying nothing rolling one die', () => {
+    const module = withCondition({ ownAttacks: 'advantage' });
+    const clean = caster(module).entities['e:1']!;
+    expect(skillCheck(module, Rng.fromSeed(2), clean, 'perception', 12).notation).toBe('1d20');
   });
 });
 

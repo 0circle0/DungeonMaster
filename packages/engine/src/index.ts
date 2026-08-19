@@ -128,7 +128,10 @@ export { isEvent, eventsOfType } from './events.js';
 export type { GameEvent, EventType, RollRecord } from './events.js';
 
 export { Transaction, applyOps, adjustResource, applyCondition, removeCondition, changeInventory, adjustReputation } from './rules/apply.js';
-export { tickConditions, tickAllConditions, preventsAction, impliedConditions } from './rules/conditions.js';
+export {
+  tickConditions, tickAllConditions, preventsAction, impliedConditions, swingsFrom,
+} from './rules/conditions.js';
+export type { SwingScope } from './rules/conditions.js';
 
 export {
   check,

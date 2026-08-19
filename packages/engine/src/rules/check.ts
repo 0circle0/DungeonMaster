@@ -18,6 +18,7 @@ import type { RollRecord } from '../events.js';
 import {
   statsOf, proficiencyOf, isSaveProficient, skillRankOf, buildScope, OPEN_NAMESPACES,
 } from '../stats.js';
+import { swingsFrom } from './conditions.js';
 
 interface Resolution {
   checkDice: string;
@@ -47,6 +48,12 @@ export interface CheckOptions {
    * is not a step a caller can forget.
    */
   readonly swing?: Swing | readonly Swing[] | undefined;
+}
+
+/** One swing or many, always as many. */
+function asList(given: Swing | readonly Swing[] | undefined): readonly Swing[] {
+  if (given === undefined || given === null) return [];
+  return Array.isArray(given) ? given : [given as Swing];
 }
 
 /**
@@ -213,7 +220,10 @@ export function skillCheck(
   return check(module, rng, {
     modifier: skillModifier(module, entity, skillId),
     difficulty: difficultyOf(module, difficulty),
-    swing,
+    // Whatever the caller knows, plus whatever the creature is carrying. Every
+    // skill roll in the game comes through here, so wiring it once covers
+    // traps, dialogue, gates, loot and discovery at the same time.
+    swing: [...asList(swing), ...swingsFrom(module, entity, 'checks')],
   });
 }
 
@@ -240,12 +250,12 @@ export function opposedCheck(
   const attackerRoll = check(module, rng, {
     modifier: skillModifier(module, attacker.entity, attacker.skill),
     difficulty: 0,
-    swing: attacker.swing,
+    swing: [...asList(attacker.swing), ...swingsFrom(module, attacker.entity, 'checks')],
   });
   const defenderRoll = check(module, rng, {
     modifier: skillModifier(module, defender.entity, defender.skill),
     difficulty: 0,
-    swing: defender.swing,
+    swing: [...asList(defender.swing), ...swingsFrom(module, defender.entity, 'checks')],
   });
 
   const attackerWins = attackerRoll.total > defenderRoll.total;
@@ -308,7 +318,11 @@ export function savingThrow(
   // an ordinary check — that is the whole point of writing one — so it wins over
   // the global difficulty whenever the caller named none.
   const against = difficulty ?? defaultDifficultyOf(module, definition, entity);
-  return check(module, rng, { modifier, difficulty: difficultyOf(module, against), swing });
+  return check(module, rng, {
+    modifier,
+    difficulty: difficultyOf(module, against),
+    swing: [...asList(swing), ...swingsFrom(module, entity, 'saves')],
+  });
 }
 
 /** The save's own `defaultDifficulty`, which the module may write as a formula. */
