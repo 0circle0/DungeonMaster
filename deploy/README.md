@@ -94,6 +94,15 @@ The origins listen on plain HTTP and match any `Host` — that is intentional, a
 `deploy/bootstrap.sh` step 7 explains at length why a bare `:PORT` is the only site address that
 works behind a proxy. Certificates are the front end's job.
 
+**Editing the proxy's config is not applying it.** Whatever installs that config has to be run;
+until it is, the proxy has no site block for these hostnames, cannot present a certificate for
+them, and aborts the TLS handshake. The browser reports that as a certificate or "secure
+connection failed" error with no mention of a missing vhost, which reads exactly like DNS that
+has not propagated — so it is easy to spend a while waiting for something that was never going to
+happen. This is the only step in the whole deploy with nothing guarding it: the workflow cannot
+check a machine it does not own, and its public-URL step only warns. If the origins are healthy
+and DNS resolves but HTTPS fails, look here first.
+
 ### 4. DNS
 
 `A` records for `@`, `studio` and `play` pointing at the public IP. If that IP is dynamic, make
