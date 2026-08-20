@@ -9,7 +9,7 @@
 import { z } from 'zod';
 import { ExprSchema, PredicateSchema, EffectSchema, RuleSchema, diceNotation } from '../dsl/schema.js';
 import { idSchema, displayName, description, ref, tags, weighted, extra } from './common.js';
-import { damageInteractionSchema } from './tactical.js';
+import { damageInteractionSchema, temperamentOverrideSchema } from './tactical.js';
 import { requirementSchema } from './requirement.js';
 
 /** An activatable ability: a spell, a class power, or an item's use effect. */
@@ -412,6 +412,14 @@ export const monsterSchema = z
     skillBonuses: z.record(ref('content.skills'), z.number().int()).default({}),
     senses: z.record(ref('rules.senses'), z.number().int()).default({}),
     speeds: z.record(ref('rules.movementModes'), z.number().int()).default({}),
+    /**
+     * What it does when nothing is telling it what to do — wandering, giving
+     * chase, giving up. Anything left out falls back to `rules.temperament`.
+     *
+     * Distinct from `behaviour` above, which is how it picks an attack once a
+     * fight is already happening.
+     */
+    temperament: temperamentOverrideSchema.optional(),
     languages: z.array(ref('rules.languages')).default([]),
     /** Roughly how hard it fights, for encounter budgeting in the editor. */
     challenge: z.number().min(0).optional(),
@@ -493,6 +501,13 @@ export const npcSchema = z
     memorySpan: z.number().int().min(0).default(90),
     /** Starting attitude toward the party, -100..100. */
     disposition: z.number().int().min(-100).max(100).default(0),
+    /**
+     * What they do when nobody is talking to them — whether they keep to their
+     * counter or walk the lane, and what they bother to look into.
+     *
+     * Anything left out falls back to `rules.temperament`.
+     */
+    temperament: temperamentOverrideSchema.optional(),
     /** They act too: reactions to deeds, quests, and what they are shown. */
     reactions: z.array(reactionSchema).default([]),
     /** Quests they can hand out, gated per quest. */

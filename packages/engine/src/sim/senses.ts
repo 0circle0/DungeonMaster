@@ -25,7 +25,8 @@ import { TerrainIndex, key as packKey, neighbours, inBounds } from '../grid/tile
 import { fieldOfView } from '../grid/fov.js';
 import { hasLineOfSight } from '../grid/fov.js';
 import { distance } from '../grid/geometry.js';
-import { toTiles, isHostileTo } from '../rules/combat/targeting.js';
+import { toTiles } from '../rules/combat/targeting.js';
+import { notices as registers, temperamentOf } from './temperament.js';
 import { conditionsInForce } from '../rules/implied.js';
 import type { Transaction } from '../rules/apply.js';
 
@@ -253,6 +254,7 @@ export function signalAt(
   observer: Entity,
   from: Position,
   emission: number,
+  options: { readonly since?: number } = {},
 ): number {
   if (emission <= 0) return 0;
 
@@ -283,8 +285,44 @@ export function signalAt(
     }
   }
 
+  // Whether it has got here yet. A shout is instant and a smell is not, and
+  // that difference is the whole reason a nose is worth having: what reaches
+  // you is where something *was*, however long ago the air took to bring it.
+  if (!hasArrived(sense, travelled, context.state.minute - (options.since ?? -Infinity))) return 0;
+
   const carried = sense.falloff === 'cliff' ? 1 : 1 - travelled / (reach + 1);
-  return Math.max(0, Math.min(1, carried * emission));
+  // Thinner for having spread out: the same scent over more ground. Eased from
+  // full at the source to `spreadRetention` at the edge of reach rather than
+  // switched on at the first tile, which would make standing *on* something
+  // twice as pungent as standing beside it.
+  const diluted = travels(sense)
+    ? 1 - (1 - sense.spreadRetention) * Math.min(1, travelled / Math.max(1, reach))
+    : 1;
+  return Math.max(0, Math.min(1, carried * diluted * emission));
+}
+
+/** Whether this sense arrives at once, or has to make its way over. */
+export function travels(sense: SenseDef): boolean {
+  return sense.propagation === 'field' && sense.spreadPerMinute > 0;
+}
+
+/**
+ * Has the signal had time to get here?
+ *
+ * A sense that does not travel is always yes, which is sight and sound and
+ * everything else that arrives at the speed of noticing. For one that does,
+ * the front of it is `spreadPerMinute` tiles out per minute since it was given
+ * off — so walking into a dungeon does not fill the dungeon, it starts filling
+ * it, and the far end has a while yet.
+ *
+ * An unknown emission time is treated as long past rather than as just now.
+ * The callers that leave it out are asking about a place rather than about a
+ * creature — a noise, a deed, an editor's preview — and none of them wants a
+ * sense to answer "not yet" to a question with no clock in it.
+ */
+function hasArrived(sense: SenseDef, travelled: number, age: number): boolean {
+  if (!travels(sense)) return true;
+  return travelled <= age * sense.spreadPerMinute;
 }
 
 /** Whether a straight signal survives the trip. */
@@ -458,6 +496,7 @@ export function canPerceive(
     ...options,
     emission: 1,
     subject,
+    since: subject.since,
   });
 }
 
@@ -477,6 +516,8 @@ export function canPerceiveTile(
     readonly emission?: number;
     readonly subject?: Entity;
     readonly range?: number;
+    /** When the signal started coming from there. Absent is "long enough ago". */
+    readonly since?: number;
   } = {},
 ): boolean {
   const wanted = options.threshold ?? 'detect';
@@ -489,7 +530,9 @@ export function canPerceiveTile(
       ? sense
       : { ...sense, range: options.range };
 
-    const strength = signalAt(context, effective, observer, at, emission);
+    const strength = options.since === undefined
+      ? signalAt(context, effective, observer, at, emission)
+      : signalAt(context, effective, observer, at, emission, { since: options.since });
     if (strength > thresholdOf(sense, wanted)) return true;
   }
 
@@ -545,7 +588,15 @@ export function markStrength(sense: SenseDef, mark: Mark, minute: number): numbe
   return mark.strength * (1 - age / sense.lingerMinutes);
 }
 
-/** How far a trace has crept from where it was left, in tiles. */
+/**
+ * How far a trace has got from where it was left, in tiles.
+ *
+ * The front of the cloud, not a bonus to anybody's reach. It used to be the
+ * latter — a trace within the observer's range was smelled the instant it
+ * existed, and `spread` only extended things *past* that range, so walking into
+ * a dungeon filled the whole dungeon with your scent at once. This is now what
+ * decides whether the smell has arrived at all.
+ */
 export function markSpread(sense: SenseDef, mark: Mark, minute: number): number {
   if (sense.spreadPerMinute <= 0) return 0;
   return Math.max(0, minute - mark.at) * sense.spreadPerMinute;
@@ -563,7 +614,12 @@ export function leavesMarks(module: CompiledModule): boolean {
  * is walked over again and again never accumulates. A ruleset whose senses
  * leave nothing writes nothing at all.
  */
-export function leaveMarks(txn: Transaction, actor: Entity, at: Position): void {
+export function leaveMarks(
+  txn: Transaction,
+  terrain: TerrainIndex,
+  actor: Entity,
+  at: Position,
+): void {
   const module = txn.module;
   if (!leavesMarks(module)) return;
 
@@ -585,12 +641,64 @@ export function leaveMarks(txn: Transaction, actor: Entity, at: Position): void 
 
   for (const sense of sensesOf(module)) {
     if (sense.lingerMinutes <= 0) continue;
-    const strength = emissionOf(module, actor, sense);
+    // What the ground will hold. Bare rock takes no print however heavily you
+    // walk on it, and that is a fact about the stone rather than about the
+    // creature — so it scales the emission rather than the sense.
+    const held = terrain.marksKept(map.tiles, at, sense.id);
+    if (held <= 0) continue;
+
+    const strength = emissionOf(module, actor, sense) * held;
     if (strength <= 0) continue;
     kept.push(newMark(sense.id, actor.id, minute, strength));
   }
 
-  writeMarks(txn, actor.map, tile, kept);
+  writeMarks(txn, actor.map, tile, capMarks(module, kept));
+}
+
+/**
+ * Keep only the freshest few traces per sense on one tile.
+ *
+ * A thousand of a thing crossing one tile is still, to a nose, "they came
+ * through here": the thousandth trace says nothing the first did not. Two of
+ * them passing in opposite directions is genuinely two things, which is why
+ * this trims to a few rather than to one.
+ *
+ * It matters more for speed than for space. {@link perceive} reads every trace
+ * on every tile, for every sense, for every creature, every turn — so an
+ * unbounded tile is an unbounded inner loop, and no amount of later pruning
+ * could reach it.
+ *
+ * The result carries a **total order** — oldest first, ties broken on sense and
+ * then on who left it. Truncation is exactly where a partial order would start
+ * costing runs their determinism: two equivalent games would drop different
+ * traces and stop comparing equal.
+ */
+function capMarks(module: CompiledModule, marks: readonly Mark[]): Mark[] {
+  const cap = module.source.rules.perception.maxMarksPerTile;
+
+  const bySense = new Map<string, Mark[]>();
+  for (const mark of marks) {
+    const held = bySense.get(mark.sense);
+    if (held) held.push(mark);
+    else bySense.set(mark.sense, [mark]);
+  }
+
+  const out: Mark[] = [];
+  for (const held of bySense.values()) {
+    held.sort(byAgeThenId);
+    // Sorted oldest first, so the tail is what is still worth smelling.
+    out.push(...held.slice(Math.max(0, held.length - cap)));
+  }
+
+  return out.sort(byAgeThenId);
+}
+
+/** Oldest first, and total — the order a tile's traces are stored in. */
+function byAgeThenId(a: Mark, b: Mark): number {
+  if (a.at !== b.at) return a.at - b.at;
+  if (a.sense !== b.sense) return a.sense < b.sense ? -1 : 1;
+  if (a.by !== b.by) return a.by < b.by ? -1 : 1;
+  return a.strength - b.strength;
 }
 
 /**
@@ -735,9 +843,17 @@ export function perceive(context: PerceptionContext, observer: Entity): readonly
     // Creatures, where they actually are.
     for (const other of Object.values(context.state.entities)) {
       if (other.id === observer.id || !other.alive || other.map !== observer.map) continue;
-      if (!isHostileTo(observer, other)) continue;
+      // What it bothers to register. Enemies only by default, which is the
+      // filter this was born with; a module widens it per creature, which is
+      // how a wolf comes to track a deer and a shopkeeper comes to see anyone.
+      if (!registers(module, observer, other)) continue;
 
-      const strength = signalAt(context, sense, observer, other.position, emissionOf(module, other, sense));
+      // Measured from when it got there, not from now: something that has just
+      // stepped into the room has not yet filled it.
+      const strength = signalAt(
+        context, sense, observer, other.position, emissionOf(module, other, sense),
+        { since: other.since },
+      );
       if (strength > sense.detect) {
         out.push({ sense: sense.id, of: other.id, at: other.position, strength, fresh: true });
       }
@@ -745,6 +861,9 @@ export function perceive(context: PerceptionContext, observer: Entity): readonly
 
     // And the traces they left behind, which is what makes a trail followable.
     if (sense.lingerMinutes <= 0) continue;
+    // Something that does not know what a footprint is. It can smell you
+    // perfectly well; it simply has no idea that the ground remembers.
+    if (!temperamentOf(module, observer).followsTrails) continue;
 
     for (const [rawTile, marks] of Object.entries(map.marks)) {
       const tile = Number(rawTile);
@@ -759,11 +878,11 @@ export function perceive(context: PerceptionContext, observer: Entity): readonly
         const remaining = markStrength(sense, mark, minute);
         if (remaining <= 0) continue;
 
-        // An old trace has spread, so it is smelled from further off even as it
-        // weakens — the cloud widens as it thins.
-        const spread = markSpread(sense, mark, minute);
-        const strength = signalAt(context, sense, observer, at, remaining)
-          || (spread > 0 ? spreadSignal(context, sense, observer, at, remaining, spread) : 0);
+        // The trace is its own clock. It began spreading where it was laid, so
+        // an old one has reached further than a fresh one — which is what makes
+        // a cold trail perceptible from across a room while the warm one you
+        // are standing beside has not got anywhere yet.
+        const strength = signalAt(context, sense, observer, at, remaining, { since: mark.at });
 
         if (strength > sense.detect) {
           out.push({ sense: sense.id, of: mark.by, at, strength, fresh: false });
@@ -775,7 +894,7 @@ export function perceive(context: PerceptionContext, observer: Entity): readonly
   return out.sort(byStrengthThenId(senses));
 }
 
-/** Whether a trace is worth following: left by something this creature opposes. */
+/** Whether a trace is worth following: left by something this creature registers. */
 function txnEntityIsHostile(
   context: PerceptionContext,
   observer: Entity,
@@ -785,21 +904,7 @@ function txnEntityIsHostile(
   // A trace outlives whoever left it, and a cold trail of something long gone
   // is still worth following.
   if (!other) return true;
-  return isHostileTo(observer, other);
-}
-
-/** Signal from a trace that has crept outward beyond where it was laid. */
-function spreadSignal(
-  context: PerceptionContext,
-  sense: SenseDef,
-  observer: Entity,
-  at: Position,
-  remaining: number,
-  spread: number,
-): number {
-  const widened: SenseDef = { ...sense, range: rangeOf(context, observer, sense) + Math.floor(spread) };
-  // Weaker for having spread: the same scent over more ground.
-  return signalAt(context, widened, observer, at, remaining) * sense.spreadRetention;
+  return registers(context.module, observer, other);
 }
 
 /** Strongest first; ties settled by sense order then subject, so it is total. */
@@ -962,11 +1067,25 @@ export function currentAlert(
   observer: Entity,
   threshold: Threshold,
 ): Alert | null {
-  for (const alert of observer.alerts) {
+  const usable = (alert: Alert): boolean => {
     const sense = senseOf(context.module, alert.sense);
-    if (!sense) continue;
-    if (context.state.minute - alert.minute >= sense.rememberMinutes) continue;
-    if (alert.strength > thresholdOf(sense, threshold)) return alert;
+    if (!sense) return false;
+    if (context.state.minute - alert.minute >= sense.rememberMinutes) return false;
+    return alert.strength > thresholdOf(sense, threshold);
+  };
+
+  // Which sense it trusts. Absent is "whichever is shouting loudest", since
+  // `alerts` is already strongest first — the behaviour this had before a
+  // creature could hold an opinion about its own nose.
+  const preference = temperamentOf(context.module, observer).investigates;
+  if (preference === null) return observer.alerts.find(usable) ?? null;
+
+  // Named senses are a **preference order**, not a filter on strength: a wolf
+  // that lists smell first follows its nose past something it can plainly see.
+  // An empty list is a creature that notices everything and acts on none of it.
+  for (const senseId of preference) {
+    const found = observer.alerts.find((alert) => alert.sense === senseId && usable(alert));
+    if (found) return found;
   }
   return null;
 }

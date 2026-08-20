@@ -378,12 +378,23 @@ rules = {
          "faintImpressionTextKey": "heard_something_faint", "emptyTextKey": "heard_nothing",
          "thresholds": {"detect": 0.05, "investigate": 0.25, "aggro": 0.8}},
         {"id": "smell", "name": "Smell",
-         "description": "Scent seeps around corners and hangs about long after you have gone. A hound follows where you went rather than where you are, and a cold trail is faint even underfoot.",
+         "description": "Scent seeps around corners and hangs about long after you have gone, but it has to get to you first: it creeps outward about six feet a minute from wherever it was given off. A hound follows where you went rather than where you are, and a cold trail is faint even underfoot.",
          "defaultRange": 125, "propagation": "field", "blockedBy": "impassable", "falloff": "linear",
-         "lingerMinutes": 90, "spreadPerMinute": 0.4, "rememberMinutes": 60,
+         "lingerMinutes": 90, "spreadPerMinute": 3, "rememberMinutes": 60,
          "impressionTextKey": "smelled_something", "faintImpressionTextKey": "smelled_something_faint",
          "emptyTextKey": "smelled_nothing",
          "thresholds": {"detect": 0.05, "investigate": 0.3, "aggro": 0.95}},
+        # What the ground remembers. Prints need soft footing to form and close
+        # eyes to read, so they are useless at any distance and useless on
+        # stone -- but they outlast a scent by hours. `aggro` is 1, which no
+        # signal reaches: you cannot pick a fight with a footprint.
+        {"id": "tracks", "name": "Tracks",
+         "description": "Prints in soft ground. Worthless on stone and worthless from across a room, but they last hours after a scent has gone and they say which way a thing was going.",
+         "defaultRange": 10, "propagation": "line", "blockedBy": "opaque", "falloff": "linear",
+         "lingerMinutes": 240, "spreadPerMinute": 0, "rememberMinutes": 45,
+         "impressionTextKey": "saw_tracks", "faintImpressionTextKey": "saw_tracks_faint",
+         "emptyTextKey": "saw_no_tracks",
+         "thresholds": {"detect": 0.05, "investigate": 0.2, "aggro": 1}},
     ],
     "stances": [
         {"id": "sneak", "name": "Sneak",
@@ -396,7 +407,21 @@ rules = {
          "description": "Quick, and heard from a long way off.",
          "speedMultiplier": 1.5, "emits": {"hearing": 2.2, "smell": 1.4}},
     ],
-    "perception": {"defaultStance": "walk", "sightSense": "sight", "curiosityMinutes": 20},
+    "perception": {"defaultStance": "walk", "sightSense": "sight", "curiosityMinutes": 20,
+                   "maxMarksPerTile": 4},
+    # What anything does when nobody is telling it what to do. Every creature
+    # inherits this and overrides what it disagrees with, which is how 127
+    # monsters get sensible habits without 127 hand-written blocks.
+    #
+    # Distances are module units and a tile here is *two feet*, not five, because
+    # `tileSize` takes the smallest declared size and `tiny` is 2. Halve these to
+    # read them in tiles: 30 is fifteen tiles of territory, not six.
+    "temperament": {
+        "roamRadius": 30, "investigateRadius": 80, "leashRadius": 120,
+        "wanderChance": 0.35, "disengageTurns": 2,
+        "speeds": {"wander": 0.5, "investigate": 1, "engage": 1, "returning": 1},
+        "followsTrails": True, "notices": ["hostile"],
+    },
     "movementModes": [
         {"id": "walk", "name": "Walk", "defaultSpeed": 30, "terrainMultiplier": 1},
         {"id": "swim", "name": "Swim", "defaultSpeed": 15, "terrainMultiplier": 1},
@@ -531,6 +556,21 @@ TEXT_GRAMMAR = [
          "Cold air, and no trail in it.",
          "Nothing has come this way lately, or the wind has taken it.",
          "You breathe deep. The air keeps its own counsel."),
+    pool("saw_tracks",
+         "Prints in the soft ground, sharp enough to be an hour old at most: {direction}.",
+         "Something heavy came through here, and it went {direction}.",
+         "Fresh tracks, and nothing has filled them in yet: {direction}.",
+         "The ground {direction} of you has been walked on, and recently."),
+    pool("saw_tracks_faint",
+         "Old prints, slumped at the edges, heading {direction}.",
+         "Something passed this way, long enough ago that the ground has settled.",
+         "The ground is disturbed {direction}, but it has been a while.",
+         "Tracks, or what is left of them, pointing {direction}."),
+    pool("saw_no_tracks",
+         "Nothing has come this way, or the ground is too hard to say.",
+         "You read the ground and it tells you nothing at all.",
+         "Bare stone, and stone keeps no secrets because it keeps no prints.",
+         "Whatever came through here left the ground exactly as it found it."),
 ]
 
 # Keep whatever `npm run systemtext` already seeded, so regenerating this file

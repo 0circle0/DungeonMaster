@@ -4,5 +4,9 @@
   "glyph": "\"",
   "passable": true,
   "opaque": true,
-  "moveCost": 2
+  "moveCost": 2,
+  "marks": {
+    "tracks": 1,
+    "smell": 1
+  }
 }

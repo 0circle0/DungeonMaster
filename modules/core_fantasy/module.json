@@ -1040,13 +1040,13 @@
       {
         "id": "smell",
         "name": "Smell",
-        "description": "Scent seeps around corners and hangs about long after you have gone. A hound follows where you went rather than where you are, and a cold trail is faint even underfoot.",
+        "description": "Scent seeps around corners and hangs about long after you have gone, but it has to get to you first: it creeps outward about six feet a minute from wherever it was given off. A hound follows where you went rather than where you are, and a cold trail is faint even underfoot.",
         "defaultRange": 125,
         "propagation": "field",
         "blockedBy": "impassable",
         "falloff": "linear",
         "lingerMinutes": 90,
-        "spreadPerMinute": 0.4,
+        "spreadPerMinute": 3,
         "rememberMinutes": 60,
         "impressionTextKey": "smelled_something",
         "faintImpressionTextKey": "smelled_something_faint",
@@ -1055,6 +1055,26 @@
           "detect": 0.05,
           "investigate": 0.3,
           "aggro": 0.95
+        }
+      },
+      {
+        "id": "tracks",
+        "name": "Tracks",
+        "description": "Prints in soft ground. Worthless on stone and worthless from across a room, but they last hours after a scent has gone and they say which way a thing was going.",
+        "defaultRange": 10,
+        "propagation": "line",
+        "blockedBy": "opaque",
+        "falloff": "linear",
+        "lingerMinutes": 240,
+        "spreadPerMinute": 0,
+        "rememberMinutes": 45,
+        "impressionTextKey": "saw_tracks",
+        "faintImpressionTextKey": "saw_tracks_faint",
+        "emptyTextKey": "saw_no_tracks",
+        "thresholds": {
+          "detect": 0.05,
+          "investigate": 0.2,
+          "aggro": 1
         }
       }
     ],
@@ -1091,7 +1111,25 @@
     "perception": {
       "defaultStance": "walk",
       "sightSense": "sight",
-      "curiosityMinutes": 20
+      "curiosityMinutes": 20,
+      "maxMarksPerTile": 4
+    },
+    "temperament": {
+      "roamRadius": 30,
+      "investigateRadius": 80,
+      "leashRadius": 120,
+      "wanderChance": 0.35,
+      "disengageTurns": 2,
+      "speeds": {
+        "wander": 0.5,
+        "investigate": 1,
+        "engage": 1,
+        "returning": 1
+      },
+      "followsTrails": true,
+      "notices": [
+        "hostile"
+      ]
     },
     "movementModes": [
       {
@@ -2266,6 +2304,57 @@
           },
           {
             "text": "You breathe deep. The air keeps its own counsel."
+          }
+        ]
+      },
+      {
+        "id": "saw_tracks",
+        "variants": [
+          {
+            "text": "Prints in the soft ground, sharp enough to be an hour old at most: {direction}."
+          },
+          {
+            "text": "Something heavy came through here, and it went {direction}."
+          },
+          {
+            "text": "Fresh tracks, and nothing has filled them in yet: {direction}."
+          },
+          {
+            "text": "The ground {direction} of you has been walked on, and recently."
+          }
+        ]
+      },
+      {
+        "id": "saw_tracks_faint",
+        "variants": [
+          {
+            "text": "Old prints, slumped at the edges, heading {direction}."
+          },
+          {
+            "text": "Something passed this way, long enough ago that the ground has settled."
+          },
+          {
+            "text": "The ground is disturbed {direction}, but it has been a while."
+          },
+          {
+            "text": "Tracks, or what is left of them, pointing {direction}."
+          }
+        ]
+      },
+      {
+        "id": "saw_no_tracks",
+        "variants": [
+          {
+            "text": "Nothing has come this way, or the ground is too hard to say."
+          },
+          {
+            "text": "You read the ground and it tells you nothing at all."
+          },
+          {
+            "text": "Bare stone, and stone keeps no secrets because it keeps no prints."
+          },
+          {
+            "text": "Whatever came through here left the ground exactly as it found it."
           }
         ]
       }

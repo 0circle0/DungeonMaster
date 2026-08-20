@@ -762,6 +762,7 @@ describe('walking together', () => {
       combat: {
         round: 1, order: [state.selected], turn: 0,
         spent: {}, movement: 6, reactionsUsed: {}, cooldowns: [], usedOnce: [], specialUses: {},
+      unseenSince: null,
       },
     };
     const result = reduce(fighting, { type: 'setFollow', follow: true }, { module: GREENMARCH, terrain });

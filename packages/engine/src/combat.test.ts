@@ -660,12 +660,27 @@ describe('running away', () => {
       },
     };
 
-    const { state: next, events } = reduce(separated, { type: 'wait', minutes: 0 }, ctx);
-    expect(next.combat).toBeNull();
+    // Breaking line of sight is no longer the whole of an escape: a bog hound
+    // keeps looking for three rounds, so a corner buys time to choose your
+    // ground rather than ending the encounter on the spot.
+    const { state: hidden } = reduce(separated, { type: 'wait', minutes: 0 }, ctx);
+    expect(hidden.combat).not.toBeNull();
+
+    // It ends when whatever is hunting you gives up, which is what
+    // `temperament.disengageTurns` is counting down.
+    let after = hidden;
+    let events: ReturnType<typeof reduce>['events'] = [];
+    for (let guard = 0; guard < 40 && after.combat; guard += 1) {
+      const step = reduce(after, { type: 'endTurn' }, ctx);
+      after = step.state;
+      events = step.events;
+    }
+
+    expect(after.combat).toBeNull();
     expect(events.find((e) => e.type === 'combatEnded')).toMatchObject({ outcome: 'fled' });
 
     // And it reads as getting away, not as losing.
-    const line = narrate({ module: GREENMARCH, state: next, seed: 1 }, events.filter((e) => e.type === 'combatEnded'));
+    const line = narrate({ module: GREENMARCH, state: after, seed: 1 }, events.filter((e) => e.type === 'combatEnded'));
     expect(line.map((entry) => entry.text).join(' ')).toContain('not followed');
   });
 
@@ -752,6 +767,7 @@ describe('combat has depth', () => {
         cooldowns: [],
         usedOnce: [],
         specialUses: {},
+      unseenSince: null,
       },
     };
   }
@@ -814,6 +830,7 @@ describe('combat has depth', () => {
       combat: {
         round: 1, order: ['e:1', 'e:2', 'm:0'], turn: 0, spent: {}, movement: 6,
         reactionsUsed: {}, cooldowns: [], usedOnce: [], specialUses: {},
+      unseenSince: null,
       },
     };
 
@@ -837,6 +854,7 @@ describe('a reaction that fires once a fight', () => {
       combat: {
         round: 1, order: ['e:1', 'm:0'], turn: 0, spent: {}, movement: 6,
         reactionsUsed: {}, cooldowns: [], usedOnce: [], specialUses: {},
+      unseenSince: null,
       },
     };
 

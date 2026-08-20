@@ -11,5 +11,9 @@
   "moveCost": 2,
   "requiresMode": [
     "swim"
-  ]
+  ],
+  "marks": {
+    "tracks": 0,
+    "smell": 0.2
+  }
 }

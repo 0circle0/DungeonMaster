@@ -9,5 +9,9 @@
   ],
   "passable": true,
   "opaque": false,
-  "moveCost": 2
+  "moveCost": 2,
+  "marks": {
+    "tracks": 0.6,
+    "smell": 0.5
+  }
 }

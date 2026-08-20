@@ -17,7 +17,7 @@ import type { Value } from '@dm/module';
 import type { Position, TileMap } from './grid/tiles.js';
 
 /** Bumped when the shape changes in a way that needs migrating. */
-export const SAVE_VERSION = 9;
+export const SAVE_VERSION = 10;
 
 export type EntityId = string;
 
@@ -105,6 +105,30 @@ export interface Entity {
   /** Which map this entity stands on, and where. The grid is always on. */
   readonly map: string;
   readonly position: Position;
+  /**
+   * The tile it was placed on: its territory, and where it goes back to.
+   *
+   * Null for the party, who have somewhere better to be. Stored rather than
+   * derived because there is nothing to derive it from — a creature that has
+   * wandered halfway across a marsh has no record of where it started except
+   * this one, and a wandering creature that forgot its anchor would drift until
+   * it hit a wall.
+   */
+  readonly anchor: Position | null;
+  /**
+   * World minute it arrived on the tile it is standing on.
+   *
+   * What a travelling signal is measured from. A scent is not a fact about
+   * where a creature *is*, it is a fact about where it has *been* and for how
+   * long — so something that just stepped into a room has not yet filled it,
+   * however keen the nose at the far end.
+   *
+   * Stored rather than read off the creature's own trail, which was the first
+   * attempt: a trace fades after `lingerMinutes`, so anything that stood still
+   * longer than that lost the record of when it arrived and went abruptly
+   * undetectable.
+   */
+  readonly since: number;
   /** Movement modes available, e.g. `["walk"]`. Drawn from ancestry and gear. */
   readonly movementModes: readonly string[];
 
@@ -234,6 +258,18 @@ export interface CombatState {
   readonly usedOnce: readonly string[];
   /** Special turns taken this round, by entity — reset alongside `reactionsUsed`. */
   readonly specialUses: Readonly<Record<EntityId, number>>;
+  /**
+   * The round in which everyone lost track of everyone, or null while someone
+   * can still be perceived.
+   *
+   * What turns "you broke line of sight" from an instant escape into a tactic.
+   * A round rather than a tally because `maybeEndCombat` is asked more than
+   * once per round — from `settle` and again from `endTurn` — and a counter
+   * would tick several times for a single round of nobody finding anybody.
+   * Stamping the round instead makes the question idempotent: ask it five
+   * times or once and the answer is the same.
+   */
+  readonly unseenSince: number | null;
 }
 
 /**
@@ -378,6 +414,35 @@ export function entity(state: GameState, id: EntityId): Entity {
 /** The party's living members, in roster order. */
 export function livingParty(state: GameState): readonly Entity[] {
   return state.party.map((id) => entity(state, id)).filter((e) => e.alive);
+}
+
+/**
+ * Put a creature somewhere, and remember that somewhere as its ground.
+ *
+ * One helper rather than ten hand-written spreads, because `anchor` has to be
+ * set at every site that assigns a position or a creature quietly wanders from
+ * wherever it happened to be standing the first time anything asked. The party
+ * keeps a null anchor: they are the ones with somewhere else to be.
+ */
+export function placeOn(entity: Entity, map: string, at: Position, minute: number): Entity {
+  return {
+    ...entity,
+    map,
+    position: at,
+    since: minute,
+    anchor: entity.kind === 'character' ? null : { x: at.x, y: at.y },
+  };
+}
+
+/**
+ * One step, and the clock that goes with it.
+ *
+ * Every site that changes a creature's tile goes through here, because a
+ * position written without its minute is a creature whose scent silently dates
+ * from wherever it last happened to be recorded.
+ */
+export function steppedTo(entity: Entity, at: Position, minute: number): Entity {
+  return { ...entity, position: at, since: minute };
 }
 
 /** Replace one entity, returning a new state. */

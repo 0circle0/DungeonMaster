@@ -11,6 +11,7 @@ import { Rng, parseDice, rollDice } from '@dm/core';
 import { evalEffects, evalExpr } from '@dm/module';
 import type { Effect, Expr, Scope } from '@dm/module';
 import type { Entity, ItemStack, MapInstance } from '../state.js';
+import { placeOn } from '../state.js';
 import { Transaction, applyOps } from '../rules/apply.js';
 import { buildScope, OPEN_NAMESPACES } from '../stats.js';
 import { TerrainIndex, key as packKey, unkey } from '../grid/tiles.js';
@@ -80,7 +81,7 @@ export function placeParty(
     const member = txn.entity(id);
     if (!member) continue;
     const spot = freeNear(txn, terrain, mapId, at);
-    txn.putEntity({ ...member, map: mapId, position: spot });
+    txn.putEntity(placeOn(member, mapId, spot, txn.state.minute));
     txn.emit({ type: 'enteredMap', entity: id, map: mapId, at: spot });
   }
   txn.set({ ...txn.state, currentMap: mapId });
@@ -153,7 +154,7 @@ function spawnStaticContent(
       } catch {
         continue;
       }
-      txn.putEntity({ ...person, map: mapId, position: spawn.at });
+      txn.putEntity(placeOn(person, mapId, spawn.at, txn.state.minute));
       txn.emit({ type: 'spawned', entity: spawn.id, statblock: person.statblock ?? spawn.id, at: spawn.at });
       continue;
     }
@@ -166,7 +167,7 @@ function spawnStaticContent(
     } catch {
       continue;
     }
-    txn.putEntity({ ...monster, map: mapId, position: spawn.at, disposition: 'hostile' });
+    txn.putEntity({ ...placeOn(monster, mapId, spawn.at, txn.state.minute), disposition: 'hostile' });
     txn.emit({ type: 'spawned', entity: id, statblock: spawn.id, at: spawn.at });
   }
 
@@ -248,7 +249,7 @@ function spawnResidents(
     }
 
     const at = freeNear(txn, terrain, mapId, anchor);
-    txn.putEntity({ ...person, map: mapId, position: at });
+    txn.putEntity(placeOn(person, mapId, at, txn.state.minute));
     txn.emit({ type: 'spawned', entity: npcId, statblock: person.statblock ?? npcId, at });
   }
 }
@@ -315,9 +316,7 @@ function spawnEncounter(
 
       const at = freeNear(txn, terrain, mapId, anchor);
       txn.putEntity({
-        ...monster,
-        map: mapId,
-        position: at,
+        ...placeOn(monster, mapId, at, txn.state.minute),
         disposition: draw.hostile ? 'hostile' : 'neutral',
       });
       txn.emit({ type: 'spawned', entity: id, statblock: entry.monster, at });
@@ -488,7 +487,7 @@ export function enterDungeon(
             }
             const at = freeNear(txn, terrain, mapId, anchor);
             txn.putEntity({
-              ...monster, map: mapId, position: at,
+              ...placeOn(monster, mapId, at, txn.state.minute),
               disposition: draw.hostile ? 'hostile' : 'neutral',
             });
             txn.emit({ type: 'spawned', entity: id, statblock: entry.monster, at });
@@ -570,9 +569,7 @@ export function enterDungeon(
     const id = `e:${nextId}`;
     const monster = spawnMonster(txn.module, id, placed.monster);
     entities[id] = {
-      ...monster,
-      map: mapId,
-      position: placed.at,
+      ...placeOn(monster, mapId, placed.at, txn.state.minute),
       disposition: placed.hostile ? 'hostile' : 'neutral',
     };
   }

@@ -344,6 +344,10 @@ export function createCharacter(
     // creation happens before any map exists.
     map: '',
     position: { x: 0, y: 0 },
+    // Filled in by `placeOn` when this creature is actually put on a map;
+    // creation happens before any map exists.
+    anchor: null,
+    since: 0,
     movementModes: movementModesFor(module, ancestry.speeds),
     disposition: 'ally',
     following: null,
@@ -404,6 +408,10 @@ export function spawnMonster(module: CompiledModule, id: string, monsterId: stri
   const draft: Entity = {
     map: '',
     position: { x: 0, y: 0 },
+    // Filled in by `placeOn` when this creature is actually put on a map;
+    // creation happens before any map exists.
+    anchor: null,
+    since: 0,
     movementModes: movementModesFor(module, monster.speeds),
     disposition: 'hostile',
     following: null,
@@ -476,6 +484,10 @@ export function spawnNpc(module: CompiledModule, npcId: string): Entity {
   const draft: Entity = {
     map: '',
     position: { x: 0, y: 0 },
+    // Filled in by `placeOn` when this creature is actually put on a map;
+    // creation happens before any map exists.
+    anchor: null,
+    since: 0,
     movementModes: base?.movementModes ?? movementModesFor(module, undefined),
     // Which band a signed disposition falls in is the ruleset's call. The
     // engine used to cut at exactly zero and never offer `ally`, so however

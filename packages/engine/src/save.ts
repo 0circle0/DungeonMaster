@@ -236,6 +236,44 @@ const MIGRATIONS: Readonly<Record<number, Migration>> = {
    * standing in for lost information — it is the information.
    */
   8: (state) => ({ ...state, saveVersion: 9, lore: state['lore'] ?? {} }),
+
+  /**
+   * 9 → 10: territory, and a fight that survives a corner.
+   *
+   * Creatures gained the tile they keep to, and an encounter gained a count of
+   * how long nobody has been able to find anybody.
+   *
+   * A creature adopts where it is standing rather than getting a null anchor.
+   * Null would be defensible — the save genuinely does not record where it
+   * started — but it would leave every creature in an old save permanently
+   * unable to wander, which is a worse lie than "it lives here now". The party
+   * keeps a null anchor because the party has no territory.
+   */
+  9: (state) => {
+    const entities = { ...(state['entities'] as Record<string, Record<string, unknown>>) };
+    const party = new Set((state['party'] as string[] | undefined) ?? []);
+
+    for (const [id, entity] of Object.entries(entities)) {
+      const held = entity['anchor'];
+      const position = entity['position'];
+      entities[id] = {
+        ...entity,
+        anchor: held ?? (party.has(id) || entity['kind'] === 'character' ? null : position ?? null),
+        // As if it had been standing there since the save was written, which is
+        // the only honest reading: an older save records no arrival time, and
+        // pretending the scent is already everywhere would be worse.
+        since: entity['since'] ?? state['minute'] ?? 0,
+      };
+    }
+
+    const combat = state['combat'] as Record<string, unknown> | null | undefined;
+    return {
+      ...state,
+      saveVersion: 10,
+      entities,
+      combat: combat ? { ...combat, unseenSince: combat['unseenSince'] ?? null } : combat ?? null,
+    };
+  },
 };
 
 export function load(

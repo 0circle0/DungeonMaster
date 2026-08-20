@@ -36,6 +36,13 @@ export interface TerrainDef {
   readonly providesCover?: string;
   readonly lightRadius: number;
   readonly isDoor: boolean;
+  /**
+   * How well this ground keeps a trace, per sense. Absent is one.
+   *
+   * A record rather than a single number because whether ground takes a print
+   * and whether it holds a smell are different questions about the same stone.
+   */
+  readonly marks?: Readonly<Record<string, number>>;
 }
 
 export function samePosition(a: Position, b: Position): boolean {
@@ -160,6 +167,7 @@ export class TerrainIndex {
         ...(terrain['providesCover'] ? { providesCover: String(terrain['providesCover']) } : {}),
         lightRadius: Number(terrain['lightRadius'] ?? 0),
         isDoor: terrain['isDoor'] === true,
+        ...(terrain['marks'] ? { marks: terrain['marks'] as Record<string, number> } : {}),
       });
     }
     this.byId = map;
@@ -185,6 +193,18 @@ export class TerrainIndex {
 
   at(map: TileMap, position: Position): TerrainDef {
     return this.get(terrainAt(map, position));
+  }
+
+  /**
+   * How much of a trace this ground keeps for one sense, from zero to one.
+   *
+   * One when the terrain says nothing, so a module that has never heard of this
+   * leaves exactly the trails it always did. Zero is bare rock: nothing to
+   * print on, and nothing written.
+   */
+  marksKept(map: TileMap, position: Position, sense: string): number {
+    const declared = this.at(map, position).marks?.[sense];
+    return declared === undefined ? 1 : Math.max(0, Math.min(1, declared));
   }
 
   isPassable(map: TileMap, position: Position, modes: readonly string[] = []): boolean {

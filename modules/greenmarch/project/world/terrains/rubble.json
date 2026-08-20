@@ -4,5 +4,9 @@
   "glyph": "%",
   "passable": false,
   "opaque": false,
-  "providesCover": "half"
+  "providesCover": "half",
+  "marks": {
+    "tracks": 0,
+    "smell": 0.6
+  }
 }

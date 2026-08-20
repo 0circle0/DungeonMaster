@@ -451,6 +451,28 @@ The 60 is documented as deliberate back-compat and is fine; the emission floor
 and the spread halving are undeclared game knobs. **Proposal:**
 `rules.perception.minimumEmission: 0.01`, `rules.senses[].spreadRetention: 0.5`.
 
+### 21a. Idle movement and disengagement had no knobs at all — **closed**
+
+Two constants that were not so much hardcoded as *absent*, found while making
+the world move on its own.
+
+`runIdleTurns` paced everything at one tile per elapsed minute regardless of
+why it was moving, so ambling around a den and running somebody down were the
+same speed. And `maybeEndCombat` ended a fight after a single round in which
+nobody could perceive anybody, which made stepping around a corner a complete
+escape and pulling something into open ground impossible.
+
+Both are now declared: `rules.temperament.speeds` gives a separate multiplier
+per reason a creature moves, and `rules.temperament.disengageTurns` says how
+long it keeps looking. Zero on both reproduces the old behaviour exactly, which
+is what `modules/minimal` is the witness for.
+
+One thing deliberately **not** made declarable: which threshold the end-of-fight
+test uses. It asks at `investigate` where combat entry asks at `aggro`, and that
+ordering is guaranteed by the schema — so a fight can never end and immediately
+restart. Exposing it would let a module invert the two and build exactly that
+loop.
+
 ### 22. Concentration and speed defaults duplicated in engine
 
 [sim/agenda.ts:44-56](../packages/engine/src/sim/agenda.ts#L44-L56) and
@@ -674,6 +696,7 @@ one-line constants, in the style of the existing `criticalMultiplier`.
 | 19 | `encounterTables[].scalePerLevels` |
 | 20 | `roomTemplates[].{alwaysEncounter, neverEncounter, neverTrap}` and `dungeons[].safeEntrance`; `role` is no longer load-bearing |
 | 21 | `rules.perception.minimumEmission`, `rules.senses[].spreadRetention` |
+| 21a | `rules.temperament` (roam, investigate and leash radii, wander odds, per-reason speeds, sense preference, who it registers) and `rules.perception.maxMarksPerTile`. Per creature via `content.monsters[].temperament` and `content.npcs[].temperament`; per ground via `world.terrains[].marks` |
 | 22 | Deleted. `MemoryModel` and `Spellcasting` are the schema's inferred types now, not hand-written copies behind an `as unknown as` |
 | 23 | `rules.resolution.damageRounding`, `rules.currency.allowNegative` |
 | 24 | `rules.resolution.reputationRounding` |

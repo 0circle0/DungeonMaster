@@ -38,6 +38,7 @@
         "senses",
         "stances",
         "perception",
+        "temperament",
         "movementModes",
         "opportunities",
         "coverTypes",
@@ -111,7 +112,8 @@
         "senses": [
           "sight.json",
           "hearing.json",
-          "smell.json"
+          "smell.json",
+          "tracks.json"
         ],
         "stances": [
           "sneak.json",
@@ -286,6 +288,8 @@
           "heard_something_faint.json",
           "smelled_something.json",
           "smelled_something_faint.json",
+          "saw_tracks.json",
+          "saw_tracks_faint.json",
           "millford_desc.json",
           "fens_desc.json",
           "fen_ambience.json",
@@ -295,6 +299,7 @@
           "wight_arrives.json",
           "heard_nothing.json",
           "smelled_nothing.json",
+          "saw_no_tracks.json",
           "millford_village_desc.json",
           "vess_journal.json"
         ],

@@ -60,6 +60,7 @@ import { findPath } from './grid/path.js';
 import { distance } from './grid/geometry.js';
 import { isHostileTo } from './rules/combat/targeting.js';
 import { leaveMarks, perceiveAll, perceivedTiles, sightSenseOf } from './sim/senses.js';
+import { steppedTo } from './state.js';
 import { message, joinMessages } from './narrate/systemText.js';
 import type { Message } from './narrate/systemText.js';
 import type { ModRuntime } from './mods/runtime.js';
@@ -1057,7 +1058,7 @@ function moveEntity(
   const survived = txn.entity(actor.id);
   if (!survived || !survived.alive) return false;
 
-  txn.putEntity({ ...survived, position: to });
+  txn.putEntity(steppedTo(survived, to, txn.state.minute));
   txn.emit({ type: 'moved', entity: actor.id, from, to, cost });
   if (combat) spendMovement(txn, cost);
 
@@ -1075,7 +1076,7 @@ function moveEntity(
   }
 
   // And everything that walks leaves something behind for a nose to find.
-  leaveMarks(txn, txn.entity(actor.id) ?? actor, to);
+  leaveMarks(txn, terrain, txn.entity(actor.id) ?? actor, to);
 
   // What the ground itself does to whoever stands on it — lava, caltrops, a
   // pressure plate. Declared on every terrain and read by nothing until now.

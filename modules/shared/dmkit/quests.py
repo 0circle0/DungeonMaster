@@ -236,9 +236,35 @@ def dialogue(did, start, nodes):
     return {"id": did, "start": start, "nodes": list(nodes)}
 
 
+# Somebody who stands where you left them.
+#
+# A shopkeeper with a job to do does not go and investigate a noise, and a
+# questgiver who wandered off would be a bug rather than a living world. They
+# notice everyone, though -- that is the difference between incurious and
+# blind, and it is what lets them witness a theft.
+MINDS_THE_SHOP = {
+    "roamRadius": 0,
+    "wanderChance": 0,
+    "speeds": {"wander": 0},
+    "investigates": [],
+    "notices": ["hostile", "neutral", "ally"],
+}
+
+# Somebody with the run of the place: a guard on a round, a child in a lane.
+WALKS_ABOUT = {
+    "roamRadius": 24,
+    "investigateRadius": 60,
+    "leashRadius": 90,
+    "wanderChance": 0.3,
+    "speeds": {"wander": 0.5},
+    "investigates": ["sight", "hearing"],
+    "notices": ["hostile", "neutral", "ally"],
+}
+
+
 def npc(nid, name, description, *, faction=None, dialogue_id=None, home=None,
         offers=(), disposition=0, cares=(), shop=None, statblock=None,
-        gullibility=0.5, memory_span=90, reactions=()):
+        gullibility=0.5, memory_span=90, reactions=(), temperament=None):
     out = {"id": nid, "name": name, "description": description,
            "disposition": disposition, "gullibility": gullibility,
            "memorySpan": memory_span, "offersQuests": list(offers),
@@ -253,6 +279,15 @@ def npc(nid, name, description, *, faction=None, dialogue_id=None, home=None,
         out["statblock"] = statblock
     if shop:
         out["shop"] = shop
+
+    # Anyone with a counter to mind or a job to hand out stays put; everyone
+    # else has the run of the place. Stated rather than left to the ruleset so
+    # a village reads as a village rather than as a crowd milling at random.
+    habits = temperament
+    if habits is None:
+        habits = MINDS_THE_SHOP if (shop or offers) else WALKS_ABOUT
+    if habits:
+        out["temperament"] = dict(habits)
     return out
 
 

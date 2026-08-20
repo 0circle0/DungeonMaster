@@ -233,6 +233,17 @@ describe('hashModule', () => {
    * Re-stamped a third time for `rules.resolution.criticalScope`, on the same
    * reasoning: which rolls can crit is an opinion, and an author who cannot
    * see it in their own document cannot tell they hold it.
+   *
+   * Re-stamped a fourth time for `rules.temperament` and
+   * `rules.perception.maxMarksPerTile`. Same distinction, applied twice over:
+   * how far a creature strays from its own ground, how long it keeps looking
+   * for you, and how many traces a tile is worth remembering are all opinions
+   * the ruleset holds, and a world whose creatures never wandered held them
+   * silently. The per-creature half of the same feature —
+   * `content.monsters[].temperament`, `content.npcs[].temperament` and
+   * `world.terrains[].marks` — is `.optional()` and contributed nothing to the
+   * move, which is the distinction working again. Saves from before it need
+   * `allowModuleDrift`.
    */
   it('is unchanged for a module that declares no mods', () => {
     // `minimal` is the witness, and deliberately not greenmarch: greenmarch
@@ -241,7 +252,7 @@ describe('hashModule', () => {
     // no mods and is the no-hardcoding control, so the only thing that can
     // move this number is the schema itself.
     const at = (name: string) => fileURLToPath(new URL(`../../../modules/${name}`, import.meta.url));
-    expect(loadModuleFrom(at('minimal')).hash).toBe('601a1f7d06eb69df');
+    expect(loadModuleFrom(at('minimal')).hash).toBe('25b811d298a743a2');
   });
 
   it('treats an absent `mods` key as absent, not as an empty list', () => {

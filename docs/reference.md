@@ -93,6 +93,7 @@ not anticipate there. It is the supported way to exceed what ships.
 | `coverTypes` | [object](#module-rules-coverTypes)[] |  | `[]` | Degrees of cover and what each is worth on defence. |
 | `spellcasting` | [object](#module-rules-spellcasting) |  | `{}` | Slots or points, concentration, components, and rituals. |
 | `perception` | [object](#module-rules-perception) |  | `{}` | Which sense counts as sight, and the defaults perception runs on. |
+| `temperament` | [object](#module-rules-temperament) |  | `{}` | What creatures do unprompted: wandering, giving chase, and giving up. |
 | `currency` | [object](#module-rules-currency) |  | `{}` | What money is called and whether it can go negative. |
 | `vitalResource` | [→ rules.resources](#module-rules-resources) | **yes** |  | The resource whose floor means death. Required. |
 | `initiativeStat` | [→ rules.derivedStats](#module-rules-derivedStats) |  |  | Derived stat rolled for turn order. Without one, order is by id. |
@@ -369,8 +370,8 @@ not anticipate there. It is the supported way to exceed what ships.
 | `blockedBy` | `opaque` \| `impassable` \| `nothing` |  | `"opaque"` | What stops it. Opaque terrain, anything impassable, or nothing. |
 | `falloff` | `cliff` \| `linear` |  | `"cliff"` | Whether strength drops off a cliff at range or fades with distance. |
 | `lingerMinutes` | number |  | `0` | How long a trace stays after whatever left it has gone. Scent, not sight. |
-| `spreadPerMinute` | number |  | `0` | How far a trace creeps outward each minute. |
-| `spreadRetention` | number |  | `0.5` | Strength kept as a trace spreads, 0 to 1. |
+| `spreadPerMinute` | number |  | `0` | How fast it travels, in tiles a minute. Zero arrives at once. |
+| `spreadRetention` | number |  | `0.5` | Signal left at the far edge of reach once it has spread that far. |
 | `rememberMinutes` | number |  | `0` | How long a creature holds on to something it noticed with this sense. |
 | `impressionTextKey` | [→ narrative.textGrammar](#module-narrative-textGrammar) |  |  | Text pool for a clear impression. |
 | `faintImpressionTextKey` | [→ narrative.textGrammar](#module-narrative-textGrammar) |  |  | Text pool for a weak impression. |
@@ -519,7 +520,36 @@ not anticipate there. It is the supported way to exceed what ships.
 | `curiosityMinutes` | number |  | `10` | How long a creature keeps walking toward something it noticed. |
 | `defaultStance` | [→ rules.stances](#module-rules-stances) |  |  | Stance a creature is in when it names none. |
 | `minimumEmission` | number |  | `0.01` | Signal below this is treated as nothing, 0 to 1. |
+| `maxMarksPerTile` | number |  | `4` | How many traces one tile keeps per sense. The oldest fall off. |
 | `extra` | { string: any } |  | `{}` | Open bag of your own data on perception. |
+
+### Module → `rules` → `temperament`
+
+<a id="module-rules-temperament"></a>
+
+| Field | Type | Required | Default | What it does |
+| --- | --- | --- | --- | --- |
+| `roamRadius` | number |  | `0` | How far from where it was placed it will wander. Zero stands still. |
+| `investigateRadius` | number |  |  | How far from that spot a lead may pull it. Absent is no limit. |
+| `leashRadius` | number |  |  | How far it chases before turning for home. Absent is no limit. |
+| `wanderChance` | number |  | `0` | Odds it moves at all on a given idle step, 0 to 1. |
+| `disengageTurns` | number |  | `0` | Rounds it stays in a fight after nobody can perceive anybody. |
+| `speeds` | [object](#module-rules-temperament-speeds) |  | `{}` | How fast it moves for each reason it moves, as multipliers. |
+| `investigates` | [→ rules.senses](#module-rules-senses)[] |  |  | Senses it acts on, best first. Absent means all of them. |
+| `followsTrails` | boolean |  | `true` | Whether a trace on the ground is worth following at all. |
+| `notices` | `hostile` \| `neutral` \| `ally`[] |  | `["hostile"]` | Whose presence it registers: hostile, neutral, ally. |
+| `extra` | { string: any } |  | `{}` | Open bag of your own data on temperament. |
+
+### Module → `rules` → `temperament` → `speeds`
+
+<a id="module-rules-temperament-speeds"></a>
+
+| Field | Type | Required | Default | What it does |
+| --- | --- | --- | --- | --- |
+| `wander` | number |  | `1` | Pace while wandering its own ground. Zero never wanders. |
+| `investigate` | number |  | `1` | Pace while walking toward something it noticed. |
+| `engage` | number |  | `1` | Pace while closing on something it means to fight. |
+| `returning` | number |  | `1` | Pace while heading back to where it was placed. |
 
 ### Module → `rules` → `currency`
 
@@ -1018,6 +1048,7 @@ not anticipate there. It is the supported way to exceed what ships.
 | `skillBonuses` | { [→ content.skills](#module-content-skills): number } |  | `{}` | Skill rank per skill. |
 | `senses` | { [→ rules.senses](#module-rules-senses): number } |  | `{}` | Range per sense, overriding each sense's default. |
 | `speeds` | { [→ rules.movementModes](#module-rules-movementModes): number } |  | `{}` | Speed per movement mode, overriding each mode's default. |
+| `temperament` | [object](#module-content-monsters-temperament) |  |  | What it does unprompted. Anything left out falls back to the ruleset. |
 | `languages` | [→ rules.languages](#module-rules-languages)[] |  | `[]` | Languages it speaks. |
 | `challenge` | number |  |  | Not read by the engine. A budgeting number for the editor. |
 | `specialTurns` | [object](#module-content-monsters-specialTurns)[] |  | `[]` | Extra turns it takes outside the order. Legendary and lair actions. |
@@ -1066,6 +1097,34 @@ not anticipate there. It is the supported way to exceed what ships.
 | `attribute` | [→ rules.attributes](#module-rules-attributes) |  |  | Attribute rolled, when no skill fits. |
 | `difficulty` | [expression](#the-dsl) |  | `12` | Difficulty of the roll. |
 | `opposedBy` | [→ content.skills](#module-content-skills) |  |  | Skill the other side rolls instead of a fixed difficulty. |
+
+### Module → `content` → `monsters` → `temperament`
+
+<a id="module-content-monsters-temperament"></a>
+
+| Field | Type | Required | Default | What it does |
+| --- | --- | --- | --- | --- |
+| `roamRadius` | number |  |  | How far from where it was placed it will wander. Zero stands still. |
+| `investigateRadius` | number |  |  | How far from that spot a lead may pull it. Absent is no limit. |
+| `leashRadius` | number |  |  | How far it chases before turning for home. Absent is no limit. |
+| `wanderChance` | number |  |  | Odds it moves at all on a given idle step, 0 to 1. |
+| `disengageTurns` | number |  |  | Rounds it stays in a fight after nobody can perceive anybody. |
+| `speeds` | [object](#module-content-monsters-temperament-speeds) |  |  | How fast it moves for each reason it moves, as multipliers. |
+| `investigates` | [→ rules.senses](#module-rules-senses)[] |  |  | Senses it acts on, best first. Absent means all of them. |
+| `followsTrails` | boolean |  |  | Whether a trace on the ground is worth following at all. |
+| `notices` | `hostile` \| `neutral` \| `ally`[] |  |  | Whose presence it registers: hostile, neutral, ally. |
+| `extra` | { string: any } |  | `{}` | Open bag of your own data on temperament. |
+
+### Module → `content` → `monsters` → `temperament` → `speeds`
+
+<a id="module-content-monsters-temperament-speeds"></a>
+
+| Field | Type | Required | Default | What it does |
+| --- | --- | --- | --- | --- |
+| `wander` | number |  |  | Pace while wandering its own ground. Zero never wanders. |
+| `investigate` | number |  |  | Pace while walking toward something it noticed. |
+| `engage` | number |  |  | Pace while closing on something it means to fight. |
+| `returning` | number |  |  | Pace while heading back to where it was placed. |
 
 ### Module → `content` → `monsters` → `specialTurns`
 
@@ -1155,6 +1214,7 @@ not anticipate there. It is the supported way to exceed what ships.
 | `gullibility` | number |  | `0.5` | How readily they believe a rumour they did not witness, 0 to 1. |
 | `memorySpan` | number |  | `90` | Days a deed stays in their memory. |
 | `disposition` | number |  | `0` | How they feel about the party, from minus one hundred to one hundred. |
+| `temperament` | [object](#module-content-monsters-temperament) |  |  | What they do unprompted. Anything left out falls back to the ruleset. |
 | `reactions` | [object](#module-content-monsters-reactions)[] |  | `[]` | What they do off their own turn, gated on what they know. |
 | `offersQuests` | [→ narrative.quests](#module-narrative-quests)[] |  | `[]` | The quests they actually put in front of a player. This is what offers work. |
 | `shop` | [object](#module-content-npcs-shop) |  |  | What they will trade, and on what terms. |
@@ -1212,6 +1272,7 @@ not anticipate there. It is the supported way to exceed what ships.
 | `onEnter` | [effect](#the-dsl)[] |  | `[]` | Effects run on whoever steps onto it. |
 | `onOccupy` | [effect](#the-dsl)[] |  | `[]` | Effects run on whoever ends their turn on it. |
 | `lightRadius` | number |  | `0` | Indexed but unread. There is no light model; a sense carries its own reach. |
+| `marks` | { [→ rules.senses](#module-rules-senses): number } |  |  | How well this ground keeps a trace, per sense. Zero keeps none. |
 | `isDoor` | boolean |  | `false` | Indexed but unread. Doors live on the map's gate record, not on the terrain. |
 | `extra` | { string: any } |  | `{}` | Open bag of your own data on this terrain. |
 

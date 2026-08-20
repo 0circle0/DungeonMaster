@@ -175,6 +175,7 @@ Every reference is proven to resolve before play begins, so a typo is a load err
 | Perception | Sight, hearing and smell as declared senses; scent trails, stances, investigation | **done** |
 | Play surface | `@dm/play` — shared session, affordances, view models; isomorphic and enforced | **done** |
 | Browser UI | `apps/play` — click-first map, context bar, autocomplete, journal, saves | **done** |
+| Living ground | Territory and wandering, footprints the ground may refuse, leashed pursuit, a fight that survives a corner | **done** |
 
 The game is playable: `npm run play`, then open `modules/greenmarch`. The party
 can be rolled by hand — the ancestries, classes, budget, and price of each
@@ -182,18 +183,38 @@ score all come from the module, so a different ruleset gets a different screen
 with no code change.
 
 Creatures perceive rather than simply know. Senses are declared in the module —
-greenmarch gives its creatures sight, hearing and smell — and each one carries a
-signal that fades with distance, stops at whatever the module says stops it, and
-in the case of smell lingers on the ground as a trail that can be followed to
-where you *went*. Noticing something, walking over to look at it, and attacking
-it are three separate thresholds, so a bog hound can catch your scent across the
-fen and come to investigate without a fight starting. How you move decides what
-hears you: `sneak`, `walk`, `dash`.
+greenmarch gives its creatures sight, hearing, smell and tracks — and each one
+carries a signal that fades with distance, stops at whatever the module says
+stops it, and in the case of smell and footprints lingers on the ground as a
+trail that can be followed to where you *went*. Senses also have a **speed**:
+sight and sound arrive the instant they happen and are bounded by range and by
+walls, while a smell creeps outward a few feet a minute from wherever it was
+given off. Walking into a dungeon does not fill the dungeon with your scent; it
+starts filling it, and what reaches the far end first is the trail you left
+behind, because that has been spreading for longer than you have been standing
+there. Noticing something, walking over
+to look at it, and attacking it are three separate thresholds, so a bog hound can
+catch your scent across the fen and come to investigate without a fight starting.
+How you move decides what hears you: `sneak`, `walk`, `dash`.
+
+And they have somewhere to be. A creature remembers the ground it was placed on,
+wanders it when nothing is happening, follows a lead only so far before it turns
+for home, and leaves a trail of its own while it does — which is what makes
+tracking worth anything, since otherwise the only footprints in a dungeon are
+your own. The ground has a say too: a print needs soft footing, so bare rock and
+worked stone are where you can genuinely lose whatever is following you. What a
+creature bothers to investigate is its own: a wolf trusts its nose over its eyes
+and has no idea what a footprint means, and a shopkeeper stays behind the counter
+whatever the street is doing.
 
 Running away is movement rather than an exit: `flee` spends the whole movement
 allowance backing away, adjacent enemies take their parting blow, and the fight
-ends only once neither side can see the other — judged at the top of a round, so
-pursuers get their chance to give chase.
+ends only once neither side can *still make you out* — judged at the top of a
+round, so pursuers get their chance to give chase, and only after however many
+rounds that particular creature is willing to keep hunting. Breaking line of
+sight buys time to choose your ground; it is not, by itself, an escape. Staying
+in a fight is deliberately a lower bar than starting one, so something that can
+plainly smell you does not lose you the moment you round a corner.
 
 ## Tooling
 

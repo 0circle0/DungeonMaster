@@ -14,5 +14,9 @@
   "onOccupy": [],
   "lightRadius": 0,
   "isDoor": false,
-  "extra": {}
+  "extra": {},
+  "marks": {
+    "tracks": 1,
+    "smell": 1
+  }
 }

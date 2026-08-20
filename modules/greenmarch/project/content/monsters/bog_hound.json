@@ -32,7 +32,7 @@
   "reactions": [
     {
       "id": "pack_fury",
-      "description": "A hound that watches a packmate die goes berserk — creatures act on each other, not only on the party.",
+      "description": "A hound that watches a packmate die goes berserk \u2014 creatures act on each other, not only on the party.",
       "on": "allyKilled",
       "priority": 10,
       "effects": [
@@ -82,5 +82,27 @@
   },
   "extra": {
     "morale": 4
+  },
+  "temperament": {
+    "roamRadius": 90,
+    "investigateRadius": 300,
+    "leashRadius": 400,
+    "wanderChance": 0.6,
+    "disengageTurns": 3,
+    "speeds": {
+      "wander": 0.5,
+      "investigate": 1.25,
+      "engage": 1,
+      "returning": 1
+    },
+    "investigates": [
+      "smell",
+      "hearing",
+      "sight"
+    ],
+    "notices": [
+      "hostile",
+      "neutral"
+    ]
   }
 }

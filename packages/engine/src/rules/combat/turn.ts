@@ -28,6 +28,7 @@ import type { TargetingContext } from './targeting.js';
 import { useAbility } from './attack.js';
 import { recordEncounter } from '../../sim/agenda.js';
 import { combatants, isHostileTo, reachOf, speedOf } from './targeting.js';
+import { temperamentOf } from '../../sim/temperament.js';
 import { canPerceive } from '../../sim/senses.js';
 import { npcIdOf } from '../../state.js';
 import { terrainFor } from '../../grid/tiles.js';
@@ -147,6 +148,7 @@ export function maybeStartCombat(txn: Transaction, context: TargetingContext, rn
       cooldowns: [],
       usedOnce: [],
       specialUses: {},
+      unseenSince: null,
       ...(first ? freshTurn(txn, first) : { spent: {}, movement: 0 }),
     },
   });
@@ -224,12 +226,37 @@ export function maybeEndCombat(txn: Transaction, context?: TargetingContext): vo
   // Getting away is judged at the top of a round, once everyone has had their
   // chance to give chase. Judging it the instant someone runs would let a
   // fleeing character vanish before the creature beside them could react.
-  const escaped = party.length > 0 && hostiles.length > 0
-    && context !== undefined
-    && combat.turn === 0
-    && !anyoneCanSeeAnyone(txn, context, party, hostiles);
+  const contested = party.length > 0 && hostiles.length > 0;
+  let escaped = false;
 
-  if (party.length > 0 && hostiles.length > 0 && !escaped) return;
+  if (contested && context !== undefined && combat.turn === 0) {
+    // How long anything here is willing to keep looking. Taken as the most
+    // stubborn of them, because a fight lasts as long as its most stubborn
+    // participant is still in it.
+    const patience = hostiles.reduce(
+      (most, hostile) => Math.max(most, temperamentOf(txn.module, hostile).disengageTurns),
+      0,
+    );
+
+    // Breaking line of sight used to *be* the escape: one round unseen and the
+    // fight was over, so stepping round a corner to pull something into the
+    // open was impossible. Now losing everyone stamps the round it happened,
+    // and a corner buys time rather than ending the encounter.
+    const found = anyoneCanSeeAnyone(txn, context, party, hostiles);
+    const since = found ? null : combat.unseenSince ?? combat.round;
+
+    // At a patience of zero this is `since === combat.round`, which is exactly
+    // the old behaviour: lose them at the top of a round and the fight is over.
+    escaped = since !== null && combat.round - since >= patience;
+
+    // Written back even when the fight continues, or a patience above zero
+    // could never be reached — there would be nothing to count from.
+    if (!escaped && since !== combat.unseenSince) {
+      txn.set({ ...txn.state, combat: { ...combat, unseenSince: since } });
+    }
+  }
+
+  if (contested && !escaped) return;
 
   // What fought here is remembered by its kin, so the next ambush is prepared.
   const kinds = new Set<string>();
@@ -252,10 +279,19 @@ export function maybeEndCombat(txn: Transaction, context?: TargetingContext): vo
 }
 
 /**
- * Can any of these perceive any of those?
+ * Can any of these still make out any of those?
  *
- * Deliberately the same test `maybeStartCombat` uses, so a fight cannot end and
- * immediately restart on the same tiles.
+ * Asked at the **investigate** threshold, where starting a fight is asked at
+ * `aggro`. Picking a fight and staying in one are not the same judgement: you
+ * need to be sure enough to commit before you charge, and only sure enough to
+ * keep looking once you already have. A hound that can plainly smell you but
+ * could not have found you by smell alone should not lose the fight it is
+ * already in.
+ *
+ * The two thresholds are ordered by the schema, so this bar is always the lower
+ * one — which means a fight cannot end and immediately restart on the same
+ * tiles. That invariant used to be kept by asking the identical question; it is
+ * now kept by asking a strictly easier one.
  */
 function anyoneCanSeeAnyone(
   _txn: Transaction,
@@ -264,7 +300,7 @@ function anyoneCanSeeAnyone(
   hostiles: readonly Entity[],
 ): boolean {
   return hostiles.some((hostile) =>
-    party.some((member) => canPerceive(context, hostile, member, { threshold: 'aggro' })),
+    party.some((member) => canPerceive(context, hostile, member, { threshold: 'investigate' })),
   );
 }
 

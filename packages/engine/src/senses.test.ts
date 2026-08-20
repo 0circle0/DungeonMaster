@@ -131,17 +131,36 @@ describe('the awareness boundary', () => {
     const started = settle(field([{ at: { x: HERO.x + 3, y: HERO.y } }]));
     expect(started.combat).not.toBeNull();
 
-    // Pull them apart past the threshold. Escape is judged at the top of a
-    // round, so the fight ends the next time the order comes round.
+    // Pull them apart past the threshold, and wall the gap. The wall is the
+    // point: a hound that has lost you now *hunts* for a few rounds rather than
+    // shrugging at the top of the next one, so an open field is no longer an
+    // escape — it closes the distance and finds you again. Getting away has to
+    // be something the geometry makes true.
+    const builder = new MapBuilder(40, 9, 'floor');
+    for (let y = 0; y < 9; y += 1) builder.set(HERO.x + 10, y, 'wall');
+
     const separated: GameState = {
       ...started,
+      maps: { ...started.maps, field: { ...started.maps['field']!, tiles: builder.freeze() } },
       entities: {
         ...started.entities,
         'm:0': { ...started.entities['m:0']!, position: { x: HERO.x + 20, y: HERO.y } },
       },
     };
-    const { state: next, events } = reduce(separated, { type: 'wait', minutes: 0 }, ctx);
-    expect(next.combat).toBeNull();
+
+    // Losing them starts a count rather than ending the fight; greenmarch's
+    // hounds give it three rounds before they let it go.
+    let state = reduce(separated, { type: 'wait', minutes: 0 }, ctx).state;
+    expect(state.combat).not.toBeNull();
+
+    let events: ReturnType<typeof reduce>['events'] = [];
+    for (let guard = 0; guard < 40 && state.combat; guard += 1) {
+      const step = reduce(state, { type: 'endTurn' }, ctx);
+      state = step.state;
+      events = step.events;
+    }
+
+    expect(state.combat).toBeNull();
     expect(events.find((e) => e.type === 'combatEnded')).toMatchObject({ outcome: 'fled' });
   });
 });
@@ -320,8 +339,9 @@ describe('a declared sense reproduces the constant it replaced', () => {
 
   it('converts every declared range into tiles once', () => {
     const senses = sensesOf(GREENMARCH);
-    expect(senses.map((sense) => sense.id)).toEqual(['sight', 'hearing', 'smell']);
-    expect(senses.map((sense) => sense.range)).toEqual([12, 24, 25]);
+    expect(senses.map((sense) => sense.id)).toEqual(['sight', 'hearing', 'smell', 'tracks']);
+    // Tracks reach two tiles: you have to be standing over them to read them.
+    expect(senses.map((sense) => sense.range)).toEqual([12, 24, 25, 2]);
   });
 
   it('gives a module that declares nothing the same reach, unnamed', () => {
@@ -537,9 +557,10 @@ describe('the trail a creature leaves', () => {
     const tiles = Object.keys(marks).map(Number);
     expect(tiles.length).toBeGreaterThanOrEqual(3);
 
-    // Only senses that linger leave anything: sight and hearing do not.
+    // Only senses that linger leave anything: sight and hearing do not, and
+    // both a scent and a print do.
     const left = Object.values(marks).flat();
-    expect(new Set(left.map((mark) => mark.sense))).toEqual(new Set(['smell']));
+    expect(new Set(left.map((mark) => mark.sense))).toEqual(new Set(['smell', 'tracks']));
     expect(left.every((mark) => mark.by === 'e:1')).toBe(true);
   });
 
@@ -572,9 +593,51 @@ describe('the trail a creature leaves', () => {
       state = reduce(state, { type: 'step', direction }, ctx).state;
     }
 
-    // Two tiles paced between, one trace each — not twelve stacked up.
+    // Two tiles paced between, one trace per sense each — not twelve stacked
+    // up. Counted per sense because a creature leaves a scent *and* a print,
+    // and it is refreshing both rather than layering either.
+    const cap = GREENMARCH.source.rules.perception.maxMarksPerTile;
     for (const marks of Object.values(state.maps['field']!.marks)) {
-      expect(marks.length).toBeLessThanOrEqual(1);
+      const perSense = new Map<string, number>();
+      for (const mark of marks) perSense.set(mark.sense, (perSense.get(mark.sense) ?? 0) + 1);
+      for (const count of perSense.values()) expect(count).toBe(1);
+      expect(marks.length).toBeLessThanOrEqual(cap * perSense.size);
+    }
+  });
+
+  it('keeps only the freshest few traces when a crowd crosses one tile', () => {
+    // A thousand of a thing crossing one tile is still "they came through
+    // here". The cap is what stops the tile — and the loop that reads it every
+    // turn for every creature — growing with the size of the herd.
+    const walkers = Array.from({ length: 9 }, (_, i) => ({
+      id: `m:${i}`, at: { x: HERO.x + 6, y: HERO.y + 2 },
+    }));
+    let state = field(walkers);
+
+    // March them all across the same tile, one after another.
+    const crossing = { x: HERO.x + 6, y: HERO.y };
+    for (const walker of walkers) {
+      const mover = state.entities[walker.id]!;
+      state = reduce(
+        { ...state, entities: { ...state.entities, [walker.id]: { ...mover, position: { x: crossing.x, y: crossing.y + 1 } } } },
+        { type: 'wait', minutes: 1 },
+        ctx,
+      ).state;
+    }
+
+    const cap = GREENMARCH.source.rules.perception.maxMarksPerTile;
+    for (const marks of Object.values(state.maps['field']!.marks)) {
+      const perSense = new Map<string, number>();
+      for (const mark of marks) perSense.set(mark.sense, (perSense.get(mark.sense) ?? 0) + 1);
+      for (const count of perSense.values()) expect(count).toBeLessThanOrEqual(cap);
+
+      // And what survived is a total order, oldest first — which is what makes
+      // the truncation reproducible rather than whichever one happened to be
+      // written last.
+      const ordered = [...marks].sort((a, b) =>
+        a.at - b.at || (a.sense < b.sense ? -1 : a.sense > b.sense ? 1 : 0)
+        || (a.by < b.by ? -1 : a.by > b.by ? 1 : 0) || a.strength - b.strength);
+      expect(marks).toEqual(ordered);
     }
   });
 });
@@ -847,7 +910,7 @@ describe('the editor preview and play agree', () => {
       source: { x: 3, y: 4 },
     });
 
-    expect(preview.senses.map((sense) => sense.id)).toEqual(['sight', 'hearing', 'smell']);
+    expect(preview.senses.map((sense) => sense.id)).toEqual(['sight', 'hearing', 'smell', 'tracks']);
 
     // Rebuild the same sketch as a real game state and ask the engine directly.
     const builder = new MapBuilder(20, 9, 'floor');
@@ -1007,5 +1070,151 @@ describe('using a sense deliberately', () => {
     const result = reduce(state, { type: 'sense', sense: 'echolocation' }, { module: GREENMARCH, terrain });
     expect(result.events.some((event) => event.type === 'refused')).toBe(true);
     expect(result.state.minute).toBe(state.minute);
+  });
+});
+
+describe('a smell has to get to you', () => {
+  /**
+   * The bug this pins: a `field` sense used to arrive everywhere at once. Walk
+   * into a dungeon and every creature in it, around every corner, smelled you
+   * on the same tick — because the flood from the observer only asked *can this
+   * reach* and never *has it yet*.
+   */
+  const settled = (state: GameState, id: string, minute: number): GameState => ({
+    ...state,
+    entities: { ...state.entities, [id]: { ...state.entities[id]!, since: minute } },
+  });
+
+  /** The party, freshly arrived, and a hound that has been here for ever. */
+  const justArrived = (gap: number): GameState => {
+    const base = field([{ at: { x: HERO.x + gap, y: HERO.y } }]);
+    return settled(base, base.party[0]!, base.minute);
+  };
+
+  const smell = () => sensesOf(GREENMARCH).find((sense) => sense.id === 'smell')!;
+
+  it('is not there the moment you walk in', () => {
+    const state = justArrived(12);
+    const hound = state.entities['m:0']!;
+    const hero = state.entities[state.party[0]!]!;
+    expect(signalAt({ module: GREENMARCH, state, terrain }, smell(), hound, hero.position, 1,
+      { since: hero.since })).toBe(0);
+  });
+
+  it('arrives once it has had the minutes to cross the gap', () => {
+    // Greenmarch scent creeps a little over a tile a minute, so twelve tiles is
+    // ten minutes away however keen the nose at this end.
+    const state = justArrived(12);
+    const hound = state.entities['m:0']!;
+    const hero = state.entities[state.party[0]!]!;
+    const context = (minute: number) => ({ module: GREENMARCH, state: { ...state, minute }, terrain });
+
+    const early = signalAt(context(state.minute + 4), smell(), hound, hero.position, 1, { since: hero.since });
+    const later = signalAt(context(state.minute + 20), smell(), hound, hero.position, 1, { since: hero.since });
+
+    expect(early).toBe(0);
+    expect(later).toBeGreaterThan(0);
+  });
+
+  it('reaches what is close before what is far', () => {
+    const base = field([
+      { id: 'm:near', at: { x: HERO.x + 3, y: HERO.y } },
+      { id: 'm:far', at: { x: HERO.x + 18, y: HERO.y } },
+    ]);
+    const state = settled(base, base.party[0]!, base.minute);
+    const hero = state.entities[state.party[0]!]!;
+    const context = { module: GREENMARCH, state: { ...state, minute: state.minute + 5 }, terrain };
+
+    expect(signalAt(context, smell(), state.entities['m:near']!, hero.position, 1, { since: hero.since }))
+      .toBeGreaterThan(0);
+    expect(signalAt(context, smell(), state.entities['m:far']!, hero.position, 1, { since: hero.since }))
+      .toBe(0);
+  });
+
+  it('leaves the party unsmelled through a whole walk in, and then catches up', () => {
+    // The end-to-end shape, through the reducer rather than through `signalAt`:
+    // nobody has anything at first, and somebody does later.
+    let state = settled(field([{ at: { x: HERO.x + 10, y: HERO.y } }]), 'm:0', 0);
+    state = settled(state, state.party[0]!, state.minute);
+    const context = () => ({ module: GREENMARCH, state, terrain });
+    const smelled = () => perceive(context(), state.entities['m:0']!).some((p) => p.sense === 'smell');
+
+    expect(smelled()).toBe(false);
+    state = reduce(state, { type: 'wait', minutes: 30 }, ctx).state;
+    expect(smelled()).toBe(true);
+  });
+});
+
+describe('nearer is never worse', () => {
+  /**
+   * The invariant a travelling sense could plausibly break, and the one that
+   * makes it read as sane: of two creatures with the same nose, the closer one
+   * smells at least as much.
+   *
+   * It was broken once, and not by the arithmetic — aurendel's undead were
+   * given `followsTrails: false`, which switches off *every* lingering trace
+   * rather than only footprints. The two nearest creatures in a barrow were
+   * grave hounds, so the party was smelled by the rats across the room and not
+   * by the hounds beside them. The lesson is in the field, not the formula:
+   * `followsTrails` is "perceives nothing the ground kept", which is a
+   * construct, and almost never what an author means about an animal.
+   */
+  it('smells a thing more strongly the closer it is', () => {
+    const base = field([
+      { id: 'm:near', at: { x: HERO.x + 3, y: HERO.y } },
+      { id: 'm:far', at: { x: HERO.x + 14, y: HERO.y } },
+    ]);
+    // Long settled, so the scent has reached both and neither is waiting.
+    const state: GameState = { ...base, minute: base.minute + 240 };
+    const context = { module: GREENMARCH, state, terrain };
+
+    const smelled = (id: string) => perceive(context, state.entities[id]!)
+      .filter((p) => p.sense === 'smell')
+      .reduce((most, p) => Math.max(most, p.strength), 0);
+
+    expect(smelled('m:near')).toBeGreaterThan(0);
+    expect(smelled('m:near')).toBeGreaterThan(smelled('m:far'));
+  });
+
+  it('leaves a live nose alone when a creature will not read the ground', () => {
+    // `followsTrails: false` must gate traces only. A creature that cannot
+    // track still smells whatever is standing in front of it, or the field is
+    // not "ignores trails", it is "has no nose".
+    const base = field([{ id: 'm:0', at: { x: HERO.x + 3, y: HERO.y } }]);
+    const state: GameState = { ...base, minute: base.minute + 240 };
+    const context = { module: GREENMARCH, state, terrain };
+
+    const live = perceive(context, state.entities['m:0']!)
+      .filter((p) => p.sense === 'smell' && p.fresh);
+    expect(live.length).toBeGreaterThan(0);
+  });
+});
+
+describe('a sound does not', () => {
+  it('arrives the instant it is made, however far across the room', () => {
+    // The other half of the same rule. Hearing does not spread, so there is
+    // nothing to wait for: it is heard now or not at all.
+    const base = field([{ at: { x: HERO.x + 20, y: HERO.y } }]);
+    const state = { ...base, entities: { ...base.entities,
+      [base.party[0]!]: { ...base.entities[base.party[0]!]!, since: base.minute } } };
+    const hearing = sensesOf(GREENMARCH).find((sense) => sense.id === 'hearing')!;
+    const hero = state.entities[state.party[0]!]!;
+
+    expect(signalAt({ module: GREENMARCH, state, terrain }, hearing, state.entities['m:0']!,
+      hero.position, 1, { since: hero.since })).toBeGreaterThan(0);
+  });
+
+  it('never arrives at all from beyond its range, however long anyone waits', () => {
+    // Greenmarch hearing reaches 24 tiles. Thirty is silence, and waiting an
+    // hour does not make it less so — which is what separates a range from a
+    // travel time.
+    const base = field([{ at: { x: HERO.x + 30, y: HERO.y } }]);
+    const hearing = sensesOf(GREENMARCH).find((sense) => sense.id === 'hearing')!;
+    const hero = base.entities[base.party[0]!]!;
+
+    for (const minute of [base.minute, base.minute + 60, base.minute + 600]) {
+      expect(signalAt({ module: GREENMARCH, state: { ...base, minute }, terrain },
+        hearing, base.entities['m:0']!, hero.position, 1, { since: base.minute })).toBe(0);
+    }
   });
 });

@@ -2561,6 +2561,101 @@
                   "maximum": 1,
                   "default": 0.01
                 },
+                "maxMarksPerTile": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "default": 4
+                },
+                "extra": {
+                  "$ref": "#/$defs/GameModule/properties/rules/properties/conditions/items/properties/extra"
+                }
+              },
+              "additionalProperties": false,
+              "default": {}
+            },
+            "temperament": {
+              "type": "object",
+              "properties": {
+                "roamRadius": {
+                  "type": "number",
+                  "minimum": 0,
+                  "default": 0
+                },
+                "investigateRadius": {
+                  "type": "number",
+                  "minimum": 0
+                },
+                "leashRadius": {
+                  "type": "number",
+                  "minimum": 0
+                },
+                "wanderChance": {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 1,
+                  "default": 0
+                },
+                "disengageTurns": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "default": 0
+                },
+                "speeds": {
+                  "type": "object",
+                  "properties": {
+                    "wander": {
+                      "type": "number",
+                      "minimum": 0,
+                      "default": 1
+                    },
+                    "investigate": {
+                      "type": "number",
+                      "minimum": 0,
+                      "default": 1
+                    },
+                    "engage": {
+                      "type": "number",
+                      "minimum": 0,
+                      "default": 1
+                    },
+                    "returning": {
+                      "type": "number",
+                      "minimum": 0,
+                      "default": 1
+                    }
+                  },
+                  "additionalProperties": false,
+                  "default": {}
+                },
+                "investigates": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 64,
+                    "pattern": "^[a-z][a-z0-9_]*$",
+                    "description": "An id from rules.senses.",
+                    "x-dm-ref": "rules.senses"
+                  }
+                },
+                "followsTrails": {
+                  "type": "boolean",
+                  "default": true
+                },
+                "notices": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "enum": [
+                      "hostile",
+                      "neutral",
+                      "ally"
+                    ]
+                  },
+                  "default": [
+                    "hostile"
+                  ]
+                },
                 "extra": {
                   "$ref": "#/$defs/GameModule/properties/rules/properties/conditions/items/properties/extra"
                 }
@@ -4577,6 +4672,83 @@
                     },
                     "default": {}
                   },
+                  "temperament": {
+                    "type": "object",
+                    "properties": {
+                      "roamRadius": {
+                        "type": "number",
+                        "minimum": 0
+                      },
+                      "investigateRadius": {
+                        "type": "number",
+                        "minimum": 0
+                      },
+                      "leashRadius": {
+                        "type": "number",
+                        "minimum": 0
+                      },
+                      "wanderChance": {
+                        "type": "number",
+                        "minimum": 0,
+                        "maximum": 1
+                      },
+                      "disengageTurns": {
+                        "type": "integer",
+                        "minimum": 0
+                      },
+                      "speeds": {
+                        "type": "object",
+                        "properties": {
+                          "wander": {
+                            "type": "number",
+                            "minimum": 0
+                          },
+                          "investigate": {
+                            "type": "number",
+                            "minimum": 0
+                          },
+                          "engage": {
+                            "type": "number",
+                            "minimum": 0
+                          },
+                          "returning": {
+                            "type": "number",
+                            "minimum": 0
+                          }
+                        },
+                        "additionalProperties": false
+                      },
+                      "investigates": {
+                        "type": "array",
+                        "items": {
+                          "type": "string",
+                          "minLength": 1,
+                          "maxLength": 64,
+                          "pattern": "^[a-z][a-z0-9_]*$",
+                          "description": "An id from rules.senses.",
+                          "x-dm-ref": "rules.senses"
+                        }
+                      },
+                      "followsTrails": {
+                        "type": "boolean"
+                      },
+                      "notices": {
+                        "type": "array",
+                        "items": {
+                          "type": "string",
+                          "enum": [
+                            "hostile",
+                            "neutral",
+                            "ally"
+                          ]
+                        }
+                      },
+                      "extra": {
+                        "$ref": "#/$defs/GameModule/properties/rules/properties/conditions/items/properties/extra"
+                      }
+                    },
+                    "additionalProperties": false
+                  },
                   "languages": {
                     "type": "array",
                     "items": {
@@ -4873,6 +5045,9 @@
                     "maximum": 100,
                     "default": 0
                   },
+                  "temperament": {
+                    "$ref": "#/$defs/GameModule/properties/content/properties/monsters/items/properties/temperament"
+                  },
                   "reactions": {
                     "type": "array",
                     "items": {
@@ -5037,6 +5212,19 @@
                     "type": "number",
                     "minimum": 0,
                     "default": 0
+                  },
+                  "marks": {
+                    "type": "object",
+                    "additionalProperties": {
+                      "type": "number",
+                      "minimum": 0,
+                      "maximum": 1
+                    },
+                    "propertyNames": {
+                      "minLength": 1,
+                      "maxLength": 64,
+                      "pattern": "^[a-z][a-z0-9_]*$"
+                    }
                   },
                   "isDoor": {
                     "type": "boolean",

@@ -70,6 +70,17 @@ export const terrainSchema = z
     /** Light emitted, in tiles. Zero is dark. */
     lightRadius: z.number().min(0).default(0),
 
+    /**
+     * How well this ground keeps a trace, per sense. Zero keeps none.
+     *
+     * Mud takes a print and bare rock does not, and that is a fact about the
+     * ground rather than about the creature standing on it — which is why it
+     * lives here and not on the sense. Absent is one: a terrain with no opinion
+     * holds a trace exactly as well as anything else, so nothing already
+     * written changes.
+     */
+    marks: z.record(ref('rules.senses'), z.number().min(0).max(1)).optional(),
+
     /** A door-like terrain that a gate can be attached to. */
     isDoor: z.boolean().default(false),
     extra,

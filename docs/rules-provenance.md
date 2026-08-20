@@ -7,7 +7,8 @@ accidents.
 > **Status: first pass, 2026-08-19.** The defects in *[Defects](#defects)* are
 > fixed, and so are G1, G2, G3, G5, G6 and G7. **G4, creature footprints, is
 > deliberately held** — there are larger plans for that part of the engine, and
-> G4a records something worth knowing before it is touched. The one deliberate
+> G4a records something worth knowing before it is touched — and has since
+> caught a second feature, which its entry now records. The one deliberate
 > deferral inside a closed entry is Ready, which is blocked on a trigger
 > vocabulary that is one-seventh implemented. The entries under
 > *[Choices](#choices)* are settled and need no further action.
@@ -247,6 +248,18 @@ and arguably correct at that resolution, but it makes opportunity attacks feel
 much rarer than the rule reads, and it is entirely an artefact of `tiny` being
 declared at all. Removing tiny would silently double every distance in the game.
 
+**It has since caught a second feature, exactly as predicted.** `rules.temperament`
+states a creature's territory and its leash in module units, and the first pass
+wrote them as though a tile were five feet — so a leash of 400 came out as two
+hundred tiles, larger than any dungeon the generator produces, and creatures
+that were supposed to break off a chase were unleashed. Nothing failed: the
+module validated, the tests passed, and the numbers looked reasonable in the
+JSON. It was visible only by playing a dungeon and watching where things went.
+
+The rule for anyone declaring a distance in a `core_fantasy`-derived module:
+**halve it to read it in tiles**, and sanity-check the result against the size
+of a map it will be used on.
+
 ### G4. Every creature occupies exactly one tile
 
 `sizes[].space` derives the global tile scale, and it does so from the
@@ -416,6 +429,35 @@ with `detect` / `investigate` / `aggro` thresholds. This is a substantial
 original system and is richer than what it replaces. Stealth follows from it:
 a stance *emits*, and concealment is a skill applied to that emission, so hiding
 is not a roll.
+
+**And a sense can have a speed.** `spreadPerMinute` is how many tiles a signal
+travels per minute, so a smell has to *get* to you: walking into a dungeon
+starts filling it rather than filling it, and the far end has a while yet. Sight
+and sound leave it at zero and arrive at once, bounded by range and geometry
+instead. Nothing in a tabletop ruleset needs this — a table adjudicates it — but
+a computer that skips it produces the thing this replaced, where every creature
+on a level smelled the party on the tick they stepped through the door.
+
+The nicest consequence is emergent rather than designed: because a trace has
+been spreading since it was left, an *older* one has reached further than the
+fresh one beside its owner. A hound picks up the trail behind you before it
+picks up you, which is what the smell sense's own description always claimed and
+what the instantaneous model could never actually do.
+
+**Creatures have territory, and a fight outlasts a corner.** Nothing in a
+tabletop ruleset says where a monster stands when nobody is looking at it, or
+how long it keeps hunting after it loses you — those are the table's job, and a
+computer has to hold an opinion. `rules.temperament` is that opinion made
+declarable: a roam radius around where a creature was placed, a leash past which
+it stops being towed, a per-reason movement speed, an ordered list of which
+senses it acts on, and a count of rounds it keeps looking before it gives up.
+
+Two consequences worth naming. **Entry and persistence use different bars** —
+combat starts at the `aggro` threshold and ends at the lower `investigate` one,
+because committing to a charge and refusing to give up are not the same
+judgement. And a creature that wanders lays a trail while it does, which is what
+finally makes `world.terrains[].marks` worth declaring: ground that takes no
+print is somewhere you can genuinely lose a thing that hunts by tracks.
 
 **Resistance is an arbitrary multiplier** with `unless` tags, composing
 multiplicatively across statblock, ancestry and equipment. The official rules

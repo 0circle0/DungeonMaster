@@ -23,14 +23,26 @@ def sc(terrain, frequency, distribution="speckle", **kw):
     return entry
 
 
-def terrains(rows, *, extras=None, tags=None):
+def terrains(rows, *, extras=None, tags=None, marks=None):
     """`(id, name, glyph, colour, passable, opaque, moveCost, description)`
     tuples into terrain entries. `tags` is tag -> [terrain id]; `extras` is
-    per-id and merged last, so it can override anything derived."""
+    per-id and merged last, so it can override anything derived.
+
+    `marks` is how well ground keeps a trace, as `{group: {sense: 0..1}}` with
+    `group` naming a list in `tags`. Keyed by tag rather than by id because a
+    module has scores of terrains and about four kinds of footing: stone takes
+    no print whatever you call it. Anything in no listed group is left absent,
+    which the engine reads as keeping a trace perfectly -- so adding this to a
+    module changes only the terrains it actually names."""
     by_tag = {}
     for tag, ids in (tags or {}).items():
         for i in ids:
             by_tag.setdefault(i, []).append(tag)
+
+    holds = {}
+    for group, kept in (marks or {}).items():
+        for i in (tags or {}).get(group, ()):
+            holds[i] = kept
 
     out = []
     for tid, name, glyph, colour, passable, opaque, cost, desc in rows:
@@ -42,6 +54,8 @@ def terrains(rows, *, extras=None, tags=None):
         }
         if tid in by_tag:
             entry["tags"] = by_tag[tid]
+        if tid in holds:
+            entry["marks"] = dict(holds[tid])
         entry.update((extras or {}).get(tid, {}))
         out.append(entry)
     return out

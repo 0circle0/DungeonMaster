@@ -108,11 +108,27 @@ export const senseSchema = z
      */
     lingerMinutes: z.number().min(0).default(0),
 
-    /** Tiles a lingering trace spreads outward per minute as it thins. */
+    /**
+     * How fast this sense travels, in tiles per minute. Zero arrives at once.
+     *
+     * **This is a speed, not a bonus to anyone's reach.** A signal given off at
+     * a place has only got `spreadPerMinute` tiles away for each minute since,
+     * so a creature further out than that simply cannot perceive it yet however
+     * keen its nose. Sight and sound leave this at zero and are heard the
+     * instant they happen; a smell does not, which is why walking into a
+     * dungeon starts filling it rather than filling it.
+     *
+     * It is also what makes a trail worth more than the thing that left it: an
+     * old trace has been spreading longer, so it reaches you while the fresh
+     * one beside its owner has not got anywhere yet.
+     */
     spreadPerMinute: z.number().min(0).default(0),
     /**
-     * Signal kept by a trace that has spread out. The same scent over more
-     * ground is weaker; how much weaker is a property of the sense.
+     * Signal left at the far edge of reach, once it has spread that far.
+     *
+     * The same scent over more ground is weaker. Eased from full strength at
+     * the source to this at the limit of the sense, so it thins with distance
+     * rather than switching over at the first tile.
      */
     spreadRetention: z.number().min(0).max(1).default(0.5),
 
@@ -207,6 +223,152 @@ export const perceptionSchema = z
      * hold rather than the engine's.
      */
     minimumEmission: z.number().min(0).max(1).default(0.01),
+
+    /**
+     * How many traces one tile keeps, per sense. The oldest fall off.
+     *
+     * A thousand of a thing crossing one tile is still, to a nose, "they came
+     * through here" — the thousandth trace says nothing the first did not. Two
+     * of them passing in opposite directions is genuinely two things, which is
+     * why this is a small number rather than one.
+     *
+     * It is a performance bound as much as a storage one: every trace on every
+     * tile is read for every sense, for every creature, every turn.
+     */
+    maxMarksPerTile: z.number().int().min(1).default(4),
+    extra,
+  })
+  .strict();
+
+/**
+ * What a creature does when nobody is telling it what to do.
+ *
+ * Perception answers *what can it tell is there*; this answers *what does it
+ * bother to do about it*. The two are deliberately separate: a hound and a
+ * shopkeeper standing in the same doorway smell the same street, and only one
+ * of them goes to look.
+ *
+ * Every default here reproduces the engine's older behaviour exactly — nothing
+ * wanders, nothing is leashed, and a fight ends the moment nobody can be
+ * perceived. A world comes alive by opting in.
+ */
+export const temperamentSchema = z
+  .object({
+    /**
+     * How far from where it was placed it will wander, in module units.
+     *
+     * Zero is a creature with no territory, which is one that stands where it
+     * was put. That is the default, and it is what every creature did before
+     * this existed.
+     */
+    roamRadius: z.number().min(0).default(0),
+
+    /**
+     * How far from that same spot a lead may pull it. Absent is no limit.
+     *
+     * Separate from `roamRadius` because catching a scent is exactly the reason
+     * to leave your own patch of ground.
+     */
+    investigateRadius: z.number().min(0).optional(),
+
+    /**
+     * How far it will chase before it gives up and turns for home. Absent is no
+     * limit, which is what makes a chase trainable across a whole map.
+     *
+     * This gates **pursuit only**. A leashed creature with something in reach
+     * still fights; it simply will not follow you any further.
+     */
+    leashRadius: z.number().min(0).optional(),
+
+    /** Odds it moves at all on a given idle step. Zero never wanders. */
+    wanderChance: z.number().min(0).max(1).default(0),
+
+    /**
+     * Rounds it stays in a fight after nobody can perceive anybody.
+     *
+     * Zero ends the fight at the end of the round somebody breaks away, which
+     * is what made stepping around a corner a complete escape. One or two is
+     * enough that a corner is a tactic rather than an exit.
+     */
+    disengageTurns: z.number().int().min(0).default(0),
+
+    /**
+     * Multipliers on how fast it moves for each reason it moves.
+     *
+     * Zero never moves that way at all: a shopkeeper sets `wander` to zero and
+     * stays behind the counter however interesting the street gets.
+     */
+    speeds: z
+      .object({
+        wander: z.number().min(0).default(1),
+        investigate: z.number().min(0).default(1),
+        engage: z.number().min(0).default(1),
+        returning: z.number().min(0).default(1),
+      })
+      .strict()
+      .default({}),
+
+    /**
+     * Which senses it acts on, best first. Absent means all of them, strongest
+     * signal first, which is what the engine did before.
+     *
+     * An empty list is a creature that notices everything and investigates
+     * none of it. Order is preference, not strength: a wolf listing smell
+     * first follows its nose past something it can plainly see.
+     */
+    investigates: z.array(ref('rules.senses')).optional(),
+
+    /**
+     * Whether a trace left on the ground is worth following.
+     *
+     * False is a creature that can smell you perfectly well but has no idea
+     * what a footprint means — it acts on what is there now, never on what
+     * passed through an hour ago.
+     */
+    followsTrails: z.boolean().default(true),
+
+    /**
+     * Whose presence it registers at all.
+     *
+     * Defaults to enemies only, which is exactly the filter perception used to
+     * apply with no way to say otherwise — so a shopkeeper perceived nothing
+     * whatever and no wolf could track a deer. Widening it is what lets
+     * creatures notice each other.
+     */
+    notices: z.array(z.enum(['hostile', 'neutral', 'ally'])).default(['hostile']),
+    extra,
+  })
+  .strict();
+
+/**
+ * The same thing as a per-creature override, where every field is genuinely
+ * absent rather than defaulted.
+ *
+ * Written out rather than derived with `.partial()`, which is shallow: it would
+ * leave `speeds` carrying its inner defaults, so a wolf that only wanted to say
+ * "I lope when I wander" would silently reset its investigate, engage and
+ * return speeds to one. An override has to be able to say nothing at all about
+ * a field, and that is not expressible in the schema it overrides.
+ */
+export const temperamentOverrideSchema = z
+  .object({
+    roamRadius: z.number().min(0).optional(),
+    investigateRadius: z.number().min(0).optional(),
+    leashRadius: z.number().min(0).optional(),
+    wanderChance: z.number().min(0).max(1).optional(),
+    disengageTurns: z.number().int().min(0).optional(),
+    speeds: z
+      .object({
+        wander: z.number().min(0).optional(),
+        investigate: z.number().min(0).optional(),
+        engage: z.number().min(0).optional(),
+        returning: z.number().min(0).optional(),
+      })
+      .strict()
+      .optional(),
+    investigates: z.array(ref('rules.senses')).optional(),
+    followsTrails: z.boolean().optional(),
+    notices: z.array(z.enum(['hostile', 'neutral', 'ally'])).optional(),
     extra,
   })
   .strict();
@@ -362,3 +524,5 @@ export type SavingThrow = z.infer<typeof savingThrowSchema>;
 export type Size = z.infer<typeof sizeSchema>;
 export type Spellcasting = z.infer<typeof spellcastingSchema>;
 export type Opportunity = z.infer<typeof opportunitySchema>;
+export type Temperament = z.infer<typeof temperamentSchema>;
+export type TemperamentOverride = z.infer<typeof temperamentOverrideSchema>;

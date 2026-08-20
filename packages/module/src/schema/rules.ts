@@ -18,6 +18,7 @@ import {
   senseSchema,
   stanceSchema,
   perceptionSchema,
+  temperamentSchema,
   movementModeSchema,
   languageSchema,
   alignmentSchema,
@@ -506,6 +507,14 @@ export const rulesSchema = z
     coverTypes: z.array(coverSchema).default([]),
     spellcasting: spellcastingSchema.default({}),
     perception: perceptionSchema.default({}),
+    /**
+     * What creatures do when nothing is telling them what to do.
+     *
+     * Sits beside `perception` because the two are halves of one idea: that one
+     * decides what a creature can tell is there, this one decides what it does
+     * about it. Per-creature `temperament` overrides any of it.
+     */
+    temperament: temperamentSchema.default({}),
     /** Resource consumed when a character is reduced to zero, e.g. `hp`. */
     currency: currencySchema.default({}),
     vitalResource: ref('rules.resources'),

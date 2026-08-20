@@ -94,5 +94,23 @@
   ],
   "extra": {
     "morale": 0
+  },
+  "temperament": {
+    "roamRadius": 15,
+    "investigateRadius": 60,
+    "leashRadius": 90,
+    "wanderChance": 0.1,
+    "disengageTurns": 1,
+    "speeds": {
+      "wander": 0.5,
+      "investigate": 0.5,
+      "engage": 1,
+      "returning": 1
+    },
+    "investigates": [
+      "sight",
+      "hearing"
+    ],
+    "followsTrails": false
   }
 }

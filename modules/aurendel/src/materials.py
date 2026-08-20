@@ -172,7 +172,32 @@ TERRAIN_EXTRAS = {
     },
 }
 
+# What the ground is made of, for the purposes of what it remembers. Grouped
+# by footing rather than by biome: a print is a fact about mud, and there are
+# only about four kinds of mud in seventy-seven terrains.
+#
+# `stone` covers bare rock and everything built on it -- the cave floors and
+# flagstones where a party can genuinely lose whatever is tracking it, which is
+# the tactical point of the whole distinction.
+GROUND = {
+    "soft":    {"tracks": 1,   "smell": 1},
+    "stone":   {"tracks": 0,   "smell": 0.6},
+    "washed":  {"tracks": 0,   "smell": 0.15},
+    "shifting": {"tracks": 0.5, "smell": 0.7},
+}
+
 TAGS = {
+    # -- footing, for what the ground keeps -----------------------------------
+    "soft": ["marsh", "reeds", "leaf_litter", "moss", "meadow", "cropland",
+             "fallow", "heather", "steppe_grass", "grass", "dirt_road",
+             "thicket", "bramble", "mushroom", "ash", "cinder"],
+    "stone": ["rock", "scree", "cliff", "rubble", "standing_stone", "obsidian",
+              "glass_crust", "cave_floor", "cobble", "flagstone", "boardwalk",
+              "timber_floor", "kingsroad", "bridge", "jetty", "stair", "ice",
+              "shingle", "saltflat", "lava", "vent"],
+    "washed": ["shallows", "deep_water", "river", "bog_pool"],
+    "shifting": ["sand", "dune", "snow"],
+
     "water": ["shallows", "deep_water", "river", "marsh", "bog_pool", "well"],
     "built": ["cobble", "flagstone", "boardwalk", "timber_floor", "rug", "wall_stone",
               "wall_timber", "wall_mudbrick", "wall_hull", "door", "gate_arch",
@@ -493,7 +518,7 @@ TIME = {
 # Thin, because the shaping is `dmkit.materials`; what is here is the vocabulary.
 
 def terrains():
-    return _kit.terrains(T, extras=TERRAIN_EXTRAS, tags=TAGS)
+    return _kit.terrains(T, extras=TERRAIN_EXTRAS, tags=TAGS, marks=GROUND)
 
 
 def palettes():

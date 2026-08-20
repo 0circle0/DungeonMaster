@@ -1,0 +1,14 @@
+{
+  "id": "saw_tracks",
+  "variants": [
+    {
+      "text": "Prints in the mud, sharp enough to be an hour old at most: {direction}."
+    },
+    {
+      "text": "Something heavy came through here, and it went {direction}."
+    },
+    {
+      "text": "Fresh tracks, and the water has not filled them in yet: {direction}."
+    }
+  ]
+}

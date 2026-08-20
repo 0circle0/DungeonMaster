@@ -1,0 +1,14 @@
+{
+  "id": "saw_tracks_faint",
+  "variants": [
+    {
+      "text": "Old prints, half filled with water, heading {direction}."
+    },
+    {
+      "text": "Something passed this way, long enough ago that the mud has slumped."
+    },
+    {
+      "text": "The ground is disturbed {direction}, but it has been a while."
+    }
+  ]
+}
