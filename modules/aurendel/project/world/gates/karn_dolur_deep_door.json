@@ -1,0 +1,17 @@
+{
+  "id": "karn_dolur_deep_door",
+  "name": "The Deep Door",
+  "kind": "story",
+  "description": "The door to the abandoned levels, sealed by the hold and marked so in four languages.",
+  "staysOpen": true,
+  "requires": {
+    "description": "a hold-warrant for the deep levels",
+    "minLevel": 6
+  },
+  "bypass": {
+    "skill": "lore",
+    "difficulty": 16,
+    "retryable": true
+  },
+  "blockedTextKey": "karn_dolur_deep_door_blocked"
+}

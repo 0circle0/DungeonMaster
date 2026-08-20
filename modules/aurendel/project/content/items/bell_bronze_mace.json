@@ -1,0 +1,19 @@
+{
+  "id": "bell_bronze_mace",
+  "name": "Bell-Bronze",
+  "description": "Cast from what came up with the old church, and it still has the note in it. Things that have been under water a long time do not care for the note.",
+  "kind": "weapon",
+  "slot": "hand",
+  "value": 175,
+  "weight": 5,
+  "tags": [],
+  "skillBonuses": {
+    "resolve": 1
+  },
+  "damage": {
+    "dice": "1d8",
+    "damageType": "radiant",
+    "stat": "might"
+  },
+  "rarity": "rare"
+}

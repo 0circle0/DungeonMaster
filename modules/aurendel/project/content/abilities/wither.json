@@ -1,0 +1,26 @@
+{
+  "id": "wither",
+  "name": "Wither",
+  "description": "What the barrows do to a living hand.",
+  "actionType": "action",
+  "targeting": "single",
+  "attack": {
+    "stat": "presence",
+    "against": "guard"
+  },
+  "onUse": [
+    {
+      "damage": {
+        "target": {
+          "ref": "target.id"
+        },
+        "amount": {
+          "roll": "2d6"
+        },
+        "damageType": "necrotic"
+      }
+    }
+  ],
+  "range": 15,
+  "cooldown": 3
+}

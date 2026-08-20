@@ -1,0 +1,14 @@
+{
+  "id": "carvers_count",
+  "name": "The Carver's Count",
+  "description": "Eleven years of skulls, in a hand that got smaller each year as the columns got wider.",
+  "kind": "key",
+  "value": 0,
+  "weight": 0,
+  "tags": [
+    "keepsake"
+  ],
+  "extra": {
+    "heldBy": "bone_carver_thrand"
+  }
+}

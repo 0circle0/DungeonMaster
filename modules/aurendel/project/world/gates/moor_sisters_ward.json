@@ -1,0 +1,17 @@
+{
+  "id": "moor_sisters_ward",
+  "name": "The Sisters' Ward",
+  "kind": "ward",
+  "description": "Nothing across the gap between the two southern stones, and you can walk it, and you very much do not want to.",
+  "staysOpen": true,
+  "requires": {
+    "description": "the words cut on the fallen stone",
+    "minLevel": 5
+  },
+  "bypass": {
+    "skill": "resolve",
+    "difficulty": 15,
+    "retryable": true
+  },
+  "blockedTextKey": "moor_sisters_ward_blocked"
+}

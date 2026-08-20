@@ -1,0 +1,39 @@
+{
+  "id": "thornmere_stiltmarket",
+  "name": "Stiltmarket",
+  "description": "Two thousand people on piles over open water, connected entirely by boardwalk and boat.",
+  "biome": "urban_timber",
+  "layer": "overworld",
+  "descriptionKey": "thornmere_stiltmarket_desc",
+  "dangerLevel": 2,
+  "recommendedLevel": 5,
+  "tags": [
+    "thornmere",
+    "town"
+  ],
+  "map": {
+    "width": "41",
+    "height": "27"
+  },
+  "entryPoint": {
+    "x": 20,
+    "y": 13
+  },
+  "extra": {
+    "role": "town"
+  },
+  "connections": [
+    {
+      "to": "thornmere_sunken_causeway",
+      "travelMinutes": 40
+    },
+    {
+      "to": "thornmere_the_black_water",
+      "travelMinutes": 45
+    },
+    {
+      "to": "thornmere_the_hummocks",
+      "travelMinutes": 55
+    }
+  ]
+}

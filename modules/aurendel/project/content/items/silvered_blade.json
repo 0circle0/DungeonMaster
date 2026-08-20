@@ -1,0 +1,21 @@
+{
+  "id": "silvered_blade",
+  "name": "The Silvered Blade",
+  "description": "Chased with silver along the edge. Old things feel it, and the wards were built against old things.",
+  "kind": "weapon",
+  "slot": "hand",
+  "value": 140,
+  "weight": 3,
+  "damage": {
+    "dice": "1d8",
+    "damageType": "slashing",
+    "stat": "might"
+  },
+  "properties": [
+    "silvered"
+  ],
+  "tags": [
+    "silvered"
+  ],
+  "rarity": "rare"
+}

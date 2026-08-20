@@ -1,0 +1,16 @@
+{
+  "id": "cinderhold_slag_door",
+  "name": "The Slag Door",
+  "kind": "lock",
+  "description": "Cast in one piece, in place, by pouring it — which means it has never been opened and was never meant to be.",
+  "staysOpen": true,
+  "bypass": {
+    "skill": "craft",
+    "difficulty": 17,
+    "retryable": true
+  },
+  "opensWith": [
+    "arcane_bolt"
+  ],
+  "blockedTextKey": "cinderhold_slag_door_blocked"
+}

@@ -1,0 +1,68 @@
+{
+  "id": "dry_cistern_the_feeder",
+  "name": "The Feeder",
+  "description": "The channel that fills the cistern, walked upstream, in the nine years when it is dry enough to walk.",
+  "area": "glasslands_dry_cistern",
+  "kind": "dungeonEntrance",
+  "descriptionKey": "generic_dungeon_mouth",
+  "travelMinutes": 12,
+  "tags": [
+    "dungeon"
+  ],
+  "dungeon": "glasslands_the_feeder",
+  "position": {
+    "x": 27,
+    "y": 10
+  },
+  "triggers": [
+    {
+      "id": "glass_cistern_committed",
+      "mode": "once",
+      "on": "enter",
+      "description": "The channel out, from the inside.",
+      "requires": {
+        "custom": {
+          "gte": [
+            {
+              "ref": "threads.glass_cistern.known"
+            },
+            2
+          ]
+        }
+      },
+      "effects": [
+        {
+          "emit": {
+            "event": "startQuest",
+            "data": {
+              "quest": "glass_what_it_was_for"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "hidden": true,
+  "discover": {
+    "skill": "perception",
+    "difficulty": {
+      "max": [
+        9,
+        {
+          "sub": [
+            21,
+            {
+              "mul": [
+                3,
+                {
+                  "ref": "threads.glass_cistern.known"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "gate": "glass_feeder_channel"
+}

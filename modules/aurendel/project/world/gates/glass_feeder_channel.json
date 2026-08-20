@@ -1,0 +1,29 @@
+{
+  "id": "glass_feeder_channel",
+  "name": "The Channel Out",
+  "description": "A cistern with a way out and no way in, and the way out is barred at the far end by somebody who had a key.",
+  "kind": "ward",
+  "blockedTextKey": "glass_feeder_blocked",
+  "staysOpen": true,
+  "onOpen": [
+    {
+      "setFlag": {
+        "flag": "glass_cistern_open",
+        "value": true
+      }
+    }
+  ],
+  "onBlocked": [],
+  "opensWith": [],
+  "tags": [],
+  "requires": {
+    "items": [
+      {
+        "item": "cistern_key",
+        "quantity": 1,
+        "consume": false,
+        "equipped": false
+      }
+    ]
+  }
+}

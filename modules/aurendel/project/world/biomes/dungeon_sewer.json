@@ -1,0 +1,28 @@
+{
+  "id": "dungeon_sewer",
+  "name": "Undercity",
+  "description": "Drains, culverts, and the older streets they were cut through.",
+  "layer": "underworld",
+  "palette": "dun_sewer",
+  "roomTemplates": [
+    "dungeon_sewer_boss",
+    "dungeon_sewer_chamber",
+    "dungeon_sewer_corridor",
+    "dungeon_sewer_entrance",
+    "dungeon_sewer_lair",
+    "dungeon_sewer_shrine",
+    "dungeon_sewer_vault"
+  ],
+  "encounterTables": [
+    "undercity_things"
+  ],
+  "lootTables": [
+    "vermin_scraps"
+  ],
+  "traps": [
+    "alarm_bell",
+    "gas_seal",
+    "pit",
+    "snare"
+  ]
+}

@@ -1,0 +1,37 @@
+{
+  "id": "isles",
+  "name": "The Sundered Isles",
+  "floor": "shingle",
+  "wall": "cliff",
+  "exterior": "deep_water",
+  "scatter": [
+    {
+      "terrain": "deep_water",
+      "frequency": 0.26,
+      "distribution": "patch",
+      "scale": 15,
+      "edgeTerrain": "shallows",
+      "edgeWidth": 2,
+      "priority": 0
+    },
+    {
+      "terrain": "grass",
+      "frequency": 0.14,
+      "distribution": "patch",
+      "scale": 8,
+      "priority": 1
+    },
+    {
+      "terrain": "rock",
+      "frequency": 0.07,
+      "distribution": "speckle",
+      "priority": 2
+    },
+    {
+      "terrain": "rubble",
+      "frequency": 0.03,
+      "distribution": "speckle",
+      "priority": 3
+    }
+  ]
+}

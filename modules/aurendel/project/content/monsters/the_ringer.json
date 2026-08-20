@@ -1,0 +1,86 @@
+{
+  "id": "the_ringer",
+  "name": "What Pulls From Underneath",
+  "description": "Eleven nights of a bell rung for a road that was open, and a rope worn on the face a standing hand cannot reach.",
+  "level": 8,
+  "xp": 860,
+  "attributes": {
+    "might": 17,
+    "agility": 13,
+    "endurance": 18,
+    "intellect": 12,
+    "instinct": 15,
+    "presence": 13
+  },
+  "abilities": [
+    "stone_fist",
+    "shove",
+    "rend"
+  ],
+  "behaviour": [
+    {
+      "priority": 20,
+      "use": "stone_fist",
+      "when": {
+        "chance": 0.35
+      }
+    },
+    {
+      "priority": 10,
+      "use": "shove"
+    },
+    {
+      "priority": 0,
+      "use": "rend"
+    }
+  ],
+  "faction": "the_unsealed",
+  "creatureType": "undead",
+  "size": "medium",
+  "descriptors": [
+    "a coal-warm",
+    "a deliberate"
+  ],
+  "conditionalLoot": [],
+  "loot": "skarn_bell_hoard",
+  "damageInteractions": [
+    {
+      "damageType": "slashing",
+      "multiplier": 0.5,
+      "unless": [
+        "silvered"
+      ]
+    },
+    {
+      "damageType": "piercing",
+      "multiplier": 0.5,
+      "unless": [
+        "silvered"
+      ]
+    }
+  ],
+  "conditionImmunities": [
+    "frightened",
+    "prone",
+    "blinded"
+  ],
+  "resourceOverrides": {
+    "hp": 98
+  },
+  "temperament": {
+    "roamRadius": 12,
+    "investigateRadius": 40,
+    "leashRadius": 60,
+    "wanderChance": 0.1,
+    "disengageTurns": 1,
+    "speeds": {
+      "wander": 0.5,
+      "investigate": 0.5
+    },
+    "investigates": [
+      "sight",
+      "hearing",
+      "smell"
+    ]
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "id": "kingsroad_south_posting_house",
+  "name": "The Posting House",
+  "description": "Fresh horses, bad food, and a book you have to sign.",
+  "area": "kingsvale_kingsroad_south",
+  "kind": "settlement",
+  "descriptionKey": "int_inn",
+  "travelMinutes": 6,
+  "tags": [
+    "inn"
+  ],
+  "position": {
+    "x": 32,
+    "y": 12
+  },
+  "services": [
+    "inn",
+    "stable"
+  ],
+  "map": {
+    "width": "15",
+    "height": "11",
+    "palette": "int_timber"
+  }
+}

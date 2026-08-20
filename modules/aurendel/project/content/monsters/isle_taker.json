@@ -1,0 +1,53 @@
+{
+  "id": "isle_taker",
+  "name": "Nella, Bird-Taker",
+  "description": "Goes down a cliff on a rope for a living.",
+  "level": 5,
+  "xp": 0,
+  "attributes": {
+    "might": 12,
+    "agility": 17,
+    "endurance": 13,
+    "intellect": 10,
+    "instinct": 15,
+    "presence": 11
+  },
+  "abilities": [
+    "strike",
+    "quick_shot"
+  ],
+  "behaviour": [
+    {
+      "priority": 0,
+      "use": "strike"
+    }
+  ],
+  "faction": "the_salvors",
+  "creatureType": "humanoid",
+  "size": "medium",
+  "descriptors": [
+    "a wiry"
+  ],
+  "conditionalLoot": [],
+  "loot": "isle_count_carried",
+  "resourceOverrides": {
+    "hp": 28
+  },
+  "temperament": {
+    "roamRadius": 24,
+    "investigateRadius": 70,
+    "leashRadius": 100,
+    "wanderChance": 0.4,
+    "disengageTurns": 2,
+    "investigates": [
+      "sight",
+      "hearing",
+      "tracks",
+      "smell"
+    ],
+    "notices": [
+      "hostile",
+      "neutral"
+    ]
+  }
+}

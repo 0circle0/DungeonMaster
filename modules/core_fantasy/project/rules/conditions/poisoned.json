@@ -1,0 +1,30 @@
+{
+  "id": "poisoned",
+  "name": "Poisoned",
+  "description": "Something in the blood that should not be there.",
+  "stacking": "refresh",
+  "defaultDuration": 4,
+  "modifiers": {
+    "guard": -1
+  },
+  "swings": {
+    "ownAttacks": "disadvantage",
+    "checks": "disadvantage"
+  },
+  "savingThrow": {
+    "save": "fortitude",
+    "difficulty": 12,
+    "timing": "endOfTurn"
+  },
+  "onTick": [
+    {
+      "damage": {
+        "target": {
+          "ref": "actor.id"
+        },
+        "amount": 1,
+        "damageType": "poison"
+      }
+    }
+  ]
+}

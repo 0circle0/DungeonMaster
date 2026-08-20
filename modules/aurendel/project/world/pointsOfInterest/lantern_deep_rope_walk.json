@@ -1,0 +1,24 @@
+{
+  "id": "lantern_deep_rope_walk",
+  "name": "The Rope Walk",
+  "description": "In a gallery a quarter of a mile long, which is exactly why the gallery was chosen.",
+  "area": "deeproads_lantern_deep",
+  "kind": "market",
+  "descriptionKey": "int_workshop",
+  "travelMinutes": 3,
+  "tags": [
+    "shop"
+  ],
+  "services": [
+    "market"
+  ],
+  "map": {
+    "width": "19",
+    "height": "13",
+    "palette": "int_shop"
+  },
+  "position": {
+    "x": 37,
+    "y": 13
+  }
+}

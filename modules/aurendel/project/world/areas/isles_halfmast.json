@@ -1,0 +1,40 @@
+{
+  "id": "isles_halfmast",
+  "name": "Halfmast",
+  "description": "Built in and around a fort that the sea got into, and the fort is still the best building.",
+  "biome": "urban_isle",
+  "layer": "overworld",
+  "descriptionKey": "isles_halfmast_desc",
+  "dangerLevel": 4,
+  "recommendedLevel": 6,
+  "tags": [
+    "sundered_isles",
+    "village"
+  ],
+  "map": {
+    "width": "31",
+    "height": "21"
+  },
+  "entryPoint": {
+    "x": 15,
+    "y": 10
+  },
+  "extra": {
+    "role": "village"
+  },
+  "connections": [
+    {
+      "to": "isles_tern_bank",
+      "travelMinutes": 35
+    },
+    {
+      "to": "isles_drowned_fort_shoal",
+      "travelMinutes": 40
+    },
+    {
+      "to": "thornmere_drowned_bell",
+      "travelMinutes": 220,
+      "gate": "isles_passage"
+    }
+  ]
+}

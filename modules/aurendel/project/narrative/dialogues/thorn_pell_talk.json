@@ -1,0 +1,329 @@
+{
+  "id": "thorn_pell_talk",
+  "start": "greet",
+  "nodes": [
+    {
+      "id": "greet",
+      "says": [
+        {
+          "text": "Mud to the chest and cheerful about it, on a hummock barely big enough for the both of you."
+        },
+        {
+          "text": "“Do not follow me,” Pell says. “Not being rude. You will go in.”"
+        }
+      ],
+      "onEnter": [],
+      "options": [
+        {
+          "id": "thorn_pell_tally",
+          "text": "The hut on the far hummock.",
+          "requires": {
+            "without": {
+              "lore": [
+                "thorn_hermit_tally"
+              ]
+            }
+          },
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "check": {
+            "skill": "persuasion",
+            "difficulty": {
+              "sub": [
+                12,
+                {
+                  "clamp": [
+                    {
+                      "div": [
+                        {
+                          "ref": "reputation.the_ferrymen",
+                          "else": 0
+                        },
+                        5
+                      ]
+                    },
+                    -6,
+                    6
+                  ]
+                }
+              ]
+            },
+            "onSuccess": "thorn_pell_tally_told",
+            "onFailure": "thorn_pell_tally_wont"
+          }
+        },
+        {
+          "id": "thorn_pell_facing",
+          "text": "Which way does it face?",
+          "requires": {
+            "without": {
+              "lore": [
+                "thorn_hermit_facing"
+              ]
+            }
+          },
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "check": {
+            "skill": "insight",
+            "difficulty": {
+              "sub": [
+                13,
+                {
+                  "clamp": [
+                    {
+                      "div": [
+                        {
+                          "ref": "reputation.the_ferrymen",
+                          "else": 0
+                        },
+                        5
+                      ]
+                    },
+                    -6,
+                    6
+                  ]
+                }
+              ]
+            },
+            "onSuccess": "thorn_pell_facing_told",
+            "onFailure": "thorn_pell_facing_wont"
+          }
+        },
+        {
+          "id": "thorn_pell_post",
+          "text": "You took the post. I want it.",
+          "requires": {
+            "without": {
+              "items": [
+                "hermits_tally"
+              ],
+              "flags": [
+                {
+                  "flag": "given:hermits_tally"
+                }
+              ]
+            }
+          },
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "check": {
+            "skill": "persuasion",
+            "difficulty": {
+              "sub": [
+                12,
+                {
+                  "clamp": [
+                    {
+                      "div": [
+                        {
+                          "ref": "reputation.the_ferrymen",
+                          "else": 0
+                        },
+                        5
+                      ]
+                    },
+                    -6,
+                    6
+                  ]
+                }
+              ]
+            },
+            "onSuccess": "thorn_pell_post_gave",
+            "onFailure": "thorn_pell_post_kept"
+          }
+        },
+        {
+          "id": "greet_leave",
+          "text": "Nothing.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "thorn_pell_tally_told",
+      "says": [
+        {
+          "text": "“Door post is cut all up it. Fives.” Pell holds up both hands and then, because that is not enough, does it again. “Ninety years of them, near enough. And the top ones are not weathered, and the post has been standing in this marsh, so the top ones are new.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "learnLore": {
+            "entry": "thorn_hermit_tally"
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "thorn_pell_tally_on",
+          "text": "Go on.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "thorn_pell_tally_wont",
+      "says": [
+        {
+          "text": "“I've said all I mean to,” they say, and go back to what they were doing."
+        }
+      ],
+      "onEnter": [
+        {
+          "adjustReputation": {
+            "faction": "the_ferrymen",
+            "amount": -1
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "thorn_pell_tally_drop",
+          "text": "Leave it.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "thorn_pell_facing_told",
+      "says": [
+        {
+          "text": "“Away from the water and away from the road.” A pause. “Which leaves one island out there, and you do not build a hut facing an island unless the island is the point of the hut.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "learnLore": {
+            "entry": "thorn_hermit_facing"
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "thorn_pell_facing_on",
+          "text": "Go on.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "thorn_pell_facing_wont",
+      "says": [
+        {
+          "text": "“I've said all I mean to,” they say, and go back to what they were doing."
+        }
+      ],
+      "onEnter": [
+        {
+          "adjustReputation": {
+            "faction": "the_ferrymen",
+            "amount": -1
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "thorn_pell_facing_drop",
+          "text": "Leave it.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "thorn_pell_post_gave",
+      "says": [
+        {
+          "text": "Pell fetches it out from under the bed, which answers the question of whether taking it was a good idea. “Count them,” Pell says. “I have counted them and I would rather two of us were wrong.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "grantItem": {
+            "target": {
+              "ref": "actor.id"
+            },
+            "item": "hermits_tally",
+            "quantity": 1
+          }
+        },
+        {
+          "setFlag": {
+            "flag": "given:hermits_tally",
+            "value": true
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "thorn_pell_post_thanks",
+          "text": "Thank you.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "thorn_pell_post_kept",
+      "says": [
+        {
+          "text": "“It is not mine to give twice,” Pell says, which is not an answer and is clearly all you are getting."
+        }
+      ],
+      "onEnter": [
+        {
+          "adjustReputation": {
+            "faction": "the_ferrymen",
+            "amount": -1
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "thorn_pell_post_leave",
+          "text": "Then no.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    }
+  ]
+}

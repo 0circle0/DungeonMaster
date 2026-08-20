@@ -1,0 +1,17 @@
+{
+  "id": "deeproads_broken_stair_desc",
+  "variants": [
+    {
+      "text": "A stair a hundred feet wide going up towards the Ember Reach, with about a third of it missing."
+    },
+    {
+      "text": "The Broken Stair. Halfway up there is an acre of landing with column bases on it and nothing above them."
+    },
+    {
+      "text": "Where the treads have gone you can see the stair was hollow."
+    },
+    {
+      "text": "It is warm on this stair and it gets warmer going up, which tells you where it comes out."
+    }
+  ]
+}

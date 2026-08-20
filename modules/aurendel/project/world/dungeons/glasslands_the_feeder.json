@@ -1,0 +1,18 @@
+{
+  "id": "glasslands_the_feeder",
+  "name": "The Feeder",
+  "description": "The channel that fills the cistern, walked upstream in the nine years out of ten when that is possible.",
+  "biome": "dungeon_drowned",
+  "roomCount": "10",
+  "depth": "2",
+  "algorithm": "rooms",
+  "lockedDoorChance": 0,
+  "doorGates": [],
+  "rollEncounters": false,
+  "safeEntrance": true,
+  "branchiness": 0.15,
+  "corridorLength": "3d3",
+  "width": "73",
+  "height": "73",
+  "bossTable": "glass_feeder_boss"
+}

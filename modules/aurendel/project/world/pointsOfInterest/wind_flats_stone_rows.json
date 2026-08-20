@@ -1,0 +1,36 @@
+{
+  "id": "wind_flats_stone_rows",
+  "name": "The Stone Rows",
+  "description": "Rows of set stones under the ice, visible and unreachable, going on for half a mile.",
+  "area": "frostmere_wind_scoured_flats",
+  "kind": "ruin",
+  "descriptionKey": "wind_flats_stone_rows_desc",
+  "travelMinutes": 10,
+  "tags": [
+    "ruin"
+  ],
+  "map": {
+    "width": "11",
+    "height": "9",
+    "palette": "int_cave"
+  },
+  "position": {
+    "x": 14,
+    "y": 3
+  },
+  "triggers": [
+    {
+      "id": "frost_found_rows",
+      "mode": "once",
+      "on": "enter",
+      "description": "Stonework that faces the wrong way to be keeping anything out.",
+      "effects": [
+        {
+          "learnLore": {
+            "entry": "frost_marker_shut"
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,34 @@
+{
+  "id": "frostmere_bone_strand",
+  "name": "The Bone Strand",
+  "description": "A beach of shingle and whale bone, where the whales have been coming ashore to die since before anyone watched.",
+  "biome": "glacier",
+  "layer": "overworld",
+  "descriptionKey": "frostmere_bone_strand_desc",
+  "dangerLevel": 6,
+  "recommendedLevel": 8,
+  "tags": [
+    "frostmere"
+  ],
+  "map": {
+    "width": "51",
+    "height": "35"
+  },
+  "entryPoint": {
+    "x": 25,
+    "y": 17
+  },
+  "extra": {
+    "role": "wild"
+  },
+  "connections": [
+    {
+      "to": "frostmere_whalebone_landing",
+      "travelMinutes": 45
+    },
+    {
+      "to": "frostmere_the_white_reach",
+      "travelMinutes": 60
+    }
+  ]
+}

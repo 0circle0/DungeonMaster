@@ -1,0 +1,49 @@
+{
+  "id": "moor_things",
+  "minDepth": 0,
+  "maxDepth": 999,
+  "chance": 0.45,
+  "emptyWeight": 4,
+  "scalePerLevels": 3,
+  "groups": [
+    {
+      "id": "hounds",
+      "weight": 4,
+      "hostile": true,
+      "entries": [
+        {
+          "monster": "grave_hound",
+          "count": "1d2",
+          "scaleWithLevel": true
+        }
+      ]
+    },
+    {
+      "id": "walkers",
+      "weight": 4,
+      "hostile": true,
+      "entries": [
+        {
+          "monster": "hollow_walker",
+          "count": "1d2",
+          "scaleWithLevel": true
+        }
+      ]
+    },
+    {
+      "id": "shade",
+      "weight": 1,
+      "hostile": true,
+      "entries": [
+        {
+          "monster": "sister_shade",
+          "count": "1",
+          "scaleWithLevel": false
+        }
+      ],
+      "requires": {
+        "minLevel": 5
+      }
+    }
+  ]
+}

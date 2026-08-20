@@ -1,0 +1,39 @@
+{
+  "id": "gas_seal",
+  "name": "Broken Seal",
+  "description": "A jar bedded in the floor with a thread across the passage above it.",
+  "detect": {
+    "skill": "perception",
+    "difficulty": 13
+  },
+  "disarm": {
+    "skill": "medicine",
+    "difficulty": 13
+  },
+  "onTrigger": [
+    {
+      "damage": {
+        "target": {
+          "ref": "target.id"
+        },
+        "amount": {
+          "roll": "1d6"
+        },
+        "damageType": "poison"
+      }
+    },
+    {
+      "applyCondition": {
+        "target": {
+          "ref": "target.id"
+        },
+        "condition": "poisoned",
+        "duration": 4
+      }
+    }
+  ],
+  "reusable": false,
+  "tags": [
+    "trap"
+  ]
+}

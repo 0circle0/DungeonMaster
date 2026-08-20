@@ -1,0 +1,33 @@
+{
+  "id": "ford_farmer_alsey",
+  "name": "Alsey, at the Ford",
+  "description": "Farms both banks at Pennyford and has watched the sluice go up in the spring and down at the harvest her whole life.",
+  "disposition": 8,
+  "gullibility": 0.45,
+  "memorySpan": 180,
+  "offersQuests": [],
+  "caresAbout": [],
+  "reactions": [],
+  "faction": "the_crown",
+  "dialogue": "kings_alsey_talk",
+  "home": "pennyford_house_a",
+  "statblock": "kings_farmer",
+  "temperament": {
+    "roamRadius": 24,
+    "investigateRadius": 60,
+    "leashRadius": 90,
+    "wanderChance": 0.3,
+    "speeds": {
+      "wander": 0.5
+    },
+    "investigates": [
+      "sight",
+      "hearing"
+    ],
+    "notices": [
+      "hostile",
+      "neutral",
+      "ally"
+    ]
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "id": "weirwater_things",
+  "minDepth": 0,
+  "maxDepth": 999,
+  "chance": 0.3,
+  "emptyWeight": 8,
+  "scalePerLevels": 3,
+  "groups": [
+    {
+      "id": "lampreys",
+      "weight": 5,
+      "hostile": true,
+      "entries": [
+        {
+          "monster": "weir_lamprey",
+          "count": "1d2",
+          "scaleWithLevel": true
+        }
+      ]
+    },
+    {
+      "id": "a_hand",
+      "weight": 1,
+      "hostile": true,
+      "entries": [
+        {
+          "monster": "drowned_hand",
+          "count": "1",
+          "scaleWithLevel": false
+        }
+      ],
+      "requires": {
+        "minLevel": 3
+      }
+    }
+  ]
+}

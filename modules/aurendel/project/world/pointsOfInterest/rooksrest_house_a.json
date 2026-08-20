@@ -1,0 +1,21 @@
+{
+  "id": "rooksrest_house_a",
+  "name": "Burner's Hut",
+  "description": "A turf shelter that gets rebuilt wherever the clamp is that year.",
+  "area": "duskwood_rooksrest",
+  "kind": "settlement",
+  "descriptionKey": "int_house",
+  "travelMinutes": 2,
+  "tags": [
+    "house"
+  ],
+  "map": {
+    "width": "9",
+    "height": "7",
+    "palette": "int_timber"
+  },
+  "position": {
+    "x": 21,
+    "y": 3
+  }
+}

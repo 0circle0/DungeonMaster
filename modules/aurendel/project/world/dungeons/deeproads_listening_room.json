@@ -1,0 +1,18 @@
+{
+  "id": "deeproads_listening_room",
+  "name": "The Listening Room",
+  "description": "Off the seventh chamber of the Echo Halls, and in it there is no echo at all, which is worse.",
+  "biome": "dungeon_delved",
+  "roomCount": "10",
+  "depth": "4",
+  "algorithm": "rooms",
+  "lockedDoorChance": 0,
+  "doorGates": [],
+  "rollEncounters": false,
+  "safeEntrance": true,
+  "branchiness": 0.2,
+  "width": "73",
+  "height": "73",
+  "corridorLength": "3d3",
+  "bossTable": "trial_three_seventh"
+}

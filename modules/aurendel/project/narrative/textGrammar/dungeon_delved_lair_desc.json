@@ -1,0 +1,14 @@
+{
+  "id": "dungeon_delved_lair_desc",
+  "variants": [
+    {
+      "text": "The room has been rearranged by something that does not use furniture."
+    },
+    {
+      "text": "Rubble heaped into a bank across one corner, deliberately."
+    },
+    {
+      "text": "Fittings torn out and dragged into a pile. It took strength."
+    }
+  ]
+}

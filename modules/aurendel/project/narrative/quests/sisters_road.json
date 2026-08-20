@@ -1,0 +1,52 @@
+{
+  "id": "sisters_road",
+  "name": "The Road to the Nine Sisters",
+  "description": "The Wardlist names it The Sisters' Ward. Getting there is most of a week and the last day of it is on foot.",
+  "autoStart": false,
+  "ordered": true,
+  "tags": [
+    "act2",
+    "sisters"
+  ],
+  "objectives": [
+    {
+      "id": "arrive",
+      "description": "Reach the Nine Sisters.",
+      "kind": "reach",
+      "count": 1,
+      "hidden": false,
+      "optional": false,
+      "target": "moor_barrowgate"
+    },
+    {
+      "id": "ask_around",
+      "description": "Find somebody who tends it.",
+      "kind": "custom",
+      "count": 1,
+      "hidden": false,
+      "optional": false,
+      "when": {
+        "test": {
+          "ref": "flags.sisters_briefed"
+        }
+      }
+    }
+  ],
+  "stages": [],
+  "unlocks": [
+    "sisters_site"
+  ],
+  "rewards": {
+    "xp": 150,
+    "items": [],
+    "reputation": {}
+  },
+  "requires": {
+    "quests": [
+      {
+        "quest": "the_undercroft",
+        "status": "complete"
+      }
+    ]
+  }
+}

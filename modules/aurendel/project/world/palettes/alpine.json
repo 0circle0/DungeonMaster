@@ -1,0 +1,36 @@
+{
+  "id": "alpine",
+  "name": "The Skarnspine",
+  "floor": "scree",
+  "wall": "rock",
+  "exterior": "cliff",
+  "scatter": [
+    {
+      "terrain": "rock",
+      "frequency": 0.2,
+      "distribution": "patch",
+      "scale": 8,
+      "priority": 0
+    },
+    {
+      "terrain": "snow",
+      "frequency": 0.16,
+      "distribution": "patch",
+      "scale": 11,
+      "priority": 1
+    },
+    {
+      "terrain": "cliff",
+      "frequency": 0.06,
+      "distribution": "speckle",
+      "priority": 2
+    },
+    {
+      "terrain": "grass",
+      "frequency": 0.07,
+      "distribution": "patch",
+      "scale": 6,
+      "priority": 3
+    }
+  ]
+}

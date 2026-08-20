@@ -1,0 +1,11 @@
+{
+  "id": "moor_fire",
+  "name": "Colder's Fire",
+  "description": "Two hundred years alight on a third of the fuel it needs, kept for a man the parish register buries twice.",
+  "entries": [
+    "moor_fire_years",
+    "moor_fire_fuel",
+    "moor_fire_twice",
+    "moor_fire_green"
+  ]
+}

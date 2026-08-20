@@ -1,0 +1,17 @@
+{
+  "id": "heard_nothing",
+  "variants": [
+    {
+      "text": "You hold still. Your own breathing, and nothing else."
+    },
+    {
+      "text": "Nothing moving. Nothing in a hurry, at least."
+    },
+    {
+      "text": "You listen a while. Whatever is out there is not walking."
+    },
+    {
+      "text": "Quiet, and the particular kind that means nothing has noticed you yet."
+    }
+  ]
+}

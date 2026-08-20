@@ -1,0 +1,26 @@
+{
+  "id": "isle_plate_carried",
+  "name": "What Bren Kept",
+  "rolls": "1",
+  "emptyChance": 0,
+  "entries": [
+    {
+      "weight": 1,
+      "value": {
+        "item": "capstan_plate",
+        "quantity": "1",
+        "unique": true,
+        "requirementScope": "party",
+        "requires": {
+          "without": {
+            "flags": [
+              {
+                "flag": "given:capstan_plate"
+              }
+            ]
+          }
+        }
+      }
+    }
+  ]
+}

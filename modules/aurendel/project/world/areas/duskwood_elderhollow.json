@@ -1,0 +1,40 @@
+{
+  "id": "duskwood_elderhollow",
+  "name": "Elderhollow",
+  "description": "Built in a clearing round an oak that the town is legally not allowed to touch.",
+  "biome": "urban_timber",
+  "layer": "overworld",
+  "descriptionKey": "duskwood_elderhollow_desc",
+  "dangerLevel": 1,
+  "recommendedLevel": 3,
+  "tags": [
+    "duskwood",
+    "town"
+  ],
+  "map": {
+    "width": "41",
+    "height": "27"
+  },
+  "entryPoint": {
+    "x": 20,
+    "y": 13
+  },
+  "extra": {
+    "role": "town"
+  },
+  "connections": [
+    {
+      "to": "duskwood_moot_road",
+      "travelMinutes": 30
+    },
+    {
+      "to": "duskwood_hollow_beeches",
+      "travelMinutes": 35
+    },
+    {
+      "to": "duskwood_witchwood",
+      "travelMinutes": 50,
+      "gate": "duskwood_thornward"
+    }
+  ]
+}

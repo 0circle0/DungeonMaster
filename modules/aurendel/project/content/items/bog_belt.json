@@ -1,0 +1,26 @@
+{
+  "id": "bog_belt",
+  "name": "The Belt Out of the Black Band",
+  "description": "Tanned by eleven thousand years of peat into something that is not leather any more. It does not rot and neither, for a while, does what it is buckled around.",
+  "kind": "trinket",
+  "slot": "belt",
+  "value": 940,
+  "weight": 1,
+  "tags": [
+    "fabled"
+  ],
+  "modifiers": {
+    "carry": 3
+  },
+  "skillBonuses": {
+    "medicine": 2,
+    "resolve": 3
+  },
+  "damageInteractions": [
+    {
+      "damageType": "poison",
+      "multiplier": 0.5
+    }
+  ],
+  "rarity": "very_rare"
+}

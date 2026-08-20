@@ -1,0 +1,39 @@
+{
+  "id": "frostmere_rimewatch_shore",
+  "name": "The Rimewatch Shore",
+  "description": "Where the ice meets the sea and neither gives ground. Bergs calve off it all summer with a noise like artillery.",
+  "biome": "glacier",
+  "layer": "overworld",
+  "descriptionKey": "frostmere_rimewatch_shore_desc",
+  "dangerLevel": 6,
+  "recommendedLevel": 8,
+  "tags": [
+    "frostmere"
+  ],
+  "map": {
+    "width": "51",
+    "height": "35"
+  },
+  "entryPoint": {
+    "x": 25,
+    "y": 17
+  },
+  "extra": {
+    "role": "wild"
+  },
+  "connections": [
+    {
+      "to": "frostmere_whalebone_landing",
+      "travelMinutes": 40
+    },
+    {
+      "to": "frostmere_cairnhold",
+      "travelMinutes": 45
+    },
+    {
+      "to": "coast_gannet_head",
+      "travelMinutes": 300,
+      "gate": "frostmere_north_passage"
+    }
+  ]
+}

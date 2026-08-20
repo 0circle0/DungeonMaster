@@ -1,0 +1,396 @@
+{
+  "id": "saltcliff_maun_talk",
+  "start": "greet",
+  "nodes": [
+    {
+      "id": "greet",
+      "says": [
+        {
+          "text": "The Insurers' Hall is quieter than a temple and better lit. Maun has a column open in front of her with four entries in it and does not close it. \"You are not a name on my book.\""
+        }
+      ],
+      "options": [
+        {
+          "id": "the_column",
+          "text": "What's the column?",
+          "effects": [
+            {
+              "emit": {
+                "event": "startQuest",
+                "data": {
+                  "quest": "saltcliff_the_wrong_light"
+                }
+              }
+            }
+          ],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "four_hulls",
+          "requires": {
+            "quests": [
+              {
+                "quest": "saltcliff_the_wrong_light",
+                "status": "unstarted"
+              },
+              {
+                "quest": "the_open_door",
+                "status": "complete"
+              }
+            ]
+          }
+        },
+        {
+          "id": "the_hall",
+          "text": "What does the Hall do, exactly?",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "the_hall"
+        },
+        {
+          "id": "leave",
+          "text": "Nothing.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": [
+        {
+          "requires": {
+            "quests": [
+              {
+                "quest": "saltcliff_the_ledger",
+                "status": "active"
+              }
+            ],
+            "flags": [
+              {
+                "flag": "saltcliff_pattern_seen",
+                "equals": true
+              }
+            ]
+          },
+          "goto": "the_hour_of_the_low"
+        },
+        {
+          "requires": {
+            "flags": [
+              {
+                "flag": "saltcliff_shade_down",
+                "equals": true
+              }
+            ],
+            "without": {
+              "flags": [
+                {
+                  "flag": "saltcliff_filed"
+                },
+                {
+                  "flag": "saltcliff_buried"
+                }
+              ]
+            }
+          },
+          "goto": "the_finding"
+        }
+      ]
+    },
+    {
+      "id": "the_hall",
+      "says": [
+        {
+          "text": "\"We are right about how dangerous the sea is, and we are paid the difference between how dangerous it is and how dangerous everybody thinks it is.\" She turns a page. \"For nine years I have been wrong about one headland and it is costing me a great deal of money.\""
+        }
+      ],
+      "options": [
+        {
+          "id": "back",
+          "text": "Hm.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "greet"
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": []
+    },
+    {
+      "id": "four_hulls",
+      "says": [
+        {
+          "text": "\"Four hulls, nine years, all off Gannet Head, all insured here.\" She turns the book round. \"And every master off every one of them swore at the Court that he had the Saltcliff Light fine on the bow when he struck.\""
+        }
+      ],
+      "options": [
+        {
+          "id": "so_it_was_lit",
+          "text": "Then the light was lit.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "that_is_the_trouble"
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": []
+    },
+    {
+      "id": "that_is_the_trouble",
+      "says": [
+        {
+          "text": "\"That is the trouble,\" says Maun. \"If it was lit, four masters cannot steer. If it was not lit, the keeper is a liar and the Hall has been paying out on his word.\" She closes the book. \"And if it was neither, then I do not know what the fourth possibility is, and I have been paid nine years to know that sort of thing.\""
+        }
+      ],
+      "options": [
+        {
+          "id": "go",
+          "text": "We'll go up and ask him.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "go_up"
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": []
+    },
+    {
+      "id": "go_up",
+      "says": [
+        {
+          "text": "\"His name is Bry. He has stopped showing his logbook to the Pilots' Hall, which they have told me and he has not.\""
+        }
+      ],
+      "options": [
+        {
+          "id": "done",
+          "text": "We'll climb the stair.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": []
+    },
+    {
+      "id": "the_hour_of_the_low",
+      "says": [
+        {
+          "text": "\"You have been in the Court.\" She is already reaching for the book. \"Say it.\""
+        }
+      ],
+      "options": [
+        {
+          "id": "the_low",
+          "text": "All four struck within an hour of the low water.",
+          "effects": [],
+          "onceOnly": true,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "the_workings"
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": []
+    },
+    {
+      "id": "the_workings",
+      "says": [
+        {
+          "text": "Maun does not answer for long enough that you can hear the clock. \"The chalk workings under the Rise are dry to the back at the low,\" she says. \"They come out on the head. I have walked past that fact four times in nine years with it written in my own hand.\""
+        }
+      ],
+      "options": [
+        {
+          "id": "go_down",
+          "text": "Then we'll go in at the low.",
+          "effects": [
+            {
+              "emit": {
+                "event": "startQuest",
+                "data": {
+                  "quest": "saltcliff_under_the_light"
+                }
+              }
+            },
+            {
+              "adjustReputation": {
+                "faction": "the_countinghouse",
+                "amount": 5
+              }
+            }
+          ],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "at_the_low",
+          "requires": {
+            "quests": [
+              {
+                "quest": "saltcliff_under_the_light",
+                "status": "unstarted"
+              }
+            ]
+          }
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": [],
+      "remembers": "ledger_squared"
+    },
+    {
+      "id": "at_the_low",
+      "says": [
+        {
+          "text": "\"At the low, and out before the flood,\" says Maun. \"I will not be underwriting this. I want that understood and I want it understood kindly.\""
+        }
+      ],
+      "options": [
+        {
+          "id": "done",
+          "text": "Understood.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": []
+    },
+    {
+      "id": "the_finding",
+      "says": [
+        {
+          "text": "\"Then it was not the keeper and it was not the masters.\" Maun has the pen in her hand and has not written anything. \"Which means the four findings this Court handed down were wrong, and every one of them found against the Strand.\""
+        },
+        {
+          "text": "\"I can file what you found,\" she says. \"The Hall repays ninety years of recoveries it took off men who did not do it, and I explain to the Court why I am the one telling them. Or the findings stand, and nobody is ever told, and the column closes.\""
+        }
+      ],
+      "options": [
+        {
+          "id": "file",
+          "text": "File it. All of it.",
+          "effects": [
+            {
+              "setFlag": {
+                "flag": "saltcliff_filed",
+                "value": true
+              }
+            },
+            {
+              "emit": {
+                "event": "deed",
+                "data": {
+                  "kind": "ledger_squared"
+                }
+              }
+            },
+            {
+              "grantItem": {
+                "target": {
+                  "ref": "actor.id"
+                },
+                "item": "wreck_brass",
+                "quantity": 2
+              }
+            }
+          ],
+          "onceOnly": true,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "filed"
+        },
+        {
+          "id": "bury",
+          "text": "Let them stand.",
+          "effects": [
+            {
+              "setFlag": {
+                "flag": "saltcliff_buried",
+                "value": true
+              }
+            },
+            {
+              "emit": {
+                "event": "deed",
+                "data": {
+                  "kind": "ledger_cooked"
+                }
+              }
+            },
+            {
+              "grantItem": {
+                "target": {
+                  "ref": "actor.id"
+                },
+                "item": "old_coin",
+                "quantity": 30
+              }
+            }
+          ],
+          "onceOnly": true,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "buried"
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": []
+    },
+    {
+      "id": "filed",
+      "says": [
+        {
+          "text": "She writes for a long time. At the end of it she blots the page, reads it back, and says, to nobody: \"Nine years.\""
+        }
+      ],
+      "options": [
+        {
+          "id": "leave",
+          "text": "It's done.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": [],
+      "remembers": "ledger_squared"
+    },
+    {
+      "id": "buried",
+      "says": [
+        {
+          "text": "She closes the column, and pays you out of a drawer rather than off the book, which is the whole of what she thinks about it."
+        }
+      ],
+      "options": [
+        {
+          "id": "leave",
+          "text": "Right.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": [],
+      "remembers": "ledger_cooked"
+    }
+  ]
+}

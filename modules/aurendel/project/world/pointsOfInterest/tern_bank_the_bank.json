@@ -1,0 +1,29 @@
+{
+  "id": "tern_bank_the_bank",
+  "name": "Tern Bank",
+  "description": "Three miles of shingle that is a bank for nine months and a shoal for three.",
+  "area": "isles_tern_bank",
+  "kind": "landmark",
+  "descriptionKey": "tern_bank_the_bank_desc",
+  "travelMinutes": 6,
+  "tags": [],
+  "position": {
+    "x": 3,
+    "y": 3
+  },
+  "triggers": [
+    {
+      "id": "isle_found_bank",
+      "mode": "once",
+      "on": "enter",
+      "description": "Where forty thousand birds stop.",
+      "effects": [
+        {
+          "learnLore": {
+            "entry": "isle_terns_nest"
+          }
+        }
+      ]
+    }
+  ]
+}

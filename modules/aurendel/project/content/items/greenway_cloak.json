@@ -1,0 +1,26 @@
+{
+  "id": "greenway_cloak",
+  "name": "The Cloak off the Green Bridge",
+  "description": "Kept sound for two hundred years over a stream that is not there. Whatever crosses at night does not notice the wearer.",
+  "kind": "armor",
+  "slot": "cloak",
+  "value": 820,
+  "weight": 1,
+  "tags": [
+    "fabled"
+  ],
+  "modifiers": {
+    "guard": 1
+  },
+  "skillBonuses": {
+    "stealth": 3,
+    "insight": 2
+  },
+  "damageInteractions": [
+    {
+      "damageType": "poison",
+      "multiplier": 0.75
+    }
+  ],
+  "rarity": "very_rare"
+}

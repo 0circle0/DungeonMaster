@@ -1,0 +1,14 @@
+{
+  "id": "saltcliff_battery_blocked",
+  "variants": [
+    {
+      "text": "The magazine door is sealed with the corporation's stamp across the keyhole, and the stamp is not old."
+    },
+    {
+      "text": "Iron on oak, and a bar across the outside as well, which is belt and braces."
+    },
+    {
+      "text": "It is a powder store. It is locked the way powder stores are locked."
+    }
+  ]
+}

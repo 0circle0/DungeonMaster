@@ -1,0 +1,38 @@
+{
+  "id": "duskwood_the_undereaves",
+  "name": "The Undereaves",
+  "description": "The edge of the forest, where the fields stop and do not start again for four days.",
+  "biome": "deepwood",
+  "layer": "overworld",
+  "descriptionKey": "duskwood_the_undereaves_desc",
+  "dangerLevel": 3,
+  "recommendedLevel": 3,
+  "tags": [
+    "duskwood"
+  ],
+  "map": {
+    "width": "51",
+    "height": "35"
+  },
+  "entryPoint": {
+    "x": 25,
+    "y": 17
+  },
+  "extra": {
+    "role": "wild"
+  },
+  "connections": [
+    {
+      "to": "duskwood_moot_road",
+      "travelMinutes": 40
+    },
+    {
+      "to": "duskwood_fenny_cross",
+      "travelMinutes": 35
+    },
+    {
+      "to": "kingsvale_wraymill",
+      "travelMinutes": 150
+    }
+  ]
+}

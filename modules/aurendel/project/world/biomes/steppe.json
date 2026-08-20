@@ -1,0 +1,14 @@
+{
+  "id": "steppe",
+  "name": "The Sunward Steppe",
+  "description": "Grass without end, broken by burial mounds and the smoke of somebody's camp.",
+  "layer": "overworld",
+  "palette": "steppe",
+  "roomTemplates": [],
+  "encounterTables": [
+    "steppe_things"
+  ],
+  "lootTables": [],
+  "traps": [],
+  "ambienceKey": "steppe_ambience"
+}

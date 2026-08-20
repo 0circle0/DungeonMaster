@@ -1,0 +1,22 @@
+{
+  "id": "cellar_belt",
+  "name": "The Belt Out of the Ward Cellars",
+  "description": "Strapping off something that had been holding a door shut from the wrong side for a very long time.",
+  "kind": "trinket",
+  "slot": "belt",
+  "value": 1450,
+  "weight": 1,
+  "rarity": "very_rare",
+  "tags": [
+    "fabled",
+    "trial"
+  ],
+  "modifiers": {
+    "guard": 1,
+    "carry": 4
+  },
+  "skillBonuses": {
+    "athletics": 3,
+    "intimidation": 3
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "id": "water_stolen",
+  "name": "Stole Water",
+  "faction": "the_water_wardens",
+  "severity": -18,
+  "memorability": 2,
+  "distortion": 0.25
+}

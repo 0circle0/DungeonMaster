@@ -1,0 +1,80 @@
+{
+  "id": "trial_two_door",
+  "name": "The Fourth of the Eight",
+  "description": "A quarry gallery following a seam that is not there, ending in dressed stone the quarry did not dress.",
+  "kind": "ward",
+  "blockedTextKey": "trial_two_blocked",
+  "staysOpen": true,
+  "onOpen": [
+    {
+      "setFlag": {
+        "flag": "trial_two_open",
+        "value": true
+      }
+    }
+  ],
+  "onBlocked": [],
+  "opensWith": [],
+  "tags": [
+    "trial"
+  ],
+  "requires": {
+    "items": [
+      {
+        "item": "first_warrant"
+      }
+    ],
+    "anyOf": [
+      {
+        "items": [
+          {
+            "item": "beaters_cloak",
+            "quantity": 1,
+            "consume": false,
+            "equipped": true
+          }
+        ]
+      },
+      {
+        "items": [
+          {
+            "item": "bog_belt",
+            "quantity": 1,
+            "consume": false,
+            "equipped": true
+          }
+        ]
+      },
+      {
+        "items": [
+          {
+            "item": "ninth_column_coat",
+            "quantity": 1,
+            "consume": false,
+            "equipped": true
+          }
+        ]
+      },
+      {
+        "items": [
+          {
+            "item": "rime_singers_torc",
+            "quantity": 1,
+            "consume": false,
+            "equipped": true
+          }
+        ]
+      },
+      {
+        "items": [
+          {
+            "item": "marshlight_belt",
+            "quantity": 1,
+            "consume": false,
+            "equipped": true
+          }
+        ]
+      }
+    ]
+  }
+}

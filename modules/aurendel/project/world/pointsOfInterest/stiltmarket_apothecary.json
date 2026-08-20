@@ -1,0 +1,24 @@
+{
+  "id": "stiltmarket_apothecary",
+  "name": "The Fever House",
+  "description": "Bark, quinine, and a brisk trade in things for the fever.",
+  "area": "thornmere_stiltmarket",
+  "kind": "market",
+  "descriptionKey": "int_store",
+  "travelMinutes": 3,
+  "tags": [
+    "shop"
+  ],
+  "services": [
+    "market"
+  ],
+  "map": {
+    "width": "11",
+    "height": "9",
+    "palette": "int_shop"
+  },
+  "position": {
+    "x": 37,
+    "y": 23
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "id": "wreckers_strand_lime_kiln",
+  "name": "The Lime Kiln",
+  "description": "Burnt the chalk to build Sarnport, and has been cold for sixty years.",
+  "area": "coast_wreckers_strand",
+  "kind": "ruin",
+  "descriptionKey": "generic_ruin",
+  "travelMinutes": 8,
+  "tags": [
+    "ruin"
+  ],
+  "map": {
+    "width": "9",
+    "height": "7",
+    "palette": "int_cave"
+  },
+  "position": {
+    "x": 14,
+    "y": 3
+  },
+  "triggers": [
+    {
+      "id": "strand_at_the_kiln",
+      "mode": "once",
+      "on": "enter",
+      "description": "Cold sixty years, and the draw-hole scraped clean.",
+      "effects": [
+        {
+          "setFlag": {
+            "flag": "strand_kiln_seen",
+            "value": true
+          }
+        }
+      ]
+    }
+  ]
+}

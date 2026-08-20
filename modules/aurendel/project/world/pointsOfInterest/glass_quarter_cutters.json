@@ -1,0 +1,24 @@
+{
+  "id": "glass_quarter_cutters",
+  "name": "The Cutters' Hall",
+  "description": "Crater glass is cut cold, never worked hot, for reasons nobody here will discuss with a stranger.",
+  "area": "vashta_qal_glass_quarter",
+  "kind": "market",
+  "descriptionKey": "int_workshop",
+  "travelMinutes": 3,
+  "tags": [
+    "shop"
+  ],
+  "services": [
+    "market"
+  ],
+  "map": {
+    "width": "19",
+    "height": "13",
+    "palette": "int_shop"
+  },
+  "position": {
+    "x": 22,
+    "y": 3
+  }
+}

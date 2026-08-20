@@ -1,0 +1,39 @@
+{
+  "id": "kingsvale_ashcott",
+  "name": "Ashcott",
+  "description": "Sheep country. The village is mostly one lane and a very good hedge.",
+  "biome": "urban_timber",
+  "layer": "overworld",
+  "descriptionKey": "kingsvale_ashcott_desc",
+  "dangerLevel": 0,
+  "recommendedLevel": 1,
+  "tags": [
+    "kingsvale",
+    "village"
+  ],
+  "map": {
+    "width": "31",
+    "height": "21"
+  },
+  "entryPoint": {
+    "x": 15,
+    "y": 10
+  },
+  "extra": {
+    "role": "village"
+  },
+  "connections": [
+    {
+      "to": "kingsvale_hollowdene",
+      "travelMinutes": 35
+    },
+    {
+      "to": "kingsvale_kingsroad_south",
+      "travelMinutes": 30
+    },
+    {
+      "to": "ember_the_burnt_march",
+      "travelMinutes": 230
+    }
+  ]
+}

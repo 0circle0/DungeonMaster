@@ -1,0 +1,39 @@
+{
+  "id": "ember_cinderhold",
+  "name": "Cinderhold",
+  "description": "Built on its own slag heaps, walled in basalt, and hot enough that nobody lights a fire for warmth.",
+  "biome": "urban_stone",
+  "layer": "overworld",
+  "descriptionKey": "ember_cinderhold_desc",
+  "dangerLevel": 2,
+  "recommendedLevel": 7,
+  "tags": [
+    "ember_reach",
+    "town"
+  ],
+  "map": {
+    "width": "41",
+    "height": "27"
+  },
+  "entryPoint": {
+    "x": 20,
+    "y": 13
+  },
+  "extra": {
+    "role": "town"
+  },
+  "connections": [
+    {
+      "to": "ember_firewatch_ridge",
+      "travelMinutes": 35
+    },
+    {
+      "to": "ember_the_ashfall",
+      "travelMinutes": 40
+    },
+    {
+      "to": "ember_smoking_road",
+      "travelMinutes": 55
+    }
+  ]
+}

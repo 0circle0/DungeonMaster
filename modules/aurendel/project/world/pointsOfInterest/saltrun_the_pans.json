@@ -1,0 +1,29 @@
+{
+  "id": "saltrun_the_pans",
+  "name": "The Salt Pans",
+  "description": "Cut in squares, flooded, evaporated, and cut again, over about eleven square miles.",
+  "area": "glasslands_saltrun",
+  "kind": "landmark",
+  "descriptionKey": "generic_landmark",
+  "travelMinutes": 4,
+  "tags": [],
+  "position": {
+    "x": 3,
+    "y": 3
+  },
+  "triggers": [
+    {
+      "id": "glass_found_pans",
+      "mode": "once",
+      "on": "enter",
+      "description": "Eight courses cut, and the weighing house counting nine.",
+      "effects": [
+        {
+          "learnLore": {
+            "entry": "glass_courses_eight"
+          }
+        }
+      ]
+    }
+  ]
+}

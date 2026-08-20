@@ -1,0 +1,140 @@
+{
+  "id": "thornward_choice",
+  "name": "The Thornward — Shut or Open",
+  "description": "The ward can be put back. It can also be taken the rest of the way down, which is faster and tells you more.",
+  "autoStart": false,
+  "ordered": false,
+  "tags": [
+    "act2",
+    "thornward",
+    "branch"
+  ],
+  "objectives": [
+    {
+      "id": "restore",
+      "description": "Put the ward back as it was.",
+      "kind": "custom",
+      "count": 1,
+      "hidden": false,
+      "optional": true,
+      "when": {
+        "test": {
+          "ref": "flags.thornward_restored"
+        }
+      }
+    },
+    {
+      "id": "break",
+      "description": "Take the ward the rest of the way down.",
+      "kind": "custom",
+      "count": 1,
+      "hidden": false,
+      "optional": true,
+      "when": {
+        "test": {
+          "ref": "flags.thornward_broken"
+        }
+      }
+    },
+    {
+      "id": "resolve",
+      "description": "Decide what happens to it.",
+      "kind": "custom",
+      "count": 1,
+      "hidden": false,
+      "optional": false,
+      "when": {
+        "any": [
+          {
+            "test": {
+              "ref": "flags.thornward_restored"
+            }
+          },
+          {
+            "test": {
+              "ref": "flags.thornward_broken"
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "stages": [],
+  "unlocks": [
+    "thornward_key"
+  ],
+  "rewards": {
+    "xp": 250,
+    "items": [],
+    "reputation": {}
+  },
+  "requires": {
+    "quests": [
+      {
+        "quest": "thornward_site",
+        "status": "complete"
+      }
+    ]
+  },
+  "onComplete": [
+    {
+      "if": {
+        "when": {
+          "test": {
+            "ref": "flags.thornward_broken"
+          }
+        },
+        "then": [
+          {
+            "emit": {
+              "event": "deed",
+              "data": {
+                "kind": "ward_broken"
+              }
+            }
+          },
+          {
+            "adjustReputation": {
+              "faction": "the_keepers",
+              "amount": -10
+            }
+          },
+          {
+            "setFlag": {
+              "flag": "thornward_open",
+              "value": true
+            }
+          },
+          {
+            "setFlag": {
+              "flag": "knows_the_pattern",
+              "value": true
+            }
+          }
+        ],
+        "else": [
+          {
+            "emit": {
+              "event": "deed",
+              "data": {
+                "kind": "ward_restored"
+              }
+            }
+          },
+          {
+            "adjustReputation": {
+              "faction": "the_keepers",
+              "amount": 12
+            }
+          },
+          {
+            "setFlag": {
+              "flag": "thornward_shut",
+              "value": true
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

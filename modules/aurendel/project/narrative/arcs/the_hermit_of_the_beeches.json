@@ -1,0 +1,12 @@
+{
+  "id": "the_hermit_of_the_beeches",
+  "name": "The Hermit of the Beeches",
+  "description": "Two years of a man in a tree telling the moot that the wood is moving, and two years of the moot having something more pressing on.",
+  "quests": [
+    "beeches_what_wend_has_been_saying",
+    "beeches_the_root_cellar",
+    "beeches_the_deadfall",
+    "beeches_fire_or_graft"
+  ],
+  "isEnding": false
+}

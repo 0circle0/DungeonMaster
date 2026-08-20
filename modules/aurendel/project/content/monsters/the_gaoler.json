@@ -1,0 +1,90 @@
+{
+  "id": "the_gaoler",
+  "name": "The Gaoler",
+  "description": "The old gaol was bricked up with its register still on the desk and somebody still on the book.",
+  "level": 4,
+  "xp": 190,
+  "attributes": {
+    "might": 15,
+    "agility": 11,
+    "endurance": 15,
+    "intellect": 7,
+    "instinct": 12,
+    "presence": 15
+  },
+  "abilities": [
+    "stone_fist",
+    "grave_chill",
+    "call_the_shut"
+  ],
+  "behaviour": [
+    {
+      "priority": 20,
+      "use": "call_the_shut",
+      "when": {
+        "chance": 0.25
+      }
+    },
+    {
+      "priority": 10,
+      "use": "grave_chill"
+    },
+    {
+      "priority": 0,
+      "use": "stone_fist"
+    }
+  ],
+  "faction": "the_unsealed",
+  "creatureType": "undead",
+  "size": "medium",
+  "descriptors": [
+    "a keyed",
+    "a patient"
+  ],
+  "conditionalLoot": [
+    "silvered_cache"
+  ],
+  "loot": "gaol_hoard",
+  "damageInteractions": [
+    {
+      "damageType": "slashing",
+      "multiplier": 0.5,
+      "unless": [
+        "silvered"
+      ]
+    },
+    {
+      "damageType": "piercing",
+      "multiplier": 0.5,
+      "unless": [
+        "silvered"
+      ]
+    }
+  ],
+  "conditionImmunities": [
+    "frightened",
+    "poisoned"
+  ],
+  "resourceOverrides": {
+    "hp": 40
+  },
+  "derivedOverrides": {
+    "guard": 14
+  },
+  "temperament": {
+    "roamRadius": 12,
+    "investigateRadius": 40,
+    "leashRadius": 60,
+    "wanderChance": 0.1,
+    "disengageTurns": 1,
+    "speeds": {
+      "wander": 0.5,
+      "investigate": 0.5
+    },
+    "investigates": [
+      "sight",
+      "hearing",
+      "smell"
+    ]
+  }
+}

@@ -1,0 +1,362 @@
+{
+  "id": "skarn_orn_talk",
+  "start": "greet",
+  "nodes": [
+    {
+      "id": "greet",
+      "says": [
+        {
+          "text": "A cottage with one window facing the road and a lamp burning in it at an hour that does not need a lamp."
+        },
+        {
+          "text": "“Road is open. If you have come to ask, it is open.”"
+        }
+      ],
+      "onEnter": [],
+      "options": [
+        {
+          "id": "skarn_orn_open",
+          "text": "Has the bell ever rung on an open road?",
+          "requires": {
+            "without": {
+              "lore": [
+                "skarn_bell_open"
+              ]
+            }
+          },
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "check": {
+            "skill": "persuasion",
+            "difficulty": {
+              "sub": [
+                15,
+                {
+                  "clamp": [
+                    {
+                      "div": [
+                        {
+                          "ref": "reputation.karn_dolur",
+                          "else": 0
+                        },
+                        5
+                      ]
+                    },
+                    -6,
+                    6
+                  ]
+                }
+              ]
+            },
+            "onSuccess": "skarn_orn_open_told",
+            "onFailure": "skarn_orn_open_wont"
+          }
+        },
+        {
+          "id": "skarn_orn_rope",
+          "text": "The rope.",
+          "requires": {
+            "without": {
+              "lore": [
+                "skarn_bell_rope"
+              ]
+            }
+          },
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "check": {
+            "skill": "insight",
+            "difficulty": {
+              "sub": [
+                16,
+                {
+                  "clamp": [
+                    {
+                      "div": [
+                        {
+                          "ref": "reputation.karn_dolur",
+                          "else": 0
+                        },
+                        5
+                      ]
+                    },
+                    -6,
+                    6
+                  ]
+                }
+              ]
+            },
+            "onSuccess": "skarn_orn_rope_told",
+            "onFailure": "skarn_orn_rope_wont"
+          }
+        },
+        {
+          "id": "skarn_orn_book",
+          "text": "The watch book. The eleven nights.",
+          "requires": {
+            "without": {
+              "items": [
+                "watch_book"
+              ],
+              "flags": [
+                {
+                  "flag": "given:watch_book"
+                }
+              ]
+            }
+          },
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "check": {
+            "skill": "persuasion",
+            "difficulty": {
+              "sub": [
+                12,
+                {
+                  "clamp": [
+                    {
+                      "div": [
+                        {
+                          "ref": "reputation.karn_dolur",
+                          "else": 0
+                        },
+                        5
+                      ]
+                    },
+                    -6,
+                    6
+                  ]
+                }
+              ]
+            },
+            "onSuccess": "skarn_orn_book_gave",
+            "onFailure": "skarn_orn_book_kept"
+          }
+        },
+        {
+          "id": "greet_leave",
+          "text": "Nothing.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": [
+        {
+          "requires": {
+            "factions": [
+              {
+                "faction": "karn_dolur",
+                "maxStanding": -30
+              }
+            ]
+          },
+          "goto": "skarn_orn_cold"
+        }
+      ]
+    },
+    {
+      "id": "skarn_orn_open_told",
+      "says": [
+        {
+          "text": "Orn looks at you for a while. “Eleven times,” he says. “I have the nights. My predecessor had four of them and I have seven.” He turns the book round without opening it. “Every one of those nights the watch was asleep. Including me. Twice.” Flat. “I do not sleep on watch.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "learnLore": {
+            "entry": "skarn_bell_open"
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "skarn_orn_open_on",
+          "text": "Go on.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "skarn_orn_open_wont",
+      "says": [
+        {
+          "text": "“I've said all I mean to,” they say, and go back to what they were doing."
+        }
+      ],
+      "onEnter": [
+        {
+          "adjustReputation": {
+            "faction": "karn_dolur",
+            "amount": -1
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "skarn_orn_open_drop",
+          "text": "Leave it.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "skarn_orn_rope_told",
+      "says": [
+        {
+          "text": "“Worn on the inside of the turn.” He mimes it, hands round nothing. “You pull a bell rope, you wear the outside — the face away from the wall, where your grip drags.” The hands drop. “That rope is worn on the other face. To wear it there you would have to be standing where the floor is.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "learnLore": {
+            "entry": "skarn_bell_rope"
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "skarn_orn_rope_on",
+          "text": "Go on.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "skarn_orn_rope_wont",
+      "says": [
+        {
+          "text": "“I've said all I mean to,” they say, and go back to what they were doing."
+        }
+      ],
+      "onEnter": [
+        {
+          "adjustReputation": {
+            "faction": "karn_dolur",
+            "amount": -1
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "skarn_orn_rope_drop",
+          "text": "Leave it.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "skarn_orn_book_gave",
+      "says": [
+        {
+          "text": "He hands it over faster than you expected, and you realise he has been hoping somebody would ask. “Take it. Read it in daylight.” He does not quite manage a smile. “Eleven dates. See if they are anything. I have looked at them for nine years and they are not moons and they are not weather.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "grantItem": {
+            "target": {
+              "ref": "actor.id"
+            },
+            "item": "watch_book",
+            "quantity": 1
+          }
+        },
+        {
+          "setFlag": {
+            "flag": "given:watch_book",
+            "value": true
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "skarn_orn_book_thanks",
+          "text": "Thank you.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "skarn_orn_book_kept",
+      "says": [
+        {
+          "text": "“It is the gate's book,” Orn says, “and the gate is mine tonight,” and puts it under the lamp."
+        }
+      ],
+      "onEnter": [
+        {
+          "adjustReputation": {
+            "faction": "karn_dolur",
+            "amount": -1
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "skarn_orn_book_leave",
+          "text": "Then no.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "skarn_orn_cold",
+      "says": [
+        {
+          "text": "He turns the lamp down and goes on watching the road, and does not watch you."
+        }
+      ],
+      "onEnter": [],
+      "options": [
+        {
+          "id": "skarn_orn_go",
+          "text": "Leave it.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    }
+  ]
+}

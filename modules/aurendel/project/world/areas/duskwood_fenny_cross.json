@@ -1,0 +1,39 @@
+{
+  "id": "duskwood_fenny_cross",
+  "name": "Fenny Cross",
+  "description": "Where the forest road meets the coast road in a wet hollow, and everybody arriving is already in a bad mood.",
+  "biome": "urban_timber",
+  "layer": "overworld",
+  "descriptionKey": "duskwood_fenny_cross_desc",
+  "dangerLevel": 2,
+  "recommendedLevel": 3,
+  "tags": [
+    "duskwood",
+    "village"
+  ],
+  "map": {
+    "width": "31",
+    "height": "21"
+  },
+  "entryPoint": {
+    "x": 15,
+    "y": 10
+  },
+  "extra": {
+    "role": "village"
+  },
+  "connections": [
+    {
+      "to": "duskwood_the_greenway",
+      "travelMinutes": 30
+    },
+    {
+      "to": "duskwood_the_undereaves",
+      "travelMinutes": 35
+    },
+    {
+      "to": "coast_thrift",
+      "travelMinutes": 160
+    }
+  ]
+}

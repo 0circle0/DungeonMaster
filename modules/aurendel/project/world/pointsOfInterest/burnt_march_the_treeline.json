@@ -1,0 +1,29 @@
+{
+  "id": "burnt_march_the_treeline",
+  "name": "The New Treeline",
+  "description": "Where things start growing again, badly, and the line has moved east twice in living memory.",
+  "area": "ember_the_burnt_march",
+  "kind": "landmark",
+  "descriptionKey": "generic_landmark",
+  "travelMinutes": 6,
+  "tags": [],
+  "position": {
+    "x": 3,
+    "y": 3
+  },
+  "triggers": [
+    {
+      "id": "ember_found_trees",
+      "mode": "once",
+      "on": "enter",
+      "description": "Eleven years of trees where ninety is the number.",
+      "effects": [
+        {
+          "learnLore": {
+            "entry": "ember_trees_fast"
+          }
+        }
+      ]
+    }
+  ]
+}

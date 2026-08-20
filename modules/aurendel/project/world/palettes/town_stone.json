@@ -1,0 +1,42 @@
+{
+  "id": "town_stone",
+  "name": "Stone-Built",
+  "floor": "cobble",
+  "wall": "wall_stone",
+  "exterior": "wall_stone",
+  "scatter": [
+    {
+      "terrain": "flagstone",
+      "frequency": 0.16,
+      "distribution": "patch",
+      "scale": 8,
+      "priority": 0
+    },
+    {
+      "terrain": "wall_stone",
+      "frequency": 0.1,
+      "distribution": "patch",
+      "scale": 5,
+      "priority": 1
+    },
+    {
+      "terrain": "stall",
+      "frequency": 0.02,
+      "distribution": "speckle",
+      "priority": 2
+    },
+    {
+      "terrain": "cart",
+      "frequency": 0.012,
+      "distribution": "speckle",
+      "priority": 3
+    },
+    {
+      "terrain": "well",
+      "frequency": 0.006,
+      "distribution": "speckle",
+      "priority": 4
+    }
+  ],
+  "door": "door"
+}

@@ -1,0 +1,14 @@
+{
+  "id": "dungeon_ember_vault_desc",
+  "variants": [
+    {
+      "text": "A strongroom with a door frame warped out of square by heat."
+    },
+    {
+      "text": "Whatever was stored here is still here, and it is all one colour now."
+    },
+    {
+      "text": "The seal held long enough to bake the contents rather than burn them."
+    }
+  ]
+}

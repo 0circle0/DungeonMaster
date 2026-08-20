@@ -1,0 +1,75 @@
+{
+  "id": "throat_gone_quiet",
+  "name": "Gone Quiet",
+  "description": "The chain over the Great Vent has hung still for eleven days. It has never hung still for more than two.",
+  "autoStart": false,
+  "ordered": true,
+  "tags": [
+    "side",
+    "act2",
+    "throat",
+    "ember_reach"
+  ],
+  "objectives": [
+    {
+      "id": "to_the_chain",
+      "description": "Get out to the chain over the Great Vent.",
+      "kind": "reach",
+      "count": 1,
+      "hidden": false,
+      "optional": false,
+      "target": "vent_fields_the_chain"
+    },
+    {
+      "id": "hear_ilka",
+      "description": "Hear what the eleven make of it.",
+      "kind": "talk",
+      "count": 1,
+      "hidden": false,
+      "optional": false,
+      "target": "vent_reader_ilka"
+    },
+    {
+      "id": "the_still_chain",
+      "description": "See the chain for yourself.",
+      "kind": "custom",
+      "count": 1,
+      "hidden": false,
+      "optional": false,
+      "when": {
+        "test": {
+          "ref": "flags.throat_chain_seen"
+        }
+      }
+    }
+  ],
+  "stages": [],
+  "unlocks": [
+    "throat_the_signal_deep"
+  ],
+  "rewards": {
+    "xp": 55,
+    "items": [],
+    "reputation": {
+      "the_vent_readers": 10
+    }
+  },
+  "giver": "vent_reader_ilka",
+  "requires": {
+    "quests": [
+      {
+        "quest": "the_undercroft",
+        "status": "complete"
+      }
+    ],
+    "minLevel": 5
+  },
+  "onComplete": [
+    {
+      "setFlag": {
+        "flag": "throat_quiet_known",
+        "value": true
+      }
+    }
+  ]
+}

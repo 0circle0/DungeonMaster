@@ -1,0 +1,6 @@
+{
+  "id": "survival",
+  "name": "Survival",
+  "attribute": "instinct",
+  "description": "Tracks, weather, water, and which way is out."
+}

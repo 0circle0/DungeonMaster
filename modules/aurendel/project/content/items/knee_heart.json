@@ -1,0 +1,20 @@
+{
+  "id": "knee_heart",
+  "name": "The Heart of a Knee",
+  "description": "Cut level and healed over forty years ago by something with a very good edge and no hands anybody would recognise.",
+  "kind": "treasure",
+  "value": 0,
+  "weight": 0,
+  "tags": [
+    "clue",
+    "proof"
+  ],
+  "onUse": [
+    {
+      "learnLore": {
+        "entry": "thorn_knees_cut"
+      }
+    }
+  ],
+  "consumedOnUse": false
+}

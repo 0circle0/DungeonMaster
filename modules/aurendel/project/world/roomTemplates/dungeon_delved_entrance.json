@@ -1,0 +1,16 @@
+{
+  "id": "dungeon_delved_entrance",
+  "name": "Delved Entry",
+  "descriptionKey": "dungeon_delved_entrance_desc",
+  "weight": 1,
+  "minExits": 1,
+  "maxExits": 3,
+  "encounterChance": 0.15,
+  "trapChance": 0.15,
+  "lootChance": 0.25,
+  "tags": [
+    "dungeon_delved",
+    "entrance"
+  ],
+  "role": "entrance"
+}

@@ -1,0 +1,29 @@
+{
+  "id": "hermits_watch_cloak",
+  "name": "The Hermit's Watching Cloak",
+  "description": "Oiled reed and something under it. Ninety years of sitting still facing the wrong way, and it has kept out every one of them.",
+  "kind": "armor",
+  "slot": "cloak",
+  "value": 1150,
+  "weight": 1,
+  "tags": [
+    "fabled"
+  ],
+  "modifiers": {
+    "guard": 2
+  },
+  "skillBonuses": {
+    "stealth": 3
+  },
+  "damageInteractions": [
+    {
+      "damageType": "poison",
+      "multiplier": 0.5
+    },
+    {
+      "damageType": "cold",
+      "multiplier": 0.75
+    }
+  ],
+  "rarity": "very_rare"
+}

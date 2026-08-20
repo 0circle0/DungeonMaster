@@ -1,0 +1,16 @@
+{
+  "id": "dungeon_ice_entrance",
+  "name": "Ice Entry",
+  "descriptionKey": "dungeon_ice_entrance_desc",
+  "weight": 1,
+  "minExits": 1,
+  "maxExits": 3,
+  "encounterChance": 0.15,
+  "trapChance": 0.1,
+  "lootChance": 0.2,
+  "tags": [
+    "dungeon_ice",
+    "entrance"
+  ],
+  "role": "entrance"
+}

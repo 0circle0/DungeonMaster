@@ -1,0 +1,69 @@
+{
+  "id": "mile_walker",
+  "name": "What Walks the Extra Three",
+  "description": "Three marks that are not on the road, sighting along each other, and a lane worn six feet deep by something that has been keeping to it.",
+  "level": 6,
+  "xp": 420,
+  "attributes": {
+    "might": 13,
+    "agility": 17,
+    "endurance": 14,
+    "intellect": 14,
+    "instinct": 16,
+    "presence": 12
+  },
+  "abilities": [
+    "cut_and_run",
+    "quick_shot",
+    "rend"
+  ],
+  "behaviour": [
+    {
+      "priority": 15,
+      "use": "cut_and_run",
+      "when": {
+        "chance": 0.45
+      }
+    },
+    {
+      "priority": 5,
+      "use": "quick_shot"
+    },
+    {
+      "priority": 0,
+      "use": "rend"
+    }
+  ],
+  "faction": "the_unsealed",
+  "creatureType": "undead",
+  "size": "medium",
+  "descriptors": [
+    "a long-strided",
+    "a sighting"
+  ],
+  "conditionalLoot": [],
+  "loot": "dusk_miles_hoard",
+  "conditionImmunities": [
+    "frightened",
+    "prone"
+  ],
+  "resourceOverrides": {
+    "hp": 58
+  },
+  "temperament": {
+    "roamRadius": 12,
+    "investigateRadius": 40,
+    "leashRadius": 60,
+    "wanderChance": 0.1,
+    "disengageTurns": 1,
+    "speeds": {
+      "wander": 0.5,
+      "investigate": 0.5
+    },
+    "investigates": [
+      "sight",
+      "hearing",
+      "smell"
+    ]
+  }
+}

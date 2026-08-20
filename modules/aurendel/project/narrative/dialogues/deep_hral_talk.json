@@ -1,0 +1,314 @@
+{
+  "id": "deep_hral_talk",
+  "start": "greet",
+  "nodes": [
+    {
+      "id": "greet",
+      "says": [
+        {
+          "text": "A dwarf with a carrying frame, halfway across a span over nothing, entirely unbothered."
+        },
+        {
+          "text": "“Mind the kerb. It is not the drop that gets people, it is the kerb.”"
+        }
+      ],
+      "onEnter": [],
+      "options": [
+        {
+          "id": "deep_hral_bottom",
+          "text": "Has anyone found the bottom of this?",
+          "requires": {
+            "without": {
+              "lore": [
+                "deep_bridge_bottom"
+              ]
+            }
+          },
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "check": {
+            "skill": "persuasion",
+            "difficulty": {
+              "sub": [
+                12,
+                {
+                  "clamp": [
+                    {
+                      "div": [
+                        {
+                          "ref": "reputation.karn_dolur",
+                          "else": 0
+                        },
+                        5
+                      ]
+                    },
+                    -6,
+                    6
+                  ]
+                }
+              ]
+            },
+            "onSuccess": "deep_hral_bottom_told",
+            "onFailure": "deep_hral_bottom_wont"
+          }
+        },
+        {
+          "id": "deep_hral_hum",
+          "text": "It hums.",
+          "requires": {
+            "without": {
+              "lore": [
+                "deep_bridge_older"
+              ]
+            }
+          },
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "check": {
+            "skill": "persuasion",
+            "difficulty": {
+              "sub": [
+                15,
+                {
+                  "clamp": [
+                    {
+                      "div": [
+                        {
+                          "ref": "reputation.karn_dolur",
+                          "else": 0
+                        },
+                        5
+                      ]
+                    },
+                    -6,
+                    6
+                  ]
+                }
+              ]
+            },
+            "onSuccess": "deep_hral_hum_told",
+            "onFailure": "deep_hral_hum_wont"
+          }
+        },
+        {
+          "id": "deep_hral_hum2",
+          "text": "How long has it been humming?",
+          "requires": {
+            "without": {
+              "lore": [
+                "deep_bridge_hum"
+              ]
+            }
+          },
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "check": {
+            "skill": "insight",
+            "difficulty": {
+              "sub": [
+                16,
+                {
+                  "clamp": [
+                    {
+                      "div": [
+                        {
+                          "ref": "reputation.karn_dolur",
+                          "else": 0
+                        },
+                        5
+                      ]
+                    },
+                    -6,
+                    6
+                  ]
+                }
+              ]
+            },
+            "onSuccess": "deep_hral_hum2_told",
+            "onFailure": "deep_hral_hum2_wont"
+          }
+        },
+        {
+          "id": "greet_leave",
+          "text": "Nothing.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "deep_hral_bottom_told",
+      "says": [
+        {
+          "text": "“No.” He shifts the frame. “Guild drops a light every year on the anniversary. Four hundred lights. I have dropped a few of my own out of curiosity and I have stopped, because you keep watching, and there is a point where you notice you are still watching.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "learnLore": {
+            "entry": "deep_bridge_bottom"
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "deep_hral_bottom_on",
+          "text": "Go on.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "deep_hral_bottom_wont",
+      "says": [
+        {
+          "text": "“I've said all I mean to,” they say, and go back to what they were doing."
+        }
+      ],
+      "onEnter": [
+        {
+          "adjustReputation": {
+            "faction": "karn_dolur",
+            "amount": -1
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "deep_hral_bottom_drop",
+          "text": "Leave it.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "deep_hral_hum_told",
+      "says": [
+        {
+          "text": "He goes quiet, which for Hral is out of character. “It does. In a wind there is no wind for.” He starts walking again. “Karn Dolur laid that span. The hold will tell you the span is dwarf work, which it is, and will not discuss what it was laid *on*, which it did not make.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "learnLore": {
+            "entry": "deep_bridge_older"
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "deep_hral_hum_on",
+          "text": "Go on.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "deep_hral_hum_wont",
+      "says": [
+        {
+          "text": "“I've said all I mean to,” they say, and go back to what they were doing."
+        }
+      ],
+      "onEnter": [
+        {
+          "adjustReputation": {
+            "faction": "karn_dolur",
+            "amount": -1
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "deep_hral_hum_drop",
+          "text": "Leave it.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "deep_hral_hum2_told",
+      "says": [
+        {
+          "text": "“Before the hold, and the hold is old.” He does not slow down. “There is no wind down here. There has never been a wind down here. It hums in one anyway, and Karn Dolur will tell you that is the span settling, and the span has been settling for nine hundred years.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "learnLore": {
+            "entry": "deep_bridge_hum"
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "deep_hral_hum2_on",
+          "text": "Go on.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "deep_hral_hum2_wont",
+      "says": [
+        {
+          "text": "“I've said all I mean to,” they say, and go back to what they were doing."
+        }
+      ],
+      "onEnter": [
+        {
+          "adjustReputation": {
+            "faction": "karn_dolur",
+            "amount": -1
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "deep_hral_hum2_drop",
+          "text": "Leave it.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    }
+  ]
+}

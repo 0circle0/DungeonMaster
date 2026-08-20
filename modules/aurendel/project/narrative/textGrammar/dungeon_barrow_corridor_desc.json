@@ -1,0 +1,14 @@
+{
+  "id": "dungeon_barrow_corridor_desc",
+  "variants": [
+    {
+      "text": "A creep-passage, shoulder-wide, with the ceiling slabs resting on nothing you would care to test."
+    },
+    {
+      "text": "The walls are dry-laid and there is no mortar anywhere in them."
+    },
+    {
+      "text": "Something has been along here since it was sealed. The dust says so."
+    }
+  ]
+}

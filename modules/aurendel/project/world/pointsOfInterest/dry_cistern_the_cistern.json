@@ -1,0 +1,36 @@
+{
+  "id": "dry_cistern_the_cistern",
+  "name": "The Cistern",
+  "description": "Roman in its ambition and empty nine years in ten, and the tenth is why anybody stays.",
+  "area": "glasslands_dry_cistern",
+  "kind": "landmark",
+  "descriptionKey": "int_store",
+  "travelMinutes": 4,
+  "tags": [
+    "landmark"
+  ],
+  "map": {
+    "width": "19",
+    "height": "13",
+    "palette": "int_mudbrick"
+  },
+  "position": {
+    "x": 3,
+    "y": 3
+  },
+  "triggers": [
+    {
+      "id": "glass_found_cistern",
+      "mode": "once",
+      "on": "enter",
+      "description": "A channel out, and no channel in.",
+      "effects": [
+        {
+          "learnLore": {
+            "entry": "glass_cistern_feed"
+          }
+        }
+      ]
+    }
+  ]
+}

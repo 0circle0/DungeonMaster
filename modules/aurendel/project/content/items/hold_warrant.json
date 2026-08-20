@@ -1,0 +1,11 @@
+{
+  "id": "hold_warrant",
+  "name": "A Deep Warrant",
+  "description": "Karn Dolur's seal on slate, and the ledger number that goes with it.",
+  "kind": "key",
+  "value": 0,
+  "weight": 0.5,
+  "tags": [
+    "quest"
+  ]
+}

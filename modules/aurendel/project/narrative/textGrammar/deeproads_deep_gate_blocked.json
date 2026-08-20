@@ -1,0 +1,14 @@
+{
+  "id": "deeproads_deep_gate_blocked",
+  "variants": [
+    {
+      "text": "\"Twenty to go down,\" says the gatewarden, \"and the hold would rather you did not, and charges accordingly.\""
+    },
+    {
+      "text": "It costs more to leave Karn Dolur downward than it does to enter it at all, and the hold considers that a policy."
+    },
+    {
+      "text": "The door is open. The ledger is not."
+    }
+  ]
+}

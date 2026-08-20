@@ -1,0 +1,11 @@
+{
+  "id": "trial_one_arc",
+  "name": "The First Three",
+  "description": "Three of the eight doors nobody was watching, and what walked out of them while everybody was looking at the ninth.",
+  "quests": [
+    "trial_one_cellars",
+    "trial_one_underkeep",
+    "trial_one_rootcellar"
+  ],
+  "isEnding": false
+}

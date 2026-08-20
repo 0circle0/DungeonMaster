@@ -1,0 +1,95 @@
+{
+  "id": "tread_lifter",
+  "name": "What Lifted the Course Out",
+  "description": "A course of treads taken out of the middle of a stair, cleanly, from below. Nine landings, and the ninth is where it stopped.",
+  "level": 11,
+  "xp": 2000,
+  "attributes": {
+    "might": 21,
+    "agility": 15,
+    "endurance": 21,
+    "intellect": 18,
+    "instinct": 18,
+    "presence": 20
+  },
+  "abilities": [
+    "unmaking_word",
+    "call_the_shut",
+    "grave_chill",
+    "stone_fist"
+  ],
+  "behaviour": [
+    {
+      "priority": 35,
+      "use": "unmaking_word",
+      "when": {
+        "chance": 0.3
+      }
+    },
+    {
+      "priority": 25,
+      "use": "call_the_shut",
+      "when": {
+        "chance": 0.3
+      }
+    },
+    {
+      "priority": 10,
+      "use": "grave_chill"
+    },
+    {
+      "priority": 0,
+      "use": "stone_fist"
+    }
+  ],
+  "faction": "the_unsealed",
+  "creatureType": "undead",
+  "size": "medium",
+  "descriptors": [
+    "a patient",
+    "an unhurried"
+  ],
+  "conditionalLoot": [],
+  "loot": "deep_stair_hoard",
+  "damageInteractions": [
+    {
+      "damageType": "slashing",
+      "multiplier": 0.5,
+      "unless": [
+        "silvered"
+      ]
+    },
+    {
+      "damageType": "piercing",
+      "multiplier": 0.5,
+      "unless": [
+        "silvered"
+      ]
+    }
+  ],
+  "conditionImmunities": [
+    "frightened",
+    "poisoned",
+    "prone",
+    "stunned"
+  ],
+  "resourceOverrides": {
+    "hp": 215
+  },
+  "temperament": {
+    "roamRadius": 12,
+    "investigateRadius": 40,
+    "leashRadius": 60,
+    "wanderChance": 0.1,
+    "disengageTurns": 1,
+    "speeds": {
+      "wander": 0.5,
+      "investigate": 0.5
+    },
+    "investigates": [
+      "sight",
+      "hearing",
+      "smell"
+    ]
+  }
+}

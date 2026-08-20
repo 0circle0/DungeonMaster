@@ -1,0 +1,43 @@
+{
+  "id": "deeproads_the_long_hall",
+  "name": "The Long Hall",
+  "description": "Four miles of dressed corridor forty feet wide, running dead straight, with a ceiling nobody has surveyed.",
+  "biome": "underdeep",
+  "layer": "underworld",
+  "descriptionKey": "deeproads_the_long_hall_desc",
+  "dangerLevel": 7,
+  "recommendedLevel": 9,
+  "tags": [
+    "deeproads"
+  ],
+  "map": {
+    "width": "51",
+    "height": "35"
+  },
+  "entryPoint": {
+    "x": 25,
+    "y": 17
+  },
+  "extra": {
+    "role": "wild"
+  },
+  "connections": [
+    {
+      "to": "deeproads_the_deep_market_road",
+      "travelMinutes": 30
+    },
+    {
+      "to": "deeproads_the_weeping_vault",
+      "travelMinutes": 50
+    },
+    {
+      "to": "karn_dolur_forgetiers",
+      "travelMinutes": 90,
+      "gate": "deeproads_deep_gate"
+    }
+  ],
+  "encounterTables": [
+    "deeproads_things",
+    "the_tallied"
+  ]
+}

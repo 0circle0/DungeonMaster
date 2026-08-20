@@ -1,0 +1,6 @@
+{
+  "id": "action",
+  "name": "Action",
+  "description": "The one substantial thing you do in a turn.",
+  "perTurn": 1
+}

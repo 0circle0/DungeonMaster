@@ -1,0 +1,43 @@
+{
+  "id": "long_grass_lost_wagons",
+  "name": "The Lost Wagons",
+  "description": "Eleven of them in a defensive ring, in grass, four days from any route.",
+  "area": "steppe_the_long_grass",
+  "kind": "ruin",
+  "descriptionKey": "generic_ruin",
+  "travelMinutes": 10,
+  "tags": [
+    "secret",
+    "ruin"
+  ],
+  "hidden": true,
+  "discover": {
+    "skill": "survival",
+    "difficulty": 13
+  },
+  "map": {
+    "width": "11",
+    "height": "9",
+    "palette": "int_hull"
+  },
+  "position": {
+    "x": 25,
+    "y": 3
+  },
+  "triggers": [
+    {
+      "id": "dryriver_at_the_wagons",
+      "mode": "once",
+      "on": "enter",
+      "description": "Eleven wagons in a line, and what line they are in.",
+      "effects": [
+        {
+          "setFlag": {
+            "flag": "dryriver_wagons_found",
+            "value": true
+          }
+        }
+      ]
+    }
+  ]
+}

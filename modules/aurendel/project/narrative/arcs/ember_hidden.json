@@ -1,0 +1,12 @@
+{
+  "id": "ember_hidden",
+  "name": "The Ember Reach, Unread",
+  "description": "Four arguments the vent-readers have been losing for a century, and the ground agreeing with them the whole time.",
+  "quests": [
+    "ember_the_warm_ground",
+    "ember_under_the_roofs",
+    "ember_the_new_treeline",
+    "ember_the_sheet"
+  ],
+  "isEnding": false
+}

@@ -1,0 +1,24 @@
+{
+  "id": "cinderhold_the_cold_room",
+  "name": "The Cold Room",
+  "description": "Dug down rather than built up, and it is the only cool building in the town, and it is not cool.",
+  "area": "ember_cinderhold",
+  "kind": "settlement",
+  "descriptionKey": "int_inn",
+  "travelMinutes": 3,
+  "tags": [
+    "inn"
+  ],
+  "services": [
+    "inn"
+  ],
+  "map": {
+    "width": "15",
+    "height": "11",
+    "palette": "int_timber"
+  },
+  "position": {
+    "x": 20,
+    "y": 23
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "id": "gatehall_the_gate",
+  "name": "The Hold Gate",
+  "description": "Forty tons of stone on a counterweight, and two of the hold's own on either side of it at all hours.",
+  "area": "karn_dolur_gatehall",
+  "kind": "landmark",
+  "descriptionKey": "gatehall_the_gate_desc",
+  "travelMinutes": 3,
+  "tags": [
+    "landmark"
+  ],
+  "position": {
+    "x": 3,
+    "y": 3
+  }
+}

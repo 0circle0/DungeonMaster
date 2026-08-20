@@ -1,0 +1,14 @@
+{
+  "id": "dungeon_ruin_corridor_desc",
+  "variants": [
+    {
+      "text": "A passage with sky over it and saplings coming up through the floor."
+    },
+    {
+      "text": "Two walls, no roof, and the paving still laid true underneath the leaf-fall."
+    },
+    {
+      "text": "Ivy has taken the left wall entirely and is starting on the right."
+    }
+  ]
+}

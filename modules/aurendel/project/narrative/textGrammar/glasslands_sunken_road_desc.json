@@ -1,0 +1,17 @@
+{
+  "id": "glasslands_sunken_road_desc",
+  "variants": [
+    {
+      "text": "Dressed paving under the dunes, showing in stretches where the wind has been kind, and going somewhere."
+    },
+    {
+      "text": "The Sunken Road. It runs dead straight and the dunes cross it at an angle."
+    },
+    {
+      "text": "Where it shows, the kerbs are still in place and the ruts are still visible."
+    },
+    {
+      "text": "There are mileposts. Somebody counted this road out."
+    }
+  ]
+}

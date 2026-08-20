@@ -1,0 +1,68 @@
+{
+  "id": "black_bridge_the_footings",
+  "name": "The Footings",
+  "description": "There are chambers at both ends of the bridge, below the road level, and the bridge grows out of them.",
+  "area": "deeproads_black_bridge",
+  "kind": "dungeonEntrance",
+  "descriptionKey": "generic_dungeon_mouth",
+  "travelMinutes": 14,
+  "tags": [
+    "dungeon"
+  ],
+  "dungeon": "deeproads_footings",
+  "position": {
+    "x": 25,
+    "y": 3
+  },
+  "triggers": [
+    {
+      "id": "deep_bridge_committed",
+      "mode": "once",
+      "on": "enter",
+      "description": "Down at the footings, with the hum coming up.",
+      "requires": {
+        "custom": {
+          "gte": [
+            {
+              "ref": "threads.deep_bridge.known"
+            },
+            2
+          ]
+        }
+      },
+      "effects": [
+        {
+          "emit": {
+            "event": "startQuest",
+            "data": {
+              "quest": "deep_what_it_stands_on"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "hidden": true,
+  "discover": {
+    "skill": "perception",
+    "difficulty": {
+      "max": [
+        10,
+        {
+          "sub": [
+            22,
+            {
+              "mul": [
+                3,
+                {
+                  "ref": "threads.deep_bridge.known"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "gate": "deep_footing_way"
+}

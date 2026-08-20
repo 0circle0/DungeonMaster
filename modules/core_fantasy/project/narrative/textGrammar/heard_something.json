@@ -1,0 +1,17 @@
+{
+  "id": "heard_something",
+  "variants": [
+    {
+      "text": "Something moves out there, {direction} of you, and does not care who knows it."
+    },
+    {
+      "text": "A heavy sound, {direction}. Then nothing."
+    },
+    {
+      "text": "Something shifts its weight somewhere {direction}."
+    },
+    {
+      "text": "A clatter {direction} of you, and it does not repeat."
+    }
+  ]
+}

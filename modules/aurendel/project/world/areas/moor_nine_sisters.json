@@ -1,0 +1,37 @@
+{
+  "id": "moor_nine_sisters",
+  "name": "The Nine Sisters",
+  "description": "The highest ground on the moor, and nine stones standing on it in a ring sixty yards across.",
+  "biome": "moor",
+  "layer": "overworld",
+  "descriptionKey": "moor_nine_sisters_desc",
+  "dangerLevel": 5,
+  "recommendedLevel": 5,
+  "tags": [
+    "weeping_moor"
+  ],
+  "map": {
+    "width": "51",
+    "height": "35"
+  },
+  "entryPoint": {
+    "x": 25,
+    "y": 17
+  },
+  "extra": {
+    "role": "wild"
+  },
+  "connections": [
+    {
+      "to": "moor_heatherlands",
+      "travelMinutes": 45
+    },
+    {
+      "to": "moor_the_long_barrow",
+      "travelMinutes": 40
+    }
+  ],
+  "encounterTables": [
+    "moor_things"
+  ]
+}

@@ -1,0 +1,447 @@
+{
+  "id": "frost_thrand_talk",
+  "start": "greet",
+  "nodes": [
+    {
+      "id": "greet",
+      "says": [
+        {
+          "text": "A shed that smells of hot bone. He is cutting a whaling scene into a jaw plate and does not stop for you."
+        },
+        {
+          "text": "“Scrimshaw's a season out. Oil's at the store. Whatever else you want, ask it while I'm working.”"
+        }
+      ],
+      "onEnter": [],
+      "options": [
+        {
+          "id": "frost_thrand_count",
+          "text": "How many skulls are on the Strand?",
+          "requires": {
+            "without": {
+              "lore": [
+                "frost_strand_count"
+              ]
+            }
+          },
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "check": {
+            "skill": "insight",
+            "difficulty": {
+              "sub": [
+                14,
+                {
+                  "clamp": [
+                    {
+                      "div": [
+                        {
+                          "ref": "reputation.the_ice_moot",
+                          "else": 0
+                        },
+                        5
+                      ]
+                    },
+                    -6,
+                    6
+                  ]
+                }
+              ]
+            },
+            "onSuccess": "frost_thrand_count_told",
+            "onFailure": "frost_thrand_count_wont"
+          }
+        },
+        {
+          "id": "frost_thrand_note",
+          "text": "You work bone all day. What is the sound off the face?",
+          "requires": {
+            "without": {
+              "lore": [
+                "frost_blue_note"
+              ]
+            }
+          },
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "check": {
+            "skill": "insight",
+            "difficulty": {
+              "sub": [
+                12,
+                {
+                  "clamp": [
+                    {
+                      "div": [
+                        {
+                          "ref": "reputation.the_ice_moot",
+                          "else": 0
+                        },
+                        5
+                      ]
+                    },
+                    -6,
+                    6
+                  ]
+                }
+              ]
+            },
+            "onSuccess": "frost_thrand_note_told",
+            "onFailure": "frost_thrand_note_wont"
+          }
+        },
+        {
+          "id": "frost_thrand_ribs",
+          "text": "Those bones standing out of the Strand — is that one animal?",
+          "requires": {
+            "without": {
+              "lore": [
+                "frost_strand_ribs"
+              ]
+            }
+          },
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "check": {
+            "skill": "persuasion",
+            "difficulty": {
+              "sub": [
+                15,
+                {
+                  "clamp": [
+                    {
+                      "div": [
+                        {
+                          "ref": "reputation.the_ice_moot",
+                          "else": 0
+                        },
+                        5
+                      ]
+                    },
+                    -6,
+                    6
+                  ]
+                }
+              ]
+            },
+            "onSuccess": "frost_thrand_ribs_told",
+            "onFailure": "frost_thrand_ribs_wont"
+          }
+        },
+        {
+          "id": "frost_thrand_book",
+          "text": "Let me take the count. The whole book.",
+          "requires": {
+            "without": {
+              "items": [
+                "carvers_count"
+              ],
+              "flags": [
+                {
+                  "flag": "given:carvers_count"
+                }
+              ]
+            }
+          },
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "check": {
+            "skill": "persuasion",
+            "difficulty": {
+              "sub": [
+                15,
+                {
+                  "clamp": [
+                    {
+                      "div": [
+                        {
+                          "ref": "reputation.the_ice_moot",
+                          "else": 0
+                        },
+                        5
+                      ]
+                    },
+                    -6,
+                    6
+                  ]
+                }
+              ]
+            },
+            "onSuccess": "frost_thrand_book_gave",
+            "onFailure": "frost_thrand_book_kept"
+          }
+        },
+        {
+          "id": "greet_leave",
+          "text": "Nothing.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": [
+        {
+          "requires": {
+            "factions": [
+              {
+                "faction": "the_ice_moot",
+                "maxStanding": -30
+              }
+            ]
+          },
+          "goto": "frost_thrand_cold"
+        }
+      ]
+    },
+    {
+      "id": "frost_thrand_count_told",
+      "says": [
+        {
+          "text": "The chisel stops. “More than this Landing has ever had ships,” he says, to the scrimshaw rather than to you. “I started counting to prove to myself I was wrong about that. Eleven years. I am not wrong about that.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "learnLore": {
+            "entry": "frost_strand_count"
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "frost_thrand_count_on",
+          "text": "Go on.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "frost_thrand_count_wont",
+      "says": [
+        {
+          "text": "“I've said all I mean to,” they say, and go back to what they were doing."
+        }
+      ],
+      "onEnter": [
+        {
+          "adjustReputation": {
+            "faction": "the_ice_moot",
+            "amount": -1
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "frost_thrand_count_drop",
+          "text": "Leave it.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "frost_thrand_note_told",
+      "says": [
+        {
+          "text": "“A note,” he says at once, as though he has been waiting years for somebody to use the right word. “Everyone here calls it a noise. It is a note. I have matched it on the saw and it does not shift.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "learnLore": {
+            "entry": "frost_blue_note"
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "frost_thrand_note_on",
+          "text": "Go on.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "frost_thrand_note_wont",
+      "says": [
+        {
+          "text": "“I've said all I mean to,” they say, and go back to what they were doing."
+        }
+      ],
+      "onEnter": [
+        {
+          "adjustReputation": {
+            "faction": "the_ice_moot",
+            "amount": -1
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "frost_thrand_note_drop",
+          "text": "Leave it.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "frost_thrand_ribs_told",
+      "says": [
+        {
+          "text": "He laughs without any pleasure in it. “It is the right shape from the shore. Go and stand inside it.” He goes back to the chisel. “Whoever set those out knew exactly what it would look like from the water, which is a strange thing to care about if you are dead.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "learnLore": {
+            "entry": "frost_strand_ribs"
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "frost_thrand_ribs_on",
+          "text": "Go on.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "frost_thrand_ribs_wont",
+      "says": [
+        {
+          "text": "“I've said all I mean to,” they say, and go back to what they were doing."
+        }
+      ],
+      "onEnter": [
+        {
+          "adjustReputation": {
+            "faction": "the_ice_moot",
+            "amount": -1
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "frost_thrand_ribs_drop",
+          "text": "Leave it.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "frost_thrand_book_gave",
+      "says": [
+        {
+          "text": "He does not hand it over so much as put it down between you and step back from it. “Eleven years. The last four are in a smaller hand because the columns got wider.” He will not look at it. “Somebody else can be right about this for a while.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "grantItem": {
+            "target": {
+              "ref": "actor.id"
+            },
+            "item": "carvers_count",
+            "quantity": 1
+          }
+        },
+        {
+          "setFlag": {
+            "flag": "given:carvers_count",
+            "value": true
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "frost_thrand_book_thanks",
+          "text": "Thank you.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "frost_thrand_book_kept",
+      "says": [
+        {
+          "text": "“No.” He puts his hand flat on the book. “It is the only thing I have that says I have not been imagining it.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "adjustReputation": {
+            "faction": "the_ice_moot",
+            "amount": -2
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "frost_thrand_book_leave",
+          "text": "Then no.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "frost_thrand_cold",
+      "says": [
+        {
+          "text": "He puts the chisel down, which is worse than if he had not. “I know what you have been doing. Get out of my shed.”"
+        }
+      ],
+      "onEnter": [],
+      "options": [],
+      "redirectWhen": []
+    }
+  ]
+}

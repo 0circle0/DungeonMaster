@@ -5,13 +5,13 @@
       "id": "aurendel",
       "version": "1.0.0",
       "hash": "6555007601f5aefe",
-      "rawBytes": 1671592
+      "rawBytes": 1671642
     },
     {
       "id": "core_fantasy",
       "version": "1.0.0",
       "hash": "ee05665cf9e5f4fc",
-      "rawBytes": 41562
+      "rawBytes": 41612
     }
   ]
 }

@@ -1,0 +1,35 @@
+{
+  "id": "deep_stair_under",
+  "name": "Beneath the Treads",
+  "description": "The stair is broken at the ninth landing and the break is not damage. Something was taken out of it.",
+  "kind": "ward",
+  "blockedTextKey": "deep_stair_blocked",
+  "staysOpen": true,
+  "onOpen": [
+    {
+      "setFlag": {
+        "flag": "deep_stair_open",
+        "value": true
+      }
+    }
+  ],
+  "onBlocked": [],
+  "opensWith": [],
+  "tags": [],
+  "requires": {
+    "items": [
+      {
+        "item": "wayfinders_rule",
+        "quantity": 1,
+        "consume": false,
+        "equipped": false
+      },
+      {
+        "item": "ninth_column_coat",
+        "quantity": 1,
+        "consume": false,
+        "equipped": false
+      }
+    ]
+  }
+}

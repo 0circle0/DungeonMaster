@@ -1,0 +1,38 @@
+{
+  "id": "ember_smoking_road",
+  "name": "The Smoking Road",
+  "description": "The only route across the reach that anybody keeps, marked by iron posts because nothing else survives being a marker.",
+  "biome": "volcanic",
+  "layer": "overworld",
+  "descriptionKey": "ember_smoking_road_desc",
+  "dangerLevel": 6,
+  "recommendedLevel": 7,
+  "tags": [
+    "ember_reach"
+  ],
+  "map": {
+    "width": "51",
+    "height": "35"
+  },
+  "entryPoint": {
+    "x": 25,
+    "y": 17
+  },
+  "extra": {
+    "role": "wild"
+  },
+  "connections": [
+    {
+      "to": "ember_slagfoot",
+      "travelMinutes": 40
+    },
+    {
+      "to": "ember_the_burnt_march",
+      "travelMinutes": 50
+    },
+    {
+      "to": "ember_cinderhold",
+      "travelMinutes": 55
+    }
+  ]
+}

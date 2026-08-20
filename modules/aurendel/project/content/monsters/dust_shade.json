@@ -1,0 +1,82 @@
+{
+  "id": "dust_shade",
+  "name": "The Dry River",
+  "description": "The river went somewhere else in somebody's great-grandfather's time and something stayed in the bed waiting for it.",
+  "level": 5,
+  "xp": 235,
+  "attributes": {
+    "might": 12,
+    "agility": 16,
+    "endurance": 13,
+    "intellect": 10,
+    "instinct": 14,
+    "presence": 14
+  },
+  "abilities": [
+    "scouring_wind",
+    "glass_shard"
+  ],
+  "behaviour": [
+    {
+      "priority": 10,
+      "use": "scouring_wind",
+      "when": {
+        "chance": 0.35
+      }
+    },
+    {
+      "priority": 0,
+      "use": "glass_shard"
+    }
+  ],
+  "faction": "the_unsealed",
+  "creatureType": "undead",
+  "size": "medium",
+  "descriptors": [
+    "a turning",
+    "a gritted"
+  ],
+  "conditionalLoot": [],
+  "loot": "dry_river_hoard",
+  "damageInteractions": [
+    {
+      "damageType": "slashing",
+      "multiplier": 0.5
+    },
+    {
+      "damageType": "bludgeoning",
+      "multiplier": 0.5
+    },
+    {
+      "damageType": "cold",
+      "multiplier": 1.5
+    }
+  ],
+  "conditionImmunities": [
+    "bleeding",
+    "prone",
+    "blinded"
+  ],
+  "resourceOverrides": {
+    "hp": 44
+  },
+  "derivedOverrides": {
+    "guard": 16
+  },
+  "temperament": {
+    "roamRadius": 12,
+    "investigateRadius": 40,
+    "leashRadius": 60,
+    "wanderChance": 0.1,
+    "disengageTurns": 1,
+    "speeds": {
+      "wander": 0.5,
+      "investigate": 0.5
+    },
+    "investigates": [
+      "sight",
+      "hearing",
+      "smell"
+    ]
+  }
+}

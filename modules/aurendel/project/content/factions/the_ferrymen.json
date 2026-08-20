@@ -1,0 +1,32 @@
+{
+  "id": "the_ferrymen",
+  "name": "The Pole-Ferrymen",
+  "description": "Thornmere has no roads, one bell, and a hundred and six people who know which channels are where this week. Everything that crosses the marsh crosses because they said so.",
+  "initialStanding": 0,
+  "decayPerDay": 0.06,
+  "relations": {
+    "the_countinghouse": 0.2
+  },
+  "ranks": [
+    {
+      "id": "walking",
+      "name": "Let Them Walk",
+      "atLeast": -30
+    },
+    {
+      "id": "poled",
+      "name": "Poled Across",
+      "atLeast": 0
+    },
+    {
+      "id": "of_the_channels",
+      "name": "Of the Channels",
+      "atLeast": 25
+    },
+    {
+      "id": "bell_kin",
+      "name": "Bell-Kin",
+      "atLeast": 50
+    }
+  ]
+}

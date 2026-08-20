@@ -1,0 +1,18 @@
+{
+  "id": "bleeding",
+  "name": "Bleeding",
+  "description": "An open wound that has not been seen to.",
+  "stacking": "stack",
+  "defaultDuration": 3,
+  "onTick": [
+    {
+      "damage": {
+        "target": {
+          "ref": "actor.id"
+        },
+        "amount": 1,
+        "damageType": "slashing"
+      }
+    }
+  ]
+}

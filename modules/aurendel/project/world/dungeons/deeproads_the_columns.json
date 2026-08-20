@@ -1,0 +1,21 @@
+{
+  "id": "deeproads_the_columns",
+  "name": "The Columns",
+  "description": "Eleven of the flowstone columns in the Weeping Vault are hollow, and one of them has a door in it.",
+  "biome": "dungeon_cave",
+  "roomCount": "11",
+  "depth": "4",
+  "algorithm": "caverns",
+  "lockedDoorChance": 0,
+  "doorGates": [],
+  "rollEncounters": false,
+  "safeEntrance": true,
+  "caverns": {
+    "fill": 0.43,
+    "smoothingPasses": 5,
+    "birthThreshold": 5
+  },
+  "width": "45",
+  "height": "45",
+  "bossTable": "deep_vault_boss"
+}

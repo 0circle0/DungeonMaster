@@ -1,0 +1,14 @@
+{
+  "id": "deeproads_river_crossing_blocked",
+  "variants": [
+    {
+      "text": "The boat is on the far bank. The rope is slack in the water. There is nobody at either end."
+    },
+    {
+      "text": "Somebody worked this crossing once. The winch is greased and the grease is old."
+    },
+    {
+      "text": "Sixty feet of silent water and no way across that does not involve getting into it."
+    }
+  ]
+}

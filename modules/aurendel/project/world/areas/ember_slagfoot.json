@@ -1,0 +1,35 @@
+{
+  "id": "ember_slagfoot",
+  "name": "Slagfoot",
+  "description": "At the foot of the vent fields, and the ground under the village is warm to the hand all year.",
+  "biome": "urban_timber",
+  "layer": "overworld",
+  "descriptionKey": "ember_slagfoot_desc",
+  "dangerLevel": 4,
+  "recommendedLevel": 7,
+  "tags": [
+    "ember_reach",
+    "village"
+  ],
+  "map": {
+    "width": "31",
+    "height": "21"
+  },
+  "entryPoint": {
+    "x": 15,
+    "y": 10
+  },
+  "extra": {
+    "role": "village"
+  },
+  "connections": [
+    {
+      "to": "ember_vent_fields",
+      "travelMinutes": 35
+    },
+    {
+      "to": "ember_smoking_road",
+      "travelMinutes": 40
+    }
+  ]
+}

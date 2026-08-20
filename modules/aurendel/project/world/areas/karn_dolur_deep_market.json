@@ -1,0 +1,36 @@
+{
+  "id": "karn_dolur_deep_market",
+  "name": "Karn Dolur — The Deep Market",
+  "description": "A cavern the size of a town square with four galleries of shopfronts cut round the walls of it.",
+  "biome": "urban_delved",
+  "layer": "underworld",
+  "descriptionKey": "karn_dolur_deep_market_desc",
+  "dangerLevel": 0,
+  "recommendedLevel": 4,
+  "tags": [
+    "skarnspine",
+    "karn_dolur",
+    "city"
+  ],
+  "map": {
+    "width": "45",
+    "height": "31"
+  },
+  "entryPoint": {
+    "x": 22,
+    "y": 15
+  },
+  "extra": {
+    "role": "city"
+  },
+  "connections": [
+    {
+      "to": "karn_dolur_gatehall",
+      "travelMinutes": 6
+    },
+    {
+      "to": "karn_dolur_forgetiers",
+      "travelMinutes": 8
+    }
+  ]
+}

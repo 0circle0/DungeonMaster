@@ -1,0 +1,19 @@
+{
+  "id": "fungus_gallery_pickers_camp",
+  "name": "The Pickers' Camp",
+  "description": "Wild-picked rather than farmed, which is worth more and is considerably worse for you.",
+  "area": "deeproads_fungus_gallery",
+  "kind": "camp",
+  "descriptionKey": "generic_camp",
+  "travelMinutes": 5,
+  "tags": [],
+  "map": {
+    "width": "9",
+    "height": "7",
+    "palette": "int_cave"
+  },
+  "position": {
+    "x": 14,
+    "y": 3
+  }
+}

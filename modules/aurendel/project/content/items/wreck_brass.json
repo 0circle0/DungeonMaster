@@ -1,0 +1,13 @@
+{
+  "id": "wreck_brass",
+  "name": "Wreck Brass",
+  "kind": "material",
+  "value": 12,
+  "weight": 1.5,
+  "stackable": true,
+  "tags": [
+    "material",
+    "treasure"
+  ],
+  "description": "Fittings off something that did not make the passage. The Countinghouse would rather you did not say where."
+}

@@ -1,0 +1,22 @@
+{
+  "id": "vashta_qal_camel_yard",
+  "name": "The Camel Yard",
+  "description": "Four hundred of them, and the smell is a permanent feature of the eastern city.",
+  "area": "vashta_qal_oasis",
+  "kind": "settlement",
+  "descriptionKey": "int_stable",
+  "travelMinutes": 3,
+  "tags": [],
+  "services": [
+    "stable"
+  ],
+  "map": {
+    "width": "11",
+    "height": "9",
+    "palette": "int_timber"
+  },
+  "position": {
+    "x": 3,
+    "y": 27
+  }
+}

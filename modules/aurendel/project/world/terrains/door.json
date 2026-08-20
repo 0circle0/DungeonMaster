@@ -1,0 +1,14 @@
+{
+  "id": "door",
+  "name": "Door",
+  "description": "Shut, but not necessarily against you.",
+  "glyph": "+",
+  "color": "yellow",
+  "passable": true,
+  "opaque": true,
+  "moveCost": 1,
+  "tags": [
+    "built"
+  ],
+  "isDoor": true
+}

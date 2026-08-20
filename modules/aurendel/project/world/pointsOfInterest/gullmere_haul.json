@@ -1,0 +1,14 @@
+{
+  "id": "gullmere_haul",
+  "name": "The Haul",
+  "description": "Shingle beach with eleven boats drawn up it and a capstan for each.",
+  "area": "coast_gullmere",
+  "kind": "landmark",
+  "descriptionKey": "generic_landmark",
+  "travelMinutes": 2,
+  "tags": [],
+  "position": {
+    "x": 3,
+    "y": 3
+  }
+}

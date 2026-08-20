@@ -1,0 +1,28 @@
+{
+  "id": "dungeon_ruin",
+  "name": "Ruin",
+  "description": "Roofless rooms with trees in them, and the plan still legible underfoot.",
+  "layer": "overworld",
+  "palette": "dun_ruin",
+  "roomTemplates": [
+    "dungeon_ruin_boss",
+    "dungeon_ruin_chamber",
+    "dungeon_ruin_corridor",
+    "dungeon_ruin_entrance",
+    "dungeon_ruin_lair",
+    "dungeon_ruin_shrine",
+    "dungeon_ruin_vault"
+  ],
+  "encounterTables": [
+    "duskwood_things"
+  ],
+  "lootTables": [
+    "wood_scraps"
+  ],
+  "traps": [
+    "alarm_bell",
+    "collapsing_stair",
+    "pit",
+    "snare"
+  ]
+}

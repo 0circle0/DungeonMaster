@@ -1,0 +1,39 @@
+{
+  "id": "black_water_sunken_hall",
+  "name": "The Sunken Hall",
+  "description": "A roof-ridge showing above the water, and below it a hall, and below the hall a floor that is dry.",
+  "area": "thornmere_the_black_water",
+  "kind": "dungeonEntrance",
+  "descriptionKey": "generic_dungeon_mouth",
+  "travelMinutes": 14,
+  "tags": [
+    "secret",
+    "dungeon"
+  ],
+  "hidden": true,
+  "discover": {
+    "skill": "perception",
+    "difficulty": 13
+  },
+  "dungeon": "thornmere_sunken_hall",
+  "position": {
+    "x": 25,
+    "y": 3
+  },
+  "triggers": [
+    {
+      "id": "bell_in_the_sunken_hall",
+      "mode": "once",
+      "on": "enter",
+      "description": "A hall with its roof above the water and its floor a long way under it.",
+      "effects": [
+        {
+          "setFlag": {
+            "flag": "bell_hall_found",
+            "value": true
+          }
+        }
+      ]
+    }
+  ]
+}

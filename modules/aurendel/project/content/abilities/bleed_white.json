@@ -1,0 +1,33 @@
+{
+  "id": "bleed_white",
+  "name": "Bleed White",
+  "description": "Nothing you can feel happening, which is the trouble with it.",
+  "actionType": "action",
+  "targeting": "single",
+  "attack": {
+    "stat": "endurance",
+    "against": "guard"
+  },
+  "onUse": [
+    {
+      "damage": {
+        "target": {
+          "ref": "target.id"
+        },
+        "amount": {
+          "roll": "2d4"
+        },
+        "damageType": "necrotic"
+      }
+    },
+    {
+      "applyCondition": {
+        "target": {
+          "ref": "target.id"
+        },
+        "condition": "bleeding",
+        "duration": 4
+      }
+    }
+  ]
+}

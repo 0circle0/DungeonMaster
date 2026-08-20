@@ -1,0 +1,24 @@
+{
+  "id": "colders_hearth_store",
+  "name": "The Hearth Store",
+  "description": "Fuel, mostly. Fuel is the local currency and the local anxiety.",
+  "area": "moor_colders_hearth",
+  "kind": "market",
+  "descriptionKey": "int_store",
+  "travelMinutes": 3,
+  "tags": [
+    "shop"
+  ],
+  "services": [
+    "market"
+  ],
+  "map": {
+    "width": "9",
+    "height": "7",
+    "palette": "int_shop"
+  },
+  "position": {
+    "x": 15,
+    "y": 3
+  }
+}

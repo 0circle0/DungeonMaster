@@ -1,0 +1,29 @@
+{
+  "id": "windbreak_the_line",
+  "name": "The Windbreak",
+  "description": "Eleven miles of trees in a single line, planted, and no record anywhere of anybody planting them.",
+  "area": "steppe_windbreak",
+  "kind": "landmark",
+  "descriptionKey": "windbreak_the_line_desc",
+  "travelMinutes": 8,
+  "tags": [],
+  "position": {
+    "x": 3,
+    "y": 3
+  },
+  "triggers": [
+    {
+      "id": "step_found_line",
+      "mode": "once",
+      "on": "enter",
+      "description": "Which way the trees run, and which way the wind does.",
+      "effects": [
+        {
+          "learnLore": {
+            "entry": "step_line_wrong"
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,20 @@
+{
+  "id": "volcanic_ambience",
+  "variants": [
+    {
+      "text": "The ground is warm through your boots and gets warmer where the cinder is black."
+    },
+    {
+      "text": "Ash falls the way snow would, if snow were grey and tasted of iron."
+    },
+    {
+      "text": "Something below shifts its weight and the whole reach shudders once."
+    },
+    {
+      "text": "A vent lets go with a hiss forty paces off and then thinks better of it."
+    },
+    {
+      "text": "Everything here has an edge, including the light."
+    }
+  ]
+}

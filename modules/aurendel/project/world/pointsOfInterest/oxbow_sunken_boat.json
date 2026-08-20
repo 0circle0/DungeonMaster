@@ -1,0 +1,43 @@
+{
+  "id": "oxbow_sunken_boat",
+  "name": "The Sunken Barge",
+  "description": "Went down loaded in somebody's grandfather's time. The ribs still show at low water.",
+  "area": "kingsvale_oxbow_meadows",
+  "kind": "ruin",
+  "descriptionKey": "oxbow_sunken_boat_desc",
+  "travelMinutes": 12,
+  "tags": [
+    "ruin",
+    "secret"
+  ],
+  "position": {
+    "x": 12,
+    "y": 24
+  },
+  "hidden": true,
+  "discover": {
+    "skill": "perception",
+    "difficulty": 11
+  },
+  "map": {
+    "width": "9",
+    "height": "7",
+    "palette": "int_hull"
+  },
+  "triggers": [
+    {
+      "id": "eelweir_found_the_barge",
+      "mode": "once",
+      "on": "enter",
+      "description": "The ribs at low water, and what is still under them.",
+      "effects": [
+        {
+          "setFlag": {
+            "flag": "eelweir_barge_found",
+            "value": true
+          }
+        }
+      ]
+    }
+  ]
+}

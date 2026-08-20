@@ -1,0 +1,14 @@
+{
+  "id": "ashfall_buried_village_desc",
+  "variants": [
+    {
+      "text": "Roofs above the ash in a line, and everything below the roofs exactly as it was left in a hurry."
+    },
+    {
+      "text": "You go in through a chimney. There is a street down there."
+    },
+    {
+      "text": "The ash arrived over about four hours. There was time. Most of them took it."
+    }
+  ]
+}

@@ -1,0 +1,219 @@
+{
+  "id": "moor_bram_talk",
+  "start": "greet",
+  "nodes": [
+    {
+      "id": "greet",
+      "says": [
+        {
+          "text": "Turf stacked by the thousand under a long open shed, scales, and a book on a stand that has been in that spot a very long time."
+        },
+        {
+          "text": "“By the thousand or by the load. The book stays here.”"
+        }
+      ],
+      "onEnter": [],
+      "options": [
+        {
+          "id": "moor_bram_count",
+          "text": "How many have come out of the deep cut?",
+          "requires": {
+            "without": {
+              "lore": [
+                "moor_cut_count"
+              ]
+            }
+          },
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "check": {
+            "skill": "persuasion",
+            "difficulty": {
+              "sub": [
+                13,
+                {
+                  "clamp": [
+                    {
+                      "div": [
+                        {
+                          "ref": "reputation.the_library",
+                          "else": 0
+                        },
+                        5
+                      ]
+                    },
+                    -6,
+                    6
+                  ]
+                }
+              ]
+            },
+            "onSuccess": "moor_bram_count_told",
+            "onFailure": "moor_bram_count_wont"
+          }
+        },
+        {
+          "id": "moor_bram_swapped",
+          "text": "Were the forty-one put back the ones that came out?",
+          "requires": {
+            "without": {
+              "lore": [
+                "moor_cut_swapped"
+              ]
+            }
+          },
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "check": {
+            "skill": "insight",
+            "difficulty": {
+              "sub": [
+                17,
+                {
+                  "clamp": [
+                    {
+                      "div": [
+                        {
+                          "ref": "reputation.the_library",
+                          "else": 0
+                        },
+                        5
+                      ]
+                    },
+                    -6,
+                    6
+                  ]
+                }
+              ]
+            },
+            "onSuccess": "moor_bram_swapped_told",
+            "onFailure": "moor_bram_swapped_wont"
+          }
+        },
+        {
+          "id": "greet_leave",
+          "text": "Nothing.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "moor_bram_count_told",
+      "says": [
+        {
+          "text": "“Forty-one.” Bram does not have to check and does not pretend to. “Since we started counting, which is my great-grandfather.” He turns the stand slightly, not enough to show you the page. “And forty-one put back. That is in there too. The Library takes them, the Library measures them, the Library sends them home, and we put them back where they came from.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "learnLore": {
+            "entry": "moor_cut_count"
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "moor_bram_count_on",
+          "text": "Go on.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "moor_bram_count_wont",
+      "says": [
+        {
+          "text": "“I've said all I mean to,” they say, and go back to what they were doing."
+        }
+      ],
+      "onEnter": [
+        {
+          "adjustReputation": {
+            "faction": "the_library",
+            "amount": -1
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "moor_bram_count_drop",
+          "text": "Leave it.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "moor_bram_swapped_told",
+      "says": [
+        {
+          "text": "It takes him a long moment. “No,” he says. “Two of them are written up different going in to coming out. Different height on one. Different hands on the other — *hands*, written just like that.” He shuts the book. “My grandfather's hand, in among the weights and the dates, like it was a Tuesday.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "learnLore": {
+            "entry": "moor_cut_swapped"
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "moor_bram_swapped_on",
+          "text": "Go on.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "moor_bram_swapped_wont",
+      "says": [
+        {
+          "text": "“I've said all I mean to,” they say, and go back to what they were doing."
+        }
+      ],
+      "onEnter": [
+        {
+          "adjustReputation": {
+            "faction": "the_library",
+            "amount": -1
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "moor_bram_swapped_drop",
+          "text": "Leave it.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    }
+  ]
+}

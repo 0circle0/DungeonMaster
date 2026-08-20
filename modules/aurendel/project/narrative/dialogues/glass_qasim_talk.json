@@ -1,0 +1,362 @@
+{
+  "id": "glass_qasim_talk",
+  "start": "greet",
+  "nodes": [
+    {
+      "id": "greet",
+      "says": [
+        {
+          "text": "A weighing house with the shutters half down against the glare, and a man setting brass weights on a beam by feel."
+        },
+        {
+          "text": "“Salt is by the measure and the measure is on the wall. If you are arguing about the measure, argue outside.”"
+        }
+      ],
+      "onEnter": [],
+      "options": [
+        {
+          "id": "glass_qasim_nine",
+          "text": "How many courses come out of these pans in a year?",
+          "requires": {
+            "without": {
+              "lore": [
+                "glass_courses_nine"
+              ]
+            }
+          },
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "check": {
+            "skill": "insight",
+            "difficulty": {
+              "sub": [
+                13,
+                {
+                  "clamp": [
+                    {
+                      "div": [
+                        {
+                          "ref": "reputation.the_water_wardens",
+                          "else": 0
+                        },
+                        5
+                      ]
+                    },
+                    -6,
+                    6
+                  ]
+                }
+              ]
+            },
+            "onSuccess": "glass_qasim_nine_told",
+            "onFailure": "glass_qasim_nine_wont"
+          }
+        },
+        {
+          "id": "glass_qasim_taste",
+          "text": "What is the ninth like?",
+          "requires": {
+            "without": {
+              "lore": [
+                "glass_courses_taste"
+              ]
+            }
+          },
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "check": {
+            "skill": "persuasion",
+            "difficulty": {
+              "sub": [
+                15,
+                {
+                  "clamp": [
+                    {
+                      "div": [
+                        {
+                          "ref": "reputation.the_water_wardens",
+                          "else": 0
+                        },
+                        5
+                      ]
+                    },
+                    -6,
+                    6
+                  ]
+                }
+              ]
+            },
+            "onSuccess": "glass_qasim_taste_told",
+            "onFailure": "glass_qasim_taste_wont"
+          }
+        },
+        {
+          "id": "glass_qasim_jar",
+          "text": "Let me take the jar.",
+          "requires": {
+            "without": {
+              "items": [
+                "weighers_jar"
+              ],
+              "flags": [
+                {
+                  "flag": "given:weighers_jar"
+                }
+              ]
+            }
+          },
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "check": {
+            "skill": "persuasion",
+            "difficulty": {
+              "sub": [
+                15,
+                {
+                  "clamp": [
+                    {
+                      "div": [
+                        {
+                          "ref": "reputation.the_water_wardens",
+                          "else": 0
+                        },
+                        5
+                      ]
+                    },
+                    -6,
+                    6
+                  ]
+                }
+              ]
+            },
+            "onSuccess": "glass_qasim_jar_gave",
+            "onFailure": "glass_qasim_jar_kept"
+          }
+        },
+        {
+          "id": "greet_leave",
+          "text": "Nothing.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": [
+        {
+          "requires": {
+            "factions": [
+              {
+                "faction": "the_water_wardens",
+                "maxStanding": -30
+              }
+            ]
+          },
+          "goto": "glass_qasim_cold"
+        }
+      ]
+    },
+    {
+      "id": "glass_qasim_nine_told",
+      "says": [
+        {
+          "text": "“Nine.” He does not look up from the beam. “Eight cut, nine weighed. Two hundred years of ledgers say nine and I have added every one of them twice.” He sets a weight. “Nobody has ever cut a ninth.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "learnLore": {
+            "entry": "glass_courses_nine"
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "glass_qasim_nine_on",
+          "text": "Go on.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "glass_qasim_nine_wont",
+      "says": [
+        {
+          "text": "“I've said all I mean to,” they say, and go back to what they were doing."
+        }
+      ],
+      "onEnter": [
+        {
+          "adjustReputation": {
+            "faction": "the_water_wardens",
+            "amount": -1
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "glass_qasim_nine_drop",
+          "text": "Leave it.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "glass_qasim_taste_told",
+      "says": [
+        {
+          "text": "He goes and gets the jar without being asked, which tells you how long he has wanted to show somebody. “Heavier. And it does not taste of this sea — I have tasted this sea for forty years.” He stoppers it again. “I do not sell any of it.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "learnLore": {
+            "entry": "glass_courses_taste"
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "glass_qasim_taste_on",
+          "text": "Go on.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "glass_qasim_taste_wont",
+      "says": [
+        {
+          "text": "“I've said all I mean to,” they say, and go back to what they were doing."
+        }
+      ],
+      "onEnter": [
+        {
+          "adjustReputation": {
+            "faction": "the_water_wardens",
+            "amount": -1
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "glass_qasim_taste_drop",
+          "text": "Leave it.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "glass_qasim_jar_gave",
+      "says": [
+        {
+          "text": "He hands it over with both hands and does not let go for a moment. “If you find out where it comes from, come back and tell me before you tell the wardens. Forty years is a long time to be the only one adding up.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "grantItem": {
+            "target": {
+              "ref": "actor.id"
+            },
+            "item": "weighers_jar",
+            "quantity": 1
+          }
+        },
+        {
+          "setFlag": {
+            "flag": "given:weighers_jar",
+            "value": true
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "glass_qasim_jar_thanks",
+          "text": "Thank you.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "glass_qasim_jar_kept",
+      "says": [
+        {
+          "text": "“No.” He puts it back on the shelf, behind the counterweights. “It is the only evidence I have that I am not senile.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "adjustReputation": {
+            "faction": "the_water_wardens",
+            "amount": -2
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "glass_qasim_jar_leave",
+          "text": "Then no.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "glass_qasim_cold",
+      "says": [
+        {
+          "text": "He turns the beam away from you and waits, with the patience of a man who has all day and no intention of spending any of it on you."
+        }
+      ],
+      "onEnter": [],
+      "options": [
+        {
+          "id": "glass_qasim_go",
+          "text": "Leave it.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    }
+  ]
+}

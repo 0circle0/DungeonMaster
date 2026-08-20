@@ -1,0 +1,22 @@
+{
+  "id": "barrowgate_moot_hall",
+  "name": "The Moot Hall",
+  "description": "Where the moor's business is done: grazing rights, peat rights, and the one subject nobody raises.",
+  "area": "moor_barrowgate",
+  "kind": "landmark",
+  "descriptionKey": "generic_landmark",
+  "travelMinutes": 4,
+  "tags": [
+    "landmark"
+  ],
+  "services": [
+    "guild"
+  ],
+  "map": {
+    "static": "barrowgate_moot"
+  },
+  "position": {
+    "x": 11,
+    "y": 3
+  }
+}

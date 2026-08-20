@@ -1,0 +1,24 @@
+{
+  "id": "snowgate_store",
+  "name": "The Gate Store",
+  "description": "Sells fuel, fat, and rope, and buys nothing.",
+  "area": "skarnspine_snowgate",
+  "kind": "market",
+  "descriptionKey": "int_store",
+  "travelMinutes": 3,
+  "tags": [
+    "shop"
+  ],
+  "services": [
+    "market"
+  ],
+  "map": {
+    "width": "9",
+    "height": "7",
+    "palette": "int_shop"
+  },
+  "position": {
+    "x": 9,
+    "y": 3
+  }
+}

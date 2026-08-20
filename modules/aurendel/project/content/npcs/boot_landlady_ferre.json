@@ -1,0 +1,34 @@
+{
+  "id": "boot_landlady_ferre",
+  "name": "Ferre, at the Wet Boot",
+  "description": "Keeps the only bed at a crossroads everybody arrives at wet, and hears the whole of both roads twice a day.",
+  "disposition": 7,
+  "gullibility": 0.5,
+  "memorySpan": 190,
+  "offersQuests": [],
+  "caresAbout": [],
+  "reactions": [],
+  "faction": "the_keepers",
+  "dialogue": "dusk_ferre_talk",
+  "home": "fenny_cross_the_wet_boot",
+  "shop": {
+    "lootTable": "hollowdene_stock",
+    "buysTags": [
+      "treasure"
+    ],
+    "priceMultiplier": 1.3
+  },
+  "temperament": {
+    "roamRadius": 0,
+    "wanderChance": 0,
+    "speeds": {
+      "wander": 0
+    },
+    "investigates": [],
+    "notices": [
+      "hostile",
+      "neutral",
+      "ally"
+    ]
+  }
+}

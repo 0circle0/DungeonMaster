@@ -1,0 +1,216 @@
+{
+  "id": "dath_talk",
+  "start": "greet",
+  "nodes": [
+    {
+      "id": "greet",
+      "says": [
+        {
+          "text": "Dath does not rise. \"You want the Deep Gate. Everybody who comes to this hall wants the Deep Gate.\""
+        }
+      ],
+      "options": [
+        {
+          "id": "ask",
+          "text": "We want the Deep Gate.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "the_fee"
+        },
+        {
+          "id": "why_shut",
+          "text": "Why has it never been opened?",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "why_shut"
+        },
+        {
+          "id": "leave",
+          "text": "Nothing.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": [
+        {
+          "requires": {
+            "memories": [
+              {
+                "deedKind": "deep_door_opened",
+                "who": "speaker"
+              }
+            ]
+          },
+          "goto": "he_has_heard"
+        },
+        {
+          "requires": {
+            "factions": [
+              {
+                "faction": "karn_dolur",
+                "minRank": "hold_friend"
+              }
+            ]
+          },
+          "goto": "hold_friend"
+        }
+      ]
+    },
+    {
+      "id": "why_shut",
+      "says": [
+        {
+          "text": "\"Because it was shut.\" He turns a page. \"That is the whole of the reasoning and it has held for nine hundred years. Every generation that has asked for a better one has been shown the ledger and has gone away.\""
+        }
+      ],
+      "options": [
+        {
+          "id": "back",
+          "text": "Hm.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "greet"
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": []
+    },
+    {
+      "id": "the_fee",
+      "says": [
+        {
+          "text": "\"Twenty to go down. The hold would rather you did not, and charges accordingly.\" He does not look up. \"You may also earn it, which is slower and which I would respect more.\""
+        }
+      ],
+      "options": [
+        {
+          "id": "pay",
+          "text": "We'll pay.",
+          "effects": [
+            {
+              "setFlag": {
+                "flag": "down_by_karn_dolur",
+                "value": true
+              }
+            }
+          ],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "greet"
+        },
+        {
+          "id": "earn",
+          "text": "How is it earned?",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": true,
+          "lockedHint": "The hold does not know you well enough to have that conversation.",
+          "goto": "earned",
+          "requires": {
+            "factions": [
+              {
+                "faction": "karn_dolur",
+                "minStanding": 15
+              }
+            ]
+          }
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": []
+    },
+    {
+      "id": "earned",
+      "says": [
+        {
+          "text": "\"By having been useful to the hold, which the ledger says you have been.\" He writes something. \"Warrant's yours. Do not make me regret the entry.\""
+        }
+      ],
+      "options": [
+        {
+          "id": "thanks",
+          "text": "We won't.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "onEnter": [
+        {
+          "setFlag": {
+            "flag": "down_by_karn_dolur",
+            "value": true
+          }
+        },
+        {
+          "adjustReputation": {
+            "faction": "karn_dolur",
+            "amount": 10
+          }
+        }
+      ],
+      "redirectWhen": [],
+      "remembers": "hold_honoured"
+    },
+    {
+      "id": "hold_friend",
+      "says": [
+        {
+          "text": "\"Hold-friend,\" says Dath, and closes the ledger, which is the single most surprising thing that has happened to you in Aurendel. \"Say what you need.\""
+        }
+      ],
+      "options": [
+        {
+          "id": "the_gate",
+          "text": "The Deep Gate.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "earned"
+        },
+        {
+          "id": "leave",
+          "text": "Only passing.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": []
+    },
+    {
+      "id": "he_has_heard",
+      "says": [
+        {
+          "text": "The ledger is already open at a page with your name on it. \"You opened a door of ours,\" says Dath. \"I have written it down. That is all I intend to do about it, and it is more than you think.\""
+        }
+      ],
+      "options": [
+        {
+          "id": "leave",
+          "text": "...",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": []
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "id": "riverside_watergate_shrine",
+  "name": "The Watergate Shrine",
+  "description": "A niche in the wall, a shelf of offerings, and a very old stain of candle-wax.",
+  "area": "aurenhal_riverside",
+  "kind": "shrine",
+  "descriptionKey": "generic_shrine",
+  "travelMinutes": 2,
+  "tags": [
+    "shrine"
+  ],
+  "position": {
+    "x": 34,
+    "y": 24
+  },
+  "services": [
+    "temple"
+  ]
+}

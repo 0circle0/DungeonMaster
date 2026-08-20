@@ -1,0 +1,34 @@
+{
+  "id": "cinder_lash",
+  "name": "Cinder Lash",
+  "description": "Something between a limb and a flow.",
+  "actionType": "action",
+  "targeting": "single",
+  "attack": {
+    "stat": "might",
+    "against": "guard"
+  },
+  "onUse": [
+    {
+      "damage": {
+        "target": {
+          "ref": "target.id"
+        },
+        "amount": {
+          "roll": "2d6"
+        },
+        "damageType": "fire"
+      }
+    },
+    {
+      "applyCondition": {
+        "target": {
+          "ref": "target.id"
+        },
+        "condition": "burning",
+        "duration": 2
+      }
+    }
+  ],
+  "range": 10
+}

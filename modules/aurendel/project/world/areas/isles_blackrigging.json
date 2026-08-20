@@ -1,0 +1,39 @@
+{
+  "id": "isles_blackrigging",
+  "name": "Blackrigging",
+  "description": "A free port in the sense that nobody has successfully charged anything here, built out of about forty wrecks.",
+  "biome": "urban_isle",
+  "layer": "overworld",
+  "descriptionKey": "isles_blackrigging_desc",
+  "dangerLevel": 3,
+  "recommendedLevel": 5,
+  "tags": [
+    "sundered_isles",
+    "town"
+  ],
+  "map": {
+    "width": "41",
+    "height": "27"
+  },
+  "entryPoint": {
+    "x": 20,
+    "y": 13
+  },
+  "extra": {
+    "role": "town"
+  },
+  "connections": [
+    {
+      "to": "isles_the_narrows",
+      "travelMinutes": 30
+    },
+    {
+      "to": "isles_wreck_reef",
+      "travelMinutes": 40
+    },
+    {
+      "to": "isles_tern_bank",
+      "travelMinutes": 55
+    }
+  ]
+}

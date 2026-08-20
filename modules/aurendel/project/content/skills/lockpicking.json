@@ -1,0 +1,6 @@
+{
+  "id": "lockpicking",
+  "name": "Lockpicking",
+  "attribute": "agility",
+  "description": "Locks, latches, and the small mechanisms of other people's privacy."
+}

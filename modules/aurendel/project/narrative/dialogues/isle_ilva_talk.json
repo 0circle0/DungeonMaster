@@ -1,0 +1,219 @@
+{
+  "id": "isle_ilva_talk",
+  "start": "greet",
+  "nodes": [
+    {
+      "id": "greet",
+      "says": [
+        {
+          "text": "A chapel cut into rock, with more graves outside it than Cormorant has ever had living people."
+        },
+        {
+          "text": "“I bury what the sea gives back,” she says. “It gives back a great deal. Sit down.”"
+        }
+      ],
+      "onEnter": [],
+      "options": [
+        {
+          "id": "isle_ilva_pointing",
+          "text": "The deep wreck's guns. Which way are they run out?",
+          "requires": {
+            "without": {
+              "lore": [
+                "isle_wreck_pointing"
+              ]
+            }
+          },
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "check": {
+            "skill": "persuasion",
+            "difficulty": {
+              "sub": [
+                13,
+                {
+                  "clamp": [
+                    {
+                      "div": [
+                        {
+                          "ref": "reputation.the_keepers",
+                          "else": 0
+                        },
+                        5
+                      ]
+                    },
+                    -6,
+                    6
+                  ]
+                }
+              ]
+            },
+            "onSuccess": "isle_ilva_pointing_told",
+            "onFailure": "isle_ilva_pointing_wont"
+          }
+        },
+        {
+          "id": "isle_ilva_year",
+          "text": "When did the terns come off the cut?",
+          "requires": {
+            "without": {
+              "lore": [
+                "isle_terns_year"
+              ]
+            }
+          },
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "check": {
+            "skill": "persuasion",
+            "difficulty": {
+              "sub": [
+                12,
+                {
+                  "clamp": [
+                    {
+                      "div": [
+                        {
+                          "ref": "reputation.the_keepers",
+                          "else": 0
+                        },
+                        5
+                      ]
+                    },
+                    -6,
+                    6
+                  ]
+                }
+              ]
+            },
+            "onSuccess": "isle_ilva_year_told",
+            "onFailure": "isle_ilva_year_wont"
+          }
+        },
+        {
+          "id": "greet_leave",
+          "text": "Nothing.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "isle_ilva_pointing_told",
+      "says": [
+        {
+          "text": "“One side. All of them.” She lets it sit. “At the island. Not at the open water, not at the reef — at the island, which has a chapel on it and eleven houses and nothing else and never has had.” A pause. “I have thought about that a great deal, at night.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "learnLore": {
+            "entry": "isle_wreck_pointing"
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "isle_ilva_pointing_on",
+          "text": "Go on.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "isle_ilva_pointing_wont",
+      "says": [
+        {
+          "text": "“I've said all I mean to,” they say, and go back to what they were doing."
+        }
+      ],
+      "onEnter": [
+        {
+          "adjustReputation": {
+            "faction": "the_keepers",
+            "amount": -1
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "isle_ilva_pointing_drop",
+          "text": "Leave it.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "isle_ilva_year_told",
+      "says": [
+        {
+          "text": "“In my mother's time. One year, and never again.” She folds her hands. “There are people alive who took eggs off that strip as children. Nella's count has the column and the column stops.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "learnLore": {
+            "entry": "isle_terns_year"
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "isle_ilva_year_on",
+          "text": "Go on.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "isle_ilva_year_wont",
+      "says": [
+        {
+          "text": "“I've said all I mean to,” they say, and go back to what they were doing."
+        }
+      ],
+      "onEnter": [
+        {
+          "adjustReputation": {
+            "faction": "the_keepers",
+            "amount": -1
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "isle_ilva_year_drop",
+          "text": "Leave it.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    }
+  ]
+}

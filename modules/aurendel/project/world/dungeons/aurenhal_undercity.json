@@ -1,0 +1,22 @@
+{
+  "id": "aurenhal_undercity",
+  "name": "The Aurenhal Undercity",
+  "description": "The city's drains, and beneath them the streets they were cut through — three centuries of Aurenhal built on top of itself.",
+  "biome": "dungeon_sewer",
+  "roomCount": "14",
+  "depth": "2",
+  "algorithm": "rooms",
+  "lockedDoorChance": 0,
+  "doorGates": [],
+  "rollEncounters": false,
+  "safeEntrance": true,
+  "branchiness": 0.5,
+  "corridor": {
+    "style": "l",
+    "width": 2
+  },
+  "width": "75",
+  "height": "75",
+  "corridorLength": "2d3",
+  "bossTable": "kings_under_boss"
+}

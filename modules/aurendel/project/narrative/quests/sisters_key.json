@@ -1,0 +1,58 @@
+{
+  "id": "sisters_key",
+  "name": "Cast Key",
+  "description": "The ward was made of something. Whatever you did to it, that something is now loose and portable.",
+  "autoStart": false,
+  "ordered": true,
+  "tags": [
+    "act2",
+    "sisters"
+  ],
+  "objectives": [
+    {
+      "id": "take_it",
+      "description": "Take what the ward was made of.",
+      "kind": "custom",
+      "count": 1,
+      "hidden": false,
+      "optional": false,
+      "when": {
+        "test": {
+          "ref": "flags.sisters_taken"
+        }
+      }
+    }
+  ],
+  "stages": [],
+  "unlocks": [
+    "the_way_below"
+  ],
+  "rewards": {
+    "xp": 200,
+    "items": [
+      {
+        "item": "cast_key",
+        "quantity": 1
+      }
+    ],
+    "reputation": {
+      "the_keepers": 5
+    }
+  },
+  "requires": {
+    "quests": [
+      {
+        "quest": "sisters_choice",
+        "status": "complete"
+      }
+    ]
+  },
+  "onComplete": [
+    {
+      "setFlag": {
+        "flag": "sisters_done",
+        "value": true
+      }
+    }
+  ]
+}

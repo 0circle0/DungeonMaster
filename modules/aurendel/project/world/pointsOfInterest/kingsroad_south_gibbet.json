@@ -1,0 +1,29 @@
+{
+  "id": "kingsroad_south_gibbet",
+  "name": "The Gibbet Oak",
+  "description": "Empty these forty years, and still nobody camps under it.",
+  "area": "kingsvale_kingsroad_south",
+  "kind": "landmark",
+  "descriptionKey": "kingsroad_south_gibbet_desc",
+  "travelMinutes": 8,
+  "tags": [],
+  "position": {
+    "x": 12,
+    "y": 26
+  },
+  "triggers": [
+    {
+      "id": "kings_found_gibbet",
+      "mode": "once",
+      "on": "enter",
+      "description": "A gibbet with nobody on the assize rolls for it.",
+      "effects": [
+        {
+          "learnLore": {
+            "entry": "kings_quarry_gibbet"
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "id": "thornmere_old_church",
+  "name": "The Old Church",
+  "description": "Under the new bell tower, past the old bell, into a nave that has been under water two hundred years and is not full.",
+  "biome": "dungeon_drowned",
+  "roomCount": "10",
+  "depth": "2",
+  "algorithm": "rooms",
+  "lockedDoorChance": 0,
+  "doorGates": [],
+  "rollEncounters": false,
+  "safeEntrance": true,
+  "width": "73",
+  "height": "73",
+  "corridorLength": "3d3",
+  "bossTable": "the_old_church"
+}

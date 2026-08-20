@@ -1,0 +1,14 @@
+{
+  "id": "dungeon_sewer_lair_desc",
+  "variants": [
+    {
+      "text": "The ledge is worn smooth and there is a great deal of hair on it."
+    },
+    {
+      "text": "Something nests in the inlet where the flow is slowest."
+    },
+    {
+      "text": "Bones washed into a corner and then arranged out of it."
+    }
+  ]
+}

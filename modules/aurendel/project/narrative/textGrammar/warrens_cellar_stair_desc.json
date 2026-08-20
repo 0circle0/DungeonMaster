@@ -1,0 +1,14 @@
+{
+  "id": "warrens_cellar_stair_desc",
+  "variants": [
+    {
+      "text": "Behind a wine-shop with no wine in it, a stair going down past three cellars into something the Warrens were built on top of."
+    },
+    {
+      "text": "The steps are cut, not laid, and they are worn in the middle, which means traffic."
+    },
+    {
+      "text": "It smells of river down there, and the river is a quarter mile away."
+    }
+  ]
+}

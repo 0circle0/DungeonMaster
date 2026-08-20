@@ -1,0 +1,14 @@
+{
+  "id": "drowned_bell_new_tower_desc",
+  "variants": [
+    {
+      "text": "The new tower, built on the old one, with a hatch in the floor over what is left of the first belfry."
+    },
+    {
+      "text": "The old bell is nine feet under the hatch, in water, and it has been heard."
+    },
+    {
+      "text": "Nobody in the village disputes that it has been heard. They dispute everything else about it."
+    }
+  ]
+}

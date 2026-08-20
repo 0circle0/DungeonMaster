@@ -1,0 +1,14 @@
+{
+  "id": "dungeon_drowned_shrine_desc",
+  "variants": [
+    {
+      "text": "A figure standing in the water to the waist, carved, and facing the door."
+    },
+    {
+      "text": "Offerings on a ledge, swollen and softened and still recognisable."
+    },
+    {
+      "text": "The water is stiller here than it has any reason to be."
+    }
+  ]
+}

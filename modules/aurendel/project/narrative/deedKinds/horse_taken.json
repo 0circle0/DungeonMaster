@@ -1,0 +1,8 @@
+{
+  "id": "horse_taken",
+  "name": "Took a Horse",
+  "faction": "the_horse_lords",
+  "severity": -20,
+  "memorability": 2.5,
+  "distortion": 0.25
+}

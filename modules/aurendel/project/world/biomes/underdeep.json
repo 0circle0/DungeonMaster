@@ -1,0 +1,14 @@
+{
+  "id": "underdeep",
+  "name": "The Deeproads",
+  "description": "Halls cut by hands and caverns cut by water, and no clean line between them.",
+  "layer": "underworld",
+  "palette": "underdeep",
+  "roomTemplates": [],
+  "encounterTables": [
+    "deeproads_things"
+  ],
+  "lootTables": [],
+  "traps": [],
+  "ambienceKey": "underdeep_ambience"
+}

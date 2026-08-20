@@ -1,0 +1,41 @@
+{
+  "id": "moor_the_long_barrow",
+  "name": "The Long Barrow",
+  "description": "Four hundred yards of raised ground running east and west, and it is all one grave.",
+  "biome": "moor",
+  "layer": "overworld",
+  "descriptionKey": "moor_the_long_barrow_desc",
+  "dangerLevel": 5,
+  "recommendedLevel": 6,
+  "tags": [
+    "weeping_moor"
+  ],
+  "map": {
+    "width": "51",
+    "height": "35"
+  },
+  "entryPoint": {
+    "x": 25,
+    "y": 17
+  },
+  "extra": {
+    "role": "wild"
+  },
+  "connections": [
+    {
+      "to": "moor_nine_sisters",
+      "travelMinutes": 40
+    },
+    {
+      "to": "moor_black_tarn",
+      "travelMinutes": 50
+    },
+    {
+      "to": "ember_firewatch_ridge",
+      "travelMinutes": 210
+    }
+  ],
+  "encounterTables": [
+    "moor_things"
+  ]
+}

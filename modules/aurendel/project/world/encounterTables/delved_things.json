@@ -1,0 +1,86 @@
+{
+  "id": "delved_things",
+  "minDepth": 0,
+  "maxDepth": 999,
+  "chance": 0.45,
+  "emptyWeight": 4,
+  "scalePerLevels": 3,
+  "groups": [
+    {
+      "id": "vermin",
+      "weight": 5,
+      "hostile": true,
+      "entries": [
+        {
+          "monster": "barrow_rat",
+          "count": "1d4",
+          "scaleWithLevel": true
+        }
+      ],
+      "requires": {
+        "maxLevel": 4
+      }
+    },
+    {
+      "id": "thieves",
+      "weight": 3,
+      "hostile": true,
+      "entries": [
+        {
+          "monster": "cellar_thief",
+          "count": "1d2",
+          "scaleWithLevel": true
+        }
+      ],
+      "requires": {
+        "maxLevel": 4
+      }
+    },
+    {
+      "id": "walkers",
+      "weight": 4,
+      "hostile": true,
+      "entries": [
+        {
+          "monster": "hollow_walker",
+          "count": "1",
+          "scaleWithLevel": true
+        }
+      ],
+      "requires": {
+        "minLevel": 3,
+        "maxLevel": 7
+      }
+    },
+    {
+      "id": "deep",
+      "weight": 4,
+      "hostile": true,
+      "entries": [
+        {
+          "monster": "fungal_horror",
+          "count": "1",
+          "scaleWithLevel": true
+        }
+      ],
+      "requires": {
+        "minLevel": 6
+      }
+    },
+    {
+      "id": "rime",
+      "weight": 4,
+      "hostile": true,
+      "entries": [
+        {
+          "monster": "rime_shade",
+          "count": "1d2",
+          "scaleWithLevel": true
+        }
+      ],
+      "requires": {
+        "minLevel": 7
+      }
+    }
+  ]
+}

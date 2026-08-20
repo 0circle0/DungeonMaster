@@ -1,0 +1,14 @@
+{
+  "id": "echo_halls_the_ten_desc",
+  "variants": [
+    {
+      "text": "A word comes back four times in each chamber, from four directions, and none of the four is a wall."
+    },
+    {
+      "text": "You will stop talking. Everybody stops talking, usually in the second chamber."
+    },
+    {
+      "text": "There is a phrase cut over the tenth door in a script nobody at Lantern Deep reads."
+    }
+  ]
+}

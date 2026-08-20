@@ -1,0 +1,27 @@
+{
+  "id": "dwarf",
+  "name": "Dwarf",
+  "description": "Hold-born. They measure a thing in centuries and are rarely wrong about stone.",
+  "attributeBonuses": {
+    "endurance": 1
+  },
+  "skillBonuses": {
+    "craft": 1,
+    "lore": 1
+  },
+  "creatureType": "humanoid",
+  "size": "medium",
+  "languages": [
+    "common",
+    "delving"
+  ],
+  "senses": {
+    "sight": 30
+  },
+  "damageInteractions": [
+    {
+      "damageType": "poison",
+      "multiplier": 0.5
+    }
+  ]
+}

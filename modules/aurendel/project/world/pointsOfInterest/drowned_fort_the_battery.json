@@ -1,0 +1,21 @@
+{
+  "id": "drowned_fort_the_battery",
+  "name": "The Sea Battery",
+  "description": "Nine guns still in their positions, under water, pointing at a channel that has moved.",
+  "area": "isles_drowned_fort_shoal",
+  "kind": "ruin",
+  "descriptionKey": "generic_ruin",
+  "travelMinutes": 10,
+  "tags": [
+    "ruin"
+  ],
+  "map": {
+    "width": "11",
+    "height": "9",
+    "palette": "int_stone"
+  },
+  "position": {
+    "x": 25,
+    "y": 3
+  }
+}

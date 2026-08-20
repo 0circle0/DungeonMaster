@@ -1,0 +1,21 @@
+{
+  "id": "weirwater_drowned_chapel",
+  "name": "The Drowned Chapel",
+  "description": "Stands in the water at anything above summer level, and out of it in Highsun. Nobody has moved the altar.",
+  "area": "kingsvale_weirwater_crossing",
+  "kind": "ruin",
+  "descriptionKey": "weirwater_drowned_chapel_desc",
+  "travelMinutes": 12,
+  "tags": [
+    "ruin"
+  ],
+  "position": {
+    "x": 18,
+    "y": 24
+  },
+  "map": {
+    "width": "9",
+    "height": "7",
+    "palette": "int_temple"
+  }
+}

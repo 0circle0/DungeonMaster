@@ -1,0 +1,329 @@
+{
+  "id": "step_serel_talk",
+  "start": "greet",
+  "nodes": [
+    {
+      "id": "greet",
+      "says": [
+        {
+          "text": "A yard of hurdles and tallies and a man going down a column with his thumb, twice, and then a third time."
+        },
+        {
+          "text": "“I am counting. You can talk while I count.”"
+        }
+      ],
+      "onEnter": [],
+      "options": [
+        {
+          "id": "step_serel_wrong",
+          "text": "The line of trees. What is it for?",
+          "requires": {
+            "without": {
+              "lore": [
+                "step_line_wrong"
+              ]
+            }
+          },
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "check": {
+            "skill": "insight",
+            "difficulty": {
+              "sub": [
+                13,
+                {
+                  "clamp": [
+                    {
+                      "div": [
+                        {
+                          "ref": "reputation.the_horse_lords",
+                          "else": 0
+                        },
+                        5
+                      ]
+                    },
+                    -6,
+                    6
+                  ]
+                }
+              ]
+            },
+            "onSuccess": "step_serel_wrong_told",
+            "onFailure": "step_serel_wrong_wont"
+          }
+        },
+        {
+          "id": "step_serel_count",
+          "text": "How many trees are in it?",
+          "requires": {
+            "without": {
+              "lore": [
+                "step_line_count"
+              ]
+            }
+          },
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "check": {
+            "skill": "persuasion",
+            "difficulty": {
+              "sub": [
+                15,
+                {
+                  "clamp": [
+                    {
+                      "div": [
+                        {
+                          "ref": "reputation.the_horse_lords",
+                          "else": 0
+                        },
+                        5
+                      ]
+                    },
+                    -6,
+                    6
+                  ]
+                }
+              ]
+            },
+            "onSuccess": "step_serel_count_told",
+            "onFailure": "step_serel_count_wont"
+          }
+        },
+        {
+          "id": "step_serel_tally",
+          "text": "Your count. All forty years of it.",
+          "requires": {
+            "without": {
+              "items": [
+                "planting_tally"
+              ],
+              "flags": [
+                {
+                  "flag": "given:planting_tally"
+                }
+              ]
+            }
+          },
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "check": {
+            "skill": "persuasion",
+            "difficulty": {
+              "sub": [
+                13,
+                {
+                  "clamp": [
+                    {
+                      "div": [
+                        {
+                          "ref": "reputation.the_horse_lords",
+                          "else": 0
+                        },
+                        5
+                      ]
+                    },
+                    -6,
+                    6
+                  ]
+                }
+              ]
+            },
+            "onSuccess": "step_serel_tally_gave",
+            "onFailure": "step_serel_tally_kept"
+          }
+        },
+        {
+          "id": "greet_leave",
+          "text": "Nothing.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "step_serel_wrong_told",
+      "says": [
+        {
+          "text": "“It is for breaking the wind.” Serel says it the way you say the thing everybody says. Then, because you have not gone away: “The wind is off the south-west. Has been since before the Lines. And the trees run south-west to north-east.” A hand, flat, drawing it in the air. “They run *with* it. Eleven miles of doing nothing at all.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "learnLore": {
+            "entry": "step_line_wrong"
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "step_serel_wrong_on",
+          "text": "Go on.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "step_serel_wrong_wont",
+      "says": [
+        {
+          "text": "“I've said all I mean to,” they say, and go back to what they were doing."
+        }
+      ],
+      "onEnter": [
+        {
+          "adjustReputation": {
+            "faction": "the_horse_lords",
+            "amount": -1
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "step_serel_wrong_drop",
+          "text": "Leave it.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "step_serel_count_told",
+      "says": [
+        {
+          "text": "Serel goes quiet for long enough to be uncomfortable. “I have counted it forty years,” he says. “Going north I get one number. Coming back I get another. I have done it in a day, both ways, sober, with a boy counting beside me.” He shrugs, and it is not a casual shrug. “The boy gets different numbers too, and not my different numbers.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "learnLore": {
+            "entry": "step_line_count"
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "step_serel_count_on",
+          "text": "Go on.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "step_serel_count_wont",
+      "says": [
+        {
+          "text": "“I've said all I mean to,” they say, and go back to what they were doing."
+        }
+      ],
+      "onEnter": [
+        {
+          "adjustReputation": {
+            "faction": "the_horse_lords",
+            "amount": -1
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "step_serel_count_drop",
+          "text": "Leave it.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "step_serel_tally_gave",
+      "says": [
+        {
+          "text": "He brings out a roll of it, which is more than you expected and less tidy. “It does not settle,” he says. “Forty years of it not settling. I have never shown anybody because there is no way to say it that does not sound like a man who cannot count.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "grantItem": {
+            "target": {
+              "ref": "actor.id"
+            },
+            "item": "planting_tally",
+            "quantity": 1
+          }
+        },
+        {
+          "setFlag": {
+            "flag": "given:planting_tally",
+            "value": true
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "step_serel_tally_thanks",
+          "text": "Thank you.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "step_serel_tally_kept",
+      "says": [
+        {
+          "text": "“It is forty years of looking foolish,” Serel says, “and it is mine,” and puts it away."
+        }
+      ],
+      "onEnter": [
+        {
+          "adjustReputation": {
+            "faction": "the_horse_lords",
+            "amount": -2
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "step_serel_tally_leave",
+          "text": "Then no.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    }
+  ]
+}

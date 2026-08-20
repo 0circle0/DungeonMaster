@@ -1,0 +1,18 @@
+{
+  "id": "cairnhold_first_cairn",
+  "name": "Under the First Cairn",
+  "description": "The oldest one, and the only one anybody has ever opened, and they stopped.",
+  "area": "frostmere_cairnhold",
+  "kind": "dungeonEntrance",
+  "descriptionKey": "generic_dungeon_mouth",
+  "travelMinutes": 12,
+  "tags": [
+    "dungeon"
+  ],
+  "gate": "frostmere_cairn_ward",
+  "dungeon": "frostmere_first_cairn",
+  "position": {
+    "x": 27,
+    "y": 10
+  }
+}

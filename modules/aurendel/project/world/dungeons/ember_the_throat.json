@@ -1,0 +1,21 @@
+{
+  "id": "ember_the_throat",
+  "name": "The Throat",
+  "description": "Down the inside of the Great Vent on ledges, in the nine hours between one eruption and the next.",
+  "biome": "dungeon_ember",
+  "roomCount": "12",
+  "depth": "4",
+  "algorithm": "caverns",
+  "lockedDoorChance": 0,
+  "doorGates": [],
+  "rollEncounters": false,
+  "safeEntrance": true,
+  "caverns": {
+    "fill": 0.46,
+    "smoothingPasses": 4,
+    "birthThreshold": 5
+  },
+  "width": "47",
+  "height": "47",
+  "bossTable": "the_throat"
+}

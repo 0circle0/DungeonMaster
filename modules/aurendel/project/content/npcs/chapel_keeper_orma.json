@@ -1,0 +1,35 @@
+{
+  "id": "chapel_keeper_orma",
+  "name": "Orma, at the Ice Chapel",
+  "description": "Keeps a chapel nobody attends in a town that buries at sea, and has opinions about which way a thing is facing when it arrives.",
+  "disposition": 8,
+  "gullibility": 0.35,
+  "memorySpan": 200,
+  "offersQuests": [],
+  "caresAbout": [
+    "ward_restored",
+    "ward_broken"
+  ],
+  "reactions": [],
+  "faction": "the_keepers",
+  "dialogue": "frost_orma_talk",
+  "home": "whalebone_chapel",
+  "temperament": {
+    "roamRadius": 24,
+    "investigateRadius": 60,
+    "leashRadius": 90,
+    "wanderChance": 0.3,
+    "speeds": {
+      "wander": 0.5
+    },
+    "investigates": [
+      "sight",
+      "hearing"
+    ],
+    "notices": [
+      "hostile",
+      "neutral",
+      "ally"
+    ]
+  }
+}

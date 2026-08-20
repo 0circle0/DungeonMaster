@@ -1,0 +1,14 @@
+{
+  "id": "dungeon_drowned_lair_desc",
+  "variants": [
+    {
+      "text": "The water is churned up and stays churned up."
+    },
+    {
+      "text": "Something has dragged its food up onto the one dry shelf."
+    },
+    {
+      "text": "Ripples, from the far side, and nothing visible making them."
+    }
+  ]
+}

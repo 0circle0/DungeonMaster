@@ -1,0 +1,16 @@
+{
+  "id": "witchwood_the_still_pool",
+  "name": "The Still Pool",
+  "description": "Forty feet across, black, and no wind has ever moved it.",
+  "area": "duskwood_witchwood",
+  "kind": "shrine",
+  "descriptionKey": "witchwood_the_still_pool_desc",
+  "travelMinutes": 10,
+  "tags": [
+    "shrine"
+  ],
+  "position": {
+    "x": 36,
+    "y": 3
+  }
+}

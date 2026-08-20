@@ -1,0 +1,14 @@
+{
+  "id": "glacier",
+  "name": "The Frostmere Waste",
+  "description": "Ice with a grain to it, and a shoreline that the sea gave up on.",
+  "layer": "overworld",
+  "palette": "glacier",
+  "roomTemplates": [],
+  "encounterTables": [
+    "ice_things"
+  ],
+  "lootTables": [],
+  "traps": [],
+  "ambienceKey": "glacier_ambience"
+}

@@ -1,0 +1,11 @@
+{
+  "id": "thorn_hidden",
+  "name": "Thornmere, in Account",
+  "description": "Three sets of books the marsh has been keeping, none of them for anybody who asked.",
+  "quests": [
+    "thorn_the_knees",
+    "thorn_the_toll",
+    "thorn_what_it_watched"
+  ],
+  "isEnding": false
+}

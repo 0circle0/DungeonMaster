@@ -1,0 +1,470 @@
+{
+  "id": "rot_kesk_talk",
+  "start": "greet",
+  "nodes": [
+    {
+      "id": "greet",
+      "says": [
+        {
+          "text": "The beds go up the gallery in terraces with lamps strung over them, and the top four terraces are dark. Kesk is at the edge of the light with a knife she has not put down. \"Mind the second. It's not ours any more.\""
+        }
+      ],
+      "options": [
+        {
+          "id": "the_dark_terraces",
+          "text": "Four of your terraces are dark.",
+          "effects": [
+            {
+              "emit": {
+                "event": "startQuest",
+                "data": {
+                  "quest": "rot_the_second_gallery"
+                }
+              }
+            }
+          ],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "the_arithmetic",
+          "requires": {
+            "quests": [
+              {
+                "quest": "rot_the_second_gallery",
+                "status": "unstarted"
+              }
+            ],
+            "description": "two of the three ward-keys",
+            "anyOf": [
+              {
+                "items": [
+                  {
+                    "item": "grown_key"
+                  },
+                  {
+                    "item": "cast_key"
+                  }
+                ]
+              },
+              {
+                "items": [
+                  {
+                    "item": "grown_key"
+                  },
+                  {
+                    "item": "glass_key"
+                  }
+                ]
+              },
+              {
+                "items": [
+                  {
+                    "item": "cast_key"
+                  },
+                  {
+                    "item": "glass_key"
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "id": "the_beds",
+          "text": "What grows down here?",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "the_beds"
+        },
+        {
+          "id": "leave",
+          "text": "Nothing.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": [
+        {
+          "requires": {
+            "flags": [
+              {
+                "flag": "rot_gallery_cut",
+                "equals": true
+              }
+            ]
+          },
+          "goto": "after_the_cut"
+        },
+        {
+          "requires": {
+            "quests": [
+              {
+                "quest": "rot_the_listening_room",
+                "status": "active"
+              }
+            ],
+            "flags": [
+              {
+                "flag": "rot_listened",
+                "equals": true
+              }
+            ]
+          },
+          "goto": "about_the_room"
+        },
+        {
+          "requires": {
+            "flags": [
+              {
+                "flag": "rot_mother_down",
+                "equals": true
+              }
+            ],
+            "without": {
+              "flags": [
+                {
+                  "flag": "rot_burnt"
+                },
+                {
+                  "flag": "rot_farmed"
+                }
+              ]
+            }
+          },
+          "goto": "burn_or_farm"
+        }
+      ]
+    },
+    {
+      "id": "the_beds",
+      "says": [
+        {
+          "text": "\"Cap, mostly. Lantern cap for the light and grey cap for the eating, and eleven other things nobody up top has a word for.\" She nods up the gallery. \"Nine hundred at Lantern Deep, four hundred here, every waystation on the Market Road. All of it off these terraces.\""
+        }
+      ],
+      "options": [
+        {
+          "id": "back",
+          "text": "Hm.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "greet"
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": []
+    },
+    {
+      "id": "the_arithmetic",
+      "says": [
+        {
+          "text": "\"Two hundred years we held the fifth gallery,\" says Kesk. \"My grandmother held the fifth. I held the fifth in the spring.\" She does not look up the terraces. \"I'm at the second.\""
+        },
+        {
+          "text": "\"Which is the arithmetic,\" she says. \"Second gallery feeds four hundred. Lantern Deep is nine hundred. You can do the rest of it as well as I can and I have done it out loud twice today already.\""
+        }
+      ],
+      "options": [
+        {
+          "id": "cut_it",
+          "text": "We'll cut the second back.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "the_walking"
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": []
+    },
+    {
+      "id": "the_walking",
+      "says": [
+        {
+          "text": "\"Then know the thing we don't say to outsiders,\" says Kesk. \"When it's thick enough, it walks. Two hundred years we've known that and two hundred years we've kept it in the family.\" She hands you a knife. \"Cut low and cut wet.\""
+        }
+      ],
+      "options": [
+        {
+          "id": "done",
+          "text": "Low and wet.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": []
+    },
+    {
+      "id": "after_the_cut",
+      "says": [
+        {
+          "text": "Kesk counts what you brought back without being asked and does not like the number. \"That's not spreading,\" she says. \"That's *arriving*.\""
+        }
+      ],
+      "options": [
+        {
+          "id": "difference",
+          "text": "What's the difference?",
+          "effects": [],
+          "onceOnly": true,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "fed"
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": [],
+      "remembers": "beds_saved"
+    },
+    {
+      "id": "fed",
+      "says": [
+        {
+          "text": "\"Spreading is even. It goes out at the same rate in every direction because it's growing.\" She lays four caps on the boards in a line. \"This is heavier up-gallery and lighter down. That's not growing. That's being *fed* from one end.\""
+        },
+        {
+          "text": "\"There's a room in the Echo Halls,\" she says. \"Cut to hear the whole length of the Long Hall. Nobody's sat in it in living memory because there's nothing to hear.\" A pause. \"Sit in it.\""
+        }
+      ],
+      "options": [
+        {
+          "id": "go_listen",
+          "text": "We'll sit in it.",
+          "effects": [
+            {
+              "emit": {
+                "event": "startQuest",
+                "data": {
+                  "quest": "rot_the_listening_room"
+                }
+              }
+            }
+          ],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "sit_still",
+          "requires": {
+            "quests": [
+              {
+                "quest": "rot_the_listening_room",
+                "status": "unstarted"
+              }
+            ]
+          }
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": []
+    },
+    {
+      "id": "sit_still",
+      "says": [
+        {
+          "text": "\"Sit still and give it a full turn of the lamp,\" says Kesk. \"Whatever you hear, it'll be quiet and it'll be regular, and you'll want to have stopped listening before it gets loud enough to be sure of.\""
+        }
+      ],
+      "options": [
+        {
+          "id": "done",
+          "text": "A full turn.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": []
+    },
+    {
+      "id": "about_the_room",
+      "says": [
+        {
+          "text": "\"You sat.\" Kesk has the knife down for the first time. \"Which direction?\""
+        }
+      ],
+      "options": [
+        {
+          "id": "up_gallery",
+          "text": "Up the fungus gallery. Past the canopy.",
+          "effects": [],
+          "onceOnly": true,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "two_hundred_years"
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": []
+    },
+    {
+      "id": "two_hundred_years",
+      "says": [
+        {
+          "text": "\"Then it's been up there the whole time,\" says Kesk, \"and we've been cutting the *edge* of it for two hundred years and calling that holding a line.\""
+        },
+        {
+          "text": "She picks the knife back up. \"Nobody's cut past the canopy since my grandmother's grandmother. There's a reason and I have never once been told what it is.\""
+        }
+      ],
+      "options": [
+        {
+          "id": "go_up",
+          "text": "Then we'll find out.",
+          "effects": [
+            {
+              "emit": {
+                "event": "startQuest",
+                "data": {
+                  "quest": "rot_what_grows_mycelt"
+                }
+              }
+            },
+            {
+              "adjustReputation": {
+                "faction": "the_pickers",
+                "amount": 8
+              }
+            }
+          ],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "past_the_canopy",
+          "requires": {
+            "quests": [
+              {
+                "quest": "rot_what_grows_mycelt",
+                "status": "unstarted"
+              }
+            ]
+          }
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": [],
+      "remembers": "beds_saved"
+    },
+    {
+      "id": "past_the_canopy",
+      "says": [
+        {
+          "text": "\"Past the canopy the lamps stop and the air gets warm,\" says Kesk. \"Warm. Down here. Take the masks and do not take them off, whatever it smells like, and it will smell like bread.\""
+        }
+      ],
+      "options": [
+        {
+          "id": "done",
+          "text": "Masks on.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": []
+    },
+    {
+      "id": "burn_or_farm",
+      "says": [
+        {
+          "text": "Kesk has come up past the canopy herself, which no picker has done in four generations, and is standing in the warm looking at what is left. \"It'll regrow,\" she says. \"That's not a problem. That's the whole trade.\""
+        },
+        {
+          "text": "\"We can burn the gallery. Properly, all of it, and the Rot is finished and so are the beds — every terrace on that slope came off this, whatever we've told ourselves.\" She turns a cutting over. \"Or I take a cutting and I grow it where I can see it, on the second, in the light, and the pickers spend the next two hundred years farming the thing they've been fighting.\""
+        }
+      ],
+      "options": [
+        {
+          "id": "farm",
+          "text": "Take the cutting.",
+          "effects": [
+            {
+              "setFlag": {
+                "flag": "rot_farmed",
+                "value": true
+              }
+            }
+          ],
+          "onceOnly": true,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "farmed"
+        },
+        {
+          "id": "burn",
+          "text": "Burn it. All of it.",
+          "effects": [
+            {
+              "setFlag": {
+                "flag": "rot_burnt",
+                "value": true
+              }
+            }
+          ],
+          "onceOnly": true,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "burnt"
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": []
+    },
+    {
+      "id": "farmed",
+      "says": [
+        {
+          "text": "She cuts it herself, wraps it wet, and carries it down past four dark terraces without saying anything to anybody. By Highsun there are lamps on the third again."
+        }
+      ],
+      "options": [
+        {
+          "id": "done",
+          "text": "Grow it well.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": [],
+      "remembers": "beds_saved"
+    },
+    {
+      "id": "burnt",
+      "says": [
+        {
+          "text": "It burns for nine days and the smoke goes up the gallery and out somewhere nobody has ever mapped. Lantern Deep eats off Karn Dolur's stores that season, at Karn Dolur's price, and says so."
+        }
+      ],
+      "options": [
+        {
+          "id": "done",
+          "text": "It's finished.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": [],
+      "remembers": "rot_spread"
+    }
+  ]
+}

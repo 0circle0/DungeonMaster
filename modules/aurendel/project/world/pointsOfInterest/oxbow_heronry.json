@@ -1,0 +1,14 @@
+{
+  "id": "oxbow_heronry",
+  "name": "The Heronry",
+  "description": "Forty nests in a stand of dead alder, and the noise to match.",
+  "area": "kingsvale_oxbow_meadows",
+  "kind": "landmark",
+  "descriptionKey": "oxbow_heronry_desc",
+  "travelMinutes": 8,
+  "tags": [],
+  "position": {
+    "x": 20,
+    "y": 10
+  }
+}

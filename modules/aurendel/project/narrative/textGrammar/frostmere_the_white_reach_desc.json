@@ -1,0 +1,17 @@
+{
+  "id": "frostmere_the_white_reach_desc",
+  "variants": [
+    {
+      "text": "Forty miles of level ice with nothing on it in any direction whatsoever."
+    },
+    {
+      "text": "The White Reach. Your own tracks are the only feature and they are behind you."
+    },
+    {
+      "text": "The horizon is a line and the sky is a slightly different white, and that is the entire view."
+    },
+    {
+      "text": "No shelter. No landmarks. Wind from one quarter, all day."
+    }
+  ]
+}

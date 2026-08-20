@@ -1,0 +1,34 @@
+{
+  "id": "shag_landlord_dree",
+  "name": "Dree, at the Shag",
+  "description": "Keeps the only roof on Cormorant that will take a stranger, and listens to the water for a living without meaning to.",
+  "disposition": 8,
+  "gullibility": 0.5,
+  "memorySpan": 150,
+  "offersQuests": [],
+  "caresAbout": [],
+  "reactions": [],
+  "faction": "the_salvors",
+  "dialogue": "isle_dree_talk",
+  "home": "cormorant_the_shag",
+  "shop": {
+    "lootTable": "hollowdene_stock",
+    "buysTags": [
+      "treasure"
+    ],
+    "priceMultiplier": 1.35
+  },
+  "temperament": {
+    "roamRadius": 0,
+    "wanderChance": 0,
+    "speeds": {
+      "wander": 0
+    },
+    "investigates": [],
+    "notices": [
+      "hostile",
+      "neutral",
+      "ally"
+    ]
+  }
+}

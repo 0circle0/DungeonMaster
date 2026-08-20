@@ -1,0 +1,14 @@
+{
+  "id": "broken_stair_the_stair",
+  "name": "The Broken Stair",
+  "description": "A hundred feet wide, going up towards the Ember Reach, with about a third of it missing.",
+  "area": "deeproads_broken_stair",
+  "kind": "landmark",
+  "descriptionKey": "broken_stair_the_stair_desc",
+  "travelMinutes": 8,
+  "tags": [],
+  "position": {
+    "x": 3,
+    "y": 3
+  }
+}

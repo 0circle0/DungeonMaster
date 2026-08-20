@@ -1,0 +1,12 @@
+{
+  "id": "the_drowned_bell",
+  "name": "The Drowned Bell",
+  "description": "A church that went under in one night in the year six-eleven, a tower built four hundred yards inland by people who had learnt something, and a bell that has been heard since.",
+  "quests": [
+    "bell_the_new_tower",
+    "bell_the_black_water",
+    "bell_the_old_church",
+    "bell_raise_or_sink"
+  ],
+  "isEnding": false
+}

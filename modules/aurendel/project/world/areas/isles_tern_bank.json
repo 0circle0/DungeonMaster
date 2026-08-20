@@ -1,0 +1,38 @@
+{
+  "id": "isles_tern_bank",
+  "name": "Tern Bank",
+  "description": "A shingle bank three miles long that is above water for nine months and a shoal for three.",
+  "biome": "isles",
+  "layer": "overworld",
+  "descriptionKey": "isles_tern_bank_desc",
+  "dangerLevel": 5,
+  "recommendedLevel": 5,
+  "tags": [
+    "sundered_isles"
+  ],
+  "map": {
+    "width": "51",
+    "height": "35"
+  },
+  "entryPoint": {
+    "x": 25,
+    "y": 17
+  },
+  "extra": {
+    "role": "wild"
+  },
+  "connections": [
+    {
+      "to": "isles_cormorant",
+      "travelMinutes": 40
+    },
+    {
+      "to": "isles_halfmast",
+      "travelMinutes": 35
+    },
+    {
+      "to": "isles_blackrigging",
+      "travelMinutes": 55
+    }
+  ]
+}

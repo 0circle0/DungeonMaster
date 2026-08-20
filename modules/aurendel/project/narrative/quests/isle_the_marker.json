@@ -1,0 +1,57 @@
+{
+  "id": "isle_the_marker",
+  "name": "The Marker That Does Not Move",
+  "description": "Two hundred years on one bearing in a channel that redraws every spring, held by something that divers say is not rock.",
+  "autoStart": false,
+  "ordered": true,
+  "tags": [
+    "hidden",
+    "sundered_isles",
+    "isle_marker"
+  ],
+  "objectives": [
+    {
+      "id": "alongside",
+      "description": "Get alongside her at slack water.",
+      "kind": "reach",
+      "count": 1,
+      "hidden": true,
+      "optional": false,
+      "target": "narrows_marker_wreck"
+    },
+    {
+      "id": "get_under",
+      "description": "Get under her.",
+      "kind": "custom",
+      "count": 1,
+      "hidden": true,
+      "optional": false,
+      "when": {
+        "test": {
+          "ref": "flags.isle_marker_open"
+        }
+      }
+    },
+    {
+      "id": "what_holds",
+      "description": "Find what has been holding her.",
+      "kind": "kill",
+      "count": 1,
+      "hidden": true,
+      "optional": false,
+      "target": "marker_holder"
+    }
+  ],
+  "stages": [],
+  "unlocks": [],
+  "rewards": {
+    "xp": 180,
+    "items": [
+      {
+        "item": "pilots_glass_ring",
+        "quantity": 1
+      }
+    ],
+    "reputation": {}
+  }
+}

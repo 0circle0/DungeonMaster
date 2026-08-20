@@ -1,0 +1,76 @@
+{
+  "id": "eelweir_the_badger_hole",
+  "name": "The Badger Hole",
+  "description": "The barge was carrying stone out of the hedge country, and it was carrying it *away* from something. A terrier went into a hole under a hedge bank last spring and came out the far side of the field.",
+  "autoStart": false,
+  "ordered": true,
+  "tags": [
+    "side",
+    "act1",
+    "eelweir",
+    "kingsvale"
+  ],
+  "objectives": [],
+  "stages": [
+    {
+      "id": "find_it",
+      "name": "Find the hole",
+      "description": "A longer set than a badger digs, and the spoil outside it is fresh.",
+      "objectives": [
+        {
+          "id": "at_the_setts",
+          "description": "Get into the Hedge Setts.",
+          "kind": "reach",
+          "count": 1,
+          "hidden": false,
+          "optional": false,
+          "target": "hedge_country_badger_hole"
+        }
+      ],
+      "journalKey": "eelweir_journal_setts"
+    },
+    {
+      "id": "the_far_end",
+      "name": "The far end, where the walls are cut",
+      "description": "It is a badger hole for about eight feet.",
+      "objectives": [
+        {
+          "id": "kill_delver",
+          "description": "Put down what has been digging.",
+          "kind": "kill",
+          "count": 1,
+          "hidden": false,
+          "optional": false,
+          "target": "sett_delver"
+        }
+      ],
+      "onComplete": [
+        {
+          "setFlag": {
+            "flag": "eelweir_delver_down",
+            "value": true
+          }
+        }
+      ],
+      "journalKey": "eelweir_journal_delver"
+    }
+  ],
+  "unlocks": [
+    "eelweir_what_came_up"
+  ],
+  "rewards": {
+    "xp": 45,
+    "items": [],
+    "reputation": {
+      "the_keepers": 8
+    }
+  },
+  "requires": {
+    "quests": [
+      {
+        "quest": "eelweir_the_barge",
+        "status": "complete"
+      }
+    ]
+  }
+}

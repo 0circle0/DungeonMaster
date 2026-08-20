@@ -1,0 +1,40 @@
+{
+  "id": "aurenhal_warrens",
+  "name": "Aurenhal — The Warrens",
+  "description": "Older than the wall that was built to contain it, and it has been leaking out of that wall ever since.",
+  "biome": "urban_stone",
+  "layer": "overworld",
+  "descriptionKey": "aurenhal_warrens_desc",
+  "dangerLevel": 1,
+  "recommendedLevel": 1,
+  "tags": [
+    "kingsvale",
+    "aurenhal",
+    "city"
+  ],
+  "map": {
+    "width": "45",
+    "height": "31"
+  },
+  "entryPoint": {
+    "x": 22,
+    "y": 15
+  },
+  "extra": {
+    "role": "city"
+  },
+  "connections": [
+    {
+      "to": "aurenhal_riverside",
+      "travelMinutes": 3
+    },
+    {
+      "to": "aurenhal_highgate",
+      "travelMinutes": 6
+    },
+    {
+      "to": "kingsvale_hedge_country",
+      "travelMinutes": 30
+    }
+  ]
+}

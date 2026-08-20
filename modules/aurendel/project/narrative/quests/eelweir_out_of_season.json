@@ -1,0 +1,94 @@
+{
+  "id": "eelweir_out_of_season",
+  "name": "Out of Season",
+  "description": "The eels stopped running past the drowned chapel in Harvest. Nesh has kept six huts standing through two months of weather to find out why.",
+  "autoStart": false,
+  "ordered": true,
+  "tags": [
+    "side",
+    "act1",
+    "eelweir",
+    "kingsvale"
+  ],
+  "objectives": [],
+  "stages": [
+    {
+      "id": "look",
+      "name": "Go and look at the chapel",
+      "description": "It stands in the water at anything above summer level, and it is a long way above summer level.",
+      "objectives": [
+        {
+          "id": "at_the_chapel",
+          "description": "Walk out to the Drowned Chapel.",
+          "kind": "reach",
+          "count": 1,
+          "hidden": false,
+          "optional": false,
+          "target": "weirwater_drowned_chapel"
+        }
+      ],
+      "journalKey": "eelweir_journal_look"
+    },
+    {
+      "id": "clear",
+      "name": "What is in the nave",
+      "description": "Something has been in the flooded nave long enough to have cleared the reach of everything else.",
+      "objectives": [
+        {
+          "id": "the_lampreys",
+          "description": "Deal with what is in the chapel.",
+          "kind": "kill",
+          "count": 2,
+          "hidden": false,
+          "optional": false,
+          "target": "weir_lamprey"
+        }
+      ],
+      "onComplete": [
+        {
+          "setFlag": {
+            "flag": "eelweir_chapel_cleared",
+            "value": true
+          }
+        }
+      ],
+      "journalKey": "eelweir_journal_clear"
+    },
+    {
+      "id": "tell_her",
+      "name": "Tell Nesh",
+      "description": "She has been waiting two months to be told something.",
+      "objectives": [
+        {
+          "id": "report",
+          "description": "Bring word back to the eel camp.",
+          "kind": "talk",
+          "count": 1,
+          "hidden": false,
+          "optional": false,
+          "target": "eelwife_nesh"
+        }
+      ],
+      "journalKey": "eelweir_journal_tell"
+    }
+  ],
+  "unlocks": [
+    "eelweir_the_barge"
+  ],
+  "rewards": {
+    "xp": 25,
+    "items": [],
+    "reputation": {
+      "the_keepers": 5
+    }
+  },
+  "giver": "eelwife_nesh",
+  "requires": {
+    "quests": [
+      {
+        "quest": "the_open_door",
+        "status": "complete"
+      }
+    ]
+  }
+}

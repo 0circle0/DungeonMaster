@@ -1,0 +1,32 @@
+{
+  "id": "the_horse_lords",
+  "name": "The Ilkhet Lines",
+  "description": "Nine families, eleven thousand horses, and a grazing right that is older than the Crown and has never been written down anywhere the Crown could read it.",
+  "initialStanding": 0,
+  "decayPerDay": 0.05,
+  "relations": {
+    "the_keepers": 0.2
+  },
+  "ranks": [
+    {
+      "id": "footed",
+      "name": "Footed",
+      "atLeast": -30
+    },
+    {
+      "id": "guested",
+      "name": "Guested",
+      "atLeast": 0
+    },
+    {
+      "id": "of_the_lines",
+      "name": "Of the Lines",
+      "atLeast": 25
+    },
+    {
+      "id": "wind_brother",
+      "name": "Wind-Brother",
+      "atLeast": 55
+    }
+  ]
+}

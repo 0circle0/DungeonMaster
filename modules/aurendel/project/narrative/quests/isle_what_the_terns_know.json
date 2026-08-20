@@ -1,0 +1,57 @@
+{
+  "id": "isle_what_the_terns_know",
+  "name": "What the Terns Know",
+  "description": "Forty thousand pairs on the Bank, not one in the cut, and sand in the cut that will not freeze.",
+  "autoStart": false,
+  "ordered": true,
+  "tags": [
+    "hidden",
+    "sundered_isles",
+    "isle_terns"
+  ],
+  "objectives": [
+    {
+      "id": "in_the_cut",
+      "description": "Get into the cut.",
+      "kind": "reach",
+      "count": 1,
+      "hidden": true,
+      "optional": false,
+      "target": "tern_bank_the_cut"
+    },
+    {
+      "id": "down_the_sand",
+      "description": "Get under the sand.",
+      "kind": "custom",
+      "count": 1,
+      "hidden": true,
+      "optional": false,
+      "when": {
+        "test": {
+          "ref": "flags.isle_terns_open"
+        }
+      }
+    },
+    {
+      "id": "what_silences",
+      "description": "Find what the birds are avoiding.",
+      "kind": "kill",
+      "count": 1,
+      "hidden": true,
+      "optional": false,
+      "target": "cut_silence"
+    }
+  ],
+  "stages": [],
+  "unlocks": [],
+  "rewards": {
+    "xp": 185,
+    "items": [
+      {
+        "item": "tern_cloak",
+        "quantity": 1
+      }
+    ],
+    "reputation": {}
+  }
+}

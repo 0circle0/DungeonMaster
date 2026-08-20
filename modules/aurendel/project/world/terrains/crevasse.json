@@ -1,0 +1,16 @@
+{
+  "id": "crevasse",
+  "name": "Crevasse",
+  "description": "A blue slot in the ice, and no bottom to see.",
+  "glyph": "V",
+  "color": "cyan",
+  "passable": false,
+  "opaque": false,
+  "moveCost": 0,
+  "tags": [
+    "hazard"
+  ],
+  "requiresMode": [
+    "climb"
+  ]
+}

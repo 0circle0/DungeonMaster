@@ -1,0 +1,14 @@
+{
+  "id": "dungeon_cave_shrine_desc",
+  "variants": [
+    {
+      "text": "Somebody has stacked stones here in a way water does not."
+    },
+    {
+      "text": "Marks on the wall in ochre, hand-height, and a hand among them."
+    },
+    {
+      "text": "A natural alcove with everything in it arranged."
+    }
+  ]
+}

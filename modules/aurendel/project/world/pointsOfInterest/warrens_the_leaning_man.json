@@ -1,0 +1,24 @@
+{
+  "id": "warrens_the_leaning_man",
+  "name": "The Leaning Man",
+  "description": "The floor slopes, the stairs slope, and the landlord insists it is the customers.",
+  "area": "aurenhal_warrens",
+  "kind": "settlement",
+  "descriptionKey": "int_inn",
+  "travelMinutes": 3,
+  "tags": [
+    "inn"
+  ],
+  "position": {
+    "x": 26,
+    "y": 16
+  },
+  "services": [
+    "inn"
+  ],
+  "map": {
+    "width": "11",
+    "height": "9",
+    "palette": "int_timber"
+  }
+}

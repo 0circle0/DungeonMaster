@@ -1,0 +1,14 @@
+{
+  "id": "wreckers_lantern",
+  "name": "A Wrecker's Lantern",
+  "description": "Shows a light that is the wrong colour for a harbour and exactly the colour of one, at four miles, in rain.",
+  "kind": "trinket",
+  "slot": "belt",
+  "value": 70,
+  "weight": 2,
+  "tags": [],
+  "skillBonuses": {
+    "perception": 1,
+    "deception": 1
+  }
+}

@@ -1,0 +1,76 @@
+{
+  "id": "saltcliff_under_the_light",
+  "name": "Under the Light",
+  "description": "All four struck within an hour of the low, and the low is when the chalk workings under the Rise are dry to the back. Something is getting up to the head from underneath.",
+  "autoStart": false,
+  "ordered": true,
+  "tags": [
+    "side",
+    "act1",
+    "saltcliff",
+    "silver_coast"
+  ],
+  "objectives": [],
+  "stages": [
+    {
+      "id": "go_down",
+      "name": "Into the workings",
+      "description": "Pillar and stall, quarried out to build the town, and the town is now standing on the hole.",
+      "objectives": [
+        {
+          "id": "in_the_workings",
+          "description": "Get into the Chalk Workings.",
+          "kind": "reach",
+          "count": 1,
+          "hidden": false,
+          "optional": false,
+          "target": "saltcliff_chalk_workings"
+        }
+      ],
+      "journalKey": "saltcliff_journal_workings"
+    },
+    {
+      "id": "the_light",
+      "name": "What has been showing",
+      "description": "Ninety years off one headland, and the lighthouse is not it.",
+      "objectives": [
+        {
+          "id": "kill_shade",
+          "description": "Put out the light on the point.",
+          "kind": "kill",
+          "count": 1,
+          "hidden": false,
+          "optional": false,
+          "target": "wreck_shade"
+        }
+      ],
+      "onComplete": [
+        {
+          "setFlag": {
+            "flag": "saltcliff_shade_down",
+            "value": true
+          }
+        }
+      ],
+      "journalKey": "saltcliff_journal_shade"
+    }
+  ],
+  "unlocks": [
+    "saltcliff_the_finding"
+  ],
+  "rewards": {
+    "xp": 55,
+    "items": [],
+    "reputation": {
+      "the_countinghouse": 10
+    }
+  },
+  "requires": {
+    "quests": [
+      {
+        "quest": "saltcliff_the_ledger",
+        "status": "complete"
+      }
+    ]
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "id": "coast_cobbleway_desc",
+  "variants": [
+    {
+      "text": "A market cross, four streets, and more wheelwrights than a town this size can possibly need."
+    },
+    {
+      "text": "Cobbleway. Everything going to or from Sarnport stops here, and the town has arranged itself entirely around that."
+    },
+    {
+      "text": "Carts nose to tail in the market place, and the smell of hot iron from the tyring yard."
+    },
+    {
+      "text": "Stone-built and slate-roofed, and prosperous in an unshowy way."
+    }
+  ]
+}

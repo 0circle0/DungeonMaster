@@ -1,0 +1,16 @@
+{
+  "id": "dungeon_ice_corridor",
+  "name": "Ice Passage",
+  "descriptionKey": "dungeon_ice_corridor_desc",
+  "weight": 4,
+  "minExits": 2,
+  "maxExits": 4,
+  "encounterChance": 0.15,
+  "trapChance": 0.1,
+  "lootChance": 0.2,
+  "tags": [
+    "dungeon_ice",
+    "corridor"
+  ],
+  "role": "corridor"
+}

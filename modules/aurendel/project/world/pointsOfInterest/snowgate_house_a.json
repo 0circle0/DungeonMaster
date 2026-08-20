@@ -1,0 +1,76 @@
+{
+  "id": "snowgate_house_a",
+  "name": "The Deep House",
+  "description": "Dug in eleven feet, and it does not need a fire until Rimewatch.",
+  "area": "skarnspine_snowgate",
+  "kind": "settlement",
+  "descriptionKey": "int_house",
+  "travelMinutes": 2,
+  "tags": [
+    "house"
+  ],
+  "map": {
+    "width": "9",
+    "height": "7",
+    "palette": "int_timber"
+  },
+  "position": {
+    "x": 27,
+    "y": 3
+  },
+  "triggers": [
+    {
+      "id": "skarn_bell_committed",
+      "mode": "once",
+      "on": "enter",
+      "description": "Seventy feet into a slope everybody else stopped digging at twenty.",
+      "requires": {
+        "custom": {
+          "gte": [
+            {
+              "ref": "threads.skarn_bell.known"
+            },
+            2
+          ]
+        }
+      },
+      "effects": [
+        {
+          "emit": {
+            "event": "startQuest",
+            "data": {
+              "quest": "skarn_rung_from_below"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "hidden": true,
+  "discover": {
+    "skill": "perception",
+    "difficulty": {
+      "max": [
+        9,
+        {
+          "sub": [
+            21,
+            {
+              "mul": [
+                3,
+                {
+                  "ref": "threads.skarn_bell.known"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "gate": "skarn_bell_backroom",
+  "encounterTables": [
+    "skarn_bell_boss"
+  ],
+  "encounterChance": 1
+}

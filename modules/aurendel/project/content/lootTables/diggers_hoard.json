@@ -1,0 +1,36 @@
+{
+  "id": "diggers_hoard",
+  "entries": [
+    {
+      "weight": 4,
+      "value": {
+        "item": "barrow_torc",
+        "quantity": "1"
+      }
+    },
+    {
+      "weight": 3,
+      "value": {
+        "item": "torc_of_the_ridge",
+        "quantity": "1"
+      }
+    },
+    {
+      "weight": 2,
+      "value": {
+        "item": "ward_salt",
+        "quantity": "1d2"
+      }
+    },
+    {
+      "weight": 2,
+      "value": {
+        "item": "healing_draught",
+        "quantity": "1d2"
+      }
+    }
+  ],
+  "rolls": "2",
+  "emptyChance": 0,
+  "name": "The Undug End"
+}

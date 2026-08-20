@@ -1,0 +1,32 @@
+{
+  "id": "narrows_the_passage",
+  "name": "The Passage",
+  "description": "Eleven miles of shoal that moves between one season and the next, and it is the only way in.",
+  "area": "isles_the_narrows",
+  "kind": "crossing",
+  "descriptionKey": "narrows_the_passage_desc",
+  "travelMinutes": 8,
+  "tags": [
+    "crossing"
+  ],
+  "gate": "isles_passage",
+  "position": {
+    "x": 3,
+    "y": 3
+  },
+  "triggers": [
+    {
+      "id": "isle_found_passage",
+      "mode": "once",
+      "on": "enter",
+      "description": "One bearing on a chart that has been redrawn two hundred times.",
+      "effects": [
+        {
+          "learnLore": {
+            "entry": "isle_marker_still"
+          }
+        }
+      ]
+    }
+  ]
+}

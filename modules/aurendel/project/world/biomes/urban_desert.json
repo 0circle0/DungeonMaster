@@ -1,0 +1,12 @@
+{
+  "id": "urban_desert",
+  "name": "Sun Town",
+  "description": "Whitewashed brick, shaded lanes, and every doorway facing away from the glare.",
+  "layer": "overworld",
+  "palette": "town_desert",
+  "roomTemplates": [],
+  "encounterTables": [],
+  "lootTables": [],
+  "traps": [],
+  "ambienceKey": "urban_desert_ambience"
+}

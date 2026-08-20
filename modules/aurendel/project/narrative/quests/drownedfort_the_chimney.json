@@ -1,0 +1,73 @@
+{
+  "id": "drownedfort_the_chimney",
+  "name": "The Chimney",
+  "description": "He came out at Gullstone, which is a mile and a half from the fort and eighty feet above it, and no salvor in four generations has been able to say how.",
+  "autoStart": false,
+  "ordered": true,
+  "tags": [
+    "side",
+    "act3",
+    "drownedfort",
+    "sundered_isles"
+  ],
+  "objectives": [
+    {
+      "id": "up_the_chimney",
+      "description": "Get to the bottom of the Gullstone chimney.",
+      "kind": "reach",
+      "count": 1,
+      "hidden": false,
+      "optional": false,
+      "target": "gullstone_the_chimney"
+    },
+    {
+      "id": "the_bottom",
+      "description": "See what the chimney is connected to.",
+      "kind": "custom",
+      "count": 1,
+      "hidden": false,
+      "optional": false,
+      "when": {
+        "test": {
+          "ref": "flags.drownedfort_chimney_seen"
+        }
+      }
+    },
+    {
+      "id": "tell_runa",
+      "description": "Take it back to Runa.",
+      "kind": "talk",
+      "count": 1,
+      "hidden": false,
+      "optional": false,
+      "target": "wreckmaster_runa"
+    }
+  ],
+  "stages": [],
+  "unlocks": [
+    "drownedfort_the_battery"
+  ],
+  "rewards": {
+    "xp": 115,
+    "items": [],
+    "reputation": {
+      "the_salvors": 10
+    }
+  },
+  "requires": {
+    "quests": [
+      {
+        "quest": "drownedfort_four_crews",
+        "status": "complete"
+      }
+    ]
+  },
+  "onComplete": [
+    {
+      "setFlag": {
+        "flag": "drownedfort_route_known",
+        "value": true
+      }
+    }
+  ]
+}

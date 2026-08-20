@@ -1,0 +1,14 @@
+{
+  "id": "riverside_undercity_grate_desc",
+  "variants": [
+    {
+      "text": "Where the city's drains meet the river: an arch, an iron grate, and the grate is standing open."
+    },
+    {
+      "text": "Cold air comes out of the tunnel even in Highsun. Nobody has ever explained where from."
+    },
+    {
+      "text": "The grate has been forced, and then forced back, and then forced again."
+    }
+  ]
+}

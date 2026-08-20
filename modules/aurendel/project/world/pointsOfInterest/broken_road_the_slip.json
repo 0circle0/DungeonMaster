@@ -1,0 +1,36 @@
+{
+  "id": "broken_road_the_slip",
+  "name": "The Slip",
+  "description": "Half a mile of the old road, and the hillside it was on, at the bottom of the valley.",
+  "area": "skarnspine_broken_road",
+  "kind": "ruin",
+  "descriptionKey": "generic_ruin",
+  "travelMinutes": 6,
+  "tags": [
+    "ruin"
+  ],
+  "map": {
+    "width": "11",
+    "height": "9",
+    "palette": "int_cave"
+  },
+  "position": {
+    "x": 3,
+    "y": 3
+  },
+  "triggers": [
+    {
+      "id": "skarn_found_slip",
+      "mode": "once",
+      "on": "enter",
+      "description": "What the slip took out, and what was under it.",
+      "effects": [
+        {
+          "learnLore": {
+            "entry": "skarn_stair_two"
+          }
+        }
+      ]
+    }
+  ]
+}

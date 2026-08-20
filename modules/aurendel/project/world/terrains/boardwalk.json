@@ -1,0 +1,18 @@
+{
+  "id": "boardwalk",
+  "name": "Boardwalk",
+  "description": "Planks over water or mud, with gaps to watch for.",
+  "glyph": "-",
+  "color": "yellow",
+  "passable": true,
+  "opaque": false,
+  "moveCost": 0.8,
+  "tags": [
+    "stone",
+    "built"
+  ],
+  "marks": {
+    "tracks": 0,
+    "smell": 0.6
+  }
+}

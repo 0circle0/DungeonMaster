@@ -1,0 +1,18 @@
+{
+  "id": "dungeon_drowned_boss",
+  "name": "Drowned Deep Chamber",
+  "descriptionKey": "dungeon_drowned_boss_desc",
+  "weight": 1,
+  "minExits": 1,
+  "maxExits": 2,
+  "encounterChance": 0,
+  "trapChance": 0.12,
+  "lootChance": 0.8,
+  "tags": [
+    "dungeon_drowned",
+    "boss"
+  ],
+  "role": "boss",
+  "neverTrap": true,
+  "alwaysEncounter": true
+}

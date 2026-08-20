@@ -1,0 +1,81 @@
+{
+  "id": "door_walker",
+  "name": "A Door-Walker",
+  "description": "Eight doors were opened and only the ninth was watched. These are what has been walking between them since.",
+  "level": 11,
+  "xp": 1800,
+  "attributes": {
+    "might": 17,
+    "agility": 16,
+    "endurance": 17,
+    "intellect": 13,
+    "instinct": 16,
+    "presence": 12
+  },
+  "abilities": [
+    "rend",
+    "shove",
+    "grave_chill"
+  ],
+  "behaviour": [
+    {
+      "priority": 10,
+      "use": "grave_chill",
+      "when": {
+        "chance": 0.3
+      }
+    },
+    {
+      "priority": 0,
+      "use": "rend"
+    }
+  ],
+  "faction": "the_unsealed",
+  "creatureType": "undead",
+  "size": "medium",
+  "descriptors": [
+    "a lean",
+    "a wrong-jointed"
+  ],
+  "conditionalLoot": [],
+  "loot": "trial_loose_drop",
+  "damageInteractions": [
+    {
+      "damageType": "slashing",
+      "multiplier": 0.5,
+      "unless": [
+        "silvered"
+      ]
+    },
+    {
+      "damageType": "piercing",
+      "multiplier": 0.5,
+      "unless": [
+        "silvered"
+      ]
+    }
+  ],
+  "conditionImmunities": [
+    "frightened",
+    "prone"
+  ],
+  "resourceOverrides": {
+    "hp": 120
+  },
+  "temperament": {
+    "roamRadius": 12,
+    "investigateRadius": 40,
+    "leashRadius": 60,
+    "wanderChance": 0.1,
+    "disengageTurns": 1,
+    "speeds": {
+      "wander": 0.5,
+      "investigate": 0.5
+    },
+    "investigates": [
+      "sight",
+      "hearing",
+      "smell"
+    ]
+  }
+}

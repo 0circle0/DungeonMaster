@@ -1,0 +1,24 @@
+{
+  "id": "read_runes",
+  "name": "Read Runes",
+  "description": "An hour with a hand on the carving, and it gives up its sense.",
+  "actionType": "action",
+  "targeting": "none",
+  "requires": {
+    "skills": [
+      {
+        "skill": "arcana",
+        "minRank": 2,
+        "minTier": "adept"
+      }
+    ]
+  },
+  "onUse": [
+    {
+      "setFlag": {
+        "flag": "runes_read",
+        "value": true
+      }
+    }
+  ]
+}

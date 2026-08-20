@@ -1,0 +1,36 @@
+{
+  "id": "town_desert",
+  "name": "Sun-Built",
+  "floor": "sand",
+  "wall": "wall_mudbrick",
+  "exterior": "wall_mudbrick",
+  "scatter": [
+    {
+      "terrain": "flagstone",
+      "frequency": 0.14,
+      "distribution": "patch",
+      "scale": 7,
+      "priority": 0
+    },
+    {
+      "terrain": "wall_mudbrick",
+      "frequency": 0.1,
+      "distribution": "patch",
+      "scale": 5,
+      "priority": 1
+    },
+    {
+      "terrain": "urn",
+      "frequency": 0.02,
+      "distribution": "speckle",
+      "priority": 2
+    },
+    {
+      "terrain": "well",
+      "frequency": 0.008,
+      "distribution": "speckle",
+      "priority": 3
+    }
+  ],
+  "door": "door"
+}

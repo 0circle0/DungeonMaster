@@ -1,0 +1,57 @@
+{
+  "id": "skarn_the_breathing_face",
+  "name": "The Breathing Face",
+  "description": "A cave that draws and blows to the minute, warm, out of a north face that has never thawed.",
+  "autoStart": false,
+  "ordered": true,
+  "tags": [
+    "hidden",
+    "skarnspine",
+    "skarn_wind"
+  ],
+  "objectives": [
+    {
+      "id": "into_the_mouth",
+      "description": "Get into the mouth on the draw.",
+      "kind": "reach",
+      "count": 1,
+      "hidden": true,
+      "optional": false,
+      "target": "cold_shoulder_wind_cave"
+    },
+    {
+      "id": "past_the_margin",
+      "description": "Get past where the survey stops.",
+      "kind": "custom",
+      "count": 1,
+      "hidden": true,
+      "optional": false,
+      "when": {
+        "test": {
+          "ref": "flags.skarn_wind_open"
+        }
+      }
+    },
+    {
+      "id": "what_breathes",
+      "description": "Meet what has been doing the breathing.",
+      "kind": "kill",
+      "count": 1,
+      "hidden": true,
+      "optional": false,
+      "target": "the_breath"
+    }
+  ],
+  "stages": [],
+  "unlocks": [],
+  "rewards": {
+    "xp": 205,
+    "items": [
+      {
+        "item": "breathing_hood",
+        "quantity": 1
+      }
+    ],
+    "reputation": {}
+  }
+}

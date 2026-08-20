@@ -1,0 +1,19 @@
+{
+  "id": "wraymill_grain_market",
+  "name": "The Grain Market",
+  "description": "Sacks, scales, and men arguing about moisture.",
+  "area": "kingsvale_wraymill",
+  "kind": "market",
+  "descriptionKey": "generic_market",
+  "travelMinutes": 3,
+  "tags": [
+    "shop"
+  ],
+  "position": {
+    "x": 20,
+    "y": 14
+  },
+  "services": [
+    "market"
+  ]
+}

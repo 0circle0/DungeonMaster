@@ -1,0 +1,314 @@
+{
+  "id": "deep_vess_talk",
+  "start": "greet",
+  "nodes": [
+    {
+      "id": "greet",
+      "says": [
+        {
+          "text": "A woman walking a lit road with a pole she has never once used, checking lamps that have not needed checking in four hundred years."
+        },
+        {
+          "text": "“Lamp-keeper,” she says, and shrugs at the obvious. “Somebody has the office. It may as well be somebody who walks it.”"
+        }
+      ],
+      "onEnter": [],
+      "options": [
+        {
+          "id": "deep_vess_lit",
+          "text": "Who oils these?",
+          "requires": {
+            "without": {
+              "lore": [
+                "deep_lamps_lit"
+              ]
+            }
+          },
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "check": {
+            "skill": "persuasion",
+            "difficulty": {
+              "sub": [
+                11,
+                {
+                  "clamp": [
+                    {
+                      "div": [
+                        {
+                          "ref": "reputation.the_wayfinders",
+                          "else": 0
+                        },
+                        5
+                      ]
+                    },
+                    -6,
+                    6
+                  ]
+                }
+              ]
+            },
+            "onSuccess": "deep_vess_lit_told",
+            "onFailure": "deep_vess_lit_wont"
+          }
+        },
+        {
+          "id": "deep_vess_reading",
+          "text": "Do they light the road evenly?",
+          "requires": {
+            "without": {
+              "lore": [
+                "deep_lamps_reading"
+              ]
+            }
+          },
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "check": {
+            "skill": "perception",
+            "difficulty": {
+              "sub": [
+                13,
+                {
+                  "clamp": [
+                    {
+                      "div": [
+                        {
+                          "ref": "reputation.the_wayfinders",
+                          "else": 0
+                        },
+                        5
+                      ]
+                    },
+                    -6,
+                    6
+                  ]
+                }
+              ]
+            },
+            "onSuccess": "deep_vess_reading_told",
+            "onFailure": "deep_vess_reading_wont"
+          }
+        },
+        {
+          "id": "deep_vess_out",
+          "text": "Are any of them out?",
+          "requires": {
+            "without": {
+              "lore": [
+                "deep_lamps_out"
+              ]
+            }
+          },
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "check": {
+            "skill": "persuasion",
+            "difficulty": {
+              "sub": [
+                12,
+                {
+                  "clamp": [
+                    {
+                      "div": [
+                        {
+                          "ref": "reputation.the_wayfinders",
+                          "else": 0
+                        },
+                        5
+                      ]
+                    },
+                    -6,
+                    6
+                  ]
+                }
+              ]
+            },
+            "onSuccess": "deep_vess_out_told",
+            "onFailure": "deep_vess_out_wont"
+          }
+        },
+        {
+          "id": "greet_leave",
+          "text": "Nothing.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "deep_vess_lit_told",
+      "says": [
+        {
+          "text": "“Nobody.” She is cheerful about it in a way that takes a moment to land. “Not in four hundred years. There is no oil in them — I have had one down. There is no wick. They are lit.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "learnLore": {
+            "entry": "deep_lamps_lit"
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "deep_vess_lit_on",
+          "text": "Go on.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "deep_vess_lit_wont",
+      "says": [
+        {
+          "text": "“I've said all I mean to,” they say, and go back to what they were doing."
+        }
+      ],
+      "onEnter": [
+        {
+          "adjustReputation": {
+            "faction": "the_wayfinders",
+            "amount": -1
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "deep_vess_lit_drop",
+          "text": "Leave it.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "deep_vess_reading_told",
+      "says": [
+        {
+          "text": "“No, and that is the thing I would tell somebody if anybody asked.” She stops walking. “Stand in the dark *between* two of them and look at the floor. There are marks. Under a lamp you cannot see them at all.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "learnLore": {
+            "entry": "deep_lamps_reading"
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "deep_vess_reading_on",
+          "text": "Go on.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "deep_vess_reading_wont",
+      "says": [
+        {
+          "text": "“I've said all I mean to,” they say, and go back to what they were doing."
+        }
+      ],
+      "onEnter": [
+        {
+          "adjustReputation": {
+            "faction": "the_wayfinders",
+            "amount": -1
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "deep_vess_reading_drop",
+          "text": "Leave it.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "deep_vess_out_told",
+      "says": [
+        {
+          "text": "“Three.” No hesitation. “And the three are the three nearest the old toll, which I have mentioned to the guild twice.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "learnLore": {
+            "entry": "deep_lamps_out"
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "deep_vess_out_on",
+          "text": "Go on.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "deep_vess_out_wont",
+      "says": [
+        {
+          "text": "“I've said all I mean to,” they say, and go back to what they were doing."
+        }
+      ],
+      "onEnter": [
+        {
+          "adjustReputation": {
+            "faction": "the_wayfinders",
+            "amount": -1
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "deep_vess_out_drop",
+          "text": "Leave it.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    }
+  ]
+}

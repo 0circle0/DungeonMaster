@@ -1,0 +1,14 @@
+{
+  "id": "forgetiers_great_forge_desc",
+  "variants": [
+    {
+      "text": "Six furnaces on six levels down one shaft, all drawing on the same chimney, all going at once."
+    },
+    {
+      "text": "The Great Forge of Karn Dolur, where the hold's reputation is actually manufactured."
+    },
+    {
+      "text": "The heat comes at you up the shaft and you feel it two tiers before you arrive."
+    }
+  ]
+}

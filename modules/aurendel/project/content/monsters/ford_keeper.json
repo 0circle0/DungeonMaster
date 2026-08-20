@@ -1,0 +1,80 @@
+{
+  "id": "ford_keeper",
+  "name": "The Keeper",
+  "description": "Ninety years of a sluice worked to the day, by somebody the parish stopped paying and who did not stop.",
+  "level": 4,
+  "xp": 230,
+  "attributes": {
+    "might": 14,
+    "agility": 13,
+    "endurance": 15,
+    "intellect": 11,
+    "instinct": 14,
+    "presence": 12
+  },
+  "abilities": [
+    "drag_under",
+    "latch"
+  ],
+  "behaviour": [
+    {
+      "priority": 15,
+      "use": "drag_under",
+      "when": {
+        "chance": 0.4
+      }
+    },
+    {
+      "priority": 0,
+      "use": "latch"
+    }
+  ],
+  "faction": "the_unsealed",
+  "creatureType": "undead",
+  "size": "medium",
+  "descriptors": [
+    "a sodden",
+    "a dutiful"
+  ],
+  "conditionalLoot": [],
+  "loot": "kings_ford_hoard",
+  "damageInteractions": [
+    {
+      "damageType": "slashing",
+      "multiplier": 0.5,
+      "unless": [
+        "silvered"
+      ]
+    },
+    {
+      "damageType": "piercing",
+      "multiplier": 0.5,
+      "unless": [
+        "silvered"
+      ]
+    }
+  ],
+  "conditionImmunities": [
+    "frightened",
+    "prone"
+  ],
+  "resourceOverrides": {
+    "hp": 36
+  },
+  "temperament": {
+    "roamRadius": 12,
+    "investigateRadius": 40,
+    "leashRadius": 60,
+    "wanderChance": 0.1,
+    "disengageTurns": 1,
+    "speeds": {
+      "wander": 0.5,
+      "investigate": 0.5
+    },
+    "investigates": [
+      "sight",
+      "hearing",
+      "smell"
+    ]
+  }
+}

@@ -1,0 +1,42 @@
+{
+  "id": "town_timber",
+  "name": "Timber-Built",
+  "floor": "dirt_road",
+  "wall": "wall_timber",
+  "exterior": "wall_timber",
+  "scatter": [
+    {
+      "terrain": "grass",
+      "frequency": 0.16,
+      "distribution": "patch",
+      "scale": 7,
+      "priority": 0
+    },
+    {
+      "terrain": "wall_timber",
+      "frequency": 0.1,
+      "distribution": "patch",
+      "scale": 5,
+      "priority": 1
+    },
+    {
+      "terrain": "fence",
+      "frequency": 0.04,
+      "distribution": "speckle",
+      "priority": 2
+    },
+    {
+      "terrain": "cart",
+      "frequency": 0.012,
+      "distribution": "speckle",
+      "priority": 3
+    },
+    {
+      "terrain": "well",
+      "frequency": 0.006,
+      "distribution": "speckle",
+      "priority": 4
+    }
+  ],
+  "door": "door"
+}

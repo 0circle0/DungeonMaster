@@ -1,0 +1,19 @@
+{
+  "id": "riverside_long_wharf",
+  "name": "The Long Wharf",
+  "description": "Half a mile of stone quay, and never a free bollard when you want one.",
+  "area": "aurenhal_riverside",
+  "kind": "market",
+  "descriptionKey": "riverside_long_wharf_desc",
+  "travelMinutes": 3,
+  "tags": [
+    "docks"
+  ],
+  "position": {
+    "x": 22,
+    "y": 6
+  },
+  "services": [
+    "market"
+  ]
+}

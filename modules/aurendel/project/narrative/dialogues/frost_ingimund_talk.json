@@ -1,0 +1,219 @@
+{
+  "id": "frost_ingimund_talk",
+  "start": "greet",
+  "nodes": [
+    {
+      "id": "greet",
+      "says": [
+        {
+          "text": "Ledgers to the ceiling and a very small stove. He has the look of a man who has priced you already."
+        },
+        {
+          "text": "“Oil is up. Bone is down. If it is neither of those, be brief.”"
+        }
+      ],
+      "onEnter": [],
+      "options": [
+        {
+          "id": "frost_ingimund_moved",
+          "text": "Why was the Landing moved?",
+          "requires": {
+            "without": {
+              "lore": [
+                "frost_blue_moved"
+              ]
+            }
+          },
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "check": {
+            "skill": "persuasion",
+            "difficulty": {
+              "sub": [
+                14,
+                {
+                  "clamp": [
+                    {
+                      "div": [
+                        {
+                          "ref": "reputation.the_countinghouse",
+                          "else": 0
+                        },
+                        5
+                      ]
+                    },
+                    -6,
+                    6
+                  ]
+                }
+              ]
+            },
+            "onSuccess": "frost_ingimund_moved_told",
+            "onFailure": "frost_ingimund_moved_wont"
+          }
+        },
+        {
+          "id": "frost_ingimund_count",
+          "text": "How many ships has this Landing ever had?",
+          "requires": {
+            "without": {
+              "lore": [
+                "frost_strand_count"
+              ]
+            }
+          },
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "check": {
+            "skill": "insight",
+            "difficulty": {
+              "sub": [
+                12,
+                {
+                  "clamp": [
+                    {
+                      "div": [
+                        {
+                          "ref": "reputation.the_countinghouse",
+                          "else": 0
+                        },
+                        5
+                      ]
+                    },
+                    -6,
+                    6
+                  ]
+                }
+              ]
+            },
+            "onSuccess": "frost_ingimund_count_told",
+            "onFailure": "frost_ingimund_count_wont"
+          }
+        },
+        {
+          "id": "greet_leave",
+          "text": "Nothing.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "frost_ingimund_moved_told",
+      "says": [
+        {
+          "text": "He does not go and fetch the book; he knows the page. “One winter, the whole station, a mile out to here. Eleven buildings.” He taps the desk once. “There is a cost for the move and a cost for the timber and a cost for the men. There is no *reason*. I have kept these ledgers for thirty years and it is the only entry in them with no reason.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "learnLore": {
+            "entry": "frost_blue_moved"
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "frost_ingimund_moved_on",
+          "text": "Go on.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "frost_ingimund_moved_wont",
+      "says": [
+        {
+          "text": "“I've said all I mean to,” they say, and go back to what they were doing."
+        }
+      ],
+      "onEnter": [
+        {
+          "adjustReputation": {
+            "faction": "the_countinghouse",
+            "amount": -1
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "frost_ingimund_moved_drop",
+          "text": "Leave it.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "frost_ingimund_count_told",
+      "says": [
+        {
+          "text": "“Since the move? Forty-one keels, of which nine were lost.” He says it instantly. “Why — has somebody been counting skulls at you?” He returns to the column. “Thrand has been counting skulls at people for eleven years. The trouble is that his arithmetic is sound.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "learnLore": {
+            "entry": "frost_strand_count"
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "frost_ingimund_count_on",
+          "text": "Go on.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "frost_ingimund_count_wont",
+      "says": [
+        {
+          "text": "“I've said all I mean to,” they say, and go back to what they were doing."
+        }
+      ],
+      "onEnter": [
+        {
+          "adjustReputation": {
+            "faction": "the_countinghouse",
+            "amount": -1
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "frost_ingimund_count_drop",
+          "text": "Leave it.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    }
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "id": "kings_quarry",
+  "name": "The Quarry's Second Face",
+  "description": "One warrant, two faces, and eleven years of unlicensed carts going south at night.",
+  "entries": [
+    "kings_quarry_two",
+    "kings_quarry_stone",
+    "kings_quarry_gibbet",
+    "kings_quarry_night"
+  ]
+}

@@ -1,0 +1,20 @@
+{
+  "id": "laid_course",
+  "name": "A Stone Out of the Face",
+  "description": "Dressed on five sides, laid level, and pulled out of a river bank forty feet below the grass.",
+  "kind": "treasure",
+  "value": 0,
+  "weight": 0,
+  "tags": [
+    "clue",
+    "proof"
+  ],
+  "onUse": [
+    {
+      "learnLore": {
+        "entry": "step_bank_courses"
+      }
+    }
+  ],
+  "consumedOnUse": false
+}

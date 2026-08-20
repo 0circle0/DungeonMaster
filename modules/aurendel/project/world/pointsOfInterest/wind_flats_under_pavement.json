@@ -1,0 +1,17 @@
+{
+  "id": "wind_flats_under_pavement",
+  "name": "Under the Pavement",
+  "description": "The wind has taken enough ice off to open a way into whatever was quarried here.",
+  "area": "frostmere_wind_scoured_flats",
+  "kind": "dungeonEntrance",
+  "descriptionKey": "generic_dungeon_mouth",
+  "travelMinutes": 14,
+  "tags": [
+    "dungeon"
+  ],
+  "dungeon": "frostmere_under_pavement",
+  "position": {
+    "x": 25,
+    "y": 3
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "id": "long_grass_the_sea_desc",
+  "variants": [
+    {
+      "text": "Chest-high to the horizon in every direction, and it moves like water does."
+    },
+    {
+      "text": "You are navigating by the sun. There is nothing else."
+    },
+    {
+      "text": "Something is moving through it two hundred yards off, making a wake, and you cannot see what."
+    }
+  ]
+}

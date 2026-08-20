@@ -1,0 +1,128 @@
+{
+  "id": "saltcliff_bry_talk",
+  "start": "greet",
+  "nodes": [
+    {
+      "id": "greet",
+      "says": [
+        {
+          "text": "A hundred and ten feet of stair, and Bry is at the top of it with the fire drawing well and a logbook shut under his elbow. \"You came up. Most don't.\""
+        }
+      ],
+      "options": [
+        {
+          "id": "the_light",
+          "text": "Tell me about the light.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "the_light"
+        },
+        {
+          "id": "leave",
+          "text": "Nothing.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": [
+        {
+          "requires": {
+            "quests": [
+              {
+                "quest": "saltcliff_the_wrong_light",
+                "status": "active"
+              }
+            ]
+          },
+          "goto": "the_logbook"
+        }
+      ]
+    },
+    {
+      "id": "the_light",
+      "says": [
+        {
+          "text": "\"Coal, and a following wind, and a stair I go up twice a night whatever the weather is doing.\" He nods at the fire. \"She has not been out on my watch in eleven years. Write that down somewhere the Hall will read it.\""
+        }
+      ],
+      "options": [
+        {
+          "id": "back",
+          "text": "Hm.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "greet"
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": []
+    },
+    {
+      "id": "the_logbook",
+      "says": [
+        {
+          "text": "\"You're from Maun.\" He takes his elbow off the book, which takes him a moment. \"Then here it is and I'll not be asked twice.\""
+        },
+        {
+          "text": "\"Two of those four nights she was *out*,\" says Bry. \"Coal wet, wind wrong, out for three hours, and I logged it because I log it. And on both those nights a ship went onto Gannet Head steering by a light.\""
+        }
+      ],
+      "options": [
+        {
+          "id": "what_light",
+          "text": "Then what were they steering by?",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "not_mine"
+        }
+      ],
+      "onEnter": [
+        {
+          "setFlag": {
+            "flag": "saltcliff_log_read",
+            "value": true
+          }
+        }
+      ],
+      "redirectWhen": [],
+      "remembers": "ledger_squared"
+    },
+    {
+      "id": "not_mine",
+      "says": [
+        {
+          "text": "\"Not mine,\" he says, and looks out west at the head, which is black. \"There is something shows off that point and it is not mine, and I have stopped saying so at the Pilots' Hall because of how they look at me.\""
+        }
+      ],
+      "options": [
+        {
+          "id": "thanks",
+          "text": "We believe you.",
+          "effects": [
+            {
+              "adjustReputation": {
+                "faction": "the_countinghouse",
+                "amount": 4
+              }
+            }
+          ],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "greet"
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": []
+    }
+  ]
+}

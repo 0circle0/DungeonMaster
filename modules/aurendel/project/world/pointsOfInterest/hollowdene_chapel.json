@@ -1,0 +1,24 @@
+{
+  "id": "hollowdene_chapel",
+  "name": "Hollowdene Chapel",
+  "description": "One room, one bell, and a churchyard that has been filling slowly for six hundred years.",
+  "area": "kingsvale_hollowdene",
+  "kind": "shrine",
+  "descriptionKey": "int_temple",
+  "travelMinutes": 2,
+  "tags": [
+    "shrine"
+  ],
+  "position": {
+    "x": 10,
+    "y": 14
+  },
+  "services": [
+    "temple"
+  ],
+  "map": {
+    "width": "9",
+    "height": "7",
+    "palette": "int_temple"
+  }
+}

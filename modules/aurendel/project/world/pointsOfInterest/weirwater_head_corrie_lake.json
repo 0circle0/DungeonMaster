@@ -1,0 +1,30 @@
+{
+  "id": "weirwater_head_corrie_lake",
+  "name": "The Corrie Lake",
+  "description": "Black, round, three hundred feet deep at the middle, and the start of the Weirwater.",
+  "area": "skarnspine_weirwater_head",
+  "kind": "landmark",
+  "descriptionKey": "generic_landmark",
+  "travelMinutes": 6,
+  "tags": [],
+  "position": {
+    "x": 3,
+    "y": 3
+  },
+  "triggers": [
+    {
+      "id": "thecut_at_the_lake",
+      "mode": "once",
+      "on": "enter",
+      "description": "The colour of it, and how far down the colour goes.",
+      "effects": [
+        {
+          "setFlag": {
+            "flag": "thecut_lake_seen",
+            "value": true
+          }
+        }
+      ]
+    }
+  ]
+}

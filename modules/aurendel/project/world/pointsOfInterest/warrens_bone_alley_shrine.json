@@ -1,0 +1,19 @@
+{
+  "id": "warrens_bone_alley_shrine",
+  "name": "The Bone Alley Shrine",
+  "description": "Somebody keeps a light burning here and nobody will say who.",
+  "area": "aurenhal_warrens",
+  "kind": "shrine",
+  "descriptionKey": "generic_shrine",
+  "travelMinutes": 2,
+  "tags": [
+    "shrine"
+  ],
+  "position": {
+    "x": 30,
+    "y": 22
+  },
+  "services": [
+    "temple"
+  ]
+}

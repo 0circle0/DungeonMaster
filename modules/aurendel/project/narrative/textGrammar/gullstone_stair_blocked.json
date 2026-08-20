@@ -1,0 +1,14 @@
+{
+  "id": "gullstone_stair_blocked",
+  "variants": [
+    {
+      "text": "Four hundred feet of cut steps, no rail, and a wind that is currently taking the tops off the swell."
+    },
+    {
+      "text": "The first fifty steps are wet from spray and it is not raining."
+    },
+    {
+      "text": "You could go up that. Today, with this wind, you very much could not."
+    }
+  ]
+}

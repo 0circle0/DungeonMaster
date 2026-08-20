@@ -1,0 +1,9 @@
+{
+  "id": "the_unsealed",
+  "name": "What Was Shut",
+  "description": "Whatever the wards were built against. It has a side, and the side is not yours.",
+  "initialStanding": -40,
+  "decayPerDay": 0,
+  "relations": {},
+  "ranks": []
+}

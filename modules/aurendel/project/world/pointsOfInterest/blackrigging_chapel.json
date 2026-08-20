@@ -1,0 +1,24 @@
+{
+  "id": "blackrigging_chapel",
+  "name": "The Ship's Chapel",
+  "description": "Lifted whole out of a wreck, roof and all, and set down here.",
+  "area": "isles_blackrigging",
+  "kind": "shrine",
+  "descriptionKey": "int_temple",
+  "travelMinutes": 3,
+  "tags": [
+    "shrine"
+  ],
+  "services": [
+    "temple"
+  ],
+  "map": {
+    "width": "11",
+    "height": "9",
+    "palette": "int_temple"
+  },
+  "position": {
+    "x": 12,
+    "y": 23
+  }
+}

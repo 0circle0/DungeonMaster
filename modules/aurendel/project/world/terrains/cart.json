@@ -1,0 +1,14 @@
+{
+  "id": "cart",
+  "name": "Cart",
+  "description": "Shafts down, tail-gate open.",
+  "glyph": "6",
+  "color": "yellow",
+  "passable": false,
+  "opaque": false,
+  "moveCost": 0,
+  "tags": [
+    "furniture"
+  ],
+  "providesCover": "half"
+}

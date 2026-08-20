@@ -1,0 +1,29 @@
+{
+  "id": "isle_marker_hold",
+  "name": "What Holds Her",
+  "description": "She is not aground. Two hundred years on one bearing and she is held, and what she is held by is not rock.",
+  "kind": "ward",
+  "blockedTextKey": "isle_marker_blocked",
+  "staysOpen": true,
+  "onOpen": [
+    {
+      "setFlag": {
+        "flag": "isle_marker_open",
+        "value": true
+      }
+    }
+  ],
+  "onBlocked": [],
+  "opensWith": [],
+  "tags": [],
+  "requires": {
+    "items": [
+      {
+        "item": "pilots_book",
+        "quantity": 1,
+        "consume": false,
+        "equipped": false
+      }
+    ]
+  }
+}

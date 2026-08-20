@@ -1,0 +1,34 @@
+{
+  "id": "deeproads_the_deep_market_road",
+  "name": "The Deep Market Road",
+  "description": "The one stretch that is genuinely a road, kept up by Lantern Deep and lit at intervals.",
+  "biome": "underdeep",
+  "layer": "underworld",
+  "descriptionKey": "deeproads_the_deep_market_road_desc",
+  "dangerLevel": 6,
+  "recommendedLevel": 9,
+  "tags": [
+    "deeproads"
+  ],
+  "map": {
+    "width": "51",
+    "height": "35"
+  },
+  "entryPoint": {
+    "x": 25,
+    "y": 17
+  },
+  "extra": {
+    "role": "wild"
+  },
+  "connections": [
+    {
+      "to": "deeproads_the_long_hall",
+      "travelMinutes": 30
+    },
+    {
+      "to": "deeproads_lantern_deep",
+      "travelMinutes": 25
+    }
+  ]
+}

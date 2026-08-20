@@ -1,0 +1,219 @@
+{
+  "id": "moor_ivy_talk",
+  "start": "greet",
+  "nodes": [
+    {
+      "id": "greet",
+      "says": [
+        {
+          "text": "Peat by the load, tallow, rope, and a slate with the parish's account on it in a hand that has clearly added it up twice."
+        },
+        {
+          "text": "“Load, half load, or the parish's account. It is usually the parish's account.”"
+        }
+      ],
+      "onEnter": [],
+      "options": [
+        {
+          "id": "moor_ivy_fuel",
+          "text": "How much peat does the parish buy for that fire?",
+          "requires": {
+            "without": {
+              "lore": [
+                "moor_fire_fuel"
+              ]
+            }
+          },
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "check": {
+            "skill": "craft",
+            "difficulty": {
+              "sub": [
+                12,
+                {
+                  "clamp": [
+                    {
+                      "div": [
+                        {
+                          "ref": "reputation.the_library",
+                          "else": 0
+                        },
+                        5
+                      ]
+                    },
+                    -6,
+                    6
+                  ]
+                }
+              ]
+            },
+            "onSuccess": "moor_ivy_fuel_told",
+            "onFailure": "moor_ivy_fuel_wont"
+          }
+        },
+        {
+          "id": "moor_ivy_draught",
+          "text": "The holes under the scarp.",
+          "requires": {
+            "without": {
+              "lore": [
+                "moor_shoot_draught"
+              ]
+            }
+          },
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "check": {
+            "skill": "persuasion",
+            "difficulty": {
+              "sub": [
+                13,
+                {
+                  "clamp": [
+                    {
+                      "div": [
+                        {
+                          "ref": "reputation.the_library",
+                          "else": 0
+                        },
+                        5
+                      ]
+                    },
+                    -6,
+                    6
+                  ]
+                }
+              ]
+            },
+            "onSuccess": "moor_ivy_draught_told",
+            "onFailure": "moor_ivy_draught_wont"
+          }
+        },
+        {
+          "id": "greet_leave",
+          "text": "Nothing.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "moor_ivy_fuel_told",
+      "says": [
+        {
+          "text": "“Eleven loads a year.” Ivy taps the slate. “I have sold it eleven loads a year for nineteen years.” She puts the chalk down. “A fire that size, going day and night, eats thirty. I have said so to the vestry twice. Both times somebody said *well, it has never gone out, has it* and that was the end of the meeting.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "learnLore": {
+            "entry": "moor_fire_fuel"
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "moor_ivy_fuel_on",
+          "text": "Go on.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "moor_ivy_fuel_wont",
+      "says": [
+        {
+          "text": "“I've said all I mean to,” they say, and go back to what they were doing."
+        }
+      ],
+      "onEnter": [
+        {
+          "adjustReputation": {
+            "faction": "the_library",
+            "amount": -1
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "moor_ivy_fuel_drop",
+          "text": "Leave it.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "moor_ivy_draught_told",
+      "says": [
+        {
+          "text": "“Draw up.” She is definite. “Every hole on this moor breathes down — cold air falls, that is all it does. Put a candle at any of the ones under that edge and it lies flat the wrong way.” A shrug. “The shooting parties used to think it was funny. There have been no shooting parties for a while.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "learnLore": {
+            "entry": "moor_shoot_draught"
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "moor_ivy_draught_on",
+          "text": "Go on.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "moor_ivy_draught_wont",
+      "says": [
+        {
+          "text": "“I've said all I mean to,” they say, and go back to what they were doing."
+        }
+      ],
+      "onEnter": [
+        {
+          "adjustReputation": {
+            "faction": "the_library",
+            "amount": -1
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "moor_ivy_draught_drop",
+          "text": "Leave it.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    }
+  ]
+}

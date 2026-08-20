@@ -1,0 +1,362 @@
+{
+  "id": "dusk_moll_talk",
+  "start": "greet",
+  "nodes": [
+    {
+      "id": "greet",
+      "says": [
+        {
+          "text": "A covered burn the size of a cottage giving off no visible smoke at all, which took forty years to learn, and a woman watching it."
+        },
+        {
+          "text": "“Do not stand upwind and do not touch the sides.”"
+        }
+      ],
+      "onEnter": [],
+      "options": [
+        {
+          "id": "dusk_moll_ages",
+          "text": "The trees along the Greenway.",
+          "requires": {
+            "without": {
+              "lore": [
+                "dusk_green_ages"
+              ]
+            }
+          },
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "check": {
+            "skill": "persuasion",
+            "difficulty": {
+              "sub": [
+                12,
+                {
+                  "clamp": [
+                    {
+                      "div": [
+                        {
+                          "ref": "reputation.the_keepers",
+                          "else": 0
+                        },
+                        5
+                      ]
+                    },
+                    -6,
+                    6
+                  ]
+                }
+              ]
+            },
+            "onSuccess": "dusk_moll_ages_told",
+            "onFailure": "dusk_moll_ages_wont"
+          }
+        },
+        {
+          "id": "dusk_moll_line",
+          "text": "What is the line you will not cut inside?",
+          "requires": {
+            "without": {
+              "lore": [
+                "dusk_ward_line"
+              ]
+            }
+          },
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "check": {
+            "skill": "insight",
+            "difficulty": {
+              "sub": [
+                15,
+                {
+                  "clamp": [
+                    {
+                      "div": [
+                        {
+                          "ref": "reputation.the_keepers",
+                          "else": 0
+                        },
+                        5
+                      ]
+                    },
+                    -6,
+                    6
+                  ]
+                }
+              ]
+            },
+            "onSuccess": "dusk_moll_line_told",
+            "onFailure": "dusk_moll_line_wont"
+          }
+        },
+        {
+          "id": "dusk_moll_charter",
+          "text": "The charter. I want to see the back of it.",
+          "requires": {
+            "without": {
+              "items": [
+                "burners_charter"
+              ],
+              "flags": [
+                {
+                  "flag": "given:burners_charter"
+                }
+              ]
+            }
+          },
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "check": {
+            "skill": "persuasion",
+            "difficulty": {
+              "sub": [
+                14,
+                {
+                  "clamp": [
+                    {
+                      "div": [
+                        {
+                          "ref": "reputation.the_keepers",
+                          "else": 0
+                        },
+                        5
+                      ]
+                    },
+                    -6,
+                    6
+                  ]
+                }
+              ]
+            },
+            "onSuccess": "dusk_moll_charter_gave",
+            "onFailure": "dusk_moll_charter_kept"
+          }
+        },
+        {
+          "id": "greet_leave",
+          "text": "Nothing.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": [
+        {
+          "requires": {
+            "factions": [
+              {
+                "faction": "the_keepers",
+                "maxStanding": -30
+              }
+            ]
+          },
+          "goto": "dusk_moll_cold"
+        }
+      ]
+    },
+    {
+      "id": "dusk_moll_ages_told",
+      "says": [
+        {
+          "text": "“All of an age and none of them old.” Moll rakes over a section of the burn that does not need it. “A wood does not do that. Leave any gap in this wood and in four years it is thicket and in twenty it is wood again. That has been forty yards wide for longer than the Moot Road has existed.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "learnLore": {
+            "entry": "dusk_green_ages"
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "dusk_moll_ages_on",
+          "text": "Go on.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "dusk_moll_ages_wont",
+      "says": [
+        {
+          "text": "“I've said all I mean to,” they say, and go back to what they were doing."
+        }
+      ],
+      "onEnter": [
+        {
+          "adjustReputation": {
+            "faction": "the_keepers",
+            "amount": -1
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "dusk_moll_ages_drop",
+          "text": "Leave it.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "dusk_moll_line_told",
+      "says": [
+        {
+          "text": "She walks you to it, which takes a quarter of an hour, and stops at a place with nothing at it. “Here.” Then along, a hundred paces, still nothing. “And here.” She turns round. “Every burner in Rooksrest can do that and not one of us can tell you what we are walking. We learned it off the last lot. They learned it off theirs.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "learnLore": {
+            "entry": "dusk_ward_line"
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "dusk_moll_line_on",
+          "text": "Go on.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "dusk_moll_line_wont",
+      "says": [
+        {
+          "text": "“I've said all I mean to,” they say, and go back to what they were doing."
+        }
+      ],
+      "onEnter": [
+        {
+          "adjustReputation": {
+            "faction": "the_keepers",
+            "amount": -1
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "dusk_moll_line_drop",
+          "text": "Leave it.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "dusk_moll_charter_gave",
+      "says": [
+        {
+          "text": "She unrolls it on a stump. The front is the parish's right to cut, in the parish's clerk's hand. The back is a line drawn freehand, closed, with no words on it at all. “That is not our writing,” Moll says. “That is not anybody's writing. That is a shape.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "grantItem": {
+            "target": {
+              "ref": "actor.id"
+            },
+            "item": "burners_charter",
+            "quantity": 1
+          }
+        },
+        {
+          "setFlag": {
+            "flag": "given:burners_charter",
+            "value": true
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "dusk_moll_charter_thanks",
+          "text": "Thank you.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "dusk_moll_charter_kept",
+      "says": [
+        {
+          "text": "“It is the right to feed forty people,” she says, rolling it up. “No.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "adjustReputation": {
+            "faction": "the_keepers",
+            "amount": -2
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "dusk_moll_charter_leave",
+          "text": "Then no.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "dusk_moll_cold",
+      "says": [
+        {
+          "text": "She walks round to the far side of the burn and stays there."
+        }
+      ],
+      "onEnter": [],
+      "options": [
+        {
+          "id": "dusk_moll_go",
+          "text": "Leave it.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    }
+  ]
+}

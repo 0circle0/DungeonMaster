@@ -1,0 +1,75 @@
+{
+  "id": "beeches_what_wend_has_been_saying",
+  "name": "What Wend Has Been Saying",
+  "description": "Two years of messages to Elderhollow about the beeches moving, and two years of the moot having something more pressing on.",
+  "autoStart": false,
+  "ordered": true,
+  "tags": [
+    "side",
+    "act2",
+    "beeches",
+    "duskwood"
+  ],
+  "objectives": [
+    {
+      "id": "to_the_hermit",
+      "description": "Find the hermit in the Hollow Beeches.",
+      "kind": "reach",
+      "count": 1,
+      "hidden": false,
+      "optional": false,
+      "target": "hollow_beeches_hermit"
+    },
+    {
+      "id": "hear_wend",
+      "description": "Hear what he has been trying to tell the moot.",
+      "kind": "talk",
+      "count": 1,
+      "hidden": false,
+      "optional": false,
+      "target": "hermit_wend"
+    },
+    {
+      "id": "the_ring_count",
+      "description": "Count the ring with him.",
+      "kind": "custom",
+      "count": 1,
+      "hidden": false,
+      "optional": false,
+      "when": {
+        "test": {
+          "ref": "flags.beeches_counted"
+        }
+      }
+    }
+  ],
+  "stages": [],
+  "unlocks": [
+    "beeches_the_root_cellar"
+  ],
+  "rewards": {
+    "xp": 55,
+    "items": [],
+    "reputation": {
+      "the_keepers": 8
+    }
+  },
+  "giver": "hermit_wend",
+  "requires": {
+    "quests": [
+      {
+        "quest": "the_undercroft",
+        "status": "complete"
+      }
+    ],
+    "minLevel": 4
+  },
+  "onComplete": [
+    {
+      "setFlag": {
+        "flag": "beeches_wend_heard",
+        "value": true
+      }
+    }
+  ]
+}

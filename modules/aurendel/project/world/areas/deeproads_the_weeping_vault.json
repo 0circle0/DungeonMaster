@@ -1,0 +1,42 @@
+{
+  "id": "deeproads_the_weeping_vault",
+  "name": "The Weeping Vault",
+  "description": "Water comes through the roof here in ten thousand places and has been doing so long enough to build the floor up to meet it.",
+  "biome": "underdeep",
+  "layer": "underworld",
+  "descriptionKey": "deeproads_the_weeping_vault_desc",
+  "dangerLevel": 8,
+  "recommendedLevel": 10,
+  "tags": [
+    "deeproads"
+  ],
+  "map": {
+    "width": "51",
+    "height": "35"
+  },
+  "entryPoint": {
+    "x": 25,
+    "y": 17
+  },
+  "extra": {
+    "role": "wild"
+  },
+  "connections": [
+    {
+      "to": "deeproads_broken_stair",
+      "travelMinutes": 40
+    },
+    {
+      "to": "deeproads_the_long_hall",
+      "travelMinutes": 50
+    },
+    {
+      "to": "moor_black_tarn",
+      "travelMinutes": 120,
+      "gate": "deeproads_tarn_shaft"
+    }
+  ],
+  "encounterTables": [
+    "deeproads_things"
+  ]
+}

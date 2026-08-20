@@ -1,0 +1,29 @@
+{
+  "id": "weeping_vault_the_roof",
+  "name": "The Weeping Roof",
+  "description": "Water through the roof in ten thousand places, and it has been doing it long enough to build the floor up to meet it.",
+  "area": "deeproads_the_weeping_vault",
+  "kind": "landmark",
+  "descriptionKey": "weeping_vault_the_roof_desc",
+  "travelMinutes": 8,
+  "tags": [],
+  "position": {
+    "x": 3,
+    "y": 3
+  },
+  "triggers": [
+    {
+      "id": "deep_found_roof",
+      "mode": "once",
+      "on": "enter",
+      "description": "How many columns are holding it, and how many there are.",
+      "effects": [
+        {
+          "learnLore": {
+            "entry": "deep_vault_count"
+          }
+        }
+      ]
+    }
+  ]
+}

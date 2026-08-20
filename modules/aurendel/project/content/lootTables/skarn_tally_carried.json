@@ -1,0 +1,26 @@
+{
+  "id": "skarn_tally_carried",
+  "name": "What Bel Kept",
+  "rolls": "1",
+  "emptyChance": 0,
+  "entries": [
+    {
+      "weight": 1,
+      "value": {
+        "item": "sweeping_tally",
+        "quantity": "1",
+        "unique": true,
+        "requirementScope": "party",
+        "requires": {
+          "without": {
+            "flags": [
+              {
+                "flag": "given:sweeping_tally"
+              }
+            ]
+          }
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,24 @@
+{
+  "id": "craftrow_armourers",
+  "name": "Vench & Daughters, Armourers",
+  "description": "Plate, mail, and a very long wait unless you are somebody.",
+  "area": "aurenhal_craftrow",
+  "kind": "market",
+  "descriptionKey": "int_smithy",
+  "travelMinutes": 3,
+  "tags": [
+    "shop"
+  ],
+  "position": {
+    "x": 14,
+    "y": 14
+  },
+  "services": [
+    "smith"
+  ],
+  "map": {
+    "width": "15",
+    "height": "11",
+    "palette": "int_forge"
+  }
+}

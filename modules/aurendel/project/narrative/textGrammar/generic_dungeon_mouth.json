@@ -1,0 +1,17 @@
+{
+  "id": "generic_dungeon_mouth",
+  "variants": [
+    {
+      "text": "The way in. Cold air comes out of it, steadily, whatever the weather is doing up here."
+    },
+    {
+      "text": "A hole with edges — cut, or worn, or both, and going down further than the light does."
+    },
+    {
+      "text": "Dark, and the dark has a draught behind it, which means there is more of it than you can see."
+    },
+    {
+      "text": "The opening, and the strong impression that it was not made for you."
+    }
+  ]
+}

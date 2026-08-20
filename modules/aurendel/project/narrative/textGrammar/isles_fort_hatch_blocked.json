@@ -1,0 +1,14 @@
+{
+  "id": "isles_fort_hatch_blocked",
+  "variants": [
+    {
+      "text": "There is forty feet of the Iron Sea on top of the hatch and the tide has three hours to run."
+    },
+    {
+      "text": "Low water is at dawn. It is not dawn."
+    },
+    {
+      "text": "The hatch is open for about forty minutes either side of low water and this is neither of them."
+    }
+  ]
+}

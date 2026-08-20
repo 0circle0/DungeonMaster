@@ -1,0 +1,73 @@
+{
+  "id": "drowned_hand",
+  "name": "A Drowned Hand",
+  "description": "Came off the reef with the rest of the cargo and did not stop at the tide line.",
+  "level": 3,
+  "xp": 110,
+  "attributes": {
+    "might": 14,
+    "agility": 9,
+    "endurance": 14,
+    "intellect": 4,
+    "instinct": 11,
+    "presence": 8
+  },
+  "abilities": [
+    "drag_under",
+    "rend"
+  ],
+  "behaviour": [
+    {
+      "priority": 0,
+      "use": "drag_under"
+    }
+  ],
+  "faction": "the_unsealed",
+  "creatureType": "undead",
+  "size": "medium",
+  "descriptors": [
+    "a bloated",
+    "a weed-hung"
+  ],
+  "conditionalLoot": [],
+  "loot": "strand_scraps",
+  "damageInteractions": [
+    {
+      "damageType": "slashing",
+      "multiplier": 0.5,
+      "unless": [
+        "silvered"
+      ]
+    },
+    {
+      "damageType": "piercing",
+      "multiplier": 0.5,
+      "unless": [
+        "silvered"
+      ]
+    }
+  ],
+  "conditionImmunities": [
+    "poisoned",
+    "prone"
+  ],
+  "resourceOverrides": {
+    "hp": 26
+  },
+  "temperament": {
+    "roamRadius": 12,
+    "investigateRadius": 40,
+    "leashRadius": 60,
+    "wanderChance": 0.1,
+    "disengageTurns": 1,
+    "speeds": {
+      "wander": 0.5,
+      "investigate": 0.5
+    },
+    "investigates": [
+      "sight",
+      "hearing",
+      "smell"
+    ]
+  }
+}

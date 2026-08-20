@@ -1,0 +1,29 @@
+{
+  "id": "obsidian_shelf_the_sheet",
+  "name": "The Sheet",
+  "description": "A mile of black glass, flat, and it reflects the sky in a way that stops being pleasant after a while.",
+  "area": "ember_obsidian_shelf",
+  "kind": "landmark",
+  "descriptionKey": "obsidian_shelf_the_sheet_desc",
+  "travelMinutes": 8,
+  "tags": [],
+  "position": {
+    "x": 3,
+    "y": 3
+  },
+  "triggers": [
+    {
+      "id": "ember_found_sheet",
+      "mode": "once",
+      "on": "enter",
+      "description": "A mile of glass, poured flat.",
+      "effects": [
+        {
+          "learnLore": {
+            "entry": "ember_sheet_flat"
+          }
+        }
+      ]
+    }
+  ]
+}

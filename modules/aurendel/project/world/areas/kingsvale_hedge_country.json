@@ -1,0 +1,46 @@
+{
+  "id": "kingsvale_hedge_country",
+  "name": "The Hedge Country",
+  "description": "Fields inside fields inside hedges laid before anybody's grandfather. Easy to walk and easy to lose a day in.",
+  "biome": "vale",
+  "layer": "overworld",
+  "descriptionKey": "kingsvale_hedge_country_desc",
+  "dangerLevel": 1,
+  "recommendedLevel": 1,
+  "tags": [
+    "kingsvale"
+  ],
+  "map": {
+    "width": "51",
+    "height": "35"
+  },
+  "entryPoint": {
+    "x": 25,
+    "y": 17
+  },
+  "extra": {
+    "role": "wild"
+  },
+  "connections": [
+    {
+      "to": "aurenhal_warrens",
+      "travelMinutes": 30
+    },
+    {
+      "to": "kingsvale_hollowdene",
+      "travelMinutes": 25
+    },
+    {
+      "to": "kingsvale_kingsroad_south",
+      "travelMinutes": 25
+    },
+    {
+      "to": "coast_chalk_downs",
+      "travelMinutes": 180
+    }
+  ],
+  "encounterTables": [
+    "kingsvale_wanderers",
+    "the_loosed"
+  ]
+}

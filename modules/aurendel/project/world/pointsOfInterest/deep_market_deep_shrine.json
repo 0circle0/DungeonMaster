@@ -1,0 +1,24 @@
+{
+  "id": "deep_market_deep_shrine",
+  "name": "The Deep Shrine",
+  "description": "Cut so that a single lamp lights the whole chamber, which took somebody a lifetime to work out.",
+  "area": "karn_dolur_deep_market",
+  "kind": "shrine",
+  "descriptionKey": "int_temple",
+  "travelMinutes": 3,
+  "tags": [
+    "shrine"
+  ],
+  "services": [
+    "temple"
+  ],
+  "map": {
+    "width": "15",
+    "height": "11",
+    "palette": "int_temple"
+  },
+  "position": {
+    "x": 32,
+    "y": 27
+  }
+}

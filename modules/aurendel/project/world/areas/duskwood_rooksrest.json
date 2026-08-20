@@ -1,0 +1,35 @@
+{
+  "id": "duskwood_rooksrest",
+  "name": "Rooksrest",
+  "description": "Charcoal burners, mostly, and the smoke never entirely leaves the clearing.",
+  "biome": "urban_timber",
+  "layer": "overworld",
+  "descriptionKey": "duskwood_rooksrest_desc",
+  "dangerLevel": 2,
+  "recommendedLevel": 3,
+  "tags": [
+    "duskwood",
+    "village"
+  ],
+  "map": {
+    "width": "31",
+    "height": "21"
+  },
+  "entryPoint": {
+    "x": 15,
+    "y": 10
+  },
+  "extra": {
+    "role": "village"
+  },
+  "connections": [
+    {
+      "to": "duskwood_hollow_beeches",
+      "travelMinutes": 30
+    },
+    {
+      "to": "duskwood_thornback_ride",
+      "travelMinutes": 45
+    }
+  ]
+}

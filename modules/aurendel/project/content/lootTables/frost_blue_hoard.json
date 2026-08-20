@@ -1,0 +1,35 @@
+{
+  "id": "frost_blue_hoard",
+  "name": "Under the Calving Face",
+  "rolls": "2",
+  "emptyChance": 0,
+  "bonusRollSkill": "perception",
+  "bonusRolls": {
+    "onSuccess": 1,
+    "onCritical": 2
+  },
+  "entries": [
+    {
+      "weight": 3,
+      "value": {
+        "item": "old_coin",
+        "quantity": "3d6"
+      }
+    },
+    {
+      "weight": 2,
+      "value": {
+        "item": "wight_ash",
+        "quantity": "1d3"
+      }
+    },
+    {
+      "weight": 1,
+      "value": {
+        "item": "blue_bell_shard",
+        "quantity": "1",
+        "unique": true
+      }
+    }
+  ]
+}

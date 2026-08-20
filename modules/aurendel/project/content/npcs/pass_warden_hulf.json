@@ -1,0 +1,48 @@
+{
+  "id": "pass_warden_hulf",
+  "name": "Hulf, Warden of the Pass",
+  "description": "Keeps the Highpass ward on the Hold's behalf, holds the Hold's ledger of what the mountain's water has done since the year eleven, and has been told to sort this out without it becoming the Hold's problem.",
+  "disposition": 5,
+  "gullibility": 0.2,
+  "memorySpan": 300,
+  "offersQuests": [
+    "thecut_the_red_water"
+  ],
+  "caresAbout": [
+    "hold_honoured",
+    "deep_door_opened"
+  ],
+  "reactions": [],
+  "faction": "karn_dolur",
+  "dialogue": "thecut_hulf_talk",
+  "home": "highpass_ward",
+  "shop": {
+    "lootTable": "keeper_stock",
+    "buysTags": [
+      "treasure",
+      "material"
+    ],
+    "priceMultiplier": 1.3,
+    "requires": {
+      "factions": [
+        {
+          "faction": "karn_dolur",
+          "minStanding": 12
+        }
+      ]
+    }
+  },
+  "temperament": {
+    "roamRadius": 0,
+    "wanderChance": 0,
+    "speeds": {
+      "wander": 0
+    },
+    "investigates": [],
+    "notices": [
+      "hostile",
+      "neutral",
+      "ally"
+    ]
+  }
+}

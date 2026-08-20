@@ -1,0 +1,32 @@
+{
+  "id": "the_library",
+  "name": "The Grand Library",
+  "description": "Scholars who hold that a thing unrecorded is a thing lost, and who are not always careful about the cost.",
+  "initialStanding": 0,
+  "decayPerDay": 0.05,
+  "relations": {
+    "the_crown": -0.4
+  },
+  "ranks": [
+    {
+      "id": "unwelcome",
+      "name": "Unwelcome",
+      "atLeast": -40
+    },
+    {
+      "id": "reader",
+      "name": "Reader",
+      "atLeast": 0
+    },
+    {
+      "id": "fellow",
+      "name": "Fellow",
+      "atLeast": 25
+    },
+    {
+      "id": "keyholder",
+      "name": "Keyholder of the Fourth",
+      "atLeast": 60
+    }
+  ]
+}

@@ -1,0 +1,34 @@
+{
+  "id": "int_delved",
+  "name": "Delved Interior",
+  "floor": "flagstone",
+  "wall": "cave_wall",
+  "exterior": "cave_wall",
+  "scatter": [
+    {
+      "terrain": "pillar",
+      "frequency": 0.05,
+      "distribution": "speckle",
+      "priority": 0
+    },
+    {
+      "terrain": "anvil",
+      "frequency": 0.02,
+      "distribution": "speckle",
+      "priority": 1
+    },
+    {
+      "terrain": "brazier",
+      "frequency": 0.03,
+      "distribution": "speckle",
+      "priority": 2
+    },
+    {
+      "terrain": "crate",
+      "frequency": 0.03,
+      "distribution": "speckle",
+      "priority": 3
+    }
+  ],
+  "door": "door"
+}

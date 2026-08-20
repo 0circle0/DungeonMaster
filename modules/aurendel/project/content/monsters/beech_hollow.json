@@ -1,0 +1,74 @@
+{
+  "id": "beech_hollow",
+  "name": "The Hollow Beech",
+  "description": "Four hundred years growing round a hole somebody dug, and it has taken the shape of what it grew around.",
+  "level": 5,
+  "xp": 230,
+  "attributes": {
+    "might": 17,
+    "agility": 7,
+    "endurance": 17,
+    "intellect": 6,
+    "instinct": 13,
+    "presence": 9
+  },
+  "abilities": [
+    "root_and_branch",
+    "rend"
+  ],
+  "behaviour": [
+    {
+      "priority": 10,
+      "use": "root_and_branch",
+      "when": {
+        "chance": 0.4
+      }
+    },
+    {
+      "priority": 0,
+      "use": "rend"
+    }
+  ],
+  "faction": "the_unsealed",
+  "creatureType": "plant",
+  "size": "large",
+  "descriptors": [
+    "a vast",
+    "a split"
+  ],
+  "conditionalLoot": [
+    "silvered_cache"
+  ],
+  "loot": "beeches_hoard",
+  "damageInteractions": [
+    {
+      "damageType": "fire",
+      "multiplier": 2
+    },
+    {
+      "damageType": "piercing",
+      "multiplier": 0.5
+    }
+  ],
+  "conditionImmunities": [
+    "frightened",
+    "prone",
+    "poisoned"
+  ],
+  "resourceOverrides": {
+    "hp": 54
+  },
+  "derivedOverrides": {
+    "guard": 13
+  },
+  "temperament": {
+    "roamRadius": 0,
+    "wanderChance": 0,
+    "disengageTurns": 0,
+    "speeds": {
+      "wander": 0
+    },
+    "investigates": [],
+    "followsTrails": false
+  }
+}

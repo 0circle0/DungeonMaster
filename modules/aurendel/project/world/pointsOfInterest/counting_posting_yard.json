@@ -1,0 +1,22 @@
+{
+  "id": "counting_posting_yard",
+  "name": "The Posting Yard",
+  "description": "Coaches for Cobbleway and the Kingsvale, twice daily, weather allowing.",
+  "area": "sarnport_countinghouse",
+  "kind": "settlement",
+  "descriptionKey": "int_stable",
+  "travelMinutes": 3,
+  "tags": [],
+  "services": [
+    "stable"
+  ],
+  "map": {
+    "width": "11",
+    "height": "9",
+    "palette": "int_timber"
+  },
+  "position": {
+    "x": 32,
+    "y": 27
+  }
+}

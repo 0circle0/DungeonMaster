@@ -1,0 +1,17 @@
+{
+  "id": "smelled_nothing",
+  "variants": [
+    {
+      "text": "You take the air. Nothing in it but the place itself."
+    },
+    {
+      "text": "Cold air, and no trail in it."
+    },
+    {
+      "text": "Nothing has come this way lately, or the wind has taken it."
+    },
+    {
+      "text": "You breathe deep. The air keeps its own counsel."
+    }
+  ]
+}

@@ -1,0 +1,53 @@
+{
+  "id": "glass_walker",
+  "name": "Sela, who Walks the Dunes",
+  "description": "Ninety years of chart and the legs that made the last thirty of it.",
+  "level": 6,
+  "xp": 0,
+  "attributes": {
+    "might": 13,
+    "agility": 16,
+    "endurance": 15,
+    "intellect": 12,
+    "instinct": 17,
+    "presence": 12
+  },
+  "abilities": [
+    "strike",
+    "quick_shot"
+  ],
+  "behaviour": [
+    {
+      "priority": 0,
+      "use": "strike"
+    }
+  ],
+  "faction": "the_water_wardens",
+  "creatureType": "humanoid",
+  "size": "medium",
+  "descriptors": [
+    "a sun-dark"
+  ],
+  "conditionalLoot": [],
+  "loot": "glass_chart_carried",
+  "resourceOverrides": {
+    "hp": 36
+  },
+  "temperament": {
+    "roamRadius": 24,
+    "investigateRadius": 70,
+    "leashRadius": 100,
+    "wanderChance": 0.4,
+    "disengageTurns": 2,
+    "investigates": [
+      "sight",
+      "hearing",
+      "tracks",
+      "smell"
+    ],
+    "notices": [
+      "hostile",
+      "neutral"
+    ]
+  }
+}

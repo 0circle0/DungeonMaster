@@ -1,0 +1,36 @@
+{
+  "id": "lens_cutter_naim",
+  "name": "Naim, at the Cutters' Hall",
+  "description": "Grinds one lens a year that the Hall does not sell, does not display, and does not have minutes for.",
+  "disposition": 0,
+  "gullibility": 0.15,
+  "memorySpan": 250,
+  "offersQuests": [],
+  "caresAbout": [],
+  "reactions": [],
+  "faction": "the_library",
+  "dialogue": "glass_naim_talk",
+  "home": "glass_quarter_cutters",
+  "statblock": "glass_cutter",
+  "shop": {
+    "lootTable": "aurenhal_stock",
+    "buysTags": [
+      "treasure",
+      "material"
+    ],
+    "priceMultiplier": 1.5
+  },
+  "temperament": {
+    "roamRadius": 0,
+    "wanderChance": 0,
+    "speeds": {
+      "wander": 0
+    },
+    "investigates": [],
+    "notices": [
+      "hostile",
+      "neutral",
+      "ally"
+    ]
+  }
+}

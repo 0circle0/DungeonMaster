@@ -1,0 +1,33 @@
+{
+  "id": "ice_guide_vesk",
+  "name": "Vesk of the Ice Road",
+  "description": "Takes people over the shoulder to the ice and back, and holds the hold's survey of it because somebody has to.",
+  "disposition": 3,
+  "gullibility": 0.25,
+  "memorySpan": 200,
+  "offersQuests": [],
+  "caresAbout": [],
+  "reactions": [],
+  "faction": "karn_dolur",
+  "dialogue": "skarn_vesk_talk",
+  "home": "cold_shoulder_ice_road",
+  "statblock": "skarn_guide",
+  "temperament": {
+    "roamRadius": 24,
+    "investigateRadius": 60,
+    "leashRadius": 90,
+    "wanderChance": 0.3,
+    "speeds": {
+      "wander": 0.5
+    },
+    "investigates": [
+      "sight",
+      "hearing"
+    ],
+    "notices": [
+      "hostile",
+      "neutral",
+      "ally"
+    ]
+  }
+}

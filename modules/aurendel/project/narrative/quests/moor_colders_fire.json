@@ -1,0 +1,57 @@
+{
+  "id": "moor_colders_fire",
+  "name": "Colder's Fire",
+  "description": "Two hundred years alight on a third of the fuel it needs, kept for a man the parish register buries twice.",
+  "autoStart": false,
+  "ordered": true,
+  "tags": [
+    "hidden",
+    "weeping_moor",
+    "moor_fire"
+  ],
+  "objectives": [
+    {
+      "id": "under_the_warm",
+      "description": "Get into the cold room underneath.",
+      "kind": "reach",
+      "count": 1,
+      "hidden": true,
+      "optional": false,
+      "target": "colders_hearth_chapel"
+    },
+    {
+      "id": "read_the_rota",
+      "description": "Find which two nights have no name against them.",
+      "kind": "custom",
+      "count": 1,
+      "hidden": true,
+      "optional": false,
+      "when": {
+        "test": {
+          "ref": "flags.moor_fire_open"
+        }
+      }
+    },
+    {
+      "id": "what_is_fed",
+      "description": "Meet what the fire has been feeding.",
+      "kind": "kill",
+      "count": 1,
+      "hidden": true,
+      "optional": false,
+      "target": "the_long_fire"
+    }
+  ],
+  "stages": [],
+  "unlocks": [],
+  "rewards": {
+    "xp": 185,
+    "items": [
+      {
+        "item": "hearth_ring",
+        "quantity": 1
+      }
+    ],
+    "reputation": {}
+  }
+}

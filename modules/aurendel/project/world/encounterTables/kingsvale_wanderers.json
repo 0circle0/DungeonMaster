@@ -1,0 +1,34 @@
+{
+  "id": "kingsvale_wanderers",
+  "minDepth": 0,
+  "maxDepth": 999,
+  "chance": 0.25,
+  "emptyWeight": 10,
+  "scalePerLevels": 3,
+  "groups": [
+    {
+      "id": "rats",
+      "weight": 6,
+      "hostile": true,
+      "entries": [
+        {
+          "monster": "barrow_rat",
+          "count": "1d3",
+          "scaleWithLevel": true
+        }
+      ]
+    },
+    {
+      "id": "a_hound",
+      "weight": 2,
+      "hostile": true,
+      "entries": [
+        {
+          "monster": "grave_hound",
+          "count": "1",
+          "scaleWithLevel": false
+        }
+      ]
+    }
+  ]
+}

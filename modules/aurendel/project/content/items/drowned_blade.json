@@ -1,0 +1,24 @@
+{
+  "id": "drowned_blade",
+  "name": "The Drowned Blade",
+  "description": "Off the battery floor, green to the hilt, and silver under the green because the fort's armoury knew what the passage held.",
+  "kind": "weapon",
+  "slot": "hand",
+  "value": 360,
+  "weight": 3,
+  "tags": [
+    "silvered"
+  ],
+  "skillBonuses": {
+    "intimidation": 1
+  },
+  "damage": {
+    "dice": "1d10",
+    "damageType": "slashing",
+    "stat": "might"
+  },
+  "properties": [
+    "silvered"
+  ],
+  "rarity": "very_rare"
+}

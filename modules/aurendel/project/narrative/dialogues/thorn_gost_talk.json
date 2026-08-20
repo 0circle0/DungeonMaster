@@ -1,0 +1,219 @@
+{
+  "id": "thorn_gost_talk",
+  "start": "greet",
+  "nodes": [
+    {
+      "id": "greet",
+      "says": [
+        {
+          "text": "Trays of dark water under reed shade, and a man moving them out of the sun with a hooked pole."
+        },
+        {
+          "text": "“Leeches. Temples buy them. If you are squeamish, stand upwind.”"
+        }
+      ],
+      "onEnter": [],
+      "options": [
+        {
+          "id": "thorn_gost_quiet",
+          "text": "Where in this marsh will leeches not live?",
+          "requires": {
+            "without": {
+              "lore": [
+                "thorn_knees_quiet"
+              ]
+            }
+          },
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "check": {
+            "skill": "persuasion",
+            "difficulty": {
+              "sub": [
+                12,
+                {
+                  "clamp": [
+                    {
+                      "div": [
+                        {
+                          "ref": "reputation.the_ferrymen",
+                          "else": 0
+                        },
+                        5
+                      ]
+                    },
+                    -6,
+                    6
+                  ]
+                }
+              ]
+            },
+            "onSuccess": "thorn_gost_quiet_told",
+            "onFailure": "thorn_gost_quiet_wont"
+          }
+        },
+        {
+          "id": "thorn_gost_warm",
+          "text": "The channels out by the hummocks run warm.",
+          "requires": {
+            "without": {
+              "lore": [
+                "thorn_hermit_warm"
+              ]
+            }
+          },
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "check": {
+            "skill": "persuasion",
+            "difficulty": {
+              "sub": [
+                13,
+                {
+                  "clamp": [
+                    {
+                      "div": [
+                        {
+                          "ref": "reputation.the_ferrymen",
+                          "else": 0
+                        },
+                        5
+                      ]
+                    },
+                    -6,
+                    6
+                  ]
+                }
+              ]
+            },
+            "onSuccess": "thorn_gost_warm_told",
+            "onFailure": "thorn_gost_warm_wont"
+          }
+        },
+        {
+          "id": "greet_leave",
+          "text": "Nothing.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "thorn_gost_quiet_told",
+      "says": [
+        {
+          "text": "“One place.” He does not have to think. “The deep maze. Not one, anywhere in it, and I have tried to seed it twice because it would be a fine quiet water for it.” He moves another tray. “They will not stop in it. That is not a thing leeches do.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "learnLore": {
+            "entry": "thorn_knees_quiet"
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "thorn_gost_quiet_on",
+          "text": "Go on.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "thorn_gost_quiet_wont",
+      "says": [
+        {
+          "text": "“I've said all I mean to,” they say, and go back to what they were doing."
+        }
+      ],
+      "onEnter": [
+        {
+          "adjustReputation": {
+            "faction": "the_ferrymen",
+            "amount": -1
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "thorn_gost_quiet_drop",
+          "text": "Leave it.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "thorn_gost_warm_told",
+      "says": [
+        {
+          "text": "“They do, and warm water in a marsh is water coming *up*.” He looks out that way. “Down here everything drains. Something out there is pushing, and it has been pushing since before I had this camp.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "learnLore": {
+            "entry": "thorn_hermit_warm"
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "thorn_gost_warm_on",
+          "text": "Go on.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "thorn_gost_warm_wont",
+      "says": [
+        {
+          "text": "“I've said all I mean to,” they say, and go back to what they were doing."
+        }
+      ],
+      "onEnter": [
+        {
+          "adjustReputation": {
+            "faction": "the_ferrymen",
+            "amount": -1
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "thorn_gost_warm_drop",
+          "text": "Leave it.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    }
+  ]
+}

@@ -1,0 +1,8 @@
+{
+  "id": "initiative",
+  "name": "Initiative",
+  "description": "Who moves first when it starts.",
+  "formula": {
+    "ref": "actor.mod.agility"
+  }
+}

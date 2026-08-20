@@ -1,0 +1,11 @@
+{
+  "id": "isle_hidden",
+  "name": "The Isles, Off the Chart",
+  "description": "Three things the sea has been consistent about, in a place where the sea is consistent about nothing.",
+  "quests": [
+    "isle_the_marker",
+    "isle_what_the_terns_know",
+    "isle_the_deep_wreck"
+  ],
+  "isEnding": false
+}

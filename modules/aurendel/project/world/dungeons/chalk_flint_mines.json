@@ -1,0 +1,19 @@
+{
+  "id": "chalk_flint_mines",
+  "name": "The Flint Mines",
+  "description": "Shafts and galleries sunk for flint before iron, and worked with antler picks that are still lying where they were put down.",
+  "biome": "dungeon_cave",
+  "roomCount": "12",
+  "depth": "2",
+  "algorithm": "rooms",
+  "lockedDoorChance": 0,
+  "doorGates": [],
+  "rollEncounters": false,
+  "safeEntrance": true,
+  "branchiness": 0.5,
+  "corridorLength": "3d3",
+  "roomSize": "2d2+2",
+  "width": "69",
+  "height": "69",
+  "bossTable": "coast_horse_boss"
+}

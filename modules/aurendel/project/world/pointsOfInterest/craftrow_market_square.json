@@ -1,0 +1,19 @@
+{
+  "id": "craftrow_market_square",
+  "name": "Craftrow Market",
+  "description": "Trestles up at dawn, down at dusk, and a fight about pitches in between.",
+  "area": "aurenhal_craftrow",
+  "kind": "market",
+  "descriptionKey": "craftrow_market_square_desc",
+  "travelMinutes": 2,
+  "tags": [
+    "shop"
+  ],
+  "position": {
+    "x": 20,
+    "y": 24
+  },
+  "services": [
+    "market"
+  ]
+}

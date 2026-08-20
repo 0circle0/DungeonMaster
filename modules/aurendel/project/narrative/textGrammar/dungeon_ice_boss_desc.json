@@ -1,0 +1,14 @@
+{
+  "id": "dungeon_ice_boss_desc",
+  "variants": [
+    {
+      "text": "A cavern in the glacier with a roof of clear ice and grey daylight coming through forty feet of it."
+    },
+    {
+      "text": "The floor is a frozen lake and there is a great deal underneath it."
+    },
+    {
+      "text": "The whole chamber groans and shifts a fraction and settles, on some schedule of its own."
+    }
+  ]
+}

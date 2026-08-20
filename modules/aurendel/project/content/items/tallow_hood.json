@@ -1,0 +1,13 @@
+{
+  "id": "tallow_hood",
+  "name": "The Tallow Hood",
+  "description": "Waxed against the drip, black against the dark, and cut so the hearing is not covered. The guild issues them and takes them back.",
+  "kind": "armor",
+  "slot": "head",
+  "value": 75,
+  "weight": 1,
+  "tags": [],
+  "skillBonuses": {
+    "stealth": 2
+  }
+}

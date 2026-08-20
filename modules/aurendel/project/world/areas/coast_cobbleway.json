@@ -1,0 +1,43 @@
+{
+  "id": "coast_cobbleway",
+  "name": "Cobbleway",
+  "description": "A market town a day inland of the harbour, and the last place a cart can be repaired before the downs.",
+  "biome": "urban_stone",
+  "layer": "overworld",
+  "descriptionKey": "coast_cobbleway_desc",
+  "dangerLevel": 0,
+  "recommendedLevel": 2,
+  "tags": [
+    "silver_coast",
+    "town"
+  ],
+  "map": {
+    "width": "41",
+    "height": "27"
+  },
+  "entryPoint": {
+    "x": 20,
+    "y": 13
+  },
+  "extra": {
+    "role": "town"
+  },
+  "connections": [
+    {
+      "to": "coast_chalk_downs",
+      "travelMinutes": 45
+    },
+    {
+      "to": "coast_gullmere",
+      "travelMinutes": 35
+    },
+    {
+      "to": "coast_thrift",
+      "travelMinutes": 25
+    },
+    {
+      "to": "kingsvale_wraymill",
+      "travelMinutes": 200
+    }
+  ]
+}

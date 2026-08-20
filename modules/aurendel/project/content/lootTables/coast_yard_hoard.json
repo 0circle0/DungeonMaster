@@ -1,0 +1,41 @@
+{
+  "id": "coast_yard_hoard",
+  "name": "Behind the Mortared Face",
+  "rolls": "2",
+  "emptyChance": 0.05,
+  "bonusRollSkill": "perception",
+  "bonusRolls": {
+    "onSuccess": 1,
+    "onCritical": 2
+  },
+  "entries": [
+    {
+      "weight": 5,
+      "value": {
+        "item": "old_coin",
+        "quantity": "4d6"
+      }
+    },
+    {
+      "weight": 2,
+      "value": {
+        "item": "hold_silver",
+        "quantity": "1"
+      }
+    },
+    {
+      "weight": 2,
+      "value": {
+        "item": "healing_draught",
+        "quantity": "1"
+      }
+    },
+    {
+      "weight": 1,
+      "value": {
+        "item": "barrow_torc",
+        "quantity": "1"
+      }
+    }
+  ]
+}

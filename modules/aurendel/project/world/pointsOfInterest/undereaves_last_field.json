@@ -1,0 +1,29 @@
+{
+  "id": "undereaves_last_field",
+  "name": "The Last Field",
+  "description": "Ploughed right up to the treeline, and the treeline has moved twice in the farmer's lifetime, both times the wrong way.",
+  "area": "duskwood_the_undereaves",
+  "kind": "landmark",
+  "descriptionKey": "generic_landmark",
+  "travelMinutes": 6,
+  "tags": [],
+  "position": {
+    "x": 3,
+    "y": 3
+  },
+  "triggers": [
+    {
+      "id": "dusk_found_field",
+      "mode": "once",
+      "on": "enter",
+      "description": "Where the ploughing stops, against where the marks say it should.",
+      "effects": [
+        {
+          "learnLore": {
+            "entry": "dusk_ward_moved"
+          }
+        }
+      ]
+    }
+  ]
+}

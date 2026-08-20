@@ -1,0 +1,22 @@
+{
+  "id": "kettle_ring",
+  "name": "The Kettle Ring",
+  "description": "Iron off the tube's dressed stone, which the lava went around. It has been warm continuously for as long as anybody has held it.",
+  "kind": "trinket",
+  "slot": "ring",
+  "value": 800,
+  "weight": 1,
+  "tags": [
+    "fabled"
+  ],
+  "skillBonuses": {
+    "survival": 2
+  },
+  "damageInteractions": [
+    {
+      "damageType": "fire",
+      "multiplier": 0.5
+    }
+  ],
+  "rarity": "rare"
+}

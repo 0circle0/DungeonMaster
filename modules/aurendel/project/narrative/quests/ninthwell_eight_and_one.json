@@ -1,0 +1,102 @@
+{
+  "id": "ninthwell_eight_and_one",
+  "name": "Eight and One",
+  "description": "Nine shafts at Bone Wells. Eight are on the roster and drawn from daily. The ninth is on the survey, has never been on the roster, and the camp is laid out so that nobody faces it.",
+  "autoStart": false,
+  "ordered": true,
+  "tags": [
+    "side",
+    "act3",
+    "ninthwell",
+    "glasslands"
+  ],
+  "objectives": [
+    {
+      "id": "to_the_camp",
+      "description": "Reach the diggers' camp at Bone Wells.",
+      "kind": "reach",
+      "count": 1,
+      "hidden": false,
+      "optional": false,
+      "target": "bone_wells_diggers_camp"
+    },
+    {
+      "id": "hear_sefa",
+      "description": "Hear why Sefa was posted out here.",
+      "kind": "talk",
+      "count": 1,
+      "hidden": false,
+      "optional": false,
+      "target": "water_warden_sefa"
+    },
+    {
+      "id": "the_roster",
+      "description": "See the roster and the survey side by side.",
+      "kind": "custom",
+      "count": 1,
+      "hidden": false,
+      "optional": false,
+      "when": {
+        "test": {
+          "ref": "flags.ninthwell_roster_seen"
+        }
+      }
+    }
+  ],
+  "stages": [],
+  "unlocks": [
+    "ninthwell_the_milepost_vault"
+  ],
+  "rewards": {
+    "xp": 90,
+    "items": [],
+    "reputation": {
+      "the_water_wardens": 12
+    }
+  },
+  "giver": "water_warden_sefa",
+  "requires": {
+    "description": "two of the three ward-keys",
+    "anyOf": [
+      {
+        "items": [
+          {
+            "item": "grown_key"
+          },
+          {
+            "item": "cast_key"
+          }
+        ]
+      },
+      {
+        "items": [
+          {
+            "item": "grown_key"
+          },
+          {
+            "item": "glass_key"
+          }
+        ]
+      },
+      {
+        "items": [
+          {
+            "item": "cast_key"
+          },
+          {
+            "item": "glass_key"
+          }
+        ]
+      }
+    ],
+    "minLevel": 6
+  },
+  "onComplete": [
+    {
+      "setFlag": {
+        "flag": "ninthwell_asked",
+        "value": true
+      }
+    }
+  ]
+}

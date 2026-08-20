@@ -1,0 +1,231 @@
+{
+  "id": "tenkh_talk",
+  "start": "greet",
+  "nodes": [
+    {
+      "id": "greet",
+      "says": [
+        {
+          "text": "Tenkh does not dismount. \"You crossed the skull line. Nobody crosses the skull line.\""
+        }
+      ],
+      "options": [
+        {
+          "id": "brief",
+          "text": "Tell me about the ward.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "brief"
+        },
+        {
+          "id": "leave",
+          "text": "Nothing.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": [
+        {
+          "requires": {
+            "flags": [
+              {
+                "flag": "kurgan_cleared",
+                "equals": true
+              }
+            ],
+            "without": {
+              "flags": [
+                {
+                  "flag": "kurgan_restored"
+                },
+                {
+                  "flag": "kurgan_broken"
+                }
+              ]
+            }
+          },
+          "goto": "decide"
+        },
+        {
+          "requires": {
+            "memories": [
+              {
+                "deedKind": "ward_broken",
+                "who": "speaker"
+              }
+            ]
+          },
+          "goto": "cold"
+        }
+      ]
+    },
+    {
+      "id": "brief",
+      "says": [
+        {
+          "text": "\"Two hundred mounds and eleven rows, and the rows point at something that isn't there any more.\" He nods at the poles. \"My grandfather's grandfather set those. Not to keep people out. To keep people from being *in* when it opens.\""
+        }
+      ],
+      "options": [
+        {
+          "id": "back",
+          "text": "Right.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "greet"
+        }
+      ],
+      "onEnter": [
+        {
+          "setFlag": {
+            "flag": "kurgan_briefed",
+            "value": true
+          }
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "decide",
+      "says": [
+        {
+          "text": "\"It's cleared, then.\" A long pause. \"So you've a choice, and I'll not pretend I don't mind which.\""
+        }
+      ],
+      "options": [
+        {
+          "id": "restore",
+          "text": "Reset the line. Every pole.",
+          "effects": [
+            {
+              "setFlag": {
+                "flag": "kurgan_restored",
+                "value": true
+              }
+            },
+            {
+              "adjustReputation": {
+                "faction": "the_keepers",
+                "amount": 6
+              }
+            }
+          ],
+          "onceOnly": true,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "restored"
+        },
+        {
+          "id": "break",
+          "text": "We're going into the great mound.",
+          "effects": [
+            {
+              "setFlag": {
+                "flag": "kurgan_broken",
+                "value": true
+              }
+            }
+          ],
+          "onceOnly": true,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "broken"
+        },
+        {
+          "id": "wait",
+          "text": "We'll think about it.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "greet"
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": []
+    },
+    {
+      "id": "restored",
+      "says": [
+        {
+          "text": "It takes the rest of the day and most of the next, and at the end of it the ward is what it was."
+        }
+      ],
+      "options": [
+        {
+          "id": "done",
+          "text": "Done.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "onEnter": [
+        {
+          "setFlag": {
+            "flag": "kurgan_taken",
+            "value": true
+          }
+        }
+      ],
+      "redirectWhen": [],
+      "remembers": "ward_restored"
+    },
+    {
+      "id": "broken",
+      "says": [
+        {
+          "text": "It comes down faster than you expect, and something on the far side of it stops making the noise it had been making."
+        }
+      ],
+      "options": [
+        {
+          "id": "done",
+          "text": "Done.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "onEnter": [
+        {
+          "setFlag": {
+            "flag": "kurgan_taken",
+            "value": true
+          }
+        }
+      ],
+      "redirectWhen": [],
+      "remembers": "ward_broken"
+    },
+    {
+      "id": "cold",
+      "says": [
+        {
+          "text": "He turns the horse before you finish the first sentence."
+        }
+      ],
+      "options": [
+        {
+          "id": "leave",
+          "text": "Nothing.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": []
+    }
+  ]
+}

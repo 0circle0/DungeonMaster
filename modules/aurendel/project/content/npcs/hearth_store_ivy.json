@@ -1,0 +1,34 @@
+{
+  "id": "hearth_store_ivy",
+  "name": "Ivy, at the Hearth Store",
+  "description": "Sells the parish its peat by the load and has done the arithmetic more than once.",
+  "disposition": 6,
+  "gullibility": 0.4,
+  "memorySpan": 180,
+  "offersQuests": [],
+  "caresAbout": [],
+  "reactions": [],
+  "faction": "the_library",
+  "dialogue": "moor_ivy_talk",
+  "home": "colders_hearth_store",
+  "shop": {
+    "lootTable": "keeper_stock",
+    "buysTags": [
+      "material"
+    ],
+    "priceMultiplier": 1.2
+  },
+  "temperament": {
+    "roamRadius": 0,
+    "wanderChance": 0,
+    "speeds": {
+      "wander": 0
+    },
+    "investigates": [],
+    "notices": [
+      "hostile",
+      "neutral",
+      "ally"
+    ]
+  }
+}

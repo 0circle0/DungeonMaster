@@ -1,0 +1,20 @@
+{
+  "id": "deepwood_ambience",
+  "variants": [
+    {
+      "text": "The canopy closes over and takes most of the daylight with it."
+    },
+    {
+      "text": "Something moves in the leaf litter and stops when you do."
+    },
+    {
+      "text": "Moss has gone up the trunks on the north side, thick as felt."
+    },
+    {
+      "text": "A woodpecker works at something, three trees off, and will not be found."
+    },
+    {
+      "text": "The air under the trees is older and colder than the air outside them."
+    }
+  ]
+}

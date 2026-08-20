@@ -1,0 +1,14 @@
+{
+  "id": "three_wells_the_wells",
+  "name": "The Three Wells",
+  "description": "Sunk in a line a hundred paces apart, and only two of them have ever gone dry in the same year.",
+  "area": "steppe_three_wells",
+  "kind": "landmark",
+  "descriptionKey": "three_wells_the_wells_desc",
+  "travelMinutes": 3,
+  "tags": [],
+  "position": {
+    "x": 3,
+    "y": 3
+  }
+}

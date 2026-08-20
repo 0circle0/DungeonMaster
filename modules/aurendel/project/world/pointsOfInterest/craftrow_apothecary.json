@@ -1,0 +1,24 @@
+{
+  "id": "craftrow_apothecary",
+  "name": "The Sign of the Green Jar",
+  "description": "Drawers, jars, and a proprietor who wants to know exactly what for.",
+  "area": "aurenhal_craftrow",
+  "kind": "market",
+  "descriptionKey": "int_store",
+  "travelMinutes": 3,
+  "tags": [
+    "shop"
+  ],
+  "position": {
+    "x": 30,
+    "y": 18
+  },
+  "services": [
+    "market"
+  ],
+  "map": {
+    "width": "11",
+    "height": "9",
+    "palette": "int_shop"
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "id": "the_old_seams",
+  "minDepth": 0,
+  "maxDepth": 999,
+  "chance": 1,
+  "emptyWeight": 0,
+  "scalePerLevels": 3,
+  "groups": [
+    {
+      "id": "seam",
+      "weight": 1,
+      "hostile": true,
+      "entries": [
+        {
+          "monster": "seam_thing",
+          "count": "1",
+          "scaleWithLevel": false
+        }
+      ]
+    }
+  ]
+}

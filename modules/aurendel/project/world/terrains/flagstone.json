@@ -1,0 +1,18 @@
+{
+  "id": "flagstone",
+  "name": "Flagstones",
+  "description": "Flat-cut paving, the mark of somewhere that had money.",
+  "glyph": ":",
+  "color": "gray",
+  "passable": true,
+  "opaque": false,
+  "moveCost": 0.8,
+  "tags": [
+    "stone",
+    "built"
+  ],
+  "marks": {
+    "tracks": 0,
+    "smell": 0.6
+  }
+}

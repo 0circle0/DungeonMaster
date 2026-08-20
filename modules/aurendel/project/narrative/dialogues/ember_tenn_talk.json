@@ -1,0 +1,424 @@
+{
+  "id": "ember_tenn_talk",
+  "start": "greet",
+  "nodes": [
+    {
+      "id": "greet",
+      "says": [
+        {
+          "text": "A road station with a burn smoking behind it and a man watching the smoke the way other people watch a pot."
+        },
+        {
+          "text": "“Nine days in a burn. Talk if you like, I am not going anywhere.”"
+        }
+      ],
+      "onEnter": [],
+      "options": [
+        {
+          "id": "ember_tenn_ring",
+          "text": "The rings in the new trees.",
+          "requires": {
+            "without": {
+              "lore": [
+                "ember_trees_ring"
+              ]
+            }
+          },
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "check": {
+            "skill": "insight",
+            "difficulty": {
+              "sub": [
+                13,
+                {
+                  "clamp": [
+                    {
+                      "div": [
+                        {
+                          "ref": "reputation.the_vent_readers",
+                          "else": 0
+                        },
+                        5
+                      ]
+                    },
+                    -6,
+                    6
+                  ]
+                }
+              ]
+            },
+            "onSuccess": "ember_tenn_ring_told",
+            "onFailure": "ember_tenn_ring_wont"
+          }
+        },
+        {
+          "id": "ember_tenn_posts",
+          "text": "The iron posts on the road.",
+          "requires": {
+            "without": {
+              "lore": [
+                "ember_trees_posts"
+              ]
+            }
+          },
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "check": {
+            "skill": "persuasion",
+            "difficulty": {
+              "sub": [
+                14,
+                {
+                  "clamp": [
+                    {
+                      "div": [
+                        {
+                          "ref": "reputation.the_vent_readers",
+                          "else": 0
+                        },
+                        5
+                      ]
+                    },
+                    -6,
+                    6
+                  ]
+                }
+              ]
+            },
+            "onSuccess": "ember_tenn_posts_told",
+            "onFailure": "ember_tenn_posts_wont"
+          }
+        },
+        {
+          "id": "ember_tenn_sealed",
+          "text": "Anybody been down the old workings?",
+          "requires": {
+            "without": {
+              "lore": [
+                "ember_trees_sealed"
+              ]
+            }
+          },
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "check": {
+            "skill": "persuasion",
+            "difficulty": {
+              "sub": [
+                15,
+                {
+                  "clamp": [
+                    {
+                      "div": [
+                        {
+                          "ref": "reputation.the_vent_readers",
+                          "else": 0
+                        },
+                        5
+                      ]
+                    },
+                    -6,
+                    6
+                  ]
+                }
+              ]
+            },
+            "onSuccess": "ember_tenn_sealed_told",
+            "onFailure": "ember_tenn_sealed_wont"
+          }
+        },
+        {
+          "id": "ember_tenn_core",
+          "text": "Give me the core.",
+          "requires": {
+            "without": {
+              "items": [
+                "burners_core"
+              ],
+              "flags": [
+                {
+                  "flag": "given:burners_core"
+                }
+              ]
+            }
+          },
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "check": {
+            "skill": "persuasion",
+            "difficulty": {
+              "sub": [
+                12,
+                {
+                  "clamp": [
+                    {
+                      "div": [
+                        {
+                          "ref": "reputation.the_vent_readers",
+                          "else": 0
+                        },
+                        5
+                      ]
+                    },
+                    -6,
+                    6
+                  ]
+                }
+              ]
+            },
+            "onSuccess": "ember_tenn_core_gave",
+            "onFailure": "ember_tenn_core_kept"
+          }
+        },
+        {
+          "id": "greet_leave",
+          "text": "Nothing.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "ember_tenn_ring_told",
+      "says": [
+        {
+          "text": "He fetches a bored core without being asked. “Forty. In eleven years of wood.” He turns it. “And they run the wrong way out from the middle, which I have shown to three foresters and one of them walked off.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "learnLore": {
+            "entry": "ember_trees_ring"
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "ember_tenn_ring_on",
+          "text": "Go on.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "ember_tenn_ring_wont",
+      "says": [
+        {
+          "text": "“I've said all I mean to,” they say, and go back to what they were doing."
+        }
+      ],
+      "onEnter": [
+        {
+          "adjustReputation": {
+            "faction": "the_vent_readers",
+            "amount": -1
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "ember_tenn_ring_drop",
+          "text": "Leave it.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "ember_tenn_posts_told",
+      "says": [
+        {
+          "text": "“Not milestones. Wrong spacing, wrong iron.” He draws it in the dirt with a stick: four posts, and a shape between them. “They are corners. And the middle of what they are the corners of is under the new trees.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "learnLore": {
+            "entry": "ember_trees_posts"
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "ember_tenn_posts_on",
+          "text": "Go on.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "ember_tenn_posts_wont",
+      "says": [
+        {
+          "text": "“I've said all I mean to,” they say, and go back to what they were doing."
+        }
+      ],
+      "onEnter": [
+        {
+          "adjustReputation": {
+            "faction": "the_vent_readers",
+            "amount": -1
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "ember_tenn_posts_drop",
+          "text": "Leave it.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "ember_tenn_sealed_told",
+      "says": [
+        {
+          "text": "“Cannot be. It is barred.” He is very clear about this. “Barred from the inside, and the adit is the only way in, and I would like somebody cleverer than me to explain how both of those are true.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "learnLore": {
+            "entry": "ember_trees_sealed"
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "ember_tenn_sealed_on",
+          "text": "Go on.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "ember_tenn_sealed_wont",
+      "says": [
+        {
+          "text": "“I've said all I mean to,” they say, and go back to what they were doing."
+        }
+      ],
+      "onEnter": [
+        {
+          "adjustReputation": {
+            "faction": "the_vent_readers",
+            "amount": -1
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "ember_tenn_sealed_drop",
+          "text": "Leave it.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "ember_tenn_core_gave",
+      "says": [
+        {
+          "text": "He hands it over end-first, like a tool. “Count them yourself. I have counted them eleven times and I would like to be wrong.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "grantItem": {
+            "target": {
+              "ref": "actor.id"
+            },
+            "item": "burners_core",
+            "quantity": 1
+          }
+        },
+        {
+          "setFlag": {
+            "flag": "given:burners_core",
+            "value": true
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "ember_tenn_core_thanks",
+          "text": "Thank you.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "ember_tenn_core_kept",
+      "says": [
+        {
+          "text": "“Bore your own,” he says, not unkindly. “The saw is there.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "adjustReputation": {
+            "faction": "the_vent_readers",
+            "amount": -1
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "ember_tenn_core_leave",
+          "text": "Then no.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "id": "dungeon_drowned_boss_desc",
+  "variants": [
+    {
+      "text": "The great chamber, flooded to the springing of the vault, and the vault still holding."
+    },
+    {
+      "text": "Deep water, black, with the tops of columns coming up out of it in two rows."
+    },
+    {
+      "text": "There is a current in here, in a room with no outlet you can see."
+    }
+  ]
+}

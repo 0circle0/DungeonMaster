@@ -1,0 +1,17 @@
+{
+  "id": "shilling_ring",
+  "name": "The Shilling Ring",
+  "description": "Two hundred years of tolls, one shilling at a time, fused into a band. Worn, people ask you for less.",
+  "kind": "trinket",
+  "slot": "ring",
+  "value": 900,
+  "weight": 1,
+  "tags": [
+    "fabled"
+  ],
+  "skillBonuses": {
+    "persuasion": 3,
+    "insight": 2
+  },
+  "rarity": "rare"
+}

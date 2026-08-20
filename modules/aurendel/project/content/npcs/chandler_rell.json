@@ -1,0 +1,34 @@
+{
+  "id": "chandler_rell",
+  "name": "Rell, Chandler",
+  "description": "Sells rope, tar, lamp oil and charts, and has opinions about which of the charts are worth the paper.",
+  "disposition": 6,
+  "gullibility": 0.4,
+  "memorySpan": 180,
+  "offersQuests": [],
+  "caresAbout": [],
+  "reactions": [],
+  "faction": "the_countinghouse",
+  "dialogue": "coast_rell_talk",
+  "home": "harbourside_chandlery",
+  "shop": {
+    "lootTable": "countinghouse_stock",
+    "buysTags": [
+      "treasure"
+    ],
+    "priceMultiplier": 1.25
+  },
+  "temperament": {
+    "roamRadius": 0,
+    "wanderChance": 0,
+    "speeds": {
+      "wander": 0
+    },
+    "investigates": [],
+    "notices": [
+      "hostile",
+      "neutral",
+      "ally"
+    ]
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "id": "three_wells_the_dry_well",
+  "name": "The Dry Well",
+  "description": "The fourth, which nobody counts, and which went dry two hundred years ago and has a doorway at the bottom.",
+  "area": "steppe_three_wells",
+  "kind": "dungeonEntrance",
+  "descriptionKey": "generic_dungeon_mouth",
+  "travelMinutes": 10,
+  "tags": [
+    "secret",
+    "dungeon"
+  ],
+  "hidden": true,
+  "discover": {
+    "skill": "perception",
+    "difficulty": 12
+  },
+  "dungeon": "steppe_dry_well",
+  "position": {
+    "x": 27,
+    "y": 17
+  }
+}

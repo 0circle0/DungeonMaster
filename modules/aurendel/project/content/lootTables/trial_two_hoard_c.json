@@ -1,0 +1,48 @@
+{
+  "id": "trial_two_hoard_c",
+  "name": "Four Hundred Feet Under a Milepost",
+  "rolls": "5",
+  "emptyChance": 0,
+  "bonusRollSkill": "perception",
+  "bonusRolls": {
+    "onSuccess": 2,
+    "onCritical": 3
+  },
+  "entries": [
+    {
+      "weight": 4,
+      "value": {
+        "item": "old_coin",
+        "quantity": "12d6"
+      }
+    },
+    {
+      "weight": 3,
+      "value": {
+        "item": "glass_bead",
+        "quantity": "2d4"
+      }
+    },
+    {
+      "weight": 3,
+      "value": {
+        "item": "antidote",
+        "quantity": "1d3"
+      }
+    },
+    {
+      "weight": 2,
+      "value": {
+        "item": "ward_salt",
+        "quantity": "2d3"
+      }
+    },
+    {
+      "weight": 1,
+      "value": {
+        "item": "amber_lump",
+        "quantity": "1d4"
+      }
+    }
+  ]
+}

@@ -1,0 +1,32 @@
+{
+  "id": "the_ratcatchers",
+  "name": "The Ratcatchers' Guild",
+  "description": "Forty-one people with a charter, a livery, and the only complete map of what is under Aurenhal. They did not make the map for the Crown and they are not showing it to the Crown.",
+  "initialStanding": 0,
+  "decayPerDay": 0.07,
+  "relations": {
+    "the_crown": -0.3
+  },
+  "ranks": [
+    {
+      "id": "marked",
+      "name": "Marked",
+      "atLeast": -35
+    },
+    {
+      "id": "hired",
+      "name": "Casual Hire",
+      "atLeast": 0
+    },
+    {
+      "id": "liveried",
+      "name": "Liveried",
+      "atLeast": 25
+    },
+    {
+      "id": "warden_of_the_under",
+      "name": "Warden of the Under",
+      "atLeast": 55
+    }
+  ]
+}

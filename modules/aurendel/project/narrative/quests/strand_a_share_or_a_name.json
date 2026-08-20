@@ -1,0 +1,140 @@
+{
+  "id": "strand_a_share_or_a_name",
+  "name": "A Share or a Name",
+  "description": "The cargo is under the downs, the kiln was lit on purpose, and two people would like to hear about it in two very different rooms.",
+  "autoStart": false,
+  "ordered": false,
+  "tags": [
+    "side",
+    "act1",
+    "strand",
+    "silver_coast"
+  ],
+  "objectives": [
+    {
+      "id": "take_a_share",
+      "description": "Take the Strand's share and say nothing.",
+      "kind": "custom",
+      "count": 1,
+      "hidden": false,
+      "optional": true,
+      "when": {
+        "test": {
+          "ref": "flags.strand_took_share"
+        }
+      }
+    },
+    {
+      "id": "give_a_name",
+      "description": "Give the Insurers' Hall a name.",
+      "kind": "custom",
+      "count": 1,
+      "hidden": false,
+      "optional": true,
+      "when": {
+        "test": {
+          "ref": "flags.strand_informed"
+        }
+      }
+    },
+    {
+      "id": "settle",
+      "description": "Settle what happens to the cargo.",
+      "kind": "custom",
+      "count": 1,
+      "hidden": false,
+      "optional": false,
+      "when": {
+        "any": [
+          {
+            "test": {
+              "ref": "flags.strand_took_share"
+            }
+          },
+          {
+            "test": {
+              "ref": "flags.strand_informed"
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "stages": [],
+  "unlocks": [],
+  "rewards": {
+    "xp": 40,
+    "items": [
+      {
+        "item": "wreckers_lantern",
+        "quantity": 1
+      }
+    ],
+    "reputation": {}
+  },
+  "requires": {
+    "quests": [
+      {
+        "quest": "strand_the_run",
+        "status": "complete"
+      }
+    ]
+  },
+  "onComplete": [
+    {
+      "if": {
+        "when": {
+          "test": {
+            "ref": "flags.strand_informed"
+          }
+        },
+        "then": [
+          {
+            "adjustReputation": {
+              "faction": "the_countinghouse",
+              "amount": 25
+            }
+          },
+          {
+            "adjustReputation": {
+              "faction": "the_crown",
+              "amount": 8
+            }
+          },
+          {
+            "adjustReputation": {
+              "faction": "the_salvors",
+              "amount": -30
+            }
+          },
+          {
+            "setFlag": {
+              "flag": "strand_named",
+              "value": true
+            }
+          }
+        ],
+        "else": [
+          {
+            "adjustReputation": {
+              "faction": "the_salvors",
+              "amount": 25
+            }
+          },
+          {
+            "adjustReputation": {
+              "faction": "the_countinghouse",
+              "amount": -15
+            }
+          },
+          {
+            "setFlag": {
+              "flag": "strand_shared",
+              "value": true
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

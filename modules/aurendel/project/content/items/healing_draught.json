@@ -1,0 +1,25 @@
+{
+  "id": "healing_draught",
+  "name": "Healing Draught",
+  "description": "Bitter, warm going down, and worth every mark.",
+  "kind": "consumable",
+  "value": 22,
+  "weight": 0.5,
+  "stackable": true,
+  "consumedOnUse": true,
+  "onUse": [
+    {
+      "heal": {
+        "target": {
+          "ref": "actor.id"
+        },
+        "amount": {
+          "roll": "2d4"
+        }
+      }
+    }
+  ],
+  "tags": [
+    "consumable"
+  ]
+}

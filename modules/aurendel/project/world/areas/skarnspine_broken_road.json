@@ -1,0 +1,42 @@
+{
+  "id": "skarnspine_broken_road",
+  "name": "The Broken Road",
+  "description": "The old road up from the vale, taken out by a slip in the year of the great rains and never properly mended.",
+  "biome": "alpine",
+  "layer": "overworld",
+  "descriptionKey": "skarnspine_broken_road_desc",
+  "dangerLevel": 3,
+  "recommendedLevel": 4,
+  "tags": [
+    "skarnspine"
+  ],
+  "map": {
+    "width": "51",
+    "height": "35"
+  },
+  "entryPoint": {
+    "x": 25,
+    "y": 17
+  },
+  "extra": {
+    "role": "wild"
+  },
+  "connections": [
+    {
+      "to": "skarnspine_the_cut",
+      "travelMinutes": 50
+    },
+    {
+      "to": "skarnspine_ironstair",
+      "travelMinutes": 60
+    },
+    {
+      "to": "kingsvale_weirwater_crossing",
+      "travelMinutes": 210
+    },
+    {
+      "to": "duskwood_thornback_ride",
+      "travelMinutes": 190
+    }
+  ]
+}

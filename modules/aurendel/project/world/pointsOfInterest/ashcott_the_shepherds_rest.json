@@ -1,0 +1,24 @@
+{
+  "id": "ashcott_the_shepherds_rest",
+  "name": "The Shepherd's Rest",
+  "description": "Two rooms to let and a landlady who counts the spoons.",
+  "area": "kingsvale_ashcott",
+  "kind": "settlement",
+  "descriptionKey": "int_inn",
+  "travelMinutes": 2,
+  "tags": [
+    "inn"
+  ],
+  "position": {
+    "x": 20,
+    "y": 14
+  },
+  "services": [
+    "inn"
+  ],
+  "map": {
+    "width": "9",
+    "height": "7",
+    "palette": "int_timber"
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "id": "highpass_ward",
+  "name": "Highpass Ward",
+  "description": "A wall across the valley with a gate in it, and a garrison who spend most of the year shovelling.",
+  "area": "skarnspine_highpass",
+  "kind": "landmark",
+  "descriptionKey": "generic_landmark",
+  "travelMinutes": 5,
+  "tags": [
+    "castle"
+  ],
+  "map": {
+    "width": "19",
+    "height": "13",
+    "palette": "int_stone"
+  },
+  "position": {
+    "x": 3,
+    "y": 3
+  }
+}

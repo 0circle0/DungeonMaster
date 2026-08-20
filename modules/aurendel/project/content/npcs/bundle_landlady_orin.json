@@ -1,0 +1,34 @@
+{
+  "id": "bundle_landlady_orin",
+  "name": "Orin, at the Bundle",
+  "description": "Knows every cutter, thatcher and leech-man in the Bottom by name, which is why the one she cannot name bothers her.",
+  "disposition": 8,
+  "gullibility": 0.5,
+  "memorySpan": 180,
+  "offersQuests": [],
+  "caresAbout": [],
+  "reactions": [],
+  "faction": "the_ferrymen",
+  "dialogue": "thorn_orin_talk",
+  "home": "reedy_bottom_the_bundle",
+  "shop": {
+    "lootTable": "hollowdene_stock",
+    "buysTags": [
+      "treasure"
+    ],
+    "priceMultiplier": 1.3
+  },
+  "temperament": {
+    "roamRadius": 0,
+    "wanderChance": 0,
+    "speeds": {
+      "wander": 0
+    },
+    "investigates": [],
+    "notices": [
+      "hostile",
+      "neutral",
+      "ally"
+    ]
+  }
+}

@@ -1,0 +1,72 @@
+{
+  "id": "under_warmth",
+  "name": "What Keeps the Third Turn Warm",
+  "description": "Warm air off a bricked passage under a city, all year, since before the King's Gate.",
+  "level": 4,
+  "xp": 240,
+  "attributes": {
+    "might": 12,
+    "agility": 14,
+    "endurance": 14,
+    "intellect": 12,
+    "instinct": 15,
+    "presence": 13
+  },
+  "abilities": [
+    "grave_chill",
+    "wither"
+  ],
+  "behaviour": [
+    {
+      "priority": 0,
+      "use": "grave_chill"
+    }
+  ],
+  "faction": "the_unsealed",
+  "creatureType": "undead",
+  "size": "medium",
+  "descriptors": [
+    "a close",
+    "a breathing"
+  ],
+  "conditionalLoot": [],
+  "loot": "kings_under_hoard",
+  "damageInteractions": [
+    {
+      "damageType": "slashing",
+      "multiplier": 0.5,
+      "unless": [
+        "silvered"
+      ]
+    },
+    {
+      "damageType": "piercing",
+      "multiplier": 0.5,
+      "unless": [
+        "silvered"
+      ]
+    }
+  ],
+  "conditionImmunities": [
+    "frightened"
+  ],
+  "resourceOverrides": {
+    "hp": 34
+  },
+  "temperament": {
+    "roamRadius": 12,
+    "investigateRadius": 40,
+    "leashRadius": 60,
+    "wanderChance": 0.1,
+    "disengageTurns": 1,
+    "speeds": {
+      "wander": 0.5,
+      "investigate": 0.5
+    },
+    "investigates": [
+      "sight",
+      "hearing",
+      "smell"
+    ]
+  }
+}

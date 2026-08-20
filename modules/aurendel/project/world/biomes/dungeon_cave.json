@@ -1,0 +1,27 @@
+{
+  "id": "dungeon_cave",
+  "name": "Cave",
+  "description": "Cut by water over a very long time, and never intended for anyone.",
+  "layer": "underworld",
+  "palette": "dun_cave",
+  "roomTemplates": [
+    "dungeon_cave_boss",
+    "dungeon_cave_chamber",
+    "dungeon_cave_corridor",
+    "dungeon_cave_entrance",
+    "dungeon_cave_lair",
+    "dungeon_cave_shrine",
+    "dungeon_cave_vault"
+  ],
+  "encounterTables": [
+    "cave_things"
+  ],
+  "lootTables": [
+    "deep_scraps"
+  ],
+  "traps": [
+    "collapsing_stair",
+    "pit",
+    "snare"
+  ]
+}

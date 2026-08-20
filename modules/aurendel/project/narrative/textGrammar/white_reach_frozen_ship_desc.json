@@ -1,0 +1,14 @@
+{
+  "id": "white_reach_frozen_ship_desc",
+  "variants": [
+    {
+      "text": "Thirty miles from the nearest open water, upright, masts standing, rigged."
+    },
+    {
+      "text": "There is no route by which this could have arrived here."
+    },
+    {
+      "text": "She is in good order. That is the part that stays with you."
+    }
+  ]
+}

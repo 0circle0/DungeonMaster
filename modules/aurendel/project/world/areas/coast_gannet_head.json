@@ -1,0 +1,42 @@
+{
+  "id": "coast_gannet_head",
+  "name": "Gannet Head",
+  "description": "The headland: four hundred feet of chalk, forty thousand birds, and a path along the top that is narrower than it was.",
+  "biome": "coast",
+  "layer": "overworld",
+  "descriptionKey": "coast_gannet_head_desc",
+  "dangerLevel": 3,
+  "recommendedLevel": 3,
+  "tags": [
+    "silver_coast"
+  ],
+  "map": {
+    "width": "51",
+    "height": "35"
+  },
+  "entryPoint": {
+    "x": 25,
+    "y": 17
+  },
+  "extra": {
+    "role": "wild"
+  },
+  "connections": [
+    {
+      "to": "coast_gullmere",
+      "travelMinutes": 35
+    },
+    {
+      "to": "coast_wreckers_strand",
+      "travelMinutes": 40
+    },
+    {
+      "to": "frostmere_rimewatch_shore",
+      "travelMinutes": 300,
+      "gate": "frostmere_north_passage"
+    }
+  ],
+  "encounterTables": [
+    "coast_things"
+  ]
+}

@@ -1,0 +1,7 @@
+{
+  "id": "void_floor",
+  "name": "Nowhere",
+  "description": "Placeholder ground. A world module replaces this.",
+  "glyph": ".",
+  "passable": true
+}

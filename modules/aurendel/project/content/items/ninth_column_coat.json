@@ -1,0 +1,30 @@
+{
+  "id": "ninth_column_coat",
+  "name": "The Ninth Column's Coat",
+  "description": "Salt-stiffened, off a body at the foot of the column that should not be there. It is still warm.",
+  "kind": "armor",
+  "slot": "cloak",
+  "value": 1700,
+  "weight": 1,
+  "tags": [
+    "fabled"
+  ],
+  "modifiers": {
+    "guard": 3
+  },
+  "skillBonuses": {
+    "resolve": 3,
+    "arcana": 2
+  },
+  "damageInteractions": [
+    {
+      "damageType": "necrotic",
+      "multiplier": 0.5
+    },
+    {
+      "damageType": "cold",
+      "multiplier": 0.5
+    }
+  ],
+  "rarity": "artifact"
+}

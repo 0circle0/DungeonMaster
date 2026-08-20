@@ -1,0 +1,18 @@
+{
+  "id": "shallows",
+  "name": "Shallows",
+  "description": "Ankle-deep and cold.",
+  "glyph": "~",
+  "color": "blue",
+  "passable": true,
+  "opaque": false,
+  "moveCost": 2,
+  "tags": [
+    "washed",
+    "water"
+  ],
+  "marks": {
+    "tracks": 0,
+    "smell": 0.15
+  }
+}

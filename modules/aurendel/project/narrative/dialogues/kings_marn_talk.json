@@ -1,0 +1,362 @@
+{
+  "id": "kings_marn_talk",
+  "start": "greet",
+  "nodes": [
+    {
+      "id": "greet",
+      "says": [
+        {
+          "text": "A stall on the market square with a board, a case of rolls and a man ruling a line with the concentration of a surgeon."
+        },
+        {
+          "text": "“Copying is by the sheet and I do not do it while you wait.”"
+        }
+      ],
+      "onEnter": [],
+      "options": [
+        {
+          "id": "kings_marn_maps",
+          "text": "The Library keeps the city's drains, doesn't it?",
+          "requires": {
+            "without": {
+              "lore": [
+                "kings_under_maps"
+              ]
+            }
+          },
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "check": {
+            "skill": "persuasion",
+            "difficulty": {
+              "sub": [
+                15,
+                {
+                  "clamp": [
+                    {
+                      "div": [
+                        {
+                          "ref": "reputation.the_library",
+                          "else": 0
+                        },
+                        5
+                      ]
+                    },
+                    -6,
+                    6
+                  ]
+                }
+              ]
+            },
+            "onSuccess": "kings_marn_maps_told",
+            "onFailure": "kings_marn_maps_wont"
+          }
+        },
+        {
+          "id": "kings_marn_brick",
+          "text": "What is at the third turn under Riverside?",
+          "requires": {
+            "without": {
+              "lore": [
+                "kings_under_brick"
+              ]
+            }
+          },
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "check": {
+            "skill": "persuasion",
+            "difficulty": {
+              "sub": [
+                13,
+                {
+                  "clamp": [
+                    {
+                      "div": [
+                        {
+                          "ref": "reputation.the_library",
+                          "else": 0
+                        },
+                        5
+                      ]
+                    },
+                    -6,
+                    6
+                  ]
+                }
+              ]
+            },
+            "onSuccess": "kings_marn_brick_told",
+            "onFailure": "kings_marn_brick_wont"
+          }
+        },
+        {
+          "id": "kings_marn_sheet",
+          "text": "You copied the sheet before it went. I want your copy.",
+          "requires": {
+            "without": {
+              "items": [
+                "drain_sheet"
+              ],
+              "flags": [
+                {
+                  "flag": "given:drain_sheet"
+                }
+              ]
+            }
+          },
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "check": {
+            "skill": "persuasion",
+            "difficulty": {
+              "sub": [
+                16,
+                {
+                  "clamp": [
+                    {
+                      "div": [
+                        {
+                          "ref": "reputation.the_library",
+                          "else": 0
+                        },
+                        5
+                      ]
+                    },
+                    -6,
+                    6
+                  ]
+                }
+              ]
+            },
+            "onSuccess": "kings_marn_sheet_gave",
+            "onFailure": "kings_marn_sheet_kept"
+          }
+        },
+        {
+          "id": "greet_leave",
+          "text": "Nothing.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": [
+        {
+          "requires": {
+            "factions": [
+              {
+                "faction": "the_library",
+                "maxStanding": -25
+              }
+            ]
+          },
+          "goto": "kings_marn_cold"
+        }
+      ]
+    },
+    {
+      "id": "kings_marn_maps_told",
+      "says": [
+        {
+          "text": "“Four hundred years of them, and I copy them for the guilds.” He lowers his voice without seeming to decide to. “There is a year missing out of the run. One sheet. And the run is bound, so somebody cut it out and rebound it, which is a week's work by somebody who knew how.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "learnLore": {
+            "entry": "kings_under_maps"
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "kings_marn_maps_on",
+          "text": "Go on.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "kings_marn_maps_wont",
+      "says": [
+        {
+          "text": "“I've said all I mean to,” they say, and go back to what they were doing."
+        }
+      ],
+      "onEnter": [
+        {
+          "adjustReputation": {
+            "faction": "the_library",
+            "amount": -1
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "kings_marn_maps_drop",
+          "text": "Leave it.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "kings_marn_brick_told",
+      "says": [
+        {
+          "text": "“Brick.” He is precise about it, because he is a copyist. “And I have the profile off my copy — it is a foot thick, English bond, and the mortar is better than anything the city was laying at the time.” He sits back. “Somebody good was in a hurry.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "learnLore": {
+            "entry": "kings_under_brick"
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "kings_marn_brick_on",
+          "text": "Go on.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "kings_marn_brick_wont",
+      "says": [
+        {
+          "text": "“I've said all I mean to,” they say, and go back to what they were doing."
+        }
+      ],
+      "onEnter": [
+        {
+          "adjustReputation": {
+            "faction": "the_library",
+            "amount": -1
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "kings_marn_brick_drop",
+          "text": "Leave it.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "kings_marn_sheet_gave",
+      "says": [
+        {
+          "text": "He does not pretend not to have it. He gets it out of a case and unrolls the corner and rolls it back up again. “I made this the week before. I have never shown it to the Library.” He hands it over. “I would like to not be the only person who has seen it.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "grantItem": {
+            "target": {
+              "ref": "actor.id"
+            },
+            "item": "drain_sheet",
+            "quantity": 1
+          }
+        },
+        {
+          "setFlag": {
+            "flag": "given:drain_sheet",
+            "value": true
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "kings_marn_sheet_thanks",
+          "text": "Thank you.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "kings_marn_sheet_kept",
+      "says": [
+        {
+          "text": "“I am a copyist in a city that has already cut one sheet out of a bound run,” he says. “No.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "adjustReputation": {
+            "faction": "the_library",
+            "amount": -2
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "kings_marn_sheet_leave",
+          "text": "Then no.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "kings_marn_cold",
+      "says": [
+        {
+          "text": "He rolls what he was working on and puts it in the case and closes the case."
+        }
+      ],
+      "onEnter": [],
+      "options": [
+        {
+          "id": "kings_marn_go",
+          "text": "Leave it.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    }
+  ]
+}

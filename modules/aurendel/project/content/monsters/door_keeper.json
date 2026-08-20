@@ -1,0 +1,149 @@
+{
+  "id": "door_keeper",
+  "name": "The Keeper of the Ninth",
+  "description": "It has been on the other side of the ninth door for as long as there has been a ninth door.",
+  "level": 8,
+  "xp": 900,
+  "attributes": {
+    "might": 18,
+    "agility": 13,
+    "endurance": 18,
+    "intellect": 16,
+    "instinct": 15,
+    "presence": 18
+  },
+  "abilities": [
+    "unmaking_word",
+    "wither",
+    "stone_fist",
+    "call_the_shut"
+  ],
+  "behaviour": [
+    {
+      "priority": 30,
+      "use": "unmaking_word",
+      "when": {
+        "chance": 0.4
+      }
+    },
+    {
+      "priority": 20,
+      "use": "call_the_shut",
+      "when": {
+        "chance": 0.3
+      }
+    },
+    {
+      "priority": 10,
+      "use": "wither"
+    },
+    {
+      "priority": 0,
+      "use": "stone_fist"
+    }
+  ],
+  "faction": "the_unsealed",
+  "creatureType": "undead",
+  "size": "large",
+  "descriptors": [
+    "a vast",
+    "an unhurried"
+  ],
+  "conditionalLoot": [
+    "warden_blade_cache"
+  ],
+  "loot": "ninth_door_hoard",
+  "damageInteractions": [
+    {
+      "damageType": "slashing",
+      "multiplier": 0.5,
+      "unless": [
+        "silvered"
+      ]
+    },
+    {
+      "damageType": "piercing",
+      "multiplier": 0.5,
+      "unless": [
+        "silvered"
+      ]
+    },
+    {
+      "damageType": "necrotic",
+      "multiplier": 0
+    },
+    {
+      "damageType": "radiant",
+      "multiplier": 1.5
+    }
+  ],
+  "conditionImmunities": [
+    "frightened",
+    "poisoned",
+    "bleeding",
+    "prone",
+    "stunned"
+  ],
+  "specialTurns": [
+    {
+      "id": "the_door_answers",
+      "name": "The Door Answers",
+      "use": "grave_chill",
+      "uses": 1
+    }
+  ],
+  "reactions": [
+    {
+      "id": "names_you",
+      "on": "seePlayer",
+      "priority": 10,
+      "effects": [
+        {
+          "setFlag": {
+            "flag": "the_keeper_knows_you",
+            "value": true
+          }
+        }
+      ]
+    },
+    {
+      "id": "the_door_shudders",
+      "on": "selfHurt",
+      "priority": 5,
+      "oncePerEncounter": true,
+      "effects": [
+        {
+          "applyCondition": {
+            "target": {
+              "ref": "actor.id"
+            },
+            "condition": "emboldened",
+            "duration": 4
+          }
+        }
+      ]
+    }
+  ],
+  "resourceOverrides": {
+    "hp": 120
+  },
+  "derivedOverrides": {
+    "guard": 18
+  },
+  "temperament": {
+    "roamRadius": 12,
+    "investigateRadius": 40,
+    "leashRadius": 60,
+    "wanderChance": 0.1,
+    "disengageTurns": 1,
+    "speeds": {
+      "wander": 0.5,
+      "investigate": 0.5
+    },
+    "investigates": [
+      "sight",
+      "hearing",
+      "smell"
+    ]
+  }
+}

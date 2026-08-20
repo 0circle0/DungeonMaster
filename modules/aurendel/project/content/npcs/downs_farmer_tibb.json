@@ -1,0 +1,34 @@
+{
+  "id": "downs_farmer_tibb",
+  "name": "Tibb, at Downs Farm",
+  "description": "Farms the last field before the cliff and has looked up at that hillside every day of a long life.",
+  "disposition": 7,
+  "gullibility": 0.45,
+  "memorySpan": 170,
+  "offersQuests": [],
+  "caresAbout": [],
+  "reactions": [],
+  "faction": "the_salvors",
+  "dialogue": "coast_tibb_talk",
+  "home": "thrift_house_a",
+  "shop": {
+    "lootTable": "keeper_stock",
+    "buysTags": [
+      "material"
+    ],
+    "priceMultiplier": 1.15
+  },
+  "temperament": {
+    "roamRadius": 0,
+    "wanderChance": 0,
+    "speeds": {
+      "wander": 0
+    },
+    "investigates": [],
+    "notices": [
+      "hostile",
+      "neutral",
+      "ally"
+    ]
+  }
+}

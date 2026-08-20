@@ -1,0 +1,91 @@
+{
+  "id": "the_way_below",
+  "name": "The Way Below",
+  "description": "Every ward on the list is a door in the same wall, and the wall has a corridor behind it.",
+  "autoStart": false,
+  "ordered": true,
+  "tags": [
+    "act3"
+  ],
+  "objectives": [
+    {
+      "id": "get_down",
+      "description": "Find a way into the Deeproads.",
+      "kind": "custom",
+      "count": 1,
+      "hidden": false,
+      "optional": false,
+      "when": {
+        "any": [
+          {
+            "test": {
+              "ref": "flags.down_by_karn_dolur"
+            }
+          },
+          {
+            "test": {
+              "ref": "flags.down_by_the_tarn"
+            }
+          },
+          {
+            "test": {
+              "ref": "flags.down_by_the_crater"
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "stages": [],
+  "unlocks": [
+    "lantern_deep"
+  ],
+  "rewards": {
+    "xp": 300,
+    "items": [],
+    "reputation": {}
+  },
+  "requires": {
+    "description": "two of the three ward-keys",
+    "anyOf": [
+      {
+        "items": [
+          {
+            "item": "grown_key"
+          },
+          {
+            "item": "cast_key"
+          }
+        ]
+      },
+      {
+        "items": [
+          {
+            "item": "grown_key"
+          },
+          {
+            "item": "glass_key"
+          }
+        ]
+      },
+      {
+        "items": [
+          {
+            "item": "cast_key"
+          },
+          {
+            "item": "glass_key"
+          }
+        ]
+      }
+    ]
+  },
+  "onComplete": [
+    {
+      "setFlag": {
+        "flag": "in_the_deeproads",
+        "value": true
+      }
+    }
+  ]
+}

@@ -1,0 +1,314 @@
+{
+  "id": "frost_gudny_talk",
+  "start": "greet",
+  "nodes": [
+    {
+      "id": "greet",
+      "says": [
+        {
+          "text": "Elbow-deep in a flensing trough, and cheerful about it in a way that suggests she has been doing it long enough to have stopped noticing."
+        },
+        {
+          "text": "“Mind the deck, it's slick the whole length. Twenty-two seasons and I still go over on it.”"
+        }
+      ],
+      "onEnter": [],
+      "options": [
+        {
+          "id": "frost_gudny_calving",
+          "text": "Do the whales still calve inside the face?",
+          "requires": {
+            "without": {
+              "lore": [
+                "frost_blue_calving"
+              ]
+            }
+          },
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "check": {
+            "skill": "persuasion",
+            "difficulty": {
+              "sub": [
+                10,
+                {
+                  "clamp": [
+                    {
+                      "div": [
+                        {
+                          "ref": "reputation.the_ice_moot",
+                          "else": 0
+                        },
+                        5
+                      ]
+                    },
+                    -6,
+                    6
+                  ]
+                }
+              ]
+            },
+            "onSuccess": "frost_gudny_calving_told",
+            "onFailure": "frost_gudny_calving_wont"
+          }
+        },
+        {
+          "id": "frost_gudny_cut",
+          "text": "Half the skulls on the Strand are cut. What cuts like that?",
+          "requires": {
+            "without": {
+              "lore": [
+                "frost_strand_cut"
+              ]
+            }
+          },
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "check": {
+            "skill": "persuasion",
+            "difficulty": {
+              "sub": [
+                12,
+                {
+                  "clamp": [
+                    {
+                      "div": [
+                        {
+                          "ref": "reputation.the_ice_moot",
+                          "else": 0
+                        },
+                        5
+                      ]
+                    },
+                    -6,
+                    6
+                  ]
+                }
+              ]
+            },
+            "onSuccess": "frost_gudny_cut_told",
+            "onFailure": "frost_gudny_cut_wont"
+          }
+        },
+        {
+          "id": "frost_gudny_moved",
+          "text": "Somebody said the Landing used to stand further in.",
+          "requires": {
+            "without": {
+              "lore": [
+                "frost_blue_moved"
+              ]
+            }
+          },
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "check": {
+            "skill": "persuasion",
+            "difficulty": {
+              "sub": [
+                13,
+                {
+                  "clamp": [
+                    {
+                      "div": [
+                        {
+                          "ref": "reputation.the_ice_moot",
+                          "else": 0
+                        },
+                        5
+                      ]
+                    },
+                    -6,
+                    6
+                  ]
+                }
+              ]
+            },
+            "onSuccess": "frost_gudny_moved_told",
+            "onFailure": "frost_gudny_moved_wont"
+          }
+        },
+        {
+          "id": "greet_leave",
+          "text": "Nothing.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "frost_gudny_calving_told",
+      "says": [
+        {
+          "text": "“No.” She straightens up. “And they used to — I worked it. Eleven years since one came inside. They still come to the shore either side of it, mind, which is the part that keeps me up. It is not the shore they are avoiding.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "learnLore": {
+            "entry": "frost_blue_calving"
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "frost_gudny_calving_on",
+          "text": "Go on.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "frost_gudny_calving_wont",
+      "says": [
+        {
+          "text": "“I've said all I mean to,” they say, and go back to what they were doing."
+        }
+      ],
+      "onEnter": [
+        {
+          "adjustReputation": {
+            "faction": "the_ice_moot",
+            "amount": -1
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "frost_gudny_calving_drop",
+          "text": "Leave it.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "frost_gudny_cut_told",
+      "says": [
+        {
+          "text": "“Not a flensing iron.” She holds hers up. “This chatters. Every blade chatters, that is what bone does to a blade. Those went through in one and the edge is clean.” She looks at it a moment. “Nothing I have ever been sold does that.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "learnLore": {
+            "entry": "frost_strand_cut"
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "frost_gudny_cut_on",
+          "text": "Go on.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "frost_gudny_cut_wont",
+      "says": [
+        {
+          "text": "“I've said all I mean to,” they say, and go back to what they were doing."
+        }
+      ],
+      "onEnter": [
+        {
+          "adjustReputation": {
+            "faction": "the_ice_moot",
+            "amount": -1
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "frost_gudny_cut_drop",
+          "text": "Leave it.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "frost_gudny_moved_told",
+      "says": [
+        {
+          "text": "“A mile in, and they shifted the whole of it in one winter. My grandmother's winter.” She goes back to the trough. “Ask the factor for the why. There is no why in the ledger, I have looked, and a thing with no why in a ledger is a thing somebody decided not to write down.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "learnLore": {
+            "entry": "frost_blue_moved"
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "frost_gudny_moved_on",
+          "text": "Go on.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "frost_gudny_moved_wont",
+      "says": [
+        {
+          "text": "“I've said all I mean to,” they say, and go back to what they were doing."
+        }
+      ],
+      "onEnter": [
+        {
+          "adjustReputation": {
+            "faction": "the_ice_moot",
+            "amount": -1
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "frost_gudny_moved_drop",
+          "text": "Leave it.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    }
+  ]
+}

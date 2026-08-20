@@ -1,0 +1,16 @@
+{
+  "id": "dungeon_ruin_corridor",
+  "name": "Ruin Passage",
+  "descriptionKey": "dungeon_ruin_corridor_desc",
+  "weight": 4,
+  "minExits": 2,
+  "maxExits": 4,
+  "encounterChance": 0.15,
+  "trapChance": 0.1,
+  "lootChance": 0.22,
+  "tags": [
+    "dungeon_ruin",
+    "corridor"
+  ],
+  "role": "corridor"
+}

@@ -1,0 +1,14 @@
+{
+  "id": "dungeon_barrow_vault_desc",
+  "variants": [
+    {
+      "text": "A cist in the floor, capped, and the cap has been shifted before."
+    },
+    {
+      "text": "Niches cut in all four walls, most of them empty, and no dust in the empty ones."
+    },
+    {
+      "text": "The chamber was sealed twice: once with stone, and once with something that has left a mark on the lintel."
+    }
+  ]
+}

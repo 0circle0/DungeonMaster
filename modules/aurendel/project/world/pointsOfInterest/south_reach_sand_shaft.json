@@ -1,0 +1,68 @@
+{
+  "id": "south_reach_sand_shaft",
+  "name": "The Sand Shaft",
+  "description": "Sand pours into it continuously and it never fills, which has been true for as long as anybody has watched.",
+  "area": "steppe_the_south_reach",
+  "kind": "dungeonEntrance",
+  "descriptionKey": "generic_dungeon_mouth",
+  "travelMinutes": 14,
+  "tags": [
+    "dungeon"
+  ],
+  "dungeon": "steppe_sand_shaft",
+  "position": {
+    "x": 25,
+    "y": 3
+  },
+  "triggers": [
+    {
+      "id": "step_water_committed",
+      "mode": "once",
+      "on": "enter",
+      "description": "Beside the spring, at the top of the shoring.",
+      "requires": {
+        "custom": {
+          "gte": [
+            {
+              "ref": "threads.step_water.known"
+            },
+            2
+          ]
+        }
+      },
+      "effects": [
+        {
+          "emit": {
+            "event": "startQuest",
+            "data": {
+              "quest": "step_the_last_water"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "hidden": true,
+  "discover": {
+    "skill": "perception",
+    "difficulty": {
+      "max": [
+        9,
+        {
+          "sub": [
+            21,
+            {
+              "mul": [
+                3,
+                {
+                  "ref": "threads.step_water.known"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "gate": "step_water_shoring"
+}

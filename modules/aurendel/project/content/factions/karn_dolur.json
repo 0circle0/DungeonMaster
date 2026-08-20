@@ -1,0 +1,33 @@
+{
+  "id": "karn_dolur",
+  "name": "The Hold of Karn Dolur",
+  "description": "Nine hundred years of not opening the Deep Door, and a ledger of every fee ever charged for the privilege of not being let through it.",
+  "initialStanding": 0,
+  "decayPerDay": 0.04,
+  "relations": {
+    "the_keepers": 0.3,
+    "the_wayfinders": 0.2
+  },
+  "ranks": [
+    {
+      "id": "barred",
+      "name": "Barred",
+      "atLeast": -50
+    },
+    {
+      "id": "guest",
+      "name": "Guest",
+      "atLeast": 0
+    },
+    {
+      "id": "hold_friend",
+      "name": "Hold-Friend",
+      "atLeast": 30
+    },
+    {
+      "id": "deep_warrant",
+      "name": "Bearer of a Deep Warrant",
+      "atLeast": 55
+    }
+  ]
+}

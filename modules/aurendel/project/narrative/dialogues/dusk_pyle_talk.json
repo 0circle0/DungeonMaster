@@ -1,0 +1,329 @@
+{
+  "id": "dusk_pyle_talk",
+  "start": "greet",
+  "nodes": [
+    {
+      "id": "greet",
+      "says": [
+        {
+          "text": "A stage house on a straight road, four horses out and four in, and a fare slate being rewritten faster than it can be read."
+        },
+        {
+          "text": "“Bed, bait, or the next coach. In that order of likelihood.”"
+        }
+      ],
+      "onEnter": [],
+      "options": [
+        {
+          "id": "dusk_pyle_count",
+          "text": "How long is the Moot Road?",
+          "requires": {
+            "without": {
+              "lore": [
+                "dusk_miles_count"
+              ]
+            }
+          },
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "check": {
+            "skill": "persuasion",
+            "difficulty": {
+              "sub": [
+                12,
+                {
+                  "clamp": [
+                    {
+                      "div": [
+                        {
+                          "ref": "reputation.the_keepers",
+                          "else": 0
+                        },
+                        5
+                      ]
+                    },
+                    -6,
+                    6
+                  ]
+                }
+              ]
+            },
+            "onSuccess": "dusk_pyle_count_told",
+            "onFailure": "dusk_pyle_count_wont"
+          }
+        },
+        {
+          "id": "dusk_pyle_sunken",
+          "text": "The oaks. Is there anything out by them?",
+          "requires": {
+            "without": {
+              "lore": [
+                "dusk_miles_sunken"
+              ]
+            }
+          },
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "check": {
+            "skill": "insight",
+            "difficulty": {
+              "sub": [
+                14,
+                {
+                  "clamp": [
+                    {
+                      "div": [
+                        {
+                          "ref": "reputation.the_keepers",
+                          "else": 0
+                        },
+                        5
+                      ]
+                    },
+                    -6,
+                    6
+                  ]
+                }
+              ]
+            },
+            "onSuccess": "dusk_pyle_sunken_told",
+            "onFailure": "dusk_pyle_sunken_wont"
+          }
+        },
+        {
+          "id": "dusk_pyle_book",
+          "text": "The mile book. Let me take it.",
+          "requires": {
+            "without": {
+              "items": [
+                "mile_book"
+              ],
+              "flags": [
+                {
+                  "flag": "given:mile_book"
+                }
+              ]
+            }
+          },
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "check": {
+            "skill": "persuasion",
+            "difficulty": {
+              "sub": [
+                13,
+                {
+                  "clamp": [
+                    {
+                      "div": [
+                        {
+                          "ref": "reputation.the_keepers",
+                          "else": 0
+                        },
+                        5
+                      ]
+                    },
+                    -6,
+                    6
+                  ]
+                }
+              ]
+            },
+            "onSuccess": "dusk_pyle_book_gave",
+            "onFailure": "dusk_pyle_book_kept"
+          }
+        },
+        {
+          "id": "greet_leave",
+          "text": "Nothing.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "dusk_pyle_count_told",
+      "says": [
+        {
+          "text": "“Eleven miles.” Pyle does not look up from the fare slate. “And fourteen marks on it.” A pause exactly long enough to be deliberate. “My great-grandmother opened this house and wrote fourteen in the book, and her son wrote fourteen, and I write fourteen. Nobody has ever bothered to be troubled by it but me.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "learnLore": {
+            "entry": "dusk_miles_count"
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "dusk_pyle_count_on",
+          "text": "Go on.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "dusk_pyle_count_wont",
+      "says": [
+        {
+          "text": "“I've said all I mean to,” they say, and go back to what they were doing."
+        }
+      ],
+      "onEnter": [
+        {
+          "adjustReputation": {
+            "faction": "the_keepers",
+            "amount": -1
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "dusk_pyle_count_drop",
+          "text": "Leave it.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "dusk_pyle_sunken_told",
+      "says": [
+        {
+          "text": "“There is a lane.” Now Pyle looks up. “Six foot down into the ground, sides standing, no spoil either side of it. That is a hundred years of loaded carts.” The slate goes down. “Nothing has been down there in my life, my father's life, or the book.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "learnLore": {
+            "entry": "dusk_miles_sunken"
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "dusk_pyle_sunken_on",
+          "text": "Go on.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "dusk_pyle_sunken_wont",
+      "says": [
+        {
+          "text": "“I've said all I mean to,” they say, and go back to what they were doing."
+        }
+      ],
+      "onEnter": [
+        {
+          "adjustReputation": {
+            "faction": "the_keepers",
+            "amount": -1
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "dusk_pyle_sunken_drop",
+          "text": "Leave it.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "dusk_pyle_book_gave",
+      "says": [
+        {
+          "text": "It comes off the shelf with a cloth round it, which tells you what the family thinks of it. “Every stage and every fare since the house opened,” Pyle says. “And every one of us counting to fourteen. Find out which three, and come and tell me, and I will stand you whatever you like.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "grantItem": {
+            "target": {
+              "ref": "actor.id"
+            },
+            "item": "mile_book",
+            "quantity": 1
+          }
+        },
+        {
+          "setFlag": {
+            "flag": "given:mile_book",
+            "value": true
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "dusk_pyle_book_thanks",
+          "text": "Thank you.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "dusk_pyle_book_kept",
+      "says": [
+        {
+          "text": "“It is the house's,” Pyle says, and the cloth goes back round it, and back on the shelf."
+        }
+      ],
+      "onEnter": [
+        {
+          "adjustReputation": {
+            "faction": "the_keepers",
+            "amount": -2
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "dusk_pyle_book_leave",
+          "text": "Then no.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    }
+  ]
+}

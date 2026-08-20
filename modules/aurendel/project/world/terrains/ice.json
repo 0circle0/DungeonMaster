@@ -1,0 +1,17 @@
+{
+  "id": "ice",
+  "name": "Ice",
+  "description": "Blue-white and unsympathetic.",
+  "glyph": "i",
+  "color": "cyan",
+  "passable": true,
+  "opaque": false,
+  "moveCost": 1.5,
+  "tags": [
+    "stone"
+  ],
+  "marks": {
+    "tracks": 0,
+    "smell": 0.6
+  }
+}

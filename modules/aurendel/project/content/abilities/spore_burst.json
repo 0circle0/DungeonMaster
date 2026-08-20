@@ -1,0 +1,35 @@
+{
+  "id": "spore_burst",
+  "name": "Spore Burst",
+  "description": "A cloud, and then a great deal of coughing.",
+  "actionType": "action",
+  "targeting": "allEnemies",
+  "attack": {
+    "stat": "endurance",
+    "against": "guard"
+  },
+  "onUse": [
+    {
+      "damage": {
+        "target": {
+          "ref": "target.id"
+        },
+        "amount": {
+          "roll": "2d4"
+        },
+        "damageType": "poison"
+      }
+    },
+    {
+      "applyCondition": {
+        "target": {
+          "ref": "target.id"
+        },
+        "condition": "poisoned",
+        "duration": 3
+      }
+    }
+  ],
+  "range": 15,
+  "cooldown": 4
+}

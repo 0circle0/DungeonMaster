@@ -1,0 +1,26 @@
+{
+  "id": "glass_jar_carried",
+  "name": "What Qasim Kept",
+  "rolls": "1",
+  "emptyChance": 0,
+  "entries": [
+    {
+      "weight": 1,
+      "value": {
+        "item": "weighers_jar",
+        "quantity": "1",
+        "unique": true,
+        "requirementScope": "party",
+        "requires": {
+          "without": {
+            "flags": [
+              {
+                "flag": "given:weighers_jar"
+              }
+            ]
+          }
+        }
+      }
+    }
+  ]
+}

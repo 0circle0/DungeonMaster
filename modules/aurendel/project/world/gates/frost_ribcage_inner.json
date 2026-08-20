@@ -1,0 +1,29 @@
+{
+  "id": "frost_ribcage_inner",
+  "name": "Inside the Wrong Shape",
+  "description": "From the shore it is a ribcage. From in here it is a room, and the room has a door in it.",
+  "kind": "ward",
+  "blockedTextKey": "frost_ribcage_blocked",
+  "staysOpen": true,
+  "onOpen": [
+    {
+      "setFlag": {
+        "flag": "frost_strand_open",
+        "value": true
+      }
+    }
+  ],
+  "onBlocked": [],
+  "opensWith": [],
+  "tags": [],
+  "requires": {
+    "items": [
+      {
+        "item": "carvers_count",
+        "quantity": 1,
+        "consume": false,
+        "equipped": false
+      }
+    ]
+  }
+}

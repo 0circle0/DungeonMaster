@@ -1,0 +1,45 @@
+{
+  "id": "kingsvale_oxbow_meadows",
+  "name": "The Oxbow Meadows",
+  "description": "The Weirwater changed its mind here a long time ago and left good grazing and bad drainage behind.",
+  "biome": "vale",
+  "layer": "overworld",
+  "descriptionKey": "kingsvale_oxbow_meadows_desc",
+  "dangerLevel": 1,
+  "recommendedLevel": 1,
+  "tags": [
+    "kingsvale"
+  ],
+  "map": {
+    "width": "51",
+    "height": "35"
+  },
+  "entryPoint": {
+    "x": 25,
+    "y": 17
+  },
+  "extra": {
+    "role": "wild"
+  },
+  "connections": [
+    {
+      "to": "kingsvale_wraymill",
+      "travelMinutes": 35
+    },
+    {
+      "to": "kingsvale_pennyford",
+      "travelMinutes": 30
+    },
+    {
+      "to": "kingsvale_hollowdene",
+      "travelMinutes": 40
+    },
+    {
+      "to": "moor_kestrel_edge",
+      "travelMinutes": 200
+    }
+  ],
+  "encounterTables": [
+    "weirwater_things"
+  ]
+}

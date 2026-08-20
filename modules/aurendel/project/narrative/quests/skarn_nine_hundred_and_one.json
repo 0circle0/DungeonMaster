@@ -1,0 +1,57 @@
+{
+  "id": "skarn_nine_hundred_and_one",
+  "name": "Nine Hundred and One",
+  "description": "Two stairs where the hold admits to one, swept daily by nobody on any payroll, and a count that will not agree with the lintel.",
+  "autoStart": false,
+  "ordered": true,
+  "tags": [
+    "hidden",
+    "skarnspine",
+    "skarn_stair"
+  ],
+  "objectives": [
+    {
+      "id": "onto_the_older",
+      "description": "Get onto the flight nobody uses.",
+      "kind": "reach",
+      "count": 1,
+      "hidden": true,
+      "optional": false,
+      "target": "ironstair_fallen_stair"
+    },
+    {
+      "id": "find_the_extra",
+      "description": "Find which step is the one too many.",
+      "kind": "custom",
+      "count": 1,
+      "hidden": true,
+      "optional": false,
+      "when": {
+        "test": {
+          "ref": "flags.skarn_stair_open"
+        }
+      }
+    },
+    {
+      "id": "who_sweeps",
+      "description": "Meet whoever has been sweeping them.",
+      "kind": "kill",
+      "count": 1,
+      "hidden": true,
+      "optional": false,
+      "target": "the_sweeper"
+    }
+  ],
+  "stages": [],
+  "unlocks": [],
+  "rewards": {
+    "xp": 185,
+    "items": [
+      {
+        "item": "sweepers_belt",
+        "quantity": 1
+      }
+    ],
+    "reputation": {}
+  }
+}

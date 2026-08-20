@@ -1,0 +1,29 @@
+{
+  "id": "cold_shoulder_north_face",
+  "name": "The North Face",
+  "description": "In shade from Emberfall to Greening, and the snow on it is older than anybody using the road.",
+  "area": "skarnspine_cold_shoulder",
+  "kind": "landmark",
+  "descriptionKey": "generic_landmark",
+  "travelMinutes": 8,
+  "tags": [],
+  "position": {
+    "x": 3,
+    "y": 3
+  },
+  "triggers": [
+    {
+      "id": "skarn_found_face",
+      "mode": "once",
+      "on": "enter",
+      "description": "Warm air off a face that has not thawed.",
+      "effects": [
+        {
+          "learnLore": {
+            "entry": "skarn_wind_warm"
+          }
+        }
+      ]
+    }
+  ]
+}

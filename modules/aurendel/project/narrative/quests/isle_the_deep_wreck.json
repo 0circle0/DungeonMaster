@@ -1,0 +1,57 @@
+{
+  "id": "isle_the_deep_wreck",
+  "name": "The Deep Wreck",
+  "description": "Guns run out at an island with nothing on it, and every hatch dogged from the outside.",
+  "autoStart": false,
+  "ordered": true,
+  "tags": [
+    "hidden",
+    "sundered_isles",
+    "isle_wreck"
+  ],
+  "objectives": [
+    {
+      "id": "on_her_deck",
+      "description": "Get onto her deck.",
+      "kind": "reach",
+      "count": 1,
+      "hidden": true,
+      "optional": false,
+      "target": "wreck_reef_the_deep_wreck"
+    },
+    {
+      "id": "open_a_hatch",
+      "description": "Get a hatch open.",
+      "kind": "custom",
+      "count": 1,
+      "hidden": true,
+      "optional": false,
+      "when": {
+        "test": {
+          "ref": "flags.isle_wreck_open"
+        }
+      }
+    },
+    {
+      "id": "what_was_shut_in_her",
+      "description": "Meet what they shut in.",
+      "kind": "kill",
+      "count": 1,
+      "hidden": true,
+      "optional": false,
+      "target": "hold_thing"
+    }
+  ],
+  "stages": [],
+  "unlocks": [],
+  "rewards": {
+    "xp": 230,
+    "items": [
+      {
+        "item": "run_out_gun",
+        "quantity": 1
+      }
+    ],
+    "reputation": {}
+  }
+}

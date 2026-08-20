@@ -1,0 +1,33 @@
+{
+  "id": "rend",
+  "name": "Rend",
+  "description": "Teeth, and a great deal of enthusiasm.",
+  "actionType": "action",
+  "targeting": "single",
+  "attack": {
+    "stat": "might",
+    "against": "guard"
+  },
+  "onUse": [
+    {
+      "damage": {
+        "target": {
+          "ref": "target.id"
+        },
+        "amount": {
+          "roll": "1d6"
+        },
+        "damageType": "slashing"
+      }
+    },
+    {
+      "applyCondition": {
+        "target": {
+          "ref": "target.id"
+        },
+        "condition": "bleeding",
+        "duration": 2
+      }
+    }
+  ]
+}

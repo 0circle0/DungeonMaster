@@ -1,9 +1,31 @@
 # `modules/shared` — the module-authoring API
 
-This directory holds `dmkit`, the Python package the world modules are written
-against. It is **not a module**: it has no `module.json`, and `listModules()`
-(`packages/module/src/load.ts`) enumerates only directories that have one — so
-the validator, the Studio editor and the test suite never see it.
+This directory holds `dmkit`, the Python package that **first built** Aurendel
+and the reference ruleset. It is **not a module**: it has no `module.json`, and
+`listModules()` (`packages/module/src/load.ts`) enumerates only directories that
+have one — so the validator, the Studio editor and the test suite never see it.
+
+## Retired
+
+Aurendel and `core_fantasy` are authored as `project/` trees now — one file per
+entry, `module.json` built from them by `npm run project -- build`. A generator
+that overwrites `module.json` wholesale would throw away whatever has been
+authored since, so **both refuse to run over a module that has a `project/`**
+(`dmkit/retired.py`), and `check:generated` is gone: it asserted the opposite
+invariant, that re-running the Python reproduced the committed file.
+
+The files are kept rather than deleted because they are still the only home for
+what was never ported to TypeScript: `lint.py`'s contract checks, the map
+reachability flood fill, the caverns and BSP sizing, `trials.py`'s post-game
+ladder, and `regions.py`'s two-way road expansion. Six algorithms *were* ported
+and live in `packages/authoring` with tests — `fit`, `layOut`, `buildChain`,
+`standingDc`, the dialogue trio and `rumoured`.
+
+`staticmaps.py` is the exception and still runs: `maps/` is not part of
+`project/`, so nothing has taken it over.
+
+Read the rest of this file as how these worlds were built, not as how a new one
+should be.
 
 Aurendel is 27,000 lines of Python that emit a 2.9 MB `module.json`. About a
 tenth of that is the engine's shape rather than Aurendel's content: how a quest

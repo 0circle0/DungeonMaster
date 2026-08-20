@@ -1,0 +1,12 @@
+{
+  "id": "first_warrant",
+  "name": "The Warrant of the First Three",
+  "description": "Hesper's own list, with the first three lines struck through and countersigned, which is a thing the Keepers have not had cause to do in nine hundred years.",
+  "kind": "key",
+  "value": 0,
+  "weight": 0,
+  "tags": [
+    "warrant",
+    "trial"
+  ]
+}

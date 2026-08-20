@@ -1,0 +1,76 @@
+{
+  "id": "bonealley_what_was_bricked_up",
+  "name": "What Was Bricked Up",
+  "description": "The register was left on the desk with a name still on it. The guild has been walking round that corner of the under for sixty years and telling itself it was the damp.",
+  "autoStart": false,
+  "ordered": true,
+  "tags": [
+    "side",
+    "act1",
+    "bonealley",
+    "kingsvale"
+  ],
+  "objectives": [],
+  "stages": [
+    {
+      "id": "go_through",
+      "name": "Through the west range",
+      "description": "Sixty years of brick, and it comes down in an afternoon.",
+      "objectives": [
+        {
+          "id": "in_the_cellars",
+          "description": "Get into the Warren Cellars.",
+          "kind": "reach",
+          "count": 1,
+          "hidden": false,
+          "optional": false,
+          "target": "warrens_cellar_stair"
+        }
+      ],
+      "journalKey": "bonealley_journal_through"
+    },
+    {
+      "id": "the_gaoler",
+      "name": "The man still on the book",
+      "description": "He was not left the keys. He was left with them.",
+      "objectives": [
+        {
+          "id": "kill_gaoler",
+          "description": "Put down the Gaoler.",
+          "kind": "kill",
+          "count": 1,
+          "hidden": false,
+          "optional": false,
+          "target": "the_gaoler"
+        }
+      ],
+      "onComplete": [
+        {
+          "setFlag": {
+            "flag": "bonealley_gaoler_down",
+            "value": true
+          }
+        }
+      ],
+      "journalKey": "bonealley_journal_gaoler"
+    }
+  ],
+  "unlocks": [
+    "bonealley_the_charter"
+  ],
+  "rewards": {
+    "xp": 50,
+    "items": [],
+    "reputation": {
+      "the_ratcatchers": 10
+    }
+  },
+  "requires": {
+    "quests": [
+      {
+        "quest": "bonealley_the_old_gaol",
+        "status": "complete"
+      }
+    ]
+  }
+}

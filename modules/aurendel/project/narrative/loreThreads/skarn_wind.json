@@ -1,0 +1,11 @@
+{
+  "id": "skarn_wind",
+  "name": "The Breathing Face",
+  "description": "A cave that draws and blows to the minute, warm, out of a north face that has never thawed.",
+  "entries": [
+    "skarn_wind_cycle",
+    "skarn_wind_warm",
+    "skarn_wind_ice",
+    "skarn_wind_maps"
+  ]
+}

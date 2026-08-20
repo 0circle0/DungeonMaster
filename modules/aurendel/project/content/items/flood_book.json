@@ -1,0 +1,14 @@
+{
+  "id": "flood_book",
+  "name": "The Relay Flood Book",
+  "description": "Nine hundred years of the same week, kept by riders who each wrote down the day the grass told them and never why.",
+  "kind": "key",
+  "value": 0,
+  "weight": 0,
+  "tags": [
+    "keepsake"
+  ],
+  "extra": {
+    "heldBy": "relay_rider_talith"
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "id": "greenway_elf_bridge",
+  "name": "The Green Bridge",
+  "description": "A single span of dressed stone over a stream you could step across, carved on both parapets, and older than the forest.",
+  "area": "duskwood_the_greenway",
+  "kind": "ruin",
+  "descriptionKey": "greenway_elf_bridge_desc",
+  "travelMinutes": 8,
+  "tags": [
+    "ruin"
+  ],
+  "map": {
+    "width": "9",
+    "height": "7",
+    "palette": "int_stone"
+  },
+  "position": {
+    "x": 14,
+    "y": 3
+  },
+  "triggers": [
+    {
+      "id": "dusk_found_bridge",
+      "mode": "once",
+      "on": "enter",
+      "description": "A sound bridge, pointed this decade, over a dry bed.",
+      "effects": [
+        {
+          "learnLore": {
+            "entry": "dusk_green_bridge"
+          }
+        }
+      ]
+    }
+  ]
+}

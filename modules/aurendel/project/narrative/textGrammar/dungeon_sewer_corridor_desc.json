@@ -1,0 +1,14 @@
+{
+  "id": "dungeon_sewer_corridor_desc",
+  "variants": [
+    {
+      "text": "A brick barrel with a channel down the middle and a ledge either side, and the ledge is narrow."
+    },
+    {
+      "text": "Water going the same way you are, and rather faster."
+    },
+    {
+      "text": "Side-inlets every thirty feet, all of them too small and all of them dripping."
+    }
+  ]
+}

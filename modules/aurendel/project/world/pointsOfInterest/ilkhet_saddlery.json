@@ -1,0 +1,24 @@
+{
+  "id": "ilkhet_saddlery",
+  "name": "The Saddlery",
+  "description": "Trees, panels, and the particular geometry of a saddle that will be lived in for eleven hours a day.",
+  "area": "steppe_ilkhet",
+  "kind": "market",
+  "descriptionKey": "int_workshop",
+  "travelMinutes": 3,
+  "tags": [
+    "shop"
+  ],
+  "services": [
+    "market"
+  ],
+  "map": {
+    "width": "15",
+    "height": "11",
+    "palette": "int_shop"
+  },
+  "position": {
+    "x": 37,
+    "y": 3
+  }
+}

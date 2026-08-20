@@ -1,0 +1,16 @@
+{
+  "id": "dungeon_ice_chamber",
+  "name": "Ice Chamber",
+  "descriptionKey": "dungeon_ice_chamber_desc",
+  "weight": 5,
+  "minExits": 1,
+  "maxExits": 4,
+  "encounterChance": 0.4,
+  "trapChance": 0.1,
+  "lootChance": 0.2,
+  "tags": [
+    "dungeon_ice",
+    "chamber"
+  ],
+  "role": "chamber"
+}

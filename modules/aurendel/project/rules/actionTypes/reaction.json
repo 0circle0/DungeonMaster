@@ -1,0 +1,6 @@
+{
+  "id": "reaction",
+  "name": "Reaction",
+  "description": "Spent out of turn, on somebody else's mistake.",
+  "perTurn": 1
+}

@@ -1,0 +1,14 @@
+{
+  "id": "karn_dolur_hold_gate_blocked",
+  "variants": [
+    {
+      "text": "The gate stands open and the gate-fee does not care. Twelve marks, and the clerk has all day."
+    },
+    {
+      "text": "\"Twelve,\" says the gatewarden. \"Same as it was for your grandfather.\""
+    },
+    {
+      "text": "Two of the hold's own, one ledger, and no discussion."
+    }
+  ]
+}

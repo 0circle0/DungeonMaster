@@ -1,0 +1,68 @@
+{
+  "id": "gannet_head_seacaves",
+  "name": "The Sea Caves",
+  "description": "Cut by the sea into the foot of the head, and dry at the back for as far as anybody has gone.",
+  "area": "coast_gannet_head",
+  "kind": "dungeonEntrance",
+  "descriptionKey": "gannet_head_seacaves_desc",
+  "travelMinutes": 12,
+  "tags": [
+    "dungeon"
+  ],
+  "dungeon": "gannet_sea_caves",
+  "position": {
+    "x": 36,
+    "y": 3
+  },
+  "triggers": [
+    {
+      "id": "coast_watch_committed",
+      "mode": "once",
+      "on": "enter",
+      "description": "In under the head, on the hour the tide allows.",
+      "requires": {
+        "custom": {
+          "gte": [
+            {
+              "ref": "threads.coast_watch.known"
+            },
+            2
+          ]
+        }
+      },
+      "effects": [
+        {
+          "emit": {
+            "event": "startQuest",
+            "data": {
+              "quest": "coast_the_signal"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "hidden": true,
+  "discover": {
+    "skill": "perception",
+    "difficulty": {
+      "max": [
+        7,
+        {
+          "sub": [
+            19,
+            {
+              "mul": [
+                3,
+                {
+                  "ref": "threads.coast_watch.known"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "gate": "coast_watch_undercroft"
+}

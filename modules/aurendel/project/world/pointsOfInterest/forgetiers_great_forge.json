@@ -1,0 +1,24 @@
+{
+  "id": "forgetiers_great_forge",
+  "name": "The Great Forge",
+  "description": "Six levels of furnace stacked down a shaft that serves as the chimney for all of them.",
+  "area": "karn_dolur_forgetiers",
+  "kind": "market",
+  "descriptionKey": "forgetiers_great_forge_desc",
+  "travelMinutes": 6,
+  "tags": [
+    "shop",
+    "landmark"
+  ],
+  "services": [
+    "smith",
+    "guild"
+  ],
+  "map": {
+    "static": "karn_dolur_forge"
+  },
+  "position": {
+    "x": 3,
+    "y": 3
+  }
+}

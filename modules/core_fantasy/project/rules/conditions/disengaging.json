@@ -1,0 +1,7 @@
+{
+  "id": "disengaging",
+  "name": "Disengaging",
+  "description": "Backing out with your guard up, giving nobody a clean parting swing.",
+  "stacking": "refresh",
+  "defaultDuration": 1
+}

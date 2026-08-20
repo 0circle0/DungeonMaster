@@ -1,0 +1,17 @@
+{
+  "id": "weighers_scale",
+  "name": "The Weigher's Scale",
+  "description": "Brass, and older than the pans. What is set on it reads its true weight, which is not always the weight it has.",
+  "kind": "trinket",
+  "slot": "belt",
+  "value": 850,
+  "weight": 1,
+  "tags": [
+    "fabled"
+  ],
+  "skillBonuses": {
+    "insight": 3,
+    "craft": 2
+  },
+  "rarity": "rare"
+}

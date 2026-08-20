@@ -1,0 +1,24 @@
+{
+  "id": "cudgel",
+  "name": "Cudgel",
+  "description": "A length of ash with a nail through it, swung by somebody who has done this before.",
+  "actionType": "action",
+  "targeting": "single",
+  "attack": {
+    "stat": "might",
+    "against": "guard"
+  },
+  "onUse": [
+    {
+      "damage": {
+        "target": {
+          "ref": "target.id"
+        },
+        "amount": {
+          "roll": "1d6"
+        },
+        "damageType": "bludgeoning"
+      }
+    }
+  ]
+}

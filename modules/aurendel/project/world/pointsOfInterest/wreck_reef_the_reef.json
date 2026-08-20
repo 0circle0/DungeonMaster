@@ -1,0 +1,29 @@
+{
+  "id": "wreck_reef_the_reef",
+  "name": "Wreck Reef",
+  "description": "Three miles long, with about sixty ships on it in every stage of going, and the newest is four years old.",
+  "area": "isles_wreck_reef",
+  "kind": "landmark",
+  "descriptionKey": "wreck_reef_the_reef_desc",
+  "travelMinutes": 8,
+  "tags": [],
+  "position": {
+    "x": 3,
+    "y": 3
+  },
+  "triggers": [
+    {
+      "id": "isle_found_reef",
+      "mode": "once",
+      "on": "enter",
+      "description": "Guns run out, on one side, at nothing.",
+      "effects": [
+        {
+          "learnLore": {
+            "entry": "isle_wreck_guns"
+          }
+        }
+      ]
+    }
+  ]
+}

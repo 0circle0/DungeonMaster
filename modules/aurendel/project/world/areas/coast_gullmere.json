@@ -1,0 +1,35 @@
+{
+  "id": "coast_gullmere",
+  "name": "Gullmere",
+  "description": "Eleven boats, forty people, and a beach they haul up rather than a harbour they moor in.",
+  "biome": "urban_timber",
+  "layer": "overworld",
+  "descriptionKey": "coast_gullmere_desc",
+  "dangerLevel": 1,
+  "recommendedLevel": 2,
+  "tags": [
+    "silver_coast",
+    "village"
+  ],
+  "map": {
+    "width": "31",
+    "height": "21"
+  },
+  "entryPoint": {
+    "x": 15,
+    "y": 10
+  },
+  "extra": {
+    "role": "village"
+  },
+  "connections": [
+    {
+      "to": "coast_cobbleway",
+      "travelMinutes": 35
+    },
+    {
+      "to": "coast_gannet_head",
+      "travelMinutes": 35
+    }
+  ]
+}

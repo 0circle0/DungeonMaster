@@ -1,0 +1,42 @@
+{
+  "id": "step_bank_hoard",
+  "name": "Into the Laid Course",
+  "rolls": "3",
+  "emptyChance": 0,
+  "bonusRollSkill": "perception",
+  "bonusRolls": {
+    "onSuccess": 1,
+    "onCritical": 2
+  },
+  "entries": [
+    {
+      "weight": 5,
+      "value": {
+        "item": "old_coin",
+        "quantity": "4d6"
+      }
+    },
+    {
+      "weight": 3,
+      "value": {
+        "item": "hold_silver",
+        "quantity": "1"
+      }
+    },
+    {
+      "weight": 2,
+      "value": {
+        "item": "ward_salt",
+        "quantity": "1"
+      }
+    },
+    {
+      "weight": 1,
+      "value": {
+        "item": "laid_course",
+        "quantity": "1",
+        "unique": true
+      }
+    }
+  ]
+}

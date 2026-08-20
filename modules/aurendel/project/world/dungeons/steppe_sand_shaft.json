@@ -1,0 +1,19 @@
+{
+  "id": "steppe_sand_shaft",
+  "name": "The Sand Shaft",
+  "description": "Sand pours into it continuously and it has never filled, which means it is going somewhere.",
+  "biome": "dungeon_delved",
+  "roomCount": "13",
+  "depth": "4",
+  "algorithm": "bsp",
+  "lockedDoorChance": 0,
+  "doorGates": [],
+  "rollEncounters": false,
+  "safeEntrance": true,
+  "bsp": {
+    "minLeaf": 5
+  },
+  "width": "29",
+  "height": "29",
+  "bossTable": "step_water_boss"
+}

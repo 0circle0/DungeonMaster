@@ -1,0 +1,24 @@
+{
+  "id": "cormorant_the_shag",
+  "name": "The Shag",
+  "description": "One room, one barrel, eleven families, and no strangers most years.",
+  "area": "isles_cormorant",
+  "kind": "settlement",
+  "descriptionKey": "int_inn",
+  "travelMinutes": 3,
+  "tags": [
+    "inn"
+  ],
+  "services": [
+    "inn"
+  ],
+  "map": {
+    "width": "9",
+    "height": "7",
+    "palette": "int_timber"
+  },
+  "position": {
+    "x": 9,
+    "y": 3
+  }
+}

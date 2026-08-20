@@ -1,0 +1,14 @@
+{
+  "id": "vale",
+  "name": "The Kingsvale",
+  "description": "River-country: hedged fields, mill-leats, and a road somebody keeps up.",
+  "layer": "overworld",
+  "palette": "vale",
+  "roomTemplates": [],
+  "encounterTables": [
+    "kingsvale_wanderers"
+  ],
+  "lootTables": [],
+  "traps": [],
+  "ambienceKey": "vale_ambience"
+}

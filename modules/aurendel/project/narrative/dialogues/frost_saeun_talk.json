@@ -1,0 +1,362 @@
+{
+  "id": "frost_saeun_talk",
+  "start": "greet",
+  "nodes": [
+    {
+      "id": "greet",
+      "says": [
+        {
+          "text": "She is sitting on a hauled-up boat at the end of the Landing with a bone stick across her knees, marking it. She does not stop."
+        },
+        {
+          "text": "“Making tonight,” she says, before you have said anything. “You can hear it if you stop walking.”"
+        }
+      ],
+      "onEnter": [],
+      "options": [
+        {
+          "id": "frost_saeun_note",
+          "text": "What is it you are actually listening for out there?",
+          "requires": {
+            "without": {
+              "lore": [
+                "frost_blue_note"
+              ]
+            }
+          },
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "check": {
+            "skill": "insight",
+            "difficulty": {
+              "sub": [
+                13,
+                {
+                  "clamp": [
+                    {
+                      "div": [
+                        {
+                          "ref": "reputation.the_ice_moot",
+                          "else": 0
+                        },
+                        5
+                      ]
+                    },
+                    -6,
+                    6
+                  ]
+                }
+              ]
+            },
+            "onSuccess": "frost_saeun_note_told",
+            "onFailure": "frost_saeun_note_wont"
+          }
+        },
+        {
+          "id": "frost_saeun_making",
+          "text": "Does it sound every night?",
+          "requires": {
+            "without": {
+              "lore": [
+                "frost_blue_making"
+              ]
+            }
+          },
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "check": {
+            "skill": "persuasion",
+            "difficulty": {
+              "sub": [
+                15,
+                {
+                  "clamp": [
+                    {
+                      "div": [
+                        {
+                          "ref": "reputation.the_ice_moot",
+                          "else": 0
+                        },
+                        5
+                      ]
+                    },
+                    -6,
+                    6
+                  ]
+                }
+              ]
+            },
+            "onSuccess": "frost_saeun_making_told",
+            "onFailure": "frost_saeun_making_wont"
+          }
+        },
+        {
+          "id": "frost_saeun_tally",
+          "text": "I need the tally itself. Not what it says — the stick.",
+          "requires": {
+            "without": {
+              "items": [
+                "makers_tally"
+              ],
+              "flags": [
+                {
+                  "flag": "given:makers_tally"
+                }
+              ]
+            }
+          },
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "check": {
+            "skill": "persuasion",
+            "difficulty": {
+              "sub": [
+                17,
+                {
+                  "clamp": [
+                    {
+                      "div": [
+                        {
+                          "ref": "reputation.the_ice_moot",
+                          "else": 0
+                        },
+                        5
+                      ]
+                    },
+                    -6,
+                    6
+                  ]
+                }
+              ]
+            },
+            "onSuccess": "frost_saeun_tally_gave",
+            "onFailure": "frost_saeun_tally_kept"
+          }
+        },
+        {
+          "id": "greet_leave",
+          "text": "Nothing.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": [
+        {
+          "requires": {
+            "factions": [
+              {
+                "faction": "the_ice_moot",
+                "maxStanding": -35
+              }
+            ]
+          },
+          "goto": "frost_saeun_cold"
+        }
+      ]
+    },
+    {
+      "id": "frost_saeun_note_told",
+      "says": [
+        {
+          "text": "“A note.” She does not look up from the stick. “Not a noise. A note — one, the way a struck bowl goes on after you have taken your hand off it.” She marks the edge. “Forty years. It has not changed pitch once.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "learnLore": {
+            "entry": "frost_blue_note"
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "frost_saeun_note_on",
+          "text": "Go on.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "frost_saeun_note_wont",
+      "says": [
+        {
+          "text": "“I've said all I mean to,” they say, and go back to what they were doing."
+        }
+      ],
+      "onEnter": [
+        {
+          "adjustReputation": {
+            "faction": "the_ice_moot",
+            "amount": -1
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "frost_saeun_note_drop",
+          "text": "Leave it.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "frost_saeun_making_told",
+      "says": [
+        {
+          "text": "“Only while the ice is making.” She turns the stick over so you can see the other edge, and the two rows of notches line up the whole way down. “In a thaw there is nothing there. Two men went in during a thaw to find out why that was such a comfort.” A pause. “It was not a comfort.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "learnLore": {
+            "entry": "frost_blue_making"
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "frost_saeun_making_on",
+          "text": "Go on.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "frost_saeun_making_wont",
+      "says": [
+        {
+          "text": "“I've said all I mean to,” they say, and go back to what they were doing."
+        }
+      ],
+      "onEnter": [
+        {
+          "adjustReputation": {
+            "faction": "the_ice_moot",
+            "amount": -1
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "frost_saeun_making_drop",
+          "text": "Leave it.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "frost_saeun_tally_gave",
+      "says": [
+        {
+          "text": "She is quiet for long enough that you think she has refused. Then she holds it out flat on both palms, the way you hand somebody a tool rather than a keepsake. “Forty years. Bring it back or do not, but do not lose it out there thinking it is a stick.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "grantItem": {
+            "target": {
+              "ref": "actor.id"
+            },
+            "item": "makers_tally",
+            "quantity": 1
+          }
+        },
+        {
+          "setFlag": {
+            "flag": "given:makers_tally",
+            "value": true
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "frost_saeun_tally_thanks",
+          "text": "Thank you.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "frost_saeun_tally_kept",
+      "says": [
+        {
+          "text": "Her hand closes over it. “No. You want to know which nights it opens. I want to still be here when it does.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "adjustReputation": {
+            "faction": "the_ice_moot",
+            "amount": -3
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "frost_saeun_tally_leave",
+          "text": "Then no.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "frost_saeun_cold",
+      "says": [
+        {
+          "text": "She looks at you once, the way you look at weather, and turns the stick face down on her knee."
+        }
+      ],
+      "onEnter": [],
+      "options": [
+        {
+          "id": "frost_saeun_go",
+          "text": "Leave it.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    }
+  ]
+}

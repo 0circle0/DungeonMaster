@@ -1,0 +1,12 @@
+{
+  "id": "ring_mail",
+  "name": "Ring Mail",
+  "description": "Rings sewn to a coat. Noisy, heavy, and it works.",
+  "kind": "armor",
+  "slot": "body",
+  "value": 45,
+  "weight": 20,
+  "modifiers": {
+    "guard": 2
+  }
+}

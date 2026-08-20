@@ -1,0 +1,33 @@
+{
+  "id": "rime_touch",
+  "name": "Rime Touch",
+  "description": "Everything it holds stops moving quite so freely.",
+  "actionType": "action",
+  "targeting": "single",
+  "attack": {
+    "stat": "might",
+    "against": "guard"
+  },
+  "onUse": [
+    {
+      "damage": {
+        "target": {
+          "ref": "target.id"
+        },
+        "amount": {
+          "roll": "2d6"
+        },
+        "damageType": "cold"
+      }
+    },
+    {
+      "applyCondition": {
+        "target": {
+          "ref": "target.id"
+        },
+        "condition": "slowed",
+        "duration": 2
+      }
+    }
+  ]
+}

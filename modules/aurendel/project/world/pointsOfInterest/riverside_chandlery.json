@@ -1,0 +1,24 @@
+{
+  "id": "riverside_chandlery",
+  "name": "The Chandlery",
+  "description": "Rope, tar, lamp oil, and every size of nail there is.",
+  "area": "aurenhal_riverside",
+  "kind": "market",
+  "descriptionKey": "int_store",
+  "travelMinutes": 3,
+  "tags": [
+    "shop"
+  ],
+  "position": {
+    "x": 14,
+    "y": 16
+  },
+  "services": [
+    "market"
+  ],
+  "map": {
+    "width": "11",
+    "height": "9",
+    "palette": "int_shop"
+  }
+}

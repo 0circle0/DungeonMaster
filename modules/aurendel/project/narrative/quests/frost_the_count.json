@@ -1,0 +1,57 @@
+{
+  "id": "frost_the_count",
+  "name": "The Count of the Strand",
+  "description": "Eleven years of skulls arriving facing the wrong way, and a ribcage on the shore that is the right shape only from a distance.",
+  "autoStart": false,
+  "ordered": true,
+  "tags": [
+    "hidden",
+    "frostmere",
+    "frost_strand"
+  ],
+  "objectives": [
+    {
+      "id": "at_the_ribs",
+      "description": "Get inside the Ribcage.",
+      "kind": "reach",
+      "count": 1,
+      "hidden": true,
+      "optional": false,
+      "target": "bone_strand_ribcage"
+    },
+    {
+      "id": "past_the_count",
+      "description": "Answer what the door is asking for.",
+      "kind": "custom",
+      "count": 1,
+      "hidden": true,
+      "optional": false,
+      "when": {
+        "test": {
+          "ref": "flags.frost_strand_open"
+        }
+      }
+    },
+    {
+      "id": "the_cutter",
+      "description": "Find what has been doing the cutting.",
+      "kind": "kill",
+      "count": 1,
+      "hidden": true,
+      "optional": false,
+      "target": "strand_cutter"
+    }
+  ],
+  "stages": [],
+  "unlocks": [],
+  "rewards": {
+    "xp": 170,
+    "items": [
+      {
+        "item": "strandwardens_coat",
+        "quantity": 1
+      }
+    ],
+    "reputation": {}
+  }
+}

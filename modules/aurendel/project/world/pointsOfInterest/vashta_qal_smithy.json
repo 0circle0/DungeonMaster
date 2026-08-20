@@ -1,0 +1,24 @@
+{
+  "id": "vashta_qal_smithy",
+  "name": "The Oasis Forge",
+  "description": "Charcoal comes eleven days by camel, so nothing is forged here that could be forged elsewhere.",
+  "area": "vashta_qal_oasis",
+  "kind": "market",
+  "descriptionKey": "int_smithy",
+  "travelMinutes": 3,
+  "tags": [
+    "shop"
+  ],
+  "services": [
+    "smith"
+  ],
+  "map": {
+    "width": "11",
+    "height": "9",
+    "palette": "int_forge"
+  },
+  "position": {
+    "x": 32,
+    "y": 27
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "id": "nine_sisters_fallen",
+  "name": "The Fallen Sister",
+  "description": "The tenth, lying down, with writing on the underside that somebody has propped it up to read.",
+  "area": "moor_nine_sisters",
+  "kind": "landmark",
+  "descriptionKey": "nine_sisters_fallen_desc",
+  "travelMinutes": 5,
+  "tags": [],
+  "position": {
+    "x": 14,
+    "y": 3
+  }
+}

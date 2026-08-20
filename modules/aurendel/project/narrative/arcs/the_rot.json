@@ -1,0 +1,12 @@
+{
+  "id": "the_rot",
+  "name": "The Rot",
+  "description": "Two hundred years of pickers holding a line at the fifth gallery, and one season that put them back to the second.",
+  "quests": [
+    "rot_the_second_gallery",
+    "rot_the_listening_room",
+    "rot_what_grows_mycelt",
+    "rot_burn_it_or_farm_it"
+  ],
+  "isEnding": false
+}

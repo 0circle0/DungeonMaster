@@ -1,0 +1,43 @@
+{
+  "id": "salvors_stock",
+  "entries": [
+    {
+      "weight": 5,
+      "value": {
+        "item": "wreck_brass",
+        "quantity": "1d3"
+      }
+    },
+    {
+      "weight": 4,
+      "value": {
+        "item": "wreckers_lantern",
+        "quantity": "1"
+      }
+    },
+    {
+      "weight": 3,
+      "value": {
+        "item": "healing_draught",
+        "quantity": "1"
+      }
+    },
+    {
+      "weight": 2,
+      "value": {
+        "item": "hunting_bow",
+        "quantity": "1"
+      }
+    },
+    {
+      "weight": 2,
+      "value": {
+        "item": "ring_mail",
+        "quantity": "1"
+      }
+    }
+  ],
+  "rolls": "3",
+  "emptyChance": 0,
+  "name": "Off the Bar, Unasked"
+}

@@ -1,0 +1,39 @@
+{
+  "id": "isles_the_narrows",
+  "name": "The Narrows",
+  "description": "Eleven miles of shoal that moves between one season and the next, and the only way in.",
+  "biome": "isles",
+  "layer": "overworld",
+  "descriptionKey": "isles_the_narrows_desc",
+  "dangerLevel": 5,
+  "recommendedLevel": 5,
+  "tags": [
+    "sundered_isles"
+  ],
+  "map": {
+    "width": "51",
+    "height": "35"
+  },
+  "entryPoint": {
+    "x": 25,
+    "y": 17
+  },
+  "extra": {
+    "role": "wild"
+  },
+  "connections": [
+    {
+      "to": "isles_blackrigging",
+      "travelMinutes": 30
+    },
+    {
+      "to": "isles_drowned_fort_shoal",
+      "travelMinutes": 45
+    },
+    {
+      "to": "coast_wreckers_strand",
+      "travelMinutes": 180,
+      "gate": "isles_passage"
+    }
+  ]
+}

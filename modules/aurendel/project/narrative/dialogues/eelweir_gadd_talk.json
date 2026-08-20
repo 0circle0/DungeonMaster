@@ -1,0 +1,191 @@
+{
+  "id": "eelweir_gadd_talk",
+  "start": "greet",
+  "nodes": [
+    {
+      "id": "greet",
+      "says": [
+        {
+          "text": "Gadd has the ledger open at a page with four entries on it and is ruling a line under the fourth. \"Foot, horse, or cart?\""
+        }
+      ],
+      "options": [
+        {
+          "id": "the_bridge",
+          "text": "Tell me about the bridge.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "the_bridge"
+        },
+        {
+          "id": "what_does_the_crown_say",
+          "text": "What does Aurenhal say about the chapel?",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": true,
+          "lockedHint": "He does not discuss the Crown's business with people the Crown has no opinion about.",
+          "goto": "the_crowns_view",
+          "requires": {
+            "factions": [
+              {
+                "faction": "the_crown",
+                "minStanding": 10
+              }
+            ]
+          }
+        },
+        {
+          "id": "leave",
+          "text": "Foot. Nothing else.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": [
+        {
+          "requires": {
+            "flags": [
+              {
+                "flag": "eelweir_delver_down",
+                "equals": true
+              }
+            ],
+            "without": {
+              "flags": [
+                {
+                  "flag": "eelweir_told_crown"
+                },
+                {
+                  "flag": "eelweir_told_keepers"
+                }
+              ]
+            }
+          },
+          "goto": "the_matter_of_the_chapel"
+        }
+      ]
+    },
+    {
+      "id": "the_bridge",
+      "says": [
+        {
+          "text": "\"Nine arches, two of them rebuilt after the flood and the rebuilt two do not match.\" He does not look up. \"Everybody mentions it. I have stopped minding.\""
+        }
+      ],
+      "options": [
+        {
+          "id": "back",
+          "text": "Right.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "greet"
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": []
+    },
+    {
+      "id": "the_crowns_view",
+      "says": [
+        {
+          "text": "He puts the pen down, which for Gadd is a speech. \"Aurenhal says the chapel is a parish matter and the parish has no priest. Aurenhal has said that for sixty years.\" A pause. \"Aurenhal has also never sent anybody to look.\""
+        }
+      ],
+      "options": [
+        {
+          "id": "back",
+          "text": "Hm.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "greet"
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": []
+    },
+    {
+      "id": "the_matter_of_the_chapel",
+      "says": [
+        {
+          "text": "\"You have been in the setts,\" says Gadd, \"and you have been in the chapel, and you have the look of somebody who wants a thing written down.\" He turns the ledger round. \"I can write it down. Understand what that means: it becomes the Crown's, and the Crown will send a man with a warrant and a mason, and the chapel will be filled in.\""
+        }
+      ],
+      "options": [
+        {
+          "id": "write_it",
+          "text": "Write it down.",
+          "effects": [
+            {
+              "setFlag": {
+                "flag": "eelweir_told_crown",
+                "value": true
+              }
+            },
+            {
+              "emit": {
+                "event": "deed",
+                "data": {
+                  "kind": "crown_served"
+                }
+              }
+            },
+            {
+              "grantItem": {
+                "target": {
+                  "ref": "actor.id"
+                },
+                "item": "old_coin",
+                "quantity": 6
+              }
+            }
+          ],
+          "onceOnly": true,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "written"
+        },
+        {
+          "id": "not_yet",
+          "text": "Not yet. Nesh should hear it first.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "greet"
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": []
+    },
+    {
+      "id": "written",
+      "says": [
+        {
+          "text": "He writes for a long time in a very small hand, and at the end of it he blots the page and turns it back round. \"It is the Crown's now. You will not be asked about it again, and neither will I.\""
+        }
+      ],
+      "options": [
+        {
+          "id": "leave",
+          "text": "Good.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": [],
+      "remembers": "crown_served"
+    }
+  ]
+}

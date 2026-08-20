@@ -1,0 +1,38 @@
+{
+  "id": "steppe_horse_road",
+  "name": "The Horse Road",
+  "description": "Not a road. A width of grass forty yards across that has been ridden flat for nine hundred years.",
+  "biome": "steppe",
+  "layer": "overworld",
+  "descriptionKey": "steppe_horse_road_desc",
+  "dangerLevel": 3,
+  "recommendedLevel": 3,
+  "tags": [
+    "sunward_steppe"
+  ],
+  "map": {
+    "width": "51",
+    "height": "35"
+  },
+  "entryPoint": {
+    "x": 25,
+    "y": 17
+  },
+  "extra": {
+    "role": "wild"
+  },
+  "connections": [
+    {
+      "to": "steppe_ilkhet",
+      "travelMinutes": 40
+    },
+    {
+      "to": "steppe_windbreak",
+      "travelMinutes": 40
+    },
+    {
+      "to": "kingsvale_kingsroad_south",
+      "travelMinutes": 200
+    }
+  ]
+}

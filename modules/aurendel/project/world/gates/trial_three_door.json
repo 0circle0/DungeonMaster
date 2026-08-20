@@ -1,0 +1,80 @@
+{
+  "id": "trial_three_door",
+  "name": "The Seventh of the Eight",
+  "description": "A room off the Long Hall with no furniture, dressed to the inch, and built so that a sound made in it comes back changed.",
+  "kind": "ward",
+  "blockedTextKey": "trial_three_blocked",
+  "staysOpen": true,
+  "onOpen": [
+    {
+      "setFlag": {
+        "flag": "trial_three_open",
+        "value": true
+      }
+    }
+  ],
+  "onBlocked": [],
+  "opensWith": [],
+  "tags": [
+    "trial"
+  ],
+  "requires": {
+    "items": [
+      {
+        "item": "second_warrant"
+      }
+    ],
+    "anyOf": [
+      {
+        "items": [
+          {
+            "item": "bell_rope_ring",
+            "quantity": 1,
+            "consume": false,
+            "equipped": true
+          }
+        ]
+      },
+      {
+        "items": [
+          {
+            "item": "shilling_ring",
+            "quantity": 1,
+            "consume": false,
+            "equipped": true
+          }
+        ]
+      },
+      {
+        "items": [
+          {
+            "item": "hearth_ring",
+            "quantity": 1,
+            "consume": false,
+            "equipped": true
+          }
+        ]
+      },
+      {
+        "items": [
+          {
+            "item": "pilots_glass_ring",
+            "quantity": 1,
+            "consume": false,
+            "equipped": true
+          }
+        ]
+      },
+      {
+        "items": [
+          {
+            "item": "cistern_keepers_ring",
+            "quantity": 1,
+            "consume": false,
+            "equipped": true
+          }
+        ]
+      }
+    ]
+  }
+}

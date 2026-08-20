@@ -1,0 +1,329 @@
+{
+  "id": "coast_hask_talk",
+  "start": "greet",
+  "nodes": [
+    {
+      "id": "greet",
+      "says": [
+        {
+          "text": "A front room with a table, a strongbox and a book, and a man who has been bailiff long enough that the room has stopped being a front room."
+        },
+        {
+          "text": "“Strays, fees, and the pinfold. Which is it?”"
+        }
+      ],
+      "onEnter": [],
+      "options": [
+        {
+          "id": "coast_hask_one",
+          "text": "The October entry.",
+          "requires": {
+            "without": {
+              "lore": [
+                "coast_yard_one"
+              ]
+            }
+          },
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "check": {
+            "skill": "persuasion",
+            "difficulty": {
+              "sub": [
+                13,
+                {
+                  "clamp": [
+                    {
+                      "div": [
+                        {
+                          "ref": "reputation.the_countinghouse",
+                          "else": 0
+                        },
+                        5
+                      ]
+                    },
+                    -6,
+                    6
+                  ]
+                }
+              ]
+            },
+            "onSuccess": "coast_hask_one_told",
+            "onFailure": "coast_hask_one_wont"
+          }
+        },
+        {
+          "id": "coast_hask_horses",
+          "text": "Why will the coach horses not stand there?",
+          "requires": {
+            "without": {
+              "lore": [
+                "coast_yard_horses"
+              ]
+            }
+          },
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "check": {
+            "skill": "insight",
+            "difficulty": {
+              "sub": [
+                12,
+                {
+                  "clamp": [
+                    {
+                      "div": [
+                        {
+                          "ref": "reputation.the_countinghouse",
+                          "else": 0
+                        },
+                        5
+                      ]
+                    },
+                    -6,
+                    6
+                  ]
+                }
+              ]
+            },
+            "onSuccess": "coast_hask_horses_told",
+            "onFailure": "coast_hask_horses_wont"
+          }
+        },
+        {
+          "id": "coast_hask_book",
+          "text": "Give me the book.",
+          "requires": {
+            "without": {
+              "items": [
+                "yard_book"
+              ],
+              "flags": [
+                {
+                  "flag": "given:yard_book"
+                }
+              ]
+            }
+          },
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "check": {
+            "skill": "persuasion",
+            "difficulty": {
+              "sub": [
+                14,
+                {
+                  "clamp": [
+                    {
+                      "div": [
+                        {
+                          "ref": "reputation.the_countinghouse",
+                          "else": 0
+                        },
+                        5
+                      ]
+                    },
+                    -6,
+                    6
+                  ]
+                }
+              ]
+            },
+            "onSuccess": "coast_hask_book_gave",
+            "onFailure": "coast_hask_book_kept"
+          }
+        },
+        {
+          "id": "greet_leave",
+          "text": "Nothing.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "coast_hask_one_told",
+      "says": [
+        {
+          "text": "The bailiff does not pretend not to know what you mean, which is itself an answer. “One a year. Same night. Taken up, unclaimed, and the fee paid.” He closes the book. “My father wrote it. His father wrote it. I have written it nineteen times and I have never once been in that yard to see what I was writing about.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "learnLore": {
+            "entry": "coast_yard_one"
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "coast_hask_one_on",
+          "text": "Go on.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "coast_hask_one_wont",
+      "says": [
+        {
+          "text": "“I've said all I mean to,” they say, and go back to what they were doing."
+        }
+      ],
+      "onEnter": [
+        {
+          "adjustReputation": {
+            "faction": "the_countinghouse",
+            "amount": -1
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "coast_hask_one_drop",
+          "text": "Leave it.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "coast_hask_horses_told",
+      "says": [
+        {
+          "text": "“Because they are not stupid.” He says it flatly. “One night of the year they will not go through the gate and they will not be made to. The stablers stopped trying before I was born and put the night in the coaching timetable instead, which tells you how long this has been the arrangement.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "learnLore": {
+            "entry": "coast_yard_horses"
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "coast_hask_horses_on",
+          "text": "Go on.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "coast_hask_horses_wont",
+      "says": [
+        {
+          "text": "“I've said all I mean to,” they say, and go back to what they were doing."
+        }
+      ],
+      "onEnter": [
+        {
+          "adjustReputation": {
+            "faction": "the_countinghouse",
+            "amount": -1
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "coast_hask_horses_drop",
+          "text": "Leave it.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "coast_hask_book_gave",
+      "says": [
+        {
+          "text": "He hands it across with both hands, which is not how a man hands over a ledger. “The October line is eleven words and it names where the beast was put,” he says. “I have read it nineteen times. I would rather somebody else went and looked.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "grantItem": {
+            "target": {
+              "ref": "actor.id"
+            },
+            "item": "yard_book",
+            "quantity": 1
+          }
+        },
+        {
+          "setFlag": {
+            "flag": "given:yard_book",
+            "value": true
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "coast_hask_book_thanks",
+          "text": "Thank you.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "coast_hask_book_kept",
+      "says": [
+        {
+          "text": "“It is the town's book and I am the town's bailiff,” he says, which is a sentence he has clearly had ready for years."
+        }
+      ],
+      "onEnter": [
+        {
+          "adjustReputation": {
+            "faction": "the_countinghouse",
+            "amount": -2
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "coast_hask_book_leave",
+          "text": "Then no.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    }
+  ]
+}

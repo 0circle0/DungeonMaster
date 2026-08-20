@@ -1,0 +1,33 @@
+{
+  "id": "the_keepers",
+  "name": "The Keepers",
+  "description": "Cairn-tenders, the Elderhollow moot, the wardens of the Sisters. Not an order and not a guild — a habit, kept in eleven places by people who have never met.",
+  "initialStanding": 5,
+  "decayPerDay": 0.03,
+  "relations": {
+    "the_crown": -0.2,
+    "karn_dolur": 0.3
+  },
+  "ranks": [
+    {
+      "id": "oathbreaker",
+      "name": "Oathbreaker",
+      "atLeast": -60
+    },
+    {
+      "id": "watched",
+      "name": "Watched",
+      "atLeast": -20
+    },
+    {
+      "id": "known",
+      "name": "Known",
+      "atLeast": 10
+    },
+    {
+      "id": "trusted",
+      "name": "Trusted with the Ways",
+      "atLeast": 40
+    }
+  ]
+}

@@ -1,0 +1,76 @@
+{
+  "id": "thecut_the_galleries",
+  "name": "The Quarry Galleries",
+  "description": "The Cut was quarried for the Hold road and the galleries run back into the mountain further than the road ever needed. Something has come down them as far as the toll ruin.",
+  "autoStart": false,
+  "ordered": true,
+  "tags": [
+    "side",
+    "act2",
+    "thecut",
+    "skarnspine"
+  ],
+  "objectives": [],
+  "stages": [
+    {
+      "id": "get_in",
+      "name": "Into the galleries",
+      "description": "Driven for stone, and driven a great deal further than stone accounts for.",
+      "objectives": [
+        {
+          "id": "in_the_galleries",
+          "description": "Get into the quarry galleries.",
+          "kind": "reach",
+          "count": 1,
+          "hidden": false,
+          "optional": false,
+          "target": "the_cut_quarry_galleries"
+        }
+      ],
+      "journalKey": "thecut_journal_galleries"
+    },
+    {
+      "id": "clear",
+      "name": "What has come down them",
+      "description": "Grey, slow, and walking a circuit it did not choose.",
+      "objectives": [
+        {
+          "id": "the_walkers",
+          "description": "Clear the galleries.",
+          "kind": "kill",
+          "count": 2,
+          "hidden": false,
+          "optional": false,
+          "target": "hollow_walker"
+        }
+      ],
+      "onComplete": [
+        {
+          "setFlag": {
+            "flag": "thecut_galleries_cleared",
+            "value": true
+          }
+        }
+      ],
+      "journalKey": "thecut_journal_walkers"
+    }
+  ],
+  "unlocks": [
+    "thecut_the_sink"
+  ],
+  "rewards": {
+    "xp": 70,
+    "items": [],
+    "reputation": {
+      "karn_dolur": 8
+    }
+  },
+  "requires": {
+    "quests": [
+      {
+        "quest": "thecut_the_red_water",
+        "status": "complete"
+      }
+    ]
+  }
+}

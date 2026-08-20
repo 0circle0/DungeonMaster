@@ -1,0 +1,20 @@
+{
+  "id": "beaters_cloak",
+  "name": "The Beater's Cloak",
+  "description": "Off the eighth place in the line, the one that stands where the ground stops. Whatever is driven, it does not come at the wearer first.",
+  "kind": "armor",
+  "slot": "cloak",
+  "value": 1000,
+  "weight": 1,
+  "tags": [
+    "fabled"
+  ],
+  "modifiers": {
+    "guard": 2
+  },
+  "skillBonuses": {
+    "stealth": 3,
+    "perception": 2
+  },
+  "rarity": "very_rare"
+}

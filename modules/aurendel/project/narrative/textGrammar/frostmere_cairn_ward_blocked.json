@@ -1,0 +1,14 @@
+{
+  "id": "frostmere_cairn_ward_blocked",
+  "variants": [
+    {
+      "text": "The way through the cairns is marked, and the marked way does not go where you want to go."
+    },
+    {
+      "text": "A keeper is standing at the gap with both hands visible and no weapon, which is somehow worse."
+    },
+    {
+      "text": "\"Not that one,\" she says. \"Any of the others. Not that one.\""
+    }
+  ]
+}

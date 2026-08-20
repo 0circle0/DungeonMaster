@@ -1,0 +1,52 @@
+{
+  "id": "coast_shepherd",
+  "name": "Ansel, on the Downs",
+  "description": "Walks the chalk from dark to dark and has never once been hurried.",
+  "level": 4,
+  "xp": 0,
+  "attributes": {
+    "might": 13,
+    "agility": 13,
+    "endurance": 15,
+    "intellect": 10,
+    "instinct": 15,
+    "presence": 12
+  },
+  "abilities": [
+    "strike"
+  ],
+  "behaviour": [
+    {
+      "priority": 0,
+      "use": "strike"
+    }
+  ],
+  "faction": "the_salvors",
+  "creatureType": "humanoid",
+  "size": "medium",
+  "descriptors": [
+    "a weathered"
+  ],
+  "conditionalLoot": [],
+  "loot": "coast_tally_carried",
+  "resourceOverrides": {
+    "hp": 24
+  },
+  "temperament": {
+    "roamRadius": 24,
+    "investigateRadius": 70,
+    "leashRadius": 100,
+    "wanderChance": 0.4,
+    "disengageTurns": 2,
+    "investigates": [
+      "sight",
+      "hearing",
+      "tracks",
+      "smell"
+    ],
+    "notices": [
+      "hostile",
+      "neutral"
+    ]
+  }
+}

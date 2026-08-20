@@ -1,0 +1,17 @@
+{
+  "id": "heard_something_faint",
+  "variants": [
+    {
+      "text": "A sound, maybe. Somewhere {direction}."
+    },
+    {
+      "text": "You stop. Whatever it was does not come again."
+    },
+    {
+      "text": "Far off {direction}, something disturbs the quiet."
+    },
+    {
+      "text": "The edge of a noise, {direction}, already gone."
+    }
+  ]
+}

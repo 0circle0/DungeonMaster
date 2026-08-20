@@ -1,0 +1,76 @@
+{
+  "id": "narrows_marker_wreck",
+  "name": "The Marker",
+  "description": "A ship set deliberately on the shoal to mark it, forty years ago, and she is still where she was put.",
+  "area": "isles_the_narrows",
+  "kind": "ruin",
+  "descriptionKey": "generic_ruin",
+  "travelMinutes": 8,
+  "tags": [
+    "ruin"
+  ],
+  "map": {
+    "width": "11",
+    "height": "9",
+    "palette": "int_hull"
+  },
+  "position": {
+    "x": 25,
+    "y": 3
+  },
+  "triggers": [
+    {
+      "id": "isle_marker_committed",
+      "mode": "once",
+      "on": "enter",
+      "description": "Alongside her at slack water.",
+      "requires": {
+        "custom": {
+          "gte": [
+            {
+              "ref": "threads.isle_marker.known"
+            },
+            2
+          ]
+        }
+      },
+      "effects": [
+        {
+          "emit": {
+            "event": "startQuest",
+            "data": {
+              "quest": "isle_the_marker"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "hidden": true,
+  "discover": {
+    "skill": "perception",
+    "difficulty": {
+      "max": [
+        8,
+        {
+          "sub": [
+            20,
+            {
+              "mul": [
+                3,
+                {
+                  "ref": "threads.isle_marker.known"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "gate": "isle_marker_hold",
+  "encounterTables": [
+    "isle_marker_boss"
+  ],
+  "encounterChance": 1
+}

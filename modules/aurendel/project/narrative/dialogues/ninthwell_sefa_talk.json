@@ -1,0 +1,426 @@
+{
+  "id": "ninthwell_sefa_talk",
+  "start": "greet",
+  "nodes": [
+    {
+      "id": "greet",
+      "says": [
+        {
+          "text": "The camp is eleven tents arranged in a crescent, and the open side of the crescent faces east, away from a ninth wellhead that nobody has mentioned. Sefa is sitting in the open side of it facing the wrong way. \"You came from the road.\""
+        }
+      ],
+      "options": [
+        {
+          "id": "nine_shafts",
+          "text": "There are nine shafts and eight ropes.",
+          "effects": [
+            {
+              "emit": {
+                "event": "startQuest",
+                "data": {
+                  "quest": "ninthwell_eight_and_one"
+                }
+              }
+            }
+          ],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "the_roster_and_the_survey",
+          "requires": {
+            "quests": [
+              {
+                "quest": "ninthwell_eight_and_one",
+                "status": "unstarted"
+              }
+            ],
+            "description": "two of the three ward-keys",
+            "anyOf": [
+              {
+                "items": [
+                  {
+                    "item": "grown_key"
+                  },
+                  {
+                    "item": "cast_key"
+                  }
+                ]
+              },
+              {
+                "items": [
+                  {
+                    "item": "grown_key"
+                  },
+                  {
+                    "item": "glass_key"
+                  }
+                ]
+              },
+              {
+                "items": [
+                  {
+                    "item": "cast_key"
+                  },
+                  {
+                    "item": "glass_key"
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "id": "posted",
+          "text": "Why is a water warden out here?",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "posted"
+        },
+        {
+          "id": "leave",
+          "text": "Nothing.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": [
+        {
+          "requires": {
+            "quests": [
+              {
+                "quest": "ninthwell_the_milepost_vault",
+                "status": "active"
+              }
+            ],
+            "flags": [
+              {
+                "flag": "ninthwell_survey_read",
+                "equals": true
+              }
+            ]
+          },
+          "goto": "about_the_survey"
+        },
+        {
+          "requires": {
+            "flags": [
+              {
+                "flag": "ninthwell_thing_down",
+                "equals": true
+              }
+            ],
+            "without": {
+              "flags": [
+                {
+                  "flag": "ninthwell_opened"
+                },
+                {
+                  "flag": "ninthwell_capped"
+                }
+              ]
+            }
+          },
+          "goto": "cap_or_open"
+        }
+      ]
+    },
+    {
+      "id": "posted",
+      "says": [
+        {
+          "text": "\"I asked a question in writing,\" says Sefa. \"That is the whole of it. In Vashta Qal a question in writing goes into the record and the record is read, which is the finest thing about the office and the reason I am four days into a desert.\""
+        }
+      ],
+      "options": [
+        {
+          "id": "back",
+          "text": "Hm.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "greet"
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": []
+    },
+    {
+      "id": "the_roster_and_the_survey",
+      "says": [
+        {
+          "text": "She has them both out before you have finished asking, which tells you how long she has been waiting for somebody to ask."
+        },
+        {
+          "text": "\"The survey, from the sinking: nine shafts, one crew, one season.\" She sets the other beside it. \"The roster, from the season after and every season since: eight. Not eight and a failure. Eight.\""
+        }
+      ],
+      "options": [
+        {
+          "id": "dry",
+          "text": "Perhaps it came up dry.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "not_dry"
+        }
+      ],
+      "onEnter": [
+        {
+          "setFlag": {
+            "flag": "ninthwell_roster_seen",
+            "value": true
+          }
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "not_dry",
+      "says": [
+        {
+          "text": "\"A dry shaft is written down as dry,\" says Sefa. \"There are four dry shafts on this survey at other sites and every one of them says *dry*, because a dry shaft is four hundred marks of somebody's money and money gets written down.\""
+        },
+        {
+          "text": "\"This one says a depth,\" she says. \"That is all it says. And the camp has been laid out facing away from it for four hundred years, which is not something anybody decided. It is something everybody kept doing.\""
+        }
+      ],
+      "options": [
+        {
+          "id": "the_original",
+          "text": "Where's the original survey?",
+          "effects": [
+            {
+              "emit": {
+                "event": "startQuest",
+                "data": {
+                  "quest": "ninthwell_the_milepost_vault"
+                }
+              }
+            }
+          ],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "the_mileposts",
+          "requires": {
+            "quests": [
+              {
+                "quest": "ninthwell_the_milepost_vault",
+                "status": "unstarted"
+              }
+            ]
+          }
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": []
+    },
+    {
+      "id": "the_mileposts",
+      "says": [
+        {
+          "text": "\"The crew came up the Sunken Road, and the Sunken Road has vaults under its mileposts.\" A dry look. \"The caravanserai has been storing barley in them for two hundred years and will not have moved anything it did not have to.\""
+        }
+      ],
+      "options": [
+        {
+          "id": "done",
+          "text": "We'll go and shift some barley.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": []
+    },
+    {
+      "id": "about_the_survey",
+      "says": [
+        {
+          "text": "\"You got into the vault.\" Sefa is standing. \"What does the original say that the copy does not?\""
+        }
+      ],
+      "options": [
+        {
+          "id": "sunk_to",
+          "text": "The ninth was 'sunk to' the depth. Not 'sunk for' water.",
+          "effects": [],
+          "onceOnly": true,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "sunk_to"
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": []
+    },
+    {
+      "id": "sunk_to",
+      "says": [
+        {
+          "text": "Sefa sits back down, slowly. \"*Sunk to*,\" she repeats. \"Then they were not looking for water and finding none. They were going to a depth somebody had given them, and they got there, and they wrote down that they got there.\""
+        },
+        {
+          "text": "\"And then eight wells fed a town for four hundred years and nobody put a rope on the ninth.\""
+        }
+      ],
+      "options": [
+        {
+          "id": "go_down",
+          "text": "Then we'll go to the depth.",
+          "effects": [
+            {
+              "emit": {
+                "event": "startQuest",
+                "data": {
+                  "quest": "ninthwell_down_the_ninth"
+                }
+              }
+            },
+            {
+              "adjustReputation": {
+                "faction": "the_water_wardens",
+                "amount": 8
+              }
+            }
+          ],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "four_hundred_feet",
+          "requires": {
+            "quests": [
+              {
+                "quest": "ninthwell_down_the_ninth",
+                "status": "unstarted"
+              }
+            ]
+          }
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": [],
+      "remembers": "spring_served"
+    },
+    {
+      "id": "four_hundred_feet",
+      "says": [
+        {
+          "text": "\"Four hundred feet, dressed the whole way, in a desert.\" Sefa shakes her head slightly. \"I have spent my life measuring water out in cupfuls. Somebody spent a season and four hundred marks going *past* it.\""
+        }
+      ],
+      "options": [
+        {
+          "id": "done",
+          "text": "Four hundred feet.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": []
+    },
+    {
+      "id": "cap_or_open",
+      "says": [
+        {
+          "text": "Sefa has been at the wellhead since you came up and has not looked away from it. \"There is water,\" she says. \"Under everything. It was under everything the whole time.\""
+        },
+        {
+          "text": "\"I can put the ninth on the roster,\" she says. \"Vashta Qal stops rationing inside a year, the Glass Quarter doubles, and the wardens' office becomes an office about *distribution* rather than about scarcity, which is a thing I would like to see before I die.\""
+        },
+        {
+          "text": "\"Or I cap it,\" she says. \"Because eight wells were enough for four hundred years, and the crew that sank nine went to a depth somebody gave them, and I have spent four days looking at what was down there and I am no longer certain the roster was an accident.\""
+        }
+      ],
+      "options": [
+        {
+          "id": "open",
+          "text": "Put it on the roster.",
+          "effects": [
+            {
+              "setFlag": {
+                "flag": "ninthwell_opened",
+                "value": true
+              }
+            }
+          ],
+          "onceOnly": true,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "opened"
+        },
+        {
+          "id": "cap",
+          "text": "Cap it. Eight was enough.",
+          "effects": [
+            {
+              "setFlag": {
+                "flag": "ninthwell_capped",
+                "value": true
+              }
+            }
+          ],
+          "onceOnly": true,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "capped"
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": []
+    },
+    {
+      "id": "opened",
+      "says": [
+        {
+          "text": "The rope goes on in the spring and the first draw is clear and cold and tastes of nothing at all. Sefa writes the ninth onto the roster in her own hand and the entry is the ninth line on a page that has had eight for four hundred years."
+        }
+      ],
+      "options": [
+        {
+          "id": "done",
+          "text": "Nine.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": [],
+      "remembers": "spring_served"
+    },
+    {
+      "id": "capped",
+      "says": [
+        {
+          "text": "They cap it with four feet of dressed stone and a course of brick, and Sefa has the camp turned to face it, which she says is the only part of this anybody will remember to keep doing."
+        }
+      ],
+      "options": [
+        {
+          "id": "done",
+          "text": "Facing it.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": []
+    }
+  ]
+}

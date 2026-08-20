@@ -1,0 +1,8 @@
+{
+  "id": "finesse",
+  "name": "Finesse",
+  "description": "Rewards a quick hand over a heavy one.",
+  "attackStats": [
+    "agility"
+  ]
+}

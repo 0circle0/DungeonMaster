@@ -1,0 +1,12 @@
+{
+  "id": "the_old_seams",
+  "name": "The Old Seams",
+  "description": "Nine hundred years of a hold writing everything down, and four years in the middle of it that nobody wrote anything about at all.",
+  "quests": [
+    "seams_the_missing_year",
+    "seams_the_ledger_stone",
+    "seams_into_the_old_workings",
+    "seams_cut_it_or_close_it"
+  ],
+  "isEnding": false
+}

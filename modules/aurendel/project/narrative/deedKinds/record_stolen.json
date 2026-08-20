@@ -1,0 +1,8 @@
+{
+  "id": "record_stolen",
+  "name": "Stole from the Library",
+  "faction": "the_library",
+  "severity": -12,
+  "memorability": 2,
+  "distortion": 0.3
+}

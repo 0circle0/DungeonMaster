@@ -1,0 +1,20 @@
+{
+  "id": "oak_cutting",
+  "name": "A Cutting Off the Same Tree",
+  "description": "Live wood out of a mile-oak, and the leaf on it matches thirteen others and no tree anybody can find.",
+  "kind": "treasure",
+  "value": 0,
+  "weight": 0,
+  "tags": [
+    "clue",
+    "proof"
+  ],
+  "onUse": [
+    {
+      "learnLore": {
+        "entry": "dusk_miles_cuttings"
+      }
+    }
+  ],
+  "consumedOnUse": false
+}

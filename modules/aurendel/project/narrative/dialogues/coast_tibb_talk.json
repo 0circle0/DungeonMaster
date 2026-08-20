@@ -1,0 +1,314 @@
+{
+  "id": "coast_tibb_talk",
+  "start": "greet",
+  "nodes": [
+    {
+      "id": "greet",
+      "says": [
+        {
+          "text": "The last field before four hundred feet of nothing, and an old farmer leaning on a gate looking inland rather than out."
+        },
+        {
+          "text": "“I have looked at that hill for sixty years. Go on, then.”"
+        }
+      ],
+      "onEnter": [],
+      "options": [
+        {
+          "id": "coast_tibb_lines",
+          "text": "You have looked at it for sixty years. What is it?",
+          "requires": {
+            "without": {
+              "lore": [
+                "coast_horse_lines"
+              ]
+            }
+          },
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "check": {
+            "skill": "insight",
+            "difficulty": {
+              "sub": [
+                11,
+                {
+                  "clamp": [
+                    {
+                      "div": [
+                        {
+                          "ref": "reputation.the_salvors",
+                          "else": 0
+                        },
+                        5
+                      ]
+                    },
+                    -6,
+                    6
+                  ]
+                }
+              ]
+            },
+            "onSuccess": "coast_tibb_lines_told",
+            "onFailure": "coast_tibb_lines_wont"
+          }
+        },
+        {
+          "id": "coast_tibb_ring",
+          "text": "The birds on the head. Is there anywhere they don't nest?",
+          "requires": {
+            "without": {
+              "lore": [
+                "coast_watch_ring"
+              ]
+            }
+          },
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "check": {
+            "skill": "persuasion",
+            "difficulty": {
+              "sub": [
+                12,
+                {
+                  "clamp": [
+                    {
+                      "div": [
+                        {
+                          "ref": "reputation.the_salvors",
+                          "else": 0
+                        },
+                        5
+                      ]
+                    },
+                    -6,
+                    6
+                  ]
+                }
+              ]
+            },
+            "onSuccess": "coast_tibb_ring_told",
+            "onFailure": "coast_tibb_ring_wont"
+          }
+        },
+        {
+          "id": "coast_tibb_paid",
+          "text": "Somebody pays the October fee at Cobbleway.",
+          "requires": {
+            "without": {
+              "lore": [
+                "coast_yard_paid"
+              ]
+            }
+          },
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "check": {
+            "skill": "insight",
+            "difficulty": {
+              "sub": [
+                14,
+                {
+                  "clamp": [
+                    {
+                      "div": [
+                        {
+                          "ref": "reputation.the_salvors",
+                          "else": 0
+                        },
+                        5
+                      ]
+                    },
+                    -6,
+                    6
+                  ]
+                }
+              ]
+            },
+            "onSuccess": "coast_tibb_paid_told",
+            "onFailure": "coast_tibb_paid_wont"
+          }
+        },
+        {
+          "id": "greet_leave",
+          "text": "Nothing.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "coast_tibb_lines_told",
+      "says": [
+        {
+          "text": "“It is not a horse.” Tibb says it without any weight at all, the way you say a thing you settled long ago. “From up the cliff path you can see two of the cuts go square to each other, and they run on past where the beast would stop.” A shrug. “I told the vicar once. He wrote it down and nothing happened, which is what I expected.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "learnLore": {
+            "entry": "coast_horse_lines"
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "coast_tibb_lines_on",
+          "text": "Go on.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "coast_tibb_lines_wont",
+      "says": [
+        {
+          "text": "“I've said all I mean to,” they say, and go back to what they were doing."
+        }
+      ],
+      "onEnter": [
+        {
+          "adjustReputation": {
+            "faction": "the_salvors",
+            "amount": -1
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "coast_tibb_lines_drop",
+          "text": "Leave it.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "coast_tibb_ring_told",
+      "says": [
+        {
+          "text": "“Round the tower's foot. Forty feet of bare rock, near enough a circle.” Tibb spits over the gate. “There is guano a foot deep on every other stone of that headland. Birds are not sentimental. If they will not sit there, there is a reason and it is not history.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "learnLore": {
+            "entry": "coast_watch_ring"
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "coast_tibb_ring_on",
+          "text": "Go on.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "coast_tibb_ring_wont",
+      "says": [
+        {
+          "text": "“I've said all I mean to,” they say, and go back to what they were doing."
+        }
+      ],
+      "onEnter": [
+        {
+          "adjustReputation": {
+            "faction": "the_salvors",
+            "amount": -1
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "coast_tibb_ring_drop",
+          "text": "Leave it.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "coast_tibb_paid_told",
+      "says": [
+        {
+          "text": "“In coin, into the box, every year.” Tibb has clearly thought about this. “Now a fee is paid by the owner. So somebody owns it, and has for two hundred years, and has never once come and collected the animal they are paying for.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "learnLore": {
+            "entry": "coast_yard_paid"
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "coast_tibb_paid_on",
+          "text": "Go on.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "coast_tibb_paid_wont",
+      "says": [
+        {
+          "text": "“I've said all I mean to,” they say, and go back to what they were doing."
+        }
+      ],
+      "onEnter": [
+        {
+          "adjustReputation": {
+            "faction": "the_salvors",
+            "amount": -1
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "coast_tibb_paid_drop",
+          "text": "Leave it.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    }
+  ]
+}

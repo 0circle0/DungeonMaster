@@ -1,0 +1,57 @@
+{
+  "id": "deep_what_it_stands_on",
+  "name": "What the Bridge Was Built Over",
+  "description": "Footings rather than abutments, on a chasm four hundred years of dropped lights have not found the bottom of, older than the span laid onto them.",
+  "autoStart": false,
+  "ordered": true,
+  "tags": [
+    "hidden",
+    "deeproads",
+    "deep_bridge"
+  ],
+  "objectives": [
+    {
+      "id": "at_the_footings",
+      "description": "Get down into the footings.",
+      "kind": "reach",
+      "count": 1,
+      "hidden": true,
+      "optional": false,
+      "target": "black_bridge_the_footings"
+    },
+    {
+      "id": "past_the_bar",
+      "description": "Get past a bar on the far side.",
+      "kind": "custom",
+      "count": 1,
+      "hidden": true,
+      "optional": false,
+      "when": {
+        "test": {
+          "ref": "flags.deep_bridge_open"
+        }
+      }
+    },
+    {
+      "id": "what_hums",
+      "description": "Find what has been humming.",
+      "kind": "kill",
+      "count": 1,
+      "hidden": true,
+      "optional": false,
+      "target": "footing_hum"
+    }
+  ],
+  "stages": [],
+  "unlocks": [],
+  "rewards": {
+    "xp": 300,
+    "items": [
+      {
+        "item": "footing_maul",
+        "quantity": 1
+      }
+    ],
+    "reputation": {}
+  }
+}

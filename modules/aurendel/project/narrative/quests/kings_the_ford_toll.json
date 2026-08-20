@@ -1,0 +1,57 @@
+{
+  "id": "kings_the_ford_toll",
+  "name": "The Ford Toll",
+  "description": "A sluice worked to the day for ninety years by a keeper the parish stopped paying, over a chamber nobody has opened.",
+  "autoStart": false,
+  "ordered": true,
+  "tags": [
+    "hidden",
+    "kingsvale",
+    "kings_ford"
+  ],
+  "objectives": [
+    {
+      "id": "in_the_sluice_house",
+      "description": "Get into the sluice house.",
+      "kind": "reach",
+      "count": 1,
+      "hidden": true,
+      "optional": false,
+      "target": "pennyford_sluice_house"
+    },
+    {
+      "id": "under_the_gate",
+      "description": "Get under the gate.",
+      "kind": "custom",
+      "count": 1,
+      "hidden": true,
+      "optional": false,
+      "when": {
+        "test": {
+          "ref": "flags.kings_ford_open"
+        }
+      }
+    },
+    {
+      "id": "the_keeper",
+      "description": "Meet the keeper.",
+      "kind": "kill",
+      "count": 1,
+      "hidden": true,
+      "optional": false,
+      "target": "ford_keeper"
+    }
+  ],
+  "stages": [],
+  "unlocks": [],
+  "rewards": {
+    "xp": 100,
+    "items": [
+      {
+        "item": "ford_ring",
+        "quantity": 1
+      }
+    ],
+    "reputation": {}
+  }
+}

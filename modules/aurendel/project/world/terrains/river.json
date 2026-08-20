@@ -1,0 +1,21 @@
+{
+  "id": "river",
+  "name": "River",
+  "description": "Moving water with an opinion about where you are going.",
+  "glyph": "r",
+  "color": "blue",
+  "passable": true,
+  "opaque": false,
+  "moveCost": 3,
+  "tags": [
+    "washed",
+    "water"
+  ],
+  "marks": {
+    "tracks": 0,
+    "smell": 0.15
+  },
+  "requiresMode": [
+    "swim"
+  ]
+}

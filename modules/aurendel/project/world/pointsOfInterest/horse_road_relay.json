@@ -1,0 +1,23 @@
+{
+  "id": "horse_road_relay",
+  "name": "The Relay Post",
+  "description": "Fresh horses every thirty miles, which is how news crosses the steppe in three days.",
+  "area": "steppe_horse_road",
+  "kind": "settlement",
+  "descriptionKey": "int_stable",
+  "travelMinutes": 5,
+  "tags": [],
+  "services": [
+    "stable",
+    "inn"
+  ],
+  "map": {
+    "width": "11",
+    "height": "9",
+    "palette": "int_timber"
+  },
+  "position": {
+    "x": 14,
+    "y": 3
+  }
+}

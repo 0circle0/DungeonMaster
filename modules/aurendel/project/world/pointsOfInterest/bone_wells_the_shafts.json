@@ -1,0 +1,14 @@
+{
+  "id": "bone_wells_the_shafts",
+  "name": "The Bone Wells",
+  "description": "Eleven shafts sunk for water, all dry, all deep, and all of them full of something.",
+  "area": "glasslands_bone_wells",
+  "kind": "landmark",
+  "descriptionKey": "bone_wells_the_shafts_desc",
+  "travelMinutes": 8,
+  "tags": [],
+  "position": {
+    "x": 3,
+    "y": 3
+  }
+}

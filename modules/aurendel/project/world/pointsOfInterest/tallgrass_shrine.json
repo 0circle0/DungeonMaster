@@ -1,0 +1,24 @@
+{
+  "id": "tallgrass_shrine",
+  "name": "The Grass Shrine",
+  "description": "Mown, in a circle, by hand, every week, by whoever is free.",
+  "area": "steppe_tallgrass",
+  "kind": "shrine",
+  "descriptionKey": "int_temple",
+  "travelMinutes": 3,
+  "tags": [
+    "shrine"
+  ],
+  "services": [
+    "temple"
+  ],
+  "map": {
+    "width": "9",
+    "height": "7",
+    "palette": "int_temple"
+  },
+  "position": {
+    "x": 21,
+    "y": 3
+  }
+}

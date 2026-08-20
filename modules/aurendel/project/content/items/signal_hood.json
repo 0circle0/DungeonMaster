@@ -1,0 +1,17 @@
+{
+  "id": "signal_hood",
+  "name": "The Hood off the Signal Course",
+  "description": "Tarred canvas out of a tower with no stair in it. Light behaves oddly at the edge of it, and always has.",
+  "kind": "armor",
+  "slot": "head",
+  "value": 640,
+  "weight": 1,
+  "tags": [
+    "fabled"
+  ],
+  "skillBonuses": {
+    "perception": 3,
+    "insight": 2
+  },
+  "rarity": "rare"
+}

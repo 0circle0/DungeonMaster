@@ -1,0 +1,72 @@
+{
+  "id": "sisters_site",
+  "name": "The Sisters' Ward",
+  "description": "Whatever was set here to keep the door shut is still at it, and it has stopped distinguishing between the door and you.",
+  "autoStart": false,
+  "ordered": true,
+  "tags": [
+    "act2",
+    "sisters"
+  ],
+  "objectives": [],
+  "stages": [
+    {
+      "id": "get_in",
+      "name": "Get inside",
+      "description": "The way down is where the Wardlist says it is.",
+      "objectives": [
+        {
+          "id": "enter",
+          "description": "Go down.",
+          "kind": "reach",
+          "count": 1,
+          "hidden": false,
+          "optional": false,
+          "target": "nine_sisters_under_ring"
+        }
+      ]
+    },
+    {
+      "id": "clear_it",
+      "name": "What is keeping it",
+      "description": "It was set here. It is still here.",
+      "objectives": [
+        {
+          "id": "kill_boss",
+          "description": "Put down what guards the ward.",
+          "kind": "kill",
+          "count": 1,
+          "hidden": false,
+          "optional": false,
+          "target": "sister_shade"
+        }
+      ],
+      "onComplete": [
+        {
+          "setFlag": {
+            "flag": "sisters_cleared",
+            "value": true
+          }
+        }
+      ]
+    }
+  ],
+  "unlocks": [
+    "sisters_choice"
+  ],
+  "rewards": {
+    "xp": 200,
+    "items": [],
+    "reputation": {
+      "the_keepers": 8
+    }
+  },
+  "requires": {
+    "quests": [
+      {
+        "quest": "sisters_road",
+        "status": "complete"
+      }
+    ]
+  }
+}

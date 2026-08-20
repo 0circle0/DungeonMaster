@@ -1,0 +1,50 @@
+{
+  "id": "the_checked",
+  "minDepth": 0,
+  "maxDepth": 999,
+  "chance": 0.35,
+  "emptyWeight": 5,
+  "scalePerLevels": 2,
+  "groups": [
+    {
+      "id": "keepers",
+      "weight": 5,
+      "hostile": true,
+      "entries": [
+        {
+          "monster": "door_keeper_loosed",
+          "count": "1",
+          "scaleWithLevel": false
+        }
+      ],
+      "requires": {
+        "flags": [
+          {
+            "flag": "aurendel_finished",
+            "equals": true
+          }
+        ]
+      }
+    },
+    {
+      "id": "a_pair",
+      "weight": 2,
+      "hostile": true,
+      "entries": [
+        {
+          "monster": "door_keeper_loosed",
+          "count": "1d2",
+          "scaleWithLevel": true
+        }
+      ],
+      "requires": {
+        "flags": [
+          {
+            "flag": "aurendel_finished",
+            "equals": true
+          }
+        ]
+      }
+    }
+  ]
+}

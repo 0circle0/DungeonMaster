@@ -1,0 +1,12 @@
+{
+  "id": "the_ninth_well",
+  "name": "The Ninth Well",
+  "description": "Nine shafts sunk in one season by one crew, eight of them on the roster, and a camp laid out for four hundred years so that nobody faces the other one.",
+  "quests": [
+    "ninthwell_eight_and_one",
+    "ninthwell_the_milepost_vault",
+    "ninthwell_down_the_ninth",
+    "ninthwell_cap_it_or_open_it"
+  ],
+  "isEnding": false
+}

@@ -1,0 +1,8 @@
+{
+  "id": "cairn_set",
+  "name": "Set a Cairn",
+  "faction": "the_ice_moot",
+  "severity": 14,
+  "memorability": 2,
+  "distortion": 0.2
+}

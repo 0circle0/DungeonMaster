@@ -1,0 +1,57 @@
+{
+  "id": "trial_one_rootcellar",
+  "name": "The Third Door",
+  "description": "A root cellar in the Hollow Beeches with a floor under the floor, and the Keepers' third line struck through in red by a hand that was not Hesper's.",
+  "autoStart": false,
+  "ordered": true,
+  "tags": [
+    "trial",
+    "trial_one"
+  ],
+  "objectives": [
+    {
+      "id": "into_the_cellar",
+      "description": "Get into the root cellar.",
+      "kind": "reach",
+      "count": 1,
+      "hidden": false,
+      "optional": false,
+      "target": "hollow_beeches_root_cellar"
+    },
+    {
+      "id": "the_third",
+      "description": "Finish what came through the third door.",
+      "kind": "kill",
+      "count": 1,
+      "hidden": false,
+      "optional": false,
+      "target": "third_through"
+    }
+  ],
+  "stages": [],
+  "unlocks": [],
+  "rewards": {
+    "xp": 1700,
+    "items": [
+      {
+        "item": "eighth_list_cloak",
+        "quantity": 1
+      },
+      {
+        "item": "first_warrant",
+        "quantity": 1
+      }
+    ],
+    "reputation": {
+      "the_keepers": 30
+    }
+  },
+  "requires": {
+    "quests": [
+      {
+        "quest": "trial_one_underkeep",
+        "status": "complete"
+      }
+    ]
+  }
+}

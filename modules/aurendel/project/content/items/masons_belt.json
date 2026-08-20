@@ -1,0 +1,19 @@
+{
+  "id": "masons_belt",
+  "name": "The Road Mason's Belt",
+  "description": "Tool-worn leather off somebody who worked both faces and was paid for one. It carries more than it looks like it should.",
+  "kind": "trinket",
+  "slot": "belt",
+  "value": 420,
+  "weight": 1,
+  "tags": [
+    "fabled"
+  ],
+  "modifiers": {
+    "carry": 4
+  },
+  "skillBonuses": {
+    "craft": 2
+  },
+  "rarity": "uncommon"
+}

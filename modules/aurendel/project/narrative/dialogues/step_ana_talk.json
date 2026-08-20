@@ -1,0 +1,219 @@
+{
+  "id": "step_ana_talk",
+  "start": "greet",
+  "nodes": [
+    {
+      "id": "greet",
+      "says": [
+        {
+          "text": "Hay by the load, girth straps, salt, and a woman who has already worked out what you forgot to bring."
+        },
+        {
+          "text": "“Hay, salt, strap, or rope. It is always one of the four.”"
+        }
+      ],
+      "onEnter": [],
+      "options": [
+        {
+          "id": "step_ana_ford",
+          "text": "The camp at the crossing. Why is it there?",
+          "requires": {
+            "without": {
+              "lore": [
+                "step_bank_ford"
+              ]
+            }
+          },
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "check": {
+            "skill": "persuasion",
+            "difficulty": {
+              "sub": [
+                12,
+                {
+                  "clamp": [
+                    {
+                      "div": [
+                        {
+                          "ref": "reputation.the_horse_lords",
+                          "else": 0
+                        },
+                        5
+                      ]
+                    },
+                    -6,
+                    6
+                  ]
+                }
+              ]
+            },
+            "onSuccess": "step_ana_ford_told",
+            "onFailure": "step_ana_ford_wont"
+          }
+        },
+        {
+          "id": "step_ana_courses",
+          "text": "What is showing in the open face?",
+          "requires": {
+            "without": {
+              "lore": [
+                "step_bank_courses"
+              ]
+            }
+          },
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "check": {
+            "skill": "craft",
+            "difficulty": {
+              "sub": [
+                14,
+                {
+                  "clamp": [
+                    {
+                      "div": [
+                        {
+                          "ref": "reputation.the_horse_lords",
+                          "else": 0
+                        },
+                        5
+                      ]
+                    },
+                    -6,
+                    6
+                  ]
+                }
+              ]
+            },
+            "onSuccess": "step_ana_courses_told",
+            "onFailure": "step_ana_courses_wont"
+          }
+        },
+        {
+          "id": "greet_leave",
+          "text": "Nothing.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "step_ana_ford_told",
+      "says": [
+        {
+          "text": "“Because it has always been there.” Ana stacks something. “Nine hundred years of hearths, one on top of the last. And there is no crossing — it is dry eleven months, and the twelfth you would not put a horse in it.” She stops stacking. “Nobody has ever *needed* to camp at that spot. They camp there anyway.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "learnLore": {
+            "entry": "step_bank_ford"
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "step_ana_ford_on",
+          "text": "Go on.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "step_ana_ford_wont",
+      "says": [
+        {
+          "text": "“I've said all I mean to,” they say, and go back to what they were doing."
+        }
+      ],
+      "onEnter": [
+        {
+          "adjustReputation": {
+            "faction": "the_horse_lords",
+            "amount": -1
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "step_ana_ford_drop",
+          "text": "Leave it.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "step_ana_courses_told",
+      "says": [
+        {
+          "text": "“Stone.” She says it like it is an inconvenience. “Forty foot down, courses of it, dressed, laid level, going both ways into the bank.” A hand out flat. “Not fallen. Not washed. Laid. My father took a block out and it is my doorstep, and you can see the chisel on it.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "learnLore": {
+            "entry": "step_bank_courses"
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "step_ana_courses_on",
+          "text": "Go on.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "step_ana_courses_wont",
+      "says": [
+        {
+          "text": "“I've said all I mean to,” they say, and go back to what they were doing."
+        }
+      ],
+      "onEnter": [
+        {
+          "adjustReputation": {
+            "faction": "the_horse_lords",
+            "amount": -1
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "step_ana_courses_drop",
+          "text": "Leave it.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    }
+  ]
+}

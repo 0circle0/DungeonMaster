@@ -1,0 +1,13 @@
+{
+  "id": "wall_stone",
+  "name": "Stone Wall",
+  "description": "Dressed block, or field-stone and mortar.",
+  "glyph": "#",
+  "color": "gray",
+  "passable": false,
+  "opaque": true,
+  "moveCost": 0,
+  "tags": [
+    "built"
+  ]
+}

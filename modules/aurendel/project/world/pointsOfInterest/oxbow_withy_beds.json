@@ -1,0 +1,14 @@
+{
+  "id": "oxbow_withy_beds",
+  "name": "The Withy Beds",
+  "description": "Cut every winter for baskets, and impassable every summer.",
+  "area": "kingsvale_oxbow_meadows",
+  "kind": "settlement",
+  "descriptionKey": "generic_settlement",
+  "travelMinutes": 10,
+  "tags": [],
+  "position": {
+    "x": 34,
+    "y": 20
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "id": "hold_honoured",
+  "name": "Honoured the Hold",
+  "faction": "karn_dolur",
+  "severity": 12,
+  "memorability": 1.5,
+  "distortion": 0.15
+}

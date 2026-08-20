@@ -1,0 +1,35 @@
+{
+  "id": "steppe_tallgrass",
+  "name": "Tallgrass",
+  "description": "In the one place where the grass goes over head height, which is shelter of a kind and a nuisance of another.",
+  "biome": "urban_timber",
+  "layer": "overworld",
+  "descriptionKey": "steppe_tallgrass_desc",
+  "dangerLevel": 2,
+  "recommendedLevel": 3,
+  "tags": [
+    "sunward_steppe",
+    "village"
+  ],
+  "map": {
+    "width": "31",
+    "height": "21"
+  },
+  "entryPoint": {
+    "x": 15,
+    "y": 10
+  },
+  "extra": {
+    "role": "village"
+  },
+  "connections": [
+    {
+      "to": "steppe_dry_river",
+      "travelMinutes": 40
+    },
+    {
+      "to": "steppe_windbreak",
+      "travelMinutes": 45
+    }
+  ]
+}

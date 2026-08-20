@@ -1,0 +1,26 @@
+{
+  "id": "deep_plate_carried",
+  "name": "What Ilde Kept",
+  "rolls": "1",
+  "emptyChance": 0,
+  "entries": [
+    {
+      "weight": 1,
+      "value": {
+        "item": "survey_plate",
+        "quantity": "1",
+        "unique": true,
+        "requirementScope": "party",
+        "requires": {
+          "without": {
+            "flags": [
+              {
+                "flag": "given:survey_plate"
+              }
+            ]
+          }
+        }
+      }
+    }
+  ]
+}

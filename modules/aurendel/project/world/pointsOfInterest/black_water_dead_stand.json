@@ -1,0 +1,21 @@
+{
+  "id": "black_water_dead_stand",
+  "name": "The Dead Stand",
+  "description": "Forty acres of cypress that died standing, all in the same year, and nobody knows which year.",
+  "area": "thornmere_the_black_water",
+  "kind": "ruin",
+  "descriptionKey": "black_water_dead_stand_desc",
+  "travelMinutes": 10,
+  "tags": [
+    "ruin"
+  ],
+  "map": {
+    "width": "11",
+    "height": "9",
+    "palette": "int_cave"
+  },
+  "position": {
+    "x": 14,
+    "y": 3
+  }
+}

@@ -1,0 +1,73 @@
+{
+  "id": "diggers_the_ridge",
+  "name": "The Ridge",
+  "description": "Four hundred feet of barrow with two ends, and everything anybody has ever dug has been at the western one. Pell wants the reason walked rather than read.",
+  "autoStart": false,
+  "ordered": true,
+  "tags": [
+    "side",
+    "act2",
+    "diggers",
+    "weeping_moor"
+  ],
+  "objectives": [
+    {
+      "id": "walk_it",
+      "description": "Walk the length of the ridge.",
+      "kind": "reach",
+      "count": 1,
+      "hidden": false,
+      "optional": false,
+      "target": "long_barrow_the_ridge"
+    },
+    {
+      "id": "the_alignment",
+      "description": "See what the barrow is pointed at.",
+      "kind": "custom",
+      "count": 1,
+      "hidden": false,
+      "optional": false,
+      "when": {
+        "test": {
+          "ref": "flags.diggers_ridge_walked"
+        }
+      }
+    },
+    {
+      "id": "ask_pell",
+      "description": "Ask Pell what lines up with the east end.",
+      "kind": "talk",
+      "count": 1,
+      "hidden": false,
+      "optional": false,
+      "target": "antiquary_pell"
+    }
+  ],
+  "stages": [],
+  "unlocks": [
+    "diggers_the_east_end"
+  ],
+  "rewards": {
+    "xp": 65,
+    "items": [],
+    "reputation": {
+      "the_library": 8
+    }
+  },
+  "requires": {
+    "quests": [
+      {
+        "quest": "diggers_the_west_end",
+        "status": "complete"
+      }
+    ]
+  },
+  "onComplete": [
+    {
+      "setFlag": {
+        "flag": "diggers_alignment_known",
+        "value": true
+      }
+    }
+  ]
+}

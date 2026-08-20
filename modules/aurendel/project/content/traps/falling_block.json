@@ -1,0 +1,30 @@
+{
+  "id": "falling_block",
+  "name": "Falling Block",
+  "description": "A ceiling stone held by a pin, and the pin is on a trip.",
+  "detect": {
+    "skill": "perception",
+    "difficulty": 15
+  },
+  "disarm": {
+    "skill": "craft",
+    "difficulty": 14
+  },
+  "onTrigger": [
+    {
+      "damage": {
+        "target": {
+          "ref": "target.id"
+        },
+        "amount": {
+          "roll": "3d6"
+        },
+        "damageType": "bludgeoning"
+      }
+    }
+  ],
+  "reusable": false,
+  "tags": [
+    "trap"
+  ]
+}

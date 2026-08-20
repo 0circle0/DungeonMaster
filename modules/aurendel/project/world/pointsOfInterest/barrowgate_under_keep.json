@@ -1,0 +1,18 @@
+{
+  "id": "barrowgate_under_keep",
+  "name": "Under the Keep",
+  "description": "The keep's cellars go into the barrow, which the builders swore they would not do.",
+  "area": "moor_barrowgate",
+  "kind": "dungeonEntrance",
+  "descriptionKey": "generic_dungeon_mouth",
+  "travelMinutes": 10,
+  "tags": [
+    "dungeon"
+  ],
+  "gate": "barrowgate_keep_door",
+  "dungeon": "moor_under_keep",
+  "position": {
+    "x": 3,
+    "y": 13
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "id": "kings_book_carried",
+  "name": "What Wend Kept",
+  "rolls": "1",
+  "emptyChance": 0,
+  "entries": [
+    {
+      "weight": 1,
+      "value": {
+        "item": "posting_book",
+        "quantity": "1",
+        "unique": true,
+        "requirementScope": "party",
+        "requires": {
+          "without": {
+            "flags": [
+              {
+                "flag": "given:posting_book"
+              }
+            ]
+          }
+        }
+      }
+    }
+  ]
+}

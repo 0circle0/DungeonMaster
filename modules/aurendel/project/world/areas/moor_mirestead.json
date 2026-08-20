@@ -1,0 +1,35 @@
+{
+  "id": "moor_mirestead",
+  "name": "Mirestead",
+  "description": "Peat cutters, on the only firm ground for two miles in any direction.",
+  "biome": "urban_timber",
+  "layer": "overworld",
+  "descriptionKey": "moor_mirestead_desc",
+  "dangerLevel": 3,
+  "recommendedLevel": 4,
+  "tags": [
+    "weeping_moor",
+    "village"
+  ],
+  "map": {
+    "width": "31",
+    "height": "21"
+  },
+  "entryPoint": {
+    "x": 15,
+    "y": 10
+  },
+  "extra": {
+    "role": "village"
+  },
+  "connections": [
+    {
+      "to": "moor_black_tarn",
+      "travelMinutes": 35
+    },
+    {
+      "to": "moor_colders_hearth",
+      "travelMinutes": 40
+    }
+  ]
+}

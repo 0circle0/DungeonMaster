@@ -1,0 +1,14 @@
+{
+  "id": "kurgan_field_the_rows",
+  "name": "The Kurgans",
+  "description": "Two hundred mounds in eleven rows, aligned on something, and the something is not the sun.",
+  "area": "steppe_kurgan_field",
+  "kind": "landmark",
+  "descriptionKey": "kurgan_field_the_rows_desc",
+  "travelMinutes": 8,
+  "tags": [],
+  "position": {
+    "x": 14,
+    "y": 3
+  }
+}

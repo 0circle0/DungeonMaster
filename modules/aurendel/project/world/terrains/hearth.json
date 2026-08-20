@@ -1,0 +1,14 @@
+{
+  "id": "hearth",
+  "name": "Hearth",
+  "description": "Banked, and the warmest thing for a mile.",
+  "glyph": "F",
+  "color": "red",
+  "passable": false,
+  "opaque": false,
+  "moveCost": 0,
+  "tags": [
+    "furniture"
+  ],
+  "lightRadius": 4
+}

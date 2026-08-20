@@ -1,0 +1,41 @@
+{
+  "id": "glasslands_bone_wells",
+  "name": "The Bone Wells",
+  "description": "Eleven shafts sunk into the sand for water, all dry, all deep, and all of them full of something.",
+  "biome": "desert",
+  "layer": "overworld",
+  "descriptionKey": "glasslands_bone_wells_desc",
+  "dangerLevel": 6,
+  "recommendedLevel": 7,
+  "tags": [
+    "glasslands"
+  ],
+  "map": {
+    "width": "51",
+    "height": "35"
+  },
+  "entryPoint": {
+    "x": 25,
+    "y": 17
+  },
+  "extra": {
+    "role": "wild"
+  },
+  "connections": [
+    {
+      "to": "glasslands_the_fulgurite",
+      "travelMinutes": 45
+    },
+    {
+      "to": "glasslands_dry_cistern",
+      "travelMinutes": 40
+    },
+    {
+      "to": "vashta_qal_oasis",
+      "travelMinutes": 55
+    }
+  ],
+  "encounterTables": [
+    "glasslands_things"
+  ]
+}

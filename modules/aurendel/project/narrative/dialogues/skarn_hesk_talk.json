@@ -1,0 +1,219 @@
+{
+  "id": "skarn_hesk_talk",
+  "start": "greet",
+  "nodes": [
+    {
+      "id": "greet",
+      "says": [
+        {
+          "text": "Rope, tallow, nails, boots, and a counter positioned so its keeper can see both the up road and the down."
+        },
+        {
+          "text": "“Going up or coming down? It changes what you need and what I charge.”"
+        }
+      ],
+      "onEnter": [],
+      "options": [
+        {
+          "id": "skarn_hesk_two",
+          "text": "There are two stairs on that cliff.",
+          "requires": {
+            "without": {
+              "lore": [
+                "skarn_stair_two"
+              ]
+            }
+          },
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "check": {
+            "skill": "craft",
+            "difficulty": {
+              "sub": [
+                14,
+                {
+                  "clamp": [
+                    {
+                      "div": [
+                        {
+                          "ref": "reputation.karn_dolur",
+                          "else": 0
+                        },
+                        5
+                      ]
+                    },
+                    -6,
+                    6
+                  ]
+                }
+              ]
+            },
+            "onSuccess": "skarn_hesk_two_told",
+            "onFailure": "skarn_hesk_two_wont"
+          }
+        },
+        {
+          "id": "skarn_hesk_shade",
+          "text": "Does anything nest on the broken stair?",
+          "requires": {
+            "without": {
+              "lore": [
+                "skarn_stair_shade"
+              ]
+            }
+          },
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "check": {
+            "skill": "persuasion",
+            "difficulty": {
+              "sub": [
+                13,
+                {
+                  "clamp": [
+                    {
+                      "div": [
+                        {
+                          "ref": "reputation.karn_dolur",
+                          "else": 0
+                        },
+                        5
+                      ]
+                    },
+                    -6,
+                    6
+                  ]
+                }
+              ]
+            },
+            "onSuccess": "skarn_hesk_shade_told",
+            "onFailure": "skarn_hesk_shade_wont"
+          }
+        },
+        {
+          "id": "greet_leave",
+          "text": "Nothing.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "skarn_hesk_two_told",
+      "says": [
+        {
+          "text": "“There are.” Hesk does not stop counting nails. “The one you climb and the one that came down in the rains. Go and stand on the broken one.” Now the counting stops. “The treads are short and deep. Ours are long and shallow, because we have legs. Whoever cut that one was working to a different leg.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "learnLore": {
+            "entry": "skarn_stair_two"
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "skarn_hesk_two_on",
+          "text": "Go on.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "skarn_hesk_two_wont",
+      "says": [
+        {
+          "text": "“I've said all I mean to,” they say, and go back to what they were doing."
+        }
+      ],
+      "onEnter": [
+        {
+          "adjustReputation": {
+            "faction": "karn_dolur",
+            "amount": -1
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "skarn_hesk_two_drop",
+          "text": "Leave it.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "skarn_hesk_shade_told",
+      "says": [
+        {
+          "text": "“No.” He puts the nails down. “Gritstone face in this country, you cannot walk under an overhang without wearing it. Every ledge on that cliff is white with them.” A hand toward the window. “Not that flight. Not one nest, not one streak, the whole length of it.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "learnLore": {
+            "entry": "skarn_stair_shade"
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "skarn_hesk_shade_on",
+          "text": "Go on.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "skarn_hesk_shade_wont",
+      "says": [
+        {
+          "text": "“I've said all I mean to,” they say, and go back to what they were doing."
+        }
+      ],
+      "onEnter": [
+        {
+          "adjustReputation": {
+            "faction": "karn_dolur",
+            "amount": -1
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "skarn_hesk_shade_drop",
+          "text": "Leave it.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    }
+  ]
+}

@@ -1,0 +1,39 @@
+{
+  "id": "skarnspine_ironstair",
+  "name": "The Ironstair",
+  "description": "Nine hundred steps up a cliff face to the gate of Karn Dolur, cut and railed and swept.",
+  "biome": "alpine",
+  "layer": "overworld",
+  "descriptionKey": "skarnspine_ironstair_desc",
+  "dangerLevel": 4,
+  "recommendedLevel": 5,
+  "tags": [
+    "skarnspine"
+  ],
+  "map": {
+    "width": "51",
+    "height": "35"
+  },
+  "entryPoint": {
+    "x": 25,
+    "y": 17
+  },
+  "extra": {
+    "role": "wild"
+  },
+  "connections": [
+    {
+      "to": "skarnspine_highpass",
+      "travelMinutes": 45
+    },
+    {
+      "to": "karn_dolur_gatehall",
+      "travelMinutes": 30,
+      "gate": "karn_dolur_hold_gate"
+    },
+    {
+      "to": "skarnspine_broken_road",
+      "travelMinutes": 60
+    }
+  ]
+}

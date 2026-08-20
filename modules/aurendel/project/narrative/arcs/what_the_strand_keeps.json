@@ -1,0 +1,12 @@
+{
+  "id": "what_the_strand_keeps",
+  "name": "What the Strand Keeps",
+  "description": "A ship on the bar, a kiln that was cold for sixty years and not on the night that mattered, and an argument about the difference between a wreck and a cargo.",
+  "quests": [
+    "strand_what_came_ashore",
+    "strand_the_lime_kiln",
+    "strand_the_run",
+    "strand_a_share_or_a_name"
+  ],
+  "isEnding": false
+}

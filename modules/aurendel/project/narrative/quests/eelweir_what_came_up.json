@@ -1,0 +1,128 @@
+{
+  "id": "eelweir_what_came_up",
+  "name": "What Came Up the Weir",
+  "description": "It is dealt with, and now somebody has to be told — which is a different question from whether anybody wants to hear it.",
+  "autoStart": false,
+  "ordered": false,
+  "tags": [
+    "side",
+    "act1",
+    "eelweir",
+    "kingsvale"
+  ],
+  "objectives": [
+    {
+      "id": "tell_the_moot",
+      "description": "Have the chapel closed the old way.",
+      "kind": "custom",
+      "count": 1,
+      "hidden": false,
+      "optional": true,
+      "when": {
+        "test": {
+          "ref": "flags.eelweir_told_keepers"
+        }
+      }
+    },
+    {
+      "id": "tell_the_crown",
+      "description": "Have the chapel closed by warrant.",
+      "kind": "custom",
+      "count": 1,
+      "hidden": false,
+      "optional": true,
+      "when": {
+        "test": {
+          "ref": "flags.eelweir_told_crown"
+        }
+      }
+    },
+    {
+      "id": "closed",
+      "description": "See the chapel closed.",
+      "kind": "custom",
+      "count": 1,
+      "hidden": false,
+      "optional": false,
+      "when": {
+        "any": [
+          {
+            "test": {
+              "ref": "flags.eelweir_told_keepers"
+            }
+          },
+          {
+            "test": {
+              "ref": "flags.eelweir_told_crown"
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "stages": [],
+  "unlocks": [],
+  "rewards": {
+    "xp": 35,
+    "items": [
+      {
+        "item": "poachers_lamp",
+        "quantity": 1
+      }
+    ],
+    "reputation": {}
+  },
+  "requires": {
+    "quests": [
+      {
+        "quest": "eelweir_the_badger_hole",
+        "status": "complete"
+      }
+    ]
+  },
+  "onComplete": [
+    {
+      "if": {
+        "when": {
+          "test": {
+            "ref": "flags.eelweir_told_crown"
+          }
+        },
+        "then": [
+          {
+            "adjustReputation": {
+              "faction": "the_crown",
+              "amount": 12
+            }
+          },
+          {
+            "adjustReputation": {
+              "faction": "the_keepers",
+              "amount": -4
+            }
+          },
+          {
+            "setFlag": {
+              "flag": "eelweir_in_the_ledger",
+              "value": true
+            }
+          }
+        ],
+        "else": [
+          {
+            "adjustReputation": {
+              "faction": "the_keepers",
+              "amount": 15
+            }
+          },
+          {
+            "setFlag": {
+              "flag": "eelweir_shut_quietly",
+              "value": true
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

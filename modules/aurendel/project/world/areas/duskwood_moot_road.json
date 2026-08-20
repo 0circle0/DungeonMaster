@@ -1,0 +1,34 @@
+{
+  "id": "duskwood_moot_road",
+  "name": "The Moot Road",
+  "description": "The only road anybody keeps up, running straight to Elderhollow because the trees were persuaded to allow it.",
+  "biome": "deepwood",
+  "layer": "overworld",
+  "descriptionKey": "duskwood_moot_road_desc",
+  "dangerLevel": 3,
+  "recommendedLevel": 3,
+  "tags": [
+    "duskwood"
+  ],
+  "map": {
+    "width": "51",
+    "height": "35"
+  },
+  "entryPoint": {
+    "x": 25,
+    "y": 17
+  },
+  "extra": {
+    "role": "wild"
+  },
+  "connections": [
+    {
+      "to": "duskwood_the_undereaves",
+      "travelMinutes": 40
+    },
+    {
+      "to": "duskwood_elderhollow",
+      "travelMinutes": 30
+    }
+  ]
+}

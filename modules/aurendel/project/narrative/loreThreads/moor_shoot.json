@@ -1,0 +1,11 @@
+{
+  "id": "moor_shoot",
+  "name": "The Drive That Goes Over",
+  "description": "A roofless shooting house with this century's wear in eight even places, and a beaters' line drawn over the scarp and down.",
+  "entries": [
+    "moor_shoot_wear",
+    "moor_shoot_line",
+    "moor_shoot_birds",
+    "moor_shoot_draught"
+  ]
+}

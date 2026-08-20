@@ -1,0 +1,43 @@
+{
+  "id": "coast_chalk_downs",
+  "name": "The Chalk Downs",
+  "description": "Short turf over white rock, sheep, and a horse cut into the hillside by nobody anybody remembers.",
+  "biome": "coast",
+  "layer": "overworld",
+  "descriptionKey": "coast_chalk_downs_desc",
+  "dangerLevel": 2,
+  "recommendedLevel": 2,
+  "tags": [
+    "silver_coast"
+  ],
+  "map": {
+    "width": "51",
+    "height": "35"
+  },
+  "entryPoint": {
+    "x": 25,
+    "y": 17
+  },
+  "extra": {
+    "role": "wild"
+  },
+  "connections": [
+    {
+      "to": "sarnport_saltcliff",
+      "travelMinutes": 30,
+      "gate": "sarnport_landward_gate"
+    },
+    {
+      "to": "coast_cobbleway",
+      "travelMinutes": 45
+    },
+    {
+      "to": "coast_thrift",
+      "travelMinutes": 30
+    },
+    {
+      "to": "kingsvale_hedge_country",
+      "travelMinutes": 180
+    }
+  ]
+}

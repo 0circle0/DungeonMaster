@@ -1,0 +1,41 @@
+{
+  "id": "ember_vent_fields",
+  "name": "The Vent Fields",
+  "description": "Four hundred acres of ground that breathes out, on schedules nobody has managed to write down.",
+  "biome": "volcanic",
+  "layer": "overworld",
+  "descriptionKey": "ember_vent_fields_desc",
+  "dangerLevel": 8,
+  "recommendedLevel": 8,
+  "tags": [
+    "ember_reach"
+  ],
+  "map": {
+    "width": "51",
+    "height": "35"
+  },
+  "entryPoint": {
+    "x": 25,
+    "y": 17
+  },
+  "extra": {
+    "role": "wild"
+  },
+  "connections": [
+    {
+      "to": "ember_obsidian_shelf",
+      "travelMinutes": 40
+    },
+    {
+      "to": "ember_slagfoot",
+      "travelMinutes": 35
+    },
+    {
+      "to": "thornmere_sunken_causeway",
+      "travelMinutes": 220
+    }
+  ],
+  "encounterTables": [
+    "ember_things"
+  ]
+}

@@ -1,0 +1,33 @@
+{
+  "id": "dune_walker_sela",
+  "name": "Sela, who Walks the Dunes",
+  "description": "Has ninety years of where the sand was, in four hands, and only one line on it that she cannot explain.",
+  "disposition": 8,
+  "gullibility": 0.4,
+  "memorySpan": 200,
+  "offersQuests": [],
+  "caresAbout": [],
+  "reactions": [],
+  "faction": "the_water_wardens",
+  "dialogue": "glass_sela_talk",
+  "home": "fulgurite_collectors_camp",
+  "statblock": "glass_walker",
+  "temperament": {
+    "roamRadius": 24,
+    "investigateRadius": 60,
+    "leashRadius": 90,
+    "wanderChance": 0.3,
+    "speeds": {
+      "wander": 0.5
+    },
+    "investigates": [
+      "sight",
+      "hearing"
+    ],
+    "notices": [
+      "hostile",
+      "neutral",
+      "ally"
+    ]
+  }
+}

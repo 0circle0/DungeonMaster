@@ -1,0 +1,24 @@
+{
+  "id": "rooksrest_the_black_hand",
+  "name": "The Black Hand",
+  "description": "Named for what every customer's are. The ale is good and the upholstery is not.",
+  "area": "duskwood_rooksrest",
+  "kind": "settlement",
+  "descriptionKey": "int_inn",
+  "travelMinutes": 3,
+  "tags": [
+    "inn"
+  ],
+  "services": [
+    "inn"
+  ],
+  "map": {
+    "width": "9",
+    "height": "7",
+    "palette": "int_timber"
+  },
+  "position": {
+    "x": 15,
+    "y": 3
+  }
+}

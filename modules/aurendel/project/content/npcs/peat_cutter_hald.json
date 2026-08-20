@@ -1,0 +1,33 @@
+{
+  "id": "peat_cutter_hald",
+  "name": "Hald, who Cuts",
+  "description": "Takes turf out of the only firm ground for two miles and has carried three of the forty-one up the duckboards himself.",
+  "disposition": 3,
+  "gullibility": 0.3,
+  "memorySpan": 200,
+  "offersQuests": [],
+  "caresAbout": [],
+  "reactions": [],
+  "faction": "the_library",
+  "dialogue": "moor_hald_talk",
+  "home": "mirestead_house_a",
+  "statblock": "moor_cutter",
+  "temperament": {
+    "roamRadius": 24,
+    "investigateRadius": 60,
+    "leashRadius": 90,
+    "wanderChance": 0.3,
+    "speeds": {
+      "wander": 0.5
+    },
+    "investigates": [
+      "sight",
+      "hearing"
+    ],
+    "notices": [
+      "hostile",
+      "neutral",
+      "ally"
+    ]
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "id": "pilots_glass_ring",
+  "name": "The Pilot's Ring",
+  "description": "Two hundred years of a bearing that should have moved, cast into a band. Worn, a road you have walked once does not go wrong.",
+  "kind": "trinket",
+  "slot": "ring",
+  "value": 880,
+  "weight": 1,
+  "tags": [
+    "fabled"
+  ],
+  "skillBonuses": {
+    "survival": 3,
+    "perception": 2
+  },
+  "rarity": "rare"
+}

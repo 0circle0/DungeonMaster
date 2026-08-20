@@ -1,0 +1,22 @@
+{
+  "id": "aurenhal_highgate_house_a",
+  "name": "The Chancellor's Town House",
+  "description": "Three storeys, railings, and a door knocker shaped like something extinct.",
+  "area": "aurenhal_highgate",
+  "kind": "settlement",
+  "descriptionKey": "int_house",
+  "travelMinutes": 2,
+  "tags": [
+    "aurenhal",
+    "house"
+  ],
+  "position": {
+    "x": 8,
+    "y": 26
+  },
+  "map": {
+    "width": "9",
+    "height": "7",
+    "palette": "int_timber"
+  }
+}

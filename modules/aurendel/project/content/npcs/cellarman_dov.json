@@ -1,0 +1,34 @@
+{
+  "id": "cellarman_dov",
+  "name": "Dov, at the Green Room",
+  "description": "Runs the cellar under the Green Room and has been down there long enough to know exactly which wall is warm.",
+  "disposition": 6,
+  "gullibility": 0.45,
+  "memorySpan": 120,
+  "offersQuests": [],
+  "caresAbout": [],
+  "reactions": [],
+  "faction": "the_countinghouse",
+  "dialogue": "glass_dov_talk",
+  "home": "glass_quarter_the_green_room",
+  "shop": {
+    "lootTable": "aurenhal_stock",
+    "buysTags": [
+      "treasure"
+    ],
+    "priceMultiplier": 1.3
+  },
+  "temperament": {
+    "roamRadius": 0,
+    "wanderChance": 0,
+    "speeds": {
+      "wander": 0
+    },
+    "investigates": [],
+    "notices": [
+      "hostile",
+      "neutral",
+      "ally"
+    ]
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "id": "frostmere_cairn_ward",
+  "name": "The Cairn Ward",
+  "kind": "ward",
+  "description": "Eleven hundred cairns, and a gap through them that is not the shortest way and is the only way anybody walks.",
+  "staysOpen": true,
+  "bypass": {
+    "skill": "lore",
+    "difficulty": 16,
+    "retryable": true
+  },
+  "blockedTextKey": "frostmere_cairn_ward_blocked"
+}

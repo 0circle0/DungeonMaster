@@ -1,0 +1,14 @@
+{
+  "id": "cistern_key",
+  "name": "The Cistern Keeper's Key",
+  "description": "For a channel that runs out of a cistern nothing runs into. The office of keeper outlived the water by three hundred years.",
+  "kind": "key",
+  "value": 0,
+  "weight": 0,
+  "tags": [
+    "keepsake"
+  ],
+  "extra": {
+    "heldBy": "cistern_keeper_havva"
+  }
+}

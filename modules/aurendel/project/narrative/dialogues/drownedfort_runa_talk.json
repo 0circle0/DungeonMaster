@@ -1,0 +1,473 @@
+{
+  "id": "drownedfort_runa_talk",
+  "start": "greet",
+  "nodes": [
+    {
+      "id": "greet",
+      "says": [
+        {
+          "text": "The hulks are eleven dead ships moored together into a street, and Runa's is the one in the middle with the list nailed inside the door. \"You'll have come about the fort. Everybody who comes here on purpose has.\""
+        }
+      ],
+      "options": [
+        {
+          "id": "the_list",
+          "text": "What's the list on the door?",
+          "effects": [
+            {
+              "emit": {
+                "event": "startQuest",
+                "data": {
+                  "quest": "drownedfort_four_crews"
+                }
+              }
+            }
+          ],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "four_crews",
+          "requires": {
+            "quests": [
+              {
+                "quest": "drownedfort_four_crews",
+                "status": "unstarted"
+              }
+            ],
+            "description": "two of the three ward-keys",
+            "anyOf": [
+              {
+                "items": [
+                  {
+                    "item": "grown_key"
+                  },
+                  {
+                    "item": "cast_key"
+                  }
+                ]
+              },
+              {
+                "items": [
+                  {
+                    "item": "grown_key"
+                  },
+                  {
+                    "item": "glass_key"
+                  }
+                ]
+              },
+              {
+                "items": [
+                  {
+                    "item": "cast_key"
+                  },
+                  {
+                    "item": "glass_key"
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "id": "why_not",
+          "text": "Why has nobody salvaged it?",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "why_not"
+        },
+        {
+          "id": "leave",
+          "text": "Nothing.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": [
+        {
+          "requires": {
+            "memories": [
+              {
+                "deedKind": "wreck_informed",
+                "who": "speaker"
+              }
+            ]
+          },
+          "goto": "she_has_heard"
+        },
+        {
+          "requires": {
+            "quests": [
+              {
+                "quest": "drownedfort_the_chimney",
+                "status": "active"
+              }
+            ],
+            "flags": [
+              {
+                "flag": "drownedfort_chimney_seen",
+                "equals": true
+              }
+            ]
+          },
+          "goto": "about_the_chimney"
+        },
+        {
+          "requires": {
+            "flags": [
+              {
+                "flag": "drownedfort_battery_cleared",
+                "equals": true
+              }
+            ],
+            "without": {
+              "flags": [
+                {
+                  "flag": "drownedfort_salvaged"
+                },
+                {
+                  "flag": "drownedfort_sealed"
+                }
+              ]
+            }
+          },
+          "goto": "salvage_or_seal"
+        }
+      ]
+    },
+    {
+      "id": "why_not",
+      "says": [
+        {
+          "text": "\"Not superstition and not sentiment,\" says Runa. \"We have taken the copper off a plague ship and slept aboard her after. It is the list.\""
+        }
+      ],
+      "options": [
+        {
+          "id": "back",
+          "text": "Hm.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "greet"
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": []
+    },
+    {
+      "id": "four_crews",
+      "says": [
+        {
+          "text": "\"Four crews into the drowned fort in four generations,\" says Runa. \"Nineteen people. One came out.\""
+        },
+        {
+          "text": "\"And the fort went down in one night with her guns run out and her magazine dry,\" she adds. \"Which are two things that do not belong in the same sentence. Guns run out means they saw something coming. Magazine dry means they had already fired everything they had.\""
+        }
+      ],
+      "options": [
+        {
+          "id": "the_one",
+          "text": "What did the one who came out say?",
+          "effects": [
+            {
+              "setFlag": {
+                "flag": "drownedfort_survivor_heard",
+                "value": true
+              }
+            }
+          ],
+          "onceOnly": true,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "the_survivor"
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": []
+    },
+    {
+      "id": "the_survivor",
+      "says": [
+        {
+          "text": "\"He came out at Gullstone,\" says Runa. \"Which is a mile and a half from the fort and eighty feet above it, up a chimney in the rock that goes down into the island and has no bottom anybody has found.\""
+        },
+        {
+          "text": "\"He was in the water three days and he was not in the water at all,\" she says. \"He was dry. That is the part of it my grandmother wrote down and underlined.\""
+        }
+      ],
+      "options": [
+        {
+          "id": "the_chimney",
+          "text": "Then we start at the chimney.",
+          "effects": [
+            {
+              "emit": {
+                "event": "startQuest",
+                "data": {
+                  "quest": "drownedfort_the_chimney"
+                }
+              }
+            }
+          ],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "eighty_feet",
+          "requires": {
+            "quests": [
+              {
+                "quest": "drownedfort_the_chimney",
+                "status": "unstarted"
+              }
+            ]
+          }
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": []
+    },
+    {
+      "id": "eighty_feet",
+      "says": [
+        {
+          "text": "\"Eighty feet down and take a line you trust,\" says Runa. \"Nobody has been to the bottom of it because nobody has ever had a reason that outweighed eighty feet.\""
+        }
+      ],
+      "options": [
+        {
+          "id": "done",
+          "text": "A line we trust.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": []
+    },
+    {
+      "id": "about_the_chimney",
+      "says": [
+        {
+          "text": "Runa has the list off the door and flat on the table. \"What's at the bottom?\""
+        }
+      ],
+      "options": [
+        {
+          "id": "the_draught",
+          "text": "Air. Moving. Coming up from the direction of the fort.",
+          "effects": [],
+          "onceOnly": true,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "a_draught"
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": []
+    },
+    {
+      "id": "a_draught",
+      "says": [
+        {
+          "text": "\"A draught,\" says Runa. \"Out of a hole a mile and a half from a fort that has been under the passage for four hundred years.\""
+        },
+        {
+          "text": "She sits down. \"Then the fort is dry inside. Which is how he walked out of it, and it is also why four crews did not — because they went in expecting to swim, and whatever is in there has been *breathing* since before the fort was built. They didn't put the fort on top of a chimney. Somebody put a chimney under the fort, and the garrison worked that out on the last night.\""
+        }
+      ],
+      "options": [
+        {
+          "id": "go_in",
+          "text": "Then we go in at the hatch.",
+          "effects": [
+            {
+              "emit": {
+                "event": "startQuest",
+                "data": {
+                  "quest": "drownedfort_the_battery"
+                }
+              }
+            },
+            {
+              "adjustReputation": {
+                "faction": "the_salvors",
+                "amount": 8
+              }
+            }
+          ],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "the_hatch",
+          "requires": {
+            "quests": [
+              {
+                "quest": "drownedfort_the_battery",
+                "status": "unstarted"
+              }
+            ]
+          }
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": [],
+      "remembers": "share_honoured"
+    },
+    {
+      "id": "the_hatch",
+      "says": [
+        {
+          "text": "\"The hatch on the north wall, at slack water, and you will have about four hours,\" says Runa. \"I will put my own boat on it and I will not come in with you, and I would like that said out loud so neither of us has to pretend later.\""
+        }
+      ],
+      "options": [
+        {
+          "id": "done",
+          "text": "Said out loud.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": []
+    },
+    {
+      "id": "salvage_or_seal",
+      "says": [
+        {
+          "text": "Runa has come in as far as the stair head, which she said she would not, and is looking down the battery floor at eleven guns still run out. \"Four hundred years,\" she says. \"Dry. And an armoury behind that door.\""
+        },
+        {
+          "text": "\"I can open her to the Isles,\" she says. \"Every hull in Blackrigging works for a season and nobody's hungry for five years, and the chimney stays where it is, at the far end, with a draught coming up it.\""
+        },
+        {
+          "text": "\"Or we seal the chimney,\" says Runa, \"and the fort floods properly for the first time in four hundred years, and it is a wreck like any other wreck, and nineteen people are still on that list.\""
+        }
+      ],
+      "options": [
+        {
+          "id": "salvage",
+          "text": "Open her. Five years is five years.",
+          "effects": [
+            {
+              "setFlag": {
+                "flag": "drownedfort_salvaged",
+                "value": true
+              }
+            }
+          ],
+          "onceOnly": true,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "salvaged"
+        },
+        {
+          "id": "seal",
+          "text": "Seal the chimney.",
+          "effects": [
+            {
+              "setFlag": {
+                "flag": "drownedfort_sealed",
+                "value": true
+              }
+            }
+          ],
+          "onceOnly": true,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "sealed"
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": []
+    },
+    {
+      "id": "salvaged",
+      "says": [
+        {
+          "text": "Every hull in Blackrigging is on her inside a fortnight and the free market has brass in it that nobody can account for and nobody asks about. Runa takes the list down off the door and does not throw it away."
+        }
+      ],
+      "options": [
+        {
+          "id": "done",
+          "text": "Five years.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": [],
+      "remembers": "share_honoured"
+    },
+    {
+      "id": "sealed",
+      "says": [
+        {
+          "text": "It takes four days to bring the chimney down onto itself, and the fort takes the water at the turn of the tide on the fifth, all at once, the way it should have four hundred years ago."
+        }
+      ],
+      "options": [
+        {
+          "id": "done",
+          "text": "Like any other wreck.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": []
+    },
+    {
+      "id": "she_has_heard",
+      "says": [
+        {
+          "text": "Runa does not get up. \"There is a hut on the Strand,\" she says, \"that had a name given to the Hall. Word came down the passage inside the month.\" She looks at the list rather than at you. \"State your business and then go and state it somewhere else.\""
+        }
+      ],
+      "options": [
+        {
+          "id": "explain",
+          "text": "It was owed.",
+          "effects": [
+            {
+              "adjustReputation": {
+                "faction": "the_salvors",
+                "amount": -5
+              }
+            }
+          ],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "greet"
+        },
+        {
+          "id": "leave",
+          "text": "Nothing.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": []
+    }
+  ]
+}

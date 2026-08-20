@@ -1,0 +1,38 @@
+{
+  "id": "steppe",
+  "name": "The Sunward Steppe",
+  "floor": "steppe_grass",
+  "wall": "rock",
+  "exterior": "rock",
+  "scatter": [
+    {
+      "terrain": "meadow",
+      "frequency": 0.14,
+      "distribution": "patch",
+      "scale": 14,
+      "priority": 0
+    },
+    {
+      "terrain": "scree",
+      "frequency": 0.06,
+      "distribution": "patch",
+      "scale": 9,
+      "priority": 1
+    },
+    {
+      "terrain": "standing_stone",
+      "frequency": 0.01,
+      "distribution": "speckle",
+      "priority": 2
+    },
+    {
+      "terrain": "shallows",
+      "frequency": 0.03,
+      "distribution": "patch",
+      "scale": 11,
+      "edgeTerrain": "reeds",
+      "edgeWidth": 1,
+      "priority": 3
+    }
+  ]
+}

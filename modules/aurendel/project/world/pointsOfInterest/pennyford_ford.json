@@ -1,0 +1,32 @@
+{
+  "id": "pennyford_ford",
+  "name": "The Ford",
+  "description": "Paved bottom, marker posts, and a depth board that has been optimistic since the sluice went in.",
+  "area": "kingsvale_pennyford",
+  "kind": "crossing",
+  "descriptionKey": "pennyford_ford_desc",
+  "travelMinutes": 3,
+  "tags": [
+    "crossing"
+  ],
+  "position": {
+    "x": 15,
+    "y": 6
+  },
+  "gate": "pennyford_sluice",
+  "triggers": [
+    {
+      "id": "kings_found_ford",
+      "mode": "once",
+      "on": "enter",
+      "description": "A stone in the bed with a rope-worn hole.",
+      "effects": [
+        {
+          "learnLore": {
+            "entry": "kings_ford_stone"
+          }
+        }
+      ]
+    }
+  ]
+}

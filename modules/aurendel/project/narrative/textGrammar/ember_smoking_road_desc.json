@@ -1,0 +1,17 @@
+{
+  "id": "ember_smoking_road_desc",
+  "variants": [
+    {
+      "text": "Iron posts a hundred paces apart, all the way across, because nothing else survives being a marker here."
+    },
+    {
+      "text": "The Smoking Road. Between the posts there is ash, and under the ash there is a road, in theory."
+    },
+    {
+      "text": "Ground smoking in three places within sight, none of them alarming, all of them worth going round."
+    },
+    {
+      "text": "The next post is visible. The one after it usually is not."
+    }
+  ]
+}

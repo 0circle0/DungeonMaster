@@ -1,0 +1,41 @@
+{
+  "id": "trial_one_hoard_a",
+  "name": "Behind the Chewed Bar",
+  "rolls": "3",
+  "emptyChance": 0,
+  "bonusRollSkill": "perception",
+  "bonusRolls": {
+    "onSuccess": 2,
+    "onCritical": 3
+  },
+  "entries": [
+    {
+      "weight": 4,
+      "value": {
+        "item": "old_coin",
+        "quantity": "8d6"
+      }
+    },
+    {
+      "weight": 3,
+      "value": {
+        "item": "hold_silver",
+        "quantity": "2d4"
+      }
+    },
+    {
+      "weight": 2,
+      "value": {
+        "item": "ward_salt",
+        "quantity": "1d3"
+      }
+    },
+    {
+      "weight": 1,
+      "value": {
+        "item": "silvered_blade",
+        "quantity": "1"
+      }
+    }
+  ]
+}

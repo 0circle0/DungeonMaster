@@ -1,0 +1,24 @@
+{
+  "id": "saltrun_salt_store",
+  "name": "The Salt Stores",
+  "description": "Blocks stacked in a building made of blocks.",
+  "area": "glasslands_saltrun",
+  "kind": "market",
+  "descriptionKey": "int_warehouse",
+  "travelMinutes": 3,
+  "tags": [
+    "shop"
+  ],
+  "services": [
+    "market"
+  ],
+  "map": {
+    "width": "19",
+    "height": "13",
+    "palette": "int_shop"
+  },
+  "position": {
+    "x": 37,
+    "y": 13
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "id": "parting_blow",
+  "name": "Parting Blow",
+  "description": "Anyone who walks out of your reach gives you one free swing, which is what makes disengaging a decision rather than a formality.",
+  "on": "moveAway",
+  "actionType": "reaction",
+  "use": "strike",
+  "usesPerRound": 1,
+  "requires": {
+    "not": {
+      "exists": "target.conditions.disengaging"
+    }
+  }
+}

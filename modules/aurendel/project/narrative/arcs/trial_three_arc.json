@@ -1,0 +1,11 @@
+{
+  "id": "trial_three_arc",
+  "name": "The Ninth Line",
+  "description": "The last two doors, and the thing that had been opening them in order and writing down how many were left.",
+  "quests": [
+    "trial_three_listening",
+    "trial_three_signal",
+    "trial_three_counter"
+  ],
+  "isEnding": false
+}

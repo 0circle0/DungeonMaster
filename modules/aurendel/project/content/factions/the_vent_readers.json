@@ -1,0 +1,33 @@
+{
+  "id": "the_vent_readers",
+  "name": "The Vent-Readers",
+  "description": "Cinderhold's oldest office: eleven people who watch what the ground is doing and are believed, because the two times they were not, there is a village under the ash.",
+  "initialStanding": 0,
+  "decayPerDay": 0.04,
+  "relations": {
+    "karn_dolur": 0.25,
+    "the_keepers": 0.15
+  },
+  "ranks": [
+    {
+      "id": "deaf",
+      "name": "Deaf to It",
+      "atLeast": -30
+    },
+    {
+      "id": "listener",
+      "name": "Listener",
+      "atLeast": 0
+    },
+    {
+      "id": "reader",
+      "name": "Reader",
+      "atLeast": 25
+    },
+    {
+      "id": "of_the_eleven",
+      "name": "Of the Eleven",
+      "atLeast": 55
+    }
+  ]
+}

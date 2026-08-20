@@ -1,0 +1,18 @@
+{
+  "id": "disengage",
+  "name": "Disengage",
+  "description": "Break away without turning your back on it.",
+  "actionType": "action",
+  "targeting": "self",
+  "onUse": [
+    {
+      "applyCondition": {
+        "target": {
+          "ref": "actor.id"
+        },
+        "condition": "disengaging",
+        "duration": 1
+      }
+    }
+  ]
+}

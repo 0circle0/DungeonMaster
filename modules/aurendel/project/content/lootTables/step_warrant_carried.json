@@ -1,0 +1,26 @@
+{
+  "id": "step_warrant_carried",
+  "name": "What Ondir Kept",
+  "rolls": "1",
+  "emptyChance": 0,
+  "entries": [
+    {
+      "weight": 1,
+      "value": {
+        "item": "shaft_warrant",
+        "quantity": "1",
+        "unique": true,
+        "requirementScope": "party",
+        "requires": {
+          "without": {
+            "flags": [
+              {
+                "flag": "given:shaft_warrant"
+              }
+            ]
+          }
+        }
+      }
+    }
+  ]
+}

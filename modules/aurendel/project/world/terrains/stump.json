@@ -1,0 +1,11 @@
+{
+  "id": "stump",
+  "name": "Stump",
+  "description": "Cut a long time ago by somebody who is not here.",
+  "glyph": "n",
+  "color": "yellow",
+  "passable": false,
+  "opaque": false,
+  "moveCost": 0,
+  "providesCover": "half"
+}

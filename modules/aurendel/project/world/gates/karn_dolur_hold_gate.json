@@ -1,0 +1,24 @@
+{
+  "id": "karn_dolur_hold_gate",
+  "name": "The Hold Gate",
+  "kind": "toll",
+  "description": "Forty tons of stone on a counterweight, and a gate-fee that the hold has charged since it was cut.",
+  "staysOpen": false,
+  "requires": {
+    "description": "12 marks",
+    "currency": 12
+  },
+  "bypass": {
+    "skill": "persuasion",
+    "difficulty": 16,
+    "retryable": true
+  },
+  "onOpen": [
+    {
+      "adjustCurrency": {
+        "amount": -12
+      }
+    }
+  ],
+  "blockedTextKey": "karn_dolur_hold_gate_blocked"
+}

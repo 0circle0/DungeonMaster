@@ -1,0 +1,12 @@
+{
+  "id": "the_throat",
+  "name": "The Throat",
+  "description": "Eleven days of a chain hanging still that has never hung still for more than two, and eleven people whose whole office is knowing what that means.",
+  "quests": [
+    "throat_gone_quiet",
+    "throat_the_signal_deep",
+    "throat_down_the_throat",
+    "throat_heed_or_haul"
+  ],
+  "isEnding": false
+}

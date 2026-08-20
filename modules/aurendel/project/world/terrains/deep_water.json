@@ -1,0 +1,21 @@
+{
+  "id": "deep_water",
+  "name": "Deep Water",
+  "description": "Over your head. You will have to swim it.",
+  "glyph": "W",
+  "color": "blue",
+  "passable": true,
+  "opaque": false,
+  "moveCost": 3,
+  "tags": [
+    "washed",
+    "water"
+  ],
+  "marks": {
+    "tracks": 0,
+    "smell": 0.15
+  },
+  "requiresMode": [
+    "swim"
+  ]
+}

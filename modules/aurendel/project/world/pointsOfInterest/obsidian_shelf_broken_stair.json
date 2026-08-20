@@ -1,0 +1,68 @@
+{
+  "id": "obsidian_shelf_broken_stair",
+  "name": "The Broken Stair",
+  "description": "A stair going down through the glass, cut before the glass was there, which is not a thing that can be true.",
+  "area": "ember_obsidian_shelf",
+  "kind": "dungeonEntrance",
+  "descriptionKey": "obsidian_shelf_broken_stair_desc",
+  "travelMinutes": 12,
+  "tags": [
+    "dungeon"
+  ],
+  "dungeon": "ember_glass_stair",
+  "position": {
+    "x": 25,
+    "y": 3
+  },
+  "triggers": [
+    {
+      "id": "ember_sheet_committed",
+      "mode": "once",
+      "on": "enter",
+      "description": "The cut, and what the glass did around it.",
+      "requires": {
+        "custom": {
+          "gte": [
+            {
+              "ref": "threads.ember_sheet.known"
+            },
+            2
+          ]
+        }
+      },
+      "effects": [
+        {
+          "emit": {
+            "event": "startQuest",
+            "data": {
+              "quest": "ember_the_sheet"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "hidden": true,
+  "discover": {
+    "skill": "lore",
+    "difficulty": {
+      "max": [
+        8,
+        {
+          "sub": [
+            24,
+            {
+              "mul": [
+                4,
+                {
+                  "ref": "threads.ember_sheet.known"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "gate": "ember_sheet_stair_seal"
+}

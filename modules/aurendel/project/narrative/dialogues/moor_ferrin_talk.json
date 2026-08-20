@@ -1,0 +1,457 @@
+{
+  "id": "moor_ferrin_talk",
+  "start": "greet",
+  "nodes": [
+    {
+      "id": "greet",
+      "says": [
+        {
+          "text": "One room, one door, one window, eleven miles of heather, and somebody who has clearly been alone long enough to have views."
+        },
+        {
+          "text": "“There is tea. There is not much else.”"
+        }
+      ],
+      "onEnter": [],
+      "options": [
+        {
+          "id": "moor_ferrin_wear",
+          "text": "The house on the edge.",
+          "requires": {
+            "without": {
+              "lore": [
+                "moor_shoot_wear"
+              ]
+            }
+          },
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "check": {
+            "skill": "persuasion",
+            "difficulty": {
+              "sub": [
+                14,
+                {
+                  "clamp": [
+                    {
+                      "div": [
+                        {
+                          "ref": "reputation.the_library",
+                          "else": 0
+                        },
+                        5
+                      ]
+                    },
+                    -6,
+                    6
+                  ]
+                }
+              ]
+            },
+            "onSuccess": "moor_ferrin_wear_told",
+            "onFailure": "moor_ferrin_wear_wont"
+          }
+        },
+        {
+          "id": "moor_ferrin_line",
+          "text": "You keep the estate's old map.",
+          "requires": {
+            "without": {
+              "lore": [
+                "moor_shoot_line"
+              ]
+            }
+          },
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "check": {
+            "skill": "insight",
+            "difficulty": {
+              "sub": [
+                15,
+                {
+                  "clamp": [
+                    {
+                      "div": [
+                        {
+                          "ref": "reputation.the_library",
+                          "else": 0
+                        },
+                        5
+                      ]
+                    },
+                    -6,
+                    6
+                  ]
+                }
+              ]
+            },
+            "onSuccess": "moor_ferrin_line_told",
+            "onFailure": "moor_ferrin_line_wont"
+          }
+        },
+        {
+          "id": "moor_ferrin_green",
+          "text": "You can see Colder's Fire from here.",
+          "requires": {
+            "without": {
+              "lore": [
+                "moor_fire_green"
+              ]
+            }
+          },
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "check": {
+            "skill": "persuasion",
+            "difficulty": {
+              "sub": [
+                14,
+                {
+                  "clamp": [
+                    {
+                      "div": [
+                        {
+                          "ref": "reputation.the_library",
+                          "else": 0
+                        },
+                        5
+                      ]
+                    },
+                    -6,
+                    6
+                  ]
+                }
+              ]
+            },
+            "onSuccess": "moor_ferrin_green_told",
+            "onFailure": "moor_ferrin_green_wont"
+          }
+        },
+        {
+          "id": "moor_ferrin_map",
+          "text": "The map. Lend it to me.",
+          "requires": {
+            "without": {
+              "items": [
+                "estate_map"
+              ],
+              "flags": [
+                {
+                  "flag": "given:estate_map"
+                }
+              ]
+            }
+          },
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "check": {
+            "skill": "persuasion",
+            "difficulty": {
+              "sub": [
+                14,
+                {
+                  "clamp": [
+                    {
+                      "div": [
+                        {
+                          "ref": "reputation.the_library",
+                          "else": 0
+                        },
+                        5
+                      ]
+                    },
+                    -6,
+                    6
+                  ]
+                }
+              ]
+            },
+            "onSuccess": "moor_ferrin_map_gave",
+            "onFailure": "moor_ferrin_map_kept"
+          }
+        },
+        {
+          "id": "greet_leave",
+          "text": "Nothing.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": [
+        {
+          "requires": {
+            "factions": [
+              {
+                "faction": "the_library",
+                "maxStanding": -30
+              }
+            ]
+          },
+          "goto": "moor_ferrin_cold"
+        }
+      ]
+    },
+    {
+      "id": "moor_ferrin_wear_told",
+      "says": [
+        {
+          "text": "“No roof since my father's time.” Ferrin does not look up from the fire. “And eight worn places in the flags in front of it, even as fence posts.” Now the look up. “Worn through. Grit does not wear through in a century unless somebody is standing on it, and there has not been a shoot off that house since before the roof went.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "learnLore": {
+            "entry": "moor_shoot_wear"
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "moor_ferrin_wear_on",
+          "text": "Go on.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "moor_ferrin_wear_wont",
+      "says": [
+        {
+          "text": "“I've said all I mean to,” they say, and go back to what they were doing."
+        }
+      ],
+      "onEnter": [
+        {
+          "adjustReputation": {
+            "faction": "the_library",
+            "amount": -1
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "moor_ferrin_wear_drop",
+          "text": "Leave it.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "moor_ferrin_line_told",
+      "says": [
+        {
+          "text": "“They did not want it and I did.” He unrolls a corner of it without being asked, which tells you how often he looks at it. “Drives, butts, beaters' lines, the whole moor.” A finger on one line. “That one does not stop at the scarp. It is drawn over and down, and it is the same ink as the rest, which means whoever drew it drew it on the same afternoon and thought nothing of it.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "learnLore": {
+            "entry": "moor_shoot_line"
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "moor_ferrin_line_on",
+          "text": "Go on.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "moor_ferrin_line_wont",
+      "says": [
+        {
+          "text": "“I've said all I mean to,” they say, and go back to what they were doing."
+        }
+      ],
+      "onEnter": [
+        {
+          "adjustReputation": {
+            "faction": "the_library",
+            "amount": -1
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "moor_ferrin_line_drop",
+          "text": "Leave it.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "moor_ferrin_green_told",
+      "says": [
+        {
+          "text": "“Every night of my life.” Ferrin does not think it worth remarking on until he does. “Twice a year it goes green. I can see it go from this door, eleven mile off, and the lamps in the village all come on inside the same quarter hour and then they all go out.” He sets the cup down. “Nobody rings anything. They just go in.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "learnLore": {
+            "entry": "moor_fire_green"
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "moor_ferrin_green_on",
+          "text": "Go on.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "moor_ferrin_green_wont",
+      "says": [
+        {
+          "text": "“I've said all I mean to,” they say, and go back to what they were doing."
+        }
+      ],
+      "onEnter": [
+        {
+          "adjustReputation": {
+            "faction": "the_library",
+            "amount": -1
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "moor_ferrin_green_drop",
+          "text": "Leave it.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "moor_ferrin_map_gave",
+      "says": [
+        {
+          "text": "He rolls it properly before he hands it over, which takes a while and is the whole of what he thinks about it. “Eight in the line,” Ferrin says. “Seven of them you can walk to. The eighth is drawn where there is no ground.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "grantItem": {
+            "target": {
+              "ref": "actor.id"
+            },
+            "item": "estate_map",
+            "quantity": 1
+          }
+        },
+        {
+          "setFlag": {
+            "flag": "given:estate_map",
+            "value": true
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "moor_ferrin_map_thanks",
+          "text": "Thank you.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "moor_ferrin_map_kept",
+      "says": [
+        {
+          "text": "“It is the only thing in here worth anything,” Ferrin says, “and I am not sentimental about much,” and rolls it up."
+        }
+      ],
+      "onEnter": [
+        {
+          "adjustReputation": {
+            "faction": "the_library",
+            "amount": -2
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "moor_ferrin_map_leave",
+          "text": "Then no.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "moor_ferrin_cold",
+      "says": [
+        {
+          "text": "He puts the map in the box, sits on the box, and looks at the fire."
+        }
+      ],
+      "onEnter": [],
+      "options": [
+        {
+          "id": "moor_ferrin_go",
+          "text": "Leave it.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    }
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "id": "moor_colders_hearth_desc",
+  "variants": [
+    {
+      "text": "A fire on a stone platform in the middle of the village, kept going since a man called Colder started it."
+    },
+    {
+      "text": "Colder's Hearth. You can see the fire from three miles off in clear weather and that is the entire point of the village."
+    },
+    {
+      "text": "Everything here is arranged so that somebody can always see the flame."
+    },
+    {
+      "text": "The fuel stack is enormous and it is everybody's responsibility."
+    }
+  ]
+}

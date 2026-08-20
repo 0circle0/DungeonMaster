@@ -1,0 +1,13 @@
+{
+  "id": "wall_hull",
+  "name": "Hull Timber",
+  "description": "Ship's planking, put to a second use ashore.",
+  "glyph": "h",
+  "color": "yellow",
+  "passable": false,
+  "opaque": true,
+  "moveCost": 0,
+  "tags": [
+    "built"
+  ]
+}

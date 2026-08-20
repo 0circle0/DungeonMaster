@@ -1,0 +1,17 @@
+{
+  "id": "int_house",
+  "variants": [
+    {
+      "text": "One room and a loft, a banked fire, and a smell of last night's supper."
+    },
+    {
+      "text": "Swept boards, a bed against the far wall, and somebody's boots by the door."
+    },
+    {
+      "text": "Low beams, a shuttered window, and everything the household owns within arm's reach of the hearth."
+    },
+    {
+      "text": "Dark, warm, and lived in hard. A chair has been mended twice."
+    }
+  ]
+}

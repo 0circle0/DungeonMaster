@@ -1,0 +1,14 @@
+{
+  "id": "frostmere_ice_road_blocked",
+  "variants": [
+    {
+      "text": "The bridge is not there. There is a gap, and below the gap there is blue, and below the blue there is nothing you can see."
+    },
+    {
+      "text": "Marker poles on both sides and no snow between them."
+    },
+    {
+      "text": "It is Longlight. The Ice Road is a winter road."
+    }
+  ]
+}

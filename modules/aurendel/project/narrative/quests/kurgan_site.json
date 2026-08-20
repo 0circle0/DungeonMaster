@@ -1,0 +1,72 @@
+{
+  "id": "kurgan_site",
+  "name": "The Skull Line",
+  "description": "Whatever was set here to keep the door shut is still at it, and it has stopped distinguishing between the door and you.",
+  "autoStart": false,
+  "ordered": true,
+  "tags": [
+    "act2",
+    "kurgan"
+  ],
+  "objectives": [],
+  "stages": [
+    {
+      "id": "get_in",
+      "name": "Get inside",
+      "description": "The way down is where the Wardlist says it is.",
+      "objectives": [
+        {
+          "id": "enter",
+          "description": "Go down.",
+          "kind": "reach",
+          "count": 1,
+          "hidden": false,
+          "optional": false,
+          "target": "kurgan_field_great_kurgan"
+        }
+      ]
+    },
+    {
+      "id": "clear_it",
+      "name": "What is keeping it",
+      "description": "It was set here. It is still here.",
+      "objectives": [
+        {
+          "id": "kill_boss",
+          "description": "Put down what guards the ward.",
+          "kind": "kill",
+          "count": 1,
+          "hidden": false,
+          "optional": false,
+          "target": "kurgan_rider"
+        }
+      ],
+      "onComplete": [
+        {
+          "setFlag": {
+            "flag": "kurgan_cleared",
+            "value": true
+          }
+        }
+      ]
+    }
+  ],
+  "unlocks": [
+    "kurgan_choice"
+  ],
+  "rewards": {
+    "xp": 200,
+    "items": [],
+    "reputation": {
+      "the_keepers": 8
+    }
+  },
+  "requires": {
+    "quests": [
+      {
+        "quest": "kurgan_road",
+        "status": "complete"
+      }
+    ]
+  }
+}

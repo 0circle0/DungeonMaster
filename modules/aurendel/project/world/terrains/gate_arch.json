@@ -1,0 +1,14 @@
+{
+  "id": "gate_arch",
+  "name": "Gate Arch",
+  "description": "The way through a wall, when somebody is minded to let you.",
+  "glyph": "A",
+  "color": "gray",
+  "passable": true,
+  "opaque": false,
+  "moveCost": 1,
+  "tags": [
+    "built"
+  ],
+  "isDoor": true
+}

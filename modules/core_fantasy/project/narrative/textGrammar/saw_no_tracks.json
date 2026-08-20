@@ -1,0 +1,17 @@
+{
+  "id": "saw_no_tracks",
+  "variants": [
+    {
+      "text": "Nothing has come this way, or the ground is too hard to say."
+    },
+    {
+      "text": "You read the ground and it tells you nothing at all."
+    },
+    {
+      "text": "Bare stone, and stone keeps no secrets because it keeps no prints."
+    },
+    {
+      "text": "Whatever came through here left the ground exactly as it found it."
+    }
+  ]
+}

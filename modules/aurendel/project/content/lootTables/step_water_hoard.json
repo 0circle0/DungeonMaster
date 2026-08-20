@@ -1,0 +1,41 @@
+{
+  "id": "step_water_hoard",
+  "name": "Past the Shoring",
+  "rolls": "2",
+  "emptyChance": 0,
+  "bonusRollSkill": "perception",
+  "bonusRolls": {
+    "onSuccess": 1,
+    "onCritical": 2
+  },
+  "entries": [
+    {
+      "weight": 4,
+      "value": {
+        "item": "old_coin",
+        "quantity": "4d6"
+      }
+    },
+    {
+      "weight": 3,
+      "value": {
+        "item": "antidote",
+        "quantity": "1d2"
+      }
+    },
+    {
+      "weight": 2,
+      "value": {
+        "item": "glass_bead",
+        "quantity": "1d2"
+      }
+    },
+    {
+      "weight": 1,
+      "value": {
+        "item": "warded_coat",
+        "quantity": "1"
+      }
+    }
+  ]
+}

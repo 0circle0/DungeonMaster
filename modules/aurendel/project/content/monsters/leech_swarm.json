@@ -1,0 +1,75 @@
+{
+  "id": "leech_swarm",
+  "name": "Leech Swarm",
+  "description": "The warm channels breed them and the marsh has never once objected.",
+  "level": 3,
+  "xp": 95,
+  "attributes": {
+    "might": 6,
+    "agility": 15,
+    "endurance": 12,
+    "intellect": 1,
+    "instinct": 10,
+    "presence": 4
+  },
+  "abilities": [
+    "bleed_white"
+  ],
+  "behaviour": [
+    {
+      "priority": 0,
+      "use": "bleed_white"
+    }
+  ],
+  "faction": "the_unsealed",
+  "creatureType": "beast",
+  "size": "small",
+  "descriptors": [
+    "a boiling",
+    "a spreading"
+  ],
+  "conditionalLoot": [],
+  "loot": "marsh_scraps",
+  "damageInteractions": [
+    {
+      "damageType": "slashing",
+      "multiplier": 0.5
+    },
+    {
+      "damageType": "piercing",
+      "multiplier": 0.5
+    },
+    {
+      "damageType": "fire",
+      "multiplier": 2
+    }
+  ],
+  "conditionImmunities": [
+    "frightened",
+    "bleeding",
+    "prone"
+  ],
+  "resourceOverrides": {
+    "hp": 18
+  },
+  "temperament": {
+    "roamRadius": 50,
+    "investigateRadius": 120,
+    "leashRadius": 180,
+    "wanderChance": 0.6,
+    "disengageTurns": 3,
+    "speeds": {
+      "wander": 0.5,
+      "investigate": 1.25
+    },
+    "investigates": [
+      "smell",
+      "hearing",
+      "sight"
+    ],
+    "notices": [
+      "hostile",
+      "neutral"
+    ]
+  }
+}

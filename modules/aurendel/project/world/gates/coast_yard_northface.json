@@ -1,0 +1,29 @@
+{
+  "id": "coast_yard_northface",
+  "name": "The Mortared Face",
+  "description": "Three walls of dry-stone a bailiff's grandfather laid, and a fourth that was standing here before the road was.",
+  "kind": "ward",
+  "blockedTextKey": "coast_yard_blocked",
+  "staysOpen": true,
+  "onOpen": [
+    {
+      "setFlag": {
+        "flag": "coast_yard_open",
+        "value": true
+      }
+    }
+  ],
+  "onBlocked": [],
+  "opensWith": [],
+  "tags": [],
+  "requires": {
+    "items": [
+      {
+        "item": "yard_book",
+        "quantity": 1,
+        "consume": false,
+        "equipped": false
+      }
+    ]
+  }
+}

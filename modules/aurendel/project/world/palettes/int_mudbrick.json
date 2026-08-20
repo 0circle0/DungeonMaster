@@ -1,0 +1,29 @@
+{
+  "id": "int_mudbrick",
+  "name": "Sun-Built Interior",
+  "floor": "flagstone",
+  "wall": "wall_mudbrick",
+  "exterior": "wall_mudbrick",
+  "scatter": [
+    {
+      "terrain": "rug",
+      "frequency": 0.1,
+      "distribution": "patch",
+      "scale": 4,
+      "priority": 0
+    },
+    {
+      "terrain": "urn",
+      "frequency": 0.04,
+      "distribution": "speckle",
+      "priority": 1
+    },
+    {
+      "terrain": "shelf",
+      "frequency": 0.03,
+      "distribution": "speckle",
+      "priority": 2
+    }
+  ],
+  "door": "door"
+}

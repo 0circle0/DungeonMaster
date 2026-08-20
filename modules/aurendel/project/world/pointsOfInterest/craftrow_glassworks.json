@@ -1,0 +1,24 @@
+{
+  "id": "craftrow_glassworks",
+  "name": "The Glasshouse",
+  "description": "Southern sand, northern fuel, and a furnace that has not gone out in forty years.",
+  "area": "aurenhal_craftrow",
+  "kind": "market",
+  "descriptionKey": "int_smithy",
+  "travelMinutes": 4,
+  "tags": [
+    "shop"
+  ],
+  "position": {
+    "x": 34,
+    "y": 22
+  },
+  "services": [
+    "smith"
+  ],
+  "map": {
+    "width": "15",
+    "height": "11",
+    "palette": "int_forge"
+  }
+}

@@ -1,0 +1,48 @@
+{
+  "id": "trial_three_hoard_a",
+  "name": "What the Room Had Kept",
+  "rolls": "5",
+  "emptyChance": 0,
+  "bonusRollSkill": "perception",
+  "bonusRolls": {
+    "onSuccess": 2,
+    "onCritical": 4
+  },
+  "entries": [
+    {
+      "weight": 4,
+      "value": {
+        "item": "old_coin",
+        "quantity": "12d6"
+      }
+    },
+    {
+      "weight": 3,
+      "value": {
+        "item": "hold_silver",
+        "quantity": "3d4"
+      }
+    },
+    {
+      "weight": 3,
+      "value": {
+        "item": "ward_salt",
+        "quantity": "2d3"
+      }
+    },
+    {
+      "weight": 2,
+      "value": {
+        "item": "healing_draught",
+        "quantity": "2d3"
+      }
+    },
+    {
+      "weight": 1,
+      "value": {
+        "item": "silvered_blade",
+        "quantity": "1"
+      }
+    }
+  ]
+}

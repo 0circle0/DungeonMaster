@@ -1,0 +1,11 @@
+{
+  "id": "glass_bead",
+  "name": "A Glass Bead",
+  "description": "Crater glass, drilled, and green all the way through.",
+  "kind": "treasure",
+  "value": 28,
+  "weight": 1,
+  "tags": [
+    "treasure"
+  ]
+}

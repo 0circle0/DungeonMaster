@@ -1,0 +1,29 @@
+{
+  "id": "fulgurite_the_grove",
+  "name": "The Glass Grove",
+  "description": "Branching tubes of fused sand standing eleven feet out of the ground, in thousands, where lightning has been striking the same field for a very long time.",
+  "area": "glasslands_the_fulgurite",
+  "kind": "landmark",
+  "descriptionKey": "fulgurite_the_grove_desc",
+  "travelMinutes": 8,
+  "tags": [],
+  "position": {
+    "x": 3,
+    "y": 3
+  },
+  "triggers": [
+    {
+      "id": "glass_found_grove",
+      "mode": "once",
+      "on": "enter",
+      "description": "Glass in lines, and the lines going somewhere.",
+      "effects": [
+        {
+          "learnLore": {
+            "entry": "glass_town_glass"
+          }
+        }
+      ]
+    }
+  ]
+}

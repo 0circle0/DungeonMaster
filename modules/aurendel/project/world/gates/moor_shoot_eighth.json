@@ -1,0 +1,29 @@
+{
+  "id": "moor_shoot_eighth",
+  "name": "The Eighth Butt",
+  "description": "Eight worn places in front of a roofless house, evenly spaced, and the eighth of them stands where the ground stops.",
+  "kind": "ward",
+  "blockedTextKey": "moor_shoot_blocked",
+  "staysOpen": true,
+  "onOpen": [
+    {
+      "setFlag": {
+        "flag": "moor_shoot_open",
+        "value": true
+      }
+    }
+  ],
+  "onBlocked": [],
+  "opensWith": [],
+  "tags": [],
+  "requires": {
+    "items": [
+      {
+        "item": "estate_map",
+        "quantity": 1,
+        "consume": false,
+        "equipped": false
+      }
+    ]
+  }
+}

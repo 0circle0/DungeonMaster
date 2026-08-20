@@ -1,0 +1,18 @@
+{
+  "id": "glasslands_ninth_well",
+  "name": "The Ninth Well",
+  "description": "The only one of the eleven with rungs, and the rungs go down further than the shaft was ever dug.",
+  "biome": "dungeon_delved",
+  "roomCount": "12",
+  "depth": "4",
+  "algorithm": "rooms",
+  "lockedDoorChance": 0,
+  "doorGates": [],
+  "rollEncounters": false,
+  "safeEntrance": true,
+  "branchiness": 0.25,
+  "width": "81",
+  "height": "81",
+  "corridorLength": "3d3",
+  "bossTable": "the_ninth_well"
+}

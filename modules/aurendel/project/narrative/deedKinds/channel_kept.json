@@ -1,0 +1,8 @@
+{
+  "id": "channel_kept",
+  "name": "Kept a Channel",
+  "faction": "the_ferrymen",
+  "severity": 12,
+  "memorability": 1.5,
+  "distortion": 0.2
+}

@@ -1,0 +1,19 @@
+{
+  "id": "chalk_downs_shepherds_hut",
+  "name": "The Shepherd's Hut",
+  "description": "On wheels, moved twice a year, and unlocked.",
+  "area": "coast_chalk_downs",
+  "kind": "camp",
+  "descriptionKey": "int_house",
+  "travelMinutes": 6,
+  "tags": [],
+  "map": {
+    "width": "9",
+    "height": "7",
+    "palette": "int_timber"
+  },
+  "position": {
+    "x": 25,
+    "y": 3
+  }
+}

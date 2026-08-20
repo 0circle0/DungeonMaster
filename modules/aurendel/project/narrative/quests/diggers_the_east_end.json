@@ -1,0 +1,76 @@
+{
+  "id": "diggers_the_east_end",
+  "name": "The East End",
+  "description": "The east end was never dug, and it was never dug on purpose, and the moot has written twice to say which of those two facts is load-bearing.",
+  "autoStart": false,
+  "ordered": true,
+  "tags": [
+    "side",
+    "act2",
+    "diggers",
+    "weeping_moor"
+  ],
+  "objectives": [],
+  "stages": [
+    {
+      "id": "open_it",
+      "name": "Open the east end",
+      "description": "Two days with eleven men and it is open in an afternoon once they find the kerb.",
+      "objectives": [
+        {
+          "id": "into_the_east",
+          "description": "Get into the east end.",
+          "kind": "reach",
+          "count": 1,
+          "hidden": false,
+          "optional": false,
+          "target": "long_barrow_east_end"
+        }
+      ],
+      "journalKey": "diggers_journal_east"
+    },
+    {
+      "id": "what_is_in_it",
+      "name": "Whoever is in it",
+      "description": "Buried facing the other way from everybody else, and crowned, which nobody in this parish has ever been.",
+      "objectives": [
+        {
+          "id": "kill_wight",
+          "description": "Put down what is in the east end.",
+          "kind": "kill",
+          "count": 1,
+          "hidden": false,
+          "optional": false,
+          "target": "long_barrow_wight"
+        }
+      ],
+      "onComplete": [
+        {
+          "setFlag": {
+            "flag": "diggers_east_opened",
+            "value": true
+          }
+        }
+      ],
+      "journalKey": "diggers_journal_wight"
+    }
+  ],
+  "unlocks": [
+    "diggers_record_or_rebury"
+  ],
+  "rewards": {
+    "xp": 95,
+    "items": [],
+    "reputation": {
+      "the_library": 10
+    }
+  },
+  "requires": {
+    "quests": [
+      {
+        "quest": "diggers_the_ridge",
+        "status": "complete"
+      }
+    ]
+  }
+}

@@ -1,0 +1,52 @@
+{
+  "id": "ember_farmer",
+  "name": "Borsa of the Ash Farm",
+  "description": "Farms ash, which is heavier work than farming soil.",
+  "level": 5,
+  "xp": 0,
+  "attributes": {
+    "might": 15,
+    "agility": 11,
+    "endurance": 15,
+    "intellect": 11,
+    "instinct": 13,
+    "presence": 12
+  },
+  "abilities": [
+    "strike"
+  ],
+  "behaviour": [
+    {
+      "priority": 0,
+      "use": "strike"
+    }
+  ],
+  "faction": "the_vent_readers",
+  "creatureType": "humanoid",
+  "size": "medium",
+  "descriptors": [
+    "a broad"
+  ],
+  "conditionalLoot": [],
+  "loot": "ember_deed_carried",
+  "resourceOverrides": {
+    "hp": 32
+  },
+  "temperament": {
+    "roamRadius": 24,
+    "investigateRadius": 70,
+    "leashRadius": 100,
+    "wanderChance": 0.4,
+    "disengageTurns": 2,
+    "investigates": [
+      "sight",
+      "hearing",
+      "tracks",
+      "smell"
+    ],
+    "notices": [
+      "hostile",
+      "neutral"
+    ]
+  }
+}

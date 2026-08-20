@@ -1,0 +1,34 @@
+{
+  "id": "carter_dunn",
+  "name": "Dunn, who Carts",
+  "description": "Runs the coast road and the forest road in the same week and has opinions about both, mostly about the state of them.",
+  "disposition": 6,
+  "gullibility": 0.45,
+  "memorySpan": 140,
+  "offersQuests": [],
+  "caresAbout": [],
+  "reactions": [],
+  "faction": "the_keepers",
+  "dialogue": "dusk_dunn_talk",
+  "home": "fenny_cross_house_b",
+  "shop": {
+    "lootTable": "hollowdene_stock",
+    "buysTags": [
+      "material"
+    ],
+    "priceMultiplier": 1.2
+  },
+  "temperament": {
+    "roamRadius": 0,
+    "wanderChance": 0,
+    "speeds": {
+      "wander": 0
+    },
+    "investigates": [],
+    "notices": [
+      "hostile",
+      "neutral",
+      "ally"
+    ]
+  }
+}

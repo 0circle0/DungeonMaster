@@ -1,0 +1,36 @@
+{
+  "id": "horse_road_stone_horse",
+  "name": "The Stone Horse",
+  "description": "Carved, life-size, lying on its side where it fell, and there is no stone within forty miles.",
+  "area": "steppe_horse_road",
+  "kind": "ruin",
+  "descriptionKey": "generic_ruin",
+  "travelMinutes": 8,
+  "tags": [
+    "ruin"
+  ],
+  "map": {
+    "width": "9",
+    "height": "7",
+    "palette": "int_cave"
+  },
+  "position": {
+    "x": 25,
+    "y": 3
+  },
+  "triggers": [
+    {
+      "id": "step_found_horse",
+      "mode": "once",
+      "on": "enter",
+      "description": "A relay marker for a stage that is not on the road.",
+      "effects": [
+        {
+          "learnLore": {
+            "entry": "step_line_norecord"
+          }
+        }
+      ]
+    }
+  ]
+}

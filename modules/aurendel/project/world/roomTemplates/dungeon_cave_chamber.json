@@ -1,0 +1,16 @@
+{
+  "id": "dungeon_cave_chamber",
+  "name": "Cave Chamber",
+  "descriptionKey": "dungeon_cave_chamber_desc",
+  "weight": 5,
+  "minExits": 1,
+  "maxExits": 4,
+  "encounterChance": 0.4,
+  "trapChance": 0.08,
+  "lootChance": 0.18,
+  "tags": [
+    "dungeon_cave",
+    "chamber"
+  ],
+  "role": "chamber"
+}

@@ -1,0 +1,17 @@
+{
+  "id": "deeproads_echo_halls_desc",
+  "variants": [
+    {
+      "text": "Eleven chambers where a word comes back four times, each from a different direction, and none of them from a wall."
+    },
+    {
+      "text": "The Echo Halls. You stop talking after the second chamber. Everybody does."
+    },
+    {
+      "text": "There is a phrase cut over the tenth door and it is not in a language anybody at Lantern Deep reads."
+    },
+    {
+      "text": "The eleventh will not let a word through at all."
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "id": "wayfinders_rule",
+  "name": "The Wayfinders' Rule",
+  "description": "Four hundred years of the Deeproads measured and set down, including the two pages the guild reads aloud to nobody.",
+  "kind": "key",
+  "value": 0,
+  "weight": 0,
+  "tags": [
+    "keepsake"
+  ],
+  "extra": {
+    "heldBy": "wayfinder_ost"
+  }
+}

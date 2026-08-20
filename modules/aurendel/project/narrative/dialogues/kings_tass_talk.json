@@ -1,0 +1,314 @@
+{
+  "id": "kings_tass_talk",
+  "start": "greet",
+  "nodes": [
+    {
+      "id": "greet",
+      "says": [
+        {
+          "text": "A lighter tied at the Long Wharf and a man coiling rope on it who has clearly done this ten thousand times."
+        },
+        {
+          "text": "“Cargo's by the ton and I do not take passengers past the watergate.”"
+        }
+      ],
+      "onEnter": [],
+      "options": [
+        {
+          "id": "kings_tass_air",
+          "text": "That grate breathes.",
+          "requires": {
+            "without": {
+              "lore": [
+                "kings_under_air"
+              ]
+            }
+          },
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "check": {
+            "skill": "persuasion",
+            "difficulty": {
+              "sub": [
+                10,
+                {
+                  "clamp": [
+                    {
+                      "div": [
+                        {
+                          "ref": "reputation.the_crown",
+                          "else": 0
+                        },
+                        5
+                      ]
+                    },
+                    -6,
+                    6
+                  ]
+                }
+              ]
+            },
+            "onSuccess": "kings_tass_air_told",
+            "onFailure": "kings_tass_air_wont"
+          }
+        },
+        {
+          "id": "kings_tass_brick",
+          "text": "How far in does it go?",
+          "requires": {
+            "without": {
+              "lore": [
+                "kings_under_brick"
+              ]
+            }
+          },
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "check": {
+            "skill": "persuasion",
+            "difficulty": {
+              "sub": [
+                12,
+                {
+                  "clamp": [
+                    {
+                      "div": [
+                        {
+                          "ref": "reputation.the_crown",
+                          "else": 0
+                        },
+                        5
+                      ]
+                    },
+                    -6,
+                    6
+                  ]
+                }
+              ]
+            },
+            "onSuccess": "kings_tass_brick_told",
+            "onFailure": "kings_tass_brick_wont"
+          }
+        },
+        {
+          "id": "kings_tass_wharf",
+          "text": "The wharf was rebuilt?",
+          "requires": {
+            "without": {
+              "lore": [
+                "kings_under_wharf"
+              ]
+            }
+          },
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "check": {
+            "skill": "insight",
+            "difficulty": {
+              "sub": [
+                13,
+                {
+                  "clamp": [
+                    {
+                      "div": [
+                        {
+                          "ref": "reputation.the_crown",
+                          "else": 0
+                        },
+                        5
+                      ]
+                    },
+                    -6,
+                    6
+                  ]
+                }
+              ]
+            },
+            "onSuccess": "kings_tass_wharf_told",
+            "onFailure": "kings_tass_wharf_wont"
+          }
+        },
+        {
+          "id": "greet_leave",
+          "text": "Nothing.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "kings_tass_air_told",
+      "says": [
+        {
+          "text": "“All year.” He does not stop coiling. “Warm, and warmer than the river, which the river should not permit. Twenty years I have gone past it four times a day. Winter, summer, flood — same warm air.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "learnLore": {
+            "entry": "kings_under_air"
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "kings_tass_air_on",
+          "text": "Go on.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "kings_tass_air_wont",
+      "says": [
+        {
+          "text": "“I've said all I mean to,” they say, and go back to what they were doing."
+        }
+      ],
+      "onEnter": [
+        {
+          "adjustReputation": {
+            "faction": "the_crown",
+            "amount": -1
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "kings_tass_air_drop",
+          "text": "Leave it.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "kings_tass_brick_told",
+      "says": [
+        {
+          "text": "“Third turn, and then brick.” He ties off. “And the brick is newer than the city and older than the Gate, which every boatman on this reach knows and nobody has ever put in writing.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "learnLore": {
+            "entry": "kings_under_brick"
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "kings_tass_brick_on",
+          "text": "Go on.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "kings_tass_brick_wont",
+      "says": [
+        {
+          "text": "“I've said all I mean to,” they say, and go back to what they were doing."
+        }
+      ],
+      "onEnter": [
+        {
+          "adjustReputation": {
+            "faction": "the_crown",
+            "amount": -1
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "kings_tass_brick_drop",
+          "text": "Leave it.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "kings_tass_wharf_told",
+      "says": [
+        {
+          "text": "“New piles, same year as the brick. Old ones are still down there, cut off level in the mud.” He looks at the water. “Cut off *level*. You do not cut a pile off level under six feet of river for fun.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "learnLore": {
+            "entry": "kings_under_wharf"
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "kings_tass_wharf_on",
+          "text": "Go on.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "kings_tass_wharf_wont",
+      "says": [
+        {
+          "text": "“I've said all I mean to,” they say, and go back to what they were doing."
+        }
+      ],
+      "onEnter": [
+        {
+          "adjustReputation": {
+            "faction": "the_crown",
+            "amount": -1
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "kings_tass_wharf_drop",
+          "text": "Leave it.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    }
+  ]
+}

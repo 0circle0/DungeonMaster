@@ -1,0 +1,19 @@
+{
+  "id": "frightened",
+  "name": "Frightened",
+  "description": "Nerve gone, and the body arguing for the door.",
+  "stacking": "refresh",
+  "defaultDuration": 2,
+  "modifiers": {
+    "guard": -2
+  },
+  "swings": {
+    "ownAttacks": "disadvantage",
+    "checks": "disadvantage"
+  },
+  "savingThrow": {
+    "save": "will",
+    "difficulty": 12,
+    "timing": "endOfTurn"
+  }
+}

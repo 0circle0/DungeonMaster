@@ -1,0 +1,36 @@
+{
+  "id": "throat_hoard",
+  "entries": [
+    {
+      "weight": 4,
+      "value": {
+        "item": "glass_bead",
+        "quantity": "1d3"
+      }
+    },
+    {
+      "weight": 3,
+      "value": {
+        "item": "cinder_cloak",
+        "quantity": "1"
+      }
+    },
+    {
+      "weight": 2,
+      "value": {
+        "item": "iron_ore",
+        "quantity": "1d4"
+      }
+    },
+    {
+      "weight": 2,
+      "value": {
+        "item": "healing_draught",
+        "quantity": "1d2"
+      }
+    }
+  ],
+  "rolls": "2",
+  "emptyChance": 0,
+  "name": "Down the Throat"
+}

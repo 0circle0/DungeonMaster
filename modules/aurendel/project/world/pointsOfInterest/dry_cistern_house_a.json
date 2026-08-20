@@ -1,0 +1,21 @@
+{
+  "id": "dry_cistern_house_a",
+  "name": "The Keeper's",
+  "description": "Whoever measures the cistern lives beside it and does so daily.",
+  "area": "glasslands_dry_cistern",
+  "kind": "settlement",
+  "descriptionKey": "int_house",
+  "travelMinutes": 2,
+  "tags": [
+    "house"
+  ],
+  "map": {
+    "width": "9",
+    "height": "7",
+    "palette": "int_timber"
+  },
+  "position": {
+    "x": 21,
+    "y": 3
+  }
+}

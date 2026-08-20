@@ -1,0 +1,57 @@
+{
+  "id": "skarn_rung_from_below",
+  "name": "Rung From Below",
+  "description": "A bell for a shut road, rung eleven times on an open one, with the rope worn on the face a hand cannot reach.",
+  "autoStart": false,
+  "ordered": true,
+  "tags": [
+    "hidden",
+    "skarnspine",
+    "skarn_bell"
+  ],
+  "objectives": [
+    {
+      "id": "into_the_slope",
+      "description": "Get into the house that goes further.",
+      "kind": "reach",
+      "count": 1,
+      "hidden": true,
+      "optional": false,
+      "target": "snowgate_house_a"
+    },
+    {
+      "id": "match_the_nights",
+      "description": "Match the eleven nights to what was under them.",
+      "kind": "custom",
+      "count": 1,
+      "hidden": true,
+      "optional": false,
+      "when": {
+        "test": {
+          "ref": "flags.skarn_bell_open"
+        }
+      }
+    },
+    {
+      "id": "who_pulls",
+      "description": "Meet what has been pulling from underneath.",
+      "kind": "kill",
+      "count": 1,
+      "hidden": true,
+      "optional": false,
+      "target": "the_ringer"
+    }
+  ],
+  "stages": [],
+  "unlocks": [],
+  "rewards": {
+    "xp": 195,
+    "items": [
+      {
+        "item": "bell_rope_ring",
+        "quantity": 1
+      }
+    ],
+    "reputation": {}
+  }
+}

@@ -1,0 +1,69 @@
+{
+  "id": "weeping_vault_the_columns",
+  "name": "The Columns",
+  "description": "Where the drip has met the floor it has built columns, and eleven of them are hollow, and one of them has a door.",
+  "area": "deeproads_the_weeping_vault",
+  "kind": "dungeonEntrance",
+  "descriptionKey": "generic_dungeon_mouth",
+  "travelMinutes": 14,
+  "tags": [
+    "secret",
+    "dungeon"
+  ],
+  "hidden": true,
+  "discover": {
+    "skill": "arcana",
+    "difficulty": {
+      "max": [
+        11,
+        {
+          "sub": [
+            23,
+            {
+              "mul": [
+                3,
+                {
+                  "ref": "threads.deep_vault.known"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "dungeon": "deeproads_the_columns",
+  "position": {
+    "x": 25,
+    "y": 3
+  },
+  "triggers": [
+    {
+      "id": "deep_vault_committed",
+      "mode": "once",
+      "on": "enter",
+      "description": "At the foot of a column that holds nothing.",
+      "requires": {
+        "custom": {
+          "gte": [
+            {
+              "ref": "threads.deep_vault.known"
+            },
+            2
+          ]
+        }
+      },
+      "effects": [
+        {
+          "emit": {
+            "event": "startQuest",
+            "data": {
+              "quest": "deep_the_ninth_column"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "gate": "deep_vault_ninth"
+}

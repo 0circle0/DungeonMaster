@@ -1,0 +1,14 @@
+{
+  "id": "int_mill",
+  "variants": [
+    {
+      "text": "The whole building shakes gently, which is how you know the wheel is turning."
+    },
+    {
+      "text": "Flour on every surface, in the air, and shortly on you."
+    },
+    {
+      "text": "Gears the size of a cart, all of them wooden, all of them working."
+    }
+  ]
+}

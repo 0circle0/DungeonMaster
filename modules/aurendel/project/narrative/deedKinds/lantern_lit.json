@@ -1,0 +1,8 @@
+{
+  "id": "lantern_lit",
+  "name": "Lit the Great Lantern",
+  "faction": "the_wayfinders",
+  "severity": 25,
+  "memorability": 4,
+  "distortion": 0.05
+}

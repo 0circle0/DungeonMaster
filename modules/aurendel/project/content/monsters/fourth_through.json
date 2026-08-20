@@ -1,0 +1,92 @@
+{
+  "id": "fourth_through",
+  "name": "What Came Through the Fourth",
+  "description": "Eight hundred feet of gallery cut along a seam that does not exist, to a face nobody ever put a pick into.",
+  "level": 16,
+  "xp": 5600,
+  "attributes": {
+    "might": 22,
+    "agility": 18,
+    "endurance": 23,
+    "intellect": 17,
+    "instinct": 19,
+    "presence": 16
+  },
+  "abilities": [
+    "stone_fist",
+    "rend",
+    "shove",
+    "digging_claw"
+  ],
+  "behaviour": [
+    {
+      "priority": 25,
+      "use": "stone_fist",
+      "when": {
+        "chance": 0.4
+      }
+    },
+    {
+      "priority": 15,
+      "use": "digging_claw"
+    },
+    {
+      "priority": 5,
+      "use": "shove"
+    },
+    {
+      "priority": 0,
+      "use": "rend"
+    }
+  ],
+  "faction": "the_unsealed",
+  "creatureType": "undead",
+  "size": "medium",
+  "descriptors": [
+    "a quarry-grey",
+    "an enormous"
+  ],
+  "conditionalLoot": [],
+  "loot": "trial_two_hoard_a",
+  "damageInteractions": [
+    {
+      "damageType": "slashing",
+      "multiplier": 0.5,
+      "unless": [
+        "silvered"
+      ]
+    },
+    {
+      "damageType": "piercing",
+      "multiplier": 0.5,
+      "unless": [
+        "silvered"
+      ]
+    }
+  ],
+  "conditionImmunities": [
+    "frightened",
+    "prone",
+    "blinded",
+    "slowed"
+  ],
+  "resourceOverrides": {
+    "hp": 280
+  },
+  "temperament": {
+    "roamRadius": 12,
+    "investigateRadius": 40,
+    "leashRadius": 60,
+    "wanderChance": 0.1,
+    "disengageTurns": 1,
+    "speeds": {
+      "wander": 0.5,
+      "investigate": 0.5
+    },
+    "investigates": [
+      "sight",
+      "hearing",
+      "smell"
+    ]
+  }
+}

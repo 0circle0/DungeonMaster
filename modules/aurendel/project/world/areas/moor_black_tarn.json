@@ -1,0 +1,43 @@
+{
+  "id": "moor_black_tarn",
+  "name": "The Black Tarn",
+  "description": "A peat lake of no measured depth, with a shaft going down beside it that somebody cut.",
+  "biome": "moor",
+  "layer": "overworld",
+  "descriptionKey": "moor_black_tarn_desc",
+  "dangerLevel": 6,
+  "recommendedLevel": 6,
+  "tags": [
+    "weeping_moor"
+  ],
+  "map": {
+    "width": "51",
+    "height": "35"
+  },
+  "entryPoint": {
+    "x": 25,
+    "y": 17
+  },
+  "extra": {
+    "role": "wild"
+  },
+  "connections": [
+    {
+      "to": "moor_the_long_barrow",
+      "travelMinutes": 50
+    },
+    {
+      "to": "moor_mirestead",
+      "travelMinutes": 35
+    },
+    {
+      "to": "moor_barrowgate",
+      "travelMinutes": 60
+    },
+    {
+      "to": "deeproads_the_weeping_vault",
+      "travelMinutes": 120,
+      "gate": "deeproads_tarn_shaft"
+    }
+  ]
+}

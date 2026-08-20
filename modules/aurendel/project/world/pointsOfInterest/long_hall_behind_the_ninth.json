@@ -1,0 +1,17 @@
+{
+  "id": "long_hall_behind_the_ninth",
+  "name": "Behind the Ninth Door",
+  "description": "The ninth door on the left is open, and everything behind it is laid out on the same plan as everything behind the other two hundred and ten.",
+  "area": "deeproads_the_long_hall",
+  "kind": "dungeonEntrance",
+  "descriptionKey": "generic_dungeon_mouth",
+  "travelMinutes": 14,
+  "tags": [
+    "dungeon"
+  ],
+  "dungeon": "deeproads_ninth_door",
+  "position": {
+    "x": 25,
+    "y": 3
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "id": "fungus_cap",
+  "name": "Lantern Cap",
+  "kind": "material",
+  "value": 4,
+  "weight": 0.2,
+  "stackable": true,
+  "tags": [
+    "material"
+  ],
+  "description": "Glows enough to read by for about nine hours."
+}

@@ -1,0 +1,14 @@
+{
+  "id": "vent_fields_the_great_vent",
+  "name": "The Great Vent",
+  "description": "Forty feet across, and it goes off about every nine hours, and you can set a watch by it if you are willing to stand there.",
+  "area": "ember_vent_fields",
+  "kind": "landmark",
+  "descriptionKey": "vent_fields_the_great_vent_desc",
+  "travelMinutes": 10,
+  "tags": [],
+  "position": {
+    "x": 14,
+    "y": 3
+  }
+}

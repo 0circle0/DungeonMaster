@@ -1,0 +1,20 @@
+{
+  "id": "burning",
+  "name": "Burning",
+  "description": "Alight, and not going out on its own.",
+  "stacking": "refresh",
+  "defaultDuration": 2,
+  "onTick": [
+    {
+      "damage": {
+        "target": {
+          "ref": "actor.id"
+        },
+        "amount": {
+          "roll": "1d4"
+        },
+        "damageType": "fire"
+      }
+    }
+  ]
+}

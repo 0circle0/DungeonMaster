@@ -1,0 +1,36 @@
+{
+  "id": "steppe_three_wells",
+  "name": "Three Wells",
+  "description": "Three, sunk in a line, and only two of them have ever gone dry at the same time.",
+  "biome": "urban_timber",
+  "layer": "overworld",
+  "descriptionKey": "steppe_three_wells_desc",
+  "dangerLevel": 2,
+  "recommendedLevel": 3,
+  "tags": [
+    "sunward_steppe",
+    "village"
+  ],
+  "map": {
+    "width": "31",
+    "height": "21"
+  },
+  "entryPoint": {
+    "x": 15,
+    "y": 10
+  },
+  "extra": {
+    "role": "village"
+  },
+  "connections": [
+    {
+      "to": "steppe_kurgan_field",
+      "travelMinutes": 40
+    },
+    {
+      "to": "steppe_the_long_grass",
+      "travelMinutes": 50,
+      "gate": "steppe_grazing_right"
+    }
+  ]
+}

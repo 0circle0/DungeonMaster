@@ -1,0 +1,37 @@
+{
+  "id": "steppe_things",
+  "minDepth": 0,
+  "maxDepth": 999,
+  "chance": 0.4,
+  "emptyWeight": 5,
+  "scalePerLevels": 3,
+  "groups": [
+    {
+      "id": "hounds",
+      "weight": 4,
+      "hostile": true,
+      "entries": [
+        {
+          "monster": "grave_hound",
+          "count": "1d2",
+          "scaleWithLevel": true
+        }
+      ]
+    },
+    {
+      "id": "riders",
+      "weight": 2,
+      "hostile": true,
+      "entries": [
+        {
+          "monster": "kurgan_rider",
+          "count": "1",
+          "scaleWithLevel": true
+        }
+      ],
+      "requires": {
+        "minLevel": 4
+      }
+    }
+  ]
+}

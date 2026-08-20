@@ -1,0 +1,85 @@
+{
+  "id": "the_crowns_commission",
+  "name": "The Crown's Commission",
+  "description": "Vail will give you the run of the undercroft and a seal that opens gates, on the condition that none of this is discussed.",
+  "autoStart": false,
+  "ordered": true,
+  "tags": [
+    "act1",
+    "branch"
+  ],
+  "objectives": [
+    {
+      "id": "take_the_seal",
+      "description": "Take Vail's commission.",
+      "kind": "talk",
+      "count": 1,
+      "hidden": false,
+      "optional": false,
+      "target": "steward_vail"
+    },
+    {
+      "id": "read_the_list",
+      "description": "Read the Wardlist in the Kingshold.",
+      "kind": "custom",
+      "count": 1,
+      "hidden": false,
+      "optional": false,
+      "when": {
+        "test": {
+          "ref": "flags.wardlist_read"
+        }
+      }
+    }
+  ],
+  "stages": [],
+  "unlocks": [
+    "the_undercroft"
+  ],
+  "rewards": {
+    "xp": 90,
+    "items": [
+      {
+        "item": "the_wardlist",
+        "quantity": 1
+      },
+      {
+        "item": "undercroft_key",
+        "quantity": 1
+      }
+    ],
+    "reputation": {
+      "the_crown": 20,
+      "the_library": -10
+    }
+  },
+  "giver": "steward_vail",
+  "requires": {
+    "quests": [
+      {
+        "quest": "word_to_aurenhal",
+        "status": "complete"
+      }
+    ],
+    "without": {
+      "quests": [
+        {
+          "quest": "the_librarians_errand",
+          "status": "active"
+        },
+        {
+          "quest": "the_librarians_errand",
+          "status": "complete"
+        }
+      ]
+    }
+  },
+  "onComplete": [
+    {
+      "setFlag": {
+        "flag": "sided_with_crown",
+        "value": true
+      }
+    }
+  ]
+}

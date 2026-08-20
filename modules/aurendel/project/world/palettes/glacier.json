@@ -1,0 +1,35 @@
+{
+  "id": "glacier",
+  "name": "Frostmere Waste",
+  "floor": "snow",
+  "wall": "wall_ice",
+  "exterior": "wall_ice",
+  "scatter": [
+    {
+      "terrain": "ice",
+      "frequency": 0.22,
+      "distribution": "patch",
+      "scale": 12,
+      "priority": 0
+    },
+    {
+      "terrain": "rock",
+      "frequency": 0.05,
+      "distribution": "speckle",
+      "priority": 1
+    },
+    {
+      "terrain": "crevasse",
+      "frequency": 0.03,
+      "distribution": "speckle",
+      "priority": 2
+    },
+    {
+      "terrain": "shingle",
+      "frequency": 0.06,
+      "distribution": "patch",
+      "scale": 8,
+      "priority": 3
+    }
+  ]
+}

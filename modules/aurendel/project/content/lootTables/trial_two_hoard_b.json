@@ -1,0 +1,41 @@
+{
+  "id": "trial_two_hoard_b",
+  "name": "The Hall Under the Black Water",
+  "rolls": "4",
+  "emptyChance": 0,
+  "bonusRollSkill": "perception",
+  "bonusRolls": {
+    "onSuccess": 2,
+    "onCritical": 3
+  },
+  "entries": [
+    {
+      "weight": 4,
+      "value": {
+        "item": "old_coin",
+        "quantity": "10d6"
+      }
+    },
+    {
+      "weight": 3,
+      "value": {
+        "item": "barrow_torc",
+        "quantity": "1d3"
+      }
+    },
+    {
+      "weight": 3,
+      "value": {
+        "item": "healing_draught",
+        "quantity": "1d3"
+      }
+    },
+    {
+      "weight": 1,
+      "value": {
+        "item": "warded_coat",
+        "quantity": "1"
+      }
+    }
+  ]
+}

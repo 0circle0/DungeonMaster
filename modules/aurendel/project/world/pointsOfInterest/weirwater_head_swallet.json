@@ -1,0 +1,14 @@
+{
+  "id": "weirwater_head_swallet",
+  "name": "The Swallet",
+  "description": "Where the whole outflow goes into the ground rather than down the valley, and comes out somewhere nobody has proved.",
+  "area": "skarnspine_weirwater_head",
+  "kind": "landmark",
+  "descriptionKey": "weirwater_head_swallet_desc",
+  "travelMinutes": 8,
+  "tags": [],
+  "position": {
+    "x": 14,
+    "y": 3
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "id": "gullmere_the_bass",
+  "name": "The Bass",
+  "description": "One room, one barrel, and a view of the weather coming.",
+  "area": "coast_gullmere",
+  "kind": "settlement",
+  "descriptionKey": "int_inn",
+  "travelMinutes": 3,
+  "tags": [
+    "inn"
+  ],
+  "services": [
+    "inn"
+  ],
+  "map": {
+    "width": "9",
+    "height": "7",
+    "palette": "int_timber"
+  },
+  "position": {
+    "x": 15,
+    "y": 3
+  }
+}

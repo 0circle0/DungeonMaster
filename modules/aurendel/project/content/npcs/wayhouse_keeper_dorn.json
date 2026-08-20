@@ -1,0 +1,34 @@
+{
+  "id": "wayhouse_keeper_dorn",
+  "name": "Dorn, at the Broken Road",
+  "description": "Keeps a house on a road that has not been mended since the great rains and does perfectly well out of the fact.",
+  "disposition": 6,
+  "gullibility": 0.45,
+  "memorySpan": 170,
+  "offersQuests": [],
+  "caresAbout": [],
+  "reactions": [],
+  "faction": "karn_dolur",
+  "dialogue": "skarn_dorn_talk",
+  "home": "broken_road_wayhouse",
+  "shop": {
+    "lootTable": "hollowdene_stock",
+    "buysTags": [
+      "treasure"
+    ],
+    "priceMultiplier": 1.3
+  },
+  "temperament": {
+    "roamRadius": 0,
+    "wanderChance": 0,
+    "speeds": {
+      "wander": 0
+    },
+    "investigates": [],
+    "notices": [
+      "hostile",
+      "neutral",
+      "ally"
+    ]
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "id": "undercity_hood",
+  "name": "The Hood off the Third Turn",
+  "description": "Oiled canvas, sooted through, out of a passage that has been bricked since before the King's Gate.",
+  "kind": "armor",
+  "slot": "head",
+  "value": 520,
+  "weight": 1,
+  "tags": [
+    "fabled"
+  ],
+  "skillBonuses": {
+    "stealth": 3,
+    "perception": 2
+  },
+  "rarity": "rare"
+}

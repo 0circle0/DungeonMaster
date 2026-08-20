@@ -1,0 +1,34 @@
+{
+  "id": "thatcher_bel",
+  "name": "Bel the Thatcher",
+  "description": "Roofs half of Thornmere and has an opinion about every cut surface in the marsh, professionally.",
+  "disposition": 6,
+  "gullibility": 0.4,
+  "memorySpan": 150,
+  "offersQuests": [],
+  "caresAbout": [],
+  "reactions": [],
+  "faction": "the_ferrymen",
+  "dialogue": "thorn_bel_talk",
+  "home": "reedy_bottom_thatcher",
+  "shop": {
+    "lootTable": "keeper_stock",
+    "buysTags": [
+      "material"
+    ],
+    "priceMultiplier": 1.15
+  },
+  "temperament": {
+    "roamRadius": 0,
+    "wanderChance": 0,
+    "speeds": {
+      "wander": 0
+    },
+    "investigates": [],
+    "notices": [
+      "hostile",
+      "neutral",
+      "ally"
+    ]
+  }
+}

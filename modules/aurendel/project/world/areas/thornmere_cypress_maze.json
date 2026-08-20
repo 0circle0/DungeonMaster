@@ -1,0 +1,34 @@
+{
+  "id": "thornmere_cypress_maze",
+  "name": "The Cypress Maze",
+  "description": "Knees and trunks so thick you navigate by touch, and the channels between them close and open with the season.",
+  "biome": "swamp",
+  "layer": "overworld",
+  "descriptionKey": "thornmere_cypress_maze_desc",
+  "dangerLevel": 6,
+  "recommendedLevel": 6,
+  "tags": [
+    "thornmere"
+  ],
+  "map": {
+    "width": "51",
+    "height": "35"
+  },
+  "entryPoint": {
+    "x": 25,
+    "y": 17
+  },
+  "extra": {
+    "role": "wild"
+  },
+  "connections": [
+    {
+      "to": "thornmere_the_black_water",
+      "travelMinutes": 50
+    },
+    {
+      "to": "thornmere_drowned_bell",
+      "travelMinutes": 40
+    }
+  ]
+}

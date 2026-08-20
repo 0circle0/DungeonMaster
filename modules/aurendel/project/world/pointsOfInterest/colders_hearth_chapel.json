@@ -1,0 +1,79 @@
+{
+  "id": "colders_hearth_chapel",
+  "name": "The Small Chapel",
+  "description": "One room, and the fire is visible through its one window.",
+  "area": "moor_colders_hearth",
+  "kind": "shrine",
+  "descriptionKey": "int_temple",
+  "travelMinutes": 3,
+  "tags": [
+    "shrine"
+  ],
+  "services": [
+    "temple"
+  ],
+  "map": {
+    "width": "9",
+    "height": "7",
+    "palette": "int_temple"
+  },
+  "position": {
+    "x": 21,
+    "y": 3
+  },
+  "triggers": [
+    {
+      "id": "moor_fire_committed",
+      "mode": "once",
+      "on": "enter",
+      "description": "In the cold room under the warm building.",
+      "requires": {
+        "custom": {
+          "gte": [
+            {
+              "ref": "threads.moor_fire.known"
+            },
+            2
+          ]
+        }
+      },
+      "effects": [
+        {
+          "emit": {
+            "event": "startQuest",
+            "data": {
+              "quest": "moor_colders_fire"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "hidden": true,
+  "discover": {
+    "skill": "perception",
+    "difficulty": {
+      "max": [
+        7,
+        {
+          "sub": [
+            19,
+            {
+              "mul": [
+                3,
+                {
+                  "ref": "threads.moor_fire.known"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "gate": "moor_fire_undercroft",
+  "encounterTables": [
+    "moor_fire_boss"
+  ],
+  "encounterChance": 1
+}

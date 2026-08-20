@@ -1,0 +1,36 @@
+{
+  "id": "town_isle",
+  "name": "Wreck-Built",
+  "floor": "boardwalk",
+  "wall": "wall_hull",
+  "exterior": "deep_water",
+  "scatter": [
+    {
+      "terrain": "shallows",
+      "frequency": 0.14,
+      "distribution": "patch",
+      "scale": 9,
+      "priority": 0
+    },
+    {
+      "terrain": "wall_hull",
+      "frequency": 0.09,
+      "distribution": "patch",
+      "scale": 5,
+      "priority": 1
+    },
+    {
+      "terrain": "barrel",
+      "frequency": 0.03,
+      "distribution": "speckle",
+      "priority": 2
+    },
+    {
+      "terrain": "crate",
+      "frequency": 0.03,
+      "distribution": "speckle",
+      "priority": 3
+    }
+  ],
+  "door": "door"
+}

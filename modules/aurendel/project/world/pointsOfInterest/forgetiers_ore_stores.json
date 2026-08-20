@@ -1,0 +1,24 @@
+{
+  "id": "forgetiers_ore_stores",
+  "name": "The Ore Stores",
+  "description": "Graded, weighed, and stacked by seam of origin.",
+  "area": "karn_dolur_forgetiers",
+  "kind": "market",
+  "descriptionKey": "int_warehouse",
+  "travelMinutes": 3,
+  "tags": [
+    "shop"
+  ],
+  "services": [
+    "market"
+  ],
+  "map": {
+    "width": "19",
+    "height": "13",
+    "palette": "int_shop"
+  },
+  "position": {
+    "x": 41,
+    "y": 3
+  }
+}

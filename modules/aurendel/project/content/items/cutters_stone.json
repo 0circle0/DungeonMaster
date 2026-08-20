@@ -1,0 +1,14 @@
+{
+  "id": "cutters_stone",
+  "name": "The Cutter's Stone",
+  "description": "A palm of worked granite with a slot down it. Sighted through, the marker on the Glass Ice stops being a bearing across and becomes a bearing down.",
+  "kind": "key",
+  "value": 0,
+  "weight": 0,
+  "tags": [
+    "keepsake"
+  ],
+  "extra": {
+    "heldBy": "rimewatch_keeper_hallr"
+  }
+}

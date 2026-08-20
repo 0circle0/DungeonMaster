@@ -1,0 +1,18 @@
+{
+  "id": "hollowdene_old_barrow",
+  "name": "The Dene Barrow",
+  "description": "A mound at the top of the sheep field with a stone doorway in the side, and the village has always told children to stay off it.",
+  "area": "kingsvale_hollowdene",
+  "kind": "dungeonEntrance",
+  "descriptionKey": "hollowdene_old_barrow_desc",
+  "travelMinutes": 15,
+  "tags": [
+    "dungeon",
+    "barrow"
+  ],
+  "position": {
+    "x": 27,
+    "y": 3
+  },
+  "dungeon": "dene_barrow"
+}

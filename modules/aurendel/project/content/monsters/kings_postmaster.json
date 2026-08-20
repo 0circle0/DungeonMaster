@@ -1,0 +1,52 @@
+{
+  "id": "kings_postmaster",
+  "name": "Wend, at the Posting House",
+  "description": "Handles horses that do not want handling, all day.",
+  "level": 3,
+  "xp": 0,
+  "attributes": {
+    "might": 11,
+    "agility": 13,
+    "endurance": 12,
+    "intellect": 13,
+    "instinct": 14,
+    "presence": 13
+  },
+  "abilities": [
+    "strike"
+  ],
+  "behaviour": [
+    {
+      "priority": 0,
+      "use": "strike"
+    }
+  ],
+  "faction": "the_crown",
+  "creatureType": "humanoid",
+  "size": "medium",
+  "descriptors": [
+    "a brisk"
+  ],
+  "conditionalLoot": [],
+  "loot": "kings_book_carried",
+  "resourceOverrides": {
+    "hp": 18
+  },
+  "temperament": {
+    "roamRadius": 24,
+    "investigateRadius": 70,
+    "leashRadius": 100,
+    "wanderChance": 0.4,
+    "disengageTurns": 2,
+    "investigates": [
+      "sight",
+      "hearing",
+      "tracks",
+      "smell"
+    ],
+    "notices": [
+      "hostile",
+      "neutral"
+    ]
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "id": "isles_gullstone_chimney",
+  "name": "The Gullstone Chimney",
+  "description": "A shaft through the middle of the rock from the top to the waterline, and the stair outside was cut in order to reach it.",
+  "biome": "dungeon_cave",
+  "roomCount": "10",
+  "depth": "3",
+  "algorithm": "rooms",
+  "lockedDoorChance": 0,
+  "doorGates": [],
+  "rollEncounters": false,
+  "safeEntrance": true,
+  "branchiness": 0.2,
+  "corridorLength": "3d3",
+  "width": "73",
+  "height": "73",
+  "bossTable": "the_top_of_the_chimney"
+}

@@ -1,0 +1,57 @@
+{
+  "id": "deep_the_ninth_column",
+  "name": "The Ninth Column",
+  "description": "Eight columns holding a roof and a ninth holding nothing, weeping warm salt water four hundred miles from any sea.",
+  "autoStart": false,
+  "ordered": true,
+  "tags": [
+    "hidden",
+    "deeproads",
+    "deep_vault"
+  ],
+  "objectives": [
+    {
+      "id": "at_the_columns",
+      "description": "Get to the columns.",
+      "kind": "reach",
+      "count": 1,
+      "hidden": true,
+      "optional": false,
+      "target": "weeping_vault_the_columns"
+    },
+    {
+      "id": "open_the_ninth",
+      "description": "Open what the ninth column is.",
+      "kind": "custom",
+      "count": 1,
+      "hidden": true,
+      "optional": false,
+      "when": {
+        "test": {
+          "ref": "flags.deep_vault_open"
+        }
+      }
+    },
+    {
+      "id": "what_weeps",
+      "description": "Find what has been weeping.",
+      "kind": "kill",
+      "count": 1,
+      "hidden": true,
+      "optional": false,
+      "target": "column_weeper"
+    }
+  ],
+  "stages": [],
+  "unlocks": [],
+  "rewards": {
+    "xp": 330,
+    "items": [
+      {
+        "item": "ninth_column_coat",
+        "quantity": 1
+      }
+    ],
+    "reputation": {}
+  }
+}

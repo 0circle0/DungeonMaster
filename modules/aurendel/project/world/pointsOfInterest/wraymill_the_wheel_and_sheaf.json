@@ -1,0 +1,24 @@
+{
+  "id": "wraymill_the_wheel_and_sheaf",
+  "name": "The Wheel and Sheaf",
+  "description": "The only inn, and it knows it.",
+  "area": "kingsvale_wraymill",
+  "kind": "settlement",
+  "descriptionKey": "int_inn",
+  "travelMinutes": 3,
+  "tags": [
+    "inn"
+  ],
+  "position": {
+    "x": 26,
+    "y": 12
+  },
+  "services": [
+    "inn"
+  ],
+  "map": {
+    "width": "15",
+    "height": "11",
+    "palette": "int_timber"
+  }
+}

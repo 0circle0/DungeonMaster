@@ -1,0 +1,352 @@
+{
+  "id": "frost_hallr_talk",
+  "start": "greet",
+  "nodes": [
+    {
+      "id": "greet",
+      "says": [
+        {
+          "text": "A hut with one window facing the calving face and a log open on the sill. He puts his body between you and it without appearing to."
+        },
+        {
+          "text": "“Rimewatch. I keep it for the moot.” A pause exactly long enough to be rude. “Not for the Landing, and not for you.”"
+        }
+      ],
+      "onEnter": [],
+      "options": [
+        {
+          "id": "frost_hallr_down",
+          "text": "The marker on the Glass Ice. What is it pointing at?",
+          "requires": {
+            "without": {
+              "lore": [
+                "frost_marker_down"
+              ]
+            }
+          },
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "check": {
+            "skill": "persuasion",
+            "difficulty": {
+              "sub": [
+                16,
+                {
+                  "clamp": [
+                    {
+                      "div": [
+                        {
+                          "ref": "reputation.the_ice_moot",
+                          "else": 0
+                        },
+                        5
+                      ]
+                    },
+                    -6,
+                    6
+                  ]
+                }
+              ]
+            },
+            "onSuccess": "frost_hallr_down_told",
+            "onFailure": "frost_hallr_down_wont"
+          }
+        },
+        {
+          "id": "frost_hallr_making",
+          "text": "Your log. Does the sound keep to a season?",
+          "requires": {
+            "without": {
+              "lore": [
+                "frost_blue_making"
+              ]
+            }
+          },
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "check": {
+            "skill": "insight",
+            "difficulty": {
+              "sub": [
+                15,
+                {
+                  "clamp": [
+                    {
+                      "div": [
+                        {
+                          "ref": "reputation.the_ice_moot",
+                          "else": 0
+                        },
+                        5
+                      ]
+                    },
+                    -6,
+                    6
+                  ]
+                }
+              ]
+            },
+            "onSuccess": "frost_hallr_making_told",
+            "onFailure": "frost_hallr_making_wont"
+          }
+        },
+        {
+          "id": "frost_hallr_stone",
+          "text": "The sighting stone. I need to stand where he stood.",
+          "requires": {
+            "without": {
+              "items": [
+                "cutters_stone"
+              ],
+              "flags": [
+                {
+                  "flag": "given:cutters_stone"
+                }
+              ]
+            }
+          },
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "check": {
+            "skill": "persuasion",
+            "difficulty": {
+              "sub": [
+                18,
+                {
+                  "clamp": [
+                    {
+                      "div": [
+                        {
+                          "ref": "reputation.the_ice_moot",
+                          "else": 0
+                        },
+                        5
+                      ]
+                    },
+                    -6,
+                    6
+                  ]
+                }
+              ]
+            },
+            "onSuccess": "frost_hallr_stone_gave",
+            "onFailure": "frost_hallr_stone_kept"
+          }
+        },
+        {
+          "id": "greet_leave",
+          "text": "Nothing.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": [
+        {
+          "requires": {
+            "factions": [
+              {
+                "faction": "the_ice_moot",
+                "maxStanding": -25
+              }
+            ]
+          },
+          "goto": "frost_hallr_cold"
+        }
+      ]
+    },
+    {
+      "id": "frost_hallr_down_told",
+      "says": [
+        {
+          "text": "“Nothing. That is the trouble with it.” He shifts, and decides to say the rest. “Every marker on the Reach points at a cairn. That one points at open ice. Stand where the cutter stood, though — properly, with your eye where his was — and it is not pointing across at all.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "learnLore": {
+            "entry": "frost_marker_down"
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "frost_hallr_down_on",
+          "text": "Go on.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "frost_hallr_down_wont",
+      "says": [
+        {
+          "text": "“I've said all I mean to,” they say, and go back to what they were doing."
+        }
+      ],
+      "onEnter": [
+        {
+          "adjustReputation": {
+            "faction": "the_ice_moot",
+            "amount": -1
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "frost_hallr_down_drop",
+          "text": "Leave it.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "frost_hallr_making_told",
+      "says": [
+        {
+          "text": "He turns the log round rather than reading it to you. The column is forty years deep and there are gaps in it, and the gaps are every thaw. “It does not keep to a season. It keeps to the ice.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "learnLore": {
+            "entry": "frost_blue_making"
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "frost_hallr_making_on",
+          "text": "Go on.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "frost_hallr_making_wont",
+      "says": [
+        {
+          "text": "“I've said all I mean to,” they say, and go back to what they were doing."
+        }
+      ],
+      "onEnter": [
+        {
+          "adjustReputation": {
+            "faction": "the_ice_moot",
+            "amount": -1
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "frost_hallr_making_drop",
+          "text": "Leave it.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "frost_hallr_stone_gave",
+      "says": [
+        {
+          "text": "He weighs it, and you can see him decide that a stone which has told nobody anything in nine hundred years is not doing the moot much good in his pocket. “Sight it at the marker. Not at the hole — at the marker. The hole is what happens after.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "grantItem": {
+            "target": {
+              "ref": "actor.id"
+            },
+            "item": "cutters_stone",
+            "quantity": 1
+          }
+        },
+        {
+          "setFlag": {
+            "flag": "given:cutters_stone",
+            "value": true
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "frost_hallr_stone_thanks",
+          "text": "Thank you.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "frost_hallr_stone_kept",
+      "says": [
+        {
+          "text": "“It is the moot's,” he says, and does not elaborate, and does not move his hand."
+        }
+      ],
+      "onEnter": [
+        {
+          "adjustReputation": {
+            "faction": "the_ice_moot",
+            "amount": -3
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "frost_hallr_stone_leave",
+          "text": "Then no.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "frost_hallr_cold",
+      "says": [
+        {
+          "text": "He shuts the log, and then the shutter, and you are looking at a hut."
+        }
+      ],
+      "onEnter": [],
+      "options": [],
+      "redirectWhen": []
+    }
+  ]
+}

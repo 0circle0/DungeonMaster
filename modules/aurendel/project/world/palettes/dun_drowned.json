@@ -1,0 +1,29 @@
+{
+  "id": "dun_drowned",
+  "name": "Drowned Works",
+  "floor": "shallows",
+  "wall": "wall_stone",
+  "exterior": "wall_stone",
+  "scatter": [
+    {
+      "terrain": "bog_pool",
+      "frequency": 0.1,
+      "distribution": "patch",
+      "scale": 5,
+      "priority": 0
+    },
+    {
+      "terrain": "reeds",
+      "frequency": 0.07,
+      "distribution": "speckle",
+      "priority": 1
+    },
+    {
+      "terrain": "rubble",
+      "frequency": 0.06,
+      "distribution": "speckle",
+      "priority": 2
+    }
+  ],
+  "door": "door"
+}

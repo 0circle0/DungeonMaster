@@ -1,0 +1,53 @@
+{
+  "id": "skarn_watch",
+  "name": "Orn, on Watch",
+  "description": "Stays awake for two nights when the sky looks wrong, which it does often here.",
+  "level": 6,
+  "xp": 0,
+  "attributes": {
+    "might": 13,
+    "agility": 13,
+    "endurance": 15,
+    "intellect": 13,
+    "instinct": 16,
+    "presence": 12
+  },
+  "abilities": [
+    "strike",
+    "quick_shot"
+  ],
+  "behaviour": [
+    {
+      "priority": 0,
+      "use": "strike"
+    }
+  ],
+  "faction": "karn_dolur",
+  "creatureType": "humanoid",
+  "size": "medium",
+  "descriptors": [
+    "a hollow-eyed"
+  ],
+  "conditionalLoot": [],
+  "loot": "skarn_watch_carried",
+  "resourceOverrides": {
+    "hp": 35
+  },
+  "temperament": {
+    "roamRadius": 24,
+    "investigateRadius": 70,
+    "leashRadius": 100,
+    "wanderChance": 0.4,
+    "disengageTurns": 2,
+    "investigates": [
+      "sight",
+      "hearing",
+      "tracks",
+      "smell"
+    ],
+    "notices": [
+      "hostile",
+      "neutral"
+    ]
+  }
+}

@@ -1,0 +1,76 @@
+{
+  "id": "ninthwell_down_the_ninth",
+  "name": "Down the Ninth",
+  "description": "The survey does not say the ninth failed to find water. It says the ninth was sunk to a depth, which is a different kind of sentence, and it gives the depth.",
+  "autoStart": false,
+  "ordered": true,
+  "tags": [
+    "side",
+    "act3",
+    "ninthwell",
+    "glasslands"
+  ],
+  "objectives": [],
+  "stages": [
+    {
+      "id": "go_down",
+      "name": "Down the ninth shaft",
+      "description": "Four hundred feet of dressed stone in a desert, sunk by people who knew exactly how far down they were going.",
+      "objectives": [
+        {
+          "id": "in_the_well",
+          "description": "Get down the ninth well.",
+          "kind": "reach",
+          "count": 1,
+          "hidden": false,
+          "optional": false,
+          "target": "bone_wells_the_ninth"
+        }
+      ],
+      "journalKey": "ninthwell_journal_down"
+    },
+    {
+      "id": "the_bottom",
+      "name": "What is at the depth",
+      "description": "Eight wells were sunk for water. This one was sunk for something else.",
+      "objectives": [
+        {
+          "id": "kill_salt",
+          "description": "Put down what is at the bottom.",
+          "kind": "kill",
+          "count": 1,
+          "hidden": false,
+          "optional": false,
+          "target": "salt_thing"
+        }
+      ],
+      "onComplete": [
+        {
+          "setFlag": {
+            "flag": "ninthwell_thing_down",
+            "value": true
+          }
+        }
+      ],
+      "journalKey": "ninthwell_journal_bottom"
+    }
+  ],
+  "unlocks": [
+    "ninthwell_cap_it_or_open_it"
+  ],
+  "rewards": {
+    "xp": 170,
+    "items": [],
+    "reputation": {
+      "the_water_wardens": 15
+    }
+  },
+  "requires": {
+    "quests": [
+      {
+        "quest": "ninthwell_the_milepost_vault",
+        "status": "complete"
+      }
+    ]
+  }
+}

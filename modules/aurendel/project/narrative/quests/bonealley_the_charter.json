@@ -1,0 +1,140 @@
+{
+  "id": "bonealley_the_charter",
+  "name": "The Charter",
+  "description": "It is finished, and there is a map of it in your hand that two different people would like very much.",
+  "autoStart": false,
+  "ordered": false,
+  "tags": [
+    "side",
+    "act1",
+    "bonealley",
+    "kingsvale"
+  ],
+  "objectives": [
+    {
+      "id": "keep_it_under",
+      "description": "Give the guild back its own map.",
+      "kind": "custom",
+      "count": 1,
+      "hidden": false,
+      "optional": true,
+      "when": {
+        "test": {
+          "ref": "flags.bonealley_kept_under"
+        }
+      }
+    },
+    {
+      "id": "sell_the_map",
+      "description": "Sell the copyist what he came for.",
+      "kind": "custom",
+      "count": 1,
+      "hidden": false,
+      "optional": true,
+      "when": {
+        "test": {
+          "ref": "flags.bonealley_sold_under"
+        }
+      }
+    },
+    {
+      "id": "decide",
+      "description": "Decide where the map ends up.",
+      "kind": "custom",
+      "count": 1,
+      "hidden": false,
+      "optional": false,
+      "when": {
+        "any": [
+          {
+            "test": {
+              "ref": "flags.bonealley_kept_under"
+            }
+          },
+          {
+            "test": {
+              "ref": "flags.bonealley_sold_under"
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "stages": [],
+  "unlocks": [],
+  "rewards": {
+    "xp": 40,
+    "items": [
+      {
+        "item": "tallow_hood",
+        "quantity": 1
+      }
+    ],
+    "reputation": {}
+  },
+  "requires": {
+    "quests": [
+      {
+        "quest": "bonealley_what_was_bricked_up",
+        "status": "complete"
+      }
+    ]
+  },
+  "onComplete": [
+    {
+      "if": {
+        "when": {
+          "test": {
+            "ref": "flags.bonealley_sold_under"
+          }
+        },
+        "then": [
+          {
+            "adjustReputation": {
+              "faction": "the_library",
+              "amount": 20
+            }
+          },
+          {
+            "adjustReputation": {
+              "faction": "the_ratcatchers",
+              "amount": -25
+            }
+          },
+          {
+            "adjustReputation": {
+              "faction": "the_crown",
+              "amount": -5
+            }
+          },
+          {
+            "setFlag": {
+              "flag": "bonealley_map_copied",
+              "value": true
+            }
+          }
+        ],
+        "else": [
+          {
+            "adjustReputation": {
+              "faction": "the_ratcatchers",
+              "amount": 22
+            }
+          },
+          {
+            "adjustReputation": {
+              "faction": "the_library",
+              "amount": -8
+            }
+          },
+          {
+            "setFlag": {
+              "flag": "bonealley_map_kept",
+              "value": true
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

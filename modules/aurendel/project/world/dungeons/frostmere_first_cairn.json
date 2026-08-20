@@ -1,0 +1,18 @@
+{
+  "id": "frostmere_first_cairn",
+  "name": "Under the First Cairn",
+  "description": "The oldest cairn on the hill, opened once, and the keepers have not opened another since.",
+  "biome": "dungeon_barrow",
+  "roomCount": "8",
+  "depth": "2",
+  "algorithm": "rooms",
+  "lockedDoorChance": 0,
+  "doorGates": [],
+  "rollEncounters": false,
+  "safeEntrance": true,
+  "roomSize": "2d2+3",
+  "width": "61",
+  "height": "61",
+  "corridorLength": "3d3",
+  "bossTable": "frost_cairn_boss"
+}

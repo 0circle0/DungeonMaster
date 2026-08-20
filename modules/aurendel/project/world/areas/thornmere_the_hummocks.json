@@ -1,0 +1,38 @@
+{
+  "id": "thornmere_the_hummocks",
+  "name": "The Hummocks",
+  "description": "Islands of firm ground, a few yards across, scattered across ten miles of water, and half of them have something on them.",
+  "biome": "swamp",
+  "layer": "overworld",
+  "descriptionKey": "thornmere_the_hummocks_desc",
+  "dangerLevel": 5,
+  "recommendedLevel": 6,
+  "tags": [
+    "thornmere"
+  ],
+  "map": {
+    "width": "51",
+    "height": "35"
+  },
+  "entryPoint": {
+    "x": 25,
+    "y": 17
+  },
+  "extra": {
+    "role": "wild"
+  },
+  "connections": [
+    {
+      "to": "thornmere_leech_channels",
+      "travelMinutes": 40
+    },
+    {
+      "to": "thornmere_reedy_bottom",
+      "travelMinutes": 35
+    },
+    {
+      "to": "thornmere_stiltmarket",
+      "travelMinutes": 55
+    }
+  ]
+}

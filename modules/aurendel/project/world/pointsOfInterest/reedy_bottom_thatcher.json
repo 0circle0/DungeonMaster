@@ -1,0 +1,24 @@
+{
+  "id": "reedy_bottom_thatcher",
+  "name": "The Thatcher's",
+  "description": "Trains four apprentices at a time and has a waiting list of eleven years.",
+  "area": "thornmere_reedy_bottom",
+  "kind": "market",
+  "descriptionKey": "int_workshop",
+  "travelMinutes": 3,
+  "tags": [
+    "shop"
+  ],
+  "services": [
+    "market"
+  ],
+  "map": {
+    "width": "9",
+    "height": "7",
+    "palette": "int_shop"
+  },
+  "position": {
+    "x": 21,
+    "y": 3
+  }
+}

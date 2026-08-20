@@ -1,0 +1,179 @@
+{
+  "id": "ulla_talk",
+  "start": "greet",
+  "nodes": [
+    {
+      "id": "greet",
+      "says": [
+        {
+          "text": "She is stacking stones by the chapel wall, in an order that is not the order they came out of the cart. \"You've been in the mound.\""
+        }
+      ],
+      "options": [
+        {
+          "id": "what_is_a_ward",
+          "text": "What is a ward?",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "what_is_a_ward"
+        },
+        {
+          "id": "nine",
+          "text": "Hedda said there were nine.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": true,
+          "lockedHint": "You have nothing to ask her about yet.",
+          "goto": "nine",
+          "requires": {
+            "flags": [
+              {
+                "flag": "hedda_told",
+                "equals": true
+              }
+            ]
+          }
+        },
+        {
+          "id": "leave",
+          "text": "Nothing.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": [
+        {
+          "requires": {
+            "memories": [
+              {
+                "deedKind": "ward_broken",
+                "who": "speaker"
+              }
+            ]
+          },
+          "goto": "she_knows"
+        }
+      ]
+    },
+    {
+      "id": "what_is_a_ward",
+      "says": [
+        {
+          "text": "\"A door that was shut on purpose, and a thing put by it to keep it shut.\" She sets a stone. \"Cairns are wards. The Thornward's a ward. Your barrow was a ward and now it isn't.\""
+        }
+      ],
+      "options": [
+        {
+          "id": "who_built",
+          "text": "Who built them?",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "who_built"
+        },
+        {
+          "id": "back",
+          "text": "Hm.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "greet"
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": []
+    },
+    {
+      "id": "who_built",
+      "says": [
+        {
+          "text": "\"People who could count to nine and didn't write anything down where you'd find it.\" She looks at you properly for the first time. \"There's a list. The Library has it and won't say so, and the Crown has a copy and won't admit it.\""
+        }
+      ],
+      "options": [
+        {
+          "id": "thanks",
+          "text": "That's useful.",
+          "effects": [
+            {
+              "setFlag": {
+                "flag": "knows_about_wardlist",
+                "value": true
+              }
+            }
+          ],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "greet"
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": []
+    },
+    {
+      "id": "nine",
+      "says": [
+        {
+          "text": "\"Nine,\" she agrees. \"And three of them have gone in a year. Whatever's doing it is going in order and it is not slowing down.\""
+        }
+      ],
+      "options": [
+        {
+          "id": "back",
+          "text": "Right.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "greet"
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": []
+    },
+    {
+      "id": "she_knows",
+      "says": [
+        {
+          "text": "She does not stop stacking. \"I heard what you did to the ward.\" A stone goes down harder than it needs to. \"Say what you came to say.\""
+        }
+      ],
+      "options": [
+        {
+          "id": "apologise",
+          "text": "It had to come down.",
+          "effects": [
+            {
+              "adjustReputation": {
+                "faction": "the_keepers",
+                "amount": -3
+              }
+            }
+          ],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "greet"
+        },
+        {
+          "id": "leave",
+          "text": "Nothing.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": []
+    }
+  ]
+}

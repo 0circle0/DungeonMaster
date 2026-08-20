@@ -1,0 +1,17 @@
+{
+  "id": "hold_plate",
+  "name": "Hold Plate",
+  "description": "Karn Dolur's own, off the muster floor, and the ledger number is struck into the inside of the shoulder where it will outlast you.",
+  "kind": "armor",
+  "slot": "body",
+  "value": 320,
+  "weight": 26,
+  "tags": [],
+  "modifiers": {
+    "guard": 4
+  },
+  "skillBonuses": {
+    "athletics": 1
+  },
+  "rarity": "rare"
+}

@@ -1,0 +1,20 @@
+{
+  "id": "glacier_ambience",
+  "variants": [
+    {
+      "text": "The ice groans, somewhere deep, and settles."
+    },
+    {
+      "text": "Your breath freezes in your beard before it has finished leaving you."
+    },
+    {
+      "text": "Blue light comes up out of the crevasses, which is not a comfort."
+    },
+    {
+      "text": "Nothing has walked here since the last snow, which was this morning."
+    },
+    {
+      "text": "The cold is not weather here. It is simply the condition of things."
+    }
+  ]
+}

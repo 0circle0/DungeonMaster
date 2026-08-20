@@ -1,0 +1,8 @@
+{
+  "id": "ledger_cooked",
+  "name": "Cooked a Ledger",
+  "faction": "the_countinghouse",
+  "severity": -18,
+  "memorability": 2,
+  "distortion": 0.35
+}

@@ -1,0 +1,29 @@
+{
+  "id": "south_reach_the_pale",
+  "name": "The Pale Ground",
+  "description": "Where the grass thins and the ground goes white, and the Glasslands start making themselves felt.",
+  "area": "steppe_the_south_reach",
+  "kind": "landmark",
+  "descriptionKey": "south_reach_the_pale_desc",
+  "travelMinutes": 8,
+  "tags": [],
+  "position": {
+    "x": 3,
+    "y": 3
+  },
+  "triggers": [
+    {
+      "id": "step_found_pale",
+      "mode": "once",
+      "on": "enter",
+      "description": "Where the grass stops, and how close the spring is to it.",
+      "effects": [
+        {
+          "learnLore": {
+            "entry": "step_water_wont"
+          }
+        }
+      ]
+    }
+  ]
+}

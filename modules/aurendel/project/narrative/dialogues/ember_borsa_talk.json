@@ -1,0 +1,424 @@
+{
+  "id": "ember_borsa_talk",
+  "start": "greet",
+  "nodes": [
+    {
+      "id": "greet",
+      "says": [
+        {
+          "text": "A farm on grey ground, growing something grey, with a woman working it who does not look up until you are close."
+        },
+        {
+          "text": "“Ash farm. It grows two things and neither of them is what you are hoping.”"
+        }
+      ],
+      "onEnter": [],
+      "options": [
+        {
+          "id": "ember_borsa_up",
+          "text": "The roofs down there. Which way up are they?",
+          "requires": {
+            "without": {
+              "lore": [
+                "ember_roofs_up"
+              ]
+            }
+          },
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "check": {
+            "skill": "persuasion",
+            "difficulty": {
+              "sub": [
+                11,
+                {
+                  "clamp": [
+                    {
+                      "div": [
+                        {
+                          "ref": "reputation.the_vent_readers",
+                          "else": 0
+                        },
+                        5
+                      ]
+                    },
+                    -6,
+                    6
+                  ]
+                }
+              ]
+            },
+            "onSuccess": "ember_borsa_up_told",
+            "onFailure": "ember_borsa_up_wont"
+          }
+        },
+        {
+          "id": "ember_borsa_empty",
+          "text": "Anybody ever dug a house out?",
+          "requires": {
+            "without": {
+              "lore": [
+                "ember_roofs_empty"
+              ]
+            }
+          },
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "check": {
+            "skill": "insight",
+            "difficulty": {
+              "sub": [
+                14,
+                {
+                  "clamp": [
+                    {
+                      "div": [
+                        {
+                          "ref": "reputation.the_vent_readers",
+                          "else": 0
+                        },
+                        5
+                      ]
+                    },
+                    -6,
+                    6
+                  ]
+                }
+              ]
+            },
+            "onSuccess": "ember_borsa_empty_told",
+            "onFailure": "ember_borsa_empty_wont"
+          }
+        },
+        {
+          "id": "ember_borsa_fast",
+          "text": "Your treeline came back fast.",
+          "requires": {
+            "without": {
+              "lore": [
+                "ember_trees_fast"
+              ]
+            }
+          },
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "check": {
+            "skill": "persuasion",
+            "difficulty": {
+              "sub": [
+                12,
+                {
+                  "clamp": [
+                    {
+                      "div": [
+                        {
+                          "ref": "reputation.the_vent_readers",
+                          "else": 0
+                        },
+                        5
+                      ]
+                    },
+                    -6,
+                    6
+                  ]
+                }
+              ]
+            },
+            "onSuccess": "ember_borsa_fast_told",
+            "onFailure": "ember_borsa_fast_wont"
+          }
+        },
+        {
+          "id": "ember_borsa_deed",
+          "text": "The deed to the buried village. I want to know whose it was.",
+          "requires": {
+            "without": {
+              "items": [
+                "ashfall_deed"
+              ],
+              "flags": [
+                {
+                  "flag": "given:ashfall_deed"
+                }
+              ]
+            }
+          },
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "check": {
+            "skill": "persuasion",
+            "difficulty": {
+              "sub": [
+                14,
+                {
+                  "clamp": [
+                    {
+                      "div": [
+                        {
+                          "ref": "reputation.the_vent_readers",
+                          "else": 0
+                        },
+                        5
+                      ]
+                    },
+                    -6,
+                    6
+                  ]
+                }
+              ]
+            },
+            "onSuccess": "ember_borsa_deed_gave",
+            "onFailure": "ember_borsa_deed_kept"
+          }
+        },
+        {
+          "id": "greet_leave",
+          "text": "Nothing.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "ember_borsa_up_told",
+      "says": [
+        {
+          "text": "“Up.” She lets that sit. “Ash presses a roof. It does not lift one. Every roof my family has ever uncovered a corner of has been the wrong way up, and we stopped uncovering corners.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "learnLore": {
+            "entry": "ember_roofs_up"
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "ember_borsa_up_on",
+          "text": "Go on.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "ember_borsa_up_wont",
+      "says": [
+        {
+          "text": "“I've said all I mean to,” they say, and go back to what they were doing."
+        }
+      ],
+      "onEnter": [
+        {
+          "adjustReputation": {
+            "faction": "the_vent_readers",
+            "amount": -1
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "ember_borsa_up_drop",
+          "text": "Leave it.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "ember_borsa_empty_told",
+      "says": [
+        {
+          "text": "“Two, in my grandmother's time.” She is not enjoying this. “No bodies in either. Doors barred and nobody home.” A pause. “A village that has time to leave does not bar its doors, and a village that bars its doors is still in them.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "learnLore": {
+            "entry": "ember_roofs_empty"
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "ember_borsa_empty_on",
+          "text": "Go on.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "ember_borsa_empty_wont",
+      "says": [
+        {
+          "text": "“I've said all I mean to,” they say, and go back to what they were doing."
+        }
+      ],
+      "onEnter": [
+        {
+          "adjustReputation": {
+            "faction": "the_vent_readers",
+            "amount": -1
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "ember_borsa_empty_drop",
+          "text": "Leave it.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "ember_borsa_fast_told",
+      "says": [
+        {
+          "text": "“Eleven years. It is ninety, everywhere, always — my father wrote away to the Library to check and they wrote back ninety.” She looks at the trees. “I have not been comfortable in that wood since.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "learnLore": {
+            "entry": "ember_trees_fast"
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "ember_borsa_fast_on",
+          "text": "Go on.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "ember_borsa_fast_wont",
+      "says": [
+        {
+          "text": "“I've said all I mean to,” they say, and go back to what they were doing."
+        }
+      ],
+      "onEnter": [
+        {
+          "adjustReputation": {
+            "faction": "the_vent_readers",
+            "amount": -1
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "ember_borsa_fast_drop",
+          "text": "Leave it.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "ember_borsa_deed_gave",
+      "says": [
+        {
+          "text": "She fetches it without a word and hands it over folded. “Six generations of paying tithe on nine feet of ash,” she says. “If it turns out we have been paying tithe on somebody who is still down there, I would rather know than not.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "grantItem": {
+            "target": {
+              "ref": "actor.id"
+            },
+            "item": "ashfall_deed",
+            "quantity": 1
+          }
+        },
+        {
+          "setFlag": {
+            "flag": "given:ashfall_deed",
+            "value": true
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "ember_borsa_deed_thanks",
+          "text": "Thank you.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "ember_borsa_deed_kept",
+      "says": [
+        {
+          "text": "“It is the farm's,” she says. “I will tell you what is on it. I will not hand it to somebody I met this morning.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "adjustReputation": {
+            "faction": "the_vent_readers",
+            "amount": -2
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "ember_borsa_deed_leave",
+          "text": "Then no.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    }
+  ]
+}

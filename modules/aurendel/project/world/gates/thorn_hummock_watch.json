@@ -1,0 +1,29 @@
+{
+  "id": "thorn_hummock_watch",
+  "name": "What the Hut Faces",
+  "description": "Ninety years of somebody sitting in a doorway looking at this, and cutting a mark for each year they went on looking.",
+  "kind": "ward",
+  "blockedTextKey": "thorn_hummock_blocked",
+  "staysOpen": true,
+  "onOpen": [
+    {
+      "setFlag": {
+        "flag": "thorn_hermit_open",
+        "value": true
+      }
+    }
+  ],
+  "onBlocked": [],
+  "opensWith": [],
+  "tags": [],
+  "requires": {
+    "items": [
+      {
+        "item": "hermits_tally",
+        "quantity": 1,
+        "consume": false,
+        "equipped": false
+      }
+    ]
+  }
+}

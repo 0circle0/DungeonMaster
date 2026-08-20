@@ -1,0 +1,28 @@
+{
+  "id": "sunken_hall_ring",
+  "name": "The Ring of the Sunken Hall",
+  "description": "Off a hand still resting on the arm of a chair, in a hall that was a hall before the water was water.",
+  "kind": "trinket",
+  "slot": "ring",
+  "value": 2000,
+  "weight": 0,
+  "rarity": "very_rare",
+  "tags": [
+    "fabled",
+    "trial"
+  ],
+  "modifiers": {
+    "initiative": 2
+  },
+  "skillBonuses": {
+    "insight": 3,
+    "persuasion": 3,
+    "resolve": 3
+  },
+  "damageInteractions": [
+    {
+      "damageType": "cold",
+      "multiplier": 0.5
+    }
+  ]
+}

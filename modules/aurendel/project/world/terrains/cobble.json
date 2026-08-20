@@ -1,0 +1,18 @@
+{
+  "id": "cobble",
+  "name": "Cobbles",
+  "description": "Round stones set in sand. Cart-ruts worn into them.",
+  "glyph": "e",
+  "color": "gray",
+  "passable": true,
+  "opaque": false,
+  "moveCost": 0.8,
+  "tags": [
+    "stone",
+    "built"
+  ],
+  "marks": {
+    "tracks": 0,
+    "smell": 0.6
+  }
+}

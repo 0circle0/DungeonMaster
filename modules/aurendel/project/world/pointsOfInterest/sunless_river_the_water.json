@@ -1,0 +1,29 @@
+{
+  "id": "sunless_river_the_water",
+  "name": "The Sunless River",
+  "description": "Sixty feet wide, no sound whatsoever, and it has been going the same way for a very long time.",
+  "area": "deeproads_the_sunless_river",
+  "kind": "landmark",
+  "descriptionKey": "sunless_river_the_water_desc",
+  "travelMinutes": 8,
+  "tags": [],
+  "position": {
+    "x": 14,
+    "y": 3
+  },
+  "triggers": [
+    {
+      "id": "deep_found_water",
+      "mode": "once",
+      "on": "enter",
+      "description": "Salt, four hundred miles from any sea.",
+      "effects": [
+        {
+          "learnLore": {
+            "entry": "deep_vault_taste"
+          }
+        }
+      ]
+    }
+  ]
+}

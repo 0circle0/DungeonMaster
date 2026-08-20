@@ -1,0 +1,19 @@
+{
+  "id": "warrens_thieves_market",
+  "name": "The Thieves' Market",
+  "description": "It has another name on the ward map. Nobody uses it.",
+  "area": "aurenhal_warrens",
+  "kind": "market",
+  "descriptionKey": "warrens_thieves_market_desc",
+  "travelMinutes": 3,
+  "tags": [
+    "shop"
+  ],
+  "position": {
+    "x": 20,
+    "y": 12
+  },
+  "services": [
+    "market"
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "id": "step_water_blocked",
+  "variants": [
+    {
+      "text": "Shoring is ordered, and an order is signed, and the order for this one still exists. Without it you are looking at a hole with good carpentry in it."
+    },
+    {
+      "text": "The water comes up warm and tastes of iron on a steppe where every other spring is cold and tastes of grass."
+    },
+    {
+      "text": "They will water here and they will not camp here, and there are twelve reasons and no two of them agree, which is what people do instead of remembering."
+    }
+  ]
+}

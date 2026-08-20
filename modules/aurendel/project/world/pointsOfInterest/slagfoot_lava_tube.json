@@ -1,0 +1,68 @@
+{
+  "id": "slagfoot_lava_tube",
+  "name": "The Lava Tube",
+  "description": "A flow drained out from under its own crust and left a tunnel twenty feet across going into the mountain.",
+  "area": "ember_slagfoot",
+  "kind": "dungeonEntrance",
+  "descriptionKey": "generic_dungeon_mouth",
+  "travelMinutes": 12,
+  "tags": [
+    "dungeon"
+  ],
+  "dungeon": "ember_lava_tube",
+  "position": {
+    "x": 27,
+    "y": 17
+  },
+  "triggers": [
+    {
+      "id": "ember_warm_committed",
+      "mode": "once",
+      "on": "enter",
+      "description": "The mouth of it, breathing on its own schedule.",
+      "requires": {
+        "custom": {
+          "gte": [
+            {
+              "ref": "threads.ember_warm.known"
+            },
+            2
+          ]
+        }
+      },
+      "effects": [
+        {
+          "emit": {
+            "event": "startQuest",
+            "data": {
+              "quest": "ember_the_warm_ground"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "hidden": true,
+  "discover": {
+    "skill": "perception",
+    "difficulty": {
+      "max": [
+        8,
+        {
+          "sub": [
+            20,
+            {
+              "mul": [
+                3,
+                {
+                  "ref": "threads.ember_warm.known"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "gate": "ember_tube_turn"
+}

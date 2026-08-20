@@ -1,0 +1,21 @@
+{
+  "id": "wraymill_house_b",
+  "name": "The Reeve's House",
+  "description": "Stone below, timber above, and the only slate roof in the town.",
+  "area": "kingsvale_wraymill",
+  "kind": "settlement",
+  "descriptionKey": "int_house",
+  "travelMinutes": 2,
+  "tags": [
+    "house"
+  ],
+  "position": {
+    "x": 10,
+    "y": 8
+  },
+  "map": {
+    "width": "9",
+    "height": "7",
+    "palette": "int_timber"
+  }
+}

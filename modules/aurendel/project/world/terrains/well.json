@@ -1,0 +1,14 @@
+{
+  "id": "well",
+  "name": "Well",
+  "description": "Wall, windlass, and a very long rope.",
+  "glyph": "4",
+  "color": "blue",
+  "passable": false,
+  "opaque": false,
+  "moveCost": 0,
+  "tags": [
+    "water",
+    "furniture"
+  ]
+}

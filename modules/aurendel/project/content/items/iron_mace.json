@@ -1,0 +1,16 @@
+{
+  "id": "iron_mace",
+  "name": "Iron Mace",
+  "description": "Flanged, short, and entirely honest about what it is for.",
+  "kind": "weapon",
+  "slot": "hand",
+  "value": 16,
+  "weight": 3,
+  "damage": {
+    "dice": "1d8",
+    "damageType": "bludgeoning",
+    "stat": "might"
+  },
+  "properties": [],
+  "tags": []
+}

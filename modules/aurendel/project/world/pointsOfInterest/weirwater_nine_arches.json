@@ -1,0 +1,16 @@
+{
+  "id": "weirwater_nine_arches",
+  "name": "The Nine Arches",
+  "description": "The bridge. Two of its arches were rebuilt after the flood and do not match, which locals will point out unprompted.",
+  "area": "kingsvale_weirwater_crossing",
+  "kind": "crossing",
+  "descriptionKey": "weirwater_nine_arches_desc",
+  "travelMinutes": 5,
+  "tags": [
+    "crossing"
+  ],
+  "position": {
+    "x": 25,
+    "y": 17
+  }
+}

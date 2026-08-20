@@ -1,0 +1,22 @@
+{
+  "id": "ember_lava_tube",
+  "name": "The Lava Tube",
+  "description": "A flow drained out from under its own crust: twenty feet across, round, and going a long way in.",
+  "biome": "dungeon_ember",
+  "roomCount": "10",
+  "depth": "2",
+  "algorithm": "rooms",
+  "lockedDoorChance": 0,
+  "doorGates": [],
+  "rollEncounters": false,
+  "safeEntrance": true,
+  "branchiness": 0.15,
+  "corridorLength": "3d3",
+  "corridor": {
+    "style": "winding",
+    "width": 2
+  },
+  "width": "73",
+  "height": "73",
+  "bossTable": "ember_tube_boss"
+}

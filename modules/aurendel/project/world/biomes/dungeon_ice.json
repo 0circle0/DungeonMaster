@@ -1,0 +1,27 @@
+{
+  "id": "dungeon_ice",
+  "name": "Ice Cave",
+  "description": "Melt channels in a glacier, which move, and are therefore never twice the same shape.",
+  "layer": "underworld",
+  "palette": "dun_ice",
+  "roomTemplates": [
+    "dungeon_ice_boss",
+    "dungeon_ice_chamber",
+    "dungeon_ice_corridor",
+    "dungeon_ice_entrance",
+    "dungeon_ice_lair",
+    "dungeon_ice_shrine",
+    "dungeon_ice_vault"
+  ],
+  "encounterTables": [
+    "ice_things"
+  ],
+  "lootTables": [
+    "ice_scraps"
+  ],
+  "traps": [
+    "falling_block",
+    "ice_shelf",
+    "pit"
+  ]
+}

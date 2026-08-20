@@ -1,0 +1,34 @@
+{
+  "id": "cypress_maze_hunters_stand",
+  "name": "The Hunter's Stand",
+  "description": "A platform in a tree with a ladder, and somebody keeps the ladder in repair.",
+  "area": "thornmere_cypress_maze",
+  "kind": "camp",
+  "descriptionKey": "int_house",
+  "travelMinutes": 6,
+  "tags": [],
+  "map": {
+    "width": "9",
+    "height": "7",
+    "palette": "int_timber"
+  },
+  "position": {
+    "x": 14,
+    "y": 3
+  },
+  "triggers": [
+    {
+      "id": "thorn_found_stand",
+      "mode": "once",
+      "on": "enter",
+      "description": "What you can see from up here that you cannot see from the water.",
+      "effects": [
+        {
+          "learnLore": {
+            "entry": "thorn_knees_point"
+          }
+        }
+      ]
+    }
+  ]
+}

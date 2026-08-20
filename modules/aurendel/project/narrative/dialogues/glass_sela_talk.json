@@ -1,0 +1,329 @@
+{
+  "id": "glass_sela_talk",
+  "start": "greet",
+  "nodes": [
+    {
+      "id": "greet",
+      "says": [
+        {
+          "text": "A camp among glass trees, and a woman with ninety years of chart spread on a board and stones on the corners."
+        },
+        {
+          "text": "“Do not step on the grove,” she says. “It cuts through a boot and then it cuts through the foot.”"
+        }
+      ],
+      "onEnter": [],
+      "options": [
+        {
+          "id": "glass_sela_season",
+          "text": "Has a dune here ever moved fast?",
+          "requires": {
+            "without": {
+              "lore": [
+                "glass_town_season"
+              ]
+            }
+          },
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "check": {
+            "skill": "persuasion",
+            "difficulty": {
+              "sub": [
+                12,
+                {
+                  "clamp": [
+                    {
+                      "div": [
+                        {
+                          "ref": "reputation.the_water_wardens",
+                          "else": 0
+                        },
+                        5
+                      ]
+                    },
+                    -6,
+                    6
+                  ]
+                }
+              ]
+            },
+            "onSuccess": "glass_sela_season_told",
+            "onFailure": "glass_sela_season_wont"
+          }
+        },
+        {
+          "id": "glass_sela_age",
+          "text": "How old is the town it uncovered?",
+          "requires": {
+            "without": {
+              "lore": [
+                "glass_town_age"
+              ]
+            }
+          },
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "check": {
+            "skill": "insight",
+            "difficulty": {
+              "sub": [
+                14,
+                {
+                  "clamp": [
+                    {
+                      "div": [
+                        {
+                          "ref": "reputation.the_water_wardens",
+                          "else": 0
+                        },
+                        5
+                      ]
+                    },
+                    -6,
+                    6
+                  ]
+                }
+              ]
+            },
+            "onSuccess": "glass_sela_age_told",
+            "onFailure": "glass_sela_age_wont"
+          }
+        },
+        {
+          "id": "glass_sela_chart",
+          "text": "I need the chart. All ninety years of it.",
+          "requires": {
+            "without": {
+              "items": [
+                "dune_walkers_chart"
+              ],
+              "flags": [
+                {
+                  "flag": "given:dune_walkers_chart"
+                }
+              ]
+            }
+          },
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "check": {
+            "skill": "persuasion",
+            "difficulty": {
+              "sub": [
+                14,
+                {
+                  "clamp": [
+                    {
+                      "div": [
+                        {
+                          "ref": "reputation.the_water_wardens",
+                          "else": 0
+                        },
+                        5
+                      ]
+                    },
+                    -6,
+                    6
+                  ]
+                }
+              ]
+            },
+            "onSuccess": "glass_sela_chart_gave",
+            "onFailure": "glass_sela_chart_kept"
+          }
+        },
+        {
+          "id": "greet_leave",
+          "text": "Nothing.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "glass_sela_season_told",
+      "says": [
+        {
+          "text": "“A pace a year, all of them, all my life and my father's.” She unrolls the chart far enough for you to see the lines. “Except this one. One season. A mile.” Her finger stops on it. “I have walked that ground since and there is no reason for it.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "learnLore": {
+            "entry": "glass_town_season"
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "glass_sela_season_on",
+          "text": "Go on.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "glass_sela_season_wont",
+      "says": [
+        {
+          "text": "“I've said all I mean to,” they say, and go back to what they were doing."
+        }
+      ],
+      "onEnter": [
+        {
+          "adjustReputation": {
+            "faction": "the_water_wardens",
+            "amount": -1
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "glass_sela_season_drop",
+          "text": "Leave it.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "glass_sela_age_told",
+      "says": [
+        {
+          "text": "“Two hundred years, near enough — you can date the brick.” She rolls the chart back up. “It should have been under that dune for nine hundred. Either the dune is young or the town is, and the dune is not young.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "learnLore": {
+            "entry": "glass_town_age"
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "glass_sela_age_on",
+          "text": "Go on.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "glass_sela_age_wont",
+      "says": [
+        {
+          "text": "“I've said all I mean to,” they say, and go back to what they were doing."
+        }
+      ],
+      "onEnter": [
+        {
+          "adjustReputation": {
+            "faction": "the_water_wardens",
+            "amount": -1
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "glass_sela_age_drop",
+          "text": "Leave it.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "glass_sela_chart_gave",
+      "says": [
+        {
+          "text": "She hands it over rolled, and holds onto the end of it a second longer. “Four hands. My great-grandfather started it.” She lets go. “The line that goes a mile is in mine. I would like somebody to tell me I drew it wrong.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "grantItem": {
+            "target": {
+              "ref": "actor.id"
+            },
+            "item": "dune_walkers_chart",
+            "quantity": 1
+          }
+        },
+        {
+          "setFlag": {
+            "flag": "given:dune_walkers_chart",
+            "value": true
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "glass_sela_chart_thanks",
+          "text": "Thank you.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "glass_sela_chart_kept",
+      "says": [
+        {
+          "text": "“Not the chart,” she says. “Ask me anything off it and I will tell you. The chart stays.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "adjustReputation": {
+            "faction": "the_water_wardens",
+            "amount": -2
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "glass_sela_chart_leave",
+          "text": "Then no.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    }
+  ]
+}

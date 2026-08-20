@@ -1,0 +1,329 @@
+{
+  "id": "deep_bruk_talk",
+  "start": "greet",
+  "nodes": [
+    {
+      "id": "greet",
+      "says": [
+        {
+          "text": "A toll post on a road the guild stopped tolling, three dark lamps above it, and a man sitting under them with a book."
+        },
+        {
+          "text": "“No toll,” he says. “Has not been for two hundred years. I sit here.”"
+        }
+      ],
+      "onEnter": [],
+      "options": [
+        {
+          "id": "deep_bruk_out",
+          "text": "Three lamps out, all by you.",
+          "requires": {
+            "without": {
+              "lore": [
+                "deep_lamps_out"
+              ]
+            }
+          },
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "check": {
+            "skill": "persuasion",
+            "difficulty": {
+              "sub": [
+                13,
+                {
+                  "clamp": [
+                    {
+                      "div": [
+                        {
+                          "ref": "reputation.the_wayfinders",
+                          "else": 0
+                        },
+                        5
+                      ]
+                    },
+                    -6,
+                    6
+                  ]
+                }
+              ]
+            },
+            "onSuccess": "deep_bruk_out_told",
+            "onFailure": "deep_bruk_out_wont"
+          }
+        },
+        {
+          "id": "deep_bruk_hollow",
+          "text": "You are the only person who sits on this road. Does the bridge sound right to you?",
+          "requires": {
+            "without": {
+              "lore": [
+                "deep_bridge_footings"
+              ]
+            }
+          },
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "check": {
+            "skill": "insight",
+            "difficulty": {
+              "sub": [
+                15,
+                {
+                  "clamp": [
+                    {
+                      "div": [
+                        {
+                          "ref": "reputation.the_wayfinders",
+                          "else": 0
+                        },
+                        5
+                      ]
+                    },
+                    -6,
+                    6
+                  ]
+                }
+              ]
+            },
+            "onSuccess": "deep_bruk_hollow_told",
+            "onFailure": "deep_bruk_hollow_wont"
+          }
+        },
+        {
+          "id": "deep_bruk_tally",
+          "text": "The tally. Every year of it.",
+          "requires": {
+            "without": {
+              "items": [
+                "toll_tally"
+              ],
+              "flags": [
+                {
+                  "flag": "given:toll_tally"
+                }
+              ]
+            }
+          },
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "check": {
+            "skill": "persuasion",
+            "difficulty": {
+              "sub": [
+                15,
+                {
+                  "clamp": [
+                    {
+                      "div": [
+                        {
+                          "ref": "reputation.the_wayfinders",
+                          "else": 0
+                        },
+                        5
+                      ]
+                    },
+                    -6,
+                    6
+                  ]
+                }
+              ]
+            },
+            "onSuccess": "deep_bruk_tally_gave",
+            "onFailure": "deep_bruk_tally_kept"
+          }
+        },
+        {
+          "id": "greet_leave",
+          "text": "Nothing.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "deep_bruk_out_told",
+      "says": [
+        {
+          "text": "“All three, and I have sat under them for thirty years.” He does not look up. “They went out one after another, a year apart, and they went out in order going away from me.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "learnLore": {
+            "entry": "deep_lamps_out"
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "deep_bruk_out_on",
+          "text": "Go on.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "deep_bruk_out_wont",
+      "says": [
+        {
+          "text": "“I've said all I mean to,” they say, and go back to what they were doing."
+        }
+      ],
+      "onEnter": [
+        {
+          "adjustReputation": {
+            "faction": "the_wayfinders",
+            "amount": -1
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "deep_bruk_out_drop",
+          "text": "Leave it.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "deep_bruk_hollow_told",
+      "says": [
+        {
+          "text": "“It sounds hollow at the ends.” He says it as a fact about masonry, which is how he has kept it bearable. “Ring what it stands on and it answers. Ring the cliff and it does not. There is a room in each pier and there has been the whole time.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "learnLore": {
+            "entry": "deep_bridge_footings"
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "deep_bruk_hollow_on",
+          "text": "Go on.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "deep_bruk_hollow_wont",
+      "says": [
+        {
+          "text": "“I've said all I mean to,” they say, and go back to what they were doing."
+        }
+      ],
+      "onEnter": [
+        {
+          "adjustReputation": {
+            "faction": "the_wayfinders",
+            "amount": -1
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "deep_bruk_hollow_drop",
+          "text": "Leave it.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "deep_bruk_tally_gave",
+      "says": [
+        {
+          "text": "He hands it over without looking at it. “Three years in a different ink,” he says. “Not my father's hand and not mine. I have never worked out whose, and I have had thirty years of sitting here to work it out in.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "grantItem": {
+            "target": {
+              "ref": "actor.id"
+            },
+            "item": "toll_tally",
+            "quantity": 1
+          }
+        },
+        {
+          "setFlag": {
+            "flag": "given:toll_tally",
+            "value": true
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "deep_bruk_tally_thanks",
+          "text": "Thank you.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "deep_bruk_tally_kept",
+      "says": [
+        {
+          "text": "“It is the post's,” he says. “I am the post.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "adjustReputation": {
+            "faction": "the_wayfinders",
+            "amount": -2
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "deep_bruk_tally_leave",
+          "text": "Then no.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    }
+  ]
+}

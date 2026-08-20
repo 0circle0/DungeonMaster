@@ -1,0 +1,12 @@
+{
+  "id": "the_last_cairn",
+  "name": "The Last Cairn",
+  "description": "Eleven hundred cairns counted from one, for nine hundred years, by people who have never once opened it.",
+  "quests": [
+    "lastcairn_what_the_ice_gave_back",
+    "lastcairn_the_frozen_ship",
+    "lastcairn_under_the_last_cairn",
+    "lastcairn_set_it_or_move_it"
+  ],
+  "isEnding": false
+}

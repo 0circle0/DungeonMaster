@@ -1,0 +1,14 @@
+{
+  "id": "deepwood",
+  "name": "Duskwood",
+  "description": "Trees older than the kingdom, standing over what the kingdom replaced.",
+  "layer": "overworld",
+  "palette": "deepwood",
+  "roomTemplates": [],
+  "encounterTables": [
+    "duskwood_things"
+  ],
+  "lootTables": [],
+  "traps": [],
+  "ambienceKey": "deepwood_ambience"
+}

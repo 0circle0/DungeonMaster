@@ -1,0 +1,11 @@
+{
+  "id": "dusk_green",
+  "name": "The Road Nobody Cut",
+  "description": "Forty yards wide and nine miles straight through a wood that closes any gap in four years, and nothing crosses it at night.",
+  "entries": [
+    "dusk_green_width",
+    "dusk_green_ages",
+    "dusk_green_bridge",
+    "dusk_green_night"
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "id": "milepost_belt",
+  "name": "The Belt off the Milepost",
+  "slot": "belt",
+  "description": "A surveyor's belt with four hundred feet of vault under the stone it was left leaning against.",
+  "kind": "trinket",
+  "value": 2200,
+  "weight": 1,
+  "rarity": "very_rare",
+  "tags": [
+    "fabled",
+    "trial"
+  ],
+  "modifiers": {
+    "guard": 2,
+    "carry": 5
+  },
+  "skillBonuses": {
+    "athletics": 3,
+    "lore": 3,
+    "arcana": 2
+  }
+}

@@ -1,0 +1,34 @@
+{
+  "id": "ember_the_ashfall",
+  "name": "The Ashfall",
+  "description": "Grey drift eight feet deep in the hollows, and it takes a footprint and keeps it for a season.",
+  "biome": "volcanic",
+  "layer": "overworld",
+  "descriptionKey": "ember_the_ashfall_desc",
+  "dangerLevel": 7,
+  "recommendedLevel": 7,
+  "tags": [
+    "ember_reach"
+  ],
+  "map": {
+    "width": "51",
+    "height": "35"
+  },
+  "entryPoint": {
+    "x": 25,
+    "y": 17
+  },
+  "extra": {
+    "role": "wild"
+  },
+  "connections": [
+    {
+      "to": "ember_cinderhold",
+      "travelMinutes": 40
+    },
+    {
+      "to": "ember_obsidian_shelf",
+      "travelMinutes": 45
+    }
+  ]
+}

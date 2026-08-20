@@ -1,0 +1,24 @@
+{
+  "id": "elderhollow_apiary",
+  "name": "The Bee House",
+  "description": "Honey, wax, and mead, and the mead is the reason people come.",
+  "area": "duskwood_elderhollow",
+  "kind": "market",
+  "descriptionKey": "int_store",
+  "travelMinutes": 3,
+  "tags": [
+    "shop"
+  ],
+  "services": [
+    "market"
+  ],
+  "map": {
+    "width": "11",
+    "height": "9",
+    "palette": "int_timber"
+  },
+  "position": {
+    "x": 29,
+    "y": 23
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "id": "ranger",
+  "name": "Ranger",
+  "description": "Between the settlements, where the roads stop being roads.",
+  "hitDie": "1d10",
+  "primaryAttribute": "instinct",
+  "attributeBonuses": {
+    "instinct": 1
+  },
+  "skillProficiencies": [
+    "survival",
+    "nature",
+    "perception",
+    "athletics"
+  ],
+  "saveProficiencies": [
+    "fortitude",
+    "reflex"
+  ],
+  "abilitiesByLevel": {
+    "1": [
+      "strike",
+      "quick_shot",
+      "dodge",
+      "assist",
+      "disengage"
+    ],
+    "2": [
+      "first_aid"
+    ]
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "id": "kings_under_brick_wall",
+  "name": "The Brick at the Third Turn",
+  "description": "Newer than the city, older than the gate, and laid by somebody in a hurry who was nonetheless very good at it.",
+  "kind": "ward",
+  "blockedTextKey": "kings_under_blocked",
+  "staysOpen": true,
+  "onOpen": [
+    {
+      "setFlag": {
+        "flag": "kings_under_open",
+        "value": true
+      }
+    }
+  ],
+  "onBlocked": [],
+  "opensWith": [],
+  "tags": [],
+  "requires": {
+    "items": [
+      {
+        "item": "drain_sheet",
+        "quantity": 1,
+        "consume": false,
+        "equipped": false
+      }
+    ]
+  }
+}

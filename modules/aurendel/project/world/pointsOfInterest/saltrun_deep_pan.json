@@ -1,0 +1,68 @@
+{
+  "id": "saltrun_deep_pan",
+  "name": "The Deep Pan",
+  "description": "They cut down through the salt looking for better grade and came out the bottom of it into a room.",
+  "area": "glasslands_saltrun",
+  "kind": "dungeonEntrance",
+  "descriptionKey": "generic_dungeon_mouth",
+  "travelMinutes": 12,
+  "tags": [
+    "dungeon"
+  ],
+  "dungeon": "glasslands_deep_pan",
+  "position": {
+    "x": 3,
+    "y": 23
+  },
+  "triggers": [
+    {
+      "id": "glass_courses_committed",
+      "mode": "once",
+      "on": "enter",
+      "description": "Standing on the pan floor, knowing what it rings like.",
+      "requires": {
+        "custom": {
+          "gte": [
+            {
+              "ref": "threads.glass_courses.known"
+            },
+            2
+          ]
+        }
+      },
+      "effects": [
+        {
+          "emit": {
+            "event": "startQuest",
+            "data": {
+              "quest": "glass_the_ninth_course"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "hidden": true,
+  "discover": {
+    "skill": "perception",
+    "difficulty": {
+      "max": [
+        8,
+        {
+          "sub": [
+            20,
+            {
+              "mul": [
+                3,
+                {
+                  "ref": "threads.glass_courses.known"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "gate": "glass_pan_floor"
+}

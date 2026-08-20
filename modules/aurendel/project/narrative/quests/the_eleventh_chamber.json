@@ -1,0 +1,102 @@
+{
+  "id": "the_eleventh_chamber",
+  "name": "The Eleventh Chamber",
+  "description": "Ten chambers give a word back four times. The eleventh does not give it back at all, and the far door does not open until something is said correctly.",
+  "autoStart": false,
+  "ordered": true,
+  "tags": [
+    "act3"
+  ],
+  "objectives": [],
+  "stages": [
+    {
+      "id": "the_ten",
+      "name": "The ten that answer",
+      "description": "You stop talking somewhere around the second.",
+      "objectives": [
+        {
+          "id": "reach_echo",
+          "description": "Reach the Echo Halls.",
+          "kind": "reach",
+          "count": 1,
+          "hidden": false,
+          "optional": false,
+          "target": "deeproads_echo_halls"
+        }
+      ]
+    },
+    {
+      "id": "the_eleventh",
+      "name": "The one that does not",
+      "description": "Two keys, and the phrase cut over the tenth door.",
+      "objectives": [
+        {
+          "id": "open_the_ward",
+          "description": "Open the Echo Ward.",
+          "kind": "reach",
+          "count": 1,
+          "hidden": false,
+          "optional": false,
+          "target": "deeproads_echo_ward"
+        }
+      ],
+      "onComplete": [
+        {
+          "setFlag": {
+            "flag": "echo_ward_open",
+            "value": true
+          }
+        }
+      ]
+    }
+  ],
+  "unlocks": [
+    "behind_the_ninth_door"
+  ],
+  "rewards": {
+    "xp": 450,
+    "items": [],
+    "reputation": {}
+  },
+  "requires": {
+    "quests": [
+      {
+        "quest": "lantern_deep",
+        "status": "complete"
+      }
+    ],
+    "description": "two of the three ward-keys",
+    "anyOf": [
+      {
+        "items": [
+          {
+            "item": "grown_key"
+          },
+          {
+            "item": "cast_key"
+          }
+        ]
+      },
+      {
+        "items": [
+          {
+            "item": "grown_key"
+          },
+          {
+            "item": "glass_key"
+          }
+        ]
+      },
+      {
+        "items": [
+          {
+            "item": "cast_key"
+          },
+          {
+            "item": "glass_key"
+          }
+        ]
+      }
+    ]
+  }
+}

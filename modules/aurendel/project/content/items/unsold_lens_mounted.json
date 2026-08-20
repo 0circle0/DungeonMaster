@@ -1,0 +1,17 @@
+{
+  "id": "unsold_lens_mounted",
+  "name": "The Ground Lens, Mounted",
+  "description": "The one the cutters make and do not sell, in a frame somebody made for it a very long time after. Worn, the lines in the glass have ends.",
+  "kind": "armor",
+  "slot": "head",
+  "value": 1300,
+  "weight": 1,
+  "tags": [
+    "fabled"
+  ],
+  "skillBonuses": {
+    "perception": 3,
+    "arcana": 3
+  },
+  "rarity": "very_rare"
+}

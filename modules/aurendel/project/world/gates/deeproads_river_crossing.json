@@ -1,0 +1,13 @@
+{
+  "id": "deeproads_river_crossing",
+  "name": "The Ferry of the Sunless River",
+  "kind": "hazard",
+  "description": "There is a boat. There is a rope. There is nobody to work either and there has not been for some time.",
+  "staysOpen": true,
+  "bypass": {
+    "skill": "athletics",
+    "difficulty": 16,
+    "retryable": true
+  },
+  "blockedTextKey": "deeproads_river_crossing_blocked"
+}

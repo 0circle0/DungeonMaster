@@ -1,0 +1,14 @@
+{
+  "id": "steppe_grazing_blocked",
+  "variants": [
+    {
+      "text": "Somebody's grazing, in season, and somebody is sitting on a horse watching you think about it."
+    },
+    {
+      "text": "\"Eight,\" says the rider. \"For the grass, not for the road. There is no road.\""
+    },
+    {
+      "text": "Nobody owns the steppe. Everybody owns the grazing, and this is theirs until Winnow."
+    }
+  ]
+}

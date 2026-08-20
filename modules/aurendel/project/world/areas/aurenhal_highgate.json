@@ -1,0 +1,41 @@
+{
+  "id": "aurenhal_highgate",
+  "name": "Aurenhal — Highgate",
+  "description": "The upper city: the Kingshold, the Grand Library, and the gate the Kingsroad actually arrives at.",
+  "biome": "urban_stone",
+  "layer": "overworld",
+  "descriptionKey": "aurenhal_highgate_desc",
+  "dangerLevel": 0,
+  "recommendedLevel": 1,
+  "tags": [
+    "kingsvale",
+    "aurenhal",
+    "city"
+  ],
+  "map": {
+    "width": "45",
+    "height": "31"
+  },
+  "entryPoint": {
+    "x": 22,
+    "y": 15
+  },
+  "extra": {
+    "role": "city"
+  },
+  "connections": [
+    {
+      "to": "aurenhal_craftrow",
+      "travelMinutes": 4
+    },
+    {
+      "to": "aurenhal_warrens",
+      "travelMinutes": 6
+    },
+    {
+      "to": "kingsvale_kingsroad_south",
+      "travelMinutes": 25,
+      "gate": "aurenhal_kings_gate"
+    }
+  ]
+}

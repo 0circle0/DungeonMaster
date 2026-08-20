@@ -1,0 +1,14 @@
+{
+  "id": "altar",
+  "name": "Altar",
+  "description": "Stone, worn pale in the middle by hands.",
+  "glyph": "2",
+  "color": "white",
+  "passable": false,
+  "opaque": false,
+  "moveCost": 0,
+  "tags": [
+    "furniture"
+  ],
+  "providesCover": "half"
+}

@@ -1,0 +1,219 @@
+{
+  "id": "thorn_orin_talk",
+  "start": "greet",
+  "nodes": [
+    {
+      "id": "greet",
+      "says": [
+        {
+          "text": "A low taproom smelling of wet reed, and a landlady who has already worked out you are not from here."
+        },
+        {
+          "text": "“Bed's a shilling, ale's a penny, and if you are after the leech-men they drink at the camp.”"
+        }
+      ],
+      "onEnter": [],
+      "options": [
+        {
+          "id": "thorn_orin_none",
+          "text": "Is there anybody living out on the hummocks?",
+          "requires": {
+            "without": {
+              "lore": [
+                "thorn_hermit_none"
+              ]
+            }
+          },
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "check": {
+            "skill": "persuasion",
+            "difficulty": {
+              "sub": [
+                11,
+                {
+                  "clamp": [
+                    {
+                      "div": [
+                        {
+                          "ref": "reputation.the_ferrymen",
+                          "else": 0
+                        },
+                        5
+                      ]
+                    },
+                    -6,
+                    6
+                  ]
+                }
+              ]
+            },
+            "onSuccess": "thorn_orin_none_told",
+            "onFailure": "thorn_orin_none_wont"
+          }
+        },
+        {
+          "id": "thorn_orin_abandoned",
+          "text": "The toll house on the causeway.",
+          "requires": {
+            "without": {
+              "lore": [
+                "thorn_toll_abandoned"
+              ]
+            }
+          },
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "check": {
+            "skill": "persuasion",
+            "difficulty": {
+              "sub": [
+                10,
+                {
+                  "clamp": [
+                    {
+                      "div": [
+                        {
+                          "ref": "reputation.the_ferrymen",
+                          "else": 0
+                        },
+                        5
+                      ]
+                    },
+                    -6,
+                    6
+                  ]
+                }
+              ]
+            },
+            "onSuccess": "thorn_orin_abandoned_told",
+            "onFailure": "thorn_orin_abandoned_wont"
+          }
+        },
+        {
+          "id": "greet_leave",
+          "text": "Nothing.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "thorn_orin_none_told",
+      "says": [
+        {
+          "text": "“There is a hut,” she says, and stops, and starts again. “I know every cutter, thatcher and leech-man between here and Stiltmarket by name. I have known them since they were children.” She puts the cloth down. “There is a fire pit out there that has been used, and I cannot name who uses it, and that has never once been true of anybody else.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "learnLore": {
+            "entry": "thorn_hermit_none"
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "thorn_orin_none_on",
+          "text": "Go on.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "thorn_orin_none_wont",
+      "says": [
+        {
+          "text": "“I've said all I mean to,” they say, and go back to what they were doing."
+        }
+      ],
+      "onEnter": [
+        {
+          "adjustReputation": {
+            "faction": "the_ferrymen",
+            "amount": -1
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "thorn_orin_none_drop",
+          "text": "Leave it.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "thorn_orin_abandoned_told",
+      "says": [
+        {
+          "text": "“Shut two hundred years. The Crown gave it up when the road sank — you cannot toll a road that is under water half the time.” She refills something. “Ask Sarl about the ledger, though. Ask him twice.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "learnLore": {
+            "entry": "thorn_toll_abandoned"
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "thorn_orin_abandoned_on",
+          "text": "Go on.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "thorn_orin_abandoned_wont",
+      "says": [
+        {
+          "text": "“I've said all I mean to,” they say, and go back to what they were doing."
+        }
+      ],
+      "onEnter": [
+        {
+          "adjustReputation": {
+            "faction": "the_ferrymen",
+            "amount": -1
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "thorn_orin_abandoned_drop",
+          "text": "Leave it.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    }
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "id": "skarn_wind_throat",
+  "name": "Past the Clean Margin",
+  "description": "Where the hold's survey stops: a throat the mapping did not measure, in a mountain the hold has measured to the inch.",
+  "kind": "ward",
+  "blockedTextKey": "skarn_wind_blocked",
+  "staysOpen": true,
+  "onOpen": [
+    {
+      "setFlag": {
+        "flag": "skarn_wind_open",
+        "value": true
+      }
+    }
+  ],
+  "onBlocked": [],
+  "opensWith": [],
+  "tags": [],
+  "requires": {
+    "items": [
+      {
+        "item": "stopped_survey",
+        "quantity": 1,
+        "consume": false,
+        "equipped": false
+      }
+    ]
+  }
+}

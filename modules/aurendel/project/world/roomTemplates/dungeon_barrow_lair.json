@@ -1,0 +1,16 @@
+{
+  "id": "dungeon_barrow_lair",
+  "name": "Barrow Den",
+  "descriptionKey": "dungeon_barrow_lair_desc",
+  "weight": 2,
+  "minExits": 1,
+  "maxExits": 3,
+  "encounterChance": 0.4,
+  "trapChance": 0.05,
+  "lootChance": 0.3,
+  "tags": [
+    "dungeon_barrow",
+    "lair"
+  ],
+  "role": "lair"
+}

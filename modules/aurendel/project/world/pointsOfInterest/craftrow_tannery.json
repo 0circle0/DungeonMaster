@@ -1,0 +1,24 @@
+{
+  "id": "craftrow_tannery",
+  "name": "The Tanyard",
+  "description": "Downwind of everything, by law, and still not far enough.",
+  "area": "aurenhal_craftrow",
+  "kind": "market",
+  "descriptionKey": "int_workshop",
+  "travelMinutes": 4,
+  "tags": [
+    "shop"
+  ],
+  "position": {
+    "x": 6,
+    "y": 26
+  },
+  "services": [
+    "market"
+  ],
+  "map": {
+    "width": "11",
+    "height": "9",
+    "palette": "int_shop"
+  }
+}

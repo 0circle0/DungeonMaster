@@ -1,0 +1,57 @@
+{
+  "id": "quarry_thing",
+  "name": "What the Fine Stone Was Cut For",
+  "description": "Eleven years of the best stone in the Kingsvale going south at night, and something at the bottom of the hole it came out of.",
+  "level": 4,
+  "xp": 220,
+  "attributes": {
+    "might": 15,
+    "agility": 11,
+    "endurance": 15,
+    "intellect": 8,
+    "instinct": 12,
+    "presence": 9
+  },
+  "abilities": [
+    "stone_fist",
+    "rend"
+  ],
+  "behaviour": [
+    {
+      "priority": 0,
+      "use": "stone_fist"
+    }
+  ],
+  "faction": "the_unsealed",
+  "creatureType": "undead",
+  "size": "medium",
+  "descriptors": [
+    "a dust-white",
+    "a heavy"
+  ],
+  "conditionalLoot": [],
+  "loot": "kings_quarry_hoard",
+  "conditionImmunities": [
+    "prone",
+    "frightened"
+  ],
+  "resourceOverrides": {
+    "hp": 38
+  },
+  "temperament": {
+    "roamRadius": 12,
+    "investigateRadius": 40,
+    "leashRadius": 60,
+    "wanderChance": 0.1,
+    "disengageTurns": 1,
+    "speeds": {
+      "wander": 0.5,
+      "investigate": 0.5
+    },
+    "investigates": [
+      "sight",
+      "hearing",
+      "smell"
+    ]
+  }
+}

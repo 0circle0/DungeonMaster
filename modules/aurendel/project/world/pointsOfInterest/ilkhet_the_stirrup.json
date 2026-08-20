@@ -1,0 +1,24 @@
+{
+  "id": "ilkhet_the_stirrup",
+  "name": "The Stirrup",
+  "description": "Timber, which is a statement, and it is the only timber building for ninety miles.",
+  "area": "steppe_ilkhet",
+  "kind": "settlement",
+  "descriptionKey": "int_inn",
+  "travelMinutes": 3,
+  "tags": [
+    "inn"
+  ],
+  "services": [
+    "inn"
+  ],
+  "map": {
+    "width": "15",
+    "height": "11",
+    "palette": "int_timber"
+  },
+  "position": {
+    "x": 20,
+    "y": 23
+  }
+}

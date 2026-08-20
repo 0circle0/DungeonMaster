@@ -1,0 +1,43 @@
+{
+  "id": "arcane_bolt",
+  "name": "Arcane Bolt",
+  "description": "A splinter of will, thrown.",
+  "actionType": "action",
+  "targeting": "single",
+  "range": 60,
+  "spellLevel": 1,
+  "components": [
+    "verbal",
+    "somatic"
+  ],
+  "attack": {
+    "stat": "intellect",
+    "against": "guard"
+  },
+  "onUse": [
+    {
+      "damage": {
+        "target": {
+          "ref": "target.id"
+        },
+        "amount": {
+          "roll": "2d6"
+        },
+        "damageType": "fire"
+      }
+    }
+  ],
+  "upcast": [
+    {
+      "damage": {
+        "target": {
+          "ref": "target.id"
+        },
+        "amount": {
+          "roll": "1d6"
+        },
+        "damageType": "fire"
+      }
+    }
+  ]
+}

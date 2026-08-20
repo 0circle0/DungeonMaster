@@ -1,0 +1,219 @@
+{
+  "id": "coast_orsa_talk",
+  "start": "greet",
+  "nodes": [
+    {
+      "id": "greet",
+      "says": [
+        {
+          "text": "Eleven boats up the shingle above the tide line, and a woman going over the seams of the nearest one on her knees."
+        },
+        {
+          "text": "“If you are buying fish it is up the beach. If you are asking about the water, ask.”"
+        }
+      ],
+      "onEnter": [],
+      "options": [
+        {
+          "id": "coast_orsa_correct",
+          "text": "Do you change course off the head at night?",
+          "requires": {
+            "without": {
+              "lore": [
+                "coast_watch_correct"
+              ]
+            }
+          },
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "check": {
+            "skill": "persuasion",
+            "difficulty": {
+              "sub": [
+                11,
+                {
+                  "clamp": [
+                    {
+                      "div": [
+                        {
+                          "ref": "reputation.the_salvors",
+                          "else": 0
+                        },
+                        5
+                      ]
+                    },
+                    -6,
+                    6
+                  ]
+                }
+              ]
+            },
+            "onSuccess": "coast_orsa_correct_told",
+            "onFailure": "coast_orsa_correct_wont"
+          }
+        },
+        {
+          "id": "coast_orsa_pond",
+          "text": "The standing water on top of the downs.",
+          "requires": {
+            "without": {
+              "lore": [
+                "coast_horse_pond"
+              ]
+            }
+          },
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "check": {
+            "skill": "insight",
+            "difficulty": {
+              "sub": [
+                13,
+                {
+                  "clamp": [
+                    {
+                      "div": [
+                        {
+                          "ref": "reputation.the_salvors",
+                          "else": 0
+                        },
+                        5
+                      ]
+                    },
+                    -6,
+                    6
+                  ]
+                }
+              ]
+            },
+            "onSuccess": "coast_orsa_pond_told",
+            "onFailure": "coast_orsa_pond_wont"
+          }
+        },
+        {
+          "id": "greet_leave",
+          "text": "Nothing.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "coast_orsa_correct_told",
+      "says": [
+        {
+          "text": "“Two points to starboard.” Immediately, without thinking. Then she hears herself. “Everybody does. My father did. I have never asked him what for and he is dead now.” She sits back on her heels. “There is nothing there to clear. I have sounded it. There is nothing there.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "learnLore": {
+            "entry": "coast_watch_correct"
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "coast_orsa_correct_on",
+          "text": "Go on.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "coast_orsa_correct_wont",
+      "says": [
+        {
+          "text": "“I've said all I mean to,” they say, and go back to what they were doing."
+        }
+      ],
+      "onEnter": [
+        {
+          "adjustReputation": {
+            "faction": "the_salvors",
+            "amount": -1
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "coast_orsa_correct_drop",
+          "text": "Leave it.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "coast_orsa_pond_told",
+      "says": [
+        {
+          "text": "“Never dry.” She is definite. “Two summers ago the wells went at Thrift and the beasts were being walked four miles and that water was where it always is.” A grin with no humour in it. “On chalk. On the *top* of chalk. Somebody made that, and it was not this century.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "learnLore": {
+            "entry": "coast_horse_pond"
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "coast_orsa_pond_on",
+          "text": "Go on.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "coast_orsa_pond_wont",
+      "says": [
+        {
+          "text": "“I've said all I mean to,” they say, and go back to what they were doing."
+        }
+      ],
+      "onEnter": [
+        {
+          "adjustReputation": {
+            "faction": "the_salvors",
+            "amount": -1
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "coast_orsa_pond_drop",
+          "text": "Leave it.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    }
+  ]
+}

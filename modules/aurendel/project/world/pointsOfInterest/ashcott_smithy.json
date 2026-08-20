@@ -1,0 +1,24 @@
+{
+  "id": "ashcott_smithy",
+  "name": "Ashcott Forge",
+  "description": "Shears, mostly, and the mending of shears.",
+  "area": "kingsvale_ashcott",
+  "kind": "market",
+  "descriptionKey": "int_smithy",
+  "travelMinutes": 2,
+  "tags": [
+    "shop"
+  ],
+  "position": {
+    "x": 20,
+    "y": 8
+  },
+  "services": [
+    "smith"
+  ],
+  "map": {
+    "width": "9",
+    "height": "7",
+    "palette": "int_forge"
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "id": "beds_saved",
+  "name": "Saved the Beds",
+  "faction": "the_pickers",
+  "severity": 15,
+  "memorability": 2.5,
+  "distortion": 0.2
+}

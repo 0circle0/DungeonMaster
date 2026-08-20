@@ -1,0 +1,36 @@
+{
+  "id": "aurenhal_craftrow",
+  "name": "Aurenhal — Craftrow",
+  "description": "Every trade that needs a chimney, arranged along one long street by somebody who was thinking about fire.",
+  "biome": "urban_stone",
+  "layer": "overworld",
+  "descriptionKey": "aurenhal_craftrow_desc",
+  "dangerLevel": 0,
+  "recommendedLevel": 1,
+  "tags": [
+    "kingsvale",
+    "aurenhal",
+    "city"
+  ],
+  "map": {
+    "width": "45",
+    "height": "31"
+  },
+  "entryPoint": {
+    "x": 22,
+    "y": 15
+  },
+  "extra": {
+    "role": "city"
+  },
+  "connections": [
+    {
+      "to": "aurenhal_highgate",
+      "travelMinutes": 4
+    },
+    {
+      "to": "aurenhal_riverside",
+      "travelMinutes": 4
+    }
+  ]
+}

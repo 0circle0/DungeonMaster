@@ -1,0 +1,14 @@
+{
+  "id": "fungus_gallery_the_canopy",
+  "name": "The Canopy",
+  "description": "Forty feet up, a mile across, and bright enough underneath it to read by.",
+  "area": "deeproads_fungus_gallery",
+  "kind": "landmark",
+  "descriptionKey": "fungus_gallery_the_canopy_desc",
+  "travelMinutes": 8,
+  "tags": [],
+  "position": {
+    "x": 3,
+    "y": 3
+  }
+}

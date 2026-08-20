@@ -1,0 +1,10 @@
+{
+  "id": "slowed",
+  "name": "Slowed",
+  "description": "Every movement costs more than it should.",
+  "stacking": "refresh",
+  "defaultDuration": 2,
+  "modifiers": {
+    "initiative": -2
+  }
+}

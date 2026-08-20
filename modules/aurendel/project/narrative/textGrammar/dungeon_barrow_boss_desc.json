@@ -1,0 +1,14 @@
+{
+  "id": "dungeon_barrow_boss_desc",
+  "variants": [
+    {
+      "text": "The end chamber, and the whole barrow was built to have this at the bottom of it."
+    },
+    {
+      "text": "A single slab bench down the centre and everything else arranged around what was on it."
+    },
+    {
+      "text": "The roof here is proper corbelled work and it has held for a thousand years without a crack."
+    }
+  ]
+}

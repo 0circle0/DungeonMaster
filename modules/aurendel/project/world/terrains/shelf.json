@@ -1,0 +1,13 @@
+{
+  "id": "shelf",
+  "name": "Shelving",
+  "description": "Floor to ceiling, and not quite full.",
+  "glyph": "E",
+  "color": "yellow",
+  "passable": false,
+  "opaque": true,
+  "moveCost": 0,
+  "tags": [
+    "furniture"
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "id": "bridge",
+  "name": "Bridge",
+  "description": "A crossing with rails, or without.",
+  "glyph": "b",
+  "color": "yellow",
+  "passable": true,
+  "opaque": false,
+  "moveCost": 1,
+  "tags": [
+    "stone",
+    "built"
+  ],
+  "marks": {
+    "tracks": 0,
+    "smell": 0.6
+  }
+}

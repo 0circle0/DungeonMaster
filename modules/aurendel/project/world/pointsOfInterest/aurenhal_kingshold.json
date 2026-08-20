@@ -1,0 +1,23 @@
+{
+  "id": "aurenhal_kingshold",
+  "name": "The Kingshold",
+  "description": "A castle that began as a river-fort and has been argued with by every monarch since.",
+  "area": "aurenhal_highgate",
+  "kind": "landmark",
+  "descriptionKey": "aurenhal_kingshold_desc",
+  "travelMinutes": 8,
+  "tags": [
+    "castle",
+    "aurenhal"
+  ],
+  "position": {
+    "x": 22,
+    "y": 8
+  },
+  "services": [
+    "guild"
+  ],
+  "map": {
+    "static": "kingshold_hall"
+  }
+}

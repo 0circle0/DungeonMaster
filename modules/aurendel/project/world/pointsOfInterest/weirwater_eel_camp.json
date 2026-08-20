@@ -1,0 +1,21 @@
+{
+  "id": "weirwater_eel_camp",
+  "name": "The Eel Camp",
+  "description": "Half a dozen huts on the bank, occupied in season and left standing the rest of the year.",
+  "area": "kingsvale_weirwater_crossing",
+  "kind": "camp",
+  "descriptionKey": "int_house",
+  "travelMinutes": 15,
+  "tags": [
+    "camp"
+  ],
+  "position": {
+    "x": 38,
+    "y": 22
+  },
+  "map": {
+    "width": "9",
+    "height": "7",
+    "palette": "int_timber"
+  }
+}

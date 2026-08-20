@@ -1,0 +1,192 @@
+{
+  "id": "bonealley_ilv_talk",
+  "start": "greet",
+  "nodes": [
+    {
+      "id": "greet",
+      "says": [
+        {
+          "text": "The room behind the pawnbroker's is very clean and smells of nothing at all, which in the Warrens takes work. \"You are not here to pawn something,\" says Ilv, without putting down the pen."
+        }
+      ],
+      "options": [
+        {
+          "id": "who_are_you",
+          "text": "Who do you copy for?",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "who"
+        },
+        {
+          "id": "leave",
+          "text": "Nothing.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": [
+        {
+          "requires": {
+            "flags": [
+              {
+                "flag": "bonealley_gaoler_down",
+                "equals": true
+              }
+            ],
+            "without": {
+              "flags": [
+                {
+                  "flag": "bonealley_sold_under"
+                },
+                {
+                  "flag": "bonealley_kept_under"
+                }
+              ]
+            }
+          },
+          "goto": "the_offer"
+        }
+      ]
+    },
+    {
+      "id": "who",
+      "says": [
+        {
+          "text": "\"A gallery,\" he says. \"Not the fourth. I am told the fourth does not exist and I have never had cause to check.\""
+        }
+      ],
+      "options": [
+        {
+          "id": "back",
+          "text": "Hm.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "greet"
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": []
+    },
+    {
+      "id": "the_offer",
+      "says": [
+        {
+          "text": "He puts the pen down and folds his hands, which he has clearly practised. \"You have been under the gaol. You will have the guild's map or enough of it to redraw. I am authorised to be generous and I would rather not have to explain how generous.\""
+        },
+        {
+          "text": "\"Understand what you would be selling,\" he adds. \"Not a map. Four hundred years of somebody else's only advantage.\""
+        }
+      ],
+      "options": [
+        {
+          "id": "sell",
+          "text": "Name the figure.",
+          "effects": [
+            {
+              "setFlag": {
+                "flag": "bonealley_sold_under",
+                "value": true
+              }
+            },
+            {
+              "emit": {
+                "event": "deed",
+                "data": {
+                  "kind": "under_sold"
+                }
+              }
+            },
+            {
+              "grantItem": {
+                "target": {
+                  "ref": "actor.id"
+                },
+                "item": "old_coin",
+                "quantity": 25
+              }
+            }
+          ],
+          "onceOnly": true,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "sold"
+        },
+        {
+          "id": "refuse",
+          "text": "It isn't mine to sell.",
+          "effects": [
+            {
+              "setFlag": {
+                "flag": "bonealley_kept_under",
+                "value": true
+              }
+            },
+            {
+              "emit": {
+                "event": "deed",
+                "data": {
+                  "kind": "under_kept"
+                }
+              }
+            }
+          ],
+          "onceOnly": true,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "refused"
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": []
+    },
+    {
+      "id": "sold",
+      "says": [
+        {
+          "text": "He counts it out in old coin, which is what you use when you do not want a mint mark on the transaction, and he does not look up once while he does it."
+        }
+      ],
+      "options": [
+        {
+          "id": "leave",
+          "text": "Done.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": [],
+      "remembers": "under_sold"
+    },
+    {
+      "id": "refused",
+      "says": [
+        {
+          "text": "\"No,\" he agrees, and picks the pen back up. \"It is hers. I did say that part out loud, and you will notice I did not have to.\""
+        }
+      ],
+      "options": [
+        {
+          "id": "leave",
+          "text": "Goodbye.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": [],
+      "remembers": "under_kept"
+    }
+  ]
+}

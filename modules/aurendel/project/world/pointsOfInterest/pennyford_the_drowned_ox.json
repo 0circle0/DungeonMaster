@@ -1,0 +1,24 @@
+{
+  "id": "pennyford_the_drowned_ox",
+  "name": "The Drowned Ox",
+  "description": "Named after an incident the landlord will describe at length.",
+  "area": "kingsvale_pennyford",
+  "kind": "settlement",
+  "descriptionKey": "int_inn",
+  "travelMinutes": 2,
+  "tags": [
+    "inn"
+  ],
+  "position": {
+    "x": 12,
+    "y": 14
+  },
+  "services": [
+    "inn"
+  ],
+  "map": {
+    "width": "11",
+    "height": "9",
+    "palette": "int_timber"
+  }
+}

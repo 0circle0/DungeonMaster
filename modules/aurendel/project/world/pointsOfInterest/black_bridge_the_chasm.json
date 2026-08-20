@@ -1,0 +1,29 @@
+{
+  "id": "black_bridge_the_chasm",
+  "name": "The Chasm",
+  "description": "You can drop a lamp down it and watch it for a very long time.",
+  "area": "deeproads_black_bridge",
+  "kind": "landmark",
+  "descriptionKey": "generic_landmark",
+  "travelMinutes": 6,
+  "tags": [],
+  "position": {
+    "x": 14,
+    "y": 3
+  },
+  "triggers": [
+    {
+      "id": "deep_found_chasm",
+      "mode": "once",
+      "on": "enter",
+      "description": "Four hundred years of dropped lights and no bottom.",
+      "effects": [
+        {
+          "learnLore": {
+            "entry": "deep_bridge_bottom"
+          }
+        }
+      ]
+    }
+  ]
+}

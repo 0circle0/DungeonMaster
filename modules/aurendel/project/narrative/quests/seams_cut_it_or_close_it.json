@@ -1,0 +1,146 @@
+{
+  "id": "seams_cut_it_or_close_it",
+  "name": "Cut It or Close It",
+  "description": "Four years are missing from the stone and there is room to cut them in, and a hold that has been right for nine hundred years has an opinion about being publicly wrong for four of them.",
+  "autoStart": false,
+  "ordered": false,
+  "tags": [
+    "side",
+    "act3",
+    "seams",
+    "skarnspine"
+  ],
+  "objectives": [
+    {
+      "id": "cut_the_years",
+      "description": "Cut the four missing years into the stone.",
+      "kind": "custom",
+      "count": 1,
+      "hidden": false,
+      "optional": true,
+      "when": {
+        "test": {
+          "ref": "flags.seams_cut"
+        }
+      }
+    },
+    {
+      "id": "close_it_again",
+      "description": "Seal the seams and leave the stone as it is.",
+      "kind": "custom",
+      "count": 1,
+      "hidden": false,
+      "optional": true,
+      "when": {
+        "test": {
+          "ref": "flags.seams_closed"
+        }
+      }
+    },
+    {
+      "id": "settled",
+      "description": "Settle what the Hold admits to.",
+      "kind": "custom",
+      "count": 1,
+      "hidden": false,
+      "optional": false,
+      "when": {
+        "any": [
+          {
+            "test": {
+              "ref": "flags.seams_cut"
+            }
+          },
+          {
+            "test": {
+              "ref": "flags.seams_closed"
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "stages": [],
+  "unlocks": [],
+  "rewards": {
+    "xp": 120,
+    "items": [
+      {
+        "item": "hold_plate",
+        "quantity": 1
+      },
+      {
+        "item": "hold_warrant",
+        "quantity": 1
+      }
+    ],
+    "reputation": {}
+  },
+  "requires": {
+    "quests": [
+      {
+        "quest": "seams_into_the_old_workings",
+        "status": "complete"
+      }
+    ]
+  },
+  "onComplete": [
+    {
+      "if": {
+        "when": {
+          "test": {
+            "ref": "flags.seams_cut"
+          }
+        },
+        "then": [
+          {
+            "emit": {
+              "event": "deed",
+              "data": {
+                "kind": "hold_honoured"
+              }
+            }
+          },
+          {
+            "adjustReputation": {
+              "faction": "karn_dolur",
+              "amount": 30
+            }
+          },
+          {
+            "adjustReputation": {
+              "faction": "the_library",
+              "amount": 12
+            }
+          },
+          {
+            "setFlag": {
+              "flag": "seams_on_the_stone",
+              "value": true
+            }
+          }
+        ],
+        "else": [
+          {
+            "adjustReputation": {
+              "faction": "karn_dolur",
+              "amount": 20
+            }
+          },
+          {
+            "adjustReputation": {
+              "faction": "the_library",
+              "amount": -10
+            }
+          },
+          {
+            "setFlag": {
+              "flag": "seams_sealed",
+              "value": true
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

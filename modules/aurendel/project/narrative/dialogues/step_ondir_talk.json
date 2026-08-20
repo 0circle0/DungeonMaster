@@ -1,0 +1,329 @@
+{
+  "id": "step_ondir_talk",
+  "start": "greet",
+  "nodes": [
+    {
+      "id": "greet",
+      "says": [
+        {
+          "text": "A stone trough, a rope, and somebody sitting where they can see both the water and the road to it."
+        },
+        {
+          "text": "“Drink what you need. Fill what you carry. Do not wash in it.”"
+        }
+      ],
+      "onEnter": [],
+      "options": [
+        {
+          "id": "step_ondir_never",
+          "text": "Has the spring ever failed?",
+          "requires": {
+            "without": {
+              "lore": [
+                "step_water_never"
+              ]
+            }
+          },
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "check": {
+            "skill": "persuasion",
+            "difficulty": {
+              "sub": [
+                13,
+                {
+                  "clamp": [
+                    {
+                      "div": [
+                        {
+                          "ref": "reputation.the_horse_lords",
+                          "else": 0
+                        },
+                        5
+                      ]
+                    },
+                    -6,
+                    6
+                  ]
+                }
+              ]
+            },
+            "onSuccess": "step_ondir_never_told",
+            "onFailure": "step_ondir_never_wont"
+          }
+        },
+        {
+          "id": "step_ondir_shored",
+          "text": "What is the hole beside it?",
+          "requires": {
+            "without": {
+              "lore": [
+                "step_water_shored"
+              ]
+            }
+          },
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "check": {
+            "skill": "persuasion",
+            "difficulty": {
+              "sub": [
+                16,
+                {
+                  "clamp": [
+                    {
+                      "div": [
+                        {
+                          "ref": "reputation.the_horse_lords",
+                          "else": 0
+                        },
+                        5
+                      ]
+                    },
+                    -6,
+                    6
+                  ]
+                }
+              ]
+            },
+            "onSuccess": "step_ondir_shored_told",
+            "onFailure": "step_ondir_shored_wont"
+          }
+        },
+        {
+          "id": "step_ondir_warrant",
+          "text": "Somebody paid for that timber. Do you have the paper?",
+          "requires": {
+            "without": {
+              "items": [
+                "shaft_warrant"
+              ],
+              "flags": [
+                {
+                  "flag": "given:shaft_warrant"
+                }
+              ]
+            }
+          },
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "check": {
+            "skill": "persuasion",
+            "difficulty": {
+              "sub": [
+                15,
+                {
+                  "clamp": [
+                    {
+                      "div": [
+                        {
+                          "ref": "reputation.the_horse_lords",
+                          "else": 0
+                        },
+                        5
+                      ]
+                    },
+                    -6,
+                    6
+                  ]
+                }
+              ]
+            },
+            "onSuccess": "step_ondir_warrant_gave",
+            "onFailure": "step_ondir_warrant_kept"
+          }
+        },
+        {
+          "id": "greet_leave",
+          "text": "Nothing.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "step_ondir_never_told",
+      "says": [
+        {
+          "text": "“Not in the record.” Ondir does not look at you; the watching is the job. “Nine hundred years. Droughts that took the Lines down to half their stock and it ran the same.” A nod south. “Two miles that way nothing has run since before anybody was counting. It stops. Here does not.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "learnLore": {
+            "entry": "step_water_never"
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "step_ondir_never_on",
+          "text": "Go on.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "step_ondir_never_wont",
+      "says": [
+        {
+          "text": "“I've said all I mean to,” they say, and go back to what they were doing."
+        }
+      ],
+      "onEnter": [
+        {
+          "adjustReputation": {
+            "faction": "the_horse_lords",
+            "amount": -1
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "step_ondir_never_drop",
+          "text": "Leave it.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "step_ondir_shored_told",
+      "says": [
+        {
+          "text": "“Shored.” Flatly. “Timber, cut and set, holding a way down. I have been in the first forty feet and the carpentry is better than my house.” Now Ondir looks at you. “There is no timber on this steppe. There is no mine on this steppe. Somebody carted the wood here and paid for it.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "learnLore": {
+            "entry": "step_water_shored"
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "step_ondir_shored_on",
+          "text": "Go on.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "step_ondir_shored_wont",
+      "says": [
+        {
+          "text": "“I've said all I mean to,” they say, and go back to what they were doing."
+        }
+      ],
+      "onEnter": [
+        {
+          "adjustReputation": {
+            "faction": "the_horse_lords",
+            "amount": -1
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "step_ondir_shored_drop",
+          "text": "Leave it.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "step_ondir_warrant_gave",
+      "says": [
+        {
+          "text": "Ondir takes it out of a box that has nothing else in it. “Signed, sealed, and dated in a year we have not used for six hundred,” he says. “It came with the post. Every watcher gets it. Not one of us has ever gone down on the strength of it.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "grantItem": {
+            "target": {
+              "ref": "actor.id"
+            },
+            "item": "shaft_warrant",
+            "quantity": 1
+          }
+        },
+        {
+          "setFlag": {
+            "flag": "given:shaft_warrant",
+            "value": true
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "step_ondir_warrant_thanks",
+          "text": "Thank you.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "step_ondir_warrant_kept",
+      "says": [
+        {
+          "text": "“It comes with the post,” Ondir says, “and I have the post,” and the box shuts."
+        }
+      ],
+      "onEnter": [
+        {
+          "adjustReputation": {
+            "faction": "the_horse_lords",
+            "amount": -3
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "step_ondir_warrant_leave",
+          "text": "Then no.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    }
+  ]
+}

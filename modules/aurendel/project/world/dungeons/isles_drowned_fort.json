@@ -1,0 +1,19 @@
+{
+  "id": "isles_drowned_fort",
+  "name": "The Drowned Fort",
+  "description": "Three levels of casemate, magazine, and cistern under a shoal, reachable for forty minutes either side of low water.",
+  "biome": "dungeon_drowned",
+  "roomCount": "14",
+  "depth": "3",
+  "algorithm": "bsp",
+  "lockedDoorChance": 0,
+  "doorGates": [],
+  "rollEncounters": false,
+  "safeEntrance": true,
+  "bsp": {
+    "minLeaf": 6
+  },
+  "width": "35",
+  "height": "35",
+  "bossTable": "the_drowned_battery"
+}

@@ -1,0 +1,36 @@
+{
+  "id": "drowned_fort_hoard",
+  "entries": [
+    {
+      "weight": 4,
+      "value": {
+        "item": "wreck_brass",
+        "quantity": "2d3"
+      }
+    },
+    {
+      "weight": 3,
+      "value": {
+        "item": "drowned_blade",
+        "quantity": "1"
+      }
+    },
+    {
+      "weight": 2,
+      "value": {
+        "item": "hold_silver",
+        "quantity": "1d3"
+      }
+    },
+    {
+      "weight": 2,
+      "value": {
+        "item": "healing_draught",
+        "quantity": "1d3"
+      }
+    }
+  ],
+  "rolls": "3",
+  "emptyChance": 0,
+  "name": "The Drowned Battery"
+}

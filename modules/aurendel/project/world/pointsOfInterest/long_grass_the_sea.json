@@ -1,0 +1,14 @@
+{
+  "id": "long_grass_the_sea",
+  "name": "The Grass Sea",
+  "description": "Chest-high and unbroken to the horizon, moving in a way that makes it very hard to tell what else is moving in it.",
+  "area": "steppe_the_long_grass",
+  "kind": "landmark",
+  "descriptionKey": "long_grass_the_sea_desc",
+  "travelMinutes": 8,
+  "tags": [],
+  "position": {
+    "x": 3,
+    "y": 3
+  }
+}

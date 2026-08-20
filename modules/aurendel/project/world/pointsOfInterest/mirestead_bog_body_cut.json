@@ -1,0 +1,68 @@
+{
+  "id": "mirestead_bog_body_cut",
+  "name": "The Deep Cutting",
+  "description": "They cut down eleven feet here and found a floor, and stopped cutting.",
+  "area": "moor_mirestead",
+  "kind": "dungeonEntrance",
+  "descriptionKey": "generic_dungeon_mouth",
+  "travelMinutes": 12,
+  "tags": [
+    "dungeon"
+  ],
+  "dungeon": "moor_deep_cutting",
+  "position": {
+    "x": 27,
+    "y": 17
+  },
+  "triggers": [
+    {
+      "id": "moor_cut_committed",
+      "mode": "once",
+      "on": "enter",
+      "description": "Below the band, on the face nobody opens.",
+      "requires": {
+        "custom": {
+          "gte": [
+            {
+              "ref": "threads.moor_cut.known"
+            },
+            2
+          ]
+        }
+      },
+      "effects": [
+        {
+          "emit": {
+            "event": "startQuest",
+            "data": {
+              "quest": "moor_forty_one"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "hidden": true,
+  "discover": {
+    "skill": "perception",
+    "difficulty": {
+      "max": [
+        9,
+        {
+          "sub": [
+            21,
+            {
+              "mul": [
+                3,
+                {
+                  "ref": "threads.moor_cut.known"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "gate": "moor_cut_black_band"
+}

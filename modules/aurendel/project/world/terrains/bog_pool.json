@@ -1,0 +1,22 @@
+{
+  "id": "bog_pool",
+  "name": "Bog Pool",
+  "description": "Black water of no honest depth.",
+  "glyph": "0",
+  "color": "blue",
+  "passable": true,
+  "opaque": false,
+  "moveCost": 4,
+  "tags": [
+    "washed",
+    "water",
+    "hazard"
+  ],
+  "marks": {
+    "tracks": 0,
+    "smell": 0.15
+  },
+  "requiresMode": [
+    "swim"
+  ]
+}

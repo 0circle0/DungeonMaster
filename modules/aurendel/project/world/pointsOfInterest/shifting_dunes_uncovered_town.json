@@ -1,0 +1,36 @@
+{
+  "id": "shifting_dunes_uncovered_town",
+  "name": "The Uncovered Town",
+  "description": "The dune moved off it eleven years ago and will move back over it in about thirty.",
+  "area": "glasslands_shifting_dunes",
+  "kind": "ruin",
+  "descriptionKey": "shifting_dunes_uncovered_town_desc",
+  "travelMinutes": 10,
+  "tags": [
+    "ruin"
+  ],
+  "map": {
+    "width": "15",
+    "height": "11",
+    "palette": "int_mudbrick"
+  },
+  "position": {
+    "x": 14,
+    "y": 3
+  },
+  "triggers": [
+    {
+      "id": "glass_found_town",
+      "mode": "once",
+      "on": "enter",
+      "description": "Which side of each door the bar is on.",
+      "effects": [
+        {
+          "learnLore": {
+            "entry": "glass_town_doors"
+          }
+        }
+      ]
+    }
+  ]
+}

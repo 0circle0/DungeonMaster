@@ -1,0 +1,19 @@
+{
+  "id": "weirwater_toll_house",
+  "name": "The Bridge Toll House",
+  "description": "Collects for the crown on one side and for the bridge fund on the other.",
+  "area": "kingsvale_weirwater_crossing",
+  "kind": "settlement",
+  "descriptionKey": "generic_settlement",
+  "travelMinutes": 3,
+  "tags": [],
+  "position": {
+    "x": 29,
+    "y": 17
+  },
+  "map": {
+    "width": "9",
+    "height": "7",
+    "palette": "int_stone"
+  }
+}

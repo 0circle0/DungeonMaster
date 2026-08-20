@@ -1,0 +1,23 @@
+{
+  "id": "vashta_qal_sunken_bath",
+  "name": "The Sunken Bath",
+  "description": "Built when the water was forty feet higher, and the top three storeys of it are now the bottom three.",
+  "area": "vashta_qal_oasis",
+  "kind": "landmark",
+  "descriptionKey": "vashta_qal_sunken_bath_desc",
+  "travelMinutes": 6,
+  "tags": [
+    "landmark"
+  ],
+  "services": [
+    "temple"
+  ],
+  "gate": "vashta_qal_sunken_bath_door",
+  "map": {
+    "static": "sunken_bath"
+  },
+  "position": {
+    "x": 12,
+    "y": 3
+  }
+}

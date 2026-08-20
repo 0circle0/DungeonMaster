@@ -1,0 +1,14 @@
+{
+  "id": "brazier",
+  "name": "Brazier",
+  "description": "Coals in an iron basket, on a stand.",
+  "glyph": "v",
+  "color": "red",
+  "passable": false,
+  "opaque": false,
+  "moveCost": 0,
+  "tags": [
+    "furniture"
+  ],
+  "lightRadius": 5
+}

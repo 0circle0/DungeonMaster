@@ -1,0 +1,16 @@
+{
+  "id": "nowhere",
+  "name": "Nowhere",
+  "description": "A blank room that exists so the ruleset validates on its own. World modules delete it.",
+  "biome": "nowhere",
+  "dangerLevel": 0,
+  "map": {
+    "width": "9",
+    "height": "9",
+    "palette": "void"
+  },
+  "entryPoint": {
+    "x": 4,
+    "y": 4
+  }
+}

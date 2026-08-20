@@ -1,0 +1,11 @@
+{
+  "id": "strike",
+  "name": "Strike",
+  "description": "A swing with whatever you are holding.",
+  "actionType": "action",
+  "targeting": "single",
+  "attack": {
+    "stat": "might",
+    "against": "guard"
+  }
+}

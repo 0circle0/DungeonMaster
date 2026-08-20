@@ -1,0 +1,68 @@
+{
+  "id": "riverside_undercity_grate",
+  "name": "The Undercity Grate",
+  "description": "Where the city's drains meet the river. It is not locked, which should tell you something.",
+  "area": "aurenhal_riverside",
+  "kind": "dungeonEntrance",
+  "descriptionKey": "riverside_undercity_grate_desc",
+  "travelMinutes": 6,
+  "tags": [
+    "dungeon"
+  ],
+  "position": {
+    "x": 36,
+    "y": 8
+  },
+  "dungeon": "aurenhal_undercity",
+  "triggers": [
+    {
+      "id": "kings_under_committed",
+      "mode": "once",
+      "on": "enter",
+      "description": "Down at the grate, with warm air coming up.",
+      "requires": {
+        "custom": {
+          "gte": [
+            {
+              "ref": "threads.kings_under.known"
+            },
+            2
+          ]
+        }
+      },
+      "effects": [
+        {
+          "emit": {
+            "event": "startQuest",
+            "data": {
+              "quest": "kings_what_goes_under"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "hidden": true,
+  "discover": {
+    "skill": "perception",
+    "difficulty": {
+      "max": [
+        6,
+        {
+          "sub": [
+            18,
+            {
+              "mul": [
+                3,
+                {
+                  "ref": "threads.kings_under.known"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "gate": "kings_under_brick_wall"
+}

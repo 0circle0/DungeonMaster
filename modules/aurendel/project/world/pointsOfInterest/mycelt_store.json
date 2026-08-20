@@ -1,0 +1,24 @@
+{
+  "id": "mycelt_store",
+  "name": "The Spore Store",
+  "description": "Cultures, spawn, and the tools for handling both.",
+  "area": "deeproads_mycelt",
+  "kind": "market",
+  "descriptionKey": "int_store",
+  "travelMinutes": 3,
+  "tags": [
+    "shop"
+  ],
+  "services": [
+    "market"
+  ],
+  "map": {
+    "width": "9",
+    "height": "7",
+    "palette": "int_shop"
+  },
+  "position": {
+    "x": 15,
+    "y": 3
+  }
+}

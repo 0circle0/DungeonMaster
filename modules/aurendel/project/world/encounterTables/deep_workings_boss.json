@@ -1,0 +1,22 @@
+{
+  "id": "deep_workings_boss",
+  "minDepth": 0,
+  "maxDepth": 999,
+  "chance": 1,
+  "emptyWeight": 0,
+  "scalePerLevels": 3,
+  "groups": [
+    {
+      "id": "b",
+      "weight": 1,
+      "hostile": true,
+      "entries": [
+        {
+          "monster": "workings_thing",
+          "count": "1d2",
+          "scaleWithLevel": true
+        }
+      ]
+    }
+  ]
+}

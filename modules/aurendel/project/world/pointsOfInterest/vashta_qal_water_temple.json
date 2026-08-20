@@ -1,0 +1,24 @@
+{
+  "id": "vashta_qal_water_temple",
+  "name": "The Temple of the Spring",
+  "description": "Built over the spring head, and the priesthood and the wardens have been the same people for four hundred years.",
+  "area": "vashta_qal_oasis",
+  "kind": "shrine",
+  "descriptionKey": "int_temple",
+  "travelMinutes": 3,
+  "tags": [
+    "shrine"
+  ],
+  "services": [
+    "temple"
+  ],
+  "map": {
+    "width": "19",
+    "height": "13",
+    "palette": "int_temple"
+  },
+  "position": {
+    "x": 22,
+    "y": 27
+  }
+}

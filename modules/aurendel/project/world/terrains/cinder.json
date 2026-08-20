@@ -1,0 +1,17 @@
+{
+  "id": "cinder",
+  "name": "Cinder",
+  "description": "Black grit still warm from below.",
+  "glyph": "c",
+  "color": "red",
+  "passable": true,
+  "opaque": false,
+  "moveCost": 2,
+  "tags": [
+    "soft"
+  ],
+  "marks": {
+    "tracks": 1,
+    "smell": 1
+  }
+}

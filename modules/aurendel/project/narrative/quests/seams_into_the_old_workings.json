@@ -1,0 +1,76 @@
+{
+  "id": "seams_into_the_old_workings",
+  "name": "Into the Old Workings",
+  "description": "Four years with no fee cut, four hundred years ago, in the middle of an unbroken run of nine hundred. The Hold did not charge because the Hold did not open the gate, and it did not open the gate because of what was in the seams behind it.",
+  "autoStart": false,
+  "ordered": true,
+  "tags": [
+    "side",
+    "act3",
+    "seams",
+    "skarnspine"
+  ],
+  "objectives": [],
+  "stages": [
+    {
+      "id": "get_in",
+      "name": "Into the old seams",
+      "description": "Sealed at the ninth level and not sealed well, which for Karn Dolur is the loudest thing in the chain.",
+      "objectives": [
+        {
+          "id": "in_the_seams",
+          "description": "Get into the Old Seams.",
+          "kind": "reach",
+          "count": 1,
+          "hidden": false,
+          "optional": false,
+          "target": "forgetiers_old_seams"
+        }
+      ],
+      "journalKey": "seams_journal_in"
+    },
+    {
+      "id": "what_is_in_them",
+      "name": "What stopped the working",
+      "description": "Karn Dolur stopped working these in the year four hundred and has never written down which year it stopped for.",
+      "objectives": [
+        {
+          "id": "kill_seam",
+          "description": "Put down what is in the old seams.",
+          "kind": "kill",
+          "count": 1,
+          "hidden": false,
+          "optional": false,
+          "target": "seam_thing"
+        }
+      ],
+      "onComplete": [
+        {
+          "setFlag": {
+            "flag": "seams_thing_down",
+            "value": true
+          }
+        }
+      ],
+      "journalKey": "seams_journal_thing"
+    }
+  ],
+  "unlocks": [
+    "seams_cut_it_or_close_it"
+  ],
+  "rewards": {
+    "xp": 160,
+    "items": [],
+    "reputation": {
+      "karn_dolur": 15
+    }
+  },
+  "requires": {
+    "quests": [
+      {
+        "quest": "seams_the_ledger_stone",
+        "status": "complete"
+      }
+    ]
+  }
+}

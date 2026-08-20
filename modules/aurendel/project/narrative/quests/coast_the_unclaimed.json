@@ -1,0 +1,57 @@
+{
+  "id": "coast_the_unclaimed",
+  "name": "One a Year, Unclaimed",
+  "description": "Two hundred years of one entry each October — taken up, never collected — and the fee paid in coin by somebody.",
+  "autoStart": false,
+  "ordered": true,
+  "tags": [
+    "hidden",
+    "silver_coast",
+    "coast_yard"
+  ],
+  "objectives": [
+    {
+      "id": "into_the_yard",
+      "description": "Be in the yard on the night.",
+      "kind": "reach",
+      "count": 1,
+      "hidden": true,
+      "optional": false,
+      "target": "cobbleway_pound"
+    },
+    {
+      "id": "open_the_face",
+      "description": "Open the wall that was here first.",
+      "kind": "custom",
+      "count": 1,
+      "hidden": true,
+      "optional": false,
+      "when": {
+        "test": {
+          "ref": "flags.coast_yard_open"
+        }
+      }
+    },
+    {
+      "id": "what_is_taken",
+      "description": "Meet what has been taken up every year.",
+      "kind": "kill",
+      "count": 1,
+      "hidden": true,
+      "optional": false,
+      "target": "the_unclaimed"
+    }
+  ],
+  "stages": [],
+  "unlocks": [],
+  "rewards": {
+    "xp": 130,
+    "items": [
+      {
+        "item": "unclaimed_ring",
+        "quantity": 1
+      }
+    ],
+    "reputation": {}
+  }
+}

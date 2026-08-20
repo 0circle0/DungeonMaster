@@ -1,0 +1,24 @@
+{
+  "id": "harbourside_anchor_smith",
+  "name": "The Anchor Smith",
+  "description": "Chain, anchors, and fittings too big for anybody else's fire.",
+  "area": "sarnport_harbourside",
+  "kind": "market",
+  "descriptionKey": "int_smithy",
+  "travelMinutes": 3,
+  "tags": [
+    "shop"
+  ],
+  "services": [
+    "smith"
+  ],
+  "map": {
+    "width": "15",
+    "height": "11",
+    "palette": "int_forge"
+  },
+  "position": {
+    "x": 41,
+    "y": 27
+  }
+}

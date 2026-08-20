@@ -1,0 +1,73 @@
+{
+  "id": "hollow_walker",
+  "name": "Hollow Walker",
+  "description": "Under the Ring, and it has been walking the same circuit for a very long time.",
+  "level": 4,
+  "xp": 160,
+  "attributes": {
+    "might": 15,
+    "agility": 10,
+    "endurance": 15,
+    "intellect": 6,
+    "instinct": 11,
+    "presence": 12
+  },
+  "abilities": [
+    "stone_fist",
+    "grave_chill"
+  ],
+  "behaviour": [
+    {
+      "priority": 0,
+      "use": "stone_fist"
+    }
+  ],
+  "faction": "the_unsealed",
+  "creatureType": "undead",
+  "size": "medium",
+  "descriptors": [
+    "a slow",
+    "a grey"
+  ],
+  "conditionalLoot": [],
+  "loot": "barrow_scraps",
+  "damageInteractions": [
+    {
+      "damageType": "slashing",
+      "multiplier": 0.5,
+      "unless": [
+        "silvered"
+      ]
+    },
+    {
+      "damageType": "piercing",
+      "multiplier": 0.5,
+      "unless": [
+        "silvered"
+      ]
+    }
+  ],
+  "conditionImmunities": [
+    "frightened",
+    "slowed"
+  ],
+  "resourceOverrides": {
+    "hp": 34
+  },
+  "temperament": {
+    "roamRadius": 12,
+    "investigateRadius": 40,
+    "leashRadius": 60,
+    "wanderChance": 0.1,
+    "disengageTurns": 1,
+    "speeds": {
+      "wander": 0.5,
+      "investigate": 0.5
+    },
+    "investigates": [
+      "sight",
+      "hearing",
+      "smell"
+    ]
+  }
+}

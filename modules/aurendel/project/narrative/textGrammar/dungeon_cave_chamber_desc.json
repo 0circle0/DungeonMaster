@@ -1,0 +1,14 @@
+{
+  "id": "dungeon_cave_chamber_desc",
+  "variants": [
+    {
+      "text": "The roof lifts away out of the light and you can hear how big the room is before you can see it."
+    },
+    {
+      "text": "Flowstone down one wall in sheets, and a pool at the bottom of it."
+    },
+    {
+      "text": "Fallen blocks the size of carts, and paths worn between them."
+    }
+  ]
+}

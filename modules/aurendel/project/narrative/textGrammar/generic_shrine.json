@@ -1,0 +1,17 @@
+{
+  "id": "generic_shrine",
+  "variants": [
+    {
+      "text": "A shelf, an offering, and a light somebody keeps going."
+    },
+    {
+      "text": "Small, tended, and older than whatever is standing next to it."
+    },
+    {
+      "text": "Stone worn smooth in the one place where hands go."
+    },
+    {
+      "text": "Somebody was here recently and left something. It is still fresh."
+    }
+  ]
+}

@@ -1,0 +1,34 @@
+{
+  "id": "snowgate_smith_ruvo",
+  "name": "Ruvo, at the Forge",
+  "description": "Works coal that comes up warm and has stopped mentioning it, which took some doing.",
+  "disposition": 3,
+  "gullibility": 0.3,
+  "memorySpan": 200,
+  "offersQuests": [],
+  "caresAbout": [],
+  "reactions": [],
+  "faction": "karn_dolur",
+  "dialogue": "skarn_ruvo_talk",
+  "home": "snowgate_forge",
+  "shop": {
+    "lootTable": "keeper_stock",
+    "buysTags": [
+      "material"
+    ],
+    "priceMultiplier": 1.15
+  },
+  "temperament": {
+    "roamRadius": 0,
+    "wanderChance": 0,
+    "speeds": {
+      "wander": 0
+    },
+    "investigates": [],
+    "notices": [
+      "hostile",
+      "neutral",
+      "ally"
+    ]
+  }
+}

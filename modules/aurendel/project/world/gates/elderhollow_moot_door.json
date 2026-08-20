@@ -1,0 +1,13 @@
+{
+  "id": "elderhollow_moot_door",
+  "name": "The Moot Door",
+  "kind": "story",
+  "description": "The door in the oak. It is a door, in an oak, and it has hinges.",
+  "staysOpen": true,
+  "bypass": {
+    "skill": "persuasion",
+    "difficulty": 15,
+    "retryable": true
+  },
+  "blockedTextKey": "elderhollow_moot_blocked"
+}

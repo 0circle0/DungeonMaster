@@ -1,0 +1,38 @@
+{
+  "id": "moor_heatherlands",
+  "name": "The Heatherlands",
+  "description": "Purple to the skyline in Winnow and brown the rest of the year, and no shelter anywhere in it.",
+  "biome": "moor",
+  "layer": "overworld",
+  "descriptionKey": "moor_heatherlands_desc",
+  "dangerLevel": 4,
+  "recommendedLevel": 4,
+  "tags": [
+    "weeping_moor"
+  ],
+  "map": {
+    "width": "51",
+    "height": "35"
+  },
+  "entryPoint": {
+    "x": 25,
+    "y": 17
+  },
+  "extra": {
+    "role": "wild"
+  },
+  "connections": [
+    {
+      "to": "moor_barrowgate",
+      "travelMinutes": 40
+    },
+    {
+      "to": "moor_nine_sisters",
+      "travelMinutes": 45
+    },
+    {
+      "to": "skarnspine_weirwater_head",
+      "travelMinutes": 220
+    }
+  ]
+}

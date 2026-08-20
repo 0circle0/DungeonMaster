@@ -1,0 +1,8 @@
+{
+  "id": "tiny",
+  "name": "Tiny",
+  "space": 2,
+  "reach": 0,
+  "carryMultiplier": 0.25,
+  "hitDie": "1d4"
+}

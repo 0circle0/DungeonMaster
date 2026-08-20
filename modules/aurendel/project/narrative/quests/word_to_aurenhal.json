@@ -1,0 +1,61 @@
+{
+  "id": "word_to_aurenhal",
+  "name": "Word to Aurenhal",
+  "description": "A barrow-door is a parish matter. Nine of them is not.",
+  "autoStart": false,
+  "ordered": true,
+  "tags": [
+    "act1"
+  ],
+  "objectives": [
+    {
+      "id": "reach_the_city",
+      "description": "Take the road east to Aurenhal.",
+      "kind": "reach",
+      "count": 1,
+      "hidden": false,
+      "optional": false,
+      "target": "aurenhal_highgate"
+    },
+    {
+      "id": "find_an_ear",
+      "description": "Find somebody in the capital who will hear it.",
+      "kind": "custom",
+      "count": 1,
+      "hidden": false,
+      "optional": false,
+      "when": {
+        "any": [
+          {
+            "test": {
+              "ref": "flags.heard_by_crown"
+            }
+          },
+          {
+            "test": {
+              "ref": "flags.heard_by_library"
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "stages": [],
+  "unlocks": [
+    "the_crowns_commission",
+    "the_librarians_errand"
+  ],
+  "rewards": {
+    "xp": 70,
+    "items": [],
+    "reputation": {}
+  },
+  "requires": {
+    "quests": [
+      {
+        "quest": "the_open_door",
+        "status": "complete"
+      }
+    ]
+  }
+}

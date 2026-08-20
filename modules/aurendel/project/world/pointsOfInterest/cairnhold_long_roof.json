@@ -1,0 +1,24 @@
+{
+  "id": "cairnhold_long_roof",
+  "name": "The Long Roof",
+  "description": "Sixteen households under one roof, because sixteen roofs would be sixteen roofs to keep clear.",
+  "area": "frostmere_cairnhold",
+  "kind": "settlement",
+  "descriptionKey": "int_house",
+  "travelMinutes": 3,
+  "tags": [
+    "house"
+  ],
+  "services": [
+    "inn"
+  ],
+  "map": {
+    "width": "19",
+    "height": "13",
+    "palette": "int_timber"
+  },
+  "position": {
+    "x": 9,
+    "y": 3
+  }
+}

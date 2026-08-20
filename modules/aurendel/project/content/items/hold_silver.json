@@ -1,0 +1,11 @@
+{
+  "id": "hold_silver",
+  "name": "Hold Silver",
+  "description": "Struck at Karn Dolur and stamped with a year nobody uses.",
+  "kind": "treasure",
+  "value": 45,
+  "weight": 1,
+  "tags": [
+    "treasure"
+  ]
+}

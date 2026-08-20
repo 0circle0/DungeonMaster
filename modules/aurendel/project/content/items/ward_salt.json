@@ -1,0 +1,25 @@
+{
+  "id": "ward_salt",
+  "name": "Ward Salt",
+  "description": "A handful thrown over a threshold. The Keepers make it and will not say how.",
+  "kind": "consumable",
+  "value": 30,
+  "weight": 0.5,
+  "stackable": true,
+  "consumedOnUse": true,
+  "onUse": [
+    {
+      "applyCondition": {
+        "target": {
+          "ref": "actor.id"
+        },
+        "condition": "emboldened",
+        "duration": 4
+      }
+    }
+  ],
+  "tags": [
+    "consumable",
+    "ward"
+  ]
+}

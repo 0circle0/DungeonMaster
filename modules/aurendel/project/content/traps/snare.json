@@ -1,0 +1,30 @@
+{
+  "id": "snare",
+  "name": "Snare",
+  "description": "A noose in a run, set by somebody who knew which run.",
+  "detect": {
+    "skill": "survival",
+    "difficulty": 12
+  },
+  "disarm": {
+    "skill": "survival",
+    "difficulty": 11
+  },
+  "onTrigger": [
+    {
+      "damage": {
+        "target": {
+          "ref": "target.id"
+        },
+        "amount": {
+          "roll": "1d6"
+        },
+        "damageType": "piercing"
+      }
+    }
+  ],
+  "reusable": false,
+  "tags": [
+    "trap"
+  ]
+}

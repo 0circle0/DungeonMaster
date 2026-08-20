@@ -1,0 +1,19 @@
+{
+  "id": "elderhollow_green_market",
+  "name": "The Green Market",
+  "description": "Timber, charcoal, honey, hides, and a great deal of arguing about coppice rights.",
+  "area": "duskwood_elderhollow",
+  "kind": "market",
+  "descriptionKey": "generic_market",
+  "travelMinutes": 2,
+  "tags": [
+    "shop"
+  ],
+  "services": [
+    "market"
+  ],
+  "position": {
+    "x": 11,
+    "y": 3
+  }
+}

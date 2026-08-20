@@ -1,0 +1,11 @@
+{
+  "id": "glass_courses",
+  "name": "The Ninth Course",
+  "description": "Eight courses cut, nine weighed, every year for two hundred years, and the ninth does not taste of this sea.",
+  "entries": [
+    "glass_courses_eight",
+    "glass_courses_nine",
+    "glass_courses_taste",
+    "glass_courses_night"
+  ]
+}

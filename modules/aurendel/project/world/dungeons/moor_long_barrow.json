@@ -1,0 +1,22 @@
+{
+  "id": "moor_long_barrow",
+  "name": "The Long Barrow",
+  "description": "Four hundred yards of grave: an entrance passage and forty cists off it, and a chamber at the west end.",
+  "biome": "dungeon_barrow",
+  "roomCount": "15",
+  "depth": "3",
+  "algorithm": "rooms",
+  "lockedDoorChance": 0,
+  "doorGates": [],
+  "rollEncounters": false,
+  "safeEntrance": true,
+  "branchiness": 0.15,
+  "corridorLength": "2d3",
+  "corridor": {
+    "style": "straight",
+    "width": 1
+  },
+  "width": "79",
+  "height": "79",
+  "bossTable": "the_east_end"
+}

@@ -1,0 +1,17 @@
+{
+  "id": "generic_landmark",
+  "variants": [
+    {
+      "text": "The thing everyone gives directions by."
+    },
+    {
+      "text": "Distinctive enough that it has a name, and old enough that nobody remembers who gave it one."
+    },
+    {
+      "text": "It stands out. That is the whole of its job and it does it."
+    },
+    {
+      "text": "You can see it from a long way off, which is presumably why it is here."
+    }
+  ]
+}

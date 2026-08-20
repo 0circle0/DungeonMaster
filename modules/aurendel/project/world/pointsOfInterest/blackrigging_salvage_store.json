@@ -1,0 +1,24 @@
+{
+  "id": "blackrigging_salvage_store",
+  "name": "The Salvage Store",
+  "description": "Sorted by what it came off rather than what it is, which makes perfect sense to everybody here.",
+  "area": "isles_blackrigging",
+  "kind": "market",
+  "descriptionKey": "int_warehouse",
+  "travelMinutes": 3,
+  "tags": [
+    "shop"
+  ],
+  "services": [
+    "market"
+  ],
+  "map": {
+    "width": "19",
+    "height": "13",
+    "palette": "int_shop"
+  },
+  "position": {
+    "x": 37,
+    "y": 23
+  }
+}

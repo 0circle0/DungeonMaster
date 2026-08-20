@@ -1,0 +1,314 @@
+{
+  "id": "moor_sask_talk",
+  "start": "greet",
+  "nodes": [
+    {
+      "id": "greet",
+      "says": [
+        {
+          "text": "A taproom built to be found from a long way off, with the door on the moor side and a lamp in every window of that wall."
+        },
+        {
+          "text": "“Bed, fire, or the fire. Most people want the fire.”"
+        }
+      ],
+      "onEnter": [],
+      "options": [
+        {
+          "id": "moor_sask_twice",
+          "text": "Colder. What do the parish records say about him?",
+          "requires": {
+            "without": {
+              "lore": [
+                "moor_fire_twice"
+              ]
+            }
+          },
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "check": {
+            "skill": "insight",
+            "difficulty": {
+              "sub": [
+                15,
+                {
+                  "clamp": [
+                    {
+                      "div": [
+                        {
+                          "ref": "reputation.the_library",
+                          "else": 0
+                        },
+                        5
+                      ]
+                    },
+                    -6,
+                    6
+                  ]
+                }
+              ]
+            },
+            "onSuccess": "moor_sask_twice_told",
+            "onFailure": "moor_sask_twice_wont"
+          }
+        },
+        {
+          "id": "moor_sask_birds",
+          "text": "The birds over the edge.",
+          "requires": {
+            "without": {
+              "lore": [
+                "moor_shoot_birds"
+              ]
+            }
+          },
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "check": {
+            "skill": "persuasion",
+            "difficulty": {
+              "sub": [
+                14,
+                {
+                  "clamp": [
+                    {
+                      "div": [
+                        {
+                          "ref": "reputation.the_library",
+                          "else": 0
+                        },
+                        5
+                      ]
+                    },
+                    -6,
+                    6
+                  ]
+                }
+              ]
+            },
+            "onSuccess": "moor_sask_birds_told",
+            "onFailure": "moor_sask_birds_wont"
+          }
+        },
+        {
+          "id": "moor_sask_buckle",
+          "text": "What do the cutters say comes out of the deep cut?",
+          "requires": {
+            "without": {
+              "lore": [
+                "moor_cut_buckle"
+              ]
+            }
+          },
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "check": {
+            "skill": "insight",
+            "difficulty": {
+              "sub": [
+                15,
+                {
+                  "clamp": [
+                    {
+                      "div": [
+                        {
+                          "ref": "reputation.the_library",
+                          "else": 0
+                        },
+                        5
+                      ]
+                    },
+                    -6,
+                    6
+                  ]
+                }
+              ]
+            },
+            "onSuccess": "moor_sask_buckle_told",
+            "onFailure": "moor_sask_buckle_wont"
+          }
+        },
+        {
+          "id": "greet_leave",
+          "text": "Nothing.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "moor_sask_twice_told",
+      "says": [
+        {
+          "text": "Sask leans on the bar with the air of a man who has been waiting years. “Buried twice,” he says. “Forty year apart. Same hand — the register was kept by one clerk for fifty years, so it *is* the same hand — and the same three words written after the name both times.” He straightens. “I have shown four people. Three said it was a copying error. The fourth was a Library man and he went very quiet.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "learnLore": {
+            "entry": "moor_fire_twice"
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "moor_sask_twice_on",
+          "text": "Go on.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "moor_sask_twice_wont",
+      "says": [
+        {
+          "text": "“I've said all I mean to,” they say, and go back to what they were doing."
+        }
+      ],
+      "onEnter": [
+        {
+          "adjustReputation": {
+            "faction": "the_library",
+            "amount": -1
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "moor_sask_twice_drop",
+          "text": "Leave it.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "moor_sask_birds_told",
+      "says": [
+        {
+          "text": "“One day a year, in their thousands.” He says it without wonder, which is worse. “Out over the drop and down. My father counted them out and counted them back for eleven years because he did not believe the first ten.” A cloth on the bar. “Fewer come back. Every year. Never once the same number.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "learnLore": {
+            "entry": "moor_shoot_birds"
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "moor_sask_birds_on",
+          "text": "Go on.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "moor_sask_birds_wont",
+      "says": [
+        {
+          "text": "“I've said all I mean to,” they say, and go back to what they were doing."
+        }
+      ],
+      "onEnter": [
+        {
+          "adjustReputation": {
+            "faction": "the_library",
+            "amount": -1
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "moor_sask_birds_drop",
+          "text": "Leave it.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "moor_sask_buckle_told",
+      "says": [
+        {
+          "text": "“Forty-one, and I have heard about all forty-one in here twice.” Sask is enjoying himself, and then is not. “The one they will not let go is the buckle. Iron buckle, on a body out of eleven-thousand-year peat.” He turns a glass over. “The Library man said the face must have slumped. Hald carried that one up the boards himself and Hald says the face was clean.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "learnLore": {
+            "entry": "moor_cut_buckle"
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "moor_sask_buckle_on",
+          "text": "Go on.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "moor_sask_buckle_wont",
+      "says": [
+        {
+          "text": "“I've said all I mean to,” they say, and go back to what they were doing."
+        }
+      ],
+      "onEnter": [
+        {
+          "adjustReputation": {
+            "faction": "the_library",
+            "amount": -1
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "moor_sask_buckle_drop",
+          "text": "Leave it.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    }
+  ]
+}

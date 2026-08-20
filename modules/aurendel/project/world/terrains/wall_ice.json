@@ -1,0 +1,10 @@
+{
+  "id": "wall_ice",
+  "name": "Ice Wall",
+  "description": "Glacier, sheared flat, older than any road.",
+  "glyph": "#",
+  "color": "cyan",
+  "passable": false,
+  "opaque": true,
+  "moveCost": 0
+}

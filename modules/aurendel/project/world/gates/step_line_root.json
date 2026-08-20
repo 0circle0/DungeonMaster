@@ -1,0 +1,29 @@
+{
+  "id": "step_line_root",
+  "name": "Under the Marker",
+  "description": "A stone at the middle of eleven miles of trees, and under it the roots go down further than roots go.",
+  "kind": "ward",
+  "blockedTextKey": "step_line_blocked",
+  "staysOpen": true,
+  "onOpen": [
+    {
+      "setFlag": {
+        "flag": "step_line_open",
+        "value": true
+      }
+    }
+  ],
+  "onBlocked": [],
+  "opensWith": [],
+  "tags": [],
+  "requires": {
+    "items": [
+      {
+        "item": "planting_tally",
+        "quantity": 1,
+        "consume": false,
+        "equipped": false
+      }
+    ]
+  }
+}

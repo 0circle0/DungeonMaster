@@ -1,0 +1,58 @@
+{
+  "id": "river_thing",
+  "name": "What Goes Downstream",
+  "description": "The Sunless River goes somewhere and nobody has followed it there.",
+  "level": 10,
+  "xp": 1400,
+  "attributes": {
+    "might": 18,
+    "agility": 16,
+    "endurance": 18,
+    "intellect": 10,
+    "instinct": 16,
+    "presence": 12
+  },
+  "abilities": [
+    "drag_under",
+    "latch",
+    "bleed_white"
+  ],
+  "behaviour": [
+    {
+      "priority": 0,
+      "use": "drag_under"
+    }
+  ],
+  "faction": "the_unsealed",
+  "creatureType": "undead",
+  "size": "medium",
+  "descriptors": [
+    "a pale",
+    "a long"
+  ],
+  "conditionalLoot": [],
+  "loot": "deep_footing_hoard",
+  "conditionImmunities": [
+    "prone",
+    "frightened"
+  ],
+  "resourceOverrides": {
+    "hp": 150
+  },
+  "temperament": {
+    "roamRadius": 12,
+    "investigateRadius": 40,
+    "leashRadius": 60,
+    "wanderChance": 0.1,
+    "disengageTurns": 1,
+    "speeds": {
+      "wander": 0.5,
+      "investigate": 0.5
+    },
+    "investigates": [
+      "sight",
+      "hearing",
+      "smell"
+    ]
+  }
+}

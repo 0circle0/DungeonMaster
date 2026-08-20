@@ -1,0 +1,14 @@
+{
+  "id": "watch_book",
+  "name": "The Snowgate Watch Book",
+  "description": "Every night the road was shut, every night the bell was rung, and eleven nights on which those are not the same list.",
+  "kind": "key",
+  "value": 0,
+  "weight": 0,
+  "tags": [
+    "keepsake"
+  ],
+  "extra": {
+    "heldBy": "bell_watch_orn"
+  }
+}

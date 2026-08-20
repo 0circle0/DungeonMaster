@@ -1,0 +1,36 @@
+{
+  "id": "hummocks_hermit_hummock",
+  "name": "The Hermit's Hummock",
+  "description": "One hut, one garden, one grave, and all three well kept by somebody.",
+  "area": "thornmere_the_hummocks",
+  "kind": "ruin",
+  "descriptionKey": "generic_ruin",
+  "travelMinutes": 8,
+  "tags": [
+    "ruin"
+  ],
+  "map": {
+    "width": "9",
+    "height": "7",
+    "palette": "int_timber"
+  },
+  "position": {
+    "x": 14,
+    "y": 3
+  },
+  "triggers": [
+    {
+      "id": "thorn_found_hut",
+      "mode": "once",
+      "on": "enter",
+      "description": "Which way the hut is built to look.",
+      "effects": [
+        {
+          "learnLore": {
+            "entry": "thorn_hermit_facing"
+          }
+        }
+      ]
+    }
+  ]
+}

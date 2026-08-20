@@ -1,0 +1,14 @@
+{
+  "id": "dungeon_ember_entrance_desc",
+  "variants": [
+    {
+      "text": "The opening breathes out warm air, steadily, and the ground either side of it is bare."
+    },
+    {
+      "text": "Ash has drifted against the doorway and something has walked through the drift."
+    },
+    {
+      "text": "It is warmer three paces in than it is outside, and the difference grows."
+    }
+  ]
+}

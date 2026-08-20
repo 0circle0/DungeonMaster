@@ -1,0 +1,29 @@
+{
+  "id": "sheet_lens",
+  "name": "A Pane out of the Sheet",
+  "description": "A sheet of the glass, worn across the shoulders, still faintly warm. The writing under it reads through from either side.",
+  "kind": "armor",
+  "slot": "cloak",
+  "value": 1400,
+  "weight": 1,
+  "tags": [
+    "fabled"
+  ],
+  "modifiers": {
+    "guard": 2
+  },
+  "skillBonuses": {
+    "lore": 3
+  },
+  "damageInteractions": [
+    {
+      "damageType": "fire",
+      "multiplier": 0.5
+    },
+    {
+      "damageType": "radiant",
+      "multiplier": 0.75
+    }
+  ],
+  "rarity": "very_rare"
+}

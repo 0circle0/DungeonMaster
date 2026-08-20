@@ -1,0 +1,68 @@
+{
+  "id": "chalk_downs_flint_mines",
+  "name": "The Flint Mines",
+  "description": "Shafts sunk into the chalk for flint before anybody here worked iron, and galleries running off every one of them.",
+  "area": "coast_chalk_downs",
+  "kind": "dungeonEntrance",
+  "descriptionKey": "chalk_downs_flint_mines_desc",
+  "travelMinutes": 14,
+  "tags": [
+    "dungeon"
+  ],
+  "dungeon": "chalk_flint_mines",
+  "position": {
+    "x": 36,
+    "y": 3
+  },
+  "triggers": [
+    {
+      "id": "coast_horse_committed",
+      "mode": "once",
+      "on": "enter",
+      "description": "Under the place where the lines cross.",
+      "requires": {
+        "custom": {
+          "gte": [
+            {
+              "ref": "threads.coast_horse.known"
+            },
+            2
+          ]
+        }
+      },
+      "effects": [
+        {
+          "emit": {
+            "event": "startQuest",
+            "data": {
+              "quest": "coast_the_scouring"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "hidden": true,
+  "discover": {
+    "skill": "survival",
+    "difficulty": {
+      "max": [
+        5,
+        {
+          "sub": [
+            17,
+            {
+              "mul": [
+                3,
+                {
+                  "ref": "threads.coast_horse.known"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "gate": "coast_horse_adit"
+}

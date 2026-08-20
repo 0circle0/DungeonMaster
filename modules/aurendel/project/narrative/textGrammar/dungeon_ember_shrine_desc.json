@@ -1,0 +1,14 @@
+{
+  "id": "dungeon_ember_shrine_desc",
+  "variants": [
+    {
+      "text": "A basin cut for something molten, and it has been used."
+    },
+    {
+      "text": "Figures carved facing the heat, which is an unusual choice."
+    },
+    {
+      "text": "The offering shelf is glazed over and there is a shape under the glaze."
+    }
+  ]
+}

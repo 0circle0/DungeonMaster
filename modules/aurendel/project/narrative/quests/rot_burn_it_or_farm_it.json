@@ -1,0 +1,148 @@
+{
+  "id": "rot_burn_it_or_farm_it",
+  "name": "Burn It or Farm It",
+  "description": "What is left of it will regrow, and the pickers have spent two hundred years learning exactly how to make that happen on purpose.",
+  "autoStart": false,
+  "ordered": false,
+  "tags": [
+    "side",
+    "act3",
+    "rot",
+    "deeproads"
+  ],
+  "objectives": [
+    {
+      "id": "burn_it_out",
+      "description": "Burn the gallery out for good.",
+      "kind": "custom",
+      "count": 1,
+      "hidden": false,
+      "optional": true,
+      "when": {
+        "test": {
+          "ref": "flags.rot_burnt"
+        }
+      }
+    },
+    {
+      "id": "farm_it",
+      "description": "Keep a cutting and grow the beds from it.",
+      "kind": "custom",
+      "count": 1,
+      "hidden": false,
+      "optional": true,
+      "when": {
+        "test": {
+          "ref": "flags.rot_farmed"
+        }
+      }
+    },
+    {
+      "id": "settled",
+      "description": "Settle what happens to the beds.",
+      "kind": "custom",
+      "count": 1,
+      "hidden": false,
+      "optional": false,
+      "when": {
+        "any": [
+          {
+            "test": {
+              "ref": "flags.rot_burnt"
+            }
+          },
+          {
+            "test": {
+              "ref": "flags.rot_farmed"
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "stages": [],
+  "unlocks": [],
+  "rewards": {
+    "xp": 130,
+    "items": [
+      {
+        "item": "sporeward_mask",
+        "quantity": 1
+      }
+    ],
+    "reputation": {}
+  },
+  "requires": {
+    "quests": [
+      {
+        "quest": "rot_what_grows_mycelt",
+        "status": "complete"
+      }
+    ]
+  },
+  "onComplete": [
+    {
+      "if": {
+        "when": {
+          "test": {
+            "ref": "flags.rot_farmed"
+          }
+        },
+        "then": [
+          {
+            "emit": {
+              "event": "deed",
+              "data": {
+                "kind": "beds_saved"
+              }
+            }
+          },
+          {
+            "adjustReputation": {
+              "faction": "the_pickers",
+              "amount": 30
+            }
+          },
+          {
+            "adjustReputation": {
+              "faction": "the_wayfinders",
+              "amount": 15
+            }
+          },
+          {
+            "setFlag": {
+              "flag": "rot_beds_kept",
+              "value": true
+            }
+          }
+        ],
+        "else": [
+          {
+            "adjustReputation": {
+              "faction": "the_pickers",
+              "amount": -10
+            }
+          },
+          {
+            "adjustReputation": {
+              "faction": "the_wayfinders",
+              "amount": 8
+            }
+          },
+          {
+            "adjustReputation": {
+              "faction": "karn_dolur",
+              "amount": 10
+            }
+          },
+          {
+            "setFlag": {
+              "flag": "rot_gallery_burnt",
+              "value": true
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

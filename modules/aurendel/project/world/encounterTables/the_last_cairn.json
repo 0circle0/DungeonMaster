@@ -1,0 +1,22 @@
+{
+  "id": "the_last_cairn",
+  "minDepth": 0,
+  "maxDepth": 999,
+  "chance": 1,
+  "emptyWeight": 0,
+  "scalePerLevels": 3,
+  "groups": [
+    {
+      "id": "cairn",
+      "weight": 1,
+      "hostile": true,
+      "entries": [
+        {
+          "monster": "cairn_thing",
+          "count": "1",
+          "scaleWithLevel": false
+        }
+      ]
+    }
+  ]
+}

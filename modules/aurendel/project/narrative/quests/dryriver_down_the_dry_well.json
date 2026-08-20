@@ -1,0 +1,76 @@
+{
+  "id": "dryriver_down_the_dry_well",
+  "name": "Down the Dry Well",
+  "description": "Eleven wagons in a line, pointed at a well that stopped in the same season, and nothing between the two but grass that grows a different colour.",
+  "autoStart": false,
+  "ordered": true,
+  "tags": [
+    "side",
+    "act2",
+    "dryriver",
+    "sunward_steppe"
+  ],
+  "objectives": [],
+  "stages": [
+    {
+      "id": "go_down",
+      "name": "Down the third well",
+      "description": "Ninety feet of dressed stone, dry to the bottom and dry a good way past it.",
+      "objectives": [
+        {
+          "id": "in_the_well",
+          "description": "Get down the dry well.",
+          "kind": "reach",
+          "count": 1,
+          "hidden": false,
+          "optional": false,
+          "target": "three_wells_the_dry_well"
+        }
+      ],
+      "journalKey": "dryriver_journal_well"
+    },
+    {
+      "id": "the_bed",
+      "name": "What is in the bed",
+      "description": "The river went somewhere else in somebody's great-grandfather's time and something stayed in the bed waiting for it.",
+      "objectives": [
+        {
+          "id": "kill_shade",
+          "description": "Put down what is holding the water.",
+          "kind": "kill",
+          "count": 1,
+          "hidden": false,
+          "optional": false,
+          "target": "dust_shade"
+        }
+      ],
+      "onComplete": [
+        {
+          "setFlag": {
+            "flag": "dryriver_shade_down",
+            "value": true
+          }
+        }
+      ],
+      "journalKey": "dryriver_journal_shade"
+    }
+  ],
+  "unlocks": [
+    "dryriver_a_road_or_a_right"
+  ],
+  "rewards": {
+    "xp": 95,
+    "items": [],
+    "reputation": {
+      "the_horse_lords": 12
+    }
+  },
+  "requires": {
+    "quests": [
+      {
+        "quest": "dryriver_the_lost_wagons",
+        "status": "complete"
+      }
+    ]
+  }
+}

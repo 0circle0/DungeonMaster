@@ -1,0 +1,24 @@
+{
+  "id": "glass_quarter_the_green_room",
+  "name": "The Green Room",
+  "description": "The walls are crater glass and the light inside it is a colour you will not find anywhere else.",
+  "area": "vashta_qal_glass_quarter",
+  "kind": "settlement",
+  "descriptionKey": "int_inn",
+  "travelMinutes": 3,
+  "tags": [
+    "inn"
+  ],
+  "services": [
+    "inn"
+  ],
+  "map": {
+    "width": "11",
+    "height": "9",
+    "palette": "int_timber"
+  },
+  "position": {
+    "x": 41,
+    "y": 15
+  }
+}

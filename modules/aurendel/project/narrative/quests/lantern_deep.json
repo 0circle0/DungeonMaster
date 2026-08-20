@@ -1,0 +1,54 @@
+{
+  "id": "lantern_deep",
+  "name": "Lantern Deep",
+  "description": "Nine hundred people in a cavern, and a lamp hanging over them on a chain nobody can account for.",
+  "autoStart": false,
+  "ordered": true,
+  "tags": [
+    "act3"
+  ],
+  "objectives": [
+    {
+      "id": "reach_the_deep",
+      "description": "Reach Lantern Deep.",
+      "kind": "reach",
+      "count": 1,
+      "hidden": false,
+      "optional": false,
+      "target": "deeproads_lantern_deep"
+    },
+    {
+      "id": "hear_sull",
+      "description": "Hear what the Wayfinders know about the Lantern.",
+      "kind": "custom",
+      "count": 1,
+      "hidden": false,
+      "optional": false,
+      "when": {
+        "test": {
+          "ref": "flags.lantern_explained"
+        }
+      }
+    }
+  ],
+  "stages": [],
+  "unlocks": [
+    "the_eleventh_chamber"
+  ],
+  "rewards": {
+    "xp": 350,
+    "items": [],
+    "reputation": {
+      "the_wayfinders": 15
+    }
+  },
+  "giver": "wayfinder_sull",
+  "requires": {
+    "quests": [
+      {
+        "quest": "the_way_below",
+        "status": "complete"
+      }
+    ]
+  }
+}

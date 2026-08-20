@@ -1,0 +1,18 @@
+{
+  "id": "timber_floor",
+  "name": "Timber Floor",
+  "description": "Swept boards.",
+  "glyph": "-",
+  "color": "yellow",
+  "passable": true,
+  "opaque": false,
+  "moveCost": 1,
+  "tags": [
+    "stone",
+    "built"
+  ],
+  "marks": {
+    "tracks": 0,
+    "smell": 0.6
+  }
+}

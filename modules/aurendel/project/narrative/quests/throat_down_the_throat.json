@@ -1,0 +1,76 @@
+{
+  "id": "throat_down_the_throat",
+  "name": "Down the Throat",
+  "description": "Twice in nine hundred years the chain has hung still, and both times the wall says the same thing was in the throat, and both times somebody went down and stopped it.",
+  "autoStart": false,
+  "ordered": true,
+  "tags": [
+    "side",
+    "act2",
+    "throat",
+    "ember_reach"
+  ],
+  "objectives": [],
+  "stages": [
+    {
+      "id": "go_down",
+      "name": "Into the Throat",
+      "description": "Nobody has been down the Throat in four hundred years and the last one who did left the rope.",
+      "objectives": [
+        {
+          "id": "in_the_throat",
+          "description": "Get down into the Throat.",
+          "kind": "reach",
+          "count": 1,
+          "hidden": false,
+          "optional": false,
+          "target": "vent_fields_the_throat"
+        }
+      ],
+      "journalKey": "throat_journal_down"
+    },
+    {
+      "id": "the_thing",
+      "name": "What has been keeping it quiet",
+      "description": "Nine hundred years of the vent going gently, and the reason it went gently.",
+      "objectives": [
+        {
+          "id": "kill_wyrm",
+          "description": "Put down what is in the Throat.",
+          "kind": "kill",
+          "count": 1,
+          "hidden": false,
+          "optional": false,
+          "target": "vent_wyrm"
+        }
+      ],
+      "onComplete": [
+        {
+          "setFlag": {
+            "flag": "throat_wyrm_down",
+            "value": true
+          }
+        }
+      ],
+      "journalKey": "throat_journal_wyrm"
+    }
+  ],
+  "unlocks": [
+    "throat_heed_or_haul"
+  ],
+  "rewards": {
+    "xp": 105,
+    "items": [],
+    "reputation": {
+      "the_vent_readers": 14
+    }
+  },
+  "requires": {
+    "quests": [
+      {
+        "quest": "throat_the_signal_deep",
+        "status": "complete"
+      }
+    ]
+  }
+}

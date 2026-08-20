@@ -1,0 +1,41 @@
+{
+  "id": "steppe_dry_river",
+  "name": "The Dry River",
+  "description": "A bed a quarter of a mile wide with no water in it for eleven months and rather too much in the twelfth.",
+  "biome": "steppe",
+  "layer": "overworld",
+  "descriptionKey": "steppe_dry_river_desc",
+  "dangerLevel": 4,
+  "recommendedLevel": 4,
+  "tags": [
+    "sunward_steppe"
+  ],
+  "map": {
+    "width": "51",
+    "height": "35"
+  },
+  "entryPoint": {
+    "x": 25,
+    "y": 17
+  },
+  "extra": {
+    "role": "wild"
+  },
+  "connections": [
+    {
+      "to": "steppe_the_long_grass",
+      "travelMinutes": 45
+    },
+    {
+      "to": "steppe_tallgrass",
+      "travelMinutes": 40
+    },
+    {
+      "to": "steppe_the_south_reach",
+      "travelMinutes": 55
+    }
+  ],
+  "encounterTables": [
+    "steppe_things"
+  ]
+}

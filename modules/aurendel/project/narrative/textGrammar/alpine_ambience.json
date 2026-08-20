@@ -1,0 +1,20 @@
+{
+  "id": "alpine_ambience",
+  "variants": [
+    {
+      "text": "Scree shifts somewhere above you and takes a while to stop."
+    },
+    {
+      "text": "The air is thin enough that the climb costs more than it looks like it should."
+    },
+    {
+      "text": "Wind comes down the pass in one direction only, and hard."
+    },
+    {
+      "text": "Someone cut steps into this rock, and then nobody used them for a century."
+    },
+    {
+      "text": "Cloud comes over the ridge and the temperature goes with it."
+    }
+  ]
+}

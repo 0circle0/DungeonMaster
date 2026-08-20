@@ -1,0 +1,68 @@
+{
+  "id": "glass_thing",
+  "name": "A Glass Thing",
+  "description": "The crater made it, or something in the crater did.",
+  "level": 6,
+  "xp": 320,
+  "attributes": {
+    "might": 12,
+    "agility": 17,
+    "endurance": 13,
+    "intellect": 12,
+    "instinct": 15,
+    "presence": 10
+  },
+  "abilities": [
+    "glass_shard",
+    "rend"
+  ],
+  "behaviour": [
+    {
+      "priority": 0,
+      "use": "glass_shard"
+    }
+  ],
+  "faction": "the_unsealed",
+  "creatureType": "aberration",
+  "size": "medium",
+  "descriptors": [
+    "a translucent",
+    "a ringing"
+  ],
+  "conditionalLoot": [
+    "silvered_cache"
+  ],
+  "loot": "glass_hoard",
+  "damageInteractions": [
+    {
+      "damageType": "slashing",
+      "multiplier": 0.5
+    },
+    {
+      "damageType": "bludgeoning",
+      "multiplier": 2
+    }
+  ],
+  "resourceOverrides": {
+    "hp": 44
+  },
+  "derivedOverrides": {
+    "guard": 16
+  },
+  "temperament": {
+    "roamRadius": 30,
+    "investigateRadius": 90,
+    "leashRadius": 140,
+    "wanderChance": 0.3,
+    "disengageTurns": 3,
+    "investigates": [
+      "hearing",
+      "smell",
+      "sight"
+    ],
+    "notices": [
+      "hostile",
+      "neutral"
+    ]
+  }
+}

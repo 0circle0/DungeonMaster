@@ -1,0 +1,16 @@
+{
+  "id": "dungeon_sewer_chamber",
+  "name": "Undercity Chamber",
+  "descriptionKey": "dungeon_sewer_chamber_desc",
+  "weight": 5,
+  "minExits": 1,
+  "maxExits": 4,
+  "encounterChance": 0.4,
+  "trapChance": 0.14,
+  "lootChance": 0.24,
+  "tags": [
+    "dungeon_sewer",
+    "chamber"
+  ],
+  "role": "chamber"
+}

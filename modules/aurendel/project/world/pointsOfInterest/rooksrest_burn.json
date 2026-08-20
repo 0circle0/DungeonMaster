@@ -1,0 +1,14 @@
+{
+  "id": "rooksrest_burn",
+  "name": "The Burn",
+  "description": "Six charcoal clamps smouldering under turf, watched day and night for a fortnight at a time.",
+  "area": "duskwood_rooksrest",
+  "kind": "landmark",
+  "descriptionKey": "generic_landmark",
+  "travelMinutes": 3,
+  "tags": [],
+  "position": {
+    "x": 3,
+    "y": 3
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "id": "thornmere_drowned_bell_desc",
+  "variants": [
+    {
+      "text": "A bell tower built directly on top of an older one, which is under it, and under water."
+    },
+    {
+      "text": "Drowned Bell. The old bell is still down there and it is still, occasionally, audible, and the village has stopped explaining this."
+    },
+    {
+      "text": "Cottages rebuilt four times, each time nine inches higher than the last."
+    },
+    {
+      "text": "Six ringers, and they ring the new one every evening without fail."
+    }
+  ]
+}

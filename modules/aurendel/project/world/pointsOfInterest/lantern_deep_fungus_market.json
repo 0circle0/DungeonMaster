@@ -1,0 +1,24 @@
+{
+  "id": "lantern_deep_fungus_market",
+  "name": "The Fungus Market",
+  "description": "Eleven kinds of light, forty kinds of food, and all of it grown within two miles of here.",
+  "area": "deeproads_lantern_deep",
+  "kind": "market",
+  "descriptionKey": "lantern_deep_fungus_market_desc",
+  "travelMinutes": 5,
+  "tags": [
+    "landmark",
+    "shop"
+  ],
+  "services": [
+    "market",
+    "guild"
+  ],
+  "map": {
+    "static": "fungus_market"
+  },
+  "position": {
+    "x": 3,
+    "y": 3
+  }
+}

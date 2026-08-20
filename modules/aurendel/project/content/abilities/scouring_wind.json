@@ -1,0 +1,35 @@
+{
+  "id": "scouring_wind",
+  "name": "Scouring Wind",
+  "description": "Grit off two hundred miles of open grass, at the speed the grass grew used to.",
+  "actionType": "action",
+  "targeting": "allEnemies",
+  "attack": {
+    "stat": "agility",
+    "against": "guard"
+  },
+  "onUse": [
+    {
+      "damage": {
+        "target": {
+          "ref": "target.id"
+        },
+        "amount": {
+          "roll": "2d6"
+        },
+        "damageType": "slashing"
+      }
+    },
+    {
+      "applyCondition": {
+        "target": {
+          "ref": "target.id"
+        },
+        "condition": "blinded",
+        "duration": 2
+      }
+    }
+  ],
+  "range": 20,
+  "cooldown": 4
+}

@@ -1,0 +1,76 @@
+{
+  "id": "beeches_the_deadfall",
+  "name": "The Deadfall",
+  "description": "Whatever was put in that hole was put in it by people who then planted a wood on top, and the wood has been doing the job since. One of them has stopped.",
+  "autoStart": false,
+  "ordered": true,
+  "tags": [
+    "side",
+    "act2",
+    "beeches",
+    "duskwood"
+  ],
+  "objectives": [],
+  "stages": [
+    {
+      "id": "the_ride",
+      "name": "Out along the Thornback Ride",
+      "description": "The narrows, and then the deadfall, which is where the foresters stopped working and did not write down why.",
+      "objectives": [
+        {
+          "id": "at_the_deadfall",
+          "description": "Reach the Deadfall Cave.",
+          "kind": "reach",
+          "count": 1,
+          "hidden": false,
+          "optional": false,
+          "target": "thornback_ride_deadfall_cave"
+        }
+      ],
+      "journalKey": "beeches_journal_ride"
+    },
+    {
+      "id": "the_hollow",
+      "name": "What the beech grew around",
+      "description": "Four hundred years growing round a hole somebody dug, and it has taken the shape of what it grew around.",
+      "objectives": [
+        {
+          "id": "kill_beech",
+          "description": "Put down the Hollow Beech.",
+          "kind": "kill",
+          "count": 1,
+          "hidden": false,
+          "optional": false,
+          "target": "beech_hollow"
+        }
+      ],
+      "onComplete": [
+        {
+          "setFlag": {
+            "flag": "beeches_hollow_down",
+            "value": true
+          }
+        }
+      ],
+      "journalKey": "beeches_journal_hollow"
+    }
+  ],
+  "unlocks": [
+    "beeches_fire_or_graft"
+  ],
+  "rewards": {
+    "xp": 90,
+    "items": [],
+    "reputation": {
+      "the_keepers": 12
+    }
+  },
+  "requires": {
+    "quests": [
+      {
+        "quest": "beeches_the_root_cellar",
+        "status": "complete"
+      }
+    ]
+  }
+}

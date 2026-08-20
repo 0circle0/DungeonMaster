@@ -1,0 +1,17 @@
+{
+  "id": "generic_lair",
+  "variants": [
+    {
+      "text": "Something dens here. The ground says so, and so does the smell."
+    },
+    {
+      "text": "Bones at the entrance, arranged by nothing with hands."
+    },
+    {
+      "text": "A den. Occupied recently enough that the bedding is still flattened."
+    },
+    {
+      "text": "The approach is trodden bare, all of it towards the opening."
+    }
+  ]
+}

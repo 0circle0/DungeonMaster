@@ -1,0 +1,14 @@
+{
+  "id": "dungeon_ember_chamber_desc",
+  "variants": [
+    {
+      "text": "A worked room with a crack across the floor that was not part of the design."
+    },
+    {
+      "text": "Everything here is grey and everything here was once another colour."
+    },
+    {
+      "text": "The ceiling has spalled and come down in sheets, and more of it will."
+    }
+  ]
+}

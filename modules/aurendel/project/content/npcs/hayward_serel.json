@@ -1,0 +1,33 @@
+{
+  "id": "hayward_serel",
+  "name": "Serel, Hayward",
+  "description": "Counts what the village owns, including eleven miles of trees the village does not remember acquiring.",
+  "disposition": 4,
+  "gullibility": 0.3,
+  "memorySpan": 200,
+  "offersQuests": [],
+  "caresAbout": [],
+  "reactions": [],
+  "faction": "the_horse_lords",
+  "dialogue": "step_serel_talk",
+  "home": "tallgrass_house_b",
+  "statblock": "step_hayward",
+  "temperament": {
+    "roamRadius": 24,
+    "investigateRadius": 60,
+    "leashRadius": 90,
+    "wanderChance": 0.3,
+    "speeds": {
+      "wander": 0.5
+    },
+    "investigates": [
+      "sight",
+      "hearing"
+    ],
+    "notices": [
+      "hostile",
+      "neutral",
+      "ally"
+    ]
+  }
+}

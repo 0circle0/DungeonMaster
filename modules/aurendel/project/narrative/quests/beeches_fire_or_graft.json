@@ -1,0 +1,138 @@
+{
+  "id": "beeches_fire_or_graft",
+  "name": "Fire or Graft",
+  "description": "It can be burnt out in an afternoon, and the Greenway is four hundred years old and joined at the root.",
+  "autoStart": false,
+  "ordered": false,
+  "tags": [
+    "side",
+    "act2",
+    "beeches",
+    "duskwood"
+  ],
+  "objectives": [
+    {
+      "id": "graft_it",
+      "description": "Graft the ring back and let it close slowly.",
+      "kind": "custom",
+      "count": 1,
+      "hidden": false,
+      "optional": true,
+      "when": {
+        "test": {
+          "ref": "flags.beeches_grafted"
+        }
+      }
+    },
+    {
+      "id": "burn_it",
+      "description": "Burn the deadfall out.",
+      "kind": "custom",
+      "count": 1,
+      "hidden": false,
+      "optional": true,
+      "when": {
+        "test": {
+          "ref": "flags.beeches_burnt"
+        }
+      }
+    },
+    {
+      "id": "settled",
+      "description": "Settle what happens to the ring.",
+      "kind": "custom",
+      "count": 1,
+      "hidden": false,
+      "optional": false,
+      "when": {
+        "any": [
+          {
+            "test": {
+              "ref": "flags.beeches_grafted"
+            }
+          },
+          {
+            "test": {
+              "ref": "flags.beeches_burnt"
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "stages": [],
+  "unlocks": [],
+  "rewards": {
+    "xp": 70,
+    "items": [
+      {
+        "item": "greenway_charm",
+        "quantity": 1
+      }
+    ],
+    "reputation": {}
+  },
+  "requires": {
+    "quests": [
+      {
+        "quest": "beeches_the_deadfall",
+        "status": "complete"
+      }
+    ]
+  },
+  "onComplete": [
+    {
+      "if": {
+        "when": {
+          "test": {
+            "ref": "flags.beeches_burnt"
+          }
+        },
+        "then": [
+          {
+            "emit": {
+              "event": "deed",
+              "data": {
+                "kind": "ward_broken"
+              }
+            }
+          },
+          {
+            "adjustReputation": {
+              "faction": "the_keepers",
+              "amount": -18
+            }
+          },
+          {
+            "setFlag": {
+              "flag": "beeches_ring_burnt",
+              "value": true
+            }
+          }
+        ],
+        "else": [
+          {
+            "emit": {
+              "event": "deed",
+              "data": {
+                "kind": "ward_restored"
+              }
+            }
+          },
+          {
+            "adjustReputation": {
+              "faction": "the_keepers",
+              "amount": 22
+            }
+          },
+          {
+            "setFlag": {
+              "flag": "beeches_ring_grafted",
+              "value": true
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

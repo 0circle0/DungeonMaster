@@ -1,0 +1,82 @@
+{
+  "id": "salt_thing",
+  "name": "The Ninth Well",
+  "description": "Eight wells were sunk for water. The ninth was sunk for something else and the diggers' camp does not go near it.",
+  "level": 7,
+  "xp": 420,
+  "attributes": {
+    "might": 14,
+    "agility": 13,
+    "endurance": 16,
+    "intellect": 11,
+    "instinct": 14,
+    "presence": 13
+  },
+  "abilities": [
+    "salt_burn",
+    "glass_shard",
+    "wither"
+  ],
+  "behaviour": [
+    {
+      "priority": 10,
+      "use": "salt_burn"
+    },
+    {
+      "priority": 0,
+      "use": "glass_shard"
+    }
+  ],
+  "faction": "the_unsealed",
+  "creatureType": "aberration",
+  "size": "medium",
+  "descriptors": [
+    "a crusted",
+    "a weeping"
+  ],
+  "conditionalLoot": [
+    "silvered_cache"
+  ],
+  "loot": "ninth_well_hoard",
+  "damageInteractions": [
+    {
+      "damageType": "acid",
+      "multiplier": 0
+    },
+    {
+      "damageType": "cold",
+      "multiplier": 1.5
+    },
+    {
+      "damageType": "bludgeoning",
+      "multiplier": 1.5
+    }
+  ],
+  "conditionImmunities": [
+    "poisoned",
+    "bleeding",
+    "blinded"
+  ],
+  "resourceOverrides": {
+    "hp": 70
+  },
+  "derivedOverrides": {
+    "guard": 16
+  },
+  "temperament": {
+    "roamRadius": 30,
+    "investigateRadius": 90,
+    "leashRadius": 140,
+    "wanderChance": 0.3,
+    "disengageTurns": 3,
+    "investigates": [
+      "hearing",
+      "smell",
+      "sight"
+    ],
+    "notices": [
+      "hostile",
+      "neutral"
+    ]
+  }
+}

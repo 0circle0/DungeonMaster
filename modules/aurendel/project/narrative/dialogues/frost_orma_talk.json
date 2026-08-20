@@ -1,0 +1,219 @@
+{
+  "id": "frost_orma_talk",
+  "start": "greet",
+  "nodes": [
+    {
+      "id": "greet",
+      "says": [
+        {
+          "text": "A chapel with room for forty and nobody in it, in a town that buries at sea."
+        },
+        {
+          "text": "“You will be the first this month,” she says, without reproach. “Sit if you like. Nobody will mind.”"
+        }
+      ],
+      "onEnter": [],
+      "options": [
+        {
+          "id": "frost_orma_inland",
+          "text": "The skulls on the Strand. Have you looked at how they lie?",
+          "requires": {
+            "without": {
+              "lore": [
+                "frost_strand_inland"
+              ]
+            }
+          },
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "check": {
+            "skill": "persuasion",
+            "difficulty": {
+              "sub": [
+                11,
+                {
+                  "clamp": [
+                    {
+                      "div": [
+                        {
+                          "ref": "reputation.the_keepers",
+                          "else": 0
+                        },
+                        5
+                      ]
+                    },
+                    -6,
+                    6
+                  ]
+                }
+              ]
+            },
+            "onSuccess": "frost_orma_inland_told",
+            "onFailure": "frost_orma_inland_wont"
+          }
+        },
+        {
+          "id": "frost_orma_older",
+          "text": "There is a marker out on the Glass Ice with no cairn at the end of it.",
+          "requires": {
+            "without": {
+              "lore": [
+                "frost_marker_older"
+              ]
+            }
+          },
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "check": {
+            "skill": "insight",
+            "difficulty": {
+              "sub": [
+                13,
+                {
+                  "clamp": [
+                    {
+                      "div": [
+                        {
+                          "ref": "reputation.the_keepers",
+                          "else": 0
+                        },
+                        5
+                      ]
+                    },
+                    -6,
+                    6
+                  ]
+                }
+              ]
+            },
+            "onSuccess": "frost_orma_older_told",
+            "onFailure": "frost_orma_older_wont"
+          }
+        },
+        {
+          "id": "greet_leave",
+          "text": "Nothing.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "frost_orma_inland_told",
+      "says": [
+        {
+          "text": "“Every one of them facing inland.” She says it the way you say a thing you have said before and been thanked for leaving alone. “A whale that dies at sea arrives however the water leaves it. These have been *arranged*, or they came ashore under their own arrangement, and I do not know which of those I would rather.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "learnLore": {
+            "entry": "frost_strand_inland"
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "frost_orma_inland_on",
+          "text": "Go on.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "frost_orma_inland_wont",
+      "says": [
+        {
+          "text": "“I've said all I mean to,” they say, and go back to what they were doing."
+        }
+      ],
+      "onEnter": [
+        {
+          "adjustReputation": {
+            "faction": "the_keepers",
+            "amount": -1
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "frost_orma_inland_drop",
+          "text": "Leave it.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "frost_orma_older_told",
+      "says": [
+        {
+          "text": "“Cut before the moot kept records.” She nods slowly. “Which is a polite way of saying nobody alive knows who set it, or what they were pointing at, or whether they were pointing at it to find it again or to warn somebody off it.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "learnLore": {
+            "entry": "frost_marker_older"
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "frost_orma_older_on",
+          "text": "Go on.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "frost_orma_older_wont",
+      "says": [
+        {
+          "text": "“I've said all I mean to,” they say, and go back to what they were doing."
+        }
+      ],
+      "onEnter": [
+        {
+          "adjustReputation": {
+            "faction": "the_keepers",
+            "amount": -1
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "frost_orma_older_drop",
+          "text": "Leave it.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    }
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "id": "gullstone_the_stair",
+  "name": "The Gullstone Stair",
+  "description": "Four hundred feet of cut steps up a rock, no rail, and the wind never stops.",
+  "area": "isles_gullstone",
+  "kind": "crossing",
+  "descriptionKey": "generic_crossing",
+  "travelMinutes": 8,
+  "tags": [
+    "crossing"
+  ],
+  "gate": "gullstone_stair",
+  "position": {
+    "x": 3,
+    "y": 3
+  }
+}

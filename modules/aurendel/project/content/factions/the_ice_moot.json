@@ -1,0 +1,32 @@
+{
+  "id": "the_ice_moot",
+  "name": "The Ice Moot",
+  "description": "Cairnhold's half of the Keepers' habit, kept eleven hundred miles from anybody who would call it that. They tend the northern cairns and have opinions about the southern ones.",
+  "initialStanding": 5,
+  "decayPerDay": 0.03,
+  "relations": {
+    "the_keepers": 0.4
+  },
+  "ranks": [
+    {
+      "id": "cairn_breaker",
+      "name": "Cairn-Breaker",
+      "atLeast": -50
+    },
+    {
+      "id": "thawed",
+      "name": "Thawed",
+      "atLeast": -15
+    },
+    {
+      "id": "of_the_moot",
+      "name": "Of the Moot",
+      "atLeast": 15
+    },
+    {
+      "id": "stone_setter",
+      "name": "Stone-Setter",
+      "atLeast": 45
+    }
+  ]
+}

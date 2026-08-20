@@ -1,0 +1,14 @@
+{
+  "id": "dungeon_sewer_boss_desc",
+  "variants": [
+    {
+      "text": "The great cistern: a vaulted tank the size of a market square, with the water black and dead flat."
+    },
+    {
+      "text": "Older stonework than the drains — this was down here before the sewers were cut to meet it."
+    },
+    {
+      "text": "The echo in here comes back four times and each one is quieter and further away."
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "id": "dungeon_delved_shrine_desc",
+  "variants": [
+    {
+      "text": "A niche with a basin under it, and the basin has a channel cut to a drain."
+    },
+    {
+      "text": "Carved work on all four walls, and the carving stops mid-figure on the fourth."
+    },
+    {
+      "text": "Somebody kept a lamp here for a long time. The ceiling says how long."
+    }
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "id": "ember_rhythm_carried",
+  "name": "What Esk Kept",
+  "rolls": "1",
+  "emptyChance": 0,
+  "entries": [
+    {
+      "weight": 1,
+      "value": {
+        "item": "readers_rhythm",
+        "quantity": "1",
+        "unique": true,
+        "requirementScope": "party",
+        "requires": {
+          "without": {
+            "flags": [
+              {
+                "flag": "given:readers_rhythm"
+              }
+            ]
+          }
+        }
+      }
+    }
+  ]
+}

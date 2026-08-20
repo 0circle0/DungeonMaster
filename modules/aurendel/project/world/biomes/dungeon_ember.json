@@ -1,0 +1,27 @@
+{
+  "id": "dungeon_ember",
+  "name": "Burnt Deep",
+  "description": "Worked ground that the mountain took back while it was still in use.",
+  "layer": "underworld",
+  "palette": "dun_ember",
+  "roomTemplates": [
+    "dungeon_ember_boss",
+    "dungeon_ember_chamber",
+    "dungeon_ember_corridor",
+    "dungeon_ember_entrance",
+    "dungeon_ember_lair",
+    "dungeon_ember_shrine",
+    "dungeon_ember_vault"
+  ],
+  "encounterTables": [
+    "ember_things"
+  ],
+  "lootTables": [
+    "ember_scraps"
+  ],
+  "traps": [
+    "falling_block",
+    "flame_jet",
+    "gas_seal"
+  ]
+}

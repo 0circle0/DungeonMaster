@@ -1,0 +1,14 @@
+{
+  "id": "broken_stair_the_stair_desc",
+  "variants": [
+    {
+      "text": "A hundred feet wide, going up, and about a third of the treads are not there any more."
+    },
+    {
+      "text": "It is warm here and warmer further up, which tells you what it is going towards."
+    },
+    {
+      "text": "Where the treads have gone you can see straight into the thickness of the stair, and there are rooms in it."
+    }
+  ]
+}

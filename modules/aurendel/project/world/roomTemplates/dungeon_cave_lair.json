@@ -1,0 +1,16 @@
+{
+  "id": "dungeon_cave_lair",
+  "name": "Cave Den",
+  "descriptionKey": "dungeon_cave_lair_desc",
+  "weight": 2,
+  "minExits": 1,
+  "maxExits": 3,
+  "encounterChance": 0.4,
+  "trapChance": 0.05,
+  "lootChance": 0.18,
+  "tags": [
+    "dungeon_cave",
+    "lair"
+  ],
+  "role": "lair"
+}

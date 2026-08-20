@@ -1,0 +1,21 @@
+{
+  "id": "slagfoot_house_b",
+  "name": "Sulphur Row",
+  "description": "Three cottages built out of the same cooled flow they stand on.",
+  "area": "ember_slagfoot",
+  "kind": "settlement",
+  "descriptionKey": "int_house",
+  "travelMinutes": 2,
+  "tags": [
+    "house"
+  ],
+  "map": {
+    "width": "9",
+    "height": "7",
+    "palette": "int_timber"
+  },
+  "position": {
+    "x": 27,
+    "y": 10
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "id": "mycelt_the_cap",
+  "name": "The Cap",
+  "description": "One room, and everything on the menu was grown within a hundred yards.",
+  "area": "deeproads_mycelt",
+  "kind": "settlement",
+  "descriptionKey": "int_inn",
+  "travelMinutes": 3,
+  "tags": [
+    "inn"
+  ],
+  "services": [
+    "inn"
+  ],
+  "map": {
+    "width": "9",
+    "height": "7",
+    "palette": "int_timber"
+  },
+  "position": {
+    "x": 9,
+    "y": 3
+  }
+}

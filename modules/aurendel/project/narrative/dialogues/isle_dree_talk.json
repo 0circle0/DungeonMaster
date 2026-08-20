@@ -1,0 +1,219 @@
+{
+  "id": "isle_dree_talk",
+  "start": "greet",
+  "nodes": [
+    {
+      "id": "greet",
+      "says": [
+        {
+          "text": "A low room with the window shuttered against spray and a fire that smells of driftwood."
+        },
+        {
+          "text": "“Bed, ale, or the boat times. The boat times are a lie, mind, they come when they come.”"
+        }
+      ],
+      "onEnter": [],
+      "options": [
+        {
+          "id": "isle_dree_quiet",
+          "text": "You hear the Bank from here. What does the cut sound like?",
+          "requires": {
+            "without": {
+              "lore": [
+                "isle_terns_quiet"
+              ]
+            }
+          },
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "check": {
+            "skill": "persuasion",
+            "difficulty": {
+              "sub": [
+                11,
+                {
+                  "clamp": [
+                    {
+                      "div": [
+                        {
+                          "ref": "reputation.the_salvors",
+                          "else": 0
+                        },
+                        5
+                      ]
+                    },
+                    -6,
+                    6
+                  ]
+                }
+              ]
+            },
+            "onSuccess": "isle_dree_quiet_told",
+            "onFailure": "isle_dree_quiet_wont"
+          }
+        },
+        {
+          "id": "isle_dree_warm",
+          "text": "There is ice on everything here and none on the Bank sand.",
+          "requires": {
+            "without": {
+              "lore": [
+                "isle_terns_warm"
+              ]
+            }
+          },
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "check": {
+            "skill": "persuasion",
+            "difficulty": {
+              "sub": [
+                12,
+                {
+                  "clamp": [
+                    {
+                      "div": [
+                        {
+                          "ref": "reputation.the_salvors",
+                          "else": 0
+                        },
+                        5
+                      ]
+                    },
+                    -6,
+                    6
+                  ]
+                }
+              ]
+            },
+            "onSuccess": "isle_dree_warm_told",
+            "onFailure": "isle_dree_warm_wont"
+          }
+        },
+        {
+          "id": "greet_leave",
+          "text": "Nothing.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "isle_dree_quiet_told",
+      "says": [
+        {
+          "text": "“Nothing.” She says it and then makes sure you have got it. “Forty thousand birds on the Bank, and you can hear them here on a still night, and there is a strip in the middle of it that is *silent*. You can hear the shape of the silence. It has a hundred yards of edges.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "learnLore": {
+            "entry": "isle_terns_quiet"
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "isle_dree_quiet_on",
+          "text": "Go on.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "isle_dree_quiet_wont",
+      "says": [
+        {
+          "text": "“I've said all I mean to,” they say, and go back to what they were doing."
+        }
+      ],
+      "onEnter": [
+        {
+          "adjustReputation": {
+            "faction": "the_salvors",
+            "amount": -1
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "isle_dree_quiet_drop",
+          "text": "Leave it.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "isle_dree_warm_told",
+      "says": [
+        {
+          "text": "“One strip of it.” She nods out at the water. “The jetty ices, the hut ices, the water in the hut ices. That strip does not, and it has not in my time or my father's.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "learnLore": {
+            "entry": "isle_terns_warm"
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "isle_dree_warm_on",
+          "text": "Go on.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "isle_dree_warm_wont",
+      "says": [
+        {
+          "text": "“I've said all I mean to,” they say, and go back to what they were doing."
+        }
+      ],
+      "onEnter": [
+        {
+          "adjustReputation": {
+            "faction": "the_salvors",
+            "amount": -1
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "isle_dree_warm_drop",
+          "text": "Leave it.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    }
+  ]
+}

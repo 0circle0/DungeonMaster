@@ -1,0 +1,14 @@
+{
+  "id": "gannet_head_path_blocked",
+  "variants": [
+    {
+      "text": "The path has gone into the sea for a stretch of about fifteen feet, and what is left is turf over nothing."
+    },
+    {
+      "text": "There is a fence. The fence ends where the path does, which is not reassuring."
+    },
+    {
+      "text": "You could get across that. You would want to be very sure about it first."
+    }
+  ]
+}

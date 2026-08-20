@@ -1,0 +1,24 @@
+{
+  "id": "lantern_deep_shrine",
+  "name": "The Shrine of the Second Light",
+  "description": "A lamp kept burning against the day the Great Lantern is lit, which the shrine maintains is coming.",
+  "area": "deeproads_lantern_deep",
+  "kind": "shrine",
+  "descriptionKey": "int_temple",
+  "travelMinutes": 3,
+  "tags": [
+    "shrine"
+  ],
+  "services": [
+    "temple"
+  ],
+  "map": {
+    "width": "15",
+    "height": "11",
+    "palette": "int_temple"
+  },
+  "position": {
+    "x": 29,
+    "y": 23
+  }
+}

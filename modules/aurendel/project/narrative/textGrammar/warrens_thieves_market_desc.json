@@ -1,0 +1,14 @@
+{
+  "id": "warrens_thieves_market_desc",
+  "variants": [
+    {
+      "text": "It is called the Cordwainers' Yard on the ward map, which fools nobody and is not meant to."
+    },
+    {
+      "text": "Goods laid on cloth rather than trestles, so the cloth can be gathered up quickly."
+    },
+    {
+      "text": "Everything here has a history and none of it is written down."
+    }
+  ]
+}

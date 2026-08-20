@@ -1,0 +1,28 @@
+{
+  "id": "gallery_head",
+  "name": "The Helm Out of the Cut",
+  "slot": "head",
+  "description": "Quarry iron beaten over something that was already the right shape, by a mason who never said what for.",
+  "kind": "armor",
+  "value": 2100,
+  "weight": 3,
+  "rarity": "very_rare",
+  "tags": [
+    "fabled",
+    "trial"
+  ],
+  "modifiers": {
+    "guard": 3
+  },
+  "skillBonuses": {
+    "craft": 3,
+    "perception": 3,
+    "resolve": 2
+  },
+  "damageInteractions": [
+    {
+      "damageType": "bludgeoning",
+      "multiplier": 0.5
+    }
+  ]
+}

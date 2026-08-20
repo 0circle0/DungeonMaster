@@ -1,0 +1,68 @@
+{
+  "id": "cypress_maze_the_mound",
+  "name": "The Cypress Mound",
+  "description": "A rise in the middle of the maze that is not a natural rise, with a way into the side of it.",
+  "area": "thornmere_cypress_maze",
+  "kind": "dungeonEntrance",
+  "descriptionKey": "generic_dungeon_mouth",
+  "travelMinutes": 14,
+  "tags": [
+    "dungeon"
+  ],
+  "dungeon": "thornmere_cypress_mound",
+  "position": {
+    "x": 25,
+    "y": 3
+  },
+  "triggers": [
+    {
+      "id": "thorn_knees_committed",
+      "mode": "once",
+      "on": "enter",
+      "description": "Standing where the rows meet.",
+      "requires": {
+        "custom": {
+          "gte": [
+            {
+              "ref": "threads.thorn_knees.known"
+            },
+            2
+          ]
+        }
+      },
+      "effects": [
+        {
+          "emit": {
+            "event": "startQuest",
+            "data": {
+              "quest": "thorn_the_knees"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "hidden": true,
+  "discover": {
+    "skill": "survival",
+    "difficulty": {
+      "max": [
+        9,
+        {
+          "sub": [
+            21,
+            {
+              "mul": [
+                3,
+                {
+                  "ref": "threads.thorn_knees.known"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "gate": "thorn_mound_rows"
+}

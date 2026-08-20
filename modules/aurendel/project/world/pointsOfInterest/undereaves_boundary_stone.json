@@ -1,0 +1,76 @@
+{
+  "id": "undereaves_boundary_stone",
+  "name": "The Boundary Stones",
+  "description": "A line of them, half a mile apart, marking a boundary between two things that no longer exist.",
+  "area": "duskwood_the_undereaves",
+  "kind": "ruin",
+  "descriptionKey": "generic_ruin",
+  "travelMinutes": 8,
+  "tags": [
+    "ruin"
+  ],
+  "map": {
+    "width": "9",
+    "height": "7",
+    "palette": "int_cave"
+  },
+  "position": {
+    "x": 25,
+    "y": 3
+  },
+  "triggers": [
+    {
+      "id": "dusk_ward_committed",
+      "mode": "once",
+      "on": "enter",
+      "description": "At the mark that was cut all the way through.",
+      "requires": {
+        "custom": {
+          "gte": [
+            {
+              "ref": "threads.dusk_ward.known"
+            },
+            2
+          ]
+        }
+      },
+      "effects": [
+        {
+          "emit": {
+            "event": "startQuest",
+            "data": {
+              "quest": "dusk_the_round"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "hidden": true,
+  "discover": {
+    "skill": "perception",
+    "difficulty": {
+      "max": [
+        8,
+        {
+          "sub": [
+            20,
+            {
+              "mul": [
+                3,
+                {
+                  "ref": "threads.dusk_ward.known"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "gate": "dusk_ward_mark",
+  "encounterTables": [
+    "dusk_ward_boss"
+  ],
+  "encounterChance": 1
+}

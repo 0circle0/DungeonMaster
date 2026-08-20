@@ -1,0 +1,28 @@
+{
+  "id": "dungeon_delved",
+  "name": "Delved Hall",
+  "description": "Squared, dressed, and laid out by somebody with a plan and a workforce.",
+  "layer": "underworld",
+  "palette": "dun_delved",
+  "roomTemplates": [
+    "dungeon_delved_boss",
+    "dungeon_delved_chamber",
+    "dungeon_delved_corridor",
+    "dungeon_delved_entrance",
+    "dungeon_delved_lair",
+    "dungeon_delved_shrine",
+    "dungeon_delved_vault"
+  ],
+  "encounterTables": [
+    "delved_things"
+  ],
+  "lootTables": [
+    "deep_scraps"
+  ],
+  "traps": [
+    "alarm_bell",
+    "dart_slab",
+    "falling_block",
+    "scything_blade"
+  ]
+}

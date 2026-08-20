@@ -1,0 +1,35 @@
+{
+  "id": "vent_breath",
+  "name": "Vent Breath",
+  "description": "What the throat has been doing quietly for nine hundred years, done all at once and at you.",
+  "actionType": "action",
+  "targeting": "allEnemies",
+  "attack": {
+    "stat": "endurance",
+    "against": "guard"
+  },
+  "onUse": [
+    {
+      "damage": {
+        "target": {
+          "ref": "target.id"
+        },
+        "amount": {
+          "roll": "2d8"
+        },
+        "damageType": "fire"
+      }
+    },
+    {
+      "applyCondition": {
+        "target": {
+          "ref": "target.id"
+        },
+        "condition": "burning",
+        "duration": 3
+      }
+    }
+  ],
+  "range": 15,
+  "cooldown": 4
+}

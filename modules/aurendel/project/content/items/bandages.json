@@ -1,0 +1,25 @@
+{
+  "id": "bandages",
+  "name": "Bandages",
+  "description": "Clean linen and a firm hand.",
+  "kind": "consumable",
+  "value": 6,
+  "weight": 0.5,
+  "stackable": true,
+  "consumedOnUse": true,
+  "onUse": [
+    {
+      "heal": {
+        "target": {
+          "ref": "actor.id"
+        },
+        "amount": {
+          "roll": "1d6"
+        }
+      }
+    }
+  ],
+  "tags": [
+    "consumable"
+  ]
+}

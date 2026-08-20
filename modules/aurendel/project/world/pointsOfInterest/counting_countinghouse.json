@@ -1,0 +1,22 @@
+{
+  "id": "counting_countinghouse",
+  "name": "The Countinghouse",
+  "description": "The building the district is named for. Three storeys of ledgers and one very good strongroom.",
+  "area": "sarnport_countinghouse",
+  "kind": "landmark",
+  "descriptionKey": "counting_countinghouse_desc",
+  "travelMinutes": 5,
+  "tags": [
+    "landmark"
+  ],
+  "services": [
+    "guild"
+  ],
+  "map": {
+    "static": "countinghouse"
+  },
+  "position": {
+    "x": 31,
+    "y": 3
+  }
+}

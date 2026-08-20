@@ -1,0 +1,11 @@
+{
+  "id": "glass_bath",
+  "name": "The Bath That Is Still Full",
+  "description": "One warm bath in a desert, unmetered in a city that meters everything, and a lens the cutters make every year and will not sell.",
+  "entries": [
+    "glass_bath_metered",
+    "glass_bath_warm",
+    "glass_bath_lens",
+    "glass_bath_down"
+  ]
+}

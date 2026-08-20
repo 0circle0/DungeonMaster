@@ -1,0 +1,69 @@
+{
+  "id": "tern_bank_the_cut",
+  "name": "The Bank Cut",
+  "description": "A winter storm cut the bank through and exposed something that had been under it, and the bank has not closed up again.",
+  "area": "isles_tern_bank",
+  "kind": "dungeonEntrance",
+  "descriptionKey": "generic_dungeon_mouth",
+  "travelMinutes": 12,
+  "tags": [
+    "secret",
+    "dungeon"
+  ],
+  "hidden": true,
+  "discover": {
+    "skill": "perception",
+    "difficulty": {
+      "max": [
+        8,
+        {
+          "sub": [
+            20,
+            {
+              "mul": [
+                3,
+                {
+                  "ref": "threads.isle_terns.known"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "dungeon": "isles_bank_cut",
+  "position": {
+    "x": 25,
+    "y": 3
+  },
+  "triggers": [
+    {
+      "id": "isle_terns_committed",
+      "mode": "once",
+      "on": "enter",
+      "description": "In the quiet part of the Bank.",
+      "requires": {
+        "custom": {
+          "gte": [
+            {
+              "ref": "threads.isle_terns.known"
+            },
+            2
+          ]
+        }
+      },
+      "effects": [
+        {
+          "emit": {
+            "event": "startQuest",
+            "data": {
+              "quest": "isle_what_the_terns_know"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "gate": "isle_cut_sand"
+}

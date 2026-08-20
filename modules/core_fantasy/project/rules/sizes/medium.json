@@ -1,0 +1,8 @@
+{
+  "id": "medium",
+  "name": "Medium",
+  "space": 5,
+  "reach": 5,
+  "carryMultiplier": 1,
+  "hitDie": "1d8"
+}

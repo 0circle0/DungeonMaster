@@ -1,0 +1,219 @@
+{
+  "id": "isle_othe_talk",
+  "start": "greet",
+  "nodes": [
+    {
+      "id": "greet",
+      "says": [
+        {
+          "text": "A forge in a casemate, with a fort's worth of guns outside it and no garrison to fire them."
+        },
+        {
+          "text": "“Iron work, and I will not do locks. Ask at Blackrigging for locks.”"
+        }
+      ],
+      "onEnter": [],
+      "options": [
+        {
+          "id": "isle_othe_iron",
+          "text": "The marker wreck in the Narrows. What is she fastened with?",
+          "requires": {
+            "without": {
+              "lore": [
+                "isle_marker_iron"
+              ]
+            }
+          },
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "check": {
+            "skill": "insight",
+            "difficulty": {
+              "sub": [
+                12,
+                {
+                  "clamp": [
+                    {
+                      "div": [
+                        {
+                          "ref": "reputation.the_salvors",
+                          "else": 0
+                        },
+                        5
+                      ]
+                    },
+                    -6,
+                    6
+                  ]
+                }
+              ]
+            },
+            "onSuccess": "isle_othe_iron_told",
+            "onFailure": "isle_othe_iron_wont"
+          }
+        },
+        {
+          "id": "isle_othe_guns",
+          "text": "The deep wreck went down with her guns run out.",
+          "requires": {
+            "without": {
+              "lore": [
+                "isle_wreck_guns"
+              ]
+            }
+          },
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "check": {
+            "skill": "persuasion",
+            "difficulty": {
+              "sub": [
+                13,
+                {
+                  "clamp": [
+                    {
+                      "div": [
+                        {
+                          "ref": "reputation.the_salvors",
+                          "else": 0
+                        },
+                        5
+                      ]
+                    },
+                    -6,
+                    6
+                  ]
+                }
+              ]
+            },
+            "onSuccess": "isle_othe_guns_told",
+            "onFailure": "isle_othe_guns_wont"
+          }
+        },
+        {
+          "id": "greet_leave",
+          "text": "Nothing.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "isle_othe_iron_told",
+      "says": [
+        {
+          "text": "“Iron.” He puts down the hammer, because this is his subject. “Nobody was iron-fastening hulls when she is supposed to have gone down. Either she is a hundred years younger than the story or somebody was iron-fastening a hundred years before anybody else, and I would like to know which.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "learnLore": {
+            "entry": "isle_marker_iron"
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "isle_othe_iron_on",
+          "text": "Go on.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "isle_othe_iron_wont",
+      "says": [
+        {
+          "text": "“I've said all I mean to,” they say, and go back to what they were doing."
+        }
+      ],
+      "onEnter": [
+        {
+          "adjustReputation": {
+            "faction": "the_salvors",
+            "amount": -1
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "isle_othe_iron_drop",
+          "text": "Leave it.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "isle_othe_guns_told",
+      "says": [
+        {
+          "text": "“Run out and *loaded*.” He is grim about it. “Bren brought a swivel up and it is still charged. A ship that founders houses her guns. A ship with her guns run out was fighting, and there is nothing on that reef to fight.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "learnLore": {
+            "entry": "isle_wreck_guns"
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "isle_othe_guns_on",
+          "text": "Go on.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "isle_othe_guns_wont",
+      "says": [
+        {
+          "text": "“I've said all I mean to,” they say, and go back to what they were doing."
+        }
+      ],
+      "onEnter": [
+        {
+          "adjustReputation": {
+            "faction": "the_salvors",
+            "amount": -1
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "isle_othe_guns_drop",
+          "text": "Leave it.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    }
+  ]
+}

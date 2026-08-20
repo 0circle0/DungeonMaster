@@ -1,0 +1,25 @@
+{
+  "id": "grave_chill",
+  "name": "Grave Chill",
+  "description": "The cold of a sealed place, reaching.",
+  "actionType": "action",
+  "targeting": "single",
+  "attack": {
+    "stat": "presence",
+    "against": "guard"
+  },
+  "onUse": [
+    {
+      "damage": {
+        "target": {
+          "ref": "target.id"
+        },
+        "amount": {
+          "roll": "1d6"
+        },
+        "damageType": "necrotic"
+      }
+    }
+  ],
+  "range": 30
+}

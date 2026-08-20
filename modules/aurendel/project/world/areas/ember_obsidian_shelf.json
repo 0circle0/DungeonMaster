@@ -1,0 +1,41 @@
+{
+  "id": "ember_obsidian_shelf",
+  "name": "The Obsidian Shelf",
+  "description": "Black glass in sheets a mile across, and every edge of it is an edge.",
+  "biome": "volcanic",
+  "layer": "overworld",
+  "descriptionKey": "ember_obsidian_shelf_desc",
+  "dangerLevel": 7,
+  "recommendedLevel": 8,
+  "tags": [
+    "ember_reach"
+  ],
+  "map": {
+    "width": "51",
+    "height": "35"
+  },
+  "entryPoint": {
+    "x": 25,
+    "y": 17
+  },
+  "extra": {
+    "role": "wild"
+  },
+  "connections": [
+    {
+      "to": "ember_the_ashfall",
+      "travelMinutes": 45
+    },
+    {
+      "to": "ember_vent_fields",
+      "travelMinutes": 40
+    },
+    {
+      "to": "deeproads_broken_stair",
+      "travelMinutes": 130
+    }
+  ],
+  "encounterTables": [
+    "ember_things"
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "id": "duskwood_ride_barrow",
+  "name": "The Ride Barrow",
+  "description": "A long barrow astride the Greenway, and the Greenway goes round it, which settles the question of which came first.",
+  "biome": "dungeon_barrow",
+  "roomCount": "7",
+  "depth": "1",
+  "algorithm": "rooms",
+  "lockedDoorChance": 0,
+  "doorGates": [],
+  "rollEncounters": false,
+  "safeEntrance": true,
+  "roomSize": "2d2+3",
+  "width": "57",
+  "height": "57",
+  "corridorLength": "3d3",
+  "bossTable": "dusk_green_boss"
+}

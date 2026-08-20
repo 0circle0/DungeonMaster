@@ -1,0 +1,14 @@
+{
+  "id": "aurenhal_kings_gate_blocked",
+  "variants": [
+    {
+      "text": "The clerk does not look up. \"Five marks the party, or the ledger, and the ledger takes longer.\""
+    },
+    {
+      "text": "A halberd comes down across the arch, unhurriedly. \"Toll.\""
+    },
+    {
+      "text": "\"Five marks,\" says the gate-clerk, \"and before you ask, yes, everyone.\""
+    }
+  ]
+}

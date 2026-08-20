@@ -1,0 +1,40 @@
+{
+  "id": "thornmere_drowned_bell",
+  "name": "Drowned Bell",
+  "description": "Named for the one that is still down there and still, occasionally, audible.",
+  "biome": "urban_timber",
+  "layer": "overworld",
+  "descriptionKey": "thornmere_drowned_bell_desc",
+  "dangerLevel": 4,
+  "recommendedLevel": 6,
+  "tags": [
+    "thornmere",
+    "village"
+  ],
+  "map": {
+    "width": "31",
+    "height": "21"
+  },
+  "entryPoint": {
+    "x": 15,
+    "y": 10
+  },
+  "extra": {
+    "role": "village"
+  },
+  "connections": [
+    {
+      "to": "thornmere_cypress_maze",
+      "travelMinutes": 40
+    },
+    {
+      "to": "thornmere_leech_channels",
+      "travelMinutes": 45
+    },
+    {
+      "to": "isles_halfmast",
+      "travelMinutes": 220,
+      "gate": "isles_passage"
+    }
+  ]
+}

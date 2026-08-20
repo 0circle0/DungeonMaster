@@ -1,0 +1,73 @@
+{
+  "id": "bonealley_the_old_gaol",
+  "name": "The Old Gaol",
+  "description": "They were digging *towards* something, and the direction is the only evidence anybody needs: the west range of the gaol, which was emptied after the fire and bricked up in a hurry.",
+  "autoStart": false,
+  "ordered": true,
+  "tags": [
+    "side",
+    "act1",
+    "bonealley",
+    "kingsvale"
+  ],
+  "objectives": [
+    {
+      "id": "at_the_gaol",
+      "description": "Get into the Old Gaol.",
+      "kind": "reach",
+      "count": 1,
+      "hidden": false,
+      "optional": false,
+      "target": "warrens_old_gaol"
+    },
+    {
+      "id": "the_brickwork",
+      "description": "Find what the brickwork is hiding.",
+      "kind": "custom",
+      "count": 1,
+      "hidden": false,
+      "optional": false,
+      "when": {
+        "test": {
+          "ref": "flags.bonealley_brickwork_seen"
+        }
+      }
+    },
+    {
+      "id": "ask_dree",
+      "description": "Ask Dree what was bricked up after the fire.",
+      "kind": "talk",
+      "count": 1,
+      "hidden": false,
+      "optional": false,
+      "target": "ratcatcher_dree"
+    }
+  ],
+  "stages": [],
+  "unlocks": [
+    "bonealley_what_was_bricked_up"
+  ],
+  "rewards": {
+    "xp": 35,
+    "items": [],
+    "reputation": {
+      "the_ratcatchers": 6
+    }
+  },
+  "requires": {
+    "quests": [
+      {
+        "quest": "bonealley_unlicensed",
+        "status": "complete"
+      }
+    ]
+  },
+  "onComplete": [
+    {
+      "setFlag": {
+        "flag": "bonealley_gaol_known",
+        "value": true
+      }
+    }
+  ]
+}

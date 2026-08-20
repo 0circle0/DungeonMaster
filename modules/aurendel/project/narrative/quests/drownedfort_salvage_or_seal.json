@@ -1,0 +1,148 @@
+{
+  "id": "drownedfort_salvage_or_seal",
+  "name": "Salvage It or Seal It",
+  "description": "Four hundred years of a fort nobody has been into, dry, with its armoury intact — and a chimney at the far end of it that goes somewhere the Isles would rather not have a road to.",
+  "autoStart": false,
+  "ordered": false,
+  "tags": [
+    "side",
+    "act3",
+    "drownedfort",
+    "sundered_isles"
+  ],
+  "objectives": [
+    {
+      "id": "salvage_it",
+      "description": "Open the fort to the salvors.",
+      "kind": "custom",
+      "count": 1,
+      "hidden": false,
+      "optional": true,
+      "when": {
+        "test": {
+          "ref": "flags.drownedfort_salvaged"
+        }
+      }
+    },
+    {
+      "id": "seal_it",
+      "description": "Seal the chimney and leave the fort.",
+      "kind": "custom",
+      "count": 1,
+      "hidden": false,
+      "optional": true,
+      "when": {
+        "test": {
+          "ref": "flags.drownedfort_sealed"
+        }
+      }
+    },
+    {
+      "id": "settled",
+      "description": "Settle what happens to the fort.",
+      "kind": "custom",
+      "count": 1,
+      "hidden": false,
+      "optional": false,
+      "when": {
+        "any": [
+          {
+            "test": {
+              "ref": "flags.drownedfort_salvaged"
+            }
+          },
+          {
+            "test": {
+              "ref": "flags.drownedfort_sealed"
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "stages": [],
+  "unlocks": [],
+  "rewards": {
+    "xp": 135,
+    "items": [
+      {
+        "item": "drowned_blade",
+        "quantity": 1
+      }
+    ],
+    "reputation": {}
+  },
+  "requires": {
+    "quests": [
+      {
+        "quest": "drownedfort_the_battery",
+        "status": "complete"
+      }
+    ]
+  },
+  "onComplete": [
+    {
+      "if": {
+        "when": {
+          "test": {
+            "ref": "flags.drownedfort_salvaged"
+          }
+        },
+        "then": [
+          {
+            "emit": {
+              "event": "deed",
+              "data": {
+                "kind": "share_honoured"
+              }
+            }
+          },
+          {
+            "adjustReputation": {
+              "faction": "the_salvors",
+              "amount": 30
+            }
+          },
+          {
+            "adjustReputation": {
+              "faction": "the_countinghouse",
+              "amount": -15
+            }
+          },
+          {
+            "setFlag": {
+              "flag": "drownedfort_open",
+              "value": true
+            }
+          }
+        ],
+        "else": [
+          {
+            "adjustReputation": {
+              "faction": "the_salvors",
+              "amount": 10
+            }
+          },
+          {
+            "adjustReputation": {
+              "faction": "the_keepers",
+              "amount": 18
+            }
+          },
+          {
+            "adjustReputation": {
+              "faction": "karn_dolur",
+              "amount": 10
+            }
+          },
+          {
+            "setFlag": {
+              "flag": "drownedfort_shut",
+              "value": true
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,61 @@
+{
+  "id": "adept",
+  "name": "Adept",
+  "description": "A scholar of workings. Fewer bones than the others and rather more books.",
+  "hitDie": "1d6",
+  "primaryAttribute": "intellect",
+  "attributeBonuses": {
+    "intellect": 2
+  },
+  "skillProficiencies": [
+    "arcana",
+    "lore",
+    "insight"
+  ],
+  "saveProficiencies": [
+    "will"
+  ],
+  "abilitiesByLevel": {
+    "1": [
+      "strike",
+      "wardlight",
+      "arcane_bolt",
+      "dodge",
+      "assist",
+      "disengage"
+    ],
+    "2": [
+      "read_runes"
+    ],
+    "3": [
+      "frost_lance"
+    ]
+  },
+  "spellcasting": {
+    "castingAttribute": "intellect",
+    "spellList": [
+      "wardlight",
+      "arcane_bolt",
+      "frost_lance",
+      "read_runes"
+    ],
+    "progression": 1,
+    "knownByLevel": {
+      "1": 2,
+      "2": 3,
+      "3": 4,
+      "4": 5,
+      "5": 6
+    }
+  },
+  "startingItems": [
+    {
+      "item": "oak_staff",
+      "quantity": 1
+    },
+    {
+      "item": "leather_jerkin",
+      "quantity": 1
+    }
+  ]
+}

@@ -1,0 +1,76 @@
+{
+  "id": "thecut_the_sink",
+  "name": "The Sink",
+  "description": "The galleries and the swallet are the same hole approached from two sides, and the Hold's ledgers have said so since the year eleven without anybody putting the two pages together.",
+  "autoStart": false,
+  "ordered": true,
+  "tags": [
+    "side",
+    "act2",
+    "thecut",
+    "skarnspine"
+  ],
+  "objectives": [],
+  "stages": [
+    {
+      "id": "down_the_sink",
+      "name": "Down the sink",
+      "description": "Where the Weirwater goes in, and where for two days this spring it did not.",
+      "objectives": [
+        {
+          "id": "in_the_sink",
+          "description": "Get down into the Sink.",
+          "kind": "reach",
+          "count": 1,
+          "hidden": false,
+          "optional": false,
+          "target": "weirwater_head_sink"
+        }
+      ],
+      "journalKey": "thecut_journal_sink"
+    },
+    {
+      "id": "what_is_in_it",
+      "name": "What has never needed to leave",
+      "description": "In goes at the swallet, out eleven miles down. Something in between has never had a reason to do either.",
+      "objectives": [
+        {
+          "id": "kill_sink",
+          "description": "Put down what is in the Sink.",
+          "kind": "kill",
+          "count": 1,
+          "hidden": false,
+          "optional": false,
+          "target": "sink_thing"
+        }
+      ],
+      "onComplete": [
+        {
+          "setFlag": {
+            "flag": "thecut_sink_cleared",
+            "value": true
+          }
+        }
+      ],
+      "journalKey": "thecut_journal_thing"
+    }
+  ],
+  "unlocks": [
+    "thecut_seal_or_road"
+  ],
+  "rewards": {
+    "xp": 100,
+    "items": [],
+    "reputation": {
+      "karn_dolur": 12
+    }
+  },
+  "requires": {
+    "quests": [
+      {
+        "quest": "thecut_the_galleries",
+        "status": "complete"
+      }
+    ]
+  }
+}

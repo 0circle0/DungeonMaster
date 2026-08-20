@@ -1,0 +1,11 @@
+{
+  "id": "frost_strand",
+  "name": "The Count of the Strand",
+  "description": "The boneyard has been growing faster than the fleet can explain, and one man has the tally.",
+  "entries": [
+    "frost_strand_count",
+    "frost_strand_cut",
+    "frost_strand_inland",
+    "frost_strand_ribs"
+  ]
+}

@@ -1,0 +1,57 @@
+{
+  "id": "frost_the_blue_voice",
+  "name": "The Blue Voice",
+  "description": "Something under the calving face has been sounding one note for eleven years. You are close enough now to hear it without the ice in the way.",
+  "autoStart": false,
+  "ordered": true,
+  "tags": [
+    "hidden",
+    "frostmere",
+    "frost_blue"
+  ],
+  "objectives": [
+    {
+      "id": "at_the_caves",
+      "description": "Get inside the Blue Caves.",
+      "kind": "reach",
+      "count": 1,
+      "hidden": true,
+      "optional": false,
+      "target": "rimewatch_blue_caves"
+    },
+    {
+      "id": "past_the_seam",
+      "description": "Get past the seam that is not frozen.",
+      "kind": "custom",
+      "count": 1,
+      "hidden": true,
+      "optional": false,
+      "when": {
+        "test": {
+          "ref": "flags.frost_blue_open"
+        }
+      }
+    },
+    {
+      "id": "silence_it",
+      "description": "Find the thing that will not stop ringing.",
+      "kind": "kill",
+      "count": 1,
+      "hidden": true,
+      "optional": false,
+      "target": "blue_bell"
+    }
+  ],
+  "stages": [],
+  "unlocks": [],
+  "rewards": {
+    "xp": 180,
+    "items": [
+      {
+        "item": "rime_singers_torc",
+        "quantity": 1
+      }
+    ],
+    "reputation": {}
+  }
+}

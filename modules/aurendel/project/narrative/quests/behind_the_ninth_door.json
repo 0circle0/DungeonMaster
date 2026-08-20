@@ -1,0 +1,74 @@
+{
+  "id": "behind_the_ninth_door",
+  "name": "Behind the Ninth Door",
+  "description": "Two hundred and eleven doors down the Long Hall, and nine of them stand open. This is the ninth.",
+  "autoStart": false,
+  "ordered": true,
+  "tags": [
+    "act3"
+  ],
+  "objectives": [],
+  "stages": [
+    {
+      "id": "the_hall",
+      "name": "Down the Long Hall",
+      "description": "Four miles, dead straight, and the ceiling is not in your lamplight at any point.",
+      "objectives": [
+        {
+          "id": "the_ninth",
+          "description": "Reach the ninth door.",
+          "kind": "reach",
+          "count": 1,
+          "hidden": false,
+          "optional": false,
+          "target": "long_hall_behind_the_ninth"
+        }
+      ]
+    },
+    {
+      "id": "the_keeper",
+      "name": "What has been on the other side",
+      "description": "It has been there as long as there has been a door.",
+      "objectives": [
+        {
+          "id": "kill_keeper",
+          "description": "Face the Keeper of the Ninth.",
+          "kind": "kill",
+          "count": 1,
+          "hidden": false,
+          "optional": false,
+          "target": "door_keeper"
+        }
+      ],
+      "onComplete": [
+        {
+          "setFlag": {
+            "flag": "the_keeper_is_down",
+            "value": true
+          }
+        }
+      ]
+    }
+  ],
+  "unlocks": [
+    "the_unsealing"
+  ],
+  "rewards": {
+    "xp": 900,
+    "items": [
+      {
+        "item": "warden_blade",
+        "quantity": 1
+      }
+    ],
+    "reputation": {}
+  },
+  "requires": {
+    "quests": [
+      {
+        "quest": "the_eleventh_chamber",
+        "status": "complete"
+      }
+    ]
+  }
+}

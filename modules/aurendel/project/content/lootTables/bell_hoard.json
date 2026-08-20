@@ -1,0 +1,36 @@
+{
+  "id": "bell_hoard",
+  "entries": [
+    {
+      "weight": 4,
+      "value": {
+        "item": "old_coin",
+        "quantity": "2d6"
+      }
+    },
+    {
+      "weight": 3,
+      "value": {
+        "item": "bell_bronze_mace",
+        "quantity": "1"
+      }
+    },
+    {
+      "weight": 2,
+      "value": {
+        "item": "amber_lump",
+        "quantity": "1"
+      }
+    },
+    {
+      "weight": 2,
+      "value": {
+        "item": "antidote",
+        "quantity": "1d2"
+      }
+    }
+  ],
+  "rolls": "2",
+  "emptyChance": 0,
+  "name": "Under the Old Church"
+}

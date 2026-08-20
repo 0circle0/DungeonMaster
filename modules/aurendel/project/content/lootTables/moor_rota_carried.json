@@ -1,0 +1,26 @@
+{
+  "id": "moor_rota_carried",
+  "name": "What Wenna Kept",
+  "rolls": "1",
+  "emptyChance": 0,
+  "entries": [
+    {
+      "weight": 1,
+      "value": {
+        "item": "hearth_rota",
+        "quantity": "1",
+        "unique": true,
+        "requirementScope": "party",
+        "requires": {
+          "without": {
+            "flags": [
+              {
+                "flag": "given:hearth_rota"
+              }
+            ]
+          }
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,24 @@
+{
+  "id": "harbourside_sailmaker",
+  "name": "The Sail Loft",
+  "description": "One long room, one long floor, and canvas laid out the whole length of it.",
+  "area": "sarnport_harbourside",
+  "kind": "market",
+  "descriptionKey": "int_workshop",
+  "travelMinutes": 3,
+  "tags": [
+    "shop"
+  ],
+  "services": [
+    "market"
+  ],
+  "map": {
+    "width": "15",
+    "height": "11",
+    "palette": "int_shop"
+  },
+  "position": {
+    "x": 41,
+    "y": 3
+  }
+}

@@ -1,0 +1,460 @@
+{
+  "id": "beeches_wend_talk",
+  "start": "greet",
+  "nodes": [
+    {
+      "id": "greet",
+      "says": [
+        {
+          "text": "The King is eleven feet through at the base and Wend lives in the side of it. He does not come out. \"You'll be from the moot,\" he says, from inside the tree. \"Finally.\""
+        }
+      ],
+      "options": [
+        {
+          "id": "not_from_moot",
+          "text": "We're not from the moot.",
+          "effects": [
+            {
+              "emit": {
+                "event": "startQuest",
+                "data": {
+                  "quest": "beeches_what_wend_has_been_saying"
+                }
+              }
+            }
+          ],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "two_years",
+          "requires": {
+            "quests": [
+              {
+                "quest": "beeches_what_wend_has_been_saying",
+                "status": "unstarted"
+              },
+              {
+                "quest": "the_undercroft",
+                "status": "complete"
+              }
+            ]
+          }
+        },
+        {
+          "id": "forty_one",
+          "text": "Forty-one years in a tree?",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "forty_one"
+        },
+        {
+          "id": "leave",
+          "text": "Nothing.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": [
+        {
+          "requires": {
+            "memories": [
+              {
+                "deedKind": "ward_broken",
+                "who": "speaker"
+              }
+            ]
+          },
+          "goto": "he_has_heard"
+        },
+        {
+          "requires": {
+            "quests": [
+              {
+                "quest": "beeches_the_root_cellar",
+                "status": "active"
+              }
+            ],
+            "flags": [
+              {
+                "flag": "beeches_cellar_seen",
+                "equals": true
+              }
+            ]
+          },
+          "goto": "about_the_cellar"
+        },
+        {
+          "requires": {
+            "flags": [
+              {
+                "flag": "beeches_hollow_down",
+                "equals": true
+              }
+            ],
+            "without": {
+              "flags": [
+                {
+                  "flag": "beeches_grafted"
+                },
+                {
+                  "flag": "beeches_burnt"
+                }
+              ]
+            }
+          },
+          "goto": "fire_or_graft"
+        }
+      ]
+    },
+    {
+      "id": "forty_one",
+      "says": [
+        {
+          "text": "\"Forty-one in this one. Two in a worse one down the ride before the moot decided I was going to be a fixture and moved me somewhere with a roof.\" A dry sound that might be a laugh. \"The tree is the roof.\""
+        }
+      ],
+      "options": [
+        {
+          "id": "back",
+          "text": "Hm.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "greet"
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": []
+    },
+    {
+      "id": "two_years",
+      "says": [
+        {
+          "text": "\"Two years I've been sending word to Elderhollow that the beeches are moving, and two years they've had something more pressing on, and I have read about what they've had on and they are not wrong.\" A pause. \"They are also not here.\""
+        }
+      ],
+      "options": [
+        {
+          "id": "moving_how",
+          "text": "Moving how?",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "the_ring"
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": []
+    },
+    {
+      "id": "the_ring",
+      "says": [
+        {
+          "text": "\"There's a ring of them. Nine, if you count the King, and you should.\" He shifts, and the tree shifts. \"Count them yourself, from the west. I've done it every spring for forty-one years and last spring there were eight.\""
+        }
+      ],
+      "options": [
+        {
+          "id": "count",
+          "text": "Then we'll count them.",
+          "effects": [
+            {
+              "setFlag": {
+                "flag": "beeches_counted",
+                "value": true
+              }
+            }
+          ],
+          "onceOnly": true,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "counted"
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": []
+    },
+    {
+      "id": "counted",
+      "says": [
+        {
+          "text": "Eight, from the west, and a gap where a ninth stood with the ground still healed over it. Something did not fall. Something *left*."
+        },
+        {
+          "text": "\"Eight,\" says Wend, when you come back. \"And you'll want the cellar under this one, which is not a cellar and never was.\""
+        }
+      ],
+      "options": [
+        {
+          "id": "the_cellar",
+          "text": "Show us the cellar.",
+          "effects": [
+            {
+              "emit": {
+                "event": "startQuest",
+                "data": {
+                  "quest": "beeches_the_root_cellar"
+                }
+              }
+            }
+          ],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "down_there",
+          "requires": {
+            "quests": [
+              {
+                "quest": "beeches_the_root_cellar",
+                "status": "unstarted"
+              }
+            ]
+          }
+        },
+        {
+          "id": "later",
+          "text": "Later.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "greet"
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": []
+    },
+    {
+      "id": "down_there",
+      "says": [
+        {
+          "text": "\"Down there, and mind the root — it's grown across at head height and it does not give.\" He is quiet a moment. \"It's not a cellar. It's a hole somebody dug, and the tree came after.\""
+        }
+      ],
+      "options": [
+        {
+          "id": "done",
+          "text": "We'll look.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": []
+    },
+    {
+      "id": "about_the_cellar",
+      "says": [
+        {
+          "text": "\"You've been down.\" Wend sounds older. \"Say what's cut in the sill.\""
+        }
+      ],
+      "options": [
+        {
+          "id": "the_nine",
+          "text": "Nine marks. One of them scratched out.",
+          "effects": [],
+          "onceOnly": true,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "planted"
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": []
+    },
+    {
+      "id": "planted",
+      "says": [
+        {
+          "text": "\"Nine,\" he says. \"So it was nine holes and nine trees, and the trees are the lids.\" The tree creaks around him. \"Somebody planted a wood on top of nine of something and the ninth lid has walked off down the Thornback Ride.\""
+        }
+      ],
+      "options": [
+        {
+          "id": "go_after_it",
+          "text": "Then we'll go after it.",
+          "effects": [
+            {
+              "emit": {
+                "event": "startQuest",
+                "data": {
+                  "quest": "beeches_the_deadfall"
+                }
+              }
+            }
+          ],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "the_ride",
+          "requires": {
+            "quests": [
+              {
+                "quest": "beeches_the_deadfall",
+                "status": "unstarted"
+              }
+            ]
+          }
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": [],
+      "remembers": "ward_restored"
+    },
+    {
+      "id": "the_ride",
+      "says": [
+        {
+          "text": "\"Past the narrows and out to the deadfall, where the foresters stopped working in my grandfather's time and did not write down why.\" A pause. \"I know why. So will you.\""
+        }
+      ],
+      "options": [
+        {
+          "id": "done",
+          "text": "We'll go.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": []
+    },
+    {
+      "id": "fire_or_graft",
+      "says": [
+        {
+          "text": "\"It's down,\" says Wend, and does not sound pleased, exactly. \"Now the part I have been dreading for two years.\""
+        },
+        {
+          "text": "\"Burn the deadfall and it is finished this afternoon and the Greenway goes with it — four hundred years, joined at the root, all of it one tree that has been pretending to be a hundred. Or graft the ring back and it closes over in about ninety years, which is a length of time I am personally not able to offer you.\""
+        }
+      ],
+      "options": [
+        {
+          "id": "graft",
+          "text": "Graft it. Ninety years is fine.",
+          "effects": [
+            {
+              "setFlag": {
+                "flag": "beeches_grafted",
+                "value": true
+              }
+            }
+          ],
+          "onceOnly": true,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "grafted"
+        },
+        {
+          "id": "burn",
+          "text": "Burn it. We don't have ninety years.",
+          "effects": [
+            {
+              "setFlag": {
+                "flag": "beeches_burnt",
+                "value": true
+              }
+            }
+          ],
+          "onceOnly": true,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "burnt"
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": []
+    },
+    {
+      "id": "grafted",
+      "says": [
+        {
+          "text": "It takes eleven days and most of them are spent waiting. At the end of it the ring is nine again, and the ninth is a whip of green the thickness of your thumb, and Wend looks at it the way other men look at a child."
+        }
+      ],
+      "options": [
+        {
+          "id": "done",
+          "text": "It'll hold.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": [],
+      "remembers": "ward_restored"
+    },
+    {
+      "id": "burnt",
+      "says": [
+        {
+          "text": "It goes up in an afternoon and the smoke is visible from Elderhollow, which is nine miles. Wend watches from the King until the light goes, and then he goes inside and does not come out again while you are there."
+        }
+      ],
+      "options": [
+        {
+          "id": "done",
+          "text": "It's finished.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": [],
+      "remembers": "ward_broken"
+    },
+    {
+      "id": "he_has_heard",
+      "says": [
+        {
+          "text": "The tree does not answer for a while. \"I heard about the ward,\" says Wend, eventually. \"Elderhollow is slow about a great many things and was not slow about that.\""
+        }
+      ],
+      "options": [
+        {
+          "id": "explain",
+          "text": "It had to come down.",
+          "effects": [
+            {
+              "adjustReputation": {
+                "faction": "the_keepers",
+                "amount": -3
+              }
+            }
+          ],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "greet"
+        },
+        {
+          "id": "leave",
+          "text": "Nothing.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": []
+    }
+  ]
+}

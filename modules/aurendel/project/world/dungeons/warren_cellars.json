@@ -1,0 +1,19 @@
+{
+  "id": "warren_cellars",
+  "name": "The Warren Cellars",
+  "description": "Cellar under cellar under cellar, connected by people who did not want the connections known about.",
+  "biome": "dungeon_delved",
+  "roomCount": "10",
+  "depth": "2",
+  "algorithm": "rooms",
+  "lockedDoorChance": 0,
+  "doorGates": [],
+  "rollEncounters": false,
+  "safeEntrance": true,
+  "branchiness": 0.55,
+  "corridorLength": "2d2",
+  "roomSize": "2d2+2",
+  "width": "49",
+  "height": "49",
+  "bossTable": "the_gaoler"
+}

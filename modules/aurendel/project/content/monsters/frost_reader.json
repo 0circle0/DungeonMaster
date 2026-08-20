@@ -1,0 +1,52 @@
+{
+  "id": "frost_reader",
+  "name": "Saeun, who Reads the Making",
+  "description": "Forty years of sitting still in the cold, which is its own kind of hardiness.",
+  "level": 5,
+  "xp": 0,
+  "attributes": {
+    "might": 9,
+    "agility": 11,
+    "endurance": 12,
+    "intellect": 13,
+    "instinct": 16,
+    "presence": 12
+  },
+  "abilities": [
+    "strike"
+  ],
+  "behaviour": [
+    {
+      "priority": 0,
+      "use": "strike"
+    }
+  ],
+  "faction": "the_ice_moot",
+  "creatureType": "humanoid",
+  "size": "medium",
+  "descriptors": [
+    "a weathered"
+  ],
+  "conditionalLoot": [],
+  "loot": "frost_tally_carried",
+  "resourceOverrides": {
+    "hp": 26
+  },
+  "temperament": {
+    "roamRadius": 24,
+    "investigateRadius": 70,
+    "leashRadius": 100,
+    "wanderChance": 0.4,
+    "disengageTurns": 2,
+    "investigates": [
+      "sight",
+      "hearing",
+      "tracks",
+      "smell"
+    ],
+    "notices": [
+      "hostile",
+      "neutral"
+    ]
+  }
+}

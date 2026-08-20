@@ -1,0 +1,42 @@
+{
+  "id": "moor_barrowgate",
+  "name": "Barrowgate",
+  "description": "A market town with a keep, built on and partly out of a barrow that nobody has ever fully opened.",
+  "biome": "urban_stone",
+  "layer": "overworld",
+  "descriptionKey": "moor_barrowgate_desc",
+  "dangerLevel": 1,
+  "recommendedLevel": 4,
+  "tags": [
+    "weeping_moor",
+    "town"
+  ],
+  "map": {
+    "width": "41",
+    "height": "27"
+  },
+  "entryPoint": {
+    "x": 20,
+    "y": 13
+  },
+  "extra": {
+    "role": "town"
+  },
+  "connections": [
+    {
+      "to": "moor_kestrel_edge",
+      "travelMinutes": 35
+    },
+    {
+      "to": "moor_heatherlands",
+      "travelMinutes": 40
+    },
+    {
+      "to": "moor_black_tarn",
+      "travelMinutes": 60
+    }
+  ],
+  "encounterTables": [
+    "the_loosed"
+  ]
+}

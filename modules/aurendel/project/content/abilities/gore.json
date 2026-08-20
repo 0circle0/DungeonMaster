@@ -1,0 +1,24 @@
+{
+  "id": "gore",
+  "name": "Gore",
+  "description": "Head down, and it does not stop when it connects.",
+  "actionType": "action",
+  "targeting": "single",
+  "attack": {
+    "stat": "might",
+    "against": "guard"
+  },
+  "onUse": [
+    {
+      "damage": {
+        "target": {
+          "ref": "target.id"
+        },
+        "amount": {
+          "roll": "1d8"
+        },
+        "damageType": "piercing"
+      }
+    }
+  ]
+}

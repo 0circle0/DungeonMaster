@@ -1,0 +1,58 @@
+{
+  "id": "cathedral_slag",
+  "name": "The Thing in the Slag Cathedral",
+  "description": "Cinderhold built a temple over a vent and the vent has opinions.",
+  "level": 8,
+  "xp": 760,
+  "attributes": {
+    "might": 18,
+    "agility": 10,
+    "endurance": 18,
+    "intellect": 8,
+    "instinct": 13,
+    "presence": 10
+  },
+  "abilities": [
+    "cinder_lash",
+    "stone_fist"
+  ],
+  "behaviour": [
+    {
+      "priority": 0,
+      "use": "cinder_lash"
+    }
+  ],
+  "faction": "the_unsealed",
+  "creatureType": "undead",
+  "size": "medium",
+  "descriptors": [
+    "a fused",
+    "a lumbering"
+  ],
+  "conditionalLoot": [],
+  "loot": "ember_tube_hoard",
+  "conditionImmunities": [
+    "burning",
+    "prone",
+    "frightened"
+  ],
+  "resourceOverrides": {
+    "hp": 92
+  },
+  "temperament": {
+    "roamRadius": 12,
+    "investigateRadius": 40,
+    "leashRadius": 60,
+    "wanderChance": 0.1,
+    "disengageTurns": 1,
+    "speeds": {
+      "wander": 0.5,
+      "investigate": 0.5
+    },
+    "investigates": [
+      "sight",
+      "hearing",
+      "smell"
+    ]
+  }
+}

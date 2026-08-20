@@ -1,0 +1,14 @@
+{
+  "id": "oxbow_sunken_boat_desc",
+  "variants": [
+    {
+      "text": "Went down loaded, in somebody's grandfather's time. The ribs still show at low water and the cargo was never got out."
+    },
+    {
+      "text": "A barge on its side in four feet of water, silted to the gunwale on the upstream flank."
+    },
+    {
+      "text": "Willow has gone through the deck. There is still a hold under it."
+    }
+  ]
+}

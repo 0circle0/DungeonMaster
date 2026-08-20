@@ -1,0 +1,8 @@
+{
+  "id": "lodging",
+  "name": "Take a Room",
+  "description": "A bed with a roof over it. Nothing interrupts a paid bed.",
+  "kind": "long",
+  "duration": 480,
+  "interruptChance": 0
+}

@@ -1,0 +1,24 @@
+{
+  "id": "whalebone_bone_carver",
+  "name": "The Bone Carver",
+  "description": "Scrimshaw, buttons, combs, and one very large chess set.",
+  "area": "frostmere_whalebone_landing",
+  "kind": "market",
+  "descriptionKey": "int_store",
+  "travelMinutes": 3,
+  "tags": [
+    "shop"
+  ],
+  "services": [
+    "market"
+  ],
+  "map": {
+    "width": "11",
+    "height": "9",
+    "palette": "int_shop"
+  },
+  "position": {
+    "x": 37,
+    "y": 23
+  }
+}

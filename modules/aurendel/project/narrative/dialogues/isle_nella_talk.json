@@ -1,0 +1,329 @@
+{
+  "id": "isle_nella_talk",
+  "start": "greet",
+  "nodes": [
+    {
+      "id": "greet",
+      "says": [
+        {
+          "text": "A hut on a sandbank, with a ledger on the table and forty thousand birds outside making it impossible to think."
+        },
+        {
+          "text": "“Eggs are in season or they are not. This week they are not.”"
+        }
+      ],
+      "onEnter": [],
+      "options": [
+        {
+          "id": "isle_nella_nest",
+          "text": "How much of the Bank do they nest?",
+          "requires": {
+            "without": {
+              "lore": [
+                "isle_terns_nest"
+              ]
+            }
+          },
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "check": {
+            "skill": "persuasion",
+            "difficulty": {
+              "sub": [
+                10,
+                {
+                  "clamp": [
+                    {
+                      "div": [
+                        {
+                          "ref": "reputation.the_salvors",
+                          "else": 0
+                        },
+                        5
+                      ]
+                    },
+                    -6,
+                    6
+                  ]
+                }
+              ]
+            },
+            "onSuccess": "isle_nella_nest_told",
+            "onFailure": "isle_nella_nest_wont"
+          }
+        },
+        {
+          "id": "isle_nella_year",
+          "text": "When did they stop?",
+          "requires": {
+            "without": {
+              "lore": [
+                "isle_terns_year"
+              ]
+            }
+          },
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "check": {
+            "skill": "persuasion",
+            "difficulty": {
+              "sub": [
+                13,
+                {
+                  "clamp": [
+                    {
+                      "div": [
+                        {
+                          "ref": "reputation.the_salvors",
+                          "else": 0
+                        },
+                        5
+                      ]
+                    },
+                    -6,
+                    6
+                  ]
+                }
+              ]
+            },
+            "onSuccess": "isle_nella_year_told",
+            "onFailure": "isle_nella_year_wont"
+          }
+        },
+        {
+          "id": "isle_nella_count",
+          "text": "The count. All four generations.",
+          "requires": {
+            "without": {
+              "items": [
+                "takers_count"
+              ],
+              "flags": [
+                {
+                  "flag": "given:takers_count"
+                }
+              ]
+            }
+          },
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "check": {
+            "skill": "persuasion",
+            "difficulty": {
+              "sub": [
+                13,
+                {
+                  "clamp": [
+                    {
+                      "div": [
+                        {
+                          "ref": "reputation.the_salvors",
+                          "else": 0
+                        },
+                        5
+                      ]
+                    },
+                    -6,
+                    6
+                  ]
+                }
+              ]
+            },
+            "onSuccess": "isle_nella_count_gave",
+            "onFailure": "isle_nella_count_kept"
+          }
+        },
+        {
+          "id": "greet_leave",
+          "text": "Nothing.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "isle_nella_nest_told",
+      "says": [
+        {
+          "text": "“All of it but the cut.” She is unbothered discussing it and bothered by the fact. “A tern will nest on a wreck. On a gun. On a dead seal. I have seen a pair raise two on a capstan.” She looks across at the strip. “Not there.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "learnLore": {
+            "entry": "isle_terns_nest"
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "isle_nella_nest_on",
+          "text": "Go on.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "isle_nella_nest_wont",
+      "says": [
+        {
+          "text": "“I've said all I mean to,” they say, and go back to what they were doing."
+        }
+      ],
+      "onEnter": [
+        {
+          "adjustReputation": {
+            "faction": "the_salvors",
+            "amount": -1
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "isle_nella_nest_drop",
+          "text": "Leave it.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "isle_nella_year_told",
+      "says": [
+        {
+          "text": "“One season, in my grandmother's count.” She says it precisely, because it is a number and she keeps numbers. “Full column the year before. Nothing the year after. Nothing since.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "learnLore": {
+            "entry": "isle_terns_year"
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "isle_nella_year_on",
+          "text": "Go on.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "isle_nella_year_wont",
+      "says": [
+        {
+          "text": "“I've said all I mean to,” they say, and go back to what they were doing."
+        }
+      ],
+      "onEnter": [
+        {
+          "adjustReputation": {
+            "faction": "the_salvors",
+            "amount": -1
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "isle_nella_year_drop",
+          "text": "Leave it.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "isle_nella_count_gave",
+      "says": [
+        {
+          "text": "She fetches it wrapped in oilcloth, which tells you what it is worth to her. “The year it stops is marked. My grandmother put a line under it and did not write why, and I have wanted to know why since I could read.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "grantItem": {
+            "target": {
+              "ref": "actor.id"
+            },
+            "item": "takers_count",
+            "quantity": 1
+          }
+        },
+        {
+          "setFlag": {
+            "flag": "given:takers_count",
+            "value": true
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "isle_nella_count_thanks",
+          "text": "Thank you.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "isle_nella_count_kept",
+      "says": [
+        {
+          "text": "“It is the family's,” she says. “Ask me anything out of it.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "adjustReputation": {
+            "faction": "the_salvors",
+            "amount": -2
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "isle_nella_count_leave",
+          "text": "Then no.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    }
+  ]
+}

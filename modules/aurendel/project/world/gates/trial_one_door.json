@@ -1,0 +1,81 @@
+{
+  "id": "trial_one_door",
+  "name": "The First of the Eight",
+  "description": "A cellar door under a ward-house, barred on the inside by something that was inside.",
+  "kind": "ward",
+  "blockedTextKey": "trial_one_blocked",
+  "staysOpen": true,
+  "onOpen": [
+    {
+      "setFlag": {
+        "flag": "trial_one_open",
+        "value": true
+      }
+    }
+  ],
+  "onBlocked": [],
+  "opensWith": [],
+  "tags": [
+    "trial"
+  ],
+  "requires": {
+    "flags": [
+      {
+        "flag": "aurendel_finished",
+        "equals": true
+      }
+    ],
+    "anyOf": [
+      {
+        "items": [
+          {
+            "item": "greenway_cloak",
+            "quantity": 1,
+            "consume": false,
+            "equipped": true
+          }
+        ]
+      },
+      {
+        "items": [
+          {
+            "item": "hermits_watch_cloak",
+            "quantity": 1,
+            "consume": false,
+            "equipped": true
+          }
+        ]
+      },
+      {
+        "items": [
+          {
+            "item": "signal_hood",
+            "quantity": 1,
+            "consume": false,
+            "equipped": true
+          }
+        ]
+      },
+      {
+        "items": [
+          {
+            "item": "warm_water_hood",
+            "quantity": 1,
+            "consume": false,
+            "equipped": true
+          }
+        ]
+      },
+      {
+        "items": [
+          {
+            "item": "breathing_hood",
+            "quantity": 1,
+            "consume": false,
+            "equipped": true
+          }
+        ]
+      }
+    ]
+  }
+}

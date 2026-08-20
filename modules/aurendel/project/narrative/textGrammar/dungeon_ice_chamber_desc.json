@@ -1,0 +1,14 @@
+{
+  "id": "dungeon_ice_chamber_desc",
+  "variants": [
+    {
+      "text": "A melt chamber with a floor of clear ice and things visible in it, further down than you want to look."
+    },
+    {
+      "text": "The walls are blue going to black, and the black is depth."
+    },
+    {
+      "text": "Icicles from the roof in a forest, some of them floor to ceiling."
+    }
+  ]
+}

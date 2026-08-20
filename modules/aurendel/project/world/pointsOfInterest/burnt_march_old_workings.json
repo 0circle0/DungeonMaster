@@ -1,0 +1,68 @@
+{
+  "id": "burnt_march_old_workings",
+  "name": "The Old Workings",
+  "description": "Iron was got here before the reach caught fire, and the workings were left in the middle of a shift.",
+  "area": "ember_the_burnt_march",
+  "kind": "dungeonEntrance",
+  "descriptionKey": "generic_dungeon_mouth",
+  "travelMinutes": 12,
+  "tags": [
+    "dungeon"
+  ],
+  "dungeon": "ember_old_workings",
+  "position": {
+    "x": 25,
+    "y": 3
+  },
+  "triggers": [
+    {
+      "id": "ember_trees_committed",
+      "mode": "once",
+      "on": "enter",
+      "description": "The adit, and the bar on the wrong side of it.",
+      "requires": {
+        "custom": {
+          "gte": [
+            {
+              "ref": "threads.ember_trees.known"
+            },
+            2
+          ]
+        }
+      },
+      "effects": [
+        {
+          "emit": {
+            "event": "startQuest",
+            "data": {
+              "quest": "ember_the_new_treeline"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "hidden": true,
+  "discover": {
+    "skill": "survival",
+    "difficulty": {
+      "max": [
+        9,
+        {
+          "sub": [
+            21,
+            {
+              "mul": [
+                3,
+                {
+                  "ref": "threads.ember_trees.known"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "gate": "ember_workings_seal"
+}

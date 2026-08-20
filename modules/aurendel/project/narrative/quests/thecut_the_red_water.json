@@ -1,0 +1,75 @@
+{
+  "id": "thecut_the_red_water",
+  "name": "The Red Water",
+  "description": "Nine days red, then two days of nothing at all, and eleven miles down the Kingsvale drinks whatever this mountain decides to send it.",
+  "autoStart": false,
+  "ordered": true,
+  "tags": [
+    "side",
+    "act2",
+    "thecut",
+    "skarnspine"
+  ],
+  "objectives": [
+    {
+      "id": "up_to_the_lake",
+      "description": "Climb to the corrie lake.",
+      "kind": "reach",
+      "count": 1,
+      "hidden": false,
+      "optional": false,
+      "target": "weirwater_head_corrie_lake"
+    },
+    {
+      "id": "the_colour",
+      "description": "See how far down the colour goes.",
+      "kind": "custom",
+      "count": 1,
+      "hidden": false,
+      "optional": false,
+      "when": {
+        "test": {
+          "ref": "flags.thecut_lake_seen"
+        }
+      }
+    },
+    {
+      "id": "tell_hulf",
+      "description": "Take it back to Hulf at the ward.",
+      "kind": "talk",
+      "count": 1,
+      "hidden": false,
+      "optional": false,
+      "target": "pass_warden_hulf"
+    }
+  ],
+  "stages": [],
+  "unlocks": [
+    "thecut_the_galleries"
+  ],
+  "rewards": {
+    "xp": 55,
+    "items": [],
+    "reputation": {
+      "karn_dolur": 10
+    }
+  },
+  "giver": "pass_warden_hulf",
+  "requires": {
+    "quests": [
+      {
+        "quest": "the_undercroft",
+        "status": "complete"
+      }
+    ],
+    "minLevel": 4
+  },
+  "onComplete": [
+    {
+      "setFlag": {
+        "flag": "thecut_water_seen",
+        "value": true
+      }
+    }
+  ]
+}

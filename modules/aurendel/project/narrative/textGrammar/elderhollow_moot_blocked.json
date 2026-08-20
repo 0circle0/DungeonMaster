@@ -1,0 +1,14 @@
+{
+  "id": "elderhollow_moot_blocked",
+  "variants": [
+    {
+      "text": "The door in the oak is shut, and the moot is sitting, and you are not on the list."
+    },
+    {
+      "text": "Somebody stands at the door with their arms folded and does not move."
+    },
+    {
+      "text": "\"Moot's in,\" he says. \"You can wait or you can come back.\""
+    }
+  ]
+}

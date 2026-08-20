@@ -1,0 +1,39 @@
+{
+  "id": "hp",
+  "name": "Hit Points",
+  "description": "What is left between you and the end of the story.",
+  "max": {
+    "max": [
+      1,
+      {
+        "add": [
+          8,
+          {
+            "mul": [
+              {
+                "ref": "actor.mod.endurance"
+              },
+              {
+                "ref": "actor.level"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "restoreOnShortRest": 0.25,
+  "restoreOnLongRest": 1,
+  "onDepleted": [
+    {
+      "emit": {
+        "event": "died",
+        "data": {
+          "who": {
+            "ref": "actor.id"
+          }
+        }
+      }
+    }
+  ]
+}

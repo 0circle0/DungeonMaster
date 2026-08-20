@@ -1,0 +1,14 @@
+{
+  "id": "swamp",
+  "name": "Thornmere",
+  "description": "Cypress standing in black water, and paths that are only paths this week.",
+  "layer": "overworld",
+  "palette": "swamp",
+  "roomTemplates": [],
+  "encounterTables": [
+    "marsh_things"
+  ],
+  "lootTables": [],
+  "traps": [],
+  "ambienceKey": "swamp_ambience"
+}

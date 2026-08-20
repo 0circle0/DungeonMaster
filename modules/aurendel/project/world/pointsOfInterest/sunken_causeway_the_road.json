@@ -1,0 +1,17 @@
+{
+  "id": "sunken_causeway_the_road",
+  "name": "The Causeway",
+  "description": "A raised road under two feet of water for eleven miles, and the only hard bottom in the region.",
+  "area": "thornmere_sunken_causeway",
+  "kind": "crossing",
+  "descriptionKey": "sunken_causeway_the_road_desc",
+  "travelMinutes": 8,
+  "tags": [
+    "crossing",
+    "landmark"
+  ],
+  "position": {
+    "x": 3,
+    "y": 3
+  }
+}

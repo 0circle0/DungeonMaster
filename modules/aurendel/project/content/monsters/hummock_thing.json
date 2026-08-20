@@ -1,0 +1,70 @@
+{
+  "id": "hummock_thing",
+  "name": "What Was Watched",
+  "description": "Ninety years of somebody sitting in a doorway cutting a mark for each year they went on looking at it.",
+  "level": 8,
+  "xp": 900,
+  "attributes": {
+    "might": 18,
+    "agility": 12,
+    "endurance": 19,
+    "intellect": 13,
+    "instinct": 16,
+    "presence": 14
+  },
+  "abilities": [
+    "drag_under",
+    "bleed_white",
+    "rend"
+  ],
+  "behaviour": [
+    {
+      "priority": 20,
+      "use": "drag_under",
+      "when": {
+        "chance": 0.35
+      }
+    },
+    {
+      "priority": 10,
+      "use": "bleed_white"
+    },
+    {
+      "priority": 0,
+      "use": "rend"
+    }
+  ],
+  "faction": "the_unsealed",
+  "creatureType": "undead",
+  "size": "medium",
+  "descriptors": [
+    "a swollen",
+    "a slow"
+  ],
+  "conditionalLoot": [],
+  "loot": "thorn_hummock_hoard",
+  "conditionImmunities": [
+    "prone",
+    "frightened",
+    "poisoned"
+  ],
+  "resourceOverrides": {
+    "hp": 105
+  },
+  "temperament": {
+    "roamRadius": 12,
+    "investigateRadius": 40,
+    "leashRadius": 60,
+    "wanderChance": 0.1,
+    "disengageTurns": 1,
+    "speeds": {
+      "wander": 0.5,
+      "investigate": 0.5
+    },
+    "investigates": [
+      "sight",
+      "hearing",
+      "smell"
+    ]
+  }
+}

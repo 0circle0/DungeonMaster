@@ -1,0 +1,35 @@
+{
+  "id": "isles_cormorant",
+  "name": "Cormorant",
+  "description": "One rock, one jetty, and eleven families who have been here longer than Blackrigging has existed.",
+  "biome": "urban_isle",
+  "layer": "overworld",
+  "descriptionKey": "isles_cormorant_desc",
+  "dangerLevel": 4,
+  "recommendedLevel": 5,
+  "tags": [
+    "sundered_isles",
+    "village"
+  ],
+  "map": {
+    "width": "31",
+    "height": "21"
+  },
+  "entryPoint": {
+    "x": 15,
+    "y": 10
+  },
+  "extra": {
+    "role": "village"
+  },
+  "connections": [
+    {
+      "to": "isles_gullstone",
+      "travelMinutes": 35
+    },
+    {
+      "to": "isles_tern_bank",
+      "travelMinutes": 40
+    }
+  ]
+}

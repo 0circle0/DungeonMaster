@@ -1,0 +1,73 @@
+{
+  "id": "bell_the_black_water",
+  "name": "The Black Water",
+  "description": "Everything Gost has lost went in the same reach, and the reach has a hall in it with its roof out of the water, which nobody built there.",
+  "autoStart": false,
+  "ordered": true,
+  "tags": [
+    "side",
+    "act2",
+    "bell",
+    "thornmere"
+  ],
+  "objectives": [
+    {
+      "id": "into_the_black",
+      "description": "Get out into the Black Water.",
+      "kind": "reach",
+      "count": 1,
+      "hidden": false,
+      "optional": false,
+      "target": "black_water_sunken_hall"
+    },
+    {
+      "id": "the_hall",
+      "description": "See what is standing in the reach.",
+      "kind": "custom",
+      "count": 1,
+      "hidden": false,
+      "optional": false,
+      "when": {
+        "test": {
+          "ref": "flags.bell_hall_found"
+        }
+      }
+    },
+    {
+      "id": "tell_gost",
+      "description": "Take it back to Gost.",
+      "kind": "talk",
+      "count": 1,
+      "hidden": false,
+      "optional": false,
+      "target": "ferryman_gost"
+    }
+  ],
+  "stages": [],
+  "unlocks": [
+    "bell_the_old_church"
+  ],
+  "rewards": {
+    "xp": 70,
+    "items": [],
+    "reputation": {
+      "the_ferrymen": 8
+    }
+  },
+  "requires": {
+    "quests": [
+      {
+        "quest": "bell_the_new_tower",
+        "status": "complete"
+      }
+    ]
+  },
+  "onComplete": [
+    {
+      "setFlag": {
+        "flag": "bell_hall_known",
+        "value": true
+      }
+    }
+  ]
+}

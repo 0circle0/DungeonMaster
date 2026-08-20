@@ -1,0 +1,14 @@
+{
+  "id": "barrel",
+  "name": "Barrel",
+  "description": "Stood on end, and used as a table by whoever got there first.",
+  "glyph": "O",
+  "color": "yellow",
+  "passable": false,
+  "opaque": false,
+  "moveCost": 0,
+  "tags": [
+    "furniture"
+  ],
+  "providesCover": "half"
+}

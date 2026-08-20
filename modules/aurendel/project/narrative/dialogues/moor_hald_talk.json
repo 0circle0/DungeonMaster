@@ -1,0 +1,329 @@
+{
+  "id": "moor_hald_talk",
+  "start": "greet",
+  "nodes": [
+    {
+      "id": "greet",
+      "says": [
+        {
+          "text": "Duckboards out over black water to a face of cut turf twelve feet high, and a man on the top of it working down."
+        },
+        {
+          "text": "“Stay on the boards. I mean that kindly.”"
+        }
+      ],
+      "onEnter": [],
+      "options": [
+        {
+          "id": "moor_hald_buckle",
+          "text": "The bodies out of the deep peat.",
+          "requires": {
+            "without": {
+              "lore": [
+                "moor_cut_buckle"
+              ]
+            }
+          },
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "check": {
+            "skill": "insight",
+            "difficulty": {
+              "sub": [
+                14,
+                {
+                  "clamp": [
+                    {
+                      "div": [
+                        {
+                          "ref": "reputation.the_library",
+                          "else": 0
+                        },
+                        5
+                      ]
+                    },
+                    -6,
+                    6
+                  ]
+                }
+              ]
+            },
+            "onSuccess": "moor_hald_buckle_told",
+            "onFailure": "moor_hald_buckle_wont"
+          }
+        },
+        {
+          "id": "moor_hald_band",
+          "text": "How deep do you cut?",
+          "requires": {
+            "without": {
+              "lore": [
+                "moor_cut_band"
+              ]
+            }
+          },
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "check": {
+            "skill": "persuasion",
+            "difficulty": {
+              "sub": [
+                15,
+                {
+                  "clamp": [
+                    {
+                      "div": [
+                        {
+                          "ref": "reputation.the_library",
+                          "else": 0
+                        },
+                        5
+                      ]
+                    },
+                    -6,
+                    6
+                  ]
+                }
+              ]
+            },
+            "onSuccess": "moor_hald_band_told",
+            "onFailure": "moor_hald_band_wont"
+          }
+        },
+        {
+          "id": "moor_hald_book",
+          "text": "The cutters' book. I want the two lines.",
+          "requires": {
+            "without": {
+              "items": [
+                "cutters_book"
+              ],
+              "flags": [
+                {
+                  "flag": "given:cutters_book"
+                }
+              ]
+            }
+          },
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "check": {
+            "skill": "persuasion",
+            "difficulty": {
+              "sub": [
+                15,
+                {
+                  "clamp": [
+                    {
+                      "div": [
+                        {
+                          "ref": "reputation.the_library",
+                          "else": 0
+                        },
+                        5
+                      ]
+                    },
+                    -6,
+                    6
+                  ]
+                }
+              ]
+            },
+            "onSuccess": "moor_hald_book_gave",
+            "onFailure": "moor_hald_book_kept"
+          }
+        },
+        {
+          "id": "greet_leave",
+          "text": "Nothing.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "moor_hald_buckle_told",
+      "says": [
+        {
+          "text": "“Forty-one.” Hald leans on the spade. “I have carried three myself.” He is quiet a moment. “The peat down there is eleven thousand year. Everybody knows that, it is why the Library pays. And one of the forty-one had an iron buckle on it.” He meets your eye. “Iron is four thousand. I am a turf cutter and even I can do that sum.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "learnLore": {
+            "entry": "moor_cut_buckle"
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "moor_hald_buckle_on",
+          "text": "Go on.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "moor_hald_buckle_wont",
+      "says": [
+        {
+          "text": "“I've said all I mean to,” they say, and go back to what they were doing."
+        }
+      ],
+      "onEnter": [
+        {
+          "adjustReputation": {
+            "faction": "the_library",
+            "amount": -1
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "moor_hald_buckle_drop",
+          "text": "Leave it.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "moor_hald_band_told",
+      "says": [
+        {
+          "text": "“To the black band and not past it.” Instant. Then he hears the next question coming and answers it. “No, nobody told me. I was eleven and I stopped at it, and my hands stopped at it before I did.” The spade goes back in. “Take any cutter out there at night with no lamp and they will put a hand on that band first go.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "learnLore": {
+            "entry": "moor_cut_band"
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "moor_hald_band_on",
+          "text": "Go on.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "moor_hald_band_wont",
+      "says": [
+        {
+          "text": "“I've said all I mean to,” they say, and go back to what they were doing."
+        }
+      ],
+      "onEnter": [
+        {
+          "adjustReputation": {
+            "faction": "the_library",
+            "amount": -1
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "moor_hald_band_drop",
+          "text": "Leave it.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "moor_hald_book_gave",
+      "says": [
+        {
+          "text": "He gets it from under a dry sack. “Forty-one out, forty-one back,” he says. “And two of them written up as going back different to how they came out, in Bram's grandfather's ordinary hand, as though it were an ordinary thing to write.” He does not let go of it at once. “I would rather know.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "grantItem": {
+            "target": {
+              "ref": "actor.id"
+            },
+            "item": "cutters_book",
+            "quantity": 1
+          }
+        },
+        {
+          "setFlag": {
+            "flag": "given:cutters_book",
+            "value": true
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "moor_hald_book_thanks",
+          "text": "Thank you.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "moor_hald_book_kept",
+      "says": [
+        {
+          "text": "“It is the cut's book,” Hald says, “and the cut is all of ours,” and it goes back under the sack."
+        }
+      ],
+      "onEnter": [
+        {
+          "adjustReputation": {
+            "faction": "the_library",
+            "amount": -2
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "moor_hald_book_leave",
+          "text": "Then no.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    }
+  ]
+}

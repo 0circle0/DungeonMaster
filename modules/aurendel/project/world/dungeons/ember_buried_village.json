@@ -1,0 +1,19 @@
+{
+  "id": "ember_buried_village",
+  "name": "The Buried Village",
+  "description": "A street under eight feet of ash, entered through a chimney, with every door on it still shut.",
+  "biome": "dungeon_ember",
+  "roomCount": "12",
+  "depth": "2",
+  "algorithm": "bsp",
+  "lockedDoorChance": 0,
+  "doorGates": [],
+  "rollEncounters": false,
+  "safeEntrance": true,
+  "bsp": {
+    "minLeaf": 5
+  },
+  "width": "29",
+  "height": "29",
+  "bossTable": "ember_roofs_boss"
+}

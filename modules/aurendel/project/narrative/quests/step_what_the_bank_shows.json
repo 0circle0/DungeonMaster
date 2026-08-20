@@ -1,0 +1,57 @@
+{
+  "id": "step_what_the_bank_shows",
+  "name": "What the Bank Shows",
+  "description": "A quarter-mile bed for a four-week river, and forty feet down in the open face, courses that were laid level.",
+  "autoStart": false,
+  "ordered": true,
+  "tags": [
+    "hidden",
+    "sunward_steppe",
+    "step_bank"
+  ],
+  "objectives": [
+    {
+      "id": "down_the_face",
+      "description": "Get down the open face.",
+      "kind": "reach",
+      "count": 1,
+      "hidden": true,
+      "optional": false,
+      "target": "dry_river_cut_bank"
+    },
+    {
+      "id": "open_the_course",
+      "description": "Take a block out of the laid course.",
+      "kind": "custom",
+      "count": 1,
+      "hidden": true,
+      "optional": false,
+      "when": {
+        "test": {
+          "ref": "flags.step_bank_open"
+        }
+      }
+    },
+    {
+      "id": "what_it_carried",
+      "description": "Meet what the course was built to carry.",
+      "kind": "kill",
+      "count": 1,
+      "hidden": true,
+      "optional": false,
+      "target": "course_dweller"
+    }
+  ],
+  "stages": [],
+  "unlocks": [],
+  "rewards": {
+    "xp": 170,
+    "items": [
+      {
+        "item": "flood_ring",
+        "quantity": 1
+      }
+    ],
+    "reputation": {}
+  }
+}

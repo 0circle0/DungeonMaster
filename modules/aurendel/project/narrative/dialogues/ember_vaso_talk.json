@@ -1,0 +1,219 @@
+{
+  "id": "ember_vaso_talk",
+  "start": "greet",
+  "nodes": [
+    {
+      "id": "greet",
+      "says": [
+        {
+          "text": "A taproom warm from the floor up, which is the wrong direction for a room to be warm in."
+        },
+        {
+          "text": "“Mind the flags, they're hot at the back. Ale's cold, at least.”"
+        }
+      ],
+      "onEnter": [],
+      "options": [
+        {
+          "id": "ember_vaso_never",
+          "text": "Has this floor ever been cold?",
+          "requires": {
+            "without": {
+              "lore": [
+                "ember_warm_never"
+              ]
+            }
+          },
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "check": {
+            "skill": "persuasion",
+            "difficulty": {
+              "sub": [
+                9,
+                {
+                  "clamp": [
+                    {
+                      "div": [
+                        {
+                          "ref": "reputation.the_vent_readers",
+                          "else": 0
+                        },
+                        5
+                      ]
+                    },
+                    -6,
+                    6
+                  ]
+                }
+              ]
+            },
+            "onSuccess": "ember_vaso_never_told",
+            "onFailure": "ember_vaso_never_wont"
+          }
+        },
+        {
+          "id": "ember_vaso_stone",
+          "text": "Anything odd ever come out of the tube?",
+          "requires": {
+            "without": {
+              "lore": [
+                "ember_warm_older"
+              ]
+            }
+          },
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "check": {
+            "skill": "persuasion",
+            "difficulty": {
+              "sub": [
+                12,
+                {
+                  "clamp": [
+                    {
+                      "div": [
+                        {
+                          "ref": "reputation.the_vent_readers",
+                          "else": 0
+                        },
+                        5
+                      ]
+                    },
+                    -6,
+                    6
+                  ]
+                }
+              ]
+            },
+            "onSuccess": "ember_vaso_stone_told",
+            "onFailure": "ember_vaso_stone_wont"
+          }
+        },
+        {
+          "id": "greet_leave",
+          "text": "Nothing.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "ember_vaso_never_told",
+      "says": [
+        {
+          "text": "“Never.” No hesitation at all. “Not in the hard winter, not in the two years the mountain went quiet and everybody in Cinderhold froze. My grandfather's tally is on the beam — he started marking cold nights and gave up because there were none.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "learnLore": {
+            "entry": "ember_warm_never"
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "ember_vaso_never_on",
+          "text": "Go on.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "ember_vaso_never_wont",
+      "says": [
+        {
+          "text": "“I've said all I mean to,” they say, and go back to what they were doing."
+        }
+      ],
+      "onEnter": [
+        {
+          "adjustReputation": {
+            "faction": "the_vent_readers",
+            "amount": -1
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "ember_vaso_never_drop",
+          "text": "Leave it.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "ember_vaso_stone_told",
+      "says": [
+        {
+          "text": "“Esk talks about stone. Squared stone, a quarter-mile in.” He wipes the counter. “I have known him forty years and he has never once made a thing up, which is why I have stopped asking him about it.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "learnLore": {
+            "entry": "ember_warm_older"
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "ember_vaso_stone_on",
+          "text": "Go on.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "ember_vaso_stone_wont",
+      "says": [
+        {
+          "text": "“I've said all I mean to,” they say, and go back to what they were doing."
+        }
+      ],
+      "onEnter": [
+        {
+          "adjustReputation": {
+            "faction": "the_vent_readers",
+            "amount": -1
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "ember_vaso_stone_drop",
+          "text": "Leave it.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    }
+  ]
+}

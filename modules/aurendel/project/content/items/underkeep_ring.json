@@ -1,0 +1,19 @@
+{
+  "id": "underkeep_ring",
+  "name": "The Ring Under the Keep",
+  "description": "Found on the sixth finger of a hand that had five.",
+  "kind": "trinket",
+  "slot": "ring",
+  "value": 1500,
+  "weight": 0,
+  "rarity": "very_rare",
+  "tags": [
+    "fabled",
+    "trial"
+  ],
+  "skillBonuses": {
+    "arcana": 3,
+    "insight": 3,
+    "medicine": 2
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "id": "greenway_the_avenue",
+  "name": "The Avenue",
+  "description": "Two rows of oak a hundred feet apart running dead straight for six miles, and nobody planted them within record.",
+  "area": "duskwood_the_greenway",
+  "kind": "landmark",
+  "descriptionKey": "greenway_the_avenue_desc",
+  "travelMinutes": 6,
+  "tags": [],
+  "position": {
+    "x": 3,
+    "y": 3
+  },
+  "triggers": [
+    {
+      "id": "dusk_found_avenue",
+      "mode": "once",
+      "on": "enter",
+      "description": "Nine miles of it, and how old the edge trees are not.",
+      "effects": [
+        {
+          "learnLore": {
+            "entry": "dusk_green_ages"
+          }
+        }
+      ]
+    }
+  ]
+}

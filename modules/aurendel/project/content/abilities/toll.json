@@ -1,0 +1,35 @@
+{
+  "id": "toll",
+  "name": "Toll",
+  "description": "One note, under the water, and it is in your chest before it is in your ears.",
+  "actionType": "action",
+  "targeting": "allEnemies",
+  "attack": {
+    "stat": "presence",
+    "against": "guard"
+  },
+  "onUse": [
+    {
+      "damage": {
+        "target": {
+          "ref": "target.id"
+        },
+        "amount": {
+          "roll": "2d6"
+        },
+        "damageType": "bludgeoning"
+      }
+    },
+    {
+      "applyCondition": {
+        "target": {
+          "ref": "target.id"
+        },
+        "condition": "stunned",
+        "duration": 1
+      }
+    }
+  ],
+  "range": 30,
+  "cooldown": 5
+}

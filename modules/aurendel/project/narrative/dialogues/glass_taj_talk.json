@@ -1,0 +1,314 @@
+{
+  "id": "glass_taj_talk",
+  "start": "greet",
+  "nodes": [
+    {
+      "id": "greet",
+      "says": [
+        {
+          "text": "A room of tally-boards, one per well, each with a number chalked on it and a smaller number under that."
+        },
+        {
+          "text": "“Every well in the city, to the cup,” he says, with the flat pride of a man who has never once been thanked for it.”"
+        }
+      ],
+      "onEnter": [],
+      "options": [
+        {
+          "id": "glass_taj_metered",
+          "text": "Is every well on those boards?",
+          "requires": {
+            "without": {
+              "lore": [
+                "glass_bath_metered"
+              ]
+            }
+          },
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "check": {
+            "skill": "insight",
+            "difficulty": {
+              "sub": [
+                13,
+                {
+                  "clamp": [
+                    {
+                      "div": [
+                        {
+                          "ref": "reputation.the_water_wardens",
+                          "else": 0
+                        },
+                        5
+                      ]
+                    },
+                    -6,
+                    6
+                  ]
+                }
+              ]
+            },
+            "onSuccess": "glass_taj_metered_told",
+            "onFailure": "glass_taj_metered_wont"
+          }
+        },
+        {
+          "id": "glass_taj_nine",
+          "text": "You take the pans' returns. How many courses do they yield?",
+          "requires": {
+            "without": {
+              "lore": [
+                "glass_courses_nine"
+              ]
+            }
+          },
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "check": {
+            "skill": "insight",
+            "difficulty": {
+              "sub": [
+                14,
+                {
+                  "clamp": [
+                    {
+                      "div": [
+                        {
+                          "ref": "reputation.the_water_wardens",
+                          "else": 0
+                        },
+                        5
+                      ]
+                    },
+                    -6,
+                    6
+                  ]
+                }
+              ]
+            },
+            "onSuccess": "glass_taj_nine_told",
+            "onFailure": "glass_taj_nine_wont"
+          }
+        },
+        {
+          "id": "glass_taj_cistern",
+          "text": "The cistern out at the Dry Cistern — what fed it?",
+          "requires": {
+            "without": {
+              "lore": [
+                "glass_cistern_feed"
+              ]
+            }
+          },
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "check": {
+            "skill": "persuasion",
+            "difficulty": {
+              "sub": [
+                14,
+                {
+                  "clamp": [
+                    {
+                      "div": [
+                        {
+                          "ref": "reputation.the_water_wardens",
+                          "else": 0
+                        },
+                        5
+                      ]
+                    },
+                    -6,
+                    6
+                  ]
+                }
+              ]
+            },
+            "onSuccess": "glass_taj_cistern_told",
+            "onFailure": "glass_taj_cistern_wont"
+          }
+        },
+        {
+          "id": "greet_leave",
+          "text": "Nothing.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "glass_taj_metered_told",
+      "says": [
+        {
+          "text": "“Every well.” A beat, and then, because he cannot help it: “There is one that is not a well. The bath under the Glass Quarter has never been metered, not once, not in the whole run of the boards.” He straightens a board that did not need it. “It is not a well, so it is not mine. That is the position.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "learnLore": {
+            "entry": "glass_bath_metered"
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "glass_taj_metered_on",
+          "text": "Go on.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "glass_taj_metered_wont",
+      "says": [
+        {
+          "text": "“I've said all I mean to,” they say, and go back to what they were doing."
+        }
+      ],
+      "onEnter": [
+        {
+          "adjustReputation": {
+            "faction": "the_water_wardens",
+            "amount": -1
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "glass_taj_metered_drop",
+          "text": "Leave it.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "glass_taj_nine_told",
+      "says": [
+        {
+          "text": "“Nine.” He does not have to look it up. “Which has been irritating me since I took the boards, because Saltrun cuts eight and everyone on that coast cuts eight, and the returns have said nine for two hundred years.” He shrugs, very slightly. “It is salt, not water. Not mine.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "learnLore": {
+            "entry": "glass_courses_nine"
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "glass_taj_nine_on",
+          "text": "Go on.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "glass_taj_nine_wont",
+      "says": [
+        {
+          "text": "“I've said all I mean to,” they say, and go back to what they were doing."
+        }
+      ],
+      "onEnter": [
+        {
+          "adjustReputation": {
+            "faction": "the_water_wardens",
+            "amount": -1
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "glass_taj_nine_drop",
+          "text": "Leave it.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "glass_taj_cistern_told",
+      "says": [
+        {
+          "text": "“Nothing on any chart of mine.” He is put out by it. “I have the whole watershed. There is no watershed. It has an outlet and no inlet, and I have three hundred years of wardens before me who all wrote *see previous* in that column.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "learnLore": {
+            "entry": "glass_cistern_feed"
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "glass_taj_cistern_on",
+          "text": "Go on.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "glass_taj_cistern_wont",
+      "says": [
+        {
+          "text": "“I've said all I mean to,” they say, and go back to what they were doing."
+        }
+      ],
+      "onEnter": [
+        {
+          "adjustReputation": {
+            "faction": "the_water_wardens",
+            "amount": -1
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "glass_taj_cistern_drop",
+          "text": "Leave it.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    }
+  ]
+}

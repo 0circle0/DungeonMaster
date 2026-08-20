@@ -1,0 +1,19 @@
+{
+  "id": "obsidian_shelf_cutters_camp",
+  "name": "The Cutters' Camp",
+  "description": "Where the glass is quarried, by people who work in leather from neck to ankle in that heat.",
+  "area": "ember_obsidian_shelf",
+  "kind": "camp",
+  "descriptionKey": "generic_camp",
+  "travelMinutes": 6,
+  "tags": [],
+  "map": {
+    "width": "11",
+    "height": "9",
+    "palette": "int_cave"
+  },
+  "position": {
+    "x": 14,
+    "y": 3
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "id": "deeproads_beneath_treads",
+  "name": "Beneath the Treads",
+  "description": "The Broken Stair is hollow, and where it has gone you can see there are rooms in the thickness of it.",
+  "biome": "dungeon_delved",
+  "roomCount": "12",
+  "depth": "4",
+  "algorithm": "bsp",
+  "lockedDoorChance": 0,
+  "doorGates": [],
+  "rollEncounters": false,
+  "safeEntrance": true,
+  "bsp": {
+    "minLeaf": 5
+  },
+  "width": "29",
+  "height": "29",
+  "bossTable": "deep_stair_boss"
+}

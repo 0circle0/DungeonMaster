@@ -1,0 +1,18 @@
+{
+  "id": "dungeon_ember_boss",
+  "name": "Burnt Deep Chamber",
+  "descriptionKey": "dungeon_ember_boss_desc",
+  "weight": 1,
+  "minExits": 1,
+  "maxExits": 2,
+  "encounterChance": 0,
+  "trapChance": 0.16,
+  "lootChance": 0.8,
+  "tags": [
+    "dungeon_ember",
+    "boss"
+  ],
+  "role": "boss",
+  "neverTrap": true,
+  "alwaysEncounter": true
+}

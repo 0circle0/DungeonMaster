@@ -1,0 +1,29 @@
+{
+  "id": "kings_quarry_face",
+  "name": "The Second Face",
+  "description": "Two faces worked, one warrant, and the second face has a way into the hill at the bottom of it.",
+  "kind": "ward",
+  "blockedTextKey": "kings_quarry_blocked",
+  "staysOpen": true,
+  "onOpen": [
+    {
+      "setFlag": {
+        "flag": "kings_quarry_open",
+        "value": true
+      }
+    }
+  ],
+  "onBlocked": [],
+  "opensWith": [],
+  "tags": [],
+  "requires": {
+    "items": [
+      {
+        "item": "posting_book",
+        "quantity": 1,
+        "consume": false,
+        "equipped": false
+      }
+    ]
+  }
+}

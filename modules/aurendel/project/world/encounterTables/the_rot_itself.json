@@ -1,0 +1,22 @@
+{
+  "id": "the_rot_itself",
+  "minDepth": 0,
+  "maxDepth": 999,
+  "chance": 1,
+  "emptyWeight": 0,
+  "scalePerLevels": 3,
+  "groups": [
+    {
+      "id": "rot",
+      "weight": 1,
+      "hostile": true,
+      "entries": [
+        {
+          "monster": "rot_mother",
+          "count": "1",
+          "scaleWithLevel": false
+        }
+      ]
+    }
+  ]
+}

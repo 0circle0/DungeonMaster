@@ -1,0 +1,11 @@
+{
+  "id": "skarn_stair",
+  "name": "Nine Hundred and One",
+  "description": "Two stairs where the hold admits to one, swept daily by nobody on any payroll, and a count that will not agree with the lintel.",
+  "entries": [
+    "skarn_stair_swept",
+    "skarn_stair_two",
+    "skarn_stair_count",
+    "skarn_stair_shade"
+  ]
+}

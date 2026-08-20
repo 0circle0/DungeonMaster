@@ -1,0 +1,17 @@
+{
+  "id": "crater_the_lip_crossing",
+  "name": "The Thin Glass",
+  "description": "The glass gets thin about a mile in, and the thin part is over something.",
+  "area": "glasslands_the_crater",
+  "kind": "crossing",
+  "descriptionKey": "generic_crossing",
+  "travelMinutes": 8,
+  "tags": [
+    "crossing"
+  ],
+  "gate": "glasslands_crater_ward",
+  "position": {
+    "x": 3,
+    "y": 3
+  }
+}

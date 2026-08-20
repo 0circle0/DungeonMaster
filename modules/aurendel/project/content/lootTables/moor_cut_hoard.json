@@ -1,0 +1,41 @@
+{
+  "id": "moor_cut_hoard",
+  "name": "Below the Black Band",
+  "rolls": "3",
+  "emptyChance": 0,
+  "bonusRollSkill": "perception",
+  "bonusRolls": {
+    "onSuccess": 1,
+    "onCritical": 2
+  },
+  "entries": [
+    {
+      "weight": 4,
+      "value": {
+        "item": "old_coin",
+        "quantity": "5d6"
+      }
+    },
+    {
+      "weight": 3,
+      "value": {
+        "item": "barrow_torc",
+        "quantity": "1"
+      }
+    },
+    {
+      "weight": 2,
+      "value": {
+        "item": "antidote",
+        "quantity": "1d2"
+      }
+    },
+    {
+      "weight": 1,
+      "value": {
+        "item": "silvered_blade",
+        "quantity": "1"
+      }
+    }
+  ]
+}

@@ -26,8 +26,8 @@ State is fully serializable *including RNG state*, so `seed + action log` reprod
 | `apps/editor` | The authoring studio. |
 | `apps/site` | The documentation site: the format field by field, the engine, and the studio. |
 | `modules/` | Game modules. `minimal` is the no-hardcoding proof. |
-| `modules/shared` | `dmkit`, the Python API a world of any size is authored against. Not a module — no `module.json` — see [modules/shared/README.md](modules/shared/README.md). |
-| `pyrightconfig.json` | Editor/`npx pyright` search paths for the module generators. Type checking off; missing imports and undefined names are errors. |
+| `modules/shared` | `dmkit`, the Python that first built Aurendel and the reference ruleset. Retired: both are authored as `project/` trees now, and the generators refuse to run over one. Not a module — no `module.json` — see [modules/shared/README.md](modules/shared/README.md). |
+| `pyrightconfig.json` | Editor/`npx pyright` search paths for the retired generators. Type checking off; missing imports and undefined names are errors. |
 | `mods/` | Installed mods, `engine/` and `editor/`. Not packaged with any game — see [mods/README.md](mods/README.md). |
 
 ## The DSL

@@ -1,0 +1,28 @@
+{
+  "id": "int_hull",
+  "name": "Hull Interior",
+  "floor": "timber_floor",
+  "wall": "wall_hull",
+  "exterior": "wall_hull",
+  "scatter": [
+    {
+      "terrain": "crate",
+      "frequency": 0.06,
+      "distribution": "speckle",
+      "priority": 0
+    },
+    {
+      "terrain": "barrel",
+      "frequency": 0.05,
+      "distribution": "speckle",
+      "priority": 1
+    },
+    {
+      "terrain": "table",
+      "frequency": 0.03,
+      "distribution": "speckle",
+      "priority": 2
+    }
+  ],
+  "door": "door"
+}

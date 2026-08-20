@@ -1,0 +1,29 @@
+{
+  "id": "step_bank_course",
+  "name": "Into the Laid Course",
+  "description": "Forty feet down the open face, a course of dressed stone going into the bank both ways, and one block out of it.",
+  "kind": "ward",
+  "blockedTextKey": "step_bank_blocked",
+  "staysOpen": true,
+  "onOpen": [
+    {
+      "setFlag": {
+        "flag": "step_bank_open",
+        "value": true
+      }
+    }
+  ],
+  "onBlocked": [],
+  "opensWith": [],
+  "tags": [],
+  "requires": {
+    "items": [
+      {
+        "item": "flood_book",
+        "quantity": 1,
+        "consume": false,
+        "equipped": false
+      }
+    ]
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "id": "barrow_torc",
+  "name": "A Barrow Torc",
+  "description": "Twisted gold, sized for a neck rather thicker than yours.",
+  "kind": "treasure",
+  "value": 70,
+  "weight": 1,
+  "tags": [
+    "treasure"
+  ]
+}

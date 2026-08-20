@@ -1,0 +1,24 @@
+{
+  "id": "highpass_chapel",
+  "name": "The Ward Chapel",
+  "description": "Small, thick-walled, and warm, which is the whole of its appeal.",
+  "area": "skarnspine_highpass",
+  "kind": "shrine",
+  "descriptionKey": "int_temple",
+  "travelMinutes": 3,
+  "tags": [
+    "shrine"
+  ],
+  "services": [
+    "temple"
+  ],
+  "map": {
+    "width": "11",
+    "height": "9",
+    "palette": "int_temple"
+  },
+  "position": {
+    "x": 37,
+    "y": 13
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "id": "long_hall_the_span",
+  "name": "The Long Hall",
+  "description": "Four miles of dressed corridor forty feet wide, dead straight, with a ceiling nobody has surveyed.",
+  "area": "deeproads_the_long_hall",
+  "kind": "landmark",
+  "descriptionKey": "long_hall_the_span_desc",
+  "travelMinutes": 10,
+  "tags": [],
+  "position": {
+    "x": 3,
+    "y": 3
+  }
+}

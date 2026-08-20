@@ -1,0 +1,29 @@
+{
+  "id": "slagfoot_warm_ground",
+  "name": "The Warm Ground",
+  "description": "You can lie on it in Deepdark and be comfortable, and people do, and occasionally it goes wrong.",
+  "area": "ember_slagfoot",
+  "kind": "landmark",
+  "descriptionKey": "generic_landmark",
+  "travelMinutes": 3,
+  "tags": [],
+  "position": {
+    "x": 3,
+    "y": 3
+  },
+  "triggers": [
+    {
+      "id": "ember_found_warm",
+      "mode": "once",
+      "on": "enter",
+      "description": "Ground that has never once been cold.",
+      "effects": [
+        {
+          "learnLore": {
+            "entry": "ember_warm_never"
+          }
+        }
+      ]
+    }
+  ]
+}

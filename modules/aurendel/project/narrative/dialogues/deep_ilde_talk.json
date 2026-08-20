@@ -1,0 +1,424 @@
+{
+  "id": "deep_ilde_talk",
+  "start": "greet",
+  "nodes": [
+    {
+      "id": "greet",
+      "says": [
+        {
+          "text": "A crossing over the Sunless River, a lamp on a tripod, and a woman scribing onto brass with the river going past under her."
+        },
+        {
+          "text": "“Do not stand in the light. I am taking an angle off the far bank.”"
+        }
+      ],
+      "onEnter": [],
+      "options": [
+        {
+          "id": "deep_ilde_shaft",
+          "text": "The shaft above the Weeping Vault.",
+          "requires": {
+            "without": {
+              "lore": [
+                "deep_vault_shaft"
+              ]
+            }
+          },
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "check": {
+            "skill": "persuasion",
+            "difficulty": {
+              "sub": [
+                17,
+                {
+                  "clamp": [
+                    {
+                      "div": [
+                        {
+                          "ref": "reputation.the_wayfinders",
+                          "else": 0
+                        },
+                        5
+                      ]
+                    },
+                    -6,
+                    6
+                  ]
+                }
+              ]
+            },
+            "onSuccess": "deep_ilde_shaft_told",
+            "onFailure": "deep_ilde_shaft_wont"
+          }
+        },
+        {
+          "id": "deep_ilde_warm",
+          "text": "The columns weep warm.",
+          "requires": {
+            "without": {
+              "lore": [
+                "deep_vault_warm"
+              ]
+            }
+          },
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "check": {
+            "skill": "persuasion",
+            "difficulty": {
+              "sub": [
+                14,
+                {
+                  "clamp": [
+                    {
+                      "div": [
+                        {
+                          "ref": "reputation.the_wayfinders",
+                          "else": 0
+                        },
+                        5
+                      ]
+                    },
+                    -6,
+                    6
+                  ]
+                }
+              ]
+            },
+            "onSuccess": "deep_ilde_warm_told",
+            "onFailure": "deep_ilde_warm_wont"
+          }
+        },
+        {
+          "id": "deep_ilde_spacing",
+          "text": "You measure things. What is the interval on the market road's lamps?",
+          "requires": {
+            "without": {
+              "lore": [
+                "deep_lamps_spacing"
+              ]
+            }
+          },
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "check": {
+            "skill": "insight",
+            "difficulty": {
+              "sub": [
+                15,
+                {
+                  "clamp": [
+                    {
+                      "div": [
+                        {
+                          "ref": "reputation.the_wayfinders",
+                          "else": 0
+                        },
+                        5
+                      ]
+                    },
+                    -6,
+                    6
+                  ]
+                }
+              ]
+            },
+            "onSuccess": "deep_ilde_spacing_told",
+            "onFailure": "deep_ilde_spacing_wont"
+          }
+        },
+        {
+          "id": "deep_ilde_plate",
+          "text": "The plate. The one with the number scratched out.",
+          "requires": {
+            "without": {
+              "items": [
+                "survey_plate"
+              ],
+              "flags": [
+                {
+                  "flag": "given:survey_plate"
+                }
+              ]
+            }
+          },
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "check": {
+            "skill": "persuasion",
+            "difficulty": {
+              "sub": [
+                16,
+                {
+                  "clamp": [
+                    {
+                      "div": [
+                        {
+                          "ref": "reputation.the_wayfinders",
+                          "else": 0
+                        },
+                        5
+                      ]
+                    },
+                    -6,
+                    6
+                  ]
+                }
+              ]
+            },
+            "onSuccess": "deep_ilde_plate_gave",
+            "onFailure": "deep_ilde_plate_kept"
+          }
+        },
+        {
+          "id": "greet_leave",
+          "text": "Nothing.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "deep_ilde_shaft_told",
+      "says": [
+        {
+          "text": "She puts the scriber down. “It goes up further than there is rock above it.” She lets you have that. “I sectioned it. I took the depth from the surface and I took the height of the shaft and the second is bigger. I wrote the number down and then I scratched it out, because a number like that gets a surveyor retired.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "learnLore": {
+            "entry": "deep_vault_shaft"
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "deep_ilde_shaft_on",
+          "text": "Go on.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "deep_ilde_shaft_wont",
+      "says": [
+        {
+          "text": "“I've said all I mean to,” they say, and go back to what they were doing."
+        }
+      ],
+      "onEnter": [
+        {
+          "adjustReputation": {
+            "faction": "the_wayfinders",
+            "amount": -1
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "deep_ilde_shaft_drop",
+          "text": "Leave it.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "deep_ilde_warm_told",
+      "says": [
+        {
+          "text": "“Warm and salt.” She is precise. “There is no sea within four hundred miles of straight down from that hall. I have tasted it and I have had it tasted by somebody who did not know where it came from, and they said seawater.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "learnLore": {
+            "entry": "deep_vault_warm"
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "deep_ilde_warm_on",
+          "text": "Go on.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "deep_ilde_warm_wont",
+      "says": [
+        {
+          "text": "“I've said all I mean to,” they say, and go back to what they were doing."
+        }
+      ],
+      "onEnter": [
+        {
+          "adjustReputation": {
+            "faction": "the_wayfinders",
+            "amount": -1
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "deep_ilde_warm_drop",
+          "text": "Leave it.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "deep_ilde_spacing_told",
+      "says": [
+        {
+          "text": "“Twice what you would light a road at, and exact between one and the next.” She does not have to check. “I took it as a young surveyor because it looked wrong. It is wrong, and it is *consistent*, which is worse. A lamp interval drifts. That does not.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "learnLore": {
+            "entry": "deep_lamps_spacing"
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "deep_ilde_spacing_on",
+          "text": "Go on.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "deep_ilde_spacing_wont",
+      "says": [
+        {
+          "text": "“I've said all I mean to,” they say, and go back to what they were doing."
+        }
+      ],
+      "onEnter": [
+        {
+          "adjustReputation": {
+            "faction": "the_wayfinders",
+            "amount": -1
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "deep_ilde_spacing_drop",
+          "text": "Leave it.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "deep_ilde_plate_gave",
+      "says": [
+        {
+          "text": "She fetches it and turns it so the scratched-out corner is toward you first, which is either honesty or relief. “Eight pillars on it,” she says. “Go and count them, and then come back and tell me I sectioned it wrong.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "grantItem": {
+            "target": {
+              "ref": "actor.id"
+            },
+            "item": "survey_plate",
+            "quantity": 1
+          }
+        },
+        {
+          "setFlag": {
+            "flag": "given:survey_plate",
+            "value": true
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "deep_ilde_plate_thanks",
+          "text": "Thank you.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "deep_ilde_plate_kept",
+      "says": [
+        {
+          "text": "“It is scribed for the guild,” she says, and does not look at the corner. “Ask me the measurements.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "adjustReputation": {
+            "faction": "the_wayfinders",
+            "amount": -2
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "deep_ilde_plate_leave",
+          "text": "Then no.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    }
+  ]
+}

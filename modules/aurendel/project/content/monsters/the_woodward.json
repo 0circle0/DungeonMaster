@@ -1,0 +1,85 @@
+{
+  "id": "the_woodward",
+  "name": "Whoever Has Been Earning the Fee",
+  "description": "Four hundred years of a quarterly payment to a post nobody has filled, and every mark on the edge of the wood re-cut on the same face, recently.",
+  "level": 6,
+  "xp": 430,
+  "attributes": {
+    "might": 15,
+    "agility": 14,
+    "endurance": 16,
+    "intellect": 13,
+    "instinct": 15,
+    "presence": 12
+  },
+  "abilities": [
+    "strike",
+    "wither",
+    "grave_chill"
+  ],
+  "behaviour": [
+    {
+      "priority": 15,
+      "use": "wither",
+      "when": {
+        "chance": 0.35
+      }
+    },
+    {
+      "priority": 5,
+      "use": "grave_chill"
+    },
+    {
+      "priority": 0,
+      "use": "strike"
+    }
+  ],
+  "faction": "the_unsealed",
+  "creatureType": "undead",
+  "size": "medium",
+  "descriptors": [
+    "a methodical",
+    "a bark-grey"
+  ],
+  "conditionalLoot": [],
+  "loot": "dusk_ward_hoard",
+  "damageInteractions": [
+    {
+      "damageType": "slashing",
+      "multiplier": 0.5,
+      "unless": [
+        "silvered"
+      ]
+    },
+    {
+      "damageType": "piercing",
+      "multiplier": 0.5,
+      "unless": [
+        "silvered"
+      ]
+    }
+  ],
+  "conditionImmunities": [
+    "frightened",
+    "poisoned"
+  ],
+  "resourceOverrides": {
+    "hp": 60
+  },
+  "temperament": {
+    "roamRadius": 12,
+    "investigateRadius": 40,
+    "leashRadius": 60,
+    "wanderChance": 0.1,
+    "disengageTurns": 1,
+    "speeds": {
+      "wander": 0.5,
+      "investigate": 0.5
+    },
+    "investigates": [
+      "sight",
+      "hearing",
+      "smell"
+    ]
+  }
+}

@@ -1,0 +1,114 @@
+{
+  "id": "door_warden",
+  "name": "The Door-Warden",
+  "description": "It was set to keep the barrow shut and it is still, in its way, doing that.",
+  "level": 4,
+  "xp": 200,
+  "attributes": {
+    "might": 16,
+    "agility": 11,
+    "endurance": 16,
+    "intellect": 8,
+    "instinct": 12,
+    "presence": 14
+  },
+  "abilities": [
+    "gore",
+    "grave_chill",
+    "call_the_shut"
+  ],
+  "behaviour": [
+    {
+      "priority": 20,
+      "use": "call_the_shut",
+      "when": {
+        "chance": 0.3
+      }
+    },
+    {
+      "priority": 10,
+      "use": "grave_chill",
+      "when": {
+        "gt": [
+          {
+            "ref": "actor.res.hp"
+          },
+          0
+        ]
+      }
+    },
+    {
+      "priority": 0,
+      "use": "gore"
+    }
+  ],
+  "faction": "the_unsealed",
+  "creatureType": "undead",
+  "size": "medium",
+  "descriptors": [
+    "a wrapped",
+    "a patient"
+  ],
+  "conditionalLoot": [
+    "silvered_cache"
+  ],
+  "loot": "door_warden_hoard",
+  "damageInteractions": [
+    {
+      "damageType": "slashing",
+      "multiplier": 0.5,
+      "unless": [
+        "silvered"
+      ]
+    },
+    {
+      "damageType": "piercing",
+      "multiplier": 0.5,
+      "unless": [
+        "silvered"
+      ]
+    }
+  ],
+  "conditionImmunities": [
+    "frightened",
+    "poisoned",
+    "bleeding"
+  ],
+  "reactions": [
+    {
+      "id": "warden_wakes",
+      "on": "seePlayer",
+      "priority": 5,
+      "effects": [
+        {
+          "setFlag": {
+            "flag": "warden_saw_you",
+            "value": true
+          }
+        }
+      ]
+    }
+  ],
+  "resourceOverrides": {
+    "hp": 46
+  },
+  "derivedOverrides": {
+    "guard": 14
+  },
+  "temperament": {
+    "roamRadius": 12,
+    "investigateRadius": 40,
+    "leashRadius": 60,
+    "wanderChance": 0.1,
+    "disengageTurns": 1,
+    "speeds": {
+      "wander": 0.5,
+      "investigate": 0.5
+    },
+    "investigates": [
+      "sight",
+      "hearing",
+      "smell"
+    ]
+  }
+}

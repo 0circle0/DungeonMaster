@@ -1,0 +1,34 @@
+{
+  "id": "gate_store_hesk",
+  "name": "Hesk, at the Gate Store",
+  "description": "Sells rope, tallow, nails and boots to everybody going up and everybody coming down, and looks at both.",
+  "disposition": 5,
+  "gullibility": 0.4,
+  "memorySpan": 190,
+  "offersQuests": [],
+  "caresAbout": [],
+  "reactions": [],
+  "faction": "karn_dolur",
+  "dialogue": "skarn_hesk_talk",
+  "home": "snowgate_store",
+  "shop": {
+    "lootTable": "keeper_stock",
+    "buysTags": [
+      "material"
+    ],
+    "priceMultiplier": 1.2
+  },
+  "temperament": {
+    "roamRadius": 0,
+    "wanderChance": 0,
+    "speeds": {
+      "wander": 0
+    },
+    "investigates": [],
+    "notices": [
+      "hostile",
+      "neutral",
+      "ally"
+    ]
+  }
+}

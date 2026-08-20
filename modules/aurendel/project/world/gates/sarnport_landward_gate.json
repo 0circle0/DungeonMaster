@@ -1,0 +1,24 @@
+{
+  "id": "sarnport_landward_gate",
+  "name": "The Landward Gate",
+  "kind": "toll",
+  "description": "Sarnport charges to leave as well as to arrive, which the corporation describes as a road levy and nobody else does.",
+  "staysOpen": false,
+  "requires": {
+    "description": "4 marks",
+    "currency": 4
+  },
+  "bypass": {
+    "skill": "deception",
+    "difficulty": 13,
+    "retryable": true
+  },
+  "onOpen": [
+    {
+      "adjustCurrency": {
+        "amount": -4
+      }
+    }
+  ],
+  "blockedTextKey": "sarnport_landward_gate_blocked"
+}

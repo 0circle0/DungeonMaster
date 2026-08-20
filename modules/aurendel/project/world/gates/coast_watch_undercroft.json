@@ -1,0 +1,29 @@
+{
+  "id": "coast_watch_undercroft",
+  "name": "Below the Second Course",
+  "description": "A tower with no stair going up, and a course of stone at the foot that is dressed on the inside face.",
+  "kind": "ward",
+  "blockedTextKey": "coast_watch_blocked",
+  "staysOpen": true,
+  "onOpen": [
+    {
+      "setFlag": {
+        "flag": "coast_watch_open",
+        "value": true
+      }
+    }
+  ],
+  "onBlocked": [],
+  "opensWith": [],
+  "tags": [],
+  "requires": {
+    "items": [
+      {
+        "item": "harbour_night_book",
+        "quantity": 1,
+        "consume": false,
+        "equipped": false
+      }
+    ]
+  }
+}

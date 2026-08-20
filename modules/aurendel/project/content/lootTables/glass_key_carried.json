@@ -1,0 +1,26 @@
+{
+  "id": "glass_key_carried",
+  "name": "What Havva Kept",
+  "rolls": "1",
+  "emptyChance": 0,
+  "entries": [
+    {
+      "weight": 1,
+      "value": {
+        "item": "cistern_key",
+        "quantity": "1",
+        "unique": true,
+        "requirementScope": "party",
+        "requires": {
+          "without": {
+            "flags": [
+              {
+                "flag": "given:cistern_key"
+              }
+            ]
+          }
+        }
+      }
+    }
+  ]
+}

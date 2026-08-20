@@ -1,0 +1,130 @@
+{
+  "id": "rot_the_second_gallery",
+  "name": "The Second Gallery",
+  "description": "Two hundred years of holding the line at the fifth. Kesk has been driven back to the second in a season and the beds she has left will not feed Lantern Deep past Highsun.",
+  "autoStart": false,
+  "ordered": true,
+  "tags": [
+    "side",
+    "act3",
+    "rot",
+    "deeproads"
+  ],
+  "objectives": [],
+  "stages": [
+    {
+      "id": "to_the_beds",
+      "name": "Down to Mycelt",
+      "description": "Four hundred people, and every one of them growing what nine hundred more eat.",
+      "objectives": [
+        {
+          "id": "at_the_beds",
+          "description": "Reach the beds at Mycelt.",
+          "kind": "reach",
+          "count": 1,
+          "hidden": false,
+          "optional": false,
+          "target": "mycelt_the_beds"
+        }
+      ],
+      "journalKey": "rot_journal_beds"
+    },
+    {
+      "id": "cut_it_back",
+      "name": "Cut it back",
+      "description": "The Rot walks when it is thick enough, which the pickers have known for two hundred years and never had to say to an outsider before.",
+      "objectives": [
+        {
+          "id": "the_horrors",
+          "description": "Cut the gallery back.",
+          "kind": "kill",
+          "count": 2,
+          "hidden": false,
+          "optional": false,
+          "target": "fungal_horror"
+        }
+      ],
+      "onComplete": [
+        {
+          "setFlag": {
+            "flag": "rot_gallery_cut",
+            "value": true
+          }
+        }
+      ],
+      "journalKey": "rot_journal_cut"
+    },
+    {
+      "id": "tell_kesk",
+      "name": "Tell Kesk",
+      "description": "She will want the count, and she will do the arithmetic in front of you.",
+      "objectives": [
+        {
+          "id": "report",
+          "description": "Report to Kesk.",
+          "kind": "talk",
+          "count": 1,
+          "hidden": false,
+          "optional": false,
+          "target": "picker_kesk"
+        }
+      ],
+      "journalKey": "rot_journal_report"
+    }
+  ],
+  "unlocks": [
+    "rot_the_listening_room"
+  ],
+  "rewards": {
+    "xp": 90,
+    "items": [],
+    "reputation": {
+      "the_pickers": 12
+    }
+  },
+  "giver": "picker_kesk",
+  "requires": {
+    "description": "two of the three ward-keys",
+    "anyOf": [
+      {
+        "items": [
+          {
+            "item": "grown_key"
+          },
+          {
+            "item": "cast_key"
+          }
+        ]
+      },
+      {
+        "items": [
+          {
+            "item": "grown_key"
+          },
+          {
+            "item": "glass_key"
+          }
+        ]
+      },
+      {
+        "items": [
+          {
+            "item": "cast_key"
+          },
+          {
+            "item": "glass_key"
+          }
+        ]
+      }
+    ],
+    "minLevel": 6
+  },
+  "onComplete": [
+    {
+      "setFlag": {
+        "flag": "rot_beds_seen",
+        "value": true
+      }
+    }
+  ]
+}

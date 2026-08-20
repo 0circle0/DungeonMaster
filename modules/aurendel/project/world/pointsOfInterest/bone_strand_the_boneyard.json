@@ -1,0 +1,29 @@
+{
+  "id": "bone_strand_the_boneyard",
+  "name": "The Boneyard",
+  "description": "Where the whales have come ashore to die since before there was anybody to watch, and the shingle is more bone than stone.",
+  "area": "frostmere_bone_strand",
+  "kind": "landmark",
+  "descriptionKey": "bone_strand_the_boneyard_desc",
+  "travelMinutes": 8,
+  "tags": [],
+  "position": {
+    "x": 3,
+    "y": 3
+  },
+  "triggers": [
+    {
+      "id": "frost_found_boneyard",
+      "mode": "once",
+      "on": "enter",
+      "description": "Which way they are all facing.",
+      "effects": [
+        {
+          "learnLore": {
+            "entry": "frost_strand_inland"
+          }
+        }
+      ]
+    }
+  ]
+}

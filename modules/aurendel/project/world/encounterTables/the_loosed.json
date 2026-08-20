@@ -1,0 +1,50 @@
+{
+  "id": "the_loosed",
+  "minDepth": 0,
+  "maxDepth": 999,
+  "chance": 0.4,
+  "emptyWeight": 4,
+  "scalePerLevels": 2,
+  "groups": [
+    {
+      "id": "walkers",
+      "weight": 5,
+      "hostile": true,
+      "entries": [
+        {
+          "monster": "door_walker",
+          "count": "1d2",
+          "scaleWithLevel": true
+        }
+      ],
+      "requires": {
+        "flags": [
+          {
+            "flag": "aurendel_finished",
+            "equals": true
+          }
+        ]
+      }
+    },
+    {
+      "id": "a_pair",
+      "weight": 2,
+      "hostile": true,
+      "entries": [
+        {
+          "monster": "door_walker",
+          "count": "2",
+          "scaleWithLevel": false
+        }
+      ],
+      "requires": {
+        "flags": [
+          {
+            "flag": "aurendel_finished",
+            "equals": true
+          }
+        ]
+      }
+    }
+  ]
+}

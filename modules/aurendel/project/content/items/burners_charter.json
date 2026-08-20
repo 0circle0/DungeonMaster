@@ -1,0 +1,14 @@
+{
+  "id": "burners_charter",
+  "name": "The Burners' Charter",
+  "description": "The right to cut, in writing, with the line they may not cut inside drawn on the back of it in a hand nobody at Rooksrest writes.",
+  "kind": "key",
+  "value": 0,
+  "weight": 0,
+  "tags": [
+    "keepsake"
+  ],
+  "extra": {
+    "heldBy": "charcoal_burner_moll"
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "id": "nowhere",
+  "name": "Nowhere",
+  "description": "The ruleset has to stand somewhere to be validated. A world module deletes this.",
+  "layer": "overworld",
+  "palette": "void"
+}

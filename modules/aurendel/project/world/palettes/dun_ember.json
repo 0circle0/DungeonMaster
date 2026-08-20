@@ -1,0 +1,38 @@
+{
+  "id": "dun_ember",
+  "name": "Burnt Deep",
+  "floor": "ash",
+  "wall": "rock",
+  "exterior": "rock",
+  "scatter": [
+    {
+      "terrain": "cinder",
+      "frequency": 0.12,
+      "distribution": "patch",
+      "scale": 6,
+      "priority": 0
+    },
+    {
+      "terrain": "obsidian",
+      "frequency": 0.07,
+      "distribution": "speckle",
+      "priority": 1
+    },
+    {
+      "terrain": "vent",
+      "frequency": 0.02,
+      "distribution": "speckle",
+      "priority": 2
+    },
+    {
+      "terrain": "lava",
+      "frequency": 0.02,
+      "distribution": "patch",
+      "scale": 4,
+      "edgeTerrain": "cinder",
+      "edgeWidth": 1,
+      "priority": 3
+    }
+  ],
+  "door": "door"
+}

@@ -1,0 +1,74 @@
+{
+  "id": "pennyford_sluice_house",
+  "name": "The Sluice House",
+  "description": "Winches, a chain, and a keeper's room with a very good view of the river doing whatever it likes.",
+  "area": "kingsvale_pennyford",
+  "kind": "landmark",
+  "descriptionKey": "generic_landmark",
+  "travelMinutes": 3,
+  "tags": [],
+  "position": {
+    "x": 12,
+    "y": 6
+  },
+  "map": {
+    "width": "9",
+    "height": "7",
+    "palette": "int_stone"
+  },
+  "triggers": [
+    {
+      "id": "kings_ford_committed",
+      "mode": "once",
+      "on": "enter",
+      "description": "In the sluice house, with the gear oiled.",
+      "requires": {
+        "custom": {
+          "gte": [
+            {
+              "ref": "threads.kings_ford.known"
+            },
+            2
+          ]
+        }
+      },
+      "effects": [
+        {
+          "emit": {
+            "event": "startQuest",
+            "data": {
+              "quest": "kings_the_ford_toll"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "hidden": true,
+  "discover": {
+    "skill": "perception",
+    "difficulty": {
+      "max": [
+        4,
+        {
+          "sub": [
+            16,
+            {
+              "mul": [
+                3,
+                {
+                  "ref": "threads.kings_ford.known"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "gate": "kings_ford_sluice",
+  "encounterTables": [
+    "kings_ford_boss"
+  ],
+  "encounterChance": 1
+}

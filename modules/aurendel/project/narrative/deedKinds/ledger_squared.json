@@ -1,0 +1,8 @@
+{
+  "id": "ledger_squared",
+  "name": "Squared the Ledger",
+  "faction": "the_countinghouse",
+  "severity": 12,
+  "memorability": 1.5,
+  "distortion": 0.2
+}

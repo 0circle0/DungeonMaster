@@ -1,0 +1,24 @@
+{
+  "id": "blackrigging_wreck_tavern",
+  "name": "The Weatherly",
+  "description": "A merchantman that came ashore stern-first in 'eighty-one and has been an inn ever since without anybody moving her.",
+  "area": "isles_blackrigging",
+  "kind": "settlement",
+  "descriptionKey": "blackrigging_wreck_tavern_desc",
+  "travelMinutes": 5,
+  "tags": [
+    "landmark",
+    "inn"
+  ],
+  "services": [
+    "inn",
+    "market"
+  ],
+  "map": {
+    "static": "wreck_tavern"
+  },
+  "position": {
+    "x": 3,
+    "y": 3
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "id": "dungeon_cave_vault",
+  "name": "Cave Vault",
+  "descriptionKey": "dungeon_cave_vault_desc",
+  "weight": 2,
+  "minExits": 1,
+  "maxExits": 2,
+  "encounterChance": 0.4,
+  "trapChance": 0.3,
+  "lootChance": 0.6,
+  "tags": [
+    "dungeon_cave",
+    "vault"
+  ],
+  "role": "vault"
+}

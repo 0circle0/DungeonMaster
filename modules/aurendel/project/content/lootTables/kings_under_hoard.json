@@ -1,0 +1,34 @@
+{
+  "id": "kings_under_hoard",
+  "name": "Past the Third Turn",
+  "rolls": "2",
+  "emptyChance": 0.15,
+  "bonusRollSkill": "perception",
+  "bonusRolls": {
+    "onSuccess": 1,
+    "onCritical": 2
+  },
+  "entries": [
+    {
+      "weight": 5,
+      "value": {
+        "item": "old_coin",
+        "quantity": "2d6"
+      }
+    },
+    {
+      "weight": 2,
+      "value": {
+        "item": "healing_draught",
+        "quantity": "1"
+      }
+    },
+    {
+      "weight": 1,
+      "value": {
+        "item": "ward_salt",
+        "quantity": "1"
+      }
+    }
+  ]
+}

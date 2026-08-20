@@ -1,0 +1,41 @@
+{
+  "id": "skarnspine_weirwater_head",
+  "name": "The Weirwater Head",
+  "description": "Where the river starts: a corrie, a lake, and a waterfall that goes into the ground rather than out of it.",
+  "biome": "alpine",
+  "layer": "overworld",
+  "descriptionKey": "skarnspine_weirwater_head_desc",
+  "dangerLevel": 4,
+  "recommendedLevel": 4,
+  "tags": [
+    "skarnspine"
+  ],
+  "map": {
+    "width": "51",
+    "height": "35"
+  },
+  "entryPoint": {
+    "x": 25,
+    "y": 17
+  },
+  "extra": {
+    "role": "wild"
+  },
+  "connections": [
+    {
+      "to": "skarnspine_cold_shoulder",
+      "travelMinutes": 45
+    },
+    {
+      "to": "skarnspine_the_cut",
+      "travelMinutes": 50
+    },
+    {
+      "to": "moor_heatherlands",
+      "travelMinutes": 220
+    }
+  ],
+  "encounterTables": [
+    "alpine_things"
+  ]
+}

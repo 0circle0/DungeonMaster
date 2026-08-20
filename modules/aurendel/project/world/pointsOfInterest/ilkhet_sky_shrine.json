@@ -1,0 +1,24 @@
+{
+  "id": "ilkhet_sky_shrine",
+  "name": "The Sky Shrine",
+  "description": "Open to the top, deliberately, and it rains in and that is considered correct.",
+  "area": "steppe_ilkhet",
+  "kind": "shrine",
+  "descriptionKey": "int_temple",
+  "travelMinutes": 3,
+  "tags": [
+    "shrine"
+  ],
+  "services": [
+    "temple"
+  ],
+  "map": {
+    "width": "11",
+    "height": "9",
+    "palette": "int_temple"
+  },
+  "position": {
+    "x": 12,
+    "y": 23
+  }
+}

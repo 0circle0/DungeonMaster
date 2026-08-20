@@ -1,0 +1,36 @@
+{
+  "id": "halfmast_the_fort",
+  "name": "Halfmast Fort",
+  "description": "The sea got into it in 'sixty-three and it is still the best building on the island.",
+  "area": "isles_halfmast",
+  "kind": "landmark",
+  "descriptionKey": "generic_landmark",
+  "travelMinutes": 5,
+  "tags": [
+    "castle"
+  ],
+  "map": {
+    "width": "19",
+    "height": "13",
+    "palette": "int_stone"
+  },
+  "position": {
+    "x": 3,
+    "y": 3
+  },
+  "triggers": [
+    {
+      "id": "isle_found_fort",
+      "mode": "once",
+      "on": "enter",
+      "description": "What the fort's own guns are laid on, and what they are not.",
+      "effects": [
+        {
+          "learnLore": {
+            "entry": "isle_wreck_pointing"
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "id": "cinderhold_slag_temple",
+  "name": "The Slag Cathedral",
+  "description": "Cast rather than built: they poured it, over eleven years, and it has no joints anywhere.",
+  "area": "ember_cinderhold",
+  "kind": "shrine",
+  "descriptionKey": "cinderhold_slag_temple_desc",
+  "travelMinutes": 6,
+  "tags": [
+    "landmark",
+    "shrine"
+  ],
+  "services": [
+    "temple"
+  ],
+  "map": {
+    "static": "slag_temple"
+  },
+  "position": {
+    "x": 3,
+    "y": 3
+  }
+}

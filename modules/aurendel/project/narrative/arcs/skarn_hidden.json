@@ -1,0 +1,11 @@
+{
+  "id": "skarn_hidden",
+  "name": "The Skarnspine, Kept",
+  "description": "Three pieces of upkeep on a mountain that has a hold on it, none of them the hold's.",
+  "quests": [
+    "skarn_nine_hundred_and_one",
+    "skarn_rung_from_below",
+    "skarn_the_breathing_face"
+  ],
+  "isEnding": false
+}

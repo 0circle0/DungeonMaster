@@ -1,0 +1,36 @@
+{
+  "id": "copyist_ilv",
+  "name": "Ilv, a Copyist",
+  "description": "Keeps a room behind a pawnbroker's on Anchor Lane, which is a long way from the fourth gallery and is the point.",
+  "disposition": 0,
+  "gullibility": 0.3,
+  "memorySpan": 200,
+  "offersQuests": [],
+  "caresAbout": [
+    "library_served",
+    "record_stolen",
+    "under_sold"
+  ],
+  "reactions": [],
+  "faction": "the_library",
+  "dialogue": "bonealley_ilv_talk",
+  "home": "warrens_pawnbroker",
+  "temperament": {
+    "roamRadius": 24,
+    "investigateRadius": 60,
+    "leashRadius": 90,
+    "wanderChance": 0.3,
+    "speeds": {
+      "wander": 0.5
+    },
+    "investigates": [
+      "sight",
+      "hearing"
+    ],
+    "notices": [
+      "hostile",
+      "neutral",
+      "ally"
+    ]
+  }
+}

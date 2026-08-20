@@ -1,0 +1,16 @@
+{
+  "id": "dungeon_ruin_vault",
+  "name": "Ruin Vault",
+  "descriptionKey": "dungeon_ruin_vault_desc",
+  "weight": 2,
+  "minExits": 1,
+  "maxExits": 2,
+  "encounterChance": 0.4,
+  "trapChance": 0.3,
+  "lootChance": 0.6,
+  "tags": [
+    "dungeon_ruin",
+    "vault"
+  ],
+  "role": "vault"
+}

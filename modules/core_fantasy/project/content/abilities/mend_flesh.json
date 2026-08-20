@@ -1,0 +1,37 @@
+{
+  "id": "mend_flesh",
+  "name": "Mend Flesh",
+  "description": "The wound closes, though it will still want telling about later.",
+  "actionType": "action",
+  "targeting": "single",
+  "range": 5,
+  "spellLevel": 1,
+  "components": [
+    "verbal",
+    "somatic"
+  ],
+  "onUse": [
+    {
+      "heal": {
+        "target": {
+          "ref": "target.id"
+        },
+        "amount": {
+          "roll": "2d4"
+        }
+      }
+    }
+  ],
+  "upcast": [
+    {
+      "heal": {
+        "target": {
+          "ref": "target.id"
+        },
+        "amount": {
+          "roll": "1d4"
+        }
+      }
+    }
+  ]
+}

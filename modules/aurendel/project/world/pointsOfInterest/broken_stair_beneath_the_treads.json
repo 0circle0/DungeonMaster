@@ -1,0 +1,68 @@
+{
+  "id": "broken_stair_beneath_the_treads",
+  "name": "Beneath the Treads",
+  "description": "Where the stair has gone, you can see that it was hollow, and that there are rooms in the thickness of it.",
+  "area": "deeproads_broken_stair",
+  "kind": "dungeonEntrance",
+  "descriptionKey": "generic_dungeon_mouth",
+  "travelMinutes": 14,
+  "tags": [
+    "dungeon"
+  ],
+  "dungeon": "deeproads_beneath_treads",
+  "position": {
+    "x": 25,
+    "y": 3
+  },
+  "triggers": [
+    {
+      "id": "deep_lamps_committed",
+      "mode": "once",
+      "on": "enter",
+      "description": "At the ninth landing, where a course was lifted out.",
+      "requires": {
+        "custom": {
+          "gte": [
+            {
+              "ref": "threads.deep_lamps.known"
+            },
+            2
+          ]
+        }
+      },
+      "effects": [
+        {
+          "emit": {
+            "event": "startQuest",
+            "data": {
+              "quest": "deep_the_lamps"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "hidden": true,
+  "discover": {
+    "skill": "lore",
+    "difficulty": {
+      "max": [
+        9,
+        {
+          "sub": [
+            25,
+            {
+              "mul": [
+                4,
+                {
+                  "ref": "threads.deep_lamps.known"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "gate": "deep_stair_under"
+}

@@ -1,0 +1,14 @@
+{
+  "id": "dune_walkers_chart",
+  "name": "The Dune-Walker's Chart",
+  "description": "Where the dunes were, year by year, in four hands over ninety years. One line on it goes a mile in a season.",
+  "kind": "key",
+  "value": 0,
+  "weight": 0,
+  "tags": [
+    "keepsake"
+  ],
+  "extra": {
+    "heldBy": "dune_walker_sela"
+  }
+}

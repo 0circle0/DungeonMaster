@@ -1,0 +1,47 @@
+{
+  "id": "thorn_thing",
+  "name": "Thorn-Thing",
+  "description": "The Thornward grew it, or grew around it. Elderhollow will not be drawn.",
+  "level": 3,
+  "xp": 90,
+  "attributes": {
+    "might": 13,
+    "agility": 15,
+    "endurance": 12,
+    "intellect": 5,
+    "instinct": 15,
+    "presence": 8
+  },
+  "abilities": [
+    "rend",
+    "glass_shard"
+  ],
+  "behaviour": [
+    {
+      "priority": 0,
+      "use": "rend"
+    }
+  ],
+  "faction": "the_unsealed",
+  "creatureType": "plant",
+  "size": "medium",
+  "descriptors": [
+    "a bristling",
+    "a creaking"
+  ],
+  "conditionalLoot": [],
+  "loot": "wood_scraps",
+  "resourceOverrides": {
+    "hp": 22
+  },
+  "temperament": {
+    "roamRadius": 0,
+    "wanderChance": 0,
+    "disengageTurns": 0,
+    "speeds": {
+      "wander": 0
+    },
+    "investigates": [],
+    "followsTrails": false
+  }
+}

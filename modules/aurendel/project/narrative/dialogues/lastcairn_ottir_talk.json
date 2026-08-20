@@ -1,0 +1,474 @@
+{
+  "id": "lastcairn_ottir_talk",
+  "start": "greet",
+  "nodes": [
+    {
+      "id": "greet",
+      "says": [
+        {
+          "text": "The cairns run up the slope above Cairnhold in an order that is not the order they were built in. Ottir is at the lowest of them, holding a stone he has not set. \"You've come a long way.\""
+        }
+      ],
+      "options": [
+        {
+          "id": "the_stone",
+          "text": "You've been holding that stone a while.",
+          "effects": [
+            {
+              "emit": {
+                "event": "startQuest",
+                "data": {
+                  "quest": "lastcairn_what_the_ice_gave_back"
+                }
+              }
+            }
+          ],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "the_body",
+          "requires": {
+            "quests": [
+              {
+                "quest": "lastcairn_what_the_ice_gave_back",
+                "status": "unstarted"
+              }
+            ],
+            "description": "two of the three ward-keys",
+            "anyOf": [
+              {
+                "items": [
+                  {
+                    "item": "grown_key"
+                  },
+                  {
+                    "item": "cast_key"
+                  }
+                ]
+              },
+              {
+                "items": [
+                  {
+                    "item": "grown_key"
+                  },
+                  {
+                    "item": "glass_key"
+                  }
+                ]
+              },
+              {
+                "items": [
+                  {
+                    "item": "cast_key"
+                  },
+                  {
+                    "item": "glass_key"
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "id": "the_moot",
+          "text": "What is the Ice Moot?",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "the_moot"
+        },
+        {
+          "id": "leave",
+          "text": "Nothing.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": [
+        {
+          "requires": {
+            "memories": [
+              {
+                "deedKind": "ward_broken",
+                "who": "speaker"
+              }
+            ]
+          },
+          "goto": "he_has_heard"
+        },
+        {
+          "requires": {
+            "quests": [
+              {
+                "quest": "lastcairn_the_frozen_ship",
+                "status": "active"
+              }
+            ],
+            "flags": [
+              {
+                "flag": "lastcairn_ship_found",
+                "equals": true
+              }
+            ]
+          },
+          "goto": "about_the_ship"
+        },
+        {
+          "requires": {
+            "flags": [
+              {
+                "flag": "lastcairn_thing_down",
+                "equals": true
+              }
+            ],
+            "without": {
+              "flags": [
+                {
+                  "flag": "lastcairn_set"
+                },
+                {
+                  "flag": "lastcairn_moved"
+                }
+              ]
+            }
+          },
+          "goto": "set_or_move"
+        }
+      ]
+    },
+    {
+      "id": "the_moot",
+      "says": [
+        {
+          "text": "\"Eleven hundred cairns from here to the Last, and somebody has to know which stone goes where.\" He turns the stone over. \"Down south they call it the Keepers and make it sound like an order. Up here it is four families and a great deal of walking.\""
+        }
+      ],
+      "options": [
+        {
+          "id": "back",
+          "text": "Hm.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "greet"
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": []
+    },
+    {
+      "id": "the_body",
+      "says": [
+        {
+          "text": "\"The ice gave one back in the spring,\" says Ottir. \"They do that. It takes what it takes and gives it back forty years later a mile downhill and we set a cairn and that is the whole of the arrangement.\""
+        },
+        {
+          "text": "\"This one had a moot-mark cut in the shoulder,\" he says. \"Ours. Cut by us. And it came out of the ice forty miles from anywhere a marked man has any business being.\""
+        }
+      ],
+      "options": [
+        {
+          "id": "see_it",
+          "text": "Show us the mark.",
+          "effects": [
+            {
+              "setFlag": {
+                "flag": "lastcairn_mark_seen",
+                "value": true
+              }
+            }
+          ],
+          "onceOnly": true,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "the_mark"
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": []
+    },
+    {
+      "id": "the_mark",
+      "says": [
+        {
+          "text": "The mark is a stone-setter's, four strokes, and Ottir reads it the way you would read a signature. \"Nine hundred years old, near enough. And he was going *up*.\""
+        },
+        {
+          "text": "\"There is one thing on the top of the White Reach anybody has ever found,\" he says. \"A ship. In the middle of the ice, forty miles from water, and nobody has ever been able to say a useful thing about it.\""
+        }
+      ],
+      "options": [
+        {
+          "id": "go_up",
+          "text": "We'll go and look at your ship.",
+          "effects": [
+            {
+              "emit": {
+                "event": "startQuest",
+                "data": {
+                  "quest": "lastcairn_the_frozen_ship"
+                }
+              }
+            }
+          ],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "which_way",
+          "requires": {
+            "quests": [
+              {
+                "quest": "lastcairn_the_frozen_ship",
+                "status": "unstarted"
+              }
+            ]
+          }
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": []
+    },
+    {
+      "id": "which_way",
+      "says": [
+        {
+          "text": "\"Look at which way she is pointed,\" says Ottir. \"That is the only question I have ever wanted answered about her and I am sixty-one and I am not walking it again.\""
+        }
+      ],
+      "options": [
+        {
+          "id": "done",
+          "text": "Which way she's pointed.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": []
+    },
+    {
+      "id": "about_the_ship",
+      "says": [
+        {
+          "text": "Ottir sets the stone down, finally, on the wrong cairn. \"Which way?\""
+        }
+      ],
+      "options": [
+        {
+          "id": "the_bearing",
+          "text": "South-west. Straight at the Last Cairn.",
+          "effects": [],
+          "onceOnly": true,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "the_bearing"
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": []
+    },
+    {
+      "id": "the_bearing",
+      "says": [
+        {
+          "text": "\"At the Last,\" says Ottir, and does not say anything else for a while."
+        },
+        {
+          "text": "\"We count from the Last. Eleven hundred cairns and every one of them set by measure from that one, for nine hundred years.\" He picks the stone back up. \"And in nine hundred years not one of us has opened it, and I have never once heard anybody say why not, and I have realised this spring that I never asked.\""
+        }
+      ],
+      "options": [
+        {
+          "id": "open_it",
+          "text": "Then we'll ask it.",
+          "effects": [
+            {
+              "emit": {
+                "event": "startQuest",
+                "data": {
+                  "quest": "lastcairn_under_the_last_cairn"
+                }
+              }
+            },
+            {
+              "adjustReputation": {
+                "faction": "the_ice_moot",
+                "amount": 8
+              }
+            }
+          ],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "four_days",
+          "requires": {
+            "quests": [
+              {
+                "quest": "lastcairn_under_the_last_cairn",
+                "status": "unstarted"
+              }
+            ]
+          }
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": [],
+      "remembers": "cairn_set"
+    },
+    {
+      "id": "four_days",
+      "says": [
+        {
+          "text": "\"Four days from the last roof and the last day into the wind,\" says Ottir. \"Take the coats. Not yours — ours. I will not have somebody die of the walk on my account and then be given back in forty years for somebody else to set.\""
+        }
+      ],
+      "options": [
+        {
+          "id": "done",
+          "text": "We'll take the coats.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": []
+    },
+    {
+      "id": "set_or_move",
+      "says": [
+        {
+          "text": "Ottir has walked the four days after all. He is standing at the hollow with his hands in his sleeves looking at what is left of the biggest cairn on the continent. \"So that is why,\" he says."
+        },
+        {
+          "text": "\"I can set it back,\" he says. \"Exactly as it was, and I am the only man alive who can, and eleven hundred cairns go on meaning what they have always meant.\""
+        },
+        {
+          "text": "\"Or we move the count. Make the first cairn the first cairn — Cairnhold, where the people are — and re-measure eleven hundred of them over about forty years, and write down what was actually in this one so nobody has to find out like this again.\" A long breath. \"The moot has a word for moving the count and it is not a kind one.\""
+        }
+      ],
+      "options": [
+        {
+          "id": "set",
+          "text": "Set it back. You're the only one who can.",
+          "effects": [
+            {
+              "setFlag": {
+                "flag": "lastcairn_set",
+                "value": true
+              }
+            }
+          ],
+          "onceOnly": true,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "set_back"
+        },
+        {
+          "id": "move",
+          "text": "Move the count. Write it down.",
+          "effects": [
+            {
+              "setFlag": {
+                "flag": "lastcairn_moved",
+                "value": true
+              }
+            }
+          ],
+          "onceOnly": true,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "moved"
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": []
+    },
+    {
+      "id": "set_back",
+      "says": [
+        {
+          "text": "It takes him nine days and he will not let anybody hand him a stone. At the end of it the Last Cairn is the Last Cairn, and you would not know, and that is the entire point of him."
+        }
+      ],
+      "options": [
+        {
+          "id": "done",
+          "text": "It stands.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": [],
+      "remembers": "cairn_set"
+    },
+    {
+      "id": "moved",
+      "says": [
+        {
+          "text": "He writes it out that night in a hand that has set stones for forty years and held a pen for very few of them, and in the spring the moot begins re-measuring eleven hundred cairns from the wrong end, complaining, for the next forty years."
+        }
+      ],
+      "options": [
+        {
+          "id": "done",
+          "text": "From the people.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": [],
+      "remembers": "ice_broken"
+    },
+    {
+      "id": "he_has_heard",
+      "says": [
+        {
+          "text": "Ottir does not stop what he is doing. \"Word came up the ice road about a ward,\" he says. \"It takes a season to get here and it got here.\""
+        }
+      ],
+      "options": [
+        {
+          "id": "explain",
+          "text": "It had to come down.",
+          "effects": [
+            {
+              "adjustReputation": {
+                "faction": "the_ice_moot",
+                "amount": -5
+              }
+            }
+          ],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "greet"
+        },
+        {
+          "id": "leave",
+          "text": "Nothing.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": []
+    }
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "id": "the_cut_quarry_galleries",
+  "name": "The Cut Galleries",
+  "description": "Where the stone from the Cut went, and the galleries go a great deal further than the stone would account for.",
+  "area": "skarnspine_the_cut",
+  "kind": "dungeonEntrance",
+  "descriptionKey": "generic_dungeon_mouth",
+  "travelMinutes": 12,
+  "tags": [
+    "dungeon"
+  ],
+  "dungeon": "skarn_cut_galleries",
+  "position": {
+    "x": 25,
+    "y": 3
+  },
+  "gate": "trial_two_door"
+}

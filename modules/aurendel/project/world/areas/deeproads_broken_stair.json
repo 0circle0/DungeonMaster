@@ -1,0 +1,38 @@
+{
+  "id": "deeproads_broken_stair",
+  "name": "The Broken Stair",
+  "description": "A stair a hundred feet wide going up towards the Ember Reach, with about a third of it missing.",
+  "biome": "underdeep",
+  "layer": "underworld",
+  "descriptionKey": "deeproads_broken_stair_desc",
+  "dangerLevel": 7,
+  "recommendedLevel": 10,
+  "tags": [
+    "deeproads"
+  ],
+  "map": {
+    "width": "51",
+    "height": "35"
+  },
+  "entryPoint": {
+    "x": 25,
+    "y": 17
+  },
+  "extra": {
+    "role": "wild"
+  },
+  "connections": [
+    {
+      "to": "deeproads_echo_halls",
+      "travelMinutes": 45
+    },
+    {
+      "to": "deeproads_the_weeping_vault",
+      "travelMinutes": 40
+    },
+    {
+      "to": "ember_obsidian_shelf",
+      "travelMinutes": 130
+    }
+  ]
+}

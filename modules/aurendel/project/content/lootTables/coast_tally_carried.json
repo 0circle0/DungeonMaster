@@ -1,0 +1,26 @@
+{
+  "id": "coast_tally_carried",
+  "name": "What Ansel Kept",
+  "rolls": "1",
+  "emptyChance": 0,
+  "entries": [
+    {
+      "weight": 1,
+      "value": {
+        "item": "scouring_tally",
+        "quantity": "1",
+        "unique": true,
+        "requirementScope": "party",
+        "requires": {
+          "without": {
+            "flags": [
+              {
+                "flag": "given:scouring_tally"
+              }
+            ]
+          }
+        }
+      }
+    }
+  ]
+}

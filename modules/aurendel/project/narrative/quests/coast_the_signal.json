@@ -1,0 +1,57 @@
+{
+  "id": "coast_the_signal",
+  "name": "The Tower That Still Signals",
+  "description": "No roof, no stair, and every skipper on this coast correcting two points to starboard off the head after dark.",
+  "autoStart": false,
+  "ordered": true,
+  "tags": [
+    "hidden",
+    "silver_coast",
+    "coast_watch"
+  ],
+  "objectives": [
+    {
+      "id": "in_under_the_head",
+      "description": "Get in under the head on the tide.",
+      "kind": "reach",
+      "count": 1,
+      "hidden": true,
+      "optional": false,
+      "target": "gannet_head_seacaves"
+    },
+    {
+      "id": "below_the_course",
+      "description": "Open what the tower was worked from.",
+      "kind": "custom",
+      "count": 1,
+      "hidden": true,
+      "optional": false,
+      "when": {
+        "test": {
+          "ref": "flags.coast_watch_open"
+        }
+      }
+    },
+    {
+      "id": "what_lights_it",
+      "description": "Meet what has been keeping the correction true.",
+      "kind": "kill",
+      "count": 1,
+      "hidden": true,
+      "optional": false,
+      "target": "signal_keeper"
+    }
+  ],
+  "stages": [],
+  "unlocks": [],
+  "rewards": {
+    "xp": 140,
+    "items": [
+      {
+        "item": "signal_hood",
+        "quantity": 1
+      }
+    ],
+    "reputation": {}
+  }
+}

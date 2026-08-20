@@ -1,0 +1,16 @@
+{
+  "id": "dungeon_delved_shrine",
+  "name": "Delved Shrine",
+  "descriptionKey": "dungeon_delved_shrine_desc",
+  "weight": 1,
+  "minExits": 1,
+  "maxExits": 2,
+  "encounterChance": 0.4,
+  "trapChance": 0.15,
+  "lootChance": 0.35,
+  "tags": [
+    "dungeon_delved",
+    "shrine"
+  ],
+  "role": "shrine"
+}

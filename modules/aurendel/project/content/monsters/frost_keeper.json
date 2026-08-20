@@ -1,0 +1,53 @@
+{
+  "id": "frost_keeper",
+  "name": "Hallr of the Rimewatch",
+  "description": "Keeps a hut on a calving face alone, which selects for a particular sort of person.",
+  "level": 6,
+  "xp": 0,
+  "attributes": {
+    "might": 14,
+    "agility": 12,
+    "endurance": 14,
+    "intellect": 11,
+    "instinct": 14,
+    "presence": 11
+  },
+  "abilities": [
+    "strike",
+    "guarded_stance"
+  ],
+  "behaviour": [
+    {
+      "priority": 0,
+      "use": "strike"
+    }
+  ],
+  "faction": "the_ice_moot",
+  "creatureType": "humanoid",
+  "size": "medium",
+  "descriptors": [
+    "a hard-faced"
+  ],
+  "conditionalLoot": [],
+  "loot": "frost_stone_carried",
+  "resourceOverrides": {
+    "hp": 40
+  },
+  "temperament": {
+    "roamRadius": 24,
+    "investigateRadius": 70,
+    "leashRadius": 100,
+    "wanderChance": 0.4,
+    "disengageTurns": 2,
+    "investigates": [
+      "sight",
+      "hearing",
+      "tracks",
+      "smell"
+    ],
+    "notices": [
+      "hostile",
+      "neutral"
+    ]
+  }
+}

@@ -1,0 +1,76 @@
+{
+  "id": "drownedfort_the_battery",
+  "name": "The Battery",
+  "description": "The chimney is a chimney because something under the Narrows needed a draught, and the fort was built on top of it by people who did not know that and worked it out on the last night.",
+  "autoStart": false,
+  "ordered": true,
+  "tags": [
+    "side",
+    "act3",
+    "drownedfort",
+    "sundered_isles"
+  ],
+  "objectives": [],
+  "stages": [
+    {
+      "id": "in_the_hatch",
+      "name": "In at the hatch",
+      "description": "Dry inside, which after four hundred years under the passage is the part nobody has ever been able to explain.",
+      "objectives": [
+        {
+          "id": "in_the_fort",
+          "description": "Get into the Drowned Fort.",
+          "kind": "reach",
+          "count": 1,
+          "hidden": false,
+          "optional": false,
+          "target": "drowned_fort_the_hatch"
+        }
+      ],
+      "journalKey": "drownedfort_journal_hatch"
+    },
+    {
+      "id": "the_guns",
+      "name": "The battery floor",
+      "description": "The guns are still run out and still pointed at the passage, and something down there is still minding them.",
+      "objectives": [
+        {
+          "id": "kill_battery",
+          "description": "Clear the battery floor.",
+          "kind": "kill",
+          "count": 1,
+          "hidden": false,
+          "optional": false,
+          "target": "reef_thing"
+        }
+      ],
+      "onComplete": [
+        {
+          "setFlag": {
+            "flag": "drownedfort_battery_cleared",
+            "value": true
+          }
+        }
+      ],
+      "journalKey": "drownedfort_journal_battery"
+    }
+  ],
+  "unlocks": [
+    "drownedfort_salvage_or_seal"
+  ],
+  "rewards": {
+    "xp": 175,
+    "items": [],
+    "reputation": {
+      "the_salvors": 15
+    }
+  },
+  "requires": {
+    "quests": [
+      {
+        "quest": "drownedfort_the_chimney",
+        "status": "complete"
+      }
+    ]
+  }
+}

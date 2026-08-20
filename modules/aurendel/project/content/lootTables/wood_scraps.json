@@ -1,0 +1,33 @@
+{
+  "id": "wood_scraps",
+  "entries": [
+    {
+      "weight": 5,
+      "value": {
+        "item": "old_coin",
+        "quantity": "1"
+      }
+    },
+    {
+      "weight": 3,
+      "value": {
+        "item": "amber_lump",
+        "quantity": "1"
+      }
+    },
+    {
+      "weight": 2,
+      "value": {
+        "item": "antidote",
+        "quantity": "1"
+      }
+    }
+  ],
+  "rolls": "1",
+  "emptyChance": 0.4,
+  "bonusRollSkill": "survival",
+  "bonusRolls": {
+    "onSuccess": 1,
+    "onCritical": 2
+  }
+}

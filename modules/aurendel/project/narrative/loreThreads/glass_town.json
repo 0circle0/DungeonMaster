@@ -1,0 +1,11 @@
+{
+  "id": "glass_town",
+  "name": "The Town That Came Back",
+  "description": "A dune moved a mile in one season and gave back a town two hundred years too young, with every door barred from outside.",
+  "entries": [
+    "glass_town_season",
+    "glass_town_age",
+    "glass_town_doors",
+    "glass_town_glass"
+  ]
+}

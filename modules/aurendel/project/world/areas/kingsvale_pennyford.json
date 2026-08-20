@@ -1,0 +1,35 @@
+{
+  "id": "kingsvale_pennyford",
+  "name": "Pennyford",
+  "description": "Named for what the ford used to cost. It is free now, and deeper.",
+  "biome": "urban_timber",
+  "layer": "overworld",
+  "descriptionKey": "kingsvale_pennyford_desc",
+  "dangerLevel": 1,
+  "recommendedLevel": 1,
+  "tags": [
+    "kingsvale",
+    "village"
+  ],
+  "map": {
+    "width": "31",
+    "height": "21"
+  },
+  "entryPoint": {
+    "x": 15,
+    "y": 10
+  },
+  "extra": {
+    "role": "village"
+  },
+  "connections": [
+    {
+      "to": "kingsvale_oxbow_meadows",
+      "travelMinutes": 30
+    },
+    {
+      "to": "kingsvale_weirwater_crossing",
+      "travelMinutes": 45
+    }
+  ]
+}

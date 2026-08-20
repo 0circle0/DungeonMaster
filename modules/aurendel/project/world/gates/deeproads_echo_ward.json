@@ -1,0 +1,17 @@
+{
+  "id": "deeproads_echo_ward",
+  "name": "The Echo Ward",
+  "kind": "puzzle",
+  "description": "The eleventh chamber will not let a word through, and until something is said correctly the far door does not open.",
+  "staysOpen": true,
+  "requires": {
+    "description": "the phrase cut over the tenth door",
+    "minLevel": 8
+  },
+  "bypass": {
+    "skill": "lore",
+    "difficulty": 18,
+    "retryable": true
+  },
+  "blockedTextKey": "deeproads_echo_ward_blocked"
+}

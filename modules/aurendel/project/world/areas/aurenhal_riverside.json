@@ -1,0 +1,41 @@
+{
+  "id": "aurenhal_riverside",
+  "name": "Aurenhal — Riverside",
+  "description": "Wharves, warehouses, and the river gate. The Weirwater does most of the city's carrying.",
+  "biome": "urban_stone",
+  "layer": "overworld",
+  "descriptionKey": "aurenhal_riverside_desc",
+  "dangerLevel": 0,
+  "recommendedLevel": 1,
+  "tags": [
+    "kingsvale",
+    "aurenhal",
+    "city"
+  ],
+  "map": {
+    "width": "45",
+    "height": "31"
+  },
+  "entryPoint": {
+    "x": 22,
+    "y": 15
+  },
+  "extra": {
+    "role": "city"
+  },
+  "connections": [
+    {
+      "to": "aurenhal_craftrow",
+      "travelMinutes": 4
+    },
+    {
+      "to": "aurenhal_warrens",
+      "travelMinutes": 3
+    },
+    {
+      "to": "kingsvale_weirwater_crossing",
+      "travelMinutes": 25,
+      "gate": "aurenhal_river_gate"
+    }
+  ]
+}

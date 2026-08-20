@@ -1,0 +1,21 @@
+{
+  "id": "thrift_house_b",
+  "name": "The Old Coastguard",
+  "description": "Built to watch for smugglers and now lived in by their descendants.",
+  "area": "coast_thrift",
+  "kind": "settlement",
+  "descriptionKey": "int_house",
+  "travelMinutes": 2,
+  "tags": [
+    "house"
+  ],
+  "map": {
+    "width": "9",
+    "height": "7",
+    "palette": "int_timber"
+  },
+  "position": {
+    "x": 27,
+    "y": 10
+  }
+}

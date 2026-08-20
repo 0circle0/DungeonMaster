@@ -1,0 +1,68 @@
+{
+  "id": "kestrel_edge_grit_caves",
+  "name": "The Grit Caves",
+  "description": "Where blocks have come away from the edge and left slots behind them, and one of the slots does not end.",
+  "area": "moor_kestrel_edge",
+  "kind": "dungeonEntrance",
+  "descriptionKey": "generic_dungeon_mouth",
+  "travelMinutes": 12,
+  "tags": [
+    "dungeon"
+  ],
+  "dungeon": "moor_grit_caves",
+  "position": {
+    "x": 25,
+    "y": 3
+  },
+  "triggers": [
+    {
+      "id": "moor_shoot_committed",
+      "mode": "once",
+      "on": "enter",
+      "description": "Under the scarp, where the eighth of the line stands.",
+      "requires": {
+        "custom": {
+          "gte": [
+            {
+              "ref": "threads.moor_shoot.known"
+            },
+            2
+          ]
+        }
+      },
+      "effects": [
+        {
+          "emit": {
+            "event": "startQuest",
+            "data": {
+              "quest": "moor_the_drive"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "hidden": true,
+  "discover": {
+    "skill": "survival",
+    "difficulty": {
+      "max": [
+        10,
+        {
+          "sub": [
+            22,
+            {
+              "mul": [
+                3,
+                {
+                  "ref": "threads.moor_shoot.known"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "gate": "moor_shoot_eighth"
+}

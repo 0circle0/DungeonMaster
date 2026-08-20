@@ -1,0 +1,22 @@
+{
+  "id": "kingshold_undercroft_door",
+  "name": "The Undercroft Door",
+  "kind": "lock",
+  "description": "Iron-banded oak at the bottom of a stair nobody sweeps.",
+  "staysOpen": true,
+  "requires": {
+    "description": "the undercroft key, or a very good lockpick",
+    "items": [
+      {
+        "item": "undercroft_key",
+        "consume": false
+      }
+    ]
+  },
+  "bypass": {
+    "skill": "lockpicking",
+    "difficulty": 16,
+    "retryable": true
+  },
+  "blockedTextKey": "kingshold_undercroft_blocked"
+}

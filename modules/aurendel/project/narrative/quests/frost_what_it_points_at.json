@@ -1,0 +1,57 @@
+{
+  "id": "frost_what_it_points_at",
+  "name": "What the Marker Points At",
+  "description": "A bearing cut before the moot kept records, pointing down, at a hole with stonework around it that faces inward.",
+  "autoStart": false,
+  "ordered": true,
+  "tags": [
+    "hidden",
+    "frostmere",
+    "frost_marker"
+  ],
+  "objectives": [
+    {
+      "id": "at_the_moulin",
+      "description": "Get down the Moulin.",
+      "kind": "reach",
+      "count": 1,
+      "hidden": true,
+      "optional": false,
+      "target": "glass_ice_the_moulin"
+    },
+    {
+      "id": "past_the_seal",
+      "description": "Read the seal from the side it was cut for.",
+      "kind": "custom",
+      "count": 1,
+      "hidden": true,
+      "optional": false,
+      "when": {
+        "test": {
+          "ref": "flags.frost_moulin_open"
+        }
+      }
+    },
+    {
+      "id": "what_was_shut_in",
+      "description": "Meet what the seal was written for.",
+      "kind": "kill",
+      "count": 1,
+      "hidden": true,
+      "optional": false,
+      "target": "moulin_keeper"
+    }
+  ],
+  "stages": [],
+  "unlocks": [],
+  "rewards": {
+    "xp": 240,
+    "items": [
+      {
+        "item": "moulin_lamp",
+        "quantity": 1
+      }
+    ],
+    "reputation": {}
+  }
+}

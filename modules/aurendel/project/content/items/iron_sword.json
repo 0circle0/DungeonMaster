@@ -1,0 +1,16 @@
+{
+  "id": "iron_sword",
+  "name": "Iron Sword",
+  "description": "Plain, well balanced, and made by somebody who makes a great many.",
+  "kind": "weapon",
+  "slot": "hand",
+  "value": 18,
+  "weight": 3,
+  "damage": {
+    "dice": "1d8",
+    "damageType": "slashing",
+    "stat": "might"
+  },
+  "properties": [],
+  "tags": []
+}

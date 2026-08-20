@@ -1,0 +1,14 @@
+{
+  "id": "dungeon_sewer_entrance_desc",
+  "variants": [
+    {
+      "text": "A culvert mouth with a grate that is standing open and has been for some time."
+    },
+    {
+      "text": "Steps down beside the outfall, slick, with a rope-rail long since rotted off its rings."
+    },
+    {
+      "text": "The smell announces the place before the dark does."
+    }
+  ]
+}

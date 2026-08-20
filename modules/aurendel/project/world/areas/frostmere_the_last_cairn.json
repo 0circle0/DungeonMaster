@@ -1,0 +1,37 @@
+{
+  "id": "frostmere_the_last_cairn",
+  "name": "The Last Cairn",
+  "description": "The furthest north anybody has built anything, and it is a heap of stones with a name.",
+  "biome": "glacier",
+  "layer": "overworld",
+  "descriptionKey": "frostmere_the_last_cairn_desc",
+  "dangerLevel": 8,
+  "recommendedLevel": 10,
+  "tags": [
+    "frostmere"
+  ],
+  "map": {
+    "width": "51",
+    "height": "35"
+  },
+  "entryPoint": {
+    "x": 25,
+    "y": 17
+  },
+  "extra": {
+    "role": "wild"
+  },
+  "connections": [
+    {
+      "to": "frostmere_glass_ice",
+      "travelMinutes": 50
+    },
+    {
+      "to": "frostmere_wind_scoured_flats",
+      "travelMinutes": 60
+    }
+  ],
+  "encounterTables": [
+    "ice_things"
+  ]
+}

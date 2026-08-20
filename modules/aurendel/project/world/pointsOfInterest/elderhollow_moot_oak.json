@@ -1,0 +1,23 @@
+{
+  "id": "elderhollow_moot_oak",
+  "name": "The Moot Oak",
+  "description": "Nine yards round at the base, hollow for the first twenty feet, and the town holds its moot inside it.",
+  "area": "duskwood_elderhollow",
+  "kind": "landmark",
+  "descriptionKey": "elderhollow_moot_oak_desc",
+  "travelMinutes": 5,
+  "tags": [
+    "landmark"
+  ],
+  "services": [
+    "guild"
+  ],
+  "gate": "elderhollow_moot_door",
+  "map": {
+    "static": "moot_oak"
+  },
+  "position": {
+    "x": 3,
+    "y": 3
+  }
+}

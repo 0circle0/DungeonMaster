@@ -1,0 +1,41 @@
+{
+  "id": "moor_shoot_hoard",
+  "name": "Under the Eighth Butt",
+  "rolls": "3",
+  "emptyChance": 0,
+  "bonusRollSkill": "perception",
+  "bonusRolls": {
+    "onSuccess": 1,
+    "onCritical": 2
+  },
+  "entries": [
+    {
+      "weight": 4,
+      "value": {
+        "item": "old_coin",
+        "quantity": "5d6"
+      }
+    },
+    {
+      "weight": 3,
+      "value": {
+        "item": "ward_salt",
+        "quantity": "1d2"
+      }
+    },
+    {
+      "weight": 2,
+      "value": {
+        "item": "amber_lump",
+        "quantity": "1d2"
+      }
+    },
+    {
+      "weight": 1,
+      "value": {
+        "item": "warded_coat",
+        "quantity": "1"
+      }
+    }
+  ]
+}

@@ -1,0 +1,92 @@
+{
+  "id": "third_through",
+  "name": "What Came Through the Third",
+  "description": "A root cellar with a floor under the floor, and the third line on a Keeper's list struck through in red by somebody who was not the Keeper.",
+  "level": 15,
+  "xp": 4800,
+  "attributes": {
+    "might": 21,
+    "agility": 18,
+    "endurance": 22,
+    "intellect": 17,
+    "instinct": 19,
+    "presence": 17
+  },
+  "abilities": [
+    "rend",
+    "drag_under",
+    "spore_burst",
+    "cut_and_run"
+  ],
+  "behaviour": [
+    {
+      "priority": 25,
+      "use": "spore_burst",
+      "when": {
+        "chance": 0.35
+      }
+    },
+    {
+      "priority": 15,
+      "use": "drag_under"
+    },
+    {
+      "priority": 5,
+      "use": "cut_and_run"
+    },
+    {
+      "priority": 0,
+      "use": "rend"
+    }
+  ],
+  "faction": "the_unsealed",
+  "creatureType": "undead",
+  "size": "medium",
+  "descriptors": [
+    "a many-rooted",
+    "a spreading"
+  ],
+  "conditionalLoot": [],
+  "loot": "trial_one_hoard_c",
+  "damageInteractions": [
+    {
+      "damageType": "slashing",
+      "multiplier": 0.5,
+      "unless": [
+        "silvered"
+      ]
+    },
+    {
+      "damageType": "piercing",
+      "multiplier": 0.5,
+      "unless": [
+        "silvered"
+      ]
+    }
+  ],
+  "conditionImmunities": [
+    "frightened",
+    "prone",
+    "poisoned",
+    "bleeding"
+  ],
+  "resourceOverrides": {
+    "hp": 240
+  },
+  "temperament": {
+    "roamRadius": 12,
+    "investigateRadius": 40,
+    "leashRadius": 60,
+    "wanderChance": 0.1,
+    "disengageTurns": 1,
+    "speeds": {
+      "wander": 0.5,
+      "investigate": 0.5
+    },
+    "investigates": [
+      "sight",
+      "hearing",
+      "smell"
+    ]
+  }
+}

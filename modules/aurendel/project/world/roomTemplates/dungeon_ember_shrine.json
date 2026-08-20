@@ -1,0 +1,16 @@
+{
+  "id": "dungeon_ember_shrine",
+  "name": "Burnt Shrine",
+  "descriptionKey": "dungeon_ember_shrine_desc",
+  "weight": 1,
+  "minExits": 1,
+  "maxExits": 2,
+  "encounterChance": 0.4,
+  "trapChance": 0.16,
+  "lootChance": 0.35,
+  "tags": [
+    "dungeon_ember",
+    "shrine"
+  ],
+  "role": "shrine"
+}

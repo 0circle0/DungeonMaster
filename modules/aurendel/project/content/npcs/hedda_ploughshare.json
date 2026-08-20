@@ -1,0 +1,41 @@
+{
+  "id": "hedda_ploughshare",
+  "name": "Hedda of the Ploughshare",
+  "description": "Keeps the inn, the village's memory, and a ledger of who owes whom.",
+  "disposition": 15,
+  "gullibility": 0.35,
+  "memorySpan": 120,
+  "offersQuests": [
+    "the_open_door"
+  ],
+  "caresAbout": [
+    "ward_broken",
+    "ward_restored",
+    "barrow_robbed"
+  ],
+  "reactions": [],
+  "faction": "the_keepers",
+  "dialogue": "hedda_talk",
+  "home": "hollowdene_the_ploughshare",
+  "shop": {
+    "lootTable": "hollowdene_stock",
+    "buysTags": [
+      "treasure",
+      "material"
+    ],
+    "priceMultiplier": 1.1
+  },
+  "temperament": {
+    "roamRadius": 0,
+    "wanderChance": 0,
+    "speeds": {
+      "wander": 0
+    },
+    "investigates": [],
+    "notices": [
+      "hostile",
+      "neutral",
+      "ally"
+    ]
+  }
+}

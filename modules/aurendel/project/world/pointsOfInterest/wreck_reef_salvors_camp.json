@@ -1,0 +1,19 @@
+{
+  "id": "wreck_reef_salvors_camp",
+  "name": "The Salvors' Camp",
+  "description": "On the one dry rock, occupied whenever the weather allows, which is not often.",
+  "area": "isles_wreck_reef",
+  "kind": "camp",
+  "descriptionKey": "int_house",
+  "travelMinutes": 6,
+  "tags": [],
+  "map": {
+    "width": "9",
+    "height": "7",
+    "palette": "int_timber"
+  },
+  "position": {
+    "x": 14,
+    "y": 3
+  }
+}

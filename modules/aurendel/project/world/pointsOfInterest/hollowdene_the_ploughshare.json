@@ -1,0 +1,24 @@
+{
+  "id": "hollowdene_the_ploughshare",
+  "name": "The Ploughshare",
+  "description": "Four tables, one fire, and beds upstairs if you do not mind the roof being close.",
+  "area": "kingsvale_hollowdene",
+  "kind": "settlement",
+  "descriptionKey": "int_inn",
+  "travelMinutes": 2,
+  "tags": [
+    "inn"
+  ],
+  "position": {
+    "x": 20,
+    "y": 14
+  },
+  "services": [
+    "inn"
+  ],
+  "map": {
+    "width": "11",
+    "height": "9",
+    "palette": "int_timber"
+  }
+}

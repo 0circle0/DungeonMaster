@@ -1,0 +1,68 @@
+{
+  "id": "wreck_reef_the_deep_wreck",
+  "name": "The Deep Wreck",
+  "description": "A ship on her side in the lee of the reef with her holds intact and her decks above water at low springs.",
+  "area": "isles_wreck_reef",
+  "kind": "dungeonEntrance",
+  "descriptionKey": "generic_dungeon_mouth",
+  "travelMinutes": 14,
+  "tags": [
+    "dungeon"
+  ],
+  "dungeon": "isles_deep_wreck",
+  "position": {
+    "x": 25,
+    "y": 3
+  },
+  "triggers": [
+    {
+      "id": "isle_wreck_committed",
+      "mode": "once",
+      "on": "enter",
+      "description": "On her deck, with the guns run out beside you.",
+      "requires": {
+        "custom": {
+          "gte": [
+            {
+              "ref": "threads.isle_wreck.known"
+            },
+            2
+          ]
+        }
+      },
+      "effects": [
+        {
+          "emit": {
+            "event": "startQuest",
+            "data": {
+              "quest": "isle_the_deep_wreck"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "hidden": true,
+  "discover": {
+    "skill": "survival",
+    "difficulty": {
+      "max": [
+        7,
+        {
+          "sub": [
+            23,
+            {
+              "mul": [
+                4,
+                {
+                  "ref": "threads.isle_wreck.known"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "gate": "isle_wreck_hatch"
+}

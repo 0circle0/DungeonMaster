@@ -1,0 +1,41 @@
+{
+  "id": "skarn_bell_hoard",
+  "name": "Seventy Feet Back",
+  "rolls": "3",
+  "emptyChance": 0,
+  "bonusRollSkill": "perception",
+  "bonusRolls": {
+    "onSuccess": 1,
+    "onCritical": 2
+  },
+  "entries": [
+    {
+      "weight": 4,
+      "value": {
+        "item": "old_coin",
+        "quantity": "5d6"
+      }
+    },
+    {
+      "weight": 3,
+      "value": {
+        "item": "hold_silver",
+        "quantity": "1d2"
+      }
+    },
+    {
+      "weight": 2,
+      "value": {
+        "item": "iron_ore",
+        "quantity": "2d4"
+      }
+    },
+    {
+      "weight": 1,
+      "value": {
+        "item": "silvered_blade",
+        "quantity": "1"
+      }
+    }
+  ]
+}

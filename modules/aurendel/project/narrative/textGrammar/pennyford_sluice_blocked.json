@@ -1,0 +1,14 @@
+{
+  "id": "pennyford_sluice_blocked",
+  "variants": [
+    {
+      "text": "The sluice is down and the channel below it is running full and brown."
+    },
+    {
+      "text": "The gate is shut and the water is going over the top of it, which is not how it is supposed to work."
+    },
+    {
+      "text": "You could get across. You would not enjoy it and you would not stay dry."
+    }
+  ]
+}

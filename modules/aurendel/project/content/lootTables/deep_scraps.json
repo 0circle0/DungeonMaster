@@ -1,0 +1,33 @@
+{
+  "id": "deep_scraps",
+  "entries": [
+    {
+      "weight": 5,
+      "value": {
+        "item": "fungus_cap",
+        "quantity": "1d4"
+      }
+    },
+    {
+      "weight": 3,
+      "value": {
+        "item": "hold_silver",
+        "quantity": "1"
+      }
+    },
+    {
+      "weight": 2,
+      "value": {
+        "item": "healing_draught",
+        "quantity": "1"
+      }
+    }
+  ],
+  "rolls": "1",
+  "emptyChance": 0.35,
+  "bonusRollSkill": "survival",
+  "bonusRolls": {
+    "onSuccess": 1,
+    "onCritical": 2
+  }
+}

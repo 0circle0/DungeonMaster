@@ -1,0 +1,37 @@
+{
+  "id": "steppe_kurgan_field",
+  "name": "The Kurgan Field",
+  "description": "Two hundred burial mounds in eleven rows, and the rows are aligned on something that is not the sun.",
+  "biome": "steppe",
+  "layer": "overworld",
+  "descriptionKey": "steppe_kurgan_field_desc",
+  "dangerLevel": 4,
+  "recommendedLevel": 4,
+  "tags": [
+    "sunward_steppe"
+  ],
+  "map": {
+    "width": "51",
+    "height": "35"
+  },
+  "entryPoint": {
+    "x": 25,
+    "y": 17
+  },
+  "extra": {
+    "role": "wild"
+  },
+  "connections": [
+    {
+      "to": "steppe_ilkhet",
+      "travelMinutes": 45
+    },
+    {
+      "to": "steppe_three_wells",
+      "travelMinutes": 40
+    }
+  ],
+  "encounterTables": [
+    "steppe_things"
+  ]
+}

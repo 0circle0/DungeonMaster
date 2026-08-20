@@ -1,0 +1,17 @@
+{
+  "id": "vent_fields_the_chain",
+  "name": "The Chain",
+  "description": "Iron posts and a chain, and past the chain the ground breathes on its own schedule.",
+  "area": "ember_vent_fields",
+  "kind": "crossing",
+  "descriptionKey": "generic_crossing",
+  "travelMinutes": 5,
+  "tags": [
+    "crossing"
+  ],
+  "gate": "ember_vent_ward",
+  "position": {
+    "x": 3,
+    "y": 3
+  }
+}

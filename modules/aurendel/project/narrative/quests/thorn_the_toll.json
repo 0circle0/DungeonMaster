@@ -1,0 +1,57 @@
+{
+  "id": "thorn_the_toll",
+  "name": "The Toll That Is Still Collected",
+  "description": "Two hundred years of a balanced ledger in one unbroken hand, for a shilling a head nobody has ever seen taken.",
+  "autoStart": false,
+  "ordered": true,
+  "tags": [
+    "hidden",
+    "thornmere",
+    "thorn_toll"
+  ],
+  "objectives": [
+    {
+      "id": "in_the_counting_room",
+      "description": "Get into the counting room.",
+      "kind": "reach",
+      "count": 1,
+      "hidden": true,
+      "optional": false,
+      "target": "sunken_causeway_toll_ruin"
+    },
+    {
+      "id": "open_the_strongroom",
+      "description": "Open what the ledger says is there.",
+      "kind": "custom",
+      "count": 1,
+      "hidden": true,
+      "optional": false,
+      "when": {
+        "test": {
+          "ref": "flags.thorn_toll_open"
+        }
+      }
+    },
+    {
+      "id": "the_collector",
+      "description": "Meet the collector.",
+      "kind": "kill",
+      "count": 1,
+      "hidden": true,
+      "optional": false,
+      "target": "toll_collector"
+    }
+  ],
+  "stages": [],
+  "unlocks": [],
+  "rewards": {
+    "xp": 185,
+    "items": [
+      {
+        "item": "shilling_ring",
+        "quantity": 1
+      }
+    ],
+    "reputation": {}
+  }
+}

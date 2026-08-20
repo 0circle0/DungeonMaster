@@ -1,0 +1,14 @@
+{
+  "id": "ashfall_the_drifts",
+  "name": "The Drifts",
+  "description": "Eight feet deep in the hollows, and it takes a footprint and keeps it until the next fall.",
+  "area": "ember_the_ashfall",
+  "kind": "landmark",
+  "descriptionKey": "generic_landmark",
+  "travelMinutes": 8,
+  "tags": [],
+  "position": {
+    "x": 3,
+    "y": 3
+  }
+}

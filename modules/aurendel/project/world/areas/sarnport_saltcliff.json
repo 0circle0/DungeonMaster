@@ -1,0 +1,41 @@
+{
+  "id": "sarnport_saltcliff",
+  "name": "Sarnport — Saltcliff Rise",
+  "description": "Up the hill and out of the smell: the battery, the lighthouse road, and the houses of people who own ships rather than sail them.",
+  "biome": "urban_stone",
+  "layer": "overworld",
+  "descriptionKey": "sarnport_saltcliff_desc",
+  "dangerLevel": 0,
+  "recommendedLevel": 2,
+  "tags": [
+    "silver_coast",
+    "sarnport",
+    "city"
+  ],
+  "map": {
+    "width": "45",
+    "height": "31"
+  },
+  "entryPoint": {
+    "x": 22,
+    "y": 15
+  },
+  "extra": {
+    "role": "city"
+  },
+  "connections": [
+    {
+      "to": "sarnport_countinghouse",
+      "travelMinutes": 8
+    },
+    {
+      "to": "sarnport_harbourside",
+      "travelMinutes": 7
+    },
+    {
+      "to": "coast_chalk_downs",
+      "travelMinutes": 30,
+      "gate": "sarnport_landward_gate"
+    }
+  ]
+}

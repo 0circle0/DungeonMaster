@@ -1,0 +1,24 @@
+{
+  "id": "mycelt_drying_house",
+  "name": "The Drying House",
+  "description": "Warm, dry, and it is the only place in the Deeproads that is either.",
+  "area": "deeproads_mycelt",
+  "kind": "market",
+  "descriptionKey": "int_workshop",
+  "travelMinutes": 3,
+  "tags": [
+    "shop"
+  ],
+  "services": [
+    "market"
+  ],
+  "map": {
+    "width": "11",
+    "height": "9",
+    "palette": "int_shop"
+  },
+  "position": {
+    "x": 21,
+    "y": 3
+  }
+}

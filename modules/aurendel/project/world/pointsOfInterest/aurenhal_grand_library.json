@@ -1,0 +1,22 @@
+{
+  "id": "aurenhal_grand_library",
+  "name": "The Grand Library",
+  "description": "Four floors of shelving and one very determined argument about who is allowed on the fourth.",
+  "area": "aurenhal_highgate",
+  "kind": "landmark",
+  "descriptionKey": "aurenhal_grand_library_desc",
+  "travelMinutes": 6,
+  "tags": [
+    "aurenhal"
+  ],
+  "position": {
+    "x": 14,
+    "y": 12
+  },
+  "services": [
+    "guild"
+  ],
+  "map": {
+    "static": "grand_library"
+  }
+}

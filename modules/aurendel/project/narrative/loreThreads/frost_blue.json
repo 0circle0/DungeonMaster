@@ -1,0 +1,11 @@
+{
+  "id": "frost_blue",
+  "name": "The Blue Voice",
+  "description": "Something under the calving face has been sounding one note for eleven years, and the whales understood it before anybody else started listening.",
+  "entries": [
+    "frost_blue_calving",
+    "frost_blue_note",
+    "frost_blue_making",
+    "frost_blue_moved"
+  ]
+}

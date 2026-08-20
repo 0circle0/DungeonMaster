@@ -1,0 +1,29 @@
+{
+  "id": "ashcott_hedge_maze",
+  "name": "The Long Hedge",
+  "description": "Laid nine generations back and never once let through. It is a mile long and it goes where it wants.",
+  "area": "kingsvale_ashcott",
+  "kind": "landmark",
+  "descriptionKey": "ashcott_hedge_maze_desc",
+  "travelMinutes": 10,
+  "tags": [],
+  "position": {
+    "x": 27,
+    "y": 16
+  },
+  "triggers": [
+    {
+      "id": "kings_found_maze",
+      "mode": "once",
+      "on": "enter",
+      "description": "Fine stone in the maze's paths that is in no road in the Kingsvale.",
+      "effects": [
+        {
+          "learnLore": {
+            "entry": "kings_quarry_stone"
+          }
+        }
+      ]
+    }
+  ]
+}

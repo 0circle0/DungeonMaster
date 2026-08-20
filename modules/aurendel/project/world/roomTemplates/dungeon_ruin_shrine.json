@@ -1,0 +1,16 @@
+{
+  "id": "dungeon_ruin_shrine",
+  "name": "Ruin Shrine",
+  "descriptionKey": "dungeon_ruin_shrine_desc",
+  "weight": 1,
+  "minExits": 1,
+  "maxExits": 2,
+  "encounterChance": 0.4,
+  "trapChance": 0.1,
+  "lootChance": 0.35,
+  "tags": [
+    "dungeon_ruin",
+    "shrine"
+  ],
+  "role": "shrine"
+}

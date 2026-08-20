@@ -1,0 +1,19 @@
+{
+  "id": "aurenhal_kingshold_undercroft",
+  "name": "The Kingshold Undercroft",
+  "description": "Storerooms under the keep, and below those the older fort nobody has had a reason to survey.",
+  "area": "aurenhal_highgate",
+  "kind": "dungeonEntrance",
+  "descriptionKey": "aurenhal_kingshold_undercroft_desc",
+  "travelMinutes": 10,
+  "tags": [
+    "dungeon",
+    "aurenhal"
+  ],
+  "position": {
+    "x": 24,
+    "y": 10
+  },
+  "gate": "kingshold_undercroft_door",
+  "dungeon": "kingshold_undercroft"
+}

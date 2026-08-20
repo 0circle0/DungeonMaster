@@ -1,0 +1,23 @@
+{
+  "id": "ilkhet_khans_yurt",
+  "name": "The Khan's Yurt",
+  "description": "Sixty feet across, felt over a lattice, and it comes down in two hours if it has to.",
+  "area": "steppe_ilkhet",
+  "kind": "landmark",
+  "descriptionKey": "ilkhet_khans_yurt_desc",
+  "travelMinutes": 5,
+  "tags": [
+    "landmark"
+  ],
+  "services": [
+    "guild",
+    "inn"
+  ],
+  "map": {
+    "static": "khans_yurt"
+  },
+  "position": {
+    "x": 3,
+    "y": 3
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "id": "ward_broken",
+  "name": "Broke a Ward",
+  "faction": "the_keepers",
+  "severity": -18,
+  "memorability": 2.5,
+  "distortion": 0.15
+}

@@ -1,0 +1,18 @@
+{
+  "id": "frostmere_moulin",
+  "name": "The Moulin",
+  "description": "A shaft drilled straight down through the glacier by meltwater, and dry from Rimewatch to Turning.",
+  "biome": "dungeon_ice",
+  "roomCount": "12",
+  "depth": "4",
+  "algorithm": "rooms",
+  "lockedDoorChance": 0,
+  "doorGates": [],
+  "rollEncounters": false,
+  "safeEntrance": true,
+  "branchiness": 0.25,
+  "corridorLength": "3d3",
+  "width": "81",
+  "height": "81",
+  "bossTable": "frost_moulin_boss"
+}

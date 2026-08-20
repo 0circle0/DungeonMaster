@@ -1,0 +1,26 @@
+{
+  "id": "warm_water_hood",
+  "name": "The Hood off the Warm Water",
+  "description": "Felt gone stiff with iron out of a spring that has never failed. Heat and thirst arrive later for whoever wears it.",
+  "kind": "armor",
+  "slot": "head",
+  "value": 860,
+  "weight": 1,
+  "tags": [
+    "fabled"
+  ],
+  "modifiers": {
+    "guard": 1
+  },
+  "skillBonuses": {
+    "resolve": 2,
+    "survival": 3
+  },
+  "damageInteractions": [
+    {
+      "damageType": "fire",
+      "multiplier": 0.75
+    }
+  ],
+  "rarity": "very_rare"
+}

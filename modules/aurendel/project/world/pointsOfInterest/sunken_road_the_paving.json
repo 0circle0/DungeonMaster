@@ -1,0 +1,14 @@
+{
+  "id": "sunken_road_the_paving",
+  "name": "The Paving",
+  "description": "A dressed road under the dunes, showing in stretches where the wind has been kind, and going somewhere.",
+  "area": "glasslands_sunken_road",
+  "kind": "landmark",
+  "descriptionKey": "sunken_road_the_paving_desc",
+  "travelMinutes": 8,
+  "tags": [],
+  "position": {
+    "x": 3,
+    "y": 3
+  }
+}

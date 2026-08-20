@@ -1,0 +1,67 @@
+{
+  "id": "sett_delver",
+  "name": "The Delver",
+  "description": "Whatever cut the far end of the setts has been at it a long while, and has stopped needing to come up.",
+  "level": 3,
+  "xp": 120,
+  "attributes": {
+    "might": 15,
+    "agility": 10,
+    "endurance": 15,
+    "intellect": 4,
+    "instinct": 12,
+    "presence": 6
+  },
+  "abilities": [
+    "digging_claw",
+    "rend"
+  ],
+  "behaviour": [
+    {
+      "priority": 10,
+      "use": "digging_claw",
+      "when": {
+        "chance": 0.4
+      }
+    },
+    {
+      "priority": 0,
+      "use": "rend"
+    }
+  ],
+  "faction": "the_unsealed",
+  "creatureType": "aberration",
+  "size": "medium",
+  "descriptors": [
+    "a pale",
+    "a blind"
+  ],
+  "conditionalLoot": [],
+  "loot": "setts_hoard",
+  "conditionImmunities": [
+    "blinded",
+    "frightened"
+  ],
+  "resourceOverrides": {
+    "hp": 28
+  },
+  "derivedOverrides": {
+    "guard": 13
+  },
+  "temperament": {
+    "roamRadius": 30,
+    "investigateRadius": 90,
+    "leashRadius": 140,
+    "wanderChance": 0.3,
+    "disengageTurns": 3,
+    "investigates": [
+      "hearing",
+      "smell",
+      "sight"
+    ],
+    "notices": [
+      "hostile",
+      "neutral"
+    ]
+  }
+}

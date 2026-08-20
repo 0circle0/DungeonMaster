@@ -1,0 +1,41 @@
+{
+  "id": "karn_dolur_gatehall",
+  "name": "Karn Dolur — Gatehall",
+  "description": "The first hall inside the mountain: the gate, the muster floor, and everything the hold wants a stranger to see.",
+  "biome": "urban_delved",
+  "layer": "underworld",
+  "descriptionKey": "karn_dolur_gatehall_desc",
+  "dangerLevel": 1,
+  "recommendedLevel": 4,
+  "tags": [
+    "skarnspine",
+    "karn_dolur",
+    "city"
+  ],
+  "map": {
+    "width": "45",
+    "height": "31"
+  },
+  "entryPoint": {
+    "x": 22,
+    "y": 15
+  },
+  "extra": {
+    "role": "city"
+  },
+  "connections": [
+    {
+      "to": "skarnspine_ironstair",
+      "travelMinutes": 30,
+      "gate": "karn_dolur_hold_gate"
+    },
+    {
+      "to": "karn_dolur_deep_market",
+      "travelMinutes": 6
+    },
+    {
+      "to": "karn_dolur_forgetiers",
+      "travelMinutes": 10
+    }
+  ]
+}

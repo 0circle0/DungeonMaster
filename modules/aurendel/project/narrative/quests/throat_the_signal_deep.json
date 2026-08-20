@@ -1,0 +1,73 @@
+{
+  "id": "throat_the_signal_deep",
+  "name": "The Signal Deep",
+  "description": "The readers have kept every reading since the hold was cut, and they kept them in the one place nobody would think to burn: a gallery under the firewatch towers, with the numbers on the wall.",
+  "autoStart": false,
+  "ordered": true,
+  "tags": [
+    "side",
+    "act2",
+    "throat",
+    "ember_reach"
+  ],
+  "objectives": [
+    {
+      "id": "under_the_towers",
+      "description": "Find the Signal Deep under Firewatch Ridge.",
+      "kind": "reach",
+      "count": 1,
+      "hidden": false,
+      "optional": false,
+      "target": "firewatch_ridge_signal_deep"
+    },
+    {
+      "id": "the_readings",
+      "description": "Read what the wall has been saying.",
+      "kind": "custom",
+      "count": 1,
+      "hidden": false,
+      "optional": false,
+      "when": {
+        "test": {
+          "ref": "flags.throat_readings_found"
+        }
+      }
+    },
+    {
+      "id": "tell_ilka",
+      "description": "Take the two matching years back to Ilka.",
+      "kind": "talk",
+      "count": 1,
+      "hidden": false,
+      "optional": false,
+      "target": "vent_reader_ilka"
+    }
+  ],
+  "stages": [],
+  "unlocks": [
+    "throat_down_the_throat"
+  ],
+  "rewards": {
+    "xp": 70,
+    "items": [],
+    "reputation": {
+      "the_vent_readers": 10
+    }
+  },
+  "requires": {
+    "quests": [
+      {
+        "quest": "throat_gone_quiet",
+        "status": "complete"
+      }
+    ]
+  },
+  "onComplete": [
+    {
+      "setFlag": {
+        "flag": "throat_readings_known",
+        "value": true
+      }
+    }
+  ]
+}

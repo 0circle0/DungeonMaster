@@ -1,0 +1,34 @@
+{
+  "id": "frostmere_wind_scoured_flats",
+  "name": "The Wind-Scoured Flats",
+  "description": "Where the wind has taken the snow away entirely and left the ice polished and the ground under it visible.",
+  "biome": "glacier",
+  "layer": "overworld",
+  "descriptionKey": "frostmere_wind_scoured_flats_desc",
+  "dangerLevel": 7,
+  "recommendedLevel": 9,
+  "tags": [
+    "frostmere"
+  ],
+  "map": {
+    "width": "51",
+    "height": "35"
+  },
+  "entryPoint": {
+    "x": 25,
+    "y": 17
+  },
+  "extra": {
+    "role": "wild"
+  },
+  "connections": [
+    {
+      "to": "frostmere_the_last_cairn",
+      "travelMinutes": 60
+    },
+    {
+      "to": "frostmere_cairnhold",
+      "travelMinutes": 40
+    }
+  ]
+}

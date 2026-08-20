@@ -1,0 +1,37 @@
+{
+  "id": "cobbleway_stables",
+  "name": "The Coach Stables",
+  "description": "Sixty stalls, and forty of them full on a market day.",
+  "area": "coast_cobbleway",
+  "kind": "settlement",
+  "descriptionKey": "int_stable",
+  "travelMinutes": 3,
+  "tags": [],
+  "services": [
+    "stable"
+  ],
+  "map": {
+    "width": "11",
+    "height": "9",
+    "palette": "int_timber"
+  },
+  "position": {
+    "x": 29,
+    "y": 23
+  },
+  "triggers": [
+    {
+      "id": "coast_found_stables",
+      "mode": "once",
+      "on": "enter",
+      "description": "What the stablers have stopped arguing with the horses about.",
+      "effects": [
+        {
+          "learnLore": {
+            "entry": "coast_yard_horses"
+          }
+        }
+      ]
+    }
+  ]
+}

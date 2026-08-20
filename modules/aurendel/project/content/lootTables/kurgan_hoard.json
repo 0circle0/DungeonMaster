@@ -1,0 +1,36 @@
+{
+  "id": "kurgan_hoard",
+  "entries": [
+    {
+      "weight": 4,
+      "value": {
+        "item": "hold_silver",
+        "quantity": "1d3"
+      }
+    },
+    {
+      "weight": 3,
+      "value": {
+        "item": "barrow_torc",
+        "quantity": "1"
+      }
+    },
+    {
+      "weight": 2,
+      "value": {
+        "item": "ring_mail",
+        "quantity": "1"
+      }
+    },
+    {
+      "weight": 2,
+      "value": {
+        "item": "healing_draught",
+        "quantity": "1"
+      }
+    }
+  ],
+  "rolls": "2",
+  "emptyChance": 0,
+  "name": "The Great Kurgan"
+}

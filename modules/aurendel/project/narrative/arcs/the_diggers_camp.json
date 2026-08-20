@@ -1,0 +1,12 @@
+{
+  "id": "the_diggers_camp",
+  "name": "The Diggers' Camp",
+  "description": "Four hundred feet of barrow with two ends, and four hundred years of everybody agreeing to dig the same one.",
+  "quests": [
+    "diggers_the_west_end",
+    "diggers_the_ridge",
+    "diggers_the_east_end",
+    "diggers_record_or_rebury"
+  ],
+  "isEnding": false
+}

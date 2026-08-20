@@ -1,0 +1,22 @@
+{
+  "id": "barrowgate_stables",
+  "name": "The Moor Stables",
+  "description": "Ponies, not horses. Anything taller is no use up here.",
+  "area": "moor_barrowgate",
+  "kind": "settlement",
+  "descriptionKey": "int_stable",
+  "travelMinutes": 3,
+  "tags": [],
+  "services": [
+    "stable"
+  ],
+  "map": {
+    "width": "11",
+    "height": "9",
+    "palette": "int_timber"
+  },
+  "position": {
+    "x": 20,
+    "y": 23
+  }
+}

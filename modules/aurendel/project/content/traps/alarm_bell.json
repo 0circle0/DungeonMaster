@@ -1,0 +1,30 @@
+{
+  "id": "alarm_bell",
+  "name": "Alarm Wire",
+  "description": "A wire at ankle height with something noisy on the far end of it.",
+  "detect": {
+    "skill": "perception",
+    "difficulty": 13
+  },
+  "disarm": {
+    "skill": "lockpicking",
+    "difficulty": 12
+  },
+  "onTrigger": [
+    {
+      "damage": {
+        "target": {
+          "ref": "target.id"
+        },
+        "amount": {
+          "roll": "1d4"
+        },
+        "damageType": "bludgeoning"
+      }
+    }
+  ],
+  "reusable": true,
+  "tags": [
+    "trap"
+  ]
+}

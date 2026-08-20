@@ -1,0 +1,14 @@
+{
+  "id": "hollowdene_well",
+  "name": "The Hollow Well",
+  "description": "Deeper than it needs to be, and cold all year.",
+  "area": "kingsvale_hollowdene",
+  "kind": "landmark",
+  "descriptionKey": "hollowdene_well_desc",
+  "travelMinutes": 1,
+  "tags": [],
+  "position": {
+    "x": 15,
+    "y": 12
+  }
+}

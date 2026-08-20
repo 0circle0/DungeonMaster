@@ -1,0 +1,24 @@
+{
+  "id": "whalebone_meadhall",
+  "name": "The Jawbone",
+  "description": "A meadhall roofed on the jaw of something that came ashore in somebody's great-grandmother's time.",
+  "area": "frostmere_whalebone_landing",
+  "kind": "landmark",
+  "descriptionKey": "whalebone_meadhall_desc",
+  "travelMinutes": 5,
+  "tags": [
+    "landmark",
+    "inn"
+  ],
+  "services": [
+    "inn",
+    "guild"
+  ],
+  "map": {
+    "static": "whalebone_meadhall"
+  },
+  "position": {
+    "x": 3,
+    "y": 3
+  }
+}

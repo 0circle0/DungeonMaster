@@ -1,0 +1,14 @@
+{
+  "id": "cairnhold_the_cairns",
+  "name": "The Cairn Field",
+  "description": "Eleven hundred of them on the hill behind the village, and somebody knows what every one is for.",
+  "area": "frostmere_cairnhold",
+  "kind": "landmark",
+  "descriptionKey": "cairnhold_the_cairns_desc",
+  "travelMinutes": 5,
+  "tags": [],
+  "position": {
+    "x": 3,
+    "y": 3
+  }
+}

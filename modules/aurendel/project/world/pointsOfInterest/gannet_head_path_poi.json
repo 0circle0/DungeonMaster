@@ -1,0 +1,32 @@
+{
+  "id": "gannet_head_path_poi",
+  "name": "The Cliff Path",
+  "description": "Two feet of turf between the fence and the drop, and the fence is advisory.",
+  "area": "coast_gannet_head",
+  "kind": "crossing",
+  "descriptionKey": "generic_crossing",
+  "travelMinutes": 8,
+  "tags": [
+    "crossing"
+  ],
+  "gate": "gannet_head_path",
+  "position": {
+    "x": 14,
+    "y": 3
+  },
+  "triggers": [
+    {
+      "id": "coast_found_path",
+      "mode": "once",
+      "on": "enter",
+      "description": "What the hill two miles inland looks like from four hundred feet up.",
+      "effects": [
+        {
+          "learnLore": {
+            "entry": "coast_horse_lines"
+          }
+        }
+      ]
+    }
+  ]
+}

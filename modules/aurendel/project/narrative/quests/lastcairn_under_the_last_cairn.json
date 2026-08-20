@@ -1,0 +1,77 @@
+{
+  "id": "lastcairn_under_the_last_cairn",
+  "name": "Under the Last Cairn",
+  "description": "Eleven hundred cairns, counted from one, and the ship is pointed straight at it. The Ice Moot has been measuring nine hundred years of work against a thing it has never once opened.",
+  "autoStart": false,
+  "ordered": true,
+  "tags": [
+    "side",
+    "act3",
+    "lastcairn",
+    "frostmere"
+  ],
+  "objectives": [],
+  "stages": [
+    {
+      "id": "out_past_the_flats",
+      "name": "Out past the flats",
+      "description": "Four days from the last roof, and the last day of it into the wind.",
+      "objectives": [
+        {
+          "id": "at_the_cairn",
+          "description": "Reach the Last Cairn.",
+          "kind": "reach",
+          "count": 1,
+          "hidden": false,
+          "optional": false,
+          "target": "last_cairn_the_hollow"
+        }
+      ],
+      "journalKey": "lastcairn_journal_out"
+    },
+    {
+      "id": "what_it_held",
+      "name": "What it has been holding",
+      "description": "Nine hundred years of counting from a thing nobody has opened, and one very good reason for that.",
+      "objectives": [
+        {
+          "id": "kill_cairn",
+          "description": "Put down what the Last Cairn held.",
+          "kind": "kill",
+          "count": 1,
+          "hidden": false,
+          "optional": false,
+          "target": "cairn_thing"
+        }
+      ],
+      "onComplete": [
+        {
+          "setFlag": {
+            "flag": "lastcairn_thing_down",
+            "value": true
+          }
+        }
+      ],
+      "journalKey": "lastcairn_journal_thing"
+    }
+  ],
+  "unlocks": [
+    "lastcairn_set_it_or_move_it"
+  ],
+  "rewards": {
+    "xp": 175,
+    "items": [],
+    "reputation": {
+      "the_ice_moot": 15,
+      "the_keepers": 10
+    }
+  },
+  "requires": {
+    "quests": [
+      {
+        "quest": "lastcairn_the_frozen_ship",
+        "status": "complete"
+      }
+    ]
+  }
+}

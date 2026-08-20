@@ -1,0 +1,69 @@
+{
+  "id": "cobbleway_pound",
+  "name": "The Pound",
+  "description": "Stone walls, one gate, and any beast found straying goes in it until somebody pays.",
+  "area": "coast_cobbleway",
+  "kind": "landmark",
+  "descriptionKey": "generic_landmark",
+  "travelMinutes": 2,
+  "tags": [],
+  "position": {
+    "x": 3,
+    "y": 13
+  },
+  "triggers": [
+    {
+      "id": "coast_yard_committed",
+      "mode": "once",
+      "on": "enter",
+      "description": "In the yard, on the wrong night, with the book.",
+      "requires": {
+        "custom": {
+          "gte": [
+            {
+              "ref": "threads.coast_yard.known"
+            },
+            2
+          ]
+        }
+      },
+      "effects": [
+        {
+          "emit": {
+            "event": "startQuest",
+            "data": {
+              "quest": "coast_the_unclaimed"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "hidden": true,
+  "discover": {
+    "skill": "perception",
+    "difficulty": {
+      "max": [
+        6,
+        {
+          "sub": [
+            18,
+            {
+              "mul": [
+                3,
+                {
+                  "ref": "threads.coast_yard.known"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "gate": "coast_yard_northface",
+  "encounterTables": [
+    "coast_yard_boss"
+  ],
+  "encounterChance": 1
+}

@@ -1,0 +1,39 @@
+{
+  "id": "skarnspine_cold_shoulder",
+  "name": "The Cold Shoulder",
+  "description": "The north face, in shade from Emberfall to Greening, and the way to the ice.",
+  "biome": "alpine",
+  "layer": "overworld",
+  "descriptionKey": "skarnspine_cold_shoulder_desc",
+  "dangerLevel": 5,
+  "recommendedLevel": 5,
+  "tags": [
+    "skarnspine"
+  ],
+  "map": {
+    "width": "51",
+    "height": "35"
+  },
+  "entryPoint": {
+    "x": 25,
+    "y": 17
+  },
+  "extra": {
+    "role": "wild"
+  },
+  "connections": [
+    {
+      "to": "skarnspine_snowgate",
+      "travelMinutes": 55
+    },
+    {
+      "to": "skarnspine_weirwater_head",
+      "travelMinutes": 45
+    },
+    {
+      "to": "frostmere_cairnhold",
+      "travelMinutes": 240,
+      "gate": "frostmere_ice_road"
+    }
+  ]
+}

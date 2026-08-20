@@ -1,0 +1,27 @@
+{
+  "id": "the_top_of_the_chimney",
+  "minDepth": 0,
+  "maxDepth": 999,
+  "chance": 1,
+  "emptyWeight": 0,
+  "scalePerLevels": 3,
+  "groups": [
+    {
+      "id": "chimney",
+      "weight": 1,
+      "hostile": true,
+      "entries": [
+        {
+          "monster": "drowned_hand",
+          "count": "2",
+          "scaleWithLevel": false
+        },
+        {
+          "monster": "strand_wrecker",
+          "count": "1",
+          "scaleWithLevel": false
+        }
+      ]
+    }
+  ]
+}

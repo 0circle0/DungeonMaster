@@ -1,0 +1,102 @@
+{
+  "id": "bonealley_unlicensed",
+  "name": "Unlicensed",
+  "description": "Three of the guild went down at Kettle Yard in Lastmonth. Dree wants to know who else is under her city, and she does not want to ask the Watch.",
+  "autoStart": false,
+  "ordered": true,
+  "tags": [
+    "side",
+    "act1",
+    "bonealley",
+    "kingsvale"
+  ],
+  "objectives": [],
+  "stages": [
+    {
+      "id": "get_down",
+      "name": "Find the way down",
+      "description": "Behind a wine-shop that is not a wine-shop. You will not find it by being told where it is.",
+      "objectives": [
+        {
+          "id": "the_stair",
+          "description": "Get down the Cellar Stair.",
+          "kind": "reach",
+          "count": 1,
+          "hidden": false,
+          "optional": false,
+          "target": "warrens_cellar_stair"
+        }
+      ],
+      "journalKey": "bonealley_journal_stair"
+    },
+    {
+      "id": "meet_them",
+      "name": "Whoever is down there",
+      "description": "They are not guild. Guild wear the hood.",
+      "objectives": [
+        {
+          "id": "the_diggers",
+          "description": "Deal with the men in the cellars.",
+          "kind": "kill",
+          "count": 2,
+          "hidden": false,
+          "optional": false,
+          "target": "cellar_thief"
+        }
+      ],
+      "onComplete": [
+        {
+          "setFlag": {
+            "flag": "bonealley_diggers_met",
+            "value": true
+          }
+        }
+      ],
+      "journalKey": "bonealley_journal_diggers"
+    },
+    {
+      "id": "tell_dree",
+      "name": "Tell Dree",
+      "description": "She will want to know what they were carrying, not what they were carrying it in.",
+      "objectives": [
+        {
+          "id": "report",
+          "description": "Report to the guild.",
+          "kind": "talk",
+          "count": 1,
+          "hidden": false,
+          "optional": false,
+          "target": "ratcatcher_dree"
+        }
+      ],
+      "journalKey": "bonealley_journal_report"
+    }
+  ],
+  "unlocks": [
+    "bonealley_the_old_gaol"
+  ],
+  "rewards": {
+    "xp": 30,
+    "items": [],
+    "reputation": {
+      "the_ratcatchers": 8
+    }
+  },
+  "giver": "ratcatcher_dree",
+  "requires": {
+    "quests": [
+      {
+        "quest": "the_open_door",
+        "status": "complete"
+      }
+    ]
+  },
+  "onComplete": [
+    {
+      "setFlag": {
+        "flag": "bonealley_unlicensed_known",
+        "value": true
+      }
+    }
+  ]
+}

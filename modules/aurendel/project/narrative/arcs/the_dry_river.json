@@ -1,0 +1,12 @@
+{
+  "id": "the_dry_river",
+  "name": "The Dry River",
+  "description": "A well that stopped in a season, eleven wagons pointed at it, and four hundred years of a grazing right that nobody has written down.",
+  "quests": [
+    "dryriver_the_third_well",
+    "dryriver_the_lost_wagons",
+    "dryriver_down_the_dry_well",
+    "dryriver_a_road_or_a_right"
+  ],
+  "isEnding": false
+}

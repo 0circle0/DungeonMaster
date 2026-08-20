@@ -1,0 +1,39 @@
+{
+  "id": "duskwood_witchwood",
+  "name": "The Witchwood",
+  "description": "Nine square miles the foresters will not work, and they will not be drawn on why.",
+  "biome": "deepwood",
+  "layer": "overworld",
+  "descriptionKey": "duskwood_witchwood_desc",
+  "dangerLevel": 6,
+  "recommendedLevel": 6,
+  "tags": [
+    "duskwood"
+  ],
+  "map": {
+    "width": "51",
+    "height": "35"
+  },
+  "entryPoint": {
+    "x": 25,
+    "y": 17
+  },
+  "extra": {
+    "role": "wild"
+  },
+  "connections": [
+    {
+      "to": "duskwood_elderhollow",
+      "travelMinutes": 50,
+      "gate": "duskwood_thornward"
+    },
+    {
+      "to": "duskwood_thornback_ride",
+      "travelMinutes": 55
+    }
+  ],
+  "encounterTables": [
+    "duskwood_things",
+    "the_tallied"
+  ]
+}

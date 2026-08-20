@@ -1,0 +1,13 @@
+{
+  "id": "frostmere_ice_road",
+  "name": "The Ice Road",
+  "kind": "hazard",
+  "description": "The way north off the Cold Shoulder, over a snow bridge that is there in Deepdark and is not there in Longlight.",
+  "staysOpen": true,
+  "bypass": {
+    "skill": "survival",
+    "difficulty": 15,
+    "retryable": true
+  },
+  "blockedTextKey": "frostmere_ice_road_blocked"
+}

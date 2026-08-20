@@ -1,0 +1,35 @@
+{
+  "id": "wayhouse_keeper_pyle",
+  "name": "Pyle, at the Wayhouse",
+  "description": "Fourth of the family to keep the stage on the Moot Road, and the fourth to count fourteen miles on an eleven-mile road.",
+  "disposition": 4,
+  "gullibility": 0.3,
+  "memorySpan": 200,
+  "offersQuests": [],
+  "caresAbout": [],
+  "reactions": [],
+  "faction": "the_keepers",
+  "dialogue": "dusk_pyle_talk",
+  "home": "moot_road_wayhouse",
+  "statblock": "dusk_wayhouse_keeper",
+  "shop": {
+    "lootTable": "keeper_stock",
+    "buysTags": [
+      "treasure"
+    ],
+    "priceMultiplier": 1.2
+  },
+  "temperament": {
+    "roamRadius": 0,
+    "wanderChance": 0,
+    "speeds": {
+      "wander": 0
+    },
+    "investigates": [],
+    "notices": [
+      "hostile",
+      "neutral",
+      "ally"
+    ]
+  }
+}

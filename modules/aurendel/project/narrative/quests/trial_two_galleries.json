@@ -1,0 +1,70 @@
+{
+  "id": "trial_two_galleries",
+  "name": "The Fourth Door",
+  "description": "Eight hundred feet of quarry gallery along a seam that stops at forty, ending at a face nine generations of quarrymen worked around and never into.",
+  "autoStart": false,
+  "ordered": true,
+  "tags": [
+    "trial",
+    "trial_two"
+  ],
+  "objectives": [
+    {
+      "id": "into_the_galleries",
+      "description": "Get into the quarry galleries.",
+      "kind": "reach",
+      "count": 1,
+      "hidden": false,
+      "optional": false,
+      "target": "the_cut_quarry_galleries"
+    },
+    {
+      "id": "through_the_face",
+      "description": "Open the face the quarry never cut.",
+      "kind": "custom",
+      "count": 1,
+      "hidden": false,
+      "optional": false,
+      "when": {
+        "test": {
+          "ref": "flags.trial_two_open"
+        }
+      }
+    },
+    {
+      "id": "the_fourth",
+      "description": "Finish what came through the fourth door.",
+      "kind": "kill",
+      "count": 1,
+      "hidden": false,
+      "optional": false,
+      "target": "fourth_through"
+    }
+  ],
+  "stages": [],
+  "unlocks": [
+    "trial_two_sunken_hall"
+  ],
+  "rewards": {
+    "xp": 2000,
+    "items": [
+      {
+        "item": "gallery_head",
+        "quantity": 1
+      }
+    ],
+    "reputation": {
+      "the_keepers": 25,
+      "karn_dolur": 20
+    }
+  },
+  "giver": "keeper_hesper",
+  "requires": {
+    "items": [
+      {
+        "item": "first_warrant"
+      }
+    ],
+    "minLevel": 16
+  }
+}

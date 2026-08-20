@@ -1,0 +1,17 @@
+{
+  "id": "smelled_something",
+  "variants": [
+    {
+      "text": "Wet fur and old meat, carried {direction} on the air."
+    },
+    {
+      "text": "A rank animal smell, close enough to place: {direction}."
+    },
+    {
+      "text": "Something has been through here recently, and it stank."
+    },
+    {
+      "text": "The air {direction} of you has something living in it."
+    }
+  ]
+}

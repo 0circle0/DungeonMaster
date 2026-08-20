@@ -1,0 +1,36 @@
+{
+  "id": "unmaking_word",
+  "name": "The Unmaking Word",
+  "description": "Not shouted. Said, once, in a language the wards were written to refuse.",
+  "actionType": "action",
+  "targeting": "allEnemies",
+  "range": 30,
+  "savingThrow": {
+    "save": "will",
+    "difficulty": 16,
+    "onSuccess": "half"
+  },
+  "onUse": [
+    {
+      "damage": {
+        "target": {
+          "ref": "target.id"
+        },
+        "amount": {
+          "roll": "4d6"
+        },
+        "damageType": "necrotic"
+      }
+    },
+    {
+      "applyCondition": {
+        "target": {
+          "ref": "target.id"
+        },
+        "condition": "frightened",
+        "duration": 3
+      }
+    }
+  ],
+  "cooldown": 4
+}

@@ -1,0 +1,21 @@
+{
+  "id": "long_barrow_diggers_camp",
+  "name": "The Diggers' Camp",
+  "description": "Somebody excavated here for two seasons, wrote nothing down that survives, and left in a hurry.",
+  "area": "moor_the_long_barrow",
+  "kind": "ruin",
+  "descriptionKey": "generic_ruin",
+  "travelMinutes": 8,
+  "tags": [
+    "ruin"
+  ],
+  "map": {
+    "width": "9",
+    "height": "7",
+    "palette": "int_timber"
+  },
+  "position": {
+    "x": 25,
+    "y": 3
+  }
+}

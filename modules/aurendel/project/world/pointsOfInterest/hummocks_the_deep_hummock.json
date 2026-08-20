@@ -1,0 +1,68 @@
+{
+  "id": "hummocks_the_deep_hummock",
+  "name": "The Deep Hummock",
+  "description": "The largest of them, and the only one made of stone rather than silt, and there is a way down through it.",
+  "area": "thornmere_the_hummocks",
+  "kind": "dungeonEntrance",
+  "descriptionKey": "generic_dungeon_mouth",
+  "travelMinutes": 14,
+  "tags": [
+    "dungeon"
+  ],
+  "dungeon": "thornmere_deep_hummock",
+  "position": {
+    "x": 25,
+    "y": 3
+  },
+  "triggers": [
+    {
+      "id": "thorn_hermit_committed",
+      "mode": "once",
+      "on": "enter",
+      "description": "On the thing the hut has been looking at.",
+      "requires": {
+        "custom": {
+          "gte": [
+            {
+              "ref": "threads.thorn_hermit.known"
+            },
+            2
+          ]
+        }
+      },
+      "effects": [
+        {
+          "emit": {
+            "event": "startQuest",
+            "data": {
+              "quest": "thorn_what_it_watched"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "hidden": true,
+  "discover": {
+    "skill": "survival",
+    "difficulty": {
+      "max": [
+        10,
+        {
+          "sub": [
+            22,
+            {
+              "mul": [
+                3,
+                {
+                  "ref": "threads.thorn_hermit.known"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "gate": "thorn_hummock_watch"
+}

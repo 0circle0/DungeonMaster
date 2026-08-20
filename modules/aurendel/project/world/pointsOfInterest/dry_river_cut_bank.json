@@ -1,0 +1,68 @@
+{
+  "id": "dry_river_cut_bank",
+  "name": "The Cut Bank",
+  "description": "The flood took a bite out of the bank and opened a stair that had been in it.",
+  "area": "steppe_dry_river",
+  "kind": "dungeonEntrance",
+  "descriptionKey": "generic_dungeon_mouth",
+  "travelMinutes": 12,
+  "tags": [
+    "dungeon"
+  ],
+  "dungeon": "steppe_cut_bank",
+  "position": {
+    "x": 25,
+    "y": 3
+  },
+  "triggers": [
+    {
+      "id": "step_bank_committed",
+      "mode": "once",
+      "on": "enter",
+      "description": "Down the open face, at the course that was laid.",
+      "requires": {
+        "custom": {
+          "gte": [
+            {
+              "ref": "threads.step_bank.known"
+            },
+            2
+          ]
+        }
+      },
+      "effects": [
+        {
+          "emit": {
+            "event": "startQuest",
+            "data": {
+              "quest": "step_what_the_bank_shows"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "hidden": true,
+  "discover": {
+    "skill": "perception",
+    "difficulty": {
+      "max": [
+        8,
+        {
+          "sub": [
+            20,
+            {
+              "mul": [
+                3,
+                {
+                  "ref": "threads.step_bank.known"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "gate": "step_bank_course"
+}

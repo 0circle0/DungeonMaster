@@ -1,0 +1,21 @@
+{
+  "id": "augury",
+  "name": "Augury",
+  "description": "An hour of quiet and the right question, and something answers.",
+  "actionType": "action",
+  "targeting": "none",
+  "spellLevel": 1,
+  "ritual": true,
+  "castingTime": "60 minutes",
+  "components": [
+    "verbal"
+  ],
+  "onUse": [
+    {
+      "setFlag": {
+        "flag": "augury_taken",
+        "value": true
+      }
+    }
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "id": "colders_hearth_the_fire",
+  "name": "Colder's Fire",
+  "description": "Kept burning for forty years by one man so that people could find the way, and kept burning since by everybody.",
+  "area": "moor_colders_hearth",
+  "kind": "landmark",
+  "descriptionKey": "colders_hearth_the_fire_desc",
+  "travelMinutes": 3,
+  "tags": [],
+  "position": {
+    "x": 3,
+    "y": 3
+  },
+  "triggers": [
+    {
+      "id": "moor_found_fire",
+      "mode": "once",
+      "on": "enter",
+      "description": "How much peat is stacked against it, and how long that would last.",
+      "effects": [
+        {
+          "learnLore": {
+            "entry": "moor_fire_fuel"
+          }
+        }
+      ]
+    }
+  ]
+}

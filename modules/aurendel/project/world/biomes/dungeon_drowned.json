@@ -1,0 +1,27 @@
+{
+  "id": "dungeon_drowned",
+  "name": "Drowned Works",
+  "description": "Built dry, and standing in water now, and the water is winning.",
+  "layer": "underworld",
+  "palette": "dun_drowned",
+  "roomTemplates": [
+    "dungeon_drowned_boss",
+    "dungeon_drowned_chamber",
+    "dungeon_drowned_corridor",
+    "dungeon_drowned_entrance",
+    "dungeon_drowned_lair",
+    "dungeon_drowned_shrine",
+    "dungeon_drowned_vault"
+  ],
+  "encounterTables": [
+    "drowned_things"
+  ],
+  "lootTables": [
+    "marsh_scraps"
+  ],
+  "traps": [
+    "collapsing_stair",
+    "gas_seal",
+    "pit"
+  ]
+}

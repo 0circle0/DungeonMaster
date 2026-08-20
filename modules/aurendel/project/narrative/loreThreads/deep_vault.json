@@ -1,0 +1,11 @@
+{
+  "id": "deep_vault",
+  "name": "The Weeping Vault",
+  "description": "Nine columns in a world built in eights, weeping salt water that is warm, under a shaft with too much rock above it.",
+  "entries": [
+    "deep_vault_warm",
+    "deep_vault_shaft",
+    "deep_vault_count",
+    "deep_vault_taste"
+  ]
+}

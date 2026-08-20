@@ -1,0 +1,43 @@
+{
+  "id": "skarnspine_the_cut",
+  "name": "The Cut",
+  "description": "A pass a hundred feet deep and forty wide, and somebody made it that way on purpose.",
+  "biome": "alpine",
+  "layer": "overworld",
+  "descriptionKey": "skarnspine_the_cut_desc",
+  "dangerLevel": 4,
+  "recommendedLevel": 4,
+  "tags": [
+    "skarnspine"
+  ],
+  "map": {
+    "width": "51",
+    "height": "35"
+  },
+  "entryPoint": {
+    "x": 25,
+    "y": 17
+  },
+  "extra": {
+    "role": "wild"
+  },
+  "connections": [
+    {
+      "to": "skarnspine_broken_road",
+      "travelMinutes": 50
+    },
+    {
+      "to": "skarnspine_highpass",
+      "travelMinutes": 40,
+      "gate": "skarnspine_pass_ward"
+    },
+    {
+      "to": "skarnspine_weirwater_head",
+      "travelMinutes": 50
+    }
+  ],
+  "encounterTables": [
+    "alpine_things",
+    "the_checked"
+  ]
+}

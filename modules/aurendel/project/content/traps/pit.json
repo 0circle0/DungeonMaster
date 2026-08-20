@@ -1,0 +1,39 @@
+{
+  "id": "pit",
+  "name": "Covered Pit",
+  "description": "Hurdles and turf over a hole somebody took real trouble digging.",
+  "detect": {
+    "skill": "perception",
+    "difficulty": 13
+  },
+  "disarm": {
+    "skill": "craft",
+    "difficulty": 12
+  },
+  "onTrigger": [
+    {
+      "damage": {
+        "target": {
+          "ref": "target.id"
+        },
+        "amount": {
+          "roll": "2d6"
+        },
+        "damageType": "bludgeoning"
+      }
+    },
+    {
+      "applyCondition": {
+        "target": {
+          "ref": "target.id"
+        },
+        "condition": "prone",
+        "duration": 1
+      }
+    }
+  ],
+  "reusable": false,
+  "tags": [
+    "trap"
+  ]
+}

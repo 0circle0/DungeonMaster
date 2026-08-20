@@ -1,0 +1,15 @@
+{
+  "id": "black_water_the_crossing",
+  "name": "The Ferry Crossing",
+  "description": "A punt, a pole, and a man who has done this for thirty-one years and will not be hurried.",
+  "area": "thornmere_the_black_water",
+  "kind": "landmark",
+  "descriptionKey": "generic_landmark",
+  "travelMinutes": 5,
+  "tags": [],
+  "gate": "thornmere_pole_ferry",
+  "position": {
+    "x": 3,
+    "y": 3
+  }
+}

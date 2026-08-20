@@ -1,0 +1,34 @@
+{
+  "id": "glass_crater_hoard",
+  "name": "Under the Poured Glass",
+  "rolls": "3",
+  "emptyChance": 0,
+  "bonusRollSkill": "lore",
+  "bonusRolls": {
+    "onSuccess": 1,
+    "onCritical": 2
+  },
+  "entries": [
+    {
+      "weight": 3,
+      "value": {
+        "item": "old_coin",
+        "quantity": "5d6"
+      }
+    },
+    {
+      "weight": 2,
+      "value": {
+        "item": "glass_bead",
+        "quantity": "2d3"
+      }
+    },
+    {
+      "weight": 2,
+      "value": {
+        "item": "warded_coat",
+        "quantity": "1"
+      }
+    }
+  ]
+}

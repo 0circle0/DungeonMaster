@@ -1,0 +1,219 @@
+{
+  "id": "thorn_bel_talk",
+  "start": "greet",
+  "nodes": [
+    {
+      "id": "greet",
+      "says": [
+        {
+          "text": "A yard of reed in every stage between cut and roofed, and a man sorting it by feel."
+        },
+        {
+          "text": "“Roofing, thatching, or reed. If it is reed, Maud's your woman.”"
+        }
+      ],
+      "onEnter": [],
+      "options": [
+        {
+          "id": "thorn_bel_cut",
+          "text": "You judge cut surfaces for a living. What cuts a cypress knee off level?",
+          "requires": {
+            "without": {
+              "lore": [
+                "thorn_knees_cut"
+              ]
+            }
+          },
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "check": {
+            "skill": "insight",
+            "difficulty": {
+              "sub": [
+                12,
+                {
+                  "clamp": [
+                    {
+                      "div": [
+                        {
+                          "ref": "reputation.the_ferrymen",
+                          "else": 0
+                        },
+                        5
+                      ]
+                    },
+                    -6,
+                    6
+                  ]
+                }
+              ]
+            },
+            "onSuccess": "thorn_bel_cut_told",
+            "onFailure": "thorn_bel_cut_wont"
+          }
+        },
+        {
+          "id": "thorn_bel_hand",
+          "text": "Have you ever seen the toll ledger?",
+          "requires": {
+            "without": {
+              "lore": [
+                "thorn_toll_hand"
+              ]
+            }
+          },
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "check": {
+            "skill": "insight",
+            "difficulty": {
+              "sub": [
+                13,
+                {
+                  "clamp": [
+                    {
+                      "div": [
+                        {
+                          "ref": "reputation.the_ferrymen",
+                          "else": 0
+                        },
+                        5
+                      ]
+                    },
+                    -6,
+                    6
+                  ]
+                }
+              ]
+            },
+            "onSuccess": "thorn_bel_hand_told",
+            "onFailure": "thorn_bel_hand_wont"
+          }
+        },
+        {
+          "id": "greet_leave",
+          "text": "Nothing.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "thorn_bel_cut_told",
+      "says": [
+        {
+          "text": "“Nothing I sell.” He is definite. “Bill will do it if it is Maud's bill and Maud is swinging it. Anything else crushes before it cuts.” He turns a reed over. “There are a hundred of them out there cut clean and healed. Somebody had a very good edge and forty years ago.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "learnLore": {
+            "entry": "thorn_knees_cut"
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "thorn_bel_cut_on",
+          "text": "Go on.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "thorn_bel_cut_wont",
+      "says": [
+        {
+          "text": "“I've said all I mean to,” they say, and go back to what they were doing."
+        }
+      ],
+      "onEnter": [
+        {
+          "adjustReputation": {
+            "faction": "the_ferrymen",
+            "amount": -1
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "thorn_bel_cut_drop",
+          "text": "Leave it.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "thorn_bel_hand_told",
+      "says": [
+        {
+          "text": "“Sarl has it. I have signed the book next to it for twenty years.” He straightens up. “Same hand the whole way back. Not a copied hand — I copy hands, it is half of thatching a name into a ridge. That is one hand with a broken g and it goes back two hundred years.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "learnLore": {
+            "entry": "thorn_toll_hand"
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "thorn_bel_hand_on",
+          "text": "Go on.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "thorn_bel_hand_wont",
+      "says": [
+        {
+          "text": "“I've said all I mean to,” they say, and go back to what they were doing."
+        }
+      ],
+      "onEnter": [
+        {
+          "adjustReputation": {
+            "faction": "the_ferrymen",
+            "amount": -1
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "thorn_bel_hand_drop",
+          "text": "Leave it.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    }
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "id": "heatherlands_bothy",
+  "name": "The Heather Bothy",
+  "description": "Unlocked, unstaffed, stocked, and it has saved more lives than the keep has.",
+  "area": "moor_heatherlands",
+  "kind": "camp",
+  "descriptionKey": "int_house",
+  "travelMinutes": 5,
+  "tags": [],
+  "services": [
+    "inn"
+  ],
+  "map": {
+    "width": "9",
+    "height": "7",
+    "palette": "int_timber"
+  },
+  "position": {
+    "x": 14,
+    "y": 3
+  }
+}

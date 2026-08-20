@@ -1,0 +1,14 @@
+{
+  "id": "moor",
+  "name": "The Weeping Moor",
+  "description": "Heather to the skyline, and under it more graves than living people.",
+  "layer": "overworld",
+  "palette": "moor",
+  "roomTemplates": [],
+  "encounterTables": [
+    "moor_things"
+  ],
+  "lootTables": [],
+  "traps": [],
+  "ambienceKey": "moor_ambience"
+}

@@ -20,6 +20,12 @@ import os  # noqa: E402
 
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", ".."))
 OUT = os.path.join(ROOT, "modules/aurendel")
+
+from dmkit.retired import refuse_if_handed_over  # noqa: E402
+
+# Handed over to `aurendel/project/`. See dmkit/retired.py for why this file is
+# kept rather than deleted.
+refuse_if_handed_over(OUT)
 BASE = os.path.join(ROOT, "modules/core_fantasy/module.json")
 
 from dmkit import assemble  # noqa: E402

@@ -1,0 +1,68 @@
+{
+  "id": "glass_quarter_crater_stair",
+  "name": "The Crater Stair",
+  "description": "Cut down the inside of the lip, in glass, and it goes below the floor of the crater.",
+  "area": "vashta_qal_glass_quarter",
+  "kind": "dungeonEntrance",
+  "descriptionKey": "generic_dungeon_mouth",
+  "travelMinutes": 10,
+  "tags": [
+    "dungeon"
+  ],
+  "dungeon": "glasslands_crater_deep",
+  "position": {
+    "x": 13,
+    "y": 27
+  },
+  "triggers": [
+    {
+      "id": "glass_bath_committed",
+      "mode": "once",
+      "on": "enter",
+      "description": "The head of a stair the city does not admit to.",
+      "requires": {
+        "custom": {
+          "gte": [
+            {
+              "ref": "threads.glass_bath.known"
+            },
+            2
+          ]
+        }
+      },
+      "effects": [
+        {
+          "emit": {
+            "event": "startQuest",
+            "data": {
+              "quest": "glass_still_full"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "hidden": true,
+  "discover": {
+    "skill": "arcana",
+    "difficulty": {
+      "max": [
+        8,
+        {
+          "sub": [
+            24,
+            {
+              "mul": [
+                4,
+                {
+                  "ref": "threads.glass_bath.known"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "gate": "glass_crater_seal"
+}

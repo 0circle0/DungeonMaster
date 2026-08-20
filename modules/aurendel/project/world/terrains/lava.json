@@ -1,0 +1,19 @@
+{
+  "id": "lava",
+  "name": "Lava",
+  "description": "No.",
+  "glyph": "L",
+  "color": "red",
+  "passable": false,
+  "opaque": false,
+  "moveCost": 0,
+  "tags": [
+    "stone",
+    "hazard"
+  ],
+  "marks": {
+    "tracks": 0,
+    "smell": 0.6
+  },
+  "lightRadius": 6
+}

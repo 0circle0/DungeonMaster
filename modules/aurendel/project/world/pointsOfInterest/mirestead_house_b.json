@@ -1,0 +1,21 @@
+{
+  "id": "mirestead_house_b",
+  "name": "Duckboard Cottages",
+  "description": "Reached by planks, and the planks are municipal property.",
+  "area": "moor_mirestead",
+  "kind": "settlement",
+  "descriptionKey": "int_house",
+  "travelMinutes": 2,
+  "tags": [
+    "house"
+  ],
+  "map": {
+    "width": "9",
+    "height": "7",
+    "palette": "int_timber"
+  },
+  "position": {
+    "x": 27,
+    "y": 10
+  }
+}

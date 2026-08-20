@@ -1,0 +1,38 @@
+{
+  "id": "coast",
+  "name": "The Silver Coast",
+  "floor": "grass",
+  "wall": "cliff",
+  "exterior": "cliff",
+  "scatter": [
+    {
+      "terrain": "shingle",
+      "frequency": 0.18,
+      "distribution": "patch",
+      "scale": 9,
+      "priority": 0
+    },
+    {
+      "terrain": "deep_water",
+      "frequency": 0.16,
+      "distribution": "patch",
+      "scale": 16,
+      "edgeTerrain": "shallows",
+      "edgeWidth": 2,
+      "priority": 1
+    },
+    {
+      "terrain": "rock",
+      "frequency": 0.05,
+      "distribution": "speckle",
+      "priority": 2
+    },
+    {
+      "terrain": "heather",
+      "frequency": 0.08,
+      "distribution": "patch",
+      "scale": 8,
+      "priority": 3
+    }
+  ]
+}

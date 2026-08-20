@@ -1,0 +1,29 @@
+{
+  "id": "glass_pan_floor",
+  "name": "Under the Eighth Course",
+  "description": "The floor of the last pan is not pan-floor. It rings.",
+  "kind": "ward",
+  "blockedTextKey": "glass_pan_blocked",
+  "staysOpen": true,
+  "onOpen": [
+    {
+      "setFlag": {
+        "flag": "glass_courses_open",
+        "value": true
+      }
+    }
+  ],
+  "onBlocked": [],
+  "opensWith": [],
+  "tags": [],
+  "requires": {
+    "items": [
+      {
+        "item": "weighers_jar",
+        "quantity": 1,
+        "consume": false,
+        "equipped": false
+      }
+    ]
+  }
+}

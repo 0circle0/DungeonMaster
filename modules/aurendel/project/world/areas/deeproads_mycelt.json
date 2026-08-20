@@ -1,0 +1,35 @@
+{
+  "id": "deeproads_mycelt",
+  "name": "Mycelt",
+  "description": "A fungus farm with a village attached, and the village is very much the smaller half.",
+  "biome": "urban_delved",
+  "layer": "underworld",
+  "descriptionKey": "deeproads_mycelt_desc",
+  "dangerLevel": 3,
+  "recommendedLevel": 9,
+  "tags": [
+    "deeproads",
+    "village"
+  ],
+  "map": {
+    "width": "31",
+    "height": "21"
+  },
+  "entryPoint": {
+    "x": 15,
+    "y": 10
+  },
+  "extra": {
+    "role": "village"
+  },
+  "connections": [
+    {
+      "to": "deeproads_fungus_gallery",
+      "travelMinutes": 25
+    },
+    {
+      "to": "deeproads_the_sunless_river",
+      "travelMinutes": 40
+    }
+  ]
+}

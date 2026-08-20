@@ -1,0 +1,24 @@
+{
+  "id": "stiltmarket_smithy",
+  "name": "The Floating Forge",
+  "description": "On a barge, moored, because the town will not have a fire on piles.",
+  "area": "thornmere_stiltmarket",
+  "kind": "market",
+  "descriptionKey": "int_smithy",
+  "travelMinutes": 3,
+  "tags": [
+    "shop"
+  ],
+  "services": [
+    "smith"
+  ],
+  "map": {
+    "width": "15",
+    "height": "11",
+    "palette": "int_forge"
+  },
+  "position": {
+    "x": 37,
+    "y": 3
+  }
+}

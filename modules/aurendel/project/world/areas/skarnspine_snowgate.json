@@ -1,0 +1,35 @@
+{
+  "id": "skarnspine_snowgate",
+  "name": "Snowgate",
+  "description": "Nine houses, all of them dug half into the slope, and a bell to ring when the road is shut.",
+  "biome": "urban_timber",
+  "layer": "overworld",
+  "descriptionKey": "skarnspine_snowgate_desc",
+  "dangerLevel": 3,
+  "recommendedLevel": 4,
+  "tags": [
+    "skarnspine",
+    "village"
+  ],
+  "map": {
+    "width": "31",
+    "height": "21"
+  },
+  "entryPoint": {
+    "x": 15,
+    "y": 10
+  },
+  "extra": {
+    "role": "village"
+  },
+  "connections": [
+    {
+      "to": "skarnspine_highpass",
+      "travelMinutes": 40
+    },
+    {
+      "to": "skarnspine_cold_shoulder",
+      "travelMinutes": 55
+    }
+  ]
+}

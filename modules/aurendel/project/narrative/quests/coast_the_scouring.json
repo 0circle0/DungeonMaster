@@ -1,0 +1,57 @@
+{
+  "id": "coast_the_scouring",
+  "name": "The Scouring",
+  "description": "A chalk figure three parishes clear every spring without knowing why, that reads as lines from the cliff and has corners in it.",
+  "autoStart": false,
+  "ordered": true,
+  "tags": [
+    "hidden",
+    "silver_coast",
+    "coast_horse"
+  ],
+  "objectives": [
+    {
+      "id": "under_the_cross",
+      "description": "Get under where the lines cross.",
+      "kind": "reach",
+      "count": 1,
+      "hidden": true,
+      "optional": false,
+      "target": "chalk_downs_flint_mines"
+    },
+    {
+      "id": "lift_the_turf",
+      "description": "Lift the turf the way it has been lifted before.",
+      "kind": "custom",
+      "count": 1,
+      "hidden": true,
+      "optional": false,
+      "when": {
+        "test": {
+          "ref": "flags.coast_horse_open"
+        }
+      }
+    },
+    {
+      "id": "what_cut_them",
+      "description": "Find what cut them square.",
+      "kind": "kill",
+      "count": 1,
+      "hidden": true,
+      "optional": false,
+      "target": "chalk_cutter"
+    }
+  ],
+  "stages": [],
+  "unlocks": [],
+  "rewards": {
+    "xp": 125,
+    "items": [
+      {
+        "item": "scourers_belt",
+        "quantity": 1
+      }
+    ],
+    "reputation": {}
+  }
+}

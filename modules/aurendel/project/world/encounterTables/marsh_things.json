@@ -1,0 +1,54 @@
+{
+  "id": "marsh_things",
+  "minDepth": 0,
+  "maxDepth": 999,
+  "chance": 0.45,
+  "emptyWeight": 4,
+  "scalePerLevels": 3,
+  "groups": [
+    {
+      "id": "leeches",
+      "weight": 5,
+      "hostile": true,
+      "entries": [
+        {
+          "monster": "leech_swarm",
+          "count": "1",
+          "scaleWithLevel": true
+        }
+      ]
+    },
+    {
+      "id": "walkers",
+      "weight": 4,
+      "hostile": true,
+      "entries": [
+        {
+          "monster": "bog_walker",
+          "count": "1d2",
+          "scaleWithLevel": true
+        }
+      ]
+    },
+    {
+      "id": "both",
+      "weight": 2,
+      "hostile": true,
+      "entries": [
+        {
+          "monster": "bog_walker",
+          "count": "1",
+          "scaleWithLevel": false
+        },
+        {
+          "monster": "leech_swarm",
+          "count": "1",
+          "scaleWithLevel": true
+        }
+      ],
+      "requires": {
+        "minLevel": 5
+      }
+    }
+  ]
+}

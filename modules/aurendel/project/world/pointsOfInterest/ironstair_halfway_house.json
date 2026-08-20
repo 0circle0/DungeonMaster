@@ -1,0 +1,24 @@
+{
+  "id": "ironstair_halfway_house",
+  "name": "The Halfway House",
+  "description": "A cut chamber at step four hundred and fifty with a bench and a brazier.",
+  "area": "skarnspine_ironstair",
+  "kind": "settlement",
+  "descriptionKey": "int_house",
+  "travelMinutes": 5,
+  "tags": [
+    "inn"
+  ],
+  "services": [
+    "inn"
+  ],
+  "map": {
+    "width": "9",
+    "height": "7",
+    "palette": "int_delved"
+  },
+  "position": {
+    "x": 14,
+    "y": 3
+  }
+}

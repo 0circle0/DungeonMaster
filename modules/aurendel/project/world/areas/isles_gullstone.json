@@ -1,0 +1,34 @@
+{
+  "id": "isles_gullstone",
+  "name": "Gullstone",
+  "description": "A rock four hundred feet out of the water with nothing on it but birds and a stair.",
+  "biome": "isles",
+  "layer": "overworld",
+  "descriptionKey": "isles_gullstone_desc",
+  "dangerLevel": 5,
+  "recommendedLevel": 6,
+  "tags": [
+    "sundered_isles"
+  ],
+  "map": {
+    "width": "51",
+    "height": "35"
+  },
+  "entryPoint": {
+    "x": 25,
+    "y": 17
+  },
+  "extra": {
+    "role": "wild"
+  },
+  "connections": [
+    {
+      "to": "isles_wreck_reef",
+      "travelMinutes": 45
+    },
+    {
+      "to": "isles_cormorant",
+      "travelMinutes": 35
+    }
+  ]
+}

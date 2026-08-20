@@ -1,0 +1,17 @@
+{
+  "id": "forgetiers_old_seams",
+  "name": "The Old Seams",
+  "description": "Worked out four hundred years ago and left open, because a hold does not fill in what it might want back.",
+  "area": "karn_dolur_forgetiers",
+  "kind": "dungeonEntrance",
+  "descriptionKey": "generic_dungeon_mouth",
+  "travelMinutes": 12,
+  "tags": [
+    "dungeon"
+  ],
+  "dungeon": "karn_dolur_old_seams",
+  "position": {
+    "x": 13,
+    "y": 27
+  }
+}

@@ -1,0 +1,103 @@
+{
+  "id": "diggers_the_west_end",
+  "name": "The West End",
+  "description": "Pell has eleven diggers, a fellow's warrant, and a west end that has started giving things back that were not put in it.",
+  "autoStart": false,
+  "ordered": true,
+  "tags": [
+    "side",
+    "act2",
+    "diggers",
+    "weeping_moor"
+  ],
+  "objectives": [],
+  "stages": [
+    {
+      "id": "the_camp",
+      "name": "The camp on the ridge",
+      "description": "Eleven on day rates and four of them not turning up.",
+      "objectives": [
+        {
+          "id": "at_the_camp",
+          "description": "Reach the diggers' camp.",
+          "kind": "reach",
+          "count": 1,
+          "hidden": false,
+          "optional": false,
+          "target": "long_barrow_diggers_camp"
+        }
+      ],
+      "journalKey": "diggers_journal_camp"
+    },
+    {
+      "id": "clear_it",
+      "name": "What is coming up the cutting",
+      "description": "The spoil heap is on the wrong side of the trench and something has been walking it at night.",
+      "objectives": [
+        {
+          "id": "the_walkers",
+          "description": "Clear the west cutting.",
+          "kind": "kill",
+          "count": 2,
+          "hidden": false,
+          "optional": false,
+          "target": "hollow_walker"
+        }
+      ],
+      "onComplete": [
+        {
+          "setFlag": {
+            "flag": "diggers_west_cleared",
+            "value": true
+          }
+        }
+      ],
+      "journalKey": "diggers_journal_west"
+    },
+    {
+      "id": "tell_pell",
+      "name": "Tell Pell",
+      "description": "She will want it described rather than summarised.",
+      "objectives": [
+        {
+          "id": "report",
+          "description": "Report to Pell.",
+          "kind": "talk",
+          "count": 1,
+          "hidden": false,
+          "optional": false,
+          "target": "antiquary_pell"
+        }
+      ],
+      "journalKey": "diggers_journal_report"
+    }
+  ],
+  "unlocks": [
+    "diggers_the_ridge"
+  ],
+  "rewards": {
+    "xp": 55,
+    "items": [],
+    "reputation": {
+      "the_library": 10
+    }
+  },
+  "giver": "antiquary_pell",
+  "requires": {
+    "quests": [
+      {
+        "quest": "the_undercroft",
+        "status": "complete"
+      }
+    ],
+    "minLevel": 4
+  },
+  "onComplete": [
+    {
+      "setFlag": {
+        "flag": "diggers_west_known",
+        "value": true
+      }
+    }
+  ]
+}

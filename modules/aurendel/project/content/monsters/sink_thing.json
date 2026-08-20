@@ -1,0 +1,80 @@
+{
+  "id": "sink_thing",
+  "name": "What Is In the Sink",
+  "description": "The Weirwater goes into the ground at the swallet and comes out eleven miles away. Something in between has never needed to leave.",
+  "level": 5,
+  "xp": 250,
+  "attributes": {
+    "might": 16,
+    "agility": 11,
+    "endurance": 16,
+    "intellect": 5,
+    "instinct": 12,
+    "presence": 8
+  },
+  "abilities": [
+    "drag_under",
+    "stone_fist"
+  ],
+  "behaviour": [
+    {
+      "priority": 10,
+      "use": "drag_under",
+      "when": {
+        "chance": 0.4
+      }
+    },
+    {
+      "priority": 0,
+      "use": "stone_fist"
+    }
+  ],
+  "faction": "the_unsealed",
+  "creatureType": "aberration",
+  "size": "large",
+  "descriptors": [
+    "a pallid",
+    "a folded"
+  ],
+  "conditionalLoot": [
+    "silvered_cache"
+  ],
+  "loot": "sink_hoard",
+  "damageInteractions": [
+    {
+      "damageType": "cold",
+      "multiplier": 0.5
+    },
+    {
+      "damageType": "lightning",
+      "multiplier": 2
+    }
+  ],
+  "conditionImmunities": [
+    "prone",
+    "blinded",
+    "frightened"
+  ],
+  "resourceOverrides": {
+    "hp": 58
+  },
+  "derivedOverrides": {
+    "guard": 14
+  },
+  "temperament": {
+    "roamRadius": 30,
+    "investigateRadius": 90,
+    "leashRadius": 140,
+    "wanderChance": 0.3,
+    "disengageTurns": 3,
+    "investigates": [
+      "hearing",
+      "smell",
+      "sight"
+    ],
+    "notices": [
+      "hostile",
+      "neutral"
+    ]
+  }
+}

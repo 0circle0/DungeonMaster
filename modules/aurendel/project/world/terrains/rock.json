@@ -1,0 +1,18 @@
+{
+  "id": "rock",
+  "name": "Rock",
+  "description": "Bare stone, gone vertical.",
+  "glyph": "^",
+  "color": "gray",
+  "passable": false,
+  "opaque": true,
+  "moveCost": 0,
+  "tags": [
+    "stone"
+  ],
+  "marks": {
+    "tracks": 0,
+    "smell": 0.6
+  },
+  "providesCover": "three_quarters"
+}

@@ -1,0 +1,11 @@
+{
+  "id": "glass_key",
+  "name": "The Glass Key",
+  "description": "Fulgurite, hollow, and it rings a note that is very slightly wrong.",
+  "kind": "trinket",
+  "value": 0,
+  "weight": 0.5,
+  "tags": [
+    "quest"
+  ]
+}

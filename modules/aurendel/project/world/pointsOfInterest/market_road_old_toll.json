@@ -1,0 +1,36 @@
+{
+  "id": "market_road_old_toll",
+  "name": "The Old Toll",
+  "description": "Somebody charged for this road once, and the arch is still standing and the gate is not.",
+  "area": "deeproads_the_deep_market_road",
+  "kind": "ruin",
+  "descriptionKey": "generic_ruin",
+  "travelMinutes": 6,
+  "tags": [
+    "ruin"
+  ],
+  "map": {
+    "width": "9",
+    "height": "7",
+    "palette": "int_delved"
+  },
+  "position": {
+    "x": 25,
+    "y": 3
+  },
+  "triggers": [
+    {
+      "id": "deep_found_toll",
+      "mode": "once",
+      "on": "enter",
+      "description": "Which three lamps are out.",
+      "effects": [
+        {
+          "learnLore": {
+            "entry": "deep_lamps_out"
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,35 @@
+{
+  "id": "kings_quarry_hoard",
+  "name": "Bottom of the Second Face",
+  "rolls": "2",
+  "emptyChance": 0.1,
+  "bonusRollSkill": "perception",
+  "bonusRolls": {
+    "onSuccess": 1,
+    "onCritical": 2
+  },
+  "entries": [
+    {
+      "weight": 5,
+      "value": {
+        "item": "old_coin",
+        "quantity": "2d6"
+      }
+    },
+    {
+      "weight": 2,
+      "value": {
+        "item": "bandages",
+        "quantity": "1d2"
+      }
+    },
+    {
+      "weight": 1,
+      "value": {
+        "item": "second_face_stone",
+        "quantity": "1",
+        "unique": true
+      }
+    }
+  ]
+}

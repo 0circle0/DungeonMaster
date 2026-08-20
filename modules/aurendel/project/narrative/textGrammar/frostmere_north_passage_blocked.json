@@ -1,0 +1,14 @@
+{
+  "id": "frostmere_north_passage_blocked",
+  "variants": [
+    {
+      "text": "The passage is closed. It is closed for forty-three weeks of the year and this is one of them."
+    },
+    {
+      "text": "Fast ice from the shore to the horizon. Nothing is going round the top of anything."
+    },
+    {
+      "text": "\"Nine weeks,\" says the factor, \"and it was eleven when I was young. Not this month.\""
+    }
+  ]
+}

@@ -1,0 +1,24 @@
+{
+  "id": "deep_market_hall_of_measures",
+  "name": "The Hall of Measures",
+  "description": "Where a weight becomes a legal weight, and where the standards themselves are kept.",
+  "area": "karn_dolur_deep_market",
+  "kind": "market",
+  "descriptionKey": "generic_market",
+  "travelMinutes": 4,
+  "tags": [
+    "shop"
+  ],
+  "services": [
+    "guild"
+  ],
+  "map": {
+    "width": "15",
+    "height": "11",
+    "palette": "int_stone"
+  },
+  "position": {
+    "x": 41,
+    "y": 15
+  }
+}

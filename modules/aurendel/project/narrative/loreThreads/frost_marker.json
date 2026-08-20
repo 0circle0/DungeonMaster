@@ -1,0 +1,11 @@
+{
+  "id": "frost_marker",
+  "name": "What the Marker Points At",
+  "description": "A bearing cut before the moot kept records, aimed at no cairn, and not aimed across.",
+  "entries": [
+    "frost_marker_bearing",
+    "frost_marker_older",
+    "frost_marker_down",
+    "frost_marker_shut"
+  ]
+}

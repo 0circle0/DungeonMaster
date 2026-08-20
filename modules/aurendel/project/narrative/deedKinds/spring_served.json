@@ -1,0 +1,8 @@
+{
+  "id": "spring_served",
+  "name": "Served the Spring",
+  "faction": "the_water_wardens",
+  "severity": 12,
+  "memorability": 1.5,
+  "distortion": 0.2
+}

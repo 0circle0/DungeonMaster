@@ -1,0 +1,93 @@
+{
+  "id": "seventh_through",
+  "name": "What Came Through the Seventh",
+  "description": "A room built to hear four miles of corridor, and something in it that has heard every footfall on that floor since there was a floor.",
+  "level": 18,
+  "xp": 8000,
+  "attributes": {
+    "might": 20,
+    "agility": 22,
+    "endurance": 22,
+    "intellect": 23,
+    "instinct": 23,
+    "presence": 21
+  },
+  "abilities": [
+    "unmaking_word",
+    "call_the_shut",
+    "grave_chill",
+    "wither"
+  ],
+  "behaviour": [
+    {
+      "priority": 30,
+      "use": "call_the_shut",
+      "when": {
+        "chance": 0.3
+      }
+    },
+    {
+      "priority": 20,
+      "use": "unmaking_word"
+    },
+    {
+      "priority": 10,
+      "use": "wither"
+    },
+    {
+      "priority": 0,
+      "use": "grave_chill"
+    }
+  ],
+  "faction": "the_unsealed",
+  "creatureType": "undead",
+  "size": "medium",
+  "descriptors": [
+    "an attentive",
+    "a listening"
+  ],
+  "conditionalLoot": [],
+  "loot": "trial_three_hoard_a",
+  "damageInteractions": [
+    {
+      "damageType": "slashing",
+      "multiplier": 0.5,
+      "unless": [
+        "silvered"
+      ]
+    },
+    {
+      "damageType": "piercing",
+      "multiplier": 0.5,
+      "unless": [
+        "silvered"
+      ]
+    }
+  ],
+  "conditionImmunities": [
+    "frightened",
+    "silenced",
+    "blinded",
+    "poisoned",
+    "slowed"
+  ],
+  "resourceOverrides": {
+    "hp": 300
+  },
+  "temperament": {
+    "roamRadius": 12,
+    "investigateRadius": 40,
+    "leashRadius": 60,
+    "wanderChance": 0.1,
+    "disengageTurns": 1,
+    "speeds": {
+      "wander": 0.5,
+      "investigate": 0.5
+    },
+    "investigates": [
+      "sight",
+      "hearing",
+      "smell"
+    ]
+  }
+}

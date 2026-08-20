@@ -1,0 +1,16 @@
+{
+  "id": "warden_blade_cache",
+  "entries": [
+    {
+      "weight": 1,
+      "value": {
+        "item": "warden_blade",
+        "quantity": "1",
+        "unique": true
+      }
+    }
+  ],
+  "rolls": "1",
+  "emptyChance": 0,
+  "name": "The Ninth Blade"
+}

@@ -1,0 +1,8 @@
+{
+  "id": "library_served",
+  "name": "Served the Library",
+  "faction": "the_library",
+  "severity": 10,
+  "memorability": 1,
+  "distortion": 0.2
+}

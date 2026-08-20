@@ -1,0 +1,21 @@
+{
+  "id": "whalebone_house_a",
+  "name": "Harpooner's Row",
+  "description": "Turf over timber over turf, and warm as a burrow.",
+  "area": "frostmere_whalebone_landing",
+  "kind": "settlement",
+  "descriptionKey": "int_house",
+  "travelMinutes": 2,
+  "tags": [
+    "house"
+  ],
+  "map": {
+    "width": "9",
+    "height": "7",
+    "palette": "int_timber"
+  },
+  "position": {
+    "x": 12,
+    "y": 23
+  }
+}

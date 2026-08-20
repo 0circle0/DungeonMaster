@@ -1,0 +1,11 @@
+{
+  "id": "dusk_hidden",
+  "name": "The Duskwood, on Terms",
+  "description": "Three arrangements this forest was made to accept, all of them still being honoured by somebody.",
+  "quests": [
+    "dusk_the_extra_miles",
+    "dusk_the_road",
+    "dusk_the_round"
+  ],
+  "isEnding": false
+}

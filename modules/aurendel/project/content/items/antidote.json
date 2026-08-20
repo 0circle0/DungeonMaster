@@ -1,0 +1,23 @@
+{
+  "id": "antidote",
+  "name": "Antidote",
+  "description": "For the fen, the leech channels, and whatever the barrows use.",
+  "kind": "consumable",
+  "value": 18,
+  "weight": 0.5,
+  "stackable": true,
+  "consumedOnUse": true,
+  "onUse": [
+    {
+      "removeCondition": {
+        "target": {
+          "ref": "actor.id"
+        },
+        "condition": "poisoned"
+      }
+    }
+  ],
+  "tags": [
+    "consumable"
+  ]
+}

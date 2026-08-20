@@ -1,0 +1,29 @@
+{
+  "id": "kestrel_edge_the_edge",
+  "name": "The Edge",
+  "description": "Two hundred feet of gritstone with the whole Kingsvale laid out below it, and kestrels hanging along the whole length.",
+  "area": "moor_kestrel_edge",
+  "kind": "landmark",
+  "descriptionKey": "generic_landmark",
+  "travelMinutes": 6,
+  "tags": [],
+  "position": {
+    "x": 3,
+    "y": 3
+  },
+  "triggers": [
+    {
+      "id": "moor_found_edge",
+      "mode": "once",
+      "on": "enter",
+      "description": "What goes out over the drop, and what comes back.",
+      "effects": [
+        {
+          "learnLore": {
+            "entry": "moor_shoot_birds"
+          }
+        }
+      ]
+    }
+  ]
+}

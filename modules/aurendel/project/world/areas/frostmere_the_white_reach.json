@@ -1,0 +1,41 @@
+{
+  "id": "frostmere_the_white_reach",
+  "name": "The White Reach",
+  "description": "Forty miles of level ice with nothing on it, in any direction, at all.",
+  "biome": "glacier",
+  "layer": "overworld",
+  "descriptionKey": "frostmere_the_white_reach_desc",
+  "dangerLevel": 8,
+  "recommendedLevel": 9,
+  "tags": [
+    "frostmere"
+  ],
+  "map": {
+    "width": "51",
+    "height": "35"
+  },
+  "entryPoint": {
+    "x": 25,
+    "y": 17
+  },
+  "extra": {
+    "role": "wild"
+  },
+  "connections": [
+    {
+      "to": "frostmere_bone_strand",
+      "travelMinutes": 60
+    },
+    {
+      "to": "frostmere_glass_ice",
+      "travelMinutes": 55
+    },
+    {
+      "to": "frostmere_whalebone_landing",
+      "travelMinutes": 70
+    }
+  ],
+  "encounterTables": [
+    "the_tallied"
+  ]
+}

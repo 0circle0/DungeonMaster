@@ -1,0 +1,14 @@
+{
+  "id": "thrift_green",
+  "name": "Thrift Green",
+  "description": "Cropped short by sheep and edged with the flower the place is named for.",
+  "area": "coast_thrift",
+  "kind": "landmark",
+  "descriptionKey": "generic_landmark",
+  "travelMinutes": 1,
+  "tags": [],
+  "position": {
+    "x": 3,
+    "y": 3
+  }
+}

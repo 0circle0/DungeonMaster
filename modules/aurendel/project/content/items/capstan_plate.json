@@ -1,0 +1,14 @@
+{
+  "id": "capstan_plate",
+  "name": "The Plate off the Capstan",
+  "description": "Brass off the salvors' capstan with a line cut into it by somebody who came up and did not want to say it out loud.",
+  "kind": "key",
+  "value": 0,
+  "weight": 0,
+  "tags": [
+    "keepsake"
+  ],
+  "extra": {
+    "heldBy": "salvor_bren"
+  }
+}

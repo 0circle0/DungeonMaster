@@ -1,0 +1,14 @@
+{
+  "id": "dungeon_delved_boss_desc",
+  "variants": [
+    {
+      "text": "The hall the rest of it was cut to reach: pillared, high, and dressed to the ceiling."
+    },
+    {
+      "text": "A dais at the far end with three steps up to it and nothing on top."
+    },
+    {
+      "text": "The finest work in the whole delving, and it is at the deepest point, which is how you know what it was for."
+    }
+  ]
+}

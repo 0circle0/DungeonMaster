@@ -1,0 +1,29 @@
+{
+  "id": "deep_footing_way",
+  "name": "Into the Footings",
+  "description": "There is a way into the footings and it was made from inside them.",
+  "kind": "ward",
+  "blockedTextKey": "deep_footing_blocked",
+  "staysOpen": true,
+  "onOpen": [
+    {
+      "setFlag": {
+        "flag": "deep_bridge_open",
+        "value": true
+      }
+    }
+  ],
+  "onBlocked": [],
+  "opensWith": [],
+  "tags": [],
+  "requires": {
+    "items": [
+      {
+        "item": "toll_tally",
+        "quantity": 1,
+        "consume": false,
+        "equipped": false
+      }
+    ]
+  }
+}

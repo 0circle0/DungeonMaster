@@ -1,0 +1,12 @@
+{
+  "id": "the_cut",
+  "name": "The Cut",
+  "description": "Nine days of red water, two days of none, and nine hundred years of ledgers with the answer on two pages nobody had put together.",
+  "quests": [
+    "thecut_the_red_water",
+    "thecut_the_galleries",
+    "thecut_the_sink",
+    "thecut_seal_or_road"
+  ],
+  "isEnding": false
+}

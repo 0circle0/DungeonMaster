@@ -1,0 +1,43 @@
+{
+  "id": "coast_wreckers_strand",
+  "name": "Wreckers' Strand",
+  "description": "Nine miles of shingle under a cliff, and everything the sea has given back for four hundred years still lying on it.",
+  "biome": "coast",
+  "layer": "overworld",
+  "descriptionKey": "coast_wreckers_strand_desc",
+  "dangerLevel": 3,
+  "recommendedLevel": 3,
+  "tags": [
+    "silver_coast"
+  ],
+  "map": {
+    "width": "51",
+    "height": "35"
+  },
+  "entryPoint": {
+    "x": 25,
+    "y": 17
+  },
+  "extra": {
+    "role": "wild"
+  },
+  "connections": [
+    {
+      "to": "sarnport_harbourside",
+      "travelMinutes": 45
+    },
+    {
+      "to": "coast_gannet_head",
+      "travelMinutes": 40
+    },
+    {
+      "to": "isles_the_narrows",
+      "travelMinutes": 180,
+      "gate": "isles_passage"
+    }
+  ],
+  "encounterTables": [
+    "coast_things",
+    "the_loosed"
+  ]
+}

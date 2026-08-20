@@ -1,0 +1,35 @@
+{
+  "id": "dun_ruin",
+  "name": "Ruin",
+  "floor": "moss",
+  "wall": "wall_stone",
+  "exterior": "tree",
+  "scatter": [
+    {
+      "terrain": "rubble",
+      "frequency": 0.12,
+      "distribution": "speckle",
+      "priority": 0
+    },
+    {
+      "terrain": "leaf_litter",
+      "frequency": 0.1,
+      "distribution": "patch",
+      "scale": 6,
+      "priority": 1
+    },
+    {
+      "terrain": "bramble",
+      "frequency": 0.04,
+      "distribution": "speckle",
+      "priority": 2
+    },
+    {
+      "terrain": "stump",
+      "frequency": 0.02,
+      "distribution": "speckle",
+      "priority": 3
+    }
+  ],
+  "door": "door"
+}

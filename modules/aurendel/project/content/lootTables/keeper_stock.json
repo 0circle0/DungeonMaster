@@ -1,0 +1,43 @@
+{
+  "id": "keeper_stock",
+  "entries": [
+    {
+      "weight": 5,
+      "value": {
+        "item": "ward_salt",
+        "quantity": "1d2"
+      }
+    },
+    {
+      "weight": 4,
+      "value": {
+        "item": "antidote",
+        "quantity": "1"
+      }
+    },
+    {
+      "weight": 3,
+      "value": {
+        "item": "healing_draught",
+        "quantity": "1"
+      }
+    },
+    {
+      "weight": 2,
+      "value": {
+        "item": "iron_mace",
+        "quantity": "1"
+      }
+    },
+    {
+      "weight": 1,
+      "value": {
+        "item": "silvered_blade",
+        "quantity": "1"
+      }
+    }
+  ],
+  "rolls": "3",
+  "emptyChance": 0,
+  "name": "What the Keepers Will Part With"
+}

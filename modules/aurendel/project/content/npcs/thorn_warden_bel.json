@@ -1,0 +1,38 @@
+{
+  "id": "thorn_warden_bel",
+  "name": "Bel of the Thornward",
+  "description": "Lays thorn, and has laid it in the same line for thirty-one years.",
+  "disposition": 12,
+  "gullibility": 0.3,
+  "memorySpan": 300,
+  "offersQuests": [],
+  "caresAbout": [
+    "ward_broken",
+    "ward_restored"
+  ],
+  "reactions": [],
+  "faction": "the_keepers",
+  "dialogue": "bel_talk",
+  "home": "elderhollow_moot_oak",
+  "shop": {
+    "lootTable": "keeper_stock",
+    "buysTags": [
+      "treasure",
+      "ward"
+    ],
+    "priceMultiplier": 1.25
+  },
+  "temperament": {
+    "roamRadius": 0,
+    "wanderChance": 0,
+    "speeds": {
+      "wander": 0
+    },
+    "investigates": [],
+    "notices": [
+      "hostile",
+      "neutral",
+      "ally"
+    ]
+  }
+}

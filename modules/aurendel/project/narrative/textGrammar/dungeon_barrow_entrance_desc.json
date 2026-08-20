@@ -1,0 +1,14 @@
+{
+  "id": "dungeon_barrow_entrance_desc",
+  "variants": [
+    {
+      "text": "Dry-stone walls close in either side and the daylight stops about six feet in, all at once."
+    },
+    {
+      "text": "The passage in is lined with slabs set on edge, and every one of them was carried here."
+    },
+    {
+      "text": "Low enough that you go in bent, which is presumably the point."
+    }
+  ]
+}

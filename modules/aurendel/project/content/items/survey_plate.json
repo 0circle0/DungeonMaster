@@ -1,0 +1,14 @@
+{
+  "id": "survey_plate",
+  "name": "The Survey Plate",
+  "description": "Brass, scribed with the vault's section. The shaft on it runs off the top of the plate and somebody has written a number beside it and then scratched it out.",
+  "kind": "key",
+  "value": 0,
+  "weight": 0,
+  "tags": [
+    "keepsake"
+  ],
+  "extra": {
+    "heldBy": "surveyor_ilde"
+  }
+}

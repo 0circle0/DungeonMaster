@@ -1,0 +1,28 @@
+{
+  "id": "dungeon_barrow",
+  "name": "Barrow",
+  "description": "Dry-stone chambers under a mound, built to be shut and not to be entered.",
+  "layer": "underworld",
+  "palette": "dun_barrow",
+  "roomTemplates": [
+    "dungeon_barrow_boss",
+    "dungeon_barrow_chamber",
+    "dungeon_barrow_corridor",
+    "dungeon_barrow_entrance",
+    "dungeon_barrow_lair",
+    "dungeon_barrow_shrine",
+    "dungeon_barrow_vault"
+  ],
+  "encounterTables": [
+    "barrow_things"
+  ],
+  "lootTables": [
+    "barrow_scraps"
+  ],
+  "traps": [
+    "collapsing_stair",
+    "dart_slab",
+    "falling_block",
+    "gas_seal"
+  ]
+}

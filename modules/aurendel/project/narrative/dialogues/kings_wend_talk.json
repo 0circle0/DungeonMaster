@@ -1,0 +1,424 @@
+{
+  "id": "kings_wend_talk",
+  "start": "greet",
+  "nodes": [
+    {
+      "id": "greet",
+      "says": [
+        {
+          "text": "A posting house on a straight road, four horses in the yard and a woman writing in a book on the counter."
+        },
+        {
+          "text": "“Horses are hired by the stage. If it is the Kingshold road you want the earlier one.”"
+        }
+      ],
+      "onEnter": [],
+      "options": [
+        {
+          "id": "kings_wend_night",
+          "text": "Do many carts go south off this road at night?",
+          "requires": {
+            "without": {
+              "lore": [
+                "kings_quarry_night"
+              ]
+            }
+          },
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "check": {
+            "skill": "persuasion",
+            "difficulty": {
+              "sub": [
+                13,
+                {
+                  "clamp": [
+                    {
+                      "div": [
+                        {
+                          "ref": "reputation.the_crown",
+                          "else": 0
+                        },
+                        5
+                      ]
+                    },
+                    -6,
+                    6
+                  ]
+                }
+              ]
+            },
+            "onSuccess": "kings_wend_night_told",
+            "onFailure": "kings_wend_night_wont"
+          }
+        },
+        {
+          "id": "kings_wend_gibbet",
+          "text": "There is a gibbet down the road with nobody's name on it.",
+          "requires": {
+            "without": {
+              "lore": [
+                "kings_quarry_gibbet"
+              ]
+            }
+          },
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "check": {
+            "skill": "persuasion",
+            "difficulty": {
+              "sub": [
+                14,
+                {
+                  "clamp": [
+                    {
+                      "div": [
+                        {
+                          "ref": "reputation.the_crown",
+                          "else": 0
+                        },
+                        5
+                      ]
+                    },
+                    -6,
+                    6
+                  ]
+                }
+              ]
+            },
+            "onSuccess": "kings_wend_gibbet_told",
+            "onFailure": "kings_wend_gibbet_wont"
+          }
+        },
+        {
+          "id": "kings_wend_worked",
+          "text": "You post horses over Pennyford. Is that sluice worked?",
+          "requires": {
+            "without": {
+              "lore": [
+                "kings_ford_worked"
+              ]
+            }
+          },
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "check": {
+            "skill": "insight",
+            "difficulty": {
+              "sub": [
+                12,
+                {
+                  "clamp": [
+                    {
+                      "div": [
+                        {
+                          "ref": "reputation.the_crown",
+                          "else": 0
+                        },
+                        5
+                      ]
+                    },
+                    -6,
+                    6
+                  ]
+                }
+              ]
+            },
+            "onSuccess": "kings_wend_worked_told",
+            "onFailure": "kings_wend_worked_wont"
+          }
+        },
+        {
+          "id": "kings_wend_book",
+          "text": "Let me take the book.",
+          "requires": {
+            "without": {
+              "items": [
+                "posting_book"
+              ],
+              "flags": [
+                {
+                  "flag": "given:posting_book"
+                }
+              ]
+            }
+          },
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "check": {
+            "skill": "persuasion",
+            "difficulty": {
+              "sub": [
+                14,
+                {
+                  "clamp": [
+                    {
+                      "div": [
+                        {
+                          "ref": "reputation.the_crown",
+                          "else": 0
+                        },
+                        5
+                      ]
+                    },
+                    -6,
+                    6
+                  ]
+                }
+              ]
+            },
+            "onSuccess": "kings_wend_book_gave",
+            "onFailure": "kings_wend_book_kept"
+          }
+        },
+        {
+          "id": "greet_leave",
+          "text": "Nothing.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "kings_wend_night_told",
+      "says": [
+        {
+          "text": "“They did.” She checks over her shoulder, which answers a different question. “Eleven years of them and not one licensed. I wrote every one down because a posting house writes things down, and nobody ever came and asked me for the book, which I have thought about a great deal.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "learnLore": {
+            "entry": "kings_quarry_night"
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "kings_wend_night_on",
+          "text": "Go on.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "kings_wend_night_wont",
+      "says": [
+        {
+          "text": "“I've said all I mean to,” they say, and go back to what they were doing."
+        }
+      ],
+      "onEnter": [
+        {
+          "adjustReputation": {
+            "faction": "the_crown",
+            "amount": -1
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "kings_wend_night_drop",
+          "text": "Leave it.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "kings_wend_gibbet_told",
+      "says": [
+        {
+          "text": "“Went up the same year the carts started.” She says it flatly. “Nobody hanged on it — I have had the assize clerk look, he owed me a favour. It is a gibbet that has never been used, on a road with no highwaymen, put up the year something else started.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "learnLore": {
+            "entry": "kings_quarry_gibbet"
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "kings_wend_gibbet_on",
+          "text": "Go on.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "kings_wend_gibbet_wont",
+      "says": [
+        {
+          "text": "“I've said all I mean to,” they say, and go back to what they were doing."
+        }
+      ],
+      "onEnter": [
+        {
+          "adjustReputation": {
+            "faction": "the_crown",
+            "amount": -1
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "kings_wend_gibbet_drop",
+          "text": "Leave it.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "kings_wend_worked_told",
+      "says": [
+        {
+          "text": "“Up in the spring, down at the harvest, and I set my remounts by it.” She says it without looking up, and then does look up. “Which I have just heard myself say out loud for the first time. The parish has not paid anybody to do that since before I was born.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "learnLore": {
+            "entry": "kings_ford_worked"
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "kings_wend_worked_on",
+          "text": "Go on.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "kings_wend_worked_wont",
+      "says": [
+        {
+          "text": "“I've said all I mean to,” they say, and go back to what they were doing."
+        }
+      ],
+      "onEnter": [
+        {
+          "adjustReputation": {
+            "faction": "the_crown",
+            "amount": -1
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "kings_wend_worked_drop",
+          "text": "Leave it.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "kings_wend_book_gave",
+      "says": [
+        {
+          "text": "She gets it from under the counter, which is not where a posting house keeps its book. “Eleven years,” she says. “If it turns out somebody at Kingshold has known this the whole time, I would rather hear it from you than from them.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "grantItem": {
+            "target": {
+              "ref": "actor.id"
+            },
+            "item": "posting_book",
+            "quantity": 1
+          }
+        },
+        {
+          "setFlag": {
+            "flag": "given:posting_book",
+            "value": true
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "kings_wend_book_thanks",
+          "text": "Thank you.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "kings_wend_book_kept",
+      "says": [
+        {
+          "text": "“Not the book,” she says. “I will tell you what is in it. The book stays where it is.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "adjustReputation": {
+            "faction": "the_crown",
+            "amount": -2
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "kings_wend_book_leave",
+          "text": "Then no.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    }
+  ]
+}

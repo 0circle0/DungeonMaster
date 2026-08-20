@@ -1,0 +1,26 @@
+{
+  "id": "glass_lens_carried",
+  "name": "What Naim Kept",
+  "rolls": "1",
+  "emptyChance": 0,
+  "entries": [
+    {
+      "weight": 1,
+      "value": {
+        "item": "unsold_lens",
+        "quantity": "1",
+        "unique": true,
+        "requirementScope": "party",
+        "requires": {
+          "without": {
+            "flags": [
+              {
+                "flag": "given:unsold_lens"
+              }
+            ]
+          }
+        }
+      }
+    }
+  ]
+}

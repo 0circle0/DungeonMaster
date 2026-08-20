@@ -1,0 +1,18 @@
+{
+  "id": "dungeon_ice_boss",
+  "name": "Ice Deep Chamber",
+  "descriptionKey": "dungeon_ice_boss_desc",
+  "weight": 1,
+  "minExits": 1,
+  "maxExits": 2,
+  "encounterChance": 0,
+  "trapChance": 0.1,
+  "lootChance": 0.8,
+  "tags": [
+    "dungeon_ice",
+    "boss"
+  ],
+  "role": "boss",
+  "neverTrap": true,
+  "alwaysEncounter": true
+}

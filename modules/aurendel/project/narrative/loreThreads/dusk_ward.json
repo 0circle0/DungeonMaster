@@ -1,0 +1,11 @@
+{
+  "id": "dusk_ward",
+  "name": "The Round",
+  "description": "Four hundred years of paying a woodward nobody can name, and marks that have moved outward.",
+  "entries": [
+    "dusk_ward_paid",
+    "dusk_ward_moved",
+    "dusk_ward_line",
+    "dusk_ward_recut"
+  ]
+}

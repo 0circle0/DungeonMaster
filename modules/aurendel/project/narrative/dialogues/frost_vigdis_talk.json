@@ -1,0 +1,314 @@
+{
+  "id": "frost_vigdis_talk",
+  "start": "greet",
+  "nodes": [
+    {
+      "id": "greet",
+      "says": [
+        {
+          "text": "A tarpaulin, a fire that is mostly smoke, and a woman sorting bone into three piles by some system of her own."
+        },
+        {
+          "text": "“Buying or looking? Looking's free. Standing where I'm sorting isn't.”"
+        }
+      ],
+      "onEnter": [],
+      "options": [
+        {
+          "id": "frost_vigdis_cut",
+          "text": "These have been cut. What does that out here?",
+          "requires": {
+            "without": {
+              "lore": [
+                "frost_strand_cut"
+              ]
+            }
+          },
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "check": {
+            "skill": "persuasion",
+            "difficulty": {
+              "sub": [
+                11,
+                {
+                  "clamp": [
+                    {
+                      "div": [
+                        {
+                          "ref": "reputation.the_ice_moot",
+                          "else": 0
+                        },
+                        5
+                      ]
+                    },
+                    -6,
+                    6
+                  ]
+                }
+              ]
+            },
+            "onSuccess": "frost_vigdis_cut_told",
+            "onFailure": "frost_vigdis_cut_wont"
+          }
+        },
+        {
+          "id": "frost_vigdis_inland",
+          "text": "They are all lying the same way round.",
+          "requires": {
+            "without": {
+              "lore": [
+                "frost_strand_inland"
+              ]
+            }
+          },
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "check": {
+            "skill": "persuasion",
+            "difficulty": {
+              "sub": [
+                12,
+                {
+                  "clamp": [
+                    {
+                      "div": [
+                        {
+                          "ref": "reputation.the_ice_moot",
+                          "else": 0
+                        },
+                        5
+                      ]
+                    },
+                    -6,
+                    6
+                  ]
+                }
+              ]
+            },
+            "onSuccess": "frost_vigdis_inland_told",
+            "onFailure": "frost_vigdis_inland_wont"
+          }
+        },
+        {
+          "id": "frost_vigdis_ribs",
+          "text": "Those bones standing out of the Strand. You sleep next to them.",
+          "requires": {
+            "without": {
+              "lore": [
+                "frost_strand_ribs"
+              ]
+            }
+          },
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "check": {
+            "skill": "persuasion",
+            "difficulty": {
+              "sub": [
+                13,
+                {
+                  "clamp": [
+                    {
+                      "div": [
+                        {
+                          "ref": "reputation.the_ice_moot",
+                          "else": 0
+                        },
+                        5
+                      ]
+                    },
+                    -6,
+                    6
+                  ]
+                }
+              ]
+            },
+            "onSuccess": "frost_vigdis_ribs_told",
+            "onFailure": "frost_vigdis_ribs_wont"
+          }
+        },
+        {
+          "id": "greet_leave",
+          "text": "Nothing.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "frost_vigdis_cut_told",
+      "says": [
+        {
+          "text": "She holds one up without being asked twice — she has clearly wanted somebody to look at it. “One stroke. No chatter, no saw marks, no wedge. I have taken bone apart for nine years and I could not do that with anything I own.” She puts it back on the pile. “The Landing says ice. Ice does not do that either.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "learnLore": {
+            "entry": "frost_strand_cut"
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "frost_vigdis_cut_on",
+          "text": "Go on.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "frost_vigdis_cut_wont",
+      "says": [
+        {
+          "text": "“I've said all I mean to,” they say, and go back to what they were doing."
+        }
+      ],
+      "onEnter": [
+        {
+          "adjustReputation": {
+            "faction": "the_ice_moot",
+            "amount": -1
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "frost_vigdis_cut_drop",
+          "text": "Leave it.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "frost_vigdis_inland_told",
+      "says": [
+        {
+          "text": "“Facing in. Every one, and I have moved a lot of them.” She is quiet a moment. “I stopped turning them back after the first winter. They were facing in again by the spring and I would rather not know how.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "learnLore": {
+            "entry": "frost_strand_inland"
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "frost_vigdis_inland_on",
+          "text": "Go on.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "frost_vigdis_inland_wont",
+      "says": [
+        {
+          "text": "“I've said all I mean to,” they say, and go back to what they were doing."
+        }
+      ],
+      "onEnter": [
+        {
+          "adjustReputation": {
+            "faction": "the_ice_moot",
+            "amount": -1
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "frost_vigdis_inland_drop",
+          "text": "Leave it.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "frost_vigdis_ribs_told",
+      "says": [
+        {
+          "text": "“I sleep with my back to it.” She says it flatly, without any appetite for the joke. “From out here it is a whale. Go and stand inside and count the uprights, and then tell me what whale that is.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "learnLore": {
+            "entry": "frost_strand_ribs"
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "frost_vigdis_ribs_on",
+          "text": "Go on.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "frost_vigdis_ribs_wont",
+      "says": [
+        {
+          "text": "“I've said all I mean to,” they say, and go back to what they were doing."
+        }
+      ],
+      "onEnter": [
+        {
+          "adjustReputation": {
+            "faction": "the_ice_moot",
+            "amount": -1
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "frost_vigdis_ribs_drop",
+          "text": "Leave it.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    }
+  ]
+}

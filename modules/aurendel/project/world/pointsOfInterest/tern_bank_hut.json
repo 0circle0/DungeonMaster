@@ -1,0 +1,19 @@
+{
+  "id": "tern_bank_hut",
+  "name": "The Bank Hut",
+  "description": "Rebuilt every spring, because it is under water every winter.",
+  "area": "isles_tern_bank",
+  "kind": "camp",
+  "descriptionKey": "int_house",
+  "travelMinutes": 5,
+  "tags": [],
+  "map": {
+    "width": "9",
+    "height": "7",
+    "palette": "int_timber"
+  },
+  "position": {
+    "x": 14,
+    "y": 3
+  }
+}

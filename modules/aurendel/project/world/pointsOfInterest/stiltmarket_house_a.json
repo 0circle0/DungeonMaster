@@ -1,0 +1,21 @@
+{
+  "id": "stiltmarket_house_a",
+  "name": "Third Walk, Eleven",
+  "description": "Two rooms over water, and the floor moves when the wind gets up.",
+  "area": "thornmere_stiltmarket",
+  "kind": "settlement",
+  "descriptionKey": "int_house",
+  "travelMinutes": 2,
+  "tags": [
+    "house"
+  ],
+  "map": {
+    "width": "9",
+    "height": "7",
+    "palette": "int_timber"
+  },
+  "position": {
+    "x": 3,
+    "y": 23
+  }
+}

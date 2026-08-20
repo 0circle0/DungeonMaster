@@ -1,0 +1,23 @@
+{
+  "id": "hedge_country_badger_hole",
+  "name": "The Badger Hole",
+  "description": "Somebody's terrier went in after something and came out the far side of the field, which is a longer set than a badger digs.",
+  "area": "kingsvale_hedge_country",
+  "kind": "dungeonEntrance",
+  "descriptionKey": "hedge_country_badger_hole_desc",
+  "travelMinutes": 12,
+  "tags": [
+    "dungeon",
+    "secret"
+  ],
+  "position": {
+    "x": 8,
+    "y": 28
+  },
+  "hidden": true,
+  "discover": {
+    "skill": "survival",
+    "difficulty": 12
+  },
+  "dungeon": "hedge_setts"
+}

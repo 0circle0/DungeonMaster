@@ -1,0 +1,14 @@
+{
+  "id": "alpine",
+  "name": "The Skarnspine",
+  "description": "Cut passes, thin air, and stone that was worked long before anyone asked.",
+  "layer": "overworld",
+  "palette": "alpine",
+  "roomTemplates": [],
+  "encounterTables": [
+    "alpine_things"
+  ],
+  "lootTables": [],
+  "traps": [],
+  "ambienceKey": "alpine_ambience"
+}

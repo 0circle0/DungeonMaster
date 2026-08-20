@@ -1,0 +1,24 @@
+{
+  "id": "aurenhal_river_gate",
+  "name": "The River Gate",
+  "kind": "toll",
+  "description": "Where the wall meets the water. The wharfingers pay by the year; everyone else pays at the arch.",
+  "staysOpen": false,
+  "requires": {
+    "description": "3 marks",
+    "currency": 3
+  },
+  "bypass": {
+    "skill": "stealth",
+    "difficulty": 14,
+    "retryable": true
+  },
+  "onOpen": [
+    {
+      "adjustCurrency": {
+        "amount": -3
+      }
+    }
+  ],
+  "blockedTextKey": "aurenhal_river_gate_blocked"
+}

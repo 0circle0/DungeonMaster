@@ -1,0 +1,14 @@
+{
+  "id": "dungeon_ruin_shrine_desc",
+  "variants": [
+    {
+      "text": "A carved stone still upright among the fallen ones, and somebody has cut back the bramble around it."
+    },
+    {
+      "text": "The figure on the slab has weathered to a suggestion."
+    },
+    {
+      "text": "Offerings, recent, in a place that has been abandoned for centuries."
+    }
+  ]
+}

@@ -1,0 +1,35 @@
+{
+  "id": "ash_farmer_borsa",
+  "name": "Borsa of the Ash Farm",
+  "description": "Six generations of farming the ash over a village her family holds the deed to, and not one of them has ever put a spade in it.",
+  "disposition": 6,
+  "gullibility": 0.35,
+  "memorySpan": 250,
+  "offersQuests": [],
+  "caresAbout": [],
+  "reactions": [],
+  "faction": "the_vent_readers",
+  "dialogue": "ember_borsa_talk",
+  "home": "burnt_march_ash_farm",
+  "statblock": "ember_farmer",
+  "shop": {
+    "lootTable": "keeper_stock",
+    "buysTags": [
+      "material"
+    ],
+    "priceMultiplier": 1.2
+  },
+  "temperament": {
+    "roamRadius": 0,
+    "wanderChance": 0,
+    "speeds": {
+      "wander": 0
+    },
+    "investigates": [],
+    "notices": [
+      "hostile",
+      "neutral",
+      "ally"
+    ]
+  }
+}

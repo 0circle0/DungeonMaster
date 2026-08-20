@@ -1,0 +1,68 @@
+{
+  "id": "kingsroad_south_quarry",
+  "name": "The Roadstone Quarry",
+  "description": "Where the Kingsroad came from. Worked out, flooded at the bottom, and not entirely empty.",
+  "area": "kingsvale_kingsroad_south",
+  "kind": "dungeonEntrance",
+  "descriptionKey": "kingsroad_south_quarry_desc",
+  "travelMinutes": 14,
+  "tags": [
+    "dungeon"
+  ],
+  "position": {
+    "x": 40,
+    "y": 26
+  },
+  "dungeon": "roadstone_quarry",
+  "triggers": [
+    {
+      "id": "kings_quarry_committed",
+      "mode": "once",
+      "on": "enter",
+      "description": "At the foot of a face nobody was paid to cut.",
+      "requires": {
+        "custom": {
+          "gte": [
+            {
+              "ref": "threads.kings_quarry.known"
+            },
+            2
+          ]
+        }
+      },
+      "effects": [
+        {
+          "emit": {
+            "event": "startQuest",
+            "data": {
+              "quest": "kings_the_second_face"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "hidden": true,
+  "discover": {
+    "skill": "perception",
+    "difficulty": {
+      "max": [
+        5,
+        {
+          "sub": [
+            17,
+            {
+              "mul": [
+                3,
+                {
+                  "ref": "threads.kings_quarry.known"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "gate": "kings_quarry_face"
+}

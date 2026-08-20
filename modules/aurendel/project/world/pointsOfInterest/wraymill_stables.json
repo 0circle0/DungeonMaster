@@ -1,0 +1,22 @@
+{
+  "id": "wraymill_stables",
+  "name": "Coaching Stables",
+  "description": "Change here for Aurenhal, Cobbleway, or a long wait.",
+  "area": "kingsvale_wraymill",
+  "kind": "settlement",
+  "descriptionKey": "int_stable",
+  "travelMinutes": 3,
+  "tags": [],
+  "position": {
+    "x": 30,
+    "y": 16
+  },
+  "services": [
+    "stable"
+  ],
+  "map": {
+    "width": "11",
+    "height": "9",
+    "palette": "int_timber"
+  }
+}

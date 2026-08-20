@@ -1,0 +1,14 @@
+{
+  "id": "dungeon_sewer_shrine_desc",
+  "variants": [
+    {
+      "text": "A niche in the brickwork with a light in it, and somebody fills the light."
+    },
+    {
+      "text": "Chalk marks around an alcove, redrawn often."
+    },
+    {
+      "text": "An offering shelf down here, of all places, and it is not neglected."
+    }
+  ]
+}

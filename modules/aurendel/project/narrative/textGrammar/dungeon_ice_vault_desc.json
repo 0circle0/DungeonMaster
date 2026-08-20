@@ -1,0 +1,14 @@
+{
+  "id": "dungeon_ice_vault_desc",
+  "variants": [
+    {
+      "text": "A pocket in the ice, dry, with everything in it frozen exactly as it was put down."
+    },
+    {
+      "text": "Whatever came in here is still here and is in remarkably good condition."
+    },
+    {
+      "text": "Nothing has decayed. Nothing here can."
+    }
+  ]
+}

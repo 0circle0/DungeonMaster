@@ -1,0 +1,24 @@
+{
+  "id": "warrens_ratcatchers_guild",
+  "name": "The Ratcatchers' Guild",
+  "description": "A real guild, with a charter, and rather more to do than the name suggests.",
+  "area": "aurenhal_warrens",
+  "kind": "market",
+  "descriptionKey": "generic_market",
+  "travelMinutes": 3,
+  "tags": [
+    "shop"
+  ],
+  "position": {
+    "x": 10,
+    "y": 22
+  },
+  "services": [
+    "guild"
+  ],
+  "map": {
+    "width": "11",
+    "height": "9",
+    "palette": "int_stone"
+  }
+}

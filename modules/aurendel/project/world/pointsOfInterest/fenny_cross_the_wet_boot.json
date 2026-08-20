@@ -1,0 +1,24 @@
+{
+  "id": "fenny_cross_the_wet_boot",
+  "name": "The Wet Boot",
+  "description": "Honest about itself, which is the best thing anybody says about it.",
+  "area": "duskwood_fenny_cross",
+  "kind": "settlement",
+  "descriptionKey": "int_inn",
+  "travelMinutes": 3,
+  "tags": [
+    "inn"
+  ],
+  "services": [
+    "inn"
+  ],
+  "map": {
+    "width": "11",
+    "height": "9",
+    "palette": "int_timber"
+  },
+  "position": {
+    "x": 9,
+    "y": 3
+  }
+}

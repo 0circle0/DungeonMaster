@@ -1,0 +1,19 @@
+{
+  "id": "guarded_stance",
+  "name": "Guarded Stance",
+  "description": "Give up the initiative and keep the ribs.",
+  "actionType": "quick",
+  "targeting": "self",
+  "cooldown": 2,
+  "onUse": [
+    {
+      "applyCondition": {
+        "target": {
+          "ref": "actor.id"
+        },
+        "condition": "emboldened",
+        "duration": 2
+      }
+    }
+  ]
+}

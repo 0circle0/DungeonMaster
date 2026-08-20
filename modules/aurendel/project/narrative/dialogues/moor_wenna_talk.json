@@ -1,0 +1,329 @@
+{
+  "id": "moor_wenna_talk",
+  "start": "greet",
+  "nodes": [
+    {
+      "id": "greet",
+      "says": [
+        {
+          "text": "A cottage with a peat stack under the eave twice the size of the cottage, and a woman counting it who does not need to."
+        },
+        {
+          "text": "“It is my turn this fortnight. Talk while I carry.”"
+        }
+      ],
+      "onEnter": [],
+      "options": [
+        {
+          "id": "moor_wenna_years",
+          "text": "How long has the fire been going?",
+          "requires": {
+            "without": {
+              "lore": [
+                "moor_fire_years"
+              ]
+            }
+          },
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "check": {
+            "skill": "persuasion",
+            "difficulty": {
+              "sub": [
+                12,
+                {
+                  "clamp": [
+                    {
+                      "div": [
+                        {
+                          "ref": "reputation.the_library",
+                          "else": 0
+                        },
+                        5
+                      ]
+                    },
+                    -6,
+                    6
+                  ]
+                }
+              ]
+            },
+            "onSuccess": "moor_wenna_years_told",
+            "onFailure": "moor_wenna_years_wont"
+          }
+        },
+        {
+          "id": "moor_wenna_green",
+          "text": "What happens on the nights it burns green?",
+          "requires": {
+            "without": {
+              "lore": [
+                "moor_fire_green"
+              ]
+            }
+          },
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "check": {
+            "skill": "insight",
+            "difficulty": {
+              "sub": [
+                16,
+                {
+                  "clamp": [
+                    {
+                      "div": [
+                        {
+                          "ref": "reputation.the_library",
+                          "else": 0
+                        },
+                        5
+                      ]
+                    },
+                    -6,
+                    6
+                  ]
+                }
+              ]
+            },
+            "onSuccess": "moor_wenna_green_told",
+            "onFailure": "moor_wenna_green_wont"
+          }
+        },
+        {
+          "id": "moor_wenna_rota",
+          "text": "The rota. Let me take it.",
+          "requires": {
+            "without": {
+              "items": [
+                "hearth_rota"
+              ],
+              "flags": [
+                {
+                  "flag": "given:hearth_rota"
+                }
+              ]
+            }
+          },
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "check": {
+            "skill": "persuasion",
+            "difficulty": {
+              "sub": [
+                14,
+                {
+                  "clamp": [
+                    {
+                      "div": [
+                        {
+                          "ref": "reputation.the_library",
+                          "else": 0
+                        },
+                        5
+                      ]
+                    },
+                    -6,
+                    6
+                  ]
+                }
+              ]
+            },
+            "onSuccess": "moor_wenna_rota_gave",
+            "onFailure": "moor_wenna_rota_kept"
+          }
+        },
+        {
+          "id": "greet_leave",
+          "text": "Nothing.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "moor_wenna_years_told",
+      "says": [
+        {
+          "text": "“Two hundred years and a bit.” Wenna says it the way you say your own age. “Colder kept it forty. The parish has kept it since, on the rota, and there is no gap in the rota — I have been through it twice looking for one.” A dry look. “Every parish record in Aurendel has a gap in it. Ours does not.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "learnLore": {
+            "entry": "moor_fire_years"
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "moor_wenna_years_on",
+          "text": "Go on.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "moor_wenna_years_wont",
+      "says": [
+        {
+          "text": "“I've said all I mean to,” they say, and go back to what they were doing."
+        }
+      ],
+      "onEnter": [
+        {
+          "adjustReputation": {
+            "faction": "the_library",
+            "amount": -1
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "moor_wenna_years_drop",
+          "text": "Leave it.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "moor_wenna_green_told",
+      "says": [
+        {
+          "text": "The friendliness goes out of her, not unkindly. “Two nights a year. When the wind comes off the moor instead of the vale.” She looks at the door. “Everybody is inside by dark. Nobody rings a bell and nobody knocks and nobody has ever said out loud that we do it. I did it as a child before I knew I was doing it.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "learnLore": {
+            "entry": "moor_fire_green"
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "moor_wenna_green_on",
+          "text": "Go on.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "moor_wenna_green_wont",
+      "says": [
+        {
+          "text": "“I've said all I mean to,” they say, and go back to what they were doing."
+        }
+      ],
+      "onEnter": [
+        {
+          "adjustReputation": {
+            "faction": "the_library",
+            "amount": -1
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "moor_wenna_green_drop",
+          "text": "Leave it.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "moor_wenna_rota_gave",
+      "says": [
+        {
+          "text": "She hands it over in an oilcloth. “A hundred and sixty years of whose turn,” she says. “And two nights a year ruled straight through with nobody's name against them, every year, in every hand.” A beat. “Somebody keeps it those nights. It has never gone out.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "grantItem": {
+            "target": {
+              "ref": "actor.id"
+            },
+            "item": "hearth_rota",
+            "quantity": 1
+          }
+        },
+        {
+          "setFlag": {
+            "flag": "given:hearth_rota",
+            "value": true
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "moor_wenna_rota_thanks",
+          "text": "Thank you.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "moor_wenna_rota_kept",
+      "says": [
+        {
+          "text": "“It is the parish's and it is my turn,” Wenna says, and the oilcloth goes back in the dresser."
+        }
+      ],
+      "onEnter": [
+        {
+          "adjustReputation": {
+            "faction": "the_library",
+            "amount": -2
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "moor_wenna_rota_leave",
+          "text": "Then no.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    }
+  ]
+}

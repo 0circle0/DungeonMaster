@@ -1,0 +1,104 @@
+{
+  "id": "the_counter",
+  "name": "Whatever Kept the Count",
+  "description": "Nine doors in eleven hundred years, opened in order, by somebody. The tally is cut into the underside of a ring of stones in a wood nobody goes into, and it does not stop at nine.",
+  "level": 20,
+  "xp": 12000,
+  "attributes": {
+    "might": 24,
+    "agility": 23,
+    "endurance": 25,
+    "intellect": 24,
+    "instinct": 24,
+    "presence": 23
+  },
+  "abilities": [
+    "unmaking_word",
+    "call_the_shut",
+    "wither",
+    "drag_under",
+    "rend"
+  ],
+  "behaviour": [
+    {
+      "priority": 35,
+      "use": "call_the_shut",
+      "when": {
+        "chance": 0.3
+      }
+    },
+    {
+      "priority": 25,
+      "use": "unmaking_word",
+      "when": {
+        "chance": 0.4
+      }
+    },
+    {
+      "priority": 15,
+      "use": "drag_under"
+    },
+    {
+      "priority": 5,
+      "use": "wither"
+    },
+    {
+      "priority": 0,
+      "use": "rend"
+    }
+  ],
+  "faction": "the_unsealed",
+  "creatureType": "undead",
+  "size": "medium",
+  "descriptors": [
+    "a patient",
+    "an unhurried",
+    "a counting"
+  ],
+  "conditionalLoot": [],
+  "loot": "trial_three_hoard_c",
+  "damageInteractions": [
+    {
+      "damageType": "slashing",
+      "multiplier": 0.5,
+      "unless": [
+        "silvered"
+      ]
+    },
+    {
+      "damageType": "piercing",
+      "multiplier": 0.5,
+      "unless": [
+        "silvered"
+      ]
+    }
+  ],
+  "conditionImmunities": [
+    "frightened",
+    "prone",
+    "blinded",
+    "silenced",
+    "poisoned",
+    "slowed",
+    "stunned"
+  ],
+  "resourceOverrides": {
+    "hp": 440
+  },
+  "temperament": {
+    "roamRadius": 12,
+    "investigateRadius": 40,
+    "leashRadius": 60,
+    "wanderChance": 0.1,
+    "disengageTurns": 1,
+    "speeds": {
+      "wander": 0.5,
+      "investigate": 0.5
+    },
+    "investigates": [
+      "sight",
+      "hearing",
+      "smell"
+    ]
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "id": "wrong_ring_haft",
+  "name": "Haft of the Wrong Rings",
+  "description": "Cut from the new treeline. Forty rings in eleven years, and it takes an edge no wood of that age should hold.",
+  "kind": "weapon",
+  "slot": "hand",
+  "value": 1000,
+  "weight": 1,
+  "tags": [
+    "fabled"
+  ],
+  "damage": {
+    "dice": "1d8",
+    "damageType": "slashing",
+    "stat": "agility"
+  },
+  "properties": [
+    "finesse"
+  ],
+  "rarity": "very_rare"
+}

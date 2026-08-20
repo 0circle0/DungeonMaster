@@ -1,0 +1,26 @@
+{
+  "id": "strandwardens_coat",
+  "name": "The Strand-Warden's Coat",
+  "description": "Sealskin with the fur turned in and a lining of something else. Whatever cut the skulls on the Strand cut this too, once, and did not get through.",
+  "kind": "armor",
+  "slot": "cloak",
+  "value": 750,
+  "weight": 1,
+  "tags": [
+    "fabled"
+  ],
+  "modifiers": {
+    "guard": 2
+  },
+  "damageInteractions": [
+    {
+      "damageType": "cold",
+      "multiplier": 0.5
+    },
+    {
+      "damageType": "slashing",
+      "multiplier": 0.75
+    }
+  ],
+  "rarity": "rare"
+}

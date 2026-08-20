@@ -1,0 +1,36 @@
+{
+  "id": "weigher_qasim",
+  "name": "Qasim, of the Weighing House",
+  "description": "Weighs every course out of the pans and has weighed one more each year than anybody cut, since he was an apprentice.",
+  "disposition": 2,
+  "gullibility": 0.2,
+  "memorySpan": 300,
+  "offersQuests": [],
+  "caresAbout": [],
+  "reactions": [],
+  "faction": "the_water_wardens",
+  "dialogue": "glass_qasim_talk",
+  "home": "saltrun_house_b",
+  "statblock": "glass_weigher",
+  "shop": {
+    "lootTable": "keeper_stock",
+    "buysTags": [
+      "treasure",
+      "material"
+    ],
+    "priceMultiplier": 1.2
+  },
+  "temperament": {
+    "roamRadius": 0,
+    "wanderChance": 0,
+    "speeds": {
+      "wander": 0
+    },
+    "investigates": [],
+    "notices": [
+      "hostile",
+      "neutral",
+      "ally"
+    ]
+  }
+}

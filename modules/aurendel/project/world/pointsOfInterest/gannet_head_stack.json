@@ -1,0 +1,14 @@
+{
+  "id": "gannet_head_stack",
+  "name": "The Stack",
+  "description": "Four hundred feet of chalk standing off the head, white with birds top to bottom.",
+  "area": "coast_gannet_head",
+  "kind": "landmark",
+  "descriptionKey": "gannet_head_stack_desc",
+  "travelMinutes": 6,
+  "tags": [],
+  "position": {
+    "x": 3,
+    "y": 3
+  }
+}

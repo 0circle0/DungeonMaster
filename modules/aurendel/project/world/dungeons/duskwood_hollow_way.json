@@ -1,0 +1,22 @@
+{
+  "id": "duskwood_hollow_way",
+  "name": "The Hollow Way",
+  "description": "The road before the road, sunk twenty feet and roofed over by growth, with side-chambers cut into the banks.",
+  "biome": "dungeon_ruin",
+  "roomCount": "9",
+  "depth": "1",
+  "algorithm": "rooms",
+  "lockedDoorChance": 0,
+  "doorGates": [],
+  "rollEncounters": false,
+  "safeEntrance": true,
+  "branchiness": 0.2,
+  "corridorLength": "4d3",
+  "corridor": {
+    "style": "winding",
+    "width": 2
+  },
+  "width": "79",
+  "height": "79",
+  "bossTable": "dusk_miles_boss"
+}

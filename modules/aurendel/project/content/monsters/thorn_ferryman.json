@@ -1,0 +1,52 @@
+{
+  "id": "thorn_ferryman",
+  "name": "Sarl of the Causeway",
+  "description": "Poles a loaded punt against a tide twice a day.",
+  "level": 5,
+  "xp": 0,
+  "attributes": {
+    "might": 15,
+    "agility": 13,
+    "endurance": 15,
+    "intellect": 12,
+    "instinct": 13,
+    "presence": 12
+  },
+  "abilities": [
+    "strike"
+  ],
+  "behaviour": [
+    {
+      "priority": 0,
+      "use": "strike"
+    }
+  ],
+  "faction": "the_ferrymen",
+  "creatureType": "humanoid",
+  "size": "medium",
+  "descriptors": [
+    "a weather-brown"
+  ],
+  "conditionalLoot": [],
+  "loot": "thorn_ledger_carried",
+  "resourceOverrides": {
+    "hp": 34
+  },
+  "temperament": {
+    "roamRadius": 24,
+    "investigateRadius": 70,
+    "leashRadius": 100,
+    "wanderChance": 0.4,
+    "disengageTurns": 2,
+    "investigates": [
+      "sight",
+      "hearing",
+      "tracks",
+      "smell"
+    ],
+    "notices": [
+      "hostile",
+      "neutral"
+    ]
+  }
+}

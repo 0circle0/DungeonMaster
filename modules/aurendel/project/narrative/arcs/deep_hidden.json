@@ -1,0 +1,11 @@
+{
+  "id": "deep_hidden",
+  "name": "The Deeproads, Unsurveyed",
+  "description": "Three things the Wayfinders have measured for four hundred years and never once written down.",
+  "quests": [
+    "deep_what_it_stands_on",
+    "deep_the_ninth_column",
+    "deep_the_lamps"
+  ],
+  "isEnding": false
+}

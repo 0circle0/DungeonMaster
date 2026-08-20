@@ -1,0 +1,150 @@
+{
+  "id": "lastcairn_set_it_or_move_it",
+  "name": "Set It or Move It",
+  "description": "The cairn can be set back exactly as it was, which is nine hundred years of practice. It can also be moved, which the moot has never done and has a word for.",
+  "autoStart": false,
+  "ordered": false,
+  "tags": [
+    "side",
+    "act3",
+    "lastcairn",
+    "frostmere"
+  ],
+  "objectives": [
+    {
+      "id": "set_it",
+      "description": "Set the Last Cairn back as it was.",
+      "kind": "custom",
+      "count": 1,
+      "hidden": false,
+      "optional": true,
+      "when": {
+        "test": {
+          "ref": "flags.lastcairn_set"
+        }
+      }
+    },
+    {
+      "id": "move_it",
+      "description": "Move the count to a new first cairn.",
+      "kind": "custom",
+      "count": 1,
+      "hidden": false,
+      "optional": true,
+      "when": {
+        "test": {
+          "ref": "flags.lastcairn_moved"
+        }
+      }
+    },
+    {
+      "id": "settled",
+      "description": "Settle what the moot counts from.",
+      "kind": "custom",
+      "count": 1,
+      "hidden": false,
+      "optional": false,
+      "when": {
+        "any": [
+          {
+            "test": {
+              "ref": "flags.lastcairn_set"
+            }
+          },
+          {
+            "test": {
+              "ref": "flags.lastcairn_moved"
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "stages": [],
+  "unlocks": [],
+  "rewards": {
+    "xp": 135,
+    "items": [
+      {
+        "item": "rimeward_coat",
+        "quantity": 1
+      }
+    ],
+    "reputation": {}
+  },
+  "requires": {
+    "quests": [
+      {
+        "quest": "lastcairn_under_the_last_cairn",
+        "status": "complete"
+      }
+    ]
+  },
+  "onComplete": [
+    {
+      "if": {
+        "when": {
+          "test": {
+            "ref": "flags.lastcairn_moved"
+          }
+        },
+        "then": [
+          {
+            "emit": {
+              "event": "deed",
+              "data": {
+                "kind": "ice_broken"
+              }
+            }
+          },
+          {
+            "adjustReputation": {
+              "faction": "the_ice_moot",
+              "amount": -18
+            }
+          },
+          {
+            "adjustReputation": {
+              "faction": "the_library",
+              "amount": 15
+            }
+          },
+          {
+            "setFlag": {
+              "flag": "lastcairn_recounted",
+              "value": true
+            }
+          }
+        ],
+        "else": [
+          {
+            "emit": {
+              "event": "deed",
+              "data": {
+                "kind": "cairn_set"
+              }
+            }
+          },
+          {
+            "adjustReputation": {
+              "faction": "the_ice_moot",
+              "amount": 30
+            }
+          },
+          {
+            "adjustReputation": {
+              "faction": "the_keepers",
+              "amount": 12
+            }
+          },
+          {
+            "setFlag": {
+              "flag": "lastcairn_stands",
+              "value": true
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

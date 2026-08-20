@@ -1,0 +1,174 @@
+{
+  "id": "trial_hesper_talk",
+  "start": "greet",
+  "nodes": [
+    {
+      "id": "greet",
+      "says": [
+        {
+          "text": "A Keeper in a fungus market four miles under the world, with a board in front of her and one sheet pinned to it."
+        },
+        {
+          "text": "\"You are the one who did the ninth,\" says Hesper. \"Sit down. I have a list.\""
+        }
+      ],
+      "options": [
+        {
+          "id": "what_list",
+          "text": "What list?",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "the_list"
+        },
+        {
+          "id": "leave",
+          "text": "Not now.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": [
+        {
+          "requires": {
+            "quests": [
+              {
+                "quest": "trial_one_rootcellar",
+                "status": "complete"
+              }
+            ]
+          },
+          "goto": "three_down"
+        }
+      ]
+    },
+    {
+      "id": "the_list",
+      "says": [
+        {
+          "text": "\"Nine doors. Opened in order, over eleven hundred years, and everybody in my order has spent their career on the ninth because the ninth was open.\" She turns the sheet round. Eight lines. \"These are the eight nobody watched. They were opened first. Whatever came out of them has had between four hundred and eleven hundred years to find somewhere quiet.\""
+        }
+      ],
+      "options": [
+        {
+          "id": "where",
+          "text": "Where is somewhere quiet?",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "the_quiet"
+        },
+        {
+          "id": "back",
+          "text": "Hm.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "greet"
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": []
+    },
+    {
+      "id": "the_quiet",
+      "says": [
+        {
+          "text": "\"Under the places you made safe.\" She does not soften it. \"The ward cellars at Highpass. The undercroft at Barrowgate. A root cellar in the Hollow Beeches with a floor under the floor.\" A finger on the first three lines, each struck through in red. \"Those three are already struck out. In red. I did not strike them out and neither did any Keeper living.\""
+        }
+      ],
+      "options": [
+        {
+          "id": "take",
+          "text": "Then we start at the first one.",
+          "effects": [
+            {
+              "emit": {
+                "event": "startQuest",
+                "data": {
+                  "quest": "trial_one_cellars"
+                }
+              }
+            }
+          ],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "the_terms",
+          "requires": {
+            "quests": [
+              {
+                "quest": "trial_one_cellars",
+                "status": "unstarted"
+              }
+            ]
+          }
+        },
+        {
+          "id": "back",
+          "text": "Give me a moment.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "greet"
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": []
+    },
+    {
+      "id": "the_terms",
+      "says": [
+        {
+          "text": "\"Two conditions and they are not mine, they are the door's.\" Hesper counts them off. \"Come at it properly levelled, because the thing behind it has had four hundred years and you have had one. And wear something out of the quiet half of this continent — a cloak, a hood, whatever you brought up out of a thread nobody set you on.\""
+        },
+        {
+          "text": "\"The bar on that cellar door is on the inside. Think about what that means before you pull on it.\""
+        }
+      ],
+      "options": [
+        {
+          "id": "understood",
+          "text": "Understood.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "greet"
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": []
+    },
+    {
+      "id": "three_down",
+      "says": [
+        {
+          "text": "Hesper has the sheet off the board and flat on the table. Three lines struck through in her own hand now, over the red."
+        },
+        {
+          "text": "\"Three,\" she says. \"In one season. My order has managed nine in eleven hundred years and eight of those were the same door twice.\" She signs the bottom of it and pushes it across. \"That is a warrant. There are five lines left on it and the next two are worse.\""
+        }
+      ],
+      "options": [
+        {
+          "id": "done",
+          "text": "Then there are five left.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": []
+    }
+  ]
+}

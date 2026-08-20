@@ -1,0 +1,40 @@
+{
+  "id": "strand_scraps",
+  "entries": [
+    {
+      "weight": 5,
+      "value": {
+        "item": "old_coin",
+        "quantity": "1d3"
+      }
+    },
+    {
+      "weight": 3,
+      "value": {
+        "item": "wreck_brass",
+        "quantity": "1"
+      }
+    },
+    {
+      "weight": 2,
+      "value": {
+        "item": "bandages",
+        "quantity": "1"
+      }
+    },
+    {
+      "weight": 1,
+      "value": {
+        "item": "amber_lump",
+        "quantity": "1"
+      }
+    }
+  ],
+  "rolls": "1",
+  "emptyChance": 0.4,
+  "bonusRollSkill": "perception",
+  "bonusRolls": {
+    "onSuccess": 1,
+    "onCritical": 2
+  }
+}

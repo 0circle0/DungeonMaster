@@ -1,0 +1,11 @@
+{
+  "id": "glass_cistern",
+  "name": "What the Cistern Was For",
+  "description": "A hollowed rock the size of a market, a channel out and no channel in, and forty feet down it is damp.",
+  "entries": [
+    "glass_cistern_size",
+    "glass_cistern_cut",
+    "glass_cistern_feed",
+    "glass_cistern_wet"
+  ]
+}

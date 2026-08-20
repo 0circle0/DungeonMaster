@@ -1,0 +1,16 @@
+{
+  "id": "blackrigging_the_hulks",
+  "name": "The Hulks",
+  "description": "Eleven ships moored in a row and joined by planks, and about two hundred people live on them.",
+  "area": "isles_blackrigging",
+  "kind": "landmark",
+  "descriptionKey": "blackrigging_the_hulks_desc",
+  "travelMinutes": 4,
+  "tags": [
+    "landmark"
+  ],
+  "position": {
+    "x": 20,
+    "y": 3
+  }
+}

@@ -1,0 +1,219 @@
+{
+  "id": "dusk_ferre_talk",
+  "start": "greet",
+  "nodes": [
+    {
+      "id": "greet",
+      "says": [
+        {
+          "text": "A low taproom with everything in it damp, a fire that is winning, and a landlady who has already put a mat down for you."
+        },
+        {
+          "text": "“Boots by the fire. Both roads meet here, so I hear both.”"
+        }
+      ],
+      "onEnter": [],
+      "options": [
+        {
+          "id": "dusk_ferre_width",
+          "text": "The Greenway. Who cut it?",
+          "requires": {
+            "without": {
+              "lore": [
+                "dusk_green_width"
+              ]
+            }
+          },
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "check": {
+            "skill": "persuasion",
+            "difficulty": {
+              "sub": [
+                11,
+                {
+                  "clamp": [
+                    {
+                      "div": [
+                        {
+                          "ref": "reputation.the_keepers",
+                          "else": 0
+                        },
+                        5
+                      ]
+                    },
+                    -6,
+                    6
+                  ]
+                }
+              ]
+            },
+            "onSuccess": "dusk_ferre_width_told",
+            "onFailure": "dusk_ferre_width_wont"
+          }
+        },
+        {
+          "id": "dusk_ferre_night",
+          "text": "Does anything cross it at night?",
+          "requires": {
+            "without": {
+              "lore": [
+                "dusk_green_night"
+              ]
+            }
+          },
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "check": {
+            "skill": "insight",
+            "difficulty": {
+              "sub": [
+                13,
+                {
+                  "clamp": [
+                    {
+                      "div": [
+                        {
+                          "ref": "reputation.the_keepers",
+                          "else": 0
+                        },
+                        5
+                      ]
+                    },
+                    -6,
+                    6
+                  ]
+                }
+              ]
+            },
+            "onSuccess": "dusk_ferre_night_told",
+            "onFailure": "dusk_ferre_night_wont"
+          }
+        },
+        {
+          "id": "greet_leave",
+          "text": "Nothing.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "dusk_ferre_width_told",
+      "says": [
+        {
+          "text": "“That is the question, is it not.” She says it like somebody who has heard it before and never had a good answer. “Nine miles, dead straight, forty yards across. The Moot Road took the parish eleven years and a great deal of arguing with the wood.” A cloth over the bar. “Nobody argued about the Greenway. It was there.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "learnLore": {
+            "entry": "dusk_green_width"
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "dusk_ferre_width_on",
+          "text": "Go on.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "dusk_ferre_width_wont",
+      "says": [
+        {
+          "text": "“I've said all I mean to,” they say, and go back to what they were doing."
+        }
+      ],
+      "onEnter": [
+        {
+          "adjustReputation": {
+            "faction": "the_keepers",
+            "amount": -1
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "dusk_ferre_width_drop",
+          "text": "Leave it.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "dusk_ferre_night_told",
+      "says": [
+        {
+          "text": "“No.” Flat, and she does not soften it. “The deer go up it and down it. They will cross the turnpike, the coast road and my yard, and they will not step over the Greenway after dark.” She looks at the fire. “I have had drovers in here who lost a night going round rather than over, and they were not men who lose nights.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "learnLore": {
+            "entry": "dusk_green_night"
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "dusk_ferre_night_on",
+          "text": "Go on.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "dusk_ferre_night_wont",
+      "says": [
+        {
+          "text": "“I've said all I mean to,” they say, and go back to what they were doing."
+        }
+      ],
+      "onEnter": [
+        {
+          "adjustReputation": {
+            "faction": "the_keepers",
+            "amount": -1
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "dusk_ferre_night_drop",
+          "text": "Leave it.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    }
+  ]
+}

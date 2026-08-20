@@ -1,0 +1,14 @@
+{
+  "id": "cinderhold_slag_temple_desc",
+  "variants": [
+    {
+      "text": "Cast, not built. They poured it over eleven years and it has no joints anywhere in it."
+    },
+    {
+      "text": "The Slag Cathedral. The walls are one piece and so is the roof and so, unfortunately, is the door in the floor."
+    },
+    {
+      "text": "Black, seamless, and warm to the touch on the north side for reasons nobody has satisfactorily explained."
+    }
+  ]
+}

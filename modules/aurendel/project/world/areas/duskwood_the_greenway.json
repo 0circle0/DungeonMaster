@@ -1,0 +1,34 @@
+{
+  "id": "duskwood_the_greenway",
+  "name": "The Greenway",
+  "description": "Older than the Moot Road and straighter, and nobody cut it.",
+  "biome": "deepwood",
+  "layer": "overworld",
+  "descriptionKey": "duskwood_the_greenway_desc",
+  "dangerLevel": 3,
+  "recommendedLevel": 4,
+  "tags": [
+    "duskwood"
+  ],
+  "map": {
+    "width": "51",
+    "height": "35"
+  },
+  "entryPoint": {
+    "x": 25,
+    "y": 17
+  },
+  "extra": {
+    "role": "wild"
+  },
+  "connections": [
+    {
+      "to": "duskwood_thornback_ride",
+      "travelMinutes": 40
+    },
+    {
+      "to": "duskwood_fenny_cross",
+      "travelMinutes": 30
+    }
+  ]
+}

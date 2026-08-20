@@ -1,0 +1,54 @@
+{
+  "id": "keeper",
+  "name": "Keeper",
+  "description": "Tends the shrines on the road and what walks between them.",
+  "hitDie": "1d8",
+  "primaryAttribute": "presence",
+  "attributeBonuses": {
+    "presence": 1,
+    "instinct": 1
+  },
+  "skillProficiencies": [
+    "medicine",
+    "insight",
+    "resolve",
+    "lore"
+  ],
+  "saveProficiencies": [
+    "will",
+    "fortitude"
+  ],
+  "abilitiesByLevel": {
+    "1": [
+      "strike",
+      "mend_flesh",
+      "dodge",
+      "assist",
+      "disengage"
+    ],
+    "2": [
+      "first_aid",
+      "augury"
+    ],
+    "3": [
+      "turn_the_dark"
+    ]
+  },
+  "spellcasting": {
+    "castingAttribute": "presence",
+    "spellList": [
+      "mend_flesh",
+      "turn_the_dark",
+      "augury",
+      "wardlight"
+    ],
+    "progression": 1,
+    "knownByLevel": {
+      "1": 2,
+      "2": 3,
+      "3": 4,
+      "4": 5,
+      "5": 6
+    }
+  }
+}

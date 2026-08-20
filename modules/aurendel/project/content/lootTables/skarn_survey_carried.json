@@ -1,0 +1,26 @@
+{
+  "id": "skarn_survey_carried",
+  "name": "What Vesk Kept",
+  "rolls": "1",
+  "emptyChance": 0,
+  "entries": [
+    {
+      "weight": 1,
+      "value": {
+        "item": "stopped_survey",
+        "quantity": "1",
+        "unique": true,
+        "requirementScope": "party",
+        "requires": {
+          "without": {
+            "flags": [
+              {
+                "flag": "given:stopped_survey"
+              }
+            ]
+          }
+        }
+      }
+    }
+  ]
+}

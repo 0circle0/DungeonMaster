@@ -1,0 +1,32 @@
+{
+  "id": "leech_man_gost",
+  "name": "Gost of the Leech Camp",
+  "description": "Farms leeches for the temples and knows to the yard where they will not live.",
+  "disposition": 2,
+  "gullibility": 0.35,
+  "memorySpan": 150,
+  "offersQuests": [],
+  "caresAbout": [],
+  "reactions": [],
+  "faction": "the_ferrymen",
+  "dialogue": "thorn_gost_talk",
+  "home": "leech_channels_leech_camp",
+  "temperament": {
+    "roamRadius": 24,
+    "investigateRadius": 60,
+    "leashRadius": 90,
+    "wanderChance": 0.3,
+    "speeds": {
+      "wander": 0.5
+    },
+    "investigates": [
+      "sight",
+      "hearing"
+    ],
+    "notices": [
+      "hostile",
+      "neutral",
+      "ally"
+    ]
+  }
+}

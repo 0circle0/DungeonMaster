@@ -1,0 +1,14 @@
+{
+  "id": "gullstone_the_top",
+  "name": "The Top",
+  "description": "Flat, about an acre, forty thousand birds, and one building that nobody in the isles claims.",
+  "area": "isles_gullstone",
+  "kind": "landmark",
+  "descriptionKey": "gullstone_the_top_desc",
+  "travelMinutes": 10,
+  "tags": [],
+  "position": {
+    "x": 14,
+    "y": 3
+  }
+}

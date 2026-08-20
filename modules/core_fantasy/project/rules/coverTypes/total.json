@@ -1,0 +1,6 @@
+{
+  "id": "total",
+  "name": "Total Cover",
+  "defenceBonus": 0,
+  "blocksTargeting": true
+}

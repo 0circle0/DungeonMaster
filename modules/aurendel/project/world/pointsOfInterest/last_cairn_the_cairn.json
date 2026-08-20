@@ -1,0 +1,14 @@
+{
+  "id": "last_cairn_the_cairn",
+  "name": "The Last Cairn",
+  "description": "A heap of stones, chest high, and the furthest north anybody has built anything.",
+  "area": "frostmere_the_last_cairn",
+  "kind": "landmark",
+  "descriptionKey": "last_cairn_the_cairn_desc",
+  "travelMinutes": 6,
+  "tags": [],
+  "position": {
+    "x": 3,
+    "y": 3
+  }
+}

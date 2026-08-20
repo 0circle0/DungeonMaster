@@ -1,0 +1,29 @@
+{
+  "id": "thorn_mound_rows",
+  "name": "Where the Rows Meet",
+  "description": "Two lines of cut knees converging over open water, and something under the water where they meet.",
+  "kind": "ward",
+  "blockedTextKey": "thorn_mound_blocked",
+  "staysOpen": true,
+  "onOpen": [
+    {
+      "setFlag": {
+        "flag": "thorn_knees_open",
+        "value": true
+      }
+    }
+  ],
+  "onBlocked": [],
+  "opensWith": [],
+  "tags": [],
+  "requires": {
+    "items": [
+      {
+        "item": "cutters_bill",
+        "quantity": 1,
+        "consume": false,
+        "equipped": false
+      }
+    ]
+  }
+}

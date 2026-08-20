@@ -1,0 +1,17 @@
+{
+  "id": "moor_deep_cutting",
+  "name": "The Deep Cutting",
+  "description": "Eleven feet down through peat, a floor, and rooms under the floor, all of them wet.",
+  "biome": "dungeon_drowned",
+  "roomCount": "9",
+  "depth": "2",
+  "algorithm": "rooms",
+  "lockedDoorChance": 0,
+  "doorGates": [],
+  "rollEncounters": false,
+  "safeEntrance": true,
+  "width": "69",
+  "height": "69",
+  "corridorLength": "3d3",
+  "bossTable": "moor_cut_boss"
+}

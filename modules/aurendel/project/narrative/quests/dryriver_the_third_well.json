@@ -1,0 +1,75 @@
+{
+  "id": "dryriver_the_third_well",
+  "name": "The Third Well",
+  "description": "Three Wells has two. The third went in a season nine years ago and Saray has swept it every month since on the grounds that it might come back.",
+  "autoStart": false,
+  "ordered": true,
+  "tags": [
+    "side",
+    "act2",
+    "dryriver",
+    "sunward_steppe"
+  ],
+  "objectives": [
+    {
+      "id": "at_the_wells",
+      "description": "Reach the wells at Three Wells.",
+      "kind": "reach",
+      "count": 1,
+      "hidden": false,
+      "optional": false,
+      "target": "three_wells_the_wells"
+    },
+    {
+      "id": "hear_saray",
+      "description": "Hear what Saray thinks happened to the third.",
+      "kind": "talk",
+      "count": 1,
+      "hidden": false,
+      "optional": false,
+      "target": "well_keeper_saray"
+    },
+    {
+      "id": "the_sweeping",
+      "description": "Look down the dry one.",
+      "kind": "custom",
+      "count": 1,
+      "hidden": false,
+      "optional": false,
+      "when": {
+        "test": {
+          "ref": "flags.dryriver_looked_down"
+        }
+      }
+    }
+  ],
+  "stages": [],
+  "unlocks": [
+    "dryriver_the_lost_wagons"
+  ],
+  "rewards": {
+    "xp": 55,
+    "items": [],
+    "reputation": {
+      "the_horse_lords": 10
+    }
+  },
+  "giver": "well_keeper_saray",
+  "requires": {
+    "quests": [
+      {
+        "quest": "the_undercroft",
+        "status": "complete"
+      }
+    ],
+    "minLevel": 4
+  },
+  "onComplete": [
+    {
+      "setFlag": {
+        "flag": "dryriver_well_seen",
+        "value": true
+      }
+    }
+  ]
+}

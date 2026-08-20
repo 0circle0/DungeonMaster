@@ -1,0 +1,314 @@
+{
+  "id": "ember_iman_talk",
+  "start": "greet",
+  "nodes": [
+    {
+      "id": "greet",
+      "says": [
+        {
+          "text": "A figure crossing the drifts with a pole, testing ahead of every step, and no apparent interest in stopping."
+        },
+        {
+          "text": "“Follow my line exactly or do not follow it. The ash does not hold everywhere.”"
+        }
+      ],
+      "onEnter": [],
+      "options": [
+        {
+          "id": "ember_iman_warm",
+          "text": "Which drifts are warm?",
+          "requires": {
+            "without": {
+              "lore": [
+                "ember_roofs_warm"
+              ]
+            }
+          },
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "check": {
+            "skill": "persuasion",
+            "difficulty": {
+              "sub": [
+                11,
+                {
+                  "clamp": [
+                    {
+                      "div": [
+                        {
+                          "ref": "reputation.the_vent_readers",
+                          "else": 0
+                        },
+                        5
+                      ]
+                    },
+                    -6,
+                    6
+                  ]
+                }
+              ]
+            },
+            "onSuccess": "ember_iman_warm_told",
+            "onFailure": "ember_iman_warm_wont"
+          }
+        },
+        {
+          "id": "ember_iman_warmground",
+          "text": "You cross warm ground for a living. Is the village's ground the same as Slagfoot's?",
+          "requires": {
+            "without": {
+              "lore": [
+                "ember_warm_never"
+              ]
+            }
+          },
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "check": {
+            "skill": "insight",
+            "difficulty": {
+              "sub": [
+                12,
+                {
+                  "clamp": [
+                    {
+                      "div": [
+                        {
+                          "ref": "reputation.the_vent_readers",
+                          "else": 0
+                        },
+                        5
+                      ]
+                    },
+                    -6,
+                    6
+                  ]
+                }
+              ]
+            },
+            "onSuccess": "ember_iman_warmground_told",
+            "onFailure": "ember_iman_warmground_wont"
+          }
+        },
+        {
+          "id": "ember_iman_one",
+          "text": "How long did the fall take?",
+          "requires": {
+            "without": {
+              "lore": [
+                "ember_roofs_one"
+              ]
+            }
+          },
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "check": {
+            "skill": "persuasion",
+            "difficulty": {
+              "sub": [
+                13,
+                {
+                  "clamp": [
+                    {
+                      "div": [
+                        {
+                          "ref": "reputation.the_vent_readers",
+                          "else": 0
+                        },
+                        5
+                      ]
+                    },
+                    -6,
+                    6
+                  ]
+                }
+              ]
+            },
+            "onSuccess": "ember_iman_one_told",
+            "onFailure": "ember_iman_one_wont"
+          }
+        },
+        {
+          "id": "greet_leave",
+          "text": "Nothing.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "ember_iman_warm_told",
+      "says": [
+        {
+          "text": "“The ones over the village.” She does not break stride. “A foot down and warm to the hand, and the rest of the Ashfall is stone cold. Nine years I have crossed this. It is the same ground every time.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "learnLore": {
+            "entry": "ember_roofs_warm"
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "ember_iman_warm_on",
+          "text": "Go on.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "ember_iman_warm_wont",
+      "says": [
+        {
+          "text": "“I've said all I mean to,” they say, and go back to what they were doing."
+        }
+      ],
+      "onEnter": [
+        {
+          "adjustReputation": {
+            "faction": "the_vent_readers",
+            "amount": -1
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "ember_iman_warm_drop",
+          "text": "Leave it.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "ember_iman_warmground_told",
+      "says": [
+        {
+          "text": "“No.” She is definite. “Slagfoot is warm all the way down and always has been — you can stand on it barefoot in midwinter and I have. Mine is warm a foot down and cold under that.” She moves on. “Different things making it.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "learnLore": {
+            "entry": "ember_warm_never"
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "ember_iman_warmground_on",
+          "text": "Go on.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "ember_iman_warmground_wont",
+      "says": [
+        {
+          "text": "“I've said all I mean to,” they say, and go back to what they were doing."
+        }
+      ],
+      "onEnter": [
+        {
+          "adjustReputation": {
+            "faction": "the_vent_readers",
+            "amount": -1
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "ember_iman_warmground_drop",
+          "text": "Leave it.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "ember_iman_one_told",
+      "says": [
+        {
+          "text": "“One night.” She stops, which from her is a speech. “Nine feet, one night. The readers have the record. The Reach has never done nine feet in a night before it or since.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "learnLore": {
+            "entry": "ember_roofs_one"
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "ember_iman_one_on",
+          "text": "Go on.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "ember_iman_one_wont",
+      "says": [
+        {
+          "text": "“I've said all I mean to,” they say, and go back to what they were doing."
+        }
+      ],
+      "onEnter": [
+        {
+          "adjustReputation": {
+            "faction": "the_vent_readers",
+            "amount": -1
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "ember_iman_one_drop",
+          "text": "Leave it.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    }
+  ]
+}

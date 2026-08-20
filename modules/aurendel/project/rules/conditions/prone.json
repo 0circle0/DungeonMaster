@@ -1,0 +1,10 @@
+{
+  "id": "prone",
+  "name": "Prone",
+  "description": "On the ground, and everyone above you knows it.",
+  "stacking": "ignore",
+  "defaultDuration": 1,
+  "modifiers": {
+    "guard": -2
+  }
+}

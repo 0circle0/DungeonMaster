@@ -1,0 +1,14 @@
+{
+  "id": "dungeon_cave_entrance_desc",
+  "variants": [
+    {
+      "text": "The opening is wider inside than out, and the floor slopes away from the light immediately."
+    },
+    {
+      "text": "Water has cut this and water is still cutting it, somewhere below."
+    },
+    {
+      "text": "Cold air on your face, steady, from a long way in."
+    }
+  ]
+}

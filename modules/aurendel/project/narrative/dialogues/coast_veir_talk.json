@@ -1,0 +1,362 @@
+{
+  "id": "coast_veir_talk",
+  "start": "greet",
+  "nodes": [
+    {
+      "id": "greet",
+      "says": [
+        {
+          "text": "A first-floor office over the mole with every window facing water, and a berth list going down a slate faster than it comes off."
+        },
+        {
+          "text": "“If it is a berth you want, it is tomorrow. If it is anything else, be quick.”"
+        }
+      ],
+      "onEnter": [],
+      "options": [
+        {
+          "id": "coast_veir_light",
+          "text": "The tower on the head. Has anything been in it?",
+          "requires": {
+            "without": {
+              "lore": [
+                "coast_watch_light"
+              ]
+            }
+          },
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "check": {
+            "skill": "persuasion",
+            "difficulty": {
+              "sub": [
+                14,
+                {
+                  "clamp": [
+                    {
+                      "div": [
+                        {
+                          "ref": "reputation.the_salvors",
+                          "else": 0
+                        },
+                        5
+                      ]
+                    },
+                    -6,
+                    6
+                  ]
+                }
+              ]
+            },
+            "onSuccess": "coast_veir_light_told",
+            "onFailure": "coast_veir_light_wont"
+          }
+        },
+        {
+          "id": "coast_veir_tide",
+          "text": "The way in under the head.",
+          "requires": {
+            "without": {
+              "lore": [
+                "coast_watch_tide"
+              ]
+            }
+          },
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "check": {
+            "skill": "persuasion",
+            "difficulty": {
+              "sub": [
+                15,
+                {
+                  "clamp": [
+                    {
+                      "div": [
+                        {
+                          "ref": "reputation.the_salvors",
+                          "else": 0
+                        },
+                        5
+                      ]
+                    },
+                    -6,
+                    6
+                  ]
+                }
+              ]
+            },
+            "onSuccess": "coast_veir_tide_told",
+            "onFailure": "coast_veir_tide_wont"
+          }
+        },
+        {
+          "id": "coast_veir_book",
+          "text": "The night book. I want to read it.",
+          "requires": {
+            "without": {
+              "items": [
+                "harbour_night_book"
+              ],
+              "flags": [
+                {
+                  "flag": "given:harbour_night_book"
+                }
+              ]
+            }
+          },
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "check": {
+            "skill": "persuasion",
+            "difficulty": {
+              "sub": [
+                14,
+                {
+                  "clamp": [
+                    {
+                      "div": [
+                        {
+                          "ref": "reputation.the_salvors",
+                          "else": 0
+                        },
+                        5
+                      ]
+                    },
+                    -6,
+                    6
+                  ]
+                }
+              ]
+            },
+            "onSuccess": "coast_veir_book_gave",
+            "onFailure": "coast_veir_book_kept"
+          }
+        },
+        {
+          "id": "greet_leave",
+          "text": "Nothing.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": [
+        {
+          "requires": {
+            "factions": [
+              {
+                "faction": "the_salvors",
+                "maxStanding": -30
+              }
+            ]
+          },
+          "goto": "coast_veir_cold"
+        }
+      ]
+    },
+    {
+      "id": "coast_veir_light_told",
+      "says": [
+        {
+          "text": "“Four times.” She does not look up from the berth list. “1187, 1224, 1251, and eleven years ago, which I saw. Same week of the year every time.” Now she looks up. “There is no stair in that tower. There has never been a stair in that tower. I have had the masons out.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "learnLore": {
+            "entry": "coast_watch_light"
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "coast_veir_light_on",
+          "text": "Go on.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "coast_veir_light_wont",
+      "says": [
+        {
+          "text": "“I've said all I mean to,” they say, and go back to what they were doing."
+        }
+      ],
+      "onEnter": [
+        {
+          "adjustReputation": {
+            "faction": "the_salvors",
+            "amount": -1
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "coast_veir_light_drop",
+          "text": "Leave it.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "coast_veir_tide_told",
+      "says": [
+        {
+          "text": "“Bottom of a spring tide, and it shuts again inside the hour.” She taps a tide table she has clearly consulted for other reasons. “Which means anybody who has ever gone in has either come out very fast or has not come out. We have never recovered one.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "learnLore": {
+            "entry": "coast_watch_tide"
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "coast_veir_tide_on",
+          "text": "Go on.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "coast_veir_tide_wont",
+      "says": [
+        {
+          "text": "“I've said all I mean to,” they say, and go back to what they were doing."
+        }
+      ],
+      "onEnter": [
+        {
+          "adjustReputation": {
+            "faction": "the_salvors",
+            "amount": -1
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "coast_veir_tide_drop",
+          "text": "Leave it.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "coast_veir_book_gave",
+      "says": [
+        {
+          "text": "She puts it on the counter and keeps a hand on it. “Fourteen hands going back to before the mole was built,” she says. “Every one of them writes the same correction and not one of them says what for. If you find out, come back. I will have kept the page.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "grantItem": {
+            "target": {
+              "ref": "actor.id"
+            },
+            "item": "harbour_night_book",
+            "quantity": 1
+          }
+        },
+        {
+          "setFlag": {
+            "flag": "given:harbour_night_book",
+            "value": true
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "coast_veir_book_thanks",
+          "text": "Thank you.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "coast_veir_book_kept",
+      "says": [
+        {
+          "text": "“It is the office's,” she says, “and I am the office,” and puts it back under the counter."
+        }
+      ],
+      "onEnter": [
+        {
+          "adjustReputation": {
+            "faction": "the_salvors",
+            "amount": -2
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "coast_veir_book_leave",
+          "text": "Then no.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "coast_veir_cold",
+      "says": [
+        {
+          "text": "She turns the berth list over and goes on writing on the back of it."
+        }
+      ],
+      "onEnter": [],
+      "options": [
+        {
+          "id": "coast_veir_go",
+          "text": "Leave it.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    }
+  ]
+}

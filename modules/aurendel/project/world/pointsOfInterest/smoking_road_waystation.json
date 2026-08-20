@@ -1,0 +1,24 @@
+{
+  "id": "smoking_road_waystation",
+  "name": "The Road Station",
+  "description": "Stone, thick, with a water cistern under it and a bell on top.",
+  "area": "ember_smoking_road",
+  "kind": "settlement",
+  "descriptionKey": "generic_settlement",
+  "travelMinutes": 5,
+  "tags": [
+    "inn"
+  ],
+  "services": [
+    "inn"
+  ],
+  "map": {
+    "width": "11",
+    "height": "9",
+    "palette": "int_stone"
+  },
+  "position": {
+    "x": 14,
+    "y": 3
+  }
+}

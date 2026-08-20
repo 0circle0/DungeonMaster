@@ -1,0 +1,22 @@
+{
+  "id": "shove",
+  "name": "Shove",
+  "description": "Put them on the ground and take the second you bought.",
+  "actionType": "action",
+  "targeting": "single",
+  "attack": {
+    "stat": "might",
+    "against": "guard"
+  },
+  "onUse": [
+    {
+      "applyCondition": {
+        "target": {
+          "ref": "target.id"
+        },
+        "condition": "prone",
+        "duration": 1
+      }
+    }
+  ]
+}

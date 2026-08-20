@@ -1,0 +1,38 @@
+{
+  "id": "steppe_the_south_reach",
+  "name": "The South Reach",
+  "description": "Where the grass thins, the ground pales, and the Glasslands start making themselves felt.",
+  "biome": "steppe",
+  "layer": "overworld",
+  "descriptionKey": "steppe_the_south_reach_desc",
+  "dangerLevel": 4,
+  "recommendedLevel": 5,
+  "tags": [
+    "sunward_steppe"
+  ],
+  "map": {
+    "width": "51",
+    "height": "35"
+  },
+  "entryPoint": {
+    "x": 25,
+    "y": 17
+  },
+  "extra": {
+    "role": "wild"
+  },
+  "connections": [
+    {
+      "to": "steppe_ilkhet",
+      "travelMinutes": 60
+    },
+    {
+      "to": "steppe_dry_river",
+      "travelMinutes": 55
+    },
+    {
+      "to": "glasslands_sunken_road",
+      "travelMinutes": 240
+    }
+  ]
+}

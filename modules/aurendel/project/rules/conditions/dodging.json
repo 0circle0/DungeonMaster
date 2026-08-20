@@ -1,0 +1,10 @@
+{
+  "id": "dodging",
+  "name": "Dodging",
+  "description": "Giving ground on purpose, and watching the hands.",
+  "stacking": "refresh",
+  "defaultDuration": 1,
+  "swings": {
+    "attacksAgainstSelf": "disadvantage"
+  }
+}

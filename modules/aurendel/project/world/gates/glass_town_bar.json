@@ -1,0 +1,29 @@
+{
+  "id": "glass_town_bar",
+  "name": "The Doors Barred from Outside",
+  "description": "Every door in the uncovered town is barred, and every bar is on the street side.",
+  "kind": "ward",
+  "blockedTextKey": "glass_town_blocked",
+  "staysOpen": true,
+  "onOpen": [
+    {
+      "setFlag": {
+        "flag": "glass_town_open",
+        "value": true
+      }
+    }
+  ],
+  "onBlocked": [],
+  "opensWith": [],
+  "tags": [],
+  "requires": {
+    "items": [
+      {
+        "item": "dune_walkers_chart",
+        "quantity": 1,
+        "consume": false,
+        "equipped": false
+      }
+    ]
+  }
+}

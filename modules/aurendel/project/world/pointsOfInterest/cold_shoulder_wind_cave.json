@@ -1,0 +1,68 @@
+{
+  "id": "cold_shoulder_wind_cave",
+  "name": "The Wind Cave",
+  "description": "Blows out at dawn and in at dusk, hard enough to lean on, which means it goes a very long way.",
+  "area": "skarnspine_cold_shoulder",
+  "kind": "dungeonEntrance",
+  "descriptionKey": "generic_dungeon_mouth",
+  "travelMinutes": 14,
+  "tags": [
+    "dungeon"
+  ],
+  "dungeon": "skarn_wind_cave",
+  "position": {
+    "x": 25,
+    "y": 3
+  },
+  "triggers": [
+    {
+      "id": "skarn_wind_committed",
+      "mode": "once",
+      "on": "enter",
+      "description": "In the mouth, on the draw, where the survey stops.",
+      "requires": {
+        "custom": {
+          "gte": [
+            {
+              "ref": "threads.skarn_wind.known"
+            },
+            2
+          ]
+        }
+      },
+      "effects": [
+        {
+          "emit": {
+            "event": "startQuest",
+            "data": {
+              "quest": "skarn_the_breathing_face"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "hidden": true,
+  "discover": {
+    "skill": "survival",
+    "difficulty": {
+      "max": [
+        10,
+        {
+          "sub": [
+            22,
+            {
+              "mul": [
+                3,
+                {
+                  "ref": "threads.skarn_wind.known"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "gate": "skarn_wind_throat"
+}

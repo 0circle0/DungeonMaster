@@ -1,0 +1,26 @@
+{
+  "id": "thorn_ledger_carried",
+  "name": "What Sarl Kept",
+  "rolls": "1",
+  "emptyChance": 0,
+  "entries": [
+    {
+      "weight": 1,
+      "value": {
+        "item": "toll_ledger",
+        "quantity": "1",
+        "unique": true,
+        "requirementScope": "party",
+        "requires": {
+          "without": {
+            "flags": [
+              {
+                "flag": "given:toll_ledger"
+              }
+            ]
+          }
+        }
+      }
+    }
+  ]
+}

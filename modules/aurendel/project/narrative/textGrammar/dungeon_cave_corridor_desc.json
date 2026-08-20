@@ -1,0 +1,14 @@
+{
+  "id": "dungeon_cave_corridor_desc",
+  "variants": [
+    {
+      "text": "A rift you go along sideways, with the walls closer at head height than at the floor."
+    },
+    {
+      "text": "The passage follows a bedding plane and turns wherever the rock does."
+    },
+    {
+      "text": "Wet underfoot, and the sound of your boots comes back wrong."
+    }
+  ]
+}

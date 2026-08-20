@@ -1,0 +1,14 @@
+{
+  "id": "crater_the_centre",
+  "name": "The Centre",
+  "description": "Four miles from any lip, and the glass here is clear rather than green, and you can see down.",
+  "area": "glasslands_the_crater",
+  "kind": "landmark",
+  "descriptionKey": "crater_the_centre_desc",
+  "travelMinutes": 12,
+  "tags": [],
+  "position": {
+    "x": 14,
+    "y": 3
+  }
+}

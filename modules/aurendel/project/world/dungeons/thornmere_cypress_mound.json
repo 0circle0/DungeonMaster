@@ -1,0 +1,17 @@
+{
+  "id": "thornmere_cypress_mound",
+  "name": "The Cypress Mound",
+  "description": "A rise in the middle of the maze that is not a natural rise, and the way in was cut, not washed.",
+  "biome": "dungeon_barrow",
+  "roomCount": "9",
+  "depth": "2",
+  "algorithm": "rooms",
+  "lockedDoorChance": 0,
+  "doorGates": [],
+  "rollEncounters": false,
+  "safeEntrance": true,
+  "width": "69",
+  "height": "69",
+  "corridorLength": "3d3",
+  "bossTable": "thorn_knees_boss"
+}

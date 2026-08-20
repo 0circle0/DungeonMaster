@@ -1,0 +1,17 @@
+{
+  "id": "glasslands_milepost",
+  "name": "The Milepost Vault",
+  "description": "One milepost on the sunken road is hollow, and there is a stair in it, and it does not stop at the road's level.",
+  "biome": "dungeon_delved",
+  "roomCount": "9",
+  "depth": "3",
+  "algorithm": "rooms",
+  "lockedDoorChance": 0,
+  "doorGates": [],
+  "rollEncounters": false,
+  "safeEntrance": true,
+  "width": "69",
+  "height": "69",
+  "corridorLength": "3d3",
+  "bossTable": "trial_two_sixth"
+}

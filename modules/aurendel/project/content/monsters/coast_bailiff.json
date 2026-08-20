@@ -1,0 +1,53 @@
+{
+  "id": "coast_bailiff",
+  "name": "Hask, Bailiff of Cobbleway",
+  "description": "Takes hold of other people's livestock for a living, which selects for a grip.",
+  "level": 4,
+  "xp": 0,
+  "attributes": {
+    "might": 14,
+    "agility": 12,
+    "endurance": 14,
+    "intellect": 13,
+    "instinct": 12,
+    "presence": 13
+  },
+  "abilities": [
+    "strike",
+    "shove"
+  ],
+  "behaviour": [
+    {
+      "priority": 0,
+      "use": "strike"
+    }
+  ],
+  "faction": "the_countinghouse",
+  "creatureType": "humanoid",
+  "size": "medium",
+  "descriptors": [
+    "a heavy-handed"
+  ],
+  "conditionalLoot": [],
+  "loot": "coast_yard_carried",
+  "resourceOverrides": {
+    "hp": 25
+  },
+  "temperament": {
+    "roamRadius": 24,
+    "investigateRadius": 70,
+    "leashRadius": 100,
+    "wanderChance": 0.4,
+    "disengageTurns": 2,
+    "investigates": [
+      "sight",
+      "hearing",
+      "tracks",
+      "smell"
+    ],
+    "notices": [
+      "hostile",
+      "neutral"
+    ]
+  }
+}

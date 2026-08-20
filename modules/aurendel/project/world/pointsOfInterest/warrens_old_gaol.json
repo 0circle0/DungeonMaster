@@ -1,0 +1,37 @@
+{
+  "id": "warrens_old_gaol",
+  "name": "The Old Gaol",
+  "description": "Emptied after the fire and never quite abandoned.",
+  "area": "aurenhal_warrens",
+  "kind": "ruin",
+  "descriptionKey": "warrens_old_gaol_desc",
+  "travelMinutes": 5,
+  "tags": [
+    "ruin"
+  ],
+  "position": {
+    "x": 34,
+    "y": 12
+  },
+  "map": {
+    "width": "15",
+    "height": "11",
+    "palette": "int_stone"
+  },
+  "triggers": [
+    {
+      "id": "bonealley_at_the_gaol",
+      "mode": "once",
+      "on": "enter",
+      "description": "The brickwork in the west range, and how new it is.",
+      "effects": [
+        {
+          "setFlag": {
+            "flag": "bonealley_brickwork_seen",
+            "value": true
+          }
+        }
+      ]
+    }
+  ]
+}

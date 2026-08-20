@@ -1,0 +1,14 @@
+{
+  "id": "horse_road_the_width",
+  "name": "The Horse Road",
+  "description": "Forty yards of grass ridden flat over nine hundred years, and it is not a road and everybody calls it one.",
+  "area": "steppe_horse_road",
+  "kind": "landmark",
+  "descriptionKey": "horse_road_the_width_desc",
+  "travelMinutes": 6,
+  "tags": [],
+  "position": {
+    "x": 3,
+    "y": 3
+  }
+}

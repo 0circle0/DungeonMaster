@@ -1,0 +1,39 @@
+{
+  "id": "deeproads_lantern_deep",
+  "name": "Lantern Deep",
+  "description": "Nine hundred people in a cavern, lit entirely by fungus and by what they can afford to burn.",
+  "biome": "urban_delved",
+  "layer": "underworld",
+  "descriptionKey": "deeproads_lantern_deep_desc",
+  "dangerLevel": 2,
+  "recommendedLevel": 9,
+  "tags": [
+    "deeproads",
+    "town"
+  ],
+  "map": {
+    "width": "41",
+    "height": "27"
+  },
+  "entryPoint": {
+    "x": 20,
+    "y": 13
+  },
+  "extra": {
+    "role": "town"
+  },
+  "connections": [
+    {
+      "to": "deeproads_the_deep_market_road",
+      "travelMinutes": 25
+    },
+    {
+      "to": "deeproads_fungus_gallery",
+      "travelMinutes": 30
+    },
+    {
+      "to": "deeproads_black_bridge",
+      "travelMinutes": 55
+    }
+  ]
+}

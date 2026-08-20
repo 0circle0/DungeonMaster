@@ -1,0 +1,24 @@
+{
+  "id": "aurenhal_kings_gate",
+  "name": "The King's Gate",
+  "kind": "toll",
+  "description": "Two towers, a portcullis nobody has dropped in thirty years, and a clerk with a ledger who will absolutely take your five marks.",
+  "staysOpen": false,
+  "requires": {
+    "description": "5 marks",
+    "currency": 5
+  },
+  "bypass": {
+    "skill": "persuasion",
+    "difficulty": 13,
+    "retryable": true
+  },
+  "onOpen": [
+    {
+      "adjustCurrency": {
+        "amount": -5
+      }
+    }
+  ],
+  "blockedTextKey": "aurenhal_kings_gate_blocked"
+}

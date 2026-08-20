@@ -1,0 +1,17 @@
+{
+  "id": "last_cairn_the_hollow",
+  "name": "The Hollow",
+  "description": "The cairn is on top of something and the something has a way in.",
+  "area": "frostmere_the_last_cairn",
+  "kind": "dungeonEntrance",
+  "descriptionKey": "generic_dungeon_mouth",
+  "travelMinutes": 16,
+  "tags": [
+    "dungeon"
+  ],
+  "dungeon": "frostmere_the_hollow",
+  "position": {
+    "x": 25,
+    "y": 3
+  }
+}

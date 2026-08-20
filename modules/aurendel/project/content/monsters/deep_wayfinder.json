@@ -1,0 +1,53 @@
+{
+  "id": "deep_wayfinder",
+  "name": "Ost of the Wayfinders",
+  "description": "Forty years of walking the Deeproads under load.",
+  "level": 8,
+  "xp": 0,
+  "attributes": {
+    "might": 14,
+    "agility": 15,
+    "endurance": 16,
+    "intellect": 16,
+    "instinct": 17,
+    "presence": 13
+  },
+  "abilities": [
+    "strike",
+    "guarded_stance"
+  ],
+  "behaviour": [
+    {
+      "priority": 0,
+      "use": "strike"
+    }
+  ],
+  "faction": "the_wayfinders",
+  "creatureType": "humanoid",
+  "size": "medium",
+  "descriptors": [
+    "a lamp-lit"
+  ],
+  "conditionalLoot": [],
+  "loot": "deep_rule_carried",
+  "resourceOverrides": {
+    "hp": 52
+  },
+  "temperament": {
+    "roamRadius": 24,
+    "investigateRadius": 70,
+    "leashRadius": 100,
+    "wanderChance": 0.4,
+    "disengageTurns": 2,
+    "investigates": [
+      "sight",
+      "hearing",
+      "tracks",
+      "smell"
+    ],
+    "notices": [
+      "hostile",
+      "neutral"
+    ]
+  }
+}

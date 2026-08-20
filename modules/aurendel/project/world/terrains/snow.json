@@ -1,0 +1,17 @@
+{
+  "id": "snow",
+  "name": "Snow",
+  "description": "Knee-deep in the drifts and shin-deep everywhere else.",
+  "glyph": "*",
+  "color": "white",
+  "passable": true,
+  "opaque": false,
+  "moveCost": 2,
+  "tags": [
+    "shifting"
+  ],
+  "marks": {
+    "tracks": 0.5,
+    "smell": 0.7
+  }
+}

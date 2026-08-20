@@ -1,0 +1,24 @@
+{
+  "id": "dry_cistern_the_drop",
+  "name": "The Drop",
+  "description": "Named for what everyone here is waiting for.",
+  "area": "glasslands_dry_cistern",
+  "kind": "settlement",
+  "descriptionKey": "int_inn",
+  "travelMinutes": 3,
+  "tags": [
+    "inn"
+  ],
+  "services": [
+    "inn"
+  ],
+  "map": {
+    "width": "9",
+    "height": "7",
+    "palette": "int_timber"
+  },
+  "position": {
+    "x": 9,
+    "y": 3
+  }
+}

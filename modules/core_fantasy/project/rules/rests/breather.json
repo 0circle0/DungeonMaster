@@ -1,0 +1,8 @@
+{
+  "id": "breather",
+  "name": "Breather",
+  "description": "An hour sat down, out of the wind.",
+  "kind": "short",
+  "duration": 60,
+  "interruptChance": 0.1
+}

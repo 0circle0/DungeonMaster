@@ -1,0 +1,33 @@
+{
+  "id": "latch",
+  "name": "Latch On",
+  "description": "It does not bite so much as attach, and then not let go.",
+  "actionType": "action",
+  "targeting": "single",
+  "attack": {
+    "stat": "might",
+    "against": "guard"
+  },
+  "onUse": [
+    {
+      "damage": {
+        "target": {
+          "ref": "target.id"
+        },
+        "amount": {
+          "roll": "1d6"
+        },
+        "damageType": "piercing"
+      }
+    },
+    {
+      "applyCondition": {
+        "target": {
+          "ref": "target.id"
+        },
+        "condition": "bleeding",
+        "duration": 3
+      }
+    }
+  ]
+}

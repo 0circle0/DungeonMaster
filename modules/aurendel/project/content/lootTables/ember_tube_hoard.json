@@ -1,0 +1,35 @@
+{
+  "id": "ember_tube_hoard",
+  "name": "Past the Turn",
+  "rolls": "2",
+  "emptyChance": 0,
+  "bonusRollSkill": "perception",
+  "bonusRolls": {
+    "onSuccess": 1,
+    "onCritical": 2
+  },
+  "entries": [
+    {
+      "weight": 3,
+      "value": {
+        "item": "old_coin",
+        "quantity": "3d6"
+      }
+    },
+    {
+      "weight": 2,
+      "value": {
+        "item": "iron_ore",
+        "quantity": "1d3"
+      }
+    },
+    {
+      "weight": 1,
+      "value": {
+        "item": "tube_slag",
+        "quantity": "1",
+        "unique": true
+      }
+    }
+  ]
+}

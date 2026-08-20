@@ -1,0 +1,30 @@
+{
+  "id": "gatehall_the_ledger_stone",
+  "name": "The Ledger Stone",
+  "description": "Every gate-fee since the hold was cut, in columns, and the columns go round three walls.",
+  "area": "karn_dolur_gatehall",
+  "kind": "landmark",
+  "descriptionKey": "generic_landmark",
+  "travelMinutes": 3,
+  "tags": [],
+  "position": {
+    "x": 13,
+    "y": 27
+  },
+  "triggers": [
+    {
+      "id": "seams_at_the_ledger_stone",
+      "mode": "once",
+      "on": "enter",
+      "description": "Nine hundred years of fees, and the gap in them.",
+      "effects": [
+        {
+          "setFlag": {
+            "flag": "seams_gap_found",
+            "value": true
+          }
+        }
+      ]
+    }
+  ]
+}

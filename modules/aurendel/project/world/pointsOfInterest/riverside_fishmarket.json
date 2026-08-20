@@ -1,0 +1,19 @@
+{
+  "id": "riverside_fishmarket",
+  "name": "The Fish Market",
+  "description": "Loud from before dawn, over by nine, and washed down by ten.",
+  "area": "aurenhal_riverside",
+  "kind": "market",
+  "descriptionKey": "generic_market",
+  "travelMinutes": 2,
+  "tags": [
+    "shop"
+  ],
+  "position": {
+    "x": 24,
+    "y": 20
+  },
+  "services": [
+    "market"
+  ]
+}

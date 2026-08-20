@@ -1,0 +1,24 @@
+{
+  "id": "ashcott_woolhouse",
+  "name": "The Wool House",
+  "description": "Fleeces graded, weighed, and argued over from Reaping to Winnow.",
+  "area": "kingsvale_ashcott",
+  "kind": "market",
+  "descriptionKey": "int_warehouse",
+  "travelMinutes": 2,
+  "tags": [
+    "shop"
+  ],
+  "position": {
+    "x": 11,
+    "y": 8
+  },
+  "services": [
+    "market"
+  ],
+  "map": {
+    "width": "11",
+    "height": "9",
+    "palette": "int_shop"
+  }
+}

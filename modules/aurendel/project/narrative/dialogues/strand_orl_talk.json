@@ -1,0 +1,348 @@
+{
+  "id": "strand_orl_talk",
+  "start": "greet",
+  "nodes": [
+    {
+      "id": "greet",
+      "says": [
+        {
+          "text": "There is a very good fire in the hut and a very good view of the bar from the window beside it, and Orl is sitting where he can use both. \"You'll be from the Hall.\""
+        }
+      ],
+      "options": [
+        {
+          "id": "not_from_the_hall",
+          "text": "We're not from the Hall.",
+          "effects": [
+            {
+              "emit": {
+                "event": "startQuest",
+                "data": {
+                  "quest": "strand_what_came_ashore"
+                }
+              }
+            }
+          ],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "the_grace",
+          "requires": {
+            "quests": [
+              {
+                "quest": "strand_what_came_ashore",
+                "status": "unstarted"
+              },
+              {
+                "quest": "the_open_door",
+                "status": "complete"
+              }
+            ]
+          }
+        },
+        {
+          "id": "wreckers",
+          "text": "They call this Wreckers' Strand.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "the_name"
+        },
+        {
+          "id": "leave",
+          "text": "Nothing.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": [
+        {
+          "requires": {
+            "flags": [
+              {
+                "flag": "strand_beach_cleared",
+                "equals": true
+              }
+            ]
+          },
+          "goto": "about_the_beach"
+        },
+        {
+          "requires": {
+            "flags": [
+              {
+                "flag": "strand_run_cleared",
+                "equals": true
+              }
+            ],
+            "without": {
+              "flags": [
+                {
+                  "flag": "strand_took_share"
+                },
+                {
+                  "flag": "strand_informed"
+                }
+              ]
+            }
+          },
+          "goto": "the_share"
+        }
+      ]
+    },
+    {
+      "id": "the_name",
+      "says": [
+        {
+          "text": "\"They do,\" says Orl. \"Down at Sarnport they do. Up here it is the Strand, and what we do on it is take what the sea has finished with.\" He looks at the window. \"The sea finishes with a great deal.\""
+        }
+      ],
+      "options": [
+        {
+          "id": "back",
+          "text": "Hm.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "greet"
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": []
+    },
+    {
+      "id": "the_grace",
+      "says": [
+        {
+          "text": "\"Portion of Grace, out of Sarnport, seventy tons, on the bar on the ninth in as much weather as I have seen.\" He says it like a man who has said it to an official already. \"Eleven off her alive, which is eleven more than the Hall is giving me credit for.\""
+        }
+      ],
+      "options": [
+        {
+          "id": "the_rest",
+          "text": "And the rest of them?",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "the_rest"
+        },
+        {
+          "id": "go",
+          "text": "We'll walk the beach.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "walk_it"
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": []
+    },
+    {
+      "id": "the_rest",
+      "says": [
+        {
+          "text": "\"On the Bone Beach with four hundred years of company.\" A pause, and he means the pause. \"Some of them have not settled. I would take that seriously and I would take a blade.\""
+        }
+      ],
+      "options": [
+        {
+          "id": "go",
+          "text": "We'll walk the beach.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "walk_it"
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": []
+    },
+    {
+      "id": "walk_it",
+      "says": [
+        {
+          "text": "\"Low water, and go along the shingle rather than the sand. The sand off the bar is not sand.\""
+        }
+      ],
+      "options": [
+        {
+          "id": "done",
+          "text": "Along the shingle.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": []
+    },
+    {
+      "id": "about_the_beach",
+      "says": [
+        {
+          "text": "Orl looks at the state of you and pours two, which for the Strand is a formal apology. \"How many?\""
+        }
+      ],
+      "options": [
+        {
+          "id": "two",
+          "text": "Two. Both of them off the Grace.",
+          "effects": [],
+          "onceOnly": true,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "the_kiln_question"
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": [],
+      "remembers": "share_honoured"
+    },
+    {
+      "id": "the_kiln_question",
+      "says": [
+        {
+          "text": "\"Then you have earned a thing I would rather not say.\" He puts his cup down. \"Cass keeps the burner's hut up at the kiln. That kiln has been cold sixty years.\" He looks at the window again. \"On the ninth it was not cold. I saw it from this chair and I have not slept properly since.\""
+        }
+      ],
+      "options": [
+        {
+          "id": "go_up",
+          "text": "We'll go and ask her.",
+          "effects": [
+            {
+              "emit": {
+                "event": "startQuest",
+                "data": {
+                  "quest": "strand_the_lime_kiln"
+                }
+              }
+            }
+          ],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "go_gently",
+          "requires": {
+            "quests": [
+              {
+                "quest": "strand_the_lime_kiln",
+                "status": "unstarted"
+              }
+            ]
+          }
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": []
+    },
+    {
+      "id": "go_gently",
+      "says": [
+        {
+          "text": "\"Gently,\" says Orl. \"She is eighty and she is not the one who lit it. But somebody carried the fuel up past her door and she will have heard them do it.\""
+        }
+      ],
+      "options": [
+        {
+          "id": "done",
+          "text": "Gently.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": []
+    },
+    {
+      "id": "the_share",
+      "says": [
+        {
+          "text": "\"You have been in the run,\" says Orl. There is no fire in the question at all. \"So you know what is under the downs and you know what it is worth, and you know the Hall would like a name rather than a cargo.\""
+        },
+        {
+          "text": "\"I will not talk you out of it,\" he says. \"I will tell you what it costs, which is that there is not a hut on this coast that will have you in it after, and that includes the ones you will need.\""
+        }
+      ],
+      "options": [
+        {
+          "id": "take_share",
+          "text": "We'll take a share and leave it at that.",
+          "effects": [
+            {
+              "setFlag": {
+                "flag": "strand_took_share",
+                "value": true
+              }
+            },
+            {
+              "emit": {
+                "event": "deed",
+                "data": {
+                  "kind": "share_honoured"
+                }
+              }
+            },
+            {
+              "grantItem": {
+                "target": {
+                  "ref": "actor.id"
+                },
+                "item": "wreck_brass",
+                "quantity": 3
+              }
+            }
+          ],
+          "onceOnly": true,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "shared"
+        },
+        {
+          "id": "think",
+          "text": "We'll think about it.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "greet"
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": []
+    },
+    {
+      "id": "shared",
+      "says": [
+        {
+          "text": "He counts it out in brass off the fittings, which is what the Strand pays in when it is paying somebody it intends to see again."
+        }
+      ],
+      "options": [
+        {
+          "id": "leave",
+          "text": "Right.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": [],
+      "remembers": "share_honoured"
+    }
+  ]
+}

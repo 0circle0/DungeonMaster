@@ -1,0 +1,34 @@
+{
+  "id": "dun_cave",
+  "name": "Cave",
+  "floor": "cave_floor",
+  "wall": "cave_wall",
+  "exterior": "cave_wall",
+  "scatter": [
+    {
+      "terrain": "rubble",
+      "frequency": 0.1,
+      "distribution": "speckle",
+      "priority": 0
+    },
+    {
+      "terrain": "shallows",
+      "frequency": 0.07,
+      "distribution": "patch",
+      "scale": 6,
+      "priority": 1
+    },
+    {
+      "terrain": "mushroom",
+      "frequency": 0.04,
+      "distribution": "speckle",
+      "priority": 2
+    },
+    {
+      "terrain": "chasm",
+      "frequency": 0.015,
+      "distribution": "speckle",
+      "priority": 3
+    }
+  ]
+}

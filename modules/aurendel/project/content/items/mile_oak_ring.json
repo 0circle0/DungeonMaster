@@ -1,0 +1,17 @@
+{
+  "id": "mile_oak_ring",
+  "name": "The Ring of the Fourteenth Mile",
+  "description": "Oak and iron off a mark that is not on the road. Distances stop surprising the wearer.",
+  "kind": "trinket",
+  "slot": "ring",
+  "value": 720,
+  "weight": 1,
+  "tags": [
+    "fabled"
+  ],
+  "skillBonuses": {
+    "survival": 3,
+    "athletics": 2
+  },
+  "rarity": "rare"
+}

@@ -1,0 +1,26 @@
+{
+  "id": "coast_book_carried",
+  "name": "What Veir Kept",
+  "rolls": "1",
+  "emptyChance": 0,
+  "entries": [
+    {
+      "weight": 1,
+      "value": {
+        "item": "harbour_night_book",
+        "quantity": "1",
+        "unique": true,
+        "requirementScope": "party",
+        "requires": {
+          "without": {
+            "flags": [
+              {
+                "flag": "given:harbour_night_book"
+              }
+            ]
+          }
+        }
+      }
+    }
+  ]
+}

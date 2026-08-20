@@ -1,0 +1,14 @@
+{
+  "id": "echo_halls_the_ten",
+  "name": "The Ten Chambers",
+  "description": "A word comes back four times in each of them, each from a different direction, and none of them from the wall.",
+  "area": "deeproads_echo_halls",
+  "kind": "landmark",
+  "descriptionKey": "echo_halls_the_ten_desc",
+  "travelMinutes": 8,
+  "tags": [],
+  "position": {
+    "x": 14,
+    "y": 3
+  }
+}

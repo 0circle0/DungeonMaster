@@ -1,0 +1,32 @@
+{
+  "id": "first_aid",
+  "name": "First Aid",
+  "description": "Pressure, a clean strip of cloth, and a hand that does not shake.",
+  "actionType": "action",
+  "targeting": "single",
+  "range": 5,
+  "costs": {
+    "focus": 1
+  },
+  "cooldown": 2,
+  "onUse": [
+    {
+      "heal": {
+        "target": {
+          "ref": "target.id"
+        },
+        "amount": {
+          "roll": "1d6"
+        }
+      }
+    },
+    {
+      "removeCondition": {
+        "target": {
+          "ref": "target.id"
+        },
+        "condition": "bleeding"
+      }
+    }
+  ]
+}

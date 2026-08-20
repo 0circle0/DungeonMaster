@@ -1,0 +1,24 @@
+{
+  "id": "glass_quarter_shrine",
+  "name": "The Shrine on the Lip",
+  "description": "Faces the crater rather than the city, which was a decision.",
+  "area": "vashta_qal_glass_quarter",
+  "kind": "shrine",
+  "descriptionKey": "int_temple",
+  "travelMinutes": 3,
+  "tags": [
+    "shrine"
+  ],
+  "services": [
+    "temple"
+  ],
+  "map": {
+    "width": "11",
+    "height": "9",
+    "palette": "int_temple"
+  },
+  "position": {
+    "x": 41,
+    "y": 27
+  }
+}

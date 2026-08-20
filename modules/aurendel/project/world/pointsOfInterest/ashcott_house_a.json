@@ -1,0 +1,21 @@
+{
+  "id": "ashcott_house_a",
+  "name": "Long Hedge Farm",
+  "description": "Named for the hedge, which is genuinely remarkable and predates the farm.",
+  "area": "kingsvale_ashcott",
+  "kind": "settlement",
+  "descriptionKey": "int_house",
+  "travelMinutes": 2,
+  "tags": [
+    "house"
+  ],
+  "position": {
+    "x": 25,
+    "y": 6
+  },
+  "map": {
+    "width": "9",
+    "height": "7",
+    "palette": "int_timber"
+  }
+}

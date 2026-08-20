@@ -1,0 +1,17 @@
+{
+  "id": "saltcliff_battery_door",
+  "name": "The Battery Door",
+  "kind": "lock",
+  "description": "A magazine door, iron on oak, with the corporation's seal across the keyhole.",
+  "staysOpen": true,
+  "requires": {
+    "description": "the harbour master's warrant",
+    "minLevel": 3
+  },
+  "bypass": {
+    "skill": "lockpicking",
+    "difficulty": 15,
+    "retryable": true
+  },
+  "blockedTextKey": "saltcliff_battery_blocked"
+}

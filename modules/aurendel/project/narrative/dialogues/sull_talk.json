@@ -1,0 +1,269 @@
+{
+  "id": "sull_talk",
+  "start": "greet",
+  "nodes": [
+    {
+      "id": "greet",
+      "says": [
+        {
+          "text": "Sull is checking a lamp she has already checked. \"You came down the wrong way. Everybody does, the first time.\""
+        }
+      ],
+      "options": [
+        {
+          "id": "ask",
+          "text": "What is that hanging over the town?",
+          "effects": [
+            {
+              "emit": {
+                "event": "startQuest",
+                "data": {
+                  "quest": "lantern_deep"
+                }
+              }
+            }
+          ],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "the_lantern",
+          "requires": {
+            "quests": [
+              {
+                "quest": "lantern_deep",
+                "status": "unstarted"
+              }
+            ]
+          }
+        },
+        {
+          "id": "leave",
+          "text": "Nothing.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": [
+        {
+          "requires": {
+            "flags": [
+              {
+                "flag": "the_keeper_is_down",
+                "equals": true
+              }
+            ]
+          },
+          "goto": "the_choice"
+        },
+        {
+          "requires": {
+            "quests": [
+              {
+                "quest": "lantern_deep",
+                "status": "active"
+              }
+            ]
+          },
+          "goto": "the_lantern"
+        }
+      ]
+    },
+    {
+      "id": "the_lantern",
+      "says": [
+        {
+          "text": "\"The Great Lantern.\" She does not look up at it, which takes effort. \"On a chain that goes into the dark and is not fixed to anything. It has never been lit by anybody living.\""
+        }
+      ],
+      "options": [
+        {
+          "id": "what_for",
+          "text": "What is it for?",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "what_for"
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": []
+    },
+    {
+      "id": "what_for",
+      "says": [
+        {
+          "text": "\"There's a shrine down the second gallery that says it'll be lit one day and they've kept a lamp going for four hundred years on the strength of it.\" She finally looks up. \"What they don't say in the shrine is what lighting it *does*. It shuts things. All of them. Every door on your list, and this one, and we live at the bottom of this one.\""
+        }
+      ],
+      "options": [
+        {
+          "id": "thanks",
+          "text": "That is worth knowing.",
+          "effects": [
+            {
+              "adjustReputation": {
+                "faction": "the_wayfinders",
+                "amount": 5
+              }
+            }
+          ],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "onEnter": [
+        {
+          "setFlag": {
+            "flag": "lantern_explained",
+            "value": true
+          }
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "the_choice",
+      "says": [
+        {
+          "text": "\"It's down, then.\" She sits, which she has not done in the whole time you have known her. \"So now there's the Lantern, and there's the door you came out of, and I'd not tell you which.\""
+        }
+      ],
+      "options": [
+        {
+          "id": "light_it",
+          "text": "Light the Lantern.",
+          "effects": [
+            {
+              "setFlag": {
+                "flag": "ending_lantern",
+                "value": true
+              }
+            }
+          ],
+          "onceOnly": true,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "the_lantern_lit"
+        },
+        {
+          "id": "go_back",
+          "text": "We're going back through the door.",
+          "effects": [
+            {
+              "setFlag": {
+                "flag": "ending_through",
+                "value": true
+              }
+            }
+          ],
+          "onceOnly": true,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "through_the_door"
+        },
+        {
+          "id": "the_hold",
+          "text": "Karn Dolur can seal it.",
+          "effects": [
+            {
+              "setFlag": {
+                "flag": "ending_hold",
+                "value": true
+              }
+            }
+          ],
+          "onceOnly": true,
+          "showWhenLocked": true,
+          "lockedHint": "The hold has no reason to do you a favour of that size.",
+          "goto": "the_hold_seals",
+          "requires": {
+            "factions": [
+              {
+                "faction": "karn_dolur",
+                "minStanding": 25
+              }
+            ]
+          }
+        },
+        {
+          "id": "wait",
+          "text": "Not yet.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "greet"
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": []
+    },
+    {
+      "id": "the_lantern_lit",
+      "says": [
+        {
+          "text": "It takes eleven of them on the chain and the better part of a day, and when it catches, the light goes up rather than down — up the chain, into the dark it was hanging out of, and does not come back.\n\nEvery door on the list shuts at once. So does the Long Hall. So does the road to Karn Dolur, and the shaft to the moor, and the stair to the Ember Reach.\n\nLantern Deep is lit for the first time in four hundred years, and it is alone."
+        }
+      ],
+      "options": [
+        {
+          "id": "done",
+          "text": "It is done.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": [],
+      "remembers": "lantern_lit"
+    },
+    {
+      "id": "through_the_door",
+      "says": [
+        {
+          "text": "You go back down the Long Hall with the ninth door standing open, and this time you do not stop at it.\n\nWhat is on the other side is not a room. It is the rest of the corridor, and it goes on, and somewhere along it are the eight doors that were never opened at all.\n\nNobody in Aurendel will ever be able to prove what happened next. The doors stop opening. That much is in every record."
+        }
+      ],
+      "options": [
+        {
+          "id": "done",
+          "text": "Go.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": []
+    },
+    {
+      "id": "the_hold_seals",
+      "says": [
+        {
+          "text": "Karn Dolur has been not-opening the Deep Door for nine hundred years, and it turns out they have spent a good part of that time working out how to shut everything else.\n\nIt costs the hold eleven months and a tier of the Forgetiers. Dath signs the ledger himself, which nobody has seen before.\n\nThe Deeproads are shut from the top. It is not elegant and it will hold."
+        }
+      ],
+      "options": [
+        {
+          "id": "done",
+          "text": "Then it holds.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": [],
+      "remembers": "hold_honoured"
+    }
+  ]
+}

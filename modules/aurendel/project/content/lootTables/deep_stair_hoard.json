@@ -1,0 +1,42 @@
+{
+  "id": "deep_stair_hoard",
+  "name": "Beneath the Treads",
+  "rolls": "4",
+  "emptyChance": 0,
+  "bonusRollSkill": "lore",
+  "bonusRolls": {
+    "onSuccess": 1,
+    "onCritical": 2
+  },
+  "entries": [
+    {
+      "weight": 3,
+      "value": {
+        "item": "old_coin",
+        "quantity": "8d6"
+      }
+    },
+    {
+      "weight": 2,
+      "value": {
+        "item": "lamp_glass",
+        "quantity": "1",
+        "unique": true
+      }
+    },
+    {
+      "weight": 2,
+      "value": {
+        "item": "hold_silver",
+        "quantity": "3d4"
+      }
+    },
+    {
+      "weight": 1,
+      "value": {
+        "item": "warded_coat",
+        "quantity": "1"
+      }
+    }
+  ]
+}

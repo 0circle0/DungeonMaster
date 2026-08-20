@@ -1,0 +1,11 @@
+{
+  "id": "thorn_toll",
+  "name": "The Toll That Is Still Collected",
+  "description": "Two hundred years of a balanced ledger in one unbroken hand, for a toll nobody has ever seen taken.",
+  "entries": [
+    "thorn_toll_abandoned",
+    "thorn_toll_balance",
+    "thorn_toll_hand",
+    "thorn_toll_paid"
+  ]
+}

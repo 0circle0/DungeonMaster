@@ -1,0 +1,33 @@
+{
+  "id": "the_crown",
+  "name": "The Crown",
+  "description": "Aurenhal, its wardens, and a very firm preference for nothing alarming being written down.",
+  "initialStanding": 0,
+  "decayPerDay": 0.08,
+  "relations": {
+    "the_library": -0.4,
+    "the_keepers": -0.25
+  },
+  "ranks": [
+    {
+      "id": "suspected",
+      "name": "Suspected",
+      "atLeast": -40
+    },
+    {
+      "id": "tolerated",
+      "name": "Tolerated",
+      "atLeast": 0
+    },
+    {
+      "id": "commissioned",
+      "name": "Commissioned",
+      "atLeast": 25
+    },
+    {
+      "id": "kings_own",
+      "name": "The King's Own",
+      "atLeast": 60
+    }
+  ]
+}

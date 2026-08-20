@@ -1,0 +1,15 @@
+{
+  "id": "fulgurite_lens",
+  "name": "The Fulgurite Lens",
+  "description": "Crater glass, ground at the Glass Quarter over nine years by a man who would not say what he was grinding it for.",
+  "kind": "armor",
+  "slot": "head",
+  "value": 340,
+  "weight": 1,
+  "tags": [],
+  "skillBonuses": {
+    "lore": 2,
+    "arcana": 1
+  },
+  "rarity": "very_rare"
+}

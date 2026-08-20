@@ -1,0 +1,76 @@
+{
+  "id": "ironstair_fallen_stair",
+  "name": "The Fallen Stair",
+  "description": "The first stair, which came off the cliff in one piece four hundred years ago and is lying at the bottom.",
+  "area": "skarnspine_ironstair",
+  "kind": "ruin",
+  "descriptionKey": "generic_ruin",
+  "travelMinutes": 10,
+  "tags": [
+    "ruin"
+  ],
+  "map": {
+    "width": "11",
+    "height": "9",
+    "palette": "int_cave"
+  },
+  "position": {
+    "x": 25,
+    "y": 3
+  },
+  "triggers": [
+    {
+      "id": "skarn_stair_committed",
+      "mode": "once",
+      "on": "enter",
+      "description": "On the flight the hold does not count.",
+      "requires": {
+        "custom": {
+          "gte": [
+            {
+              "ref": "threads.skarn_stair.known"
+            },
+            2
+          ]
+        }
+      },
+      "effects": [
+        {
+          "emit": {
+            "event": "startQuest",
+            "data": {
+              "quest": "skarn_nine_hundred_and_one"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "hidden": true,
+  "discover": {
+    "skill": "perception",
+    "difficulty": {
+      "max": [
+        8,
+        {
+          "sub": [
+            20,
+            {
+              "mul": [
+                3,
+                {
+                  "ref": "threads.skarn_stair.known"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "gate": "skarn_stair_tread",
+  "encounterTables": [
+    "skarn_stair_boss"
+  ],
+  "encounterChance": 1
+}

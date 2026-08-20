@@ -1,0 +1,219 @@
+{
+  "id": "glass_ferruh_talk",
+  "start": "greet",
+  "nodes": [
+    {
+      "id": "greet",
+      "says": [
+        {
+          "text": "The taproom of the Drop, and a man with sand in every crease of him drinking something he has clearly earned."
+        },
+        {
+          "text": "“Dry,” he says, meaning the hole and possibly the drink. “Nine holes this season and all of them dry.”"
+        }
+      ],
+      "onEnter": [],
+      "options": [
+        {
+          "id": "glass_ferruh_size",
+          "text": "That cistern is enormous for a village this size.",
+          "requires": {
+            "without": {
+              "lore": [
+                "glass_cistern_size"
+              ]
+            }
+          },
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "check": {
+            "skill": "persuasion",
+            "difficulty": {
+              "sub": [
+                10,
+                {
+                  "clamp": [
+                    {
+                      "div": [
+                        {
+                          "ref": "reputation.the_water_wardens",
+                          "else": 0
+                        },
+                        5
+                      ]
+                    },
+                    -6,
+                    6
+                  ]
+                }
+              ]
+            },
+            "onSuccess": "glass_ferruh_size_told",
+            "onFailure": "glass_ferruh_size_wont"
+          }
+        },
+        {
+          "id": "glass_ferruh_wet",
+          "text": "You would know where the damp starts. How deep?",
+          "requires": {
+            "without": {
+              "lore": [
+                "glass_cistern_wet"
+              ]
+            }
+          },
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "check": {
+            "skill": "persuasion",
+            "difficulty": {
+              "sub": [
+                13,
+                {
+                  "clamp": [
+                    {
+                      "div": [
+                        {
+                          "ref": "reputation.the_water_wardens",
+                          "else": 0
+                        },
+                        5
+                      ]
+                    },
+                    -6,
+                    6
+                  ]
+                }
+              ]
+            },
+            "onSuccess": "glass_ferruh_wet_told",
+            "onFailure": "glass_ferruh_wet_wont"
+          }
+        },
+        {
+          "id": "greet_leave",
+          "text": "Nothing.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "glass_ferruh_size_told",
+      "says": [
+        {
+          "text": "“Bigger than the market, and it was dry before anybody's grandmother.” He drinks. “And they named the village after it anyway, which tells you they thought it was coming back.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "learnLore": {
+            "entry": "glass_cistern_size"
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "glass_ferruh_size_on",
+          "text": "Go on.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "glass_ferruh_size_wont",
+      "says": [
+        {
+          "text": "“I've said all I mean to,” they say, and go back to what they were doing."
+        }
+      ],
+      "onEnter": [
+        {
+          "adjustReputation": {
+            "faction": "the_water_wardens",
+            "amount": -1
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "glass_ferruh_size_drop",
+          "text": "Leave it.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "glass_ferruh_wet_told",
+      "says": [
+        {
+          "text": "He puts the cup down. “Forty feet, in the channel out of the cistern. Not the rock — the channel.” He looks at you properly for the first time. “It has not rained here in nine years. You tell me what is damp at forty feet.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "learnLore": {
+            "entry": "glass_cistern_wet"
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "glass_ferruh_wet_on",
+          "text": "Go on.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "glass_ferruh_wet_wont",
+      "says": [
+        {
+          "text": "“I've said all I mean to,” they say, and go back to what they were doing."
+        }
+      ],
+      "onEnter": [
+        {
+          "adjustReputation": {
+            "faction": "the_water_wardens",
+            "amount": -1
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "glass_ferruh_wet_drop",
+          "text": "Leave it.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    }
+  ]
+}

@@ -1,0 +1,68 @@
+{
+  "id": "shifting_dunes_under_town",
+  "name": "Under the Uncovered Town",
+  "description": "The cellars are intact because sand is an excellent roof.",
+  "area": "glasslands_shifting_dunes",
+  "kind": "dungeonEntrance",
+  "descriptionKey": "generic_dungeon_mouth",
+  "travelMinutes": 14,
+  "tags": [
+    "dungeon"
+  ],
+  "dungeon": "glasslands_uncovered_town",
+  "position": {
+    "x": 25,
+    "y": 3
+  },
+  "triggers": [
+    {
+      "id": "glass_town_committed",
+      "mode": "once",
+      "on": "enter",
+      "description": "A street of barred doors, with the bars on your side.",
+      "requires": {
+        "custom": {
+          "gte": [
+            {
+              "ref": "threads.glass_town.known"
+            },
+            2
+          ]
+        }
+      },
+      "effects": [
+        {
+          "emit": {
+            "event": "startQuest",
+            "data": {
+              "quest": "glass_the_town_that_came_back"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "hidden": true,
+  "discover": {
+    "skill": "survival",
+    "difficulty": {
+      "max": [
+        10,
+        {
+          "sub": [
+            22,
+            {
+              "mul": [
+                3,
+                {
+                  "ref": "threads.glass_town.known"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "gate": "glass_town_bar"
+}

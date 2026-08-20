@@ -1,0 +1,8 @@
+{
+  "id": "huge",
+  "name": "Huge",
+  "space": 15,
+  "reach": 15,
+  "carryMultiplier": 4,
+  "hitDie": "1d12"
+}

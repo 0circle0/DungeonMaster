@@ -1,0 +1,7 @@
+{
+  "id": "fortitude",
+  "name": "Fortitude",
+  "attribute": "endurance",
+  "description": "Enduring what the body must endure.",
+  "defaultDifficulty": 12
+}

@@ -1,0 +1,102 @@
+{
+  "id": "strand_what_came_ashore",
+  "name": "What Came Ashore",
+  "description": "The Portion of Grace went onto the bar in the Lastmonth blow. Most of her is on the Bone Beach and some of what came off her has not settled.",
+  "autoStart": false,
+  "ordered": true,
+  "tags": [
+    "side",
+    "act1",
+    "strand",
+    "silver_coast"
+  ],
+  "objectives": [],
+  "stages": [
+    {
+      "id": "the_beach",
+      "name": "Walk the Bone Beach",
+      "description": "Four hundred years of ribs and stem-posts at every angle, and a new one among them still wet.",
+      "objectives": [
+        {
+          "id": "at_the_beach",
+          "description": "Walk out to the Bone Beach.",
+          "kind": "reach",
+          "count": 1,
+          "hidden": false,
+          "optional": false,
+          "target": "wreckers_strand_bone_beach"
+        }
+      ],
+      "journalKey": "strand_journal_beach"
+    },
+    {
+      "id": "the_crew",
+      "name": "What is still coming up the shingle",
+      "description": "They came off the reef with the cargo and did not stop at the tide line.",
+      "objectives": [
+        {
+          "id": "the_hands",
+          "description": "Put down what came ashore with her.",
+          "kind": "kill",
+          "count": 2,
+          "hidden": false,
+          "optional": false,
+          "target": "drowned_hand"
+        }
+      ],
+      "onComplete": [
+        {
+          "setFlag": {
+            "flag": "strand_beach_cleared",
+            "value": true
+          }
+        }
+      ],
+      "journalKey": "strand_journal_hands"
+    },
+    {
+      "id": "tell_orl",
+      "name": "Tell the Wreckmaster",
+      "description": "He sent you out. He will want it said to his face.",
+      "objectives": [
+        {
+          "id": "report",
+          "description": "Report to Orl.",
+          "kind": "talk",
+          "count": 1,
+          "hidden": false,
+          "optional": false,
+          "target": "wreck_master_orl"
+        }
+      ],
+      "journalKey": "strand_journal_orl"
+    }
+  ],
+  "unlocks": [
+    "strand_the_lime_kiln"
+  ],
+  "rewards": {
+    "xp": 30,
+    "items": [],
+    "reputation": {
+      "the_salvors": 8
+    }
+  },
+  "giver": "wreck_master_orl",
+  "requires": {
+    "quests": [
+      {
+        "quest": "the_open_door",
+        "status": "complete"
+      }
+    ]
+  },
+  "onComplete": [
+    {
+      "setFlag": {
+        "flag": "strand_grace_seen",
+        "value": true
+      }
+    }
+  ]
+}

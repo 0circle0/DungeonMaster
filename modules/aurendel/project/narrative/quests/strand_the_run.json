@@ -1,0 +1,76 @@
+{
+  "id": "strand_the_run",
+  "name": "The Run Under the Strand",
+  "description": "A fire on the kiln at four miles reads as a harbour light, and whatever came off the Grace before she broke did not go up the beach. It went under it.",
+  "autoStart": false,
+  "ordered": true,
+  "tags": [
+    "side",
+    "act1",
+    "strand",
+    "silver_coast"
+  ],
+  "objectives": [],
+  "stages": [
+    {
+      "id": "find_the_run",
+      "name": "Find the run",
+      "description": "It goes in at the back of the beach and comes out somewhere up on the downs, which is the whole point of it.",
+      "objectives": [
+        {
+          "id": "in_the_run",
+          "description": "Get into the Smugglers' Cave.",
+          "kind": "reach",
+          "count": 1,
+          "hidden": false,
+          "optional": false,
+          "target": "wreckers_strand_smugglers_cave"
+        }
+      ],
+      "journalKey": "strand_journal_run"
+    },
+    {
+      "id": "the_far_end",
+      "name": "Who is holding it",
+      "description": "Two men who did not expect the far end to be walked from this direction, and one thing that was already down here.",
+      "objectives": [
+        {
+          "id": "the_holders",
+          "description": "Clear the far end of the run.",
+          "kind": "kill",
+          "count": 2,
+          "hidden": false,
+          "optional": false,
+          "target": "strand_wrecker"
+        }
+      ],
+      "onComplete": [
+        {
+          "setFlag": {
+            "flag": "strand_run_cleared",
+            "value": true
+          }
+        }
+      ],
+      "journalKey": "strand_journal_far_end"
+    }
+  ],
+  "unlocks": [
+    "strand_a_share_or_a_name"
+  ],
+  "rewards": {
+    "xp": 50,
+    "items": [],
+    "reputation": {
+      "the_salvors": 6
+    }
+  },
+  "requires": {
+    "quests": [
+      {
+        "quest": "strand_the_lime_kiln",
+        "status": "complete"
+      }
+    ]
+  }
+}

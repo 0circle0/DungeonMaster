@@ -1,0 +1,14 @@
+{
+  "id": "dungeon_delved_vault_desc",
+  "variants": [
+    {
+      "text": "A strongroom: no windows, one door, walls a yard thick."
+    },
+    {
+      "text": "Shelves cut into the stone itself, which is expensive and says something about what stood on them."
+    },
+    {
+      "text": "The door frame is rebated for a door that is no longer here."
+    }
+  ]
+}

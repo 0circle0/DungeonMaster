@@ -1,0 +1,19 @@
+{
+  "id": "assist",
+  "name": "Assist",
+  "description": "Take the other half of whatever they are trying to do.",
+  "actionType": "quick",
+  "targeting": "single",
+  "range": 5,
+  "onUse": [
+    {
+      "applyCondition": {
+        "target": {
+          "ref": "target.id"
+        },
+        "condition": "helped",
+        "duration": 1
+      }
+    }
+  ]
+}

@@ -1,0 +1,64 @@
+{
+  "id": "grave_hound",
+  "name": "Grave Hound",
+  "description": "It was a dog. The barrow has had it for some while.",
+  "level": 2,
+  "xp": 40,
+  "attributes": {
+    "might": 12,
+    "agility": 12,
+    "endurance": 12,
+    "intellect": 3,
+    "instinct": 14,
+    "presence": 8
+  },
+  "abilities": [
+    "rend",
+    "gore"
+  ],
+  "behaviour": [
+    {
+      "priority": 10,
+      "use": "gore",
+      "when": {
+        "chance": 0.35
+      }
+    },
+    {
+      "priority": 0,
+      "use": "rend"
+    }
+  ],
+  "faction": "the_unsealed",
+  "creatureType": "undead",
+  "size": "medium",
+  "descriptors": [
+    "a lean",
+    "a silent"
+  ],
+  "conditionalLoot": [],
+  "loot": "barrow_scraps",
+  "conditionImmunities": [
+    "frightened",
+    "poisoned"
+  ],
+  "resourceOverrides": {
+    "hp": 9
+  },
+  "temperament": {
+    "roamRadius": 12,
+    "investigateRadius": 40,
+    "leashRadius": 60,
+    "wanderChance": 0.1,
+    "disengageTurns": 1,
+    "speeds": {
+      "wander": 0.5,
+      "investigate": 0.5
+    },
+    "investigates": [
+      "sight",
+      "hearing",
+      "smell"
+    ]
+  }
+}

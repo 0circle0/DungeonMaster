@@ -1,0 +1,26 @@
+{
+  "id": "skarn_watch_carried",
+  "name": "What Orn Kept",
+  "rolls": "1",
+  "emptyChance": 0,
+  "entries": [
+    {
+      "weight": 1,
+      "value": {
+        "item": "watch_book",
+        "quantity": "1",
+        "unique": true,
+        "requirementScope": "party",
+        "requires": {
+          "without": {
+            "flags": [
+              {
+                "flag": "given:watch_book"
+              }
+            ]
+          }
+        }
+      }
+    }
+  ]
+}

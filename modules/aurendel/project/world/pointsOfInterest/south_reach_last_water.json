@@ -1,0 +1,17 @@
+{
+  "id": "south_reach_last_water",
+  "name": "The Last Water",
+  "description": "A spring, a trough, and a very firm local convention about who drinks in what order.",
+  "area": "steppe_the_south_reach",
+  "kind": "settlement",
+  "descriptionKey": "generic_settlement",
+  "travelMinutes": 5,
+  "tags": [],
+  "services": [
+    "inn"
+  ],
+  "position": {
+    "x": 14,
+    "y": 3
+  }
+}

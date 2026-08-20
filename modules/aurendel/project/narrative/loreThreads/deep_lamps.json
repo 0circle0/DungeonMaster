@@ -1,0 +1,11 @@
+{
+  "id": "deep_lamps",
+  "name": "The Lamps That Are Still Lit",
+  "description": "Four hundred years unoiled, burning, at a spacing no road needs, and three of them out at the toll post.",
+  "entries": [
+    "deep_lamps_lit",
+    "deep_lamps_spacing",
+    "deep_lamps_out",
+    "deep_lamps_reading"
+  ]
+}

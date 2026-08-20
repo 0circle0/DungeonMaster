@@ -1,0 +1,21 @@
+{
+  "id": "harbourside_harbour_master",
+  "name": "The Harbour Master's Office",
+  "description": "Decides who berths where and is not open to discussion about it.",
+  "area": "sarnport_harbourside",
+  "kind": "landmark",
+  "descriptionKey": "generic_landmark",
+  "travelMinutes": 4,
+  "tags": [
+    "docks"
+  ],
+  "map": {
+    "width": "11",
+    "height": "9",
+    "palette": "int_stone"
+  },
+  "position": {
+    "x": 12,
+    "y": 3
+  }
+}

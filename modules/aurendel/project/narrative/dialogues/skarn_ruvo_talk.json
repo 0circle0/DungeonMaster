@@ -1,0 +1,219 @@
+{
+  "id": "skarn_ruvo_talk",
+  "start": "greet",
+  "nodes": [
+    {
+      "id": "greet",
+      "says": [
+        {
+          "text": "A forge dug into a slope, working, with the door open in weather that should have it shut."
+        },
+        {
+          "text": "“Mind the door stays open. I like it open.”"
+        }
+      ],
+      "onEnter": [],
+      "options": [
+        {
+          "id": "skarn_ruvo_coal",
+          "text": "Your coal comes up warm.",
+          "requires": {
+            "without": {
+              "lore": [
+                "skarn_bell_coal"
+              ]
+            }
+          },
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "check": {
+            "skill": "persuasion",
+            "difficulty": {
+              "sub": [
+                16,
+                {
+                  "clamp": [
+                    {
+                      "div": [
+                        {
+                          "ref": "reputation.karn_dolur",
+                          "else": 0
+                        },
+                        5
+                      ]
+                    },
+                    -6,
+                    6
+                  ]
+                }
+              ]
+            },
+            "onSuccess": "skarn_ruvo_coal_told",
+            "onFailure": "skarn_ruvo_coal_wont"
+          }
+        },
+        {
+          "id": "skarn_ruvo_maps",
+          "text": "The hold has surveyed this mountain.",
+          "requires": {
+            "without": {
+              "lore": [
+                "skarn_wind_maps"
+              ]
+            }
+          },
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "check": {
+            "skill": "insight",
+            "difficulty": {
+              "sub": [
+                15,
+                {
+                  "clamp": [
+                    {
+                      "div": [
+                        {
+                          "ref": "reputation.karn_dolur",
+                          "else": 0
+                        },
+                        5
+                      ]
+                    },
+                    -6,
+                    6
+                  ]
+                }
+              ]
+            },
+            "onSuccess": "skarn_ruvo_maps_told",
+            "onFailure": "skarn_ruvo_maps_wont"
+          }
+        },
+        {
+          "id": "greet_leave",
+          "text": "Nothing.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "skarn_ruvo_coal_told",
+      "says": [
+        {
+          "text": "Ruvo does not answer for a while, and works. “It does,” he says eventually. “Goes down cold in the basket. Comes up you can feel it through the wicker.” The hammer goes down. “I said so once, in the Drift, in front of eleven people. Nobody argued and nobody looked at me and the subject changed. I have not said it since. You are the first.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "learnLore": {
+            "entry": "skarn_bell_coal"
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "skarn_ruvo_coal_on",
+          "text": "Go on.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "skarn_ruvo_coal_wont",
+      "says": [
+        {
+          "text": "“I've said all I mean to,” they say, and go back to what they were doing."
+        }
+      ],
+      "onEnter": [
+        {
+          "adjustReputation": {
+            "faction": "karn_dolur",
+            "amount": -1
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "skarn_ruvo_coal_drop",
+          "text": "Leave it.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "skarn_ruvo_maps_told",
+      "says": [
+        {
+          "text": "“To the inch.” He is proud of it and then he is not. “Every hole, every seam, every fault, since the founding. I have seen the sheets — my father cut plate for the cases they keep them in.” A look toward the shoulder. “And the shoulder sheet stops at that mouth. Clean. No note. The hold *always* notes.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "learnLore": {
+            "entry": "skarn_wind_maps"
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "skarn_ruvo_maps_on",
+          "text": "Go on.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "skarn_ruvo_maps_wont",
+      "says": [
+        {
+          "text": "“I've said all I mean to,” they say, and go back to what they were doing."
+        }
+      ],
+      "onEnter": [
+        {
+          "adjustReputation": {
+            "faction": "karn_dolur",
+            "amount": -1
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "skarn_ruvo_maps_drop",
+          "text": "Leave it.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    }
+  ]
+}

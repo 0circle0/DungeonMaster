@@ -1,0 +1,21 @@
+{
+  "id": "footing_maul",
+  "name": "The Footing Maul",
+  "description": "Off the older stonework under the span. It is heavier than it is and it rings on nothing.",
+  "kind": "weapon",
+  "slot": "hand",
+  "value": 1600,
+  "weight": 1,
+  "tags": [
+    "fabled"
+  ],
+  "damage": {
+    "dice": "2d6",
+    "damageType": "bludgeoning",
+    "stat": "might"
+  },
+  "properties": [
+    "heavy"
+  ],
+  "rarity": "very_rare"
+}

@@ -1,0 +1,14 @@
+{
+  "id": "black_tarn_the_water",
+  "name": "The Black Tarn",
+  "description": "Peat-black, forty yards across, and every attempt to sound it has run out of line.",
+  "area": "moor_black_tarn",
+  "kind": "landmark",
+  "descriptionKey": "black_tarn_the_water_desc",
+  "travelMinutes": 6,
+  "tags": [],
+  "position": {
+    "x": 3,
+    "y": 3
+  }
+}

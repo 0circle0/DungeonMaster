@@ -1,0 +1,14 @@
+{
+  "id": "dungeon_sewer_chamber_desc",
+  "variants": [
+    {
+      "text": "A junction chamber where four drains meet and argue about it."
+    },
+    {
+      "text": "A vaulted room with steps down into the flow, for men who used to have to get down there."
+    },
+    {
+      "text": "Above the vault, faintly, the sound of a street."
+    }
+  ]
+}

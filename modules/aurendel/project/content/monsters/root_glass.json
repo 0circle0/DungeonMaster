@@ -1,0 +1,58 @@
+{
+  "id": "root_glass",
+  "name": "The Root",
+  "description": "Fulgurite goes down as far as the strike went, and this one went a long way down.",
+  "level": 7,
+  "xp": 650,
+  "attributes": {
+    "might": 16,
+    "agility": 10,
+    "endurance": 18,
+    "intellect": 8,
+    "instinct": 12,
+    "presence": 9
+  },
+  "abilities": [
+    "glass_shard",
+    "stone_fist"
+  ],
+  "behaviour": [
+    {
+      "priority": 0,
+      "use": "glass_shard"
+    }
+  ],
+  "faction": "the_unsealed",
+  "creatureType": "undead",
+  "size": "medium",
+  "descriptors": [
+    "a branching",
+    "a bright"
+  ],
+  "conditionalLoot": [],
+  "loot": "glass_town_hoard",
+  "conditionImmunities": [
+    "prone",
+    "frightened",
+    "bleeding"
+  ],
+  "resourceOverrides": {
+    "hp": 88
+  },
+  "temperament": {
+    "roamRadius": 12,
+    "investigateRadius": 40,
+    "leashRadius": 60,
+    "wanderChance": 0.1,
+    "disengageTurns": 1,
+    "speeds": {
+      "wander": 0.5,
+      "investigate": 0.5
+    },
+    "investigates": [
+      "sight",
+      "hearing",
+      "smell"
+    ]
+  }
+}

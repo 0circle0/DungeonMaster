@@ -1,0 +1,17 @@
+{
+  "id": "smelled_something_faint",
+  "variants": [
+    {
+      "text": "The wind turns and brings something sour from {direction}."
+    },
+    {
+      "text": "A trace of musk, going cold."
+    },
+    {
+      "text": "Something passed this way. Hours ago, by the smell."
+    },
+    {
+      "text": "Faint, and old, and unmistakably an animal."
+    }
+  ]
+}

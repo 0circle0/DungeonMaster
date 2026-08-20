@@ -1,0 +1,14 @@
+{
+  "id": "kings_ford_blocked",
+  "variants": [
+    {
+      "text": "The sluice is locked and the lock is oiled. There is one key, and the parish gave up trying to find out who has it."
+    },
+    {
+      "text": "Up in the spring, down at the harvest, on the day, every year. Somebody is doing this."
+    },
+    {
+      "text": "A stone in the ford bed with a rope-worn hole in it, and nothing tied there in living memory."
+    }
+  ]
+}

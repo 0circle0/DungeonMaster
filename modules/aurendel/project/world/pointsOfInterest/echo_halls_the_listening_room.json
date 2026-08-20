@@ -1,0 +1,34 @@
+{
+  "id": "echo_halls_the_listening_room",
+  "name": "The Listening Room",
+  "description": "Off the seventh chamber, and in it there is no echo at all, which is worse.",
+  "area": "deeproads_echo_halls",
+  "kind": "dungeonEntrance",
+  "descriptionKey": "generic_dungeon_mouth",
+  "travelMinutes": 14,
+  "tags": [
+    "dungeon"
+  ],
+  "dungeon": "deeproads_listening_room",
+  "position": {
+    "x": 25,
+    "y": 3
+  },
+  "triggers": [
+    {
+      "id": "rot_in_the_listening_room",
+      "mode": "once",
+      "on": "enter",
+      "description": "Cut to hear the Long Hall, and hearing something else.",
+      "effects": [
+        {
+          "setFlag": {
+            "flag": "rot_listened",
+            "value": true
+          }
+        }
+      ]
+    }
+  ],
+  "gate": "trial_three_door"
+}

@@ -1,0 +1,14 @@
+{
+  "id": "thornback_ride_the_narrows",
+  "name": "The Narrows",
+  "description": "The ride closes to eight feet here and the branches meet overhead, and it is dark at noon.",
+  "area": "duskwood_thornback_ride",
+  "kind": "landmark",
+  "descriptionKey": "thornback_ride_the_narrows_desc",
+  "travelMinutes": 6,
+  "tags": [],
+  "position": {
+    "x": 3,
+    "y": 3
+  }
+}

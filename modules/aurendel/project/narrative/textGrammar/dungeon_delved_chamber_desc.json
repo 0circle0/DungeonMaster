@@ -1,0 +1,14 @@
+{
+  "id": "dungeon_delved_chamber_desc",
+  "variants": [
+    {
+      "text": "A room laid out square, with pillars at the quarter points and a floor that still drains."
+    },
+    {
+      "text": "Benches, shelving, and the fittings gone from every one of them."
+    },
+    {
+      "text": "Whatever this room was for, it was for it in an organised way."
+    }
+  ]
+}

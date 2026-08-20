@@ -1,0 +1,17 @@
+{
+  "id": "skarnspine_pass_ward",
+  "name": "The Pass Ward",
+  "kind": "hazard",
+  "description": "A wall across the pass with a gate in it, and the gate is shut whenever the wind is from the north, which is most of the time.",
+  "staysOpen": true,
+  "requires": {
+    "description": "the ward-captain's leave to pass",
+    "minLevel": 3
+  },
+  "bypass": {
+    "skill": "survival",
+    "difficulty": 14,
+    "retryable": true
+  },
+  "blockedTextKey": "skarnspine_pass_ward_blocked"
+}

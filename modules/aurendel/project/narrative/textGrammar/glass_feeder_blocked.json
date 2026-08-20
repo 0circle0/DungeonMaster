@@ -1,0 +1,14 @@
+{
+  "id": "glass_feeder_blocked",
+  "variants": [
+    {
+      "text": "The grating at the end of the channel was made to be opened, and the office that opened it has outlived the water by three hundred years. Somebody in the village is still called the keeper."
+    },
+    {
+      "text": "Forty feet down and damp, in a country with no rain. The grating is sound and the lock in it has been oiled more recently than anything else down here."
+    },
+    {
+      "text": "It is a lock, and it is not an old lock, which is the part worth thinking about."
+    }
+  ]
+}

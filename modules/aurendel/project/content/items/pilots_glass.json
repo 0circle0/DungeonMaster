@@ -1,0 +1,14 @@
+{
+  "id": "pilots_glass",
+  "name": "A Pilot's Glass",
+  "description": "Ground at Vashta Qal, mounted at Saltcliff, and worth more than the boat it is usually in.",
+  "kind": "armor",
+  "slot": "head",
+  "value": 110,
+  "weight": 1,
+  "tags": [],
+  "skillBonuses": {
+    "perception": 2
+  },
+  "rarity": "uncommon"
+}

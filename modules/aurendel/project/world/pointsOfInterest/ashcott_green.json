@@ -1,0 +1,17 @@
+{
+  "id": "ashcott_green",
+  "name": "Ashcott Lane",
+  "description": "Not a green so much as a wide place in the lane, but it does the same job.",
+  "area": "kingsvale_ashcott",
+  "kind": "settlement",
+  "descriptionKey": "generic_settlement",
+  "travelMinutes": 1,
+  "tags": [],
+  "position": {
+    "x": 15,
+    "y": 10
+  },
+  "services": [
+    "inn"
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "id": "dungeon_delved_boss",
+  "name": "Delved Deep Chamber",
+  "descriptionKey": "dungeon_delved_boss_desc",
+  "weight": 1,
+  "minExits": 1,
+  "maxExits": 2,
+  "encounterChance": 0,
+  "trapChance": 0.15,
+  "lootChance": 0.8,
+  "tags": [
+    "dungeon_delved",
+    "boss"
+  ],
+  "role": "boss",
+  "neverTrap": true,
+  "alwaysEncounter": true
+}

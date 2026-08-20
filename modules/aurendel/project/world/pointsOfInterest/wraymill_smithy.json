@@ -1,0 +1,24 @@
+{
+  "id": "wraymill_smithy",
+  "name": "Wraymill Smithy",
+  "description": "Millwork, mostly: gudgeons, bands, and the endless small iron of machines that shake.",
+  "area": "kingsvale_wraymill",
+  "kind": "market",
+  "descriptionKey": "int_smithy",
+  "travelMinutes": 3,
+  "tags": [
+    "shop"
+  ],
+  "position": {
+    "x": 14,
+    "y": 12
+  },
+  "services": [
+    "smith"
+  ],
+  "map": {
+    "width": "11",
+    "height": "9",
+    "palette": "int_forge"
+  }
+}

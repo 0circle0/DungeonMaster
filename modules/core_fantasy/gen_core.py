@@ -6,10 +6,21 @@ to a world module. A token `nowhere` area exists solely so the base validates
 standalone; world modules $delete it.
 """
 import json
-import os, os, collections
+import os, sys, collections
 
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
 OUT = os.path.join(ROOT, "modules/core_fantasy")
+
+# Handed over to `core_fantasy/project/`. This file writes module.json wholesale,
+# so running it now would discard whatever has been authored there since. See
+# modules/shared/dmkit/retired.py for why the generators are kept at all.
+if os.path.isdir(os.path.join(OUT, "project")) and "--force" not in sys.argv:
+    sys.stderr.write(
+        "x core_fantasy is authored as core_fantasy/project now, and this "
+        "generator overwrites module.json.\n"
+        "  Edit the project files and run: npm run project -- build modules/core_fantasy\n"
+        "  Pass --force only if you mean to discard what is in project/.\n")
+    raise SystemExit(1)
 
 def mod(centre=10, step=2):
     return {"floor": {"div": [{"sub": [{"ref": "value"}, centre]}, step]}}

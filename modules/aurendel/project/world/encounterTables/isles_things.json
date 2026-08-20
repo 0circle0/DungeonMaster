@@ -1,0 +1,49 @@
+{
+  "id": "isles_things",
+  "minDepth": 0,
+  "maxDepth": 999,
+  "chance": 0.4,
+  "emptyWeight": 5,
+  "scalePerLevels": 3,
+  "groups": [
+    {
+      "id": "hands",
+      "weight": 5,
+      "hostile": true,
+      "entries": [
+        {
+          "monster": "drowned_hand",
+          "count": "1d2",
+          "scaleWithLevel": true
+        }
+      ]
+    },
+    {
+      "id": "wreckers",
+      "weight": 3,
+      "hostile": true,
+      "entries": [
+        {
+          "monster": "strand_wrecker",
+          "count": "1d2",
+          "scaleWithLevel": true
+        }
+      ]
+    },
+    {
+      "id": "deep",
+      "weight": 1,
+      "hostile": true,
+      "entries": [
+        {
+          "monster": "reef_thing",
+          "count": "1",
+          "scaleWithLevel": false
+        }
+      ],
+      "requires": {
+        "minLevel": 7
+      }
+    }
+  ]
+}

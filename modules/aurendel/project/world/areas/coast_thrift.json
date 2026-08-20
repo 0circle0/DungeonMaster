@@ -1,0 +1,39 @@
+{
+  "id": "coast_thrift",
+  "name": "Thrift",
+  "description": "Named for the flower that grows on the cliff, not the habit, though both apply.",
+  "biome": "urban_timber",
+  "layer": "overworld",
+  "descriptionKey": "coast_thrift_desc",
+  "dangerLevel": 1,
+  "recommendedLevel": 2,
+  "tags": [
+    "silver_coast",
+    "village"
+  ],
+  "map": {
+    "width": "31",
+    "height": "21"
+  },
+  "entryPoint": {
+    "x": 15,
+    "y": 10
+  },
+  "extra": {
+    "role": "village"
+  },
+  "connections": [
+    {
+      "to": "coast_cobbleway",
+      "travelMinutes": 25
+    },
+    {
+      "to": "coast_chalk_downs",
+      "travelMinutes": 30
+    },
+    {
+      "to": "duskwood_fenny_cross",
+      "travelMinutes": 160
+    }
+  ]
+}

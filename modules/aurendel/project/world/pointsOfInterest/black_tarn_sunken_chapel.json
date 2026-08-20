@@ -1,0 +1,27 @@
+{
+  "id": "black_tarn_sunken_chapel",
+  "name": "The Sunken Chapel",
+  "description": "Shows above the water in a dry Highsun and not otherwise, and it is the wrong shape for a chapel.",
+  "area": "moor_black_tarn",
+  "kind": "ruin",
+  "descriptionKey": "generic_ruin",
+  "travelMinutes": 10,
+  "tags": [
+    "secret",
+    "ruin"
+  ],
+  "hidden": true,
+  "discover": {
+    "skill": "perception",
+    "difficulty": 14
+  },
+  "map": {
+    "width": "9",
+    "height": "7",
+    "palette": "int_temple"
+  },
+  "position": {
+    "x": 25,
+    "y": 3
+  }
+}

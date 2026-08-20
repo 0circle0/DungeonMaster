@@ -1,0 +1,95 @@
+{
+  "id": "moulin_keeper",
+  "name": "What the Seal Was Written For",
+  "description": "The stonework at the lip faces inward. Nine hundred years of somebody being extremely clear about which side of it they meant to be on.",
+  "level": 10,
+  "xp": 1400,
+  "attributes": {
+    "might": 19,
+    "agility": 13,
+    "endurance": 19,
+    "intellect": 16,
+    "instinct": 17,
+    "presence": 17
+  },
+  "abilities": [
+    "unmaking_word",
+    "rime_touch",
+    "grave_chill",
+    "call_the_shut"
+  ],
+  "behaviour": [
+    {
+      "priority": 30,
+      "use": "unmaking_word",
+      "when": {
+        "chance": 0.25
+      }
+    },
+    {
+      "priority": 20,
+      "use": "call_the_shut",
+      "when": {
+        "chance": 0.3
+      }
+    },
+    {
+      "priority": 10,
+      "use": "grave_chill"
+    },
+    {
+      "priority": 0,
+      "use": "rime_touch"
+    }
+  ],
+  "faction": "the_unsealed",
+  "creatureType": "undead",
+  "size": "medium",
+  "descriptors": [
+    "a lamplit",
+    "a still"
+  ],
+  "conditionalLoot": [],
+  "loot": "frost_moulin_hoard",
+  "damageInteractions": [
+    {
+      "damageType": "slashing",
+      "multiplier": 0.5,
+      "unless": [
+        "silvered"
+      ]
+    },
+    {
+      "damageType": "piercing",
+      "multiplier": 0.5,
+      "unless": [
+        "silvered"
+      ]
+    }
+  ],
+  "conditionImmunities": [
+    "frightened",
+    "poisoned",
+    "prone",
+    "silenced"
+  ],
+  "resourceOverrides": {
+    "hp": 150
+  },
+  "temperament": {
+    "roamRadius": 12,
+    "investigateRadius": 40,
+    "leashRadius": 60,
+    "wanderChance": 0.1,
+    "disengageTurns": 1,
+    "speeds": {
+      "wander": 0.5,
+      "investigate": 0.5
+    },
+    "investigates": [
+      "sight",
+      "hearing",
+      "smell"
+    ]
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "id": "sporeward_mask",
+  "name": "A Sporeward Mask",
+  "description": "Charcoal, wet linen and a picker's patience. The Rot goes through everything eventually and it goes through this last.",
+  "kind": "armor",
+  "slot": "head",
+  "value": 280,
+  "weight": 1,
+  "tags": [],
+  "skillBonuses": {
+    "medicine": 2
+  },
+  "damageInteractions": [
+    {
+      "damageType": "poison",
+      "multiplier": 0.5
+    }
+  ],
+  "rarity": "rare"
+}

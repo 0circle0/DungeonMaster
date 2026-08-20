@@ -1,0 +1,49 @@
+{
+  "id": "coast_things",
+  "minDepth": 0,
+  "maxDepth": 999,
+  "chance": 0.35,
+  "emptyWeight": 6,
+  "scalePerLevels": 3,
+  "groups": [
+    {
+      "id": "wreckers",
+      "weight": 4,
+      "hostile": true,
+      "entries": [
+        {
+          "monster": "strand_wrecker",
+          "count": "1d2",
+          "scaleWithLevel": true
+        }
+      ]
+    },
+    {
+      "id": "hands",
+      "weight": 3,
+      "hostile": true,
+      "entries": [
+        {
+          "monster": "drowned_hand",
+          "count": "1",
+          "scaleWithLevel": true
+        }
+      ]
+    },
+    {
+      "id": "shore_party",
+      "weight": 1,
+      "hostile": true,
+      "entries": [
+        {
+          "monster": "strand_wrecker",
+          "count": "1d3",
+          "scaleWithLevel": true
+        }
+      ],
+      "requires": {
+        "minLevel": 3
+      }
+    }
+  ]
+}

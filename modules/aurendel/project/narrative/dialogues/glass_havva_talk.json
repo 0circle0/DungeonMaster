@@ -1,0 +1,329 @@
+{
+  "id": "glass_havva_talk",
+  "start": "greet",
+  "nodes": [
+    {
+      "id": "greet",
+      "says": [
+        {
+          "text": "A house built against the lip of a hole the size of a market. She is oiling a key that has nothing to open."
+        },
+        {
+          "text": "“Keeper of the Cistern,” she says, before you ask. “There has been no water in it since my great-grandmother. There is still a keeper.”"
+        }
+      ],
+      "onEnter": [],
+      "options": [
+        {
+          "id": "glass_havva_cut",
+          "text": "The cistern — was it built or cut?",
+          "requires": {
+            "without": {
+              "lore": [
+                "glass_cistern_cut"
+              ]
+            }
+          },
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "check": {
+            "skill": "insight",
+            "difficulty": {
+              "sub": [
+                12,
+                {
+                  "clamp": [
+                    {
+                      "div": [
+                        {
+                          "ref": "reputation.the_water_wardens",
+                          "else": 0
+                        },
+                        5
+                      ]
+                    },
+                    -6,
+                    6
+                  ]
+                }
+              ]
+            },
+            "onSuccess": "glass_havva_cut_told",
+            "onFailure": "glass_havva_cut_wont"
+          }
+        },
+        {
+          "id": "glass_havva_feed",
+          "text": "Where does the water come in?",
+          "requires": {
+            "without": {
+              "lore": [
+                "glass_cistern_feed"
+              ]
+            }
+          },
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "check": {
+            "skill": "persuasion",
+            "difficulty": {
+              "sub": [
+                13,
+                {
+                  "clamp": [
+                    {
+                      "div": [
+                        {
+                          "ref": "reputation.the_water_wardens",
+                          "else": 0
+                        },
+                        5
+                      ]
+                    },
+                    -6,
+                    6
+                  ]
+                }
+              ]
+            },
+            "onSuccess": "glass_havva_feed_told",
+            "onFailure": "glass_havva_feed_wont"
+          }
+        },
+        {
+          "id": "glass_havva_key",
+          "text": "The key to the grating. I want the far end of that channel.",
+          "requires": {
+            "without": {
+              "items": [
+                "cistern_key"
+              ],
+              "flags": [
+                {
+                  "flag": "given:cistern_key"
+                }
+              ]
+            }
+          },
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "check": {
+            "skill": "persuasion",
+            "difficulty": {
+              "sub": [
+                12,
+                {
+                  "clamp": [
+                    {
+                      "div": [
+                        {
+                          "ref": "reputation.the_water_wardens",
+                          "else": 0
+                        },
+                        5
+                      ]
+                    },
+                    -6,
+                    6
+                  ]
+                }
+              ]
+            },
+            "onSuccess": "glass_havva_key_gave",
+            "onFailure": "glass_havva_key_kept"
+          }
+        },
+        {
+          "id": "greet_leave",
+          "text": "Nothing.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "glass_havva_cut_told",
+      "says": [
+        {
+          "text": "“Cut.” She is definite. “One rock, hollowed. And the tool marks run the wrong way for anyone standing on the floor of it, which I have pointed out to four generations of people who did not want to hear it.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "learnLore": {
+            "entry": "glass_cistern_cut"
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "glass_havva_cut_on",
+          "text": "Go on.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "glass_havva_cut_wont",
+      "says": [
+        {
+          "text": "“I've said all I mean to,” they say, and go back to what they were doing."
+        }
+      ],
+      "onEnter": [
+        {
+          "adjustReputation": {
+            "faction": "the_water_wardens",
+            "amount": -1
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "glass_havva_cut_drop",
+          "text": "Leave it.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "glass_havva_feed_told",
+      "says": [
+        {
+          "text": "“It does not.” She lets that sit. “There is a channel out and no channel in. I have been down there with a lamp more times than anybody and I am telling you there is no way in.” A shrug. “Which does raise the question of what was going out.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "learnLore": {
+            "entry": "glass_cistern_feed"
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "glass_havva_feed_on",
+          "text": "Go on.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "glass_havva_feed_wont",
+      "says": [
+        {
+          "text": "“I've said all I mean to,” they say, and go back to what they were doing."
+        }
+      ],
+      "onEnter": [
+        {
+          "adjustReputation": {
+            "faction": "the_water_wardens",
+            "amount": -1
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "glass_havva_feed_drop",
+          "text": "Leave it.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "glass_havva_key_gave",
+      "says": [
+        {
+          "text": "She takes it off the ring at once, which is startling. “Three hundred years of keepers and not one of us has had a reason. Go on. If it is nothing I would like to be told it is nothing.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "grantItem": {
+            "target": {
+              "ref": "actor.id"
+            },
+            "item": "cistern_key",
+            "quantity": 1
+          }
+        },
+        {
+          "setFlag": {
+            "flag": "given:cistern_key",
+            "value": true
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "glass_havva_key_thanks",
+          "text": "Thank you.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "glass_havva_key_kept",
+      "says": [
+        {
+          "text": "“Not while I am the keeper,” she says, and her hand is on the ring. “Come back when you can tell me what is at the far end.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "adjustReputation": {
+            "faction": "the_water_wardens",
+            "amount": -1
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "glass_havva_key_leave",
+          "text": "Then no.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    }
+  ]
+}

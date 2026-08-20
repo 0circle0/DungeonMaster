@@ -1,0 +1,14 @@
+{
+  "id": "dungeon_ice_corridor_desc",
+  "variants": [
+    {
+      "text": "A tube of blue ice, scoured smooth, going down at an angle you have to brace against."
+    },
+    {
+      "text": "Light comes through the walls rather than along the passage, from everywhere and from nowhere."
+    },
+    {
+      "text": "The ice creaks continuously. It is not going to stop."
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "id": "dungeon_drowned_entrance_desc",
+  "variants": [
+    {
+      "text": "The way in is half under, and you go through it in water to the knee."
+    },
+    {
+      "text": "The lintel is a foot above the surface and the surface is not constant."
+    },
+    {
+      "text": "Water goes in here faster than it comes out, which means somewhere below is filling."
+    }
+  ]
+}

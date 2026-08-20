@@ -1,0 +1,14 @@
+{
+  "id": "glass_ice_the_clear",
+  "name": "The Clear",
+  "description": "Swept bare by wind and transparent for forty feet down, and there are things at thirty.",
+  "area": "frostmere_glass_ice",
+  "kind": "landmark",
+  "descriptionKey": "glass_ice_the_clear_desc",
+  "travelMinutes": 10,
+  "tags": [],
+  "position": {
+    "x": 3,
+    "y": 3
+  }
+}

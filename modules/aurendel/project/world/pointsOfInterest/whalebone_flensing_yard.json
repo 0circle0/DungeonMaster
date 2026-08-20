@@ -1,0 +1,24 @@
+{
+  "id": "whalebone_flensing_yard",
+  "name": "The Flensing Yard",
+  "description": "Where a whale becomes oil, bone, and a smell you will not forget.",
+  "area": "frostmere_whalebone_landing",
+  "kind": "market",
+  "descriptionKey": "int_workshop",
+  "travelMinutes": 3,
+  "tags": [
+    "shop"
+  ],
+  "services": [
+    "market"
+  ],
+  "map": {
+    "width": "19",
+    "height": "13",
+    "palette": "int_shop"
+  },
+  "position": {
+    "x": 28,
+    "y": 3
+  }
+}

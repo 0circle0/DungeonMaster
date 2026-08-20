@@ -1,0 +1,11 @@
+{
+  "id": "ember_warm",
+  "name": "The Warm Ground",
+  "description": "A village that has never been cold, over a tube that runs level for a mile and then turns up.",
+  "entries": [
+    "ember_warm_never",
+    "ember_warm_wrong",
+    "ember_warm_breath",
+    "ember_warm_older"
+  ]
+}

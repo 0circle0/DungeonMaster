@@ -1,0 +1,19 @@
+{
+  "id": "hedge_country_wayshrine",
+  "name": "The Hedge Wayshrine",
+  "description": "A stone hood over a stone shelf, with somebody's flowers in it, always.",
+  "area": "kingsvale_hedge_country",
+  "kind": "shrine",
+  "descriptionKey": "generic_shrine",
+  "travelMinutes": 6,
+  "tags": [
+    "shrine"
+  ],
+  "position": {
+    "x": 14,
+    "y": 10
+  },
+  "services": [
+    "temple"
+  ]
+}

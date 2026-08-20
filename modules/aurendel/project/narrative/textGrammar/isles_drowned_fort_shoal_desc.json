@@ -1,0 +1,17 @@
+{
+  "id": "isles_drowned_fort_shoal_desc",
+  "variants": [
+    {
+      "text": "A fortress on a bank the sea took, standing in twelve feet of water at low tide and forty at high."
+    },
+    {
+      "text": "The parapet shows twice a day and the rest of the time it does not."
+    },
+    {
+      "text": "Nine guns still in their positions, under water, pointing at a channel that has since moved."
+    },
+    {
+      "text": "There is a hatch. It is open for about forty minutes either side of low water."
+    }
+  ]
+}

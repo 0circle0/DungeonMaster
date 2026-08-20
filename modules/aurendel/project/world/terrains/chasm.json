@@ -1,0 +1,16 @@
+{
+  "id": "chasm",
+  "name": "Chasm",
+  "description": "The floor stops. Something below it does not.",
+  "glyph": "X",
+  "color": "gray",
+  "passable": false,
+  "opaque": false,
+  "moveCost": 0,
+  "tags": [
+    "hazard"
+  ],
+  "requiresMode": [
+    "climb"
+  ]
+}

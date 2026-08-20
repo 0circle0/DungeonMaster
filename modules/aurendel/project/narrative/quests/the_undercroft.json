@@ -1,0 +1,113 @@
+{
+  "id": "the_undercroft",
+  "name": "The Kingshold Undercroft",
+  "description": "The Wardlist names nine. Three are crossed through in newer ink, and the first of the three is under this castle.",
+  "autoStart": false,
+  "ordered": true,
+  "tags": [
+    "act1"
+  ],
+  "objectives": [],
+  "stages": [
+    {
+      "id": "get_below",
+      "name": "Get below",
+      "description": "The stair is behind the storerooms and nobody sweeps it.",
+      "objectives": [
+        {
+          "id": "enter_undercroft",
+          "description": "Go down into the undercroft.",
+          "kind": "reach",
+          "count": 1,
+          "hidden": false,
+          "optional": false,
+          "target": "aurenhal_kingshold_undercroft"
+        }
+      ]
+    },
+    {
+      "id": "the_warden",
+      "name": "What was set to keep it shut",
+      "description": "It is still doing its job. That is the problem.",
+      "objectives": [
+        {
+          "id": "kill_warden",
+          "description": "Put down the Door-Warden.",
+          "kind": "kill",
+          "count": 1,
+          "hidden": false,
+          "optional": false,
+          "target": "door_warden"
+        }
+      ],
+      "onComplete": [
+        {
+          "setFlag": {
+            "flag": "first_ward_seen",
+            "value": true
+          }
+        },
+        {
+          "emit": {
+            "event": "deed",
+            "data": {
+              "kind": "crown_served"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "unlocks": [
+    "thornward_road",
+    "sisters_road",
+    "kurgan_road"
+  ],
+  "rewards": {
+    "xp": 120,
+    "items": [],
+    "reputation": {
+      "the_keepers": 10
+    }
+  },
+  "requires": {
+    "items": [
+      {
+        "item": "the_wardlist"
+      }
+    ]
+  },
+  "onComplete": [
+    {
+      "setFlag": {
+        "flag": "act_two_open",
+        "value": true
+      }
+    },
+    {
+      "if": {
+        "when": {
+          "test": {
+            "ref": "flags.sided_with_crown"
+          }
+        },
+        "then": [
+          {
+            "adjustReputation": {
+              "faction": "the_crown",
+              "amount": 10
+            }
+          }
+        ],
+        "else": [
+          {
+            "adjustReputation": {
+              "faction": "the_library",
+              "amount": 10
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

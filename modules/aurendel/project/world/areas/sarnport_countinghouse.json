@@ -1,0 +1,36 @@
+{
+  "id": "sarnport_countinghouse",
+  "name": "Sarnport — The Countinghouse",
+  "description": "Where the cargo becomes a number. Banks, brokers, insurers, and the harbour court.",
+  "biome": "urban_stone",
+  "layer": "overworld",
+  "descriptionKey": "sarnport_countinghouse_desc",
+  "dangerLevel": 0,
+  "recommendedLevel": 2,
+  "tags": [
+    "silver_coast",
+    "sarnport",
+    "city"
+  ],
+  "map": {
+    "width": "45",
+    "height": "31"
+  },
+  "entryPoint": {
+    "x": 22,
+    "y": 15
+  },
+  "extra": {
+    "role": "city"
+  },
+  "connections": [
+    {
+      "to": "sarnport_harbourside",
+      "travelMinutes": 5
+    },
+    {
+      "to": "sarnport_saltcliff",
+      "travelMinutes": 8
+    }
+  ]
+}

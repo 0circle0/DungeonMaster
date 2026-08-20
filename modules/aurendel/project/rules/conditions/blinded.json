@@ -1,0 +1,16 @@
+{
+  "id": "blinded",
+  "name": "Blinded",
+  "description": "Sight gone, whether from dark, dazzle, or injury.",
+  "stacking": "refresh",
+  "defaultDuration": 2,
+  "modifiers": {
+    "guard": -3
+  },
+  "swings": {
+    "ownAttacks": "disadvantage"
+  },
+  "suppressesSenses": [
+    "sight"
+  ]
+}

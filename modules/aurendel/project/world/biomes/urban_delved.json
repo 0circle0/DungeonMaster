@@ -1,0 +1,12 @@
+{
+  "id": "urban_delved",
+  "name": "Delved Hold",
+  "description": "Streets under a ceiling, lit by what the holds are willing to burn.",
+  "layer": "underworld",
+  "palette": "hold_delved",
+  "roomTemplates": [],
+  "encounterTables": [],
+  "lootTables": [],
+  "traps": [],
+  "ambienceKey": "urban_delved_ambience"
+}

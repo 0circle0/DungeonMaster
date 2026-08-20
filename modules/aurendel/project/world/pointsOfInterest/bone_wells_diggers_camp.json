@@ -1,0 +1,19 @@
+{
+  "id": "bone_wells_diggers_camp",
+  "name": "The Diggers' Camp",
+  "description": "Somebody sank these. Somebody else has been coming back to look at what is in them.",
+  "area": "glasslands_bone_wells",
+  "kind": "camp",
+  "descriptionKey": "int_house",
+  "travelMinutes": 6,
+  "tags": [],
+  "map": {
+    "width": "9",
+    "height": "7",
+    "palette": "int_timber"
+  },
+  "position": {
+    "x": 14,
+    "y": 3
+  }
+}

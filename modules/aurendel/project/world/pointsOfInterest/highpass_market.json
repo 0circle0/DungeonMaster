@@ -1,0 +1,19 @@
+{
+  "id": "highpass_market",
+  "name": "The Ward Market",
+  "description": "Three days a week, and only in the four months anybody can get here.",
+  "area": "skarnspine_highpass",
+  "kind": "market",
+  "descriptionKey": "generic_market",
+  "travelMinutes": 2,
+  "tags": [
+    "shop"
+  ],
+  "services": [
+    "market"
+  ],
+  "position": {
+    "x": 11,
+    "y": 3
+  }
+}

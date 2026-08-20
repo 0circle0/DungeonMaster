@@ -1,0 +1,13 @@
+{
+  "id": "gannet_head_path",
+  "name": "The Cliff Path",
+  "kind": "hazard",
+  "description": "Two feet wide with four hundred below it, and the last winter took some of the two feet.",
+  "staysOpen": true,
+  "bypass": {
+    "skill": "acrobatics",
+    "difficulty": 13,
+    "retryable": true
+  },
+  "blockedTextKey": "gannet_head_path_blocked"
+}

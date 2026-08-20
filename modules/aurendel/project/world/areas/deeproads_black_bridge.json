@@ -1,0 +1,39 @@
+{
+  "id": "deeproads_black_bridge",
+  "name": "The Black Bridge",
+  "description": "A single span over a chasm of no measured depth, with no parapet and no supports anybody can see.",
+  "biome": "underdeep",
+  "layer": "underworld",
+  "descriptionKey": "deeproads_black_bridge_desc",
+  "dangerLevel": 8,
+  "recommendedLevel": 10,
+  "tags": [
+    "deeproads"
+  ],
+  "map": {
+    "width": "51",
+    "height": "35"
+  },
+  "entryPoint": {
+    "x": 25,
+    "y": 17
+  },
+  "extra": {
+    "role": "wild"
+  },
+  "connections": [
+    {
+      "to": "deeproads_the_sunless_river",
+      "travelMinutes": 35,
+      "gate": "deeproads_river_crossing"
+    },
+    {
+      "to": "deeproads_echo_halls",
+      "travelMinutes": 40
+    },
+    {
+      "to": "deeproads_lantern_deep",
+      "travelMinutes": 55
+    }
+  ]
+}

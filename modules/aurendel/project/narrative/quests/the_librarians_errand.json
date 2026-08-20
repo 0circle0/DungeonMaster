@@ -1,0 +1,81 @@
+{
+  "id": "the_librarians_errand",
+  "name": "The Librarian's Errand",
+  "description": "Orrin will not give you the Wardlist. He will leave you alone on the fourth floor for an hour, which he considers a different thing.",
+  "autoStart": false,
+  "ordered": true,
+  "tags": [
+    "act1",
+    "branch"
+  ],
+  "objectives": [
+    {
+      "id": "hear_orrin",
+      "description": "Hear what Orrin wants in exchange.",
+      "kind": "talk",
+      "count": 1,
+      "hidden": false,
+      "optional": false,
+      "target": "librarian_orrin"
+    },
+    {
+      "id": "copy_the_list",
+      "description": "Get the Wardlist off the fourth floor.",
+      "kind": "custom",
+      "count": 1,
+      "hidden": false,
+      "optional": false,
+      "when": {
+        "test": {
+          "ref": "flags.wardlist_read"
+        }
+      }
+    }
+  ],
+  "stages": [],
+  "unlocks": [
+    "the_undercroft"
+  ],
+  "rewards": {
+    "xp": 90,
+    "items": [
+      {
+        "item": "the_wardlist",
+        "quantity": 1
+      }
+    ],
+    "reputation": {
+      "the_library": 20,
+      "the_crown": -10
+    }
+  },
+  "giver": "librarian_orrin",
+  "requires": {
+    "quests": [
+      {
+        "quest": "word_to_aurenhal",
+        "status": "complete"
+      }
+    ],
+    "without": {
+      "quests": [
+        {
+          "quest": "the_crowns_commission",
+          "status": "active"
+        },
+        {
+          "quest": "the_crowns_commission",
+          "status": "complete"
+        }
+      ]
+    }
+  },
+  "onComplete": [
+    {
+      "setFlag": {
+        "flag": "sided_with_library",
+        "value": true
+      }
+    }
+  ]
+}

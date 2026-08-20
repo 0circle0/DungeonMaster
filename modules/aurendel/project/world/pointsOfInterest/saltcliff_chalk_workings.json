@@ -1,0 +1,17 @@
+{
+  "id": "saltcliff_chalk_workings",
+  "name": "The Chalk Workings",
+  "description": "Quarried out from under the Rise to build the town, and the town is now standing on the hole.",
+  "area": "sarnport_saltcliff",
+  "kind": "dungeonEntrance",
+  "descriptionKey": "saltcliff_chalk_workings_desc",
+  "travelMinutes": 10,
+  "tags": [
+    "dungeon"
+  ],
+  "dungeon": "saltcliff_workings",
+  "position": {
+    "x": 13,
+    "y": 27
+  }
+}

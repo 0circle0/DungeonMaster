@@ -1,0 +1,34 @@
+{
+  "id": "int_forge",
+  "name": "Forge Interior",
+  "floor": "flagstone",
+  "wall": "wall_stone",
+  "exterior": "wall_stone",
+  "scatter": [
+    {
+      "terrain": "anvil",
+      "frequency": 0.04,
+      "distribution": "speckle",
+      "priority": 0
+    },
+    {
+      "terrain": "hearth",
+      "frequency": 0.03,
+      "distribution": "speckle",
+      "priority": 1
+    },
+    {
+      "terrain": "barrel",
+      "frequency": 0.03,
+      "distribution": "speckle",
+      "priority": 2
+    },
+    {
+      "terrain": "crate",
+      "frequency": 0.03,
+      "distribution": "speckle",
+      "priority": 3
+    }
+  ],
+  "door": "door"
+}

@@ -1,0 +1,17 @@
+{
+  "id": "vashta_qal_sunken_bath_door",
+  "name": "The Bath Door",
+  "kind": "lock",
+  "description": "Bronze, green, and it has been shut since the level dropped.",
+  "staysOpen": true,
+  "requires": {
+    "description": "the water-warden's key",
+    "minLevel": 6
+  },
+  "bypass": {
+    "skill": "lockpicking",
+    "difficulty": 16,
+    "retryable": true
+  },
+  "blockedTextKey": "vashta_qal_bath_blocked"
+}

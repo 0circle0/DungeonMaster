@@ -1,0 +1,248 @@
+{
+  "id": "hedda_talk",
+  "start": "greet",
+  "nodes": [
+    {
+      "id": "greet",
+      "says": [
+        {
+          "text": "Hedda looks up, and keeps drying the same cup. \"You'll have heard about the barrow, then.\""
+        },
+        {
+          "text": "\"Sit down or don't,\" says Hedda. \"But if you're going up the sheep field, hear me first.\""
+        }
+      ],
+      "options": [
+        {
+          "id": "ask_barrow",
+          "text": "What about the barrow?",
+          "effects": [
+            {
+              "emit": {
+                "event": "startQuest",
+                "data": {
+                  "quest": "the_open_door"
+                }
+              }
+            },
+            {
+              "grantItem": {
+                "target": {
+                  "ref": "actor.id"
+                },
+                "item": "bandages",
+                "quantity": 2
+              }
+            }
+          ],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "the_draught",
+          "requires": {
+            "quests": [
+              {
+                "quest": "the_open_door",
+                "status": "unstarted"
+              }
+            ]
+          }
+        },
+        {
+          "id": "ask_village",
+          "text": "Tell me about Hollowdene.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "the_village"
+        },
+        {
+          "id": "leave",
+          "text": "Later.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": [
+        {
+          "requires": {
+            "quests": [
+              {
+                "quest": "the_open_door",
+                "status": "active"
+              }
+            ],
+            "flags": [
+              {
+                "flag": "barrow_cleared",
+                "equals": true
+              }
+            ]
+          },
+          "goto": "well_done"
+        }
+      ]
+    },
+    {
+      "id": "the_draught",
+      "says": [
+        {
+          "text": "\"Six hundred years that door's stood open and it's never once mattered. Air went *in*. My grandmother knew that, her grandmother knew it.\" She sets the cup down. \"Fortnight since, it turned. Air comes out now. And two nights after that we lost a dog.\""
+        }
+      ],
+      "options": [
+        {
+          "id": "what_out",
+          "text": "What came out?",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "what_out"
+        },
+        {
+          "id": "go_now",
+          "text": "We'll go and look.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "go_now"
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": []
+    },
+    {
+      "id": "what_out",
+      "says": [
+        {
+          "text": "\"If I knew that I'd not be asking strangers.\" A pause. \"It was a dog once. That much I'll say.\""
+        }
+      ],
+      "options": [
+        {
+          "id": "go_now",
+          "text": "We'll go and look.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "go_now"
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": []
+    },
+    {
+      "id": "go_now",
+      "says": [
+        {
+          "text": "\"Take the bandages. Take the sheep track, not the lane — the lane goes round.\" She almost smiles. \"And come back.\""
+        }
+      ],
+      "options": [
+        {
+          "id": "done",
+          "text": "We will.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": []
+    },
+    {
+      "id": "well_done",
+      "says": [
+        {
+          "text": "\"You came back,\" says Hedda, and means it."
+        }
+      ],
+      "options": [
+        {
+          "id": "tell_her",
+          "text": "It was a ward. Somebody opened it.",
+          "effects": [
+            {
+              "setFlag": {
+                "flag": "hedda_told",
+                "value": true
+              }
+            }
+          ],
+          "onceOnly": true,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "she_goes_quiet"
+        },
+        {
+          "id": "say_nothing",
+          "text": "It's dealt with.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "she_goes_quiet"
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": [],
+      "remembers": "ward_restored"
+    },
+    {
+      "id": "she_goes_quiet",
+      "says": [
+        {
+          "text": "\"A ward,\" she says, slowly. \"Then you'll want Aurenhal, and you'll want to be quick about it. There's a woman at the chapel who'll tell you what a ward is. Ulla. She came down from the ice and she's not said why.\""
+        }
+      ],
+      "options": [
+        {
+          "id": "thanks",
+          "text": "Thank you.",
+          "effects": [
+            {
+              "adjustReputation": {
+                "faction": "the_keepers",
+                "amount": 4
+              }
+            }
+          ],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": []
+    },
+    {
+      "id": "the_village",
+      "says": [
+        {
+          "text": "\"Eleven roofs, a well, and a road that goes through rather than to us. It suits everybody.\""
+        }
+      ],
+      "options": [
+        {
+          "id": "back",
+          "text": "Right.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "greet"
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": []
+    }
+  ]
+}

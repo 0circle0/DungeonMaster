@@ -1,0 +1,14 @@
+{
+  "id": "barrowgate_keep_blocked",
+  "variants": [
+    {
+      "text": "The keep door is shut and the constable is not minded to open it for this."
+    },
+    {
+      "text": "\"The cellars are the constable's business,\" says the man on the door, \"and you are not.\""
+    },
+    {
+      "text": "Iron-strapped, barred inside, and a spyhole that opens and closes again."
+    }
+  ]
+}

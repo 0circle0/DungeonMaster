@@ -1,0 +1,12 @@
+{
+  "id": "bone_alley",
+  "name": "Bone Alley",
+  "description": "Three of the guild went down at Kettle Yard and did not come up, and the reason had been bricked up in the west range for sixty years.",
+  "quests": [
+    "bonealley_unlicensed",
+    "bonealley_the_old_gaol",
+    "bonealley_what_was_bricked_up",
+    "bonealley_the_charter"
+  ],
+  "isEnding": false
+}

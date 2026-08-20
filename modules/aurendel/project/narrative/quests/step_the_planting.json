@@ -1,0 +1,57 @@
+{
+  "id": "step_the_planting",
+  "name": "The Planting",
+  "description": "Eleven miles of one species set in a single season, running the wrong way to break any wind that blows here.",
+  "autoStart": false,
+  "ordered": true,
+  "tags": [
+    "hidden",
+    "sunward_steppe",
+    "step_line"
+  ],
+  "objectives": [
+    {
+      "id": "to_the_marker",
+      "description": "Get to the stone in the middle of it.",
+      "kind": "reach",
+      "count": 1,
+      "hidden": true,
+      "optional": false,
+      "target": "windbreak_the_planter"
+    },
+    {
+      "id": "settle_the_count",
+      "description": "Settle the count that will not settle.",
+      "kind": "custom",
+      "count": 1,
+      "hidden": true,
+      "optional": false,
+      "when": {
+        "test": {
+          "ref": "flags.step_line_open"
+        }
+      }
+    },
+    {
+      "id": "what_was_set",
+      "description": "Find what the line was set around.",
+      "kind": "kill",
+      "count": 1,
+      "hidden": true,
+      "optional": false,
+      "target": "the_set_thing"
+    }
+  ],
+  "stages": [],
+  "unlocks": [],
+  "rewards": {
+    "xp": 155,
+    "items": [
+      {
+        "item": "windbreak_belt",
+        "quantity": 1
+      }
+    ],
+    "reputation": {}
+  }
+}

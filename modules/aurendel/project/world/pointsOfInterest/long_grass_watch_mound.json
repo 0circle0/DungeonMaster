@@ -1,0 +1,14 @@
+{
+  "id": "long_grass_watch_mound",
+  "name": "The Watch Mound",
+  "description": "Twelve feet of raised earth, and it is the only place in nine miles you can see out of the grass.",
+  "area": "steppe_the_long_grass",
+  "kind": "landmark",
+  "descriptionKey": "generic_landmark",
+  "travelMinutes": 6,
+  "tags": [],
+  "position": {
+    "x": 14,
+    "y": 3
+  }
+}

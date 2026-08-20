@@ -1,0 +1,57 @@
+{
+  "id": "thorn_what_it_watched",
+  "name": "What the Hermit Was Watching",
+  "description": "Ninety years of tally marks up a door post, a fire pit still in use, and a hut built facing away from everything except one island.",
+  "autoStart": false,
+  "ordered": true,
+  "tags": [
+    "hidden",
+    "thornmere",
+    "thorn_hermit"
+  ],
+  "objectives": [
+    {
+      "id": "on_the_hummock",
+      "description": "Get onto the deep hummock.",
+      "kind": "reach",
+      "count": 1,
+      "hidden": true,
+      "optional": false,
+      "target": "hummocks_the_deep_hummock"
+    },
+    {
+      "id": "read_the_post",
+      "description": "Read what the marks were counting.",
+      "kind": "custom",
+      "count": 1,
+      "hidden": true,
+      "optional": false,
+      "when": {
+        "test": {
+          "ref": "flags.thorn_hermit_open"
+        }
+      }
+    },
+    {
+      "id": "what_was_watched",
+      "description": "Meet what ninety years of watching was for.",
+      "kind": "kill",
+      "count": 1,
+      "hidden": true,
+      "optional": false,
+      "target": "hummock_thing"
+    }
+  ],
+  "stages": [],
+  "unlocks": [],
+  "rewards": {
+    "xp": 215,
+    "items": [
+      {
+        "item": "hermits_watch_cloak",
+        "quantity": 1
+      }
+    ],
+    "reputation": {}
+  }
+}

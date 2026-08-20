@@ -1,0 +1,55 @@
+{
+  "id": "trial_three_hoard_c",
+  "name": "Under the Ring, Where the Tally Is",
+  "rolls": "6",
+  "emptyChance": 0,
+  "bonusRollSkill": "perception",
+  "bonusRolls": {
+    "onSuccess": 3,
+    "onCritical": 4
+  },
+  "entries": [
+    {
+      "weight": 4,
+      "value": {
+        "item": "old_coin",
+        "quantity": "20d6"
+      }
+    },
+    {
+      "weight": 3,
+      "value": {
+        "item": "hold_silver",
+        "quantity": "4d4"
+      }
+    },
+    {
+      "weight": 3,
+      "value": {
+        "item": "barrow_torc",
+        "quantity": "1d3"
+      }
+    },
+    {
+      "weight": 3,
+      "value": {
+        "item": "healing_draught",
+        "quantity": "2d3"
+      }
+    },
+    {
+      "weight": 2,
+      "value": {
+        "item": "ward_salt",
+        "quantity": "2d4"
+      }
+    },
+    {
+      "weight": 1,
+      "value": {
+        "item": "silvered_blade",
+        "quantity": "1"
+      }
+    }
+  ]
+}

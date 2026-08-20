@@ -1,0 +1,53 @@
+{
+  "id": "thorn_wader",
+  "name": "Pell, who Wades",
+  "description": "Goes where punts cannot, which selects for a certain nerve.",
+  "level": 5,
+  "xp": 0,
+  "attributes": {
+    "might": 13,
+    "agility": 16,
+    "endurance": 14,
+    "intellect": 10,
+    "instinct": 15,
+    "presence": 10
+  },
+  "abilities": [
+    "strike",
+    "quick_shot"
+  ],
+  "behaviour": [
+    {
+      "priority": 0,
+      "use": "strike"
+    }
+  ],
+  "faction": "the_ferrymen",
+  "creatureType": "humanoid",
+  "size": "medium",
+  "descriptors": [
+    "a mud-caked"
+  ],
+  "conditionalLoot": [],
+  "loot": "thorn_tally_carried",
+  "resourceOverrides": {
+    "hp": 29
+  },
+  "temperament": {
+    "roamRadius": 24,
+    "investigateRadius": 70,
+    "leashRadius": 100,
+    "wanderChance": 0.4,
+    "disengageTurns": 2,
+    "investigates": [
+      "sight",
+      "hearing",
+      "tracks",
+      "smell"
+    ],
+    "notices": [
+      "hostile",
+      "neutral"
+    ]
+  }
+}

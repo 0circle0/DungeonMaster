@@ -1,0 +1,57 @@
+{
+  "id": "glass_what_it_was_for",
+  "name": "What the Cistern Was For",
+  "description": "A hollowed rock the size of a market with a channel out of it and no channel in, and forty feet down the channel is damp.",
+  "autoStart": false,
+  "ordered": true,
+  "tags": [
+    "hidden",
+    "glasslands",
+    "glass_cistern"
+  ],
+  "objectives": [
+    {
+      "id": "at_the_feeder",
+      "description": "Get into the channel.",
+      "kind": "reach",
+      "count": 1,
+      "hidden": true,
+      "optional": false,
+      "target": "dry_cistern_the_feeder"
+    },
+    {
+      "id": "past_the_grating",
+      "description": "Open what the keeper's office was for.",
+      "kind": "custom",
+      "count": 1,
+      "hidden": true,
+      "optional": false,
+      "when": {
+        "test": {
+          "ref": "flags.glass_cistern_open"
+        }
+      }
+    },
+    {
+      "id": "what_drinks",
+      "description": "Find what has been drinking.",
+      "kind": "kill",
+      "count": 1,
+      "hidden": true,
+      "optional": false,
+      "target": "cistern_drinker"
+    }
+  ],
+  "stages": [],
+  "unlocks": [],
+  "rewards": {
+    "xp": 180,
+    "items": [
+      {
+        "item": "cistern_keepers_ring",
+        "quantity": 1
+      }
+    ],
+    "reputation": {}
+  }
+}

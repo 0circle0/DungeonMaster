@@ -1,0 +1,17 @@
+{
+  "id": "windbreak_belt",
+  "name": "The Belt of the Eleven Miles",
+  "description": "Bark cord off a tree that was set in a season nobody wrote down. The wearer counts what is in front of them and gets it right.",
+  "kind": "trinket",
+  "slot": "belt",
+  "value": 740,
+  "weight": 1,
+  "tags": [
+    "fabled"
+  ],
+  "skillBonuses": {
+    "perception": 3,
+    "survival": 2
+  },
+  "rarity": "rare"
+}

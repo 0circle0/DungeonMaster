@@ -1,0 +1,34 @@
+{
+  "id": "ox_landlord_nib",
+  "name": "Nib, at the Drowned Ox",
+  "description": "Keeps an inn named after an animal that drowned in eleven inches of water and has heard every joke about it.",
+  "disposition": 8,
+  "gullibility": 0.5,
+  "memorySpan": 120,
+  "offersQuests": [],
+  "caresAbout": [],
+  "reactions": [],
+  "faction": "the_crown",
+  "dialogue": "kings_nib_talk",
+  "home": "pennyford_the_drowned_ox",
+  "shop": {
+    "lootTable": "hollowdene_stock",
+    "buysTags": [
+      "treasure"
+    ],
+    "priceMultiplier": 1.3
+  },
+  "temperament": {
+    "roamRadius": 0,
+    "wanderChance": 0,
+    "speeds": {
+      "wander": 0
+    },
+    "investigates": [],
+    "notices": [
+      "hostile",
+      "neutral",
+      "ally"
+    ]
+  }
+}

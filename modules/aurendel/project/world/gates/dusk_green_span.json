@@ -1,0 +1,29 @@
+{
+  "id": "dusk_green_span",
+  "name": "Under the Span",
+  "description": "A bridge in good repair over a stream that moved two hundred years ago, and a dry arch under it that is not silted.",
+  "kind": "ward",
+  "blockedTextKey": "dusk_green_blocked",
+  "staysOpen": true,
+  "onOpen": [
+    {
+      "setFlag": {
+        "flag": "dusk_green_open",
+        "value": true
+      }
+    }
+  ],
+  "onBlocked": [],
+  "opensWith": [],
+  "tags": [],
+  "requires": {
+    "items": [
+      {
+        "item": "burners_charter",
+        "quantity": 1,
+        "consume": false,
+        "equipped": false
+      }
+    ]
+  }
+}

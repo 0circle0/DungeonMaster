@@ -1,0 +1,57 @@
+{
+  "id": "glass_the_town_that_came_back",
+  "name": "The Town That Came Back",
+  "description": "A dune that moved a mile in one season, off a town two hundred years too young for it, with every door barred from the street.",
+  "autoStart": false,
+  "ordered": true,
+  "tags": [
+    "hidden",
+    "glasslands",
+    "glass_town"
+  ],
+  "objectives": [
+    {
+      "id": "in_the_streets",
+      "description": "Get into the uncovered town.",
+      "kind": "reach",
+      "count": 1,
+      "hidden": true,
+      "optional": false,
+      "target": "shifting_dunes_under_town"
+    },
+    {
+      "id": "lift_a_bar",
+      "description": "Lift one of the bars.",
+      "kind": "custom",
+      "count": 1,
+      "hidden": true,
+      "optional": false,
+      "when": {
+        "test": {
+          "ref": "flags.glass_town_open"
+        }
+      }
+    },
+    {
+      "id": "what_was_shut_in_town",
+      "description": "Meet what the bars were on the outside for.",
+      "kind": "kill",
+      "count": 1,
+      "hidden": true,
+      "optional": false,
+      "target": "barred_thing"
+    }
+  ],
+  "stages": [],
+  "unlocks": [],
+  "rewards": {
+    "xp": 200,
+    "items": [
+      {
+        "item": "barred_door_iron",
+        "quantity": 1
+      }
+    ],
+    "reputation": {}
+  }
+}

@@ -1,0 +1,34 @@
+{
+  "id": "crater_the_shaft",
+  "name": "The Centre Shaft",
+  "description": "Straight down from the middle, glass-walled, and whatever made the crater went this way.",
+  "area": "glasslands_the_crater",
+  "kind": "dungeonEntrance",
+  "descriptionKey": "generic_dungeon_mouth",
+  "travelMinutes": 16,
+  "tags": [
+    "dungeon"
+  ],
+  "gate": "glasslands_crater_ward",
+  "dungeon": "glasslands_centre_shaft",
+  "position": {
+    "x": 25,
+    "y": 3
+  },
+  "triggers": [
+    {
+      "id": "found_the_crater_shaft",
+      "mode": "once",
+      "on": "enter",
+      "description": "The Glasslands' way down.",
+      "effects": [
+        {
+          "setFlag": {
+            "flag": "down_by_the_crater",
+            "value": true
+          }
+        }
+      ]
+    }
+  ]
+}

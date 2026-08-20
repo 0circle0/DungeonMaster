@@ -1,0 +1,20 @@
+{
+  "id": "desert_ambience",
+  "variants": [
+    {
+      "text": "Heat comes up off the sand as much as down from the sky."
+    },
+    {
+      "text": "The dunes have moved since anybody last drew this."
+    },
+    {
+      "text": "Glass crust breaks underfoot with a sound like a small bell."
+    },
+    {
+      "text": "There is a wind, and it is carrying the desert somewhere else, grain by grain."
+    },
+    {
+      "text": "Something buried shows a corner, and the sand is already taking it back."
+    }
+  ]
+}

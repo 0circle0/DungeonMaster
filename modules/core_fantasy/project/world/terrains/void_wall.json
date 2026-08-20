@@ -1,0 +1,8 @@
+{
+  "id": "void_wall",
+  "name": "The Edge",
+  "description": "Placeholder wall.",
+  "glyph": "#",
+  "passable": false,
+  "opaque": true
+}

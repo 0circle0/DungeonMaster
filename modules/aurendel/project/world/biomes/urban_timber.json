@@ -1,0 +1,12 @@
+{
+  "id": "urban_timber",
+  "name": "Timber Town",
+  "description": "Frame and thatch, a green, and lanes that were cow-paths first.",
+  "layer": "overworld",
+  "palette": "town_timber",
+  "roomTemplates": [],
+  "encounterTables": [],
+  "lootTables": [],
+  "traps": [],
+  "ambienceKey": "urban_timber_ambience"
+}

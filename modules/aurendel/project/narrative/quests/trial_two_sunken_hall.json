@@ -1,0 +1,56 @@
+{
+  "id": "trial_two_sunken_hall",
+  "name": "The Fifth Door",
+  "description": "The Black Water covered a hall. The hall is still furnished, still arranged, and still occupied by one thing that was sitting down when the water came.",
+  "autoStart": false,
+  "ordered": true,
+  "tags": [
+    "trial",
+    "trial_two"
+  ],
+  "objectives": [
+    {
+      "id": "into_the_hall",
+      "description": "Get into the sunken hall.",
+      "kind": "reach",
+      "count": 1,
+      "hidden": false,
+      "optional": false,
+      "target": "black_water_sunken_hall"
+    },
+    {
+      "id": "the_fifth",
+      "description": "Finish what came through the fifth door.",
+      "kind": "kill",
+      "count": 1,
+      "hidden": false,
+      "optional": false,
+      "target": "fifth_through"
+    }
+  ],
+  "stages": [],
+  "unlocks": [
+    "trial_two_milepost"
+  ],
+  "rewards": {
+    "xp": 2200,
+    "items": [
+      {
+        "item": "sunken_hall_ring",
+        "quantity": 1
+      }
+    ],
+    "reputation": {
+      "the_keepers": 25,
+      "the_ferrymen": 20
+    }
+  },
+  "requires": {
+    "quests": [
+      {
+        "quest": "trial_two_galleries",
+        "status": "complete"
+      }
+    ]
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "id": "moor_colders_hearth",
+  "name": "Colder's Hearth",
+  "description": "Named for a man who kept a fire going here for forty years so people could find the way, and they still keep it going.",
+  "biome": "urban_timber",
+  "layer": "overworld",
+  "descriptionKey": "moor_colders_hearth_desc",
+  "dangerLevel": 3,
+  "recommendedLevel": 5,
+  "tags": [
+    "weeping_moor",
+    "village"
+  ],
+  "map": {
+    "width": "31",
+    "height": "21"
+  },
+  "entryPoint": {
+    "x": 15,
+    "y": 10
+  },
+  "extra": {
+    "role": "village"
+  },
+  "connections": [
+    {
+      "to": "moor_mirestead",
+      "travelMinutes": 40
+    },
+    {
+      "to": "moor_kestrel_edge",
+      "travelMinutes": 45
+    }
+  ]
+}

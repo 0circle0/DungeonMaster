@@ -1,0 +1,29 @@
+{
+  "id": "smoking_road_iron_posts",
+  "name": "The Iron Posts",
+  "description": "A hundred paces apart, all the way across, because nothing else survives being a marker here.",
+  "area": "ember_smoking_road",
+  "kind": "landmark",
+  "descriptionKey": "smoking_road_iron_posts_desc",
+  "travelMinutes": 6,
+  "tags": [],
+  "position": {
+    "x": 3,
+    "y": 3
+  },
+  "triggers": [
+    {
+      "id": "ember_found_posts",
+      "mode": "once",
+      "on": "enter",
+      "description": "Posts set at the corners of something.",
+      "effects": [
+        {
+          "learnLore": {
+            "entry": "ember_trees_posts"
+          }
+        }
+      ]
+    }
+  ]
+}

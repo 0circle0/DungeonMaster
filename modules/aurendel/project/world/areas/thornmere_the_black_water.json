@@ -1,0 +1,37 @@
+{
+  "id": "thornmere_the_black_water",
+  "name": "The Black Water",
+  "description": "Open water under cypress, of no honest depth, going in every direction and looking identical in all of them.",
+  "biome": "swamp",
+  "layer": "overworld",
+  "descriptionKey": "thornmere_the_black_water_desc",
+  "dangerLevel": 5,
+  "recommendedLevel": 6,
+  "tags": [
+    "thornmere"
+  ],
+  "map": {
+    "width": "51",
+    "height": "35"
+  },
+  "entryPoint": {
+    "x": 25,
+    "y": 17
+  },
+  "extra": {
+    "role": "wild"
+  },
+  "connections": [
+    {
+      "to": "thornmere_stiltmarket",
+      "travelMinutes": 45
+    },
+    {
+      "to": "thornmere_cypress_maze",
+      "travelMinutes": 50
+    }
+  ],
+  "encounterTables": [
+    "marsh_things"
+  ]
+}

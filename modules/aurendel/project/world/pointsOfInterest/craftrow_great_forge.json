@@ -1,0 +1,25 @@
+{
+  "id": "craftrow_great_forge",
+  "name": "The Great Forge",
+  "description": "Six hearths under one roof, and a guild that decides whose iron gets which.",
+  "area": "aurenhal_craftrow",
+  "kind": "market",
+  "descriptionKey": "craftrow_great_forge_desc",
+  "travelMinutes": 5,
+  "tags": [
+    "shop"
+  ],
+  "position": {
+    "x": 20,
+    "y": 10
+  },
+  "services": [
+    "smith",
+    "guild"
+  ],
+  "map": {
+    "width": "19",
+    "height": "13",
+    "palette": "int_forge"
+  }
+}

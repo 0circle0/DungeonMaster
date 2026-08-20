@@ -1,0 +1,6 @@
+{
+  "id": "speak",
+  "name": "Speech",
+  "description": "Talking costs nothing but the breath.",
+  "perTurn": 99
+}

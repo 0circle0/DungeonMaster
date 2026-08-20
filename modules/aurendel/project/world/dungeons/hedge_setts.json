@@ -1,0 +1,21 @@
+{
+  "id": "hedge_setts",
+  "name": "The Hedge Setts",
+  "description": "Badger workings that go on rather too long and end in something that was cut with tools.",
+  "biome": "dungeon_cave",
+  "roomCount": "7",
+  "depth": "1",
+  "algorithm": "caverns",
+  "lockedDoorChance": 0,
+  "doorGates": [],
+  "rollEncounters": false,
+  "safeEntrance": true,
+  "caverns": {
+    "fill": 0.46,
+    "smoothingPasses": 4,
+    "birthThreshold": 5
+  },
+  "width": "35",
+  "height": "35",
+  "bossTable": "the_delver"
+}

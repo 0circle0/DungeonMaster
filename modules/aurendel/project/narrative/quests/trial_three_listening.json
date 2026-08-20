@@ -1,0 +1,70 @@
+{
+  "id": "trial_three_listening",
+  "name": "The Seventh Door",
+  "description": "A room four miles down the Long Hall, dressed to the inch, with no furniture and no purpose except to hear — and it has heard everything that ever walked past it, including you.",
+  "autoStart": false,
+  "ordered": true,
+  "tags": [
+    "trial",
+    "trial_three"
+  ],
+  "objectives": [
+    {
+      "id": "into_the_room",
+      "description": "Get into the listening room.",
+      "kind": "reach",
+      "count": 1,
+      "hidden": false,
+      "optional": false,
+      "target": "echo_halls_the_listening_room"
+    },
+    {
+      "id": "stop_the_listening",
+      "description": "Stop it listening.",
+      "kind": "custom",
+      "count": 1,
+      "hidden": false,
+      "optional": false,
+      "when": {
+        "test": {
+          "ref": "flags.trial_three_open"
+        }
+      }
+    },
+    {
+      "id": "the_seventh",
+      "description": "Finish what came through the seventh door.",
+      "kind": "kill",
+      "count": 1,
+      "hidden": false,
+      "optional": false,
+      "target": "seventh_through"
+    }
+  ],
+  "stages": [],
+  "unlocks": [
+    "trial_three_signal"
+  ],
+  "rewards": {
+    "xp": 3000,
+    "items": [
+      {
+        "item": "listening_hood",
+        "quantity": 1
+      }
+    ],
+    "reputation": {
+      "the_keepers": 30,
+      "the_wayfinders": 25
+    }
+  },
+  "giver": "keeper_hesper",
+  "requires": {
+    "items": [
+      {
+        "item": "second_warrant"
+      }
+    ],
+    "minLevel": 18
+  }
+}

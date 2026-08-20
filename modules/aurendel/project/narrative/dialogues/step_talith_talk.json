@@ -1,0 +1,362 @@
+{
+  "id": "step_talith_talk",
+  "start": "greet",
+  "nodes": [
+    {
+      "id": "greet",
+      "says": [
+        {
+          "text": "Eight horses on a line, four of them cooling, and somebody going over a hoof without seeming to look at it."
+        },
+        {
+          "text": "“Remount, message, or neither. Neither is fine, but stand clear.”"
+        }
+      ],
+      "onEnter": [],
+      "options": [
+        {
+          "id": "step_talith_norecord",
+          "text": "Is the planting in the Lines' record?",
+          "requires": {
+            "without": {
+              "lore": [
+                "step_line_norecord"
+              ]
+            }
+          },
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "check": {
+            "skill": "persuasion",
+            "difficulty": {
+              "sub": [
+                14,
+                {
+                  "clamp": [
+                    {
+                      "div": [
+                        {
+                          "ref": "reputation.the_horse_lords",
+                          "else": 0
+                        },
+                        5
+                      ]
+                    },
+                    -6,
+                    6
+                  ]
+                }
+              ]
+            },
+            "onSuccess": "step_talith_norecord_told",
+            "onFailure": "step_talith_norecord_wont"
+          }
+        },
+        {
+          "id": "step_talith_week",
+          "text": "How do you know when the flood comes?",
+          "requires": {
+            "without": {
+              "lore": [
+                "step_bank_week"
+              ]
+            }
+          },
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "check": {
+            "skill": "insight",
+            "difficulty": {
+              "sub": [
+                15,
+                {
+                  "clamp": [
+                    {
+                      "div": [
+                        {
+                          "ref": "reputation.the_horse_lords",
+                          "else": 0
+                        },
+                        5
+                      ]
+                    },
+                    -6,
+                    6
+                  ]
+                }
+              ]
+            },
+            "onSuccess": "step_talith_week_told",
+            "onFailure": "step_talith_week_wont"
+          }
+        },
+        {
+          "id": "step_talith_book",
+          "text": "The flood book. Let me have it.",
+          "requires": {
+            "without": {
+              "items": [
+                "flood_book"
+              ],
+              "flags": [
+                {
+                  "flag": "given:flood_book"
+                }
+              ]
+            }
+          },
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "check": {
+            "skill": "persuasion",
+            "difficulty": {
+              "sub": [
+                14,
+                {
+                  "clamp": [
+                    {
+                      "div": [
+                        {
+                          "ref": "reputation.the_horse_lords",
+                          "else": 0
+                        },
+                        5
+                      ]
+                    },
+                    -6,
+                    6
+                  ]
+                }
+              ]
+            },
+            "onSuccess": "step_talith_book_gave",
+            "onFailure": "step_talith_book_kept"
+          }
+        },
+        {
+          "id": "greet_leave",
+          "text": "Nothing.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": [
+        {
+          "requires": {
+            "factions": [
+              {
+                "faction": "the_horse_lords",
+                "maxStanding": -30
+              }
+            ]
+          },
+          "goto": "step_talith_cold"
+        }
+      ]
+    },
+    {
+      "id": "step_talith_norecord_told",
+      "says": [
+        {
+          "text": "“No.” Talith does not need to check, which is itself the answer. “We have every foaling for nine hundred years. Every crossing. Every rider who did not come in.” A hand on the book. “Eleven miles of trees is a season's work for four hundred people and there is not one line about it anywhere. We do not fail to write things down.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "learnLore": {
+            "entry": "step_line_norecord"
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "step_talith_norecord_on",
+          "text": "Go on.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "step_talith_norecord_wont",
+      "says": [
+        {
+          "text": "“I've said all I mean to,” they say, and go back to what they were doing."
+        }
+      ],
+      "onEnter": [
+        {
+          "adjustReputation": {
+            "faction": "the_horse_lords",
+            "amount": -1
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "step_talith_norecord_drop",
+          "text": "Leave it.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "step_talith_week_told",
+      "says": [
+        {
+          "text": "“The grass tells you.” Immediate, and then Talith hears it. “That is what we say. Three days out, everybody moves stock, and we are never wrong, and the week is the same week.” A pause. “I have asked eleven riders what the grass does. I have had eleven answers. None of them is a thing the grass does.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "learnLore": {
+            "entry": "step_bank_week"
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "step_talith_week_on",
+          "text": "Go on.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "step_talith_week_wont",
+      "says": [
+        {
+          "text": "“I've said all I mean to,” they say, and go back to what they were doing."
+        }
+      ],
+      "onEnter": [
+        {
+          "adjustReputation": {
+            "faction": "the_horse_lords",
+            "amount": -1
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "step_talith_week_drop",
+          "text": "Leave it.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "step_talith_book_gave",
+      "says": [
+        {
+          "text": "It is oilcloth-wrapped and it is heavy. “Nine hundred years of the same week,” Talith says, “written by people who each thought they were the first to notice. If you go down that bank in the dry, that book tells you how long you have.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "grantItem": {
+            "target": {
+              "ref": "actor.id"
+            },
+            "item": "flood_book",
+            "quantity": 1
+          }
+        },
+        {
+          "setFlag": {
+            "flag": "given:flood_book",
+            "value": true
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "step_talith_book_thanks",
+          "text": "Thank you.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "step_talith_book_kept",
+      "says": [
+        {
+          "text": "“It rides with the relay,” Talith says. “It has always ridden with the relay.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "adjustReputation": {
+            "faction": "the_horse_lords",
+            "amount": -2
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "step_talith_book_leave",
+          "text": "Then no.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "step_talith_cold",
+      "says": [
+        {
+          "text": "Talith mounts a cooled horse and takes it twice round the post without a word."
+        }
+      ],
+      "onEnter": [],
+      "options": [
+        {
+          "id": "step_talith_go",
+          "text": "Leave it.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "id": "dungeon_ember_lair_desc",
+  "variants": [
+    {
+      "text": "Something dens where it is warmest and has scoured the floor doing it."
+    },
+    {
+      "text": "Slag drawn into a heap, and the heap is a nest."
+    },
+    {
+      "text": "The heat here is genuinely uncomfortable and something prefers it."
+    }
+  ]
+}

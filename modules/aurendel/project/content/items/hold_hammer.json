@@ -1,0 +1,23 @@
+{
+  "id": "hold_hammer",
+  "name": "A Hold Hammer",
+  "description": "Karn Dolur's pattern, made for a hand that expects to be swinging at stone and is not disappointed when it is not.",
+  "kind": "weapon",
+  "slot": "hand",
+  "value": 160,
+  "weight": 8,
+  "tags": [],
+  "skillBonuses": {
+    "craft": 1
+  },
+  "damage": {
+    "dice": "1d10",
+    "damageType": "bludgeoning",
+    "stat": "might"
+  },
+  "properties": [
+    "heavy",
+    "two_handed"
+  ],
+  "rarity": "uncommon"
+}

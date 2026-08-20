@@ -1,0 +1,35 @@
+{
+  "id": "stone_keeper_maun",
+  "name": "Maun of the Nine Sisters",
+  "description": "Keeps the ring for Barrowgate, which mostly means keeping people off it, and has kept a rubbing of the tenth stone for nine years.",
+  "disposition": 10,
+  "gullibility": 0.3,
+  "memorySpan": 300,
+  "offersQuests": [],
+  "caresAbout": [
+    "ward_broken",
+    "ward_restored"
+  ],
+  "reactions": [],
+  "faction": "the_keepers",
+  "dialogue": "maun_talk",
+  "home": "barrowgate_moot_hall",
+  "temperament": {
+    "roamRadius": 24,
+    "investigateRadius": 60,
+    "leashRadius": 90,
+    "wanderChance": 0.3,
+    "speeds": {
+      "wander": 0.5
+    },
+    "investigates": [
+      "sight",
+      "hearing"
+    ],
+    "notices": [
+      "hostile",
+      "neutral",
+      "ally"
+    ]
+  }
+}

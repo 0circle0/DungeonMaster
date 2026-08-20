@@ -1,0 +1,14 @@
+{
+  "id": "dungeon_drowned_corridor_desc",
+  "variants": [
+    {
+      "text": "A flooded passage, waist-deep, with the walls sound and the floor unreadable."
+    },
+    {
+      "text": "Something has silted the whole length of this to an even depth."
+    },
+    {
+      "text": "Your wake goes ahead of you down the passage and comes back."
+    }
+  ]
+}

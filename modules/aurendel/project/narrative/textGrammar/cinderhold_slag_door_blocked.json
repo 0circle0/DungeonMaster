@@ -1,0 +1,14 @@
+{
+  "id": "cinderhold_slag_door_blocked",
+  "variants": [
+    {
+      "text": "It was cast in place, shut, in one pour. There is no keyhole because there was never a key."
+    },
+    {
+      "text": "The Slag Door has no seam, no hinge, and no handle, and the cathedral was built over it afterwards."
+    },
+    {
+      "text": "Whatever this was meant to keep in, it was meant to keep in permanently."
+    }
+  ]
+}

@@ -1,0 +1,31 @@
+{
+  "id": "vent",
+  "name": "Steam Vent",
+  "description": "A crack that breathes out, on its own schedule.",
+  "glyph": "!",
+  "color": "red",
+  "passable": true,
+  "opaque": false,
+  "moveCost": 1,
+  "tags": [
+    "stone",
+    "hazard"
+  ],
+  "marks": {
+    "tracks": 0,
+    "smell": 0.6
+  },
+  "onEnter": [
+    {
+      "damage": {
+        "target": {
+          "ref": "actor.id"
+        },
+        "amount": {
+          "roll": "1d6"
+        },
+        "damageType": "fire"
+      }
+    }
+  ]
+}

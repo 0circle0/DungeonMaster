@@ -1,0 +1,26 @@
+{
+  "id": "deep_rule_carried",
+  "name": "What Ost Kept",
+  "rolls": "1",
+  "emptyChance": 0,
+  "entries": [
+    {
+      "weight": 1,
+      "value": {
+        "item": "wayfinders_rule",
+        "quantity": "1",
+        "unique": true,
+        "requirementScope": "party",
+        "requires": {
+          "without": {
+            "flags": [
+              {
+                "flag": "given:wayfinders_rule"
+              }
+            ]
+          }
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "id": "elderhollow_ox_lines",
+  "name": "The Ox Lines",
+  "description": "Timber is hauled by oxen here, and there are forty of them.",
+  "area": "duskwood_elderhollow",
+  "kind": "settlement",
+  "descriptionKey": "int_stable",
+  "travelMinutes": 3,
+  "tags": [],
+  "services": [
+    "stable"
+  ],
+  "map": {
+    "width": "11",
+    "height": "9",
+    "palette": "int_timber"
+  },
+  "position": {
+    "x": 12,
+    "y": 23
+  }
+}

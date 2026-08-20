@@ -1,0 +1,24 @@
+{
+  "id": "vashta_qal_water_toll",
+  "name": "The Water Gate",
+  "kind": "toll",
+  "description": "Vashta Qal does not charge to enter. It charges to drink, at the gate, in advance, per head.",
+  "staysOpen": false,
+  "requires": {
+    "description": "15 marks",
+    "currency": 15
+  },
+  "bypass": {
+    "skill": "deception",
+    "difficulty": 15,
+    "retryable": true
+  },
+  "onOpen": [
+    {
+      "adjustCurrency": {
+        "amount": -15
+      }
+    }
+  ],
+  "blockedTextKey": "vashta_qal_water_blocked"
+}

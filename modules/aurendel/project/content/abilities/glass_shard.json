@@ -1,0 +1,34 @@
+{
+  "id": "glass_shard",
+  "name": "Glass Shard",
+  "description": "Thrown, and it does not lose its edge on the way.",
+  "actionType": "action",
+  "targeting": "single",
+  "attack": {
+    "stat": "agility",
+    "against": "guard"
+  },
+  "onUse": [
+    {
+      "damage": {
+        "target": {
+          "ref": "target.id"
+        },
+        "amount": {
+          "roll": "2d6"
+        },
+        "damageType": "slashing"
+      }
+    },
+    {
+      "applyCondition": {
+        "target": {
+          "ref": "target.id"
+        },
+        "condition": "bleeding",
+        "duration": 2
+      }
+    }
+  ],
+  "range": 45
+}

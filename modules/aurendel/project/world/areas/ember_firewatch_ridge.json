@@ -1,0 +1,42 @@
+{
+  "id": "ember_firewatch_ridge",
+  "name": "Firewatch Ridge",
+  "description": "The high ground on the northern side, with a chain of towers along it that were built to watch the mountain rather than the road.",
+  "biome": "volcanic",
+  "layer": "overworld",
+  "descriptionKey": "ember_firewatch_ridge_desc",
+  "dangerLevel": 6,
+  "recommendedLevel": 7,
+  "tags": [
+    "ember_reach"
+  ],
+  "map": {
+    "width": "51",
+    "height": "35"
+  },
+  "entryPoint": {
+    "x": 25,
+    "y": 17
+  },
+  "extra": {
+    "role": "wild"
+  },
+  "connections": [
+    {
+      "to": "ember_cinderhold",
+      "travelMinutes": 35
+    },
+    {
+      "to": "ember_the_burnt_march",
+      "travelMinutes": 45
+    },
+    {
+      "to": "moor_the_long_barrow",
+      "travelMinutes": 210
+    }
+  ],
+  "encounterTables": [
+    "ember_things",
+    "the_checked"
+  ]
+}

@@ -1,0 +1,10 @@
+{
+  "id": "dash",
+  "name": "Dash",
+  "description": "Quick, and heard from a long way off.",
+  "speedMultiplier": 1.5,
+  "emits": {
+    "hearing": 2.2,
+    "smell": 1.4
+  }
+}

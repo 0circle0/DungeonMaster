@@ -1,0 +1,7 @@
+{
+  "id": "reflex",
+  "name": "Reflex",
+  "attribute": "agility",
+  "description": "Being somewhere else when it lands.",
+  "defaultDifficulty": 12
+}

@@ -1,0 +1,29 @@
+{
+  "id": "ember_workings_seal",
+  "name": "Sealed from the Adit Side",
+  "description": "There is no way to bar this door from where you are standing, and it is barred.",
+  "kind": "ward",
+  "blockedTextKey": "ember_workings_blocked",
+  "staysOpen": true,
+  "onOpen": [
+    {
+      "setFlag": {
+        "flag": "ember_trees_open",
+        "value": true
+      }
+    }
+  ],
+  "onBlocked": [],
+  "opensWith": [],
+  "tags": [],
+  "requires": {
+    "items": [
+      {
+        "item": "burners_core",
+        "quantity": 1,
+        "consume": false,
+        "equipped": false
+      }
+    ]
+  }
+}

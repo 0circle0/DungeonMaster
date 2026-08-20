@@ -1,0 +1,14 @@
+{
+  "id": "dungeon_ice_lair_desc",
+  "variants": [
+    {
+      "text": "The ice is stained and trodden and there is a hollow melted into the floor the size of something large."
+    },
+    {
+      "text": "Bones frozen into the wall at knee height, going back some way."
+    },
+    {
+      "text": "Warm, comparatively, which means something has been lying here."
+    }
+  ]
+}

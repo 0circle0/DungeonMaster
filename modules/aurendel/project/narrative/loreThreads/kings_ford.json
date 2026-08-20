@@ -1,0 +1,11 @@
+{
+  "id": "kings_ford",
+  "name": "The Ford Toll",
+  "description": "A sluice worked to the day by a keeper the parish stopped paying ninety years ago.",
+  "entries": [
+    "kings_ford_keeper",
+    "kings_ford_worked",
+    "kings_ford_ox",
+    "kings_ford_stone"
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "id": "coast_hidden",
+  "name": "The Silver Coast, Surveyed",
+  "description": "Three pieces of work somebody did carefully along this coast and never filed with anybody.",
+  "quests": [
+    "coast_the_scouring",
+    "coast_the_signal",
+    "coast_the_unclaimed"
+  ],
+  "isEnding": false
+}

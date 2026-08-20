@@ -1,0 +1,14 @@
+{
+  "id": "reedy_bottom_cuttings",
+  "name": "The Reed Beds",
+  "description": "Cut every winter, in blocks, on a nine-year rotation that everybody in the village can recite.",
+  "area": "thornmere_reedy_bottom",
+  "kind": "landmark",
+  "descriptionKey": "generic_landmark",
+  "travelMinutes": 4,
+  "tags": [],
+  "position": {
+    "x": 3,
+    "y": 3
+  }
+}

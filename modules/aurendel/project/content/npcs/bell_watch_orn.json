@@ -1,0 +1,33 @@
+{
+  "id": "bell_watch_orn",
+  "name": "Orn, on Watch",
+  "description": "Sits up for the nights the road might shut, and has written down eleven he cannot account for.",
+  "disposition": 2,
+  "gullibility": 0.2,
+  "memorySpan": 250,
+  "offersQuests": [],
+  "caresAbout": [],
+  "reactions": [],
+  "faction": "karn_dolur",
+  "dialogue": "skarn_orn_talk",
+  "home": "snowgate_house_b",
+  "statblock": "skarn_watch",
+  "temperament": {
+    "roamRadius": 24,
+    "investigateRadius": 60,
+    "leashRadius": 90,
+    "wanderChance": 0.3,
+    "speeds": {
+      "wander": 0.5
+    },
+    "investigates": [
+      "sight",
+      "hearing"
+    ],
+    "notices": [
+      "hostile",
+      "neutral",
+      "ally"
+    ]
+  }
+}

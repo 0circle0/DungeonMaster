@@ -1,0 +1,38 @@
+{
+  "id": "ember_the_burnt_march",
+  "name": "The Burnt March",
+  "description": "The western edge, where the ash thins and things start growing again, badly.",
+  "biome": "volcanic",
+  "layer": "overworld",
+  "descriptionKey": "ember_the_burnt_march_desc",
+  "dangerLevel": 6,
+  "recommendedLevel": 7,
+  "tags": [
+    "ember_reach"
+  ],
+  "map": {
+    "width": "51",
+    "height": "35"
+  },
+  "entryPoint": {
+    "x": 25,
+    "y": 17
+  },
+  "extra": {
+    "role": "wild"
+  },
+  "connections": [
+    {
+      "to": "ember_smoking_road",
+      "travelMinutes": 50
+    },
+    {
+      "to": "ember_firewatch_ridge",
+      "travelMinutes": 45
+    },
+    {
+      "to": "kingsvale_ashcott",
+      "travelMinutes": 230
+    }
+  ]
+}

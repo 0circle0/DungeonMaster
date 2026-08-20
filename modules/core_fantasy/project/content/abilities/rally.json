@@ -1,0 +1,22 @@
+{
+  "id": "rally",
+  "name": "Rally",
+  "description": "A word at the right moment, worth more than a shield.",
+  "actionType": "quick",
+  "targeting": "allAllies",
+  "costs": {
+    "focus": 1
+  },
+  "cooldown": 3,
+  "onUse": [
+    {
+      "applyCondition": {
+        "target": {
+          "ref": "target.id"
+        },
+        "condition": "emboldened",
+        "duration": 3
+      }
+    }
+  ]
+}

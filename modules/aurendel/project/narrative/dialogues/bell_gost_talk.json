@@ -1,0 +1,422 @@
+{
+  "id": "bell_gost_talk",
+  "start": "greet",
+  "nodes": [
+    {
+      "id": "greet",
+      "says": [
+        {
+          "text": "The Pole is a stilt-house with one room and forty poles in it, racked by length. Gost is whipping the end of a new one and does not stop. \"Crossing, or asking?\""
+        }
+      ],
+      "options": [
+        {
+          "id": "asking",
+          "text": "Asking. You've lost people.",
+          "effects": [
+            {
+              "emit": {
+                "event": "startQuest",
+                "data": {
+                  "quest": "bell_the_new_tower"
+                }
+              }
+            }
+          ],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "two_poles",
+          "requires": {
+            "quests": [
+              {
+                "quest": "bell_the_new_tower",
+                "status": "unstarted"
+              },
+              {
+                "quest": "the_undercroft",
+                "status": "complete"
+              }
+            ]
+          }
+        },
+        {
+          "id": "the_channels",
+          "text": "How does anybody live out here?",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "the_channels"
+        },
+        {
+          "id": "leave",
+          "text": "Crossing.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": [
+        {
+          "requires": {
+            "quests": [
+              {
+                "quest": "bell_the_black_water",
+                "status": "active"
+              }
+            ],
+            "flags": [
+              {
+                "flag": "bell_hall_found",
+                "equals": true
+              }
+            ]
+          },
+          "goto": "about_the_hall"
+        },
+        {
+          "requires": {
+            "flags": [
+              {
+                "flag": "bell_shade_down",
+                "equals": true
+              }
+            ],
+            "without": {
+              "flags": [
+                {
+                  "flag": "bell_sunk"
+                },
+                {
+                  "flag": "bell_raised"
+                }
+              ]
+            }
+          },
+          "goto": "raise_or_sink"
+        }
+      ]
+    },
+    {
+      "id": "the_channels",
+      "says": [
+        {
+          "text": "\"By knowing where the channels are this week,\" says Gost, \"and they are not where they were last week, and there is no map because a map would be a lie by Highsun.\" He tests the whipping. \"A hundred and six of us. Everything that crosses this marsh crosses because one of us said so.\""
+        }
+      ],
+      "options": [
+        {
+          "id": "back",
+          "text": "Hm.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "greet"
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": []
+    },
+    {
+      "id": "two_poles",
+      "says": [
+        {
+          "text": "\"Two poles and a cousin since Harvest.\" He says it evenly and the evenness is the tell. \"Same reach all three times. Off the black water, north of the causeway, where there is nothing to be lost to.\""
+        }
+      ],
+      "options": [
+        {
+          "id": "what_night",
+          "text": "What did the three nights have in common?",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "the_bell"
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": []
+    },
+    {
+      "id": "the_bell",
+      "says": [
+        {
+          "text": "Gost puts the pole down. \"They heard the bell,\" he says. \"All three. My cousin said so to my face at noon and was gone by morning.\""
+        },
+        {
+          "text": "\"And the ringers at the new tower will tell you nothing was rung on any of those three nights, and they will be telling the truth, and they will get worse at telling it the longer you stand there.\""
+        }
+      ],
+      "options": [
+        {
+          "id": "go_ask",
+          "text": "We'll go and stand there.",
+          "effects": [
+            {
+              "setFlag": {
+                "flag": "bell_ringers_asked",
+                "value": true
+              }
+            }
+          ],
+          "onceOnly": true,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "go_ask"
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": []
+    },
+    {
+      "id": "go_ask",
+      "says": [
+        {
+          "text": "The ringers are three brothers and a widow and they answer for eleven minutes without once saying the word bell, which takes a kind of skill. Then the widow says: \"It is not ours. Ours is in the tower. The one they hear is the old one and it is four hundred yards out under the water.\""
+        }
+      ],
+      "options": [
+        {
+          "id": "out_there",
+          "text": "Then we're going out there.",
+          "effects": [
+            {
+              "emit": {
+                "event": "startQuest",
+                "data": {
+                  "quest": "bell_the_black_water"
+                }
+              }
+            }
+          ],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "the_reach",
+          "requires": {
+            "quests": [
+              {
+                "quest": "bell_the_black_water",
+                "status": "unstarted"
+              }
+            ]
+          }
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": []
+    },
+    {
+      "id": "the_reach",
+      "says": [
+        {
+          "text": "\"North of the causeway, and take a pole even if you cannot use one,\" says Gost. \"There is a hall out there with its roof above the water and nobody built a hall in the black water. It has *arrived*.\""
+        }
+      ],
+      "options": [
+        {
+          "id": "done",
+          "text": "We'll take a pole.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": []
+    },
+    {
+      "id": "about_the_hall",
+      "says": [
+        {
+          "text": "\"You got to it.\" Gost has the good grace to look surprised. \"How far off the church is it?\""
+        }
+      ],
+      "options": [
+        {
+          "id": "four_hundred",
+          "text": "Four hundred yards. And closing.",
+          "effects": [],
+          "onceOnly": true,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "closing"
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": []
+    },
+    {
+      "id": "closing",
+      "says": [
+        {
+          "text": "\"Closing,\" Gost repeats. \"A hall does not close on a church.\" He is quiet for a moment. \"Unless the marsh is moving one of them, and the marsh moves what it is told to and it is not told by me.\""
+        }
+      ],
+      "options": [
+        {
+          "id": "the_church",
+          "text": "Then we go to the church.",
+          "effects": [
+            {
+              "emit": {
+                "event": "startQuest",
+                "data": {
+                  "quest": "bell_the_old_church"
+                }
+              }
+            },
+            {
+              "adjustReputation": {
+                "faction": "the_ferrymen",
+                "amount": 5
+              }
+            }
+          ],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "at_the_low",
+          "requires": {
+            "quests": [
+              {
+                "quest": "bell_the_old_church",
+                "status": "unstarted"
+              }
+            ]
+          }
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": [],
+      "remembers": "channel_kept"
+    },
+    {
+      "id": "at_the_low",
+      "says": [
+        {
+          "text": "\"Go at the low and go quiet,\" says Gost. \"The tower is still up. It was built to be still up. Whatever is in it has had four hundred years of nobody coming.\""
+        }
+      ],
+      "options": [
+        {
+          "id": "done",
+          "text": "Quiet, then.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": []
+    },
+    {
+      "id": "raise_or_sink",
+      "says": [
+        {
+          "text": "Gost has poled out himself, which the hundred and six do not do for anybody, and is sitting in the flat looking at the tower. \"Quiet,\" he says. \"First time in my life.\""
+        },
+        {
+          "text": "\"The bell's still down there and it is still bell-bronze, which is worth more than this whole village.\" He does not sound tempted. \"The new tower would take it, and Aurenhal would pay for the raising, and there would be a bell in a tower again, which is a thing people want.\""
+        },
+        {
+          "text": "\"Or we sink her properly, in the deep channel, and I hang markers off her, and there is a bell on the bottom of the black water that tolls when the tide runs — and every ferryman for a hundred years knows exactly where he is in the dark.\""
+        }
+      ],
+      "options": [
+        {
+          "id": "sink",
+          "text": "Sink her. Mark the reach.",
+          "effects": [
+            {
+              "setFlag": {
+                "flag": "bell_sunk",
+                "value": true
+              }
+            }
+          ],
+          "onceOnly": true,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "sunk"
+        },
+        {
+          "id": "raise",
+          "text": "Raise her. A tower should have a bell.",
+          "effects": [
+            {
+              "setFlag": {
+                "flag": "bell_raised",
+                "value": true
+              }
+            },
+            {
+              "grantItem": {
+                "target": {
+                  "ref": "actor.id"
+                },
+                "item": "old_coin",
+                "quantity": 35
+              }
+            }
+          ],
+          "onceOnly": true,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "raised"
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": []
+    },
+    {
+      "id": "sunk",
+      "says": [
+        {
+          "text": "It takes eleven of them two days and the markers go on at the end of the second, and that night, on the run of the tide, something under the black water makes one low note and Gost stops poling to listen to it like a man hearing his own name."
+        }
+      ],
+      "options": [
+        {
+          "id": "done",
+          "text": "There she is.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": [],
+      "remembers": "channel_kept"
+    },
+    {
+      "id": "raised",
+      "says": [
+        {
+          "text": "She comes up on the third day, green to the crown and perfectly sound, and goes into the new tower before Highsun. Gost is not at the hanging. Nor are the other hundred and five."
+        }
+      ],
+      "options": [
+        {
+          "id": "done",
+          "text": "...",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": [],
+      "remembers": "bell_rung"
+    }
+  ]
+}

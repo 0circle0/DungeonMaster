@@ -1,0 +1,53 @@
+{
+  "id": "dusk_burner",
+  "name": "Moll of the Burn",
+  "description": "Tends a burn for four days without sleeping when it is at the wrong stage, which most years it is.",
+  "level": 5,
+  "xp": 0,
+  "attributes": {
+    "might": 14,
+    "agility": 13,
+    "endurance": 15,
+    "intellect": 11,
+    "instinct": 14,
+    "presence": 11
+  },
+  "abilities": [
+    "strike",
+    "cut_and_run"
+  ],
+  "behaviour": [
+    {
+      "priority": 0,
+      "use": "strike"
+    }
+  ],
+  "faction": "the_keepers",
+  "creatureType": "humanoid",
+  "size": "medium",
+  "descriptors": [
+    "a soot-black"
+  ],
+  "conditionalLoot": [],
+  "loot": "dusk_charter_carried",
+  "resourceOverrides": {
+    "hp": 32
+  },
+  "temperament": {
+    "roamRadius": 24,
+    "investigateRadius": 70,
+    "leashRadius": 100,
+    "wanderChance": 0.4,
+    "disengageTurns": 2,
+    "investigates": [
+      "sight",
+      "hearing",
+      "tracks",
+      "smell"
+    ],
+    "notices": [
+      "hostile",
+      "neutral"
+    ]
+  }
+}

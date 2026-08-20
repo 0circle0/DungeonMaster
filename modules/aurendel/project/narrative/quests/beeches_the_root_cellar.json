@@ -1,0 +1,73 @@
+{
+  "id": "beeches_the_root_cellar",
+  "name": "The Root Cellar",
+  "description": "There is a cellar under the King, which is the largest of the beeches, and Wend says it is not a cellar and never was.",
+  "autoStart": false,
+  "ordered": true,
+  "tags": [
+    "side",
+    "act2",
+    "beeches",
+    "duskwood"
+  ],
+  "objectives": [
+    {
+      "id": "in_the_cellar",
+      "description": "Get into the root cellar.",
+      "kind": "reach",
+      "count": 1,
+      "hidden": false,
+      "optional": false,
+      "target": "hollow_beeches_root_cellar"
+    },
+    {
+      "id": "what_it_is",
+      "description": "See what the tree grew around.",
+      "kind": "custom",
+      "count": 1,
+      "hidden": false,
+      "optional": false,
+      "when": {
+        "test": {
+          "ref": "flags.beeches_cellar_seen"
+        }
+      }
+    },
+    {
+      "id": "tell_wend",
+      "description": "Take it back to Wend.",
+      "kind": "talk",
+      "count": 1,
+      "hidden": false,
+      "optional": false,
+      "target": "hermit_wend"
+    }
+  ],
+  "stages": [],
+  "unlocks": [
+    "beeches_the_deadfall"
+  ],
+  "rewards": {
+    "xp": 65,
+    "items": [],
+    "reputation": {
+      "the_keepers": 8
+    }
+  },
+  "requires": {
+    "quests": [
+      {
+        "quest": "beeches_what_wend_has_been_saying",
+        "status": "complete"
+      }
+    ]
+  },
+  "onComplete": [
+    {
+      "setFlag": {
+        "flag": "beeches_cellar_known",
+        "value": true
+      }
+    }
+  ]
+}

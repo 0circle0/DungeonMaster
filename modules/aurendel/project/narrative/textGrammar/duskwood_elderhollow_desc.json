@@ -1,0 +1,17 @@
+{
+  "id": "duskwood_elderhollow_desc",
+  "variants": [
+    {
+      "text": "A clearing with a town in it, and an oak in the middle of the town that everything else is arranged around."
+    },
+    {
+      "text": "Elderhollow: timber, charcoal, honey, and a moot that meets inside a tree."
+    },
+    {
+      "text": "Every building here came out of the forest, and the forest is thirty yards away in all directions."
+    },
+    {
+      "text": "Woodsmoke, sawdust, and oxen, and the light is green even in the market."
+    }
+  ]
+}

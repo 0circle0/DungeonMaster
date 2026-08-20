@@ -1,0 +1,33 @@
+{
+  "id": "the_pickers",
+  "name": "The Pickers",
+  "description": "Mycelt grows the food the Deeproads eat, and the Rot eats Mycelt. The pickers stand between those two facts with knives.",
+  "initialStanding": 0,
+  "decayPerDay": 0.05,
+  "relations": {
+    "the_wayfinders": 0.3,
+    "karn_dolur": 0.15
+  },
+  "ranks": [
+    {
+      "id": "blighted",
+      "name": "Blighted",
+      "atLeast": -30
+    },
+    {
+      "id": "hand",
+      "name": "A Hand at the Beds",
+      "atLeast": 0
+    },
+    {
+      "id": "cutter",
+      "name": "Cutter",
+      "atLeast": 25
+    },
+    {
+      "id": "of_the_deep_beds",
+      "name": "Of the Deep Beds",
+      "atLeast": 50
+    }
+  ]
+}

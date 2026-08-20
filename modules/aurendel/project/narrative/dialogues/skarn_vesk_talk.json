@@ -1,0 +1,329 @@
+{
+  "id": "skarn_vesk_talk",
+  "start": "greet",
+  "nodes": [
+    {
+      "id": "greet",
+      "says": [
+        {
+          "text": "Rope, poles and crampons laid out in an order somebody would fight you about, on ice, in shade."
+        },
+        {
+          "text": "“Going to the ice? Then we talk about your boots first.”"
+        }
+      ],
+      "onEnter": [],
+      "options": [
+        {
+          "id": "skarn_vesk_cycle",
+          "text": "The cave on the shoulder.",
+          "requires": {
+            "without": {
+              "lore": [
+                "skarn_wind_cycle"
+              ]
+            }
+          },
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "check": {
+            "skill": "persuasion",
+            "difficulty": {
+              "sub": [
+                13,
+                {
+                  "clamp": [
+                    {
+                      "div": [
+                        {
+                          "ref": "reputation.karn_dolur",
+                          "else": 0
+                        },
+                        5
+                      ]
+                    },
+                    -6,
+                    6
+                  ]
+                }
+              ]
+            },
+            "onSuccess": "skarn_vesk_cycle_told",
+            "onFailure": "skarn_vesk_cycle_wont"
+          }
+        },
+        {
+          "id": "skarn_vesk_warm",
+          "text": "Warm or cold, what comes out of it?",
+          "requires": {
+            "without": {
+              "lore": [
+                "skarn_wind_warm"
+              ]
+            }
+          },
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "check": {
+            "skill": "persuasion",
+            "difficulty": {
+              "sub": [
+                15,
+                {
+                  "clamp": [
+                    {
+                      "div": [
+                        {
+                          "ref": "reputation.karn_dolur",
+                          "else": 0
+                        },
+                        5
+                      ]
+                    },
+                    -6,
+                    6
+                  ]
+                }
+              ]
+            },
+            "onSuccess": "skarn_vesk_warm_told",
+            "onFailure": "skarn_vesk_warm_wont"
+          }
+        },
+        {
+          "id": "skarn_vesk_survey",
+          "text": "The hold's survey of the shoulder. Lend it to me.",
+          "requires": {
+            "without": {
+              "items": [
+                "stopped_survey"
+              ],
+              "flags": [
+                {
+                  "flag": "given:stopped_survey"
+                }
+              ]
+            }
+          },
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "check": {
+            "skill": "persuasion",
+            "difficulty": {
+              "sub": [
+                15,
+                {
+                  "clamp": [
+                    {
+                      "div": [
+                        {
+                          "ref": "reputation.karn_dolur",
+                          "else": 0
+                        },
+                        5
+                      ]
+                    },
+                    -6,
+                    6
+                  ]
+                }
+              ]
+            },
+            "onSuccess": "skarn_vesk_survey_gave",
+            "onFailure": "skarn_vesk_survey_kept"
+          }
+        },
+        {
+          "id": "greet_leave",
+          "text": "Nothing.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "skarn_vesk_cycle_told",
+      "says": [
+        {
+          "text": "“Breathes.” Vesk says it like a fact about a road, which to Vesk it is. “In, then out, and you can keep the count on a watch. I have. Same count in a gale, same count in a dead calm.” A look up at the face. “Weather does not keep time. That keeps time.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "learnLore": {
+            "entry": "skarn_wind_cycle"
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "skarn_vesk_cycle_on",
+          "text": "Go on.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "skarn_vesk_cycle_wont",
+      "says": [
+        {
+          "text": "“I've said all I mean to,” they say, and go back to what they were doing."
+        }
+      ],
+      "onEnter": [
+        {
+          "adjustReputation": {
+            "faction": "karn_dolur",
+            "amount": -1
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "skarn_vesk_cycle_drop",
+          "text": "Leave it.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "skarn_vesk_warm_told",
+      "says": [
+        {
+          "text": "“Warm.” Vesk lets that sit. “North face. Shade from Emberfall to Greening. That rock has not thawed in any year anybody has written down, and there is warm air coming out of a hole in it, on a count.” A shrug that is not a shrug. “I take parties past it. I do not take them in.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "learnLore": {
+            "entry": "skarn_wind_warm"
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "skarn_vesk_warm_on",
+          "text": "Go on.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "skarn_vesk_warm_wont",
+      "says": [
+        {
+          "text": "“I've said all I mean to,” they say, and go back to what they were doing."
+        }
+      ],
+      "onEnter": [
+        {
+          "adjustReputation": {
+            "faction": "karn_dolur",
+            "amount": -1
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "skarn_vesk_warm_drop",
+          "text": "Leave it.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "skarn_vesk_survey_gave",
+      "says": [
+        {
+          "text": "Vesk unrolls it on a rock and puts stones on the corners. Every hole, every fault, every fall of scree, to the inch — and then, where the mouth is, the ink simply stops and there is good clean vellum after it. “No note,” Vesk says. “The hold does not leave a margin. The hold has never once left a margin.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "grantItem": {
+            "target": {
+              "ref": "actor.id"
+            },
+            "item": "stopped_survey",
+            "quantity": 1
+          }
+        },
+        {
+          "setFlag": {
+            "flag": "given:stopped_survey",
+            "value": true
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "skarn_vesk_survey_thanks",
+          "text": "Thank you.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "skarn_vesk_survey_kept",
+      "says": [
+        {
+          "text": "“It is the guides',” Vesk says, rolling it. “Four of us alive can read it. Ask one of the other three.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "adjustReputation": {
+            "faction": "karn_dolur",
+            "amount": -3
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "skarn_vesk_survey_leave",
+          "text": "Then no.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    }
+  ]
+}

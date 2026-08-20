@@ -1,0 +1,24 @@
+{
+  "id": "cairnhold_forge",
+  "name": "The Cairn Forge",
+  "description": "One fire, run for two hours a day, because fuel comes by sled.",
+  "area": "frostmere_cairnhold",
+  "kind": "market",
+  "descriptionKey": "int_smithy",
+  "travelMinutes": 3,
+  "tags": [
+    "shop"
+  ],
+  "services": [
+    "smith"
+  ],
+  "map": {
+    "width": "9",
+    "height": "7",
+    "palette": "int_forge"
+  },
+  "position": {
+    "x": 21,
+    "y": 3
+  }
+}

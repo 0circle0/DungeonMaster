@@ -1,0 +1,14 @@
+{
+  "id": "estate_map",
+  "name": "The Old Estate Map",
+  "description": "Drives, butts and beaters' lines over the whole moor, and one line that goes over the scarp and keeps going.",
+  "kind": "key",
+  "value": 0,
+  "weight": 0,
+  "tags": [
+    "keepsake"
+  ],
+  "extra": {
+    "heldBy": "bothy_man_ferrin"
+  }
+}

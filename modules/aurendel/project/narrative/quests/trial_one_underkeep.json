@@ -1,0 +1,55 @@
+{
+  "id": "trial_one_underkeep",
+  "name": "The Second Door",
+  "description": "The moor took Barrowgate's keep back four hundred years ago. Something has been keeping the undercroft dry the whole time.",
+  "autoStart": false,
+  "ordered": true,
+  "tags": [
+    "trial",
+    "trial_one"
+  ],
+  "objectives": [
+    {
+      "id": "under_the_keep",
+      "description": "Get into the undercroft.",
+      "kind": "reach",
+      "count": 1,
+      "hidden": false,
+      "optional": false,
+      "target": "barrowgate_under_keep"
+    },
+    {
+      "id": "the_second",
+      "description": "Finish what came through the second door.",
+      "kind": "kill",
+      "count": 1,
+      "hidden": false,
+      "optional": false,
+      "target": "second_through"
+    }
+  ],
+  "stages": [],
+  "unlocks": [
+    "trial_one_rootcellar"
+  ],
+  "rewards": {
+    "xp": 1500,
+    "items": [
+      {
+        "item": "underkeep_ring",
+        "quantity": 1
+      }
+    ],
+    "reputation": {
+      "the_keepers": 20
+    }
+  },
+  "requires": {
+    "quests": [
+      {
+        "quest": "trial_one_cellars",
+        "status": "complete"
+      }
+    ]
+  }
+}

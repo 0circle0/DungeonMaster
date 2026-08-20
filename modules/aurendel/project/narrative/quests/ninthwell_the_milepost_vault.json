@@ -1,0 +1,74 @@
+{
+  "id": "ninthwell_the_milepost_vault",
+  "name": "The Milepost Vault",
+  "description": "The crew that sank the nine came up the Sunken Road, and the Sunken Road has vaults under its mileposts that the caravanserai has been storing barley in for two hundred years.",
+  "autoStart": false,
+  "ordered": true,
+  "tags": [
+    "side",
+    "act3",
+    "ninthwell",
+    "glasslands"
+  ],
+  "objectives": [
+    {
+      "id": "at_the_vault",
+      "description": "Find the vault under the milepost.",
+      "kind": "reach",
+      "count": 1,
+      "hidden": false,
+      "optional": false,
+      "target": "sunken_road_milepost_vault"
+    },
+    {
+      "id": "the_survey",
+      "description": "Read what the original survey counts.",
+      "kind": "custom",
+      "count": 1,
+      "hidden": false,
+      "optional": false,
+      "when": {
+        "test": {
+          "ref": "flags.ninthwell_survey_read"
+        }
+      }
+    },
+    {
+      "id": "tell_sefa",
+      "description": "Take the survey back to Sefa.",
+      "kind": "talk",
+      "count": 1,
+      "hidden": false,
+      "optional": false,
+      "target": "water_warden_sefa"
+    }
+  ],
+  "stages": [],
+  "unlocks": [
+    "ninthwell_down_the_ninth"
+  ],
+  "rewards": {
+    "xp": 110,
+    "items": [],
+    "reputation": {
+      "the_water_wardens": 10,
+      "the_library": 8
+    }
+  },
+  "requires": {
+    "quests": [
+      {
+        "quest": "ninthwell_eight_and_one",
+        "status": "complete"
+      }
+    ]
+  },
+  "onComplete": [
+    {
+      "setFlag": {
+        "flag": "ninthwell_survey_known",
+        "value": true
+      }
+    }
+  ]
+}

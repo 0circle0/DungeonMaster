@@ -1,0 +1,42 @@
+{
+  "id": "deeproads_echo_halls",
+  "name": "The Echo Halls",
+  "description": "Eleven chambers where a word comes back four times, each from a different direction.",
+  "biome": "underdeep",
+  "layer": "underworld",
+  "descriptionKey": "deeproads_echo_halls_desc",
+  "dangerLevel": 8,
+  "recommendedLevel": 10,
+  "tags": [
+    "deeproads"
+  ],
+  "map": {
+    "width": "51",
+    "height": "35"
+  },
+  "entryPoint": {
+    "x": 25,
+    "y": 17
+  },
+  "extra": {
+    "role": "wild"
+  },
+  "connections": [
+    {
+      "to": "deeproads_black_bridge",
+      "travelMinutes": 40
+    },
+    {
+      "to": "deeproads_broken_stair",
+      "travelMinutes": 45
+    },
+    {
+      "to": "glasslands_the_crater",
+      "travelMinutes": 150
+    }
+  ],
+  "encounterTables": [
+    "deeproads_things",
+    "the_tallied"
+  ]
+}

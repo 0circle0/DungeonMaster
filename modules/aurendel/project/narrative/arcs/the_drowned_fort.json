@@ -1,0 +1,12 @@
+{
+  "id": "the_drowned_fort",
+  "name": "The Drowned Fort",
+  "description": "Guns run out and a dry magazine on the same night, and four crews since who went to find out which came first.",
+  "quests": [
+    "drownedfort_four_crews",
+    "drownedfort_the_chimney",
+    "drownedfort_the_battery",
+    "drownedfort_salvage_or_seal"
+  ],
+  "isEnding": false
+}

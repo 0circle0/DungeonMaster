@@ -1,0 +1,14 @@
+{
+  "id": "aurenhal_river_gate_blocked",
+  "variants": [
+    {
+      "text": "\"Three marks or a wharfinger's chit,\" says the man on the arch, \"and you have not got a chit.\""
+    },
+    {
+      "text": "The chain across the water gate stays where it is. Somebody points at a board with a number on it."
+    },
+    {
+      "text": "\"Wharf dues,\" says the collector, already holding out a hand."
+    }
+  ]
+}

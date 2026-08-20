@@ -1,0 +1,20 @@
+{
+  "id": "blue_bell_shard",
+  "name": "A Shard of the Blue Bell",
+  "description": "Cold that does not warm in the hand, and it will not stop ringing if you set it down.",
+  "kind": "treasure",
+  "value": 0,
+  "weight": 0,
+  "tags": [
+    "clue",
+    "proof"
+  ],
+  "onUse": [
+    {
+      "learnLore": {
+        "entry": "frost_blue_note"
+      }
+    }
+  ],
+  "consumedOnUse": false
+}

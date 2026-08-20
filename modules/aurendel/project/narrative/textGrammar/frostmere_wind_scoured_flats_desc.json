@@ -1,0 +1,17 @@
+{
+  "id": "frostmere_wind_scoured_flats_desc",
+  "variants": [
+    {
+      "text": "The wind has taken the snow away entirely and polished what was under it, and what was under it is rock."
+    },
+    {
+      "text": "You can see the ground through the ice, and the ground has been quarried."
+    },
+    {
+      "text": "The Wind-Scoured Flats. The wind is the only thing here and it does not stop."
+    },
+    {
+      "text": "Rows of set stone under three feet of clear ice, going on for half a mile."
+    }
+  ]
+}

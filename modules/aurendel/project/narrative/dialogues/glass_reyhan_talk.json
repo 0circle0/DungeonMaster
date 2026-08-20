@@ -1,0 +1,219 @@
+{
+  "id": "glass_reyhan_talk",
+  "start": "greet",
+  "nodes": [
+    {
+      "id": "greet",
+      "says": [
+        {
+          "text": "A salt market at the hot end of the day, which means one stall open and everybody else asleep under it."
+        },
+        {
+          "text": "“Coarse or fine. If you want the fine you are two months early.”"
+        }
+      ],
+      "onEnter": [],
+      "options": [
+        {
+          "id": "glass_reyhan_eight",
+          "text": "How many courses do you cut?",
+          "requires": {
+            "without": {
+              "lore": [
+                "glass_courses_eight"
+              ]
+            }
+          },
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "check": {
+            "skill": "persuasion",
+            "difficulty": {
+              "sub": [
+                9,
+                {
+                  "clamp": [
+                    {
+                      "div": [
+                        {
+                          "ref": "reputation.the_water_wardens",
+                          "else": 0
+                        },
+                        5
+                      ]
+                    },
+                    -6,
+                    6
+                  ]
+                }
+              ]
+            },
+            "onSuccess": "glass_reyhan_eight_told",
+            "onFailure": "glass_reyhan_eight_wont"
+          }
+        },
+        {
+          "id": "glass_reyhan_taste",
+          "text": "Qasim keeps a jar of something he will not sell.",
+          "requires": {
+            "without": {
+              "lore": [
+                "glass_courses_taste"
+              ]
+            }
+          },
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "check": {
+            "skill": "persuasion",
+            "difficulty": {
+              "sub": [
+                14,
+                {
+                  "clamp": [
+                    {
+                      "div": [
+                        {
+                          "ref": "reputation.the_water_wardens",
+                          "else": 0
+                        },
+                        5
+                      ]
+                    },
+                    -6,
+                    6
+                  ]
+                }
+              ]
+            },
+            "onSuccess": "glass_reyhan_taste_told",
+            "onFailure": "glass_reyhan_taste_wont"
+          }
+        },
+        {
+          "id": "greet_leave",
+          "text": "Nothing.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "glass_reyhan_eight_told",
+      "says": [
+        {
+          "text": "“Eight.” She says it the way you answer a question about which way is up. “Eight is what one season of sun will draw. Every pan on this coast is cut in eight, ask anyone, ask my mother if you can wake her.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "learnLore": {
+            "entry": "glass_courses_eight"
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "glass_reyhan_eight_on",
+          "text": "Go on.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "glass_reyhan_eight_wont",
+      "says": [
+        {
+          "text": "“I've said all I mean to,” they say, and go back to what they were doing."
+        }
+      ],
+      "onEnter": [
+        {
+          "adjustReputation": {
+            "faction": "the_water_wardens",
+            "amount": -1
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "glass_reyhan_eight_drop",
+          "text": "Leave it.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "glass_reyhan_taste_told",
+      "says": [
+        {
+          "text": "Her face closes slightly. “That is the ninth, and it is not ours, and I will thank you not to say I said so.” A pause. “It is heavier. And it does not taste of this sea, and I have licked my fingers in these pans since I was four.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "learnLore": {
+            "entry": "glass_courses_taste"
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "glass_reyhan_taste_on",
+          "text": "Go on.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "glass_reyhan_taste_wont",
+      "says": [
+        {
+          "text": "“I've said all I mean to,” they say, and go back to what they were doing."
+        }
+      ],
+      "onEnter": [
+        {
+          "adjustReputation": {
+            "faction": "the_water_wardens",
+            "amount": -1
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "glass_reyhan_taste_drop",
+          "text": "Leave it.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    }
+  ]
+}

@@ -11,10 +11,12 @@
  * one-line diff and forgetting to regenerate is a failed check rather than a
  * discovery made later.
  *
- * Unlike `check:generated`, this belongs inside `npm run check`: it shells out
- * to nothing, needs no Python, takes under a second, and — importantly — never
- * writes to the working tree. A check that leaves files behind is one people
- * stop running.
+ * This belongs inside `npm run check`: it shells out to nothing, takes under a
+ * second, and — importantly — never writes to the working tree. A check that
+ * leaves files behind is one people stop running. That is what retired
+ * `check:generated`, which re-ran the Python and diffed its output: once the
+ * `project/` trees became the source, re-running a generator was the one thing
+ * nobody should do.
  */
 
 import { readFileSync, existsSync, readdirSync } from 'node:fs';

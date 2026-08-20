@@ -1,0 +1,23 @@
+{
+  "id": "hearth_ring",
+  "name": "The Ring off the Long Fire",
+  "description": "Iron out of a hearth nobody has let go out. What the wearer lights is hard to put out, and so is the wearer.",
+  "kind": "trinket",
+  "slot": "ring",
+  "value": 900,
+  "weight": 1,
+  "tags": [
+    "fabled"
+  ],
+  "skillBonuses": {
+    "resolve": 3,
+    "survival": 2
+  },
+  "damageInteractions": [
+    {
+      "damageType": "fire",
+      "multiplier": 0.5
+    }
+  ],
+  "rarity": "rare"
+}

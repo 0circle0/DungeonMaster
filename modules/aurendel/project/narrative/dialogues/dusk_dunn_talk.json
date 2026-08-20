@@ -1,0 +1,219 @@
+{
+  "id": "dusk_dunn_talk",
+  "start": "greet",
+  "nodes": [
+    {
+      "id": "greet",
+      "says": [
+        {
+          "text": "A cart backed under an eave, one wheel off, and a man doing something to the hub he is clearly not enjoying."
+        },
+        {
+          "text": "“Coast road or forest road? I will complain about either.”"
+        }
+      ],
+      "onEnter": [],
+      "options": [
+        {
+          "id": "dusk_dunn_three",
+          "text": "You've counted the marks on the Moot Road.",
+          "requires": {
+            "without": {
+              "lore": [
+                "dusk_miles_three"
+              ]
+            }
+          },
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "check": {
+            "skill": "insight",
+            "difficulty": {
+              "sub": [
+                13,
+                {
+                  "clamp": [
+                    {
+                      "div": [
+                        {
+                          "ref": "reputation.the_keepers",
+                          "else": 0
+                        },
+                        5
+                      ]
+                    },
+                    -6,
+                    6
+                  ]
+                }
+              ]
+            },
+            "onSuccess": "dusk_dunn_three_told",
+            "onFailure": "dusk_dunn_three_wont"
+          }
+        },
+        {
+          "id": "dusk_dunn_bridge",
+          "text": "The bridge on the Greenway.",
+          "requires": {
+            "without": {
+              "lore": [
+                "dusk_green_bridge"
+              ]
+            }
+          },
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "check": {
+            "skill": "persuasion",
+            "difficulty": {
+              "sub": [
+                12,
+                {
+                  "clamp": [
+                    {
+                      "div": [
+                        {
+                          "ref": "reputation.the_keepers",
+                          "else": 0
+                        },
+                        5
+                      ]
+                    },
+                    -6,
+                    6
+                  ]
+                }
+              ]
+            },
+            "onSuccess": "dusk_dunn_bridge_told",
+            "onFailure": "dusk_dunn_bridge_wont"
+          }
+        },
+        {
+          "id": "greet_leave",
+          "text": "Nothing.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "dusk_dunn_three_told",
+      "says": [
+        {
+          "text": "“Every trip.” Dunn wipes the hub. “Three of them are not on the road. They are off it — twenty yards, forty, sixty. I used to think they had shifted the road round them.” He straightens. “Then I stood at one and sighted the other two and they line up with each other, and the line they make goes across the road, not along it.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "learnLore": {
+            "entry": "dusk_miles_three"
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "dusk_dunn_three_on",
+          "text": "Go on.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "dusk_dunn_three_wont",
+      "says": [
+        {
+          "text": "“I've said all I mean to,” they say, and go back to what they were doing."
+        }
+      ],
+      "onEnter": [
+        {
+          "adjustReputation": {
+            "faction": "the_keepers",
+            "amount": -1
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "dusk_dunn_three_drop",
+          "text": "Leave it.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "dusk_dunn_bridge_told",
+      "says": [
+        {
+          "text": "“Crosses nothing.” He laughs, but not much. “Stream went round two hundred years back — there is the old bed, dry as a road. Bridge is pointed, parapet is sound, and I have carted every load of lime that has gone into this parish for twenty years and not one of them went there.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "learnLore": {
+            "entry": "dusk_green_bridge"
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "dusk_dunn_bridge_on",
+          "text": "Go on.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "dusk_dunn_bridge_wont",
+      "says": [
+        {
+          "text": "“I've said all I mean to,” they say, and go back to what they were doing."
+        }
+      ],
+      "onEnter": [
+        {
+          "adjustReputation": {
+            "faction": "the_keepers",
+            "amount": -1
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "dusk_dunn_bridge_drop",
+          "text": "Leave it.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    }
+  ]
+}

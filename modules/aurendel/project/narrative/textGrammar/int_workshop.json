@@ -1,0 +1,14 @@
+{
+  "id": "int_workshop",
+  "variants": [
+    {
+      "text": "A bench under the window, tools on the wall, and shavings underfoot."
+    },
+    {
+      "text": "Half-finished work on trestles, laid out in a system only the owner can follow."
+    },
+    {
+      "text": "Glue, sawdust, and something clamped and waiting."
+    }
+  ]
+}

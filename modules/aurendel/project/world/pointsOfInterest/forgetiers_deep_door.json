@@ -1,0 +1,34 @@
+{
+  "id": "forgetiers_deep_door",
+  "name": "The Deep Door",
+  "description": "The way to the levels the hold gave up: sealed, marked, and inspected monthly.",
+  "area": "karn_dolur_forgetiers",
+  "kind": "dungeonEntrance",
+  "descriptionKey": "generic_dungeon_mouth",
+  "travelMinutes": 10,
+  "tags": [
+    "dungeon"
+  ],
+  "gate": "karn_dolur_deep_door",
+  "dungeon": "karn_dolur_deeps",
+  "position": {
+    "x": 22,
+    "y": 27
+  },
+  "triggers": [
+    {
+      "id": "found_the_deep_gate",
+      "mode": "once",
+      "on": "enter",
+      "description": "Karn Dolur's way down — reaching it counts, whether or not you ever spoke to Dath about it.",
+      "effects": [
+        {
+          "setFlag": {
+            "flag": "down_by_karn_dolur",
+            "value": true
+          }
+        }
+      ]
+    }
+  ]
+}

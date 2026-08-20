@@ -1,0 +1,13 @@
+{
+  "id": "loom",
+  "name": "Loom",
+  "description": "Warp-weighted, and taller than the weaver.",
+  "glyph": "l",
+  "color": "yellow",
+  "passable": false,
+  "opaque": true,
+  "moveCost": 0,
+  "tags": [
+    "furniture"
+  ]
+}

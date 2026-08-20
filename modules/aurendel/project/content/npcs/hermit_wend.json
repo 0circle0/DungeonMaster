@@ -1,0 +1,32 @@
+{
+  "id": "hermit_wend",
+  "name": "Wend of the Beeches",
+  "description": "Forty-one years in a hollow tree, on the understanding that he leaves the thorn alone and says if anything changes. It changed two years ago.",
+  "disposition": 10,
+  "gullibility": 0.4,
+  "memorySpan": 365,
+  "offersQuests": [
+    "beeches_what_wend_has_been_saying"
+  ],
+  "caresAbout": [
+    "ward_broken",
+    "ward_restored"
+  ],
+  "reactions": [],
+  "faction": "the_keepers",
+  "dialogue": "beeches_wend_talk",
+  "home": "hollow_beeches_hermit",
+  "temperament": {
+    "roamRadius": 0,
+    "wanderChance": 0,
+    "speeds": {
+      "wander": 0
+    },
+    "investigates": [],
+    "notices": [
+      "hostile",
+      "neutral",
+      "ally"
+    ]
+  }
+}

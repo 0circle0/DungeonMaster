@@ -1,0 +1,329 @@
+{
+  "id": "thorn_maud_talk",
+  "start": "greet",
+  "nodes": [
+    {
+      "id": "greet",
+      "says": [
+        {
+          "text": "Water to the thigh, a hooked bill going through reed like it is not there, and a stack of bundles behind her taller than she is."
+        },
+        {
+          "text": "“Bundles are sold. Talk if you want, I am not stopping.”"
+        }
+      ],
+      "onEnter": [],
+      "options": [
+        {
+          "id": "thorn_maud_rows",
+          "text": "The knees in the deep maze are in rows.",
+          "requires": {
+            "without": {
+              "lore": [
+                "thorn_knees_rows"
+              ]
+            }
+          },
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "check": {
+            "skill": "persuasion",
+            "difficulty": {
+              "sub": [
+                11,
+                {
+                  "clamp": [
+                    {
+                      "div": [
+                        {
+                          "ref": "reputation.the_ferrymen",
+                          "else": 0
+                        },
+                        5
+                      ]
+                    },
+                    -6,
+                    6
+                  ]
+                }
+              ]
+            },
+            "onSuccess": "thorn_maud_rows_told",
+            "onFailure": "thorn_maud_rows_wont"
+          }
+        },
+        {
+          "id": "thorn_maud_cut",
+          "text": "Something has been cutting them level.",
+          "requires": {
+            "without": {
+              "lore": [
+                "thorn_knees_cut"
+              ]
+            }
+          },
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "check": {
+            "skill": "insight",
+            "difficulty": {
+              "sub": [
+                14,
+                {
+                  "clamp": [
+                    {
+                      "div": [
+                        {
+                          "ref": "reputation.the_ferrymen",
+                          "else": 0
+                        },
+                        5
+                      ]
+                    },
+                    -6,
+                    6
+                  ]
+                }
+              ]
+            },
+            "onSuccess": "thorn_maud_cut_told",
+            "onFailure": "thorn_maud_cut_wont"
+          }
+        },
+        {
+          "id": "thorn_maud_bill",
+          "text": "Lend me the bill.",
+          "requires": {
+            "without": {
+              "items": [
+                "cutters_bill"
+              ],
+              "flags": [
+                {
+                  "flag": "given:cutters_bill"
+                }
+              ]
+            }
+          },
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "check": {
+            "skill": "persuasion",
+            "difficulty": {
+              "sub": [
+                13,
+                {
+                  "clamp": [
+                    {
+                      "div": [
+                        {
+                          "ref": "reputation.the_ferrymen",
+                          "else": 0
+                        },
+                        5
+                      ]
+                    },
+                    -6,
+                    6
+                  ]
+                }
+              ]
+            },
+            "onSuccess": "thorn_maud_bill_gave",
+            "onFailure": "thorn_maud_bill_kept"
+          }
+        },
+        {
+          "id": "greet_leave",
+          "text": "Nothing.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "thorn_maud_rows_told",
+      "says": [
+        {
+          "text": "“They are.” She keeps bundling. “Knees come up where the roots run, and roots do not run straight. I have cut reed in this marsh for thirty years and I have never worked that stretch, and neither did my mother, and she gave a reason once and would not give it twice.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "learnLore": {
+            "entry": "thorn_knees_rows"
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "thorn_maud_rows_on",
+          "text": "Go on.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "thorn_maud_rows_wont",
+      "says": [
+        {
+          "text": "“I've said all I mean to,” they say, and go back to what they were doing."
+        }
+      ],
+      "onEnter": [
+        {
+          "adjustReputation": {
+            "faction": "the_ferrymen",
+            "amount": -1
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "thorn_maud_rows_drop",
+          "text": "Leave it.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "thorn_maud_cut_told",
+      "says": [
+        {
+          "text": "She stops. “You have seen the healed ones.” She holds up the bill. “This is the only edge in Thornmere that takes a knee off level, and this edge is a hundred years older than the handle, and I did not make either.” A shrug that is not casual. “The cuts out there are forty years healed. I was six.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "learnLore": {
+            "entry": "thorn_knees_cut"
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "thorn_maud_cut_on",
+          "text": "Go on.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "thorn_maud_cut_wont",
+      "says": [
+        {
+          "text": "“I've said all I mean to,” they say, and go back to what they were doing."
+        }
+      ],
+      "onEnter": [
+        {
+          "adjustReputation": {
+            "faction": "the_ferrymen",
+            "amount": -1
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "thorn_maud_cut_drop",
+          "text": "Leave it.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "thorn_maud_bill_gave",
+      "says": [
+        {
+          "text": "She hands it over haft first, which is how you hand somebody a bill if you have any sense. “It came with the cottage. Mind the hook, it comes back at you.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "grantItem": {
+            "target": {
+              "ref": "actor.id"
+            },
+            "item": "cutters_bill",
+            "quantity": 1
+          }
+        },
+        {
+          "setFlag": {
+            "flag": "given:cutters_bill",
+            "value": true
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "thorn_maud_bill_thanks",
+          "text": "Thank you.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "thorn_maud_bill_kept",
+      "says": [
+        {
+          "text": "“It is how I eat,” she says. “Buy a new one at Bel's and see how it does on a knee.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "adjustReputation": {
+            "faction": "the_ferrymen",
+            "amount": -2
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "thorn_maud_bill_leave",
+          "text": "Then no.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    }
+  ]
+}

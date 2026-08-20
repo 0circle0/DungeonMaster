@@ -1,0 +1,28 @@
+{
+  "id": "signal_deep_belt",
+  "name": "The Belt out of the Signal Deep",
+  "description": "Six hundred years of vent-readers signalling past this and never to it, and it has been wearing this the whole time.",
+  "kind": "trinket",
+  "slot": "belt",
+  "value": 3000,
+  "weight": 1,
+  "rarity": "artifact",
+  "tags": [
+    "fabled",
+    "trial"
+  ],
+  "modifiers": {
+    "guard": 3,
+    "carry": 6
+  },
+  "skillBonuses": {
+    "athletics": 4,
+    "resolve": 4
+  },
+  "damageInteractions": [
+    {
+      "damageType": "fire",
+      "multiplier": 0.5
+    }
+  ]
+}

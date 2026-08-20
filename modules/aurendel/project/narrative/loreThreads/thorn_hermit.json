@@ -1,0 +1,11 @@
+{
+  "id": "thorn_hermit",
+  "name": "What the Hermit Was Watching",
+  "description": "Ninety years of tally marks on a door post, a fire pit still in use, and a hut built facing the wrong way on purpose.",
+  "entries": [
+    "thorn_hermit_none",
+    "thorn_hermit_tally",
+    "thorn_hermit_facing",
+    "thorn_hermit_warm"
+  ]
+}

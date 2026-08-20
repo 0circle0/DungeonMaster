@@ -1,0 +1,45 @@
+{
+  "id": "frost_lance",
+  "name": "Frost Lance",
+  "description": "A line of cold, drawn straight through whatever is standing in it.",
+  "actionType": "action",
+  "targeting": "allEnemies",
+  "range": 30,
+  "spellLevel": 2,
+  "components": [
+    "verbal",
+    "somatic"
+  ],
+  "areaOfEffect": {
+    "shape": "line",
+    "size": 30,
+    "affects": "enemies"
+  },
+  "savingThrow": {
+    "save": "reflex",
+    "difficulty": 13,
+    "onSuccess": "half"
+  },
+  "onUse": [
+    {
+      "damage": {
+        "target": {
+          "ref": "target.id"
+        },
+        "amount": {
+          "roll": "3d6"
+        },
+        "damageType": "cold"
+      }
+    },
+    {
+      "applyCondition": {
+        "target": {
+          "ref": "target.id"
+        },
+        "condition": "slowed",
+        "duration": 1
+      }
+    }
+  ]
+}

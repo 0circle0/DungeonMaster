@@ -1,0 +1,19 @@
+{
+  "id": "stunned",
+  "name": "Stunned",
+  "description": "Nothing gets through for a moment.",
+  "stacking": "refresh",
+  "defaultDuration": 1,
+  "modifiers": {
+    "guard": -4
+  },
+  "prevents": [
+    "action",
+    "quick"
+  ],
+  "savingThrow": {
+    "save": "fortitude",
+    "difficulty": 13,
+    "timing": "endOfTurn"
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "id": "deep_market_lamp_oil",
+  "name": "The Oil Gallery",
+  "description": "Eleven grades of lamp oil and a proprietor who can smell the difference.",
+  "area": "karn_dolur_deep_market",
+  "kind": "market",
+  "descriptionKey": "int_store",
+  "travelMinutes": 3,
+  "tags": [
+    "shop"
+  ],
+  "services": [
+    "market"
+  ],
+  "map": {
+    "width": "11",
+    "height": "9",
+    "palette": "int_shop"
+  },
+  "position": {
+    "x": 22,
+    "y": 3
+  }
+}

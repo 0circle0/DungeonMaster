@@ -1,0 +1,24 @@
+{
+  "id": "stiltmarket_the_pole",
+  "name": "The Pole",
+  "description": "Where the punt-men drink, which is to say where the news is.",
+  "area": "thornmere_stiltmarket",
+  "kind": "settlement",
+  "descriptionKey": "int_inn",
+  "travelMinutes": 3,
+  "tags": [
+    "inn"
+  ],
+  "services": [
+    "inn"
+  ],
+  "map": {
+    "width": "11",
+    "height": "9",
+    "palette": "int_timber"
+  },
+  "position": {
+    "x": 12,
+    "y": 23
+  }
+}

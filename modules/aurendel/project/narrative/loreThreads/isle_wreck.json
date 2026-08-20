@@ -1,0 +1,11 @@
+{
+  "id": "isle_wreck",
+  "name": "The Deep Wreck",
+  "description": "Guns run out on one side with nothing to fire at, and hatches dogged from outside.",
+  "entries": [
+    "isle_wreck_guns",
+    "isle_wreck_nothing",
+    "isle_wreck_pointing",
+    "isle_wreck_shut"
+  ]
+}

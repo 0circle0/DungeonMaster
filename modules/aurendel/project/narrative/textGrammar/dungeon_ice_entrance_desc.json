@@ -1,0 +1,14 @@
+{
+  "id": "dungeon_ice_entrance_desc",
+  "variants": [
+    {
+      "text": "A slot in the ice face, blue at the edges, with meltwater running out of it over the lip."
+    },
+    {
+      "text": "The way in is a melt channel and it will not be this shape next season."
+    },
+    {
+      "text": "Cold comes out of it that is worse than the cold outside, which you did not think possible."
+    }
+  ]
+}

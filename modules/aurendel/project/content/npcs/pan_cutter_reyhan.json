@@ -1,0 +1,32 @@
+{
+  "id": "pan_cutter_reyhan",
+  "name": "Reyhan, Pan-Cutter",
+  "description": "Cuts eight courses a year, as her mother did, and is very clear that eight is what the sun will draw.",
+  "disposition": 6,
+  "gullibility": 0.4,
+  "memorySpan": 150,
+  "offersQuests": [],
+  "caresAbout": [],
+  "reactions": [],
+  "faction": "the_water_wardens",
+  "dialogue": "glass_reyhan_talk",
+  "home": "saltrun_salt_market",
+  "temperament": {
+    "roamRadius": 24,
+    "investigateRadius": 60,
+    "leashRadius": 90,
+    "wanderChance": 0.3,
+    "speeds": {
+      "wander": 0.5
+    },
+    "investigates": [
+      "sight",
+      "hearing"
+    ],
+    "notices": [
+      "hostile",
+      "neutral",
+      "ally"
+    ]
+  }
+}

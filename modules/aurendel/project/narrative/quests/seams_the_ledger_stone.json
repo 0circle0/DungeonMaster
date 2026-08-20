@@ -1,0 +1,73 @@
+{
+  "id": "seams_the_ledger_stone",
+  "name": "The Ledger Stone",
+  "description": "Every fee the Hold has ever charged is cut into the stone at the gatehall, in order, and a fee is charged every year without exception, and Vare would like somebody who is not of the Hold to go and read it.",
+  "autoStart": false,
+  "ordered": true,
+  "tags": [
+    "side",
+    "act3",
+    "seams",
+    "skarnspine"
+  ],
+  "objectives": [
+    {
+      "id": "at_the_stone",
+      "description": "Get to the ledger stone at the gatehall.",
+      "kind": "reach",
+      "count": 1,
+      "hidden": false,
+      "optional": false,
+      "target": "gatehall_the_ledger_stone"
+    },
+    {
+      "id": "the_gap",
+      "description": "Find the gap in the fees.",
+      "kind": "custom",
+      "count": 1,
+      "hidden": false,
+      "optional": false,
+      "when": {
+        "test": {
+          "ref": "flags.seams_gap_found"
+        }
+      }
+    },
+    {
+      "id": "tell_vare",
+      "description": "Take the years back to Vare.",
+      "kind": "talk",
+      "count": 1,
+      "hidden": false,
+      "optional": false,
+      "target": "measurer_vare"
+    }
+  ],
+  "stages": [],
+  "unlocks": [
+    "seams_into_the_old_workings"
+  ],
+  "rewards": {
+    "xp": 110,
+    "items": [],
+    "reputation": {
+      "karn_dolur": 10
+    }
+  },
+  "requires": {
+    "quests": [
+      {
+        "quest": "seams_the_missing_year",
+        "status": "complete"
+      }
+    ]
+  },
+  "onComplete": [
+    {
+      "setFlag": {
+        "flag": "seams_years_known",
+        "value": true
+      }
+    }
+  ]
+}

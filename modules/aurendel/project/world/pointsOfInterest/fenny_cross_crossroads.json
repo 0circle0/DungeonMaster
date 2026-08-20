@@ -1,0 +1,16 @@
+{
+  "id": "fenny_cross_crossroads",
+  "name": "The Cross",
+  "description": "Forest road one way, coast road the other, and a foot of standing water in the middle of both.",
+  "area": "duskwood_fenny_cross",
+  "kind": "crossing",
+  "descriptionKey": "generic_crossing",
+  "travelMinutes": 2,
+  "tags": [
+    "crossing"
+  ],
+  "position": {
+    "x": 3,
+    "y": 3
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "id": "deeproads_the_sunless_river",
+  "name": "The Sunless River",
+  "description": "Sixty feet wide, no sound at all, and it has been going the same way for a very long time.",
+  "biome": "underdeep",
+  "layer": "underworld",
+  "descriptionKey": "deeproads_the_sunless_river_desc",
+  "dangerLevel": 8,
+  "recommendedLevel": 10,
+  "tags": [
+    "deeproads"
+  ],
+  "map": {
+    "width": "51",
+    "height": "35"
+  },
+  "entryPoint": {
+    "x": 25,
+    "y": 17
+  },
+  "extra": {
+    "role": "wild"
+  },
+  "connections": [
+    {
+      "to": "deeproads_mycelt",
+      "travelMinutes": 40
+    },
+    {
+      "to": "deeproads_black_bridge",
+      "travelMinutes": 35,
+      "gate": "deeproads_river_crossing"
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "id": "dungeon_delved_chamber",
+  "name": "Delved Chamber",
+  "descriptionKey": "dungeon_delved_chamber_desc",
+  "weight": 5,
+  "minExits": 1,
+  "maxExits": 4,
+  "encounterChance": 0.4,
+  "trapChance": 0.15,
+  "lootChance": 0.25,
+  "tags": [
+    "dungeon_delved",
+    "chamber"
+  ],
+  "role": "chamber"
+}

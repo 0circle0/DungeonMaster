@@ -1,0 +1,17 @@
+{
+  "id": "frostmere_north_passage",
+  "name": "The North Passage",
+  "kind": "hazard",
+  "description": "The sea road round the top of the continent, open for about nine weeks a year and not always those.",
+  "staysOpen": true,
+  "requires": {
+    "description": "a hull and a crew that have done it before",
+    "minLevel": 7
+  },
+  "bypass": {
+    "skill": "survival",
+    "difficulty": 17,
+    "retryable": true
+  },
+  "blockedTextKey": "frostmere_north_passage_blocked"
+}

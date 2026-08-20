@@ -1,0 +1,14 @@
+{
+  "id": "coast",
+  "name": "The Silver Coast",
+  "description": "Chalk over grey water. Wind off the sea and salt in everything.",
+  "layer": "overworld",
+  "palette": "coast",
+  "roomTemplates": [],
+  "encounterTables": [
+    "coast_things"
+  ],
+  "lootTables": [],
+  "traps": [],
+  "ambienceKey": "coast_ambience"
+}

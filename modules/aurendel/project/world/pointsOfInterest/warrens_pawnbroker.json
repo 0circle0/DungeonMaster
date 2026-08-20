@@ -1,0 +1,24 @@
+{
+  "id": "warrens_pawnbroker",
+  "name": "Three Balls, Anchor Lane",
+  "description": "Everything in the window was somebody's, once, and briefly.",
+  "area": "aurenhal_warrens",
+  "kind": "market",
+  "descriptionKey": "int_store",
+  "travelMinutes": 3,
+  "tags": [
+    "shop"
+  ],
+  "position": {
+    "x": 14,
+    "y": 16
+  },
+  "services": [
+    "market"
+  ],
+  "map": {
+    "width": "9",
+    "height": "7",
+    "palette": "int_shop"
+  }
+}

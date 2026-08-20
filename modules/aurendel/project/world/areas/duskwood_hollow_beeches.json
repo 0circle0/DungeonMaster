@@ -1,0 +1,38 @@
+{
+  "id": "duskwood_hollow_beeches",
+  "name": "The Hollow Beeches",
+  "description": "A stand of beeches gone hollow with age, every one of them big enough to stand inside and several of them occupied.",
+  "biome": "deepwood",
+  "layer": "overworld",
+  "descriptionKey": "duskwood_hollow_beeches_desc",
+  "dangerLevel": 4,
+  "recommendedLevel": 4,
+  "tags": [
+    "duskwood"
+  ],
+  "map": {
+    "width": "51",
+    "height": "35"
+  },
+  "entryPoint": {
+    "x": 25,
+    "y": 17
+  },
+  "extra": {
+    "role": "wild"
+  },
+  "connections": [
+    {
+      "to": "duskwood_elderhollow",
+      "travelMinutes": 35
+    },
+    {
+      "to": "duskwood_rooksrest",
+      "travelMinutes": 30
+    }
+  ],
+  "encounterTables": [
+    "duskwood_things",
+    "the_loosed"
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "id": "boar_spear",
+  "name": "Boar Spear",
+  "description": "A crossbar below the head, so what you stop stays stopped.",
+  "kind": "weapon",
+  "slot": "hand",
+  "value": 14,
+  "weight": 3,
+  "damage": {
+    "dice": "1d8",
+    "damageType": "piercing",
+    "stat": "might"
+  },
+  "properties": [
+    "reach",
+    "two_handed"
+  ],
+  "tags": []
+}

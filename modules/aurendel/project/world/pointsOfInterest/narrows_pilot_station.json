@@ -1,0 +1,22 @@
+{
+  "id": "narrows_pilot_station",
+  "name": "The Pilot Station",
+  "description": "A hut on a rock with a flagstaff, and somebody in it whenever anything is expected.",
+  "area": "isles_the_narrows",
+  "kind": "settlement",
+  "descriptionKey": "int_house",
+  "travelMinutes": 5,
+  "tags": [],
+  "services": [
+    "inn"
+  ],
+  "map": {
+    "width": "9",
+    "height": "7",
+    "palette": "int_hull"
+  },
+  "position": {
+    "x": 14,
+    "y": 3
+  }
+}

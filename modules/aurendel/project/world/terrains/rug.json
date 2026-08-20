@@ -1,0 +1,13 @@
+{
+  "id": "rug",
+  "name": "Rug",
+  "description": "Woven and much walked on.",
+  "glyph": "~",
+  "color": "red",
+  "passable": true,
+  "opaque": false,
+  "moveCost": 1,
+  "tags": [
+    "built"
+  ]
+}

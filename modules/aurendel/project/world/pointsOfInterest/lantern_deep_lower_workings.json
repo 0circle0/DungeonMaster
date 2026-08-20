@@ -1,0 +1,17 @@
+{
+  "id": "lantern_deep_lower_workings",
+  "name": "The Lower Workings",
+  "description": "The town has been quarrying its own cavern larger for four hundred years and the workings go further than the plan admits.",
+  "area": "deeproads_lantern_deep",
+  "kind": "dungeonEntrance",
+  "descriptionKey": "generic_dungeon_mouth",
+  "travelMinutes": 12,
+  "tags": [
+    "dungeon"
+  ],
+  "dungeon": "deeproads_lower_workings",
+  "position": {
+    "x": 3,
+    "y": 13
+  }
+}

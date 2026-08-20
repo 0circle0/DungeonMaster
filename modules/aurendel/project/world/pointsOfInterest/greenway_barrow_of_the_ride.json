@@ -1,0 +1,68 @@
+{
+  "id": "greenway_barrow_of_the_ride",
+  "name": "The Ride Barrow",
+  "description": "Sits directly on the Greenway, which means either the barrow came second or the road did.",
+  "area": "duskwood_the_greenway",
+  "kind": "dungeonEntrance",
+  "descriptionKey": "generic_dungeon_mouth",
+  "travelMinutes": 12,
+  "tags": [
+    "dungeon"
+  ],
+  "dungeon": "duskwood_ride_barrow",
+  "position": {
+    "x": 25,
+    "y": 3
+  },
+  "triggers": [
+    {
+      "id": "dusk_green_committed",
+      "mode": "once",
+      "on": "enter",
+      "description": "On the road nobody cut, at the only thing built on it.",
+      "requires": {
+        "custom": {
+          "gte": [
+            {
+              "ref": "threads.dusk_green.known"
+            },
+            2
+          ]
+        }
+      },
+      "effects": [
+        {
+          "emit": {
+            "event": "startQuest",
+            "data": {
+              "quest": "dusk_the_road"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "hidden": true,
+  "discover": {
+    "skill": "survival",
+    "difficulty": {
+      "max": [
+        9,
+        {
+          "sub": [
+            21,
+            {
+              "mul": [
+                3,
+                {
+                  "ref": "threads.dusk_green.known"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "gate": "dusk_green_span"
+}

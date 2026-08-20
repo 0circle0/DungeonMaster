@@ -1,0 +1,14 @@
+{
+  "id": "colders_hearth_the_fire_desc",
+  "variants": [
+    {
+      "text": "A stone platform, a fire on it, and forty years of one man's stubbornness keeping it lit before the village took over."
+    },
+    {
+      "text": "It has not been out since. There is a book recording every night's keeper, and it goes back a long way."
+    },
+    {
+      "text": "In clear weather you can see it from Kestrel Edge, which is eleven miles."
+    }
+  ]
+}

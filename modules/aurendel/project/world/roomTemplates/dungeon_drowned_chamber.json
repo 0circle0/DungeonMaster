@@ -1,0 +1,16 @@
+{
+  "id": "dungeon_drowned_chamber",
+  "name": "Drowned Chamber",
+  "descriptionKey": "dungeon_drowned_chamber_desc",
+  "weight": 5,
+  "minExits": 1,
+  "maxExits": 4,
+  "encounterChance": 0.4,
+  "trapChance": 0.12,
+  "lootChance": 0.22,
+  "tags": [
+    "dungeon_drowned",
+    "chamber"
+  ],
+  "role": "chamber"
+}

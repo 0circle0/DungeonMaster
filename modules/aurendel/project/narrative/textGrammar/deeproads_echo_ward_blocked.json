@@ -1,0 +1,14 @@
+{
+  "id": "deeproads_echo_ward_blocked",
+  "variants": [
+    {
+      "text": "The eleventh chamber takes your words and does not give them back, and the far door does not move."
+    },
+    {
+      "text": "You speak. Nothing comes back at all, which after the first ten chambers is genuinely alarming."
+    },
+    {
+      "text": "There is a phrase over the tenth door. It is presumably the phrase."
+    }
+  ]
+}

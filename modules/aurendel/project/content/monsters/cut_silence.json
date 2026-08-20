@@ -1,0 +1,78 @@
+{
+  "id": "cut_silence",
+  "name": "What the Birds Left",
+  "description": "Forty thousand pairs will nest on a gun or a corpse. They will not nest here, and they have been right about it for a lifetime.",
+  "level": 7,
+  "xp": 720,
+  "attributes": {
+    "might": 14,
+    "agility": 16,
+    "endurance": 15,
+    "intellect": 13,
+    "instinct": 18,
+    "presence": 16
+  },
+  "abilities": [
+    "wither",
+    "grave_chill",
+    "bleed_white"
+  ],
+  "behaviour": [
+    {
+      "priority": 15,
+      "use": "bleed_white"
+    },
+    {
+      "priority": 0,
+      "use": "wither"
+    }
+  ],
+  "faction": "the_unsealed",
+  "creatureType": "undead",
+  "size": "medium",
+  "descriptors": [
+    "a soundless",
+    "a pale"
+  ],
+  "conditionalLoot": [],
+  "loot": "isle_cut_hoard",
+  "damageInteractions": [
+    {
+      "damageType": "slashing",
+      "multiplier": 0.5,
+      "unless": [
+        "silvered"
+      ]
+    },
+    {
+      "damageType": "piercing",
+      "multiplier": 0.5,
+      "unless": [
+        "silvered"
+      ]
+    }
+  ],
+  "conditionImmunities": [
+    "frightened",
+    "poisoned"
+  ],
+  "resourceOverrides": {
+    "hp": 80
+  },
+  "temperament": {
+    "roamRadius": 12,
+    "investigateRadius": 40,
+    "leashRadius": 60,
+    "wanderChance": 0.1,
+    "disengageTurns": 1,
+    "speeds": {
+      "wander": 0.5,
+      "investigate": 0.5
+    },
+    "investigates": [
+      "sight",
+      "hearing",
+      "smell"
+    ]
+  }
+}

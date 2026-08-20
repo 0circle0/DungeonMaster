@@ -1,0 +1,177 @@
+{
+  "id": "hesk_talk",
+  "start": "greet",
+  "nodes": [
+    {
+      "id": "greet",
+      "says": [
+        {
+          "text": "Hesk is sitting on the temple steps with a pack he has not put down. \"Moot sent me. Which one have you been to?\""
+        }
+      ],
+      "options": [
+        {
+          "id": "the_barrow",
+          "text": "The Dene Barrow.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": true,
+          "lockedHint": "You have not been to a ward yet.",
+          "goto": "the_barrow",
+          "requires": {
+            "flags": [
+              {
+                "flag": "barrow_seen",
+                "equals": true
+              }
+            ]
+          }
+        },
+        {
+          "id": "what_moot",
+          "text": "What moot?",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "what_moot"
+        },
+        {
+          "id": "leave",
+          "text": "Nothing.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": [
+        {
+          "requires": {
+            "memories": [
+              {
+                "deedKind": "ward_broken",
+                "who": "speaker",
+                "withinDays": 90
+              }
+            ]
+          },
+          "goto": "he_has_heard"
+        }
+      ]
+    },
+    {
+      "id": "what_moot",
+      "says": [
+        {
+          "text": "\"Elderhollow's. We keep the Thornward and a few other things, and we have kept them a long time without anybody thanking us for it.\""
+        }
+      ],
+      "options": [
+        {
+          "id": "back",
+          "text": "Hm.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "greet"
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": []
+    },
+    {
+      "id": "the_barrow",
+      "says": [
+        {
+          "text": "\"Then you've seen one open.\" He rubs his face. \"That's four. Moot knows of three and I've just learned a fourth from a stranger on a step.\""
+        }
+      ],
+      "options": [
+        {
+          "id": "help",
+          "text": "What do you need?",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "what_he_needs"
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": []
+    },
+    {
+      "id": "what_he_needs",
+      "says": [
+        {
+          "text": "\"Somebody at each of the others before whatever's doing this gets there. Thornward, the Sisters, the Kurgan field.\" He looks up. \"I can be at one. You could be at another.\""
+        }
+      ],
+      "options": [
+        {
+          "id": "agreed",
+          "text": "We'll go.",
+          "effects": [
+            {
+              "adjustReputation": {
+                "faction": "the_keepers",
+                "amount": 6
+              }
+            },
+            {
+              "setFlag": {
+                "flag": "hesk_briefed",
+                "value": true
+              }
+            }
+          ],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "greet"
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": []
+    },
+    {
+      "id": "he_has_heard",
+      "says": [
+        {
+          "text": "He stands up when he sees you, which is not a welcome. \"Word came up from the moot. You broke one.\""
+        }
+      ],
+      "options": [
+        {
+          "id": "explain",
+          "text": "It was already going.",
+          "effects": [
+            {
+              "adjustReputation": {
+                "faction": "the_keepers",
+                "amount": -4
+              }
+            }
+          ],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "greet"
+        },
+        {
+          "id": "say_nothing",
+          "text": "Nothing.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": []
+    }
+  ]
+}

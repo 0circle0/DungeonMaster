@@ -1,0 +1,22 @@
+{
+  "id": "cistern_keepers_ring",
+  "name": "The Cistern Keeper's Ring",
+  "description": "Three hundred years of an office with nothing to do. The stone in it is always cold and always slightly wet.",
+  "kind": "trinket",
+  "slot": "ring",
+  "value": 800,
+  "weight": 1,
+  "tags": [
+    "fabled"
+  ],
+  "skillBonuses": {
+    "survival": 3
+  },
+  "damageInteractions": [
+    {
+      "damageType": "fire",
+      "multiplier": 0.5
+    }
+  ],
+  "rarity": "rare"
+}

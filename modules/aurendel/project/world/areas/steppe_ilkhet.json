@@ -1,0 +1,39 @@
+{
+  "id": "steppe_ilkhet",
+  "name": "Ilkhet",
+  "description": "A town that is legally a camp, because moving it is still, in principle, an option.",
+  "biome": "urban_timber",
+  "layer": "overworld",
+  "descriptionKey": "steppe_ilkhet_desc",
+  "dangerLevel": 1,
+  "recommendedLevel": 3,
+  "tags": [
+    "sunward_steppe",
+    "town"
+  ],
+  "map": {
+    "width": "41",
+    "height": "27"
+  },
+  "entryPoint": {
+    "x": 20,
+    "y": 13
+  },
+  "extra": {
+    "role": "town"
+  },
+  "connections": [
+    {
+      "to": "steppe_horse_road",
+      "travelMinutes": 40
+    },
+    {
+      "to": "steppe_kurgan_field",
+      "travelMinutes": 45
+    },
+    {
+      "to": "steppe_the_south_reach",
+      "travelMinutes": 60
+    }
+  ]
+}

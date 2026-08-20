@@ -1,0 +1,19 @@
+{
+  "id": "saltcliff_lighthouse",
+  "name": "The Saltcliff Light",
+  "description": "A hundred and ten feet of stone with a fire on top of it, and the keeper's stair going round the inside.",
+  "area": "sarnport_saltcliff",
+  "kind": "landmark",
+  "descriptionKey": "saltcliff_lighthouse_desc",
+  "travelMinutes": 8,
+  "tags": [
+    "landmark"
+  ],
+  "map": {
+    "static": "saltcliff_light"
+  },
+  "position": {
+    "x": 3,
+    "y": 3
+  }
+}

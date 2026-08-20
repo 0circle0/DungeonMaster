@@ -1,0 +1,14 @@
+{
+  "id": "desert",
+  "name": "The Glasslands",
+  "description": "Dunes over fused sand, and a city that the sand mostly won.",
+  "layer": "overworld",
+  "palette": "desert",
+  "roomTemplates": [],
+  "encounterTables": [
+    "glasslands_things"
+  ],
+  "lootTables": [],
+  "traps": [],
+  "ambienceKey": "desert_ambience"
+}

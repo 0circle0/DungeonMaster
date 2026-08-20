@@ -1,0 +1,13 @@
+{
+  "id": "gullstone_stair",
+  "name": "The Gullstone Stair",
+  "kind": "hazard",
+  "description": "Four hundred feet of cut steps up a rock, with no rail, in a place where the wind does not stop.",
+  "staysOpen": true,
+  "bypass": {
+    "skill": "acrobatics",
+    "difficulty": 14,
+    "retryable": true
+  },
+  "blockedTextKey": "gullstone_stair_blocked"
+}

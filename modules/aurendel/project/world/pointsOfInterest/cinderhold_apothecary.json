@@ -1,0 +1,24 @@
+{
+  "id": "cinderhold_apothecary",
+  "name": "The Ash Apothecary",
+  "description": "Burns, lungs, and the specific things the reach does to people.",
+  "area": "ember_cinderhold",
+  "kind": "market",
+  "descriptionKey": "int_store",
+  "travelMinutes": 3,
+  "tags": [
+    "shop"
+  ],
+  "services": [
+    "market"
+  ],
+  "map": {
+    "width": "15",
+    "height": "11",
+    "palette": "int_shop"
+  },
+  "position": {
+    "x": 29,
+    "y": 23
+  }
+}

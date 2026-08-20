@@ -1,0 +1,14 @@
+{
+  "id": "dungeon_ruin_entrance_desc",
+  "variants": [
+    {
+      "text": "A doorway with no door and a lintel holding up nothing in particular."
+    },
+    {
+      "text": "The threshold is still there under the moss, worn in the middle."
+    },
+    {
+      "text": "You step through a wall that stops at shoulder height."
+    }
+  ]
+}

@@ -1,0 +1,34 @@
+{
+  "id": "duskwood_things",
+  "minDepth": 0,
+  "maxDepth": 999,
+  "chance": 0.4,
+  "emptyWeight": 5,
+  "scalePerLevels": 3,
+  "groups": [
+    {
+      "id": "thorns",
+      "weight": 5,
+      "hostile": true,
+      "entries": [
+        {
+          "monster": "thorn_thing",
+          "count": "1d2",
+          "scaleWithLevel": true
+        }
+      ]
+    },
+    {
+      "id": "walkers",
+      "weight": 3,
+      "hostile": true,
+      "entries": [
+        {
+          "monster": "hollow_walker",
+          "count": "1",
+          "scaleWithLevel": true
+        }
+      ]
+    }
+  ]
+}

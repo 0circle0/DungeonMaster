@@ -1,0 +1,57 @@
+{
+  "id": "glass_still_full",
+  "name": "The Bath That Is Still Full",
+  "description": "One warm bath in a desert, never metered by a city that meters to the cup, and masonry under poured glass on the crater lip.",
+  "autoStart": false,
+  "ordered": true,
+  "tags": [
+    "hidden",
+    "glasslands",
+    "glass_bath"
+  ],
+  "objectives": [
+    {
+      "id": "at_the_stair",
+      "description": "Get down the crater stair.",
+      "kind": "reach",
+      "count": 1,
+      "hidden": true,
+      "optional": false,
+      "target": "glass_quarter_crater_stair"
+    },
+    {
+      "id": "read_the_lines",
+      "description": "Read the lines in the glass from the side they were cut for.",
+      "kind": "custom",
+      "count": 1,
+      "hidden": true,
+      "optional": false,
+      "when": {
+        "test": {
+          "ref": "flags.glass_bath_open"
+        }
+      }
+    },
+    {
+      "id": "what_heats_it",
+      "description": "Find what has the fire under it.",
+      "kind": "kill",
+      "count": 1,
+      "hidden": true,
+      "optional": false,
+      "target": "crater_founder"
+    }
+  ],
+  "stages": [],
+  "unlocks": [],
+  "rewards": {
+    "xp": 260,
+    "items": [
+      {
+        "item": "unsold_lens_mounted",
+        "quantity": 1
+      }
+    ],
+    "reputation": {}
+  }
+}

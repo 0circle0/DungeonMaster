@@ -1,0 +1,102 @@
+{
+  "id": "seams_the_missing_year",
+  "name": "The Missing Year",
+  "description": "The Hold writes down the weather. It has not written down which year it stopped working the old seams, and Vare has spent eleven years being professionally troubled by that.",
+  "autoStart": false,
+  "ordered": true,
+  "tags": [
+    "side",
+    "act3",
+    "seams",
+    "skarnspine"
+  ],
+  "objectives": [
+    {
+      "id": "to_the_hall",
+      "description": "Reach the Hall of Measures.",
+      "kind": "reach",
+      "count": 1,
+      "hidden": false,
+      "optional": false,
+      "target": "deep_market_hall_of_measures"
+    },
+    {
+      "id": "hear_vare",
+      "description": "Hear what Vare cannot find.",
+      "kind": "talk",
+      "count": 1,
+      "hidden": false,
+      "optional": false,
+      "target": "measurer_vare"
+    },
+    {
+      "id": "the_omission",
+      "description": "Understand what an omission means here.",
+      "kind": "custom",
+      "count": 1,
+      "hidden": false,
+      "optional": false,
+      "when": {
+        "test": {
+          "ref": "flags.seams_omission_known"
+        }
+      }
+    }
+  ],
+  "stages": [],
+  "unlocks": [
+    "seams_the_ledger_stone"
+  ],
+  "rewards": {
+    "xp": 90,
+    "items": [],
+    "reputation": {
+      "karn_dolur": 12
+    }
+  },
+  "giver": "measurer_vare",
+  "requires": {
+    "description": "two of the three ward-keys",
+    "anyOf": [
+      {
+        "items": [
+          {
+            "item": "grown_key"
+          },
+          {
+            "item": "cast_key"
+          }
+        ]
+      },
+      {
+        "items": [
+          {
+            "item": "grown_key"
+          },
+          {
+            "item": "glass_key"
+          }
+        ]
+      },
+      {
+        "items": [
+          {
+            "item": "cast_key"
+          },
+          {
+            "item": "glass_key"
+          }
+        ]
+      }
+    ],
+    "minLevel": 6
+  },
+  "onComplete": [
+    {
+      "setFlag": {
+        "flag": "seams_asked",
+        "value": true
+      }
+    }
+  ]
+}

@@ -1,0 +1,36 @@
+{
+  "id": "underdeep",
+  "name": "The Deeproads",
+  "floor": "cave_floor",
+  "wall": "cave_wall",
+  "exterior": "cave_wall",
+  "scatter": [
+    {
+      "terrain": "mushroom",
+      "frequency": 0.12,
+      "distribution": "patch",
+      "scale": 7,
+      "priority": 0
+    },
+    {
+      "terrain": "rubble",
+      "frequency": 0.1,
+      "distribution": "patch",
+      "scale": 9,
+      "priority": 1
+    },
+    {
+      "terrain": "shallows",
+      "frequency": 0.06,
+      "distribution": "patch",
+      "scale": 11,
+      "priority": 2
+    },
+    {
+      "terrain": "chasm",
+      "frequency": 0.03,
+      "distribution": "speckle",
+      "priority": 3
+    }
+  ]
+}

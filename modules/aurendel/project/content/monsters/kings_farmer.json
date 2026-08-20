@@ -1,0 +1,52 @@
+{
+  "id": "kings_farmer",
+  "name": "Alsey, at the Ford",
+  "description": "Farms two banks of a river, which is twice the walking.",
+  "level": 3,
+  "xp": 0,
+  "attributes": {
+    "might": 14,
+    "agility": 11,
+    "endurance": 14,
+    "intellect": 10,
+    "instinct": 13,
+    "presence": 12
+  },
+  "abilities": [
+    "strike"
+  ],
+  "behaviour": [
+    {
+      "priority": 0,
+      "use": "strike"
+    }
+  ],
+  "faction": "the_crown",
+  "creatureType": "humanoid",
+  "size": "medium",
+  "descriptors": [
+    "a red-faced"
+  ],
+  "conditionalLoot": [],
+  "loot": "kings_key_carried",
+  "resourceOverrides": {
+    "hp": 20
+  },
+  "temperament": {
+    "roamRadius": 24,
+    "investigateRadius": 70,
+    "leashRadius": 100,
+    "wanderChance": 0.4,
+    "disengageTurns": 2,
+    "investigates": [
+      "sight",
+      "hearing",
+      "tracks",
+      "smell"
+    ],
+    "notices": [
+      "hostile",
+      "neutral"
+    ]
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "id": "cinder_cloak",
+  "name": "A Cinder Cloak",
+  "description": "Woven from what the vent-readers pull out of the ash fall, which they will tell you is a kind of rock and is not.",
+  "kind": "armor",
+  "slot": "cloak",
+  "value": 180,
+  "weight": 3,
+  "tags": [],
+  "skillBonuses": {
+    "resolve": 1
+  },
+  "damageInteractions": [
+    {
+      "damageType": "fire",
+      "multiplier": 0.5
+    }
+  ],
+  "rarity": "rare"
+}

@@ -1,0 +1,17 @@
+{
+  "id": "steppe_grass",
+  "name": "Steppe Grass",
+  "description": "Grass to the horizon, all of it leaning the same way.",
+  "glyph": "|",
+  "color": "yellow",
+  "passable": true,
+  "opaque": false,
+  "moveCost": 1,
+  "tags": [
+    "soft"
+  ],
+  "marks": {
+    "tracks": 1,
+    "smell": 1
+  }
+}

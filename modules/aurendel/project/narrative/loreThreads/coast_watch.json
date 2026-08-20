@@ -1,0 +1,11 @@
+{
+  "id": "coast_watch",
+  "name": "The Tower That Still Signals",
+  "description": "A watchtower with no roof and no stair, off which every skipper on this coast corrects two points to starboard after dark.",
+  "entries": [
+    "coast_watch_correct",
+    "coast_watch_light",
+    "coast_watch_ring",
+    "coast_watch_tide"
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "id": "witchwood_the_ring",
+  "name": "The Ring",
+  "description": "Nine trees in a circle sixty feet across, all the same age, all the same species, and nothing at all growing inside them.",
+  "area": "duskwood_witchwood",
+  "kind": "landmark",
+  "descriptionKey": "witchwood_the_ring_desc",
+  "travelMinutes": 6,
+  "tags": [],
+  "position": {
+    "x": 3,
+    "y": 3
+  }
+}

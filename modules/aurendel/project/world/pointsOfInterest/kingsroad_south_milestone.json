@@ -1,0 +1,14 @@
+{
+  "id": "kingsroad_south_milestone",
+  "name": "The Hundredth Milestone",
+  "description": "Cut with a number and a crown, and leaned on by everybody who gets this far.",
+  "area": "kingsvale_kingsroad_south",
+  "kind": "landmark",
+  "descriptionKey": "kingsroad_south_milestone_desc",
+  "travelMinutes": 3,
+  "tags": [],
+  "position": {
+    "x": 25,
+    "y": 17
+  }
+}

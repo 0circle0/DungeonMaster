@@ -1,0 +1,24 @@
+{
+  "id": "thrift_the_pink",
+  "name": "The Pink",
+  "description": "Two rooms, and a landlord who will tell you about the flower.",
+  "area": "coast_thrift",
+  "kind": "settlement",
+  "descriptionKey": "int_inn",
+  "travelMinutes": 3,
+  "tags": [
+    "inn"
+  ],
+  "services": [
+    "inn"
+  ],
+  "map": {
+    "width": "9",
+    "height": "7",
+    "palette": "int_timber"
+  },
+  "position": {
+    "x": 15,
+    "y": 3
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "id": "deeproads_black_bridge_desc",
+  "variants": [
+    {
+      "text": "A single span over a chasm of no measured depth, with no parapet and no supports anybody has been able to find."
+    },
+    {
+      "text": "The Black Bridge. Eleven feet wide, four hundred long, and it does not flex."
+    },
+    {
+      "text": "You can drop a lamp off it and watch it for an uncomfortably long time."
+    },
+    {
+      "text": "It grows out of chambers at both ends rather than resting on anything."
+    }
+  ]
+}

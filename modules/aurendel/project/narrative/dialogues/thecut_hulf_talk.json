@@ -1,0 +1,352 @@
+{
+  "id": "thecut_hulf_talk",
+  "start": "greet",
+  "nodes": [
+    {
+      "id": "greet",
+      "says": [
+        {
+          "text": "The ward is a wall across the pass with a gate in it and a room beside the gate, and Hulf is in the room with a ledger open at a page dated to the year eleven. \"Through, or business?\""
+        }
+      ],
+      "options": [
+        {
+          "id": "business",
+          "text": "Business. What's wrong with your water?",
+          "effects": [
+            {
+              "emit": {
+                "event": "startQuest",
+                "data": {
+                  "quest": "thecut_the_red_water"
+                }
+              }
+            }
+          ],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "nine_days",
+          "requires": {
+            "quests": [
+              {
+                "quest": "thecut_the_red_water",
+                "status": "unstarted"
+              },
+              {
+                "quest": "the_undercroft",
+                "status": "complete"
+              }
+            ]
+          }
+        },
+        {
+          "id": "the_ledger",
+          "text": "What's the ledger?",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "the_ledger"
+        },
+        {
+          "id": "leave",
+          "text": "Through.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": [
+        {
+          "requires": {
+            "quests": [
+              {
+                "quest": "thecut_the_red_water",
+                "status": "active"
+              }
+            ],
+            "flags": [
+              {
+                "flag": "thecut_lake_seen",
+                "equals": true
+              }
+            ]
+          },
+          "goto": "about_the_lake"
+        },
+        {
+          "requires": {
+            "flags": [
+              {
+                "flag": "thecut_sink_cleared",
+                "equals": true
+              }
+            ],
+            "without": {
+              "flags": [
+                {
+                  "flag": "thecut_sealed"
+                },
+                {
+                  "flag": "thecut_opened"
+                }
+              ]
+            }
+          },
+          "goto": "seal_or_open"
+        }
+      ]
+    },
+    {
+      "id": "the_ledger",
+      "says": [
+        {
+          "text": "\"Every year the mountain's water has done anything but what it did the year before, since the year eleven.\" He turns it round without being asked. \"Nine hundred years of a hold writing down the weather. You may think that is a waste of ink. I have four entries here that say a village should be moved and it was.\""
+        }
+      ],
+      "options": [
+        {
+          "id": "back",
+          "text": "Hm.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "greet"
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": []
+    },
+    {
+      "id": "nine_days",
+      "says": [
+        {
+          "text": "\"Red for nine days from the swallet, and then two days of nothing at all coming out down at the head.\" Hulf closes the ledger on a finger. \"Red is iron and iron is ordinary. Nothing at all is not ordinary. Nothing at all means it is *going* somewhere.\""
+        }
+      ],
+      "options": [
+        {
+          "id": "hold",
+          "text": "And the Hold drinks off this mountain.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "quietly"
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": []
+    },
+    {
+      "id": "quietly",
+      "says": [
+        {
+          "text": "\"The Hold drinks off this mountain,\" Hulf agrees, \"and the Hold has told me to find out about it without it becoming the Hold's problem, and gave me a purse to help me understand the distinction.\" He puts the purse on the ledger. \"Go up to the corrie lake and look at the colour, and mind how far down the colour goes.\""
+        }
+      ],
+      "options": [
+        {
+          "id": "done",
+          "text": "We'll go up.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": []
+    },
+    {
+      "id": "about_the_lake",
+      "says": [
+        {
+          "text": "\"You went up.\" He has the ledger open again. \"How far down?\""
+        }
+      ],
+      "options": [
+        {
+          "id": "all_of_it",
+          "text": "All of it. It's red to the bottom.",
+          "effects": [],
+          "onceOnly": true,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "not_the_lake"
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": []
+    },
+    {
+      "id": "not_the_lake",
+      "says": [
+        {
+          "text": "\"Then it is not the lake,\" says Hulf, and writes. \"A lake stains from the top. Red to the bottom means it is coming *up* into the lake from underneath, which means the swallet is not draining, which means the swallet is *full*.\""
+        },
+        {
+          "text": "He stops writing. \"And the quarry galleries in the Cut go into the same mountain from the other side. There are two pages in this ledger about that and nobody has ever had cause to read them together.\""
+        }
+      ],
+      "options": [
+        {
+          "id": "the_galleries",
+          "text": "Then we'll go in from the Cut.",
+          "effects": [
+            {
+              "emit": {
+                "event": "startQuest",
+                "data": {
+                  "quest": "thecut_the_galleries"
+                }
+              }
+            },
+            {
+              "adjustReputation": {
+                "faction": "karn_dolur",
+                "amount": 5
+              }
+            }
+          ],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "take_a_lamp",
+          "requires": {
+            "quests": [
+              {
+                "quest": "thecut_the_galleries",
+                "status": "unstarted"
+              }
+            ]
+          }
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": [],
+      "remembers": "hold_honoured"
+    },
+    {
+      "id": "take_a_lamp",
+      "says": [
+        {
+          "text": "\"Take two lamps and do not carry them together,\" says Hulf. \"Hold rule, nine hundred years old, and the reason for it is in the ledger as well.\""
+        }
+      ],
+      "options": [
+        {
+          "id": "done",
+          "text": "Two lamps.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": []
+    },
+    {
+      "id": "seal_or_open",
+      "says": [
+        {
+          "text": "Hulf has walked down to the gallery mouth himself, which he does not do. \"It is running clear,\" he says. \"Off the swallet, all the way down. Two days and it is clear.\""
+        },
+        {
+          "text": "\"Now the part the purse was actually for,\" he says. \"Those galleries come out the far side of the pass. The muleteers have wanted an under-road for two hundred years and the Hold has refused for two hundred, and the reason the Hold gives is that an open road under a mountain is a door.\" He looks at you. \"I can have it sealed by Highsun. Or I can not have seen it.\""
+        }
+      ],
+      "options": [
+        {
+          "id": "seal",
+          "text": "Seal it. The Hold is right about doors.",
+          "effects": [
+            {
+              "setFlag": {
+                "flag": "thecut_sealed",
+                "value": true
+              }
+            }
+          ],
+          "onceOnly": true,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "sealed"
+        },
+        {
+          "id": "leave_open",
+          "text": "Leave it. The muleteers have earned a road.",
+          "effects": [
+            {
+              "setFlag": {
+                "flag": "thecut_opened",
+                "value": true
+              }
+            },
+            {
+              "grantItem": {
+                "target": {
+                  "ref": "actor.id"
+                },
+                "item": "hold_silver",
+                "quantity": 4
+              }
+            }
+          ],
+          "onceOnly": true,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "opened"
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": []
+    },
+    {
+      "id": "sealed",
+      "says": [
+        {
+          "text": "It takes forty men eleven days and the Hold sends every one of them without being asked twice, which tells you what the Hold thinks about doors."
+        }
+      ],
+      "options": [
+        {
+          "id": "done",
+          "text": "Sealed.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": [],
+      "remembers": "hold_honoured"
+    },
+    {
+      "id": "opened",
+      "says": [
+        {
+          "text": "\"I have not seen it,\" says Hulf, and writes nothing at all in the ledger, which for him is the largest thing he has ever done."
+        }
+      ],
+      "options": [
+        {
+          "id": "done",
+          "text": "Nobody has.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": []
+    }
+  ]
+}

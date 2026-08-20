@@ -1,0 +1,18 @@
+{
+  "id": "carry",
+  "name": "Carry",
+  "description": "What you can haul before it starts to matter.",
+  "formula": {
+    "mul": [
+      15,
+      {
+        "add": [
+          1,
+          {
+            "ref": "actor.mod.might"
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,70 @@
+{
+  "id": "trial_one_cellars",
+  "name": "The First Door",
+  "description": "Hesper's list says the first of the eight was opened under a ward-house in the Skarnspine, and that the bar on its cellar door is on the inside.",
+  "autoStart": false,
+  "ordered": true,
+  "tags": [
+    "trial",
+    "trial_one"
+  ],
+  "objectives": [
+    {
+      "id": "to_the_cellars",
+      "description": "Get down to the ward cellars.",
+      "kind": "reach",
+      "count": 1,
+      "hidden": false,
+      "optional": false,
+      "target": "highpass_ward_cellars"
+    },
+    {
+      "id": "past_the_bar",
+      "description": "Get past a bar that was put up from inside.",
+      "kind": "custom",
+      "count": 1,
+      "hidden": false,
+      "optional": false,
+      "when": {
+        "test": {
+          "ref": "flags.trial_one_open"
+        }
+      }
+    },
+    {
+      "id": "the_first",
+      "description": "Finish what came through the first door.",
+      "kind": "kill",
+      "count": 1,
+      "hidden": false,
+      "optional": false,
+      "target": "first_through"
+    }
+  ],
+  "stages": [],
+  "unlocks": [
+    "trial_one_underkeep"
+  ],
+  "rewards": {
+    "xp": 1400,
+    "items": [
+      {
+        "item": "cellar_belt",
+        "quantity": 1
+      }
+    ],
+    "reputation": {
+      "the_keepers": 20
+    }
+  },
+  "giver": "keeper_hesper",
+  "requires": {
+    "flags": [
+      {
+        "flag": "aurendel_finished",
+        "equals": true
+      }
+    ],
+    "minLevel": 14
+  }
+}

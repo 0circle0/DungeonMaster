@@ -1,0 +1,52 @@
+{
+  "id": "ice_things",
+  "minDepth": 0,
+  "maxDepth": 999,
+  "chance": 0.4,
+  "emptyWeight": 5,
+  "scalePerLevels": 3,
+  "groups": [
+    {
+      "id": "wights",
+      "weight": 4,
+      "hostile": true,
+      "entries": [
+        {
+          "monster": "rime_wight",
+          "count": "1d2",
+          "scaleWithLevel": true
+        }
+      ]
+    },
+    {
+      "id": "shades",
+      "weight": 3,
+      "hostile": true,
+      "entries": [
+        {
+          "monster": "rime_shade",
+          "count": "1",
+          "scaleWithLevel": true
+        }
+      ],
+      "requires": {
+        "minLevel": 6
+      }
+    },
+    {
+      "id": "hounds",
+      "weight": 3,
+      "hostile": true,
+      "entries": [
+        {
+          "monster": "grave_hound",
+          "count": "1d2",
+          "scaleWithLevel": true
+        }
+      ],
+      "requires": {
+        "maxLevel": 6
+      }
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "id": "dungeon_ruin_boss_desc",
+  "variants": [
+    {
+      "text": "The great hall: walls to full height on three sides, and the fourth gone entirely so you can see the sky and the trees past it."
+    },
+    {
+      "text": "Column bases down both sides, evenly spaced, holding up nothing."
+    },
+    {
+      "text": "This was the room the whole place was built round, and it is still the room you would build it round."
+    }
+  ]
+}

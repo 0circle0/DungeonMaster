@@ -1,0 +1,57 @@
+{
+  "id": "ember_the_sheet",
+  "name": "The Sheet",
+  "description": "A mile of glass poured flat over writing that is still legible, and something under it hot for nine hundred years.",
+  "autoStart": false,
+  "ordered": true,
+  "tags": [
+    "hidden",
+    "ember_reach",
+    "ember_sheet"
+  ],
+  "objectives": [
+    {
+      "id": "down_the_cut",
+      "description": "Get down the cut.",
+      "kind": "reach",
+      "count": 1,
+      "hidden": true,
+      "optional": false,
+      "target": "obsidian_shelf_broken_stair"
+    },
+    {
+      "id": "read_it",
+      "description": "Read what the glass went over.",
+      "kind": "custom",
+      "count": 1,
+      "hidden": true,
+      "optional": false,
+      "when": {
+        "test": {
+          "ref": "flags.ember_sheet_open"
+        }
+      }
+    },
+    {
+      "id": "what_holds_heat",
+      "description": "Meet what has held the heat.",
+      "kind": "kill",
+      "count": 1,
+      "hidden": true,
+      "optional": false,
+      "target": "sheet_founder"
+    }
+  ],
+  "stages": [],
+  "unlocks": [],
+  "rewards": {
+    "xp": 270,
+    "items": [
+      {
+        "item": "sheet_lens",
+        "quantity": 1
+      }
+    ],
+    "reputation": {}
+  }
+}

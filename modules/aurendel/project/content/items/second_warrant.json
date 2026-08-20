@@ -1,0 +1,12 @@
+{
+  "id": "second_warrant",
+  "name": "The Warrant of the Middle Three",
+  "description": "Six lines struck through now. Hesper has stopped countersigning and started writing the date beside each one, which is what the order does when it expects to be read a long time from now.",
+  "kind": "key",
+  "value": 0,
+  "weight": 0,
+  "tags": [
+    "warrant",
+    "trial"
+  ]
+}

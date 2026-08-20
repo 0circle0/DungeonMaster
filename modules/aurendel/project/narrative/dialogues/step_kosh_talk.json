@@ -1,0 +1,219 @@
+{
+  "id": "step_kosh_talk",
+  "start": "greet",
+  "nodes": [
+    {
+      "id": "greet",
+      "says": [
+        {
+          "text": "Four hundred head strung out along a line of trees, and a herder walking the length of them because that is what the day is."
+        },
+        {
+          "text": "“Walk with me or stand still. Do not stand in the middle.”"
+        }
+      ],
+      "onEnter": [],
+      "options": [
+        {
+          "id": "step_kosh_season",
+          "text": "The trees. Were they all set at once?",
+          "requires": {
+            "without": {
+              "lore": [
+                "step_line_season"
+              ]
+            }
+          },
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "check": {
+            "skill": "survival",
+            "difficulty": {
+              "sub": [
+                13,
+                {
+                  "clamp": [
+                    {
+                      "div": [
+                        {
+                          "ref": "reputation.the_horse_lords",
+                          "else": 0
+                        },
+                        5
+                      ]
+                    },
+                    -6,
+                    6
+                  ]
+                }
+              ]
+            },
+            "onSuccess": "step_kosh_season_told",
+            "onFailure": "step_kosh_season_wont"
+          }
+        },
+        {
+          "id": "step_kosh_wont",
+          "text": "Why will the Lines not camp at the Last Water?",
+          "requires": {
+            "without": {
+              "lore": [
+                "step_water_wont"
+              ]
+            }
+          },
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "check": {
+            "skill": "insight",
+            "difficulty": {
+              "sub": [
+                14,
+                {
+                  "clamp": [
+                    {
+                      "div": [
+                        {
+                          "ref": "reputation.the_horse_lords",
+                          "else": 0
+                        },
+                        5
+                      ]
+                    },
+                    -6,
+                    6
+                  ]
+                }
+              ]
+            },
+            "onSuccess": "step_kosh_wont_told",
+            "onFailure": "step_kosh_wont_wont"
+          }
+        },
+        {
+          "id": "greet_leave",
+          "text": "Nothing.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "step_kosh_season_told",
+      "says": [
+        {
+          "text": "“Within a season.” Kosh does not break stride. “You can see it in the boles — same girth, same lean, same scar year in all of them. Eleven miles.” A glance across. “Four hundred people for a season. On this grass, in that year, there were not four hundred people.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "learnLore": {
+            "entry": "step_line_season"
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "step_kosh_season_on",
+          "text": "Go on.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "step_kosh_season_wont",
+      "says": [
+        {
+          "text": "“I've said all I mean to,” they say, and go back to what they were doing."
+        }
+      ],
+      "onEnter": [
+        {
+          "adjustReputation": {
+            "faction": "the_horse_lords",
+            "amount": -1
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "step_kosh_season_drop",
+          "text": "Leave it.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "step_kosh_wont_told",
+      "says": [
+        {
+          "text": "“Ask twelve and you will get twelve answers.” Kosh sounds genuinely amused. “Bad grass. Bad ground. A cousin who died there. The Glasslands too close.” The amusement goes. “Now ask why none of the twelve is the same, when we agree about everything else on this steppe down to which side of a hill.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "learnLore": {
+            "entry": "step_water_wont"
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "step_kosh_wont_on",
+          "text": "Go on.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "step_kosh_wont_wont",
+      "says": [
+        {
+          "text": "“I've said all I mean to,” they say, and go back to what they were doing."
+        }
+      ],
+      "onEnter": [
+        {
+          "adjustReputation": {
+            "faction": "the_horse_lords",
+            "amount": -1
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "step_kosh_wont_drop",
+          "text": "Leave it.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    }
+  ]
+}

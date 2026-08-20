@@ -1,0 +1,34 @@
+{
+  "id": "dun_delved",
+  "name": "Delved Hall",
+  "floor": "flagstone",
+  "wall": "wall_stone",
+  "exterior": "wall_stone",
+  "scatter": [
+    {
+      "terrain": "pillar",
+      "frequency": 0.05,
+      "distribution": "speckle",
+      "priority": 0
+    },
+    {
+      "terrain": "rubble",
+      "frequency": 0.06,
+      "distribution": "speckle",
+      "priority": 1
+    },
+    {
+      "terrain": "brazier",
+      "frequency": 0.015,
+      "distribution": "speckle",
+      "priority": 2
+    },
+    {
+      "terrain": "stair",
+      "frequency": 0.02,
+      "distribution": "speckle",
+      "priority": 3
+    }
+  ],
+  "door": "door"
+}

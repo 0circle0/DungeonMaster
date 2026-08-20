@@ -1,0 +1,73 @@
+{
+  "id": "dryriver_the_lost_wagons",
+  "name": "The Lost Wagons",
+  "description": "Water does not stop. It goes somewhere else. Saray says find where, and says it in the tone of somebody who already knows and would rather be told by a stranger.",
+  "autoStart": false,
+  "ordered": true,
+  "tags": [
+    "side",
+    "act2",
+    "dryriver",
+    "sunward_steppe"
+  ],
+  "objectives": [
+    {
+      "id": "into_the_grass",
+      "description": "Get out into the Long Grass.",
+      "kind": "reach",
+      "count": 1,
+      "hidden": false,
+      "optional": false,
+      "target": "long_grass_lost_wagons"
+    },
+    {
+      "id": "the_line",
+      "description": "See what line the wagons are in.",
+      "kind": "custom",
+      "count": 1,
+      "hidden": false,
+      "optional": false,
+      "when": {
+        "test": {
+          "ref": "flags.dryriver_wagons_found"
+        }
+      }
+    },
+    {
+      "id": "tell_saray",
+      "description": "Take the line back to Saray.",
+      "kind": "talk",
+      "count": 1,
+      "hidden": false,
+      "optional": false,
+      "target": "well_keeper_saray"
+    }
+  ],
+  "stages": [],
+  "unlocks": [
+    "dryriver_down_the_dry_well"
+  ],
+  "rewards": {
+    "xp": 65,
+    "items": [],
+    "reputation": {
+      "the_horse_lords": 8
+    }
+  },
+  "requires": {
+    "quests": [
+      {
+        "quest": "dryriver_the_third_well",
+        "status": "complete"
+      }
+    ]
+  },
+  "onComplete": [
+    {
+      "setFlag": {
+        "flag": "dryriver_line_known",
+        "value": true
+      }
+    }
+  ]
+}

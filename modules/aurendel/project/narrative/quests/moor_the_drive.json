@@ -1,0 +1,57 @@
+{
+  "id": "moor_the_drive",
+  "name": "The Drive That Goes Over",
+  "description": "A roofless shooting house with this century's wear in eight even places, and a beaters' line drawn over the scarp and down.",
+  "autoStart": false,
+  "ordered": true,
+  "tags": [
+    "hidden",
+    "weeping_moor",
+    "moor_shoot"
+  ],
+  "objectives": [
+    {
+      "id": "under_the_scarp",
+      "description": "Get under the scarp where the line goes.",
+      "kind": "reach",
+      "count": 1,
+      "hidden": true,
+      "optional": false,
+      "target": "kestrel_edge_grit_caves"
+    },
+    {
+      "id": "stand_the_eighth",
+      "description": "Take the eighth place in the line.",
+      "kind": "custom",
+      "count": 1,
+      "hidden": true,
+      "optional": false,
+      "when": {
+        "test": {
+          "ref": "flags.moor_shoot_open"
+        }
+      }
+    },
+    {
+      "id": "what_is_driven",
+      "description": "Meet what the drive has been driving.",
+      "kind": "kill",
+      "count": 1,
+      "hidden": true,
+      "optional": false,
+      "target": "the_driven"
+    }
+  ],
+  "stages": [],
+  "unlocks": [],
+  "rewards": {
+    "xp": 205,
+    "items": [
+      {
+        "item": "beaters_cloak",
+        "quantity": 1
+      }
+    ],
+    "reputation": {}
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "id": "frost_blue_inner",
+  "name": "The Making Gallery",
+  "description": "The passage past the first chamber is open on the nights the ice makes and shut on every other night, and it is not the ice that shuts it.",
+  "kind": "ward",
+  "blockedTextKey": "frost_blue_blocked",
+  "staysOpen": true,
+  "onOpen": [
+    {
+      "setFlag": {
+        "flag": "frost_blue_open",
+        "value": true
+      }
+    }
+  ],
+  "onBlocked": [],
+  "opensWith": [],
+  "tags": [],
+  "requires": {
+    "items": [
+      {
+        "item": "makers_tally",
+        "quantity": 1,
+        "consume": false,
+        "equipped": false
+      }
+    ]
+  }
+}

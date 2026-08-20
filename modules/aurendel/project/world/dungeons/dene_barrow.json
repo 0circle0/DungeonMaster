@@ -1,0 +1,18 @@
+{
+  "id": "dene_barrow",
+  "name": "The Dene Barrow",
+  "description": "A long barrow above Hollowdene: an entrance passage, side cists, and a chamber at the end that the whole mound was raised over.",
+  "biome": "dungeon_barrow",
+  "roomCount": "6",
+  "depth": "1",
+  "algorithm": "rooms",
+  "lockedDoorChance": 0,
+  "doorGates": [],
+  "rollEncounters": false,
+  "safeEntrance": true,
+  "corridorLength": "2d3",
+  "roomSize": "2d2+3",
+  "width": "45",
+  "height": "45",
+  "bossTable": "the_barrow_pack"
+}

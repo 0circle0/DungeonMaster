@@ -1,0 +1,25 @@
+{
+  "id": "tern_cloak",
+  "name": "The Cloak of Forty Thousand",
+  "description": "Tern feather over oiled canvas, out of a cut where no tern will nest. Nothing calls when you are wearing it.",
+  "kind": "armor",
+  "slot": "cloak",
+  "value": 1000,
+  "weight": 1,
+  "tags": [
+    "fabled"
+  ],
+  "modifiers": {
+    "guard": 1
+  },
+  "skillBonuses": {
+    "stealth": 4
+  },
+  "damageInteractions": [
+    {
+      "damageType": "cold",
+      "multiplier": 0.75
+    }
+  ],
+  "rarity": "very_rare"
+}

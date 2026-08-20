@@ -1,0 +1,12 @@
+{
+  "id": "urban_stone",
+  "name": "Stone Town",
+  "description": "Cut stone, tiled roofs, and streets that were planned by somebody.",
+  "layer": "overworld",
+  "palette": "town_stone",
+  "roomTemplates": [],
+  "encounterTables": [],
+  "lootTables": [],
+  "traps": [],
+  "ambienceKey": "urban_stone_ambience"
+}

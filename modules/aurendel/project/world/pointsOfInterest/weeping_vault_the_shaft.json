@@ -1,0 +1,17 @@
+{
+  "id": "weeping_vault_the_shaft",
+  "name": "The Tarn Shaft",
+  "description": "The way up to the Weeping Moor, square-cut, and the rungs are rusted through for the top thirty feet.",
+  "area": "deeproads_the_weeping_vault",
+  "kind": "crossing",
+  "descriptionKey": "generic_crossing",
+  "travelMinutes": 10,
+  "tags": [
+    "crossing"
+  ],
+  "gate": "deeproads_tarn_shaft",
+  "position": {
+    "x": 14,
+    "y": 3
+  }
+}

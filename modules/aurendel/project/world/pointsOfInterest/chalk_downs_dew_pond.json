@@ -1,0 +1,29 @@
+{
+  "id": "chalk_downs_dew_pond",
+  "name": "The Dew Pond",
+  "description": "Clay-lined, on the top of a dry hill, and full. Nobody can entirely explain it and everybody uses it.",
+  "area": "coast_chalk_downs",
+  "kind": "landmark",
+  "descriptionKey": "generic_landmark",
+  "travelMinutes": 5,
+  "tags": [],
+  "position": {
+    "x": 14,
+    "y": 3
+  },
+  "triggers": [
+    {
+      "id": "coast_found_pond",
+      "mode": "once",
+      "on": "enter",
+      "description": "Water on the top of a chalk hill, in August.",
+      "effects": [
+        {
+          "learnLore": {
+            "entry": "coast_horse_pond"
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "id": "steppe_cut_bank",
+  "name": "The Cut Bank",
+  "description": "A flood took a bite out of the river bank and opened a stair that had been buried in it.",
+  "biome": "dungeon_barrow",
+  "roomCount": "10",
+  "depth": "2",
+  "algorithm": "rooms",
+  "lockedDoorChance": 0,
+  "doorGates": [],
+  "rollEncounters": false,
+  "safeEntrance": true,
+  "width": "73",
+  "height": "73",
+  "corridorLength": "3d3",
+  "bossTable": "step_bank_boss"
+}

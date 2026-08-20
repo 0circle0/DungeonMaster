@@ -1,0 +1,17 @@
+{
+  "id": "sunless_river_the_crossing",
+  "name": "The Crossing",
+  "description": "A boat, a rope, and nobody to work either, and there has not been for some time.",
+  "area": "deeproads_the_sunless_river",
+  "kind": "crossing",
+  "descriptionKey": "generic_crossing",
+  "travelMinutes": 8,
+  "tags": [
+    "crossing"
+  ],
+  "gate": "deeproads_river_crossing",
+  "position": {
+    "x": 3,
+    "y": 3
+  }
+}

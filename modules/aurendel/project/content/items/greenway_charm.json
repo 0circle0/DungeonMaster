@@ -1,0 +1,14 @@
+{
+  "id": "greenway_charm",
+  "name": "A Greenway Charm",
+  "description": "Laid thorn, three turns, grown rather than tied. Elderhollow makes them for people going into the Witchwood and does not explain them.",
+  "kind": "trinket",
+  "slot": "ring",
+  "value": 130,
+  "weight": 0.2,
+  "tags": [],
+  "skillBonuses": {
+    "nature": 2
+  },
+  "rarity": "uncommon"
+}

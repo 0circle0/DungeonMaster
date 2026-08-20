@@ -1,0 +1,362 @@
+{
+  "id": "thorn_sarl_talk",
+  "start": "greet",
+  "nodes": [
+    {
+      "id": "greet",
+      "says": [
+        {
+          "text": "A marker house at the end of a road that is under water half the year, and a man on a punt who has been watching you approach for a while."
+        },
+        {
+          "text": "“Crossing's a penny when the causeway's under. It is under.”"
+        }
+      ],
+      "onEnter": [],
+      "options": [
+        {
+          "id": "thorn_sarl_balance",
+          "text": "The toll ledger. Does it still come in?",
+          "requires": {
+            "without": {
+              "lore": [
+                "thorn_toll_balance"
+              ]
+            }
+          },
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "check": {
+            "skill": "persuasion",
+            "difficulty": {
+              "sub": [
+                14,
+                {
+                  "clamp": [
+                    {
+                      "div": [
+                        {
+                          "ref": "reputation.the_ferrymen",
+                          "else": 0
+                        },
+                        5
+                      ]
+                    },
+                    -6,
+                    6
+                  ]
+                }
+              ]
+            },
+            "onSuccess": "thorn_sarl_balance_told",
+            "onFailure": "thorn_sarl_balance_wont"
+          }
+        },
+        {
+          "id": "thorn_sarl_paid",
+          "text": "Has anybody ever seen it collected?",
+          "requires": {
+            "without": {
+              "lore": [
+                "thorn_toll_paid"
+              ]
+            }
+          },
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "check": {
+            "skill": "persuasion",
+            "difficulty": {
+              "sub": [
+                16,
+                {
+                  "clamp": [
+                    {
+                      "div": [
+                        {
+                          "ref": "reputation.the_ferrymen",
+                          "else": 0
+                        },
+                        5
+                      ]
+                    },
+                    -6,
+                    6
+                  ]
+                }
+              ]
+            },
+            "onSuccess": "thorn_sarl_paid_told",
+            "onFailure": "thorn_sarl_paid_wont"
+          }
+        },
+        {
+          "id": "thorn_sarl_ledger",
+          "text": "Give me the ledger.",
+          "requires": {
+            "without": {
+              "items": [
+                "toll_ledger"
+              ],
+              "flags": [
+                {
+                  "flag": "given:toll_ledger"
+                }
+              ]
+            }
+          },
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "check": {
+            "skill": "persuasion",
+            "difficulty": {
+              "sub": [
+                15,
+                {
+                  "clamp": [
+                    {
+                      "div": [
+                        {
+                          "ref": "reputation.the_ferrymen",
+                          "else": 0
+                        },
+                        5
+                      ]
+                    },
+                    -6,
+                    6
+                  ]
+                }
+              ]
+            },
+            "onSuccess": "thorn_sarl_ledger_gave",
+            "onFailure": "thorn_sarl_ledger_kept"
+          }
+        },
+        {
+          "id": "greet_leave",
+          "text": "Nothing.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": [
+        {
+          "requires": {
+            "factions": [
+              {
+                "faction": "the_ferrymen",
+                "maxStanding": -30
+              }
+            ]
+          },
+          "goto": "thorn_sarl_cold"
+        }
+      ]
+    },
+    {
+      "id": "thorn_sarl_balance_told",
+      "says": [
+        {
+          "text": "“Every year.” He says it like a man who has decided not to think about it. “Shilling a head, balanced to the penny, and the Crown stopped manning that house when the causeway sank. I file it. My father filed it. I have never asked who sends it.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "learnLore": {
+            "entry": "thorn_toll_balance"
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "thorn_sarl_balance_on",
+          "text": "Go on.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "thorn_sarl_balance_wont",
+      "says": [
+        {
+          "text": "“I've said all I mean to,” they say, and go back to what they were doing."
+        }
+      ],
+      "onEnter": [
+        {
+          "adjustReputation": {
+            "faction": "the_ferrymen",
+            "amount": -1
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "thorn_sarl_balance_drop",
+          "text": "Leave it.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "thorn_sarl_paid_told",
+      "says": [
+        {
+          "text": "“No.” Flat. “And nobody who walks that causeway is a shilling short afterwards, which I have checked, because I am not stupid.” He coils a rope he has already coiled. “So something is paying. That is the sentence I have been avoiding for thirty years.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "learnLore": {
+            "entry": "thorn_toll_paid"
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "thorn_sarl_paid_on",
+          "text": "Go on.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "thorn_sarl_paid_wont",
+      "says": [
+        {
+          "text": "“I've said all I mean to,” they say, and go back to what they were doing."
+        }
+      ],
+      "onEnter": [
+        {
+          "adjustReputation": {
+            "faction": "the_ferrymen",
+            "amount": -1
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "thorn_sarl_paid_drop",
+          "text": "Leave it.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "thorn_sarl_ledger_gave",
+      "says": [
+        {
+          "text": "He gets it out of the box under the seat and holds it a moment. “Two hundred years,” he says. “If you find out who has been writing it, I would like it back with the answer in the margin.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "grantItem": {
+            "target": {
+              "ref": "actor.id"
+            },
+            "item": "toll_ledger",
+            "quantity": 1
+          }
+        },
+        {
+          "setFlag": {
+            "flag": "given:toll_ledger",
+            "value": true
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "thorn_sarl_ledger_thanks",
+          "text": "Thank you.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "thorn_sarl_ledger_kept",
+      "says": [
+        {
+          "text": "“It is the ferrymen's,” he says, and puts it back in the box, and sits on the box."
+        }
+      ],
+      "onEnter": [
+        {
+          "adjustReputation": {
+            "faction": "the_ferrymen",
+            "amount": -2
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "thorn_sarl_ledger_leave",
+          "text": "Then no.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "thorn_sarl_cold",
+      "says": [
+        {
+          "text": "He poles off from the stage without a word and stops just out of reach."
+        }
+      ],
+      "onEnter": [],
+      "options": [
+        {
+          "id": "thorn_sarl_go",
+          "text": "Leave it.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    }
+  ]
+}

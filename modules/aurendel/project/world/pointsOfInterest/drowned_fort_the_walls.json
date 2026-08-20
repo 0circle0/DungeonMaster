@@ -1,0 +1,14 @@
+{
+  "id": "drowned_fort_the_walls",
+  "name": "The Drowned Walls",
+  "description": "Twelve feet of water over them at low tide and forty at high, and the parapet shows twice a day.",
+  "area": "isles_drowned_fort_shoal",
+  "kind": "landmark",
+  "descriptionKey": "drowned_fort_the_walls_desc",
+  "travelMinutes": 8,
+  "tags": [],
+  "position": {
+    "x": 14,
+    "y": 3
+  }
+}

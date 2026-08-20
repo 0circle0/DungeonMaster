@@ -1,0 +1,23 @@
+{
+  "id": "wreckers_strand_smugglers_cave",
+  "name": "The Smugglers' Cave",
+  "description": "Goes in at the back of the beach and comes out somewhere up on the downs, which is the whole point of it.",
+  "area": "coast_wreckers_strand",
+  "kind": "dungeonEntrance",
+  "descriptionKey": "wreckers_strand_smugglers_cave_desc",
+  "travelMinutes": 10,
+  "tags": [
+    "secret",
+    "dungeon"
+  ],
+  "hidden": true,
+  "discover": {
+    "skill": "perception",
+    "difficulty": 12
+  },
+  "dungeon": "strand_smugglers_run",
+  "position": {
+    "x": 36,
+    "y": 3
+  }
+}

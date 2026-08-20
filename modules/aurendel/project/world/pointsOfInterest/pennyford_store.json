@@ -1,0 +1,24 @@
+{
+  "id": "pennyford_store",
+  "name": "Ford Stores",
+  "description": "Sells rope and dry stockings, in that order of profitability.",
+  "area": "kingsvale_pennyford",
+  "kind": "market",
+  "descriptionKey": "int_store",
+  "travelMinutes": 2,
+  "tags": [
+    "shop"
+  ],
+  "position": {
+    "x": 18,
+    "y": 12
+  },
+  "services": [
+    "market"
+  ],
+  "map": {
+    "width": "9",
+    "height": "7",
+    "palette": "int_shop"
+  }
+}

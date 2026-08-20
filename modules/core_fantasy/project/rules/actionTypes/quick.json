@@ -1,0 +1,6 @@
+{
+  "id": "quick",
+  "name": "Quick Action",
+  "description": "Something done in the same breath as the main thing.",
+  "perTurn": 1
+}

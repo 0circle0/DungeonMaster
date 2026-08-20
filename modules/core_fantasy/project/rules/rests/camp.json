@@ -1,0 +1,8 @@
+{
+  "id": "camp",
+  "name": "Make Camp",
+  "description": "A fire, a watch rota, and eight hours of not walking.",
+  "kind": "long",
+  "duration": 480,
+  "interruptChance": 0.25
+}

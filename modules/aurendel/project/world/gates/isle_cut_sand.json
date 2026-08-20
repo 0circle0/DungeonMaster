@@ -1,0 +1,29 @@
+{
+  "id": "isle_cut_sand",
+  "name": "Under the Sand That Will Not Freeze",
+  "description": "A cut through a bank of forty thousand birds, and no bird in it.",
+  "kind": "ward",
+  "blockedTextKey": "isle_cut_blocked",
+  "staysOpen": true,
+  "onOpen": [
+    {
+      "setFlag": {
+        "flag": "isle_terns_open",
+        "value": true
+      }
+    }
+  ],
+  "onBlocked": [],
+  "opensWith": [],
+  "tags": [],
+  "requires": {
+    "items": [
+      {
+        "item": "takers_count",
+        "quantity": 1,
+        "consume": false,
+        "equipped": false
+      }
+    ]
+  }
+}

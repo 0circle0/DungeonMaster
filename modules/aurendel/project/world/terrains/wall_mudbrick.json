@@ -1,0 +1,13 @@
+{
+  "id": "wall_mudbrick",
+  "name": "Mudbrick Wall",
+  "description": "Sun-dried brick, whitewashed against the glare.",
+  "glyph": "B",
+  "color": "yellow",
+  "passable": false,
+  "opaque": true,
+  "moveCost": 0,
+  "tags": [
+    "built"
+  ]
+}

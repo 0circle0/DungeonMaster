@@ -1,0 +1,29 @@
+{
+  "id": "glass_ice_marker",
+  "name": "The Bearing Marker",
+  "description": "A pole in the ice with four arms, and three of them point at nothing you can see.",
+  "area": "frostmere_glass_ice",
+  "kind": "landmark",
+  "descriptionKey": "generic_landmark",
+  "travelMinutes": 8,
+  "tags": [],
+  "position": {
+    "x": 25,
+    "y": 3
+  },
+  "triggers": [
+    {
+      "id": "frost_found_marker",
+      "mode": "once",
+      "on": "enter",
+      "description": "A bearing with no cairn at the end of it.",
+      "effects": [
+        {
+          "learnLore": {
+            "entry": "frost_marker_bearing"
+          }
+        }
+      ]
+    }
+  ]
+}

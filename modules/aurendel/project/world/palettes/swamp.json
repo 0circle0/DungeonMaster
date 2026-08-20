@@ -1,0 +1,37 @@
+{
+  "id": "swamp",
+  "name": "Thornmere",
+  "floor": "marsh",
+  "wall": "tree",
+  "exterior": "tree",
+  "scatter": [
+    {
+      "terrain": "bog_pool",
+      "frequency": 0.14,
+      "distribution": "patch",
+      "scale": 10,
+      "edgeTerrain": "marsh",
+      "edgeWidth": 1,
+      "priority": 0
+    },
+    {
+      "terrain": "reeds",
+      "frequency": 0.16,
+      "distribution": "patch",
+      "scale": 8,
+      "priority": 1
+    },
+    {
+      "terrain": "tree",
+      "frequency": 0.1,
+      "distribution": "speckle",
+      "priority": 2
+    },
+    {
+      "terrain": "thicket",
+      "frequency": 0.05,
+      "distribution": "speckle",
+      "priority": 3
+    }
+  ]
+}

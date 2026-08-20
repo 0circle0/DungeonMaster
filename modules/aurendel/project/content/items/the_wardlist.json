@@ -1,0 +1,11 @@
+{
+  "id": "the_wardlist",
+  "name": "The Wardlist",
+  "description": "Nine entries in a hand four centuries dead. Three of them have been crossed through, recently, in different ink.",
+  "kind": "trinket",
+  "value": 0,
+  "weight": 0.5,
+  "tags": [
+    "quest"
+  ]
+}

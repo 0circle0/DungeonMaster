@@ -1,0 +1,19 @@
+{
+  "id": "roadstone_quarry",
+  "name": "The Roadstone Galleries",
+  "description": "Galleries driven into the quarry face when the open work stopped paying, and abandoned when the water came in.",
+  "biome": "dungeon_delved",
+  "roomCount": "11",
+  "depth": "2",
+  "algorithm": "bsp",
+  "lockedDoorChance": 0,
+  "doorGates": [],
+  "rollEncounters": false,
+  "safeEntrance": true,
+  "bsp": {
+    "minLeaf": 6
+  },
+  "width": "31",
+  "height": "31",
+  "bossTable": "kings_quarry_boss"
+}

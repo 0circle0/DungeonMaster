@@ -1,0 +1,8 @@
+{
+  "id": "barrow_robbed",
+  "name": "Robbed a Barrow",
+  "faction": "the_keepers",
+  "severity": -10,
+  "memorability": 1.5,
+  "distortion": 0.3
+}

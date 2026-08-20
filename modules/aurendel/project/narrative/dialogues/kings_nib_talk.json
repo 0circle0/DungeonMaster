@@ -1,0 +1,219 @@
+{
+  "id": "kings_nib_talk",
+  "start": "greet",
+  "nodes": [
+    {
+      "id": "greet",
+      "says": [
+        {
+          "text": "A taproom with an ox's yoke over the fire and a landlord who has seen you look at it."
+        },
+        {
+          "text": "“Go on then. Get it out of the way.”"
+        }
+      ],
+      "onEnter": [],
+      "options": [
+        {
+          "id": "kings_nib_ox",
+          "text": "How does an ox drown in eleven inches of water?",
+          "requires": {
+            "without": {
+              "lore": [
+                "kings_ford_ox"
+              ]
+            }
+          },
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "check": {
+            "skill": "persuasion",
+            "difficulty": {
+              "sub": [
+                11,
+                {
+                  "clamp": [
+                    {
+                      "div": [
+                        {
+                          "ref": "reputation.the_crown",
+                          "else": 0
+                        },
+                        5
+                      ]
+                    },
+                    -6,
+                    6
+                  ]
+                }
+              ]
+            },
+            "onSuccess": "kings_nib_ox_told",
+            "onFailure": "kings_nib_ox_wont"
+          }
+        },
+        {
+          "id": "kings_nib_keeper",
+          "text": "Who keeps the sluice house?",
+          "requires": {
+            "without": {
+              "lore": [
+                "kings_ford_keeper"
+              ]
+            }
+          },
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "check": {
+            "skill": "persuasion",
+            "difficulty": {
+              "sub": [
+                10,
+                {
+                  "clamp": [
+                    {
+                      "div": [
+                        {
+                          "ref": "reputation.the_crown",
+                          "else": 0
+                        },
+                        5
+                      ]
+                    },
+                    -6,
+                    6
+                  ]
+                }
+              ]
+            },
+            "onSuccess": "kings_nib_keeper_told",
+            "onFailure": "kings_nib_keeper_wont"
+          }
+        },
+        {
+          "id": "greet_leave",
+          "text": "Nothing.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "kings_nib_ox_told",
+      "says": [
+        {
+          "text": "“It does not.” He says it before you have finished. “That is the joke and that is also the answer. It is in the parish register — drowned at the ford, and the ford is eleven inches, and it was eleven inches that year because the sluice was down.” He wipes the counter. “Somebody wrote *drowned* because there was no other word for what they found.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "learnLore": {
+            "entry": "kings_ford_ox"
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "kings_nib_ox_on",
+          "text": "Go on.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "kings_nib_ox_wont",
+      "says": [
+        {
+          "text": "“I've said all I mean to,” they say, and go back to what they were doing."
+        }
+      ],
+      "onEnter": [
+        {
+          "adjustReputation": {
+            "faction": "the_crown",
+            "amount": -1
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "kings_nib_ox_drop",
+          "text": "Leave it.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "kings_nib_keeper_told",
+      "says": [
+        {
+          "text": "“Nobody. Ninety years, nobody.” He shrugs. “There is a keeper's cottage on the end of it with a roof on it and a door that shuts, and the parish has not paid a keeper since my grandfather. Make of that what you like. Most people make nothing of it, which is restful.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "learnLore": {
+            "entry": "kings_ford_keeper"
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "kings_nib_keeper_on",
+          "text": "Go on.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "kings_nib_keeper_wont",
+      "says": [
+        {
+          "text": "“I've said all I mean to,” they say, and go back to what they were doing."
+        }
+      ],
+      "onEnter": [
+        {
+          "adjustReputation": {
+            "faction": "the_crown",
+            "amount": -1
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "kings_nib_keeper_drop",
+          "text": "Leave it.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    }
+  ]
+}

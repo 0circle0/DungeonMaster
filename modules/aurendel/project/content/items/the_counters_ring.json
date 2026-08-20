@@ -1,0 +1,24 @@
+{
+  "id": "the_counters_ring",
+  "name": "The Counter's Ring",
+  "description": "Nine doors in eleven hundred years is not weather. This was on the hand that kept the tally, and the tally goes to more than nine.",
+  "kind": "trinket",
+  "slot": "ring",
+  "value": 3600,
+  "weight": 0,
+  "rarity": "artifact",
+  "tags": [
+    "fabled",
+    "trial"
+  ],
+  "modifiers": {
+    "guard": 2,
+    "initiative": 3
+  },
+  "skillBonuses": {
+    "arcana": 4,
+    "lore": 4,
+    "resolve": 3,
+    "insight": 3
+  }
+}

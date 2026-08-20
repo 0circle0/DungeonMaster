@@ -1,0 +1,29 @@
+{
+  "id": "ember_roofs_door",
+  "name": "A Door Under Nine Feet",
+  "description": "The roofs came up. The doors did not, and the doors are barred.",
+  "kind": "ward",
+  "blockedTextKey": "ember_roofs_blocked",
+  "staysOpen": true,
+  "onOpen": [
+    {
+      "setFlag": {
+        "flag": "ember_roofs_open",
+        "value": true
+      }
+    }
+  ],
+  "onBlocked": [],
+  "opensWith": [],
+  "tags": [],
+  "requires": {
+    "items": [
+      {
+        "item": "ashfall_deed",
+        "quantity": 1,
+        "consume": false,
+        "equipped": false
+      }
+    ]
+  }
+}

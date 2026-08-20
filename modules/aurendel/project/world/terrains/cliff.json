@@ -1,0 +1,20 @@
+{
+  "id": "cliff",
+  "name": "Cliff",
+  "description": "You would need hands and a great deal of confidence.",
+  "glyph": "C",
+  "color": "gray",
+  "passable": false,
+  "opaque": true,
+  "moveCost": 0,
+  "tags": [
+    "stone"
+  ],
+  "marks": {
+    "tracks": 0,
+    "smell": 0.6
+  },
+  "requiresMode": [
+    "climb"
+  ]
+}

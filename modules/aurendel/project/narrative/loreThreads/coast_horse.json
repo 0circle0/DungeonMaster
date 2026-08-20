@@ -1,0 +1,11 @@
+{
+  "id": "coast_horse",
+  "name": "The Scouring",
+  "description": "A chalk figure three parishes clear every spring without knowing why, that reads as lines from above and has corners in it.",
+  "entries": [
+    "coast_horse_three",
+    "coast_horse_lines",
+    "coast_horse_shape",
+    "coast_horse_pond"
+  ]
+}

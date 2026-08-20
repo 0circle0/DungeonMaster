@@ -1,0 +1,36 @@
+{
+  "id": "rot_hoard",
+  "entries": [
+    {
+      "weight": 4,
+      "value": {
+        "item": "fungus_cap",
+        "quantity": "2d4"
+      }
+    },
+    {
+      "weight": 3,
+      "value": {
+        "item": "sporeward_mask",
+        "quantity": "1"
+      }
+    },
+    {
+      "weight": 3,
+      "value": {
+        "item": "healing_draught",
+        "quantity": "1d3"
+      }
+    },
+    {
+      "weight": 2,
+      "value": {
+        "item": "antidote",
+        "quantity": "1d2"
+      }
+    }
+  ],
+  "rolls": "3",
+  "emptyChance": 0,
+  "name": "What Grows Mycelt"
+}

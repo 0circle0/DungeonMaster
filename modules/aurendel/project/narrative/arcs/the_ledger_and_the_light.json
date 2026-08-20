@@ -1,0 +1,12 @@
+{
+  "id": "the_ledger_and_the_light",
+  "name": "The Ledger and the Light",
+  "description": "Four hulls in nine years off one headland, and a hall full of men who make a living being right about exactly this.",
+  "quests": [
+    "saltcliff_the_wrong_light",
+    "saltcliff_the_ledger",
+    "saltcliff_under_the_light",
+    "saltcliff_the_finding"
+  ],
+  "isEnding": false
+}

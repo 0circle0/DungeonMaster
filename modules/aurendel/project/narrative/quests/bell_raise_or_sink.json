@@ -1,0 +1,144 @@
+{
+  "id": "bell_raise_or_sink",
+  "name": "Raise It or Sink It",
+  "description": "The bell is still down there and it is still bell-bronze, and there are two entirely reasonable things to do about that.",
+  "autoStart": false,
+  "ordered": false,
+  "tags": [
+    "side",
+    "act2",
+    "bell",
+    "thornmere"
+  ],
+  "objectives": [
+    {
+      "id": "sink_it",
+      "description": "Sink it properly and mark the reach.",
+      "kind": "custom",
+      "count": 1,
+      "hidden": false,
+      "optional": true,
+      "when": {
+        "test": {
+          "ref": "flags.bell_sunk"
+        }
+      }
+    },
+    {
+      "id": "raise_it",
+      "description": "Raise it for the new tower.",
+      "kind": "custom",
+      "count": 1,
+      "hidden": false,
+      "optional": true,
+      "when": {
+        "test": {
+          "ref": "flags.bell_raised"
+        }
+      }
+    },
+    {
+      "id": "settled",
+      "description": "Settle what happens to the bell.",
+      "kind": "custom",
+      "count": 1,
+      "hidden": false,
+      "optional": false,
+      "when": {
+        "any": [
+          {
+            "test": {
+              "ref": "flags.bell_sunk"
+            }
+          },
+          {
+            "test": {
+              "ref": "flags.bell_raised"
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "stages": [],
+  "unlocks": [],
+  "rewards": {
+    "xp": 80,
+    "items": [
+      {
+        "item": "bell_bronze_mace",
+        "quantity": 1
+      }
+    ],
+    "reputation": {}
+  },
+  "requires": {
+    "quests": [
+      {
+        "quest": "bell_the_old_church",
+        "status": "complete"
+      }
+    ]
+  },
+  "onComplete": [
+    {
+      "if": {
+        "when": {
+          "test": {
+            "ref": "flags.bell_raised"
+          }
+        },
+        "then": [
+          {
+            "emit": {
+              "event": "deed",
+              "data": {
+                "kind": "bell_rung"
+              }
+            }
+          },
+          {
+            "adjustReputation": {
+              "faction": "the_ferrymen",
+              "amount": -20
+            }
+          },
+          {
+            "adjustReputation": {
+              "faction": "the_crown",
+              "amount": 12
+            }
+          },
+          {
+            "setFlag": {
+              "flag": "bell_in_the_new_tower",
+              "value": true
+            }
+          }
+        ],
+        "else": [
+          {
+            "emit": {
+              "event": "deed",
+              "data": {
+                "kind": "channel_kept"
+              }
+            }
+          },
+          {
+            "adjustReputation": {
+              "faction": "the_ferrymen",
+              "amount": 28
+            }
+          },
+          {
+            "setFlag": {
+              "flag": "bell_marked_the_reach",
+              "value": true
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

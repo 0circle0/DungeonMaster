@@ -1,0 +1,39 @@
+{
+  "id": "frostmere_whalebone_landing",
+  "name": "Whalebone Landing",
+  "description": "Four hundred people, a harbour that freezes, and a meadhall built out of a jaw.",
+  "biome": "urban_timber",
+  "layer": "overworld",
+  "descriptionKey": "frostmere_whalebone_landing_desc",
+  "dangerLevel": 2,
+  "recommendedLevel": 8,
+  "tags": [
+    "frostmere",
+    "town"
+  ],
+  "map": {
+    "width": "41",
+    "height": "27"
+  },
+  "entryPoint": {
+    "x": 20,
+    "y": 13
+  },
+  "extra": {
+    "role": "town"
+  },
+  "connections": [
+    {
+      "to": "frostmere_rimewatch_shore",
+      "travelMinutes": 40
+    },
+    {
+      "to": "frostmere_bone_strand",
+      "travelMinutes": 45
+    },
+    {
+      "to": "frostmere_the_white_reach",
+      "travelMinutes": 70
+    }
+  ]
+}

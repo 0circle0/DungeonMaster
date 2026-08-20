@@ -1,0 +1,29 @@
+{
+  "id": "cypress_maze_the_knees",
+  "name": "The Knees",
+  "description": "Cypress roots up out of the water in thousands, waist-high, and you navigate this by touch.",
+  "area": "thornmere_cypress_maze",
+  "kind": "landmark",
+  "descriptionKey": "generic_landmark",
+  "travelMinutes": 10,
+  "tags": [],
+  "position": {
+    "x": 3,
+    "y": 3
+  },
+  "triggers": [
+    {
+      "id": "thorn_found_knees",
+      "mode": "once",
+      "on": "enter",
+      "description": "Knees in rows, and the rows straight.",
+      "effects": [
+        {
+          "learnLore": {
+            "entry": "thorn_knees_rows"
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,57 @@
+{
+  "id": "glass_the_ninth_course",
+  "name": "The Ninth Course",
+  "description": "Eight courses cut and nine weighed, every year for two hundred years, and the ninth arrives in the night out of a pan floor that rings.",
+  "autoStart": false,
+  "ordered": true,
+  "tags": [
+    "hidden",
+    "glasslands",
+    "glass_courses"
+  ],
+  "objectives": [
+    {
+      "id": "at_the_pan",
+      "description": "Get under the eighth pan.",
+      "kind": "reach",
+      "count": 1,
+      "hidden": true,
+      "optional": false,
+      "target": "saltrun_deep_pan"
+    },
+    {
+      "id": "through_the_floor",
+      "description": "Find the way the ninth course comes up.",
+      "kind": "custom",
+      "count": 1,
+      "hidden": true,
+      "optional": false,
+      "when": {
+        "test": {
+          "ref": "flags.glass_courses_open"
+        }
+      }
+    },
+    {
+      "id": "the_drawer",
+      "description": "Find what has been drawing.",
+      "kind": "kill",
+      "count": 1,
+      "hidden": true,
+      "optional": false,
+      "target": "salt_drawer"
+    }
+  ],
+  "stages": [],
+  "unlocks": [],
+  "rewards": {
+    "xp": 170,
+    "items": [
+      {
+        "item": "weighers_scale",
+        "quantity": 1
+      }
+    ],
+    "reputation": {}
+  }
+}

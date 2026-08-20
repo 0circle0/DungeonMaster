@@ -1,0 +1,14 @@
+{
+  "id": "volcanic",
+  "name": "The Ember Reach",
+  "description": "Ash-fall country. The ground is warm and the weather comes from below.",
+  "layer": "overworld",
+  "palette": "volcanic",
+  "roomTemplates": [],
+  "encounterTables": [
+    "ember_things"
+  ],
+  "lootTables": [],
+  "traps": [],
+  "ambienceKey": "volcanic_ambience"
+}

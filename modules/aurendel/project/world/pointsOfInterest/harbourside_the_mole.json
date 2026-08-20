@@ -1,0 +1,16 @@
+{
+  "id": "harbourside_the_mole",
+  "name": "The Mole",
+  "description": "Half a mile of piled stone out into the bay, and the whole town is behind it in every sense.",
+  "area": "sarnport_harbourside",
+  "kind": "landmark",
+  "descriptionKey": "harbourside_the_mole_desc",
+  "travelMinutes": 5,
+  "tags": [
+    "docks"
+  ],
+  "position": {
+    "x": 3,
+    "y": 3
+  }
+}

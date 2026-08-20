@@ -1,0 +1,18 @@
+{
+  "id": "bell_rope_ring",
+  "name": "The Ring in the Bell Rope",
+  "description": "Iron off the inside of the turn, worn by something that pulled from underneath. What the wearer signals is heard further than it should be.",
+  "kind": "trinket",
+  "slot": "ring",
+  "value": 920,
+  "weight": 1,
+  "tags": [
+    "fabled"
+  ],
+  "skillBonuses": {
+    "persuasion": 3,
+    "intimidation": 2,
+    "resolve": 2
+  },
+  "rarity": "very_rare"
+}

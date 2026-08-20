@@ -1,0 +1,317 @@
+{
+  "id": "orrin_talk",
+  "start": "greet",
+  "nodes": [
+    {
+      "id": "greet",
+      "says": [
+        {
+          "text": "Orrin is on the third gallery and does not come down. \"You may come up. Nothing above the third, please.\""
+        }
+      ],
+      "options": [
+        {
+          "id": "report",
+          "text": "A ward at Hollowdene has been opened.",
+          "effects": [
+            {
+              "setFlag": {
+                "flag": "heard_by_library",
+                "value": true
+              }
+            },
+            {
+              "adjustReputation": {
+                "faction": "the_library",
+                "amount": 5
+              }
+            }
+          ],
+          "onceOnly": true,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "he_comes_down"
+        },
+        {
+          "id": "leave",
+          "text": "Nothing.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": [
+        {
+          "requires": {
+            "quests": [
+              {
+                "quest": "the_librarians_errand",
+                "status": "active"
+              }
+            ]
+          },
+          "goto": "an_hour_alone"
+        },
+        {
+          "requires": {
+            "memories": [
+              {
+                "deedKind": "record_stolen",
+                "who": "speaker"
+              }
+            ]
+          },
+          "goto": "he_remembers"
+        }
+      ]
+    },
+    {
+      "id": "he_comes_down",
+      "says": [
+        {
+          "text": "He comes down. \"Which one? — no. Describe the door.\" You do. He listens with his eyes shut. \"That is the fourth. Not the first. The fourth.\""
+        }
+      ],
+      "options": [
+        {
+          "id": "how_many",
+          "text": "How many are there?",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "the_offer"
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": []
+    },
+    {
+      "id": "the_offer",
+      "says": [
+        {
+          "text": "\"Nine, and I am not permitted to say so, and I have just said so.\" He glances up the well of the building. \"I will not hand you the list. I will be on the second gallery for an hour with my back to the stair, and what happens on the fourth floor in that hour is a matter I will have no view on.\""
+        }
+      ],
+      "options": [
+        {
+          "id": "accept",
+          "text": "An hour is plenty.",
+          "effects": [
+            {
+              "emit": {
+                "event": "startQuest",
+                "data": {
+                  "quest": "the_librarians_errand"
+                }
+              }
+            }
+          ],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "an_hour_alone",
+          "requires": {
+            "quests": [
+              {
+                "quest": "the_librarians_errand",
+                "status": "unstarted"
+              }
+            ]
+          }
+        },
+        {
+          "id": "refuse",
+          "text": "That's a fine distinction.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "greet"
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": []
+    },
+    {
+      "id": "an_hour_alone",
+      "says": [
+        {
+          "text": "The fourth floor is one room and one case, and the case is not locked, which tells you what he thinks of locks."
+        }
+      ],
+      "options": [
+        {
+          "id": "copy",
+          "text": "Copy it out.",
+          "effects": [],
+          "onceOnly": true,
+          "showWhenLocked": true,
+          "lockedHint": "Nobody here reads a hand four centuries dead.",
+          "requires": {
+            "skills": [
+              {
+                "skill": "lore",
+                "minRank": 1
+              }
+            ]
+          },
+          "check": {
+            "skill": "lore",
+            "difficulty": 12,
+            "onSuccess": "copied_clean",
+            "onFailure": "copied_rough"
+          }
+        },
+        {
+          "id": "take_it",
+          "text": "Take the whole thing.",
+          "effects": [
+            {
+              "setFlag": {
+                "flag": "wardlist_read",
+                "value": true
+              }
+            },
+            {
+              "setFlag": {
+                "flag": "wardlist_stolen",
+                "value": true
+              }
+            },
+            {
+              "emit": {
+                "event": "deed",
+                "data": {
+                  "kind": "record_stolen"
+                }
+              }
+            },
+            {
+              "adjustReputation": {
+                "faction": "the_library",
+                "amount": -25
+              }
+            }
+          ],
+          "onceOnly": true,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "he_notices"
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": [],
+      "remembers": "library_served"
+    },
+    {
+      "id": "copied_clean",
+      "says": [
+        {
+          "text": "An hour, and you have every one of the nine, in order, with the three that are crossed through and the ink they were crossed through with."
+        }
+      ],
+      "options": [
+        {
+          "id": "done",
+          "text": "Go down.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "onEnter": [
+        {
+          "setFlag": {
+            "flag": "wardlist_read",
+            "value": true
+          }
+        },
+        {
+          "setFlag": {
+            "flag": "copied_clean",
+            "value": true
+          }
+        },
+        {
+          "adjustReputation": {
+            "faction": "the_library",
+            "amount": 5
+          }
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "copied_rough",
+      "says": [
+        {
+          "text": "An hour, and you have seven of the nine and a guess at the eighth. It will have to do."
+        }
+      ],
+      "options": [
+        {
+          "id": "done",
+          "text": "Go down.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "onEnter": [
+        {
+          "setFlag": {
+            "flag": "wardlist_read",
+            "value": true
+          }
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "he_notices",
+      "says": [
+        {
+          "text": "He is at the foot of the stair when you come down, and he looks at the shape of your pack rather than at your face. He says nothing at all, which is worse."
+        }
+      ],
+      "options": [
+        {
+          "id": "leave",
+          "text": "Go.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": [],
+      "remembers": "record_stolen"
+    },
+    {
+      "id": "he_remembers",
+      "says": [
+        {
+          "text": "\"You are not to come above the second gallery,\" Orrin says, without looking up. \"Nor the second, on reflection.\""
+        }
+      ],
+      "options": [
+        {
+          "id": "leave",
+          "text": "...",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": []
+    }
+  ]
+}

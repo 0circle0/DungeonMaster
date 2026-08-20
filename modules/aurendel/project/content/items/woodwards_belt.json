@@ -1,0 +1,20 @@
+{
+  "id": "woodwards_belt",
+  "name": "The Woodward's Belt",
+  "description": "Sixteen and a half feet of rod hangs off it, and the wearer walks a line they have walked once as though they had walked it always.",
+  "kind": "trinket",
+  "slot": "belt",
+  "value": 760,
+  "weight": 1,
+  "tags": [
+    "fabled"
+  ],
+  "modifiers": {
+    "carry": 3
+  },
+  "skillBonuses": {
+    "perception": 3,
+    "survival": 2
+  },
+  "rarity": "rare"
+}

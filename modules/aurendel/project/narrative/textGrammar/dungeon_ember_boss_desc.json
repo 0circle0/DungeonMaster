@@ -1,0 +1,14 @@
+{
+  "id": "dungeon_ember_boss_desc",
+  "variants": [
+    {
+      "text": "The deep chamber, and the floor of it is a crust over something that is still moving."
+    },
+    {
+      "text": "Light from below rather than above, which your eyes never quite accept."
+    },
+    {
+      "text": "It is hot enough here that the air shakes and the far wall will not hold still."
+    }
+  ]
+}

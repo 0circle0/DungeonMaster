@@ -1,0 +1,12 @@
+{
+  "id": "quick_shot",
+  "name": "Quick Shot",
+  "description": "A shot loosed before the target has finished deciding.",
+  "actionType": "action",
+  "targeting": "single",
+  "range": 60,
+  "attack": {
+    "stat": "agility",
+    "against": "guard"
+  }
+}

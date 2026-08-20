@@ -1,0 +1,219 @@
+{
+  "id": "coast_rell_talk",
+  "start": "greet",
+  "nodes": [
+    {
+      "id": "greet",
+      "says": [
+        {
+          "text": "Rope by the fathom, tar by the barrel, lamp oil, and a wall of charts with three of them turned face-in."
+        },
+        {
+          "text": "“Rope, tar, oil, glass. Charts if you promise not to sue me.”"
+        }
+      ],
+      "onEnter": [],
+      "options": [
+        {
+          "id": "coast_rell_tide",
+          "text": "What is under the head?",
+          "requires": {
+            "without": {
+              "lore": [
+                "coast_watch_tide"
+              ]
+            }
+          },
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "check": {
+            "skill": "persuasion",
+            "difficulty": {
+              "sub": [
+                12,
+                {
+                  "clamp": [
+                    {
+                      "div": [
+                        {
+                          "ref": "reputation.the_countinghouse",
+                          "else": 0
+                        },
+                        5
+                      ]
+                    },
+                    -6,
+                    6
+                  ]
+                }
+              ]
+            },
+            "onSuccess": "coast_rell_tide_told",
+            "onFailure": "coast_rell_tide_wont"
+          }
+        },
+        {
+          "id": "coast_rell_wall",
+          "text": "The pinfold wall at Cobbleway.",
+          "requires": {
+            "without": {
+              "lore": [
+                "coast_yard_wall"
+              ]
+            }
+          },
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "check": {
+            "skill": "craft",
+            "difficulty": {
+              "sub": [
+                13,
+                {
+                  "clamp": [
+                    {
+                      "div": [
+                        {
+                          "ref": "reputation.the_countinghouse",
+                          "else": 0
+                        },
+                        5
+                      ]
+                    },
+                    -6,
+                    6
+                  ]
+                }
+              ]
+            },
+            "onSuccess": "coast_rell_wall_told",
+            "onFailure": "coast_rell_wall_wont"
+          }
+        },
+        {
+          "id": "greet_leave",
+          "text": "Nothing.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "coast_rell_tide_told",
+      "says": [
+        {
+          "text": "“A way in, at the bottom of a spring tide.” He does not have to look it up. “Open about an hour. I have sold gear to four parties who meant to go in and I have had two of them back.” He straightens a coil. “I do not sell them the rope any more. They buy it at Gullmere and think I do not know.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "learnLore": {
+            "entry": "coast_watch_tide"
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "coast_rell_tide_on",
+          "text": "Go on.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "coast_rell_tide_wont",
+      "says": [
+        {
+          "text": "“I've said all I mean to,” they say, and go back to what they were doing."
+        }
+      ],
+      "onEnter": [
+        {
+          "adjustReputation": {
+            "faction": "the_countinghouse",
+            "amount": -1
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "coast_rell_tide_drop",
+          "text": "Leave it.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "coast_rell_wall_told",
+      "says": [
+        {
+          "text": "“Three sides are the town's and the fourth is not.” He is pleased to be asked. “I carted the lime up there when they repointed the good sides. Could not match the old face. Nobody can match the old face — it was mixed with something that is not in it any more, and it has not weathered in eight hundred years.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "learnLore": {
+            "entry": "coast_yard_wall"
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "coast_rell_wall_on",
+          "text": "Go on.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "coast_rell_wall_wont",
+      "says": [
+        {
+          "text": "“I've said all I mean to,” they say, and go back to what they were doing."
+        }
+      ],
+      "onEnter": [
+        {
+          "adjustReputation": {
+            "faction": "the_countinghouse",
+            "amount": -1
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "coast_rell_wall_drop",
+          "text": "Leave it.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    }
+  ]
+}

@@ -51,14 +51,20 @@ function readTree(root: string): Record<string, string> {
 /**
  * Refuse to give a generated module a second source of truth.
  *
- * `modules/aurendel` is written by 24k lines of Python, and those generators
- * overwrite `module.json` rather than merging into it. A `project/` beside them
- * would be a third representation of the same world, silently stale from the
- * next `build.py` onwards — which is the hazard `modules/aurendel/src/readme.md`
- * spells out. One source of truth per file, and for a generated module that
- * source is the generator.
+ * A generator that overwrites `module.json` rather than merging into it makes a
+ * `project/` beside it a third representation of the same world, silently stale
+ * from the next run onwards. One source of truth per file.
+ *
+ * Aurendel and core_fantasy have since been through exactly this door — their
+ * generators are retired and their `project/` trees are the source now, so the
+ * marker files are still on disk and this correctly stops saying anything about
+ * them, because a module that already *has* a `project/` has made its choice.
+ * The hazard moved rather than went away: it is now somebody re-running a
+ * retired generator, and the refusal for that lives at the top of the generator
+ * itself.
  */
 function generatedElsewhere(moduleDir: string): string | null {
+  if (existsSync(join(moduleDir, 'project'))) return null;
   for (const marker of ['src/build.py', 'gen_core.py']) {
     if (existsSync(join(moduleDir, marker))) return marker;
   }

@@ -1,0 +1,18 @@
+{
+  "id": "dungeon_cave_boss",
+  "name": "Cave Deep Chamber",
+  "descriptionKey": "dungeon_cave_boss_desc",
+  "weight": 1,
+  "minExits": 1,
+  "maxExits": 2,
+  "encounterChance": 0,
+  "trapChance": 0.08,
+  "lootChance": 0.8,
+  "tags": [
+    "dungeon_cave",
+    "boss"
+  ],
+  "role": "boss",
+  "neverTrap": true,
+  "alwaysEncounter": true
+}

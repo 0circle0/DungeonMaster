@@ -1,0 +1,14 @@
+{
+  "id": "dungeon_cave_lair_desc",
+  "variants": [
+    {
+      "text": "Trodden bare from the passage to the back wall and nowhere else."
+    },
+    {
+      "text": "Bones, hair, and a smell that fills the whole chamber."
+    },
+    {
+      "text": "Something comes here to sleep and is not tidy about it."
+    }
+  ]
+}

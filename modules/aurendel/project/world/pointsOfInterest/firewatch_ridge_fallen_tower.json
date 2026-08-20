@@ -1,0 +1,21 @@
+{
+  "id": "firewatch_ridge_fallen_tower",
+  "name": "The Fallen Tower",
+  "description": "The fifth. It went over in the year of the ashfall and the garrison went with it.",
+  "area": "ember_firewatch_ridge",
+  "kind": "ruin",
+  "descriptionKey": "generic_ruin",
+  "travelMinutes": 8,
+  "tags": [
+    "ruin"
+  ],
+  "map": {
+    "width": "11",
+    "height": "9",
+    "palette": "int_stone"
+  },
+  "position": {
+    "x": 14,
+    "y": 3
+  }
+}

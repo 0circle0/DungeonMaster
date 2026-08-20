@@ -1,0 +1,10 @@
+{
+  "id": "cave_wall",
+  "name": "Cave Wall",
+  "description": "Living rock.",
+  "glyph": "#",
+  "color": "gray",
+  "passable": false,
+  "opaque": true,
+  "moveCost": 0
+}

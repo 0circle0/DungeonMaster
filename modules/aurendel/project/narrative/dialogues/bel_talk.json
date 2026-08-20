@@ -1,0 +1,231 @@
+{
+  "id": "bel_talk",
+  "start": "greet",
+  "nodes": [
+    {
+      "id": "greet",
+      "says": [
+        {
+          "text": "Bel is laying thorn and does not stop. \"Elderhollow said somebody would come. They didn't say you'd be armed.\""
+        }
+      ],
+      "options": [
+        {
+          "id": "brief",
+          "text": "Tell me about the ward.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "brief"
+        },
+        {
+          "id": "leave",
+          "text": "Nothing.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": [
+        {
+          "requires": {
+            "flags": [
+              {
+                "flag": "thornward_cleared",
+                "equals": true
+              }
+            ],
+            "without": {
+              "flags": [
+                {
+                  "flag": "thornward_restored"
+                },
+                {
+                  "flag": "thornward_broken"
+                }
+              ]
+            }
+          },
+          "goto": "decide"
+        },
+        {
+          "requires": {
+            "memories": [
+              {
+                "deedKind": "ward_broken",
+                "who": "speaker"
+              }
+            ]
+          },
+          "goto": "cold"
+        }
+      ]
+    },
+    {
+      "id": "brief",
+      "says": [
+        {
+          "text": "\"Thorn doesn't grow in a line. Somebody lays it, and somebody's been laying this one since before the moot kept records.\" She works a length in. \"Whatever's on the far side has been quiet about it for six hundred years and is not quiet now.\""
+        }
+      ],
+      "options": [
+        {
+          "id": "back",
+          "text": "Right.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "greet"
+        }
+      ],
+      "onEnter": [
+        {
+          "setFlag": {
+            "flag": "thornward_briefed",
+            "value": true
+          }
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "decide",
+      "says": [
+        {
+          "text": "\"It's cleared, then.\" A long pause. \"So you've a choice, and I'll not pretend I don't mind which.\""
+        }
+      ],
+      "options": [
+        {
+          "id": "restore",
+          "text": "Put it back. We'll help.",
+          "effects": [
+            {
+              "setFlag": {
+                "flag": "thornward_restored",
+                "value": true
+              }
+            },
+            {
+              "adjustReputation": {
+                "faction": "the_keepers",
+                "amount": 6
+              }
+            }
+          ],
+          "onceOnly": true,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "restored"
+        },
+        {
+          "id": "break",
+          "text": "Take it down. We need to see what's behind it.",
+          "effects": [
+            {
+              "setFlag": {
+                "flag": "thornward_broken",
+                "value": true
+              }
+            }
+          ],
+          "onceOnly": true,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "broken"
+        },
+        {
+          "id": "wait",
+          "text": "We'll think about it.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "greet"
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": []
+    },
+    {
+      "id": "restored",
+      "says": [
+        {
+          "text": "It takes the rest of the day and most of the next, and at the end of it the ward is what it was."
+        }
+      ],
+      "options": [
+        {
+          "id": "done",
+          "text": "Done.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "onEnter": [
+        {
+          "setFlag": {
+            "flag": "thornward_taken",
+            "value": true
+          }
+        }
+      ],
+      "redirectWhen": [],
+      "remembers": "ward_restored"
+    },
+    {
+      "id": "broken",
+      "says": [
+        {
+          "text": "It comes down faster than you expect, and something on the far side of it stops making the noise it had been making."
+        }
+      ],
+      "options": [
+        {
+          "id": "done",
+          "text": "Done.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "onEnter": [
+        {
+          "setFlag": {
+            "flag": "thornward_taken",
+            "value": true
+          }
+        }
+      ],
+      "redirectWhen": [],
+      "remembers": "ward_broken"
+    },
+    {
+      "id": "cold",
+      "says": [
+        {
+          "text": "She does not look up, and she does not stop working, and she does not answer."
+        }
+      ],
+      "options": [
+        {
+          "id": "leave",
+          "text": "Nothing.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": []
+    }
+  ]
+}

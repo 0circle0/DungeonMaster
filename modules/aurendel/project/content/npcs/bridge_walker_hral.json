@@ -1,0 +1,32 @@
+{
+  "id": "bridge_walker_hral",
+  "name": "Hral, who Walks the Span",
+  "description": "Crosses the Black Bridge twice a day with a load and has dropped more lights down that chasm than the guild has.",
+  "disposition": 4,
+  "gullibility": 0.35,
+  "memorySpan": 200,
+  "offersQuests": [],
+  "caresAbout": [],
+  "reactions": [],
+  "faction": "karn_dolur",
+  "dialogue": "deep_hral_talk",
+  "home": "black_bridge_the_span",
+  "temperament": {
+    "roamRadius": 24,
+    "investigateRadius": 60,
+    "leashRadius": 90,
+    "wanderChance": 0.3,
+    "speeds": {
+      "wander": 0.5
+    },
+    "investigates": [
+      "sight",
+      "hearing"
+    ],
+    "notices": [
+      "hostile",
+      "neutral",
+      "ally"
+    ]
+  }
+}

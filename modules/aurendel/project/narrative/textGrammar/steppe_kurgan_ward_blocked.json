@@ -1,0 +1,14 @@
+{
+  "id": "steppe_kurgan_ward_blocked",
+  "variants": [
+    {
+      "text": "The skull line runs east and west as far as you can see, and every rider you are with has stopped without discussion."
+    },
+    {
+      "text": "\"Not past the skulls,\" says the guide, and turns his horse, and that is the entire conversation."
+    },
+    {
+      "text": "There is no wall. There is nothing at all. Nobody crosses it."
+    }
+  ]
+}

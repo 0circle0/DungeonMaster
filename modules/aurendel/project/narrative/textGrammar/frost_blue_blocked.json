@@ -1,0 +1,17 @@
+{
+  "id": "frost_blue_blocked",
+  "variants": [
+    {
+      "text": "The passage is closed. Not frozen — closed, and the seam is dry. You would have to know which nights it opens, and somebody spent forty years finding that out."
+    },
+    {
+      "text": "It is shut, and the cold coming off the seam has nothing to do with the weather. Whoever kept the making-nights kept them for a reason."
+    },
+    {
+      "text": "No handhold, no hinge, and no frost on it. Whatever opens this opens on a schedule, and the schedule is written down somewhere in the Landing."
+    },
+    {
+      "text": "The seam runs floor to roof and does not admit a blade. You are not going to force a thing that has been opening and shutting on its own for nine hundred years."
+    }
+  ]
+}

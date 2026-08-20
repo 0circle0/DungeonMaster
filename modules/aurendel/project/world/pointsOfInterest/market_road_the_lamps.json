@@ -1,0 +1,29 @@
+{
+  "id": "market_road_the_lamps",
+  "name": "The Road Lamps",
+  "description": "Every two hundred paces, filled by somebody from Lantern Deep, and the filling is a job with a rota and a salary.",
+  "area": "deeproads_the_deep_market_road",
+  "kind": "landmark",
+  "descriptionKey": "generic_landmark",
+  "travelMinutes": 6,
+  "tags": [],
+  "position": {
+    "x": 3,
+    "y": 3
+  },
+  "triggers": [
+    {
+      "id": "deep_found_lamps",
+      "mode": "once",
+      "on": "enter",
+      "description": "Lit, and nobody has carried oil down here in four hundred years.",
+      "effects": [
+        {
+          "learnLore": {
+            "entry": "deep_lamps_lit"
+          }
+        }
+      ]
+    }
+  ]
+}

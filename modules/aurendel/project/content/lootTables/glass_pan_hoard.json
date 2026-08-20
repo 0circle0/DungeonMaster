@@ -1,0 +1,35 @@
+{
+  "id": "glass_pan_hoard",
+  "name": "Under the Eighth Course",
+  "rolls": "2",
+  "emptyChance": 0,
+  "bonusRollSkill": "perception",
+  "bonusRolls": {
+    "onSuccess": 1,
+    "onCritical": 2
+  },
+  "entries": [
+    {
+      "weight": 3,
+      "value": {
+        "item": "old_coin",
+        "quantity": "3d6"
+      }
+    },
+    {
+      "weight": 2,
+      "value": {
+        "item": "glass_bead",
+        "quantity": "1d3"
+      }
+    },
+    {
+      "weight": 1,
+      "value": {
+        "item": "ninth_course_salt",
+        "quantity": "1",
+        "unique": true
+      }
+    }
+  ]
+}

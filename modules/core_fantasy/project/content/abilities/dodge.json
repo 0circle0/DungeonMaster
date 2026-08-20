@@ -1,0 +1,18 @@
+{
+  "id": "dodge",
+  "name": "Dodge",
+  "description": "Spend the moment on not being hit.",
+  "actionType": "action",
+  "targeting": "self",
+  "onUse": [
+    {
+      "applyCondition": {
+        "target": {
+          "ref": "actor.id"
+        },
+        "condition": "dodging",
+        "duration": 1
+      }
+    }
+  ]
+}

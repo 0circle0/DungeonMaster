@@ -1,0 +1,19 @@
+{
+  "id": "stiltmarket_water_market",
+  "name": "The Water Market",
+  "description": "Sold boat to boat, in a basin, and nobody involved is standing on anything.",
+  "area": "thornmere_stiltmarket",
+  "kind": "market",
+  "descriptionKey": "generic_market",
+  "travelMinutes": 2,
+  "tags": [
+    "shop"
+  ],
+  "services": [
+    "market"
+  ],
+  "position": {
+    "x": 11,
+    "y": 3
+  }
+}

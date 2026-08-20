@@ -1,0 +1,34 @@
+{
+  "id": "deep_footing_hoard",
+  "name": "Inside the Footings",
+  "rolls": "3",
+  "emptyChance": 0,
+  "bonusRollSkill": "lore",
+  "bonusRolls": {
+    "onSuccess": 1,
+    "onCritical": 2
+  },
+  "entries": [
+    {
+      "weight": 3,
+      "value": {
+        "item": "old_coin",
+        "quantity": "6d6"
+      }
+    },
+    {
+      "weight": 2,
+      "value": {
+        "item": "hold_silver",
+        "quantity": "2d4"
+      }
+    },
+    {
+      "weight": 2,
+      "value": {
+        "item": "warded_coat",
+        "quantity": "1"
+      }
+    }
+  ]
+}

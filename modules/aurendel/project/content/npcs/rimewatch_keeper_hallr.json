@@ -1,0 +1,36 @@
+{
+  "id": "rimewatch_keeper_hallr",
+  "name": "Hallr of the Rimewatch",
+  "description": "Keeps a hut, a log and a sighting stone at the calving face, and is extremely clear that he keeps them for the moot and not for you.",
+  "disposition": -4,
+  "gullibility": 0.15,
+  "memorySpan": 365,
+  "offersQuests": [],
+  "caresAbout": [
+    "ice_broken",
+    "cairn_set"
+  ],
+  "reactions": [],
+  "faction": "the_ice_moot",
+  "dialogue": "frost_hallr_talk",
+  "home": "rimewatch_watch_hut",
+  "statblock": "frost_keeper",
+  "temperament": {
+    "roamRadius": 24,
+    "investigateRadius": 60,
+    "leashRadius": 90,
+    "wanderChance": 0.3,
+    "speeds": {
+      "wander": 0.5
+    },
+    "investigates": [
+      "sight",
+      "hearing"
+    ],
+    "notices": [
+      "hostile",
+      "neutral",
+      "ally"
+    ]
+  }
+}

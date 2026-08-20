@@ -1,0 +1,31 @@
+{
+  "id": "glass_quarter_the_lip",
+  "name": "The Crater Lip",
+  "description": "The quarter is built on it, out of it, and the walls let light through.",
+  "area": "vashta_qal_glass_quarter",
+  "kind": "landmark",
+  "descriptionKey": "generic_landmark",
+  "travelMinutes": 4,
+  "tags": [
+    "landmark"
+  ],
+  "position": {
+    "x": 3,
+    "y": 3
+  },
+  "triggers": [
+    {
+      "id": "glass_found_lip",
+      "mode": "once",
+      "on": "enter",
+      "description": "Stonework under the glass, and the glass poured over it.",
+      "effects": [
+        {
+          "learnLore": {
+            "entry": "glass_bath_down"
+          }
+        }
+      ]
+    }
+  ]
+}

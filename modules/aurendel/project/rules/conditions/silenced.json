@@ -1,0 +1,10 @@
+{
+  "id": "silenced",
+  "name": "Silenced",
+  "description": "Sound will not leave you.",
+  "stacking": "refresh",
+  "defaultDuration": 2,
+  "prevents": [
+    "speak"
+  ]
+}

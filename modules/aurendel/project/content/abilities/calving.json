@@ -1,0 +1,35 @@
+{
+  "id": "calving",
+  "name": "Calving",
+  "description": "A face of ice the height of a hall deciding, all at once, to be somewhere else.",
+  "actionType": "action",
+  "targeting": "allEnemies",
+  "attack": {
+    "stat": "might",
+    "against": "guard"
+  },
+  "onUse": [
+    {
+      "damage": {
+        "target": {
+          "ref": "target.id"
+        },
+        "amount": {
+          "roll": "2d8"
+        },
+        "damageType": "cold"
+      }
+    },
+    {
+      "applyCondition": {
+        "target": {
+          "ref": "target.id"
+        },
+        "condition": "prone",
+        "duration": 1
+      }
+    }
+  ],
+  "range": 20,
+  "cooldown": 4
+}

@@ -1,0 +1,41 @@
+{
+  "id": "glasslands_sunken_road",
+  "name": "The Sunken Road",
+  "description": "A paved road under the dunes, showing in stretches where the wind has been kind, and going somewhere.",
+  "biome": "desert",
+  "layer": "overworld",
+  "descriptionKey": "glasslands_sunken_road_desc",
+  "dangerLevel": 5,
+  "recommendedLevel": 6,
+  "tags": [
+    "glasslands"
+  ],
+  "map": {
+    "width": "51",
+    "height": "35"
+  },
+  "entryPoint": {
+    "x": 25,
+    "y": 17
+  },
+  "extra": {
+    "role": "wild"
+  },
+  "connections": [
+    {
+      "to": "glasslands_saltrun",
+      "travelMinutes": 40
+    },
+    {
+      "to": "glasslands_dry_cistern",
+      "travelMinutes": 45
+    },
+    {
+      "to": "steppe_the_south_reach",
+      "travelMinutes": 240
+    }
+  ],
+  "encounterTables": [
+    "the_checked"
+  ]
+}

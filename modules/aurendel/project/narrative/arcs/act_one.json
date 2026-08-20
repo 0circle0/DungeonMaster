@@ -1,0 +1,13 @@
+{
+  "id": "act_one",
+  "name": "The Open Door",
+  "description": "A parish matter that turns out not to be one.",
+  "quests": [
+    "the_open_door",
+    "word_to_aurenhal",
+    "the_crowns_commission",
+    "the_librarians_errand",
+    "the_undercroft"
+  ],
+  "isEnding": false
+}

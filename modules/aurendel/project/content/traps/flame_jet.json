@@ -1,0 +1,39 @@
+{
+  "id": "flame_jet",
+  "name": "Flame Jet",
+  "description": "A nozzle low in the wall, sooted in a fan across the floor.",
+  "detect": {
+    "skill": "perception",
+    "difficulty": 14
+  },
+  "disarm": {
+    "skill": "craft",
+    "difficulty": 15
+  },
+  "onTrigger": [
+    {
+      "damage": {
+        "target": {
+          "ref": "target.id"
+        },
+        "amount": {
+          "roll": "3d6"
+        },
+        "damageType": "fire"
+      }
+    },
+    {
+      "applyCondition": {
+        "target": {
+          "ref": "target.id"
+        },
+        "condition": "burning",
+        "duration": 2
+      }
+    }
+  ],
+  "reusable": true,
+  "tags": [
+    "trap"
+  ]
+}

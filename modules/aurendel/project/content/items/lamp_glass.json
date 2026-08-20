@@ -1,0 +1,20 @@
+{
+  "id": "lamp_glass",
+  "name": "Glass out of a Lamp",
+  "description": "It has been burning without oil for four hundred years and it is cold to the touch.",
+  "kind": "treasure",
+  "value": 0,
+  "weight": 0,
+  "tags": [
+    "clue",
+    "proof"
+  ],
+  "onUse": [
+    {
+      "learnLore": {
+        "entry": "deep_lamps_lit"
+      }
+    }
+  ],
+  "consumedOnUse": false
+}

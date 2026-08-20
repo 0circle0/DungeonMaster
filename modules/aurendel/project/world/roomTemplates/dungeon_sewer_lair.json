@@ -1,0 +1,16 @@
+{
+  "id": "dungeon_sewer_lair",
+  "name": "Undercity Den",
+  "descriptionKey": "dungeon_sewer_lair_desc",
+  "weight": 2,
+  "minExits": 1,
+  "maxExits": 3,
+  "encounterChance": 0.4,
+  "trapChance": 0.05,
+  "lootChance": 0.24,
+  "tags": [
+    "dungeon_sewer",
+    "lair"
+  ],
+  "role": "lair"
+}

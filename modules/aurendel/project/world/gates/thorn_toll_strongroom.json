@@ -1,0 +1,29 @@
+{
+  "id": "thorn_toll_strongroom",
+  "name": "Behind the Counting Room",
+  "description": "A toll house with nothing in it but a door that has been oiled more recently than the Crown has manned the place.",
+  "kind": "ward",
+  "blockedTextKey": "thorn_toll_blocked",
+  "staysOpen": true,
+  "onOpen": [
+    {
+      "setFlag": {
+        "flag": "thorn_toll_open",
+        "value": true
+      }
+    }
+  ],
+  "onBlocked": [],
+  "opensWith": [],
+  "tags": [],
+  "requires": {
+    "items": [
+      {
+        "item": "toll_ledger",
+        "quantity": 1,
+        "consume": false,
+        "equipped": false
+      }
+    ]
+  }
+}

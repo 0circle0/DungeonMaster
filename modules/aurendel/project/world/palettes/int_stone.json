@@ -1,0 +1,34 @@
+{
+  "id": "int_stone",
+  "name": "Stone Interior",
+  "floor": "flagstone",
+  "wall": "wall_stone",
+  "exterior": "wall_stone",
+  "scatter": [
+    {
+      "terrain": "pillar",
+      "frequency": 0.04,
+      "distribution": "speckle",
+      "priority": 0
+    },
+    {
+      "terrain": "brazier",
+      "frequency": 0.025,
+      "distribution": "speckle",
+      "priority": 1
+    },
+    {
+      "terrain": "table",
+      "frequency": 0.03,
+      "distribution": "speckle",
+      "priority": 2
+    },
+    {
+      "terrain": "shelf",
+      "frequency": 0.03,
+      "distribution": "speckle",
+      "priority": 3
+    }
+  ],
+  "door": "door"
+}

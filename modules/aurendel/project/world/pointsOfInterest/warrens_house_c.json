@@ -1,0 +1,21 @@
+{
+  "id": "warrens_house_c",
+  "name": "Dogleg Lane",
+  "description": "The lane is why. The house is incidental.",
+  "area": "aurenhal_warrens",
+  "kind": "settlement",
+  "descriptionKey": "int_house",
+  "travelMinutes": 2,
+  "tags": [
+    "house"
+  ],
+  "position": {
+    "x": 28,
+    "y": 28
+  },
+  "map": {
+    "width": "9",
+    "height": "7",
+    "palette": "int_timber"
+  }
+}

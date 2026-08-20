@@ -1,0 +1,41 @@
+{
+  "id": "keeper_hesper",
+  "name": "Hesper, of the Eighth List",
+  "description": "Has spent a working life on the eight doors nobody cared about, and came down to Lantern Deep the week the ninth stopped being interesting.",
+  "disposition": 3,
+  "gullibility": 0.15,
+  "memorySpan": 365,
+  "offersQuests": [
+    "trial_one_cellars",
+    "trial_two_galleries",
+    "trial_three_listening"
+  ],
+  "caresAbout": [
+    "lantern_lit",
+    "hold_honoured"
+  ],
+  "reactions": [],
+  "faction": "the_keepers",
+  "dialogue": "trial_hesper_talk",
+  "home": "lantern_deep_fungus_market",
+  "shop": {
+    "lootTable": "keeper_stock",
+    "buysTags": [
+      "treasure"
+    ],
+    "priceMultiplier": 1.1
+  },
+  "temperament": {
+    "roamRadius": 0,
+    "wanderChance": 0,
+    "speeds": {
+      "wander": 0
+    },
+    "investigates": [],
+    "notices": [
+      "hostile",
+      "neutral",
+      "ally"
+    ]
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "id": "wraymill_house_a",
+  "name": "Millers' Row",
+  "description": "Built by the mill, rented from the mill, and dusted daily by the mill.",
+  "area": "kingsvale_wraymill",
+  "kind": "settlement",
+  "descriptionKey": "int_house",
+  "travelMinutes": 2,
+  "tags": [
+    "house"
+  ],
+  "position": {
+    "x": 20,
+    "y": 22
+  },
+  "map": {
+    "width": "9",
+    "height": "7",
+    "palette": "int_timber"
+  }
+}

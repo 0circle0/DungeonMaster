@@ -1,0 +1,20 @@
+{
+  "id": "dogged_pin",
+  "name": "A Pin off a Dogged Hatch",
+  "description": "Driven from the outside, and bent by whatever was on the inside.",
+  "kind": "treasure",
+  "value": 0,
+  "weight": 0,
+  "tags": [
+    "clue",
+    "proof"
+  ],
+  "onUse": [
+    {
+      "learnLore": {
+        "entry": "isle_wreck_shut"
+      }
+    }
+  ],
+  "consumedOnUse": false
+}

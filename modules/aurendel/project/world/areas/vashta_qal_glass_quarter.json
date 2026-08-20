@@ -1,0 +1,36 @@
+{
+  "id": "vashta_qal_glass_quarter",
+  "name": "Vashta Qal — The Glass Quarter",
+  "description": "Built on the lip of the crater, out of the crater, and the walls here are green and let light through.",
+  "biome": "urban_desert",
+  "layer": "overworld",
+  "descriptionKey": "vashta_qal_glass_quarter_desc",
+  "dangerLevel": 2,
+  "recommendedLevel": 6,
+  "tags": [
+    "glasslands",
+    "vashta_qal",
+    "city"
+  ],
+  "map": {
+    "width": "45",
+    "height": "31"
+  },
+  "entryPoint": {
+    "x": 22,
+    "y": 15
+  },
+  "extra": {
+    "role": "city"
+  },
+  "connections": [
+    {
+      "to": "vashta_qal_oasis",
+      "travelMinutes": 8
+    },
+    {
+      "to": "glasslands_the_crater",
+      "travelMinutes": 45
+    }
+  ]
+}

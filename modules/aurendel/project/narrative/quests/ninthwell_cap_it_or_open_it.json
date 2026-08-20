@@ -1,0 +1,142 @@
+{
+  "id": "ninthwell_cap_it_or_open_it",
+  "name": "Cap It or Open It",
+  "description": "There is water at the bottom of the ninth after all — a great deal of it, under everything, and Vashta Qal has been rationing one spring for four hundred years.",
+  "autoStart": false,
+  "ordered": false,
+  "tags": [
+    "side",
+    "act3",
+    "ninthwell",
+    "glasslands"
+  ],
+  "objectives": [
+    {
+      "id": "open_it",
+      "description": "Put the ninth on the roster.",
+      "kind": "custom",
+      "count": 1,
+      "hidden": false,
+      "optional": true,
+      "when": {
+        "test": {
+          "ref": "flags.ninthwell_opened"
+        }
+      }
+    },
+    {
+      "id": "cap_it",
+      "description": "Cap the ninth and say nothing.",
+      "kind": "custom",
+      "count": 1,
+      "hidden": false,
+      "optional": true,
+      "when": {
+        "test": {
+          "ref": "flags.ninthwell_capped"
+        }
+      }
+    },
+    {
+      "id": "settled",
+      "description": "Settle what happens to the water.",
+      "kind": "custom",
+      "count": 1,
+      "hidden": false,
+      "optional": false,
+      "when": {
+        "any": [
+          {
+            "test": {
+              "ref": "flags.ninthwell_opened"
+            }
+          },
+          {
+            "test": {
+              "ref": "flags.ninthwell_capped"
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "stages": [],
+  "unlocks": [],
+  "rewards": {
+    "xp": 130,
+    "items": [
+      {
+        "item": "fulgurite_lens",
+        "quantity": 1
+      }
+    ],
+    "reputation": {}
+  },
+  "requires": {
+    "quests": [
+      {
+        "quest": "ninthwell_down_the_ninth",
+        "status": "complete"
+      }
+    ]
+  },
+  "onComplete": [
+    {
+      "if": {
+        "when": {
+          "test": {
+            "ref": "flags.ninthwell_opened"
+          }
+        },
+        "then": [
+          {
+            "emit": {
+              "event": "deed",
+              "data": {
+                "kind": "spring_served"
+              }
+            }
+          },
+          {
+            "adjustReputation": {
+              "faction": "the_water_wardens",
+              "amount": 28
+            }
+          },
+          {
+            "adjustReputation": {
+              "faction": "the_library",
+              "amount": 10
+            }
+          },
+          {
+            "setFlag": {
+              "flag": "ninthwell_on_roster",
+              "value": true
+            }
+          }
+        ],
+        "else": [
+          {
+            "adjustReputation": {
+              "faction": "the_water_wardens",
+              "amount": 12
+            }
+          },
+          {
+            "adjustReputation": {
+              "faction": "the_keepers",
+              "amount": 15
+            }
+          },
+          {
+            "setFlag": {
+              "flag": "ninthwell_capped_quietly",
+              "value": true
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

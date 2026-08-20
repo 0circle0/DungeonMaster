@@ -1,0 +1,29 @@
+{
+  "id": "skarn_bell_backroom",
+  "name": "Seventy Feet Back",
+  "description": "A house dug a room and a half into the slope like its eight neighbours, and then dug rather further.",
+  "kind": "ward",
+  "blockedTextKey": "skarn_bell_blocked",
+  "staysOpen": true,
+  "onOpen": [
+    {
+      "setFlag": {
+        "flag": "skarn_bell_open",
+        "value": true
+      }
+    }
+  ],
+  "onBlocked": [],
+  "opensWith": [],
+  "tags": [],
+  "requires": {
+    "items": [
+      {
+        "item": "watch_book",
+        "quantity": 1,
+        "consume": false,
+        "equipped": false
+      }
+    ]
+  }
+}

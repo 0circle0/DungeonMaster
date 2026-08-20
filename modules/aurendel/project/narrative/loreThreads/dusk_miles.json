@@ -1,0 +1,11 @@
+{
+  "id": "dusk_miles",
+  "name": "The Extra Miles",
+  "description": "Fourteen marked miles on an eleven-mile road, three of which sight along a line of their own.",
+  "entries": [
+    "dusk_miles_count",
+    "dusk_miles_three",
+    "dusk_miles_cuttings",
+    "dusk_miles_sunken"
+  ]
+}

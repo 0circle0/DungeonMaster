@@ -1,0 +1,6 @@
+{
+  "id": "void",
+  "name": "Nowhere",
+  "floor": "void_floor",
+  "wall": "void_wall"
+}

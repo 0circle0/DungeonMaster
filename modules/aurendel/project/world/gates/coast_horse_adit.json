@@ -1,0 +1,29 @@
+{
+  "id": "coast_horse_adit",
+  "name": "Where the Lines Cross",
+  "description": "Two of the cut lines meet square, and the turf over the meeting has been lifted and put back more than once.",
+  "kind": "ward",
+  "blockedTextKey": "coast_horse_blocked",
+  "staysOpen": true,
+  "onOpen": [
+    {
+      "setFlag": {
+        "flag": "coast_horse_open",
+        "value": true
+      }
+    }
+  ],
+  "onBlocked": [],
+  "opensWith": [],
+  "tags": [],
+  "requires": {
+    "items": [
+      {
+        "item": "scouring_tally",
+        "quantity": 1,
+        "consume": false,
+        "equipped": false
+      }
+    ]
+  }
+}

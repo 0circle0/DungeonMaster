@@ -1,0 +1,26 @@
+{
+  "id": "breathing_hood",
+  "name": "The Hood off the Breathing Face",
+  "description": "Felt and hide out of a mouth that blows warm onto ice that will not form. Cold arrives at the wearer late and leaves early.",
+  "kind": "armor",
+  "slot": "head",
+  "value": 980,
+  "weight": 1,
+  "tags": [
+    "fabled"
+  ],
+  "modifiers": {
+    "guard": 1
+  },
+  "skillBonuses": {
+    "survival": 3,
+    "resolve": 2
+  },
+  "damageInteractions": [
+    {
+      "damageType": "cold",
+      "multiplier": 0.5
+    }
+  ],
+  "rarity": "very_rare"
+}

@@ -1,0 +1,43 @@
+{
+  "id": "skarnspine_highpass",
+  "name": "Highpass",
+  "description": "The last town on the road and the reason the road exists: a ward, a wall, and eleven hundred feet of altitude.",
+  "biome": "urban_stone",
+  "layer": "overworld",
+  "descriptionKey": "skarnspine_highpass_desc",
+  "dangerLevel": 2,
+  "recommendedLevel": 4,
+  "tags": [
+    "skarnspine",
+    "town"
+  ],
+  "map": {
+    "width": "41",
+    "height": "27"
+  },
+  "entryPoint": {
+    "x": 20,
+    "y": 13
+  },
+  "extra": {
+    "role": "town"
+  },
+  "connections": [
+    {
+      "to": "skarnspine_the_cut",
+      "travelMinutes": 40,
+      "gate": "skarnspine_pass_ward"
+    },
+    {
+      "to": "skarnspine_ironstair",
+      "travelMinutes": 45
+    },
+    {
+      "to": "skarnspine_snowgate",
+      "travelMinutes": 40
+    }
+  ],
+  "encounterTables": [
+    "the_loosed"
+  ]
+}

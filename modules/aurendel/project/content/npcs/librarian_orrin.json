@@ -1,0 +1,32 @@
+{
+  "id": "librarian_orrin",
+  "name": "Orrin, Keyholder of the Fourth",
+  "description": "Four floors of shelving in his charge and a locked door on the fourth that he has never once explained.",
+  "disposition": 5,
+  "gullibility": 0.4,
+  "memorySpan": 180,
+  "offersQuests": [
+    "the_librarians_errand"
+  ],
+  "caresAbout": [
+    "library_served",
+    "record_stolen"
+  ],
+  "reactions": [],
+  "faction": "the_library",
+  "dialogue": "orrin_talk",
+  "home": "aurenhal_grand_library",
+  "temperament": {
+    "roamRadius": 0,
+    "wanderChance": 0,
+    "speeds": {
+      "wander": 0
+    },
+    "investigates": [],
+    "notices": [
+      "hostile",
+      "neutral",
+      "ally"
+    ]
+  }
+}

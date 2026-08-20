@@ -1,0 +1,39 @@
+{
+  "id": "dart_slab",
+  "name": "Dart Slab",
+  "description": "A floor slab on a pivot, and a row of holes in the wall opposite.",
+  "detect": {
+    "skill": "perception",
+    "difficulty": 14
+  },
+  "disarm": {
+    "skill": "lockpicking",
+    "difficulty": 14
+  },
+  "onTrigger": [
+    {
+      "damage": {
+        "target": {
+          "ref": "target.id"
+        },
+        "amount": {
+          "roll": "2d4"
+        },
+        "damageType": "piercing"
+      }
+    },
+    {
+      "applyCondition": {
+        "target": {
+          "ref": "target.id"
+        },
+        "condition": "poisoned",
+        "duration": 3
+      }
+    }
+  ],
+  "reusable": true,
+  "tags": [
+    "trap"
+  ]
+}

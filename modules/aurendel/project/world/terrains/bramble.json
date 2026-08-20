@@ -1,0 +1,30 @@
+{
+  "id": "bramble",
+  "name": "Bramble",
+  "description": "Thorns that take payment in cloth and skin.",
+  "glyph": "&",
+  "color": "green",
+  "passable": true,
+  "opaque": false,
+  "moveCost": 4,
+  "tags": [
+    "soft",
+    "hazard"
+  ],
+  "marks": {
+    "tracks": 1,
+    "smell": 1
+  },
+  "providesCover": "half",
+  "onEnter": [
+    {
+      "applyCondition": {
+        "target": {
+          "ref": "actor.id"
+        },
+        "condition": "bleeding",
+        "duration": 1
+      }
+    }
+  ]
+}

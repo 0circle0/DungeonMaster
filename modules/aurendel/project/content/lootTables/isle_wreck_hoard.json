@@ -1,0 +1,42 @@
+{
+  "id": "isle_wreck_hoard",
+  "name": "Below Her Hatches",
+  "rolls": "3",
+  "emptyChance": 0,
+  "bonusRollSkill": "perception",
+  "bonusRolls": {
+    "onSuccess": 1,
+    "onCritical": 2
+  },
+  "entries": [
+    {
+      "weight": 4,
+      "value": {
+        "item": "old_coin",
+        "quantity": "5d6"
+      }
+    },
+    {
+      "weight": 2,
+      "value": {
+        "item": "wreck_brass",
+        "quantity": "2d3"
+      }
+    },
+    {
+      "weight": 1,
+      "value": {
+        "item": "dogged_pin",
+        "quantity": "1",
+        "unique": true
+      }
+    },
+    {
+      "weight": 2,
+      "value": {
+        "item": "warded_coat",
+        "quantity": "1"
+      }
+    }
+  ]
+}

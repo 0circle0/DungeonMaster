@@ -1,0 +1,41 @@
+{
+  "id": "karn_dolur_forgetiers",
+  "name": "Karn Dolur — The Forgetiers",
+  "description": "Six levels of furnace stacked down a shaft, and the shaft is the chimney.",
+  "biome": "urban_delved",
+  "layer": "underworld",
+  "descriptionKey": "karn_dolur_forgetiers_desc",
+  "dangerLevel": 1,
+  "recommendedLevel": 5,
+  "tags": [
+    "skarnspine",
+    "karn_dolur",
+    "city"
+  ],
+  "map": {
+    "width": "45",
+    "height": "31"
+  },
+  "entryPoint": {
+    "x": 22,
+    "y": 15
+  },
+  "extra": {
+    "role": "city"
+  },
+  "connections": [
+    {
+      "to": "karn_dolur_deep_market",
+      "travelMinutes": 8
+    },
+    {
+      "to": "karn_dolur_gatehall",
+      "travelMinutes": 10
+    },
+    {
+      "to": "deeproads_the_long_hall",
+      "travelMinutes": 90,
+      "gate": "deeproads_deep_gate"
+    }
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "id": "aurenhal_goldsmiths_hall",
+  "name": "The Goldsmiths' Hall",
+  "description": "A guild that pretends to be about craft and is entirely about credit.",
+  "area": "aurenhal_highgate",
+  "kind": "market",
+  "descriptionKey": "generic_market",
+  "travelMinutes": 4,
+  "tags": [
+    "shop",
+    "aurenhal"
+  ],
+  "position": {
+    "x": 10,
+    "y": 18
+  },
+  "services": [
+    "guild"
+  ],
+  "map": {
+    "width": "15",
+    "height": "11",
+    "palette": "int_stone"
+  }
+}

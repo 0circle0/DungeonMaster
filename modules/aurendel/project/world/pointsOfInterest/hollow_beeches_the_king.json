@@ -1,0 +1,14 @@
+{
+  "id": "hollow_beeches_the_king",
+  "name": "The Beech King",
+  "description": "Eleven yards round, hollow the whole way up, and you can stand in it and see sky.",
+  "area": "duskwood_hollow_beeches",
+  "kind": "landmark",
+  "descriptionKey": "hollow_beeches_the_king_desc",
+  "travelMinutes": 6,
+  "tags": [],
+  "position": {
+    "x": 3,
+    "y": 3
+  }
+}

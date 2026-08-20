@@ -1,0 +1,22 @@
+{
+  "id": "the_light_on_the_point",
+  "minDepth": 0,
+  "maxDepth": 999,
+  "chance": 1,
+  "emptyWeight": 0,
+  "scalePerLevels": 3,
+  "groups": [
+    {
+      "id": "shade",
+      "weight": 1,
+      "hostile": true,
+      "entries": [
+        {
+          "monster": "wreck_shade",
+          "count": "1",
+          "scaleWithLevel": false
+        }
+      ]
+    }
+  ]
+}

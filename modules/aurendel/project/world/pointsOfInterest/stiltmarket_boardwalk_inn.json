@@ -1,0 +1,24 @@
+{
+  "id": "stiltmarket_boardwalk_inn",
+  "name": "The Long Boardwalk",
+  "description": "An inn, a market, and four hundred feet of covered walk, all of it one building on nine hundred piles.",
+  "area": "thornmere_stiltmarket",
+  "kind": "settlement",
+  "descriptionKey": "stiltmarket_boardwalk_inn_desc",
+  "travelMinutes": 5,
+  "tags": [
+    "landmark",
+    "inn"
+  ],
+  "services": [
+    "inn",
+    "market"
+  ],
+  "map": {
+    "static": "boardwalk_inn"
+  },
+  "position": {
+    "x": 3,
+    "y": 3
+  }
+}

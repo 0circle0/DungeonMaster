@@ -1,0 +1,24 @@
+{
+  "id": "deep_market_apothecary",
+  "name": "The Fungus Rows",
+  "description": "Grown three levels down and sold up here, and about a third of it is medicine.",
+  "area": "karn_dolur_deep_market",
+  "kind": "market",
+  "descriptionKey": "int_store",
+  "travelMinutes": 3,
+  "tags": [
+    "shop"
+  ],
+  "services": [
+    "market"
+  ],
+  "map": {
+    "width": "11",
+    "height": "9",
+    "palette": "int_shop"
+  },
+  "position": {
+    "x": 41,
+    "y": 3
+  }
+}

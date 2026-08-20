@@ -1,0 +1,24 @@
+{
+  "id": "cinderhold_vent_readers",
+  "name": "The Vent Readers' Hall",
+  "description": "Forty people who can tell you what the ground will do tomorrow, and are right about four days in five.",
+  "area": "ember_cinderhold",
+  "kind": "market",
+  "descriptionKey": "generic_market",
+  "travelMinutes": 4,
+  "tags": [
+    "shop"
+  ],
+  "services": [
+    "guild"
+  ],
+  "map": {
+    "width": "15",
+    "height": "11",
+    "palette": "int_stone"
+  },
+  "position": {
+    "x": 12,
+    "y": 23
+  }
+}

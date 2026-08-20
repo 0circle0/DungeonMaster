@@ -1,0 +1,57 @@
+{
+  "id": "ember_the_warm_ground",
+  "name": "The Warm Ground",
+  "description": "A village that has never been cold, over a tube that runs level for a mile and then turns up past stone the lava went round.",
+  "autoStart": false,
+  "ordered": true,
+  "tags": [
+    "hidden",
+    "ember_reach",
+    "ember_warm"
+  ],
+  "objectives": [
+    {
+      "id": "in_the_tube",
+      "description": "Get up the turn.",
+      "kind": "reach",
+      "count": 1,
+      "hidden": true,
+      "optional": false,
+      "target": "slagfoot_lava_tube"
+    },
+    {
+      "id": "past_the_stone",
+      "description": "Get past the dressed stone.",
+      "kind": "custom",
+      "count": 1,
+      "hidden": true,
+      "optional": false,
+      "when": {
+        "test": {
+          "ref": "flags.ember_warm_open"
+        }
+      }
+    },
+    {
+      "id": "what_breathes",
+      "description": "Find what has been breathing.",
+      "kind": "kill",
+      "count": 1,
+      "hidden": true,
+      "optional": false,
+      "target": "tube_breather"
+    }
+  ],
+  "stages": [],
+  "unlocks": [],
+  "rewards": {
+    "xp": 180,
+    "items": [
+      {
+        "item": "kettle_ring",
+        "quantity": 1
+      }
+    ],
+    "reputation": {}
+  }
+}

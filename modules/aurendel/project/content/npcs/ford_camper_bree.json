@@ -1,0 +1,32 @@
+{
+  "id": "ford_camper_bree",
+  "name": "Bree, at the Crossing",
+  "description": "Camps where nine hundred years of people have camped, at a crossing that has not needed crossing in any of them.",
+  "disposition": 6,
+  "gullibility": 0.45,
+  "memorySpan": 150,
+  "offersQuests": [],
+  "caresAbout": [],
+  "reactions": [],
+  "faction": "the_horse_lords",
+  "dialogue": "step_bree_talk",
+  "home": "dry_river_ford_camp",
+  "temperament": {
+    "roamRadius": 24,
+    "investigateRadius": 60,
+    "leashRadius": 90,
+    "wanderChance": 0.3,
+    "speeds": {
+      "wander": 0.5
+    },
+    "investigates": [
+      "sight",
+      "hearing"
+    ],
+    "notices": [
+      "hostile",
+      "neutral",
+      "ally"
+    ]
+  }
+}

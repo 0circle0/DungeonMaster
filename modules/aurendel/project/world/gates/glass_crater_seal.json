@@ -1,0 +1,35 @@
+{
+  "id": "glass_crater_seal",
+  "name": "The Stonework Under the Lip",
+  "description": "There is masonry under the glass, and the glass was poured over it rather than the other way round.",
+  "kind": "ward",
+  "blockedTextKey": "glass_crater_blocked",
+  "staysOpen": true,
+  "onOpen": [
+    {
+      "setFlag": {
+        "flag": "glass_bath_open",
+        "value": true
+      }
+    }
+  ],
+  "onBlocked": [],
+  "opensWith": [],
+  "tags": [],
+  "requires": {
+    "items": [
+      {
+        "item": "unsold_lens",
+        "quantity": 1,
+        "consume": false,
+        "equipped": false
+      },
+      {
+        "item": "cistern_keepers_ring",
+        "quantity": 1,
+        "consume": false,
+        "equipped": false
+      }
+    ]
+  }
+}

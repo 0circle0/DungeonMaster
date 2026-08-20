@@ -1,0 +1,29 @@
+{
+  "id": "kings_ford_sluice",
+  "name": "Under the Sluice",
+  "description": "A gate worked to the day for ninety years by nobody the parish pays, and a chamber under it.",
+  "kind": "ward",
+  "blockedTextKey": "kings_ford_blocked",
+  "staysOpen": true,
+  "onOpen": [
+    {
+      "setFlag": {
+        "flag": "kings_ford_open",
+        "value": true
+      }
+    }
+  ],
+  "onBlocked": [],
+  "opensWith": [],
+  "tags": [],
+  "requires": {
+    "items": [
+      {
+        "item": "sluice_key",
+        "quantity": 1,
+        "consume": false,
+        "equipped": false
+      }
+    ]
+  }
+}

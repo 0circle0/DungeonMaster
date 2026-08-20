@@ -1,0 +1,68 @@
+{
+  "id": "bone_strand_ribcage",
+  "name": "The Ribcage",
+  "description": "Somebody has built into the ribs of the largest of them, and then gone on building downward.",
+  "area": "frostmere_bone_strand",
+  "kind": "dungeonEntrance",
+  "descriptionKey": "generic_dungeon_mouth",
+  "travelMinutes": 12,
+  "tags": [
+    "dungeon"
+  ],
+  "dungeon": "frostmere_ribcage",
+  "position": {
+    "x": 25,
+    "y": 3
+  },
+  "triggers": [
+    {
+      "id": "frost_strand_committed",
+      "mode": "once",
+      "on": "enter",
+      "description": "The wrong shape, from close enough to see it.",
+      "requires": {
+        "custom": {
+          "gte": [
+            {
+              "ref": "threads.frost_strand.known"
+            },
+            2
+          ]
+        }
+      },
+      "effects": [
+        {
+          "emit": {
+            "event": "startQuest",
+            "data": {
+              "quest": "frost_the_count"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "hidden": true,
+  "discover": {
+    "skill": "perception",
+    "difficulty": {
+      "max": [
+        8,
+        {
+          "sub": [
+            20,
+            {
+              "mul": [
+                3,
+                {
+                  "ref": "threads.frost_strand.known"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "gate": "frost_ribcage_inner"
+}

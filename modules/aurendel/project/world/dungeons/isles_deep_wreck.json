@@ -1,0 +1,19 @@
+{
+  "id": "isles_deep_wreck",
+  "name": "The Deep Wreck",
+  "description": "A great ship on her side in the lee of the reef, holds intact, decks above water at low springs and not otherwise.",
+  "biome": "dungeon_drowned",
+  "roomCount": "11",
+  "depth": "3",
+  "algorithm": "bsp",
+  "lockedDoorChance": 0,
+  "doorGates": [],
+  "rollEncounters": false,
+  "safeEntrance": true,
+  "bsp": {
+    "minLeaf": 5
+  },
+  "width": "27",
+  "height": "27",
+  "bossTable": "isle_wreck_boss"
+}

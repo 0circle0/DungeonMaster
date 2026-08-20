@@ -1,0 +1,6 @@
+{
+  "id": "walk",
+  "name": "Walk",
+  "description": "An ordinary pace. Nothing gained, nothing given away.",
+  "speedMultiplier": 1
+}

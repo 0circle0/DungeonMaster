@@ -1,0 +1,21 @@
+{
+  "id": "hollowdene_house_c",
+  "name": "Wold's",
+  "description": "Two rooms, a lean-to, and a dog with strong opinions.",
+  "area": "kingsvale_hollowdene",
+  "kind": "settlement",
+  "descriptionKey": "int_house",
+  "travelMinutes": 2,
+  "tags": [
+    "house"
+  ],
+  "position": {
+    "x": 24,
+    "y": 16
+  },
+  "map": {
+    "width": "9",
+    "height": "7",
+    "palette": "int_timber"
+  }
+}

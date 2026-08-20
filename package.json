@@ -27,7 +27,6 @@
     "lint:fix": "eslint . --fix",
     "check": "npm run check:content && npm run check:client && npm run check:projects && npm run typecheck && npm run lint && npm test",
     "check:projects": "tsx packages/tools/src/bin/check-projects.ts",
-    "check:generated": "tsx packages/tools/src/bin/check-generated.ts",
     "editor:stop": "tsx packages/tools/src/bin/free-port.ts 4400",
     "play": "npm run dev --workspace @dm/play-app",
     "play:build": "npm run build --workspace @dm/play-app",

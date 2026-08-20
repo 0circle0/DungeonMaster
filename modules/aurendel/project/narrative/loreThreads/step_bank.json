@@ -1,0 +1,11 @@
+{
+  "id": "step_bank",
+  "name": "What the Bank Shows",
+  "description": "A quarter-mile bed for a four-week river, and forty feet down in the open face, courses that were laid level.",
+  "entries": [
+    "step_bank_width",
+    "step_bank_courses",
+    "step_bank_week",
+    "step_bank_ford"
+  ]
+}

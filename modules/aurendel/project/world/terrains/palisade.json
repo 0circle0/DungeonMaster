@@ -1,0 +1,14 @@
+{
+  "id": "palisade",
+  "name": "Palisade",
+  "description": "Sharpened stakes, set close.",
+  "glyph": "p",
+  "color": "yellow",
+  "passable": false,
+  "opaque": true,
+  "moveCost": 0,
+  "tags": [
+    "built"
+  ],
+  "providesCover": "three_quarters"
+}

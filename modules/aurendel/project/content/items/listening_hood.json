@@ -1,0 +1,29 @@
+{
+  "id": "listening_hood",
+  "name": "The Hood off the Listening Room",
+  "description": "Taken off the wall of a room built to hear a corridor four miles long. It hears rather more than that.",
+  "kind": "armor",
+  "slot": "head",
+  "value": 3000,
+  "weight": 2,
+  "rarity": "artifact",
+  "tags": [
+    "fabled",
+    "trial"
+  ],
+  "modifiers": {
+    "guard": 3,
+    "initiative": 3
+  },
+  "skillBonuses": {
+    "perception": 4,
+    "insight": 4,
+    "stealth": 2
+  },
+  "damageInteractions": [
+    {
+      "damageType": "necrotic",
+      "multiplier": 0.5
+    }
+  ]
+}

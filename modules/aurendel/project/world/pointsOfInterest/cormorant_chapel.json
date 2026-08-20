@@ -1,0 +1,24 @@
+{
+  "id": "cormorant_chapel",
+  "name": "The Rock Chapel",
+  "description": "Cut into the rock rather than built on it, because of the wind.",
+  "area": "isles_cormorant",
+  "kind": "shrine",
+  "descriptionKey": "int_temple",
+  "travelMinutes": 3,
+  "tags": [
+    "shrine"
+  ],
+  "services": [
+    "temple"
+  ],
+  "map": {
+    "width": "9",
+    "height": "7",
+    "palette": "int_temple"
+  },
+  "position": {
+    "x": 21,
+    "y": 3
+  }
+}

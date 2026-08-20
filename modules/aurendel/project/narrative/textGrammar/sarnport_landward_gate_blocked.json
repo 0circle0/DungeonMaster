@@ -1,0 +1,14 @@
+{
+  "id": "sarnport_landward_gate_blocked",
+  "variants": [
+    {
+      "text": "\"Road levy,\" says the gateman, in the tone of a man who has had this argument. \"Four marks. It is not a toll.\""
+    },
+    {
+      "text": "The corporation's man taps a board with a number on it and waits."
+    },
+    {
+      "text": "\"Four marks out, same as in. You will find it is the same everywhere.\" It is not the same everywhere."
+    }
+  ]
+}

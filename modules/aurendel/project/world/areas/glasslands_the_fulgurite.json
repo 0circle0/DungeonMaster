@@ -1,0 +1,37 @@
+{
+  "id": "glasslands_the_fulgurite",
+  "name": "The Fulgurite Fields",
+  "description": "Where lightning has been fusing sand into branching glass tubes for longer than anybody has records, and the tubes stand up out of the ground like trees.",
+  "biome": "desert",
+  "layer": "overworld",
+  "descriptionKey": "glasslands_the_fulgurite_desc",
+  "dangerLevel": 6,
+  "recommendedLevel": 7,
+  "tags": [
+    "glasslands"
+  ],
+  "map": {
+    "width": "51",
+    "height": "35"
+  },
+  "entryPoint": {
+    "x": 25,
+    "y": 17
+  },
+  "extra": {
+    "role": "wild"
+  },
+  "connections": [
+    {
+      "to": "glasslands_the_crater",
+      "travelMinutes": 50
+    },
+    {
+      "to": "glasslands_bone_wells",
+      "travelMinutes": 45
+    }
+  ],
+  "encounterTables": [
+    "glasslands_things"
+  ]
+}

@@ -1,0 +1,34 @@
+{
+  "id": "drag_under",
+  "name": "Drag Under",
+  "description": "A hand at the ankle, and the water is closer than it was.",
+  "actionType": "action",
+  "targeting": "single",
+  "attack": {
+    "stat": "might",
+    "against": "guard"
+  },
+  "onUse": [
+    {
+      "damage": {
+        "target": {
+          "ref": "target.id"
+        },
+        "amount": {
+          "roll": "1d8"
+        },
+        "damageType": "bludgeoning"
+      }
+    },
+    {
+      "applyCondition": {
+        "target": {
+          "ref": "target.id"
+        },
+        "condition": "prone",
+        "duration": 1
+      }
+    }
+  ],
+  "cooldown": 2
+}

@@ -1,0 +1,18 @@
+{
+  "id": "glasslands_crater_deep",
+  "name": "The Crater Deep",
+  "description": "A stair cut down the inside of the lip, in glass, going below the floor of the crater and continuing.",
+  "biome": "dungeon_ember",
+  "roomCount": "14",
+  "depth": "4",
+  "algorithm": "rooms",
+  "lockedDoorChance": 0,
+  "doorGates": [],
+  "rollEncounters": false,
+  "safeEntrance": true,
+  "branchiness": 0.3,
+  "width": "75",
+  "height": "75",
+  "corridorLength": "2d3",
+  "bossTable": "glass_crater_boss"
+}

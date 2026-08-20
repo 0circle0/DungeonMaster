@@ -1,0 +1,35 @@
+{
+  "id": "ember_sheet_stair_seal",
+  "name": "The Cut in the Sheet",
+  "description": "A stair cut into a mile of poured glass, and the glass came up around the cut afterwards.",
+  "kind": "ward",
+  "blockedTextKey": "ember_sheet_blocked",
+  "staysOpen": true,
+  "onOpen": [
+    {
+      "setFlag": {
+        "flag": "ember_sheet_open",
+        "value": true
+      }
+    }
+  ],
+  "onBlocked": [],
+  "opensWith": [],
+  "tags": [],
+  "requires": {
+    "items": [
+      {
+        "item": "cutters_rule",
+        "quantity": 1,
+        "consume": false,
+        "equipped": false
+      },
+      {
+        "item": "kettle_ring",
+        "quantity": 1,
+        "consume": false,
+        "equipped": false
+      }
+    ]
+  }
+}

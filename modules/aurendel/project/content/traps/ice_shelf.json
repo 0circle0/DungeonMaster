@@ -1,0 +1,39 @@
+{
+  "id": "ice_shelf",
+  "name": "False Floor",
+  "description": "Snow-bridge over a melt hole, and it has held so far.",
+  "detect": {
+    "skill": "survival",
+    "difficulty": 14
+  },
+  "disarm": {
+    "skill": "survival",
+    "difficulty": 15
+  },
+  "onTrigger": [
+    {
+      "damage": {
+        "target": {
+          "ref": "target.id"
+        },
+        "amount": {
+          "roll": "2d6"
+        },
+        "damageType": "cold"
+      }
+    },
+    {
+      "applyCondition": {
+        "target": {
+          "ref": "target.id"
+        },
+        "condition": "slowed",
+        "duration": 2
+      }
+    }
+  ],
+  "reusable": false,
+  "tags": [
+    "trap"
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "id": "step_water_shoring",
+  "name": "Past the Shoring",
+  "description": "Sound timber in a country with no timber, holding up a way down beside a spring that has never failed.",
+  "kind": "ward",
+  "blockedTextKey": "step_water_blocked",
+  "staysOpen": true,
+  "onOpen": [
+    {
+      "setFlag": {
+        "flag": "step_water_open",
+        "value": true
+      }
+    }
+  ],
+  "onBlocked": [],
+  "opensWith": [],
+  "tags": [],
+  "requires": {
+    "items": [
+      {
+        "item": "shaft_warrant",
+        "quantity": 1,
+        "consume": false,
+        "equipped": false
+      }
+    ]
+  }
+}

@@ -1,0 +1,86 @@
+{
+  "id": "seam_thing",
+  "name": "What Is In the Old Seams",
+  "description": "Karn Dolur stopped working the old seams in the year four hundred and has never written down which year it stopped for.",
+  "level": 7,
+  "xp": 400,
+  "attributes": {
+    "might": 18,
+    "agility": 10,
+    "endurance": 18,
+    "intellect": 6,
+    "instinct": 12,
+    "presence": 9
+  },
+  "abilities": [
+    "stone_fist",
+    "digging_claw",
+    "call_the_shut"
+  ],
+  "behaviour": [
+    {
+      "priority": 15,
+      "use": "call_the_shut",
+      "when": {
+        "chance": 0.25
+      }
+    },
+    {
+      "priority": 10,
+      "use": "digging_claw"
+    },
+    {
+      "priority": 0,
+      "use": "stone_fist"
+    }
+  ],
+  "faction": "the_unsealed",
+  "creatureType": "elemental",
+  "size": "large",
+  "descriptors": [
+    "a seamed",
+    "a grinding"
+  ],
+  "conditionalLoot": [
+    "silvered_cache"
+  ],
+  "loot": "seams_hoard",
+  "damageInteractions": [
+    {
+      "damageType": "piercing",
+      "multiplier": 0.5
+    },
+    {
+      "damageType": "slashing",
+      "multiplier": 0.5
+    },
+    {
+      "damageType": "lightning",
+      "multiplier": 1.5
+    }
+  ],
+  "conditionImmunities": [
+    "poisoned",
+    "bleeding",
+    "frightened",
+    "blinded"
+  ],
+  "resourceOverrides": {
+    "hp": 78
+  },
+  "derivedOverrides": {
+    "guard": 17
+  },
+  "temperament": {
+    "roamRadius": 24,
+    "investigateRadius": 60,
+    "leashRadius": 80,
+    "wanderChance": 0.45,
+    "disengageTurns": 2,
+    "investigates": [
+      "sight",
+      "hearing"
+    ],
+    "followsTrails": false
+  }
+}

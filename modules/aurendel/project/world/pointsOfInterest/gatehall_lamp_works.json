@@ -1,0 +1,24 @@
+{
+  "id": "gatehall_lamp_works",
+  "name": "The Lamp Works",
+  "description": "Every lamp in the hold is filled from here and there are eleven thousand of them.",
+  "area": "karn_dolur_gatehall",
+  "kind": "market",
+  "descriptionKey": "int_workshop",
+  "travelMinutes": 4,
+  "tags": [
+    "shop"
+  ],
+  "services": [
+    "market"
+  ],
+  "map": {
+    "width": "15",
+    "height": "11",
+    "palette": "int_forge"
+  },
+  "position": {
+    "x": 31,
+    "y": 3
+  }
+}

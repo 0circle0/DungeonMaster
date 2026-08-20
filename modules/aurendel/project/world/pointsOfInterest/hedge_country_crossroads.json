@@ -1,0 +1,16 @@
+{
+  "id": "hedge_country_crossroads",
+  "name": "The Four Hedges",
+  "description": "Where four lanes meet at an angle none of them intended. There is a signpost and it has been turned.",
+  "area": "kingsvale_hedge_country",
+  "kind": "crossing",
+  "descriptionKey": "hedge_country_crossroads_desc",
+  "travelMinutes": 4,
+  "tags": [
+    "crossing"
+  ],
+  "position": {
+    "x": 25,
+    "y": 17
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "id": "hollowdene_house_b",
+  "name": "The Cottage on the Green",
+  "description": "Thatch down to the window-tops and a garden doing better than the house.",
+  "area": "kingsvale_hollowdene",
+  "kind": "settlement",
+  "descriptionKey": "int_house",
+  "travelMinutes": 2,
+  "tags": [
+    "house"
+  ],
+  "position": {
+    "x": 6,
+    "y": 12
+  },
+  "map": {
+    "width": "9",
+    "height": "7",
+    "palette": "int_timber"
+  }
+}

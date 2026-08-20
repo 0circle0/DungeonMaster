@@ -1,0 +1,21 @@
+{
+  "id": "vermin_scraps",
+  "entries": [
+    {
+      "weight": 6,
+      "value": {
+        "item": "old_coin",
+        "quantity": "1"
+      }
+    },
+    {
+      "weight": 2,
+      "value": {
+        "item": "bandages",
+        "quantity": "1"
+      }
+    }
+  ],
+  "rolls": "1",
+  "emptyChance": 0.55
+}

@@ -1,0 +1,23 @@
+{
+  "id": "flood_ring",
+  "name": "The Ring of the Fourth Week",
+  "description": "Iron off a ford post nine hundred years of riders have tied to. Water is slower to take the wearer than it should be.",
+  "kind": "trinket",
+  "slot": "ring",
+  "value": 780,
+  "weight": 1,
+  "tags": [
+    "fabled"
+  ],
+  "skillBonuses": {
+    "athletics": 3,
+    "survival": 2
+  },
+  "damageInteractions": [
+    {
+      "damageType": "cold",
+      "multiplier": 0.75
+    }
+  ],
+  "rarity": "rare"
+}

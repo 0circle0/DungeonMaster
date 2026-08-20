@@ -1,0 +1,13 @@
+{
+  "id": "anvil",
+  "name": "Anvil",
+  "description": "Horn, face, and a hardy hole worn oval.",
+  "glyph": "d",
+  "color": "gray",
+  "passable": false,
+  "opaque": false,
+  "moveCost": 0,
+  "tags": [
+    "furniture"
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "id": "dungeon_cave_entrance",
+  "name": "Cave Entry",
+  "descriptionKey": "dungeon_cave_entrance_desc",
+  "weight": 1,
+  "minExits": 1,
+  "maxExits": 3,
+  "encounterChance": 0.15,
+  "trapChance": 0.08,
+  "lootChance": 0.18,
+  "tags": [
+    "dungeon_cave",
+    "entrance"
+  ],
+  "role": "entrance"
+}

@@ -1,0 +1,8 @@
+{
+  "id": "ward_restored",
+  "name": "Restored a Ward",
+  "faction": "the_keepers",
+  "severity": 12,
+  "memorability": 2,
+  "distortion": 0.1
+}

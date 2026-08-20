@@ -1,0 +1,19 @@
+{
+  "id": "hollowdene_green",
+  "name": "Hollowdene Green",
+  "description": "Grass, a whipping-post nobody uses, and the well. Everything in the village faces it.",
+  "area": "kingsvale_hollowdene",
+  "kind": "settlement",
+  "descriptionKey": "hollowdene_green_desc",
+  "travelMinutes": 1,
+  "tags": [
+    "start"
+  ],
+  "position": {
+    "x": 15,
+    "y": 10
+  },
+  "services": [
+    "inn"
+  ]
+}

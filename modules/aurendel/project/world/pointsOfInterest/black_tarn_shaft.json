@@ -1,0 +1,34 @@
+{
+  "id": "black_tarn_shaft",
+  "name": "The Tarn Shaft",
+  "description": "Cut square, beside the water, with rungs in the wall and the first thirty feet of them rusted through.",
+  "area": "moor_black_tarn",
+  "kind": "dungeonEntrance",
+  "descriptionKey": "generic_dungeon_mouth",
+  "travelMinutes": 10,
+  "tags": [
+    "dungeon"
+  ],
+  "gate": "deeproads_tarn_shaft",
+  "dungeon": "moor_tarn_shaft",
+  "position": {
+    "x": 14,
+    "y": 3
+  },
+  "triggers": [
+    {
+      "id": "found_the_tarn_shaft",
+      "mode": "once",
+      "on": "enter",
+      "description": "The moor's way down.",
+      "effects": [
+        {
+          "setFlag": {
+            "flag": "down_by_the_tarn",
+            "value": true
+          }
+        }
+      ]
+    }
+  ]
+}

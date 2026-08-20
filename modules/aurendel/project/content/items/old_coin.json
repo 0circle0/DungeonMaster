@@ -1,0 +1,11 @@
+{
+  "id": "old_coin",
+  "name": "An Old Coin",
+  "description": "Worn past reading on one face and perfectly sharp on the other.",
+  "kind": "treasure",
+  "value": 16,
+  "weight": 1,
+  "tags": [
+    "treasure"
+  ]
+}

@@ -1,0 +1,24 @@
+{
+  "id": "cinderhold_foundry",
+  "name": "The Great Foundry",
+  "description": "Uses the ground for half its heat, which is why the town is here.",
+  "area": "ember_cinderhold",
+  "kind": "market",
+  "descriptionKey": "int_smithy",
+  "travelMinutes": 3,
+  "tags": [
+    "shop"
+  ],
+  "services": [
+    "smith"
+  ],
+  "map": {
+    "width": "19",
+    "height": "13",
+    "palette": "int_forge"
+  },
+  "position": {
+    "x": 28,
+    "y": 3
+  }
+}

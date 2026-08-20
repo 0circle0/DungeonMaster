@@ -1,0 +1,21 @@
+{
+  "id": "vashta_qal_house_a",
+  "name": "The Second Ring",
+  "description": "Whitewashed, thick-walled, and it faces away from the street on every side.",
+  "area": "vashta_qal_oasis",
+  "kind": "settlement",
+  "descriptionKey": "int_house",
+  "travelMinutes": 2,
+  "tags": [
+    "house"
+  ],
+  "map": {
+    "width": "9",
+    "height": "7",
+    "palette": "int_timber"
+  },
+  "position": {
+    "x": 3,
+    "y": 15
+  }
+}

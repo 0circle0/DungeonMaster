@@ -1,0 +1,12 @@
+{
+  "id": "the_eel_weir",
+  "name": "The Eel-Weir",
+  "description": "A fish turned round in Harvest, and the reason it turned round has been under the hedge country for rather longer than that.",
+  "quests": [
+    "eelweir_out_of_season",
+    "eelweir_the_barge",
+    "eelweir_the_badger_hole",
+    "eelweir_what_came_up"
+  ],
+  "isEnding": false
+}

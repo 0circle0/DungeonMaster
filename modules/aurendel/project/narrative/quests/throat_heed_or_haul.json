@@ -1,0 +1,150 @@
+{
+  "id": "throat_heed_or_haul",
+  "name": "Heed It or Haul It",
+  "description": "The chain is moving again and the reading is worse than it was. There are forty tons of ore in the foundry shed and a contract with Karn Dolur under them.",
+  "autoStart": false,
+  "ordered": false,
+  "tags": [
+    "side",
+    "act2",
+    "throat",
+    "ember_reach"
+  ],
+  "objectives": [
+    {
+      "id": "sound_it",
+      "description": "Sound the reading and stop the works.",
+      "kind": "custom",
+      "count": 1,
+      "hidden": false,
+      "optional": true,
+      "when": {
+        "test": {
+          "ref": "flags.throat_heeded"
+        }
+      }
+    },
+    {
+      "id": "keep_hauling",
+      "description": "Let the foundry finish the contract.",
+      "kind": "custom",
+      "count": 1,
+      "hidden": false,
+      "optional": true,
+      "when": {
+        "test": {
+          "ref": "flags.throat_hauled"
+        }
+      }
+    },
+    {
+      "id": "called",
+      "description": "Make the call.",
+      "kind": "custom",
+      "count": 1,
+      "hidden": false,
+      "optional": false,
+      "when": {
+        "any": [
+          {
+            "test": {
+              "ref": "flags.throat_heeded"
+            }
+          },
+          {
+            "test": {
+              "ref": "flags.throat_hauled"
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "stages": [],
+  "unlocks": [],
+  "rewards": {
+    "xp": 80,
+    "items": [
+      {
+        "item": "cinder_cloak",
+        "quantity": 1
+      }
+    ],
+    "reputation": {}
+  },
+  "requires": {
+    "quests": [
+      {
+        "quest": "throat_down_the_throat",
+        "status": "complete"
+      }
+    ]
+  },
+  "onComplete": [
+    {
+      "if": {
+        "when": {
+          "test": {
+            "ref": "flags.throat_hauled"
+          }
+        },
+        "then": [
+          {
+            "emit": {
+              "event": "deed",
+              "data": {
+                "kind": "warning_ignored"
+              }
+            }
+          },
+          {
+            "adjustReputation": {
+              "faction": "the_vent_readers",
+              "amount": -22
+            }
+          },
+          {
+            "adjustReputation": {
+              "faction": "karn_dolur",
+              "amount": 18
+            }
+          },
+          {
+            "setFlag": {
+              "flag": "throat_ore_moved",
+              "value": true
+            }
+          }
+        ],
+        "else": [
+          {
+            "emit": {
+              "event": "deed",
+              "data": {
+                "kind": "vent_heeded"
+              }
+            }
+          },
+          {
+            "adjustReputation": {
+              "faction": "the_vent_readers",
+              "amount": 28
+            }
+          },
+          {
+            "adjustReputation": {
+              "faction": "karn_dolur",
+              "amount": -10
+            }
+          },
+          {
+            "setFlag": {
+              "flag": "throat_works_stopped",
+              "value": true
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

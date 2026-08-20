@@ -1,0 +1,14 @@
+{
+  "id": "unsold_lens",
+  "name": "The Lens They Do Not Sell",
+  "description": "Ground every year by the Cutters' Hall since before the guild kept minutes. Looked through, the glass on the crater lip is not glass.",
+  "kind": "key",
+  "value": 0,
+  "weight": 0,
+  "tags": [
+    "keepsake"
+  ],
+  "extra": {
+    "heldBy": "lens_cutter_naim"
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "id": "wall_timber",
+  "name": "Timber Wall",
+  "description": "Frame and daub, or plank on plank.",
+  "glyph": "H",
+  "color": "yellow",
+  "passable": false,
+  "opaque": true,
+  "moveCost": 0,
+  "tags": [
+    "built"
+  ]
+}

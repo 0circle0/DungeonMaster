@@ -1,0 +1,33 @@
+{
+  "id": "cut_and_run",
+  "name": "Cut and Run",
+  "description": "A short blade, low, and then twenty yards of shingle.",
+  "actionType": "action",
+  "targeting": "single",
+  "attack": {
+    "stat": "agility",
+    "against": "guard"
+  },
+  "onUse": [
+    {
+      "damage": {
+        "target": {
+          "ref": "target.id"
+        },
+        "amount": {
+          "roll": "1d6"
+        },
+        "damageType": "slashing"
+      }
+    },
+    {
+      "applyCondition": {
+        "target": {
+          "ref": "target.id"
+        },
+        "condition": "bleeding",
+        "duration": 2
+      }
+    }
+  ]
+}

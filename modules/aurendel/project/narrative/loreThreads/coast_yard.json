@@ -1,0 +1,11 @@
+{
+  "id": "coast_yard",
+  "name": "One a Year, Unclaimed",
+  "description": "Two hundred years of one entry each October — taken up, never collected — and the fee paid in coin by somebody.",
+  "entries": [
+    "coast_yard_one",
+    "coast_yard_wall",
+    "coast_yard_horses",
+    "coast_yard_paid"
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "id": "deep_market_house_b",
+  "name": "The Weighers' Rooms",
+  "description": "Lodging for the hall's clerks, and a view down onto the floor.",
+  "area": "karn_dolur_deep_market",
+  "kind": "settlement",
+  "descriptionKey": "int_house",
+  "travelMinutes": 2,
+  "tags": [
+    "house"
+  ],
+  "map": {
+    "width": "9",
+    "height": "7",
+    "palette": "int_timber"
+  },
+  "position": {
+    "x": 13,
+    "y": 27
+  }
+}

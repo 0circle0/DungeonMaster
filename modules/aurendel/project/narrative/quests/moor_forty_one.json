@@ -1,0 +1,57 @@
+{
+  "id": "moor_forty_one",
+  "name": "Forty-One Out, Forty-One In",
+  "description": "Every body the deep peat gave up written down as returned, and not always the one that was taken.",
+  "autoStart": false,
+  "ordered": true,
+  "tags": [
+    "hidden",
+    "weeping_moor",
+    "moor_cut"
+  ],
+  "objectives": [
+    {
+      "id": "below_the_band",
+      "description": "Get below the band nobody cuts past.",
+      "kind": "reach",
+      "count": 1,
+      "hidden": true,
+      "optional": false,
+      "target": "mirestead_bog_body_cut"
+    },
+    {
+      "id": "match_the_count",
+      "description": "Work out which two went back different.",
+      "kind": "custom",
+      "count": 1,
+      "hidden": true,
+      "optional": false,
+      "when": {
+        "test": {
+          "ref": "flags.moor_cut_open"
+        }
+      }
+    },
+    {
+      "id": "what_swaps",
+      "description": "Meet what has been doing the returning.",
+      "kind": "kill",
+      "count": 1,
+      "hidden": true,
+      "optional": false,
+      "target": "the_returner"
+    }
+  ],
+  "stages": [],
+  "unlocks": [],
+  "rewards": {
+    "xp": 195,
+    "items": [
+      {
+        "item": "bog_belt",
+        "quantity": 1
+      }
+    ],
+    "reputation": {}
+  }
+}

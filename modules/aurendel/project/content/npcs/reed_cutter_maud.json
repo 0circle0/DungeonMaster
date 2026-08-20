@@ -1,0 +1,33 @@
+{
+  "id": "reed_cutter_maud",
+  "name": "Maud, Reed-Cutter",
+  "description": "Cuts and bundles for the thatchers, and owns the only bill in Thornmere whose edge is a hundred years older than its handle.",
+  "disposition": 6,
+  "gullibility": 0.4,
+  "memorySpan": 150,
+  "offersQuests": [],
+  "caresAbout": [],
+  "reactions": [],
+  "faction": "the_ferrymen",
+  "dialogue": "thorn_maud_talk",
+  "home": "reedy_bottom_cuttings",
+  "statblock": "thorn_cutter",
+  "temperament": {
+    "roamRadius": 24,
+    "investigateRadius": 60,
+    "leashRadius": 90,
+    "wanderChance": 0.3,
+    "speeds": {
+      "wander": 0.5
+    },
+    "investigates": [
+      "sight",
+      "hearing"
+    ],
+    "notices": [
+      "hostile",
+      "neutral",
+      "ally"
+    ]
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "id": "meadow",
+  "name": "Meadow",
+  "description": "Long grass and flowering weeds, up to the knee.",
+  "glyph": ",",
+  "color": "green",
+  "passable": true,
+  "opaque": false,
+  "moveCost": 1,
+  "tags": [
+    "soft"
+  ],
+  "marks": {
+    "tracks": 1,
+    "smell": 1
+  }
+}

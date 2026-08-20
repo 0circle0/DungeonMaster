@@ -1,0 +1,180 @@
+{
+  "id": "vail_talk",
+  "start": "greet",
+  "nodes": [
+    {
+      "id": "greet",
+      "says": [
+        {
+          "text": "Vail does not put the pen down. \"You are the ones from the village. Say it briefly.\""
+        }
+      ],
+      "options": [
+        {
+          "id": "report",
+          "text": "A ward at Hollowdene has been opened.",
+          "effects": [
+            {
+              "setFlag": {
+                "flag": "heard_by_crown",
+                "value": true
+              }
+            },
+            {
+              "adjustReputation": {
+                "faction": "the_crown",
+                "amount": 5
+              }
+            }
+          ],
+          "onceOnly": true,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "he_puts_the_pen_down"
+        },
+        {
+          "id": "leave",
+          "text": "Nothing yet.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": [
+        {
+          "requires": {
+            "quests": [
+              {
+                "quest": "the_crowns_commission",
+                "status": "active"
+              }
+            ]
+          },
+          "goto": "the_undercroft_stair"
+        }
+      ]
+    },
+    {
+      "id": "he_puts_the_pen_down",
+      "says": [
+        {
+          "text": "He puts the pen down. That is the whole of his reaction and it is quite enough. \"Who else have you told?\""
+        }
+      ],
+      "options": [
+        {
+          "id": "nobody",
+          "text": "Nobody.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "the_offer"
+        },
+        {
+          "id": "the_library",
+          "text": "We were going to try the Library.",
+          "effects": [
+            {
+              "adjustReputation": {
+                "faction": "the_crown",
+                "amount": -3
+              }
+            }
+          ],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "the_offer"
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": []
+    },
+    {
+      "id": "the_offer",
+      "says": [
+        {
+          "text": "\"Then here is what I will do, and here is what it costs you. I will give you the undercroft key and a seal that opens any gate between here and the ice. In return this stays between the four of us and the room.\" A thin pause. \"The Library is not the four of us.\""
+        }
+      ],
+      "options": [
+        {
+          "id": "accept",
+          "text": "Agreed.",
+          "effects": [
+            {
+              "emit": {
+                "event": "startQuest",
+                "data": {
+                  "quest": "the_crowns_commission"
+                }
+              }
+            }
+          ],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "the_undercroft_stair",
+          "requires": {
+            "quests": [
+              {
+                "quest": "the_crowns_commission",
+                "status": "unstarted"
+              }
+            ]
+          }
+        },
+        {
+          "id": "refuse",
+          "text": "We'll think about it.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "greet"
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": []
+    },
+    {
+      "id": "the_undercroft_stair",
+      "says": [
+        {
+          "text": "\"The stair is behind the third storeroom. The list is on the table at the bottom, and you will find it says nine.\" He picks the pen back up. \"Three are crossed through. Not by me.\""
+        }
+      ],
+      "options": [
+        {
+          "id": "read_it",
+          "text": "We'll read it.",
+          "effects": [
+            {
+              "setFlag": {
+                "flag": "wardlist_read",
+                "value": true
+              }
+            }
+          ],
+          "onceOnly": true,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        },
+        {
+          "id": "leave",
+          "text": "Right.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": [],
+      "remembers": "crown_served"
+    }
+  ]
+}

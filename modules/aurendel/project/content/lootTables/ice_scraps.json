@@ -1,0 +1,33 @@
+{
+  "id": "ice_scraps",
+  "entries": [
+    {
+      "weight": 5,
+      "value": {
+        "item": "old_coin",
+        "quantity": "1"
+      }
+    },
+    {
+      "weight": 3,
+      "value": {
+        "item": "barrow_torc",
+        "quantity": "1"
+      }
+    },
+    {
+      "weight": 2,
+      "value": {
+        "item": "ward_salt",
+        "quantity": "1"
+      }
+    }
+  ],
+  "rolls": "1",
+  "emptyChance": 0.45,
+  "bonusRollSkill": "survival",
+  "bonusRolls": {
+    "onSuccess": 1,
+    "onCritical": 2
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "id": "frostmere_glass_ice_desc",
+  "variants": [
+    {
+      "text": "Blue-black, swept bare by the wind, and clear enough to see forty feet down into it."
+    },
+    {
+      "text": "The Glass Ice. You can see things at thirty feet. You will look at them for some time."
+    },
+    {
+      "text": "No snow at all, and your boots find no grip anywhere."
+    },
+    {
+      "text": "It is the most beautiful place on the continent and you are anxious to be off it."
+    }
+  ]
+}

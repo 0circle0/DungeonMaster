@@ -1,0 +1,340 @@
+{
+  "id": "bonealley_dree_talk",
+  "start": "greet",
+  "nodes": [
+    {
+      "id": "greet",
+      "says": [
+        {
+          "text": "Dree is going through a ledger of who is where, and there are three lines in it with nothing written after them. \"You're not guild. State it quickly.\""
+        }
+      ],
+      "options": [
+        {
+          "id": "ask_job",
+          "text": "You're three short.",
+          "effects": [
+            {
+              "emit": {
+                "event": "startQuest",
+                "data": {
+                  "quest": "bonealley_unlicensed"
+                }
+              }
+            },
+            {
+              "grantItem": {
+                "target": {
+                  "ref": "actor.id"
+                },
+                "item": "bandages",
+                "quantity": 2
+              }
+            }
+          ],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "the_three",
+          "requires": {
+            "quests": [
+              {
+                "quest": "bonealley_unlicensed",
+                "status": "unstarted"
+              },
+              {
+                "quest": "the_open_door",
+                "status": "complete"
+              }
+            ]
+          }
+        },
+        {
+          "id": "ask_guild",
+          "text": "A guild of ratcatchers?",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "the_guild"
+        },
+        {
+          "id": "leave",
+          "text": "Nothing.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": [
+        {
+          "requires": {
+            "flags": [
+              {
+                "flag": "bonealley_diggers_met",
+                "equals": true
+              }
+            ]
+          },
+          "goto": "about_the_diggers"
+        },
+        {
+          "requires": {
+            "quests": [
+              {
+                "quest": "bonealley_the_old_gaol",
+                "status": "active"
+              }
+            ],
+            "flags": [
+              {
+                "flag": "bonealley_brickwork_seen",
+                "equals": true
+              }
+            ]
+          },
+          "goto": "about_the_gaol"
+        }
+      ]
+    },
+    {
+      "id": "the_guild",
+      "says": [
+        {
+          "text": "\"Chartered under the third Aurel, and the charter says vermin, and vermin is a broad word in a city built on three older cities.\" She does not smile. \"We have the map. Nobody else has the map. That is the guild.\""
+        }
+      ],
+      "options": [
+        {
+          "id": "back",
+          "text": "Hm.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "greet"
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": []
+    },
+    {
+      "id": "the_three",
+      "says": [
+        {
+          "text": "\"Kettle Yard, down the stair behind the wine-shop, Lastmonth the ninth. Three went, none came back, and the rope came back cut.\" She closes the ledger. \"Cut, not frayed. So it is people, and if it is people they are in my under without a charter.\""
+        }
+      ],
+      "options": [
+        {
+          "id": "why_not_watch",
+          "text": "Why not the Watch?",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "not_the_watch"
+        },
+        {
+          "id": "go",
+          "text": "We'll go down.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "go_down"
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": []
+    },
+    {
+      "id": "not_the_watch",
+      "says": [
+        {
+          "text": "\"Because the Watch would want the map, and the Watch reports to a man in the Kingshold who would want the map, and then it is not the guild's map.\" A shrug. \"Three of mine against four hundred years. I am aware of how that sounds.\""
+        }
+      ],
+      "options": [
+        {
+          "id": "go",
+          "text": "We'll go down.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "go_down"
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": []
+    },
+    {
+      "id": "go_down",
+      "says": [
+        {
+          "text": "\"Take the hood if you find one. Ours are waxed black and cut clear of the ear, and anybody down there not wearing one is not mine.\""
+        }
+      ],
+      "options": [
+        {
+          "id": "done",
+          "text": "Understood.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": []
+    },
+    {
+      "id": "about_the_diggers",
+      "says": [
+        {
+          "text": "\"Not guild,\" she says, before you have said anything. \"I can see it on you.\" She sits. \"What were they carrying?\""
+        }
+      ],
+      "options": [
+        {
+          "id": "ash",
+          "text": "Ash. Bagged, weighed, and labelled.",
+          "effects": [],
+          "onceOnly": true,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "the_ash"
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": []
+    },
+    {
+      "id": "the_ash",
+      "says": [
+        {
+          "text": "\"Labelled,\" Dree repeats, and something goes out of her face. \"Grave ash, bagged and *labelled*, which means somebody is buying it by weight and writing down where it came from.\" She looks at the ledger. \"They were going west. There is nothing west but the gaol.\""
+        }
+      ],
+      "options": [
+        {
+          "id": "the_gaol",
+          "text": "What's in the gaol?",
+          "effects": [
+            {
+              "emit": {
+                "event": "startQuest",
+                "data": {
+                  "quest": "bonealley_the_old_gaol"
+                }
+              }
+            }
+          ],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "the_west_range",
+          "requires": {
+            "quests": [
+              {
+                "quest": "bonealley_the_old_gaol",
+                "status": "unstarted"
+              }
+            ]
+          }
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": []
+    },
+    {
+      "id": "the_west_range",
+      "says": [
+        {
+          "text": "\"Emptied after the fire, and the west range bricked up in a hurry with the register still on the desk.\" She meets your eye. \"We walk round that corner. We have walked round it for sixty years and told ourselves it was the damp.\""
+        }
+      ],
+      "options": [
+        {
+          "id": "done",
+          "text": "We'll look at the brickwork.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": []
+    },
+    {
+      "id": "about_the_gaol",
+      "says": [
+        {
+          "text": "\"You've seen it.\" Dree does not ask. \"New mortar on sixty-year brick, and a hole in it somebody else made first.\""
+        }
+      ],
+      "options": [
+        {
+          "id": "go_through",
+          "text": "We're going through.",
+          "effects": [
+            {
+              "emit": {
+                "event": "startQuest",
+                "data": {
+                  "quest": "bonealley_what_was_bricked_up"
+                }
+              }
+            }
+          ],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "the_register",
+          "requires": {
+            "quests": [
+              {
+                "quest": "bonealley_what_was_bricked_up",
+                "status": "unstarted"
+              }
+            ]
+          }
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": []
+    },
+    {
+      "id": "the_register",
+      "says": [
+        {
+          "text": "\"There was a name still on the book when they bricked it,\" she says. \"That is the part nobody says out loud. They did not empty the west range. They *closed* it.\""
+        }
+      ],
+      "options": [
+        {
+          "id": "done",
+          "text": "Then we'll open it.",
+          "effects": [
+            {
+              "adjustReputation": {
+                "faction": "the_ratcatchers",
+                "amount": 5
+              }
+            }
+          ],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": [],
+      "remembers": "under_kept"
+    }
+  ]
+}

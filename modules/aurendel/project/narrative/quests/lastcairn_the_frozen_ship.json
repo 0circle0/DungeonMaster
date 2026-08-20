@@ -1,0 +1,73 @@
+{
+  "id": "lastcairn_the_frozen_ship",
+  "name": "The Frozen Ship",
+  "description": "A body in a glacier came off the top of it, and the top of the White Reach has one thing on it that anybody has ever found: a ship, in the middle of the ice, forty miles from water.",
+  "autoStart": false,
+  "ordered": true,
+  "tags": [
+    "side",
+    "act3",
+    "lastcairn",
+    "frostmere"
+  ],
+  "objectives": [
+    {
+      "id": "out_on_the_ice",
+      "description": "Find the frozen ship on the White Reach.",
+      "kind": "reach",
+      "count": 1,
+      "hidden": false,
+      "optional": false,
+      "target": "white_reach_frozen_ship"
+    },
+    {
+      "id": "which_way",
+      "description": "See which way she is pointed.",
+      "kind": "custom",
+      "count": 1,
+      "hidden": false,
+      "optional": false,
+      "when": {
+        "test": {
+          "ref": "flags.lastcairn_ship_found"
+        }
+      }
+    },
+    {
+      "id": "tell_ottir",
+      "description": "Take the bearing back to Ottir.",
+      "kind": "talk",
+      "count": 1,
+      "hidden": false,
+      "optional": false,
+      "target": "moot_stone_ottir"
+    }
+  ],
+  "stages": [],
+  "unlocks": [
+    "lastcairn_under_the_last_cairn"
+  ],
+  "rewards": {
+    "xp": 110,
+    "items": [],
+    "reputation": {
+      "the_ice_moot": 10
+    }
+  },
+  "requires": {
+    "quests": [
+      {
+        "quest": "lastcairn_what_the_ice_gave_back",
+        "status": "complete"
+      }
+    ]
+  },
+  "onComplete": [
+    {
+      "setFlag": {
+        "flag": "lastcairn_bearing_known",
+        "value": true
+      }
+    }
+  ]
+}

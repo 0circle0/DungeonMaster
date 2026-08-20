@@ -1,0 +1,11 @@
+{
+  "id": "isle_marker",
+  "name": "The Marker That Does Not Move",
+  "description": "Two hundred years on one bearing in a channel that redraws every spring, held by something that is not rock.",
+  "entries": [
+    "isle_marker_still",
+    "isle_marker_iron",
+    "isle_marker_held",
+    "isle_marker_bearing"
+  ]
+}

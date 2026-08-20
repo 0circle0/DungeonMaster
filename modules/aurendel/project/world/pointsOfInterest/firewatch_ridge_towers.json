@@ -1,0 +1,14 @@
+{
+  "id": "firewatch_ridge_towers",
+  "name": "The Firewatch Towers",
+  "description": "Nine of them along the ridge, built to watch the mountain rather than the road, and four are still manned.",
+  "area": "ember_firewatch_ridge",
+  "kind": "landmark",
+  "descriptionKey": "firewatch_ridge_towers_desc",
+  "travelMinutes": 6,
+  "tags": [],
+  "position": {
+    "x": 3,
+    "y": 3
+  }
+}

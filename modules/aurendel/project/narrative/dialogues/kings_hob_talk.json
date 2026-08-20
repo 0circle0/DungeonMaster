@@ -1,0 +1,219 @@
+{
+  "id": "kings_hob_talk",
+  "start": "greet",
+  "nodes": [
+    {
+      "id": "greet",
+      "says": [
+        {
+          "text": "A forge yard with a road mason's kit against the wall and a man sorting setts by size."
+        },
+        {
+          "text": "“Roadwork. If the road did it to your cart, take it up with the Crown, not me.”"
+        }
+      ],
+      "onEnter": [],
+      "options": [
+        {
+          "id": "kings_hob_two",
+          "text": "How many faces is that quarry worked from?",
+          "requires": {
+            "without": {
+              "lore": [
+                "kings_quarry_two"
+              ]
+            }
+          },
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "check": {
+            "skill": "persuasion",
+            "difficulty": {
+              "sub": [
+                10,
+                {
+                  "clamp": [
+                    {
+                      "div": [
+                        {
+                          "ref": "reputation.the_crown",
+                          "else": 0
+                        },
+                        5
+                      ]
+                    },
+                    -6,
+                    6
+                  ]
+                }
+              ]
+            },
+            "onSuccess": "kings_hob_two_told",
+            "onFailure": "kings_hob_two_wont"
+          }
+        },
+        {
+          "id": "kings_hob_stone",
+          "text": "Is the stone the same off both?",
+          "requires": {
+            "without": {
+              "lore": [
+                "kings_quarry_stone"
+              ]
+            }
+          },
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "check": {
+            "skill": "insight",
+            "difficulty": {
+              "sub": [
+                12,
+                {
+                  "clamp": [
+                    {
+                      "div": [
+                        {
+                          "ref": "reputation.the_crown",
+                          "else": 0
+                        },
+                        5
+                      ]
+                    },
+                    -6,
+                    6
+                  ]
+                }
+              ]
+            },
+            "onSuccess": "kings_hob_stone_told",
+            "onFailure": "kings_hob_stone_wont"
+          }
+        },
+        {
+          "id": "greet_leave",
+          "text": "Nothing.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "kings_hob_two_told",
+      "says": [
+        {
+          "text": "“Two.” He puts a sett down. “The warrant is for one. The tallies are for one. There are two, and I have laid road out of that quarry for nineteen years and I would like somebody to explain it who is not a clerk.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "learnLore": {
+            "entry": "kings_quarry_two"
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "kings_hob_two_on",
+          "text": "Go on.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "kings_hob_two_wont",
+      "says": [
+        {
+          "text": "“I've said all I mean to,” they say, and go back to what they were doing."
+        }
+      ],
+      "onEnter": [
+        {
+          "adjustReputation": {
+            "faction": "the_crown",
+            "amount": -1
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "kings_hob_two_drop",
+          "text": "Leave it.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "kings_hob_stone_told",
+      "says": [
+        {
+          "text": "“No.” Emphatic. “Second face is finer. Better stone than the Kingsroad has any use for, and there is *none of it* in the Kingsroad, or the Craftrow, or the King's Gate. I have looked at every road in this vale.” A pause. “It went somewhere.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "learnLore": {
+            "entry": "kings_quarry_stone"
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "kings_hob_stone_on",
+          "text": "Go on.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "kings_hob_stone_wont",
+      "says": [
+        {
+          "text": "“I've said all I mean to,” they say, and go back to what they were doing."
+        }
+      ],
+      "onEnter": [
+        {
+          "adjustReputation": {
+            "faction": "the_crown",
+            "amount": -1
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "kings_hob_stone_drop",
+          "text": "Leave it.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    }
+  ]
+}

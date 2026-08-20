@@ -1,0 +1,11 @@
+{
+  "id": "grown_key",
+  "name": "The Grown Key",
+  "description": "Not carved. The Witchwood put out a shape and somebody took it.",
+  "kind": "trinket",
+  "value": 0,
+  "weight": 0.5,
+  "tags": [
+    "quest"
+  ]
+}

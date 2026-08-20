@@ -1,0 +1,11 @@
+{
+  "id": "frost_hidden",
+  "name": "The Frostmere, Unaccounted",
+  "description": "Three things the Landing has known about for years and never once written down.",
+  "quests": [
+    "frost_the_blue_voice",
+    "frost_the_count",
+    "frost_what_it_points_at"
+  ],
+  "isEnding": false
+}

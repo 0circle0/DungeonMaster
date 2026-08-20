@@ -1,0 +1,441 @@
+{
+  "id": "seams_vare_talk",
+  "start": "greet",
+  "nodes": [
+    {
+      "id": "greet",
+      "says": [
+        {
+          "text": "The Hall of Measures is one room with a yard-bar on one wall, a mark-weight under glass, and eleven hundred fee-tables in presses. Vare is at the presses. \"You are not here to have anything measured.\""
+        }
+      ],
+      "options": [
+        {
+          "id": "what_troubles_you",
+          "text": "What are you looking for?",
+          "effects": [
+            {
+              "emit": {
+                "event": "startQuest",
+                "data": {
+                  "quest": "seams_the_missing_year"
+                }
+              }
+            }
+          ],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "eleven_years",
+          "requires": {
+            "quests": [
+              {
+                "quest": "seams_the_missing_year",
+                "status": "unstarted"
+              }
+            ],
+            "description": "two of the three ward-keys",
+            "anyOf": [
+              {
+                "items": [
+                  {
+                    "item": "grown_key"
+                  },
+                  {
+                    "item": "cast_key"
+                  }
+                ]
+              },
+              {
+                "items": [
+                  {
+                    "item": "grown_key"
+                  },
+                  {
+                    "item": "glass_key"
+                  }
+                ]
+              },
+              {
+                "items": [
+                  {
+                    "item": "cast_key"
+                  },
+                  {
+                    "item": "glass_key"
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "id": "the_hall",
+          "text": "What is the Hall of Measures for?",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "the_hall"
+        },
+        {
+          "id": "leave",
+          "text": "Nothing.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": [
+        {
+          "requires": {
+            "quests": [
+              {
+                "quest": "seams_the_ledger_stone",
+                "status": "active"
+              }
+            ],
+            "flags": [
+              {
+                "flag": "seams_gap_found",
+                "equals": true
+              }
+            ]
+          },
+          "goto": "about_the_gap"
+        },
+        {
+          "requires": {
+            "flags": [
+              {
+                "flag": "seams_thing_down",
+                "equals": true
+              }
+            ],
+            "without": {
+              "flags": [
+                {
+                  "flag": "seams_cut"
+                },
+                {
+                  "flag": "seams_closed"
+                }
+              ]
+            }
+          },
+          "goto": "cut_or_close"
+        }
+      ]
+    },
+    {
+      "id": "the_hall",
+      "says": [
+        {
+          "text": "\"The yard, the mark, and the fee,\" says Vare. \"Everything the Hold has decided and does not intend to decide again.\" She closes a press. \"Which is most things. We are nine hundred years old and we are principally a list.\""
+        }
+      ],
+      "options": [
+        {
+          "id": "back",
+          "text": "Hm.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "greet"
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": []
+    },
+    {
+      "id": "eleven_years",
+      "says": [
+        {
+          "text": "\"The old seams were worked out and abandoned in the year four hundred,\" says Vare. \"That is in every account. What is in no account is which year it stopped *for*.\""
+        },
+        {
+          "text": "\"We write down the weather,\" she says. \"We have four hundred entries about a stream. There is no entry about closing a working that employed nine hundred people. That is not an omission. Somebody made it.\""
+        }
+      ],
+      "options": [
+        {
+          "id": "so_ask",
+          "text": "So ask the Speaker.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "cannot_ask"
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": []
+    },
+    {
+      "id": "cannot_ask",
+      "says": [
+        {
+          "text": "\"I have asked the Speaker,\" says Vare, \"and the Speaker has told me, correctly, that the Hall of Measures records decisions and does not make them.\" A very small pause. \"I am not permitted to open anything. You are not of the Hold, so there is nothing you are not permitted to do.\""
+        }
+      ],
+      "options": [
+        {
+          "id": "where",
+          "text": "Where do we start?",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "the_stone"
+        }
+      ],
+      "onEnter": [
+        {
+          "setFlag": {
+            "flag": "seams_omission_known",
+            "value": true
+          }
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "the_stone",
+      "says": [
+        {
+          "text": "\"The ledger stone, at the gatehall. Every fee the Hold has charged for the Deep Door, cut in order, one a year for nine hundred years without exception.\" She looks up. \"Go and read the four hundreds. Count them.\""
+        }
+      ],
+      "options": [
+        {
+          "id": "go",
+          "text": "We'll count them.",
+          "effects": [
+            {
+              "emit": {
+                "event": "startQuest",
+                "data": {
+                  "quest": "seams_the_ledger_stone"
+                }
+              }
+            }
+          ],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "count_them",
+          "requires": {
+            "quests": [
+              {
+                "quest": "seams_the_ledger_stone",
+                "status": "unstarted"
+              }
+            ]
+          }
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": []
+    },
+    {
+      "id": "count_them",
+      "says": [
+        {
+          "text": "\"Count them,\" Vare repeats, \"rather than read what is written beside them. Everybody reads. Nobody counts.\""
+        }
+      ],
+      "options": [
+        {
+          "id": "done",
+          "text": "We'll count.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": []
+    },
+    {
+      "id": "about_the_gap",
+      "says": [
+        {
+          "text": "Vare has stopped working, which in eleven years the Deep Market has not seen her do. \"How many?\""
+        }
+      ],
+      "options": [
+        {
+          "id": "four",
+          "text": "Four years. No fee cut at all.",
+          "effects": [],
+          "onceOnly": true,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "four_years"
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": []
+    },
+    {
+      "id": "four_years",
+      "says": [
+        {
+          "text": "\"Four,\" says Vare. \"Then for four years the Hold charged nobody, which means for four years the Hold let nobody through, which means for four years the gate did not open.\""
+        },
+        {
+          "text": "She sits down on the press. \"And the old seams run behind that gate. We did not stop working them because they were worked out. We stopped because we shut the gate on them, and then we wrote down that they were worked out.\""
+        }
+      ],
+      "options": [
+        {
+          "id": "go_in",
+          "text": "Then we'll go and look at what you shut in.",
+          "effects": [
+            {
+              "emit": {
+                "event": "startQuest",
+                "data": {
+                  "quest": "seams_into_the_old_workings"
+                }
+              }
+            },
+            {
+              "adjustReputation": {
+                "faction": "karn_dolur",
+                "amount": 8
+              }
+            }
+          ],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "ninth_level",
+          "requires": {
+            "quests": [
+              {
+                "quest": "seams_into_the_old_workings",
+                "status": "unstarted"
+              }
+            ]
+          }
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": [],
+      "remembers": "hold_honoured"
+    },
+    {
+      "id": "ninth_level",
+      "says": [
+        {
+          "text": "\"The seals are at the ninth level and they are not good seals,\" says Vare. \"Which is the loudest thing anybody has said to me in eleven years. We seal well. Unless we are in a hurry.\""
+        }
+      ],
+      "options": [
+        {
+          "id": "done",
+          "text": "The ninth level.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": []
+    },
+    {
+      "id": "cut_or_close",
+      "says": [
+        {
+          "text": "\"It is down,\" says Vare, and writes it, because she is who she is. \"Now the Hold has a choice it has avoided for four hundred years, and it will not thank either of us for putting it in front of them.\""
+        },
+        {
+          "text": "\"There is room on the stone for four years. I can cut them, and the Hold is publicly wrong about one thing for the first time since it was founded, and everything else on that stone becomes worth trusting.\" She looks at the wall. \"Or we seal the seams properly this time, and the stone says what it has always said, and I go back to the presses.\""
+        }
+      ],
+      "options": [
+        {
+          "id": "cut",
+          "text": "Cut the years. A list is only worth its worst entry.",
+          "effects": [
+            {
+              "setFlag": {
+                "flag": "seams_cut",
+                "value": true
+              }
+            }
+          ],
+          "onceOnly": true,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "cut"
+        },
+        {
+          "id": "close",
+          "text": "Seal it. Nine hundred years is worth something too.",
+          "effects": [
+            {
+              "setFlag": {
+                "flag": "seams_closed",
+                "value": true
+              }
+            }
+          ],
+          "onceOnly": true,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "closed"
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": []
+    },
+    {
+      "id": "cut",
+      "says": [
+        {
+          "text": "It takes a mason eleven days and the Speaker comes down on the ninth to watch and says nothing at all. Vare cuts the last figure herself, badly, and nobody suggests correcting it."
+        }
+      ],
+      "options": [
+        {
+          "id": "done",
+          "text": "It's cut.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": [],
+      "remembers": "hold_honoured"
+    },
+    {
+      "id": "closed",
+      "says": [
+        {
+          "text": "Forty of the Hold seal the ninth level properly this time, which takes a season, and the stone says what it has always said. Vare goes back to the presses and is, as far as anybody can tell, content."
+        }
+      ],
+      "options": [
+        {
+          "id": "done",
+          "text": "Sealed.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": []
+    }
+  ]
+}

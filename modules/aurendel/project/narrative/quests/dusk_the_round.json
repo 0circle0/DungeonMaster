@@ -1,0 +1,57 @@
+{
+  "id": "dusk_the_round",
+  "name": "The Round",
+  "description": "Four hundred years of quarterly payment to a woodward nobody can name, and marks that have moved eighty yards outward.",
+  "autoStart": false,
+  "ordered": true,
+  "tags": [
+    "hidden",
+    "duskwood",
+    "dusk_ward"
+  ],
+  "objectives": [
+    {
+      "id": "to_the_marks",
+      "description": "Get to the mark cut all the way through.",
+      "kind": "reach",
+      "count": 1,
+      "hidden": true,
+      "optional": false,
+      "target": "undereaves_boundary_stone"
+    },
+    {
+      "id": "walk_the_round",
+      "description": "Walk the round with the rod that measures it.",
+      "kind": "custom",
+      "count": 1,
+      "hidden": true,
+      "optional": false,
+      "when": {
+        "test": {
+          "ref": "flags.dusk_ward_open"
+        }
+      }
+    },
+    {
+      "id": "who_walks_it",
+      "description": "Meet whoever has been earning the fee.",
+      "kind": "kill",
+      "count": 1,
+      "hidden": true,
+      "optional": false,
+      "target": "the_woodward"
+    }
+  ],
+  "stages": [],
+  "unlocks": [],
+  "rewards": {
+    "xp": 155,
+    "items": [
+      {
+        "item": "woodwards_belt",
+        "quantity": 1
+      }
+    ],
+    "reputation": {}
+  }
+}

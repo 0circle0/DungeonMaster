@@ -1,0 +1,219 @@
+{
+  "id": "glass_ilyas_talk",
+  "start": "greet",
+  "nodes": [
+    {
+      "id": "greet",
+      "says": [
+        {
+          "text": "A white chapel, cool for the first time all day, and a man awake in it at an hour when nobody is."
+        },
+        {
+          "text": "“You are the second person awake in Saltrun,” he says, pleased about it. “Sit down.”"
+        }
+      ],
+      "onEnter": [],
+      "options": [
+        {
+          "id": "glass_ilyas_night",
+          "text": "You are up all night. When does the ninth course arrive?",
+          "requires": {
+            "without": {
+              "lore": [
+                "glass_courses_night"
+              ]
+            }
+          },
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "check": {
+            "skill": "persuasion",
+            "difficulty": {
+              "sub": [
+                10,
+                {
+                  "clamp": [
+                    {
+                      "div": [
+                        {
+                          "ref": "reputation.the_keepers",
+                          "else": 0
+                        },
+                        5
+                      ]
+                    },
+                    -6,
+                    6
+                  ]
+                }
+              ]
+            },
+            "onSuccess": "glass_ilyas_night_told",
+            "onFailure": "glass_ilyas_night_wont"
+          }
+        },
+        {
+          "id": "glass_ilyas_lip",
+          "text": "There is stonework under the glass on the crater lip.",
+          "requires": {
+            "without": {
+              "lore": [
+                "glass_bath_down"
+              ]
+            }
+          },
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "check": {
+            "skill": "insight",
+            "difficulty": {
+              "sub": [
+                13,
+                {
+                  "clamp": [
+                    {
+                      "div": [
+                        {
+                          "ref": "reputation.the_keepers",
+                          "else": 0
+                        },
+                        5
+                      ]
+                    },
+                    -6,
+                    6
+                  ]
+                }
+              ]
+            },
+            "onSuccess": "glass_ilyas_lip_told",
+            "onFailure": "glass_ilyas_lip_wont"
+          }
+        },
+        {
+          "id": "greet_leave",
+          "text": "Nothing.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "glass_ilyas_night_told",
+      "says": [
+        {
+          "text": "“Between one evening and the next morning, and no water runs in the night.” He says it without any drama at all, which makes it worse. “I have watched the channels. They are dry from dusk. And in the morning there is more salt than there was.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "learnLore": {
+            "entry": "glass_courses_night"
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "glass_ilyas_night_on",
+          "text": "Go on.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "glass_ilyas_night_wont",
+      "says": [
+        {
+          "text": "“I've said all I mean to,” they say, and go back to what they were doing."
+        }
+      ],
+      "onEnter": [
+        {
+          "adjustReputation": {
+            "faction": "the_keepers",
+            "amount": -1
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "glass_ilyas_night_drop",
+          "text": "Leave it.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "glass_ilyas_lip_told",
+      "says": [
+        {
+          "text": "“Cut into our own shrine, that,” he says. “By somebody with a chisel and a grievance, a long time ago. It says the crater is not a crater and the stone goes further down than anybody has measured, and the Hall has never once sent anybody to measure it.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "learnLore": {
+            "entry": "glass_bath_down"
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "glass_ilyas_lip_on",
+          "text": "Go on.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "glass_ilyas_lip_wont",
+      "says": [
+        {
+          "text": "“I've said all I mean to,” they say, and go back to what they were doing."
+        }
+      ],
+      "onEnter": [
+        {
+          "adjustReputation": {
+            "faction": "the_keepers",
+            "amount": -1
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "glass_ilyas_lip_drop",
+          "text": "Leave it.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    }
+  ]
+}

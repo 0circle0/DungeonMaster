@@ -1,0 +1,17 @@
+{
+  "id": "echo_halls_the_eleventh",
+  "name": "The Eleventh Chamber",
+  "description": "It will not let a word through, and until something is said correctly the far door does not open.",
+  "area": "deeproads_echo_halls",
+  "kind": "crossing",
+  "descriptionKey": "generic_crossing",
+  "travelMinutes": 8,
+  "tags": [
+    "crossing"
+  ],
+  "gate": "deeproads_echo_ward",
+  "position": {
+    "x": 3,
+    "y": 3
+  }
+}

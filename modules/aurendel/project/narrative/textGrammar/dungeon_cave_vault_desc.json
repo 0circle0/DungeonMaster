@@ -1,0 +1,14 @@
+{
+  "id": "dungeon_cave_vault_desc",
+  "variants": [
+    {
+      "text": "A chamber off the main passage that nothing washes through, and things left here have stayed dry."
+    },
+    {
+      "text": "A shelf of rock above the flood line, and it has been used as one."
+    },
+    {
+      "text": "Dry, high, and out of the draught. Somebody has known about this."
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "id": "wreckers_strand_bone_beach",
+  "name": "The Bone Beach",
+  "description": "Four hundred years of ribs and stem-posts standing out of the shingle at every angle.",
+  "area": "coast_wreckers_strand",
+  "kind": "landmark",
+  "descriptionKey": "wreckers_strand_bone_beach_desc",
+  "travelMinutes": 8,
+  "tags": [],
+  "position": {
+    "x": 3,
+    "y": 3
+  }
+}

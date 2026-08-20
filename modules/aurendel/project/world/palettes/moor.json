@@ -1,0 +1,37 @@
+{
+  "id": "moor",
+  "name": "The Weeping Moor",
+  "floor": "heather",
+  "wall": "rock",
+  "exterior": "rock",
+  "scatter": [
+    {
+      "terrain": "heather",
+      "frequency": 0.24,
+      "distribution": "patch",
+      "scale": 10,
+      "priority": 0
+    },
+    {
+      "terrain": "marsh",
+      "frequency": 0.1,
+      "distribution": "patch",
+      "scale": 13,
+      "edgeTerrain": "reeds",
+      "edgeWidth": 1,
+      "priority": 1
+    },
+    {
+      "terrain": "standing_stone",
+      "frequency": 0.015,
+      "distribution": "speckle",
+      "priority": 2
+    },
+    {
+      "terrain": "rock",
+      "frequency": 0.05,
+      "distribution": "speckle",
+      "priority": 3
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "id": "aurenhal_mint",
+  "name": "The Mint",
+  "description": "Where the marks come from. Two doors, both watched.",
+  "area": "aurenhal_highgate",
+  "kind": "landmark",
+  "descriptionKey": "aurenhal_mint_desc",
+  "travelMinutes": 4,
+  "tags": [
+    "aurenhal"
+  ],
+  "position": {
+    "x": 18,
+    "y": 20
+  },
+  "map": {
+    "width": "15",
+    "height": "11",
+    "palette": "int_stone"
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "id": "barrowgate_house_b",
+  "name": "Peatman's Row",
+  "description": "Six cottages, each with a peat stack against the gable taller than the door.",
+  "area": "moor_barrowgate",
+  "kind": "settlement",
+  "descriptionKey": "int_house",
+  "travelMinutes": 2,
+  "tags": [
+    "house"
+  ],
+  "map": {
+    "width": "9",
+    "height": "7",
+    "palette": "int_timber"
+  },
+  "position": {
+    "x": 3,
+    "y": 23
+  }
+}

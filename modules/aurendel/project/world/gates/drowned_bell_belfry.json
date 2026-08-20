@@ -1,0 +1,17 @@
+{
+  "id": "drowned_bell_belfry",
+  "name": "The Belfry Hatch",
+  "kind": "lock",
+  "description": "In the floor of the new bell tower, over the old one, and the village keeps it shut.",
+  "staysOpen": true,
+  "requires": {
+    "description": "the ringers' consent",
+    "minLevel": 4
+  },
+  "bypass": {
+    "skill": "lockpicking",
+    "difficulty": 14,
+    "retryable": true
+  },
+  "blockedTextKey": "drowned_bell_belfry_blocked"
+}

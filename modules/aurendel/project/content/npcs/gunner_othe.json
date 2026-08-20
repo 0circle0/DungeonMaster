@@ -1,0 +1,34 @@
+{
+  "id": "gunner_othe",
+  "name": "Othe, at the Gun Forge",
+  "description": "Keeps Halfmast's guns for a fort with no garrison, and knows what iron of what age looks like.",
+  "disposition": 4,
+  "gullibility": 0.3,
+  "memorySpan": 180,
+  "offersQuests": [],
+  "caresAbout": [],
+  "reactions": [],
+  "faction": "the_salvors",
+  "dialogue": "isle_othe_talk",
+  "home": "halfmast_forge",
+  "shop": {
+    "lootTable": "salvors_stock",
+    "buysTags": [
+      "material"
+    ],
+    "priceMultiplier": 1.2
+  },
+  "temperament": {
+    "roamRadius": 0,
+    "wanderChance": 0,
+    "speeds": {
+      "wander": 0
+    },
+    "investigates": [],
+    "notices": [
+      "hostile",
+      "neutral",
+      "ally"
+    ]
+  }
+}

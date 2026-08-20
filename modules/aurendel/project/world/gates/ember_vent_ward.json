@@ -1,0 +1,17 @@
+{
+  "id": "ember_vent_ward",
+  "name": "The Vent Ward",
+  "kind": "hazard",
+  "description": "A line of iron posts across the vent fields with a chain between them, and past the chain the ground is on its own schedule.",
+  "staysOpen": true,
+  "requires": {
+    "description": "a vent-reader's word on the day",
+    "minLevel": 6
+  },
+  "bypass": {
+    "skill": "survival",
+    "difficulty": 16,
+    "retryable": true
+  },
+  "blockedTextKey": "ember_vent_ward_blocked"
+}

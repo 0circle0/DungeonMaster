@@ -1,0 +1,14 @@
+{
+  "id": "isles",
+  "name": "The Sundered Isles",
+  "description": "Rock, reef, and wreck. Everything here arrived by water or was left by it.",
+  "layer": "overworld",
+  "palette": "isles",
+  "roomTemplates": [],
+  "encounterTables": [
+    "isles_things"
+  ],
+  "lootTables": [],
+  "traps": [],
+  "ambienceKey": "isles_ambience"
+}

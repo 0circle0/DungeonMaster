@@ -1,0 +1,14 @@
+{
+  "id": "poachers_lamp",
+  "name": "A Poacher's Lamp",
+  "description": "Shuttered on three sides, and the fourth is shuttered too until you want it. The eel-men make them and do not sell them.",
+  "kind": "trinket",
+  "slot": "belt",
+  "value": 60,
+  "weight": 2,
+  "tags": [],
+  "skillBonuses": {
+    "survival": 1,
+    "stealth": 1
+  }
+}

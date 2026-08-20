@@ -1,0 +1,74 @@
+{
+  "id": "rot_the_listening_room",
+  "name": "The Listening Room",
+  "description": "The Rot is coming from somewhere and it is coming faster than it grows. The Echo Halls have a room cut to hear the whole length of the Long Hall, and nobody has sat in it in living memory.",
+  "autoStart": false,
+  "ordered": true,
+  "tags": [
+    "side",
+    "act3",
+    "rot",
+    "deeproads"
+  ],
+  "objectives": [
+    {
+      "id": "in_the_room",
+      "description": "Get into the listening room.",
+      "kind": "reach",
+      "count": 1,
+      "hidden": false,
+      "optional": false,
+      "target": "echo_halls_the_listening_room"
+    },
+    {
+      "id": "what_you_hear",
+      "description": "Hear what the room is for.",
+      "kind": "custom",
+      "count": 1,
+      "hidden": false,
+      "optional": false,
+      "when": {
+        "test": {
+          "ref": "flags.rot_listened"
+        }
+      }
+    },
+    {
+      "id": "tell_kesk_again",
+      "description": "Take what you heard back to Kesk.",
+      "kind": "talk",
+      "count": 1,
+      "hidden": false,
+      "optional": false,
+      "target": "picker_kesk"
+    }
+  ],
+  "stages": [],
+  "unlocks": [
+    "rot_what_grows_mycelt"
+  ],
+  "rewards": {
+    "xp": 110,
+    "items": [],
+    "reputation": {
+      "the_pickers": 10,
+      "the_wayfinders": 8
+    }
+  },
+  "requires": {
+    "quests": [
+      {
+        "quest": "rot_the_second_gallery",
+        "status": "complete"
+      }
+    ]
+  },
+  "onComplete": [
+    {
+      "setFlag": {
+        "flag": "rot_direction_known",
+        "value": true
+      }
+    }
+  ]
+}

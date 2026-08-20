@@ -1,0 +1,35 @@
+{
+  "id": "hold_delved",
+  "name": "Delved",
+  "floor": "flagstone",
+  "wall": "cave_wall",
+  "exterior": "cave_wall",
+  "scatter": [
+    {
+      "terrain": "pillar",
+      "frequency": 0.05,
+      "distribution": "speckle",
+      "priority": 0
+    },
+    {
+      "terrain": "stair",
+      "frequency": 0.03,
+      "distribution": "speckle",
+      "priority": 1
+    },
+    {
+      "terrain": "brazier",
+      "frequency": 0.02,
+      "distribution": "speckle",
+      "priority": 2
+    },
+    {
+      "terrain": "rubble",
+      "frequency": 0.04,
+      "distribution": "patch",
+      "scale": 6,
+      "priority": 3
+    }
+  ],
+  "door": "door"
+}

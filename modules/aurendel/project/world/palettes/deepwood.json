@@ -1,0 +1,41 @@
+{
+  "id": "deepwood",
+  "name": "Duskwood",
+  "floor": "moss",
+  "wall": "tree",
+  "exterior": "tree",
+  "scatter": [
+    {
+      "terrain": "tree",
+      "frequency": 0.26,
+      "distribution": "patch",
+      "scale": 7,
+      "priority": 0
+    },
+    {
+      "terrain": "leaf_litter",
+      "frequency": 0.2,
+      "distribution": "patch",
+      "scale": 9,
+      "priority": 1
+    },
+    {
+      "terrain": "thicket",
+      "frequency": 0.09,
+      "distribution": "speckle",
+      "priority": 2
+    },
+    {
+      "terrain": "bramble",
+      "frequency": 0.04,
+      "distribution": "speckle",
+      "priority": 3
+    },
+    {
+      "terrain": "stump",
+      "frequency": 0.02,
+      "distribution": "speckle",
+      "priority": 4
+    }
+  ]
+}

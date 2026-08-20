@@ -1,0 +1,199 @@
+{
+  "id": "the_unsealing",
+  "name": "The Unsealing",
+  "description": "The wards were shut by something, once. It is still hanging over Lantern Deep on a chain, unlit.",
+  "autoStart": false,
+  "ordered": false,
+  "tags": [
+    "act3",
+    "ending"
+  ],
+  "objectives": [
+    {
+      "id": "light_it",
+      "description": "Light the Great Lantern and shut all nine.",
+      "kind": "custom",
+      "count": 1,
+      "hidden": false,
+      "optional": true,
+      "when": {
+        "test": {
+          "ref": "flags.ending_lantern"
+        }
+      }
+    },
+    {
+      "id": "go_through",
+      "description": "Go through the ninth door and finish it from the other side.",
+      "kind": "custom",
+      "count": 1,
+      "hidden": false,
+      "optional": true,
+      "when": {
+        "test": {
+          "ref": "flags.ending_through"
+        }
+      }
+    },
+    {
+      "id": "hold_seals",
+      "description": "Let Karn Dolur seal the Deeproads behind you.",
+      "kind": "custom",
+      "count": 1,
+      "hidden": false,
+      "optional": true,
+      "when": {
+        "test": {
+          "ref": "flags.ending_hold"
+        }
+      }
+    },
+    {
+      "id": "an_end",
+      "description": "Decide how this ends.",
+      "kind": "custom",
+      "count": 1,
+      "hidden": false,
+      "optional": false,
+      "when": {
+        "any": [
+          {
+            "test": {
+              "ref": "flags.ending_lantern"
+            }
+          },
+          {
+            "test": {
+              "ref": "flags.ending_through"
+            }
+          },
+          {
+            "test": {
+              "ref": "flags.ending_hold"
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "stages": [],
+  "unlocks": [],
+  "rewards": {
+    "xp": 1200,
+    "items": [],
+    "reputation": {}
+  },
+  "requires": {
+    "quests": [
+      {
+        "quest": "behind_the_ninth_door",
+        "status": "complete"
+      }
+    ]
+  },
+  "onComplete": [
+    {
+      "if": {
+        "when": {
+          "test": {
+            "ref": "flags.ending_lantern"
+          }
+        },
+        "then": [
+          {
+            "emit": {
+              "event": "deed",
+              "data": {
+                "kind": "lantern_lit"
+              }
+            }
+          },
+          {
+            "adjustReputation": {
+              "faction": "the_wayfinders",
+              "amount": 25
+            }
+          },
+          {
+            "adjustReputation": {
+              "faction": "the_keepers",
+              "amount": 20
+            }
+          },
+          {
+            "setFlag": {
+              "flag": "deeproads_sealed",
+              "value": true
+            }
+          }
+        ]
+      }
+    },
+    {
+      "if": {
+        "when": {
+          "test": {
+            "ref": "flags.ending_through"
+          }
+        },
+        "then": [
+          {
+            "adjustReputation": {
+              "faction": "the_keepers",
+              "amount": 10
+            }
+          },
+          {
+            "adjustReputation": {
+              "faction": "the_library",
+              "amount": 20
+            }
+          },
+          {
+            "setFlag": {
+              "flag": "ninth_door_crossed",
+              "value": true
+            }
+          }
+        ]
+      }
+    },
+    {
+      "if": {
+        "when": {
+          "test": {
+            "ref": "flags.ending_hold"
+          }
+        },
+        "then": [
+          {
+            "emit": {
+              "event": "deed",
+              "data": {
+                "kind": "hold_honoured"
+              }
+            }
+          },
+          {
+            "adjustReputation": {
+              "faction": "karn_dolur",
+              "amount": 30
+            }
+          },
+          {
+            "setFlag": {
+              "flag": "hold_holds_the_line",
+              "value": true
+            }
+          }
+        ]
+      }
+    },
+    {
+      "setFlag": {
+        "flag": "aurendel_finished",
+        "value": true
+      }
+    }
+  ]
+}

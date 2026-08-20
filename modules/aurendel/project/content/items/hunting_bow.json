@@ -1,0 +1,18 @@
+{
+  "id": "hunting_bow",
+  "name": "Hunting Bow",
+  "description": "Yew, drawn to the ear, and quiet.",
+  "kind": "weapon",
+  "slot": "hand",
+  "value": 16,
+  "weight": 3,
+  "damage": {
+    "dice": "1d6",
+    "damageType": "piercing",
+    "stat": "agility"
+  },
+  "properties": [
+    "two_handed"
+  ],
+  "tags": []
+}

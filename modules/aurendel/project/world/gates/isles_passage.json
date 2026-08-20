@@ -1,0 +1,24 @@
+{
+  "id": "isles_passage",
+  "name": "The Passage",
+  "kind": "toll",
+  "description": "The run out west through the shoals to the Sundered Isles, and nobody attempts it without somebody who has done it.",
+  "staysOpen": false,
+  "requires": {
+    "description": "passage money and a pilot who knows the shoals",
+    "currency": 25
+  },
+  "bypass": {
+    "skill": "survival",
+    "difficulty": 16,
+    "retryable": true
+  },
+  "onOpen": [
+    {
+      "adjustCurrency": {
+        "amount": -25
+      }
+    }
+  ],
+  "blockedTextKey": "isles_passage_blocked"
+}

@@ -1,0 +1,76 @@
+{
+  "id": "rot_what_grows_mycelt",
+  "name": "What Grows Mycelt",
+  "description": "Not spreading. Being fed. Something up the fungus gallery has been growing the beds for two hundred years and has stopped being careful about the distinction.",
+  "autoStart": false,
+  "ordered": true,
+  "tags": [
+    "side",
+    "act3",
+    "rot",
+    "deeproads"
+  ],
+  "objectives": [],
+  "stages": [
+    {
+      "id": "up_the_gallery",
+      "name": "Up the fungus gallery",
+      "description": "Past the pickers' camp, past the canopy, and past the point where anybody has cut in two hundred years.",
+      "objectives": [
+        {
+          "id": "at_the_rot",
+          "description": "Reach the Rot.",
+          "kind": "reach",
+          "count": 1,
+          "hidden": false,
+          "optional": false,
+          "target": "fungus_gallery_the_rot"
+        }
+      ],
+      "journalKey": "rot_journal_gallery"
+    },
+    {
+      "id": "the_mother",
+      "name": "What has been growing it",
+      "description": "Mycelt grows what the Deeproads eat. This grows Mycelt.",
+      "objectives": [
+        {
+          "id": "kill_rot",
+          "description": "Put down the Rot.",
+          "kind": "kill",
+          "count": 1,
+          "hidden": false,
+          "optional": false,
+          "target": "rot_mother"
+        }
+      ],
+      "onComplete": [
+        {
+          "setFlag": {
+            "flag": "rot_mother_down",
+            "value": true
+          }
+        }
+      ],
+      "journalKey": "rot_journal_mother"
+    }
+  ],
+  "unlocks": [
+    "rot_burn_it_or_farm_it"
+  ],
+  "rewards": {
+    "xp": 170,
+    "items": [],
+    "reputation": {
+      "the_pickers": 15
+    }
+  },
+  "requires": {
+    "quests": [
+      {
+        "quest": "rot_the_listening_room",
+        "status": "complete"
+      }
+    ]
+  }
+}

@@ -1,0 +1,95 @@
+{
+  "id": "sheet_founder",
+  "name": "What Held the Heat",
+  "description": "Nine hundred years under a mile of poured glass, and still too hot to put a hand flat on the treads above it.",
+  "level": 10,
+  "xp": 1550,
+  "attributes": {
+    "might": 20,
+    "agility": 13,
+    "endurance": 20,
+    "intellect": 17,
+    "instinct": 16,
+    "presence": 18
+  },
+  "abilities": [
+    "vent_breath",
+    "unmaking_word",
+    "glass_shard",
+    "cinder_lash"
+  ],
+  "behaviour": [
+    {
+      "priority": 30,
+      "use": "unmaking_word",
+      "when": {
+        "chance": 0.25
+      }
+    },
+    {
+      "priority": 20,
+      "use": "vent_breath",
+      "when": {
+        "chance": 0.35
+      }
+    },
+    {
+      "priority": 10,
+      "use": "glass_shard"
+    },
+    {
+      "priority": 0,
+      "use": "cinder_lash"
+    }
+  ],
+  "faction": "the_unsealed",
+  "creatureType": "undead",
+  "size": "medium",
+  "descriptors": [
+    "a white",
+    "a founding"
+  ],
+  "conditionalLoot": [],
+  "loot": "ember_sheet_hoard",
+  "damageInteractions": [
+    {
+      "damageType": "slashing",
+      "multiplier": 0.5,
+      "unless": [
+        "silvered"
+      ]
+    },
+    {
+      "damageType": "piercing",
+      "multiplier": 0.5,
+      "unless": [
+        "silvered"
+      ]
+    }
+  ],
+  "conditionImmunities": [
+    "frightened",
+    "poisoned",
+    "burning",
+    "prone"
+  ],
+  "resourceOverrides": {
+    "hp": 170
+  },
+  "temperament": {
+    "roamRadius": 12,
+    "investigateRadius": 40,
+    "leashRadius": 60,
+    "wanderChance": 0.1,
+    "disengageTurns": 1,
+    "speeds": {
+      "wander": 0.5,
+      "investigate": 0.5
+    },
+    "investigates": [
+      "sight",
+      "hearing",
+      "smell"
+    ]
+  }
+}

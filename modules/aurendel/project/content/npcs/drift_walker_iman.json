@@ -1,0 +1,32 @@
+{
+  "id": "drift_walker_iman",
+  "name": "Iman, who Walks the Drifts",
+  "description": "Crosses the Ashfall for a living because the road round it is four days, and knows exactly which drifts are warm.",
+  "disposition": 4,
+  "gullibility": 0.4,
+  "memorySpan": 150,
+  "offersQuests": [],
+  "caresAbout": [],
+  "reactions": [],
+  "faction": "the_vent_readers",
+  "dialogue": "ember_iman_talk",
+  "home": "ashfall_the_drifts",
+  "temperament": {
+    "roamRadius": 24,
+    "investigateRadius": 60,
+    "leashRadius": 90,
+    "wanderChance": 0.3,
+    "speeds": {
+      "wander": 0.5
+    },
+    "investigates": [
+      "sight",
+      "hearing"
+    ],
+    "notices": [
+      "hostile",
+      "neutral",
+      "ally"
+    ]
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "id": "glass_hoard",
+  "entries": [
+    {
+      "weight": 4,
+      "value": {
+        "item": "glass_bead",
+        "quantity": "1d4"
+      }
+    },
+    {
+      "weight": 3,
+      "value": {
+        "item": "warded_coat",
+        "quantity": "1"
+      }
+    },
+    {
+      "weight": 2,
+      "value": {
+        "item": "healing_draught",
+        "quantity": "1"
+      }
+    }
+  ],
+  "rolls": "2",
+  "emptyChance": 0,
+  "name": "The Crater Deep"
+}

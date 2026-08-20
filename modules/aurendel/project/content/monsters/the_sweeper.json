@@ -1,0 +1,85 @@
+{
+  "id": "the_sweeper",
+  "name": "Whoever Sweeps Them",
+  "description": "Nine hundred steps swept every day of the year on a payroll that has no line for it, and a nine hundred and first that is swept as carefully as the rest.",
+  "level": 7,
+  "xp": 700,
+  "attributes": {
+    "might": 15,
+    "agility": 17,
+    "endurance": 15,
+    "intellect": 13,
+    "instinct": 16,
+    "presence": 11
+  },
+  "abilities": [
+    "cut_and_run",
+    "rend",
+    "shove"
+  ],
+  "behaviour": [
+    {
+      "priority": 15,
+      "use": "cut_and_run",
+      "when": {
+        "chance": 0.4
+      }
+    },
+    {
+      "priority": 5,
+      "use": "shove"
+    },
+    {
+      "priority": 0,
+      "use": "rend"
+    }
+  ],
+  "faction": "the_unsealed",
+  "creatureType": "undead",
+  "size": "medium",
+  "descriptors": [
+    "a stooped",
+    "a tireless"
+  ],
+  "conditionalLoot": [],
+  "loot": "skarn_stair_hoard",
+  "damageInteractions": [
+    {
+      "damageType": "slashing",
+      "multiplier": 0.5,
+      "unless": [
+        "silvered"
+      ]
+    },
+    {
+      "damageType": "piercing",
+      "multiplier": 0.5,
+      "unless": [
+        "silvered"
+      ]
+    }
+  ],
+  "conditionImmunities": [
+    "frightened",
+    "prone"
+  ],
+  "resourceOverrides": {
+    "hp": 80
+  },
+  "temperament": {
+    "roamRadius": 12,
+    "investigateRadius": 40,
+    "leashRadius": 60,
+    "wanderChance": 0.1,
+    "disengageTurns": 1,
+    "speeds": {
+      "wander": 0.5,
+      "investigate": 0.5
+    },
+    "investigates": [
+      "sight",
+      "hearing",
+      "smell"
+    ]
+  }
+}

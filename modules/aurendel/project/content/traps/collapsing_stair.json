@@ -1,0 +1,39 @@
+{
+  "id": "collapsing_stair",
+  "name": "Collapsing Stair",
+  "description": "Three treads rotted through and dressed to look like the rest.",
+  "detect": {
+    "skill": "perception",
+    "difficulty": 12
+  },
+  "disarm": {
+    "skill": "craft",
+    "difficulty": 12
+  },
+  "onTrigger": [
+    {
+      "damage": {
+        "target": {
+          "ref": "target.id"
+        },
+        "amount": {
+          "roll": "2d6"
+        },
+        "damageType": "bludgeoning"
+      }
+    },
+    {
+      "applyCondition": {
+        "target": {
+          "ref": "target.id"
+        },
+        "condition": "prone",
+        "duration": 1
+      }
+    }
+  ],
+  "reusable": false,
+  "tags": [
+    "trap"
+  ]
+}

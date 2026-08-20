@@ -1,0 +1,14 @@
+{
+  "id": "moor_sisters_ward_blocked",
+  "variants": [
+    {
+      "text": "The gap between the two southern stones is empty, and walking through it turns out to be an entirely different question from being able to."
+    },
+    {
+      "text": "You get three paces in and your feet stop, and they stop before you decide to."
+    },
+    {
+      "text": "Nothing is there. That is not the same as nothing being in the way."
+    }
+  ]
+}

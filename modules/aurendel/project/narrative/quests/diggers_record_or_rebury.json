@@ -1,0 +1,150 @@
+{
+  "id": "diggers_record_or_rebury",
+  "name": "Record or Rebury",
+  "description": "It is open, and it can be written down or it can be closed, and there is not time before the weather to do both properly.",
+  "autoStart": false,
+  "ordered": false,
+  "tags": [
+    "side",
+    "act2",
+    "diggers",
+    "weeping_moor"
+  ],
+  "objectives": [
+    {
+      "id": "record_it",
+      "description": "Let the Library have its record.",
+      "kind": "custom",
+      "count": 1,
+      "hidden": false,
+      "optional": true,
+      "when": {
+        "test": {
+          "ref": "flags.diggers_recorded"
+        }
+      }
+    },
+    {
+      "id": "rebury_it",
+      "description": "Close the east end the way the moot asked.",
+      "kind": "custom",
+      "count": 1,
+      "hidden": false,
+      "optional": true,
+      "when": {
+        "test": {
+          "ref": "flags.diggers_reburied"
+        }
+      }
+    },
+    {
+      "id": "decided",
+      "description": "Decide what the east end becomes.",
+      "kind": "custom",
+      "count": 1,
+      "hidden": false,
+      "optional": false,
+      "when": {
+        "any": [
+          {
+            "test": {
+              "ref": "flags.diggers_recorded"
+            }
+          },
+          {
+            "test": {
+              "ref": "flags.diggers_reburied"
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "stages": [],
+  "unlocks": [],
+  "rewards": {
+    "xp": 75,
+    "items": [
+      {
+        "item": "torc_of_the_ridge",
+        "quantity": 1
+      }
+    ],
+    "reputation": {}
+  },
+  "requires": {
+    "quests": [
+      {
+        "quest": "diggers_the_east_end",
+        "status": "complete"
+      }
+    ]
+  },
+  "onComplete": [
+    {
+      "if": {
+        "when": {
+          "test": {
+            "ref": "flags.diggers_recorded"
+          }
+        },
+        "then": [
+          {
+            "emit": {
+              "event": "deed",
+              "data": {
+                "kind": "library_served"
+              }
+            }
+          },
+          {
+            "adjustReputation": {
+              "faction": "the_library",
+              "amount": 25
+            }
+          },
+          {
+            "adjustReputation": {
+              "faction": "the_keepers",
+              "amount": -20
+            }
+          },
+          {
+            "setFlag": {
+              "flag": "diggers_on_the_shelf",
+              "value": true
+            }
+          }
+        ],
+        "else": [
+          {
+            "emit": {
+              "event": "deed",
+              "data": {
+                "kind": "ward_restored"
+              }
+            }
+          },
+          {
+            "adjustReputation": {
+              "faction": "the_keepers",
+              "amount": 25
+            }
+          },
+          {
+            "adjustReputation": {
+              "faction": "the_library",
+              "amount": -12
+            }
+          },
+          {
+            "setFlag": {
+              "flag": "diggers_closed",
+              "value": true
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

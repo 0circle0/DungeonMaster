@@ -1,0 +1,29 @@
+{
+  "id": "ironstair_the_steps",
+  "name": "The Ironstair",
+  "description": "Nine hundred steps up a cliff face, cut, railed, and swept daily by somebody.",
+  "area": "skarnspine_ironstair",
+  "kind": "landmark",
+  "descriptionKey": "ironstair_the_steps_desc",
+  "travelMinutes": 8,
+  "tags": [],
+  "position": {
+    "x": 3,
+    "y": 3
+  },
+  "triggers": [
+    {
+      "id": "skarn_found_steps",
+      "mode": "once",
+      "on": "enter",
+      "description": "Counting them on the way up, and again on the way down.",
+      "effects": [
+        {
+          "learnLore": {
+            "entry": "skarn_stair_count"
+          }
+        }
+      ]
+    }
+  ]
+}

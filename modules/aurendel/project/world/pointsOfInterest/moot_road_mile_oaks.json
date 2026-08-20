@@ -1,0 +1,29 @@
+{
+  "id": "moot_road_mile_oaks",
+  "name": "The Mile Oaks",
+  "description": "One planted at every mile, all on the same day, four hundred years ago, and all of them still standing.",
+  "area": "duskwood_moot_road",
+  "kind": "landmark",
+  "descriptionKey": "moot_road_mile_oaks_desc",
+  "travelMinutes": 6,
+  "tags": [],
+  "position": {
+    "x": 3,
+    "y": 3
+  },
+  "triggers": [
+    {
+      "id": "dusk_found_oaks",
+      "mode": "once",
+      "on": "enter",
+      "description": "Standing at one and sighting along to the next two.",
+      "effects": [
+        {
+          "learnLore": {
+            "entry": "dusk_miles_sunken"
+          }
+        }
+      ]
+    }
+  ]
+}

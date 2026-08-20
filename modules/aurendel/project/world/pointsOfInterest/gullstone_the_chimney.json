@@ -1,0 +1,34 @@
+{
+  "id": "gullstone_the_chimney",
+  "name": "The Chimney",
+  "description": "A shaft through the middle of the rock from the top to the waterline, and the stair on the outside was cut to reach it.",
+  "area": "isles_gullstone",
+  "kind": "dungeonEntrance",
+  "descriptionKey": "generic_dungeon_mouth",
+  "travelMinutes": 14,
+  "tags": [
+    "dungeon"
+  ],
+  "gate": "gullstone_stair",
+  "dungeon": "isles_gullstone_chimney",
+  "position": {
+    "x": 25,
+    "y": 3
+  },
+  "triggers": [
+    {
+      "id": "drownedfort_at_the_chimney",
+      "mode": "once",
+      "on": "enter",
+      "description": "Eighty feet of chimney, and what is at the bottom of it.",
+      "effects": [
+        {
+          "setFlag": {
+            "flag": "drownedfort_chimney_seen",
+            "value": true
+          }
+        }
+      ]
+    }
+  ]
+}

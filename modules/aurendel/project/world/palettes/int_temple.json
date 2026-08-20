@@ -1,0 +1,28 @@
+{
+  "id": "int_temple",
+  "name": "Temple Interior",
+  "floor": "flagstone",
+  "wall": "wall_stone",
+  "exterior": "wall_stone",
+  "scatter": [
+    {
+      "terrain": "pillar",
+      "frequency": 0.06,
+      "distribution": "speckle",
+      "priority": 0
+    },
+    {
+      "terrain": "altar",
+      "frequency": 0.02,
+      "distribution": "speckle",
+      "priority": 1
+    },
+    {
+      "terrain": "brazier",
+      "frequency": 0.03,
+      "distribution": "speckle",
+      "priority": 2
+    }
+  ],
+  "door": "door"
+}

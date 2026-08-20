@@ -1,0 +1,219 @@
+{
+  "id": "glass_dov_talk",
+  "start": "greet",
+  "nodes": [
+    {
+      "id": "greet",
+      "says": [
+        {
+          "text": "A cellar under the Green Room, cool the way a cellar should be except along one wall."
+        },
+        {
+          "text": "“Mind the step. And mind the west wall, it's warm and it stains your coat.”"
+        }
+      ],
+      "onEnter": [],
+      "options": [
+        {
+          "id": "glass_dov_warm",
+          "text": "Why is that wall warm?",
+          "requires": {
+            "without": {
+              "lore": [
+                "glass_bath_warm"
+              ]
+            }
+          },
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "check": {
+            "skill": "persuasion",
+            "difficulty": {
+              "sub": [
+                11,
+                {
+                  "clamp": [
+                    {
+                      "div": [
+                        {
+                          "ref": "reputation.the_countinghouse",
+                          "else": 0
+                        },
+                        5
+                      ]
+                    },
+                    -6,
+                    6
+                  ]
+                }
+              ]
+            },
+            "onSuccess": "glass_dov_warm_told",
+            "onFailure": "glass_dov_warm_wont"
+          }
+        },
+        {
+          "id": "glass_dov_metered",
+          "text": "Do the wardens meter the bath?",
+          "requires": {
+            "without": {
+              "lore": [
+                "glass_bath_metered"
+              ]
+            }
+          },
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "check": {
+            "skill": "persuasion",
+            "difficulty": {
+              "sub": [
+                12,
+                {
+                  "clamp": [
+                    {
+                      "div": [
+                        {
+                          "ref": "reputation.the_countinghouse",
+                          "else": 0
+                        },
+                        5
+                      ]
+                    },
+                    -6,
+                    6
+                  ]
+                }
+              ]
+            },
+            "onSuccess": "glass_dov_metered_told",
+            "onFailure": "glass_dov_metered_wont"
+          }
+        },
+        {
+          "id": "greet_leave",
+          "text": "Nothing.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "glass_dov_warm_told",
+      "says": [
+        {
+          "text": "“Bath's behind it.” He says it like a man discussing plumbing. Then, less like that: “It's warm all year. Nothing in the Glasslands is warm — the desert's cold at night, everything's cold at night. Warm water means a fire under it, and there's no fire under my cellar.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "learnLore": {
+            "entry": "glass_bath_warm"
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "glass_dov_warm_on",
+          "text": "Go on.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "glass_dov_warm_wont",
+      "says": [
+        {
+          "text": "“I've said all I mean to,” they say, and go back to what they were doing."
+        }
+      ],
+      "onEnter": [
+        {
+          "adjustReputation": {
+            "faction": "the_countinghouse",
+            "amount": -1
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "glass_dov_warm_drop",
+          "text": "Leave it.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "glass_dov_metered_told",
+      "says": [
+        {
+          "text": "He laughs. “The wardens meter my washing-up. They have never put a stick in that bath in my life and I have asked twice.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "learnLore": {
+            "entry": "glass_bath_metered"
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "glass_dov_metered_on",
+          "text": "Go on.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "glass_dov_metered_wont",
+      "says": [
+        {
+          "text": "“I've said all I mean to,” they say, and go back to what they were doing."
+        }
+      ],
+      "onEnter": [
+        {
+          "adjustReputation": {
+            "faction": "the_countinghouse",
+            "amount": -1
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "glass_dov_metered_drop",
+          "text": "Leave it.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    }
+  ]
+}

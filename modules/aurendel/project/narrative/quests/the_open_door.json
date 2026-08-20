@@ -1,0 +1,79 @@
+{
+  "id": "the_open_door",
+  "name": "The Open Door",
+  "description": "The Dene Barrow's door has stood open for six hundred years and never once mattered. Something about that has changed.",
+  "autoStart": true,
+  "ordered": true,
+  "tags": [
+    "act1"
+  ],
+  "objectives": [],
+  "stages": [
+    {
+      "id": "look",
+      "name": "Go and look",
+      "description": "Hedda says the draught has turned. Air used to go in.",
+      "objectives": [
+        {
+          "id": "at_the_barrow",
+          "description": "Climb the sheep field to the barrow.",
+          "kind": "reach",
+          "count": 1,
+          "hidden": false,
+          "optional": false,
+          "target": "hollowdene_old_barrow"
+        }
+      ]
+    },
+    {
+      "id": "clear",
+      "name": "Whatever came out",
+      "description": "It has been down to the village twice.",
+      "objectives": [
+        {
+          "id": "the_pack",
+          "description": "Put down what has come out of the mound.",
+          "kind": "kill",
+          "count": 2,
+          "hidden": false,
+          "optional": false,
+          "target": "grave_hound"
+        }
+      ]
+    },
+    {
+      "id": "report",
+      "name": "Tell somebody who will listen",
+      "description": "Hedda will know who that is.",
+      "objectives": [
+        {
+          "id": "tell_hedda",
+          "description": "Tell Hedda what is in the barrow.",
+          "kind": "talk",
+          "count": 1,
+          "hidden": false,
+          "optional": false,
+          "target": "hedda_ploughshare"
+        }
+      ]
+    }
+  ],
+  "unlocks": [
+    "word_to_aurenhal"
+  ],
+  "rewards": {
+    "xp": 60,
+    "items": [],
+    "reputation": {
+      "the_keepers": 8
+    }
+  },
+  "onComplete": [
+    {
+      "setFlag": {
+        "flag": "barrow_seen",
+        "value": true
+      }
+    }
+  ]
+}

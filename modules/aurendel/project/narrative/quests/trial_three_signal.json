@@ -1,0 +1,56 @@
+{
+  "id": "trial_three_signal",
+  "name": "The Eighth Door",
+  "description": "The vent-readers have signalled past the Signal Deep for six hundred years and never once signalled to it, and not one of them was ever told not to.",
+  "autoStart": false,
+  "ordered": true,
+  "tags": [
+    "trial",
+    "trial_three"
+  ],
+  "objectives": [
+    {
+      "id": "into_the_deep",
+      "description": "Get down into the Signal Deep.",
+      "kind": "reach",
+      "count": 1,
+      "hidden": false,
+      "optional": false,
+      "target": "firewatch_ridge_signal_deep"
+    },
+    {
+      "id": "the_eighth",
+      "description": "Finish what came through the eighth door.",
+      "kind": "kill",
+      "count": 1,
+      "hidden": false,
+      "optional": false,
+      "target": "eighth_through"
+    }
+  ],
+  "stages": [],
+  "unlocks": [
+    "trial_three_counter"
+  ],
+  "rewards": {
+    "xp": 3400,
+    "items": [
+      {
+        "item": "signal_deep_belt",
+        "quantity": 1
+      }
+    ],
+    "reputation": {
+      "the_keepers": 30,
+      "the_vent_readers": 30
+    }
+  },
+  "requires": {
+    "quests": [
+      {
+        "quest": "trial_three_listening",
+        "status": "complete"
+      }
+    ]
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "id": "kings_hidden",
+  "name": "The Kingsvale, Unwarranted",
+  "description": "Three things the Crown's paperwork does not cover, within two days' walk of where you started.",
+  "quests": [
+    "kings_the_second_face",
+    "kings_what_goes_under",
+    "kings_the_ford_toll"
+  ],
+  "isEnding": false
+}

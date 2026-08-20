@@ -1,0 +1,17 @@
+{
+  "id": "highpass_cellars",
+  "name": "The Ward Cellars",
+  "description": "Magazine, gaol, and store below the wall — and below those, chambers the wall was built on top of.",
+  "biome": "dungeon_delved",
+  "roomCount": "9",
+  "depth": "2",
+  "algorithm": "rooms",
+  "lockedDoorChance": 0,
+  "doorGates": [],
+  "rollEncounters": false,
+  "safeEntrance": true,
+  "width": "69",
+  "height": "69",
+  "corridorLength": "3d3",
+  "bossTable": "trial_one_first"
+}

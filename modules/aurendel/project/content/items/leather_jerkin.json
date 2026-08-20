@@ -1,0 +1,12 @@
+{
+  "id": "leather_jerkin",
+  "name": "Leather Jerkin",
+  "description": "Boiled, shaped, and cheaper than caring about it.",
+  "kind": "armor",
+  "slot": "body",
+  "value": 12,
+  "weight": 8,
+  "modifiers": {
+    "guard": 1
+  }
+}

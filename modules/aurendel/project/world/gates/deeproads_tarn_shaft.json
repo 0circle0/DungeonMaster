@@ -1,0 +1,13 @@
+{
+  "id": "deeproads_tarn_shaft",
+  "name": "The Tarn Shaft",
+  "kind": "hazard",
+  "description": "A shaft beside the Black Tarn, cut square, with the rungs rusted through for the first thirty feet.",
+  "staysOpen": true,
+  "bypass": {
+    "skill": "athletics",
+    "difficulty": 15,
+    "retryable": true
+  },
+  "blockedTextKey": "deeproads_tarn_shaft_blocked"
+}

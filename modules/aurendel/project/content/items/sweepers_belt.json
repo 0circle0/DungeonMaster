@@ -1,0 +1,20 @@
+{
+  "id": "sweepers_belt",
+  "name": "The Sweeper's Belt",
+  "description": "Off somebody who climbed nine hundred and one steps a day for a wage nobody paid. Height stops mattering to the wearer's legs.",
+  "kind": "trinket",
+  "slot": "belt",
+  "value": 880,
+  "weight": 1,
+  "tags": [
+    "fabled"
+  ],
+  "modifiers": {
+    "carry": 3
+  },
+  "skillBonuses": {
+    "athletics": 3,
+    "perception": 2
+  },
+  "rarity": "rare"
+}

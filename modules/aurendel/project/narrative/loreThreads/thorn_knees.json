@@ -1,0 +1,11 @@
+{
+  "id": "thorn_knees",
+  "name": "The Knees",
+  "description": "Cypress knees standing in straight rows that converge over open water, half of them cut level and healed.",
+  "entries": [
+    "thorn_knees_rows",
+    "thorn_knees_point",
+    "thorn_knees_cut",
+    "thorn_knees_quiet"
+  ]
+}

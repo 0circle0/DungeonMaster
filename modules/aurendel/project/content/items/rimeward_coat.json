@@ -1,0 +1,21 @@
+{
+  "id": "rimeward_coat",
+  "name": "The Rimeward Coat",
+  "description": "The Ice Moot cuts them from what the glacier gives back, and will not sell one to anybody who has not set a cairn.",
+  "kind": "armor",
+  "slot": "cloak",
+  "value": 300,
+  "weight": 6,
+  "tags": [],
+  "skillBonuses": {
+    "athletics": 1,
+    "survival": 1
+  },
+  "damageInteractions": [
+    {
+      "damageType": "cold",
+      "multiplier": 0.5
+    }
+  ],
+  "rarity": "rare"
+}

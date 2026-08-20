@@ -1,0 +1,14 @@
+{
+  "id": "dungeon_ruin_lair_desc",
+  "variants": [
+    {
+      "text": "The bramble is broken down in a run, all one way, and it is not a path."
+    },
+    {
+      "text": "Something has taken the driest corner and made it worse."
+    },
+    {
+      "text": "Feathers, and a great many of them."
+    }
+  ]
+}

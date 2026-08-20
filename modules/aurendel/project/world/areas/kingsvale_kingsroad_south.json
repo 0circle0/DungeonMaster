@@ -1,0 +1,50 @@
+{
+  "id": "kingsvale_kingsroad_south",
+  "name": "The Kingsroad, South Reach",
+  "description": "Cut stone running dead straight to the southern horizon, with milestones counting down to places you have not been.",
+  "biome": "vale",
+  "layer": "overworld",
+  "descriptionKey": "kingsvale_kingsroad_south_desc",
+  "dangerLevel": 2,
+  "recommendedLevel": 2,
+  "tags": [
+    "kingsvale"
+  ],
+  "map": {
+    "width": "51",
+    "height": "35"
+  },
+  "entryPoint": {
+    "x": 25,
+    "y": 17
+  },
+  "extra": {
+    "role": "wild"
+  },
+  "connections": [
+    {
+      "to": "aurenhal_highgate",
+      "travelMinutes": 25,
+      "gate": "aurenhal_kings_gate"
+    },
+    {
+      "to": "kingsvale_ashcott",
+      "travelMinutes": 30
+    },
+    {
+      "to": "kingsvale_hedge_country",
+      "travelMinutes": 25
+    },
+    {
+      "to": "thornmere_sunken_causeway",
+      "travelMinutes": 240
+    },
+    {
+      "to": "steppe_horse_road",
+      "travelMinutes": 200
+    }
+  ],
+  "encounterTables": [
+    "kingsvale_wanderers"
+  ]
+}

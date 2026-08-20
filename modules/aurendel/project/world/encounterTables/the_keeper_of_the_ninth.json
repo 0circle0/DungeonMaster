@@ -1,0 +1,22 @@
+{
+  "id": "the_keeper_of_the_ninth",
+  "minDepth": 0,
+  "maxDepth": 999,
+  "chance": 1,
+  "emptyWeight": 0,
+  "scalePerLevels": 3,
+  "groups": [
+    {
+      "id": "keeper",
+      "weight": 1,
+      "hostile": true,
+      "entries": [
+        {
+          "monster": "door_keeper",
+          "count": "1",
+          "scaleWithLevel": false
+        }
+      ]
+    }
+  ]
+}

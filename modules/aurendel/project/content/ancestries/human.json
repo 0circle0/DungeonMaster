@@ -1,0 +1,16 @@
+{
+  "id": "human",
+  "name": "Human",
+  "description": "Everywhere, adaptable, and short-lived enough to be in a hurry about it.",
+  "attributeBonuses": {
+    "presence": 1
+  },
+  "skillBonuses": {
+    "persuasion": 1
+  },
+  "creatureType": "humanoid",
+  "size": "medium",
+  "languages": [
+    "common"
+  ]
+}

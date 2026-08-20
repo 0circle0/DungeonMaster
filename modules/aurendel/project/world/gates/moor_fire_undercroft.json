@@ -1,0 +1,29 @@
+{
+  "id": "moor_fire_undercroft",
+  "name": "Where the Fuel Goes",
+  "description": "A cold room under a warm building, and a floor that has been up and down more often than a floor is.",
+  "kind": "ward",
+  "blockedTextKey": "moor_fire_blocked",
+  "staysOpen": true,
+  "onOpen": [
+    {
+      "setFlag": {
+        "flag": "moor_fire_open",
+        "value": true
+      }
+    }
+  ],
+  "onBlocked": [],
+  "opensWith": [],
+  "tags": [],
+  "requires": {
+    "items": [
+      {
+        "item": "hearth_rota",
+        "quantity": 1,
+        "consume": false,
+        "equipped": false
+      }
+    ]
+  }
+}

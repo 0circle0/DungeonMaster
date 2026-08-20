@@ -1,0 +1,29 @@
+{
+  "id": "dusk_ward_mark",
+  "name": "The Face That Was Re-Cut",
+  "description": "One stone of the several, cut on the same face as all the others, and the cut on this one goes all the way through.",
+  "kind": "ward",
+  "blockedTextKey": "dusk_ward_blocked",
+  "staysOpen": true,
+  "onOpen": [
+    {
+      "setFlag": {
+        "flag": "dusk_ward_open",
+        "value": true
+      }
+    }
+  ],
+  "onBlocked": [],
+  "opensWith": [],
+  "tags": [],
+  "requires": {
+    "items": [
+      {
+        "item": "woodwards_rod",
+        "quantity": 1,
+        "consume": false,
+        "equipped": false
+      }
+    ]
+  }
+}

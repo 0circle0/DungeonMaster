@@ -1,0 +1,57 @@
+{
+  "id": "thorn_the_knees",
+  "name": "The Knees",
+  "description": "Straight rows of cypress knees converging over open water, half of them cut level and healed over forty years ago.",
+  "autoStart": false,
+  "ordered": true,
+  "tags": [
+    "hidden",
+    "thornmere",
+    "thorn_knees"
+  ],
+  "objectives": [
+    {
+      "id": "where_they_meet",
+      "description": "Get to where the rows meet.",
+      "kind": "reach",
+      "count": 1,
+      "hidden": true,
+      "optional": false,
+      "target": "cypress_maze_the_mound"
+    },
+    {
+      "id": "cut_a_way",
+      "description": "Open a way with the one edge that will.",
+      "kind": "custom",
+      "count": 1,
+      "hidden": true,
+      "optional": false,
+      "when": {
+        "test": {
+          "ref": "flags.thorn_knees_open"
+        }
+      }
+    },
+    {
+      "id": "what_cuts",
+      "description": "Find what has been cutting them level.",
+      "kind": "kill",
+      "count": 1,
+      "hidden": true,
+      "optional": false,
+      "target": "knee_cutter"
+    }
+  ],
+  "stages": [],
+  "unlocks": [],
+  "rewards": {
+    "xp": 190,
+    "items": [
+      {
+        "item": "marshlight_belt",
+        "quantity": 1
+      }
+    ],
+    "reputation": {}
+  }
+}

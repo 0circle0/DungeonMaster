@@ -1,0 +1,18 @@
+{
+  "id": "ember_under_cathedral",
+  "name": "Under the Slag Cathedral",
+  "description": "The cathedral was cast on top of this, in one piece, over eleven years, with the door already shut.",
+  "biome": "dungeon_ember",
+  "roomCount": "13",
+  "depth": "3",
+  "algorithm": "rooms",
+  "lockedDoorChance": 0,
+  "doorGates": [],
+  "rollEncounters": false,
+  "safeEntrance": true,
+  "branchiness": 0.3,
+  "width": "73",
+  "height": "73",
+  "corridorLength": "2d3",
+  "bossTable": "ember_cathedral_boss"
+}

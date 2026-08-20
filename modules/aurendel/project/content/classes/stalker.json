@@ -1,0 +1,45 @@
+{
+  "id": "stalker",
+  "name": "Stalker",
+  "description": "Roads, roofs, and other people's locks. Prefers the fight that never starts.",
+  "hitDie": "1d8",
+  "primaryAttribute": "agility",
+  "attributeBonuses": {
+    "agility": 1
+  },
+  "skillProficiencies": [
+    "stealth",
+    "lockpicking",
+    "acrobatics",
+    "perception"
+  ],
+  "saveProficiencies": [
+    "reflex"
+  ],
+  "abilitiesByLevel": {
+    "1": [
+      "strike",
+      "quick_shot",
+      "dodge",
+      "assist",
+      "disengage"
+    ],
+    "3": [
+      "shove"
+    ]
+  },
+  "startingItems": [
+    {
+      "item": "hunting_bow",
+      "quantity": 1
+    },
+    {
+      "item": "iron_sword",
+      "quantity": 1
+    },
+    {
+      "item": "leather_jerkin",
+      "quantity": 1
+    }
+  ]
+}

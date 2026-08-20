@@ -1,0 +1,28 @@
+{
+  "id": "dun_barrow",
+  "name": "Barrow",
+  "floor": "cave_floor",
+  "wall": "wall_stone",
+  "exterior": "wall_stone",
+  "scatter": [
+    {
+      "terrain": "rubble",
+      "frequency": 0.07,
+      "distribution": "speckle",
+      "priority": 0
+    },
+    {
+      "terrain": "standing_stone",
+      "frequency": 0.02,
+      "distribution": "speckle",
+      "priority": 1
+    },
+    {
+      "terrain": "urn",
+      "frequency": 0.02,
+      "distribution": "speckle",
+      "priority": 2
+    }
+  ],
+  "door": "door"
+}

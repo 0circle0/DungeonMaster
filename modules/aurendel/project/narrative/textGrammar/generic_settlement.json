@@ -1,0 +1,17 @@
+{
+  "id": "generic_settlement",
+  "variants": [
+    {
+      "text": "Somewhere people actually live, going about it without reference to you."
+    },
+    {
+      "text": "A door, a roof, and whoever is inside deciding whether to look up."
+    },
+    {
+      "text": "The ordinary business of a place that was here before you and expects to be here after."
+    },
+    {
+      "text": "Lived in, worked in, and swept this morning."
+    }
+  ]
+}

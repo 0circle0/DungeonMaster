@@ -1,0 +1,29 @@
+{
+  "id": "rimewatch_calving_face",
+  "name": "The Calving Face",
+  "description": "Two hundred feet of ice cliff going into the sea, and it lets go twice a day all summer with a noise like a siege.",
+  "area": "frostmere_rimewatch_shore",
+  "kind": "landmark",
+  "descriptionKey": "rimewatch_calving_face_desc",
+  "travelMinutes": 8,
+  "tags": [],
+  "position": {
+    "x": 3,
+    "y": 3
+  },
+  "triggers": [
+    {
+      "id": "frost_found_calving",
+      "mode": "once",
+      "on": "enter",
+      "description": "Water that should have whales in it, and does not.",
+      "effects": [
+        {
+          "learnLore": {
+            "entry": "frost_blue_calving"
+          }
+        }
+      ]
+    }
+  ]
+}

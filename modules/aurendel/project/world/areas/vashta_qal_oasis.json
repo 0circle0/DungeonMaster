@@ -1,0 +1,41 @@
+{
+  "id": "vashta_qal_oasis",
+  "name": "Vashta Qal — The Oasis",
+  "description": "Palms, water, and eleven thousand people arranged in rings around the only spring for a hundred miles.",
+  "biome": "urban_desert",
+  "layer": "overworld",
+  "descriptionKey": "vashta_qal_oasis_desc",
+  "dangerLevel": 1,
+  "recommendedLevel": 6,
+  "tags": [
+    "glasslands",
+    "vashta_qal",
+    "city"
+  ],
+  "map": {
+    "width": "45",
+    "height": "31"
+  },
+  "entryPoint": {
+    "x": 22,
+    "y": 15
+  },
+  "extra": {
+    "role": "city"
+  },
+  "connections": [
+    {
+      "to": "glasslands_shifting_dunes",
+      "travelMinutes": 60,
+      "gate": "vashta_qal_water_toll"
+    },
+    {
+      "to": "vashta_qal_glass_quarter",
+      "travelMinutes": 8
+    },
+    {
+      "to": "glasslands_bone_wells",
+      "travelMinutes": 55
+    }
+  ]
+}

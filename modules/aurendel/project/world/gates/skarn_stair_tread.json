@@ -1,0 +1,29 @@
+{
+  "id": "skarn_stair_tread",
+  "name": "The Step That Is Not Counted",
+  "description": "One tread on the broken flight that has been swept as carefully as the nine hundred that are used.",
+  "kind": "ward",
+  "blockedTextKey": "skarn_stair_blocked",
+  "staysOpen": true,
+  "onOpen": [
+    {
+      "setFlag": {
+        "flag": "skarn_stair_open",
+        "value": true
+      }
+    }
+  ],
+  "onBlocked": [],
+  "opensWith": [],
+  "tags": [],
+  "requires": {
+    "items": [
+      {
+        "item": "sweeping_tally",
+        "quantity": 1,
+        "consume": false,
+        "equipped": false
+      }
+    ]
+  }
+}

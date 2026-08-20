@@ -1,0 +1,329 @@
+{
+  "id": "coast_ansel_talk",
+  "start": "greet",
+  "nodes": [
+    {
+      "id": "greet",
+      "says": [
+        {
+          "text": "Four hundred sheep on short turf over white rock, and a man in the middle of them working a pair of shears without looking at them."
+        },
+        {
+          "text": "“Mind the flock. Say what you want, I will hear you.”"
+        }
+      ],
+      "onEnter": [],
+      "options": [
+        {
+          "id": "coast_ansel_three",
+          "text": "Who clears the chalk?",
+          "requires": {
+            "without": {
+              "lore": [
+                "coast_horse_three"
+              ]
+            }
+          },
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "check": {
+            "skill": "persuasion",
+            "difficulty": {
+              "sub": [
+                10,
+                {
+                  "clamp": [
+                    {
+                      "div": [
+                        {
+                          "ref": "reputation.the_salvors",
+                          "else": 0
+                        },
+                        5
+                      ]
+                    },
+                    -6,
+                    6
+                  ]
+                }
+              ]
+            },
+            "onSuccess": "coast_ansel_three_told",
+            "onFailure": "coast_ansel_three_wont"
+          }
+        },
+        {
+          "id": "coast_ansel_shape",
+          "text": "You have walked over it all your life. What shape is it?",
+          "requires": {
+            "without": {
+              "lore": [
+                "coast_horse_shape"
+              ]
+            }
+          },
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "check": {
+            "skill": "insight",
+            "difficulty": {
+              "sub": [
+                13,
+                {
+                  "clamp": [
+                    {
+                      "div": [
+                        {
+                          "ref": "reputation.the_salvors",
+                          "else": 0
+                        },
+                        5
+                      ]
+                    },
+                    -6,
+                    6
+                  ]
+                }
+              ]
+            },
+            "onSuccess": "coast_ansel_shape_told",
+            "onFailure": "coast_ansel_shape_wont"
+          }
+        },
+        {
+          "id": "coast_ansel_tally",
+          "text": "The rod you keep the count on. Lend it to me.",
+          "requires": {
+            "without": {
+              "items": [
+                "scouring_tally"
+              ],
+              "flags": [
+                {
+                  "flag": "given:scouring_tally"
+                }
+              ]
+            }
+          },
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "check": {
+            "skill": "persuasion",
+            "difficulty": {
+              "sub": [
+                12,
+                {
+                  "clamp": [
+                    {
+                      "div": [
+                        {
+                          "ref": "reputation.the_salvors",
+                          "else": 0
+                        },
+                        5
+                      ]
+                    },
+                    -6,
+                    6
+                  ]
+                }
+              ]
+            },
+            "onSuccess": "coast_ansel_tally_gave",
+            "onFailure": "coast_ansel_tally_kept"
+          }
+        },
+        {
+          "id": "greet_leave",
+          "text": "Nothing.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "coast_ansel_three_told",
+      "says": [
+        {
+          "text": "“Three parishes. Us, Thrift, and the Cobbleway lot who come out in carts and are no use.” He shears on. “Ask any of the three why and you will get the same answer, which is that the other two turn out and it would look bad not to. That is the whole of the reasoning and it has run four hundred years.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "learnLore": {
+            "entry": "coast_horse_three"
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "coast_ansel_three_on",
+          "text": "Go on.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "coast_ansel_three_wont",
+      "says": [
+        {
+          "text": "“I've said all I mean to,” they say, and go back to what they were doing."
+        }
+      ],
+      "onEnter": [
+        {
+          "adjustReputation": {
+            "faction": "the_salvors",
+            "amount": -1
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "coast_ansel_three_drop",
+          "text": "Leave it.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "coast_ansel_shape_told",
+      "says": [
+        {
+          "text": "Ansel stops, which he does not do. “It has corners on it,” he says, carefully, like a man who has never said it aloud. “You cannot see them from the road and you cannot see them from the green. You can see them from on it, and once you have you cannot stop.” He goes back to the sheep. “Nothing that runs has corners.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "learnLore": {
+            "entry": "coast_horse_shape"
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "coast_ansel_shape_on",
+          "text": "Go on.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "coast_ansel_shape_wont",
+      "says": [
+        {
+          "text": "“I've said all I mean to,” they say, and go back to what they were doing."
+        }
+      ],
+      "onEnter": [
+        {
+          "adjustReputation": {
+            "faction": "the_salvors",
+            "amount": -1
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "coast_ansel_shape_drop",
+          "text": "Leave it.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "coast_ansel_tally_gave",
+      "says": [
+        {
+          "text": "He fetches it out of the thatch, which is where it has always lived. “There are more notches on that than the parish has years of records,” he says. “I have never known what to do about that, so I have gone on cutting them.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "grantItem": {
+            "target": {
+              "ref": "actor.id"
+            },
+            "item": "scouring_tally",
+            "quantity": 1
+          }
+        },
+        {
+          "setFlag": {
+            "flag": "given:scouring_tally",
+            "value": true
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "coast_ansel_tally_thanks",
+          "text": "Thank you.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "coast_ansel_tally_kept",
+      "says": [
+        {
+          "text": "“It goes back in the thatch,” he says, and it does, and that is the end of the conversation."
+        }
+      ],
+      "onEnter": [
+        {
+          "adjustReputation": {
+            "faction": "the_salvors",
+            "amount": -2
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "coast_ansel_tally_leave",
+          "text": "Then no.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    }
+  ]
+}

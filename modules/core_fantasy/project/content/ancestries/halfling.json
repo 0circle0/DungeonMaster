@@ -1,0 +1,20 @@
+{
+  "id": "halfling",
+  "name": "Halfling",
+  "description": "Small, unhurried, and very hard to catch.",
+  "attributeBonuses": {
+    "agility": 1
+  },
+  "skillBonuses": {
+    "stealth": 1,
+    "survival": 1
+  },
+  "creatureType": "humanoid",
+  "size": "small",
+  "languages": [
+    "common"
+  ],
+  "speeds": {
+    "walk": 25
+  }
+}

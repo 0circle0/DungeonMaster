@@ -1,0 +1,17 @@
+{
+  "id": "moor_under_keep",
+  "name": "Under Barrowgate Keep",
+  "description": "The keep's cellars, and then the barrow they were cut into, which the builders swore in writing they would not do.",
+  "biome": "dungeon_barrow",
+  "roomCount": "10",
+  "depth": "2",
+  "algorithm": "rooms",
+  "lockedDoorChance": 0,
+  "doorGates": [],
+  "rollEncounters": false,
+  "safeEntrance": true,
+  "width": "73",
+  "height": "73",
+  "corridorLength": "3d3",
+  "bossTable": "trial_one_second"
+}

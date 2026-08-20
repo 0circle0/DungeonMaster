@@ -1,0 +1,36 @@
+{
+  "id": "kestrel_edge_shooting_house",
+  "name": "The Shooting House",
+  "description": "Built for a sport that stopped, and used since by shepherds and whoever else.",
+  "area": "moor_kestrel_edge",
+  "kind": "ruin",
+  "descriptionKey": "generic_ruin",
+  "travelMinutes": 6,
+  "tags": [
+    "ruin"
+  ],
+  "map": {
+    "width": "9",
+    "height": "7",
+    "palette": "int_timber"
+  },
+  "position": {
+    "x": 14,
+    "y": 3
+  },
+  "triggers": [
+    {
+      "id": "moor_found_house",
+      "mode": "once",
+      "on": "enter",
+      "description": "Eight worn places in front of a house with no roof.",
+      "effects": [
+        {
+          "learnLore": {
+            "entry": "moor_shoot_wear"
+          }
+        }
+      ]
+    }
+  ]
+}

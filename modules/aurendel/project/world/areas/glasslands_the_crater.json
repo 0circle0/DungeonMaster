@@ -1,0 +1,42 @@
+{
+  "id": "glasslands_the_crater",
+  "name": "The Crater",
+  "description": "Four miles across, green glass from lip to lip, and something happened here.",
+  "biome": "desert",
+  "layer": "overworld",
+  "descriptionKey": "glasslands_the_crater_desc",
+  "dangerLevel": 7,
+  "recommendedLevel": 7,
+  "tags": [
+    "glasslands"
+  ],
+  "map": {
+    "width": "51",
+    "height": "35"
+  },
+  "entryPoint": {
+    "x": 25,
+    "y": 17
+  },
+  "extra": {
+    "role": "wild"
+  },
+  "connections": [
+    {
+      "to": "vashta_qal_glass_quarter",
+      "travelMinutes": 45
+    },
+    {
+      "to": "glasslands_the_fulgurite",
+      "travelMinutes": 50
+    },
+    {
+      "to": "deeproads_echo_halls",
+      "travelMinutes": 150
+    }
+  ],
+  "encounterTables": [
+    "glasslands_things",
+    "the_tallied"
+  ]
+}

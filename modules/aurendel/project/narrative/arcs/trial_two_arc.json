@@ -1,0 +1,11 @@
+{
+  "id": "trial_two_arc",
+  "name": "The Middle Three",
+  "description": "Three doors somebody found before the Keepers did, and put four hundred feet of careful stone over without ever saying why.",
+  "quests": [
+    "trial_two_galleries",
+    "trial_two_sunken_hall",
+    "trial_two_milepost"
+  ],
+  "isEnding": false
+}

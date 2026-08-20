@@ -1,0 +1,17 @@
+{
+  "id": "barrowgate_keep_door",
+  "name": "The Keep Door",
+  "kind": "lock",
+  "description": "The keep's own door, and the keep is standing on the barrow, and the two facts are related.",
+  "staysOpen": true,
+  "requires": {
+    "description": "the constable's leave",
+    "minLevel": 4
+  },
+  "bypass": {
+    "skill": "lockpicking",
+    "difficulty": 15,
+    "retryable": true
+  },
+  "blockedTextKey": "barrowgate_keep_blocked"
+}

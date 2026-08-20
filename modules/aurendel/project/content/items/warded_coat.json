@@ -1,0 +1,13 @@
+{
+  "id": "warded_coat",
+  "name": "The Warded Coat",
+  "description": "Stitched through with fine wire in a pattern somebody copied off a standing stone without asking what it meant.",
+  "kind": "armor",
+  "slot": "body",
+  "value": 180,
+  "weight": 14,
+  "modifiers": {
+    "guard": 3
+  },
+  "rarity": "rare"
+}

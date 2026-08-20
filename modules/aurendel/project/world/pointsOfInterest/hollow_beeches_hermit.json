@@ -1,0 +1,19 @@
+{
+  "id": "hollow_beeches_hermit",
+  "name": "The Hermit's Beech",
+  "description": "Somebody has lived in this tree. The door is fitted properly.",
+  "area": "duskwood_hollow_beeches",
+  "kind": "settlement",
+  "descriptionKey": "int_house",
+  "travelMinutes": 6,
+  "tags": [],
+  "map": {
+    "width": "9",
+    "height": "7",
+    "palette": "int_timber"
+  },
+  "position": {
+    "x": 14,
+    "y": 3
+  }
+}

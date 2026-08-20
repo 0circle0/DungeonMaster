@@ -1,0 +1,41 @@
+{
+  "id": "trial_one_hoard_b",
+  "name": "The Dry Undercroft",
+  "rolls": "3",
+  "emptyChance": 0,
+  "bonusRollSkill": "perception",
+  "bonusRolls": {
+    "onSuccess": 2,
+    "onCritical": 3
+  },
+  "entries": [
+    {
+      "weight": 4,
+      "value": {
+        "item": "old_coin",
+        "quantity": "8d6"
+      }
+    },
+    {
+      "weight": 3,
+      "value": {
+        "item": "healing_draught",
+        "quantity": "1d3"
+      }
+    },
+    {
+      "weight": 2,
+      "value": {
+        "item": "barrow_torc",
+        "quantity": "1d2"
+      }
+    },
+    {
+      "weight": 1,
+      "value": {
+        "item": "warded_coat",
+        "quantity": "1"
+      }
+    }
+  ]
+}

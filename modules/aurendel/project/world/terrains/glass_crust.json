@@ -1,0 +1,17 @@
+{
+  "id": "glass_crust",
+  "name": "Glass Crust",
+  "description": "Fused sand in fragile sheets. It sings when it breaks.",
+  "glyph": "z",
+  "color": "cyan",
+  "passable": true,
+  "opaque": false,
+  "moveCost": 2,
+  "tags": [
+    "stone"
+  ],
+  "marks": {
+    "tracks": 0,
+    "smell": 0.6
+  }
+}

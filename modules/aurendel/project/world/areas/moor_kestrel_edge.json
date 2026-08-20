@@ -1,0 +1,41 @@
+{
+  "id": "moor_kestrel_edge",
+  "name": "Kestrel Edge",
+  "description": "The southern scarp: a gritstone edge two hundred feet high with the whole vale laid out below it.",
+  "biome": "moor",
+  "layer": "overworld",
+  "descriptionKey": "moor_kestrel_edge_desc",
+  "dangerLevel": 3,
+  "recommendedLevel": 4,
+  "tags": [
+    "weeping_moor"
+  ],
+  "map": {
+    "width": "51",
+    "height": "35"
+  },
+  "entryPoint": {
+    "x": 25,
+    "y": 17
+  },
+  "extra": {
+    "role": "wild"
+  },
+  "connections": [
+    {
+      "to": "moor_barrowgate",
+      "travelMinutes": 35
+    },
+    {
+      "to": "moor_colders_hearth",
+      "travelMinutes": 45
+    },
+    {
+      "to": "kingsvale_oxbow_meadows",
+      "travelMinutes": 200
+    }
+  ],
+  "encounterTables": [
+    "moor_things"
+  ]
+}

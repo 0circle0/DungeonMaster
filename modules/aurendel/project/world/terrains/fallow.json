@@ -1,0 +1,17 @@
+{
+  "id": "fallow",
+  "name": "Fallow Field",
+  "description": "Turned earth resting a season.",
+  "glyph": "'",
+  "color": "yellow",
+  "passable": true,
+  "opaque": false,
+  "moveCost": 1,
+  "tags": [
+    "soft"
+  ],
+  "marks": {
+    "tracks": 1,
+    "smell": 1
+  }
+}

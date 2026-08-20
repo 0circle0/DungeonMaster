@@ -1,0 +1,14 @@
+{
+  "id": "craftrow_great_forge_desc",
+  "variants": [
+    {
+      "text": "Six hearths under one roof, all lit, and a heat that arrives before you do."
+    },
+    {
+      "text": "The Great Forge, where the guild decides whose iron goes on which fire and in what order."
+    },
+    {
+      "text": "Hammer-fall on three counts at once, and a supervisor watching the colour of everything."
+    }
+  ]
+}

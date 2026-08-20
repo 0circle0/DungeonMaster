@@ -1,0 +1,42 @@
+{
+  "id": "thornmere_sunken_causeway",
+  "name": "The Sunken Causeway",
+  "description": "A raised road under two feet of water for eleven miles, and it is the only hard bottom in the region.",
+  "biome": "swamp",
+  "layer": "overworld",
+  "descriptionKey": "thornmere_sunken_causeway_desc",
+  "dangerLevel": 4,
+  "recommendedLevel": 5,
+  "tags": [
+    "thornmere"
+  ],
+  "map": {
+    "width": "51",
+    "height": "35"
+  },
+  "entryPoint": {
+    "x": 25,
+    "y": 17
+  },
+  "extra": {
+    "role": "wild"
+  },
+  "connections": [
+    {
+      "to": "thornmere_stiltmarket",
+      "travelMinutes": 40
+    },
+    {
+      "to": "thornmere_reedy_bottom",
+      "travelMinutes": 40
+    },
+    {
+      "to": "ember_vent_fields",
+      "travelMinutes": 220
+    },
+    {
+      "to": "kingsvale_kingsroad_south",
+      "travelMinutes": 240
+    }
+  ]
+}

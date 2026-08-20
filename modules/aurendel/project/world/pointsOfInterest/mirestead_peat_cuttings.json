@@ -1,0 +1,29 @@
+{
+  "id": "mirestead_peat_cuttings",
+  "name": "The Cuttings",
+  "description": "Faces of black peat eight feet high, cut in steps, and drying stacks between them.",
+  "area": "moor_mirestead",
+  "kind": "landmark",
+  "descriptionKey": "generic_landmark",
+  "travelMinutes": 4,
+  "tags": [],
+  "position": {
+    "x": 3,
+    "y": 3
+  },
+  "triggers": [
+    {
+      "id": "moor_found_band",
+      "mode": "once",
+      "on": "enter",
+      "description": "The depth everybody stops at, and how exactly they all stop at it.",
+      "effects": [
+        {
+          "learnLore": {
+            "entry": "moor_cut_band"
+          }
+        }
+      ]
+    }
+  ]
+}

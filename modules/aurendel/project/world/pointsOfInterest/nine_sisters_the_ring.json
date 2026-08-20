@@ -1,0 +1,18 @@
+{
+  "id": "nine_sisters_the_ring",
+  "name": "The Nine Sisters",
+  "description": "Nine stones in a ring sixty yards across, on the highest ground for twenty miles, and none of them is local rock.",
+  "area": "moor_nine_sisters",
+  "kind": "shrine",
+  "descriptionKey": "nine_sisters_the_ring_desc",
+  "travelMinutes": 6,
+  "tags": [
+    "shrine",
+    "landmark"
+  ],
+  "gate": "moor_sisters_ward",
+  "position": {
+    "x": 3,
+    "y": 3
+  }
+}

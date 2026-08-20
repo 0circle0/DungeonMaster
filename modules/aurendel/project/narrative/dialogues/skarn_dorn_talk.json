@@ -1,0 +1,219 @@
+{
+  "id": "skarn_dorn_talk",
+  "start": "greet",
+  "nodes": [
+    {
+      "id": "greet",
+      "says": [
+        {
+          "text": "A wayhouse on a road with a hole in it, doing better trade than the road can account for, and a landlord who knows exactly why."
+        },
+        {
+          "text": "“Beds, stew, and I will tell you the road is impassable whether it is or not.”"
+        }
+      ],
+      "onEnter": [],
+      "options": [
+        {
+          "id": "skarn_dorn_dug",
+          "text": "The houses at Snowgate.",
+          "requires": {
+            "without": {
+              "lore": [
+                "skarn_bell_dug"
+              ]
+            }
+          },
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "check": {
+            "skill": "insight",
+            "difficulty": {
+              "sub": [
+                14,
+                {
+                  "clamp": [
+                    {
+                      "div": [
+                        {
+                          "ref": "reputation.karn_dolur",
+                          "else": 0
+                        },
+                        5
+                      ]
+                    },
+                    -6,
+                    6
+                  ]
+                }
+              ]
+            },
+            "onSuccess": "skarn_dorn_dug_told",
+            "onFailure": "skarn_dorn_dug_wont"
+          }
+        },
+        {
+          "id": "skarn_dorn_ice",
+          "text": "The ice on the shoulder road.",
+          "requires": {
+            "without": {
+              "lore": [
+                "skarn_wind_ice"
+              ]
+            }
+          },
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "check": {
+            "skill": "persuasion",
+            "difficulty": {
+              "sub": [
+                12,
+                {
+                  "clamp": [
+                    {
+                      "div": [
+                        {
+                          "ref": "reputation.karn_dolur",
+                          "else": 0
+                        },
+                        5
+                      ]
+                    },
+                    -6,
+                    6
+                  ]
+                }
+              ]
+            },
+            "onSuccess": "skarn_dorn_ice_told",
+            "onFailure": "skarn_dorn_ice_wont"
+          }
+        },
+        {
+          "id": "greet_leave",
+          "text": "Nothing.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "skarn_dorn_dug_told",
+      "says": [
+        {
+          "text": "“A room and a half, all of them, dug back into the slope.” Dorn wipes a table. “Except one. That one goes back seventy foot — I have paced it from the outside and the door is where the others' doors are.” He straightens. “In forty years nobody in that house has mentioned it and nobody next door has asked. That is not how villages work.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "learnLore": {
+            "entry": "skarn_bell_dug"
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "skarn_dorn_dug_on",
+          "text": "Go on.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "skarn_dorn_dug_wont",
+      "says": [
+        {
+          "text": "“I've said all I mean to,” they say, and go back to what they were doing."
+        }
+      ],
+      "onEnter": [
+        {
+          "adjustReputation": {
+            "faction": "karn_dolur",
+            "amount": -1
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "skarn_dorn_dug_drop",
+          "text": "Leave it.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "skarn_dorn_ice_told",
+      "says": [
+        {
+          "text": "“Will not form within forty foot of that mouth.” He says it cheerfully. “Which is why the guides take the parties that way and why they charge what they charge. Ask Vesk about it and see how fast the conversation is about boots again.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "learnLore": {
+            "entry": "skarn_wind_ice"
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "skarn_dorn_ice_on",
+          "text": "Go on.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "skarn_dorn_ice_wont",
+      "says": [
+        {
+          "text": "“I've said all I mean to,” they say, and go back to what they were doing."
+        }
+      ],
+      "onEnter": [
+        {
+          "adjustReputation": {
+            "faction": "karn_dolur",
+            "amount": -1
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "skarn_dorn_ice_drop",
+          "text": "Leave it.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    }
+  ]
+}

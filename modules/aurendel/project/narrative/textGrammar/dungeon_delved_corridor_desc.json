@@ -1,0 +1,14 @@
+{
+  "id": "dungeon_delved_corridor_desc",
+  "variants": [
+    {
+      "text": "A hall four paces wide with a barrel ceiling and lamp niches at intervals, all of them empty."
+    },
+    {
+      "text": "The passage runs dead straight and the far end of it is out of sight."
+    },
+    {
+      "text": "Tool marks on the walls, all going the same way, all the same width."
+    }
+  ]
+}

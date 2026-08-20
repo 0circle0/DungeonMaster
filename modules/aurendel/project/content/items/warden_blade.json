@@ -1,0 +1,21 @@
+{
+  "id": "warden_blade",
+  "name": "A Warden's Blade",
+  "description": "One of nine, made when the wards were made, and this is the only one anybody has found.",
+  "kind": "weapon",
+  "slot": "hand",
+  "value": 260,
+  "weight": 3,
+  "damage": {
+    "dice": "1d10",
+    "damageType": "slashing",
+    "stat": "might"
+  },
+  "properties": [
+    "silvered"
+  ],
+  "tags": [
+    "silvered"
+  ],
+  "rarity": "very_rare"
+}

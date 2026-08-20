@@ -1,0 +1,19 @@
+{
+  "id": "glass_quarter_glass_market",
+  "name": "The Glass Market",
+  "description": "Green glass by the block and by the finished piece, and the finished pieces go north for a great deal of money.",
+  "area": "vashta_qal_glass_quarter",
+  "kind": "market",
+  "descriptionKey": "generic_market",
+  "travelMinutes": 2,
+  "tags": [
+    "shop"
+  ],
+  "services": [
+    "market"
+  ],
+  "position": {
+    "x": 12,
+    "y": 3
+  }
+}

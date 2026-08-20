@@ -1,0 +1,102 @@
+{
+  "id": "lastcairn_what_the_ice_gave_back",
+  "name": "What the Ice Gave Back",
+  "description": "The glacier gave back a body this spring with a moot-mark cut into the shoulder, forty miles from anywhere a moot-marked body has any business being.",
+  "autoStart": false,
+  "ordered": true,
+  "tags": [
+    "side",
+    "act3",
+    "lastcairn",
+    "frostmere"
+  ],
+  "objectives": [
+    {
+      "id": "to_the_cairns",
+      "description": "Reach the cairns at Cairnhold.",
+      "kind": "reach",
+      "count": 1,
+      "hidden": false,
+      "optional": false,
+      "target": "cairnhold_the_cairns"
+    },
+    {
+      "id": "hear_ottir",
+      "description": "Hear what the ice gave back.",
+      "kind": "talk",
+      "count": 1,
+      "hidden": false,
+      "optional": false,
+      "target": "moot_stone_ottir"
+    },
+    {
+      "id": "the_mark",
+      "description": "See the mark on the shoulder.",
+      "kind": "custom",
+      "count": 1,
+      "hidden": false,
+      "optional": false,
+      "when": {
+        "test": {
+          "ref": "flags.lastcairn_mark_seen"
+        }
+      }
+    }
+  ],
+  "stages": [],
+  "unlocks": [
+    "lastcairn_the_frozen_ship"
+  ],
+  "rewards": {
+    "xp": 90,
+    "items": [],
+    "reputation": {
+      "the_ice_moot": 12
+    }
+  },
+  "giver": "moot_stone_ottir",
+  "requires": {
+    "description": "two of the three ward-keys",
+    "anyOf": [
+      {
+        "items": [
+          {
+            "item": "grown_key"
+          },
+          {
+            "item": "cast_key"
+          }
+        ]
+      },
+      {
+        "items": [
+          {
+            "item": "grown_key"
+          },
+          {
+            "item": "glass_key"
+          }
+        ]
+      },
+      {
+        "items": [
+          {
+            "item": "cast_key"
+          },
+          {
+            "item": "glass_key"
+          }
+        ]
+      }
+    ],
+    "minLevel": 6
+  },
+  "onComplete": [
+    {
+      "setFlag": {
+        "flag": "lastcairn_body_seen",
+        "value": true
+      }
+    }
+  ]
+}

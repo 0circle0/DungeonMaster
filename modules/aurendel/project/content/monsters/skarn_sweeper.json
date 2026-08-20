@@ -1,0 +1,52 @@
+{
+  "id": "skarn_sweeper",
+  "name": "Bel, on the Steps",
+  "description": "Climbs nine hundred and one steps a day and has since she could carry the broom.",
+  "level": 6,
+  "xp": 0,
+  "attributes": {
+    "might": 14,
+    "agility": 14,
+    "endurance": 16,
+    "intellect": 12,
+    "instinct": 14,
+    "presence": 12
+  },
+  "abilities": [
+    "strike"
+  ],
+  "behaviour": [
+    {
+      "priority": 0,
+      "use": "strike"
+    }
+  ],
+  "faction": "karn_dolur",
+  "creatureType": "humanoid",
+  "size": "medium",
+  "descriptors": [
+    "a hard-legged"
+  ],
+  "conditionalLoot": [],
+  "loot": "skarn_tally_carried",
+  "resourceOverrides": {
+    "hp": 38
+  },
+  "temperament": {
+    "roamRadius": 24,
+    "investigateRadius": 70,
+    "leashRadius": 100,
+    "wanderChance": 0.4,
+    "disengageTurns": 2,
+    "investigates": [
+      "sight",
+      "hearing",
+      "tracks",
+      "smell"
+    ],
+    "notices": [
+      "hostile",
+      "neutral"
+    ]
+  }
+}

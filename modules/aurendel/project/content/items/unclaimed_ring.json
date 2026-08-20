@@ -1,0 +1,17 @@
+{
+  "id": "unclaimed_ring",
+  "name": "The Ring Nobody Came For",
+  "description": "Off the October entry, the one year somebody looked. Worn, people find it hard to leave a question of yours unanswered.",
+  "kind": "trinket",
+  "slot": "ring",
+  "value": 580,
+  "weight": 1,
+  "tags": [
+    "fabled"
+  ],
+  "skillBonuses": {
+    "insight": 2,
+    "persuasion": 3
+  },
+  "rarity": "uncommon"
+}

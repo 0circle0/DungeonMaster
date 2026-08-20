@@ -1,0 +1,18 @@
+{
+  "id": "torc_of_the_ridge",
+  "name": "The Torc of the Ridge",
+  "description": "Off the undug end of the Long Barrow, and whoever it was sized for was buried facing the other way from everybody else.",
+  "kind": "trinket",
+  "slot": "ring",
+  "value": 150,
+  "weight": 0.5,
+  "tags": [],
+  "modifiers": {
+    "guard": 1
+  },
+  "skillBonuses": {
+    "insight": 1,
+    "resolve": 1
+  },
+  "rarity": "rare"
+}

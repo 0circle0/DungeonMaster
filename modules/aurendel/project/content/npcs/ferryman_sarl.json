@@ -1,0 +1,35 @@
+{
+  "id": "ferryman_sarl",
+  "name": "Sarl of the Causeway",
+  "description": "Poles the crossing when the causeway is under, and keeps the ferrymen's book, which is where the toll ledger goes.",
+  "disposition": 2,
+  "gullibility": 0.25,
+  "memorySpan": 250,
+  "offersQuests": [],
+  "caresAbout": [],
+  "reactions": [],
+  "faction": "the_ferrymen",
+  "dialogue": "thorn_sarl_talk",
+  "home": "sunken_causeway_marker_house",
+  "statblock": "thorn_ferryman",
+  "shop": {
+    "lootTable": "keeper_stock",
+    "buysTags": [
+      "treasure"
+    ],
+    "priceMultiplier": 1.25
+  },
+  "temperament": {
+    "roamRadius": 0,
+    "wanderChance": 0,
+    "speeds": {
+      "wander": 0
+    },
+    "investigates": [],
+    "notices": [
+      "hostile",
+      "neutral",
+      "ally"
+    ]
+  }
+}

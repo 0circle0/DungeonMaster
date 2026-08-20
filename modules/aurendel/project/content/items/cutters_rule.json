@@ -1,0 +1,14 @@
+{
+  "id": "cutters_rule",
+  "name": "The Cutter's Rule",
+  "description": "A brass rule the shelf-cutters use to find the true edge of the sheet. Laid on the glass it will not lie flat, and the way it lifts is a map.",
+  "kind": "key",
+  "value": 0,
+  "weight": 0,
+  "tags": [
+    "keepsake"
+  ],
+  "extra": {
+    "heldBy": "shelf_cutter_ovid"
+  }
+}

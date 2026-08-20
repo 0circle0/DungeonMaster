@@ -1,0 +1,32 @@
+{
+  "id": "the_water_wardens",
+  "name": "The Water Wardens of Vashta Qal",
+  "description": "One spring, four thousand people, and an office that decides how much of it you are, personally, allowed to drink.",
+  "initialStanding": 0,
+  "decayPerDay": 0.04,
+  "relations": {
+    "the_library": 0.2
+  },
+  "ranks": [
+    {
+      "id": "dry",
+      "name": "Dry",
+      "atLeast": -30
+    },
+    {
+      "id": "measured",
+      "name": "Measured",
+      "atLeast": 0
+    },
+    {
+      "id": "allotted",
+      "name": "Allotted",
+      "atLeast": 25
+    },
+    {
+      "id": "of_the_spring",
+      "name": "Of the Spring",
+      "atLeast": 55
+    }
+  ]
+}

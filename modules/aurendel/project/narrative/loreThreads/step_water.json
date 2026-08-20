@@ -1,0 +1,11 @@
+{
+  "id": "step_water",
+  "name": "The Last Water",
+  "description": "A spring that has never failed at the edge of a country where nothing runs, warm and tasting of iron, with a shored way down beside it.",
+  "entries": [
+    "step_water_never",
+    "step_water_warm",
+    "step_water_shored",
+    "step_water_wont"
+  ]
+}

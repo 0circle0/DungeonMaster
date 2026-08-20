@@ -1,0 +1,16 @@
+{
+  "id": "dungeon_sewer_shrine",
+  "name": "Undercity Shrine",
+  "descriptionKey": "dungeon_sewer_shrine_desc",
+  "weight": 1,
+  "minExits": 1,
+  "maxExits": 2,
+  "encounterChance": 0.4,
+  "trapChance": 0.14,
+  "lootChance": 0.35,
+  "tags": [
+    "dungeon_sewer",
+    "shrine"
+  ],
+  "role": "shrine"
+}

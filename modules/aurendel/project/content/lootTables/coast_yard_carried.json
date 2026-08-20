@@ -1,0 +1,26 @@
+{
+  "id": "coast_yard_carried",
+  "name": "What Hask Kept",
+  "rolls": "1",
+  "emptyChance": 0,
+  "entries": [
+    {
+      "weight": 1,
+      "value": {
+        "item": "yard_book",
+        "quantity": "1",
+        "unique": true,
+        "requirementScope": "party",
+        "requires": {
+          "without": {
+            "flags": [
+              {
+                "flag": "given:yard_book"
+              }
+            ]
+          }
+        }
+      }
+    }
+  ]
+}

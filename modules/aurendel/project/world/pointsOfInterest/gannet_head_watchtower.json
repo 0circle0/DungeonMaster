@@ -1,0 +1,36 @@
+{
+  "id": "gannet_head_watchtower",
+  "name": "The Gannet Watchtower",
+  "description": "Built to see the fleet coming. It saw it, once, and has had nothing to do since.",
+  "area": "coast_gannet_head",
+  "kind": "ruin",
+  "descriptionKey": "generic_ruin",
+  "travelMinutes": 10,
+  "tags": [
+    "ruin"
+  ],
+  "map": {
+    "width": "11",
+    "height": "9",
+    "palette": "int_stone"
+  },
+  "position": {
+    "x": 25,
+    "y": 3
+  },
+  "triggers": [
+    {
+      "id": "coast_found_tower",
+      "mode": "once",
+      "on": "enter",
+      "description": "The circle of bare rock at the foot of it, and how sharp its edge is.",
+      "effects": [
+        {
+          "learnLore": {
+            "entry": "coast_watch_ring"
+          }
+        }
+      ]
+    }
+  ]
+}

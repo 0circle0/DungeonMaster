@@ -1,0 +1,48 @@
+{
+  "id": "ferryman_gost",
+  "name": "Gost of the Channels",
+  "description": "Knows which channels are where this week, which is the whole profession. Has lost two poles and a cousin to the black water since Harvest and mentions the poles.",
+  "disposition": 8,
+  "gullibility": 0.35,
+  "memorySpan": 250,
+  "offersQuests": [
+    "bell_the_new_tower"
+  ],
+  "caresAbout": [
+    "channel_kept",
+    "bell_rung"
+  ],
+  "reactions": [],
+  "faction": "the_ferrymen",
+  "dialogue": "bell_gost_talk",
+  "home": "stiltmarket_the_pole",
+  "shop": {
+    "lootTable": "salvors_stock",
+    "buysTags": [
+      "treasure",
+      "material"
+    ],
+    "priceMultiplier": 1.25,
+    "requires": {
+      "factions": [
+        {
+          "faction": "the_ferrymen",
+          "minStanding": 10
+        }
+      ]
+    }
+  },
+  "temperament": {
+    "roamRadius": 0,
+    "wanderChance": 0,
+    "speeds": {
+      "wander": 0
+    },
+    "investigates": [],
+    "notices": [
+      "hostile",
+      "neutral",
+      "ally"
+    ]
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "id": "barrowgate_keep",
+  "name": "Barrowgate Keep",
+  "description": "Built on the barrow, out of the barrow, and by people who were explicitly told not to.",
+  "area": "moor_barrowgate",
+  "kind": "landmark",
+  "descriptionKey": "generic_landmark",
+  "travelMinutes": 6,
+  "tags": [
+    "castle"
+  ],
+  "gate": "barrowgate_keep_door",
+  "map": {
+    "width": "19",
+    "height": "13",
+    "palette": "int_stone"
+  },
+  "position": {
+    "x": 3,
+    "y": 3
+  }
+}

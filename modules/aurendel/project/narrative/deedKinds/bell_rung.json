@@ -1,0 +1,8 @@
+{
+  "id": "bell_rung",
+  "name": "Rang the Drowned Bell",
+  "faction": "the_ferrymen",
+  "severity": -16,
+  "memorability": 3,
+  "distortion": 0.1
+}

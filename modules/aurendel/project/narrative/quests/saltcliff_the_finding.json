@@ -1,0 +1,146 @@
+{
+  "id": "saltcliff_the_finding",
+  "name": "The Finding",
+  "description": "There is a finding to be written, and what it says decides whether the Strand has been paying for ninety years of something it did not do.",
+  "autoStart": false,
+  "ordered": false,
+  "tags": [
+    "side",
+    "act1",
+    "saltcliff",
+    "silver_coast"
+  ],
+  "objectives": [
+    {
+      "id": "file_it",
+      "description": "File the finding as it stands.",
+      "kind": "custom",
+      "count": 1,
+      "hidden": false,
+      "optional": true,
+      "when": {
+        "test": {
+          "ref": "flags.saltcliff_filed"
+        }
+      }
+    },
+    {
+      "id": "bury_it",
+      "description": "Let the old findings stand.",
+      "kind": "custom",
+      "count": 1,
+      "hidden": false,
+      "optional": true,
+      "when": {
+        "test": {
+          "ref": "flags.saltcliff_buried"
+        }
+      }
+    },
+    {
+      "id": "written",
+      "description": "See the finding written.",
+      "kind": "custom",
+      "count": 1,
+      "hidden": false,
+      "optional": false,
+      "when": {
+        "any": [
+          {
+            "test": {
+              "ref": "flags.saltcliff_filed"
+            }
+          },
+          {
+            "test": {
+              "ref": "flags.saltcliff_buried"
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "stages": [],
+  "unlocks": [],
+  "rewards": {
+    "xp": 40,
+    "items": [
+      {
+        "item": "pilots_glass",
+        "quantity": 1
+      }
+    ],
+    "reputation": {}
+  },
+  "requires": {
+    "quests": [
+      {
+        "quest": "saltcliff_under_the_light",
+        "status": "complete"
+      }
+    ]
+  },
+  "onComplete": [
+    {
+      "if": {
+        "when": {
+          "test": {
+            "ref": "flags.saltcliff_buried"
+          }
+        },
+        "then": [
+          {
+            "adjustReputation": {
+              "faction": "the_countinghouse",
+              "amount": 15
+            }
+          },
+          {
+            "adjustReputation": {
+              "faction": "the_salvors",
+              "amount": -20
+            }
+          },
+          {
+            "adjustReputation": {
+              "faction": "the_crown",
+              "amount": -6
+            }
+          },
+          {
+            "setFlag": {
+              "flag": "saltcliff_stands",
+              "value": true
+            }
+          }
+        ],
+        "else": [
+          {
+            "adjustReputation": {
+              "faction": "the_countinghouse",
+              "amount": 10
+            }
+          },
+          {
+            "adjustReputation": {
+              "faction": "the_salvors",
+              "amount": 20
+            }
+          },
+          {
+            "adjustReputation": {
+              "faction": "the_crown",
+              "amount": 8
+            }
+          },
+          {
+            "setFlag": {
+              "flag": "saltcliff_corrected",
+              "value": true
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

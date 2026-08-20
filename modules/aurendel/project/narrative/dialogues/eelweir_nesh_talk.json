@@ -1,0 +1,373 @@
+{
+  "id": "eelweir_nesh_talk",
+  "start": "greet",
+  "nodes": [
+    {
+      "id": "greet",
+      "says": [
+        {
+          "text": "She is mending a trap that does not need mending. \"You'll be going over the bridge. Everyone's going over the bridge.\""
+        },
+        {
+          "text": "Six huts, and smoke from one of them. \"If you've come for eels you're two months late and so am I.\""
+        }
+      ],
+      "options": [
+        {
+          "id": "ask_why",
+          "text": "Why are you still here in Frostfall?",
+          "effects": [
+            {
+              "emit": {
+                "event": "startQuest",
+                "data": {
+                  "quest": "eelweir_out_of_season"
+                }
+              }
+            }
+          ],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "the_reach",
+          "requires": {
+            "quests": [
+              {
+                "quest": "eelweir_out_of_season",
+                "status": "unstarted"
+              },
+              {
+                "quest": "the_open_door",
+                "status": "complete"
+              }
+            ]
+          }
+        },
+        {
+          "id": "ask_eels",
+          "text": "Tell me about the eels.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "the_eels"
+        },
+        {
+          "id": "leave",
+          "text": "Nothing.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": [
+        {
+          "requires": {
+            "flags": [
+              {
+                "flag": "eelweir_chapel_cleared",
+                "equals": true
+              }
+            ]
+          },
+          "goto": "after_the_chapel"
+        },
+        {
+          "requires": {
+            "quests": [
+              {
+                "quest": "eelweir_the_barge",
+                "status": "active"
+              }
+            ],
+            "flags": [
+              {
+                "flag": "eelweir_barge_found",
+                "equals": true
+              }
+            ]
+          },
+          "goto": "about_the_barge"
+        }
+      ]
+    },
+    {
+      "id": "the_reach",
+      "says": [
+        {
+          "text": "\"Eels run this reach every Harvest and have done since there was a bridge to run under. This Harvest they came up to the chapel and turned round.\" She sets the trap down. \"Eels do not turn round.\""
+        }
+      ],
+      "options": [
+        {
+          "id": "what_is_there",
+          "text": "What's in the chapel?",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "what_is_there"
+        },
+        {
+          "id": "go",
+          "text": "We'll walk out and see.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "go_and_see"
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": []
+    },
+    {
+      "id": "what_is_there",
+      "says": [
+        {
+          "text": "\"Water to the sill and something in it that is not eels.\" She looks at the river rather than at you. \"I put a light in there in Lastmonth and it went out from underneath.\""
+        }
+      ],
+      "options": [
+        {
+          "id": "go",
+          "text": "We'll walk out and see.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "go_and_see"
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": []
+    },
+    {
+      "id": "go_and_see",
+      "says": [
+        {
+          "text": "\"Go at the low. It's a wade either way but at the high it's a swim, and I'd not swim it.\""
+        }
+      ],
+      "options": [
+        {
+          "id": "done",
+          "text": "We'll go at the low.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": []
+    },
+    {
+      "id": "the_eels",
+      "says": [
+        {
+          "text": "\"Silver in Harvest, and worth a mark the pound in Aurenhal because the Kingshold will not eat river fish that hasn't come up past a chapel.\" A dry look. \"Do not ask me why. I take the mark.\""
+        }
+      ],
+      "options": [
+        {
+          "id": "back",
+          "text": "Hm.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "greet"
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": []
+    },
+    {
+      "id": "after_the_chapel",
+      "says": [
+        {
+          "text": "\"You've been out.\" She reads your boots. \"And you came back, which is more than the light did.\""
+        }
+      ],
+      "options": [
+        {
+          "id": "what_they_were",
+          "text": "There were three of them.",
+          "effects": [],
+          "onceOnly": true,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "up_the_reach"
+        },
+        {
+          "id": "leave",
+          "text": "It's dealt with.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": [],
+      "remembers": "ward_restored"
+    },
+    {
+      "id": "up_the_reach",
+      "says": [
+        {
+          "text": "\"Three,\" she says. \"And they came up the reach, and a thing that comes up a reach came from somewhere further down it.\" She wipes her hands. \"There's a barge on its side in the Oxbow. Went down loaded in my grandfather's time and nobody ever got the cargo out. I have wondered about that barge for thirty years.\""
+        }
+      ],
+      "options": [
+        {
+          "id": "take_it",
+          "text": "We'll go and look at your barge.",
+          "effects": [
+            {
+              "emit": {
+                "event": "startQuest",
+                "data": {
+                  "quest": "eelweir_the_barge"
+                }
+              }
+            }
+          ],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "the_oxbow",
+          "requires": {
+            "quests": [
+              {
+                "quest": "eelweir_the_barge",
+                "status": "unstarted"
+              }
+            ]
+          }
+        },
+        {
+          "id": "later",
+          "text": "Later, maybe.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "greet"
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": []
+    },
+    {
+      "id": "the_oxbow",
+      "says": [
+        {
+          "text": "\"Low water, west bank, under the willow that went through the deck.\" She almost smiles. \"You will not find it from the path. Nobody ever does.\""
+        }
+      ],
+      "options": [
+        {
+          "id": "done",
+          "text": "We'll find it.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": []
+    },
+    {
+      "id": "about_the_barge",
+      "says": [
+        {
+          "text": "\"You found her, then.\" Nesh does not sound pleased about it. \"And?\""
+        }
+      ],
+      "options": [
+        {
+          "id": "the_stone",
+          "text": "It was carrying cut stone. Away from the hedge country.",
+          "effects": [],
+          "onceOnly": true,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "the_stone"
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": []
+    },
+    {
+      "id": "the_stone",
+      "says": [
+        {
+          "text": "\"Cut stone,\" she repeats. \"Out of the hedges. Nobody quarries the hedges, there's nothing there but clay and badgers.\" She is quiet for a moment. \"Somebody was taking something *out*. And they sank rather than land it.\""
+        }
+      ],
+      "options": [
+        {
+          "id": "the_hole",
+          "text": "Where would it have come from?",
+          "effects": [
+            {
+              "emit": {
+                "event": "startQuest",
+                "data": {
+                  "quest": "eelweir_the_badger_hole"
+                }
+              }
+            }
+          ],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "the_hedge_bank",
+          "requires": {
+            "quests": [
+              {
+                "quest": "eelweir_the_badger_hole",
+                "status": "unstarted"
+              }
+            ]
+          }
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": []
+    },
+    {
+      "id": "the_hedge_bank",
+      "says": [
+        {
+          "text": "\"There's a hole under a hedge bank in the four-lane country. Tam's terrier went in after a badger last spring and came out the far side of the field.\" She looks up. \"That is a very long way for a badger to have dug.\""
+        }
+      ],
+      "options": [
+        {
+          "id": "done",
+          "text": "We'll follow it in.",
+          "effects": [
+            {
+              "adjustReputation": {
+                "faction": "the_keepers",
+                "amount": 4
+              }
+            }
+          ],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": [],
+      "remembers": "ward_restored"
+    }
+  ]
+}

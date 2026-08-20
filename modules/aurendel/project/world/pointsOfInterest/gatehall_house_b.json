@@ -1,0 +1,21 @@
+{
+  "id": "gatehall_house_b",
+  "name": "The Visitors' Cells",
+  "description": "Where the hold puts people it has not decided about yet.",
+  "area": "karn_dolur_gatehall",
+  "kind": "settlement",
+  "descriptionKey": "int_house",
+  "travelMinutes": 2,
+  "tags": [
+    "house"
+  ],
+  "map": {
+    "width": "9",
+    "height": "7",
+    "palette": "int_timber"
+  },
+  "position": {
+    "x": 22,
+    "y": 27
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "id": "warrens_cellar_stair",
+  "name": "The Cellar Stair",
+  "description": "Behind a wine-shop that is not a wine-shop, a stair down into what the Warrens were built on top of.",
+  "area": "aurenhal_warrens",
+  "kind": "dungeonEntrance",
+  "descriptionKey": "warrens_cellar_stair_desc",
+  "travelMinutes": 6,
+  "tags": [
+    "dungeon",
+    "secret"
+  ],
+  "position": {
+    "x": 18,
+    "y": 26
+  },
+  "hidden": true,
+  "discover": {
+    "skill": "perception",
+    "difficulty": 13
+  },
+  "dungeon": "warren_cellars"
+}

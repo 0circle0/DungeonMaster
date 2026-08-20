@@ -1,0 +1,14 @@
+{
+  "id": "drowned_bell_belfry_blocked",
+  "variants": [
+    {
+      "text": "The hatch is padlocked and the sexton has the key and the sexton is not persuaded."
+    },
+    {
+      "text": "\"Nobody goes down,\" says the head ringer. \"That was decided.\""
+    },
+    {
+      "text": "Oak, banded, and a padlock that is newer than everything around it."
+    }
+  ]
+}

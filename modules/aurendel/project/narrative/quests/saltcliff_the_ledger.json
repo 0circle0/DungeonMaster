@@ -1,0 +1,73 @@
+{
+  "id": "saltcliff_the_ledger",
+  "name": "The Ledger",
+  "description": "Bry's logbook says the light was out on two of the four nights, which is worse than saying it was lit. The findings of the Harbour Court will say what the Hall paid and to whom.",
+  "autoStart": false,
+  "ordered": true,
+  "tags": [
+    "side",
+    "act1",
+    "saltcliff",
+    "silver_coast"
+  ],
+  "objectives": [
+    {
+      "id": "in_the_court",
+      "description": "Get into the Harbour Court.",
+      "kind": "reach",
+      "count": 1,
+      "hidden": false,
+      "optional": false,
+      "target": "counting_harbour_court"
+    },
+    {
+      "id": "the_pattern",
+      "description": "Find what the four findings have in common.",
+      "kind": "custom",
+      "count": 1,
+      "hidden": false,
+      "optional": false,
+      "when": {
+        "test": {
+          "ref": "flags.saltcliff_pattern_seen"
+        }
+      }
+    },
+    {
+      "id": "tell_maun",
+      "description": "Take the pattern back to Maun.",
+      "kind": "talk",
+      "count": 1,
+      "hidden": false,
+      "optional": false,
+      "target": "underwriter_maun"
+    }
+  ],
+  "stages": [],
+  "unlocks": [
+    "saltcliff_under_the_light"
+  ],
+  "rewards": {
+    "xp": 35,
+    "items": [],
+    "reputation": {
+      "the_countinghouse": 6
+    }
+  },
+  "requires": {
+    "quests": [
+      {
+        "quest": "saltcliff_the_wrong_light",
+        "status": "complete"
+      }
+    ]
+  },
+  "onComplete": [
+    {
+      "setFlag": {
+        "flag": "saltcliff_pattern_known",
+        "value": true
+      }
+    }
+  ]
+}

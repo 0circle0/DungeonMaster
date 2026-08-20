@@ -1,0 +1,29 @@
+{
+  "id": "dry_river_the_bed",
+  "name": "The Dry Bed",
+  "description": "A quarter of a mile wide, with nothing in it for eleven months and a great deal in it for the twelfth.",
+  "area": "steppe_dry_river",
+  "kind": "landmark",
+  "descriptionKey": "dry_river_the_bed_desc",
+  "travelMinutes": 6,
+  "tags": [],
+  "position": {
+    "x": 3,
+    "y": 3
+  },
+  "triggers": [
+    {
+      "id": "step_found_bed",
+      "mode": "once",
+      "on": "enter",
+      "description": "What is showing forty feet down in the open face.",
+      "effects": [
+        {
+          "learnLore": {
+            "entry": "step_bank_courses"
+          }
+        }
+      ]
+    }
+  ]
+}

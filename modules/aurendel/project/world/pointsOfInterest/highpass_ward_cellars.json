@@ -1,0 +1,18 @@
+{
+  "id": "highpass_ward_cellars",
+  "name": "The Ward Cellars",
+  "description": "The wall has more below it than above, and some of the below is older than the wall.",
+  "area": "skarnspine_highpass",
+  "kind": "dungeonEntrance",
+  "descriptionKey": "generic_dungeon_mouth",
+  "travelMinutes": 10,
+  "tags": [
+    "dungeon"
+  ],
+  "dungeon": "highpass_cellars",
+  "position": {
+    "x": 3,
+    "y": 23
+  },
+  "gate": "trial_one_door"
+}

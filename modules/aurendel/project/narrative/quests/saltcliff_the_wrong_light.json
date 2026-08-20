@@ -1,0 +1,74 @@
+{
+  "id": "saltcliff_the_wrong_light",
+  "name": "The Wrong Light",
+  "description": "Four hulls in nine years, all of them insured at the Hall, all of them certain they had the Saltcliff Light fine on the bow when they struck. Maun would like somebody to go and ask the keeper.",
+  "autoStart": false,
+  "ordered": true,
+  "tags": [
+    "side",
+    "act1",
+    "saltcliff",
+    "silver_coast"
+  ],
+  "objectives": [
+    {
+      "id": "up_the_rise",
+      "description": "Climb to the Saltcliff Light.",
+      "kind": "reach",
+      "count": 1,
+      "hidden": false,
+      "optional": false,
+      "target": "saltcliff_lighthouse"
+    },
+    {
+      "id": "ask_bry",
+      "description": "Ask Bry what his logbook says.",
+      "kind": "talk",
+      "count": 1,
+      "hidden": false,
+      "optional": false,
+      "target": "light_keeper_bry"
+    },
+    {
+      "id": "the_logbook",
+      "description": "Hear what he has stopped reporting.",
+      "kind": "custom",
+      "count": 1,
+      "hidden": false,
+      "optional": false,
+      "when": {
+        "test": {
+          "ref": "flags.saltcliff_log_read"
+        }
+      }
+    }
+  ],
+  "stages": [],
+  "unlocks": [
+    "saltcliff_the_ledger"
+  ],
+  "rewards": {
+    "xp": 30,
+    "items": [],
+    "reputation": {
+      "the_countinghouse": 8
+    }
+  },
+  "giver": "underwriter_maun",
+  "requires": {
+    "quests": [
+      {
+        "quest": "the_open_door",
+        "status": "complete"
+      }
+    ]
+  },
+  "onComplete": [
+    {
+      "setFlag": {
+        "flag": "saltcliff_light_asked",
+        "value": true
+      }
+    }
+  ]
+}

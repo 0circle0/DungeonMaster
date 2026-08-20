@@ -1,0 +1,457 @@
+{
+  "id": "isle_bren_talk",
+  "start": "greet",
+  "nodes": [
+    {
+      "id": "greet",
+      "says": [
+        {
+          "text": "A salvors' camp on a shingle spit, gear drying on every line, and a big man sitting where he can see the reef."
+        },
+        {
+          "text": "“Camp's the Salvors'. If you are here to dive, you are not.”"
+        }
+      ],
+      "onEnter": [],
+      "options": [
+        {
+          "id": "isle_bren_nothing",
+          "text": "What was she fighting?",
+          "requires": {
+            "without": {
+              "lore": [
+                "isle_wreck_nothing"
+              ]
+            }
+          },
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "check": {
+            "skill": "persuasion",
+            "difficulty": {
+              "sub": [
+                13,
+                {
+                  "clamp": [
+                    {
+                      "div": [
+                        {
+                          "ref": "reputation.the_salvors",
+                          "else": 0
+                        },
+                        5
+                      ]
+                    },
+                    -6,
+                    6
+                  ]
+                }
+              ]
+            },
+            "onSuccess": "isle_bren_nothing_told",
+            "onFailure": "isle_bren_nothing_wont"
+          }
+        },
+        {
+          "id": "isle_bren_shut",
+          "text": "Her hatches.",
+          "requires": {
+            "without": {
+              "lore": [
+                "isle_wreck_shut"
+              ]
+            }
+          },
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "check": {
+            "skill": "persuasion",
+            "difficulty": {
+              "sub": [
+                17,
+                {
+                  "clamp": [
+                    {
+                      "div": [
+                        {
+                          "ref": "reputation.the_salvors",
+                          "else": 0
+                        },
+                        5
+                      ]
+                    },
+                    -6,
+                    6
+                  ]
+                }
+              ]
+            },
+            "onSuccess": "isle_bren_shut_told",
+            "onFailure": "isle_bren_shut_wont"
+          }
+        },
+        {
+          "id": "isle_bren_held",
+          "text": "You went under the marker wreck.",
+          "requires": {
+            "without": {
+              "lore": [
+                "isle_marker_held"
+              ]
+            }
+          },
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "check": {
+            "skill": "persuasion",
+            "difficulty": {
+              "sub": [
+                18,
+                {
+                  "clamp": [
+                    {
+                      "div": [
+                        {
+                          "ref": "reputation.the_salvors",
+                          "else": 0
+                        },
+                        5
+                      ]
+                    },
+                    -6,
+                    6
+                  ]
+                }
+              ]
+            },
+            "onSuccess": "isle_bren_held_told",
+            "onFailure": "isle_bren_held_wont"
+          }
+        },
+        {
+          "id": "isle_bren_plate",
+          "text": "The plate off the capstan. The one with the line on it.",
+          "requires": {
+            "without": {
+              "items": [
+                "capstan_plate"
+              ],
+              "flags": [
+                {
+                  "flag": "given:capstan_plate"
+                }
+              ]
+            }
+          },
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "check": {
+            "skill": "persuasion",
+            "difficulty": {
+              "sub": [
+                16,
+                {
+                  "clamp": [
+                    {
+                      "div": [
+                        {
+                          "ref": "reputation.the_salvors",
+                          "else": 0
+                        },
+                        5
+                      ]
+                    },
+                    -6,
+                    6
+                  ]
+                }
+              ]
+            },
+            "onSuccess": "isle_bren_plate_gave",
+            "onFailure": "isle_bren_plate_kept"
+          }
+        },
+        {
+          "id": "greet_leave",
+          "text": "Nothing.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": [
+        {
+          "requires": {
+            "factions": [
+              {
+                "faction": "the_salvors",
+                "maxStanding": -25
+              }
+            ]
+          },
+          "goto": "isle_bren_cold"
+        }
+      ]
+    },
+    {
+      "id": "isle_bren_nothing_told",
+      "says": [
+        {
+          "text": "“Nothing.” He is very short about it. “I have been over that reef for eleven years. No second wreck. No shot in the rock. Nothing down there that anybody ever fired at.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "learnLore": {
+            "entry": "isle_wreck_nothing"
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "isle_bren_nothing_on",
+          "text": "Go on.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "isle_bren_nothing_wont",
+      "says": [
+        {
+          "text": "“I've said all I mean to,” they say, and go back to what they were doing."
+        }
+      ],
+      "onEnter": [
+        {
+          "adjustReputation": {
+            "faction": "the_salvors",
+            "amount": -1
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "isle_bren_nothing_drop",
+          "text": "Leave it.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "isle_bren_shut_told",
+      "says": [
+        {
+          "text": "It takes him a while. “Dogged. From the outside.” He puts his cup down. “The pins are bent from the *inside*. Somebody stood on that deck and hammered them home, and something under the deck did its best about it, and she went down with her guns out.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "learnLore": {
+            "entry": "isle_wreck_shut"
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "isle_bren_shut_on",
+          "text": "Go on.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "isle_bren_shut_wont",
+      "says": [
+        {
+          "text": "“I've said all I mean to,” they say, and go back to what they were doing."
+        }
+      ],
+      "onEnter": [
+        {
+          "adjustReputation": {
+            "faction": "the_salvors",
+            "amount": -1
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "isle_bren_shut_drop",
+          "text": "Leave it.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "isle_bren_held_told",
+      "says": [
+        {
+          "text": "“Once.” Nothing else comes for a moment. “She is not aground.” He looks at the fire. “I am not going to describe what she is on. Hesk has asked me for eleven years and I have not described it to him either.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "learnLore": {
+            "entry": "isle_marker_held"
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "isle_bren_held_on",
+          "text": "Go on.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "isle_bren_held_wont",
+      "says": [
+        {
+          "text": "“I've said all I mean to,” they say, and go back to what they were doing."
+        }
+      ],
+      "onEnter": [
+        {
+          "adjustReputation": {
+            "faction": "the_salvors",
+            "amount": -1
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "isle_bren_held_drop",
+          "text": "Leave it.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "isle_bren_plate_gave",
+      "says": [
+        {
+          "text": "He gets it out without a word and puts it down face up, which is the first time anybody has seen it face up in eleven years. “I cut that coming up,” he says. “I did not want to say it and I did not want to forget it.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "grantItem": {
+            "target": {
+              "ref": "actor.id"
+            },
+            "item": "capstan_plate",
+            "quantity": 1
+          }
+        },
+        {
+          "setFlag": {
+            "flag": "given:capstan_plate",
+            "value": true
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "isle_bren_plate_thanks",
+          "text": "Thank you.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "isle_bren_plate_kept",
+      "says": [
+        {
+          "text": "He turns it face down under his hand. “No.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "adjustReputation": {
+            "faction": "the_salvors",
+            "amount": -3
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "isle_bren_plate_leave",
+          "text": "Then no.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "isle_bren_cold",
+      "says": [
+        {
+          "text": "He stands up, which is a considerable amount of standing up, and looks past you at the reef until you go."
+        }
+      ],
+      "onEnter": [],
+      "options": [
+        {
+          "id": "isle_bren_go",
+          "text": "Leave it.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    }
+  ]
+}

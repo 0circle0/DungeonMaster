@@ -1,0 +1,11 @@
+{
+  "id": "moor_hidden",
+  "name": "The Weeping Moor, Returned",
+  "description": "Three counts this moor has been keeping, and all three of them balance, which is the trouble.",
+  "quests": [
+    "moor_colders_fire",
+    "moor_forty_one",
+    "moor_the_drive"
+  ],
+  "isEnding": false
+}

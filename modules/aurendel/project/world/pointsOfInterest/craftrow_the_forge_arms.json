@@ -1,0 +1,24 @@
+{
+  "id": "craftrow_the_forge_arms",
+  "name": "The Forge Arms",
+  "description": "Sooty, loud, and the best table in the city if you like being shouted at.",
+  "area": "aurenhal_craftrow",
+  "kind": "settlement",
+  "descriptionKey": "int_inn",
+  "travelMinutes": 3,
+  "tags": [
+    "inn"
+  ],
+  "position": {
+    "x": 24,
+    "y": 20
+  },
+  "services": [
+    "inn"
+  ],
+  "map": {
+    "width": "15",
+    "height": "11",
+    "palette": "int_timber"
+  }
+}

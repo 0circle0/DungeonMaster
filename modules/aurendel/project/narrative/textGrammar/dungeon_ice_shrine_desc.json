@@ -1,0 +1,14 @@
+{
+  "id": "dungeon_ice_shrine_desc",
+  "variants": [
+    {
+      "text": "Stones brought in from outside and stacked, which took somebody real effort."
+    },
+    {
+      "text": "A shape cut into the ice wall, and the ice has moved since, and the shape has moved with it."
+    },
+    {
+      "text": "Offerings, frozen in, at three different depths."
+    }
+  ]
+}

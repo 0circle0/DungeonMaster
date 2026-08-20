@@ -1,0 +1,68 @@
+{
+  "id": "rimewatch_blue_caves",
+  "name": "The Blue Caves",
+  "description": "Melt channels in the face, open at the bottom of the cliff, and they go somewhere different every year.",
+  "area": "frostmere_rimewatch_shore",
+  "kind": "dungeonEntrance",
+  "descriptionKey": "generic_dungeon_mouth",
+  "travelMinutes": 14,
+  "tags": [
+    "dungeon"
+  ],
+  "dungeon": "frostmere_blue_caves",
+  "position": {
+    "x": 25,
+    "y": 3
+  },
+  "triggers": [
+    {
+      "id": "frost_blue_committed",
+      "mode": "once",
+      "on": "enter",
+      "description": "Standing at the mouth of it, knowing what it is.",
+      "requires": {
+        "custom": {
+          "gte": [
+            {
+              "ref": "threads.frost_blue.known"
+            },
+            2
+          ]
+        }
+      },
+      "effects": [
+        {
+          "emit": {
+            "event": "startQuest",
+            "data": {
+              "quest": "frost_the_blue_voice"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "hidden": true,
+  "discover": {
+    "skill": "perception",
+    "difficulty": {
+      "max": [
+        10,
+        {
+          "sub": [
+            22,
+            {
+              "mul": [
+                3,
+                {
+                  "ref": "threads.frost_blue.known"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "gate": "frost_blue_inner"
+}

@@ -1,0 +1,69 @@
+{
+  "id": "the_set_thing",
+  "name": "What the Line Was Set Around",
+  "description": "Eleven miles of one species in one season, running the wrong way for the wind, and a count that comes out different depending which end you start from.",
+  "level": 6,
+  "xp": 440,
+  "attributes": {
+    "might": 16,
+    "agility": 13,
+    "endurance": 17,
+    "intellect": 11,
+    "instinct": 14,
+    "presence": 10
+  },
+  "abilities": [
+    "root_and_branch",
+    "stone_fist",
+    "rend"
+  ],
+  "behaviour": [
+    {
+      "priority": 20,
+      "use": "root_and_branch",
+      "when": {
+        "chance": 0.35
+      }
+    },
+    {
+      "priority": 10,
+      "use": "stone_fist"
+    },
+    {
+      "priority": 0,
+      "use": "rend"
+    }
+  ],
+  "faction": "the_unsealed",
+  "creatureType": "undead",
+  "size": "medium",
+  "descriptors": [
+    "a root-bound",
+    "an unmoving"
+  ],
+  "conditionalLoot": [],
+  "loot": "step_line_hoard",
+  "conditionImmunities": [
+    "frightened",
+    "prone"
+  ],
+  "resourceOverrides": {
+    "hp": 62
+  },
+  "temperament": {
+    "roamRadius": 12,
+    "investigateRadius": 40,
+    "leashRadius": 60,
+    "wanderChance": 0.1,
+    "disengageTurns": 1,
+    "speeds": {
+      "wander": 0.5,
+      "investigate": 0.5
+    },
+    "investigates": [
+      "sight",
+      "hearing",
+      "smell"
+    ]
+  }
+}

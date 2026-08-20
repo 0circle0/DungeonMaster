@@ -1,0 +1,231 @@
+{
+  "id": "maun_talk",
+  "start": "greet",
+  "nodes": [
+    {
+      "id": "greet",
+      "says": [
+        {
+          "text": "Maun has the rubbing out on the Moot Hall table, weighted at the corners, and does not roll it up. \"You'll have felt it.\""
+        }
+      ],
+      "options": [
+        {
+          "id": "brief",
+          "text": "Tell me about the ward.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "brief"
+        },
+        {
+          "id": "leave",
+          "text": "Nothing.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": [
+        {
+          "requires": {
+            "flags": [
+              {
+                "flag": "sisters_cleared",
+                "equals": true
+              }
+            ],
+            "without": {
+              "flags": [
+                {
+                  "flag": "sisters_restored"
+                },
+                {
+                  "flag": "sisters_broken"
+                }
+              ]
+            }
+          },
+          "goto": "decide"
+        },
+        {
+          "requires": {
+            "memories": [
+              {
+                "deedKind": "ward_broken",
+                "who": "speaker"
+              }
+            ]
+          },
+          "goto": "cold"
+        }
+      ]
+    },
+    {
+      "id": "brief",
+      "says": [
+        {
+          "text": "\"Nine stones and a gap you can walk and won't.\" She flattens a curl out of the paper. \"The tenth is lying up there with writing on the underside, and the writing is the ward. Somebody put her down on her face on purpose.\""
+        }
+      ],
+      "options": [
+        {
+          "id": "back",
+          "text": "Right.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "greet"
+        }
+      ],
+      "onEnter": [
+        {
+          "setFlag": {
+            "flag": "sisters_briefed",
+            "value": true
+          }
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "decide",
+      "says": [
+        {
+          "text": "\"It's cleared, then.\" A long pause. \"So you've a choice, and I'll not pretend I don't mind which.\""
+        }
+      ],
+      "options": [
+        {
+          "id": "restore",
+          "text": "Set the tenth back up.",
+          "effects": [
+            {
+              "setFlag": {
+                "flag": "sisters_restored",
+                "value": true
+              }
+            },
+            {
+              "adjustReputation": {
+                "faction": "the_keepers",
+                "amount": 6
+              }
+            }
+          ],
+          "onceOnly": true,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "restored"
+        },
+        {
+          "id": "break",
+          "text": "Turn her over. We need to read it.",
+          "effects": [
+            {
+              "setFlag": {
+                "flag": "sisters_broken",
+                "value": true
+              }
+            }
+          ],
+          "onceOnly": true,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "broken"
+        },
+        {
+          "id": "wait",
+          "text": "We'll think about it.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "greet"
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": []
+    },
+    {
+      "id": "restored",
+      "says": [
+        {
+          "text": "It takes the rest of the day and most of the next, and at the end of it the ward is what it was."
+        }
+      ],
+      "options": [
+        {
+          "id": "done",
+          "text": "Done.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "onEnter": [
+        {
+          "setFlag": {
+            "flag": "sisters_taken",
+            "value": true
+          }
+        }
+      ],
+      "redirectWhen": [],
+      "remembers": "ward_restored"
+    },
+    {
+      "id": "broken",
+      "says": [
+        {
+          "text": "It comes down faster than you expect, and something on the far side of it stops making the noise it had been making."
+        }
+      ],
+      "options": [
+        {
+          "id": "done",
+          "text": "Done.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "onEnter": [
+        {
+          "setFlag": {
+            "flag": "sisters_taken",
+            "value": true
+          }
+        }
+      ],
+      "redirectWhen": [],
+      "remembers": "ward_broken"
+    },
+    {
+      "id": "cold",
+      "says": [
+        {
+          "text": "\"I heard,\" says Maun, and goes back to her paper."
+        }
+      ],
+      "options": [
+        {
+          "id": "leave",
+          "text": "Nothing.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": []
+    }
+  ]
+}

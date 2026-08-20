@@ -1,0 +1,136 @@
+{
+  "id": "thecut_seal_or_road",
+  "name": "Seal It or Open It",
+  "description": "The galleries come out on the far side of the pass, which the muleteers have wanted for two hundred years and the Hold has refused for the same two hundred.",
+  "autoStart": false,
+  "ordered": false,
+  "tags": [
+    "side",
+    "act2",
+    "thecut",
+    "skarnspine"
+  ],
+  "objectives": [
+    {
+      "id": "seal_it",
+      "description": "Seal the galleries behind you.",
+      "kind": "custom",
+      "count": 1,
+      "hidden": false,
+      "optional": true,
+      "when": {
+        "test": {
+          "ref": "flags.thecut_sealed"
+        }
+      }
+    },
+    {
+      "id": "open_the_road",
+      "description": "Leave the under-road open.",
+      "kind": "custom",
+      "count": 1,
+      "hidden": false,
+      "optional": true,
+      "when": {
+        "test": {
+          "ref": "flags.thecut_opened"
+        }
+      }
+    },
+    {
+      "id": "settled",
+      "description": "Settle what happens to the Cut.",
+      "kind": "custom",
+      "count": 1,
+      "hidden": false,
+      "optional": false,
+      "when": {
+        "any": [
+          {
+            "test": {
+              "ref": "flags.thecut_sealed"
+            }
+          },
+          {
+            "test": {
+              "ref": "flags.thecut_opened"
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "stages": [],
+  "unlocks": [],
+  "rewards": {
+    "xp": 80,
+    "items": [
+      {
+        "item": "hold_hammer",
+        "quantity": 1
+      }
+    ],
+    "reputation": {}
+  },
+  "requires": {
+    "quests": [
+      {
+        "quest": "thecut_the_sink",
+        "status": "complete"
+      }
+    ]
+  },
+  "onComplete": [
+    {
+      "if": {
+        "when": {
+          "test": {
+            "ref": "flags.thecut_opened"
+          }
+        },
+        "then": [
+          {
+            "adjustReputation": {
+              "faction": "the_crown",
+              "amount": 18
+            }
+          },
+          {
+            "adjustReputation": {
+              "faction": "karn_dolur",
+              "amount": -25
+            }
+          },
+          {
+            "setFlag": {
+              "flag": "thecut_under_road",
+              "value": true
+            }
+          }
+        ],
+        "else": [
+          {
+            "emit": {
+              "event": "deed",
+              "data": {
+                "kind": "hold_honoured"
+              }
+            }
+          },
+          {
+            "adjustReputation": {
+              "faction": "karn_dolur",
+              "amount": 28
+            }
+          },
+          {
+            "setFlag": {
+              "flag": "thecut_shut",
+              "value": true
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

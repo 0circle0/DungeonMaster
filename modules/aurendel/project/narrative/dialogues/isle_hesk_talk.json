@@ -1,0 +1,457 @@
+{
+  "id": "isle_hesk_talk",
+  "start": "greet",
+  "nodes": [
+    {
+      "id": "greet",
+      "says": [
+        {
+          "text": "A station on a rock with a chart table bolted to the floor and a chart on it that has been redrawn so often it is furry."
+        },
+        {
+          "text": "“Pilotage is by the hull and I do not take passengers.”"
+        }
+      ],
+      "onEnter": [],
+      "options": [
+        {
+          "id": "isle_hesk_still",
+          "text": "How much does the Narrows move in a year?",
+          "requires": {
+            "without": {
+              "lore": [
+                "isle_marker_still"
+              ]
+            }
+          },
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "check": {
+            "skill": "persuasion",
+            "difficulty": {
+              "sub": [
+                12,
+                {
+                  "clamp": [
+                    {
+                      "div": [
+                        {
+                          "ref": "reputation.the_salvors",
+                          "else": 0
+                        },
+                        5
+                      ]
+                    },
+                    -6,
+                    6
+                  ]
+                }
+              ]
+            },
+            "onSuccess": "isle_hesk_still_told",
+            "onFailure": "isle_hesk_still_wont"
+          }
+        },
+        {
+          "id": "isle_hesk_held",
+          "text": "Has anybody been under her?",
+          "requires": {
+            "without": {
+              "lore": [
+                "isle_marker_held"
+              ]
+            }
+          },
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "check": {
+            "skill": "persuasion",
+            "difficulty": {
+              "sub": [
+                15,
+                {
+                  "clamp": [
+                    {
+                      "div": [
+                        {
+                          "ref": "reputation.the_salvors",
+                          "else": 0
+                        },
+                        5
+                      ]
+                    },
+                    -6,
+                    6
+                  ]
+                }
+              ]
+            },
+            "onSuccess": "isle_hesk_held_told",
+            "onFailure": "isle_hesk_held_wont"
+          }
+        },
+        {
+          "id": "isle_hesk_bearing",
+          "text": "Lay her bearing off properly. Where does it go?",
+          "requires": {
+            "without": {
+              "lore": [
+                "isle_marker_bearing"
+              ]
+            }
+          },
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "check": {
+            "skill": "insight",
+            "difficulty": {
+              "sub": [
+                16,
+                {
+                  "clamp": [
+                    {
+                      "div": [
+                        {
+                          "ref": "reputation.the_salvors",
+                          "else": 0
+                        },
+                        5
+                      ]
+                    },
+                    -6,
+                    6
+                  ]
+                }
+              ]
+            },
+            "onSuccess": "isle_hesk_bearing_told",
+            "onFailure": "isle_hesk_bearing_wont"
+          }
+        },
+        {
+          "id": "isle_hesk_book",
+          "text": "The book. Two hundred springs of it.",
+          "requires": {
+            "without": {
+              "items": [
+                "pilots_book"
+              ],
+              "flags": [
+                {
+                  "flag": "given:pilots_book"
+                }
+              ]
+            }
+          },
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "check": {
+            "skill": "persuasion",
+            "difficulty": {
+              "sub": [
+                17,
+                {
+                  "clamp": [
+                    {
+                      "div": [
+                        {
+                          "ref": "reputation.the_salvors",
+                          "else": 0
+                        },
+                        5
+                      ]
+                    },
+                    -6,
+                    6
+                  ]
+                }
+              ]
+            },
+            "onSuccess": "isle_hesk_book_gave",
+            "onFailure": "isle_hesk_book_kept"
+          }
+        },
+        {
+          "id": "greet_leave",
+          "text": "Nothing.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": [
+        {
+          "requires": {
+            "factions": [
+              {
+                "faction": "the_salvors",
+                "maxStanding": -30
+              }
+            ]
+          },
+          "goto": "isle_hesk_cold"
+        }
+      ]
+    },
+    {
+      "id": "isle_hesk_still_told",
+      "says": [
+        {
+          "text": "“A cable, sometimes two.” He taps the chart, which has been rubbed out and redrawn until it is furry. “Everything on here has been moved in my lifetime except one bearing, and that bearing is a wreck, and a wreck is the last thing that ought to stay put.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "learnLore": {
+            "entry": "isle_marker_still"
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "isle_hesk_still_on",
+          "text": "Go on.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "isle_hesk_still_wont",
+      "says": [
+        {
+          "text": "“I've said all I mean to,” they say, and go back to what they were doing."
+        }
+      ],
+      "onEnter": [
+        {
+          "adjustReputation": {
+            "faction": "the_salvors",
+            "amount": -1
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "isle_hesk_still_drop",
+          "text": "Leave it.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "isle_hesk_held_told",
+      "says": [
+        {
+          "text": "“Twice.” He does not enjoy saying it. “Bren went the second time. She is not aground — she is *held*, and what she is held by is not rock, and Bren came up and would not put it in words.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "learnLore": {
+            "entry": "isle_marker_held"
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "isle_hesk_held_on",
+          "text": "Go on.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "isle_hesk_held_wont",
+      "says": [
+        {
+          "text": "“I've said all I mean to,” they say, and go back to what they were doing."
+        }
+      ],
+      "onEnter": [
+        {
+          "adjustReputation": {
+            "faction": "the_salvors",
+            "amount": -1
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "isle_hesk_held_drop",
+          "text": "Leave it.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "isle_hesk_bearing_told",
+      "says": [
+        {
+          "text": "He does it, because a pilot cannot resist a chart. The rule stops. “Through the Bank,” he says, “and out the far side. Which is not the channel, and never has been, and I have taken hulls through here for forty years on a mark that points at nothing.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "learnLore": {
+            "entry": "isle_marker_bearing"
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "isle_hesk_bearing_on",
+          "text": "Go on.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "isle_hesk_bearing_wont",
+      "says": [
+        {
+          "text": "“I've said all I mean to,” they say, and go back to what they were doing."
+        }
+      ],
+      "onEnter": [
+        {
+          "adjustReputation": {
+            "faction": "the_salvors",
+            "amount": -1
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "isle_hesk_bearing_drop",
+          "text": "Leave it.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "isle_hesk_book_gave",
+      "says": [
+        {
+          "text": "He gets it out of the oilskin and does not hand it over so much as surrender it. “Slack is in there. Twice a year, an hour of it.” A hard look. “If you are going under her, go at the slack, and do not be the third person who will not put it in words.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "grantItem": {
+            "target": {
+              "ref": "actor.id"
+            },
+            "item": "pilots_book",
+            "quantity": 1
+          }
+        },
+        {
+          "setFlag": {
+            "flag": "given:pilots_book",
+            "value": true
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "isle_hesk_book_thanks",
+          "text": "Thank you.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "isle_hesk_book_kept",
+      "says": [
+        {
+          "text": "“It is the station's,” he says, “and there is one of it.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "adjustReputation": {
+            "faction": "the_salvors",
+            "amount": -3
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "isle_hesk_book_leave",
+          "text": "Then no.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "isle_hesk_cold",
+      "says": [
+        {
+          "text": "He rolls the chart up, which on a bolted table takes some doing and makes the point."
+        }
+      ],
+      "onEnter": [],
+      "options": [
+        {
+          "id": "isle_hesk_go",
+          "text": "Leave it.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    }
+  ]
+}

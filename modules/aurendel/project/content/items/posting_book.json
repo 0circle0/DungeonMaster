@@ -1,0 +1,14 @@
+{
+  "id": "posting_book",
+  "name": "The Posting House Book",
+  "description": "Eleven years of southbound carts at night, none of them licensed, all of them written down by somebody who was paid not to notice and noticed anyway.",
+  "kind": "key",
+  "value": 0,
+  "weight": 0,
+  "tags": [
+    "keepsake"
+  ],
+  "extra": {
+    "heldBy": "post_master_wend"
+  }
+}

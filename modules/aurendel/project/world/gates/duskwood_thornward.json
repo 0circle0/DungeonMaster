@@ -1,0 +1,17 @@
+{
+  "id": "duskwood_thornward",
+  "name": "The Thornward",
+  "kind": "ward",
+  "description": "A line of thorn laid across the ride, and it was laid across the ride, which thorn does not do by itself.",
+  "staysOpen": true,
+  "requires": {
+    "description": "the Elderhollow moot's leave",
+    "minLevel": 4
+  },
+  "bypass": {
+    "skill": "nature",
+    "difficulty": 14,
+    "retryable": true
+  },
+  "blockedTextKey": "duskwood_thornward_blocked"
+}

@@ -1,0 +1,73 @@
+{
+  "id": "strand_the_lime_kiln",
+  "name": "The Lime Kiln",
+  "description": "Cass keeps the burner's hut and the kiln has been cold for sixty years, and on the night of the blow it was not.",
+  "autoStart": false,
+  "ordered": true,
+  "tags": [
+    "side",
+    "act1",
+    "strand",
+    "silver_coast"
+  ],
+  "objectives": [
+    {
+      "id": "at_the_kiln",
+      "description": "Get up to the lime kiln.",
+      "kind": "reach",
+      "count": 1,
+      "hidden": false,
+      "optional": false,
+      "target": "wreckers_strand_lime_kiln"
+    },
+    {
+      "id": "the_draw_hole",
+      "description": "See what the draw-hole was used for.",
+      "kind": "custom",
+      "count": 1,
+      "hidden": false,
+      "optional": false,
+      "when": {
+        "test": {
+          "ref": "flags.strand_kiln_seen"
+        }
+      }
+    },
+    {
+      "id": "ask_cass",
+      "description": "Ask Cass who lit her kiln.",
+      "kind": "talk",
+      "count": 1,
+      "hidden": false,
+      "optional": false,
+      "target": "lime_burner_cass"
+    }
+  ],
+  "stages": [],
+  "unlocks": [
+    "strand_the_run"
+  ],
+  "rewards": {
+    "xp": 35,
+    "items": [],
+    "reputation": {
+      "the_salvors": 5
+    }
+  },
+  "requires": {
+    "quests": [
+      {
+        "quest": "strand_what_came_ashore",
+        "status": "complete"
+      }
+    ]
+  },
+  "onComplete": [
+    {
+      "setFlag": {
+        "flag": "strand_light_known",
+        "value": true
+      }
+    }
+  ]
+}

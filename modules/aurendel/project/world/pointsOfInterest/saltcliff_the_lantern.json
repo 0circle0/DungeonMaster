@@ -1,0 +1,24 @@
+{
+  "id": "saltcliff_the_lantern",
+  "name": "The Lantern",
+  "description": "Quiet, expensive, and with a window that looks straight down the harbour mouth.",
+  "area": "sarnport_saltcliff",
+  "kind": "settlement",
+  "descriptionKey": "int_inn",
+  "travelMinutes": 3,
+  "tags": [
+    "inn"
+  ],
+  "services": [
+    "inn"
+  ],
+  "map": {
+    "width": "11",
+    "height": "9",
+    "palette": "int_timber"
+  },
+  "position": {
+    "x": 41,
+    "y": 15
+  }
+}

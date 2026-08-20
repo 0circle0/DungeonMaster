@@ -1,0 +1,37 @@
+{
+  "id": "deeproads_fungus_gallery",
+  "name": "The Fungus Gallery",
+  "description": "A cavern a mile across with a canopy of fungus forty feet up, and it is bright enough down here to read by.",
+  "biome": "underdeep",
+  "layer": "underworld",
+  "descriptionKey": "deeproads_fungus_gallery_desc",
+  "dangerLevel": 6,
+  "recommendedLevel": 9,
+  "tags": [
+    "deeproads"
+  ],
+  "map": {
+    "width": "51",
+    "height": "35"
+  },
+  "entryPoint": {
+    "x": 25,
+    "y": 17
+  },
+  "extra": {
+    "role": "wild"
+  },
+  "connections": [
+    {
+      "to": "deeproads_lantern_deep",
+      "travelMinutes": 30
+    },
+    {
+      "to": "deeproads_mycelt",
+      "travelMinutes": 25
+    }
+  ],
+  "encounterTables": [
+    "deeproads_things"
+  ]
+}

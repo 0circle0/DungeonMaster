@@ -1,0 +1,57 @@
+{
+  "id": "dusk_the_road",
+  "name": "The Road Nobody Cut",
+  "description": "Forty yards wide and nine miles straight through a wood that closes any gap in four years, and nothing crosses it at night.",
+  "autoStart": false,
+  "ordered": true,
+  "tags": [
+    "hidden",
+    "duskwood",
+    "dusk_green"
+  ],
+  "objectives": [
+    {
+      "id": "onto_the_green",
+      "description": "Get to the only thing built on it.",
+      "kind": "reach",
+      "count": 1,
+      "hidden": true,
+      "optional": false,
+      "target": "greenway_barrow_of_the_ride"
+    },
+    {
+      "id": "under_the_span",
+      "description": "Open the dry arch under the bridge.",
+      "kind": "custom",
+      "count": 1,
+      "hidden": true,
+      "optional": false,
+      "when": {
+        "test": {
+          "ref": "flags.dusk_green_open"
+        }
+      }
+    },
+    {
+      "id": "what_uses_it",
+      "description": "Meet what uses it after dark.",
+      "kind": "kill",
+      "count": 1,
+      "hidden": true,
+      "optional": false,
+      "target": "the_ride"
+    }
+  ],
+  "stages": [],
+  "unlocks": [],
+  "rewards": {
+    "xp": 165,
+    "items": [
+      {
+        "item": "greenway_cloak",
+        "quantity": 1
+      }
+    ],
+    "reputation": {}
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "id": "hedge_country_dovecote",
+  "name": "The Old Dovecote",
+  "description": "Round, roofless, and full of nesting boxes going back to stone.",
+  "area": "kingsvale_hedge_country",
+  "kind": "ruin",
+  "descriptionKey": "generic_ruin",
+  "travelMinutes": 10,
+  "tags": [
+    "ruin"
+  ],
+  "position": {
+    "x": 36,
+    "y": 12
+  },
+  "map": {
+    "width": "9",
+    "height": "7",
+    "palette": "int_cave"
+  }
+}

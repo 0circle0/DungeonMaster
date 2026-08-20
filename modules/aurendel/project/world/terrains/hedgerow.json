@@ -1,0 +1,10 @@
+{
+  "id": "hedgerow",
+  "name": "Hedgerow",
+  "description": "Centuries of laid thorn. A wall that grew.",
+  "glyph": "Y",
+  "color": "green",
+  "passable": false,
+  "opaque": true,
+  "moveCost": 0
+}

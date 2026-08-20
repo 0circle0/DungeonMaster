@@ -1,0 +1,21 @@
+{
+  "id": "stiltmarket_house_b",
+  "name": "The Pilot's House",
+  "description": "Whoever takes boats out through the shoals lives here and is wealthy.",
+  "area": "thornmere_stiltmarket",
+  "kind": "settlement",
+  "descriptionKey": "int_house",
+  "travelMinutes": 2,
+  "tags": [
+    "house"
+  ],
+  "map": {
+    "width": "9",
+    "height": "7",
+    "palette": "int_timber"
+  },
+  "position": {
+    "x": 3,
+    "y": 13
+  }
+}

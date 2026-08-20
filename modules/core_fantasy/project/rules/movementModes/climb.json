@@ -1,0 +1,6 @@
+{
+  "id": "climb",
+  "name": "Climb",
+  "defaultSpeed": 15,
+  "terrainMultiplier": 1
+}

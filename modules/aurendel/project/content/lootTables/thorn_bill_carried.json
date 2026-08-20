@@ -1,0 +1,26 @@
+{
+  "id": "thorn_bill_carried",
+  "name": "What Maud Kept",
+  "rolls": "1",
+  "emptyChance": 0,
+  "entries": [
+    {
+      "weight": 1,
+      "value": {
+        "item": "cutters_bill",
+        "quantity": "1",
+        "unique": true,
+        "requirementScope": "party",
+        "requires": {
+          "without": {
+            "flags": [
+              {
+                "flag": "given:cutters_bill"
+              }
+            ]
+          }
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,20 @@
+{
+  "id": "focus",
+  "name": "Focus",
+  "description": "Concentration spent on the difficult thing rather than the ordinary one.",
+  "max": {
+    "max": [
+      0,
+      {
+        "add": [
+          2,
+          {
+            "ref": "actor.mod.intellect"
+          }
+        ]
+      }
+    ]
+  },
+  "restoreOnShortRest": 0.5,
+  "restoreOnLongRest": 1
+}

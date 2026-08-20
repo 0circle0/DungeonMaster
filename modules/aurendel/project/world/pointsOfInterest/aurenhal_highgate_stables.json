@@ -1,0 +1,24 @@
+{
+  "id": "aurenhal_highgate_stables",
+  "name": "The Highgate Stables",
+  "description": "Where anybody with business at the Kingshold leaves their horse.",
+  "area": "aurenhal_highgate",
+  "kind": "settlement",
+  "descriptionKey": "int_stable",
+  "travelMinutes": 3,
+  "tags": [
+    "aurenhal"
+  ],
+  "position": {
+    "x": 26,
+    "y": 24
+  },
+  "services": [
+    "stable"
+  ],
+  "map": {
+    "width": "11",
+    "height": "9",
+    "palette": "int_timber"
+  }
+}

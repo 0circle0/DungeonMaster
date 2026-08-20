@@ -1,0 +1,17 @@
+{
+  "id": "frostmere_cairnhold_desc",
+  "variants": [
+    {
+      "text": "Sixteen households under one long roof, and eleven hundred cairns on the hill behind."
+    },
+    {
+      "text": "Cairnhold. Everything here is about the cairns and nobody will start the conversation."
+    },
+    {
+      "text": "One doorway, one chimney line, one roof, and warmth you can feel from the path."
+    },
+    {
+      "text": "The hill above is covered in stone heaps in rows, and the rows mean something."
+    }
+  ]
+}

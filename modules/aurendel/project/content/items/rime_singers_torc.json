@@ -1,0 +1,20 @@
+{
+  "id": "rime_singers_torc",
+  "name": "The Rime-Singer's Torc",
+  "description": "Bronze gone green under nine hundred years of ice. Worn, the note under the calving face resolves into something with edges — and so does every other thing that has been trying not to be heard.",
+  "kind": "trinket",
+  "slot": "ring",
+  "value": 900,
+  "weight": 1,
+  "tags": [
+    "fabled"
+  ],
+  "modifiers": {
+    "initiative": 2
+  },
+  "skillBonuses": {
+    "perception": 3,
+    "insight": 2
+  },
+  "rarity": "very_rare"
+}

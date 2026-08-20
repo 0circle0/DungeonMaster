@@ -1,0 +1,17 @@
+{
+  "id": "moor_the_long_barrow_desc",
+  "variants": [
+    {
+      "text": "Four hundred yards of raised ground running east and west, and it is all one grave."
+    },
+    {
+      "text": "Sheep graze it. Nothing else about it is ordinary."
+    },
+    {
+      "text": "The east end has been opened. The west end has not, and the west end is where the ground is highest."
+    },
+    {
+      "text": "You can walk the whole length in ten minutes and you will not enjoy the last three."
+    }
+  ]
+}

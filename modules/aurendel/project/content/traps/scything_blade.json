@@ -1,0 +1,39 @@
+{
+  "id": "scything_blade",
+  "name": "Scything Blade",
+  "description": "Set in a slot cut across the passage, and the slot has been swept.",
+  "detect": {
+    "skill": "perception",
+    "difficulty": 14
+  },
+  "disarm": {
+    "skill": "lockpicking",
+    "difficulty": 13
+  },
+  "onTrigger": [
+    {
+      "damage": {
+        "target": {
+          "ref": "target.id"
+        },
+        "amount": {
+          "roll": "2d8"
+        },
+        "damageType": "slashing"
+      }
+    },
+    {
+      "applyCondition": {
+        "target": {
+          "ref": "target.id"
+        },
+        "condition": "bleeding",
+        "duration": 3
+      }
+    }
+  ],
+  "reusable": true,
+  "tags": [
+    "trap"
+  ]
+}

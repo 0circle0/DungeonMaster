@@ -1,0 +1,73 @@
+{
+  "id": "eelweir_the_barge",
+  "name": "What the Barge Was Carrying",
+  "description": "Nesh says the lampreys came up the reach, and things come up a reach from somewhere. There is a barge on its side in the Oxbow that went down loaded and was never got out.",
+  "autoStart": false,
+  "ordered": true,
+  "tags": [
+    "side",
+    "act1",
+    "eelweir",
+    "kingsvale"
+  ],
+  "objectives": [
+    {
+      "id": "find_the_barge",
+      "description": "Find the sunken barge in the Oxbow Meadows.",
+      "kind": "reach",
+      "count": 1,
+      "hidden": false,
+      "optional": false,
+      "target": "oxbow_sunken_boat"
+    },
+    {
+      "id": "read_the_hold",
+      "description": "See what is still in the hold.",
+      "kind": "custom",
+      "count": 1,
+      "hidden": false,
+      "optional": false,
+      "when": {
+        "test": {
+          "ref": "flags.eelweir_barge_found"
+        }
+      }
+    },
+    {
+      "id": "ask_nesh",
+      "description": "Ask Nesh what a barge was doing carrying that.",
+      "kind": "talk",
+      "count": 1,
+      "hidden": false,
+      "optional": false,
+      "target": "eelwife_nesh"
+    }
+  ],
+  "stages": [],
+  "unlocks": [
+    "eelweir_the_badger_hole"
+  ],
+  "rewards": {
+    "xp": 30,
+    "items": [],
+    "reputation": {
+      "the_keepers": 5
+    }
+  },
+  "requires": {
+    "quests": [
+      {
+        "quest": "eelweir_out_of_season",
+        "status": "complete"
+      }
+    ]
+  },
+  "onComplete": [
+    {
+      "setFlag": {
+        "flag": "eelweir_cargo_known",
+        "value": true
+      }
+    }
+  ]
+}

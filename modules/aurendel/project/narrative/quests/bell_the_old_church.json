@@ -1,0 +1,76 @@
+{
+  "id": "bell_the_old_church",
+  "name": "The Old Church",
+  "description": "The hall in the black water is four hundred yards from where the old church went down, and the marsh has been quietly moving one of them towards the other.",
+  "autoStart": false,
+  "ordered": true,
+  "tags": [
+    "side",
+    "act2",
+    "bell",
+    "thornmere"
+  ],
+  "objectives": [],
+  "stages": [
+    {
+      "id": "go_out",
+      "name": "Out to the old church",
+      "description": "Roof above, floor a long way under, and the tower still standing because it was built to.",
+      "objectives": [
+        {
+          "id": "at_the_church",
+          "description": "Reach the old church.",
+          "kind": "reach",
+          "count": 1,
+          "hidden": false,
+          "optional": false,
+          "target": "drowned_bell_the_old_church"
+        }
+      ],
+      "journalKey": "bell_journal_church"
+    },
+    {
+      "id": "the_bell",
+      "name": "What has been ringing it",
+      "description": "One note, under the water, and it is in your chest before it is in your ears.",
+      "objectives": [
+        {
+          "id": "kill_bell",
+          "description": "Silence what rings the bell.",
+          "kind": "kill",
+          "count": 1,
+          "hidden": false,
+          "optional": false,
+          "target": "bell_shade"
+        }
+      ],
+      "onComplete": [
+        {
+          "setFlag": {
+            "flag": "bell_shade_down",
+            "value": true
+          }
+        }
+      ],
+      "journalKey": "bell_journal_shade"
+    }
+  ],
+  "unlocks": [
+    "bell_raise_or_sink"
+  ],
+  "rewards": {
+    "xp": 105,
+    "items": [],
+    "reputation": {
+      "the_ferrymen": 14
+    }
+  },
+  "requires": {
+    "quests": [
+      {
+        "quest": "bell_the_black_water",
+        "status": "complete"
+      }
+    ]
+  }
+}

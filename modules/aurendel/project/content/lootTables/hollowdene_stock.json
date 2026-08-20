@@ -1,0 +1,43 @@
+{
+  "id": "hollowdene_stock",
+  "entries": [
+    {
+      "weight": 5,
+      "value": {
+        "item": "bandages",
+        "quantity": "1d3"
+      }
+    },
+    {
+      "weight": 3,
+      "value": {
+        "item": "iron_sword",
+        "quantity": "1"
+      }
+    },
+    {
+      "weight": 3,
+      "value": {
+        "item": "leather_jerkin",
+        "quantity": "1"
+      }
+    },
+    {
+      "weight": 2,
+      "value": {
+        "item": "boar_spear",
+        "quantity": "1"
+      }
+    },
+    {
+      "weight": 2,
+      "value": {
+        "item": "healing_draught",
+        "quantity": "1"
+      }
+    }
+  ],
+  "rolls": "3",
+  "emptyChance": 0,
+  "name": "The Village Store"
+}

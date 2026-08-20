@@ -1,0 +1,68 @@
+{
+  "id": "glass_ice_the_moulin",
+  "name": "The Moulin",
+  "description": "A shaft the meltwater has drilled straight down through the glacier, and in winter it is dry.",
+  "area": "frostmere_glass_ice",
+  "kind": "dungeonEntrance",
+  "descriptionKey": "generic_dungeon_mouth",
+  "travelMinutes": 15,
+  "tags": [
+    "dungeon"
+  ],
+  "dungeon": "frostmere_moulin",
+  "position": {
+    "x": 14,
+    "y": 3
+  },
+  "triggers": [
+    {
+      "id": "frost_marker_committed",
+      "mode": "once",
+      "on": "enter",
+      "description": "The hole the bearing was pointing at.",
+      "requires": {
+        "custom": {
+          "gte": [
+            {
+              "ref": "threads.frost_marker.known"
+            },
+            2
+          ]
+        }
+      },
+      "effects": [
+        {
+          "emit": {
+            "event": "startQuest",
+            "data": {
+              "quest": "frost_what_it_points_at"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "hidden": true,
+  "discover": {
+    "skill": "survival",
+    "difficulty": {
+      "max": [
+        8,
+        {
+          "sub": [
+            24,
+            {
+              "mul": [
+                4,
+                {
+                  "ref": "threads.frost_marker.known"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "gate": "frost_moulin_seal"
+}

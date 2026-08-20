@@ -1,0 +1,35 @@
+{
+  "id": "glasslands_saltrun",
+  "name": "Saltrun",
+  "description": "Where the salt is cut, loaded, and argued about, on a flat that goes white to the horizon.",
+  "biome": "urban_desert",
+  "layer": "overworld",
+  "descriptionKey": "glasslands_saltrun_desc",
+  "dangerLevel": 2,
+  "recommendedLevel": 6,
+  "tags": [
+    "glasslands",
+    "town"
+  ],
+  "map": {
+    "width": "41",
+    "height": "27"
+  },
+  "entryPoint": {
+    "x": 20,
+    "y": 13
+  },
+  "extra": {
+    "role": "town"
+  },
+  "connections": [
+    {
+      "to": "glasslands_sunken_road",
+      "travelMinutes": 40
+    },
+    {
+      "to": "glasslands_shifting_dunes",
+      "travelMinutes": 50
+    }
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "id": "cormorant_the_jetty",
+  "name": "The Jetty",
+  "description": "One jetty, and everything that has ever happened here has happened on it.",
+  "area": "isles_cormorant",
+  "kind": "landmark",
+  "descriptionKey": "generic_landmark",
+  "travelMinutes": 2,
+  "tags": [],
+  "position": {
+    "x": 3,
+    "y": 3
+  },
+  "triggers": [
+    {
+      "id": "isle_found_jetty",
+      "mode": "once",
+      "on": "enter",
+      "description": "Ice on everything but one strand of sand across the water.",
+      "effects": [
+        {
+          "learnLore": {
+            "entry": "isle_terns_warm"
+          }
+        }
+      ]
+    }
+  ]
+}

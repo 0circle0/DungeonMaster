@@ -1,0 +1,419 @@
+{
+  "id": "dryriver_saray_talk",
+  "start": "greet",
+  "nodes": [
+    {
+      "id": "greet",
+      "says": [
+        {
+          "text": "Two of the three wellheads have a rope and a bucket. The third has a lid, swept clean, with nothing on it. Saray is sitting on the lid. \"You'll want the two on the left.\""
+        }
+      ],
+      "options": [
+        {
+          "id": "the_third",
+          "text": "Why is there a lid on that one?",
+          "effects": [
+            {
+              "emit": {
+                "event": "startQuest",
+                "data": {
+                  "quest": "dryriver_the_third_well"
+                }
+              }
+            }
+          ],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "nine_years",
+          "requires": {
+            "quests": [
+              {
+                "quest": "dryriver_the_third_well",
+                "status": "unstarted"
+              },
+              {
+                "quest": "the_undercroft",
+                "status": "complete"
+              }
+            ]
+          }
+        },
+        {
+          "id": "the_lines",
+          "text": "Tell me about the lines.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "the_lines"
+        },
+        {
+          "id": "leave",
+          "text": "Nothing.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": [
+        {
+          "requires": {
+            "quests": [
+              {
+                "quest": "dryriver_the_lost_wagons",
+                "status": "active"
+              }
+            ],
+            "flags": [
+              {
+                "flag": "dryriver_wagons_found",
+                "equals": true
+              }
+            ]
+          },
+          "goto": "about_the_wagons"
+        },
+        {
+          "requires": {
+            "flags": [
+              {
+                "flag": "dryriver_shade_down",
+                "equals": true
+              }
+            ],
+            "without": {
+              "flags": [
+                {
+                  "flag": "dryriver_kept"
+                },
+                {
+                  "flag": "dryriver_sold"
+                }
+              ]
+            }
+          },
+          "goto": "road_or_right"
+        }
+      ]
+    },
+    {
+      "id": "the_lines",
+      "says": [
+        {
+          "text": "\"Nine families and eleven thousand horses, and a right to the grass that is older than the man in Aurenhal who keeps asking to see it.\" She does not get off the lid. \"It has never been written down. That is not carelessness.\""
+        }
+      ],
+      "options": [
+        {
+          "id": "back",
+          "text": "Hm.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "greet"
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": []
+    },
+    {
+      "id": "nine_years",
+      "says": [
+        {
+          "text": "\"Because it is dry and I would rather nobody fell down it.\" A pause that goes on a beat too long. \"Nine years. Went in a season — full in Highsun, mud by Harvest, dust by the spring. Wells do not do that.\""
+        }
+      ],
+      "options": [
+        {
+          "id": "what_do_they_do",
+          "text": "What do they do?",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "what_wells_do"
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": []
+    },
+    {
+      "id": "what_wells_do",
+      "says": [
+        {
+          "text": "\"They go slowly, over a lifetime, and you know a year in advance and you dig another one.\" She gets off the lid. \"This one was *taken*. And the lines have watered at Tallgrass since, which is a day each way, which over nine years is a great deal of somebody's life.\""
+        }
+      ],
+      "options": [
+        {
+          "id": "look",
+          "text": "We'll look down it.",
+          "effects": [
+            {
+              "setFlag": {
+                "flag": "dryriver_looked_down",
+                "value": true
+              }
+            }
+          ],
+          "onceOnly": true,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "look_down"
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": []
+    },
+    {
+      "id": "look_down",
+      "says": [
+        {
+          "text": "Ninety feet of dressed stone, dry to the bottom, and the bottom is not the bottom — there is a cut in the side of the shaft at about eighty, going east, and it was not made by anybody sinking a well."
+        },
+        {
+          "text": "\"East,\" says Saray, when you tell her. \"Everything about this is east.\""
+        }
+      ],
+      "options": [
+        {
+          "id": "follow_east",
+          "text": "What's east?",
+          "effects": [
+            {
+              "emit": {
+                "event": "startQuest",
+                "data": {
+                  "quest": "dryriver_the_lost_wagons"
+                }
+              }
+            }
+          ],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "the_grass",
+          "requires": {
+            "quests": [
+              {
+                "quest": "dryriver_the_lost_wagons",
+                "status": "unstarted"
+              }
+            ]
+          }
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": []
+    },
+    {
+      "id": "the_grass",
+      "says": [
+        {
+          "text": "\"Out in the Long Grass there are wagons. Eleven of them, in a line, and they have been there since before the wells.\" She looks east, which from here is a great deal of nothing. \"Nobody goes and looks at them because there is nothing out there to go and look at them *for*.\""
+        }
+      ],
+      "options": [
+        {
+          "id": "done",
+          "text": "There is now.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": []
+    },
+    {
+      "id": "about_the_wagons",
+      "says": [
+        {
+          "text": "\"You found them.\" Saray is already unrolling a hide with a map scratched on it that she has clearly had for years. \"What line are they in?\""
+        }
+      ],
+      "options": [
+        {
+          "id": "the_line",
+          "text": "Straight at the dry well. All eleven.",
+          "effects": [],
+          "onceOnly": true,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "the_bed"
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": []
+    },
+    {
+      "id": "the_bed",
+      "says": [
+        {
+          "text": "\"Then that is a river,\" says Saray. \"That is a river bed with wagons stopped in it where the ford was, and it ran west into my well until something sat down in it.\" She rolls the hide back up. \"Nine years I have swept that lid.\""
+        }
+      ],
+      "options": [
+        {
+          "id": "go_down",
+          "text": "We'll go down and see what's sitting in it.",
+          "effects": [
+            {
+              "emit": {
+                "event": "startQuest",
+                "data": {
+                  "quest": "dryriver_down_the_dry_well"
+                }
+              }
+            },
+            {
+              "adjustReputation": {
+                "faction": "the_horse_lords",
+                "amount": 5
+              }
+            }
+          ],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "at_eighty",
+          "requires": {
+            "quests": [
+              {
+                "quest": "dryriver_down_the_dry_well",
+                "status": "unstarted"
+              }
+            ]
+          }
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": [],
+      "remembers": "line_ridden"
+    },
+    {
+      "id": "at_eighty",
+      "says": [
+        {
+          "text": "\"The cut at eighty feet, going east. Take rope and take more than you think.\" A flat look. \"And take water. I am aware of how that sounds.\""
+        }
+      ],
+      "options": [
+        {
+          "id": "done",
+          "text": "Rope and water.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": []
+    },
+    {
+      "id": "road_or_right",
+      "says": [
+        {
+          "text": "There is an inch of water in the bottom of the third well and Saray has been looking at it for some time. \"It will be back by Highsun,\" she says. \"Which is the good news, and you are about to hear the rest.\""
+        },
+        {
+          "text": "\"You walked that bed. You have the line of it — where the ford was, where the wagons stopped, where the water goes.\" She looks up. \"That is a surveyed road to a working well across grass the Crown has wanted a road across since before there was a Crown. They will pay you properly for it. I am not going to pretend they will not.\""
+        }
+      ],
+      "options": [
+        {
+          "id": "keep",
+          "text": "It's yours. It stays unwritten.",
+          "effects": [
+            {
+              "setFlag": {
+                "flag": "dryriver_kept",
+                "value": true
+              }
+            }
+          ],
+          "onceOnly": true,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "kept"
+        },
+        {
+          "id": "sell",
+          "text": "Aurenhal will pay for this.",
+          "effects": [
+            {
+              "setFlag": {
+                "flag": "dryriver_sold",
+                "value": true
+              }
+            },
+            {
+              "grantItem": {
+                "target": {
+                  "ref": "actor.id"
+                },
+                "item": "old_coin",
+                "quantity": 40
+              }
+            }
+          ],
+          "onceOnly": true,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "sold"
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": []
+    },
+    {
+      "id": "kept",
+      "says": [
+        {
+          "text": "She burns the tracing in the well-head fire, which takes a long time because you drew it carefully, and neither of you says anything while it goes."
+        }
+      ],
+      "options": [
+        {
+          "id": "done",
+          "text": "Unwritten.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": [],
+      "remembers": "line_ridden"
+    },
+    {
+      "id": "sold",
+      "says": [
+        {
+          "text": "Saray does not argue and does not stop you, and that is worse than either. \"They will make it a post road,\" she says, \"and the post road will have a toll on it, and the toll will be on us.\" She sits back down on the lid."
+        }
+      ],
+      "options": [
+        {
+          "id": "done",
+          "text": "...",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": [],
+      "remembers": "horse_taken"
+    }
+  ]
+}

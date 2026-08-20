@@ -1,0 +1,14 @@
+{
+  "id": "dungeon_ember_corridor_desc",
+  "variants": [
+    {
+      "text": "A gallery driven through rock that has been cooked since it was cut."
+    },
+    {
+      "text": "The walls are glazed in patches, which happens at a temperature you would not survive."
+    },
+    {
+      "text": "Cinder underfoot, and the crunch of it carries a long way."
+    }
+  ]
+}

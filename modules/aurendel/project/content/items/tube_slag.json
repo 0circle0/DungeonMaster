@@ -1,0 +1,20 @@
+{
+  "id": "tube_slag",
+  "name": "Slag from the Turn",
+  "description": "It was still moving when it cooled, and it cooled going upward.",
+  "kind": "treasure",
+  "value": 0,
+  "weight": 0,
+  "tags": [
+    "clue",
+    "proof"
+  ],
+  "onUse": [
+    {
+      "learnLore": {
+        "entry": "ember_warm_wrong"
+      }
+    }
+  ],
+  "consumedOnUse": false
+}

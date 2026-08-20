@@ -1,0 +1,29 @@
+{
+  "id": "ember_tube_turn",
+  "name": "Where the Tube Turns Up",
+  "description": "A mile of level tube, and then it goes up, past dressed stone the lava went round.",
+  "kind": "ward",
+  "blockedTextKey": "ember_tube_blocked",
+  "staysOpen": true,
+  "onOpen": [
+    {
+      "setFlag": {
+        "flag": "ember_warm_open",
+        "value": true
+      }
+    }
+  ],
+  "onBlocked": [],
+  "opensWith": [],
+  "tags": [],
+  "requires": {
+    "items": [
+      {
+        "item": "readers_rhythm",
+        "quantity": 1,
+        "consume": false,
+        "equipped": false
+      }
+    ]
+  }
+}

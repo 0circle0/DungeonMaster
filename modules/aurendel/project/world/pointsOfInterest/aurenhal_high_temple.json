@@ -1,0 +1,24 @@
+{
+  "id": "aurenhal_high_temple",
+  "name": "The High Temple",
+  "description": "The oldest roof in the city, and the only one the fire of 'eighty-one went round.",
+  "area": "aurenhal_highgate",
+  "kind": "shrine",
+  "descriptionKey": "aurenhal_high_temple_desc",
+  "travelMinutes": 5,
+  "tags": [
+    "aurenhal"
+  ],
+  "position": {
+    "x": 30,
+    "y": 14
+  },
+  "services": [
+    "temple"
+  ],
+  "map": {
+    "width": "19",
+    "height": "13",
+    "palette": "int_temple"
+  }
+}

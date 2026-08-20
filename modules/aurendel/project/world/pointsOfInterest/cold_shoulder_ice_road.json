@@ -1,0 +1,32 @@
+{
+  "id": "cold_shoulder_ice_road",
+  "name": "The Ice Road",
+  "description": "A snow bridge over a gap of unknown depth. It is there in winter. It is not there in summer.",
+  "area": "skarnspine_cold_shoulder",
+  "kind": "crossing",
+  "descriptionKey": "cold_shoulder_ice_road_desc",
+  "travelMinutes": 10,
+  "tags": [
+    "crossing"
+  ],
+  "gate": "frostmere_ice_road",
+  "position": {
+    "x": 14,
+    "y": 3
+  },
+  "triggers": [
+    {
+      "id": "skarn_found_ice",
+      "mode": "once",
+      "on": "enter",
+      "description": "Where the ice stops forming, and how sharply.",
+      "effects": [
+        {
+          "learnLore": {
+            "entry": "skarn_wind_ice"
+          }
+        }
+      ]
+    }
+  ]
+}

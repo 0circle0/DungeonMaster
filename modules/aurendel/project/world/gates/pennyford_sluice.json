@@ -1,0 +1,13 @@
+{
+  "id": "pennyford_sluice",
+  "name": "The Pennyford Sluice",
+  "kind": "hazard",
+  "description": "The old ford gate. Shut, the channel runs deep and fast; open, it runs deeper and faster.",
+  "staysOpen": true,
+  "bypass": {
+    "skill": "athletics",
+    "difficulty": 12,
+    "retryable": true
+  },
+  "blockedTextKey": "pennyford_sluice_blocked"
+}

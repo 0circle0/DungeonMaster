@@ -1,0 +1,11 @@
+{
+  "id": "skarn_bell",
+  "name": "Rung From Below",
+  "description": "A bell for a shut road, rung eleven times on an open one, with the rope worn on the face a hand cannot reach.",
+  "entries": [
+    "skarn_bell_open",
+    "skarn_bell_rope",
+    "skarn_bell_dug",
+    "skarn_bell_coal"
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "id": "dungeon_barrow_shrine_desc",
+  "variants": [
+    {
+      "text": "A slab set upright at the far end, carved, and worn pale in one spot."
+    },
+    {
+      "text": "Offerings on a ledge, and the newest of them is not very old at all."
+    },
+    {
+      "text": "Somebody knelt here often enough to wear the floor."
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "id": "guard",
+  "name": "Guard",
+  "description": "How hard you are to land a blow on.",
+  "formula": {
+    "add": [
+      10,
+      {
+        "ref": "actor.mod.agility"
+      }
+    ]
+  }
+}

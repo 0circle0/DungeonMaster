@@ -1,0 +1,17 @@
+{
+  "id": "thornback_ride_deadfall_cave",
+  "name": "The Deadfall",
+  "description": "A tree came down and took a great deal of hillside with it, and under the hillside there was a doorway.",
+  "area": "duskwood_thornback_ride",
+  "kind": "dungeonEntrance",
+  "descriptionKey": "generic_dungeon_mouth",
+  "travelMinutes": 12,
+  "tags": [
+    "dungeon"
+  ],
+  "dungeon": "duskwood_deadfall",
+  "position": {
+    "x": 25,
+    "y": 3
+  }
+}

@@ -1,0 +1,59 @@
+{
+  "id": "trial_three_counter",
+  "name": "The Ninth Line",
+  "description": "Nine doors opened in order over eleven hundred years is not weather and it is not luck. Somebody has been keeping the count, and the count does not stop at nine.",
+  "autoStart": false,
+  "ordered": true,
+  "tags": [
+    "trial",
+    "trial_three"
+  ],
+  "objectives": [
+    {
+      "id": "under_the_ring",
+      "description": "Get under the ring in the Witchwood.",
+      "kind": "reach",
+      "count": 1,
+      "hidden": false,
+      "optional": false,
+      "target": "witchwood_under_the_ring"
+    },
+    {
+      "id": "the_counter",
+      "description": "Finish whatever has been keeping the count.",
+      "kind": "kill",
+      "count": 1,
+      "hidden": false,
+      "optional": false,
+      "target": "the_counter"
+    }
+  ],
+  "stages": [],
+  "unlocks": [],
+  "rewards": {
+    "xp": 4500,
+    "items": [
+      {
+        "item": "the_counters_ring",
+        "quantity": 1
+      },
+      {
+        "item": "last_warrant",
+        "quantity": 1
+      }
+    ],
+    "reputation": {
+      "the_keepers": 50,
+      "the_library": 30,
+      "the_crown": 25
+    }
+  },
+  "requires": {
+    "quests": [
+      {
+        "quest": "trial_three_signal",
+        "status": "complete"
+      }
+    ]
+  }
+}

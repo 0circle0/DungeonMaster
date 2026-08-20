@@ -1,0 +1,457 @@
+{
+  "id": "deep_ost_talk",
+  "start": "greet",
+  "nodes": [
+    {
+      "id": "greet",
+      "says": [
+        {
+          "text": "A waystation on the market road, lit by lamps nobody carries oil for, and a man with a bound rule open on the table."
+        },
+        {
+          "text": "“Wayfinders. Guiding is by the stage and I will not guide past the Black Bridge after the third bell.”"
+        }
+      ],
+      "onEnter": [],
+      "options": [
+        {
+          "id": "deep_ost_spacing",
+          "text": "How are the market road's lamps set?",
+          "requires": {
+            "without": {
+              "lore": [
+                "deep_lamps_spacing"
+              ]
+            }
+          },
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "check": {
+            "skill": "insight",
+            "difficulty": {
+              "sub": [
+                15,
+                {
+                  "clamp": [
+                    {
+                      "div": [
+                        {
+                          "ref": "reputation.the_wayfinders",
+                          "else": 0
+                        },
+                        5
+                      ]
+                    },
+                    -6,
+                    6
+                  ]
+                }
+              ]
+            },
+            "onSuccess": "deep_ost_spacing_told",
+            "onFailure": "deep_ost_spacing_wont"
+          }
+        },
+        {
+          "id": "deep_ost_footings",
+          "text": "The Black Bridge. Abutments or footings?",
+          "requires": {
+            "without": {
+              "lore": [
+                "deep_bridge_footings"
+              ]
+            }
+          },
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "check": {
+            "skill": "persuasion",
+            "difficulty": {
+              "sub": [
+                16,
+                {
+                  "clamp": [
+                    {
+                      "div": [
+                        {
+                          "ref": "reputation.the_wayfinders",
+                          "else": 0
+                        },
+                        5
+                      ]
+                    },
+                    -6,
+                    6
+                  ]
+                }
+              ]
+            },
+            "onSuccess": "deep_ost_footings_told",
+            "onFailure": "deep_ost_footings_wont"
+          }
+        },
+        {
+          "id": "deep_ost_count",
+          "text": "How many columns in the Weeping Vault?",
+          "requires": {
+            "without": {
+              "lore": [
+                "deep_vault_count"
+              ]
+            }
+          },
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "check": {
+            "skill": "insight",
+            "difficulty": {
+              "sub": [
+                17,
+                {
+                  "clamp": [
+                    {
+                      "div": [
+                        {
+                          "ref": "reputation.the_wayfinders",
+                          "else": 0
+                        },
+                        5
+                      ]
+                    },
+                    -6,
+                    6
+                  ]
+                }
+              ]
+            },
+            "onSuccess": "deep_ost_count_told",
+            "onFailure": "deep_ost_count_wont"
+          }
+        },
+        {
+          "id": "deep_ost_rule",
+          "text": "The guild's rule. Including the two pages.",
+          "requires": {
+            "without": {
+              "items": [
+                "wayfinders_rule"
+              ],
+              "flags": [
+                {
+                  "flag": "given:wayfinders_rule"
+                }
+              ]
+            }
+          },
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "check": {
+            "skill": "persuasion",
+            "difficulty": {
+              "sub": [
+                19,
+                {
+                  "clamp": [
+                    {
+                      "div": [
+                        {
+                          "ref": "reputation.the_wayfinders",
+                          "else": 0
+                        },
+                        5
+                      ]
+                    },
+                    -6,
+                    6
+                  ]
+                }
+              ]
+            },
+            "onSuccess": "deep_ost_rule_gave",
+            "onFailure": "deep_ost_rule_kept"
+          }
+        },
+        {
+          "id": "greet_leave",
+          "text": "Nothing.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": [
+        {
+          "requires": {
+            "factions": [
+              {
+                "faction": "the_wayfinders",
+                "maxStanding": -30
+              }
+            ]
+          },
+          "goto": "deep_ost_cold"
+        }
+      ]
+    },
+    {
+      "id": "deep_ost_spacing_told",
+      "says": [
+        {
+          "text": "“Twice the interval you would light a road at, and exact to the inch between one and the next.” He does not need the rule for this. “You do not light a road that way. You *mark* something that way.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "learnLore": {
+            "entry": "deep_lamps_spacing"
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "deep_ost_spacing_on",
+          "text": "Go on.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "deep_ost_spacing_wont",
+      "says": [
+        {
+          "text": "“I've said all I mean to,” they say, and go back to what they were doing."
+        }
+      ],
+      "onEnter": [
+        {
+          "adjustReputation": {
+            "faction": "the_wayfinders",
+            "amount": -1
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "deep_ost_spacing_drop",
+          "text": "Leave it.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "deep_ost_footings_told",
+      "says": [
+        {
+          "text": "“Piers.” He waits to see whether you know the difference, and is pleased when you do. “An abutment leans on the cliff. A pier *stands on something*. That bridge has piers, over a chasm four hundred years of dropped lights have not found the bottom of.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "learnLore": {
+            "entry": "deep_bridge_footings"
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "deep_ost_footings_on",
+          "text": "Go on.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "deep_ost_footings_wont",
+      "says": [
+        {
+          "text": "“I've said all I mean to,” they say, and go back to what they were doing."
+        }
+      ],
+      "onEnter": [
+        {
+          "adjustReputation": {
+            "faction": "the_wayfinders",
+            "amount": -1
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "deep_ost_footings_drop",
+          "text": "Leave it.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "deep_ost_count_told",
+      "says": [
+        {
+          "text": "“Eight.” He says it, and then does not say anything else for a moment. “Our section has eight pillars. Every hall down here is built in eights.” He looks at the lamp. “Go and count them.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "learnLore": {
+            "entry": "deep_vault_count"
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "deep_ost_count_on",
+          "text": "Go on.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "deep_ost_count_wont",
+      "says": [
+        {
+          "text": "“I've said all I mean to,” they say, and go back to what they were doing."
+        }
+      ],
+      "onEnter": [
+        {
+          "adjustReputation": {
+            "faction": "the_wayfinders",
+            "amount": -1
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "deep_ost_count_drop",
+          "text": "Leave it.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "deep_ost_rule_gave",
+      "says": [
+        {
+          "text": "He is a long time deciding, and what decides him is not you. “Four hundred years of measuring and two pages we do not read out.” He hands it over. “I have read them. I would rather somebody else had.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "grantItem": {
+            "target": {
+              "ref": "actor.id"
+            },
+            "item": "wayfinders_rule",
+            "quantity": 1
+          }
+        },
+        {
+          "setFlag": {
+            "flag": "given:wayfinders_rule",
+            "value": true
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "deep_ost_rule_thanks",
+          "text": "Thank you.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "deep_ost_rule_kept",
+      "says": [
+        {
+          "text": "“It is the guild's, and the guild is eleven people, and I am the one who has it,” he says. “No.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "adjustReputation": {
+            "faction": "the_wayfinders",
+            "amount": -3
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "deep_ost_rule_leave",
+          "text": "Then no.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "deep_ost_cold",
+      "says": [
+        {
+          "text": "He shuts the rule, and the sound it makes in here goes a long way."
+        }
+      ],
+      "onEnter": [],
+      "options": [
+        {
+          "id": "deep_ost_go",
+          "text": "Leave it.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    }
+  ]
+}

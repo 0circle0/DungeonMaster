@@ -1,0 +1,14 @@
+{
+  "id": "dungeon_ruin_chamber_desc",
+  "variants": [
+    {
+      "text": "A room you can see the shape of from the footings, and a tree growing where the hearth was."
+    },
+    {
+      "text": "Rubble to knee height and the plan of the place perfectly legible above it."
+    },
+    {
+      "text": "Somebody's floor, still flat, still draining, four centuries after the roof went."
+    }
+  ]
+}

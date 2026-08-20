@@ -1,0 +1,16 @@
+{
+  "id": "dungeon_drowned_shrine",
+  "name": "Drowned Shrine",
+  "descriptionKey": "dungeon_drowned_shrine_desc",
+  "weight": 1,
+  "minExits": 1,
+  "maxExits": 2,
+  "encounterChance": 0.4,
+  "trapChance": 0.12,
+  "lootChance": 0.35,
+  "tags": [
+    "dungeon_drowned",
+    "shrine"
+  ],
+  "role": "shrine"
+}

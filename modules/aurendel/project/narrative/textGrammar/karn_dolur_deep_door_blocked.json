@@ -1,0 +1,14 @@
+{
+  "id": "karn_dolur_deep_door_blocked",
+  "variants": [
+    {
+      "text": "Sealed, and marked so in four languages, one of which you cannot read."
+    },
+    {
+      "text": "The hold inspects this door every month and the last inspection was eleven days ago."
+    },
+    {
+      "text": "It is not locked so much as *closed*, in a way that suggests the closing was the important part."
+    }
+  ]
+}

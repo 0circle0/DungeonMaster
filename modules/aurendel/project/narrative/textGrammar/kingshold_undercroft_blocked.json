@@ -1,0 +1,14 @@
+{
+  "id": "kingshold_undercroft_blocked",
+  "variants": [
+    {
+      "text": "The door is iron-banded oak and it has been shut a long time by somebody who meant it."
+    },
+    {
+      "text": "There is a lock, and above the lock a steward's seal, and the seal is not yours to break."
+    },
+    {
+      "text": "Locked, and the hinges have been kept oiled, which is the part you do not like."
+    }
+  ]
+}

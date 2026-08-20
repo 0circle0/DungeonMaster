@@ -1,0 +1,14 @@
+{
+  "id": "greenway_elf_bridge_desc",
+  "variants": [
+    {
+      "text": "A single span of dressed stone over a stream you could step across, carved on both parapets, and considerably older than the forest."
+    },
+    {
+      "text": "The bridge is in perfect condition. The stream has moved."
+    },
+    {
+      "text": "Whatever needed a bridge here was not worried about the water."
+    }
+  ]
+}

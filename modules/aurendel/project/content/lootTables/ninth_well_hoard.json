@@ -1,0 +1,36 @@
+{
+  "id": "ninth_well_hoard",
+  "entries": [
+    {
+      "weight": 4,
+      "value": {
+        "item": "glass_bead",
+        "quantity": "2d3"
+      }
+    },
+    {
+      "weight": 3,
+      "value": {
+        "item": "fulgurite_lens",
+        "quantity": "1"
+      }
+    },
+    {
+      "weight": 2,
+      "value": {
+        "item": "amber_lump",
+        "quantity": "1"
+      }
+    },
+    {
+      "weight": 2,
+      "value": {
+        "item": "healing_draught",
+        "quantity": "1d3"
+      }
+    }
+  ],
+  "rolls": "3",
+  "emptyChance": 0,
+  "name": "Down the Ninth Well"
+}

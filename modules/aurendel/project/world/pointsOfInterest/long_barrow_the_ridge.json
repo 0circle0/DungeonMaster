@@ -1,0 +1,30 @@
+{
+  "id": "long_barrow_the_ridge",
+  "name": "The Long Barrow",
+  "description": "Four hundred yards of raised ground running east and west, and it is all one grave.",
+  "area": "moor_the_long_barrow",
+  "kind": "landmark",
+  "descriptionKey": "long_barrow_the_ridge_desc",
+  "travelMinutes": 8,
+  "tags": [],
+  "position": {
+    "x": 3,
+    "y": 3
+  },
+  "triggers": [
+    {
+      "id": "diggers_on_the_ridge",
+      "mode": "once",
+      "on": "enter",
+      "description": "Four hundred feet of it, and the alignment of the whole thing.",
+      "effects": [
+        {
+          "setFlag": {
+            "flag": "diggers_ridge_walked",
+            "value": true
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,57 @@
+{
+  "id": "kings_what_goes_under",
+  "name": "What Goes Under Aurenhal",
+  "description": "Brick newer than the city and older than the gate, warm air off the river, and one sheet missing from four hundred years of drains.",
+  "autoStart": false,
+  "ordered": true,
+  "tags": [
+    "hidden",
+    "kingsvale",
+    "kings_under"
+  ],
+  "objectives": [
+    {
+      "id": "at_the_grate",
+      "description": "Get down the undercity grate.",
+      "kind": "reach",
+      "count": 1,
+      "hidden": true,
+      "optional": false,
+      "target": "riverside_undercity_grate"
+    },
+    {
+      "id": "past_the_brick",
+      "description": "Get past the third turn.",
+      "kind": "custom",
+      "count": 1,
+      "hidden": true,
+      "optional": false,
+      "when": {
+        "test": {
+          "ref": "flags.kings_under_open"
+        }
+      }
+    },
+    {
+      "id": "what_is_warm",
+      "description": "Find what has been keeping it warm.",
+      "kind": "kill",
+      "count": 1,
+      "hidden": true,
+      "optional": false,
+      "target": "under_warmth"
+    }
+  ],
+  "stages": [],
+  "unlocks": [],
+  "rewards": {
+    "xp": 110,
+    "items": [
+      {
+        "item": "undercity_hood",
+        "quantity": 1
+      }
+    ],
+    "reputation": {}
+  }
+}

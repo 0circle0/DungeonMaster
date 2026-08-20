@@ -1,0 +1,329 @@
+{
+  "id": "dusk_kest_talk",
+  "start": "greet",
+  "nodes": [
+    {
+      "id": "greet",
+      "says": [
+        {
+          "text": "A hut with a swept step, a hearth in use, and somebody in the doorway who heard you coming a long way off."
+        },
+        {
+          "text": "“You are four days from a field. Say what brought you.”"
+        }
+      ],
+      "onEnter": [],
+      "options": [
+        {
+          "id": "dusk_kest_recut",
+          "text": "Who re-cuts the marks?",
+          "requires": {
+            "without": {
+              "lore": [
+                "dusk_ward_recut"
+              ]
+            }
+          },
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "check": {
+            "skill": "persuasion",
+            "difficulty": {
+              "sub": [
+                15,
+                {
+                  "clamp": [
+                    {
+                      "div": [
+                        {
+                          "ref": "reputation.the_keepers",
+                          "else": 0
+                        },
+                        5
+                      ]
+                    },
+                    -6,
+                    6
+                  ]
+                }
+              ]
+            },
+            "onSuccess": "dusk_kest_recut_told",
+            "onFailure": "dusk_kest_recut_wont"
+          }
+        },
+        {
+          "id": "dusk_kest_moved",
+          "text": "The marks are further out than the survey.",
+          "requires": {
+            "without": {
+              "lore": [
+                "dusk_ward_moved"
+              ]
+            }
+          },
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "check": {
+            "skill": "insight",
+            "difficulty": {
+              "sub": [
+                16,
+                {
+                  "clamp": [
+                    {
+                      "div": [
+                        {
+                          "ref": "reputation.the_keepers",
+                          "else": 0
+                        },
+                        5
+                      ]
+                    },
+                    -6,
+                    6
+                  ]
+                }
+              ]
+            },
+            "onSuccess": "dusk_kest_moved_told",
+            "onFailure": "dusk_kest_moved_wont"
+          }
+        },
+        {
+          "id": "dusk_kest_rod",
+          "text": "The rod. Lend it to me.",
+          "requires": {
+            "without": {
+              "items": [
+                "woodwards_rod"
+              ],
+              "flags": [
+                {
+                  "flag": "given:woodwards_rod"
+                }
+              ]
+            }
+          },
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "check": {
+            "skill": "persuasion",
+            "difficulty": {
+              "sub": [
+                12,
+                {
+                  "clamp": [
+                    {
+                      "div": [
+                        {
+                          "ref": "reputation.the_keepers",
+                          "else": 0
+                        },
+                        5
+                      ]
+                    },
+                    -6,
+                    6
+                  ]
+                }
+              ]
+            },
+            "onSuccess": "dusk_kest_rod_gave",
+            "onFailure": "dusk_kest_rod_kept"
+          }
+        },
+        {
+          "id": "greet_leave",
+          "text": "Nothing.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "dusk_kest_recut_told",
+      "says": [
+        {
+          "text": "“Not me.” Kest says it fast, which is the most interesting thing about the answer. “I keep the hut. I have kept it eleven years. I am not on the parish roll and I have never been paid a quarter in my life.” A long look out at the trees. “The faces get cut. I have sat up for it twice and both times I woke where I sat and it was done.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "learnLore": {
+            "entry": "dusk_ward_recut"
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "dusk_kest_recut_on",
+          "text": "Go on.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "dusk_kest_recut_wont",
+      "says": [
+        {
+          "text": "“I've said all I mean to,” they say, and go back to what they were doing."
+        }
+      ],
+      "onEnter": [
+        {
+          "adjustReputation": {
+            "faction": "the_keepers",
+            "amount": -1
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "dusk_kest_recut_drop",
+          "text": "Leave it.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "dusk_kest_moved_told",
+      "says": [
+        {
+          "text": "“Eighty yards.” No hesitation at all. “I have chained it. Twice, in different years, and it was not the same eighty both times.” Kest looks at you properly for the first time. “It is going out. Slowly. And the field is where the field has always been, so nobody in Fenny Cross has noticed a thing.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "learnLore": {
+            "entry": "dusk_ward_moved"
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "dusk_kest_moved_on",
+          "text": "Go on.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "dusk_kest_moved_wont",
+      "says": [
+        {
+          "text": "“I've said all I mean to,” they say, and go back to what they were doing."
+        }
+      ],
+      "onEnter": [
+        {
+          "adjustReputation": {
+            "faction": "the_keepers",
+            "amount": -1
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "dusk_kest_moved_drop",
+          "text": "Leave it.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "dusk_kest_rod_gave",
+      "says": [
+        {
+          "text": "Kest takes it down off two pegs. “Sixteen and a half foot, and worn smooth at both ends,” Kest says. “I have had it eleven years. Somebody wore those ends and it was not me and it was not in eleven years.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "grantItem": {
+            "target": {
+              "ref": "actor.id"
+            },
+            "item": "woodwards_rod",
+            "quantity": 1
+          }
+        },
+        {
+          "setFlag": {
+            "flag": "given:woodwards_rod",
+            "value": true
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "dusk_kest_rod_thanks",
+          "text": "Thank you.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "dusk_kest_rod_kept",
+      "says": [
+        {
+          "text": "“It came with the hut,” Kest says. “It stays with the hut.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "adjustReputation": {
+            "faction": "the_keepers",
+            "amount": -1
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "dusk_kest_rod_leave",
+          "text": "Then no.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    }
+  ]
+}

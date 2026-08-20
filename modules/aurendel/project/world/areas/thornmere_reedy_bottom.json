@@ -1,0 +1,39 @@
+{
+  "id": "thornmere_reedy_bottom",
+  "name": "Reedy Bottom",
+  "description": "Reed cutters on the western margin, where the swamp gives way to something you can nearly walk on.",
+  "biome": "urban_timber",
+  "layer": "overworld",
+  "descriptionKey": "thornmere_reedy_bottom_desc",
+  "dangerLevel": 3,
+  "recommendedLevel": 5,
+  "tags": [
+    "thornmere",
+    "village"
+  ],
+  "map": {
+    "width": "31",
+    "height": "21"
+  },
+  "entryPoint": {
+    "x": 15,
+    "y": 10
+  },
+  "extra": {
+    "role": "village"
+  },
+  "connections": [
+    {
+      "to": "thornmere_the_hummocks",
+      "travelMinutes": 35
+    },
+    {
+      "to": "thornmere_sunken_causeway",
+      "travelMinutes": 40
+    },
+    {
+      "to": "steppe_windbreak",
+      "travelMinutes": 200
+    }
+  ]
+}

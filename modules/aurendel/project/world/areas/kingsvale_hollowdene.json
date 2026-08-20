@@ -1,0 +1,39 @@
+{
+  "id": "kingsvale_hollowdene",
+  "name": "Hollowdene",
+  "description": "A green, a well, a smithy, and eleven roofs. The road goes through rather than to it.",
+  "biome": "urban_timber",
+  "layer": "overworld",
+  "descriptionKey": "kingsvale_hollowdene_desc",
+  "dangerLevel": 0,
+  "recommendedLevel": 1,
+  "tags": [
+    "kingsvale",
+    "village"
+  ],
+  "map": {
+    "width": "31",
+    "height": "21"
+  },
+  "entryPoint": {
+    "x": 15,
+    "y": 10
+  },
+  "extra": {
+    "role": "village"
+  },
+  "connections": [
+    {
+      "to": "kingsvale_hedge_country",
+      "travelMinutes": 25
+    },
+    {
+      "to": "kingsvale_ashcott",
+      "travelMinutes": 35
+    },
+    {
+      "to": "kingsvale_oxbow_meadows",
+      "travelMinutes": 40
+    }
+  ]
+}

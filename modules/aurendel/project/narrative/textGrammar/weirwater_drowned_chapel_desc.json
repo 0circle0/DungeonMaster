@@ -1,0 +1,14 @@
+{
+  "id": "weirwater_drowned_chapel_desc",
+  "variants": [
+    {
+      "text": "Stands in the water at anything above summer level. The door is under, the windows are not, and the altar has never been moved."
+    },
+    {
+      "text": "Reeds through the floor and daylight through the roof, and the whole of it half a foot into the Weirwater."
+    },
+    {
+      "text": "In Highsun you can walk in dry. It is not Highsun."
+    }
+  ]
+}

@@ -1,0 +1,42 @@
+{
+  "id": "skarn_stair_hoard",
+  "name": "On the Flight Nobody Uses",
+  "rolls": "2",
+  "emptyChance": 0.1,
+  "bonusRollSkill": "perception",
+  "bonusRolls": {
+    "onSuccess": 1,
+    "onCritical": 2
+  },
+  "entries": [
+    {
+      "weight": 5,
+      "value": {
+        "item": "old_coin",
+        "quantity": "4d6"
+      }
+    },
+    {
+      "weight": 3,
+      "value": {
+        "item": "hold_silver",
+        "quantity": "1d2"
+      }
+    },
+    {
+      "weight": 2,
+      "value": {
+        "item": "healing_draught",
+        "quantity": "1"
+      }
+    },
+    {
+      "weight": 1,
+      "value": {
+        "item": "short_tread",
+        "quantity": "1",
+        "unique": true
+      }
+    }
+  ]
+}

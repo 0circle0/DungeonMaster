@@ -1,0 +1,14 @@
+{
+  "id": "dungeon_barrow_chamber_desc",
+  "variants": [
+    {
+      "text": "A round chamber with a corbelled roof going up into dark, and stone benches round the wall."
+    },
+    {
+      "text": "Grave goods were taken out of here a long time ago, and the marks of taking them are still in the floor."
+    },
+    {
+      "text": "Cold, dry, and absolutely still. The air has not moved in a very long time and resents you for it."
+    }
+  ]
+}

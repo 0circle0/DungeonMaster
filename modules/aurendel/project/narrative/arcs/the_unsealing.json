@@ -1,0 +1,13 @@
+{
+  "id": "the_unsealing",
+  "name": "The Unsealing",
+  "description": "Nine doors were shut on purpose. Somebody has been opening them in order, and the ninth is the last.",
+  "quests": [
+    "the_way_below",
+    "lantern_deep",
+    "the_eleventh_chamber",
+    "behind_the_ninth_door",
+    "the_unsealing"
+  ],
+  "isEnding": true
+}

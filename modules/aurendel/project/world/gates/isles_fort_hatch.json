@@ -1,0 +1,17 @@
+{
+  "id": "isles_fort_hatch",
+  "name": "The Fort Hatch",
+  "kind": "hazard",
+  "description": "The way down into the drowned fort, and it is open for about forty minutes either side of low water.",
+  "staysOpen": true,
+  "requires": {
+    "description": "a tide table and the nerve to trust it",
+    "minLevel": 6
+  },
+  "bypass": {
+    "skill": "athletics",
+    "difficulty": 15,
+    "retryable": true
+  },
+  "blockedTextKey": "isles_fort_hatch_blocked"
+}

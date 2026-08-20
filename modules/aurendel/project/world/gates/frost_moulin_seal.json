@@ -1,0 +1,35 @@
+{
+  "id": "frost_moulin_seal",
+  "name": "The Seal on the Moulin",
+  "description": "Stonework at the lip of the hole, facing inward. Whatever this was built for, it was not built to keep anybody out.",
+  "kind": "ward",
+  "blockedTextKey": "frost_moulin_blocked",
+  "staysOpen": true,
+  "onOpen": [
+    {
+      "setFlag": {
+        "flag": "frost_moulin_open",
+        "value": true
+      }
+    }
+  ],
+  "onBlocked": [],
+  "opensWith": [],
+  "tags": [],
+  "requires": {
+    "items": [
+      {
+        "item": "cutters_stone",
+        "quantity": 1,
+        "consume": false,
+        "equipped": false
+      },
+      {
+        "item": "strandwardens_coat",
+        "quantity": 1,
+        "consume": false,
+        "equipped": false
+      }
+    ]
+  }
+}

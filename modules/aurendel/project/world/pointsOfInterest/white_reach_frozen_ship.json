@@ -1,0 +1,43 @@
+{
+  "id": "white_reach_frozen_ship",
+  "name": "The Frozen Ship",
+  "description": "Thirty miles from open water, upright, with her masts still standing.",
+  "area": "frostmere_the_white_reach",
+  "kind": "ruin",
+  "descriptionKey": "white_reach_frozen_ship_desc",
+  "travelMinutes": 15,
+  "tags": [
+    "secret",
+    "ruin"
+  ],
+  "hidden": true,
+  "discover": {
+    "skill": "survival",
+    "difficulty": 15
+  },
+  "map": {
+    "width": "15",
+    "height": "11",
+    "palette": "int_hull"
+  },
+  "position": {
+    "x": 25,
+    "y": 3
+  },
+  "triggers": [
+    {
+      "id": "lastcairn_at_the_ship",
+      "mode": "once",
+      "on": "enter",
+      "description": "A ship in the middle of the ice, and which way it is pointed.",
+      "effects": [
+        {
+          "setFlag": {
+            "flag": "lastcairn_ship_found",
+            "value": true
+          }
+        }
+      ]
+    }
+  ]
+}

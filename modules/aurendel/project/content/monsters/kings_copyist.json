@@ -1,0 +1,52 @@
+{
+  "id": "kings_copyist",
+  "name": "Marn, a Copyist",
+  "description": "Sits still for a living and is not built for anything else.",
+  "level": 3,
+  "xp": 0,
+  "attributes": {
+    "might": 9,
+    "agility": 13,
+    "endurance": 10,
+    "intellect": 15,
+    "instinct": 13,
+    "presence": 11
+  },
+  "abilities": [
+    "strike"
+  ],
+  "behaviour": [
+    {
+      "priority": 0,
+      "use": "strike"
+    }
+  ],
+  "faction": "the_library",
+  "creatureType": "humanoid",
+  "size": "medium",
+  "descriptors": [
+    "an ink-stained"
+  ],
+  "conditionalLoot": [],
+  "loot": "kings_sheet_carried",
+  "resourceOverrides": {
+    "hp": 14
+  },
+  "temperament": {
+    "roamRadius": 24,
+    "investigateRadius": 70,
+    "leashRadius": 100,
+    "wanderChance": 0.4,
+    "disengageTurns": 2,
+    "investigates": [
+      "sight",
+      "hearing",
+      "tracks",
+      "smell"
+    ],
+    "notices": [
+      "hostile",
+      "neutral"
+    ]
+  }
+}

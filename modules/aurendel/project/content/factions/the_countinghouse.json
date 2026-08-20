@@ -1,0 +1,33 @@
+{
+  "id": "the_countinghouse",
+  "name": "The Countinghouse",
+  "description": "Sarnport's exchange, its harbour court, and the insurers who between them decide what a drowned ship was worth and who has to say so out loud.",
+  "initialStanding": 0,
+  "decayPerDay": 0.05,
+  "relations": {
+    "the_crown": 0.25,
+    "the_salvors": -0.4
+  },
+  "ranks": [
+    {
+      "id": "defaulted",
+      "name": "Defaulted",
+      "atLeast": -30
+    },
+    {
+      "id": "named",
+      "name": "A Name on the Book",
+      "atLeast": 0
+    },
+    {
+      "id": "underwriter",
+      "name": "Underwriter",
+      "atLeast": 25
+    },
+    {
+      "id": "of_the_court",
+      "name": "Of the Harbour Court",
+      "atLeast": 55
+    }
+  ]
+}

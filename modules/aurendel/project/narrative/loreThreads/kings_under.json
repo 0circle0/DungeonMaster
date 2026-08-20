@@ -1,0 +1,11 @@
+{
+  "id": "kings_under",
+  "name": "What Goes Under Aurenhal",
+  "description": "Brick newer than the city and older than the gate, warm air off the river, and a missing sheet in the Library's run.",
+  "entries": [
+    "kings_under_brick",
+    "kings_under_air",
+    "kings_under_maps",
+    "kings_under_wharf"
+  ]
+}

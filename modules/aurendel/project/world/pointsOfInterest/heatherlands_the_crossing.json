@@ -1,0 +1,14 @@
+{
+  "id": "heatherlands_the_crossing",
+  "name": "The Moor Crossing",
+  "description": "A line of marker stones a hundred paces apart, and in poor visibility it is the only thing standing between you and a very long walk.",
+  "area": "moor_heatherlands",
+  "kind": "landmark",
+  "descriptionKey": "generic_landmark",
+  "travelMinutes": 8,
+  "tags": [],
+  "position": {
+    "x": 3,
+    "y": 3
+  }
+}

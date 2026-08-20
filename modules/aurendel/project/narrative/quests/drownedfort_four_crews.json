@@ -1,0 +1,102 @@
+{
+  "id": "drownedfort_four_crews",
+  "name": "Four Crews",
+  "description": "Guns run out and a dry magazine, in one night, and four crews since who went to find out which of those two things happened first.",
+  "autoStart": false,
+  "ordered": true,
+  "tags": [
+    "side",
+    "act3",
+    "drownedfort",
+    "sundered_isles"
+  ],
+  "objectives": [
+    {
+      "id": "to_the_hulks",
+      "description": "Reach the hulks at Blackrigging.",
+      "kind": "reach",
+      "count": 1,
+      "hidden": false,
+      "optional": false,
+      "target": "blackrigging_the_hulks"
+    },
+    {
+      "id": "hear_runa",
+      "description": "Hear Runa's list.",
+      "kind": "talk",
+      "count": 1,
+      "hidden": false,
+      "optional": false,
+      "target": "wreckmaster_runa"
+    },
+    {
+      "id": "the_survivor",
+      "description": "Hear what the one who came out said.",
+      "kind": "custom",
+      "count": 1,
+      "hidden": false,
+      "optional": false,
+      "when": {
+        "test": {
+          "ref": "flags.drownedfort_survivor_heard"
+        }
+      }
+    }
+  ],
+  "stages": [],
+  "unlocks": [
+    "drownedfort_the_chimney"
+  ],
+  "rewards": {
+    "xp": 90,
+    "items": [],
+    "reputation": {
+      "the_salvors": 12
+    }
+  },
+  "giver": "wreckmaster_runa",
+  "requires": {
+    "description": "two of the three ward-keys",
+    "anyOf": [
+      {
+        "items": [
+          {
+            "item": "grown_key"
+          },
+          {
+            "item": "cast_key"
+          }
+        ]
+      },
+      {
+        "items": [
+          {
+            "item": "grown_key"
+          },
+          {
+            "item": "glass_key"
+          }
+        ]
+      },
+      {
+        "items": [
+          {
+            "item": "cast_key"
+          },
+          {
+            "item": "glass_key"
+          }
+        ]
+      }
+    ],
+    "minLevel": 6
+  },
+  "onComplete": [
+    {
+      "setFlag": {
+        "flag": "drownedfort_asked",
+        "value": true
+      }
+    }
+  ]
+}

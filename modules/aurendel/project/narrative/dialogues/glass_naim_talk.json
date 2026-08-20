@@ -1,0 +1,362 @@
+{
+  "id": "glass_naim_talk",
+  "start": "greet",
+  "nodes": [
+    {
+      "id": "greet",
+      "says": [
+        {
+          "text": "A hall of wheels and grit and very good light, and one bench at the back with a cloth over it."
+        },
+        {
+          "text": "“Spectacles are the third door. Lenses for instruments, I will want to know the instrument.”"
+        }
+      ],
+      "onEnter": [],
+      "options": [
+        {
+          "id": "glass_naim_lens",
+          "text": "The Hall grinds a lens it does not sell.",
+          "requires": {
+            "without": {
+              "lore": [
+                "glass_bath_lens"
+              ]
+            }
+          },
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "check": {
+            "skill": "persuasion",
+            "difficulty": {
+              "sub": [
+                17,
+                {
+                  "clamp": [
+                    {
+                      "div": [
+                        {
+                          "ref": "reputation.the_library",
+                          "else": 0
+                        },
+                        5
+                      ]
+                    },
+                    -6,
+                    6
+                  ]
+                }
+              ]
+            },
+            "onSuccess": "glass_naim_lens_told",
+            "onFailure": "glass_naim_lens_wont"
+          }
+        },
+        {
+          "id": "glass_naim_glass",
+          "text": "There is glass in the uncovered town that was not made in a kiln.",
+          "requires": {
+            "without": {
+              "lore": [
+                "glass_town_glass"
+              ]
+            }
+          },
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "check": {
+            "skill": "insight",
+            "difficulty": {
+              "sub": [
+                14,
+                {
+                  "clamp": [
+                    {
+                      "div": [
+                        {
+                          "ref": "reputation.the_library",
+                          "else": 0
+                        },
+                        5
+                      ]
+                    },
+                    -6,
+                    6
+                  ]
+                }
+              ]
+            },
+            "onSuccess": "glass_naim_glass_told",
+            "onFailure": "glass_naim_glass_wont"
+          }
+        },
+        {
+          "id": "glass_naim_take",
+          "text": "Give me this year's lens.",
+          "requires": {
+            "without": {
+              "items": [
+                "unsold_lens"
+              ],
+              "flags": [
+                {
+                  "flag": "given:unsold_lens"
+                }
+              ]
+            }
+          },
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "check": {
+            "skill": "persuasion",
+            "difficulty": {
+              "sub": [
+                18,
+                {
+                  "clamp": [
+                    {
+                      "div": [
+                        {
+                          "ref": "reputation.the_library",
+                          "else": 0
+                        },
+                        5
+                      ]
+                    },
+                    -6,
+                    6
+                  ]
+                }
+              ]
+            },
+            "onSuccess": "glass_naim_take_gave",
+            "onFailure": "glass_naim_take_kept"
+          }
+        },
+        {
+          "id": "greet_leave",
+          "text": "Nothing.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": [
+        {
+          "requires": {
+            "factions": [
+              {
+                "faction": "the_library",
+                "maxStanding": -25
+              }
+            ]
+          },
+          "goto": "glass_naim_cold"
+        }
+      ]
+    },
+    {
+      "id": "glass_naim_lens_told",
+      "says": [
+        {
+          "text": "The wheel stops. “Who told you that.” It is not a question, and he does not wait for an answer. “One a year. Since before the guild kept minutes, which is four hundred years of a thing nobody has written down the reason for.” He starts the wheel again. “We grind it because we grind it.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "learnLore": {
+            "entry": "glass_bath_lens"
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "glass_naim_lens_on",
+          "text": "Go on.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "glass_naim_lens_wont",
+      "says": [
+        {
+          "text": "“I've said all I mean to,” they say, and go back to what they were doing."
+        }
+      ],
+      "onEnter": [
+        {
+          "adjustReputation": {
+            "faction": "the_library",
+            "amount": -1
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "glass_naim_lens_drop",
+          "text": "Leave it.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "glass_naim_glass_told",
+      "says": [
+        {
+          "text": "“Nor by lightning. I have looked.” He is interested despite himself. “It runs in lines. Kiln glass pools and lightning glass branches, and that runs in *lines*, which means it was poured along something.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "learnLore": {
+            "entry": "glass_town_glass"
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "glass_naim_glass_on",
+          "text": "Go on.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "glass_naim_glass_wont",
+      "says": [
+        {
+          "text": "“I've said all I mean to,” they say, and go back to what they were doing."
+        }
+      ],
+      "onEnter": [
+        {
+          "adjustReputation": {
+            "faction": "the_library",
+            "amount": -1
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "glass_naim_glass_drop",
+          "text": "Leave it.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "glass_naim_take_gave",
+      "says": [
+        {
+          "text": "He is quiet for a long moment with his hand flat on the bench. “Four hundred years,” he says. “And every one of us assumed the last one knew why.” He wraps it in felt. “Look through it on the lip. Not at the market — on the lip.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "grantItem": {
+            "target": {
+              "ref": "actor.id"
+            },
+            "item": "unsold_lens",
+            "quantity": 1
+          }
+        },
+        {
+          "setFlag": {
+            "flag": "given:unsold_lens",
+            "value": true
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "glass_naim_take_thanks",
+          "text": "Thank you.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "glass_naim_take_kept",
+      "says": [
+        {
+          "text": "“No,” he says, and puts a cloth over it. “It is the Hall's, and the Hall has been very consistent about that.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "adjustReputation": {
+            "faction": "the_library",
+            "amount": -3
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "glass_naim_take_leave",
+          "text": "Then no.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "glass_naim_cold",
+      "says": [
+        {
+          "text": "He puts the cloth over the bench and stands in front of it."
+        }
+      ],
+      "onEnter": [],
+      "options": [
+        {
+          "id": "glass_naim_go",
+          "text": "Leave it.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    }
+  ]
+}

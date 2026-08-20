@@ -1,0 +1,11 @@
+{
+  "id": "isle_terns",
+  "name": "What the Terns Know",
+  "description": "Forty thousand pairs on the Bank, none in the cut, and sand in the cut that will not freeze.",
+  "entries": [
+    "isle_terns_nest",
+    "isle_terns_year",
+    "isle_terns_quiet",
+    "isle_terns_warm"
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "id": "ashfall_hood",
+  "name": "The Hood off the Ashfall",
+  "description": "Taken off a body that was not in a house. Nine feet of ash in one night and this came through it.",
+  "kind": "armor",
+  "slot": "head",
+  "value": 900,
+  "weight": 1,
+  "tags": [
+    "fabled"
+  ],
+  "modifiers": {
+    "guard": 1
+  },
+  "skillBonuses": {
+    "perception": 2,
+    "resolve": 2
+  },
+  "damageInteractions": [
+    {
+      "damageType": "fire",
+      "multiplier": 0.75
+    }
+  ],
+  "rarity": "rare"
+}

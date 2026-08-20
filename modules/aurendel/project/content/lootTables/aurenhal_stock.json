@@ -1,0 +1,50 @@
+{
+  "id": "aurenhal_stock",
+  "entries": [
+    {
+      "weight": 5,
+      "value": {
+        "item": "healing_draught",
+        "quantity": "1d2"
+      }
+    },
+    {
+      "weight": 4,
+      "value": {
+        "item": "ring_mail",
+        "quantity": "1"
+      }
+    },
+    {
+      "weight": 3,
+      "value": {
+        "item": "iron_sword",
+        "quantity": "1"
+      }
+    },
+    {
+      "weight": 3,
+      "value": {
+        "item": "hunting_bow",
+        "quantity": "1"
+      }
+    },
+    {
+      "weight": 2,
+      "value": {
+        "item": "antidote",
+        "quantity": "1d2"
+      }
+    },
+    {
+      "weight": 1,
+      "value": {
+        "item": "warded_coat",
+        "quantity": "1"
+      }
+    }
+  ],
+  "rolls": "4",
+  "emptyChance": 0,
+  "name": "Craftrow Stock"
+}

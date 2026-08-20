@@ -1,0 +1,17 @@
+{
+  "id": "generic_camp",
+  "variants": [
+    {
+      "text": "Fire-scar, tent-pegs, and the ground trodden flat in a ring."
+    },
+    {
+      "text": "Somebody stops here often. The wood pile has been restocked."
+    },
+    {
+      "text": "Shelter of a temporary kind, put up by people who expect to move."
+    },
+    {
+      "text": "Cold ashes, and boot prints going out in three directions."
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "id": "forgetiers_bellows_hall",
+  "name": "The Bellows Hall",
+  "description": "The waterwheel that drives every bellows in the tier, fed from a shaft nobody is allowed to look down.",
+  "area": "karn_dolur_forgetiers",
+  "kind": "landmark",
+  "descriptionKey": "int_workshop",
+  "travelMinutes": 5,
+  "tags": [
+    "landmark"
+  ],
+  "map": {
+    "width": "19",
+    "height": "13",
+    "palette": "int_delved"
+  },
+  "position": {
+    "x": 41,
+    "y": 15
+  }
+}

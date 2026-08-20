@@ -1,0 +1,17 @@
+{
+  "id": "black_bridge_the_span",
+  "name": "The Black Bridge",
+  "description": "A single span over a chasm of no measured depth, with no parapet and no supports anybody can see.",
+  "area": "deeproads_black_bridge",
+  "kind": "crossing",
+  "descriptionKey": "black_bridge_the_span_desc",
+  "travelMinutes": 8,
+  "tags": [
+    "crossing",
+    "landmark"
+  ],
+  "position": {
+    "x": 3,
+    "y": 3
+  }
+}

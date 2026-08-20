@@ -1,0 +1,11 @@
+{
+  "id": "ember_trees",
+  "name": "The New Treeline",
+  "description": "Eleven years of growth with forty rings in it, over workings that were sealed from the inside.",
+  "entries": [
+    "ember_trees_fast",
+    "ember_trees_ring",
+    "ember_trees_sealed",
+    "ember_trees_posts"
+  ]
+}

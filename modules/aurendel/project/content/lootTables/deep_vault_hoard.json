@@ -1,0 +1,34 @@
+{
+  "id": "deep_vault_hoard",
+  "name": "At the Ninth Column",
+  "rolls": "3",
+  "emptyChance": 0,
+  "bonusRollSkill": "lore",
+  "bonusRolls": {
+    "onSuccess": 1,
+    "onCritical": 2
+  },
+  "entries": [
+    {
+      "weight": 3,
+      "value": {
+        "item": "old_coin",
+        "quantity": "6d6"
+      }
+    },
+    {
+      "weight": 2,
+      "value": {
+        "item": "barrow_torc",
+        "quantity": "1"
+      }
+    },
+    {
+      "weight": 2,
+      "value": {
+        "item": "silvered_blade",
+        "quantity": "1"
+      }
+    }
+  ]
+}

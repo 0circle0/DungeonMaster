@@ -1,0 +1,17 @@
+{
+  "id": "duskwood_moot_road_desc",
+  "variants": [
+    {
+      "text": "The only road anybody keeps up: an oak every mile, all planted the same day, all still standing."
+    },
+    {
+      "text": "Wide enough for two carts, drained on both sides, and utterly dark under the canopy."
+    },
+    {
+      "text": "You can walk the Moot Road at night if you are willing to."
+    },
+    {
+      "text": "The forest presses in at the verges and is cut back twice a year, grudgingly, by everybody."
+    }
+  ]
+}

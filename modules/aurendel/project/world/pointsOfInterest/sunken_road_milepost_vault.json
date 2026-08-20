@@ -1,0 +1,39 @@
+{
+  "id": "sunken_road_milepost_vault",
+  "name": "The Milepost Vault",
+  "description": "One of the mileposts is hollow and there is a stair in it.",
+  "area": "glasslands_sunken_road",
+  "kind": "dungeonEntrance",
+  "descriptionKey": "generic_dungeon_mouth",
+  "travelMinutes": 12,
+  "tags": [
+    "secret",
+    "dungeon"
+  ],
+  "hidden": true,
+  "discover": {
+    "skill": "lore",
+    "difficulty": 13
+  },
+  "dungeon": "glasslands_milepost",
+  "position": {
+    "x": 25,
+    "y": 3
+  },
+  "triggers": [
+    {
+      "id": "ninthwell_at_the_milepost",
+      "mode": "once",
+      "on": "enter",
+      "description": "A vault under a milepost, and what the survey in it counts.",
+      "effects": [
+        {
+          "setFlag": {
+            "flag": "ninthwell_survey_read",
+            "value": true
+          }
+        }
+      ]
+    }
+  ]
+}

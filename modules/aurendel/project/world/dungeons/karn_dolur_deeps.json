@@ -1,0 +1,20 @@
+{
+  "id": "karn_dolur_deeps",
+  "name": "The Deeps of Karn Dolur",
+  "description": "The levels the hold gave up: eleven tiers of hall and gallery, sealed at the top and not, apparently, at the bottom.",
+  "biome": "dungeon_delved",
+  "roomCount": "16",
+  "depth": "4",
+  "algorithm": "bsp",
+  "lockedDoorChance": 0,
+  "doorGates": [],
+  "rollEncounters": false,
+  "safeEntrance": true,
+  "bsp": {
+    "minLeaf": 6
+  },
+  "branchiness": 0.4,
+  "width": "37",
+  "height": "37",
+  "bossTable": "the_deeps_below"
+}

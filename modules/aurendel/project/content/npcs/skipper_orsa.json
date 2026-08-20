@@ -1,0 +1,32 @@
+{
+  "id": "skipper_orsa",
+  "name": "Orsa, off the Haul",
+  "description": "Eleven boats work off that beach and hers is the one the other ten watch to see when it is worth going.",
+  "disposition": 4,
+  "gullibility": 0.35,
+  "memorySpan": 160,
+  "offersQuests": [],
+  "caresAbout": [],
+  "reactions": [],
+  "faction": "the_salvors",
+  "dialogue": "coast_orsa_talk",
+  "home": "gullmere_the_bass",
+  "temperament": {
+    "roamRadius": 24,
+    "investigateRadius": 60,
+    "leashRadius": 90,
+    "wanderChance": 0.3,
+    "speeds": {
+      "wander": 0.5
+    },
+    "investigates": [
+      "sight",
+      "hearing"
+    ],
+    "notices": [
+      "hostile",
+      "neutral",
+      "ally"
+    ]
+  }
+}

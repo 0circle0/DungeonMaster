@@ -1,0 +1,68 @@
+{
+  "id": "moot_road_hollow_way",
+  "name": "The Hollow Way",
+  "description": "The road before the road: sunk twenty feet below the forest floor and roofed over by four centuries of growth.",
+  "area": "duskwood_moot_road",
+  "kind": "dungeonEntrance",
+  "descriptionKey": "generic_dungeon_mouth",
+  "travelMinutes": 10,
+  "tags": [
+    "dungeon"
+  ],
+  "dungeon": "duskwood_hollow_way",
+  "position": {
+    "x": 25,
+    "y": 3
+  },
+  "triggers": [
+    {
+      "id": "dusk_miles_committed",
+      "mode": "once",
+      "on": "enter",
+      "description": "Down in the lane, where the extra marks line up.",
+      "requires": {
+        "custom": {
+          "gte": [
+            {
+              "ref": "threads.dusk_miles.known"
+            },
+            2
+          ]
+        }
+      },
+      "effects": [
+        {
+          "emit": {
+            "event": "startQuest",
+            "data": {
+              "quest": "dusk_the_extra_miles"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "hidden": true,
+  "discover": {
+    "skill": "perception",
+    "difficulty": {
+      "max": [
+        7,
+        {
+          "sub": [
+            19,
+            {
+              "mul": [
+                3,
+                {
+                  "ref": "threads.dusk_miles.known"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "gate": "dusk_miles_lane"
+}

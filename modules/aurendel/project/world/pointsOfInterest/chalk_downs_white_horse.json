@@ -1,0 +1,29 @@
+{
+  "id": "chalk_downs_white_horse",
+  "name": "The White Horse",
+  "description": "Cut through the turf into the chalk, three hundred feet from nose to tail, and scoured every seventh year by everybody.",
+  "area": "coast_chalk_downs",
+  "kind": "landmark",
+  "descriptionKey": "chalk_downs_white_horse_desc",
+  "travelMinutes": 8,
+  "tags": [],
+  "position": {
+    "x": 3,
+    "y": 3
+  },
+  "triggers": [
+    {
+      "id": "coast_found_horse",
+      "mode": "once",
+      "on": "enter",
+      "description": "Close up, standing on it, what the shape is actually made of.",
+      "effects": [
+        {
+          "learnLore": {
+            "entry": "coast_horse_shape"
+          }
+        }
+      ]
+    }
+  ]
+}

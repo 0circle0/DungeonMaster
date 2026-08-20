@@ -1,0 +1,43 @@
+{
+  "id": "kingsvale_wraymill",
+  "name": "Wraymill",
+  "description": "Six mills on one leat, a grain market, and the reason Aurenhal eats.",
+  "biome": "urban_timber",
+  "layer": "overworld",
+  "descriptionKey": "kingsvale_wraymill_desc",
+  "dangerLevel": 0,
+  "recommendedLevel": 1,
+  "tags": [
+    "kingsvale",
+    "town"
+  ],
+  "map": {
+    "width": "41",
+    "height": "27"
+  },
+  "entryPoint": {
+    "x": 20,
+    "y": 13
+  },
+  "extra": {
+    "role": "town"
+  },
+  "connections": [
+    {
+      "to": "kingsvale_weirwater_crossing",
+      "travelMinutes": 40
+    },
+    {
+      "to": "kingsvale_oxbow_meadows",
+      "travelMinutes": 35
+    },
+    {
+      "to": "coast_cobbleway",
+      "travelMinutes": 200
+    },
+    {
+      "to": "duskwood_the_undereaves",
+      "travelMinutes": 150
+    }
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "id": "ember_roofs",
+  "name": "Under the Roofs",
+  "description": "Nine feet of ash in one night, no bodies in two dug houses, and every roof the wrong way up.",
+  "entries": [
+    "ember_roofs_up",
+    "ember_roofs_empty",
+    "ember_roofs_one",
+    "ember_roofs_warm"
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "id": "frostmere_cairnhold",
+  "name": "Cairnhold",
+  "description": "Sixteen houses under one long roof, and eleven hundred cairns on the hill behind them.",
+  "biome": "urban_timber",
+  "layer": "overworld",
+  "descriptionKey": "frostmere_cairnhold_desc",
+  "dangerLevel": 3,
+  "recommendedLevel": 8,
+  "tags": [
+    "frostmere",
+    "village"
+  ],
+  "map": {
+    "width": "31",
+    "height": "21"
+  },
+  "entryPoint": {
+    "x": 15,
+    "y": 10
+  },
+  "extra": {
+    "role": "village"
+  },
+  "connections": [
+    {
+      "to": "frostmere_wind_scoured_flats",
+      "travelMinutes": 40
+    },
+    {
+      "to": "frostmere_rimewatch_shore",
+      "travelMinutes": 45
+    },
+    {
+      "to": "skarnspine_cold_shoulder",
+      "travelMinutes": 240,
+      "gate": "frostmere_ice_road"
+    }
+  ]
+}

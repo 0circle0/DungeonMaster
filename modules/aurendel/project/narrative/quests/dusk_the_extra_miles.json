@@ -1,0 +1,57 @@
+{
+  "id": "dusk_the_extra_miles",
+  "name": "The Extra Miles",
+  "description": "Fourteen marked miles on an eleven-mile road, and the three that do not fit sight along a line of their own.",
+  "autoStart": false,
+  "ordered": true,
+  "tags": [
+    "hidden",
+    "duskwood",
+    "dusk_miles"
+  ],
+  "objectives": [
+    {
+      "id": "down_the_lane",
+      "description": "Get down into the sunken lane.",
+      "kind": "reach",
+      "count": 1,
+      "hidden": true,
+      "optional": false,
+      "target": "moot_road_hollow_way"
+    },
+    {
+      "id": "read_the_count",
+      "description": "Work out which three marks are the extra ones.",
+      "kind": "custom",
+      "count": 1,
+      "hidden": true,
+      "optional": false,
+      "when": {
+        "test": {
+          "ref": "flags.dusk_miles_open"
+        }
+      }
+    },
+    {
+      "id": "who_walks_them",
+      "description": "Find what has been walking them.",
+      "kind": "kill",
+      "count": 1,
+      "hidden": true,
+      "optional": false,
+      "target": "mile_walker"
+    }
+  ],
+  "stages": [],
+  "unlocks": [],
+  "rewards": {
+    "xp": 150,
+    "items": [
+      {
+        "item": "mile_oak_ring",
+        "quantity": 1
+      }
+    ],
+    "reputation": {}
+  }
+}

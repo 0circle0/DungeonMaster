@@ -1,0 +1,38 @@
+{
+  "id": "steppe_the_long_grass",
+  "name": "The Long Grass",
+  "description": "Chest-high, unbroken, and it moves in a way that makes it very hard to tell what else is moving in it.",
+  "biome": "steppe",
+  "layer": "overworld",
+  "descriptionKey": "steppe_the_long_grass_desc",
+  "dangerLevel": 3,
+  "recommendedLevel": 3,
+  "tags": [
+    "sunward_steppe"
+  ],
+  "map": {
+    "width": "51",
+    "height": "35"
+  },
+  "entryPoint": {
+    "x": 25,
+    "y": 17
+  },
+  "extra": {
+    "role": "wild"
+  },
+  "connections": [
+    {
+      "to": "steppe_three_wells",
+      "travelMinutes": 50,
+      "gate": "steppe_grazing_right"
+    },
+    {
+      "to": "steppe_dry_river",
+      "travelMinutes": 45
+    }
+  ],
+  "encounterTables": [
+    "steppe_things"
+  ]
+}

@@ -1,0 +1,24 @@
+{
+  "id": "wraymill_great_mill",
+  "name": "The Great Mill",
+  "description": "Four storeys of shaking timber over a wheel you can hear from the bridge.",
+  "area": "kingsvale_wraymill",
+  "kind": "landmark",
+  "descriptionKey": "wraymill_great_mill_desc",
+  "travelMinutes": 5,
+  "tags": [
+    "shop"
+  ],
+  "position": {
+    "x": 20,
+    "y": 8
+  },
+  "services": [
+    "market"
+  ],
+  "map": {
+    "width": "19",
+    "height": "13",
+    "palette": "int_timber"
+  }
+}

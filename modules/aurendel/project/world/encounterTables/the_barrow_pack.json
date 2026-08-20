@@ -1,0 +1,22 @@
+{
+  "id": "the_barrow_pack",
+  "minDepth": 0,
+  "maxDepth": 999,
+  "chance": 1,
+  "emptyWeight": 0,
+  "scalePerLevels": 3,
+  "groups": [
+    {
+      "id": "pack",
+      "weight": 1,
+      "hostile": true,
+      "entries": [
+        {
+          "monster": "grave_hound",
+          "count": "1d2",
+          "scaleWithLevel": false
+        }
+      ]
+    }
+  ]
+}

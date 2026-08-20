@@ -1,0 +1,22 @@
+{
+  "id": "saltcliff_battery",
+  "name": "The Saltcliff Battery",
+  "description": "Guns pointing at a sea nobody has come across in ninety years, kept up regardless.",
+  "area": "sarnport_saltcliff",
+  "kind": "landmark",
+  "descriptionKey": "generic_landmark",
+  "travelMinutes": 6,
+  "tags": [
+    "castle"
+  ],
+  "gate": "saltcliff_battery_door",
+  "map": {
+    "width": "15",
+    "height": "11",
+    "palette": "int_stone"
+  },
+  "position": {
+    "x": 12,
+    "y": 3
+  }
+}

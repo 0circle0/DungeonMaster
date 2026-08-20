@@ -1,0 +1,14 @@
+{
+  "id": "dungeon_ruin_vault_desc",
+  "variants": [
+    {
+      "text": "A cellar that kept its ceiling when the building lost its roof."
+    },
+    {
+      "text": "Steps down into the one part of this place that is still dark."
+    },
+    {
+      "text": "The vaulting held. That is why there is anything left in here."
+    }
+  ]
+}

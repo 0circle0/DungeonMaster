@@ -1,0 +1,16 @@
+{
+  "id": "dungeon_delved_vault",
+  "name": "Delved Vault",
+  "descriptionKey": "dungeon_delved_vault_desc",
+  "weight": 2,
+  "minExits": 1,
+  "maxExits": 2,
+  "encounterChance": 0.4,
+  "trapChance": 0.3,
+  "lootChance": 0.6,
+  "tags": [
+    "dungeon_delved",
+    "vault"
+  ],
+  "role": "vault"
+}

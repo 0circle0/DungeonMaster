@@ -1,0 +1,19 @@
+{
+  "id": "call_the_shut",
+  "name": "Call the Shut",
+  "description": "It does not fight alone if it can help it.",
+  "actionType": "quick",
+  "targeting": "allAllies",
+  "onUse": [
+    {
+      "applyCondition": {
+        "target": {
+          "ref": "target.id"
+        },
+        "condition": "emboldened",
+        "duration": 3
+      }
+    }
+  ],
+  "cooldown": 5
+}

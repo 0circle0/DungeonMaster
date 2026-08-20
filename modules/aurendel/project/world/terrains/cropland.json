@@ -1,0 +1,17 @@
+{
+  "id": "cropland",
+  "name": "Cropland",
+  "description": "Planted rows. Walking through them is nobody's favourite.",
+  "glyph": ";",
+  "color": "yellow",
+  "passable": true,
+  "opaque": false,
+  "moveCost": 1,
+  "tags": [
+    "soft"
+  ],
+  "marks": {
+    "tracks": 1,
+    "smell": 1
+  }
+}

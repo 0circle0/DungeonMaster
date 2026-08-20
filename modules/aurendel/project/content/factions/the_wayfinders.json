@@ -1,0 +1,27 @@
+{
+  "id": "the_wayfinders",
+  "name": "The Wayfinders",
+  "description": "Forty people at Lantern Deep who can get you from there to Karn Dolur and back, and the number is not going up.",
+  "initialStanding": 0,
+  "decayPerDay": 0.06,
+  "relations": {
+    "karn_dolur": 0.2
+  },
+  "ranks": [
+    {
+      "id": "unguided",
+      "name": "Unguided",
+      "atLeast": -30
+    },
+    {
+      "id": "hired",
+      "name": "Hired",
+      "atLeast": 10
+    },
+    {
+      "id": "led",
+      "name": "Led",
+      "atLeast": 35
+    }
+  ]
+}

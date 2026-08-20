@@ -1,0 +1,26 @@
+{
+  "id": "silvered_cache",
+  "entries": [
+    {
+      "weight": 1,
+      "value": {
+        "item": "silvered_blade",
+        "quantity": "1",
+        "unique": true,
+        "requires": {
+          "description": "somebody who would know what it is",
+          "skills": [
+            {
+              "skill": "lore",
+              "minRank": 1
+            }
+          ]
+        },
+        "requirementScope": "anyMember"
+      }
+    }
+  ],
+  "rolls": "1",
+  "emptyChance": 0.5,
+  "name": "A Silvered Cache"
+}

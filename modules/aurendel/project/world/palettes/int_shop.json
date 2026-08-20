@@ -1,0 +1,34 @@
+{
+  "id": "int_shop",
+  "name": "Shop Interior",
+  "floor": "timber_floor",
+  "wall": "wall_timber",
+  "exterior": "wall_timber",
+  "scatter": [
+    {
+      "terrain": "counter",
+      "frequency": 0.05,
+      "distribution": "speckle",
+      "priority": 0
+    },
+    {
+      "terrain": "shelf",
+      "frequency": 0.06,
+      "distribution": "speckle",
+      "priority": 1
+    },
+    {
+      "terrain": "crate",
+      "frequency": 0.04,
+      "distribution": "speckle",
+      "priority": 2
+    },
+    {
+      "terrain": "barrel",
+      "frequency": 0.03,
+      "distribution": "speckle",
+      "priority": 3
+    }
+  ],
+  "door": "door"
+}

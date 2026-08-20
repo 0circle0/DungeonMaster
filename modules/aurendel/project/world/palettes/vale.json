@@ -1,0 +1,44 @@
+{
+  "id": "vale",
+  "name": "The Kingsvale",
+  "floor": "grass",
+  "wall": "hedgerow",
+  "exterior": "hedgerow",
+  "scatter": [
+    {
+      "terrain": "meadow",
+      "frequency": 0.2,
+      "distribution": "patch",
+      "scale": 10,
+      "priority": 0
+    },
+    {
+      "terrain": "cropland",
+      "frequency": 0.14,
+      "distribution": "patch",
+      "scale": 12,
+      "priority": 1
+    },
+    {
+      "terrain": "tree",
+      "frequency": 0.03,
+      "distribution": "speckle",
+      "priority": 2
+    },
+    {
+      "terrain": "shallows",
+      "frequency": 0.06,
+      "distribution": "patch",
+      "scale": 14,
+      "edgeTerrain": "reeds",
+      "edgeWidth": 1,
+      "priority": 3
+    },
+    {
+      "terrain": "fence",
+      "frequency": 0.02,
+      "distribution": "speckle",
+      "priority": 4
+    }
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "id": "sunken_causeway_marker_house",
+  "name": "The Marker House",
+  "description": "Somebody lives on the causeway and resets the marker poles after every flood, which is often.",
+  "area": "thornmere_sunken_causeway",
+  "kind": "settlement",
+  "descriptionKey": "int_house",
+  "travelMinutes": 5,
+  "tags": [],
+  "services": [
+    "inn"
+  ],
+  "map": {
+    "width": "9",
+    "height": "7",
+    "palette": "int_timber"
+  },
+  "position": {
+    "x": 14,
+    "y": 3
+  }
+}

@@ -1,0 +1,457 @@
+{
+  "id": "ember_ovid_talk",
+  "start": "greet",
+  "nodes": [
+    {
+      "id": "greet",
+      "says": [
+        {
+          "text": "A camp at the edge of a mile of black glass, and a man dressing a blade with his back to all of it."
+        },
+        {
+          "text": "“Obsidian by the pound, and I will not cut to order. Say what you want and be quick, the light goes off the sheet at noon.”"
+        }
+      ],
+      "onEnter": [],
+      "options": [
+        {
+          "id": "ember_ovid_stair",
+          "text": "The stair into the sheet.",
+          "requires": {
+            "without": {
+              "lore": [
+                "ember_sheet_stair"
+              ]
+            }
+          },
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "check": {
+            "skill": "insight",
+            "difficulty": {
+              "sub": [
+                14,
+                {
+                  "clamp": [
+                    {
+                      "div": [
+                        {
+                          "ref": "reputation.the_vent_readers",
+                          "else": 0
+                        },
+                        5
+                      ]
+                    },
+                    -6,
+                    6
+                  ]
+                }
+              ]
+            },
+            "onSuccess": "ember_ovid_stair_told",
+            "onFailure": "ember_ovid_stair_wont"
+          }
+        },
+        {
+          "id": "ember_ovid_flat",
+          "text": "A mile of it, and flat.",
+          "requires": {
+            "without": {
+              "lore": [
+                "ember_sheet_flat"
+              ]
+            }
+          },
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "check": {
+            "skill": "persuasion",
+            "difficulty": {
+              "sub": [
+                12,
+                {
+                  "clamp": [
+                    {
+                      "div": [
+                        {
+                          "ref": "reputation.the_vent_readers",
+                          "else": 0
+                        },
+                        5
+                      ]
+                    },
+                    -6,
+                    6
+                  ]
+                }
+              ]
+            },
+            "onSuccess": "ember_ovid_flat_told",
+            "onFailure": "ember_ovid_flat_wont"
+          }
+        },
+        {
+          "id": "ember_ovid_heat",
+          "text": "It is still warm.",
+          "requires": {
+            "without": {
+              "lore": [
+                "ember_sheet_heat"
+              ]
+            }
+          },
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "check": {
+            "skill": "persuasion",
+            "difficulty": {
+              "sub": [
+                15,
+                {
+                  "clamp": [
+                    {
+                      "div": [
+                        {
+                          "ref": "reputation.the_vent_readers",
+                          "else": 0
+                        },
+                        5
+                      ]
+                    },
+                    -6,
+                    6
+                  ]
+                }
+              ]
+            },
+            "onSuccess": "ember_ovid_heat_told",
+            "onFailure": "ember_ovid_heat_wont"
+          }
+        },
+        {
+          "id": "ember_ovid_rule",
+          "text": "Your rule. The one that will not lie flat.",
+          "requires": {
+            "without": {
+              "items": [
+                "cutters_rule"
+              ],
+              "flags": [
+                {
+                  "flag": "given:cutters_rule"
+                }
+              ]
+            }
+          },
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "check": {
+            "skill": "persuasion",
+            "difficulty": {
+              "sub": [
+                17,
+                {
+                  "clamp": [
+                    {
+                      "div": [
+                        {
+                          "ref": "reputation.the_vent_readers",
+                          "else": 0
+                        },
+                        5
+                      ]
+                    },
+                    -6,
+                    6
+                  ]
+                }
+              ]
+            },
+            "onSuccess": "ember_ovid_rule_gave",
+            "onFailure": "ember_ovid_rule_kept"
+          }
+        },
+        {
+          "id": "greet_leave",
+          "text": "Nothing.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": [
+        {
+          "requires": {
+            "factions": [
+              {
+                "faction": "the_vent_readers",
+                "maxStanding": -25
+              }
+            ]
+          },
+          "goto": "ember_ovid_cold"
+        }
+      ]
+    },
+    {
+      "id": "ember_ovid_stair_told",
+      "says": [
+        {
+          "text": "“Cut.” He does not elaborate until you wait. “Not melted through — cut, with tools, and then the glass came up around the cut. You can see the tool marks in the sides of it under the glass.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "learnLore": {
+            "entry": "ember_sheet_stair"
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "ember_ovid_stair_on",
+          "text": "Go on.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "ember_ovid_stair_wont",
+      "says": [
+        {
+          "text": "“I've said all I mean to,” they say, and go back to what they were doing."
+        }
+      ],
+      "onEnter": [
+        {
+          "adjustReputation": {
+            "faction": "the_vent_readers",
+            "amount": -1
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "ember_ovid_stair_drop",
+          "text": "Leave it.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "ember_ovid_flat_told",
+      "says": [
+        {
+          "text": "“Which is the part nobody will discuss.” He puts the blade down. “Lava pools. It cracks, it goes where the ground takes it, it is never flat. That is flat to the width of my rule over a mile.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "learnLore": {
+            "entry": "ember_sheet_flat"
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "ember_ovid_flat_on",
+          "text": "Go on.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "ember_ovid_flat_wont",
+      "says": [
+        {
+          "text": "“I've said all I mean to,” they say, and go back to what they were doing."
+        }
+      ],
+      "onEnter": [
+        {
+          "adjustReputation": {
+            "faction": "the_vent_readers",
+            "amount": -1
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "ember_ovid_flat_drop",
+          "text": "Leave it.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "ember_ovid_heat_told",
+      "says": [
+        {
+          "text": "“Hot. Say hot.” He shows you his palm, which is a map of old burns. “Nine hundred years by the readers' count and I cannot put a hand flat on the treads. Nothing on this Reach holds heat like that. Not the vents. Not the cathedral. Nothing.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "learnLore": {
+            "entry": "ember_sheet_heat"
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "ember_ovid_heat_on",
+          "text": "Go on.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "ember_ovid_heat_wont",
+      "says": [
+        {
+          "text": "“I've said all I mean to,” they say, and go back to what they were doing."
+        }
+      ],
+      "onEnter": [
+        {
+          "adjustReputation": {
+            "faction": "the_vent_readers",
+            "amount": -1
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "ember_ovid_heat_drop",
+          "text": "Leave it.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "ember_ovid_rule_gave",
+      "says": [
+        {
+          "text": "He hands it over and watches your face rather than the rule. “Lay it on the sheet. It lifts, and where it lifts is not random, and I have spent six years pretending that is a flaw in the brass.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "grantItem": {
+            "target": {
+              "ref": "actor.id"
+            },
+            "item": "cutters_rule",
+            "quantity": 1
+          }
+        },
+        {
+          "setFlag": {
+            "flag": "given:cutters_rule",
+            "value": true
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "ember_ovid_rule_thanks",
+          "text": "Thank you.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "ember_ovid_rule_kept",
+      "says": [
+        {
+          "text": "“It is my rule and it is how I make my living. No.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "adjustReputation": {
+            "faction": "the_vent_readers",
+            "amount": -3
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "ember_ovid_rule_leave",
+          "text": "Then no.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "ember_ovid_cold",
+      "says": [
+        {
+          "text": "He picks up the blade he was dressing and holds it, which is answer enough."
+        }
+      ],
+      "onEnter": [],
+      "options": [
+        {
+          "id": "ember_ovid_go",
+          "text": "Leave it.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    }
+  ]
+}

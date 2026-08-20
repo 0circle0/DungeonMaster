@@ -1,0 +1,21 @@
+{
+  "id": "strand_smugglers_run",
+  "name": "The Smugglers' Run",
+  "description": "A sea cave at one end, a hole in a sheep field at the other, and a great deal of deliberate confusion in between.",
+  "biome": "dungeon_cave",
+  "roomCount": "10",
+  "depth": "1",
+  "algorithm": "caverns",
+  "lockedDoorChance": 0,
+  "doorGates": [],
+  "rollEncounters": false,
+  "safeEntrance": true,
+  "caverns": {
+    "fill": 0.44,
+    "smoothingPasses": 5,
+    "birthThreshold": 5
+  },
+  "width": "43",
+  "height": "43",
+  "bossTable": "the_run"
+}

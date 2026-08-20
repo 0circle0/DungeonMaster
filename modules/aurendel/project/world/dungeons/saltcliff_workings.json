@@ -1,0 +1,19 @@
+{
+  "id": "saltcliff_workings",
+  "name": "The Chalk Workings",
+  "description": "Quarried out from under the Rise to build the town, in pillar and stall, and the pillars are not all still there.",
+  "biome": "dungeon_delved",
+  "roomCount": "11",
+  "depth": "2",
+  "algorithm": "bsp",
+  "lockedDoorChance": 0,
+  "doorGates": [],
+  "rollEncounters": false,
+  "safeEntrance": true,
+  "bsp": {
+    "minLeaf": 5
+  },
+  "width": "27",
+  "height": "27",
+  "bossTable": "the_light_on_the_point"
+}

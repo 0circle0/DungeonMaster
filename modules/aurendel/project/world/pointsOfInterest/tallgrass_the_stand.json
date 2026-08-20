@@ -1,0 +1,14 @@
+{
+  "id": "tallgrass_the_stand",
+  "name": "The Tall Stand",
+  "description": "Grass over head height for eleven acres, and you can lose a horse in it and frequently do.",
+  "area": "steppe_tallgrass",
+  "kind": "landmark",
+  "descriptionKey": "generic_landmark",
+  "travelMinutes": 4,
+  "tags": [],
+  "position": {
+    "x": 3,
+    "y": 3
+  }
+}

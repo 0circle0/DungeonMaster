@@ -1,0 +1,25 @@
+{
+  "id": "riverside_bonded_warehouse",
+  "name": "The Bonded Warehouse",
+  "description": "Locked, sealed, and rented by the cubic yard to people who like both.",
+  "area": "aurenhal_riverside",
+  "kind": "market",
+  "descriptionKey": "int_warehouse",
+  "travelMinutes": 4,
+  "tags": [
+    "shop",
+    "docks"
+  ],
+  "position": {
+    "x": 28,
+    "y": 10
+  },
+  "services": [
+    "market"
+  ],
+  "map": {
+    "width": "19",
+    "height": "13",
+    "palette": "int_shop"
+  }
+}

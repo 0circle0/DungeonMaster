@@ -1,0 +1,24 @@
+{
+  "id": "cormorant_store",
+  "name": "The Rock Store",
+  "description": "Line, hooks, salt, and lamp oil.",
+  "area": "isles_cormorant",
+  "kind": "market",
+  "descriptionKey": "int_store",
+  "travelMinutes": 3,
+  "tags": [
+    "shop"
+  ],
+  "services": [
+    "market"
+  ],
+  "map": {
+    "width": "9",
+    "height": "7",
+    "palette": "int_shop"
+  },
+  "position": {
+    "x": 15,
+    "y": 3
+  }
+}

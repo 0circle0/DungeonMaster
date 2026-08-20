@@ -1,0 +1,21 @@
+{
+  "id": "witchwood_the_tower",
+  "name": "The Leaning Tower",
+  "description": "Four storeys of elf-work with a beech growing through it, holding it up and pulling it apart at once.",
+  "area": "duskwood_witchwood",
+  "kind": "ruin",
+  "descriptionKey": "witchwood_the_tower_desc",
+  "travelMinutes": 12,
+  "tags": [
+    "ruin"
+  ],
+  "map": {
+    "width": "15",
+    "height": "11",
+    "palette": "int_stone"
+  },
+  "position": {
+    "x": 14,
+    "y": 3
+  }
+}

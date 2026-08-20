@@ -1,0 +1,20 @@
+{
+  "id": "moulin_lamp",
+  "name": "The Lamp from the Moulin",
+  "description": "It was lit when they shut the door on it, and it was still lit when the door came open. Nobody has been able to put it out.",
+  "kind": "trinket",
+  "slot": "belt",
+  "value": 1100,
+  "weight": 1,
+  "tags": [
+    "fabled"
+  ],
+  "modifiers": {
+    "carry": 2
+  },
+  "skillBonuses": {
+    "survival": 2,
+    "resolve": 2
+  },
+  "rarity": "very_rare"
+}

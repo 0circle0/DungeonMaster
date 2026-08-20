@@ -1,0 +1,24 @@
+{
+  "id": "riverside_ferrymans_rest",
+  "name": "The Ferryman's Rest",
+  "description": "Beds for boatmen, and a landlord who wakes you for the tide whether you asked or not.",
+  "area": "aurenhal_riverside",
+  "kind": "settlement",
+  "descriptionKey": "int_inn",
+  "travelMinutes": 3,
+  "tags": [
+    "inn"
+  ],
+  "position": {
+    "x": 12,
+    "y": 22
+  },
+  "services": [
+    "inn"
+  ],
+  "map": {
+    "width": "11",
+    "height": "9",
+    "palette": "int_timber"
+  }
+}

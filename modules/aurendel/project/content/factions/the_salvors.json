@@ -1,0 +1,33 @@
+{
+  "id": "the_salvors",
+  "name": "The Salvors",
+  "description": "The Isles and the Strand, and a very old argument about the difference between a wreck and a cargo. They have never once lost it in front of a magistrate, because no magistrate has ever come.",
+  "initialStanding": -5,
+  "decayPerDay": 0.06,
+  "relations": {
+    "the_countinghouse": -0.4,
+    "the_crown": -0.2
+  },
+  "ranks": [
+    {
+      "id": "beached",
+      "name": "Beached",
+      "atLeast": -35
+    },
+    {
+      "id": "crewed",
+      "name": "Crewed",
+      "atLeast": 0
+    },
+    {
+      "id": "shareholder",
+      "name": "Holding a Share",
+      "atLeast": 25
+    },
+    {
+      "id": "wreckmaster",
+      "name": "Wreckmaster",
+      "atLeast": 50
+    }
+  ]
+}

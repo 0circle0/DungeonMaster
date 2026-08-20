@@ -1,0 +1,29 @@
+{
+  "id": "snowgate_bell",
+  "name": "The Snowgate Bell",
+  "description": "Rung when the road shuts. It is heard at Highpass and at Karn Dolur both.",
+  "area": "skarnspine_snowgate",
+  "kind": "landmark",
+  "descriptionKey": "generic_landmark",
+  "travelMinutes": 2,
+  "tags": [],
+  "position": {
+    "x": 3,
+    "y": 3
+  },
+  "triggers": [
+    {
+      "id": "skarn_found_rope",
+      "mode": "once",
+      "on": "enter",
+      "description": "Which face of the rope is worn.",
+      "effects": [
+        {
+          "learnLore": {
+            "entry": "skarn_bell_rope"
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,36 @@
+{
+  "id": "ashfall_buried_village",
+  "name": "The Buried Village",
+  "description": "Roofs showing above the ash in a line, and everything below the roofs is exactly as it was left.",
+  "area": "ember_the_ashfall",
+  "kind": "ruin",
+  "descriptionKey": "ashfall_buried_village_desc",
+  "travelMinutes": 10,
+  "tags": [
+    "ruin"
+  ],
+  "map": {
+    "width": "15",
+    "height": "11",
+    "palette": "int_timber"
+  },
+  "position": {
+    "x": 14,
+    "y": 3
+  },
+  "triggers": [
+    {
+      "id": "ember_found_roofs",
+      "mode": "once",
+      "on": "enter",
+      "description": "Which way up the roofs are.",
+      "effects": [
+        {
+          "learnLore": {
+            "entry": "ember_roofs_up"
+          }
+        }
+      ]
+    }
+  ]
+}

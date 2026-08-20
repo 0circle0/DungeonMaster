@@ -1,0 +1,29 @@
+{
+  "id": "leech_channels_the_warm",
+  "name": "The Warm Channels",
+  "description": "Blood-warm, slow, shallow, and thoroughly inhabited by things that appreciate all three.",
+  "area": "thornmere_leech_channels",
+  "kind": "landmark",
+  "descriptionKey": "generic_landmark",
+  "travelMinutes": 8,
+  "tags": [],
+  "position": {
+    "x": 3,
+    "y": 3
+  },
+  "triggers": [
+    {
+      "id": "thorn_found_warm",
+      "mode": "once",
+      "on": "enter",
+      "description": "Warm water, in a marsh, coming up.",
+      "effects": [
+        {
+          "learnLore": {
+            "entry": "thorn_hermit_warm"
+          }
+        }
+      ]
+    }
+  ]
+}

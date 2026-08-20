@@ -1,0 +1,150 @@
+{
+  "id": "dryriver_a_road_or_a_right",
+  "name": "A Road or a Right",
+  "description": "The well is coming back, and there is a surveyed route to it in your hand that the Crown has wanted for four hundred years.",
+  "autoStart": false,
+  "ordered": false,
+  "tags": [
+    "side",
+    "act2",
+    "dryriver",
+    "sunward_steppe"
+  ],
+  "objectives": [
+    {
+      "id": "keep_the_right",
+      "description": "Give the route to the lines.",
+      "kind": "custom",
+      "count": 1,
+      "hidden": false,
+      "optional": true,
+      "when": {
+        "test": {
+          "ref": "flags.dryriver_kept"
+        }
+      }
+    },
+    {
+      "id": "sell_the_road",
+      "description": "Sell the survey to the Crown.",
+      "kind": "custom",
+      "count": 1,
+      "hidden": false,
+      "optional": true,
+      "when": {
+        "test": {
+          "ref": "flags.dryriver_sold"
+        }
+      }
+    },
+    {
+      "id": "settled",
+      "description": "Settle who has the road.",
+      "kind": "custom",
+      "count": 1,
+      "hidden": false,
+      "optional": false,
+      "when": {
+        "any": [
+          {
+            "test": {
+              "ref": "flags.dryriver_kept"
+            }
+          },
+          {
+            "test": {
+              "ref": "flags.dryriver_sold"
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "stages": [],
+  "unlocks": [],
+  "rewards": {
+    "xp": 75,
+    "items": [
+      {
+        "item": "horn_bow",
+        "quantity": 1
+      }
+    ],
+    "reputation": {}
+  },
+  "requires": {
+    "quests": [
+      {
+        "quest": "dryriver_down_the_dry_well",
+        "status": "complete"
+      }
+    ]
+  },
+  "onComplete": [
+    {
+      "if": {
+        "when": {
+          "test": {
+            "ref": "flags.dryriver_sold"
+          }
+        },
+        "then": [
+          {
+            "emit": {
+              "event": "deed",
+              "data": {
+                "kind": "horse_taken"
+              }
+            }
+          },
+          {
+            "adjustReputation": {
+              "faction": "the_crown",
+              "amount": 25
+            }
+          },
+          {
+            "adjustReputation": {
+              "faction": "the_horse_lords",
+              "amount": -30
+            }
+          },
+          {
+            "setFlag": {
+              "flag": "dryriver_surveyed",
+              "value": true
+            }
+          }
+        ],
+        "else": [
+          {
+            "emit": {
+              "event": "deed",
+              "data": {
+                "kind": "line_ridden"
+              }
+            }
+          },
+          {
+            "adjustReputation": {
+              "faction": "the_horse_lords",
+              "amount": 28
+            }
+          },
+          {
+            "adjustReputation": {
+              "faction": "the_crown",
+              "amount": -8
+            }
+          },
+          {
+            "setFlag": {
+              "flag": "dryriver_unwritten",
+              "value": true
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

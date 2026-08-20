@@ -1,0 +1,17 @@
+{
+  "id": "the_cut_the_narrows",
+  "name": "The Cut",
+  "description": "A hundred feet deep, forty wide, dead straight, and the tool marks are still on the walls.",
+  "area": "skarnspine_the_cut",
+  "kind": "crossing",
+  "descriptionKey": "the_cut_the_narrows_desc",
+  "travelMinutes": 6,
+  "tags": [
+    "crossing",
+    "landmark"
+  ],
+  "position": {
+    "x": 3,
+    "y": 3
+  }
+}

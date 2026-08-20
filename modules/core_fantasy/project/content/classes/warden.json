@@ -1,0 +1,34 @@
+{
+  "id": "warden",
+  "name": "Warden",
+  "description": "Trained to hold a line, a bridge, or a doorway, and to be the last one through it.",
+  "hitDie": "1d10",
+  "primaryAttribute": "might",
+  "attributeBonuses": {
+    "might": 1
+  },
+  "skillProficiencies": [
+    "athletics",
+    "perception",
+    "resolve"
+  ],
+  "saveProficiencies": [
+    "fortitude",
+    "will"
+  ],
+  "abilitiesByLevel": {
+    "1": [
+      "strike",
+      "guarded_stance",
+      "dodge",
+      "assist",
+      "disengage"
+    ],
+    "2": [
+      "rally"
+    ],
+    "3": [
+      "shove"
+    ]
+  }
+}

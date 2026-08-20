@@ -1,0 +1,57 @@
+{
+  "id": "step_the_last_water",
+  "name": "The Last Water",
+  "description": "A spring that has never failed at the edge of a country where nothing runs, warm and tasting of iron, with a shored way down beside it.",
+  "autoStart": false,
+  "ordered": true,
+  "tags": [
+    "hidden",
+    "sunward_steppe",
+    "step_water"
+  ],
+  "objectives": [
+    {
+      "id": "to_the_shoring",
+      "description": "Get to the top of the shoring.",
+      "kind": "reach",
+      "count": 1,
+      "hidden": true,
+      "optional": false,
+      "target": "south_reach_sand_shaft"
+    },
+    {
+      "id": "past_the_timber",
+      "description": "Get past the timber somebody ordered.",
+      "kind": "custom",
+      "count": 1,
+      "hidden": true,
+      "optional": false,
+      "when": {
+        "test": {
+          "ref": "flags.step_water_open"
+        }
+      }
+    },
+    {
+      "id": "what_warms_it",
+      "description": "Meet what has been keeping the water warm.",
+      "kind": "kill",
+      "count": 1,
+      "hidden": true,
+      "optional": false,
+      "target": "the_warm_thing"
+    }
+  ],
+  "stages": [],
+  "unlocks": [],
+  "rewards": {
+    "xp": 175,
+    "items": [
+      {
+        "item": "warm_water_hood",
+        "quantity": 1
+      }
+    ],
+    "reputation": {}
+  }
+}

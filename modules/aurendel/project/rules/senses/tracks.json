@@ -1,0 +1,20 @@
+{
+  "id": "tracks",
+  "name": "Tracks",
+  "description": "Prints in soft ground. Worthless on stone and worthless from across a room, but they last hours after a scent has gone and they say which way a thing was going.",
+  "defaultRange": 10,
+  "propagation": "line",
+  "blockedBy": "opaque",
+  "falloff": "linear",
+  "lingerMinutes": 240,
+  "spreadPerMinute": 0,
+  "rememberMinutes": 45,
+  "impressionTextKey": "saw_tracks",
+  "faintImpressionTextKey": "saw_tracks_faint",
+  "emptyTextKey": "saw_no_tracks",
+  "thresholds": {
+    "detect": 0.05,
+    "investigate": 0.2,
+    "aggro": 1
+  }
+}

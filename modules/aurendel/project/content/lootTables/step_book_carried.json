@@ -1,0 +1,26 @@
+{
+  "id": "step_book_carried",
+  "name": "What Talith Kept",
+  "rolls": "1",
+  "emptyChance": 0,
+  "entries": [
+    {
+      "weight": 1,
+      "value": {
+        "item": "flood_book",
+        "quantity": "1",
+        "unique": true,
+        "requirementScope": "party",
+        "requires": {
+          "without": {
+            "flags": [
+              {
+                "flag": "given:flood_book"
+              }
+            ]
+          }
+        }
+      }
+    }
+  ]
+}

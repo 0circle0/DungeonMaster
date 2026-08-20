@@ -1,0 +1,329 @@
+{
+  "id": "skarn_bel_talk",
+  "start": "greet",
+  "nodes": [
+    {
+      "id": "greet",
+      "says": [
+        {
+          "text": "A shelf of rock halfway up nine hundred steps, a bench, a brazier, and somebody sitting with a broom across her knees."
+        },
+        {
+          "text": "“Sit if you are climbing. Everybody sits.”"
+        }
+      ],
+      "onEnter": [],
+      "options": [
+        {
+          "id": "skarn_bel_swept",
+          "text": "Who pays you to sweep the stair?",
+          "requires": {
+            "without": {
+              "lore": [
+                "skarn_stair_swept"
+              ]
+            }
+          },
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "check": {
+            "skill": "persuasion",
+            "difficulty": {
+              "sub": [
+                12,
+                {
+                  "clamp": [
+                    {
+                      "div": [
+                        {
+                          "ref": "reputation.karn_dolur",
+                          "else": 0
+                        },
+                        5
+                      ]
+                    },
+                    -6,
+                    6
+                  ]
+                }
+              ]
+            },
+            "onSuccess": "skarn_bel_swept_told",
+            "onFailure": "skarn_bel_swept_wont"
+          }
+        },
+        {
+          "id": "skarn_bel_count",
+          "text": "How many steps is it?",
+          "requires": {
+            "without": {
+              "lore": [
+                "skarn_stair_count"
+              ]
+            }
+          },
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "check": {
+            "skill": "insight",
+            "difficulty": {
+              "sub": [
+                14,
+                {
+                  "clamp": [
+                    {
+                      "div": [
+                        {
+                          "ref": "reputation.karn_dolur",
+                          "else": 0
+                        },
+                        5
+                      ]
+                    },
+                    -6,
+                    6
+                  ]
+                }
+              ]
+            },
+            "onSuccess": "skarn_bel_count_told",
+            "onFailure": "skarn_bel_count_wont"
+          }
+        },
+        {
+          "id": "skarn_bel_tally",
+          "text": "Four generations of counting. I want it.",
+          "requires": {
+            "without": {
+              "items": [
+                "sweeping_tally"
+              ],
+              "flags": [
+                {
+                  "flag": "given:sweeping_tally"
+                }
+              ]
+            }
+          },
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "check": {
+            "skill": "persuasion",
+            "difficulty": {
+              "sub": [
+                13,
+                {
+                  "clamp": [
+                    {
+                      "div": [
+                        {
+                          "ref": "reputation.karn_dolur",
+                          "else": 0
+                        },
+                        5
+                      ]
+                    },
+                    -6,
+                    6
+                  ]
+                }
+              ]
+            },
+            "onSuccess": "skarn_bel_tally_gave",
+            "onFailure": "skarn_bel_tally_kept"
+          }
+        },
+        {
+          "id": "greet_leave",
+          "text": "Nothing.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "skarn_bel_swept_told",
+      "says": [
+        {
+          "text": "“Nobody.” Bel says it without any bitterness, which is the unsettling part. “The hold pays the railmen, the lampmen and the gate. Not the sweeping.” A shrug. “My great-grandfather started coming up because it wanted doing. It has never wanted doing. It is clean when I get there, every day, and I sweep it anyway.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "learnLore": {
+            "entry": "skarn_stair_swept"
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "skarn_bel_swept_on",
+          "text": "Go on.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "skarn_bel_swept_wont",
+      "says": [
+        {
+          "text": "“I've said all I mean to,” they say, and go back to what they were doing."
+        }
+      ],
+      "onEnter": [
+        {
+          "adjustReputation": {
+            "faction": "karn_dolur",
+            "amount": -1
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "skarn_bel_swept_drop",
+          "text": "Leave it.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "skarn_bel_count_told",
+      "says": [
+        {
+          "text": "“Nine hundred and one.” Instantly. Then, watching your face: “The lintel says nine hundred. It has said nine hundred for six hundred years and the hold does not make that kind of mistake.” Bel shoulders the broom. “Four of us have counted. We all get nine hundred and one. We have never worked out which one is the extra.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "learnLore": {
+            "entry": "skarn_stair_count"
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "skarn_bel_count_on",
+          "text": "Go on.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "skarn_bel_count_wont",
+      "says": [
+        {
+          "text": "“I've said all I mean to,” they say, and go back to what they were doing."
+        }
+      ],
+      "onEnter": [
+        {
+          "adjustReputation": {
+            "faction": "karn_dolur",
+            "amount": -1
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "skarn_bel_count_drop",
+          "text": "Leave it.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "skarn_bel_tally_gave",
+      "says": [
+        {
+          "text": "It is a folded sheaf, tied. “Every day, the count and the state of it,” Bel says. “Four hands and the same two things written down over and over: nine hundred and one, and already clean.” A pause. “If you find the extra one, do not tell the hold before you tell me.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "grantItem": {
+            "target": {
+              "ref": "actor.id"
+            },
+            "item": "sweeping_tally",
+            "quantity": 1
+          }
+        },
+        {
+          "setFlag": {
+            "flag": "given:sweeping_tally",
+            "value": true
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "skarn_bel_tally_thanks",
+          "text": "Thank you.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "skarn_bel_tally_kept",
+      "says": [
+        {
+          "text": "“It is the family's,” Bel says, and the sheaf goes back inside her coat."
+        }
+      ],
+      "onEnter": [
+        {
+          "adjustReputation": {
+            "faction": "karn_dolur",
+            "amount": -2
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "skarn_bel_tally_leave",
+          "text": "Then no.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    }
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "id": "deep_vault_ninth",
+  "name": "The Ninth Column",
+  "description": "Eight columns hold the roof. The ninth holds nothing and it is the only one that weeps.",
+  "kind": "ward",
+  "blockedTextKey": "deep_vault_blocked",
+  "staysOpen": true,
+  "onOpen": [
+    {
+      "setFlag": {
+        "flag": "deep_vault_open",
+        "value": true
+      }
+    }
+  ],
+  "onBlocked": [],
+  "opensWith": [],
+  "tags": [],
+  "requires": {
+    "items": [
+      {
+        "item": "survey_plate",
+        "quantity": 1,
+        "consume": false,
+        "equipped": false
+      }
+    ]
+  }
+}

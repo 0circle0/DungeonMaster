@@ -1,0 +1,21 @@
+{
+  "id": "frostmere_blue_caves",
+  "name": "The Blue Caves",
+  "description": "Melt channels in the calving face, which are a different shape every year and connect to different things.",
+  "biome": "dungeon_ice",
+  "roomCount": "11",
+  "depth": "2",
+  "algorithm": "caverns",
+  "lockedDoorChance": 0,
+  "doorGates": [],
+  "rollEncounters": false,
+  "safeEntrance": true,
+  "caverns": {
+    "fill": 0.43,
+    "smoothingPasses": 5,
+    "birthThreshold": 5
+  },
+  "width": "45",
+  "height": "45",
+  "bossTable": "frost_blue_boss"
+}

@@ -1,0 +1,14 @@
+{
+  "id": "dungeon_cave_boss_desc",
+  "variants": [
+    {
+      "text": "The great chamber. The roof is out of sight and there is water running somewhere under the floor."
+    },
+    {
+      "text": "Columns of flowstone from floor to roof, and the space between them is enormous."
+    },
+    {
+      "text": "You can shout in here and wait a genuinely uncomfortable time for the answer."
+    }
+  ]
+}

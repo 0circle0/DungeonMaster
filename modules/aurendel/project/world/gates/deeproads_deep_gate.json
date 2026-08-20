@@ -1,0 +1,24 @@
+{
+  "id": "deeproads_deep_gate",
+  "name": "The Deep Gate",
+  "kind": "toll",
+  "description": "Karn Dolur's door onto the Deeproads, and the hold charges more to go down than it does to come in.",
+  "staysOpen": false,
+  "requires": {
+    "description": "20 marks",
+    "currency": 20
+  },
+  "bypass": {
+    "skill": "stealth",
+    "difficulty": 17,
+    "retryable": true
+  },
+  "onOpen": [
+    {
+      "adjustCurrency": {
+        "amount": -20
+      }
+    }
+  ],
+  "blockedTextKey": "deeproads_deep_gate_blocked"
+}

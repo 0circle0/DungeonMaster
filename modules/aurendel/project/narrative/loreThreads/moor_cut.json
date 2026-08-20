@@ -1,0 +1,11 @@
+{
+  "id": "moor_cut",
+  "name": "Forty-One Out, Forty-One In",
+  "description": "Every body the deep peat gave up written down as returned, and not always the one that was taken.",
+  "entries": [
+    "moor_cut_count",
+    "moor_cut_swapped",
+    "moor_cut_buckle",
+    "moor_cut_band"
+  ]
+}

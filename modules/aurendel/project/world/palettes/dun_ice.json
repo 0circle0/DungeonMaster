@@ -1,0 +1,28 @@
+{
+  "id": "dun_ice",
+  "name": "Ice Cave",
+  "floor": "ice",
+  "wall": "wall_ice",
+  "exterior": "wall_ice",
+  "scatter": [
+    {
+      "terrain": "snow",
+      "frequency": 0.12,
+      "distribution": "patch",
+      "scale": 6,
+      "priority": 0
+    },
+    {
+      "terrain": "rubble",
+      "frequency": 0.05,
+      "distribution": "speckle",
+      "priority": 1
+    },
+    {
+      "terrain": "crevasse",
+      "frequency": 0.03,
+      "distribution": "speckle",
+      "priority": 2
+    }
+  ]
+}

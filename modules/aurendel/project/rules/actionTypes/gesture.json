@@ -1,0 +1,6 @@
+{
+  "id": "gesture",
+  "name": "Gesture",
+  "description": "A sign, a point, a hand held up.",
+  "perTurn": 99
+}

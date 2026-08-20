@@ -1,0 +1,33 @@
+{
+  "id": "charcoal_burner_moll",
+  "name": "Moll of the Burn",
+  "description": "Burns charcoal in a clearing the smoke never leaves, and holds the charter that says where she may not do it.",
+  "disposition": 3,
+  "gullibility": 0.35,
+  "memorySpan": 180,
+  "offersQuests": [],
+  "caresAbout": [],
+  "reactions": [],
+  "faction": "the_keepers",
+  "dialogue": "dusk_moll_talk",
+  "home": "rooksrest_house_a",
+  "statblock": "dusk_burner",
+  "temperament": {
+    "roamRadius": 24,
+    "investigateRadius": 60,
+    "leashRadius": 90,
+    "wanderChance": 0.3,
+    "speeds": {
+      "wander": 0.5
+    },
+    "investigates": [
+      "sight",
+      "hearing"
+    ],
+    "notices": [
+      "hostile",
+      "neutral",
+      "ally"
+    ]
+  }
+}

@@ -1,0 +1,44 @@
+{
+  "id": "volcanic",
+  "name": "The Ember Reach",
+  "floor": "ash",
+  "wall": "rock",
+  "exterior": "rock",
+  "scatter": [
+    {
+      "terrain": "cinder",
+      "frequency": 0.2,
+      "distribution": "patch",
+      "scale": 9,
+      "priority": 0
+    },
+    {
+      "terrain": "obsidian",
+      "frequency": 0.1,
+      "distribution": "patch",
+      "scale": 7,
+      "priority": 1
+    },
+    {
+      "terrain": "lava",
+      "frequency": 0.04,
+      "distribution": "patch",
+      "scale": 6,
+      "edgeTerrain": "cinder",
+      "edgeWidth": 1,
+      "priority": 2
+    },
+    {
+      "terrain": "vent",
+      "frequency": 0.02,
+      "distribution": "speckle",
+      "priority": 3
+    },
+    {
+      "terrain": "rock",
+      "frequency": 0.06,
+      "distribution": "speckle",
+      "priority": 4
+    }
+  ]
+}

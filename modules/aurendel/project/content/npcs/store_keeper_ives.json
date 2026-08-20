@@ -1,0 +1,34 @@
+{
+  "id": "store_keeper_ives",
+  "name": "Ives, at the Charcoal Store",
+  "description": "Weighs, bags and sells what comes out of the burns, and knows every burner's stretch of wood by the taste of the smoke.",
+  "disposition": 5,
+  "gullibility": 0.4,
+  "memorySpan": 160,
+  "offersQuests": [],
+  "caresAbout": [],
+  "reactions": [],
+  "faction": "the_keepers",
+  "dialogue": "dusk_ives_talk",
+  "home": "rooksrest_store",
+  "shop": {
+    "lootTable": "keeper_stock",
+    "buysTags": [
+      "material"
+    ],
+    "priceMultiplier": 1.15
+  },
+  "temperament": {
+    "roamRadius": 0,
+    "wanderChance": 0,
+    "speeds": {
+      "wander": 0
+    },
+    "investigates": [],
+    "notices": [
+      "hostile",
+      "neutral",
+      "ally"
+    ]
+  }
+}

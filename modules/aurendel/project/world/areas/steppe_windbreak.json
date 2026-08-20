@@ -1,0 +1,38 @@
+{
+  "id": "steppe_windbreak",
+  "name": "The Windbreak",
+  "description": "A line of trees eleven miles long, planted, and there is no record of anybody planting it.",
+  "biome": "steppe",
+  "layer": "overworld",
+  "descriptionKey": "steppe_windbreak_desc",
+  "dangerLevel": 3,
+  "recommendedLevel": 3,
+  "tags": [
+    "sunward_steppe"
+  ],
+  "map": {
+    "width": "51",
+    "height": "35"
+  },
+  "entryPoint": {
+    "x": 25,
+    "y": 17
+  },
+  "extra": {
+    "role": "wild"
+  },
+  "connections": [
+    {
+      "to": "steppe_tallgrass",
+      "travelMinutes": 45
+    },
+    {
+      "to": "steppe_horse_road",
+      "travelMinutes": 40
+    },
+    {
+      "to": "thornmere_reedy_bottom",
+      "travelMinutes": 200
+    }
+  ]
+}

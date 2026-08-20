@@ -1,0 +1,14 @@
+{
+  "id": "dungeon_delved_entrance_desc",
+  "variants": [
+    {
+      "text": "A squared doorway with a proper lintel and a threshold worn into a dip."
+    },
+    {
+      "text": "The stair down is cut, not built, and every riser is the same height."
+    },
+    {
+      "text": "Somebody wanted this found: the approach is dressed on both sides."
+    }
+  ]
+}

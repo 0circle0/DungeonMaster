@@ -1,0 +1,24 @@
+{
+  "id": "market_road_waystation",
+  "name": "The Road Station",
+  "description": "Halfway to the Long Hall, staffed, and the only reliably safe place on the road.",
+  "area": "deeproads_the_deep_market_road",
+  "kind": "settlement",
+  "descriptionKey": "int_store",
+  "travelMinutes": 5,
+  "tags": [
+    "inn"
+  ],
+  "services": [
+    "inn"
+  ],
+  "map": {
+    "width": "11",
+    "height": "9",
+    "palette": "int_delved"
+  },
+  "position": {
+    "x": 14,
+    "y": 3
+  }
+}

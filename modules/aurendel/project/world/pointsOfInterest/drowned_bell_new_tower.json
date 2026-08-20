@@ -1,0 +1,22 @@
+{
+  "id": "drowned_bell_new_tower",
+  "name": "The New Bell Tower",
+  "description": "Built directly over the old one, which is under it, and under water.",
+  "area": "thornmere_drowned_bell",
+  "kind": "landmark",
+  "descriptionKey": "drowned_bell_new_tower_desc",
+  "travelMinutes": 4,
+  "tags": [
+    "landmark"
+  ],
+  "gate": "drowned_bell_belfry",
+  "map": {
+    "width": "11",
+    "height": "9",
+    "palette": "int_stone"
+  },
+  "position": {
+    "x": 3,
+    "y": 3
+  }
+}

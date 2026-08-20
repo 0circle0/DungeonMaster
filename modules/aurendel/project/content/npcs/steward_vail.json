@@ -1,0 +1,33 @@
+{
+  "id": "steward_vail",
+  "name": "Under-Steward Vail",
+  "description": "Runs the part of the Crown's business that does not get written down, and would like it to stay that way.",
+  "disposition": 0,
+  "gullibility": 0.2,
+  "memorySpan": 180,
+  "offersQuests": [
+    "the_crowns_commission"
+  ],
+  "caresAbout": [
+    "crown_served",
+    "crown_defied",
+    "ward_broken"
+  ],
+  "reactions": [],
+  "faction": "the_crown",
+  "dialogue": "vail_talk",
+  "home": "aurenhal_kingshold",
+  "temperament": {
+    "roamRadius": 0,
+    "wanderChance": 0,
+    "speeds": {
+      "wander": 0
+    },
+    "investigates": [],
+    "notices": [
+      "hostile",
+      "neutral",
+      "ally"
+    ]
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "id": "isle_wreck_hatch",
+  "name": "The Dogged Hatch",
+  "description": "Every hatch on her is dogged, and every dog was driven from outside.",
+  "kind": "ward",
+  "blockedTextKey": "isle_wreck_blocked",
+  "staysOpen": true,
+  "onOpen": [
+    {
+      "setFlag": {
+        "flag": "isle_wreck_open",
+        "value": true
+      }
+    }
+  ],
+  "onBlocked": [],
+  "opensWith": [],
+  "tags": [],
+  "requires": {
+    "items": [
+      {
+        "item": "capstan_plate",
+        "quantity": 1,
+        "consume": false,
+        "equipped": false
+      },
+      {
+        "item": "tern_cloak",
+        "quantity": 1,
+        "consume": false,
+        "equipped": false
+      }
+    ]
+  }
+}

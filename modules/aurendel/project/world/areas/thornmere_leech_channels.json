@@ -1,0 +1,37 @@
+{
+  "id": "thornmere_leech_channels",
+  "name": "The Leech Channels",
+  "description": "Warm, slow, shallow, and thoroughly inhabited.",
+  "biome": "swamp",
+  "layer": "overworld",
+  "descriptionKey": "thornmere_leech_channels_desc",
+  "dangerLevel": 6,
+  "recommendedLevel": 7,
+  "tags": [
+    "thornmere"
+  ],
+  "map": {
+    "width": "51",
+    "height": "35"
+  },
+  "entryPoint": {
+    "x": 25,
+    "y": 17
+  },
+  "extra": {
+    "role": "wild"
+  },
+  "connections": [
+    {
+      "to": "thornmere_drowned_bell",
+      "travelMinutes": 45
+    },
+    {
+      "to": "thornmere_the_hummocks",
+      "travelMinutes": 40
+    }
+  ],
+  "encounterTables": [
+    "marsh_things"
+  ]
+}

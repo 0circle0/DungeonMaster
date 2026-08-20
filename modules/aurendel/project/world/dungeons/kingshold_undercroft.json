@@ -1,0 +1,22 @@
+{
+  "id": "kingshold_undercroft",
+  "name": "The Kingshold Undercroft",
+  "description": "Storerooms, and past the storerooms the river-fort the castle was built on, which nobody has surveyed past the fourth room.",
+  "biome": "dungeon_delved",
+  "roomCount": "13",
+  "depth": "3",
+  "algorithm": "rooms",
+  "lockedDoorChance": 0,
+  "doorGates": [],
+  "rollEncounters": false,
+  "safeEntrance": true,
+  "branchiness": 0.3,
+  "winding": {
+    "continueChance": 0.7,
+    "turnPenalty": 0.35
+  },
+  "width": "73",
+  "height": "73",
+  "corridorLength": "2d3",
+  "bossTable": "the_door_warden"
+}

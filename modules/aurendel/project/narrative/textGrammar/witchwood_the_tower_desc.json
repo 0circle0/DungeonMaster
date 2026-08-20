@@ -1,0 +1,14 @@
+{
+  "id": "witchwood_the_tower_desc",
+  "variants": [
+    {
+      "text": "Four storeys of elf-work with a beech growing straight through it, holding it up and pulling it apart in the same motion."
+    },
+    {
+      "text": "The stonework has no joints you can find and the tree has found them anyway."
+    },
+    {
+      "text": "It leans. It has leaned at exactly this angle for as long as anybody has records."
+    }
+  ]
+}

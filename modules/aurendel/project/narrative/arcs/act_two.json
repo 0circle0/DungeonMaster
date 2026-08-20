@@ -1,0 +1,20 @@
+{
+  "id": "act_two",
+  "name": "The Three Wards",
+  "description": "Nine were built. Three are already open. You can be at two of the rest in time, and not at all three.",
+  "quests": [
+    "thornward_road",
+    "thornward_site",
+    "thornward_choice",
+    "thornward_key",
+    "sisters_road",
+    "sisters_site",
+    "sisters_choice",
+    "sisters_key",
+    "kurgan_road",
+    "kurgan_site",
+    "kurgan_choice",
+    "kurgan_key"
+  ],
+  "isEnding": false
+}

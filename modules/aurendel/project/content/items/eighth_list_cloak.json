@@ -1,0 +1,28 @@
+{
+  "id": "eighth_list_cloak",
+  "name": "The Cloak of the Eighth List",
+  "description": "Keeper's oilcloth with eight lines stitched inside the collar and three of them picked out again in red.",
+  "kind": "armor",
+  "slot": "cloak",
+  "value": 1600,
+  "weight": 2,
+  "rarity": "very_rare",
+  "tags": [
+    "fabled",
+    "trial"
+  ],
+  "modifiers": {
+    "guard": 2
+  },
+  "skillBonuses": {
+    "resolve": 3,
+    "lore": 3,
+    "perception": 2
+  },
+  "damageInteractions": [
+    {
+      "damageType": "necrotic",
+      "multiplier": 0.5
+    }
+  ]
+}

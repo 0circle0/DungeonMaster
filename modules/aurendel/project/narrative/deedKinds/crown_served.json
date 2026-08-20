@@ -1,0 +1,8 @@
+{
+  "id": "crown_served",
+  "name": "Served the Crown",
+  "faction": "the_crown",
+  "severity": 10,
+  "memorability": 1,
+  "distortion": 0.2
+}

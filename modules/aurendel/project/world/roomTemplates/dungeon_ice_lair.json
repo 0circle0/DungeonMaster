@@ -1,0 +1,16 @@
+{
+  "id": "dungeon_ice_lair",
+  "name": "Ice Den",
+  "descriptionKey": "dungeon_ice_lair_desc",
+  "weight": 2,
+  "minExits": 1,
+  "maxExits": 3,
+  "encounterChance": 0.4,
+  "trapChance": 0.05,
+  "lootChance": 0.2,
+  "tags": [
+    "dungeon_ice",
+    "lair"
+  ],
+  "role": "lair"
+}

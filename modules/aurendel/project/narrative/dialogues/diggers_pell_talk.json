@@ -1,0 +1,405 @@
+{
+  "id": "diggers_pell_talk",
+  "start": "greet",
+  "nodes": [
+    {
+      "id": "greet",
+      "says": [
+        {
+          "text": "The camp is eleven tents and a trestle with the finds laid out on it in rows, labelled, in a hand you have seen before on the fourth gallery. \"Do not touch the trestle,\" says Pell, without turning round."
+        }
+      ],
+      "options": [
+        {
+          "id": "what_is_this",
+          "text": "What is this dig?",
+          "effects": [
+            {
+              "emit": {
+                "event": "startQuest",
+                "data": {
+                  "quest": "diggers_the_west_end"
+                }
+              }
+            }
+          ],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "eleven_men",
+          "requires": {
+            "quests": [
+              {
+                "quest": "diggers_the_west_end",
+                "status": "unstarted"
+              },
+              {
+                "quest": "the_undercroft",
+                "status": "complete"
+              }
+            ]
+          }
+        },
+        {
+          "id": "the_letters",
+          "text": "The moot has written to you.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "the_letters"
+        },
+        {
+          "id": "leave",
+          "text": "Nothing.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": [
+        {
+          "requires": {
+            "quests": [
+              {
+                "quest": "diggers_the_ridge",
+                "status": "active"
+              }
+            ],
+            "flags": [
+              {
+                "flag": "diggers_ridge_walked",
+                "equals": true
+              }
+            ]
+          },
+          "goto": "the_alignment"
+        },
+        {
+          "requires": {
+            "flags": [
+              {
+                "flag": "diggers_east_opened",
+                "equals": true
+              }
+            ],
+            "without": {
+              "flags": [
+                {
+                  "flag": "diggers_recorded"
+                },
+                {
+                  "flag": "diggers_reburied"
+                }
+              ]
+            }
+          },
+          "goto": "record_or_rebury"
+        },
+        {
+          "requires": {
+            "memories": [
+              {
+                "deedKind": "record_stolen",
+                "who": "speaker"
+              }
+            ]
+          },
+          "goto": "she_has_heard"
+        }
+      ]
+    },
+    {
+      "id": "the_letters",
+      "says": [
+        {
+          "text": "\"Twice,\" says Pell. \"Politely, both times, and I have filed both, and I would like it noted that filing is not the same as ignoring.\" She straightens a label that did not need it. \"They say the east end is shut for a reason. They do not say the reason. That is rather the difficulty with the moot.\""
+        }
+      ],
+      "options": [
+        {
+          "id": "back",
+          "text": "Hm.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "greet"
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": []
+    },
+    {
+      "id": "eleven_men",
+      "says": [
+        {
+          "text": "\"Eleven diggers on day rates, a fellow's warrant, and the largest long barrow west of the Kurgan field.\" She finally turns round. \"And four of the eleven did not come to work this morning, which is the part I would like dealt with before I explain the rest.\""
+        }
+      ],
+      "options": [
+        {
+          "id": "why_not",
+          "text": "Why not?",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "the_spoil"
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": []
+    },
+    {
+      "id": "the_spoil",
+      "says": [
+        {
+          "text": "\"Because the spoil heap is on the wrong side of the trench,\" says Pell, \"and I did not put it there, and neither did they.\" A precise pause. \"Something has been walking the west cutting at night and it has been *tidying*.\""
+        }
+      ],
+      "options": [
+        {
+          "id": "go",
+          "text": "We'll clear the cutting.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "go"
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": []
+    },
+    {
+      "id": "go",
+      "says": [
+        {
+          "text": "\"Take the plank road, not the heather. The heather is peat and the peat is nine feet deep in places and I have lost a barrow in it already this season.\""
+        }
+      ],
+      "options": [
+        {
+          "id": "done",
+          "text": "The plank road.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": []
+    },
+    {
+      "id": "the_alignment",
+      "says": [
+        {
+          "text": "\"You walked it.\" She has the plan out before you have answered. \"Then say what the east end is pointed at.\""
+        }
+      ],
+      "options": [
+        {
+          "id": "nine_sisters",
+          "text": "The Nine Sisters. Dead on.",
+          "effects": [],
+          "onceOnly": true,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "dead_on"
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": []
+    },
+    {
+      "id": "dead_on",
+      "says": [
+        {
+          "text": "Pell puts a finger on the plan and does not move it for some time. \"Dead on,\" she agrees. \"Eleven miles, over a rise, to a stone ring that the Keepers will not discuss either.\" She looks up. \"Everything anybody has ever dug in this barrow has been at the *west* end. Four hundred years of us all politely digging the wrong one.\""
+        }
+      ],
+      "options": [
+        {
+          "id": "open_it",
+          "text": "Then open the east end.",
+          "effects": [
+            {
+              "emit": {
+                "event": "startQuest",
+                "data": {
+                  "quest": "diggers_the_east_end"
+                }
+              }
+            }
+          ],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "two_days",
+          "requires": {
+            "quests": [
+              {
+                "quest": "diggers_the_east_end",
+                "status": "unstarted"
+              }
+            ]
+          }
+        },
+        {
+          "id": "no",
+          "text": "The moot said no. Twice.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "the_letters"
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": [],
+      "remembers": "library_served"
+    },
+    {
+      "id": "two_days",
+      "says": [
+        {
+          "text": "\"Two days to find the kerb and an afternoon to be through it,\" says Pell, already writing. \"I will have the men out. You will go in first, and I am not pretending that is generosity.\""
+        }
+      ],
+      "options": [
+        {
+          "id": "done",
+          "text": "We'll go in first.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": []
+    },
+    {
+      "id": "record_or_rebury",
+      "says": [
+        {
+          "text": "Pell is sitting on the spoil heap with the plan on her knees and has not written anything on it. \"Crowned,\" she says. \"Facing east, when every other body in four hundred feet of this thing faces west. Do you know what that is worth written down?\""
+        },
+        {
+          "text": "\"And do you know what it costs,\" she adds, \"because I find I do. The moot asked twice. If I record it, the fourth gallery has it by Highsun and every barrow on this moor gets opened by somebody with a warrant and no manners. If I close it, nobody ever knows, including me.\""
+        }
+      ],
+      "options": [
+        {
+          "id": "record",
+          "text": "Record it. That's what it's for.",
+          "effects": [
+            {
+              "setFlag": {
+                "flag": "diggers_recorded",
+                "value": true
+              }
+            },
+            {
+              "grantItem": {
+                "target": {
+                  "ref": "actor.id"
+                },
+                "item": "old_coin",
+                "quantity": 20
+              }
+            }
+          ],
+          "onceOnly": true,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "recorded"
+        },
+        {
+          "id": "rebury",
+          "text": "Close it. The moot asked twice.",
+          "effects": [
+            {
+              "setFlag": {
+                "flag": "diggers_reburied",
+                "value": true
+              }
+            }
+          ],
+          "onceOnly": true,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "reburied"
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": []
+    },
+    {
+      "id": "recorded",
+      "says": [
+        {
+          "text": "She writes for two days and the men fill in behind her as she goes, which is not the order it is supposed to be done in and is the only way it gets done before the weather."
+        }
+      ],
+      "options": [
+        {
+          "id": "leave",
+          "text": "It's down.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": [],
+      "remembers": "library_served"
+    },
+    {
+      "id": "reburied",
+      "says": [
+        {
+          "text": "It takes eleven men four days to put back what took them an afternoon to open, and Pell works the last of it herself with the plan folded in her coat, unmarked."
+        }
+      ],
+      "options": [
+        {
+          "id": "leave",
+          "text": "It's closed.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": [],
+      "remembers": "ward_restored"
+    },
+    {
+      "id": "she_has_heard",
+      "says": [
+        {
+          "text": "\"You are the one who took something off the fourth gallery,\" says Pell, and turns a label face down. \"I have eleven men and a trestle. Do not.\""
+        }
+      ],
+      "options": [
+        {
+          "id": "leave",
+          "text": "...",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": []
+    }
+  ]
+}

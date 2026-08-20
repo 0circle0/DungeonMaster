@@ -1,0 +1,24 @@
+{
+  "id": "slagfoot_forge",
+  "name": "The Ground Forge",
+  "description": "Has no fire of its own. Does not need one.",
+  "area": "ember_slagfoot",
+  "kind": "market",
+  "descriptionKey": "int_smithy",
+  "travelMinutes": 3,
+  "tags": [
+    "shop"
+  ],
+  "services": [
+    "smith"
+  ],
+  "map": {
+    "width": "9",
+    "height": "7",
+    "palette": "int_forge"
+  },
+  "position": {
+    "x": 21,
+    "y": 3
+  }
+}

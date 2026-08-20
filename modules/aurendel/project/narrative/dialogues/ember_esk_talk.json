@@ -1,0 +1,552 @@
+{
+  "id": "ember_esk_talk",
+  "start": "greet",
+  "nodes": [
+    {
+      "id": "greet",
+      "says": [
+        {
+          "text": "A cottage with a soot-marked board the size of a door on the wall, and a man who has clearly been waiting for somebody to ask about it."
+        },
+        {
+          "text": "“Reader,” he says, of himself, without much conviction. “Retired. Nobody reads the tube.”"
+        }
+      ],
+      "onEnter": [],
+      "options": [
+        {
+          "id": "ember_esk_wrong",
+          "text": "Where does that tube actually go?",
+          "requires": {
+            "without": {
+              "lore": [
+                "ember_warm_wrong"
+              ]
+            }
+          },
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "check": {
+            "skill": "insight",
+            "difficulty": {
+              "sub": [
+                12,
+                {
+                  "clamp": [
+                    {
+                      "div": [
+                        {
+                          "ref": "reputation.the_vent_readers",
+                          "else": 0
+                        },
+                        5
+                      ]
+                    },
+                    -6,
+                    6
+                  ]
+                }
+              ]
+            },
+            "onSuccess": "ember_esk_wrong_told",
+            "onFailure": "ember_esk_wrong_wont"
+          }
+        },
+        {
+          "id": "ember_esk_breath",
+          "text": "You have been marking its breathing.",
+          "requires": {
+            "without": {
+              "lore": [
+                "ember_warm_breath"
+              ]
+            }
+          },
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "check": {
+            "skill": "persuasion",
+            "difficulty": {
+              "sub": [
+                14,
+                {
+                  "clamp": [
+                    {
+                      "div": [
+                        {
+                          "ref": "reputation.the_vent_readers",
+                          "else": 0
+                        },
+                        5
+                      ]
+                    },
+                    -6,
+                    6
+                  ]
+                }
+              ]
+            },
+            "onSuccess": "ember_esk_breath_told",
+            "onFailure": "ember_esk_breath_wont"
+          }
+        },
+        {
+          "id": "ember_esk_older",
+          "text": "Is there anything in there that is not rock?",
+          "requires": {
+            "without": {
+              "lore": [
+                "ember_warm_older"
+              ]
+            }
+          },
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "check": {
+            "skill": "persuasion",
+            "difficulty": {
+              "sub": [
+                15,
+                {
+                  "clamp": [
+                    {
+                      "div": [
+                        {
+                          "ref": "reputation.the_vent_readers",
+                          "else": 0
+                        },
+                        5
+                      ]
+                    },
+                    -6,
+                    6
+                  ]
+                }
+              ]
+            },
+            "onSuccess": "ember_esk_older_told",
+            "onFailure": "ember_esk_older_wont"
+          }
+        },
+        {
+          "id": "ember_esk_reads",
+          "text": "Is there anything written on this Reach that is not the readers' own?",
+          "requires": {
+            "without": {
+              "lore": [
+                "ember_sheet_reads"
+              ]
+            }
+          },
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "check": {
+            "skill": "lore",
+            "difficulty": {
+              "sub": [
+                16,
+                {
+                  "clamp": [
+                    {
+                      "div": [
+                        {
+                          "ref": "reputation.the_vent_readers",
+                          "else": 0
+                        },
+                        5
+                      ]
+                    },
+                    -6,
+                    6
+                  ]
+                }
+              ]
+            },
+            "onSuccess": "ember_esk_reads_told",
+            "onFailure": "ember_esk_reads_wont"
+          }
+        },
+        {
+          "id": "ember_esk_board",
+          "text": "I need the board. All forty years of it.",
+          "requires": {
+            "without": {
+              "items": [
+                "readers_rhythm"
+              ],
+              "flags": [
+                {
+                  "flag": "given:readers_rhythm"
+                }
+              ]
+            }
+          },
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "check": {
+            "skill": "persuasion",
+            "difficulty": {
+              "sub": [
+                16,
+                {
+                  "clamp": [
+                    {
+                      "div": [
+                        {
+                          "ref": "reputation.the_vent_readers",
+                          "else": 0
+                        },
+                        5
+                      ]
+                    },
+                    -6,
+                    6
+                  ]
+                }
+              ]
+            },
+            "onSuccess": "ember_esk_board_gave",
+            "onFailure": "ember_esk_board_kept"
+          }
+        },
+        {
+          "id": "greet_leave",
+          "text": "Nothing.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": [
+        {
+          "requires": {
+            "factions": [
+              {
+                "faction": "the_vent_readers",
+                "maxStanding": -30
+              }
+            ]
+          },
+          "goto": "ember_esk_cold"
+        }
+      ]
+    },
+    {
+      "id": "ember_esk_wrong_told",
+      "says": [
+        {
+          "text": "“Level.” He says it like an accusation. “A mile of it, dead level, and then it turns *up*. Lava does not go up. Lava has never gone up in the history of going anywhere.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "learnLore": {
+            "entry": "ember_warm_wrong"
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "ember_esk_wrong_on",
+          "text": "Go on.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "ember_esk_wrong_wont",
+      "says": [
+        {
+          "text": "“I've said all I mean to,” they say, and go back to what they were doing."
+        }
+      ],
+      "onEnter": [
+        {
+          "adjustReputation": {
+            "faction": "the_vent_readers",
+            "amount": -1
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "ember_esk_wrong_drop",
+          "text": "Leave it.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "ember_esk_breath_told",
+      "says": [
+        {
+          "text": "He turns the board round. Forty years of soot marks, and the spacing does not change anywhere along it. “The mountain has seasons. Everything on this Reach has seasons.” He taps the board. “That does not.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "learnLore": {
+            "entry": "ember_warm_breath"
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "ember_esk_breath_on",
+          "text": "Go on.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "ember_esk_breath_wont",
+      "says": [
+        {
+          "text": "“I've said all I mean to,” they say, and go back to what they were doing."
+        }
+      ],
+      "onEnter": [
+        {
+          "adjustReputation": {
+            "faction": "the_vent_readers",
+            "amount": -1
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "ember_esk_breath_drop",
+          "text": "Leave it.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "ember_esk_older_told",
+      "says": [
+        {
+          "text": "“Dressed stone, quarter-mile in.” He waits to see whether you have understood. “The lava went *round* it. Which means the stone was there first, and the stone is squared, and nobody squares stone a quarter-mile up a lava tube for fun.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "learnLore": {
+            "entry": "ember_warm_older"
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "ember_esk_older_on",
+          "text": "Go on.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "ember_esk_older_wont",
+      "says": [
+        {
+          "text": "“I've said all I mean to,” they say, and go back to what they were doing."
+        }
+      ],
+      "onEnter": [
+        {
+          "adjustReputation": {
+            "faction": "the_vent_readers",
+            "amount": -1
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "ember_esk_older_drop",
+          "text": "Leave it.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "ember_esk_reads_told",
+      "says": [
+        {
+          "text": "“Under the sheet.” He says it quietly, which for Esk is significant. “A foot down in the glass, and *legible* — which means the glass went over it gently, and a mile of glass does not go over anything gently. We have rubbings. We have never been able to reach it.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "learnLore": {
+            "entry": "ember_sheet_reads"
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "ember_esk_reads_on",
+          "text": "Go on.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "ember_esk_reads_wont",
+      "says": [
+        {
+          "text": "“I've said all I mean to,” they say, and go back to what they were doing."
+        }
+      ],
+      "onEnter": [
+        {
+          "adjustReputation": {
+            "faction": "the_vent_readers",
+            "amount": -1
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "ember_esk_reads_drop",
+          "text": "Leave it.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "ember_esk_board_gave",
+      "says": [
+        {
+          "text": "He lifts it off the pegs and looks at the wall behind it, which is clean where the board was. “Bring it back,” he says. “Or do not, if what you find means there is no point.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "grantItem": {
+            "target": {
+              "ref": "actor.id"
+            },
+            "item": "readers_rhythm",
+            "quantity": 1
+          }
+        },
+        {
+          "setFlag": {
+            "flag": "given:readers_rhythm",
+            "value": true
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "ember_esk_board_thanks",
+          "text": "Thank you.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "ember_esk_board_kept",
+      "says": [
+        {
+          "text": "“No. It is forty years and it is one board.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "adjustReputation": {
+            "faction": "the_vent_readers",
+            "amount": -2
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "ember_esk_board_leave",
+          "text": "Then no.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "ember_esk_cold",
+      "says": [
+        {
+          "text": "He takes the board off the wall and puts it face to it."
+        }
+      ],
+      "onEnter": [],
+      "options": [
+        {
+          "id": "ember_esk_go",
+          "text": "Leave it.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "id": "riverside_house_a",
+  "name": "The Wharfinger's House",
+  "description": "Best window in the district and it looks directly at a warehouse wall.",
+  "area": "aurenhal_riverside",
+  "kind": "settlement",
+  "descriptionKey": "int_house",
+  "travelMinutes": 2,
+  "tags": [
+    "house"
+  ],
+  "position": {
+    "x": 20,
+    "y": 26
+  },
+  "map": {
+    "width": "9",
+    "height": "7",
+    "palette": "int_timber"
+  }
+}

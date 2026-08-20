@@ -1,0 +1,36 @@
+{
+  "id": "dry_river_hoard",
+  "entries": [
+    {
+      "weight": 4,
+      "value": {
+        "item": "hold_silver",
+        "quantity": "1d3"
+      }
+    },
+    {
+      "weight": 3,
+      "value": {
+        "item": "horn_bow",
+        "quantity": "1"
+      }
+    },
+    {
+      "weight": 2,
+      "value": {
+        "item": "glass_bead",
+        "quantity": "1d2"
+      }
+    },
+    {
+      "weight": 2,
+      "value": {
+        "item": "healing_draught",
+        "quantity": "1d2"
+      }
+    }
+  ],
+  "rolls": "2",
+  "emptyChance": 0,
+  "name": "What the River Left"
+}

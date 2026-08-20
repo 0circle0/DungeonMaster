@@ -1,0 +1,57 @@
+{
+  "id": "ember_under_the_roofs",
+  "name": "Under the Roofs",
+  "description": "Nine feet of ash in a single night, two houses dug and no bodies in either, and every door barred from inside.",
+  "autoStart": false,
+  "ordered": true,
+  "tags": [
+    "hidden",
+    "ember_reach",
+    "ember_roofs"
+  ],
+  "objectives": [
+    {
+      "id": "under_the_ash",
+      "description": "Get under the roofs.",
+      "kind": "reach",
+      "count": 1,
+      "hidden": true,
+      "optional": false,
+      "target": "ashfall_under_the_roofs"
+    },
+    {
+      "id": "through_the_door",
+      "description": "Open a door that was barred from inside.",
+      "kind": "custom",
+      "count": 1,
+      "hidden": true,
+      "optional": false,
+      "when": {
+        "test": {
+          "ref": "flags.ember_roofs_open"
+        }
+      }
+    },
+    {
+      "id": "what_stayed",
+      "description": "Find what stayed.",
+      "kind": "kill",
+      "count": 1,
+      "hidden": true,
+      "optional": false,
+      "target": "ashfall_stayer"
+    }
+  ],
+  "stages": [],
+  "unlocks": [],
+  "rewards": {
+    "xp": 190,
+    "items": [
+      {
+        "item": "ashfall_hood",
+        "quantity": 1
+      }
+    ],
+    "reputation": {}
+  }
+}

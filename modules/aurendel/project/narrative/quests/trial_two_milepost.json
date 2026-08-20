@@ -1,0 +1,58 @@
+{
+  "id": "trial_two_milepost",
+  "name": "The Sixth Door",
+  "description": "A milepost on a road that measures nothing, with four hundred feet of dressed vault under it and one way down.",
+  "autoStart": false,
+  "ordered": true,
+  "tags": [
+    "trial",
+    "trial_two"
+  ],
+  "objectives": [
+    {
+      "id": "under_the_milepost",
+      "description": "Get into the vault under the milepost.",
+      "kind": "reach",
+      "count": 1,
+      "hidden": false,
+      "optional": false,
+      "target": "sunken_road_milepost_vault"
+    },
+    {
+      "id": "the_sixth",
+      "description": "Finish what came through the sixth door.",
+      "kind": "kill",
+      "count": 1,
+      "hidden": false,
+      "optional": false,
+      "target": "sixth_through"
+    }
+  ],
+  "stages": [],
+  "unlocks": [],
+  "rewards": {
+    "xp": 2500,
+    "items": [
+      {
+        "item": "milepost_belt",
+        "quantity": 1
+      },
+      {
+        "item": "second_warrant",
+        "quantity": 1
+      }
+    ],
+    "reputation": {
+      "the_keepers": 35,
+      "the_library": 25
+    }
+  },
+  "requires": {
+    "quests": [
+      {
+        "quest": "trial_two_sunken_hall",
+        "status": "complete"
+      }
+    ]
+  }
+}

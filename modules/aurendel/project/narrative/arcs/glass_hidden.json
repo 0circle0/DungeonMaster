@@ -1,0 +1,12 @@
+{
+  "id": "glass_hidden",
+  "name": "The Glasslands, Unmetered",
+  "description": "Four ways of noticing that the water did not leave on its own.",
+  "quests": [
+    "glass_the_ninth_course",
+    "glass_what_it_was_for",
+    "glass_still_full",
+    "glass_the_town_that_came_back"
+  ],
+  "isEnding": false
+}

@@ -1,0 +1,57 @@
+{
+  "id": "kings_the_second_face",
+  "name": "The Quarry's Second Face",
+  "description": "One warrant, two faces, eleven years of unlicensed carts going south at night, and a shored cut at the bottom of the wrong one.",
+  "autoStart": false,
+  "ordered": true,
+  "tags": [
+    "hidden",
+    "kingsvale",
+    "kings_quarry"
+  ],
+  "objectives": [
+    {
+      "id": "at_the_face",
+      "description": "Get to the second face.",
+      "kind": "reach",
+      "count": 1,
+      "hidden": true,
+      "optional": false,
+      "target": "kingsroad_south_quarry"
+    },
+    {
+      "id": "into_the_hill",
+      "description": "Get into the hill.",
+      "kind": "custom",
+      "count": 1,
+      "hidden": true,
+      "optional": false,
+      "when": {
+        "test": {
+          "ref": "flags.kings_quarry_open"
+        }
+      }
+    },
+    {
+      "id": "what_was_cut_for",
+      "description": "Find what the fine stone was cut for.",
+      "kind": "kill",
+      "count": 1,
+      "hidden": true,
+      "optional": false,
+      "target": "quarry_thing"
+    }
+  ],
+  "stages": [],
+  "unlocks": [],
+  "rewards": {
+    "xp": 90,
+    "items": [
+      {
+        "item": "masons_belt",
+        "quantity": 1
+      }
+    ],
+    "reputation": {}
+  }
+}

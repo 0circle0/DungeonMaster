@@ -1,0 +1,16 @@
+{
+  "id": "dungeon_cave_corridor",
+  "name": "Cave Passage",
+  "descriptionKey": "dungeon_cave_corridor_desc",
+  "weight": 4,
+  "minExits": 2,
+  "maxExits": 4,
+  "encounterChance": 0.15,
+  "trapChance": 0.08,
+  "lootChance": 0.18,
+  "tags": [
+    "dungeon_cave",
+    "corridor"
+  ],
+  "role": "corridor"
+}

@@ -1,0 +1,11 @@
+{
+  "id": "cast_key",
+  "name": "The Cast Key",
+  "description": "Poured, like the cathedral above it, in one piece and while hot.",
+  "kind": "trinket",
+  "value": 0,
+  "weight": 0.5,
+  "tags": [
+    "quest"
+  ]
+}

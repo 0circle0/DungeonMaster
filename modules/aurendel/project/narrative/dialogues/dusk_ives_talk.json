@@ -1,0 +1,219 @@
+{
+  "id": "dusk_ives_talk",
+  "start": "greet",
+  "nodes": [
+    {
+      "id": "greet",
+      "says": [
+        {
+          "text": "Sacks by the hundredweight, a set of scales worn to a shine, and a man who has just told somebody their charcoal is damp."
+        },
+        {
+          "text": "“By the sack or by the load. Damp is half price and I will know.”"
+        }
+      ],
+      "onEnter": [],
+      "options": [
+        {
+          "id": "dusk_ives_cuttings",
+          "text": "The mile oaks. Were they planted?",
+          "requires": {
+            "without": {
+              "lore": [
+                "dusk_miles_cuttings"
+              ]
+            }
+          },
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "check": {
+            "skill": "survival",
+            "difficulty": {
+              "sub": [
+                13,
+                {
+                  "clamp": [
+                    {
+                      "div": [
+                        {
+                          "ref": "reputation.the_keepers",
+                          "else": 0
+                        },
+                        5
+                      ]
+                    },
+                    -6,
+                    6
+                  ]
+                }
+              ]
+            },
+            "onSuccess": "dusk_ives_cuttings_told",
+            "onFailure": "dusk_ives_cuttings_wont"
+          }
+        },
+        {
+          "id": "dusk_ives_paid",
+          "text": "Who is the woodward?",
+          "requires": {
+            "without": {
+              "lore": [
+                "dusk_ward_paid"
+              ]
+            }
+          },
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "check": {
+            "skill": "persuasion",
+            "difficulty": {
+              "sub": [
+                14,
+                {
+                  "clamp": [
+                    {
+                      "div": [
+                        {
+                          "ref": "reputation.the_keepers",
+                          "else": 0
+                        },
+                        5
+                      ]
+                    },
+                    -6,
+                    6
+                  ]
+                }
+              ]
+            },
+            "onSuccess": "dusk_ives_paid_told",
+            "onFailure": "dusk_ives_paid_wont"
+          }
+        },
+        {
+          "id": "greet_leave",
+          "text": "Nothing.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "dusk_ives_cuttings_told",
+      "says": [
+        {
+          "text": "“Struck.” Ives is definite. “Every one of them off the same tree — you can see it in the leaf, they are all the same leaf, and oak is not shy about being different.” He weighs something. “I have looked for the mother tree for thirty years. It is not on the road and it is not off it either, and I have been most of the way to Elderhollow looking.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "learnLore": {
+            "entry": "dusk_miles_cuttings"
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "dusk_ives_cuttings_on",
+          "text": "Go on.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "dusk_ives_cuttings_wont",
+      "says": [
+        {
+          "text": "“I've said all I mean to,” they say, and go back to what they were doing."
+        }
+      ],
+      "onEnter": [
+        {
+          "adjustReputation": {
+            "faction": "the_keepers",
+            "amount": -1
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "dusk_ives_cuttings_drop",
+          "text": "Leave it.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "dusk_ives_paid_told",
+      "says": [
+        {
+          "text": "“The parish pays one.” He puts the weight down. “Quarterly. Four hundred years of quarters, in the parish book, never missed.” He shrugs. “Ask Fenny Cross who it is. Ask the vicar. Ask Kest, who lives in the hut and is not it. Nobody knows and the money goes.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "learnLore": {
+            "entry": "dusk_ward_paid"
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "dusk_ives_paid_on",
+          "text": "Go on.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "dusk_ives_paid_wont",
+      "says": [
+        {
+          "text": "“I've said all I mean to,” they say, and go back to what they were doing."
+        }
+      ],
+      "onEnter": [
+        {
+          "adjustReputation": {
+            "faction": "the_keepers",
+            "amount": -1
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "dusk_ives_paid_drop",
+          "text": "Leave it.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    }
+  ]
+}

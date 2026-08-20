@@ -1,0 +1,21 @@
+{
+  "id": "pennyford_house_a",
+  "name": "The Keeper's Cottage",
+  "description": "Close enough to the water to hear it change.",
+  "area": "kingsvale_pennyford",
+  "kind": "settlement",
+  "descriptionKey": "int_house",
+  "travelMinutes": 2,
+  "tags": [
+    "house"
+  ],
+  "position": {
+    "x": 22,
+    "y": 8
+  },
+  "map": {
+    "width": "9",
+    "height": "7",
+    "palette": "int_timber"
+  }
+}

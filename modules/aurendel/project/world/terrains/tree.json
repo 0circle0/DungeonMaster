@@ -1,0 +1,10 @@
+{
+  "id": "tree",
+  "name": "Tree",
+  "description": "Trunk enough to stop you and shade enough to hide what is behind it.",
+  "glyph": "T",
+  "color": "green",
+  "passable": false,
+  "opaque": true,
+  "moveCost": 0
+}

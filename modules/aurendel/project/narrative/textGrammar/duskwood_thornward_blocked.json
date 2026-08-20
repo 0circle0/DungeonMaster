@@ -1,0 +1,14 @@
+{
+  "id": "duskwood_thornward_blocked",
+  "variants": [
+    {
+      "text": "The thorn lies across the ride in a single unbroken line, and thorn does not do that by itself."
+    },
+    {
+      "text": "It has been laid — woven, rather — and the weave goes eleven feet up."
+    },
+    {
+      "text": "The Elderhollow moot laid this and the Elderhollow moot has opinions about who lifts it."
+    }
+  ]
+}

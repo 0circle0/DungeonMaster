@@ -1,0 +1,14 @@
+{
+  "id": "dungeon_drowned_chamber_desc",
+  "variants": [
+    {
+      "text": "A room standing in its own reflection, with the waterline marked on every wall at three different heights."
+    },
+    {
+      "text": "The floor is under two feet of black water and there is no telling what is on it."
+    },
+    {
+      "text": "Reeds have got in and are doing well, which means light gets in somewhere too."
+    }
+  ]
+}

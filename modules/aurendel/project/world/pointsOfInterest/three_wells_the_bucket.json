@@ -1,0 +1,24 @@
+{
+  "id": "three_wells_the_bucket",
+  "name": "The Bucket",
+  "description": "One room, and the well-head is inside it, which is either clever or unhygienic.",
+  "area": "steppe_three_wells",
+  "kind": "settlement",
+  "descriptionKey": "int_inn",
+  "travelMinutes": 3,
+  "tags": [
+    "inn"
+  ],
+  "services": [
+    "inn"
+  ],
+  "map": {
+    "width": "9",
+    "height": "7",
+    "palette": "int_timber"
+  },
+  "position": {
+    "x": 9,
+    "y": 3
+  }
+}

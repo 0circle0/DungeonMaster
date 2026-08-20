@@ -1,0 +1,14 @@
+{
+  "id": "glasslands_crater_blocked",
+  "variants": [
+    {
+      "text": "The glass thins about a mile in. You can see it thinning. You can see through it."
+    },
+    {
+      "text": "There is nothing across your path. There is simply less and less between you and whatever is under the crater."
+    },
+    {
+      "text": "It rings differently here, and lower, and you have stopped walking without deciding to."
+    }
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "id": "horn_bow",
+  "name": "An Ilkhet Horn Bow",
+  "description": "Sinew, horn and forty years' seasoning, and it will outshoot yew at twice the distance nobody on foot needs.",
+  "kind": "weapon",
+  "slot": "hand",
+  "value": 145,
+  "weight": 3,
+  "tags": [],
+  "skillBonuses": {
+    "survival": 1
+  },
+  "damage": {
+    "dice": "1d8",
+    "damageType": "piercing",
+    "stat": "agility"
+  },
+  "properties": [
+    "two_handed"
+  ],
+  "rarity": "uncommon"
+}

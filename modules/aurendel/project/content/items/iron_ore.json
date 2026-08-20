@@ -1,0 +1,12 @@
+{
+  "id": "iron_ore",
+  "name": "Iron Ore",
+  "kind": "material",
+  "value": 5,
+  "weight": 4,
+  "stackable": true,
+  "tags": [
+    "material"
+  ],
+  "description": "Graded and stamped at the Ore Yard."
+}

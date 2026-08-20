@@ -1,0 +1,24 @@
+{
+  "id": "orc",
+  "name": "Orc",
+  "description": "Steppe-bred and hold-broken both. Reputation runs ahead of them and is usually wrong.",
+  "attributeBonuses": {
+    "might": 1
+  },
+  "skillBonuses": {
+    "intimidation": 1,
+    "athletics": 1
+  },
+  "creatureType": "humanoid",
+  "size": "medium",
+  "languages": [
+    "common",
+    "steppe_tongue"
+  ],
+  "damageInteractions": [
+    {
+      "damageType": "bludgeoning",
+      "multiplier": 0.75
+    }
+  ]
+}

@@ -1,0 +1,32 @@
+{
+  "id": "water_warden_taj",
+  "name": "Taj of the Wardens",
+  "description": "Meters every well in Vashta Qal to the cup and is professionally unable to stop thinking about the one that is not metered.",
+  "disposition": 4,
+  "gullibility": 0.2,
+  "memorySpan": 300,
+  "offersQuests": [],
+  "caresAbout": [],
+  "reactions": [],
+  "faction": "the_water_wardens",
+  "dialogue": "glass_taj_talk",
+  "home": "vashta_qal_water_wardens",
+  "temperament": {
+    "roamRadius": 24,
+    "investigateRadius": 60,
+    "leashRadius": 90,
+    "wanderChance": 0.3,
+    "speeds": {
+      "wander": 0.5
+    },
+    "investigates": [
+      "sight",
+      "hearing"
+    ],
+    "notices": [
+      "hostile",
+      "neutral",
+      "ally"
+    ]
+  }
+}

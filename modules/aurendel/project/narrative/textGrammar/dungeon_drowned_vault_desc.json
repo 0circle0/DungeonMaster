@@ -1,0 +1,14 @@
+{
+  "id": "dungeon_drowned_vault_desc",
+  "variants": [
+    {
+      "text": "A strongroom above the waterline by about a hand's breadth, and dry inside because of it."
+    },
+    {
+      "text": "Steps up rather than down, which in a drowned place is the whole point."
+    },
+    {
+      "text": "Everything in here is intact, and everything below it is not."
+    }
+  ]
+}

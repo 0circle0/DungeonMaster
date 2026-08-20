@@ -1,0 +1,329 @@
+{
+  "id": "kings_alsey_talk",
+  "start": "greet",
+  "nodes": [
+    {
+      "id": "greet",
+      "says": [
+        {
+          "text": "A field gate being mended by somebody who has mended it many times and expects to again."
+        },
+        {
+          "text": "“Ford's eleven inches. Do not let the horse drink and walk at the same time.”"
+        }
+      ],
+      "onEnter": [],
+      "options": [
+        {
+          "id": "kings_alsey_worked",
+          "text": "Somebody works that sluice.",
+          "requires": {
+            "without": {
+              "lore": [
+                "kings_ford_worked"
+              ]
+            }
+          },
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "check": {
+            "skill": "persuasion",
+            "difficulty": {
+              "sub": [
+                11,
+                {
+                  "clamp": [
+                    {
+                      "div": [
+                        {
+                          "ref": "reputation.the_crown",
+                          "else": 0
+                        },
+                        5
+                      ]
+                    },
+                    -6,
+                    6
+                  ]
+                }
+              ]
+            },
+            "onSuccess": "kings_alsey_worked_told",
+            "onFailure": "kings_alsey_worked_wont"
+          }
+        },
+        {
+          "id": "kings_alsey_stone",
+          "text": "There is a stone in the ford with a hole through it.",
+          "requires": {
+            "without": {
+              "lore": [
+                "kings_ford_stone"
+              ]
+            }
+          },
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "check": {
+            "skill": "insight",
+            "difficulty": {
+              "sub": [
+                13,
+                {
+                  "clamp": [
+                    {
+                      "div": [
+                        {
+                          "ref": "reputation.the_crown",
+                          "else": 0
+                        },
+                        5
+                      ]
+                    },
+                    -6,
+                    6
+                  ]
+                }
+              ]
+            },
+            "onSuccess": "kings_alsey_stone_told",
+            "onFailure": "kings_alsey_stone_wont"
+          }
+        },
+        {
+          "id": "kings_alsey_key",
+          "text": "Somebody has the sluice key. It is you.",
+          "requires": {
+            "without": {
+              "items": [
+                "sluice_key"
+              ],
+              "flags": [
+                {
+                  "flag": "given:sluice_key"
+                }
+              ]
+            }
+          },
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "check": {
+            "skill": "persuasion",
+            "difficulty": {
+              "sub": [
+                15,
+                {
+                  "clamp": [
+                    {
+                      "div": [
+                        {
+                          "ref": "reputation.the_crown",
+                          "else": 0
+                        },
+                        5
+                      ]
+                    },
+                    -6,
+                    6
+                  ]
+                }
+              ]
+            },
+            "onSuccess": "kings_alsey_key_gave",
+            "onFailure": "kings_alsey_key_kept"
+          }
+        },
+        {
+          "id": "greet_leave",
+          "text": "Nothing.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "kings_alsey_worked_told",
+      "says": [
+        {
+          "text": "“Up in the spring, down at the harvest.” She is entirely matter of fact, which is the unnerving part. “On the day. Every year of my life and my mother's.” She goes back to the gate she is mending. “The parish stopped paying a keeper before I was born. I have never once seen it done.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "learnLore": {
+            "entry": "kings_ford_worked"
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "kings_alsey_worked_on",
+          "text": "Go on.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "kings_alsey_worked_wont",
+      "says": [
+        {
+          "text": "“I've said all I mean to,” they say, and go back to what they were doing."
+        }
+      ],
+      "onEnter": [
+        {
+          "adjustReputation": {
+            "faction": "the_crown",
+            "amount": -1
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "kings_alsey_worked_drop",
+          "text": "Leave it.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "kings_alsey_stone_told",
+      "says": [
+        {
+          "text": "“Rope-worn.” She nods at the water. “Worn all the way through, which is a lot of rope. Nobody has tied anything there in living memory and the wear is fresh at the edges, and I have stopped mentioning that to people.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "learnLore": {
+            "entry": "kings_ford_stone"
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "kings_alsey_stone_on",
+          "text": "Go on.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "kings_alsey_stone_wont",
+      "says": [
+        {
+          "text": "“I've said all I mean to,” they say, and go back to what they were doing."
+        }
+      ],
+      "onEnter": [
+        {
+          "adjustReputation": {
+            "faction": "the_crown",
+            "amount": -1
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "kings_alsey_stone_drop",
+          "text": "Leave it.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "kings_alsey_key_gave",
+      "says": [
+        {
+          "text": "She is quiet a long moment. “It was in the thatch when we retiled. My father put it back.” She fetches it. “I have never used it and I have never thrown it away, and I would be glad to have it out of the house.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "grantItem": {
+            "target": {
+              "ref": "actor.id"
+            },
+            "item": "sluice_key",
+            "quantity": 1
+          }
+        },
+        {
+          "setFlag": {
+            "flag": "given:sluice_key",
+            "value": true
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "kings_alsey_key_thanks",
+          "text": "Thank you.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "kings_alsey_key_kept",
+      "says": [
+        {
+          "text": "“I do not have a key,” she says, which is a lie, and she is not good at it, and she is not going to change her mind today."
+        }
+      ],
+      "onEnter": [
+        {
+          "adjustReputation": {
+            "faction": "the_crown",
+            "amount": -2
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "kings_alsey_key_leave",
+          "text": "Then no.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    }
+  ]
+}

@@ -1,0 +1,45 @@
+{
+  "id": "duskwood_thornback_ride",
+  "name": "The Thornback Ride",
+  "description": "A cut through the forest going north, grown in to the width of one cart and closing.",
+  "biome": "deepwood",
+  "layer": "overworld",
+  "descriptionKey": "duskwood_thornback_ride_desc",
+  "dangerLevel": 4,
+  "recommendedLevel": 4,
+  "tags": [
+    "duskwood"
+  ],
+  "map": {
+    "width": "51",
+    "height": "35"
+  },
+  "entryPoint": {
+    "x": 25,
+    "y": 17
+  },
+  "extra": {
+    "role": "wild"
+  },
+  "connections": [
+    {
+      "to": "duskwood_rooksrest",
+      "travelMinutes": 45
+    },
+    {
+      "to": "duskwood_the_greenway",
+      "travelMinutes": 40
+    },
+    {
+      "to": "duskwood_witchwood",
+      "travelMinutes": 55
+    },
+    {
+      "to": "skarnspine_broken_road",
+      "travelMinutes": 190
+    }
+  ],
+  "encounterTables": [
+    "duskwood_things"
+  ]
+}

@@ -1,0 +1,10 @@
+{
+  "id": "helped",
+  "name": "Helped",
+  "description": "Someone steadying the ladder, holding the light, taking the weight.",
+  "stacking": "refresh",
+  "defaultDuration": 1,
+  "swings": {
+    "checks": "advantage"
+  }
+}

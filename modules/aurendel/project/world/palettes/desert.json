@@ -1,0 +1,36 @@
+{
+  "id": "desert",
+  "name": "The Glasslands",
+  "floor": "sand",
+  "wall": "rock",
+  "exterior": "rock",
+  "scatter": [
+    {
+      "terrain": "dune",
+      "frequency": 0.24,
+      "distribution": "patch",
+      "scale": 13,
+      "priority": 0
+    },
+    {
+      "terrain": "glass_crust",
+      "frequency": 0.08,
+      "distribution": "patch",
+      "scale": 7,
+      "priority": 1
+    },
+    {
+      "terrain": "saltflat",
+      "frequency": 0.1,
+      "distribution": "patch",
+      "scale": 12,
+      "priority": 2
+    },
+    {
+      "terrain": "rock",
+      "frequency": 0.04,
+      "distribution": "speckle",
+      "priority": 3
+    }
+  ]
+}

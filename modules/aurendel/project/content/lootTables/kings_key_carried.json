@@ -1,0 +1,26 @@
+{
+  "id": "kings_key_carried",
+  "name": "What Alsey Kept",
+  "rolls": "1",
+  "emptyChance": 0,
+  "entries": [
+    {
+      "weight": 1,
+      "value": {
+        "item": "sluice_key",
+        "quantity": "1",
+        "unique": true,
+        "requirementScope": "party",
+        "requires": {
+          "without": {
+            "flags": [
+              {
+                "flag": "given:sluice_key"
+              }
+            ]
+          }
+        }
+      }
+    }
+  ]
+}

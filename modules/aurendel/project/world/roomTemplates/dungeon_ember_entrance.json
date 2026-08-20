@@ -1,0 +1,16 @@
+{
+  "id": "dungeon_ember_entrance",
+  "name": "Burnt Entry",
+  "descriptionKey": "dungeon_ember_entrance_desc",
+  "weight": 1,
+  "minExits": 1,
+  "maxExits": 3,
+  "encounterChance": 0.15,
+  "trapChance": 0.16,
+  "lootChance": 0.24,
+  "tags": [
+    "dungeon_ember",
+    "entrance"
+  ],
+  "role": "entrance"
+}

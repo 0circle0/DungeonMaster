@@ -1,0 +1,49 @@
+{
+  "id": "barrow_things",
+  "minDepth": 0,
+  "maxDepth": 999,
+  "chance": 0.5,
+  "emptyWeight": 4,
+  "scalePerLevels": 3,
+  "groups": [
+    {
+      "id": "rats",
+      "weight": 5,
+      "hostile": true,
+      "entries": [
+        {
+          "monster": "barrow_rat",
+          "count": "1d4",
+          "scaleWithLevel": true
+        }
+      ]
+    },
+    {
+      "id": "hounds",
+      "weight": 4,
+      "hostile": true,
+      "entries": [
+        {
+          "monster": "grave_hound",
+          "count": "1d2",
+          "scaleWithLevel": true
+        }
+      ]
+    },
+    {
+      "id": "warden",
+      "weight": 1,
+      "hostile": true,
+      "entries": [
+        {
+          "monster": "door_warden",
+          "count": "1",
+          "scaleWithLevel": false
+        }
+      ],
+      "requires": {
+        "minLevel": 3
+      }
+    }
+  ]
+}

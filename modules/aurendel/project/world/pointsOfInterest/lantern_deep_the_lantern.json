@@ -1,0 +1,16 @@
+{
+  "id": "lantern_deep_the_lantern",
+  "name": "The Great Lantern",
+  "description": "Hung from the roof of the cavern on a chain nobody can account for, and it has never been lit by anybody living.",
+  "area": "deeproads_lantern_deep",
+  "kind": "landmark",
+  "descriptionKey": "lantern_deep_the_lantern_desc",
+  "travelMinutes": 5,
+  "tags": [
+    "landmark"
+  ],
+  "position": {
+    "x": 11,
+    "y": 3
+  }
+}

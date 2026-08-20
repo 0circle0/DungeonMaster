@@ -1,0 +1,34 @@
+{
+  "id": "salt_burn",
+  "name": "Salt Burn",
+  "description": "Nine hundred years of pan salt, and it takes the water out of whatever it is on.",
+  "actionType": "action",
+  "targeting": "single",
+  "attack": {
+    "stat": "endurance",
+    "against": "guard"
+  },
+  "onUse": [
+    {
+      "damage": {
+        "target": {
+          "ref": "target.id"
+        },
+        "amount": {
+          "roll": "2d6"
+        },
+        "damageType": "acid"
+      }
+    },
+    {
+      "applyCondition": {
+        "target": {
+          "ref": "target.id"
+        },
+        "condition": "bleeding",
+        "duration": 3
+      }
+    }
+  ],
+  "range": 10
+}

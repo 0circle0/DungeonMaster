@@ -1,0 +1,219 @@
+{
+  "id": "step_bree_talk",
+  "start": "greet",
+  "nodes": [
+    {
+      "id": "greet",
+      "says": [
+        {
+          "text": "A camp in the lee of a bank a quarter of a mile from the other bank, and a fire in a ring of stones that is not this year's ring."
+        },
+        {
+          "text": "“There is room. There has been room here for nine hundred years.”"
+        }
+      ],
+      "onEnter": [],
+      "options": [
+        {
+          "id": "step_bree_width",
+          "text": "This bed is very wide for the water that comes down it.",
+          "requires": {
+            "without": {
+              "lore": [
+                "step_bank_width"
+              ]
+            }
+          },
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "check": {
+            "skill": "insight",
+            "difficulty": {
+              "sub": [
+                12,
+                {
+                  "clamp": [
+                    {
+                      "div": [
+                        {
+                          "ref": "reputation.the_horse_lords",
+                          "else": 0
+                        },
+                        5
+                      ]
+                    },
+                    -6,
+                    6
+                  ]
+                }
+              ]
+            },
+            "onSuccess": "step_bree_width_told",
+            "onFailure": "step_bree_width_wont"
+          }
+        },
+        {
+          "id": "step_bree_warm",
+          "text": "The water at the Last Water.",
+          "requires": {
+            "without": {
+              "lore": [
+                "step_water_warm"
+              ]
+            }
+          },
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "check": {
+            "skill": "persuasion",
+            "difficulty": {
+              "sub": [
+                11,
+                {
+                  "clamp": [
+                    {
+                      "div": [
+                        {
+                          "ref": "reputation.the_horse_lords",
+                          "else": 0
+                        },
+                        5
+                      ]
+                    },
+                    -6,
+                    6
+                  ]
+                }
+              ]
+            },
+            "onSuccess": "step_bree_warm_told",
+            "onFailure": "step_bree_warm_wont"
+          }
+        },
+        {
+          "id": "greet_leave",
+          "text": "Nothing.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "step_bree_width_told",
+      "says": [
+        {
+          "text": "“Four weeks.” Bree pokes the fire. “Four weeks of water and a quarter mile of bed. I have seen the flood — it is a frightening thing and it does not fill a fifth of this.” A look up. “Something cut this. The river only borrows it.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "learnLore": {
+            "entry": "step_bank_width"
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "step_bree_width_on",
+          "text": "Go on.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "step_bree_width_wont",
+      "says": [
+        {
+          "text": "“I've said all I mean to,” they say, and go back to what they were doing."
+        }
+      ],
+      "onEnter": [
+        {
+          "adjustReputation": {
+            "faction": "the_horse_lords",
+            "amount": -1
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "step_bree_width_drop",
+          "text": "Leave it.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "step_bree_warm_told",
+      "says": [
+        {
+          "text": "“Warm, and iron.” Bree makes a face. “Every spring on this grass is cold and tastes of grass. That one you could bathe a child in without heating it, and it leaves a taste like a coin.” A shrug. “Ondir says it has always been so. That is not the same as knowing why.”"
+        }
+      ],
+      "onEnter": [
+        {
+          "learnLore": {
+            "entry": "step_water_warm"
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "step_bree_warm_on",
+          "text": "Go on.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    },
+    {
+      "id": "step_bree_warm_wont",
+      "says": [
+        {
+          "text": "“I've said all I mean to,” they say, and go back to what they were doing."
+        }
+      ],
+      "onEnter": [
+        {
+          "adjustReputation": {
+            "faction": "the_horse_lords",
+            "amount": -1
+          }
+        }
+      ],
+      "options": [
+        {
+          "id": "step_bree_warm_drop",
+          "text": "Leave it.",
+          "goto": "greet",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "redirectWhen": []
+    }
+  ]
+}

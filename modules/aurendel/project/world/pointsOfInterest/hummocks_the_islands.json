@@ -1,0 +1,14 @@
+{
+  "id": "hummocks_the_islands",
+  "name": "The Hummocks",
+  "description": "Islands of firm ground a few yards across, scattered over ten miles, and about half of them have something on them.",
+  "area": "thornmere_the_hummocks",
+  "kind": "landmark",
+  "descriptionKey": "hummocks_the_islands_desc",
+  "travelMinutes": 8,
+  "tags": [],
+  "position": {
+    "x": 3,
+    "y": 3
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "id": "dungeon_sewer_vault_desc",
+  "variants": [
+    {
+      "text": "A dry chamber off the main run, bricked up once and unbricked since."
+    },
+    {
+      "text": "Somebody's cache, on a ledge, above every flood mark on the wall."
+    },
+    {
+      "text": "A room that was a cellar before the drain was cut through the side of it."
+    }
+  ]
+}

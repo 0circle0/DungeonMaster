@@ -1,0 +1,26 @@
+{
+  "id": "ember_deed_carried",
+  "name": "What Borsa Kept",
+  "rolls": "1",
+  "emptyChance": 0,
+  "entries": [
+    {
+      "weight": 1,
+      "value": {
+        "item": "ashfall_deed",
+        "quantity": "1",
+        "unique": true,
+        "requirementScope": "party",
+        "requires": {
+          "without": {
+            "flags": [
+              {
+                "flag": "given:ashfall_deed"
+              }
+            ]
+          }
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "id": "aurenhal_watch_barracks",
+  "name": "The Highgate Barracks",
+  "description": "Where the city watch sleeps, eats, and complains about the Warrens.",
+  "area": "aurenhal_highgate",
+  "kind": "landmark",
+  "descriptionKey": "generic_landmark",
+  "travelMinutes": 4,
+  "tags": [
+    "aurenhal"
+  ],
+  "position": {
+    "x": 34,
+    "y": 20
+  },
+  "map": {
+    "width": "15",
+    "height": "11",
+    "palette": "int_stone"
+  }
+}

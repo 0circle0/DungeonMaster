@@ -1,0 +1,34 @@
+{
+  "id": "int_timber",
+  "name": "Timber Interior",
+  "floor": "timber_floor",
+  "wall": "wall_timber",
+  "exterior": "wall_timber",
+  "scatter": [
+    {
+      "terrain": "table",
+      "frequency": 0.05,
+      "distribution": "speckle",
+      "priority": 0
+    },
+    {
+      "terrain": "barrel",
+      "frequency": 0.03,
+      "distribution": "speckle",
+      "priority": 1
+    },
+    {
+      "terrain": "hearth",
+      "frequency": 0.02,
+      "distribution": "speckle",
+      "priority": 2
+    },
+    {
+      "terrain": "bed",
+      "frequency": 0.03,
+      "distribution": "speckle",
+      "priority": 3
+    }
+  ],
+  "door": "door"
+}

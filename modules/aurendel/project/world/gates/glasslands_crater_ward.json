@@ -1,0 +1,13 @@
+{
+  "id": "glasslands_crater_ward",
+  "name": "The Crater Lip",
+  "kind": "hazard",
+  "description": "Nothing across it. The glass simply gets thin, and the thin part is over something.",
+  "staysOpen": true,
+  "bypass": {
+    "skill": "survival",
+    "difficulty": 16,
+    "retryable": true
+  },
+  "blockedTextKey": "glasslands_crater_blocked"
+}

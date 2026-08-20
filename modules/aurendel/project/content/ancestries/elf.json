@@ -1,0 +1,21 @@
+{
+  "id": "elf",
+  "name": "Elf",
+  "description": "Wood-kin and ruin-keepers. Long memories, longer grudges.",
+  "attributeBonuses": {
+    "agility": 1
+  },
+  "skillBonuses": {
+    "perception": 1,
+    "arcana": 1
+  },
+  "creatureType": "humanoid",
+  "size": "medium",
+  "languages": [
+    "common",
+    "sylvan"
+  ],
+  "senses": {
+    "hearing": 30
+  }
+}

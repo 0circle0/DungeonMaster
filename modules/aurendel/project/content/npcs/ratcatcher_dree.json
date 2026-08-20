@@ -1,0 +1,49 @@
+{
+  "id": "ratcatcher_dree",
+  "name": "Dree, Warden of the Under",
+  "description": "Forty-one people under her and a charter older than the dynasty. Three of the forty-one are unaccounted for and she has stopped pretending otherwise.",
+  "disposition": 5,
+  "gullibility": 0.2,
+  "memorySpan": 200,
+  "offersQuests": [
+    "bonealley_unlicensed"
+  ],
+  "caresAbout": [
+    "under_kept",
+    "under_sold",
+    "crown_served"
+  ],
+  "reactions": [],
+  "faction": "the_ratcatchers",
+  "dialogue": "bonealley_dree_talk",
+  "home": "warrens_ratcatchers_guild",
+  "shop": {
+    "lootTable": "ratcatchers_stock",
+    "buysTags": [
+      "treasure",
+      "material"
+    ],
+    "priceMultiplier": 1.15,
+    "requires": {
+      "factions": [
+        {
+          "faction": "the_ratcatchers",
+          "minStanding": 10
+        }
+      ]
+    }
+  },
+  "temperament": {
+    "roamRadius": 0,
+    "wanderChance": 0,
+    "speeds": {
+      "wander": 0
+    },
+    "investigates": [],
+    "notices": [
+      "hostile",
+      "neutral",
+      "ally"
+    ]
+  }
+}

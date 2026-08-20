@@ -1,0 +1,75 @@
+{
+  "id": "bell_the_new_tower",
+  "name": "The New Tower",
+  "description": "Gost has lost two poles and a cousin since Harvest, all three in the same reach, and all three on nights the ringers say nothing at all was rung.",
+  "autoStart": false,
+  "ordered": true,
+  "tags": [
+    "side",
+    "act2",
+    "bell",
+    "thornmere"
+  ],
+  "objectives": [
+    {
+      "id": "to_the_tower",
+      "description": "Get up to the new tower at Drowned Bell.",
+      "kind": "reach",
+      "count": 1,
+      "hidden": false,
+      "optional": false,
+      "target": "drowned_bell_new_tower"
+    },
+    {
+      "id": "ask_gost",
+      "description": "Ask Gost what the ringers will not discuss.",
+      "kind": "talk",
+      "count": 1,
+      "hidden": false,
+      "optional": false,
+      "target": "ferryman_gost"
+    },
+    {
+      "id": "the_ringers",
+      "description": "Hear what the ringers deny.",
+      "kind": "custom",
+      "count": 1,
+      "hidden": false,
+      "optional": false,
+      "when": {
+        "test": {
+          "ref": "flags.bell_ringers_asked"
+        }
+      }
+    }
+  ],
+  "stages": [],
+  "unlocks": [
+    "bell_the_black_water"
+  ],
+  "rewards": {
+    "xp": 55,
+    "items": [],
+    "reputation": {
+      "the_ferrymen": 10
+    }
+  },
+  "giver": "ferryman_gost",
+  "requires": {
+    "quests": [
+      {
+        "quest": "the_undercroft",
+        "status": "complete"
+      }
+    ],
+    "minLevel": 4
+  },
+  "onComplete": [
+    {
+      "setFlag": {
+        "flag": "bell_tower_asked",
+        "value": true
+      }
+    }
+  ]
+}

@@ -1,0 +1,307 @@
+{
+  "format": 1,
+  "keyOrder": [
+    "format",
+    "id",
+    "version",
+    "engine",
+    "extends",
+    "meta",
+    "rules",
+    "content",
+    "world",
+    "narrative",
+    "start"
+  ],
+  "sections": {
+    "rules": {
+      "keyOrder": [
+        "attributes",
+        "resources",
+        "derivedStats",
+        "damageTypes",
+        "conditions",
+        "savingThrows",
+        "actionTypes",
+        "equipmentSlots",
+        "itemProperties",
+        "masteryTiers",
+        "creatureTypes",
+        "languages",
+        "alignments",
+        "sizes",
+        "rests",
+        "resolution",
+        "progression",
+        "vitalResource",
+        "initiativeStat",
+        "defaultSize",
+        "defaultMovementMode",
+        "senses",
+        "stances",
+        "perception",
+        "temperament",
+        "movementModes",
+        "opportunities",
+        "coverTypes",
+        "currency",
+        "interactionRange",
+        "search",
+        "dispositionBands",
+        "spellcasting"
+      ],
+      "collections": {
+        "attributes": [
+          "might.json",
+          "agility.json",
+          "endurance.json",
+          "intellect.json",
+          "instinct.json",
+          "presence.json"
+        ],
+        "resources": [
+          "hp.json",
+          "focus.json"
+        ],
+        "derivedStats": [
+          "guard.json",
+          "initiative.json",
+          "carry.json"
+        ],
+        "damageTypes": [
+          "slashing.json",
+          "piercing.json",
+          "bludgeoning.json",
+          "fire.json",
+          "cold.json",
+          "lightning.json",
+          "acid.json",
+          "poison.json",
+          "necrotic.json",
+          "radiant.json"
+        ],
+        "conditions": [
+          "bleeding.json",
+          "burning.json",
+          "poisoned.json",
+          "frightened.json",
+          "emboldened.json",
+          "blinded.json",
+          "disengaging.json",
+          "dodging.json",
+          "helped.json",
+          "silenced.json",
+          "slowed.json",
+          "stunned.json",
+          "prone.json"
+        ],
+        "actionTypes": [
+          "action.json",
+          "quick.json",
+          "reaction.json",
+          "speak.json",
+          "gesture.json"
+        ],
+        "equipmentSlots": [
+          "hand.json",
+          "body.json",
+          "head.json",
+          "cloak.json",
+          "ring.json",
+          "belt.json"
+        ],
+        "itemProperties": [
+          "silvered.json",
+          "two_handed.json",
+          "finesse.json",
+          "thrown.json",
+          "heavy.json",
+          "reach.json"
+        ],
+        "masteryTiers": [
+          "novice.json",
+          "adept.json",
+          "expert.json",
+          "master.json"
+        ],
+        "rests": [
+          "breather.json",
+          "camp.json",
+          "lodging.json"
+        ],
+        "savingThrows": [
+          "fortitude.json",
+          "reflex.json",
+          "will.json"
+        ],
+        "sizes": [
+          "tiny.json",
+          "small.json",
+          "medium.json",
+          "large.json",
+          "huge.json"
+        ],
+        "creatureTypes": [
+          "humanoid.json",
+          "beast.json",
+          "undead.json",
+          "construct.json",
+          "elemental.json",
+          "fey.json",
+          "giant.json",
+          "dragon.json",
+          "aberration.json",
+          "ooze.json",
+          "plant.json"
+        ],
+        "senses": [
+          "sight.json",
+          "hearing.json",
+          "smell.json",
+          "tracks.json"
+        ],
+        "stances": [
+          "sneak.json",
+          "walk.json",
+          "dash.json"
+        ],
+        "movementModes": [
+          "walk.json",
+          "swim.json",
+          "climb.json"
+        ],
+        "languages": [
+          "common.json",
+          "old_tongue.json",
+          "delving.json",
+          "sylvan.json",
+          "steppe_tongue.json",
+          "glass_script.json",
+          "deep_speech.json"
+        ],
+        "alignments": [
+          "lawful_good.json",
+          "neutral_good.json",
+          "chaotic_good.json",
+          "lawful_neutral.json",
+          "true_neutral.json",
+          "chaotic_neutral.json",
+          "lawful_evil.json",
+          "neutral_evil.json",
+          "chaotic_evil.json"
+        ],
+        "opportunities": [
+          "parting_blow.json"
+        ],
+        "coverTypes": [
+          "half.json",
+          "three_quarters.json",
+          "total.json"
+        ]
+      }
+    },
+    "content": {
+      "keyOrder": [
+        "skills",
+        "abilities",
+        "ancestries",
+        "classes"
+      ],
+      "collections": {
+        "abilities": [
+          "strike.json",
+          "quick_shot.json",
+          "guarded_stance.json",
+          "disengage.json",
+          "dodge.json",
+          "assist.json",
+          "rally.json",
+          "shove.json",
+          "first_aid.json",
+          "read_runes.json",
+          "wardlight.json",
+          "arcane_bolt.json",
+          "frost_lance.json",
+          "mend_flesh.json",
+          "turn_the_dark.json",
+          "augury.json"
+        ],
+        "skills": [
+          "athletics.json",
+          "acrobatics.json",
+          "stealth.json",
+          "lockpicking.json",
+          "craft.json",
+          "survival.json",
+          "perception.json",
+          "insight.json",
+          "medicine.json",
+          "lore.json",
+          "arcana.json",
+          "nature.json",
+          "persuasion.json",
+          "deception.json",
+          "intimidation.json",
+          "resolve.json"
+        ],
+        "ancestries": [
+          "human.json",
+          "dwarf.json",
+          "elf.json",
+          "halfling.json",
+          "orc.json"
+        ],
+        "classes": [
+          "warden.json",
+          "stalker.json",
+          "ranger.json",
+          "adept.json",
+          "keeper.json"
+        ]
+      }
+    },
+    "world": {
+      "keyOrder": [
+        "terrains",
+        "palettes",
+        "biomes",
+        "areas",
+        "time"
+      ],
+      "collections": {
+        "terrains": [
+          "void_floor.json",
+          "void_wall.json"
+        ],
+        "palettes": [
+          "void.json"
+        ],
+        "biomes": [
+          "nowhere.json"
+        ],
+        "areas": [
+          "nowhere.json"
+        ]
+      }
+    },
+    "narrative": {
+      "keyOrder": [
+        "textGrammar",
+        "systemText"
+      ],
+      "collections": {
+        "textGrammar": [
+          "heard_something.json",
+          "heard_something_faint.json",
+          "heard_nothing.json",
+          "smelled_something.json",
+          "smelled_something_faint.json",
+          "smelled_nothing.json",
+          "saw_tracks.json",
+          "saw_tracks_faint.json",
+          "saw_no_tracks.json"
+        ]
+      }
+    }
+  }
+}

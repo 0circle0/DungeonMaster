@@ -1,0 +1,12 @@
+{
+  "id": "urban_isle",
+  "name": "Wreck Town",
+  "description": "Built out of what the sea returned, and standing on piles above it.",
+  "layer": "overworld",
+  "palette": "town_isle",
+  "roomTemplates": [],
+  "encounterTables": [],
+  "lootTables": [],
+  "traps": [],
+  "ambienceKey": "urban_isle_ambience"
+}

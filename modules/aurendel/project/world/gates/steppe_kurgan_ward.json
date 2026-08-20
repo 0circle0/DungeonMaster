@@ -1,0 +1,17 @@
+{
+  "id": "steppe_kurgan_ward",
+  "name": "The Kurgan Ward",
+  "kind": "story",
+  "description": "No wall and no gate. A line of horse skulls on poles, and the riders will not cross it, and they will explain why at length and you will not be reassured.",
+  "staysOpen": true,
+  "requires": {
+    "description": "a khan's word, or a very good reason",
+    "minLevel": 4
+  },
+  "bypass": {
+    "skill": "resolve",
+    "difficulty": 14,
+    "retryable": true
+  },
+  "blockedTextKey": "steppe_kurgan_ward_blocked"
+}

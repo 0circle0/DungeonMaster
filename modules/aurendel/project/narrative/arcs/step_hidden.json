@@ -1,0 +1,11 @@
+{
+  "id": "step_hidden",
+  "name": "The Sunward Steppe, Laid Out",
+  "description": "Three pieces of work under nine hundred years of grass, all three of them still doing what they were built to do.",
+  "quests": [
+    "step_the_planting",
+    "step_what_the_bank_shows",
+    "step_the_last_water"
+  ],
+  "isEnding": false
+}

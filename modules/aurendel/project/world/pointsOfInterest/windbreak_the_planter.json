@@ -1,0 +1,76 @@
+{
+  "id": "windbreak_the_planter",
+  "name": "The Planter's Stone",
+  "description": "At the western end, cut with a great many names and one date.",
+  "area": "steppe_windbreak",
+  "kind": "ruin",
+  "descriptionKey": "generic_ruin",
+  "travelMinutes": 8,
+  "tags": [
+    "ruin"
+  ],
+  "map": {
+    "width": "9",
+    "height": "7",
+    "palette": "int_cave"
+  },
+  "position": {
+    "x": 25,
+    "y": 3
+  },
+  "triggers": [
+    {
+      "id": "step_line_committed",
+      "mode": "once",
+      "on": "enter",
+      "description": "At the stone in the middle of the eleven miles.",
+      "requires": {
+        "custom": {
+          "gte": [
+            {
+              "ref": "threads.step_line.known"
+            },
+            2
+          ]
+        }
+      },
+      "effects": [
+        {
+          "emit": {
+            "event": "startQuest",
+            "data": {
+              "quest": "step_the_planting"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "hidden": true,
+  "discover": {
+    "skill": "survival",
+    "difficulty": {
+      "max": [
+        7,
+        {
+          "sub": [
+            19,
+            {
+              "mul": [
+                3,
+                {
+                  "ref": "threads.step_line.known"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "gate": "step_line_root",
+  "encounterTables": [
+    "step_line_boss"
+  ],
+  "encounterChance": 1
+}

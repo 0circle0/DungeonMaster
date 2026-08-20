@@ -1,0 +1,48 @@
+{
+  "id": "antiquary_pell",
+  "name": "Pell, Fellow of the Library",
+  "description": "A fellow's warrant, a purse, eleven diggers on day rates, and two letters from the Elderhollow moot that she has filed rather than answered.",
+  "disposition": 5,
+  "gullibility": 0.3,
+  "memorySpan": 250,
+  "offersQuests": [
+    "diggers_the_west_end"
+  ],
+  "caresAbout": [
+    "library_served",
+    "record_stolen",
+    "barrow_robbed"
+  ],
+  "reactions": [],
+  "faction": "the_library",
+  "dialogue": "diggers_pell_talk",
+  "home": "long_barrow_diggers_camp",
+  "shop": {
+    "lootTable": "keeper_stock",
+    "buysTags": [
+      "treasure"
+    ],
+    "priceMultiplier": 1.35,
+    "requires": {
+      "factions": [
+        {
+          "faction": "the_library",
+          "minStanding": 15
+        }
+      ]
+    }
+  },
+  "temperament": {
+    "roamRadius": 0,
+    "wanderChance": 0,
+    "speeds": {
+      "wander": 0
+    },
+    "investigates": [],
+    "notices": [
+      "hostile",
+      "neutral",
+      "ally"
+    ]
+  }
+}

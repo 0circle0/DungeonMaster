@@ -1,0 +1,48 @@
+{
+  "id": "trial_three_hoard_b",
+  "name": "The Bottom of the Signal Deep",
+  "rolls": "5",
+  "emptyChance": 0,
+  "bonusRollSkill": "perception",
+  "bonusRolls": {
+    "onSuccess": 2,
+    "onCritical": 4
+  },
+  "entries": [
+    {
+      "weight": 4,
+      "value": {
+        "item": "old_coin",
+        "quantity": "14d6"
+      }
+    },
+    {
+      "weight": 3,
+      "value": {
+        "item": "amber_lump",
+        "quantity": "2d4"
+      }
+    },
+    {
+      "weight": 3,
+      "value": {
+        "item": "antidote",
+        "quantity": "2d3"
+      }
+    },
+    {
+      "weight": 2,
+      "value": {
+        "item": "warded_coat",
+        "quantity": "1"
+      }
+    },
+    {
+      "weight": 1,
+      "value": {
+        "item": "wreck_brass",
+        "quantity": "2d4"
+      }
+    }
+  ]
+}

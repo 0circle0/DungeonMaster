@@ -1,0 +1,16 @@
+{
+  "id": "cinderhold_the_black_wall",
+  "name": "The Black Wall",
+  "description": "Basalt, forty feet, and it is not there to keep people out.",
+  "area": "ember_cinderhold",
+  "kind": "landmark",
+  "descriptionKey": "generic_landmark",
+  "travelMinutes": 4,
+  "tags": [
+    "landmark"
+  ],
+  "position": {
+    "x": 11,
+    "y": 3
+  }
+}

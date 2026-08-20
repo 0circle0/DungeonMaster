@@ -1,0 +1,36 @@
+{
+  "id": "shelf_cutter_ovid",
+  "name": "Ovid, Shelf-Cutter",
+  "description": "Cuts obsidian off the sheet for the Reach's blades and owns the rule that finds its true edge, which will not lie flat on it.",
+  "disposition": -2,
+  "gullibility": 0.2,
+  "memorySpan": 200,
+  "offersQuests": [],
+  "caresAbout": [],
+  "reactions": [],
+  "faction": "the_vent_readers",
+  "dialogue": "ember_ovid_talk",
+  "home": "obsidian_shelf_cutters_camp",
+  "statblock": "ember_cutter",
+  "shop": {
+    "lootTable": "keeper_stock",
+    "buysTags": [
+      "material",
+      "treasure"
+    ],
+    "priceMultiplier": 1.35
+  },
+  "temperament": {
+    "roamRadius": 0,
+    "wanderChance": 0,
+    "speeds": {
+      "wander": 0
+    },
+    "investigates": [],
+    "notices": [
+      "hostile",
+      "neutral",
+      "ally"
+    ]
+  }
+}

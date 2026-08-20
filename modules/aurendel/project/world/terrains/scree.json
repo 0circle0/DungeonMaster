@@ -1,0 +1,18 @@
+{
+  "id": "scree",
+  "name": "Scree",
+  "description": "Loose slope that moves when you do.",
+  "glyph": "s",
+  "color": "gray",
+  "passable": true,
+  "opaque": false,
+  "moveCost": 2,
+  "tags": [
+    "stone"
+  ],
+  "marks": {
+    "tracks": 0,
+    "smell": 0.6
+  },
+  "providesCover": "half"
+}

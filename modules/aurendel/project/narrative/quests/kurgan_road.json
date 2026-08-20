@@ -1,0 +1,52 @@
+{
+  "id": "kurgan_road",
+  "name": "The Road to the Kurgan Field",
+  "description": "The Wardlist names it The Skull Line. Getting there is most of a week and the last day of it is on foot.",
+  "autoStart": false,
+  "ordered": true,
+  "tags": [
+    "act2",
+    "kurgan"
+  ],
+  "objectives": [
+    {
+      "id": "arrive",
+      "description": "Reach the Kurgan Field.",
+      "kind": "reach",
+      "count": 1,
+      "hidden": false,
+      "optional": false,
+      "target": "steppe_ilkhet"
+    },
+    {
+      "id": "ask_around",
+      "description": "Find somebody who tends it.",
+      "kind": "custom",
+      "count": 1,
+      "hidden": false,
+      "optional": false,
+      "when": {
+        "test": {
+          "ref": "flags.kurgan_briefed"
+        }
+      }
+    }
+  ],
+  "stages": [],
+  "unlocks": [
+    "kurgan_site"
+  ],
+  "rewards": {
+    "xp": 150,
+    "items": [],
+    "reputation": {}
+  },
+  "requires": {
+    "quests": [
+      {
+        "quest": "the_undercroft",
+        "status": "complete"
+      }
+    ]
+  }
+}

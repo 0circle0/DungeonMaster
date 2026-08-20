@@ -1,0 +1,29 @@
+{
+  "id": "dun_sewer",
+  "name": "Undercity",
+  "floor": "flagstone",
+  "wall": "wall_stone",
+  "exterior": "wall_stone",
+  "scatter": [
+    {
+      "terrain": "shallows",
+      "frequency": 0.16,
+      "distribution": "patch",
+      "scale": 7,
+      "priority": 0
+    },
+    {
+      "terrain": "rubble",
+      "frequency": 0.07,
+      "distribution": "speckle",
+      "priority": 1
+    },
+    {
+      "terrain": "crate",
+      "frequency": 0.02,
+      "distribution": "speckle",
+      "priority": 2
+    }
+  ],
+  "door": "door"
+}

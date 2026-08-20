@@ -1,0 +1,8 @@
+{
+  "id": "ice_broken",
+  "name": "Broke the Ice Moot's Word",
+  "faction": "the_ice_moot",
+  "severity": -20,
+  "memorability": 2.5,
+  "distortion": 0.15
+}

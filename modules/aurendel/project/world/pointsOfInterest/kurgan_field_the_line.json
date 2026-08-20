@@ -1,0 +1,17 @@
+{
+  "id": "kurgan_field_the_line",
+  "name": "The Skull Line",
+  "description": "Horse skulls on poles, a hundred paces apart, and no rider will cross it.",
+  "area": "steppe_kurgan_field",
+  "kind": "crossing",
+  "descriptionKey": "generic_crossing",
+  "travelMinutes": 5,
+  "tags": [
+    "crossing"
+  ],
+  "gate": "steppe_kurgan_ward",
+  "position": {
+    "x": 3,
+    "y": 3
+  }
+}

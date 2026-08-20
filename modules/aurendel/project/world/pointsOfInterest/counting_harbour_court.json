@@ -1,0 +1,35 @@
+{
+  "id": "counting_harbour_court",
+  "name": "The Harbour Court",
+  "description": "Where a collision, a salvage, or a mutiny becomes somebody's fault.",
+  "area": "sarnport_countinghouse",
+  "kind": "landmark",
+  "descriptionKey": "generic_landmark",
+  "travelMinutes": 4,
+  "tags": [],
+  "map": {
+    "width": "15",
+    "height": "11",
+    "palette": "int_stone"
+  },
+  "position": {
+    "x": 12,
+    "y": 3
+  },
+  "triggers": [
+    {
+      "id": "saltcliff_in_the_court",
+      "mode": "once",
+      "on": "enter",
+      "description": "Nine years of findings, and what they have in common.",
+      "effects": [
+        {
+          "setFlag": {
+            "flag": "saltcliff_pattern_seen",
+            "value": true
+          }
+        }
+      ]
+    }
+  ]
+}

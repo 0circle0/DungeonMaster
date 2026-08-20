@@ -1,0 +1,11 @@
+{
+  "id": "undercroft_key",
+  "name": "The Undercroft Key",
+  "description": "Iron, cold, and it carries the steward's seal on a cord.",
+  "kind": "key",
+  "value": 0,
+  "weight": 0.5,
+  "tags": [
+    "quest"
+  ]
+}

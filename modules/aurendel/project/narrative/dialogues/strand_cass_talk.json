@@ -1,0 +1,124 @@
+{
+  "id": "strand_cass_talk",
+  "start": "greet",
+  "nodes": [
+    {
+      "id": "greet",
+      "says": [
+        {
+          "text": "The burner's hut is colder inside than out and Cass is sitting in it in three coats. \"You've come up the kiln path. Nobody comes up the kiln path.\""
+        }
+      ],
+      "options": [
+        {
+          "id": "the_kiln",
+          "text": "Tell me about the kiln.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "the_kiln"
+        },
+        {
+          "id": "leave",
+          "text": "Nothing.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": ""
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": [
+        {
+          "requires": {
+            "quests": [
+              {
+                "quest": "strand_the_lime_kiln",
+                "status": "active"
+              }
+            ]
+          },
+          "goto": "the_ninth"
+        }
+      ]
+    },
+    {
+      "id": "the_kiln",
+      "says": [
+        {
+          "text": "\"Burnt the chalk that built Sarnport, and when Sarnport was built it stopped needing us.\" She does not sound bitter about it. \"Sixty years cold. I have stayed on because there is nowhere I would rather be cold.\""
+        }
+      ],
+      "options": [
+        {
+          "id": "back",
+          "text": "Hm.",
+          "effects": [],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "greet"
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": []
+    },
+    {
+      "id": "the_ninth",
+      "says": [
+        {
+          "text": "\"You will be here about the ninth.\" She has clearly been waiting for somebody to be. \"There was a fire in my kiln on the ninth and I did not light it, and I did not go out, because I am eighty and there was a man on the path with a barrow.\""
+        }
+      ],
+      "options": [
+        {
+          "id": "who",
+          "text": "Did you know him?",
+          "effects": [],
+          "onceOnly": true,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "the_barrow"
+        }
+      ],
+      "onEnter": [],
+      "redirectWhen": []
+    },
+    {
+      "id": "the_barrow",
+      "says": [
+        {
+          "text": "\"Furze and tar, two loads,\" says Cass. \"You do not carry furze and tar up a kiln path in a blow unless you want a light seen a long way off.\" She pulls the coats in. \"And you do not come back down empty, and he did not. He went on over the top and down the far side, where there is nothing but the beach.\""
+        }
+      ],
+      "options": [
+        {
+          "id": "thank",
+          "text": "Thank you.",
+          "effects": [
+            {
+              "adjustReputation": {
+                "faction": "the_salvors",
+                "amount": 4
+              }
+            }
+          ],
+          "onceOnly": false,
+          "showWhenLocked": false,
+          "lockedHint": "",
+          "goto": "greet"
+        }
+      ],
+      "onEnter": [
+        {
+          "setFlag": {
+            "flag": "strand_kiln_seen",
+            "value": true
+          }
+        }
+      ],
+      "redirectWhen": []
+    }
+  ]
+}

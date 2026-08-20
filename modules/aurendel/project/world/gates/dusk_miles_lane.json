@@ -1,0 +1,29 @@
+{
+  "id": "dusk_miles_lane",
+  "name": "Six Feet Down",
+  "description": "A lane worn deeper than a century of carts could wear it, going somewhere the road stopped going.",
+  "kind": "ward",
+  "blockedTextKey": "dusk_miles_blocked",
+  "staysOpen": true,
+  "onOpen": [
+    {
+      "setFlag": {
+        "flag": "dusk_miles_open",
+        "value": true
+      }
+    }
+  ],
+  "onBlocked": [],
+  "opensWith": [],
+  "tags": [],
+  "requires": {
+    "items": [
+      {
+        "item": "mile_book",
+        "quantity": 1,
+        "consume": false,
+        "equipped": false
+      }
+    ]
+  }
+}

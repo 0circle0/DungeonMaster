@@ -1,0 +1,14 @@
+{
+  "id": "white_reach_the_middle",
+  "name": "The Middle of the Reach",
+  "description": "Forty miles of level ice, and this is the point equidistant from every edge of it, and it is marked.",
+  "area": "frostmere_the_white_reach",
+  "kind": "landmark",
+  "descriptionKey": "generic_landmark",
+  "travelMinutes": 12,
+  "tags": [],
+  "position": {
+    "x": 3,
+    "y": 3
+  }
+}
