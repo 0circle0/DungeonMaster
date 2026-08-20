@@ -22,6 +22,7 @@
     "editor": "npm run dev --workspace @dm/editor",
     "editor:build": "npm run build --workspace @dm/editor",
     "docs": "tsx packages/module/src/bin/emit-docs.ts",
+    "comments": "tsx packages/tools/src/bin/comments.ts",
     "systemtext": "tsx packages/module/src/bin/emit-system-text.ts",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
