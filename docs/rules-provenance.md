@@ -292,11 +292,40 @@ one field carrying two meanings, and the authored number is the one to trust.
 ### G7. The named tactical actions are absent
 
 **Partly closed with G1.** Dodge and Help were the two that could not be
-written at all, and both now exist in `core_fantasy` as `dodge` and `assist`.
-Dash exists as a stance multiplier of 1.5 against the official 2. Disengage is
-independently expressible as an opportunity suppression and is not built. Hide
-would mean something different here, because stealth is stance emission rather
-than a roll — see Choices. Ready has no equivalent.
+written at all, and both now exist in `core_fantasy` as `dodge` and `assist`,
+applying the `dodging` and `helped` conditions. What remains is four separate
+situations, not one gap.
+
+**Dash is modelled differently, and deliberately.** It is a *stance*
+(`speedMultiplier: 1.5`) rather than an action: it costs nothing, applies to
+the whole party, and persists until changed, where the official Dash costs your
+action and lasts a turn. The stance also raises what you emit — hearing 2.2,
+smell 1.4 — which feeds the perception model, so moving fast is a trade here
+rather than a free option. That is a better fit for this engine than the
+original, and the only genuinely open question is the multiplier: 1.5 against
+an effective 2.
+
+**Disengage cannot be expressed.** This entry previously claimed it could, as
+an opportunity suppression. It cannot. `provokeOpportunity` builds the gate's
+scope around the *reactor* and passes the mover as `{ id }` alone
+(`buildScope(module, state, other, { target: { id: mover.id } })`, with `extra`
+spread last), so `opportunities[].requires` can read the reactor's conditions
+and the mover's id and nothing else. There is no way to write "unless the one
+leaving is disengaging". `conditions[].prevents` does not reach either: it
+blocks its *bearer's* action types, and a parting blow is spent from the
+reactor's budget.
+
+The fix is small — pass the mover's full entity into that scope — after which a
+`disengaging` condition and an ability to apply it are pure content, exactly as
+`dodge` was.
+
+**Hide means something else here, by design.** Stealth is not a roll: a stance
+*emits*, and `concealedBy` with `concealmentPerPoint` reduces that emission
+continuously. There is no moment to spend an action on. See Choices.
+
+**Ready needs persisted state.** `CombatState` has no slot for a held trigger
+and the action waiting on it, so this is a save-format migration — the same
+class of work as attunement, not a wiring job.
 
 ---
 
