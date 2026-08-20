@@ -1,33 +1,15 @@
 {
-  "id": "salvor_bren",
-  "name": "Bren of the Reef Camp",
-  "description": "Dives the reef for the Salvors and came up off the deep wreck once with a line cut into a brass plate and nothing to say.",
-  "disposition": 0,
-  "gullibility": 0.3,
-  "memorySpan": 200,
-  "offersQuests": [],
-  "caresAbout": [],
-  "reactions": [],
-  "faction": "the_salvors",
-  "dialogue": "isle_bren_talk",
-  "home": "wreck_reef_salvors_camp",
-  "statblock": "isle_salvor",
-  "temperament": {
-    "roamRadius": 24,
-    "investigateRadius": 60,
-    "leashRadius": 90,
-    "wanderChance": 0.3,
-    "speeds": {
-      "wander": 0.5
-    },
-    "investigates": [
-      "sight",
-      "hearing"
-    ],
-    "notices": [
-      "hostile",
-      "neutral",
-      "ally"
-    ]
+  "@prefab": "content_npcs_entry_3",
+  "params": {
+    "id": "salvor_bren",
+    "name": "Bren of the Reef Camp",
+    "description": "Dives the reef for the Salvors and came up off the deep wreck once with a line cut into a brass plate and nothing to say.",
+    "disposition": 0,
+    "memorySpan": 200,
+    "faction": "the_salvors",
+    "dialogue": "isle_bren_talk",
+    "home": "wreck_reef_salvors_camp",
+    "statblock": "isle_salvor",
+    "variant": "v3"
   }
 }

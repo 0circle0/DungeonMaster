@@ -1,24 +1,18 @@
 {
-  "id": "barrowgate_church",
-  "name": "The Church on the Mound",
-  "description": "Built on the east end of the barrow, deliberately, and the foundations went into something.",
-  "area": "moor_barrowgate",
-  "kind": "shrine",
-  "descriptionKey": "int_temple",
-  "travelMinutes": 3,
-  "tags": [
-    "shrine"
-  ],
-  "services": [
-    "temple"
-  ],
-  "map": {
-    "width": "15",
-    "height": "11",
-    "palette": "int_temple"
-  },
-  "position": {
-    "x": 29,
-    "y": 23
+  "@prefab": "world_points_f_nterest_int_temple",
+  "params": {
+    "id": "barrowgate_church",
+    "name": "The Church on the Mound",
+    "description": "Built on the east end of the barrow, deliberately, and the foundations went into something.",
+    "area": "moor_barrowgate",
+    "map": {
+      "width": "15",
+      "height": "11",
+      "palette": "int_temple"
+    },
+    "position": {
+      "x": 29,
+      "y": 23
+    }
   }
 }

@@ -1,18 +1,16 @@
 {
-  "id": "drowned_fort_the_hatch",
-  "name": "The Fort Hatch",
-  "description": "Open for about forty minutes either side of low water, and shut with the whole Iron Sea on top of it the rest of the time.",
-  "area": "isles_drowned_fort_shoal",
-  "kind": "dungeonEntrance",
-  "descriptionKey": "generic_dungeon_mouth",
-  "travelMinutes": 10,
-  "tags": [
-    "dungeon"
-  ],
-  "gate": "isles_fort_hatch",
-  "dungeon": "isles_drowned_fort",
-  "position": {
-    "x": 3,
-    "y": 3
+  "@prefab": "world_points_f_nterest_generic_dungeon_mouth_5",
+  "params": {
+    "id": "drowned_fort_the_hatch",
+    "name": "The Fort Hatch",
+    "description": "Open for about forty minutes either side of low water, and shut with the whole Iron Sea on top of it the rest of the time.",
+    "area": "isles_drowned_fort_shoal",
+    "travelMinutes": 10,
+    "gate": "isles_fort_hatch",
+    "dungeon": "isles_drowned_fort",
+    "position": {
+      "x": 3,
+      "y": 3
+    }
   }
 }

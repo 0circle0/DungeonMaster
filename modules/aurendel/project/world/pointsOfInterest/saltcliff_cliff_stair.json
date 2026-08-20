@@ -1,14 +1,11 @@
 {
-  "id": "saltcliff_cliff_stair",
-  "name": "The Cliff Stair",
-  "description": "Two hundred and forty steps from the Rise to the Quay, cut into the chalk and wet at the bottom.",
-  "area": "sarnport_saltcliff",
-  "kind": "landmark",
-  "descriptionKey": "generic_landmark",
-  "travelMinutes": 4,
-  "tags": [],
-  "position": {
-    "x": 22,
-    "y": 27
+  "@prefab": "world_points_f_nterest_generic_landmark",
+  "params": {
+    "id": "saltcliff_cliff_stair",
+    "name": "The Cliff Stair",
+    "description": "Two hundred and forty steps from the Rise to the Quay, cut into the chalk and wet at the bottom.",
+    "area": "sarnport_saltcliff",
+    "travelMinutes": 4,
+    "variant": "v2"
   }
 }

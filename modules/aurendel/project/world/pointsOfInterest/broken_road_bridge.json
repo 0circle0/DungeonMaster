@@ -1,21 +1,15 @@
 {
-  "id": "broken_road_bridge",
-  "name": "The Broken Bridge",
-  "description": "Three arches standing and two not, and the river going through the gap perfectly happily.",
-  "area": "skarnspine_broken_road",
-  "kind": "ruin",
-  "descriptionKey": "generic_ruin",
-  "travelMinutes": 6,
-  "tags": [
-    "ruin"
-  ],
-  "map": {
-    "width": "9",
-    "height": "7",
-    "palette": "int_stone"
-  },
-  "position": {
-    "x": 25,
-    "y": 3
+  "@prefab": "world_points_f_nterest_generic_ruin_3",
+  "params": {
+    "id": "broken_road_bridge",
+    "name": "The Broken Bridge",
+    "description": "Three arches standing and two not, and the river going through the gap perfectly happily.",
+    "area": "skarnspine_broken_road",
+    "map": {
+      "width": "9",
+      "height": "7",
+      "palette": "int_stone"
+    },
+    "variant": "v3"
   }
 }

@@ -1,24 +1,18 @@
 {
-  "id": "cairnhold_cairn_shrine",
-  "name": "The Keeper's Shrine",
-  "description": "Where the cairn-keepers are trained, which takes eleven years.",
-  "area": "frostmere_cairnhold",
-  "kind": "shrine",
-  "descriptionKey": "int_temple",
-  "travelMinutes": 3,
-  "tags": [
-    "shrine"
-  ],
-  "services": [
-    "temple"
-  ],
-  "map": {
-    "width": "9",
-    "height": "7",
-    "palette": "int_temple"
-  },
-  "position": {
-    "x": 27,
-    "y": 3
+  "@prefab": "world_points_f_nterest_int_temple",
+  "params": {
+    "id": "cairnhold_cairn_shrine",
+    "name": "The Keeper's Shrine",
+    "description": "Where the cairn-keepers are trained, which takes eleven years.",
+    "area": "frostmere_cairnhold",
+    "map": {
+      "width": "9",
+      "height": "7",
+      "palette": "int_temple"
+    },
+    "position": {
+      "x": 27,
+      "y": 3
+    }
   }
 }

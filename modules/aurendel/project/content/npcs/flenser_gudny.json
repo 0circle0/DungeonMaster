@@ -1,32 +1,15 @@
 {
-  "id": "flenser_gudny",
-  "name": "Gudny, at the Flensing Yard",
-  "description": "Twenty-two seasons on the yard and the only one left who worked the old landing before they moved it.",
-  "disposition": 6,
-  "gullibility": 0.4,
-  "memorySpan": 150,
-  "offersQuests": [],
-  "caresAbout": [],
-  "reactions": [],
-  "faction": "the_ice_moot",
-  "dialogue": "frost_gudny_talk",
-  "home": "whalebone_flensing_yard",
-  "temperament": {
-    "roamRadius": 24,
-    "investigateRadius": 60,
-    "leashRadius": 90,
-    "wanderChance": 0.3,
-    "speeds": {
-      "wander": 0.5
-    },
-    "investigates": [
-      "sight",
-      "hearing"
-    ],
-    "notices": [
-      "hostile",
-      "neutral",
-      "ally"
-    ]
+  "@prefab": "content_npcs_entry_2",
+  "params": {
+    "id": "flenser_gudny",
+    "name": "Gudny, at the Flensing Yard",
+    "description": "Twenty-two seasons on the yard and the only one left who worked the old landing before they moved it.",
+    "gullibility": 0.4,
+    "memorySpan": 150,
+    "caresAbout": [],
+    "faction": "the_ice_moot",
+    "dialogue": "frost_gudny_talk",
+    "home": "whalebone_flensing_yard",
+    "variant": "v9"
   }
 }

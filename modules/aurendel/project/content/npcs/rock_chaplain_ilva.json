@@ -1,35 +1,18 @@
 {
-  "id": "rock_chaplain_ilva",
-  "name": "Ilva, at the Rock Chapel",
-  "description": "Buries what the sea gives back, which on Cormorant is a full-time occupation, and has views about which way things are pointing.",
-  "disposition": 8,
-  "gullibility": 0.4,
-  "memorySpan": 200,
-  "offersQuests": [],
-  "caresAbout": [
-    "ward_restored",
-    "ward_broken"
-  ],
-  "reactions": [],
-  "faction": "the_keepers",
-  "dialogue": "isle_ilva_talk",
-  "home": "cormorant_chapel",
-  "temperament": {
-    "roamRadius": 24,
-    "investigateRadius": 60,
-    "leashRadius": 90,
-    "wanderChance": 0.3,
-    "speeds": {
-      "wander": 0.5
-    },
-    "investigates": [
-      "sight",
-      "hearing"
+  "@prefab": "content_npcs_entry_2",
+  "params": {
+    "id": "rock_chaplain_ilva",
+    "name": "Ilva, at the Rock Chapel",
+    "description": "Buries what the sea gives back, which on Cormorant is a full-time occupation, and has views about which way things are pointing.",
+    "gullibility": 0.4,
+    "memorySpan": 200,
+    "caresAbout": [
+      "ward_restored",
+      "ward_broken"
     ],
-    "notices": [
-      "hostile",
-      "neutral",
-      "ally"
-    ]
+    "faction": "the_keepers",
+    "dialogue": "isle_ilva_talk",
+    "home": "cormorant_chapel",
+    "variant": "v4"
   }
 }

@@ -1,14 +1,11 @@
 {
-  "id": "altar",
-  "name": "Altar",
-  "description": "Stone, worn pale in the middle by hands.",
-  "glyph": "2",
-  "color": "white",
-  "passable": false,
-  "opaque": false,
-  "moveCost": 0,
-  "tags": [
-    "furniture"
-  ],
-  "providesCover": "half"
+  "@prefab": "world_terrains_entry_6",
+  "params": {
+    "id": "altar",
+    "name": "Altar",
+    "description": "Stone, worn pale in the middle by hands.",
+    "glyph": "2",
+    "color": "white",
+    "variant": "v3"
+  }
 }

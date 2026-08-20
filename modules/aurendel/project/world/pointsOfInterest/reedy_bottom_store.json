@@ -1,24 +1,14 @@
 {
-  "id": "reedy_bottom_store",
-  "name": "The Cutters' Store",
-  "description": "Hooks, whetstones, waders, and rope.",
-  "area": "thornmere_reedy_bottom",
-  "kind": "market",
-  "descriptionKey": "int_store",
-  "travelMinutes": 3,
-  "tags": [
-    "shop"
-  ],
-  "services": [
-    "market"
-  ],
-  "map": {
-    "width": "9",
-    "height": "7",
-    "palette": "int_shop"
-  },
-  "position": {
-    "x": 15,
-    "y": 3
+  "@prefab": "world_points_f_nterest_int_store_2",
+  "params": {
+    "id": "reedy_bottom_store",
+    "name": "The Cutters' Store",
+    "description": "Hooks, whetstones, waders, and rope.",
+    "area": "thornmere_reedy_bottom",
+    "position": {
+      "x": 15,
+      "y": 3
+    },
+    "variant": "v4"
   }
 }

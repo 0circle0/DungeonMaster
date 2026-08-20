@@ -1,21 +1,14 @@
 {
-  "id": "ilkhet_house_b",
-  "name": "The Winter Row",
-  "description": "Dug in and turfed over, and used four months in twelve.",
-  "area": "steppe_ilkhet",
-  "kind": "settlement",
-  "descriptionKey": "int_house",
-  "travelMinutes": 2,
-  "tags": [
-    "house"
-  ],
-  "map": {
-    "width": "9",
-    "height": "7",
-    "palette": "int_timber"
-  },
-  "position": {
-    "x": 3,
-    "y": 13
+  "@prefab": "world_points_f_nterest_int_house_2",
+  "params": {
+    "id": "ilkhet_house_b",
+    "name": "The Winter Row",
+    "description": "Dug in and turfed over, and used four months in twelve.",
+    "area": "steppe_ilkhet",
+    "position": {
+      "x": 3,
+      "y": 13
+    },
+    "variant": "v1"
   }
 }

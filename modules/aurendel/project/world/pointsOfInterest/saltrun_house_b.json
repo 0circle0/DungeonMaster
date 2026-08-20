@@ -1,21 +1,14 @@
 {
-  "id": "saltrun_house_b",
-  "name": "The Weigher's House",
-  "description": "Has the only accurate scales in the region and is guarded accordingly.",
-  "area": "glasslands_saltrun",
-  "kind": "settlement",
-  "descriptionKey": "int_house",
-  "travelMinutes": 2,
-  "tags": [
-    "house"
-  ],
-  "map": {
-    "width": "9",
-    "height": "7",
-    "palette": "int_timber"
-  },
-  "position": {
-    "x": 12,
-    "y": 23
+  "@prefab": "world_points_f_nterest_int_house_2",
+  "params": {
+    "id": "saltrun_house_b",
+    "name": "The Weigher's House",
+    "description": "Has the only accurate scales in the region and is guarded accordingly.",
+    "area": "glasslands_saltrun",
+    "position": {
+      "x": 12,
+      "y": 23
+    },
+    "variant": "v1"
   }
 }

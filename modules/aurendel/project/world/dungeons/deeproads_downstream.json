@@ -1,22 +1,20 @@
 {
-  "id": "deeproads_downstream",
-  "name": "Downstream",
-  "description": "The Sunless River goes somewhere. Following it is the only way to find out and nobody has come back to say.",
-  "biome": "dungeon_drowned",
-  "roomCount": "13",
-  "depth": "5",
-  "algorithm": "rooms",
-  "lockedDoorChance": 0,
-  "doorGates": [],
-  "rollEncounters": false,
-  "safeEntrance": true,
-  "branchiness": 0.15,
-  "corridorLength": "2d3",
-  "corridor": {
-    "style": "winding",
-    "width": 2
-  },
-  "width": "73",
-  "height": "73",
-  "bossTable": "deep_river_boss"
+  "@prefab": "world_dungeons_entry_3",
+  "params": {
+    "id": "deeproads_downstream",
+    "name": "Downstream",
+    "description": "The Sunless River goes somewhere. Following it is the only way to find out and nobody has come back to say.",
+    "biome": "dungeon_drowned",
+    "roomCount": "13",
+    "depth": "5",
+    "branchiness": 0.15,
+    "corridorLength": "2d3",
+    "corridor": {
+      "style": "winding",
+      "width": 2
+    },
+    "width": "73",
+    "height": "73",
+    "bossTable": "deep_river_boss"
+  }
 }

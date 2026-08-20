@@ -1,24 +1,14 @@
 {
-  "id": "gatehall_outfitters",
-  "name": "The Gate Outfitters",
-  "description": "Lamps, rope, cleats, and cold-weather gear for people going out.",
-  "area": "karn_dolur_gatehall",
-  "kind": "market",
-  "descriptionKey": "int_store",
-  "travelMinutes": 3,
-  "tags": [
-    "shop"
-  ],
-  "services": [
-    "market"
-  ],
-  "map": {
-    "width": "15",
-    "height": "11",
-    "palette": "int_shop"
-  },
-  "position": {
-    "x": 41,
-    "y": 3
+  "@prefab": "world_points_f_nterest_int_store_2",
+  "params": {
+    "id": "gatehall_outfitters",
+    "name": "The Gate Outfitters",
+    "description": "Lamps, rope, cleats, and cold-weather gear for people going out.",
+    "area": "karn_dolur_gatehall",
+    "position": {
+      "x": 41,
+      "y": 3
+    },
+    "variant": "v1"
   }
 }

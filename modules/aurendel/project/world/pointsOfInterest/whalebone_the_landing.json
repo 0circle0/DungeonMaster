@@ -1,14 +1,11 @@
 {
-  "id": "whalebone_the_landing",
-  "name": "The Landing",
-  "description": "Not a harbour. A shelving beach, a capstan, and eight months a year of ice.",
-  "area": "frostmere_whalebone_landing",
-  "kind": "landmark",
-  "descriptionKey": "generic_landmark",
-  "travelMinutes": 3,
-  "tags": [],
-  "position": {
-    "x": 11,
-    "y": 3
+  "@prefab": "world_points_f_nterest_generic_landmark",
+  "params": {
+    "id": "whalebone_the_landing",
+    "name": "The Landing",
+    "description": "Not a harbour. A shelving beach, a capstan, and eight months a year of ice.",
+    "area": "frostmere_whalebone_landing",
+    "travelMinutes": 3,
+    "variant": "v5"
   }
 }

@@ -280,6 +280,126 @@ function setPath(target: Record<string, unknown>, path: string, value: unknown):
   node[segments[segments.length - 1]!] = value;
 }
 
+/** The marker that makes an entry file a recipe rather than an entry. */
+export const PREFAB_KEY = '@prefab';
+
+/**
+ * An entry stored as what makes it, rather than as what it is.
+ *
+ * Aurendel's 597 points of interest are thirteen shapes filled in over and
+ * over, so storing each one whole writes the same eleven keys 597 times. This
+ * is the other way round: name the shape, give it the handful of things that
+ * are actually different, and let the build do the rest.
+ *
+ * `overrides` carries **values**, not the paths that {@link PrefabLink} records.
+ * A link sits beside a complete entry and only has to say which fields a person
+ * touched; a recipe *is* the entry, so anything the prefab does not reproduce
+ * has nowhere else to live.
+ */
+export interface PrefabRecipe {
+  readonly [PREFAB_KEY]: string;
+  readonly params: Readonly<Record<string, unknown>>;
+  /** Dotted path to the value the prefab did not produce. */
+  readonly overrides?: Readonly<Record<string, unknown>>;
+}
+
+/** Whether a parsed entry file is a recipe. Cheap, and the only test needed. */
+export function isPrefabRecipe(value: unknown): value is PrefabRecipe {
+  if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+  return typeof (value as Record<string, unknown>)[PREFAB_KEY] === 'string';
+}
+
+/**
+ * A recipe back into the entry it stands for.
+ *
+ * Overrides are applied by path onto the expansion, which is what keeps key
+ * order intact: `setPath` writes an existing key in place and only a genuinely
+ * new one lands at the end. That matters more here than anywhere else in this
+ * file — a compressed module has to rebuild `module.json` byte for byte, and
+ * key order is the half of that no schema would ever catch.
+ */
+export function expandRecipe(
+  recipe: PrefabRecipe,
+  prefabs: readonly Prefab[],
+  style: StyleTables = {},
+): { entry: Record<string, unknown> | null; issues: readonly ExpandIssue[] } {
+  const id = recipe[PREFAB_KEY];
+  const prefab = prefabs.find((candidate) => candidate.id === id);
+  if (!prefab) {
+    return { entry: null, issues: [{ path: PREFAB_KEY, message: `no prefab ${JSON.stringify(id)}` }] };
+  }
+
+  const { entry, issues } = expandPrefab(prefab, recipe.params ?? {}, style);
+  for (const [path, value] of Object.entries(recipe.overrides ?? {})) setPath(entry, path, value);
+  return { entry, issues };
+}
+
+/**
+ * The inverse: an entry plus the prefab that nearly makes it.
+ *
+ * Whatever the expansion got wrong becomes an override, so this never fails and
+ * never lies — a poor match simply produces a recipe with more overrides than
+ * it saved. Callers choose the prefab by which answer comes out smallest, and
+ * the worst case is a file no smaller than the entry it replaced.
+ */
+export function asRecipe(
+  entry: Record<string, unknown>,
+  prefab: Prefab,
+  params: Readonly<Record<string, unknown>>,
+  style: StyleTables = {},
+): PrefabRecipe {
+  const { entry: made } = expandPrefab(prefab, params, style);
+  const overrides: Record<string, unknown> = {};
+
+  for (const path of differingPaths(made, entry)) {
+    setPathValue(overrides, path, getPath(entry, path));
+  }
+
+  return { [PREFAB_KEY]: prefab.id, params, ...(Object.keys(overrides).length > 0 ? { overrides } : {}) };
+}
+
+/** Overrides are a flat map of dotted paths, so this writes the key as given. */
+function setPathValue(target: Record<string, unknown>, path: string, value: unknown): void {
+  target[path] = value;
+}
+
+/**
+ * The shallowest paths at which two entries disagree.
+ *
+ * Shallowest on purpose: recording `map` once beats recording `map.width`,
+ * `map.height` and `map.palette`, and a whole-value override is what a reader
+ * can see the shape of. Descends only where both sides are plain objects and
+ * the disagreement is genuinely partial.
+ */
+function differingPaths(made: Record<string, unknown>, want: Record<string, unknown>): string[] {
+  const out: string[] = [];
+
+  const walk = (a: unknown, b: unknown, path: string): void => {
+    if (JSON.stringify(a) === JSON.stringify(b)) return;
+
+    const plain = (value: unknown): value is Record<string, unknown> =>
+      value !== null && typeof value === 'object' && !Array.isArray(value);
+
+    if (plain(a) && plain(b)) {
+      const keys = [...new Set([...Object.keys(a), ...Object.keys(b)])];
+      // Only worth descending when most of the object already agrees; a wholly
+      // different object reads better as one override than as five.
+      const differing = keys.filter((key) => JSON.stringify(a[key]) !== JSON.stringify(b[key]));
+      if (differing.length * 2 <= keys.length) {
+        for (const key of differing) walk(a[key], b[key], path ? `${path}.${key}` : key);
+        return;
+      }
+    }
+
+    out.push(path);
+  };
+
+  for (const key of [...new Set([...Object.keys(made), ...Object.keys(want)])]) {
+    walk(made[key], want[key], key);
+  }
+  return out;
+}
+
 /**
  * Rebuild an instance from its prefab, keeping what was overridden.
  *

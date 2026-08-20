@@ -1,34 +1,31 @@
 {
-  "id": "glass_town_hoard",
-  "name": "Behind a Barred Door",
-  "rolls": "2",
-  "emptyChance": 0.1,
-  "bonusRollSkill": "perception",
-  "bonusRolls": {
-    "onSuccess": 1,
-    "onCritical": 2
-  },
-  "entries": [
-    {
-      "weight": 4,
-      "value": {
-        "item": "old_coin",
-        "quantity": "2d6"
+  "@prefab": "content_loot_ables_entry_4",
+  "params": {
+    "id": "glass_town_hoard",
+    "name": "Behind a Barred Door",
+    "entries": [
+      {
+        "weight": 4,
+        "value": {
+          "item": "old_coin",
+          "quantity": "2d6"
+        }
+      },
+      {
+        "weight": 2,
+        "value": {
+          "item": "amber_lump",
+          "quantity": "1"
+        }
+      },
+      {
+        "weight": 1,
+        "value": {
+          "item": "silvered_blade",
+          "quantity": "1"
+        }
       }
-    },
-    {
-      "weight": 2,
-      "value": {
-        "item": "amber_lump",
-        "quantity": "1"
-      }
-    },
-    {
-      "weight": 1,
-      "value": {
-        "item": "silvered_blade",
-        "quantity": "1"
-      }
-    }
-  ]
+    ],
+    "variant": "v2"
+  }
 }

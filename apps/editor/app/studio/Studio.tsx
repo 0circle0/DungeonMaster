@@ -308,7 +308,7 @@ function StudioShell(props: {
       // document: `project/` for entries and `maps/` for static maps, which is
       // what git wants and what `npm run project -- unpack` reads back.
       { kind: 'action', id: 'act:export-project', label: 'Export project files', hint: 'for git', run: () => {
-        void downloadProject(store.doc as Record<string, unknown>, store.filename)
+        void downloadProject(store.doc as Record<string, unknown>, store.filename, props.authoring)
           .then(() => store.markSaved());
       } },
       { kind: 'action', id: 'act:new', label: 'New module…', hint: 'from a template', run: () => setNewDialog(true) },
@@ -318,8 +318,10 @@ function StudioShell(props: {
       { kind: 'action', id: 'act:mods', label: 'Mods', hint: `${NO_MODS.length} installed`, run: () => setModsOpen((open) => !open) },
     ],
     // The navigation helpers are redefined every render and close over nothing
-    // that changes, so they are deliberately not dependencies.
-    [store, saveToDisk],
+    // that changes, so they are deliberately not dependencies. `props.authoring`
+    // is one, because exporting project files has to carry the prefabs a
+    // compressed project rebuilds against.
+    [store, saveToDisk, props.authoring],
   );
 
   /**

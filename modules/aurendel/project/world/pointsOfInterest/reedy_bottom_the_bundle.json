@@ -1,24 +1,14 @@
 {
-  "id": "reedy_bottom_the_bundle",
-  "name": "The Bundle",
-  "description": "Thatched, obviously, and rethatched every third year out of principle.",
-  "area": "thornmere_reedy_bottom",
-  "kind": "settlement",
-  "descriptionKey": "int_inn",
-  "travelMinutes": 3,
-  "tags": [
-    "inn"
-  ],
-  "services": [
-    "inn"
-  ],
-  "map": {
-    "width": "9",
-    "height": "7",
-    "palette": "int_timber"
-  },
-  "position": {
-    "x": 9,
-    "y": 3
+  "@prefab": "world_points_f_nterest_int_inn_2",
+  "params": {
+    "id": "reedy_bottom_the_bundle",
+    "name": "The Bundle",
+    "description": "Thatched, obviously, and rethatched every third year out of principle.",
+    "area": "thornmere_reedy_bottom",
+    "position": {
+      "x": 9,
+      "y": 3
+    },
+    "variant": "v3"
   }
 }

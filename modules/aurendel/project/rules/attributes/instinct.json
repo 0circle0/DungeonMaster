@@ -1,24 +1,9 @@
 {
-  "id": "instinct",
-  "name": "Instinct",
-  "abbrev": "INS",
-  "description": "What you notice without being told, and what you feel about it.",
-  "min": 8,
-  "max": 20,
-  "default": 10,
-  "modifier": {
-    "floor": {
-      "div": [
-        {
-          "sub": [
-            {
-              "ref": "value"
-            },
-            10
-          ]
-        },
-        2
-      ]
-    }
+  "@prefab": "rules_attributes_entry",
+  "params": {
+    "id": "instinct",
+    "name": "Instinct",
+    "description": "What you notice without being told, and what you feel about it.",
+    "abbrev": "INS"
   }
 }

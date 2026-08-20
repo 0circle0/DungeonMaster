@@ -1,24 +1,14 @@
 {
-  "id": "stiltmarket_pile_yard",
-  "name": "The Pile Yard",
-  "description": "Drives the piles the town stands on, and the town needs about four hundred a year.",
-  "area": "thornmere_stiltmarket",
-  "kind": "market",
-  "descriptionKey": "int_workshop",
-  "travelMinutes": 4,
-  "tags": [
-    "shop"
-  ],
-  "services": [
-    "market"
-  ],
-  "map": {
-    "width": "19",
-    "height": "13",
-    "palette": "int_hull"
-  },
-  "position": {
-    "x": 20,
-    "y": 3
+  "@prefab": "world_points_f_nterest_int_workshop_2",
+  "params": {
+    "id": "stiltmarket_pile_yard",
+    "name": "The Pile Yard",
+    "description": "Drives the piles the town stands on, and the town needs about four hundred a year.",
+    "area": "thornmere_stiltmarket",
+    "position": {
+      "x": 20,
+      "y": 3
+    },
+    "variant": "v5"
   }
 }

@@ -1,24 +1,14 @@
 {
-  "id": "forgetiers_wire_drawers",
-  "name": "The Wire Drawers",
-  "description": "Draw-plates in fifty sizes and a smell of hot tallow.",
-  "area": "karn_dolur_forgetiers",
-  "kind": "market",
-  "descriptionKey": "int_workshop",
-  "travelMinutes": 3,
-  "tags": [
-    "shop"
-  ],
-  "services": [
-    "market"
-  ],
-  "map": {
-    "width": "15",
-    "height": "11",
-    "palette": "int_shop"
-  },
-  "position": {
-    "x": 31,
-    "y": 3
+  "@prefab": "world_points_f_nterest_int_workshop_2",
+  "params": {
+    "id": "forgetiers_wire_drawers",
+    "name": "The Wire Drawers",
+    "description": "Draw-plates in fifty sizes and a smell of hot tallow.",
+    "area": "karn_dolur_forgetiers",
+    "position": {
+      "x": 31,
+      "y": 3
+    },
+    "variant": "v1"
   }
 }

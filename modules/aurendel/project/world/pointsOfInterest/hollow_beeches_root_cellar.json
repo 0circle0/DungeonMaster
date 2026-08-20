@@ -1,39 +1,31 @@
 {
-  "id": "hollow_beeches_root_cellar",
-  "name": "The Root Cellar",
-  "description": "Under the Beech King, and the roots are holding up a ceiling that is made of dressed stone.",
-  "area": "duskwood_hollow_beeches",
-  "kind": "dungeonEntrance",
-  "descriptionKey": "generic_dungeon_mouth",
-  "travelMinutes": 12,
-  "tags": [
-    "secret",
-    "dungeon"
-  ],
-  "hidden": true,
-  "discover": {
-    "skill": "perception",
-    "difficulty": 14
-  },
-  "dungeon": "duskwood_root_cellar",
-  "position": {
-    "x": 25,
-    "y": 3
-  },
-  "triggers": [
-    {
-      "id": "beeches_in_the_cellar",
-      "mode": "once",
-      "on": "enter",
-      "description": "Not a cellar. A hole somebody dug, with a tree grown into it.",
-      "effects": [
-        {
-          "setFlag": {
-            "flag": "beeches_cellar_seen",
-            "value": true
+  "@prefab": "world_points_f_nterest_generic_dungeon_mouth_2",
+  "params": {
+    "id": "hollow_beeches_root_cellar",
+    "name": "The Root Cellar",
+    "description": "Under the Beech King, and the roots are holding up a ceiling that is made of dressed stone.",
+    "area": "duskwood_hollow_beeches",
+    "travelMinutes": 12,
+    "discover": {
+      "skill": "perception",
+      "difficulty": 14
+    },
+    "dungeon": "duskwood_root_cellar",
+    "triggers": [
+      {
+        "id": "beeches_in_the_cellar",
+        "mode": "once",
+        "on": "enter",
+        "description": "Not a cellar. A hole somebody dug, with a tree grown into it.",
+        "effects": [
+          {
+            "setFlag": {
+              "flag": "beeches_cellar_seen",
+              "value": true
+            }
           }
-        }
-      ]
-    }
-  ]
+        ]
+      }
+    ]
+  }
 }

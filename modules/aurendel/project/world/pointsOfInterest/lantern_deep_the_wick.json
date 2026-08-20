@@ -1,24 +1,14 @@
 {
-  "id": "lantern_deep_the_wick",
-  "name": "The Wick",
-  "description": "Beds, food, and a lamp on every table because the alternative is unbearable.",
-  "area": "deeproads_lantern_deep",
-  "kind": "settlement",
-  "descriptionKey": "int_inn",
-  "travelMinutes": 3,
-  "tags": [
-    "inn"
-  ],
-  "services": [
-    "inn"
-  ],
-  "map": {
-    "width": "15",
-    "height": "11",
-    "palette": "int_timber"
-  },
-  "position": {
-    "x": 20,
-    "y": 23
+  "@prefab": "world_points_f_nterest_int_inn_2",
+  "params": {
+    "id": "lantern_deep_the_wick",
+    "name": "The Wick",
+    "description": "Beds, food, and a lamp on every table because the alternative is unbearable.",
+    "area": "deeproads_lantern_deep",
+    "position": {
+      "x": 20,
+      "y": 23
+    },
+    "variant": "v1"
   }
 }

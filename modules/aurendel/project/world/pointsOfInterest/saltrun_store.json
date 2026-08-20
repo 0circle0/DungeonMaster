@@ -1,24 +1,14 @@
 {
-  "id": "saltrun_store",
-  "name": "The Run Stores",
-  "description": "Shovels, rakes, barrows, and eye protection.",
-  "area": "glasslands_saltrun",
-  "kind": "market",
-  "descriptionKey": "int_store",
-  "travelMinutes": 3,
-  "tags": [
-    "shop"
-  ],
-  "services": [
-    "market"
-  ],
-  "map": {
-    "width": "15",
-    "height": "11",
-    "palette": "int_shop"
-  },
-  "position": {
-    "x": 28,
-    "y": 3
+  "@prefab": "world_points_f_nterest_int_store_2",
+  "params": {
+    "id": "saltrun_store",
+    "name": "The Run Stores",
+    "description": "Shovels, rakes, barrows, and eye protection.",
+    "area": "glasslands_saltrun",
+    "position": {
+      "x": 28,
+      "y": 3
+    },
+    "variant": "v1"
   }
 }

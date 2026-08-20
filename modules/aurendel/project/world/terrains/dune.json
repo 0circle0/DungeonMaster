@@ -1,17 +1,14 @@
 {
-  "id": "dune",
-  "name": "Dune",
-  "description": "A slope that resets itself while you climb it.",
-  "glyph": "D",
-  "color": "yellow",
-  "passable": true,
-  "opaque": false,
-  "moveCost": 3,
-  "tags": [
-    "shifting"
-  ],
-  "marks": {
-    "tracks": 0.5,
-    "smell": 0.7
+  "@prefab": "world_terrains_entry",
+  "params": {
+    "id": "dune",
+    "name": "Dune",
+    "description": "A slope that resets itself while you climb it.",
+    "glyph": "D",
+    "color": "yellow",
+    "tags": [
+      "shifting"
+    ],
+    "variant": "v13"
   }
 }

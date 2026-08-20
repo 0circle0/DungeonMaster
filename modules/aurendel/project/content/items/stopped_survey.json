@@ -1,14 +1,11 @@
 {
-  "id": "stopped_survey",
-  "name": "The Survey That Stops",
-  "description": "Karn Dolur's own mapping of the Cold Shoulder, to the inch, ending at a mouth with clean margin after it.",
-  "kind": "key",
-  "value": 0,
-  "weight": 0,
-  "tags": [
-    "keepsake"
-  ],
-  "extra": {
-    "heldBy": "ice_guide_vesk"
+  "@prefab": "content_items_entry_8",
+  "params": {
+    "id": "stopped_survey",
+    "name": "The Survey That Stops",
+    "description": "Karn Dolur's own mapping of the Cold Shoulder, to the inch, ending at a mouth with clean margin after it.",
+    "extra": {
+      "heldBy": "ice_guide_vesk"
+    }
   }
 }

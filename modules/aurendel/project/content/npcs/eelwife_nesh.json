@@ -1,32 +1,18 @@
 {
-  "id": "eelwife_nesh",
-  "name": "Nesh of the Eel Camp",
-  "description": "Runs six huts, eleven traps and a season that ended two months ago. She has not gone home and will not say what she is waiting for.",
-  "disposition": 8,
-  "gullibility": 0.3,
-  "memorySpan": 120,
-  "offersQuests": [
-    "eelweir_out_of_season"
-  ],
-  "caresAbout": [
-    "ward_restored",
-    "ward_broken"
-  ],
-  "reactions": [],
-  "faction": "the_keepers",
-  "dialogue": "eelweir_nesh_talk",
-  "home": "weirwater_eel_camp",
-  "temperament": {
-    "roamRadius": 0,
-    "wanderChance": 0,
-    "speeds": {
-      "wander": 0
-    },
-    "investigates": [],
-    "notices": [
-      "hostile",
-      "neutral",
-      "ally"
-    ]
+  "@prefab": "content_npcs_entry_2",
+  "params": {
+    "id": "eelwife_nesh",
+    "name": "Nesh of the Eel Camp",
+    "description": "Runs six huts, eleven traps and a season that ended two months ago. She has not gone home and will not say what she is waiting for.",
+    "gullibility": 0.3,
+    "memorySpan": 120,
+    "caresAbout": [
+      "ward_restored",
+      "ward_broken"
+    ],
+    "faction": "the_keepers",
+    "dialogue": "eelweir_nesh_talk",
+    "home": "weirwater_eel_camp",
+    "variant": "v6"
   }
 }

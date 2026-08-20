@@ -1,57 +1,41 @@
 {
-  "id": "pavement_walker",
-  "name": "Something Under the Pavement",
-  "description": "The Flats are flagged for two miles and nobody laid them.",
-  "level": 9,
-  "xp": 800,
-  "attributes": {
-    "might": 17,
-    "agility": 12,
-    "endurance": 18,
-    "intellect": 8,
-    "instinct": 14,
-    "presence": 9
-  },
-  "abilities": [
-    "stone_fist",
-    "rime_touch"
-  ],
-  "behaviour": [
-    {
-      "priority": 0,
-      "use": "stone_fist"
-    }
-  ],
-  "faction": "the_unsealed",
-  "creatureType": "undead",
-  "size": "medium",
-  "descriptors": [
-    "a grinding",
-    "a slab-backed"
-  ],
-  "conditionalLoot": [],
-  "loot": "frost_strand_hoard",
-  "conditionImmunities": [
-    "frightened",
-    "prone"
-  ],
-  "resourceOverrides": {
-    "hp": 95
-  },
-  "temperament": {
-    "roamRadius": 12,
-    "investigateRadius": 40,
-    "leashRadius": 60,
-    "wanderChance": 0.1,
-    "disengageTurns": 1,
-    "speeds": {
-      "wander": 0.5,
-      "investigate": 0.5
+  "@prefab": "content_monsters_entry_2",
+  "params": {
+    "id": "pavement_walker",
+    "name": "Something Under the Pavement",
+    "description": "The Flats are flagged for two miles and nobody laid them.",
+    "level": 9,
+    "xp": 800,
+    "attributes": {
+      "might": 17,
+      "agility": 12,
+      "endurance": 18,
+      "intellect": 8,
+      "instinct": 14,
+      "presence": 9
     },
-    "investigates": [
-      "sight",
-      "hearing",
-      "smell"
-    ]
+    "abilities": [
+      "stone_fist",
+      "rime_touch"
+    ],
+    "behaviour": [
+      {
+        "priority": 0,
+        "use": "stone_fist"
+      }
+    ],
+    "descriptors": [
+      "a grinding",
+      "a slab-backed"
+    ],
+    "loot": "frost_strand_hoard",
+    "conditionImmunities": [
+      "frightened",
+      "prone"
+    ],
+    "resourceOverrides": {
+      "hp": 95
+    },
+    "variant": "v1"
   }
 }

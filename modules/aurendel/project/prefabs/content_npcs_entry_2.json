@@ -1,0 +1,93 @@
+{
+  "id": "content_npcs_entry_2",
+  "label": "content_npcs_entry_2",
+  "collection": "content.npcs",
+  "params": [
+    {
+      "key": "id",
+      "kind": "string"
+    },
+    {
+      "key": "name",
+      "kind": "string"
+    },
+    {
+      "key": "description",
+      "kind": "text"
+    },
+    {
+      "key": "gullibility",
+      "kind": "string"
+    },
+    {
+      "key": "memorySpan",
+      "kind": "string"
+    },
+    {
+      "key": "caresAbout",
+      "kind": "string"
+    },
+    {
+      "key": "faction",
+      "kind": "string"
+    },
+    {
+      "key": "dialogue",
+      "kind": "string"
+    },
+    {
+      "key": "home",
+      "kind": "string"
+    },
+    {
+      "key": "variant",
+      "kind": "enum",
+      "options": [
+        "v1",
+        "v2",
+        "v3",
+        "v4",
+        "v5",
+        "v6",
+        "v7",
+        "v8",
+        "v9",
+        "v10",
+        "v11"
+      ]
+    }
+  ],
+  "template": {
+    "id": "{{id}}",
+    "name": "{{name}}",
+    "description": "{{description}}",
+    "disposition": {
+      "@lookup": [
+        "content_npcs_entry_2_variant",
+        "{{variant}}",
+        "disposition"
+      ]
+    },
+    "gullibility": "{{gullibility}}",
+    "memorySpan": "{{memorySpan}}",
+    "offersQuests": {
+      "@lookup": [
+        "content_npcs_entry_2_variant",
+        "{{variant}}",
+        "offersQuests"
+      ]
+    },
+    "caresAbout": "{{caresAbout}}",
+    "reactions": [],
+    "faction": "{{faction}}",
+    "dialogue": "{{dialogue}}",
+    "home": "{{home}}",
+    "temperament": {
+      "@lookup": [
+        "content_npcs_entry_2_variant",
+        "{{variant}}",
+        "temperament"
+      ]
+    }
+  }
+}

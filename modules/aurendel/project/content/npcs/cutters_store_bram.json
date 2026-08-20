@@ -1,34 +1,23 @@
 {
-  "id": "cutters_store_bram",
-  "name": "Bram, at the Cutters' Store",
-  "description": "Weighs turf, keeps the book, and wrote two of the lines in it that he would rather he had not.",
-  "disposition": 4,
-  "gullibility": 0.35,
-  "memorySpan": 220,
-  "offersQuests": [],
-  "caresAbout": [],
-  "reactions": [],
-  "faction": "the_library",
-  "dialogue": "moor_bram_talk",
-  "home": "mirestead_store",
-  "shop": {
-    "lootTable": "keeper_stock",
-    "buysTags": [
-      "treasure"
-    ],
-    "priceMultiplier": 1.2
-  },
-  "temperament": {
-    "roamRadius": 0,
-    "wanderChance": 0,
-    "speeds": {
-      "wander": 0
-    },
-    "investigates": [],
-    "notices": [
-      "hostile",
-      "neutral",
-      "ally"
-    ]
+  "@prefab": "content_npcs_entry",
+  "params": {
+    "id": "cutters_store_bram",
+    "name": "Bram, at the Cutters' Store",
+    "description": "Weighs turf, keeps the book, and wrote two of the lines in it that he would rather he had not.",
+    "disposition": 4,
+    "gullibility": 0.35,
+    "memorySpan": 220,
+    "offersQuests": [],
+    "caresAbout": [],
+    "faction": "the_library",
+    "dialogue": "moor_bram_talk",
+    "home": "mirestead_store",
+    "shop": {
+      "lootTable": "keeper_stock",
+      "buysTags": [
+        "treasure"
+      ],
+      "priceMultiplier": 1.2
+    }
   }
 }

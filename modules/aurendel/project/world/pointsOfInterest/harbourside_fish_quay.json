@@ -1,19 +1,13 @@
 {
-  "id": "harbourside_fish_quay",
-  "name": "The Fish Quay",
-  "description": "Sold off the stones from four in the morning, and swept by eight.",
-  "area": "sarnport_harbourside",
-  "kind": "market",
-  "descriptionKey": "generic_market",
-  "travelMinutes": 2,
-  "tags": [
-    "shop"
-  ],
-  "services": [
-    "market"
-  ],
-  "position": {
-    "x": 32,
-    "y": 27
+  "@prefab": "world_points_f_nterest_generic_market",
+  "params": {
+    "id": "harbourside_fish_quay",
+    "name": "The Fish Quay",
+    "description": "Sold off the stones from four in the morning, and swept by eight.",
+    "area": "sarnport_harbourside",
+    "position": {
+      "x": 32,
+      "y": 27
+    }
   }
 }

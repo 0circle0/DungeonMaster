@@ -1,24 +1,14 @@
 {
-  "id": "forgetiers_the_slack_tub",
-  "name": "The Slack Tub",
-  "description": "Loud, hot, and closed for one hour a day to be swept.",
-  "area": "karn_dolur_forgetiers",
-  "kind": "settlement",
-  "descriptionKey": "int_inn",
-  "travelMinutes": 3,
-  "tags": [
-    "inn"
-  ],
-  "services": [
-    "inn"
-  ],
-  "map": {
-    "width": "11",
-    "height": "9",
-    "palette": "int_timber"
-  },
-  "position": {
-    "x": 41,
-    "y": 27
+  "@prefab": "world_points_f_nterest_int_inn_2",
+  "params": {
+    "id": "forgetiers_the_slack_tub",
+    "name": "The Slack Tub",
+    "description": "Loud, hot, and closed for one hour a day to be swept.",
+    "area": "karn_dolur_forgetiers",
+    "position": {
+      "x": 41,
+      "y": 27
+    },
+    "variant": "v2"
   }
 }

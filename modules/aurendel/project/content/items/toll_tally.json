@@ -1,14 +1,11 @@
 {
-  "id": "toll_tally",
-  "name": "The Old Toll's Tally",
-  "description": "What was taken on the market road, by whom, and in what — and the three years the column is in a different ink.",
-  "kind": "key",
-  "value": 0,
-  "weight": 0,
-  "tags": [
-    "keepsake"
-  ],
-  "extra": {
-    "heldBy": "toll_keeper_bruk"
+  "@prefab": "content_items_entry_8",
+  "params": {
+    "id": "toll_tally",
+    "name": "The Old Toll's Tally",
+    "description": "What was taken on the market road, by whom, and in what — and the three years the column is in a different ink.",
+    "extra": {
+      "heldBy": "toll_keeper_bruk"
+    }
   }
 }

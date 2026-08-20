@@ -1,24 +1,14 @@
 {
-  "id": "moot_road_wayhouse",
-  "name": "The Moot Road Wayhouse",
-  "description": "A roof, a hearth, and a woodpile, kept by the town for anybody caught out after dark.",
-  "area": "duskwood_moot_road",
-  "kind": "settlement",
-  "descriptionKey": "int_inn",
-  "travelMinutes": 5,
-  "tags": [
-    "inn"
-  ],
-  "services": [
-    "inn"
-  ],
-  "map": {
-    "width": "9",
-    "height": "7",
-    "palette": "int_timber"
-  },
-  "position": {
-    "x": 14,
-    "y": 3
+  "@prefab": "world_points_f_nterest_int_inn_2",
+  "params": {
+    "id": "moot_road_wayhouse",
+    "name": "The Moot Road Wayhouse",
+    "description": "A roof, a hearth, and a woodpile, kept by the town for anybody caught out after dark.",
+    "area": "duskwood_moot_road",
+    "position": {
+      "x": 14,
+      "y": 3
+    },
+    "variant": "v4"
   }
 }

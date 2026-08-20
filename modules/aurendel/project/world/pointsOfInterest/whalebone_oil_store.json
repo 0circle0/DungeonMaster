@@ -1,24 +1,14 @@
 {
-  "id": "whalebone_oil_store",
-  "name": "The Oil Store",
-  "description": "Whale oil in butts, stacked four high, and the whole building is worth more than the town.",
-  "area": "frostmere_whalebone_landing",
-  "kind": "market",
-  "descriptionKey": "int_warehouse",
-  "travelMinutes": 3,
-  "tags": [
-    "shop"
-  ],
-  "services": [
-    "market"
-  ],
-  "map": {
-    "width": "19",
-    "height": "13",
-    "palette": "int_shop"
-  },
-  "position": {
-    "x": 20,
-    "y": 3
+  "@prefab": "world_points_f_nterest_int_warehouse",
+  "params": {
+    "id": "whalebone_oil_store",
+    "name": "The Oil Store",
+    "description": "Whale oil in butts, stacked four high, and the whole building is worth more than the town.",
+    "area": "frostmere_whalebone_landing",
+    "position": {
+      "x": 20,
+      "y": 3
+    },
+    "variant": "v2"
   }
 }

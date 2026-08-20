@@ -1,21 +1,15 @@
 {
-  "id": "long_hall_the_side_doors",
-  "name": "The Side Doors",
-  "description": "Two hundred and eleven of them down both walls, all the same size, and about nine of them open.",
-  "area": "deeproads_the_long_hall",
-  "kind": "ruin",
-  "descriptionKey": "generic_ruin",
-  "travelMinutes": 8,
-  "tags": [
-    "ruin"
-  ],
-  "map": {
-    "width": "11",
-    "height": "9",
-    "palette": "int_delved"
-  },
-  "position": {
-    "x": 14,
-    "y": 3
+  "@prefab": "world_points_f_nterest_generic_ruin_3",
+  "params": {
+    "id": "long_hall_the_side_doors",
+    "name": "The Side Doors",
+    "description": "Two hundred and eleven of them down both walls, all the same size, and about nine of them open.",
+    "area": "deeproads_the_long_hall",
+    "map": {
+      "width": "11",
+      "height": "9",
+      "palette": "int_delved"
+    },
+    "variant": "v2"
   }
 }

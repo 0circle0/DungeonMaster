@@ -1,24 +1,18 @@
 {
-  "id": "drowned_bell_chapel",
-  "name": "The Chapel Above",
-  "description": "The second one on this site. The first is beneath it.",
-  "area": "thornmere_drowned_bell",
-  "kind": "shrine",
-  "descriptionKey": "int_temple",
-  "travelMinutes": 3,
-  "tags": [
-    "shrine"
-  ],
-  "services": [
-    "temple"
-  ],
-  "map": {
-    "width": "9",
-    "height": "7",
-    "palette": "int_temple"
-  },
-  "position": {
-    "x": 21,
-    "y": 3
+  "@prefab": "world_points_f_nterest_int_temple",
+  "params": {
+    "id": "drowned_bell_chapel",
+    "name": "The Chapel Above",
+    "description": "The second one on this site. The first is beneath it.",
+    "area": "thornmere_drowned_bell",
+    "map": {
+      "width": "9",
+      "height": "7",
+      "palette": "int_temple"
+    },
+    "position": {
+      "x": 21,
+      "y": 3
+    }
   }
 }

@@ -1,35 +1,18 @@
 {
-  "id": "light_keeper_bry",
-  "name": "Bry, Keeper of the Light",
-  "description": "A hundred and ten feet of stair, twice a night, and a logbook he has stopped showing to the Pilots' Hall.",
-  "disposition": 8,
-  "gullibility": 0.35,
-  "memorySpan": 200,
-  "offersQuests": [],
-  "caresAbout": [
-    "ledger_squared",
-    "ledger_cooked"
-  ],
-  "reactions": [],
-  "faction": "the_countinghouse",
-  "dialogue": "saltcliff_bry_talk",
-  "home": "saltcliff_lighthouse",
-  "temperament": {
-    "roamRadius": 24,
-    "investigateRadius": 60,
-    "leashRadius": 90,
-    "wanderChance": 0.3,
-    "speeds": {
-      "wander": 0.5
-    },
-    "investigates": [
-      "sight",
-      "hearing"
+  "@prefab": "content_npcs_entry_2",
+  "params": {
+    "id": "light_keeper_bry",
+    "name": "Bry, Keeper of the Light",
+    "description": "A hundred and ten feet of stair, twice a night, and a logbook he has stopped showing to the Pilots' Hall.",
+    "gullibility": 0.35,
+    "memorySpan": 200,
+    "caresAbout": [
+      "ledger_squared",
+      "ledger_cooked"
     ],
-    "notices": [
-      "hostile",
-      "neutral",
-      "ally"
-    ]
+    "faction": "the_countinghouse",
+    "dialogue": "saltcliff_bry_talk",
+    "home": "saltcliff_lighthouse",
+    "variant": "v4"
   }
 }

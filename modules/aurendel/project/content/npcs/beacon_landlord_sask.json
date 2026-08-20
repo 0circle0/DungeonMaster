@@ -1,34 +1,23 @@
 {
-  "id": "beacon_landlord_sask",
-  "name": "Sask, at the Beacon",
-  "description": "Keeps the inn a fire was lit to guide people to, and hears every version of every story on this moor twice a night.",
-  "disposition": 7,
-  "gullibility": 0.45,
-  "memorySpan": 190,
-  "offersQuests": [],
-  "caresAbout": [],
-  "reactions": [],
-  "faction": "the_library",
-  "dialogue": "moor_sask_talk",
-  "home": "colders_hearth_inn",
-  "shop": {
-    "lootTable": "hollowdene_stock",
-    "buysTags": [
-      "treasure"
-    ],
-    "priceMultiplier": 1.3
-  },
-  "temperament": {
-    "roamRadius": 0,
-    "wanderChance": 0,
-    "speeds": {
-      "wander": 0
-    },
-    "investigates": [],
-    "notices": [
-      "hostile",
-      "neutral",
-      "ally"
-    ]
+  "@prefab": "content_npcs_entry",
+  "params": {
+    "id": "beacon_landlord_sask",
+    "name": "Sask, at the Beacon",
+    "description": "Keeps the inn a fire was lit to guide people to, and hears every version of every story on this moor twice a night.",
+    "disposition": 7,
+    "gullibility": 0.45,
+    "memorySpan": 190,
+    "offersQuests": [],
+    "caresAbout": [],
+    "faction": "the_library",
+    "dialogue": "moor_sask_talk",
+    "home": "colders_hearth_inn",
+    "shop": {
+      "lootTable": "hollowdene_stock",
+      "buysTags": [
+        "treasure"
+      ],
+      "priceMultiplier": 1.3
+    }
   }
 }

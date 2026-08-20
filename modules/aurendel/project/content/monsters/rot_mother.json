@@ -1,92 +1,80 @@
 {
-  "id": "rot_mother",
-  "name": "The Rot",
-  "description": "Mycelt grows what the Deeproads eat. This grows Mycelt, and has been patient about the order of those two facts.",
-  "level": 8,
-  "xp": 700,
-  "attributes": {
-    "might": 16,
-    "agility": 9,
-    "endurance": 19,
-    "intellect": 8,
-    "instinct": 13,
-    "presence": 12
-  },
-  "abilities": [
-    "spore_burst",
-    "bleed_white",
-    "stone_fist",
-    "call_the_shut"
-  ],
-  "behaviour": [
-    {
-      "priority": 25,
-      "use": "spore_burst",
-      "when": {
-        "chance": 0.4
+  "@prefab": "content_monsters_entry_3",
+  "params": {
+    "id": "rot_mother",
+    "name": "The Rot",
+    "description": "Mycelt grows what the Deeproads eat. This grows Mycelt, and has been patient about the order of those two facts.",
+    "level": 8,
+    "xp": 700,
+    "attributes": {
+      "might": 16,
+      "agility": 9,
+      "endurance": 19,
+      "intellect": 8,
+      "instinct": 13,
+      "presence": 12
+    },
+    "abilities": [
+      "spore_burst",
+      "bleed_white",
+      "stone_fist",
+      "call_the_shut"
+    ],
+    "behaviour": [
+      {
+        "priority": 25,
+        "use": "spore_burst",
+        "when": {
+          "chance": 0.4
+        }
+      },
+      {
+        "priority": 15,
+        "use": "call_the_shut",
+        "when": {
+          "chance": 0.25
+        }
+      },
+      {
+        "priority": 10,
+        "use": "bleed_white"
+      },
+      {
+        "priority": 0,
+        "use": "stone_fist"
       }
-    },
-    {
-      "priority": 15,
-      "use": "call_the_shut",
-      "when": {
-        "chance": 0.25
+    ],
+    "descriptors": [
+      "a luminous",
+      "a breathing"
+    ],
+    "loot": "rot_hoard",
+    "damageInteractions": [
+      {
+        "damageType": "poison",
+        "multiplier": 0
+      },
+      {
+        "damageType": "necrotic",
+        "multiplier": 0.5
+      },
+      {
+        "damageType": "fire",
+        "multiplier": 2
       }
+    ],
+    "conditionImmunities": [
+      "poisoned",
+      "bleeding",
+      "frightened",
+      "prone"
+    ],
+    "resourceOverrides": {
+      "hp": 96
     },
-    {
-      "priority": 10,
-      "use": "bleed_white"
+    "derivedOverrides": {
+      "guard": 16
     },
-    {
-      "priority": 0,
-      "use": "stone_fist"
-    }
-  ],
-  "faction": "the_unsealed",
-  "creatureType": "plant",
-  "size": "large",
-  "descriptors": [
-    "a luminous",
-    "a breathing"
-  ],
-  "conditionalLoot": [
-    "silvered_cache"
-  ],
-  "loot": "rot_hoard",
-  "damageInteractions": [
-    {
-      "damageType": "poison",
-      "multiplier": 0
-    },
-    {
-      "damageType": "necrotic",
-      "multiplier": 0.5
-    },
-    {
-      "damageType": "fire",
-      "multiplier": 2
-    }
-  ],
-  "conditionImmunities": [
-    "poisoned",
-    "bleeding",
-    "frightened",
-    "prone"
-  ],
-  "resourceOverrides": {
-    "hp": 96
-  },
-  "derivedOverrides": {
-    "guard": 16
-  },
-  "temperament": {
-    "roamRadius": 0,
-    "wanderChance": 0,
-    "disengageTurns": 0,
-    "speeds": {
-      "wander": 0
-    },
-    "investigates": [],
-    "followsTrails": false
+    "variant": "v3"
   }
 }

@@ -1,19 +1,14 @@
 {
-  "id": "duskwood_under_ring",
-  "name": "Under the Ring",
-  "description": "A stair inside the Ring going down into work that is not stone laid on stone but stone that was grown.",
-  "biome": "dungeon_ruin",
-  "roomCount": "13",
-  "depth": "3",
-  "algorithm": "bsp",
-  "lockedDoorChance": 0,
-  "doorGates": [],
-  "rollEncounters": false,
-  "safeEntrance": true,
-  "bsp": {
-    "minLeaf": 5
-  },
-  "width": "29",
-  "height": "29",
-  "bossTable": "trial_three_counter"
+  "@prefab": "world_dungeons_entry_2",
+  "params": {
+    "id": "duskwood_under_ring",
+    "name": "Under the Ring",
+    "description": "A stair inside the Ring going down into work that is not stone laid on stone but stone that was grown.",
+    "biome": "dungeon_ruin",
+    "roomCount": "13",
+    "width": "29",
+    "height": "29",
+    "bossTable": "trial_three_counter",
+    "variant": "v3"
+  }
 }

@@ -1,18 +1,12 @@
 {
-  "id": "long_barrow_east_end",
-  "name": "The East End",
-  "description": "The only way in that anybody has found, at the sunrise end, behind a slab that has been moved before.",
-  "area": "moor_the_long_barrow",
-  "kind": "dungeonEntrance",
-  "descriptionKey": "generic_dungeon_mouth",
-  "travelMinutes": 10,
-  "tags": [
-    "dungeon",
-    "barrow"
-  ],
-  "dungeon": "moor_long_barrow",
-  "position": {
-    "x": 14,
-    "y": 3
+  "@prefab": "world_points_f_nterest_generic_dungeon_mouth_3",
+  "params": {
+    "id": "long_barrow_east_end",
+    "name": "The East End",
+    "description": "The only way in that anybody has found, at the sunrise end, behind a slab that has been moved before.",
+    "area": "moor_the_long_barrow",
+    "travelMinutes": 10,
+    "dungeon": "moor_long_barrow",
+    "variant": "v3"
   }
 }

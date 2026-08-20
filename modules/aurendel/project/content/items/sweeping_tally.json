@@ -1,14 +1,11 @@
 {
-  "id": "sweeping_tally",
-  "name": "The Sweeper's Tally",
-  "description": "Four generations of somebody writing down that the steps were already clean, and the count they made each time.",
-  "kind": "key",
-  "value": 0,
-  "weight": 0,
-  "tags": [
-    "keepsake"
-  ],
-  "extra": {
-    "heldBy": "stair_sweeper_bel"
+  "@prefab": "content_items_entry_8",
+  "params": {
+    "id": "sweeping_tally",
+    "name": "The Sweeper's Tally",
+    "description": "Four generations of somebody writing down that the steps were already clean, and the count they made each time.",
+    "extra": {
+      "heldBy": "stair_sweeper_bel"
+    }
   }
 }

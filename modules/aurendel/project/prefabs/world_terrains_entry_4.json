@@ -1,0 +1,85 @@
+{
+  "id": "world_terrains_entry_4",
+  "label": "world_terrains_entry_4",
+  "collection": "world.terrains",
+  "params": [
+    {
+      "key": "id",
+      "kind": "string"
+    },
+    {
+      "key": "name",
+      "kind": "string"
+    },
+    {
+      "key": "description",
+      "kind": "text"
+    },
+    {
+      "key": "glyph",
+      "kind": "string"
+    },
+    {
+      "key": "moveCost",
+      "kind": "string"
+    },
+    {
+      "key": "variant",
+      "kind": "enum",
+      "options": [
+        "v1",
+        "v2",
+        "v3"
+      ]
+    }
+  ],
+  "template": {
+    "id": "{{id}}",
+    "name": "{{name}}",
+    "description": "{{description}}",
+    "glyph": "{{glyph}}",
+    "color": {
+      "@lookup": [
+        "world_terrains_entry_4_variant",
+        "{{variant}}",
+        "color"
+      ]
+    },
+    "passable": {
+      "@lookup": [
+        "world_terrains_entry_4_variant",
+        "{{variant}}",
+        "passable"
+      ]
+    },
+    "opaque": {
+      "@lookup": [
+        "world_terrains_entry_4_variant",
+        "{{variant}}",
+        "opaque"
+      ]
+    },
+    "moveCost": "{{moveCost}}",
+    "tags": {
+      "@lookup": [
+        "world_terrains_entry_4_variant",
+        "{{variant}}",
+        "tags"
+      ]
+    },
+    "marks": {
+      "@lookup": [
+        "world_terrains_entry_4_variant",
+        "{{variant}}",
+        "marks"
+      ]
+    },
+    "providesCover": {
+      "@lookup": [
+        "world_terrains_entry_4_variant",
+        "{{variant}}",
+        "providesCover"
+      ]
+    }
+  }
+}

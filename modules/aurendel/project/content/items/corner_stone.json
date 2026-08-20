@@ -1,20 +1,15 @@
 {
-  "id": "corner_stone",
-  "name": "A Stone With a Corner On It",
-  "description": "Cut chalk out of a hill that has no cut chalk in it, square to within a finger's width over four feet.",
-  "kind": "treasure",
-  "value": 0,
-  "weight": 0,
-  "tags": [
-    "clue",
-    "proof"
-  ],
-  "onUse": [
-    {
-      "learnLore": {
-        "entry": "coast_horse_lines"
+  "@prefab": "content_items_entry_9",
+  "params": {
+    "id": "corner_stone",
+    "name": "A Stone With a Corner On It",
+    "description": "Cut chalk out of a hill that has no cut chalk in it, square to within a finger's width over four feet.",
+    "onUse": [
+      {
+        "learnLore": {
+          "entry": "coast_horse_lines"
+        }
       }
-    }
-  ],
-  "consumedOnUse": false
+    ]
+  }
 }

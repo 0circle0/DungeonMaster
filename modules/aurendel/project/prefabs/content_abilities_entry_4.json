@@ -1,0 +1,36 @@
+{
+  "id": "content_abilities_entry_4",
+  "label": "content_abilities_entry_4",
+  "collection": "content.abilities",
+  "params": [
+    {
+      "key": "id",
+      "kind": "string"
+    },
+    {
+      "key": "name",
+      "kind": "string"
+    },
+    {
+      "key": "description",
+      "kind": "text"
+    },
+    {
+      "key": "onUse",
+      "kind": "string"
+    }
+  ],
+  "template": {
+    "id": "{{id}}",
+    "name": "{{name}}",
+    "description": "{{description}}",
+    "actionType": "action",
+    "targeting": "single",
+    "attack": {
+      "stat": "might",
+      "against": "guard"
+    },
+    "onUse": "{{onUse}}",
+    "cooldown": 2
+  }
+}

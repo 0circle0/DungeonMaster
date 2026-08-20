@@ -1,53 +1,29 @@
 {
-  "id": "skarn_guide",
-  "name": "Vesk of the Ice Road",
-  "description": "Has brought parties off the shoulder in weather that took the parties behind them.",
-  "level": 6,
-  "xp": 0,
-  "attributes": {
-    "might": 15,
-    "agility": 15,
-    "endurance": 16,
-    "intellect": 12,
-    "instinct": 15,
-    "presence": 11
-  },
-  "abilities": [
-    "strike",
-    "guarded_stance"
-  ],
-  "behaviour": [
-    {
-      "priority": 0,
-      "use": "strike"
-    }
-  ],
-  "faction": "karn_dolur",
-  "creatureType": "humanoid",
-  "size": "medium",
-  "descriptors": [
-    "a frost-bitten"
-  ],
-  "conditionalLoot": [],
-  "loot": "skarn_survey_carried",
-  "resourceOverrides": {
-    "hp": 40
-  },
-  "temperament": {
-    "roamRadius": 24,
-    "investigateRadius": 70,
-    "leashRadius": 100,
-    "wanderChance": 0.4,
-    "disengageTurns": 2,
-    "investigates": [
-      "sight",
-      "hearing",
-      "tracks",
-      "smell"
+  "@prefab": "content_monsters_entry",
+  "params": {
+    "id": "skarn_guide",
+    "name": "Vesk of the Ice Road",
+    "description": "Has brought parties off the shoulder in weather that took the parties behind them.",
+    "attributes": {
+      "might": 15,
+      "agility": 15,
+      "endurance": 16,
+      "intellect": 12,
+      "instinct": 15,
+      "presence": 11
+    },
+    "abilities": [
+      "strike",
+      "guarded_stance"
     ],
-    "notices": [
-      "hostile",
-      "neutral"
-    ]
+    "faction": "karn_dolur",
+    "descriptors": [
+      "a frost-bitten"
+    ],
+    "loot": "skarn_survey_carried",
+    "resourceOverrides": {
+      "hp": 40
+    },
+    "variant": "v6"
   }
 }

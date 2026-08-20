@@ -1,24 +1,14 @@
 {
-  "id": "highpass_the_last_house",
-  "name": "The Last House",
-  "description": "Genuinely the last one, in the direction that matters.",
-  "area": "skarnspine_highpass",
-  "kind": "settlement",
-  "descriptionKey": "int_inn",
-  "travelMinutes": 3,
-  "tags": [
-    "inn"
-  ],
-  "services": [
-    "inn"
-  ],
-  "map": {
-    "width": "15",
-    "height": "11",
-    "palette": "int_timber"
-  },
-  "position": {
-    "x": 20,
-    "y": 3
+  "@prefab": "world_points_f_nterest_int_inn_2",
+  "params": {
+    "id": "highpass_the_last_house",
+    "name": "The Last House",
+    "description": "Genuinely the last one, in the direction that matters.",
+    "area": "skarnspine_highpass",
+    "position": {
+      "x": 20,
+      "y": 3
+    },
+    "variant": "v1"
   }
 }

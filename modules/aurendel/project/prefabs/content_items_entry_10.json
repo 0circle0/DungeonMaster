@@ -1,0 +1,46 @@
+{
+  "id": "content_items_entry_10",
+  "label": "content_items_entry_10",
+  "collection": "content.items",
+  "params": [
+    {
+      "key": "id",
+      "kind": "string"
+    },
+    {
+      "key": "name",
+      "kind": "string"
+    },
+    {
+      "key": "description",
+      "kind": "text"
+    },
+    {
+      "key": "value",
+      "kind": "string"
+    },
+    {
+      "key": "damage",
+      "kind": "string"
+    },
+    {
+      "key": "properties",
+      "kind": "string"
+    }
+  ],
+  "template": {
+    "id": "{{id}}",
+    "name": "{{name}}",
+    "description": "{{description}}",
+    "kind": "weapon",
+    "slot": "hand",
+    "value": "{{value}}",
+    "weight": 1,
+    "tags": [
+      "fabled"
+    ],
+    "damage": "{{damage}}",
+    "properties": "{{properties}}",
+    "rarity": "very_rare"
+  }
+}

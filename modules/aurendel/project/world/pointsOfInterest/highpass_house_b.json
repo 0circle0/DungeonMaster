@@ -1,21 +1,14 @@
 {
-  "id": "highpass_house_b",
-  "name": "Shovellers' Row",
-  "description": "Built for the men who keep the road open, which is most of the town.",
-  "area": "skarnspine_highpass",
-  "kind": "settlement",
-  "descriptionKey": "int_house",
-  "travelMinutes": 2,
-  "tags": [
-    "house"
-  ],
-  "map": {
-    "width": "9",
-    "height": "7",
-    "palette": "int_timber"
-  },
-  "position": {
-    "x": 12,
-    "y": 23
+  "@prefab": "world_points_f_nterest_int_house_2",
+  "params": {
+    "id": "highpass_house_b",
+    "name": "Shovellers' Row",
+    "description": "Built for the men who keep the road open, which is most of the town.",
+    "area": "skarnspine_highpass",
+    "position": {
+      "x": 12,
+      "y": 23
+    },
+    "variant": "v1"
   }
 }

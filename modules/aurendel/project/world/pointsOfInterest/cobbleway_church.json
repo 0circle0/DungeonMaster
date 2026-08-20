@@ -1,24 +1,18 @@
 {
-  "id": "cobbleway_church",
-  "name": "The Wayfarers' Church",
-  "description": "Big for the town, because the town used to be bigger.",
-  "area": "coast_cobbleway",
-  "kind": "shrine",
-  "descriptionKey": "int_temple",
-  "travelMinutes": 3,
-  "tags": [
-    "shrine"
-  ],
-  "services": [
-    "temple"
-  ],
-  "map": {
-    "width": "15",
-    "height": "11",
-    "palette": "int_temple"
-  },
-  "position": {
-    "x": 37,
-    "y": 23
+  "@prefab": "world_points_f_nterest_int_temple",
+  "params": {
+    "id": "cobbleway_church",
+    "name": "The Wayfarers' Church",
+    "description": "Big for the town, because the town used to be bigger.",
+    "area": "coast_cobbleway",
+    "map": {
+      "width": "15",
+      "height": "11",
+      "palette": "int_temple"
+    },
+    "position": {
+      "x": 37,
+      "y": 23
+    }
   }
 }

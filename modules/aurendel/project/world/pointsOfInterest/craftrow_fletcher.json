@@ -1,24 +1,19 @@
 {
-  "id": "craftrow_fletcher",
-  "name": "The Bowyer's",
-  "description": "Staves seasoning in the rafters, some of them older than the bowyer.",
-  "area": "aurenhal_craftrow",
-  "kind": "market",
-  "descriptionKey": "int_workshop",
-  "travelMinutes": 3,
-  "tags": [
-    "shop"
-  ],
-  "position": {
-    "x": 26,
-    "y": 14
-  },
-  "services": [
-    "market"
-  ],
-  "map": {
-    "width": "11",
-    "height": "9",
-    "palette": "int_shop"
+  "@prefab": "world_points_f_nterest_int_workshop",
+  "params": {
+    "id": "craftrow_fletcher",
+    "name": "The Bowyer's",
+    "description": "Staves seasoning in the rafters, some of them older than the bowyer.",
+    "area": "aurenhal_craftrow",
+    "travelMinutes": 3,
+    "position": {
+      "x": 26,
+      "y": 14
+    },
+    "map": {
+      "width": "11",
+      "height": "9",
+      "palette": "int_shop"
+    }
   }
 }

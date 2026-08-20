@@ -1,34 +1,23 @@
 {
-  "id": "cut_store_ana",
-  "name": "Ana, at the Cut Store",
-  "description": "Buys hay by the load and sells everything a rider forgot, which is most things.",
-  "disposition": 7,
-  "gullibility": 0.45,
-  "memorySpan": 160,
-  "offersQuests": [],
-  "caresAbout": [],
-  "reactions": [],
-  "faction": "the_horse_lords",
-  "dialogue": "step_ana_talk",
-  "home": "tallgrass_store",
-  "shop": {
-    "lootTable": "hollowdene_stock",
-    "buysTags": [
-      "treasure"
-    ],
-    "priceMultiplier": 1.25
-  },
-  "temperament": {
-    "roamRadius": 0,
-    "wanderChance": 0,
-    "speeds": {
-      "wander": 0
-    },
-    "investigates": [],
-    "notices": [
-      "hostile",
-      "neutral",
-      "ally"
-    ]
+  "@prefab": "content_npcs_entry",
+  "params": {
+    "id": "cut_store_ana",
+    "name": "Ana, at the Cut Store",
+    "description": "Buys hay by the load and sells everything a rider forgot, which is most things.",
+    "disposition": 7,
+    "gullibility": 0.45,
+    "memorySpan": 160,
+    "offersQuests": [],
+    "caresAbout": [],
+    "faction": "the_horse_lords",
+    "dialogue": "step_ana_talk",
+    "home": "tallgrass_store",
+    "shop": {
+      "lootTable": "hollowdene_stock",
+      "buysTags": [
+        "treasure"
+      ],
+      "priceMultiplier": 1.25
+    }
   }
 }

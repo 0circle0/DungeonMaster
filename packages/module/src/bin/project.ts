@@ -20,6 +20,7 @@ import { readFileSync, writeFileSync, mkdirSync, existsSync, readdirSync, rmSync
 import { gunzipSync } from 'node:zlib';
 import { dirname, join, relative, resolve } from 'node:path';
 import { splitProject, joinProject } from '../project.js';
+import type { Prefab, StyleTables } from '../prefab.js';
 import { unbundleModule } from '../bundle.js';
 import type { ProjectManifest } from '../project.js';
 import { lintModule, formatDiagnostics } from '../diagnostics/lint.js';
@@ -36,6 +37,31 @@ function usage(): number {
       '  unpack  a bundle exported from the studio -> project/ and maps/\n',
   );
   return 2;
+}
+
+/**
+ * The prefabs and style tables a project's recipes expand against.
+ *
+ * Read here rather than by `joinProject`, which has no filesystem — and read at
+ * all only because a compressed project's entry files are recipes. A project
+ * with no `prefabs/` gets an empty pair and builds exactly as it always did.
+ */
+function readAuthoringFor(projectDir: string): { prefabs: Prefab[]; style: StyleTables } {
+  const prefabDir = join(projectDir, 'prefabs');
+  const prefabs: Prefab[] = [];
+  if (existsSync(prefabDir)) {
+    for (const file of readdirSync(prefabDir).sort()) {
+      if (!file.endsWith('.json') || file === 'instances.json') continue;
+      prefabs.push(JSON.parse(readFileSync(join(prefabDir, file), 'utf8')) as Prefab);
+    }
+  }
+
+  const stylePath = join(projectDir, 'style.json');
+  const style = existsSync(stylePath)
+    ? (JSON.parse(readFileSync(stylePath, 'utf8')) as StyleTables)
+    : {};
+
+  return { prefabs, style };
 }
 
 /** Every file under a directory, by path relative to it. */
@@ -142,7 +168,7 @@ function build(moduleDir: string): number {
   delete files[MANIFEST];
 
   const manifest = JSON.parse(manifestText) as ProjectManifest;
-  const { document, issues } = joinProject(manifest, files);
+  const { document, issues } = joinProject(manifest, files, readAuthoringFor(projectDir));
   if (issues.length > 0) {
     process.stderr.write(`✗ ${projectDir} — ${issues.length} problem(s)\n`);
     for (const issue of issues.slice(0, 10)) process.stderr.write(`  ${issue.message}\n`);

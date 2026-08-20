@@ -1,48 +1,37 @@
 {
-  "id": "vent_reader_ilka",
-  "name": "Ilka of the Eleven",
-  "description": "Youngest of the vent-readers by nineteen years, and the only one of them willing to say out loud what the chain is doing.",
-  "disposition": 8,
-  "gullibility": 0.25,
-  "memorySpan": 280,
-  "offersQuests": [
-    "throat_gone_quiet"
-  ],
-  "caresAbout": [
-    "vent_heeded",
-    "warning_ignored"
-  ],
-  "reactions": [],
-  "faction": "the_vent_readers",
-  "dialogue": "throat_ilka_talk",
-  "home": "cinderhold_vent_readers",
-  "shop": {
-    "lootTable": "keeper_stock",
-    "buysTags": [
-      "treasure",
-      "material"
+  "@prefab": "content_npcs_entry",
+  "params": {
+    "id": "vent_reader_ilka",
+    "name": "Ilka of the Eleven",
+    "description": "Youngest of the vent-readers by nineteen years, and the only one of them willing to say out loud what the chain is doing.",
+    "disposition": 8,
+    "gullibility": 0.25,
+    "memorySpan": 280,
+    "offersQuests": [
+      "throat_gone_quiet"
     ],
-    "priceMultiplier": 1.3,
-    "requires": {
-      "factions": [
-        {
-          "faction": "the_vent_readers",
-          "minStanding": 12
-        }
-      ]
+    "caresAbout": [
+      "vent_heeded",
+      "warning_ignored"
+    ],
+    "faction": "the_vent_readers",
+    "dialogue": "throat_ilka_talk",
+    "home": "cinderhold_vent_readers",
+    "shop": {
+      "lootTable": "keeper_stock",
+      "buysTags": [
+        "treasure",
+        "material"
+      ],
+      "priceMultiplier": 1.3,
+      "requires": {
+        "factions": [
+          {
+            "faction": "the_vent_readers",
+            "minStanding": 12
+          }
+        ]
+      }
     }
-  },
-  "temperament": {
-    "roamRadius": 0,
-    "wanderChance": 0,
-    "speeds": {
-      "wander": 0
-    },
-    "investigates": [],
-    "notices": [
-      "hostile",
-      "neutral",
-      "ally"
-    ]
   }
 }

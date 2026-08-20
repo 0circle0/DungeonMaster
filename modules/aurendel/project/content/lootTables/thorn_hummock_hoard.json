@@ -1,34 +1,31 @@
 {
-  "id": "thorn_hummock_hoard",
-  "name": "Under the Deep Hummock",
-  "rolls": "2",
-  "emptyChance": 0,
-  "bonusRollSkill": "perception",
-  "bonusRolls": {
-    "onSuccess": 1,
-    "onCritical": 2
-  },
-  "entries": [
-    {
-      "weight": 3,
-      "value": {
-        "item": "old_coin",
-        "quantity": "3d6"
+  "@prefab": "content_loot_ables_entry_4",
+  "params": {
+    "id": "thorn_hummock_hoard",
+    "name": "Under the Deep Hummock",
+    "entries": [
+      {
+        "weight": 3,
+        "value": {
+          "item": "old_coin",
+          "quantity": "3d6"
+        }
+      },
+      {
+        "weight": 2,
+        "value": {
+          "item": "antidote",
+          "quantity": "1d2"
+        }
+      },
+      {
+        "weight": 2,
+        "value": {
+          "item": "warded_coat",
+          "quantity": "1"
+        }
       }
-    },
-    {
-      "weight": 2,
-      "value": {
-        "item": "antidote",
-        "quantity": "1d2"
-      }
-    },
-    {
-      "weight": 2,
-      "value": {
-        "item": "warded_coat",
-        "quantity": "1"
-      }
-    }
-  ]
+    ],
+    "variant": "v1"
+  }
 }

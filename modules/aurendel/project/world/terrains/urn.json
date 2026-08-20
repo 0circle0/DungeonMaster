@@ -1,14 +1,11 @@
 {
-  "id": "urn",
-  "name": "Urn",
-  "description": "Waist-high, glazed, and sealed with wax.",
-  "glyph": "3",
-  "color": "yellow",
-  "passable": false,
-  "opaque": false,
-  "moveCost": 0,
-  "tags": [
-    "furniture"
-  ],
-  "providesCover": "half"
+  "@prefab": "world_terrains_entry_6",
+  "params": {
+    "id": "urn",
+    "name": "Urn",
+    "description": "Waist-high, glazed, and sealed with wax.",
+    "glyph": "3",
+    "color": "yellow",
+    "variant": "v3"
+  }
 }

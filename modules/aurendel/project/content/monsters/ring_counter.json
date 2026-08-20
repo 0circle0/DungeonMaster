@@ -1,64 +1,48 @@
 {
-  "id": "ring_counter",
-  "name": "What Has Been Counting",
-  "description": "Forty rings in eleven years is not fast growth. It is a count of something else kept in wood.",
-  "level": 8,
-  "xp": 850,
-  "attributes": {
-    "might": 17,
-    "agility": 12,
-    "endurance": 17,
-    "intellect": 14,
-    "instinct": 15,
-    "presence": 12
-  },
-  "abilities": [
-    "root_and_branch",
-    "stone_fist"
-  ],
-  "behaviour": [
-    {
-      "priority": 15,
-      "use": "root_and_branch",
-      "when": {
-        "chance": 0.4
+  "@prefab": "content_monsters_entry_2",
+  "params": {
+    "id": "ring_counter",
+    "name": "What Has Been Counting",
+    "description": "Forty rings in eleven years is not fast growth. It is a count of something else kept in wood.",
+    "level": 8,
+    "xp": 850,
+    "attributes": {
+      "might": 17,
+      "agility": 12,
+      "endurance": 17,
+      "intellect": 14,
+      "instinct": 15,
+      "presence": 12
+    },
+    "abilities": [
+      "root_and_branch",
+      "stone_fist"
+    ],
+    "behaviour": [
+      {
+        "priority": 15,
+        "use": "root_and_branch",
+        "when": {
+          "chance": 0.4
+        }
+      },
+      {
+        "priority": 0,
+        "use": "stone_fist"
       }
+    ],
+    "descriptors": [
+      "a knotted",
+      "a many-ringed"
+    ],
+    "loot": "ember_workings_hoard",
+    "conditionImmunities": [
+      "prone",
+      "frightened"
+    ],
+    "resourceOverrides": {
+      "hp": 100
     },
-    {
-      "priority": 0,
-      "use": "stone_fist"
-    }
-  ],
-  "faction": "the_unsealed",
-  "creatureType": "undead",
-  "size": "medium",
-  "descriptors": [
-    "a knotted",
-    "a many-ringed"
-  ],
-  "conditionalLoot": [],
-  "loot": "ember_workings_hoard",
-  "conditionImmunities": [
-    "prone",
-    "frightened"
-  ],
-  "resourceOverrides": {
-    "hp": 100
-  },
-  "temperament": {
-    "roamRadius": 12,
-    "investigateRadius": 40,
-    "leashRadius": 60,
-    "wanderChance": 0.1,
-    "disengageTurns": 1,
-    "speeds": {
-      "wander": 0.5,
-      "investigate": 0.5
-    },
-    "investigates": [
-      "sight",
-      "hearing",
-      "smell"
-    ]
+    "variant": "v1"
   }
 }

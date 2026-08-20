@@ -1,21 +1,14 @@
 {
-  "id": "three_wells_house_a",
-  "name": "The Waterman's",
-  "description": "Whoever keeps the wells lives between the first and the second.",
-  "area": "steppe_three_wells",
-  "kind": "settlement",
-  "descriptionKey": "int_house",
-  "travelMinutes": 2,
-  "tags": [
-    "house"
-  ],
-  "map": {
-    "width": "9",
-    "height": "7",
-    "palette": "int_timber"
-  },
-  "position": {
-    "x": 27,
-    "y": 3
+  "@prefab": "world_points_f_nterest_int_house_2",
+  "params": {
+    "id": "three_wells_house_a",
+    "name": "The Waterman's",
+    "description": "Whoever keeps the wells lives between the first and the second.",
+    "area": "steppe_three_wells",
+    "position": {
+      "x": 27,
+      "y": 3
+    },
+    "variant": "v1"
   }
 }

@@ -1,0 +1,75 @@
+{
+  "id": "world_terrains_entry",
+  "label": "world_terrains_entry",
+  "collection": "world.terrains",
+  "params": [
+    {
+      "key": "id",
+      "kind": "string"
+    },
+    {
+      "key": "name",
+      "kind": "string"
+    },
+    {
+      "key": "description",
+      "kind": "text"
+    },
+    {
+      "key": "glyph",
+      "kind": "string"
+    },
+    {
+      "key": "color",
+      "kind": "string"
+    },
+    {
+      "key": "tags",
+      "kind": "string"
+    },
+    {
+      "key": "variant",
+      "kind": "enum",
+      "options": [
+        "v1",
+        "v2",
+        "v3",
+        "v4",
+        "v5",
+        "v6",
+        "v7",
+        "v8",
+        "v9",
+        "v10",
+        "v11",
+        "v12",
+        "v13",
+        "v14"
+      ]
+    }
+  ],
+  "template": {
+    "id": "{{id}}",
+    "name": "{{name}}",
+    "description": "{{description}}",
+    "glyph": "{{glyph}}",
+    "color": "{{color}}",
+    "passable": true,
+    "opaque": false,
+    "moveCost": {
+      "@lookup": [
+        "world_terrains_entry_variant",
+        "{{variant}}",
+        "moveCost"
+      ]
+    },
+    "tags": "{{tags}}",
+    "marks": {
+      "@lookup": [
+        "world_terrains_entry_variant",
+        "{{variant}}",
+        "marks"
+      ]
+    }
+  }
+}

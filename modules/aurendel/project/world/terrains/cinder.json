@@ -1,17 +1,14 @@
 {
-  "id": "cinder",
-  "name": "Cinder",
-  "description": "Black grit still warm from below.",
-  "glyph": "c",
-  "color": "red",
-  "passable": true,
-  "opaque": false,
-  "moveCost": 2,
-  "tags": [
-    "soft"
-  ],
-  "marks": {
-    "tracks": 1,
-    "smell": 1
+  "@prefab": "world_terrains_entry",
+  "params": {
+    "id": "cinder",
+    "name": "Cinder",
+    "description": "Black grit still warm from below.",
+    "glyph": "c",
+    "color": "red",
+    "tags": [
+      "soft"
+    ],
+    "variant": "v11"
   }
 }

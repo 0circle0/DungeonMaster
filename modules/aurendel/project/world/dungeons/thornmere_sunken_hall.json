@@ -1,18 +1,15 @@
 {
-  "id": "thornmere_sunken_hall",
-  "name": "The Sunken Hall",
-  "description": "A roof-ridge above the water, a hall below it, and below the hall a floor that is somehow dry.",
-  "biome": "dungeon_drowned",
-  "roomCount": "11",
-  "depth": "3",
-  "algorithm": "rooms",
-  "lockedDoorChance": 0,
-  "doorGates": [],
-  "rollEncounters": false,
-  "safeEntrance": true,
-  "branchiness": 0.3,
-  "width": "77",
-  "height": "77",
-  "corridorLength": "3d3",
-  "bossTable": "trial_two_fifth"
+  "@prefab": "world_dungeons_entry_6",
+  "params": {
+    "id": "thornmere_sunken_hall",
+    "name": "The Sunken Hall",
+    "description": "A roof-ridge above the water, a hall below it, and below the hall a floor that is somehow dry.",
+    "roomCount": "11",
+    "depth": "3",
+    "branchiness": 0.3,
+    "width": "77",
+    "height": "77",
+    "bossTable": "trial_two_fifth",
+    "variant": "v5"
+  }
 }

@@ -1,16 +1,11 @@
 {
-  "id": "vashta_qal_the_spring",
-  "name": "The Spring",
-  "description": "The only water for a hundred miles, and eleven thousand people are arranged in rings around it.",
-  "area": "vashta_qal_oasis",
-  "kind": "landmark",
-  "descriptionKey": "generic_landmark",
-  "travelMinutes": 4,
-  "tags": [
-    "landmark"
-  ],
-  "position": {
-    "x": 3,
-    "y": 3
+  "@prefab": "world_points_f_nterest_generic_landmark",
+  "params": {
+    "id": "vashta_qal_the_spring",
+    "name": "The Spring",
+    "description": "The only water for a hundred miles, and eleven thousand people are arranged in rings around it.",
+    "area": "vashta_qal_oasis",
+    "travelMinutes": 4,
+    "variant": "v8"
   }
 }

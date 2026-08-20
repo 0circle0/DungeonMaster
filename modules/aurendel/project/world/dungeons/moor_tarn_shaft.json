@@ -1,18 +1,15 @@
 {
-  "id": "moor_tarn_shaft",
-  "name": "The Tarn Shaft",
-  "description": "A cut shaft beside the tarn going down to galleries that are on the Deeproads' plan, not the moor's.",
-  "biome": "dungeon_delved",
-  "roomCount": "12",
-  "depth": "4",
-  "algorithm": "rooms",
-  "lockedDoorChance": 0,
-  "doorGates": [],
-  "rollEncounters": false,
-  "safeEntrance": true,
-  "branchiness": 0.3,
-  "width": "81",
-  "height": "81",
-  "corridorLength": "3d3",
-  "bossTable": "the_bottom_of_the_shaft"
+  "@prefab": "world_dungeons_entry_6",
+  "params": {
+    "id": "moor_tarn_shaft",
+    "name": "The Tarn Shaft",
+    "description": "A cut shaft beside the tarn going down to galleries that are on the Deeproads' plan, not the moor's.",
+    "roomCount": "12",
+    "depth": "4",
+    "branchiness": 0.3,
+    "width": "81",
+    "height": "81",
+    "bossTable": "the_bottom_of_the_shaft",
+    "variant": "v3"
+  }
 }

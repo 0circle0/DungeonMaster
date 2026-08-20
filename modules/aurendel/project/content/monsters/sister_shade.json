@@ -1,92 +1,74 @@
 {
-  "id": "sister_shade",
-  "name": "A Sister's Shade",
-  "description": "One of the nine. It is not pleased about the tenth.",
-  "level": 5,
-  "xp": 240,
-  "attributes": {
-    "might": 10,
-    "agility": 16,
-    "endurance": 12,
-    "intellect": 14,
-    "instinct": 14,
-    "presence": 16
-  },
-  "abilities": [
-    "wither",
-    "grave_chill"
-  ],
-  "behaviour": [
-    {
-      "priority": 10,
-      "use": "wither"
+  "@prefab": "content_monsters_entry_3",
+  "params": {
+    "id": "sister_shade",
+    "name": "A Sister's Shade",
+    "description": "One of the nine. It is not pleased about the tenth.",
+    "level": 5,
+    "xp": 240,
+    "attributes": {
+      "might": 10,
+      "agility": 16,
+      "endurance": 12,
+      "intellect": 14,
+      "instinct": 14,
+      "presence": 16
     },
-    {
-      "priority": 0,
-      "use": "grave_chill"
-    }
-  ],
-  "faction": "the_unsealed",
-  "creatureType": "undead",
-  "size": "medium",
-  "descriptors": [
-    "a tall",
-    "an unlit"
-  ],
-  "conditionalLoot": [
-    "silvered_cache"
-  ],
-  "loot": "sisters_hoard",
-  "damageInteractions": [
-    {
-      "damageType": "slashing",
-      "multiplier": 0.5,
-      "unless": [
-        "silvered"
-      ]
+    "abilities": [
+      "wither",
+      "grave_chill"
+    ],
+    "behaviour": [
+      {
+        "priority": 10,
+        "use": "wither"
+      },
+      {
+        "priority": 0,
+        "use": "grave_chill"
+      }
+    ],
+    "descriptors": [
+      "a tall",
+      "an unlit"
+    ],
+    "loot": "sisters_hoard",
+    "damageInteractions": [
+      {
+        "damageType": "slashing",
+        "multiplier": 0.5,
+        "unless": [
+          "silvered"
+        ]
+      },
+      {
+        "damageType": "piercing",
+        "multiplier": 0.5,
+        "unless": [
+          "silvered"
+        ]
+      },
+      {
+        "damageType": "necrotic",
+        "multiplier": 0
+      },
+      {
+        "damageType": "radiant",
+        "multiplier": 2
+      }
+    ],
+    "conditionImmunities": [
+      "frightened",
+      "poisoned",
+      "bleeding",
+      "prone"
+    ],
+    "resourceOverrides": {
+      "hp": 52
     },
-    {
-      "damageType": "piercing",
-      "multiplier": 0.5,
-      "unless": [
-        "silvered"
-      ]
+    "derivedOverrides": {
+      "guard": 15
     },
-    {
-      "damageType": "necrotic",
-      "multiplier": 0
-    },
-    {
-      "damageType": "radiant",
-      "multiplier": 2
-    }
-  ],
-  "conditionImmunities": [
-    "frightened",
-    "poisoned",
-    "bleeding",
-    "prone"
-  ],
-  "resourceOverrides": {
-    "hp": 52
-  },
-  "derivedOverrides": {
-    "guard": 15
-  },
-  "temperament": {
-    "roamRadius": 12,
-    "investigateRadius": 40,
-    "leashRadius": 60,
-    "wanderChance": 0.1,
-    "disengageTurns": 1,
-    "speeds": {
-      "wander": 0.5,
-      "investigate": 0.5
-    },
-    "investigates": [
-      "sight",
-      "hearing",
-      "smell"
-    ]
+    "variant": "v1"
   }
 }

@@ -1,24 +1,14 @@
 {
-  "id": "deep_market_the_lamplit",
-  "name": "The Lamplit",
-  "description": "Four hundred years old, entirely underground, and there is a waiting list for the corner table.",
-  "area": "karn_dolur_deep_market",
-  "kind": "settlement",
-  "descriptionKey": "int_inn",
-  "travelMinutes": 3,
-  "tags": [
-    "inn"
-  ],
-  "services": [
-    "inn"
-  ],
-  "map": {
-    "width": "15",
-    "height": "11",
-    "palette": "int_timber"
-  },
-  "position": {
-    "x": 41,
-    "y": 27
+  "@prefab": "world_points_f_nterest_int_inn_2",
+  "params": {
+    "id": "deep_market_the_lamplit",
+    "name": "The Lamplit",
+    "description": "Four hundred years old, entirely underground, and there is a waiting list for the corner table.",
+    "area": "karn_dolur_deep_market",
+    "position": {
+      "x": 41,
+      "y": 27
+    },
+    "variant": "v1"
   }
 }

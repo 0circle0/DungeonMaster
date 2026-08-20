@@ -1,52 +1,28 @@
 {
-  "id": "glass_weigher",
-  "name": "Qasim, of the Weighing House",
-  "description": "A lifetime of lifting counterweights, which is more lifting than it sounds.",
-  "level": 5,
-  "xp": 0,
-  "attributes": {
-    "might": 11,
-    "agility": 11,
-    "endurance": 12,
-    "intellect": 15,
-    "instinct": 13,
-    "presence": 12
-  },
-  "abilities": [
-    "strike"
-  ],
-  "behaviour": [
-    {
-      "priority": 0,
-      "use": "strike"
-    }
-  ],
-  "faction": "the_water_wardens",
-  "creatureType": "humanoid",
-  "size": "medium",
-  "descriptors": [
-    "a deliberate"
-  ],
-  "conditionalLoot": [],
-  "loot": "glass_jar_carried",
-  "resourceOverrides": {
-    "hp": 28
-  },
-  "temperament": {
-    "roamRadius": 24,
-    "investigateRadius": 70,
-    "leashRadius": 100,
-    "wanderChance": 0.4,
-    "disengageTurns": 2,
-    "investigates": [
-      "sight",
-      "hearing",
-      "tracks",
-      "smell"
+  "@prefab": "content_monsters_entry",
+  "params": {
+    "id": "glass_weigher",
+    "name": "Qasim, of the Weighing House",
+    "description": "A lifetime of lifting counterweights, which is more lifting than it sounds.",
+    "attributes": {
+      "might": 11,
+      "agility": 11,
+      "endurance": 12,
+      "intellect": 15,
+      "instinct": 13,
+      "presence": 12
+    },
+    "abilities": [
+      "strike"
     ],
-    "notices": [
-      "hostile",
-      "neutral"
-    ]
+    "faction": "the_water_wardens",
+    "descriptors": [
+      "a deliberate"
+    ],
+    "loot": "glass_jar_carried",
+    "resourceOverrides": {
+      "hp": 28
+    },
+    "variant": "v5"
   }
 }

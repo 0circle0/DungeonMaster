@@ -1,17 +1,14 @@
 {
-  "id": "dirt_road",
-  "name": "Dirt Road",
-  "description": "Rutted track, and better than the field beside it.",
-  "glyph": "=",
-  "color": "yellow",
-  "passable": true,
-  "opaque": false,
-  "moveCost": 0.8,
-  "tags": [
-    "soft"
-  ],
-  "marks": {
-    "tracks": 1,
-    "smell": 1
+  "@prefab": "world_terrains_entry",
+  "params": {
+    "id": "dirt_road",
+    "name": "Dirt Road",
+    "description": "Rutted track, and better than the field beside it.",
+    "glyph": "=",
+    "color": "yellow",
+    "tags": [
+      "soft"
+    ],
+    "variant": "v5"
   }
 }

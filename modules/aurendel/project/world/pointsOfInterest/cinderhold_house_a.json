@@ -1,21 +1,14 @@
 {
-  "id": "cinderhold_house_a",
-  "name": "Basalt Row",
-  "description": "Walls three feet thick, one window, and it stays at the same temperature all year.",
-  "area": "ember_cinderhold",
-  "kind": "settlement",
-  "descriptionKey": "int_house",
-  "travelMinutes": 2,
-  "tags": [
-    "house"
-  ],
-  "map": {
-    "width": "9",
-    "height": "7",
-    "palette": "int_timber"
-  },
-  "position": {
-    "x": 3,
-    "y": 23
+  "@prefab": "world_points_f_nterest_int_house_2",
+  "params": {
+    "id": "cinderhold_house_a",
+    "name": "Basalt Row",
+    "description": "Walls three feet thick, one window, and it stays at the same temperature all year.",
+    "area": "ember_cinderhold",
+    "position": {
+      "x": 3,
+      "y": 23
+    },
+    "variant": "v1"
   }
 }

@@ -1,24 +1,14 @@
 {
-  "id": "blackrigging_the_bilge",
-  "name": "The Bilge",
-  "description": "Below the waterline of a ship that is on dry land, which is a distinction the landlord enjoys.",
-  "area": "isles_blackrigging",
-  "kind": "settlement",
-  "descriptionKey": "int_inn",
-  "travelMinutes": 3,
-  "tags": [
-    "inn"
-  ],
-  "services": [
-    "inn"
-  ],
-  "map": {
-    "width": "11",
-    "height": "9",
-    "palette": "int_timber"
-  },
-  "position": {
-    "x": 3,
-    "y": 23
+  "@prefab": "world_points_f_nterest_int_inn_2",
+  "params": {
+    "id": "blackrigging_the_bilge",
+    "name": "The Bilge",
+    "description": "Below the waterline of a ship that is on dry land, which is a distinction the landlord enjoys.",
+    "area": "isles_blackrigging",
+    "position": {
+      "x": 3,
+      "y": 23
+    },
+    "variant": "v2"
   }
 }

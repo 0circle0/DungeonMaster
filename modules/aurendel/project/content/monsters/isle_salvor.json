@@ -1,52 +1,28 @@
 {
-  "id": "isle_salvor",
-  "name": "Bren of the Reef Camp",
-  "description": "Dives a hundred feet on one breath, repeatedly, by choice.",
-  "level": 6,
-  "xp": 0,
-  "attributes": {
-    "might": 16,
-    "agility": 14,
-    "endurance": 17,
-    "intellect": 11,
-    "instinct": 14,
-    "presence": 10
-  },
-  "abilities": [
-    "strike"
-  ],
-  "behaviour": [
-    {
-      "priority": 0,
-      "use": "strike"
-    }
-  ],
-  "faction": "the_salvors",
-  "creatureType": "humanoid",
-  "size": "medium",
-  "descriptors": [
-    "a barrel-chested"
-  ],
-  "conditionalLoot": [],
-  "loot": "isle_plate_carried",
-  "resourceOverrides": {
-    "hp": 38
-  },
-  "temperament": {
-    "roamRadius": 24,
-    "investigateRadius": 70,
-    "leashRadius": 100,
-    "wanderChance": 0.4,
-    "disengageTurns": 2,
-    "investigates": [
-      "sight",
-      "hearing",
-      "tracks",
-      "smell"
+  "@prefab": "content_monsters_entry",
+  "params": {
+    "id": "isle_salvor",
+    "name": "Bren of the Reef Camp",
+    "description": "Dives a hundred feet on one breath, repeatedly, by choice.",
+    "attributes": {
+      "might": 16,
+      "agility": 14,
+      "endurance": 17,
+      "intellect": 11,
+      "instinct": 14,
+      "presence": 10
+    },
+    "abilities": [
+      "strike"
     ],
-    "notices": [
-      "hostile",
-      "neutral"
-    ]
+    "faction": "the_salvors",
+    "descriptors": [
+      "a barrel-chested"
+    ],
+    "loot": "isle_plate_carried",
+    "resourceOverrides": {
+      "hp": 38
+    },
+    "variant": "v6"
   }
 }

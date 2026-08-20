@@ -1,24 +1,18 @@
 {
-  "id": "stiltmarket_water_chapel",
-  "name": "The Water Chapel",
-  "description": "On its own piles, apart from the rest, reached by one walk.",
-  "area": "thornmere_stiltmarket",
-  "kind": "shrine",
-  "descriptionKey": "int_temple",
-  "travelMinutes": 3,
-  "tags": [
-    "shrine"
-  ],
-  "services": [
-    "temple"
-  ],
-  "map": {
-    "width": "11",
-    "height": "9",
-    "palette": "int_temple"
-  },
-  "position": {
-    "x": 20,
-    "y": 23
+  "@prefab": "world_points_f_nterest_int_temple",
+  "params": {
+    "id": "stiltmarket_water_chapel",
+    "name": "The Water Chapel",
+    "description": "On its own piles, apart from the rest, reached by one walk.",
+    "area": "thornmere_stiltmarket",
+    "map": {
+      "width": "11",
+      "height": "9",
+      "palette": "int_temple"
+    },
+    "position": {
+      "x": 20,
+      "y": 23
+    }
   }
 }

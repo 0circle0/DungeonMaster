@@ -1,24 +1,14 @@
 {
-  "id": "glass_quarter_lens_maker",
-  "name": "The Lens Maker",
-  "description": "Glasses, burning lenses, and one instrument in the window that nobody will price.",
-  "area": "vashta_qal_glass_quarter",
-  "kind": "market",
-  "descriptionKey": "int_store",
-  "travelMinutes": 3,
-  "tags": [
-    "shop"
-  ],
-  "services": [
-    "market"
-  ],
-  "map": {
-    "width": "11",
-    "height": "9",
-    "palette": "int_shop"
-  },
-  "position": {
-    "x": 31,
-    "y": 3
+  "@prefab": "world_points_f_nterest_int_store_2",
+  "params": {
+    "id": "glass_quarter_lens_maker",
+    "name": "The Lens Maker",
+    "description": "Glasses, burning lenses, and one instrument in the window that nobody will price.",
+    "area": "vashta_qal_glass_quarter",
+    "position": {
+      "x": 31,
+      "y": 3
+    },
+    "variant": "v2"
   }
 }

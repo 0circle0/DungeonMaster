@@ -1,35 +1,22 @@
 {
-  "id": "relay_rider_talith",
-  "name": "Talith of the Relay",
-  "description": "Rides the long stage and keeps the book the riders have kept since there were riders.",
-  "disposition": 3,
-  "gullibility": 0.25,
-  "memorySpan": 240,
-  "offersQuests": [],
-  "caresAbout": [],
-  "reactions": [],
-  "faction": "the_horse_lords",
-  "dialogue": "step_talith_talk",
-  "home": "horse_road_relay",
-  "statblock": "step_rider",
-  "shop": {
-    "lootTable": "keeper_stock",
-    "buysTags": [
-      "material"
-    ],
-    "priceMultiplier": 1.2
-  },
-  "temperament": {
-    "roamRadius": 0,
-    "wanderChance": 0,
-    "speeds": {
-      "wander": 0
-    },
-    "investigates": [],
-    "notices": [
-      "hostile",
-      "neutral",
-      "ally"
-    ]
+  "@prefab": "content_npcs_entry_4",
+  "params": {
+    "id": "relay_rider_talith",
+    "name": "Talith of the Relay",
+    "description": "Rides the long stage and keeps the book the riders have kept since there were riders.",
+    "disposition": 3,
+    "gullibility": 0.25,
+    "memorySpan": 240,
+    "faction": "the_horse_lords",
+    "dialogue": "step_talith_talk",
+    "home": "horse_road_relay",
+    "statblock": "step_rider",
+    "shop": {
+      "lootTable": "keeper_stock",
+      "buysTags": [
+        "material"
+      ],
+      "priceMultiplier": 1.2
+    }
   }
 }

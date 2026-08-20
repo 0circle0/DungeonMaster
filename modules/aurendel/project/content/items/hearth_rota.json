@@ -1,14 +1,11 @@
 {
-  "id": "hearth_rota",
-  "name": "The Hearth Rota",
-  "description": "A hundred and sixty years of whose turn it was, unbroken, with two nights a year ruled through and nobody's name against them.",
-  "kind": "key",
-  "value": 0,
-  "weight": 0,
-  "tags": [
-    "keepsake"
-  ],
-  "extra": {
-    "heldBy": "fire_keeper_wenna"
+  "@prefab": "content_items_entry_8",
+  "params": {
+    "id": "hearth_rota",
+    "name": "The Hearth Rota",
+    "description": "A hundred and sixty years of whose turn it was, unbroken, with two nights a year ruled through and nobody's name against them.",
+    "extra": {
+      "heldBy": "fire_keeper_wenna"
+    }
   }
 }

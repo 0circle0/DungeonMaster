@@ -1,53 +1,29 @@
 {
-  "id": "strand_wrecker",
-  "name": "A Wrecker",
-  "description": "Lime under the fingernails and a lantern they only light in certain weather.",
-  "level": 2,
-  "xp": 50,
-  "attributes": {
-    "might": 13,
-    "agility": 12,
-    "endurance": 12,
-    "intellect": 9,
-    "instinct": 12,
-    "presence": 9
-  },
-  "abilities": [
-    "cudgel"
-  ],
-  "behaviour": [
-    {
-      "priority": 0,
-      "use": "cudgel"
-    }
-  ],
-  "faction": "the_salvors",
-  "creatureType": "humanoid",
-  "size": "medium",
-  "descriptors": [
-    "a squat",
-    "a weathered"
-  ],
-  "conditionalLoot": [],
-  "loot": "strand_scraps",
-  "resourceOverrides": {
-    "hp": 14
-  },
-  "temperament": {
-    "roamRadius": 24,
-    "investigateRadius": 70,
-    "leashRadius": 100,
-    "wanderChance": 0.4,
-    "disengageTurns": 2,
-    "investigates": [
-      "sight",
-      "hearing",
-      "tracks",
-      "smell"
+  "@prefab": "content_monsters_entry",
+  "params": {
+    "id": "strand_wrecker",
+    "name": "A Wrecker",
+    "description": "Lime under the fingernails and a lantern they only light in certain weather.",
+    "attributes": {
+      "might": 13,
+      "agility": 12,
+      "endurance": 12,
+      "intellect": 9,
+      "instinct": 12,
+      "presence": 9
+    },
+    "abilities": [
+      "cudgel"
     ],
-    "notices": [
-      "hostile",
-      "neutral"
-    ]
+    "faction": "the_salvors",
+    "descriptors": [
+      "a squat",
+      "a weathered"
+    ],
+    "loot": "strand_scraps",
+    "resourceOverrides": {
+      "hp": 14
+    },
+    "variant": "v3"
   }
 }

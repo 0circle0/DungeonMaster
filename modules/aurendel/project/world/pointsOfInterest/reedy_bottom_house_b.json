@@ -1,21 +1,14 @@
 {
-  "id": "reedy_bottom_house_b",
-  "name": "Wader's Cottage",
-  "description": "Boots by the door, eleven pairs, all of them somebody's.",
-  "area": "thornmere_reedy_bottom",
-  "kind": "settlement",
-  "descriptionKey": "int_house",
-  "travelMinutes": 2,
-  "tags": [
-    "house"
-  ],
-  "map": {
-    "width": "9",
-    "height": "7",
-    "palette": "int_timber"
-  },
-  "position": {
-    "x": 27,
-    "y": 10
+  "@prefab": "world_points_f_nterest_int_house_2",
+  "params": {
+    "id": "reedy_bottom_house_b",
+    "name": "Wader's Cottage",
+    "description": "Boots by the door, eleven pairs, all of them somebody's.",
+    "area": "thornmere_reedy_bottom",
+    "position": {
+      "x": 27,
+      "y": 10
+    },
+    "variant": "v1"
   }
 }

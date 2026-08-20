@@ -1,17 +1,12 @@
 {
-  "id": "sunless_river_downstream",
-  "name": "Downstream",
-  "description": "It goes somewhere. Following it is the only way to find out and nobody has come back to say.",
-  "area": "deeproads_the_sunless_river",
-  "kind": "dungeonEntrance",
-  "descriptionKey": "generic_dungeon_mouth",
-  "travelMinutes": 16,
-  "tags": [
-    "dungeon"
-  ],
-  "dungeon": "deeproads_downstream",
-  "position": {
-    "x": 25,
-    "y": 3
+  "@prefab": "world_points_f_nterest_generic_dungeon_mouth_3",
+  "params": {
+    "id": "sunless_river_downstream",
+    "name": "Downstream",
+    "description": "It goes somewhere. Following it is the only way to find out and nobody has come back to say.",
+    "area": "deeproads_the_sunless_river",
+    "travelMinutes": 16,
+    "dungeon": "deeproads_downstream",
+    "variant": "v1"
   }
 }

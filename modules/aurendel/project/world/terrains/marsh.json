@@ -1,18 +1,15 @@
 {
-  "id": "marsh",
-  "name": "Marsh",
-  "description": "Standing water and sucking mud in equal measure.",
-  "glyph": "m",
-  "color": "green",
-  "passable": true,
-  "opaque": false,
-  "moveCost": 3,
-  "tags": [
-    "soft",
-    "water"
-  ],
-  "marks": {
-    "tracks": 1,
-    "smell": 1
+  "@prefab": "world_terrains_entry",
+  "params": {
+    "id": "marsh",
+    "name": "Marsh",
+    "description": "Standing water and sucking mud in equal measure.",
+    "glyph": "m",
+    "color": "green",
+    "tags": [
+      "soft",
+      "water"
+    ],
+    "variant": "v9"
   }
 }

@@ -1,17 +1,14 @@
 {
-  "id": "heather",
-  "name": "Heather",
-  "description": "Woody purple scrub that hides the ground it grows on.",
-  "glyph": "%",
-  "color": "magenta",
-  "passable": true,
-  "opaque": false,
-  "moveCost": 1.5,
-  "tags": [
-    "soft"
-  ],
-  "marks": {
-    "tracks": 1,
-    "smell": 1
+  "@prefab": "world_terrains_entry",
+  "params": {
+    "id": "heather",
+    "name": "Heather",
+    "description": "Woody purple scrub that hides the ground it grows on.",
+    "glyph": "%",
+    "color": "magenta",
+    "tags": [
+      "soft"
+    ],
+    "variant": "v2"
   }
 }

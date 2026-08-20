@@ -1,18 +1,15 @@
 {
-  "id": "karn_dolur_old_seams",
-  "name": "The Old Seams",
-  "description": "Worked out four centuries back and left open, because a hold does not fill in what it might want again.",
-  "biome": "dungeon_delved",
-  "roomCount": "12",
-  "depth": "2",
-  "algorithm": "rooms",
-  "lockedDoorChance": 0,
-  "doorGates": [],
-  "rollEncounters": false,
-  "safeEntrance": true,
-  "branchiness": 0.55,
-  "corridorLength": "3d3",
-  "width": "81",
-  "height": "81",
-  "bossTable": "the_old_seams"
+  "@prefab": "world_dungeons_entry_5",
+  "params": {
+    "id": "karn_dolur_old_seams",
+    "name": "The Old Seams",
+    "description": "Worked out four centuries back and left open, because a hold does not fill in what it might want again.",
+    "biome": "dungeon_delved",
+    "roomCount": "12",
+    "depth": "2",
+    "branchiness": 0.55,
+    "width": "81",
+    "height": "81",
+    "bossTable": "the_old_seams"
+  }
 }

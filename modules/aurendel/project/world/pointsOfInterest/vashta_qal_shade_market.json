@@ -1,19 +1,13 @@
 {
-  "id": "vashta_qal_shade_market",
-  "name": "The Shade Market",
-  "description": "Under awnings, all of it, and the awnings are municipal and somebody's whole department.",
-  "area": "vashta_qal_oasis",
-  "kind": "market",
-  "descriptionKey": "generic_market",
-  "travelMinutes": 2,
-  "tags": [
-    "shop"
-  ],
-  "services": [
-    "market"
-  ],
-  "position": {
-    "x": 22,
-    "y": 3
+  "@prefab": "world_points_f_nterest_generic_market",
+  "params": {
+    "id": "vashta_qal_shade_market",
+    "name": "The Shade Market",
+    "description": "Under awnings, all of it, and the awnings are municipal and somebody's whole department.",
+    "area": "vashta_qal_oasis",
+    "position": {
+      "x": 22,
+      "y": 3
+    }
   }
 }

@@ -1,52 +1,28 @@
 {
-  "id": "dusk_wayhouse_keeper",
-  "name": "Pyle, at the Wayhouse",
-  "description": "Turns horses, hauls trunks and settles arguments, all day, every day.",
-  "level": 5,
-  "xp": 0,
-  "attributes": {
-    "might": 13,
-    "agility": 12,
-    "endurance": 15,
-    "intellect": 13,
-    "instinct": 13,
-    "presence": 14
-  },
-  "abilities": [
-    "strike"
-  ],
-  "behaviour": [
-    {
-      "priority": 0,
-      "use": "strike"
-    }
-  ],
-  "faction": "the_keepers",
-  "creatureType": "humanoid",
-  "size": "medium",
-  "descriptors": [
-    "a broad"
-  ],
-  "conditionalLoot": [],
-  "loot": "dusk_book_carried",
-  "resourceOverrides": {
-    "hp": 30
-  },
-  "temperament": {
-    "roamRadius": 24,
-    "investigateRadius": 70,
-    "leashRadius": 100,
-    "wanderChance": 0.4,
-    "disengageTurns": 2,
-    "investigates": [
-      "sight",
-      "hearing",
-      "tracks",
-      "smell"
+  "@prefab": "content_monsters_entry",
+  "params": {
+    "id": "dusk_wayhouse_keeper",
+    "name": "Pyle, at the Wayhouse",
+    "description": "Turns horses, hauls trunks and settles arguments, all day, every day.",
+    "attributes": {
+      "might": 13,
+      "agility": 12,
+      "endurance": 15,
+      "intellect": 13,
+      "instinct": 13,
+      "presence": 14
+    },
+    "abilities": [
+      "strike"
     ],
-    "notices": [
-      "hostile",
-      "neutral"
-    ]
+    "faction": "the_keepers",
+    "descriptors": [
+      "a broad"
+    ],
+    "loot": "dusk_book_carried",
+    "resourceOverrides": {
+      "hp": 30
+    },
+    "variant": "v5"
   }
 }

@@ -1,52 +1,28 @@
 {
-  "id": "moor_keeper",
-  "name": "Wenna, whose Turn It Is",
-  "description": "Has carried peat across open moor in weather that stopped the mail, on a rota, without comment.",
-  "level": 6,
-  "xp": 0,
-  "attributes": {
-    "might": 13,
-    "agility": 13,
-    "endurance": 16,
-    "intellect": 13,
-    "instinct": 15,
-    "presence": 13
-  },
-  "abilities": [
-    "strike"
-  ],
-  "behaviour": [
-    {
-      "priority": 0,
-      "use": "strike"
-    }
-  ],
-  "faction": "the_library",
-  "creatureType": "humanoid",
-  "size": "medium",
-  "descriptors": [
-    "a soot-marked"
-  ],
-  "conditionalLoot": [],
-  "loot": "moor_rota_carried",
-  "resourceOverrides": {
-    "hp": 36
-  },
-  "temperament": {
-    "roamRadius": 24,
-    "investigateRadius": 70,
-    "leashRadius": 100,
-    "wanderChance": 0.4,
-    "disengageTurns": 2,
-    "investigates": [
-      "sight",
-      "hearing",
-      "tracks",
-      "smell"
+  "@prefab": "content_monsters_entry",
+  "params": {
+    "id": "moor_keeper",
+    "name": "Wenna, whose Turn It Is",
+    "description": "Has carried peat across open moor in weather that stopped the mail, on a rota, without comment.",
+    "attributes": {
+      "might": 13,
+      "agility": 13,
+      "endurance": 16,
+      "intellect": 13,
+      "instinct": 15,
+      "presence": 13
+    },
+    "abilities": [
+      "strike"
     ],
-    "notices": [
-      "hostile",
-      "neutral"
-    ]
+    "faction": "the_library",
+    "descriptors": [
+      "a soot-marked"
+    ],
+    "loot": "moor_rota_carried",
+    "resourceOverrides": {
+      "hp": 36
+    },
+    "variant": "v6"
   }
 }

@@ -1,18 +1,15 @@
 {
-  "id": "stair",
-  "name": "Stair",
-  "description": "Cut steps, going up or down as the case may be.",
-  "glyph": ">",
-  "color": "gray",
-  "passable": true,
-  "opaque": false,
-  "moveCost": 1.5,
-  "tags": [
-    "stone",
-    "built"
-  ],
-  "marks": {
-    "tracks": 0,
-    "smell": 0.6
+  "@prefab": "world_terrains_entry",
+  "params": {
+    "id": "stair",
+    "name": "Stair",
+    "description": "Cut steps, going up or down as the case may be.",
+    "glyph": ">",
+    "color": "gray",
+    "tags": [
+      "stone",
+      "built"
+    ],
+    "variant": "v3"
   }
 }

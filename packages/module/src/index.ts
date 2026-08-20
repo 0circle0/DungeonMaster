@@ -23,6 +23,10 @@ export type { BundleIssue } from './bundle.js';
 // expands and previews in the browser.
 export {
   expandPrefab,
+  expandRecipe,
+  asRecipe,
+  isPrefabRecipe,
+  PREFAB_KEY,
   reexpand,
   overriddenPaths,
   checkParams,

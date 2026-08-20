@@ -1,21 +1,19 @@
 {
-  "id": "gannet_sea_caves",
-  "name": "The Gannet Sea Caves",
-  "description": "Cut by the sea into the foot of the head. The front half floods twice a day and the back half has not in living memory.",
-  "biome": "dungeon_drowned",
-  "roomCount": "9",
-  "depth": "2",
-  "algorithm": "caverns",
-  "lockedDoorChance": 0,
-  "doorGates": [],
-  "rollEncounters": false,
-  "safeEntrance": true,
-  "caverns": {
-    "fill": 0.47,
-    "smoothingPasses": 4,
-    "birthThreshold": 5
-  },
-  "width": "41",
-  "height": "41",
-  "bossTable": "coast_watch_boss"
+  "@prefab": "world_dungeons_entry",
+  "params": {
+    "id": "gannet_sea_caves",
+    "name": "The Gannet Sea Caves",
+    "description": "Cut by the sea into the foot of the head. The front half floods twice a day and the back half has not in living memory.",
+    "biome": "dungeon_drowned",
+    "roomCount": "9",
+    "depth": "2",
+    "caverns": {
+      "fill": 0.47,
+      "smoothingPasses": 4,
+      "birthThreshold": 5
+    },
+    "width": "41",
+    "height": "41",
+    "bossTable": "coast_watch_boss"
+  }
 }

@@ -1,33 +1,15 @@
 {
-  "id": "wader_pell",
-  "name": "Pell, who Wades",
-  "description": "Goes where the punts cannot and came back once with a door post nobody had asked for.",
-  "disposition": 4,
-  "gullibility": 0.45,
-  "memorySpan": 120,
-  "offersQuests": [],
-  "caresAbout": [],
-  "reactions": [],
-  "faction": "the_ferrymen",
-  "dialogue": "thorn_pell_talk",
-  "home": "hummocks_the_islands",
-  "statblock": "thorn_wader",
-  "temperament": {
-    "roamRadius": 24,
-    "investigateRadius": 60,
-    "leashRadius": 90,
-    "wanderChance": 0.3,
-    "speeds": {
-      "wander": 0.5
-    },
-    "investigates": [
-      "sight",
-      "hearing"
-    ],
-    "notices": [
-      "hostile",
-      "neutral",
-      "ally"
-    ]
+  "@prefab": "content_npcs_entry_3",
+  "params": {
+    "id": "wader_pell",
+    "name": "Pell, who Wades",
+    "description": "Goes where the punts cannot and came back once with a door post nobody had asked for.",
+    "disposition": 4,
+    "memorySpan": 120,
+    "faction": "the_ferrymen",
+    "dialogue": "thorn_pell_talk",
+    "home": "hummocks_the_islands",
+    "statblock": "thorn_wader",
+    "variant": "v6"
   }
 }

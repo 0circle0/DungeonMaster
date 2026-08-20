@@ -1,69 +1,53 @@
 {
-  "id": "the_driven",
-  "name": "What the Drive Drives",
-  "description": "Eight worn places in front of a roofless house, evenly spaced, and a line on the map that goes over the scarp and keeps going down.",
-  "level": 8,
-  "xp": 920,
-  "attributes": {
-    "might": 15,
-    "agility": 18,
-    "endurance": 16,
-    "intellect": 12,
-    "instinct": 17,
-    "presence": 11
-  },
-  "abilities": [
-    "quick_shot",
-    "cut_and_run",
-    "rend"
-  ],
-  "behaviour": [
-    {
-      "priority": 20,
-      "use": "cut_and_run",
-      "when": {
-        "chance": 0.45
+  "@prefab": "content_monsters_entry_2",
+  "params": {
+    "id": "the_driven",
+    "name": "What the Drive Drives",
+    "description": "Eight worn places in front of a roofless house, evenly spaced, and a line on the map that goes over the scarp and keeps going down.",
+    "level": 8,
+    "xp": 920,
+    "attributes": {
+      "might": 15,
+      "agility": 18,
+      "endurance": 16,
+      "intellect": 12,
+      "instinct": 17,
+      "presence": 11
+    },
+    "abilities": [
+      "quick_shot",
+      "cut_and_run",
+      "rend"
+    ],
+    "behaviour": [
+      {
+        "priority": 20,
+        "use": "cut_and_run",
+        "when": {
+          "chance": 0.45
+        }
+      },
+      {
+        "priority": 10,
+        "use": "quick_shot"
+      },
+      {
+        "priority": 0,
+        "use": "rend"
       }
+    ],
+    "descriptors": [
+      "a broken-winged",
+      "a great many"
+    ],
+    "loot": "moor_shoot_hoard",
+    "conditionImmunities": [
+      "frightened",
+      "prone"
+    ],
+    "resourceOverrides": {
+      "hp": 94
     },
-    {
-      "priority": 10,
-      "use": "quick_shot"
-    },
-    {
-      "priority": 0,
-      "use": "rend"
-    }
-  ],
-  "faction": "the_unsealed",
-  "creatureType": "undead",
-  "size": "medium",
-  "descriptors": [
-    "a broken-winged",
-    "a great many"
-  ],
-  "conditionalLoot": [],
-  "loot": "moor_shoot_hoard",
-  "conditionImmunities": [
-    "frightened",
-    "prone"
-  ],
-  "resourceOverrides": {
-    "hp": 94
-  },
-  "temperament": {
-    "roamRadius": 12,
-    "investigateRadius": 40,
-    "leashRadius": 60,
-    "wanderChance": 0.1,
-    "disengageTurns": 1,
-    "speeds": {
-      "wander": 0.5,
-      "investigate": 0.5
-    },
-    "investigates": [
-      "sight",
-      "hearing",
-      "smell"
-    ]
+    "variant": "v1"
   }
 }

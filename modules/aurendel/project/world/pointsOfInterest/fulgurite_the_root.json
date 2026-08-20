@@ -1,17 +1,12 @@
 {
-  "id": "fulgurite_the_root",
-  "name": "The Root",
-  "description": "One tube goes down rather than up, and it is wide enough, and somebody has widened it further.",
-  "area": "glasslands_the_fulgurite",
-  "kind": "dungeonEntrance",
-  "descriptionKey": "generic_dungeon_mouth",
-  "travelMinutes": 14,
-  "tags": [
-    "dungeon"
-  ],
-  "dungeon": "glasslands_the_root",
-  "position": {
-    "x": 25,
-    "y": 3
+  "@prefab": "world_points_f_nterest_generic_dungeon_mouth_3",
+  "params": {
+    "id": "fulgurite_the_root",
+    "name": "The Root",
+    "description": "One tube goes down rather than up, and it is wide enough, and somebody has widened it further.",
+    "area": "glasslands_the_fulgurite",
+    "travelMinutes": 14,
+    "dungeon": "glasslands_the_root",
+    "variant": "v1"
   }
 }

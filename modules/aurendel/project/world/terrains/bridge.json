@@ -1,18 +1,15 @@
 {
-  "id": "bridge",
-  "name": "Bridge",
-  "description": "A crossing with rails, or without.",
-  "glyph": "b",
-  "color": "yellow",
-  "passable": true,
-  "opaque": false,
-  "moveCost": 1,
-  "tags": [
-    "stone",
-    "built"
-  ],
-  "marks": {
-    "tracks": 0,
-    "smell": 0.6
+  "@prefab": "world_terrains_entry",
+  "params": {
+    "id": "bridge",
+    "name": "Bridge",
+    "description": "A crossing with rails, or without.",
+    "glyph": "b",
+    "color": "yellow",
+    "tags": [
+      "stone",
+      "built"
+    ],
+    "variant": "v4"
   }
 }

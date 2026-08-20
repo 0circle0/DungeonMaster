@@ -1,24 +1,10 @@
 {
-  "id": "whalebone_smithy",
-  "name": "The Landing Forge",
-  "description": "Harpoon irons, flensing knives, and everything else sharp.",
-  "area": "frostmere_whalebone_landing",
-  "kind": "market",
-  "descriptionKey": "int_smithy",
-  "travelMinutes": 3,
-  "tags": [
-    "shop"
-  ],
-  "services": [
-    "smith"
-  ],
-  "map": {
-    "width": "15",
-    "height": "11",
-    "palette": "int_forge"
-  },
-  "position": {
-    "x": 37,
-    "y": 3
+  "@prefab": "world_points_f_nterest_int_smithy_2",
+  "params": {
+    "id": "whalebone_smithy",
+    "name": "The Landing Forge",
+    "description": "Harpoon irons, flensing knives, and everything else sharp.",
+    "area": "frostmere_whalebone_landing",
+    "variant": "v7"
   }
 }

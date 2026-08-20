@@ -1,18 +1,15 @@
 {
-  "id": "thornmere_deep_hummock",
-  "name": "The Deep Hummock",
-  "description": "The one hummock made of stone rather than silt, and a stair through it going down under the water table.",
-  "biome": "dungeon_drowned",
-  "roomCount": "12",
-  "depth": "4",
-  "algorithm": "rooms",
-  "lockedDoorChance": 0,
-  "doorGates": [],
-  "rollEncounters": false,
-  "safeEntrance": true,
-  "branchiness": 0.35,
-  "width": "81",
-  "height": "81",
-  "corridorLength": "3d3",
-  "bossTable": "thorn_hummock_boss"
+  "@prefab": "world_dungeons_entry_6",
+  "params": {
+    "id": "thornmere_deep_hummock",
+    "name": "The Deep Hummock",
+    "description": "The one hummock made of stone rather than silt, and a stair through it going down under the water table.",
+    "roomCount": "12",
+    "depth": "4",
+    "branchiness": 0.35,
+    "width": "81",
+    "height": "81",
+    "bossTable": "thorn_hummock_boss",
+    "variant": "v5"
+  }
 }

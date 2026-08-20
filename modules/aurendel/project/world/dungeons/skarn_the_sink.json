@@ -1,21 +1,19 @@
 {
-  "id": "skarn_the_sink",
-  "name": "The Sink",
-  "description": "Follows the Weirwater into the mountain. Two miles have been surveyed. The third took the surveyor.",
-  "biome": "dungeon_drowned",
-  "roomCount": "11",
-  "depth": "3",
-  "algorithm": "caverns",
-  "lockedDoorChance": 0,
-  "doorGates": [],
-  "rollEncounters": false,
-  "safeEntrance": true,
-  "caverns": {
-    "fill": 0.47,
-    "smoothingPasses": 4,
-    "birthThreshold": 5
-  },
-  "width": "45",
-  "height": "45",
-  "bossTable": "the_sink"
+  "@prefab": "world_dungeons_entry",
+  "params": {
+    "id": "skarn_the_sink",
+    "name": "The Sink",
+    "description": "Follows the Weirwater into the mountain. Two miles have been surveyed. The third took the surveyor.",
+    "biome": "dungeon_drowned",
+    "roomCount": "11",
+    "depth": "3",
+    "caverns": {
+      "fill": 0.47,
+      "smoothingPasses": 4,
+      "birthThreshold": 5
+    },
+    "width": "45",
+    "height": "45",
+    "bossTable": "the_sink"
+  }
 }

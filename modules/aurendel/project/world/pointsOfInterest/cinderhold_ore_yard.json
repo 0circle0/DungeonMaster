@@ -1,24 +1,14 @@
 {
-  "id": "cinderhold_ore_yard",
-  "name": "The Ore Yard",
-  "description": "Iron out of the reach, graded and stacked and waiting for a cart brave enough.",
-  "area": "ember_cinderhold",
-  "kind": "market",
-  "descriptionKey": "int_warehouse",
-  "travelMinutes": 3,
-  "tags": [
-    "shop"
-  ],
-  "services": [
-    "market"
-  ],
-  "map": {
-    "width": "19",
-    "height": "13",
-    "palette": "int_shop"
-  },
-  "position": {
-    "x": 37,
-    "y": 13
+  "@prefab": "world_points_f_nterest_int_warehouse",
+  "params": {
+    "id": "cinderhold_ore_yard",
+    "name": "The Ore Yard",
+    "description": "Iron out of the reach, graded and stacked and waiting for a cart brave enough.",
+    "area": "ember_cinderhold",
+    "position": {
+      "x": 37,
+      "y": 13
+    },
+    "variant": "v2"
   }
 }

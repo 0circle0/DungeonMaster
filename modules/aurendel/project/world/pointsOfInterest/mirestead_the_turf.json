@@ -1,24 +1,14 @@
 {
-  "id": "mirestead_the_turf",
-  "name": "The Turf",
-  "description": "Burns peat, obviously, and the smell is in everything including the beer.",
-  "area": "moor_mirestead",
-  "kind": "settlement",
-  "descriptionKey": "int_inn",
-  "travelMinutes": 3,
-  "tags": [
-    "inn"
-  ],
-  "services": [
-    "inn"
-  ],
-  "map": {
-    "width": "9",
-    "height": "7",
-    "palette": "int_timber"
-  },
-  "position": {
-    "x": 9,
-    "y": 3
+  "@prefab": "world_points_f_nterest_int_inn_2",
+  "params": {
+    "id": "mirestead_the_turf",
+    "name": "The Turf",
+    "description": "Burns peat, obviously, and the smell is in everything including the beer.",
+    "area": "moor_mirestead",
+    "position": {
+      "x": 9,
+      "y": 3
+    },
+    "variant": "v3"
   }
 }

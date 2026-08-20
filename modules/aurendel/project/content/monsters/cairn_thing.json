@@ -1,100 +1,82 @@
 {
-  "id": "cairn_thing",
-  "name": "What the Last Cairn Held",
-  "description": "The Ice Moot has kept eleven hundred cairns for nine hundred years and this is the one they count from.",
-  "level": 7,
-  "xp": 430,
-  "attributes": {
-    "might": 17,
-    "agility": 11,
-    "endurance": 17,
-    "intellect": 9,
-    "instinct": 13,
-    "presence": 14
-  },
-  "abilities": [
-    "rime_touch",
-    "calving",
-    "grave_chill"
-  ],
-  "behaviour": [
-    {
-      "priority": 20,
-      "use": "calving",
-      "when": {
-        "chance": 0.3
+  "@prefab": "content_monsters_entry_3",
+  "params": {
+    "id": "cairn_thing",
+    "name": "What the Last Cairn Held",
+    "description": "The Ice Moot has kept eleven hundred cairns for nine hundred years and this is the one they count from.",
+    "level": 7,
+    "xp": 430,
+    "attributes": {
+      "might": 17,
+      "agility": 11,
+      "endurance": 17,
+      "intellect": 9,
+      "instinct": 13,
+      "presence": 14
+    },
+    "abilities": [
+      "rime_touch",
+      "calving",
+      "grave_chill"
+    ],
+    "behaviour": [
+      {
+        "priority": 20,
+        "use": "calving",
+        "when": {
+          "chance": 0.3
+        }
+      },
+      {
+        "priority": 10,
+        "use": "rime_touch"
+      },
+      {
+        "priority": 0,
+        "use": "grave_chill"
       }
+    ],
+    "descriptors": [
+      "a rimed",
+      "a shouldered"
+    ],
+    "loot": "last_cairn_hoard",
+    "damageInteractions": [
+      {
+        "damageType": "slashing",
+        "multiplier": 0.5,
+        "unless": [
+          "silvered"
+        ]
+      },
+      {
+        "damageType": "piercing",
+        "multiplier": 0.5,
+        "unless": [
+          "silvered"
+        ]
+      },
+      {
+        "damageType": "cold",
+        "multiplier": 0
+      },
+      {
+        "damageType": "fire",
+        "multiplier": 1.5
+      }
+    ],
+    "conditionImmunities": [
+      "frightened",
+      "slowed",
+      "poisoned",
+      "prone"
+    ],
+    "resourceOverrides": {
+      "hp": 82
     },
-    {
-      "priority": 10,
-      "use": "rime_touch"
+    "derivedOverrides": {
+      "guard": 17
     },
-    {
-      "priority": 0,
-      "use": "grave_chill"
-    }
-  ],
-  "faction": "the_unsealed",
-  "creatureType": "undead",
-  "size": "large",
-  "descriptors": [
-    "a rimed",
-    "a shouldered"
-  ],
-  "conditionalLoot": [
-    "silvered_cache"
-  ],
-  "loot": "last_cairn_hoard",
-  "damageInteractions": [
-    {
-      "damageType": "slashing",
-      "multiplier": 0.5,
-      "unless": [
-        "silvered"
-      ]
-    },
-    {
-      "damageType": "piercing",
-      "multiplier": 0.5,
-      "unless": [
-        "silvered"
-      ]
-    },
-    {
-      "damageType": "cold",
-      "multiplier": 0
-    },
-    {
-      "damageType": "fire",
-      "multiplier": 1.5
-    }
-  ],
-  "conditionImmunities": [
-    "frightened",
-    "slowed",
-    "poisoned",
-    "prone"
-  ],
-  "resourceOverrides": {
-    "hp": 82
-  },
-  "derivedOverrides": {
-    "guard": 17
-  },
-  "temperament": {
-    "roamRadius": 12,
-    "investigateRadius": 40,
-    "leashRadius": 60,
-    "wanderChance": 0.1,
-    "disengageTurns": 1,
-    "speeds": {
-      "wander": 0.5,
-      "investigate": 0.5
-    },
-    "investigates": [
-      "sight",
-      "hearing",
-      "smell"
-    ]
+    "variant": "v2"
   }
 }

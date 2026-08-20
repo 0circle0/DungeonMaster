@@ -1,80 +1,48 @@
 {
-  "id": "barred_thing",
-  "name": "What the Bars Were For",
-  "description": "Every door barred from the street, before the sand. They did not get it out; they got everything else out.",
-  "level": 7,
-  "xp": 700,
-  "attributes": {
-    "might": 17,
-    "agility": 16,
-    "endurance": 14,
-    "intellect": 9,
-    "instinct": 15,
-    "presence": 10
-  },
-  "abilities": [
-    "rend",
-    "gore",
-    "cut_and_run"
-  ],
-  "behaviour": [
-    {
-      "priority": 15,
-      "use": "cut_and_run",
-      "when": {
-        "chance": 0.4
+  "@prefab": "content_monsters_entry_4",
+  "params": {
+    "id": "barred_thing",
+    "name": "What the Bars Were For",
+    "description": "Every door barred from the street, before the sand. They did not get it out; they got everything else out.",
+    "level": 7,
+    "xp": 700,
+    "attributes": {
+      "might": 17,
+      "agility": 16,
+      "endurance": 14,
+      "intellect": 9,
+      "instinct": 15,
+      "presence": 10
+    },
+    "abilities": [
+      "rend",
+      "gore",
+      "cut_and_run"
+    ],
+    "behaviour": [
+      {
+        "priority": 15,
+        "use": "cut_and_run",
+        "when": {
+          "chance": 0.4
+        }
+      },
+      {
+        "priority": 0,
+        "use": "rend"
       }
+    ],
+    "descriptors": [
+      "a hunched",
+      "a sand-scoured"
+    ],
+    "loot": "glass_town_hoard",
+    "conditionImmunities": [
+      "frightened"
+    ],
+    "resourceOverrides": {
+      "hp": 84
     },
-    {
-      "priority": 0,
-      "use": "rend"
-    }
-  ],
-  "faction": "the_unsealed",
-  "creatureType": "undead",
-  "size": "medium",
-  "descriptors": [
-    "a hunched",
-    "a sand-scoured"
-  ],
-  "conditionalLoot": [],
-  "loot": "glass_town_hoard",
-  "damageInteractions": [
-    {
-      "damageType": "slashing",
-      "multiplier": 0.5,
-      "unless": [
-        "silvered"
-      ]
-    },
-    {
-      "damageType": "piercing",
-      "multiplier": 0.5,
-      "unless": [
-        "silvered"
-      ]
-    }
-  ],
-  "conditionImmunities": [
-    "frightened"
-  ],
-  "resourceOverrides": {
-    "hp": 84
-  },
-  "temperament": {
-    "roamRadius": 12,
-    "investigateRadius": 40,
-    "leashRadius": 60,
-    "wanderChance": 0.1,
-    "disengageTurns": 1,
-    "speeds": {
-      "wander": 0.5,
-      "investigate": 0.5
-    },
-    "investigates": [
-      "sight",
-      "hearing",
-      "smell"
-    ]
+    "variant": "v1"
   }
 }

@@ -1,34 +1,25 @@
 {
-  "id": "bone_strand_camp",
-  "name": "The Strand Camp",
-  "description": "Used in the two months the ice lets anybody work here.",
-  "area": "frostmere_bone_strand",
-  "kind": "camp",
-  "descriptionKey": "int_house",
-  "travelMinutes": 5,
-  "tags": [],
-  "map": {
-    "width": "9",
-    "height": "7",
-    "palette": "int_timber"
-  },
-  "position": {
-    "x": 14,
-    "y": 3
-  },
-  "triggers": [
-    {
-      "id": "frost_found_camp_door",
-      "mode": "once",
-      "on": "enter",
-      "description": "What somebody cut into the camp door, and then left.",
-      "effects": [
-        {
-          "learnLore": {
-            "entry": "frost_strand_ribs"
+  "@prefab": "world_points_f_nterest_int_house_3",
+  "params": {
+    "id": "bone_strand_camp",
+    "name": "The Strand Camp",
+    "description": "Used in the two months the ice lets anybody work here.",
+    "area": "frostmere_bone_strand",
+    "travelMinutes": 5,
+    "triggers": [
+      {
+        "id": "frost_found_camp_door",
+        "mode": "once",
+        "on": "enter",
+        "description": "What somebody cut into the camp door, and then left.",
+        "effects": [
+          {
+            "learnLore": {
+              "entry": "frost_strand_ribs"
+            }
           }
-        }
-      ]
-    }
-  ]
+        ]
+      }
+    ]
+  }
 }

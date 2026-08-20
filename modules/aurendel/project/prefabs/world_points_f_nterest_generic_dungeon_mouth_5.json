@@ -1,0 +1,54 @@
+{
+  "id": "world_points_f_nterest_generic_dungeon_mouth_5",
+  "label": "world_points_f_nterest_generic_dungeon_mouth_5",
+  "collection": "world.pointsOfInterest",
+  "params": [
+    {
+      "key": "id",
+      "kind": "string"
+    },
+    {
+      "key": "name",
+      "kind": "string"
+    },
+    {
+      "key": "description",
+      "kind": "text"
+    },
+    {
+      "key": "area",
+      "kind": "string"
+    },
+    {
+      "key": "travelMinutes",
+      "kind": "string"
+    },
+    {
+      "key": "gate",
+      "kind": "string"
+    },
+    {
+      "key": "dungeon",
+      "kind": "string"
+    },
+    {
+      "key": "position",
+      "kind": "string"
+    }
+  ],
+  "template": {
+    "id": "{{id}}",
+    "name": "{{name}}",
+    "description": "{{description}}",
+    "area": "{{area}}",
+    "kind": "dungeonEntrance",
+    "descriptionKey": "generic_dungeon_mouth",
+    "travelMinutes": "{{travelMinutes}}",
+    "tags": [
+      "dungeon"
+    ],
+    "gate": "{{gate}}",
+    "dungeon": "{{dungeon}}",
+    "position": "{{position}}"
+  }
+}

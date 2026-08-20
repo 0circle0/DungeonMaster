@@ -1,35 +1,18 @@
 {
-  "id": "toll_clerk_gadd",
-  "name": "Gadd, of the Bridge Fund",
-  "description": "Collects for the Crown with one hand and for the bridge with the other, and is scrupulous about which hand.",
-  "disposition": 0,
-  "gullibility": 0.25,
-  "memorySpan": 150,
-  "offersQuests": [],
-  "caresAbout": [
-    "crown_served",
-    "crown_defied"
-  ],
-  "reactions": [],
-  "faction": "the_crown",
-  "dialogue": "eelweir_gadd_talk",
-  "home": "weirwater_toll_house",
-  "temperament": {
-    "roamRadius": 24,
-    "investigateRadius": 60,
-    "leashRadius": 90,
-    "wanderChance": 0.3,
-    "speeds": {
-      "wander": 0.5
-    },
-    "investigates": [
-      "sight",
-      "hearing"
+  "@prefab": "content_npcs_entry_2",
+  "params": {
+    "id": "toll_clerk_gadd",
+    "name": "Gadd, of the Bridge Fund",
+    "description": "Collects for the Crown with one hand and for the bridge with the other, and is scrupulous about which hand.",
+    "gullibility": 0.25,
+    "memorySpan": 150,
+    "caresAbout": [
+      "crown_served",
+      "crown_defied"
     ],
-    "notices": [
-      "hostile",
-      "neutral",
-      "ally"
-    ]
+    "faction": "the_crown",
+    "dialogue": "eelweir_gadd_talk",
+    "home": "weirwater_toll_house",
+    "variant": "v5"
   }
 }

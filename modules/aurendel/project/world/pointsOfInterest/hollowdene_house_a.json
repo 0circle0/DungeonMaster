@@ -1,21 +1,14 @@
 {
-  "id": "hollowdene_house_a",
-  "name": "Redding's Farm",
-  "description": "The biggest holding in the parish, which is not saying a great deal.",
-  "area": "kingsvale_hollowdene",
-  "kind": "settlement",
-  "descriptionKey": "int_house",
-  "travelMinutes": 2,
-  "tags": [
-    "house"
-  ],
-  "position": {
-    "x": 24,
-    "y": 5
-  },
-  "map": {
-    "width": "9",
-    "height": "7",
-    "palette": "int_timber"
+  "@prefab": "world_points_f_nterest_int_house",
+  "params": {
+    "id": "hollowdene_house_a",
+    "name": "Redding's Farm",
+    "description": "The biggest holding in the parish, which is not saying a great deal.",
+    "area": "kingsvale_hollowdene",
+    "position": {
+      "x": 24,
+      "y": 5
+    },
+    "variant": "v2"
   }
 }

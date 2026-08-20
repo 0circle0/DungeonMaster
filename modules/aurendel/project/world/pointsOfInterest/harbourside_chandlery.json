@@ -1,24 +1,14 @@
 {
-  "id": "harbourside_chandlery",
-  "name": "Rell's Chandlery",
-  "description": "Rope, canvas, tar, biscuit, and charts of varying honesty.",
-  "area": "sarnport_harbourside",
-  "kind": "market",
-  "descriptionKey": "int_store",
-  "travelMinutes": 3,
-  "tags": [
-    "shop"
-  ],
-  "services": [
-    "market"
-  ],
-  "map": {
-    "width": "15",
-    "height": "11",
-    "palette": "int_shop"
-  },
-  "position": {
-    "x": 31,
-    "y": 3
+  "@prefab": "world_points_f_nterest_int_store_2",
+  "params": {
+    "id": "harbourside_chandlery",
+    "name": "Rell's Chandlery",
+    "description": "Rope, canvas, tar, biscuit, and charts of varying honesty.",
+    "area": "sarnport_harbourside",
+    "position": {
+      "x": 31,
+      "y": 3
+    },
+    "variant": "v1"
   }
 }

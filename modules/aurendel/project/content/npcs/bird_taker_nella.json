@@ -1,33 +1,15 @@
 {
-  "id": "bird_taker_nella",
-  "name": "Nella, Bird-Taker",
-  "description": "Takes eggs off Tern Bank in season, as her mother did, and keeps four generations of the count.",
-  "disposition": 6,
-  "gullibility": 0.4,
-  "memorySpan": 200,
-  "offersQuests": [],
-  "caresAbout": [],
-  "reactions": [],
-  "faction": "the_salvors",
-  "dialogue": "isle_nella_talk",
-  "home": "tern_bank_hut",
-  "statblock": "isle_taker",
-  "temperament": {
-    "roamRadius": 24,
-    "investigateRadius": 60,
-    "leashRadius": 90,
-    "wanderChance": 0.3,
-    "speeds": {
-      "wander": 0.5
-    },
-    "investigates": [
-      "sight",
-      "hearing"
-    ],
-    "notices": [
-      "hostile",
-      "neutral",
-      "ally"
-    ]
+  "@prefab": "content_npcs_entry_3",
+  "params": {
+    "id": "bird_taker_nella",
+    "name": "Nella, Bird-Taker",
+    "description": "Takes eggs off Tern Bank in season, as her mother did, and keeps four generations of the count.",
+    "disposition": 6,
+    "memorySpan": 200,
+    "faction": "the_salvors",
+    "dialogue": "isle_nella_talk",
+    "home": "tern_bank_hut",
+    "statblock": "isle_taker",
+    "variant": "v4"
   }
 }

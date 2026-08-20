@@ -1,52 +1,28 @@
 {
-  "id": "coast_harbourmaster",
-  "name": "Veir, Harbour Master",
-  "description": "Has talked forty tons of moving hull into the right berth without touching it.",
-  "level": 4,
-  "xp": 0,
-  "attributes": {
-    "might": 12,
-    "agility": 13,
-    "endurance": 13,
-    "intellect": 15,
-    "instinct": 14,
-    "presence": 14
-  },
-  "abilities": [
-    "strike"
-  ],
-  "behaviour": [
-    {
-      "priority": 0,
-      "use": "strike"
-    }
-  ],
-  "faction": "the_salvors",
-  "creatureType": "humanoid",
-  "size": "medium",
-  "descriptors": [
-    "a level"
-  ],
-  "conditionalLoot": [],
-  "loot": "coast_book_carried",
-  "resourceOverrides": {
-    "hp": 21
-  },
-  "temperament": {
-    "roamRadius": 24,
-    "investigateRadius": 70,
-    "leashRadius": 100,
-    "wanderChance": 0.4,
-    "disengageTurns": 2,
-    "investigates": [
-      "sight",
-      "hearing",
-      "tracks",
-      "smell"
+  "@prefab": "content_monsters_entry",
+  "params": {
+    "id": "coast_harbourmaster",
+    "name": "Veir, Harbour Master",
+    "description": "Has talked forty tons of moving hull into the right berth without touching it.",
+    "attributes": {
+      "might": 12,
+      "agility": 13,
+      "endurance": 13,
+      "intellect": 15,
+      "instinct": 14,
+      "presence": 14
+    },
+    "abilities": [
+      "strike"
     ],
-    "notices": [
-      "hostile",
-      "neutral"
-    ]
+    "faction": "the_salvors",
+    "descriptors": [
+      "a level"
+    ],
+    "loot": "coast_book_carried",
+    "resourceOverrides": {
+      "hp": 21
+    },
+    "variant": "v10"
   }
 }

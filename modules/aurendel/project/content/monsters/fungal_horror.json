@@ -1,55 +1,45 @@
 {
-  "id": "fungal_horror",
-  "name": "Fungal Horror",
-  "description": "The Rot, walking, and it is mostly what it has eaten.",
-  "level": 6,
-  "xp": 300,
-  "attributes": {
-    "might": 15,
-    "agility": 8,
-    "endurance": 18,
-    "intellect": 4,
-    "instinct": 12,
-    "presence": 8
-  },
-  "abilities": [
-    "spore_burst",
-    "stone_fist"
-  ],
-  "behaviour": [
-    {
-      "priority": 10,
-      "use": "spore_burst"
+  "@prefab": "content_monsters_entry_2",
+  "params": {
+    "id": "fungal_horror",
+    "name": "Fungal Horror",
+    "description": "The Rot, walking, and it is mostly what it has eaten.",
+    "level": 6,
+    "xp": 300,
+    "attributes": {
+      "might": 15,
+      "agility": 8,
+      "endurance": 18,
+      "intellect": 4,
+      "instinct": 12,
+      "presence": 8
     },
-    {
-      "priority": 0,
-      "use": "stone_fist"
-    }
-  ],
-  "faction": "the_unsealed",
-  "creatureType": "plant",
-  "size": "large",
-  "descriptors": [
-    "a swollen",
-    "a luminous"
-  ],
-  "conditionalLoot": [],
-  "loot": "deep_scraps",
-  "conditionImmunities": [
-    "poisoned",
-    "bleeding"
-  ],
-  "resourceOverrides": {
-    "hp": 56
-  },
-  "temperament": {
-    "roamRadius": 0,
-    "wanderChance": 0,
-    "disengageTurns": 0,
-    "speeds": {
-      "wander": 0
+    "abilities": [
+      "spore_burst",
+      "stone_fist"
+    ],
+    "behaviour": [
+      {
+        "priority": 10,
+        "use": "spore_burst"
+      },
+      {
+        "priority": 0,
+        "use": "stone_fist"
+      }
+    ],
+    "descriptors": [
+      "a swollen",
+      "a luminous"
+    ],
+    "loot": "deep_scraps",
+    "conditionImmunities": [
+      "poisoned",
+      "bleeding"
+    ],
+    "resourceOverrides": {
+      "hp": 56
     },
-    "investigates": [],
-    "followsTrails": false
+    "variant": "v3"
   }
 }

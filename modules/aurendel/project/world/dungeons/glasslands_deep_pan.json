@@ -1,19 +1,14 @@
 {
-  "id": "glasslands_deep_pan",
-  "name": "The Deep Pan",
-  "description": "They cut down through the salt for better grade and came out of the bottom of it into a finished room.",
-  "biome": "dungeon_delved",
-  "roomCount": "11",
-  "depth": "3",
-  "algorithm": "bsp",
-  "lockedDoorChance": 0,
-  "doorGates": [],
-  "rollEncounters": false,
-  "safeEntrance": true,
-  "bsp": {
-    "minLeaf": 5
-  },
-  "width": "27",
-  "height": "27",
-  "bossTable": "glass_pan_boss"
+  "@prefab": "world_dungeons_entry_2",
+  "params": {
+    "id": "glasslands_deep_pan",
+    "name": "The Deep Pan",
+    "description": "They cut down through the salt for better grade and came out of the bottom of it into a finished room.",
+    "biome": "dungeon_delved",
+    "roomCount": "11",
+    "width": "27",
+    "height": "27",
+    "bossTable": "glass_pan_boss",
+    "variant": "v3"
+  }
 }

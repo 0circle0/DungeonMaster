@@ -1,24 +1,19 @@
 {
-  "id": "hollowdene_store",
-  "name": "The Village Store",
-  "description": "Salt, nails, thread, lamp oil, and gossip at no extra charge.",
-  "area": "kingsvale_hollowdene",
-  "kind": "market",
-  "descriptionKey": "int_store",
-  "travelMinutes": 2,
-  "tags": [
-    "shop"
-  ],
-  "position": {
-    "x": 20,
-    "y": 8
-  },
-  "services": [
-    "market"
-  ],
-  "map": {
-    "width": "9",
-    "height": "7",
-    "palette": "int_shop"
+  "@prefab": "world_points_f_nterest_int_store",
+  "params": {
+    "id": "hollowdene_store",
+    "name": "The Village Store",
+    "description": "Salt, nails, thread, lamp oil, and gossip at no extra charge.",
+    "area": "kingsvale_hollowdene",
+    "position": {
+      "x": 20,
+      "y": 8
+    },
+    "map": {
+      "width": "9",
+      "height": "7",
+      "palette": "int_shop"
+    },
+    "variant": "v3"
   }
 }

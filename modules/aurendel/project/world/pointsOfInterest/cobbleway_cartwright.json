@@ -1,24 +1,14 @@
 {
-  "id": "cobbleway_cartwright",
-  "name": "The Cartwright's",
-  "description": "Bodies, shafts, and a stock of seasoned ash going back a decade.",
-  "area": "coast_cobbleway",
-  "kind": "market",
-  "descriptionKey": "int_workshop",
-  "travelMinutes": 3,
-  "tags": [
-    "shop"
-  ],
-  "services": [
-    "market"
-  ],
-  "map": {
-    "width": "11",
-    "height": "9",
-    "palette": "int_shop"
-  },
-  "position": {
-    "x": 28,
-    "y": 3
+  "@prefab": "world_points_f_nterest_int_workshop_2",
+  "params": {
+    "id": "cobbleway_cartwright",
+    "name": "The Cartwright's",
+    "description": "Bodies, shafts, and a stock of seasoned ash going back a decade.",
+    "area": "coast_cobbleway",
+    "position": {
+      "x": 28,
+      "y": 3
+    },
+    "variant": "v3"
   }
 }

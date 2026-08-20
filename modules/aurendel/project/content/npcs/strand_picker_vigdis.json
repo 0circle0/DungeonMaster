@@ -1,32 +1,15 @@
 {
-  "id": "strand_picker_vigdis",
-  "name": "Vigdis, at the Strand Camp",
-  "description": "Works the boneyard for what the Landing will buy and sleeps out there, which nobody else in the Frostmere will do.",
-  "disposition": 2,
-  "gullibility": 0.45,
-  "memorySpan": 120,
-  "offersQuests": [],
-  "caresAbout": [],
-  "reactions": [],
-  "faction": "the_ice_moot",
-  "dialogue": "frost_vigdis_talk",
-  "home": "bone_strand_camp",
-  "temperament": {
-    "roamRadius": 24,
-    "investigateRadius": 60,
-    "leashRadius": 90,
-    "wanderChance": 0.3,
-    "speeds": {
-      "wander": 0.5
-    },
-    "investigates": [
-      "sight",
-      "hearing"
-    ],
-    "notices": [
-      "hostile",
-      "neutral",
-      "ally"
-    ]
+  "@prefab": "content_npcs_entry_2",
+  "params": {
+    "id": "strand_picker_vigdis",
+    "name": "Vigdis, at the Strand Camp",
+    "description": "Works the boneyard for what the Landing will buy and sleeps out there, which nobody else in the Frostmere will do.",
+    "gullibility": 0.45,
+    "memorySpan": 120,
+    "caresAbout": [],
+    "faction": "the_ice_moot",
+    "dialogue": "frost_vigdis_talk",
+    "home": "bone_strand_camp",
+    "variant": "v10"
   }
 }

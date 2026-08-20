@@ -1,52 +1,28 @@
 {
-  "id": "step_hayward",
-  "name": "Serel, Hayward",
-  "description": "Walks a parish boundary a week and argues about it for the other six days.",
-  "level": 5,
-  "xp": 0,
-  "attributes": {
-    "might": 13,
-    "agility": 13,
-    "endurance": 14,
-    "intellect": 14,
-    "instinct": 15,
-    "presence": 13
-  },
-  "abilities": [
-    "strike"
-  ],
-  "behaviour": [
-    {
-      "priority": 0,
-      "use": "strike"
-    }
-  ],
-  "faction": "the_horse_lords",
-  "creatureType": "humanoid",
-  "size": "medium",
-  "descriptors": [
-    "a sun-dark"
-  ],
-  "conditionalLoot": [],
-  "loot": "step_tally_carried",
-  "resourceOverrides": {
-    "hp": 28
-  },
-  "temperament": {
-    "roamRadius": 24,
-    "investigateRadius": 70,
-    "leashRadius": 100,
-    "wanderChance": 0.4,
-    "disengageTurns": 2,
-    "investigates": [
-      "sight",
-      "hearing",
-      "tracks",
-      "smell"
+  "@prefab": "content_monsters_entry",
+  "params": {
+    "id": "step_hayward",
+    "name": "Serel, Hayward",
+    "description": "Walks a parish boundary a week and argues about it for the other six days.",
+    "attributes": {
+      "might": 13,
+      "agility": 13,
+      "endurance": 14,
+      "intellect": 14,
+      "instinct": 15,
+      "presence": 13
+    },
+    "abilities": [
+      "strike"
     ],
-    "notices": [
-      "hostile",
-      "neutral"
-    ]
+    "faction": "the_horse_lords",
+    "descriptors": [
+      "a sun-dark"
+    ],
+    "loot": "step_tally_carried",
+    "resourceOverrides": {
+      "hp": 28
+    },
+    "variant": "v5"
   }
 }

@@ -1,18 +1,15 @@
 {
-  "id": "ember_old_workings",
-  "name": "The Old Workings",
-  "description": "Iron got here before the reach caught fire, and abandoned in the middle of a shift with the tools where they fell.",
-  "biome": "dungeon_delved",
-  "roomCount": "11",
-  "depth": "2",
-  "algorithm": "rooms",
-  "lockedDoorChance": 0,
-  "doorGates": [],
-  "rollEncounters": false,
-  "safeEntrance": true,
-  "branchiness": 0.5,
-  "width": "77",
-  "height": "77",
-  "corridorLength": "3d3",
-  "bossTable": "ember_workings_boss"
+  "@prefab": "world_dungeons_entry_6",
+  "params": {
+    "id": "ember_old_workings",
+    "name": "The Old Workings",
+    "description": "Iron got here before the reach caught fire, and abandoned in the middle of a shift with the tools where they fell.",
+    "roomCount": "11",
+    "depth": "2",
+    "branchiness": 0.5,
+    "width": "77",
+    "height": "77",
+    "bossTable": "ember_workings_boss",
+    "variant": "v3"
+  }
 }

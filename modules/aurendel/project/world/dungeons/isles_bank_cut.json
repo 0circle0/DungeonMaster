@@ -1,21 +1,19 @@
 {
-  "id": "isles_bank_cut",
-  "name": "The Bank Cut",
-  "description": "A winter storm cut the shingle through and exposed what was under it, and the bank has not closed since.",
-  "biome": "dungeon_drowned",
-  "roomCount": "9",
-  "depth": "2",
-  "algorithm": "caverns",
-  "lockedDoorChance": 0,
-  "doorGates": [],
-  "rollEncounters": false,
-  "safeEntrance": true,
-  "caverns": {
-    "fill": 0.45,
-    "smoothingPasses": 4,
-    "birthThreshold": 5
-  },
-  "width": "41",
-  "height": "41",
-  "bossTable": "isle_cut_boss"
+  "@prefab": "world_dungeons_entry",
+  "params": {
+    "id": "isles_bank_cut",
+    "name": "The Bank Cut",
+    "description": "A winter storm cut the shingle through and exposed what was under it, and the bank has not closed since.",
+    "biome": "dungeon_drowned",
+    "roomCount": "9",
+    "depth": "2",
+    "caverns": {
+      "fill": 0.45,
+      "smoothingPasses": 4,
+      "birthThreshold": 5
+    },
+    "width": "41",
+    "height": "41",
+    "bossTable": "isle_cut_boss"
+  }
 }

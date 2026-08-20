@@ -1,18 +1,15 @@
 {
-  "id": "glasslands_centre_shaft",
-  "name": "The Centre Shaft",
-  "description": "Straight down from the middle of the crater, glass-walled the whole way, and whatever made the crater went out this way.",
-  "biome": "dungeon_ember",
-  "roomCount": "15",
-  "depth": "5",
-  "algorithm": "rooms",
-  "lockedDoorChance": 0,
-  "doorGates": [],
-  "rollEncounters": false,
-  "safeEntrance": true,
-  "branchiness": 0.2,
-  "width": "79",
-  "height": "79",
-  "corridorLength": "2d3",
-  "bossTable": "the_glass_thing"
+  "@prefab": "world_dungeons_entry_6",
+  "params": {
+    "id": "glasslands_centre_shaft",
+    "name": "The Centre Shaft",
+    "description": "Straight down from the middle of the crater, glass-walled the whole way, and whatever made the crater went out this way.",
+    "roomCount": "15",
+    "depth": "5",
+    "branchiness": 0.2,
+    "width": "79",
+    "height": "79",
+    "bossTable": "the_glass_thing",
+    "variant": "v4"
+  }
 }

@@ -1,95 +1,77 @@
 {
-  "id": "reef_thing",
-  "name": "The Battery",
-  "description": "The drowned fort's guns are still pointed at the passage and something down there is still minding them.",
-  "level": 7,
-  "xp": 410,
-  "attributes": {
-    "might": 16,
-    "agility": 13,
-    "endurance": 16,
-    "intellect": 7,
-    "instinct": 14,
-    "presence": 11
-  },
-  "abilities": [
-    "drag_under",
-    "glass_shard",
-    "rend"
-  ],
-  "behaviour": [
-    {
-      "priority": 10,
-      "use": "drag_under",
-      "when": {
-        "chance": 0.35
+  "@prefab": "content_monsters_entry_3",
+  "params": {
+    "id": "reef_thing",
+    "name": "The Battery",
+    "description": "The drowned fort's guns are still pointed at the passage and something down there is still minding them.",
+    "level": 7,
+    "xp": 410,
+    "attributes": {
+      "might": 16,
+      "agility": 13,
+      "endurance": 16,
+      "intellect": 7,
+      "instinct": 14,
+      "presence": 11
+    },
+    "abilities": [
+      "drag_under",
+      "glass_shard",
+      "rend"
+    ],
+    "behaviour": [
+      {
+        "priority": 10,
+        "use": "drag_under",
+        "when": {
+          "chance": 0.35
+        }
+      },
+      {
+        "priority": 0,
+        "use": "rend"
       }
+    ],
+    "descriptors": [
+      "a barnacled",
+      "a green-black"
+    ],
+    "loot": "drowned_fort_hoard",
+    "damageInteractions": [
+      {
+        "damageType": "slashing",
+        "multiplier": 0.5,
+        "unless": [
+          "silvered"
+        ]
+      },
+      {
+        "damageType": "piercing",
+        "multiplier": 0.5,
+        "unless": [
+          "silvered"
+        ]
+      },
+      {
+        "damageType": "cold",
+        "multiplier": 0.5
+      },
+      {
+        "damageType": "lightning",
+        "multiplier": 2
+      }
+    ],
+    "conditionImmunities": [
+      "prone",
+      "poisoned",
+      "frightened"
+    ],
+    "resourceOverrides": {
+      "hp": 74
     },
-    {
-      "priority": 0,
-      "use": "rend"
-    }
-  ],
-  "faction": "the_unsealed",
-  "creatureType": "undead",
-  "size": "large",
-  "descriptors": [
-    "a barnacled",
-    "a green-black"
-  ],
-  "conditionalLoot": [
-    "silvered_cache"
-  ],
-  "loot": "drowned_fort_hoard",
-  "damageInteractions": [
-    {
-      "damageType": "slashing",
-      "multiplier": 0.5,
-      "unless": [
-        "silvered"
-      ]
+    "derivedOverrides": {
+      "guard": 16
     },
-    {
-      "damageType": "piercing",
-      "multiplier": 0.5,
-      "unless": [
-        "silvered"
-      ]
-    },
-    {
-      "damageType": "cold",
-      "multiplier": 0.5
-    },
-    {
-      "damageType": "lightning",
-      "multiplier": 2
-    }
-  ],
-  "conditionImmunities": [
-    "prone",
-    "poisoned",
-    "frightened"
-  ],
-  "resourceOverrides": {
-    "hp": 74
-  },
-  "derivedOverrides": {
-    "guard": 16
-  },
-  "temperament": {
-    "roamRadius": 12,
-    "investigateRadius": 40,
-    "leashRadius": 60,
-    "wanderChance": 0.1,
-    "disengageTurns": 1,
-    "speeds": {
-      "wander": 0.5,
-      "investigate": 0.5
-    },
-    "investigates": [
-      "sight",
-      "hearing",
-      "smell"
-    ]
+    "variant": "v2"
   }
 }

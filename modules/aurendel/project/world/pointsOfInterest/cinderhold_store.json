@@ -1,24 +1,14 @@
 {
-  "id": "cinderhold_store",
-  "name": "The Reach Stores",
-  "description": "Water, mostly. Water is the expensive thing here.",
-  "area": "ember_cinderhold",
-  "kind": "market",
-  "descriptionKey": "int_store",
-  "travelMinutes": 3,
-  "tags": [
-    "shop"
-  ],
-  "services": [
-    "market"
-  ],
-  "map": {
-    "width": "15",
-    "height": "11",
-    "palette": "int_shop"
-  },
-  "position": {
-    "x": 37,
-    "y": 23
+  "@prefab": "world_points_f_nterest_int_store_2",
+  "params": {
+    "id": "cinderhold_store",
+    "name": "The Reach Stores",
+    "description": "Water, mostly. Water is the expensive thing here.",
+    "area": "ember_cinderhold",
+    "position": {
+      "x": 37,
+      "y": 23
+    },
+    "variant": "v1"
   }
 }

@@ -1,80 +1,48 @@
 {
-  "id": "knee_cutter",
-  "name": "What Cuts Them Level",
-  "description": "Forty years for a cypress knee to heal over a level cut. There are a hundred of them and they are in rows.",
-  "level": 7,
-  "xp": 720,
-  "attributes": {
-    "might": 15,
-    "agility": 18,
-    "endurance": 14,
-    "intellect": 12,
-    "instinct": 16,
-    "presence": 10
-  },
-  "abilities": [
-    "cut_and_run",
-    "rend",
-    "latch"
-  ],
-  "behaviour": [
-    {
-      "priority": 15,
-      "use": "cut_and_run",
-      "when": {
-        "chance": 0.45
+  "@prefab": "content_monsters_entry_4",
+  "params": {
+    "id": "knee_cutter",
+    "name": "What Cuts Them Level",
+    "description": "Forty years for a cypress knee to heal over a level cut. There are a hundred of them and they are in rows.",
+    "level": 7,
+    "xp": 720,
+    "attributes": {
+      "might": 15,
+      "agility": 18,
+      "endurance": 14,
+      "intellect": 12,
+      "instinct": 16,
+      "presence": 10
+    },
+    "abilities": [
+      "cut_and_run",
+      "rend",
+      "latch"
+    ],
+    "behaviour": [
+      {
+        "priority": 15,
+        "use": "cut_and_run",
+        "when": {
+          "chance": 0.45
+        }
+      },
+      {
+        "priority": 0,
+        "use": "rend"
       }
+    ],
+    "descriptors": [
+      "a long-limbed",
+      "a silent"
+    ],
+    "loot": "thorn_knees_hoard",
+    "conditionImmunities": [
+      "frightened"
+    ],
+    "resourceOverrides": {
+      "hp": 80
     },
-    {
-      "priority": 0,
-      "use": "rend"
-    }
-  ],
-  "faction": "the_unsealed",
-  "creatureType": "undead",
-  "size": "medium",
-  "descriptors": [
-    "a long-limbed",
-    "a silent"
-  ],
-  "conditionalLoot": [],
-  "loot": "thorn_knees_hoard",
-  "damageInteractions": [
-    {
-      "damageType": "slashing",
-      "multiplier": 0.5,
-      "unless": [
-        "silvered"
-      ]
-    },
-    {
-      "damageType": "piercing",
-      "multiplier": 0.5,
-      "unless": [
-        "silvered"
-      ]
-    }
-  ],
-  "conditionImmunities": [
-    "frightened"
-  ],
-  "resourceOverrides": {
-    "hp": 80
-  },
-  "temperament": {
-    "roamRadius": 12,
-    "investigateRadius": 40,
-    "leashRadius": 60,
-    "wanderChance": 0.1,
-    "disengageTurns": 1,
-    "speeds": {
-      "wander": 0.5,
-      "investigate": 0.5
-    },
-    "investigates": [
-      "sight",
-      "hearing",
-      "smell"
-    ]
+    "variant": "v1"
   }
 }

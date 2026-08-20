@@ -1,21 +1,14 @@
 {
-  "id": "craftrow_house_a",
-  "name": "Smiths' Row, Number Four",
-  "description": "One of nine identical houses, distinguished by the colour of the door.",
-  "area": "aurenhal_craftrow",
-  "kind": "settlement",
-  "descriptionKey": "int_house",
-  "travelMinutes": 2,
-  "tags": [
-    "house"
-  ],
-  "position": {
-    "x": 16,
-    "y": 28
-  },
-  "map": {
-    "width": "9",
-    "height": "7",
-    "palette": "int_timber"
+  "@prefab": "world_points_f_nterest_int_house",
+  "params": {
+    "id": "craftrow_house_a",
+    "name": "Smiths' Row, Number Four",
+    "description": "One of nine identical houses, distinguished by the colour of the door.",
+    "area": "aurenhal_craftrow",
+    "position": {
+      "x": 16,
+      "y": 28
+    },
+    "variant": "v2"
   }
 }

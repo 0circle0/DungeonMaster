@@ -1,21 +1,14 @@
 {
-  "id": "elderhollow_house_b",
-  "name": "Coppice Row",
-  "description": "Five cottages built out of one very large tree, which is on record.",
-  "area": "duskwood_elderhollow",
-  "kind": "settlement",
-  "descriptionKey": "int_house",
-  "travelMinutes": 2,
-  "tags": [
-    "house"
-  ],
-  "map": {
-    "width": "9",
-    "height": "7",
-    "palette": "int_timber"
-  },
-  "position": {
-    "x": 3,
-    "y": 13
+  "@prefab": "world_points_f_nterest_int_house_2",
+  "params": {
+    "id": "elderhollow_house_b",
+    "name": "Coppice Row",
+    "description": "Five cottages built out of one very large tree, which is on record.",
+    "area": "duskwood_elderhollow",
+    "position": {
+      "x": 3,
+      "y": 13
+    },
+    "variant": "v1"
   }
 }

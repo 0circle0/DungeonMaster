@@ -1,34 +1,23 @@
 {
-  "id": "factor_ingimund",
-  "name": "Ingimund, the Factor",
-  "description": "Holds the Landing's ledgers back to the move and would very much rather discuss this season's oil price.",
-  "disposition": 0,
-  "gullibility": 0.2,
-  "memorySpan": 300,
-  "offersQuests": [],
-  "caresAbout": [],
-  "reactions": [],
-  "faction": "the_countinghouse",
-  "dialogue": "frost_ingimund_talk",
-  "home": "whalebone_house_b",
-  "shop": {
-    "lootTable": "countinghouse_stock",
-    "buysTags": [
-      "treasure"
-    ],
-    "priceMultiplier": 1.4
-  },
-  "temperament": {
-    "roamRadius": 0,
-    "wanderChance": 0,
-    "speeds": {
-      "wander": 0
-    },
-    "investigates": [],
-    "notices": [
-      "hostile",
-      "neutral",
-      "ally"
-    ]
+  "@prefab": "content_npcs_entry",
+  "params": {
+    "id": "factor_ingimund",
+    "name": "Ingimund, the Factor",
+    "description": "Holds the Landing's ledgers back to the move and would very much rather discuss this season's oil price.",
+    "disposition": 0,
+    "gullibility": 0.2,
+    "memorySpan": 300,
+    "offersQuests": [],
+    "caresAbout": [],
+    "faction": "the_countinghouse",
+    "dialogue": "frost_ingimund_talk",
+    "home": "whalebone_house_b",
+    "shop": {
+      "lootTable": "countinghouse_stock",
+      "buysTags": [
+        "treasure"
+      ],
+      "priceMultiplier": 1.4
+    }
   }
 }

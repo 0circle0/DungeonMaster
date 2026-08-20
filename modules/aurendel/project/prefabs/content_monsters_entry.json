@@ -1,0 +1,113 @@
+{
+  "id": "content_monsters_entry",
+  "label": "content_monsters_entry",
+  "collection": "content.monsters",
+  "params": [
+    {
+      "key": "id",
+      "kind": "string"
+    },
+    {
+      "key": "name",
+      "kind": "string"
+    },
+    {
+      "key": "description",
+      "kind": "text"
+    },
+    {
+      "key": "attributes",
+      "kind": "string"
+    },
+    {
+      "key": "abilities",
+      "kind": "string"
+    },
+    {
+      "key": "faction",
+      "kind": "string"
+    },
+    {
+      "key": "descriptors",
+      "kind": "string"
+    },
+    {
+      "key": "loot",
+      "kind": "string"
+    },
+    {
+      "key": "resourceOverrides",
+      "kind": "string"
+    },
+    {
+      "key": "variant",
+      "kind": "enum",
+      "options": [
+        "v1",
+        "v2",
+        "v3",
+        "v4",
+        "v5",
+        "v6",
+        "v7",
+        "v8",
+        "v9",
+        "v10"
+      ]
+    }
+  ],
+  "template": {
+    "id": "{{id}}",
+    "name": "{{name}}",
+    "description": "{{description}}",
+    "level": {
+      "@lookup": [
+        "content_monsters_entry_variant",
+        "{{variant}}",
+        "level"
+      ]
+    },
+    "xp": {
+      "@lookup": [
+        "content_monsters_entry_variant",
+        "{{variant}}",
+        "xp"
+      ]
+    },
+    "attributes": "{{attributes}}",
+    "abilities": "{{abilities}}",
+    "behaviour": {
+      "@lookup": [
+        "content_monsters_entry_variant",
+        "{{variant}}",
+        "behaviour"
+      ]
+    },
+    "faction": "{{faction}}",
+    "creatureType": {
+      "@lookup": [
+        "content_monsters_entry_variant",
+        "{{variant}}",
+        "creatureType"
+      ]
+    },
+    "size": {
+      "@lookup": [
+        "content_monsters_entry_variant",
+        "{{variant}}",
+        "size"
+      ]
+    },
+    "descriptors": "{{descriptors}}",
+    "conditionalLoot": [],
+    "loot": "{{loot}}",
+    "resourceOverrides": "{{resourceOverrides}}",
+    "temperament": {
+      "@lookup": [
+        "content_monsters_entry_variant",
+        "{{variant}}",
+        "temperament"
+      ]
+    }
+  }
+}

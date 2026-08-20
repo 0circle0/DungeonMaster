@@ -1,14 +1,11 @@
 {
-  "id": "fence",
-  "name": "Fence",
-  "description": "Waist-high, and worth crouching behind.",
-  "glyph": "f",
-  "color": "yellow",
-  "passable": false,
-  "opaque": false,
-  "moveCost": 0,
-  "tags": [
-    "built"
-  ],
-  "providesCover": "half"
+  "@prefab": "world_terrains_entry_6",
+  "params": {
+    "id": "fence",
+    "name": "Fence",
+    "description": "Waist-high, and worth crouching behind.",
+    "glyph": "f",
+    "color": "yellow",
+    "variant": "v1"
+  }
 }

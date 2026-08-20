@@ -1,18 +1,15 @@
 {
-  "id": "boardwalk",
-  "name": "Boardwalk",
-  "description": "Planks over water or mud, with gaps to watch for.",
-  "glyph": "-",
-  "color": "yellow",
-  "passable": true,
-  "opaque": false,
-  "moveCost": 0.8,
-  "tags": [
-    "stone",
-    "built"
-  ],
-  "marks": {
-    "tracks": 0,
-    "smell": 0.6
+  "@prefab": "world_terrains_entry",
+  "params": {
+    "id": "boardwalk",
+    "name": "Boardwalk",
+    "description": "Planks over water or mud, with gaps to watch for.",
+    "glyph": "-",
+    "color": "yellow",
+    "tags": [
+      "stone",
+      "built"
+    ],
+    "variant": "v7"
   }
 }

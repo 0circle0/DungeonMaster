@@ -1,24 +1,14 @@
 {
-  "id": "snowgate_the_drift",
-  "name": "The Drift",
-  "description": "One room, dug into the slope, and warmer than anywhere in Highpass.",
-  "area": "skarnspine_snowgate",
-  "kind": "settlement",
-  "descriptionKey": "int_inn",
-  "travelMinutes": 3,
-  "tags": [
-    "inn"
-  ],
-  "services": [
-    "inn"
-  ],
-  "map": {
-    "width": "9",
-    "height": "7",
-    "palette": "int_timber"
-  },
-  "position": {
-    "x": 15,
-    "y": 3
+  "@prefab": "world_points_f_nterest_int_inn_2",
+  "params": {
+    "id": "snowgate_the_drift",
+    "name": "The Drift",
+    "description": "One room, dug into the slope, and warmer than anywhere in Highpass.",
+    "area": "skarnspine_snowgate",
+    "position": {
+      "x": 15,
+      "y": 3
+    },
+    "variant": "v3"
   }
 }

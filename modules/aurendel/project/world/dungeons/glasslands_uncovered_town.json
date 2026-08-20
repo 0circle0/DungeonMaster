@@ -1,19 +1,14 @@
 {
-  "id": "glasslands_uncovered_town",
-  "name": "Under the Uncovered Town",
-  "description": "The dune moved off it eleven years ago; the cellars are intact because sand turns out to be an excellent roof.",
-  "biome": "dungeon_ruin",
-  "roomCount": "13",
-  "depth": "2",
-  "algorithm": "bsp",
-  "lockedDoorChance": 0,
-  "doorGates": [],
-  "rollEncounters": false,
-  "safeEntrance": true,
-  "bsp": {
-    "minLeaf": 5
-  },
-  "width": "29",
-  "height": "29",
-  "bossTable": "glass_town_boss"
+  "@prefab": "world_dungeons_entry_2",
+  "params": {
+    "id": "glasslands_uncovered_town",
+    "name": "Under the Uncovered Town",
+    "description": "The dune moved off it eleven years ago; the cellars are intact because sand turns out to be an excellent roof.",
+    "biome": "dungeon_ruin",
+    "roomCount": "13",
+    "width": "29",
+    "height": "29",
+    "bossTable": "glass_town_boss",
+    "variant": "v2"
+  }
 }

@@ -1,21 +1,15 @@
 {
-  "id": "thornback_ride_charcoal_ruin",
-  "name": "The Burnt Lodge",
-  "description": "A hunting lodge that went up in somebody's grandfather's time, and the forest has taken three walls of four.",
-  "area": "duskwood_thornback_ride",
-  "kind": "ruin",
-  "descriptionKey": "generic_ruin",
-  "travelMinutes": 10,
-  "tags": [
-    "ruin"
-  ],
-  "map": {
-    "width": "11",
-    "height": "9",
-    "palette": "int_cave"
-  },
-  "position": {
-    "x": 14,
-    "y": 3
+  "@prefab": "world_points_f_nterest_generic_ruin_3",
+  "params": {
+    "id": "thornback_ride_charcoal_ruin",
+    "name": "The Burnt Lodge",
+    "description": "A hunting lodge that went up in somebody's grandfather's time, and the forest has taken three walls of four.",
+    "area": "duskwood_thornback_ride",
+    "map": {
+      "width": "11",
+      "height": "9",
+      "palette": "int_cave"
+    },
+    "variant": "v1"
   }
 }

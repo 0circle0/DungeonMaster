@@ -1,48 +1,37 @@
 {
-  "id": "water_warden_sefa",
-  "name": "Sefa of the Spring",
-  "description": "Measures out one spring between four thousand people, and has been posted to Bone Wells for asking, in writing, why the ninth shaft is on the survey and not on the roster.",
-  "disposition": 5,
-  "gullibility": 0.25,
-  "memorySpan": 280,
-  "offersQuests": [
-    "ninthwell_eight_and_one"
-  ],
-  "caresAbout": [
-    "spring_served",
-    "water_stolen"
-  ],
-  "reactions": [],
-  "faction": "the_water_wardens",
-  "dialogue": "ninthwell_sefa_talk",
-  "home": "bone_wells_diggers_camp",
-  "shop": {
-    "lootTable": "countinghouse_stock",
-    "buysTags": [
-      "treasure",
-      "material"
+  "@prefab": "content_npcs_entry",
+  "params": {
+    "id": "water_warden_sefa",
+    "name": "Sefa of the Spring",
+    "description": "Measures out one spring between four thousand people, and has been posted to Bone Wells for asking, in writing, why the ninth shaft is on the survey and not on the roster.",
+    "disposition": 5,
+    "gullibility": 0.25,
+    "memorySpan": 280,
+    "offersQuests": [
+      "ninthwell_eight_and_one"
     ],
-    "priceMultiplier": 1.35,
-    "requires": {
-      "factions": [
-        {
-          "faction": "the_water_wardens",
-          "minStanding": 12
-        }
-      ]
+    "caresAbout": [
+      "spring_served",
+      "water_stolen"
+    ],
+    "faction": "the_water_wardens",
+    "dialogue": "ninthwell_sefa_talk",
+    "home": "bone_wells_diggers_camp",
+    "shop": {
+      "lootTable": "countinghouse_stock",
+      "buysTags": [
+        "treasure",
+        "material"
+      ],
+      "priceMultiplier": 1.35,
+      "requires": {
+        "factions": [
+          {
+            "faction": "the_water_wardens",
+            "minStanding": 12
+          }
+        ]
+      }
     }
-  },
-  "temperament": {
-    "roamRadius": 0,
-    "wanderChance": 0,
-    "speeds": {
-      "wander": 0
-    },
-    "investigates": [],
-    "notices": [
-      "hostile",
-      "neutral",
-      "ally"
-    ]
   }
 }

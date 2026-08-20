@@ -1,65 +1,49 @@
 {
-  "id": "salt_drawer",
-  "name": "What Draws the Ninth",
-  "description": "It has been putting a ninth course into those pans every year for two hundred years, and nobody has ever asked what it wants the eight for.",
-  "level": 8,
-  "xp": 780,
-  "attributes": {
-    "might": 15,
-    "agility": 14,
-    "endurance": 17,
-    "intellect": 11,
-    "instinct": 15,
-    "presence": 12
-  },
-  "abilities": [
-    "salt_burn",
-    "wither",
-    "rend"
-  ],
-  "behaviour": [
-    {
-      "priority": 15,
-      "use": "salt_burn",
-      "when": {
-        "chance": 0.4
+  "@prefab": "content_monsters_entry_2",
+  "params": {
+    "id": "salt_drawer",
+    "name": "What Draws the Ninth",
+    "description": "It has been putting a ninth course into those pans every year for two hundred years, and nobody has ever asked what it wants the eight for.",
+    "level": 8,
+    "xp": 780,
+    "attributes": {
+      "might": 15,
+      "agility": 14,
+      "endurance": 17,
+      "intellect": 11,
+      "instinct": 15,
+      "presence": 12
+    },
+    "abilities": [
+      "salt_burn",
+      "wither",
+      "rend"
+    ],
+    "behaviour": [
+      {
+        "priority": 15,
+        "use": "salt_burn",
+        "when": {
+          "chance": 0.4
+        }
+      },
+      {
+        "priority": 0,
+        "use": "rend"
       }
+    ],
+    "descriptors": [
+      "a crusted",
+      "a patient"
+    ],
+    "loot": "glass_pan_hoard",
+    "conditionImmunities": [
+      "poisoned",
+      "frightened"
+    ],
+    "resourceOverrides": {
+      "hp": 90
     },
-    {
-      "priority": 0,
-      "use": "rend"
-    }
-  ],
-  "faction": "the_unsealed",
-  "creatureType": "undead",
-  "size": "medium",
-  "descriptors": [
-    "a crusted",
-    "a patient"
-  ],
-  "conditionalLoot": [],
-  "loot": "glass_pan_hoard",
-  "conditionImmunities": [
-    "poisoned",
-    "frightened"
-  ],
-  "resourceOverrides": {
-    "hp": 90
-  },
-  "temperament": {
-    "roamRadius": 12,
-    "investigateRadius": 40,
-    "leashRadius": 60,
-    "wanderChance": 0.1,
-    "disengageTurns": 1,
-    "speeds": {
-      "wander": 0.5,
-      "investigate": 0.5
-    },
-    "investigates": [
-      "sight",
-      "hearing",
-      "smell"
-    ]
+    "variant": "v1"
   }
 }

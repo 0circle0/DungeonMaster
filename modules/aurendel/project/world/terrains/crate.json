@@ -1,14 +1,11 @@
 {
-  "id": "crate",
-  "name": "Crate",
-  "description": "Stencilled with a mark you would need the ledger to read.",
-  "glyph": "#",
-  "color": "yellow",
-  "passable": false,
-  "opaque": false,
-  "moveCost": 0,
-  "tags": [
-    "furniture"
-  ],
-  "providesCover": "half"
+  "@prefab": "world_terrains_entry_6",
+  "params": {
+    "id": "crate",
+    "name": "Crate",
+    "description": "Stencilled with a mark you would need the ledger to read.",
+    "glyph": "#",
+    "color": "yellow",
+    "variant": "v3"
+  }
 }

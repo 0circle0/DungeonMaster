@@ -1,22 +1,14 @@
 {
-  "id": "highpass_mule_lines",
-  "name": "The Mule Lines",
-  "description": "Nothing above Highpass goes by cart. Ninety mules live here.",
-  "area": "skarnspine_highpass",
-  "kind": "settlement",
-  "descriptionKey": "int_stable",
-  "travelMinutes": 3,
-  "tags": [],
-  "services": [
-    "stable"
-  ],
-  "map": {
-    "width": "11",
-    "height": "9",
-    "palette": "int_timber"
-  },
-  "position": {
-    "x": 37,
-    "y": 23
+  "@prefab": "world_points_f_nterest_int_stable",
+  "params": {
+    "id": "highpass_mule_lines",
+    "name": "The Mule Lines",
+    "description": "Nothing above Highpass goes by cart. Ninety mules live here.",
+    "area": "skarnspine_highpass",
+    "position": {
+      "x": 37,
+      "y": 23
+    },
+    "variant": "v1"
   }
 }

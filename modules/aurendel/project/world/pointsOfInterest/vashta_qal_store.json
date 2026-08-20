@@ -1,24 +1,14 @@
 {
-  "id": "vashta_qal_store",
-  "name": "The Caravan Stores",
-  "description": "Water skins, salt, rope, and shade cloth.",
-  "area": "vashta_qal_oasis",
-  "kind": "market",
-  "descriptionKey": "int_store",
-  "travelMinutes": 3,
-  "tags": [
-    "shop"
-  ],
-  "services": [
-    "market"
-  ],
-  "map": {
-    "width": "15",
-    "height": "11",
-    "palette": "int_shop"
-  },
-  "position": {
-    "x": 41,
-    "y": 15
+  "@prefab": "world_points_f_nterest_int_store_2",
+  "params": {
+    "id": "vashta_qal_store",
+    "name": "The Caravan Stores",
+    "description": "Water skins, salt, rope, and shade cloth.",
+    "area": "vashta_qal_oasis",
+    "position": {
+      "x": 41,
+      "y": 15
+    },
+    "variant": "v1"
   }
 }

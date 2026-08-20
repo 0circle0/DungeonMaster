@@ -1,35 +1,18 @@
 {
-  "id": "night_keeper_ilyas",
-  "name": "Ilyas, at the White Chapel",
-  "description": "Keeps the chapel at night because somebody has to, and has therefore been the only person awake for two hundred pan-seasons' worth of arrivals.",
-  "disposition": 10,
-  "gullibility": 0.5,
-  "memorySpan": 180,
-  "offersQuests": [],
-  "caresAbout": [
-    "ward_restored",
-    "ward_broken"
-  ],
-  "reactions": [],
-  "faction": "the_keepers",
-  "dialogue": "glass_ilyas_talk",
-  "home": "saltrun_chapel",
-  "temperament": {
-    "roamRadius": 24,
-    "investigateRadius": 60,
-    "leashRadius": 90,
-    "wanderChance": 0.3,
-    "speeds": {
-      "wander": 0.5
-    },
-    "investigates": [
-      "sight",
-      "hearing"
+  "@prefab": "content_npcs_entry_2",
+  "params": {
+    "id": "night_keeper_ilyas",
+    "name": "Ilyas, at the White Chapel",
+    "description": "Keeps the chapel at night because somebody has to, and has therefore been the only person awake for two hundred pan-seasons' worth of arrivals.",
+    "gullibility": 0.5,
+    "memorySpan": 180,
+    "caresAbout": [
+      "ward_restored",
+      "ward_broken"
     ],
-    "notices": [
-      "hostile",
-      "neutral",
-      "ally"
-    ]
+    "faction": "the_keepers",
+    "dialogue": "glass_ilyas_talk",
+    "home": "saltrun_chapel",
+    "variant": "v3"
   }
 }

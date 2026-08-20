@@ -1,24 +1,14 @@
 {
-  "id": "harbourside_ropewalk",
-  "name": "The Ropewalk",
-  "description": "A shed a quarter of a mile long and eight feet wide, because that is how rope is made.",
-  "area": "sarnport_harbourside",
-  "kind": "market",
-  "descriptionKey": "int_workshop",
-  "travelMinutes": 3,
-  "tags": [
-    "shop"
-  ],
-  "services": [
-    "market"
-  ],
-  "map": {
-    "width": "19",
-    "height": "13",
-    "palette": "int_shop"
-  },
-  "position": {
-    "x": 41,
-    "y": 15
+  "@prefab": "world_points_f_nterest_int_workshop_2",
+  "params": {
+    "id": "harbourside_ropewalk",
+    "name": "The Ropewalk",
+    "description": "A shed a quarter of a mile long and eight feet wide, because that is how rope is made.",
+    "area": "sarnport_harbourside",
+    "position": {
+      "x": 41,
+      "y": 15
+    },
+    "variant": "v2"
   }
 }

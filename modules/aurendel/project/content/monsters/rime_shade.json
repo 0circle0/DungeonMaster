@@ -1,80 +1,64 @@
 {
-  "id": "rime_shade",
-  "name": "Rime Shade",
-  "description": "It came up the Broken Stair from somewhere colder than the Frostmere.",
-  "level": 6,
-  "xp": 310,
-  "attributes": {
-    "might": 11,
-    "agility": 15,
-    "endurance": 13,
-    "intellect": 13,
-    "instinct": 14,
-    "presence": 15
-  },
-  "abilities": [
-    "rime_touch",
-    "grave_chill"
-  ],
-  "behaviour": [
-    {
-      "priority": 0,
-      "use": "rime_touch"
-    }
-  ],
-  "faction": "the_unsealed",
-  "creatureType": "undead",
-  "size": "medium",
-  "descriptors": [
-    "a pale",
-    "a drifting"
-  ],
-  "conditionalLoot": [],
-  "loot": "deep_scraps",
-  "damageInteractions": [
-    {
-      "damageType": "slashing",
-      "multiplier": 0.5,
-      "unless": [
-        "silvered"
-      ]
+  "@prefab": "content_monsters_entry_3",
+  "params": {
+    "id": "rime_shade",
+    "name": "Rime Shade",
+    "description": "It came up the Broken Stair from somewhere colder than the Frostmere.",
+    "level": 6,
+    "xp": 310,
+    "attributes": {
+      "might": 11,
+      "agility": 15,
+      "endurance": 13,
+      "intellect": 13,
+      "instinct": 14,
+      "presence": 15
     },
-    {
-      "damageType": "piercing",
-      "multiplier": 0.5,
-      "unless": [
-        "silvered"
-      ]
+    "abilities": [
+      "rime_touch",
+      "grave_chill"
+    ],
+    "behaviour": [
+      {
+        "priority": 0,
+        "use": "rime_touch"
+      }
+    ],
+    "descriptors": [
+      "a pale",
+      "a drifting"
+    ],
+    "loot": "deep_scraps",
+    "damageInteractions": [
+      {
+        "damageType": "slashing",
+        "multiplier": 0.5,
+        "unless": [
+          "silvered"
+        ]
+      },
+      {
+        "damageType": "piercing",
+        "multiplier": 0.5,
+        "unless": [
+          "silvered"
+        ]
+      },
+      {
+        "damageType": "cold",
+        "multiplier": 0
+      }
+    ],
+    "conditionImmunities": [
+      "frightened",
+      "slowed"
+    ],
+    "resourceOverrides": {
+      "hp": 46
     },
-    {
-      "damageType": "cold",
-      "multiplier": 0
-    }
-  ],
-  "conditionImmunities": [
-    "frightened",
-    "slowed"
-  ],
-  "resourceOverrides": {
-    "hp": 46
-  },
-  "derivedOverrides": {
-    "guard": 16
-  },
-  "temperament": {
-    "roamRadius": 12,
-    "investigateRadius": 40,
-    "leashRadius": 60,
-    "wanderChance": 0.1,
-    "disengageTurns": 1,
-    "speeds": {
-      "wander": 0.5,
-      "investigate": 0.5
+    "derivedOverrides": {
+      "guard": 16
     },
-    "investigates": [
-      "sight",
-      "hearing",
-      "smell"
-    ]
+    "variant": "v4"
   }
 }

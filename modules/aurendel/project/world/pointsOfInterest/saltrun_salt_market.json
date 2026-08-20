@@ -1,19 +1,13 @@
 {
-  "id": "saltrun_salt_market",
-  "name": "The Salt Market",
-  "description": "Weighed, graded, and argued about, and the arguing is where the money is.",
-  "area": "glasslands_saltrun",
-  "kind": "market",
-  "descriptionKey": "generic_market",
-  "travelMinutes": 2,
-  "tags": [
-    "shop"
-  ],
-  "services": [
-    "market"
-  ],
-  "position": {
-    "x": 11,
-    "y": 3
+  "@prefab": "world_points_f_nterest_generic_market",
+  "params": {
+    "id": "saltrun_salt_market",
+    "name": "The Salt Market",
+    "description": "Weighed, graded, and argued about, and the arguing is where the money is.",
+    "area": "glasslands_saltrun",
+    "position": {
+      "x": 11,
+      "y": 3
+    }
   }
 }

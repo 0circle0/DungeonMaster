@@ -1,21 +1,15 @@
 {
-  "id": "leech_channels_drowned_mill",
-  "name": "The Drowned Mill",
-  "description": "There was a fall of water here once, which means the land was different, which is worth thinking about.",
-  "area": "thornmere_leech_channels",
-  "kind": "ruin",
-  "descriptionKey": "generic_ruin",
-  "travelMinutes": 10,
-  "tags": [
-    "ruin"
-  ],
-  "map": {
-    "width": "11",
-    "height": "9",
-    "palette": "int_stone"
-  },
-  "position": {
-    "x": 25,
-    "y": 3
+  "@prefab": "world_points_f_nterest_generic_ruin_3",
+  "params": {
+    "id": "leech_channels_drowned_mill",
+    "name": "The Drowned Mill",
+    "description": "There was a fall of water here once, which means the land was different, which is worth thinking about.",
+    "area": "thornmere_leech_channels",
+    "map": {
+      "width": "11",
+      "height": "9",
+      "palette": "int_stone"
+    },
+    "variant": "v5"
   }
 }

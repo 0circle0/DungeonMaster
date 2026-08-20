@@ -1,48 +1,37 @@
 {
-  "id": "wayfinder_sull",
-  "name": "Sull of the Wayfinders",
-  "description": "Forty people can get you from Lantern Deep to Karn Dolur and back. She is the one who will.",
-  "disposition": 5,
-  "gullibility": 0.4,
-  "memorySpan": 200,
-  "offersQuests": [
-    "lantern_deep"
-  ],
-  "caresAbout": [
-    "lantern_lit",
-    "deep_door_opened"
-  ],
-  "reactions": [],
-  "faction": "the_wayfinders",
-  "dialogue": "sull_talk",
-  "home": "lantern_deep_fungus_market",
-  "shop": {
-    "lootTable": "deep_stock",
-    "buysTags": [
-      "treasure",
-      "material"
+  "@prefab": "content_npcs_entry",
+  "params": {
+    "id": "wayfinder_sull",
+    "name": "Sull of the Wayfinders",
+    "description": "Forty people can get you from Lantern Deep to Karn Dolur and back. She is the one who will.",
+    "disposition": 5,
+    "gullibility": 0.4,
+    "memorySpan": 200,
+    "offersQuests": [
+      "lantern_deep"
     ],
-    "priceMultiplier": 1.4,
-    "requires": {
-      "factions": [
-        {
-          "faction": "the_wayfinders",
-          "minStanding": 10
-        }
-      ]
+    "caresAbout": [
+      "lantern_lit",
+      "deep_door_opened"
+    ],
+    "faction": "the_wayfinders",
+    "dialogue": "sull_talk",
+    "home": "lantern_deep_fungus_market",
+    "shop": {
+      "lootTable": "deep_stock",
+      "buysTags": [
+        "treasure",
+        "material"
+      ],
+      "priceMultiplier": 1.4,
+      "requires": {
+        "factions": [
+          {
+            "faction": "the_wayfinders",
+            "minStanding": 10
+          }
+        ]
+      }
     }
-  },
-  "temperament": {
-    "roamRadius": 0,
-    "wanderChance": 0,
-    "speeds": {
-      "wander": 0
-    },
-    "investigates": [],
-    "notices": [
-      "hostile",
-      "neutral",
-      "ally"
-    ]
   }
 }

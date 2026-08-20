@@ -1,19 +1,14 @@
 {
-  "id": "fulgurite_collectors_camp",
-  "name": "The Collectors' Camp",
-  "description": "Fulgurite is worth money and getting it out whole is a skill.",
-  "area": "glasslands_the_fulgurite",
-  "kind": "camp",
-  "descriptionKey": "int_house",
-  "travelMinutes": 6,
-  "tags": [],
-  "map": {
-    "width": "9",
-    "height": "7",
-    "palette": "int_timber"
-  },
-  "position": {
-    "x": 14,
-    "y": 3
+  "@prefab": "world_points_f_nterest_int_house_2",
+  "params": {
+    "id": "fulgurite_collectors_camp",
+    "name": "The Collectors' Camp",
+    "description": "Fulgurite is worth money and getting it out whole is a skill.",
+    "area": "glasslands_the_fulgurite",
+    "position": {
+      "x": 14,
+      "y": 3
+    },
+    "variant": "v2"
   }
 }

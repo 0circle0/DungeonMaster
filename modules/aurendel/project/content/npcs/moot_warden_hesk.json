@@ -1,46 +1,35 @@
 {
-  "id": "moot_warden_hesk",
-  "name": "Hesk of the Moot",
-  "description": "Elderhollow sends him where a ward needs looking at. He has been busy.",
-  "disposition": 10,
-  "gullibility": 0.3,
-  "memorySpan": 365,
-  "offersQuests": [],
-  "caresAbout": [
-    "ward_broken",
-    "ward_restored"
-  ],
-  "reactions": [],
-  "faction": "the_keepers",
-  "dialogue": "hesk_talk",
-  "home": "aurenhal_high_temple",
-  "shop": {
-    "lootTable": "keeper_stock",
-    "buysTags": [
-      "treasure",
-      "ward"
+  "@prefab": "content_npcs_entry",
+  "params": {
+    "id": "moot_warden_hesk",
+    "name": "Hesk of the Moot",
+    "description": "Elderhollow sends him where a ward needs looking at. He has been busy.",
+    "disposition": 10,
+    "gullibility": 0.3,
+    "memorySpan": 365,
+    "offersQuests": [],
+    "caresAbout": [
+      "ward_broken",
+      "ward_restored"
     ],
-    "priceMultiplier": 1.3,
-    "requires": {
-      "factions": [
-        {
-          "faction": "the_keepers",
-          "minStanding": 10
-        }
-      ]
+    "faction": "the_keepers",
+    "dialogue": "hesk_talk",
+    "home": "aurenhal_high_temple",
+    "shop": {
+      "lootTable": "keeper_stock",
+      "buysTags": [
+        "treasure",
+        "ward"
+      ],
+      "priceMultiplier": 1.3,
+      "requires": {
+        "factions": [
+          {
+            "faction": "the_keepers",
+            "minStanding": 10
+          }
+        ]
+      }
     }
-  },
-  "temperament": {
-    "roamRadius": 0,
-    "wanderChance": 0,
-    "speeds": {
-      "wander": 0
-    },
-    "investigates": [],
-    "notices": [
-      "hostile",
-      "neutral",
-      "ally"
-    ]
   }
 }

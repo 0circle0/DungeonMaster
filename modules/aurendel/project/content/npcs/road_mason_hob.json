@@ -1,32 +1,15 @@
 {
-  "id": "road_mason_hob",
-  "name": "Hob, Road Mason",
-  "description": "Lays and relays the Kingsroad and can tell you which quarry every stone in it came out of, which is why the second face bothers him.",
-  "disposition": 6,
-  "gullibility": 0.4,
-  "memorySpan": 150,
-  "offersQuests": [],
-  "caresAbout": [],
-  "reactions": [],
-  "faction": "the_crown",
-  "dialogue": "kings_hob_talk",
-  "home": "craftrow_great_forge",
-  "temperament": {
-    "roamRadius": 24,
-    "investigateRadius": 60,
-    "leashRadius": 90,
-    "wanderChance": 0.3,
-    "speeds": {
-      "wander": 0.5
-    },
-    "investigates": [
-      "sight",
-      "hearing"
-    ],
-    "notices": [
-      "hostile",
-      "neutral",
-      "ally"
-    ]
+  "@prefab": "content_npcs_entry_2",
+  "params": {
+    "id": "road_mason_hob",
+    "name": "Hob, Road Mason",
+    "description": "Lays and relays the Kingsroad and can tell you which quarry every stone in it came out of, which is why the second face bothers him.",
+    "gullibility": 0.4,
+    "memorySpan": 150,
+    "caresAbout": [],
+    "faction": "the_crown",
+    "dialogue": "kings_hob_talk",
+    "home": "craftrow_great_forge",
+    "variant": "v9"
   }
 }

@@ -1,24 +1,18 @@
 {
-  "id": "gatehall_wardens_hall",
-  "name": "The Wardens' Hall",
-  "description": "Who comes in, who goes out, and who is answerable for both.",
-  "area": "karn_dolur_gatehall",
-  "kind": "market",
-  "descriptionKey": "generic_market",
-  "travelMinutes": 4,
-  "tags": [
-    "shop"
-  ],
-  "services": [
-    "guild"
-  ],
-  "map": {
-    "width": "19",
-    "height": "13",
-    "palette": "int_stone"
-  },
-  "position": {
-    "x": 22,
-    "y": 3
+  "@prefab": "world_points_f_nterest_generic_market_2",
+  "params": {
+    "id": "gatehall_wardens_hall",
+    "name": "The Wardens' Hall",
+    "description": "Who comes in, who goes out, and who is answerable for both.",
+    "area": "karn_dolur_gatehall",
+    "map": {
+      "width": "19",
+      "height": "13",
+      "palette": "int_stone"
+    },
+    "position": {
+      "x": 22,
+      "y": 3
+    }
   }
 }

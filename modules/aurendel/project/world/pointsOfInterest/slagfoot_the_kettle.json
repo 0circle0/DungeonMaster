@@ -1,24 +1,14 @@
 {
-  "id": "slagfoot_the_kettle",
-  "name": "The Kettle",
-  "description": "Boils its water by standing the pot on the floor.",
-  "area": "ember_slagfoot",
-  "kind": "settlement",
-  "descriptionKey": "int_inn",
-  "travelMinutes": 3,
-  "tags": [
-    "inn"
-  ],
-  "services": [
-    "inn"
-  ],
-  "map": {
-    "width": "9",
-    "height": "7",
-    "palette": "int_timber"
-  },
-  "position": {
-    "x": 9,
-    "y": 3
+  "@prefab": "world_points_f_nterest_int_inn_2",
+  "params": {
+    "id": "slagfoot_the_kettle",
+    "name": "The Kettle",
+    "description": "Boils its water by standing the pot on the floor.",
+    "area": "ember_slagfoot",
+    "position": {
+      "x": 9,
+      "y": 3
+    },
+    "variant": "v3"
   }
 }

@@ -1,0 +1,51 @@
+{
+  "id": "world_points_f_nterest_int_house_3",
+  "label": "world_points_f_nterest_int_house_3",
+  "collection": "world.pointsOfInterest",
+  "params": [
+    {
+      "key": "id",
+      "kind": "string"
+    },
+    {
+      "key": "name",
+      "kind": "string"
+    },
+    {
+      "key": "description",
+      "kind": "text"
+    },
+    {
+      "key": "area",
+      "kind": "string"
+    },
+    {
+      "key": "travelMinutes",
+      "kind": "string"
+    },
+    {
+      "key": "triggers",
+      "kind": "string"
+    }
+  ],
+  "template": {
+    "id": "{{id}}",
+    "name": "{{name}}",
+    "description": "{{description}}",
+    "area": "{{area}}",
+    "kind": "camp",
+    "descriptionKey": "int_house",
+    "travelMinutes": "{{travelMinutes}}",
+    "tags": [],
+    "map": {
+      "width": "9",
+      "height": "7",
+      "palette": "int_timber"
+    },
+    "position": {
+      "x": 14,
+      "y": 3
+    },
+    "triggers": "{{triggers}}"
+  }
+}

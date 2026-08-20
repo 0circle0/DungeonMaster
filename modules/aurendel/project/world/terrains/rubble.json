@@ -1,18 +1,11 @@
 {
-  "id": "rubble",
-  "name": "Rubble",
-  "description": "What a wall becomes.",
-  "glyph": "u",
-  "color": "gray",
-  "passable": true,
-  "opaque": false,
-  "moveCost": 2,
-  "tags": [
-    "stone"
-  ],
-  "marks": {
-    "tracks": 0,
-    "smell": 0.6
-  },
-  "providesCover": "half"
+  "@prefab": "world_terrains_entry_4",
+  "params": {
+    "id": "rubble",
+    "name": "Rubble",
+    "description": "What a wall becomes.",
+    "glyph": "u",
+    "moveCost": 2,
+    "variant": "v3"
+  }
 }

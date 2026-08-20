@@ -1,92 +1,60 @@
 {
-  "id": "sixth_through",
-  "name": "What Came Through the Sixth",
-  "description": "Four hundred feet of dressed vault under a milepost on a road that measures nothing, and one way down into it.",
-  "level": 18,
-  "xp": 7400,
-  "attributes": {
-    "might": 23,
-    "agility": 19,
-    "endurance": 24,
-    "intellect": 18,
-    "instinct": 20,
-    "presence": 18
-  },
-  "abilities": [
-    "salt_burn",
-    "scouring_wind",
-    "rend",
-    "cinder_lash"
-  ],
-  "behaviour": [
-    {
-      "priority": 25,
-      "use": "scouring_wind",
-      "when": {
-        "chance": 0.35
+  "@prefab": "content_monsters_entry_4",
+  "params": {
+    "id": "sixth_through",
+    "name": "What Came Through the Sixth",
+    "description": "Four hundred feet of dressed vault under a milepost on a road that measures nothing, and one way down into it.",
+    "level": 18,
+    "xp": 7400,
+    "attributes": {
+      "might": 23,
+      "agility": 19,
+      "endurance": 24,
+      "intellect": 18,
+      "instinct": 20,
+      "presence": 18
+    },
+    "abilities": [
+      "salt_burn",
+      "scouring_wind",
+      "rend",
+      "cinder_lash"
+    ],
+    "behaviour": [
+      {
+        "priority": 25,
+        "use": "scouring_wind",
+        "when": {
+          "chance": 0.35
+        }
+      },
+      {
+        "priority": 15,
+        "use": "salt_burn"
+      },
+      {
+        "priority": 5,
+        "use": "cinder_lash"
+      },
+      {
+        "priority": 0,
+        "use": "rend"
       }
+    ],
+    "descriptors": [
+      "a glass-scoured",
+      "a towering"
+    ],
+    "loot": "trial_two_hoard_c",
+    "conditionImmunities": [
+      "frightened",
+      "prone",
+      "blinded",
+      "burning"
+    ],
+    "resourceOverrides": {
+      "hp": 310
     },
-    {
-      "priority": 15,
-      "use": "salt_burn"
-    },
-    {
-      "priority": 5,
-      "use": "cinder_lash"
-    },
-    {
-      "priority": 0,
-      "use": "rend"
-    }
-  ],
-  "faction": "the_unsealed",
-  "creatureType": "undead",
-  "size": "medium",
-  "descriptors": [
-    "a glass-scoured",
-    "a towering"
-  ],
-  "conditionalLoot": [],
-  "loot": "trial_two_hoard_c",
-  "damageInteractions": [
-    {
-      "damageType": "slashing",
-      "multiplier": 0.5,
-      "unless": [
-        "silvered"
-      ]
-    },
-    {
-      "damageType": "piercing",
-      "multiplier": 0.5,
-      "unless": [
-        "silvered"
-      ]
-    }
-  ],
-  "conditionImmunities": [
-    "frightened",
-    "prone",
-    "blinded",
-    "burning"
-  ],
-  "resourceOverrides": {
-    "hp": 310
-  },
-  "temperament": {
-    "roamRadius": 12,
-    "investigateRadius": 40,
-    "leashRadius": 60,
-    "wanderChance": 0.1,
-    "disengageTurns": 1,
-    "speeds": {
-      "wander": 0.5,
-      "investigate": 0.5
-    },
-    "investigates": [
-      "sight",
-      "hearing",
-      "smell"
-    ]
+    "variant": "v1"
   }
 }

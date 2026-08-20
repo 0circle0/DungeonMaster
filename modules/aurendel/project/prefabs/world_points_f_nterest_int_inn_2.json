@@ -1,0 +1,71 @@
+{
+  "id": "world_points_f_nterest_int_inn_2",
+  "label": "world_points_f_nterest_int_inn_2",
+  "collection": "world.pointsOfInterest",
+  "params": [
+    {
+      "key": "id",
+      "kind": "string"
+    },
+    {
+      "key": "name",
+      "kind": "string"
+    },
+    {
+      "key": "description",
+      "kind": "text"
+    },
+    {
+      "key": "area",
+      "kind": "string"
+    },
+    {
+      "key": "position",
+      "kind": "string"
+    },
+    {
+      "key": "variant",
+      "kind": "enum",
+      "options": [
+        "v1",
+        "v2",
+        "v3",
+        "v4",
+        "v5"
+      ]
+    }
+  ],
+  "template": {
+    "id": "{{id}}",
+    "name": "{{name}}",
+    "description": "{{description}}",
+    "area": "{{area}}",
+    "kind": "settlement",
+    "descriptionKey": "int_inn",
+    "travelMinutes": {
+      "@lookup": [
+        "world_points_f_nterest_int_inn_2_variant",
+        "{{variant}}",
+        "travelMinutes"
+      ]
+    },
+    "tags": [
+      "inn"
+    ],
+    "services": {
+      "@lookup": [
+        "world_points_f_nterest_int_inn_2_variant",
+        "{{variant}}",
+        "services"
+      ]
+    },
+    "map": {
+      "@lookup": [
+        "world_points_f_nterest_int_inn_2_variant",
+        "{{variant}}",
+        "map"
+      ]
+    },
+    "position": "{{position}}"
+  }
+}

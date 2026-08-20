@@ -1,24 +1,18 @@
 {
-  "id": "gatehall_stone_shrine",
-  "name": "The Shrine of the First Cut",
-  "description": "Marks the spot where the hold was begun, which is nine hundred feet from where it now starts.",
-  "area": "karn_dolur_gatehall",
-  "kind": "shrine",
-  "descriptionKey": "int_temple",
-  "travelMinutes": 3,
-  "tags": [
-    "shrine"
-  ],
-  "services": [
-    "temple"
-  ],
-  "map": {
-    "width": "11",
-    "height": "9",
-    "palette": "int_temple"
-  },
-  "position": {
-    "x": 41,
-    "y": 27
+  "@prefab": "world_points_f_nterest_int_temple",
+  "params": {
+    "id": "gatehall_stone_shrine",
+    "name": "The Shrine of the First Cut",
+    "description": "Marks the spot where the hold was begun, which is nine hundred feet from where it now starts.",
+    "area": "karn_dolur_gatehall",
+    "map": {
+      "width": "11",
+      "height": "9",
+      "palette": "int_temple"
+    },
+    "position": {
+      "x": 41,
+      "y": 27
+    }
   }
 }

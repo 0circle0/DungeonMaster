@@ -1,14 +1,11 @@
 {
-  "id": "woodwards_rod",
-  "name": "The Woodward's Rod",
-  "description": "A perambulation rod, sixteen and a half feet, worn smooth at both ends by four hundred years of somebody's hands.",
-  "kind": "key",
-  "value": 0,
-  "weight": 0,
-  "tags": [
-    "keepsake"
-  ],
-  "extra": {
-    "heldBy": "woodward_kest"
+  "@prefab": "content_items_entry_8",
+  "params": {
+    "id": "woodwards_rod",
+    "name": "The Woodward's Rod",
+    "description": "A perambulation rod, sixteen and a half feet, worn smooth at both ends by four hundred years of somebody's hands.",
+    "extra": {
+      "heldBy": "woodward_kest"
+    }
   }
 }

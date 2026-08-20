@@ -1,14 +1,11 @@
 {
-  "id": "planting_tally",
-  "name": "The Hayward's Count",
-  "description": "Forty years of counting the same eleven miles, in one hand, and the column does not settle.",
-  "kind": "key",
-  "value": 0,
-  "weight": 0,
-  "tags": [
-    "keepsake"
-  ],
-  "extra": {
-    "heldBy": "hayward_serel"
+  "@prefab": "content_items_entry_8",
+  "params": {
+    "id": "planting_tally",
+    "name": "The Hayward's Count",
+    "description": "Forty years of counting the same eleven miles, in one hand, and the column does not settle.",
+    "extra": {
+      "heldBy": "hayward_serel"
+    }
   }
 }

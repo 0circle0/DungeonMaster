@@ -1,17 +1,12 @@
 {
-  "id": "fungus_gallery_the_rot",
-  "name": "The Rot",
-  "description": "Where the canopy has come down and the floor beneath it has been eaten out from underneath.",
-  "area": "deeproads_fungus_gallery",
-  "kind": "dungeonEntrance",
-  "descriptionKey": "generic_dungeon_mouth",
-  "travelMinutes": 14,
-  "tags": [
-    "dungeon"
-  ],
-  "dungeon": "deeproads_the_rot",
-  "position": {
-    "x": 25,
-    "y": 3
+  "@prefab": "world_points_f_nterest_generic_dungeon_mouth_3",
+  "params": {
+    "id": "fungus_gallery_the_rot",
+    "name": "The Rot",
+    "description": "Where the canopy has come down and the floor beneath it has been eaten out from underneath.",
+    "area": "deeproads_fungus_gallery",
+    "travelMinutes": 14,
+    "dungeon": "deeproads_the_rot",
+    "variant": "v1"
   }
 }

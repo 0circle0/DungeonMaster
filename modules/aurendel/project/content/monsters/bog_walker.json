@@ -1,74 +1,42 @@
 {
-  "id": "bog_walker",
-  "name": "A Bog Walker",
-  "description": "The marsh keeps what it takes and occasionally gives some of it back on its feet.",
-  "level": 4,
-  "xp": 165,
-  "attributes": {
-    "might": 15,
-    "agility": 9,
-    "endurance": 16,
-    "intellect": 4,
-    "instinct": 11,
-    "presence": 9
-  },
-  "abilities": [
-    "drag_under",
-    "rend"
-  ],
-  "behaviour": [
-    {
-      "priority": 0,
-      "use": "drag_under"
-    }
-  ],
-  "faction": "the_unsealed",
-  "creatureType": "undead",
-  "size": "medium",
-  "descriptors": [
-    "a peat-black",
-    "a dripping"
-  ],
-  "conditionalLoot": [],
-  "loot": "marsh_scraps",
-  "damageInteractions": [
-    {
-      "damageType": "slashing",
-      "multiplier": 0.5,
-      "unless": [
-        "silvered"
-      ]
+  "@prefab": "content_monsters_entry_4",
+  "params": {
+    "id": "bog_walker",
+    "name": "A Bog Walker",
+    "description": "The marsh keeps what it takes and occasionally gives some of it back on its feet.",
+    "level": 4,
+    "xp": 165,
+    "attributes": {
+      "might": 15,
+      "agility": 9,
+      "endurance": 16,
+      "intellect": 4,
+      "instinct": 11,
+      "presence": 9
     },
-    {
-      "damageType": "piercing",
-      "multiplier": 0.5,
-      "unless": [
-        "silvered"
-      ]
-    }
-  ],
-  "conditionImmunities": [
-    "poisoned",
-    "prone",
-    "slowed"
-  ],
-  "resourceOverrides": {
-    "hp": 36
-  },
-  "temperament": {
-    "roamRadius": 12,
-    "investigateRadius": 40,
-    "leashRadius": 60,
-    "wanderChance": 0.1,
-    "disengageTurns": 1,
-    "speeds": {
-      "wander": 0.5,
-      "investigate": 0.5
+    "abilities": [
+      "drag_under",
+      "rend"
+    ],
+    "behaviour": [
+      {
+        "priority": 0,
+        "use": "drag_under"
+      }
+    ],
+    "descriptors": [
+      "a peat-black",
+      "a dripping"
+    ],
+    "loot": "marsh_scraps",
+    "conditionImmunities": [
+      "poisoned",
+      "prone",
+      "slowed"
+    ],
+    "resourceOverrides": {
+      "hp": 36
     },
-    "investigates": [
-      "sight",
-      "hearing",
-      "smell"
-    ]
+    "variant": "v1"
   }
 }

@@ -1,24 +1,14 @@
 {
-  "id": "vashta_qal_the_palm",
-  "name": "The Palm",
-  "description": "Courtyard, fountain, and rooms that face inward away from the sun.",
-  "area": "vashta_qal_oasis",
-  "kind": "settlement",
-  "descriptionKey": "int_inn",
-  "travelMinutes": 3,
-  "tags": [
-    "inn"
-  ],
-  "services": [
-    "inn"
-  ],
-  "map": {
-    "width": "15",
-    "height": "11",
-    "palette": "int_timber"
-  },
-  "position": {
-    "x": 13,
-    "y": 27
+  "@prefab": "world_points_f_nterest_int_inn_2",
+  "params": {
+    "id": "vashta_qal_the_palm",
+    "name": "The Palm",
+    "description": "Courtyard, fountain, and rooms that face inward away from the sun.",
+    "area": "vashta_qal_oasis",
+    "position": {
+      "x": 13,
+      "y": 27
+    },
+    "variant": "v1"
   }
 }

@@ -1,85 +1,53 @@
 {
-  "id": "course_dweller",
-  "name": "What the Course Carried",
-  "description": "Level courses of dressed stone going into a river bank in both directions, forty feet under nine hundred years of grass, and the river only borrows them four weeks a year.",
-  "level": 7,
-  "xp": 560,
-  "attributes": {
-    "might": 15,
-    "agility": 16,
-    "endurance": 15,
-    "intellect": 13,
-    "instinct": 15,
-    "presence": 12
-  },
-  "abilities": [
-    "drag_under",
-    "latch",
-    "rend"
-  ],
-  "behaviour": [
-    {
-      "priority": 20,
-      "use": "drag_under",
-      "when": {
-        "chance": 0.4
+  "@prefab": "content_monsters_entry_4",
+  "params": {
+    "id": "course_dweller",
+    "name": "What the Course Carried",
+    "description": "Level courses of dressed stone going into a river bank in both directions, forty feet under nine hundred years of grass, and the river only borrows them four weeks a year.",
+    "level": 7,
+    "xp": 560,
+    "attributes": {
+      "might": 15,
+      "agility": 16,
+      "endurance": 15,
+      "intellect": 13,
+      "instinct": 15,
+      "presence": 12
+    },
+    "abilities": [
+      "drag_under",
+      "latch",
+      "rend"
+    ],
+    "behaviour": [
+      {
+        "priority": 20,
+        "use": "drag_under",
+        "when": {
+          "chance": 0.4
+        }
+      },
+      {
+        "priority": 5,
+        "use": "latch"
+      },
+      {
+        "priority": 0,
+        "use": "rend"
       }
+    ],
+    "descriptors": [
+      "a silt-grey",
+      "a long"
+    ],
+    "loot": "step_bank_hoard",
+    "conditionImmunities": [
+      "frightened",
+      "prone"
+    ],
+    "resourceOverrides": {
+      "hp": 72
     },
-    {
-      "priority": 5,
-      "use": "latch"
-    },
-    {
-      "priority": 0,
-      "use": "rend"
-    }
-  ],
-  "faction": "the_unsealed",
-  "creatureType": "undead",
-  "size": "medium",
-  "descriptors": [
-    "a silt-grey",
-    "a long"
-  ],
-  "conditionalLoot": [],
-  "loot": "step_bank_hoard",
-  "damageInteractions": [
-    {
-      "damageType": "slashing",
-      "multiplier": 0.5,
-      "unless": [
-        "silvered"
-      ]
-    },
-    {
-      "damageType": "piercing",
-      "multiplier": 0.5,
-      "unless": [
-        "silvered"
-      ]
-    }
-  ],
-  "conditionImmunities": [
-    "frightened",
-    "prone"
-  ],
-  "resourceOverrides": {
-    "hp": 72
-  },
-  "temperament": {
-    "roamRadius": 12,
-    "investigateRadius": 40,
-    "leashRadius": 60,
-    "wanderChance": 0.1,
-    "disengageTurns": 1,
-    "speeds": {
-      "wander": 0.5,
-      "investigate": 0.5
-    },
-    "investigates": [
-      "sight",
-      "hearing",
-      "smell"
-    ]
+    "variant": "v1"
   }
 }

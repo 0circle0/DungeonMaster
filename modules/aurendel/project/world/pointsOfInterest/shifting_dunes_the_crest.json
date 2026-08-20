@@ -1,14 +1,11 @@
 {
-  "id": "shifting_dunes_the_crest",
-  "name": "The Crest",
-  "description": "Two hundred feet high and moving south at about eleven yards a year, and everything under it is preserved.",
-  "area": "glasslands_shifting_dunes",
-  "kind": "landmark",
-  "descriptionKey": "generic_landmark",
-  "travelMinutes": 10,
-  "tags": [],
-  "position": {
-    "x": 3,
-    "y": 3
+  "@prefab": "world_points_f_nterest_generic_landmark",
+  "params": {
+    "id": "shifting_dunes_the_crest",
+    "name": "The Crest",
+    "description": "Two hundred feet high and moving south at about eleven yards a year, and everything under it is preserved.",
+    "area": "glasslands_shifting_dunes",
+    "travelMinutes": 10,
+    "variant": "v3"
   }
 }

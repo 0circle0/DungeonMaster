@@ -1,35 +1,18 @@
 {
-  "id": "rider_tenkh",
-  "name": "Tenkh of the Skull Line",
-  "description": "Rides the line, counts the poles, and replaces the ones that go.",
-  "disposition": 8,
-  "gullibility": 0.35,
-  "memorySpan": 300,
-  "offersQuests": [],
-  "caresAbout": [
-    "ward_broken",
-    "ward_restored"
-  ],
-  "reactions": [],
-  "faction": "the_keepers",
-  "dialogue": "tenkh_talk",
-  "home": "ilkhet_khans_yurt",
-  "temperament": {
-    "roamRadius": 24,
-    "investigateRadius": 60,
-    "leashRadius": 90,
-    "wanderChance": 0.3,
-    "speeds": {
-      "wander": 0.5
-    },
-    "investigates": [
-      "sight",
-      "hearing"
+  "@prefab": "content_npcs_entry_2",
+  "params": {
+    "id": "rider_tenkh",
+    "name": "Tenkh of the Skull Line",
+    "description": "Rides the line, counts the poles, and replaces the ones that go.",
+    "gullibility": 0.35,
+    "memorySpan": 300,
+    "caresAbout": [
+      "ward_broken",
+      "ward_restored"
     ],
-    "notices": [
-      "hostile",
-      "neutral",
-      "ally"
-    ]
+    "faction": "the_keepers",
+    "dialogue": "tenkh_talk",
+    "home": "ilkhet_khans_yurt",
+    "variant": "v4"
   }
 }

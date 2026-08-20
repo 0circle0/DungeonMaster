@@ -1,14 +1,11 @@
 {
-  "id": "pilots_book",
-  "name": "The Pilot's Book",
-  "description": "Two hundred springs of the Narrows redrawn, and one bearing that has never been rubbed out.",
-  "kind": "key",
-  "value": 0,
-  "weight": 0,
-  "tags": [
-    "keepsake"
-  ],
-  "extra": {
-    "heldBy": "narrows_pilot_hesk"
+  "@prefab": "content_items_entry_8",
+  "params": {
+    "id": "pilots_book",
+    "name": "The Pilot's Book",
+    "description": "Two hundred springs of the Narrows redrawn, and one bearing that has never been rubbed out.",
+    "extra": {
+      "heldBy": "narrows_pilot_hesk"
+    }
   }
 }

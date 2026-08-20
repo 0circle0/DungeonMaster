@@ -1,24 +1,14 @@
 {
-  "id": "cobbleway_bakery",
-  "name": "The Bakehouse",
-  "description": "Bakes the town's bread and the town's pies in the same oven, in that order.",
-  "area": "coast_cobbleway",
-  "kind": "market",
-  "descriptionKey": "int_store",
-  "travelMinutes": 3,
-  "tags": [
-    "shop"
-  ],
-  "services": [
-    "market"
-  ],
-  "map": {
-    "width": "11",
-    "height": "9",
-    "palette": "int_timber"
-  },
-  "position": {
-    "x": 20,
-    "y": 23
+  "@prefab": "world_points_f_nterest_int_store_2",
+  "params": {
+    "id": "cobbleway_bakery",
+    "name": "The Bakehouse",
+    "description": "Bakes the town's bread and the town's pies in the same oven, in that order.",
+    "area": "coast_cobbleway",
+    "position": {
+      "x": 20,
+      "y": 23
+    },
+    "variant": "v3"
   }
 }

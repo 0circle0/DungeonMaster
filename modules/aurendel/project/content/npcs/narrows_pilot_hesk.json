@@ -1,35 +1,22 @@
 {
-  "id": "narrows_pilot_hesk",
-  "name": "Hesk, Pilot of the Narrows",
-  "description": "Takes hulls through a channel that redraws itself every spring, and keeps the book that says how it redrew.",
-  "disposition": 2,
-  "gullibility": 0.25,
-  "memorySpan": 300,
-  "offersQuests": [],
-  "caresAbout": [],
-  "reactions": [],
-  "faction": "the_salvors",
-  "dialogue": "isle_hesk_talk",
-  "home": "narrows_pilot_station",
-  "statblock": "isle_pilot",
-  "shop": {
-    "lootTable": "salvors_stock",
-    "buysTags": [
-      "treasure"
-    ],
-    "priceMultiplier": 1.3
-  },
-  "temperament": {
-    "roamRadius": 0,
-    "wanderChance": 0,
-    "speeds": {
-      "wander": 0
-    },
-    "investigates": [],
-    "notices": [
-      "hostile",
-      "neutral",
-      "ally"
-    ]
+  "@prefab": "content_npcs_entry_4",
+  "params": {
+    "id": "narrows_pilot_hesk",
+    "name": "Hesk, Pilot of the Narrows",
+    "description": "Takes hulls through a channel that redraws itself every spring, and keeps the book that says how it redrew.",
+    "disposition": 2,
+    "gullibility": 0.25,
+    "memorySpan": 300,
+    "faction": "the_salvors",
+    "dialogue": "isle_hesk_talk",
+    "home": "narrows_pilot_station",
+    "statblock": "isle_pilot",
+    "shop": {
+      "lootTable": "salvors_stock",
+      "buysTags": [
+        "treasure"
+      ],
+      "priceMultiplier": 1.3
+    }
   }
 }

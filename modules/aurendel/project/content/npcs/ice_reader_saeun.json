@@ -1,36 +1,15 @@
 {
-  "id": "ice_reader_saeun",
-  "name": "Saeun, who Reads the Making",
-  "description": "Sits at the end of the Landing with a bone stick and marks it when the ice makes. Forty years of that. Nobody has ever asked her why.",
-  "disposition": 4,
-  "gullibility": 0.2,
-  "memorySpan": 365,
-  "offersQuests": [],
-  "caresAbout": [
-    "cairn_set",
-    "ice_broken"
-  ],
-  "reactions": [],
-  "faction": "the_ice_moot",
-  "dialogue": "frost_saeun_talk",
-  "home": "whalebone_the_landing",
-  "statblock": "frost_reader",
-  "temperament": {
-    "roamRadius": 24,
-    "investigateRadius": 60,
-    "leashRadius": 90,
-    "wanderChance": 0.3,
-    "speeds": {
-      "wander": 0.5
-    },
-    "investigates": [
-      "sight",
-      "hearing"
-    ],
-    "notices": [
-      "hostile",
-      "neutral",
-      "ally"
-    ]
+  "@prefab": "content_npcs_entry_3",
+  "params": {
+    "id": "ice_reader_saeun",
+    "name": "Saeun, who Reads the Making",
+    "description": "Sits at the end of the Landing with a bone stick and marks it when the ice makes. Forty years of that. Nobody has ever asked her why.",
+    "disposition": 4,
+    "memorySpan": 365,
+    "faction": "the_ice_moot",
+    "dialogue": "frost_saeun_talk",
+    "home": "whalebone_the_landing",
+    "statblock": "frost_reader",
+    "variant": "v1"
   }
 }

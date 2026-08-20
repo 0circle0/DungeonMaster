@@ -1,86 +1,54 @@
 {
-  "id": "the_breath",
-  "name": "What Does the Breathing",
-  "description": "In and out to the minute, in a gale or a calm, warm, out of a face that has been in shade since anybody began writing things down.",
-  "level": 8,
-  "xp": 900,
-  "attributes": {
-    "might": 14,
-    "agility": 16,
-    "endurance": 17,
-    "intellect": 14,
-    "instinct": 17,
-    "presence": 14
-  },
-  "abilities": [
-    "vent_breath",
-    "rime_touch",
-    "scouring_wind"
-  ],
-  "behaviour": [
-    {
-      "priority": 20,
-      "use": "vent_breath",
-      "when": {
-        "chance": 0.35
+  "@prefab": "content_monsters_entry_4",
+  "params": {
+    "id": "the_breath",
+    "name": "What Does the Breathing",
+    "description": "In and out to the minute, in a gale or a calm, warm, out of a face that has been in shade since anybody began writing things down.",
+    "level": 8,
+    "xp": 900,
+    "attributes": {
+      "might": 14,
+      "agility": 16,
+      "endurance": 17,
+      "intellect": 14,
+      "instinct": 17,
+      "presence": 14
+    },
+    "abilities": [
+      "vent_breath",
+      "rime_touch",
+      "scouring_wind"
+    ],
+    "behaviour": [
+      {
+        "priority": 20,
+        "use": "vent_breath",
+        "when": {
+          "chance": 0.35
+        }
+      },
+      {
+        "priority": 10,
+        "use": "scouring_wind"
+      },
+      {
+        "priority": 0,
+        "use": "rime_touch"
       }
+    ],
+    "descriptors": [
+      "a vast",
+      "a slow-lunged"
+    ],
+    "loot": "skarn_wind_hoard",
+    "conditionImmunities": [
+      "frightened",
+      "slowed",
+      "prone"
+    ],
+    "resourceOverrides": {
+      "hp": 104
     },
-    {
-      "priority": 10,
-      "use": "scouring_wind"
-    },
-    {
-      "priority": 0,
-      "use": "rime_touch"
-    }
-  ],
-  "faction": "the_unsealed",
-  "creatureType": "undead",
-  "size": "medium",
-  "descriptors": [
-    "a vast",
-    "a slow-lunged"
-  ],
-  "conditionalLoot": [],
-  "loot": "skarn_wind_hoard",
-  "damageInteractions": [
-    {
-      "damageType": "slashing",
-      "multiplier": 0.5,
-      "unless": [
-        "silvered"
-      ]
-    },
-    {
-      "damageType": "piercing",
-      "multiplier": 0.5,
-      "unless": [
-        "silvered"
-      ]
-    }
-  ],
-  "conditionImmunities": [
-    "frightened",
-    "slowed",
-    "prone"
-  ],
-  "resourceOverrides": {
-    "hp": 104
-  },
-  "temperament": {
-    "roamRadius": 12,
-    "investigateRadius": 40,
-    "leashRadius": 60,
-    "wanderChance": 0.1,
-    "disengageTurns": 1,
-    "speeds": {
-      "wander": 0.5,
-      "investigate": 0.5
-    },
-    "investigates": [
-      "sight",
-      "hearing",
-      "smell"
-    ]
+    "variant": "v1"
   }
 }

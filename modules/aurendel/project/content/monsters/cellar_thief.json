@@ -1,53 +1,29 @@
 {
-  "id": "cellar_thief",
-  "name": "An Unliveried Digger",
-  "description": "Working the under without a charter, for wages somebody in a much cleaner coat is paying.",
-  "level": 2,
-  "xp": 45,
-  "attributes": {
-    "might": 11,
-    "agility": 14,
-    "endurance": 11,
-    "intellect": 9,
-    "instinct": 12,
-    "presence": 10
-  },
-  "abilities": [
-    "cut_and_run"
-  ],
-  "behaviour": [
-    {
-      "priority": 0,
-      "use": "cut_and_run"
-    }
-  ],
-  "faction": "the_library",
-  "creatureType": "humanoid",
-  "size": "medium",
-  "descriptors": [
-    "a wiry",
-    "a soot-black"
-  ],
-  "conditionalLoot": [],
-  "loot": "vermin_scraps",
-  "resourceOverrides": {
-    "hp": 12
-  },
-  "temperament": {
-    "roamRadius": 24,
-    "investigateRadius": 70,
-    "leashRadius": 100,
-    "wanderChance": 0.4,
-    "disengageTurns": 2,
-    "investigates": [
-      "sight",
-      "hearing",
-      "tracks",
-      "smell"
+  "@prefab": "content_monsters_entry",
+  "params": {
+    "id": "cellar_thief",
+    "name": "An Unliveried Digger",
+    "description": "Working the under without a charter, for wages somebody in a much cleaner coat is paying.",
+    "attributes": {
+      "might": 11,
+      "agility": 14,
+      "endurance": 11,
+      "intellect": 9,
+      "instinct": 12,
+      "presence": 10
+    },
+    "abilities": [
+      "cut_and_run"
     ],
-    "notices": [
-      "hostile",
-      "neutral"
-    ]
+    "faction": "the_library",
+    "descriptors": [
+      "a wiry",
+      "a soot-black"
+    ],
+    "loot": "vermin_scraps",
+    "resourceOverrides": {
+      "hp": 12
+    },
+    "variant": "v2"
   }
 }

@@ -1,14 +1,11 @@
 {
-  "id": "scouring_tally",
-  "name": "The Scouring Tally",
-  "description": "A hazel rod notched once a year by whoever leads the clearing, and it has more notches on it than the parish has records.",
-  "kind": "key",
-  "value": 0,
-  "weight": 0,
-  "tags": [
-    "keepsake"
-  ],
-  "extra": {
-    "heldBy": "shepherd_ansel"
+  "@prefab": "content_items_entry_8",
+  "params": {
+    "id": "scouring_tally",
+    "name": "The Scouring Tally",
+    "description": "A hazel rod notched once a year by whoever leads the clearing, and it has more notches on it than the parish has records.",
+    "extra": {
+      "heldBy": "shepherd_ansel"
+    }
   }
 }

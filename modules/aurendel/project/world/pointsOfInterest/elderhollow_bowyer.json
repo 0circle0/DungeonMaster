@@ -1,24 +1,14 @@
 {
-  "id": "elderhollow_bowyer",
-  "name": "The Yew Shop",
-  "description": "Staves seasoning in the roof, some of them promised to people who have died waiting.",
-  "area": "duskwood_elderhollow",
-  "kind": "market",
-  "descriptionKey": "int_workshop",
-  "travelMinutes": 3,
-  "tags": [
-    "shop"
-  ],
-  "services": [
-    "market"
-  ],
-  "map": {
-    "width": "11",
-    "height": "9",
-    "palette": "int_shop"
-  },
-  "position": {
-    "x": 37,
-    "y": 13
+  "@prefab": "world_points_f_nterest_int_workshop_2",
+  "params": {
+    "id": "elderhollow_bowyer",
+    "name": "The Yew Shop",
+    "description": "Staves seasoning in the roof, some of them promised to people who have died waiting.",
+    "area": "duskwood_elderhollow",
+    "position": {
+      "x": 37,
+      "y": 13
+    },
+    "variant": "v3"
   }
 }

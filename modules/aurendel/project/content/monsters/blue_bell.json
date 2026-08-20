@@ -1,86 +1,54 @@
 {
-  "id": "blue_bell",
-  "name": "The Blue Bell",
-  "description": "It is not shaped like anything. It has been sounding one note since before the Landing was moved, and the note is what is wrong with the water.",
-  "level": 9,
-  "xp": 900,
-  "attributes": {
-    "might": 10,
-    "agility": 8,
-    "endurance": 20,
-    "intellect": 14,
-    "instinct": 18,
-    "presence": 16
-  },
-  "abilities": [
-    "rime_touch",
-    "calving",
-    "wither"
-  ],
-  "behaviour": [
-    {
-      "priority": 20,
-      "use": "calving",
-      "when": {
-        "chance": 0.35
+  "@prefab": "content_monsters_entry_4",
+  "params": {
+    "id": "blue_bell",
+    "name": "The Blue Bell",
+    "description": "It is not shaped like anything. It has been sounding one note since before the Landing was moved, and the note is what is wrong with the water.",
+    "level": 9,
+    "xp": 900,
+    "attributes": {
+      "might": 10,
+      "agility": 8,
+      "endurance": 20,
+      "intellect": 14,
+      "instinct": 18,
+      "presence": 16
+    },
+    "abilities": [
+      "rime_touch",
+      "calving",
+      "wither"
+    ],
+    "behaviour": [
+      {
+        "priority": 20,
+        "use": "calving",
+        "when": {
+          "chance": 0.35
+        }
+      },
+      {
+        "priority": 10,
+        "use": "wither"
+      },
+      {
+        "priority": 0,
+        "use": "rime_touch"
       }
+    ],
+    "descriptors": [
+      "a ringing",
+      "a sounding"
+    ],
+    "loot": "frost_blue_hoard",
+    "conditionImmunities": [
+      "frightened",
+      "poisoned",
+      "prone"
+    ],
+    "resourceOverrides": {
+      "hp": 110
     },
-    {
-      "priority": 10,
-      "use": "wither"
-    },
-    {
-      "priority": 0,
-      "use": "rime_touch"
-    }
-  ],
-  "faction": "the_unsealed",
-  "creatureType": "undead",
-  "size": "medium",
-  "descriptors": [
-    "a ringing",
-    "a sounding"
-  ],
-  "conditionalLoot": [],
-  "loot": "frost_blue_hoard",
-  "damageInteractions": [
-    {
-      "damageType": "slashing",
-      "multiplier": 0.5,
-      "unless": [
-        "silvered"
-      ]
-    },
-    {
-      "damageType": "piercing",
-      "multiplier": 0.5,
-      "unless": [
-        "silvered"
-      ]
-    }
-  ],
-  "conditionImmunities": [
-    "frightened",
-    "poisoned",
-    "prone"
-  ],
-  "resourceOverrides": {
-    "hp": 110
-  },
-  "temperament": {
-    "roamRadius": 12,
-    "investigateRadius": 40,
-    "leashRadius": 60,
-    "wanderChance": 0.1,
-    "disengageTurns": 1,
-    "speeds": {
-      "wander": 0.5,
-      "investigate": 0.5
-    },
-    "investigates": [
-      "sight",
-      "hearing",
-      "smell"
-    ]
+    "variant": "v1"
   }
 }

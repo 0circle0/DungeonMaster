@@ -29,6 +29,8 @@
  */
 
 import { COLLECTION_PATHS } from './schema/module.js';
+import { isPrefabRecipe, expandRecipe } from './prefab.js';
+import type { Prefab, StyleTables } from './prefab.js';
 
 export const PROJECT_FORMAT = 1;
 
@@ -51,7 +53,7 @@ export interface SplitProject {
 
 export interface JoinIssue {
   readonly file: string;
-  readonly code: 'project_missing_file' | 'project_bad_json' | 'project_bad_manifest';
+  readonly code: 'project_missing_file' | 'project_bad_json' | 'project_bad_manifest' | 'project_bad_recipe';
   readonly message: string;
 }
 
@@ -139,8 +141,20 @@ export function splitProject(document: Record<string, unknown>): SplitProject {
 export function joinProject(
   manifest: ProjectManifest,
   files: Readonly<Record<string, string>>,
+  /**
+   * What recipes expand against. Absent means a module that does not use them,
+   * which is every module that existed before they did — an entry file is read
+   * as an entry and nothing changes.
+   *
+   * This is the one place the authoring sidecar becomes a *build input*, and
+   * only for the files that ask: `AUTHORING_PATHS` still describes what a save
+   * must not sweep away, and a collection can hold recipes and literal entries
+   * side by side while it is being converted.
+   */
+  authoring: { readonly prefabs?: readonly Prefab[]; readonly style?: StyleTables } = {},
 ): { document: Record<string, unknown>; issues: readonly JoinIssue[] } {
   const issues: JoinIssue[] = [];
+  const prefabs = authoring.prefabs ?? [];
 
   const read = (file: string): unknown => {
     const text = files[file];
@@ -179,7 +193,21 @@ export function joinProject(
         section[name] = container[name];
         continue;
       }
-      section[name] = names.map((file) => read(`${key}/${name}/${file}`));
+      section[name] = names.map((file) => {
+        const path = `${key}/${name}/${file}`;
+        const parsed = read(path);
+        if (!isPrefabRecipe(parsed)) return parsed;
+
+        const { entry, issues: expandIssues } = expandRecipe(parsed, prefabs, authoring.style ?? {});
+        for (const issue of expandIssues) {
+          issues.push({
+            file: path,
+            code: 'project_bad_recipe',
+            message: `${path}: ${issue.path ? `${issue.path}: ` : ''}${issue.message}`,
+          });
+        }
+        return entry ?? undefined;
+      });
     }
     document[key] = section;
   }

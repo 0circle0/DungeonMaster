@@ -1,21 +1,14 @@
 {
-  "id": "warrens_house_b",
-  "name": "The Nunnery",
-  "description": "It has not been one for two hundred years and the name has outlived three rebuildings.",
-  "area": "aurenhal_warrens",
-  "kind": "settlement",
-  "descriptionKey": "int_house",
-  "travelMinutes": 2,
-  "tags": [
-    "house"
-  ],
-  "position": {
-    "x": 8,
-    "y": 14
-  },
-  "map": {
-    "width": "9",
-    "height": "7",
-    "palette": "int_timber"
+  "@prefab": "world_points_f_nterest_int_house",
+  "params": {
+    "id": "warrens_house_b",
+    "name": "The Nunnery",
+    "description": "It has not been one for two hundred years and the name has outlived three rebuildings.",
+    "area": "aurenhal_warrens",
+    "position": {
+      "x": 8,
+      "y": 14
+    },
+    "variant": "v2"
   }
 }

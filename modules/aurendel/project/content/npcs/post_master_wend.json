@@ -1,35 +1,22 @@
 {
-  "id": "post_master_wend",
-  "name": "Wend, at the Posting House",
-  "description": "Changes horses on the Kingsroad and writes down every cart that goes past, which the Crown has never asked her to do.",
-  "disposition": 4,
-  "gullibility": 0.3,
-  "memorySpan": 250,
-  "offersQuests": [],
-  "caresAbout": [],
-  "reactions": [],
-  "faction": "the_crown",
-  "dialogue": "kings_wend_talk",
-  "home": "kingsroad_south_posting_house",
-  "statblock": "kings_postmaster",
-  "shop": {
-    "lootTable": "hollowdene_stock",
-    "buysTags": [
-      "treasure"
-    ],
-    "priceMultiplier": 1.25
-  },
-  "temperament": {
-    "roamRadius": 0,
-    "wanderChance": 0,
-    "speeds": {
-      "wander": 0
-    },
-    "investigates": [],
-    "notices": [
-      "hostile",
-      "neutral",
-      "ally"
-    ]
+  "@prefab": "content_npcs_entry_4",
+  "params": {
+    "id": "post_master_wend",
+    "name": "Wend, at the Posting House",
+    "description": "Changes horses on the Kingsroad and writes down every cart that goes past, which the Crown has never asked her to do.",
+    "disposition": 4,
+    "gullibility": 0.3,
+    "memorySpan": 250,
+    "faction": "the_crown",
+    "dialogue": "kings_wend_talk",
+    "home": "kingsroad_south_posting_house",
+    "statblock": "kings_postmaster",
+    "shop": {
+      "lootTable": "hollowdene_stock",
+      "buysTags": [
+        "treasure"
+      ],
+      "priceMultiplier": 1.25
+    }
   }
 }

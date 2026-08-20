@@ -1,14 +1,11 @@
 {
-  "id": "yard_book",
-  "name": "The Bailiff's Book",
-  "description": "One entry a year since the town was a crossroads. The October line is always the same eleven words.",
-  "kind": "key",
-  "value": 0,
-  "weight": 0,
-  "tags": [
-    "keepsake"
-  ],
-  "extra": {
-    "heldBy": "bailiff_hask"
+  "@prefab": "content_items_entry_8",
+  "params": {
+    "id": "yard_book",
+    "name": "The Bailiff's Book",
+    "description": "One entry a year since the town was a crossroads. The October line is always the same eleven words.",
+    "extra": {
+      "heldBy": "bailiff_hask"
+    }
   }
 }

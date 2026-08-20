@@ -1,17 +1,11 @@
 {
-  "id": "frostmere_ribcage",
-  "name": "The Ribcage",
-  "description": "Built into the ribs of the largest whale on the strand, and then downward from there, by somebody with a plan.",
-  "biome": "dungeon_ice",
-  "roomCount": "9",
-  "depth": "2",
-  "algorithm": "rooms",
-  "lockedDoorChance": 0,
-  "doorGates": [],
-  "rollEncounters": false,
-  "safeEntrance": true,
-  "width": "69",
-  "height": "69",
-  "corridorLength": "3d3",
-  "bossTable": "frost_ribcage_boss"
+  "@prefab": "world_dungeons_entry_4",
+  "params": {
+    "id": "frostmere_ribcage",
+    "name": "The Ribcage",
+    "description": "Built into the ribs of the largest whale on the strand, and then downward from there, by somebody with a plan.",
+    "biome": "dungeon_ice",
+    "bossTable": "frost_ribcage_boss",
+    "variant": "v2"
+  }
 }

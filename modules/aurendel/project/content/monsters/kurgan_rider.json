@@ -1,85 +1,67 @@
 {
-  "id": "kurgan_rider",
-  "name": "A Kurgan Rider",
-  "description": "Buried with the horse, and neither of them has settled.",
-  "level": 5,
-  "xp": 250,
-  "attributes": {
-    "might": 16,
-    "agility": 14,
-    "endurance": 14,
-    "intellect": 8,
-    "instinct": 13,
-    "presence": 13
-  },
-  "abilities": [
-    "gore",
-    "rend",
-    "call_the_shut"
-  ],
-  "behaviour": [
-    {
-      "priority": 15,
-      "use": "call_the_shut",
-      "when": {
-        "chance": 0.25
+  "@prefab": "content_monsters_entry_3",
+  "params": {
+    "id": "kurgan_rider",
+    "name": "A Kurgan Rider",
+    "description": "Buried with the horse, and neither of them has settled.",
+    "level": 5,
+    "xp": 250,
+    "attributes": {
+      "might": 16,
+      "agility": 14,
+      "endurance": 14,
+      "intellect": 8,
+      "instinct": 13,
+      "presence": 13
+    },
+    "abilities": [
+      "gore",
+      "rend",
+      "call_the_shut"
+    ],
+    "behaviour": [
+      {
+        "priority": 15,
+        "use": "call_the_shut",
+        "when": {
+          "chance": 0.25
+        }
+      },
+      {
+        "priority": 0,
+        "use": "gore"
       }
+    ],
+    "descriptors": [
+      "a mounted",
+      "a wind-dried"
+    ],
+    "loot": "kurgan_hoard",
+    "damageInteractions": [
+      {
+        "damageType": "slashing",
+        "multiplier": 0.5,
+        "unless": [
+          "silvered"
+        ]
+      },
+      {
+        "damageType": "piercing",
+        "multiplier": 0.5,
+        "unless": [
+          "silvered"
+        ]
+      }
+    ],
+    "conditionImmunities": [
+      "frightened"
+    ],
+    "resourceOverrides": {
+      "hp": 48
     },
-    {
-      "priority": 0,
-      "use": "gore"
-    }
-  ],
-  "faction": "the_unsealed",
-  "creatureType": "undead",
-  "size": "large",
-  "descriptors": [
-    "a mounted",
-    "a wind-dried"
-  ],
-  "conditionalLoot": [
-    "silvered_cache"
-  ],
-  "loot": "kurgan_hoard",
-  "damageInteractions": [
-    {
-      "damageType": "slashing",
-      "multiplier": 0.5,
-      "unless": [
-        "silvered"
-      ]
+    "derivedOverrides": {
+      "guard": 15
     },
-    {
-      "damageType": "piercing",
-      "multiplier": 0.5,
-      "unless": [
-        "silvered"
-      ]
-    }
-  ],
-  "conditionImmunities": [
-    "frightened"
-  ],
-  "resourceOverrides": {
-    "hp": 48
-  },
-  "derivedOverrides": {
-    "guard": 15
-  },
-  "temperament": {
-    "roamRadius": 12,
-    "investigateRadius": 40,
-    "leashRadius": 60,
-    "wanderChance": 0.1,
-    "disengageTurns": 1,
-    "speeds": {
-      "wander": 0.5,
-      "investigate": 0.5
-    },
-    "investigates": [
-      "sight",
-      "hearing",
-      "smell"
-    ]
+    "variant": "v2"
   }
 }

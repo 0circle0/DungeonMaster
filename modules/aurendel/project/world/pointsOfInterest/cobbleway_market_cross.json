@@ -1,19 +1,13 @@
 {
-  "id": "cobbleway_market_cross",
-  "name": "The Market Cross",
-  "description": "Roofed, octagonal, and the whole reason there is a town here.",
-  "area": "coast_cobbleway",
-  "kind": "market",
-  "descriptionKey": "generic_market",
-  "travelMinutes": 2,
-  "tags": [
-    "shop"
-  ],
-  "services": [
-    "market"
-  ],
-  "position": {
-    "x": 3,
-    "y": 3
+  "@prefab": "world_points_f_nterest_generic_market",
+  "params": {
+    "id": "cobbleway_market_cross",
+    "name": "The Market Cross",
+    "description": "Roofed, octagonal, and the whole reason there is a town here.",
+    "area": "coast_cobbleway",
+    "position": {
+      "x": 3,
+      "y": 3
+    }
   }
 }

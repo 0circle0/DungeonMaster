@@ -1,14 +1,11 @@
 {
-  "id": "harbour_night_book",
-  "name": "The Harbour Master's Night Book",
-  "description": "Two hundred years of bearings off a headland, in fourteen hands, and the correction is the same in all fourteen.",
-  "kind": "key",
-  "value": 0,
-  "weight": 0,
-  "tags": [
-    "keepsake"
-  ],
-  "extra": {
-    "heldBy": "harbour_master_veir"
+  "@prefab": "content_items_entry_8",
+  "params": {
+    "id": "harbour_night_book",
+    "name": "The Harbour Master's Night Book",
+    "description": "Two hundred years of bearings off a headland, in fourteen hands, and the correction is the same in all fourteen.",
+    "extra": {
+      "heldBy": "harbour_master_veir"
+    }
   }
 }

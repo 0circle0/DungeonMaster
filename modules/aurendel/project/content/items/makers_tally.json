@@ -1,14 +1,11 @@
 {
-  "id": "makers_tally",
-  "name": "The Maker's Tally",
-  "description": "A bone stick notched on both edges: one side the nights the ice made, the other the nights it sounded. The two edges agree.",
-  "kind": "key",
-  "value": 0,
-  "weight": 0,
-  "tags": [
-    "keepsake"
-  ],
-  "extra": {
-    "heldBy": "ice_reader_saeun"
+  "@prefab": "content_items_entry_8",
+  "params": {
+    "id": "makers_tally",
+    "name": "The Maker's Tally",
+    "description": "A bone stick notched on both edges: one side the nights the ice made, the other the nights it sounded. The two edges agree.",
+    "extra": {
+      "heldBy": "ice_reader_saeun"
+    }
   }
 }

@@ -1,34 +1,31 @@
 {
-  "id": "glass_feeder_hoard",
-  "name": "The Far End of the Channel",
-  "rolls": "2",
-  "emptyChance": 0.1,
-  "bonusRollSkill": "perception",
-  "bonusRolls": {
-    "onSuccess": 1,
-    "onCritical": 2
-  },
-  "entries": [
-    {
-      "weight": 4,
-      "value": {
-        "item": "old_coin",
-        "quantity": "2d6"
+  "@prefab": "content_loot_ables_entry_4",
+  "params": {
+    "id": "glass_feeder_hoard",
+    "name": "The Far End of the Channel",
+    "entries": [
+      {
+        "weight": 4,
+        "value": {
+          "item": "old_coin",
+          "quantity": "2d6"
+        }
+      },
+      {
+        "weight": 2,
+        "value": {
+          "item": "ward_salt",
+          "quantity": "1d2"
+        }
+      },
+      {
+        "weight": 1,
+        "value": {
+          "item": "antidote",
+          "quantity": "1d2"
+        }
       }
-    },
-    {
-      "weight": 2,
-      "value": {
-        "item": "ward_salt",
-        "quantity": "1d2"
-      }
-    },
-    {
-      "weight": 1,
-      "value": {
-        "item": "antidote",
-        "quantity": "1d2"
-      }
-    }
-  ]
+    ],
+    "variant": "v2"
+  }
 }

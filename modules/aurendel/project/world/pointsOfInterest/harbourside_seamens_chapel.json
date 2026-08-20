@@ -1,24 +1,18 @@
 {
-  "id": "harbourside_seamens_chapel",
-  "name": "The Seamen's Chapel",
-  "description": "Names on the wall in five columns and room left for a sixth.",
-  "area": "sarnport_harbourside",
-  "kind": "shrine",
-  "descriptionKey": "int_temple",
-  "travelMinutes": 3,
-  "tags": [
-    "shrine"
-  ],
-  "services": [
-    "temple"
-  ],
-  "map": {
-    "width": "11",
-    "height": "9",
-    "palette": "int_temple"
-  },
-  "position": {
-    "x": 13,
-    "y": 27
+  "@prefab": "world_points_f_nterest_int_temple",
+  "params": {
+    "id": "harbourside_seamens_chapel",
+    "name": "The Seamen's Chapel",
+    "description": "Names on the wall in five columns and room left for a sixth.",
+    "area": "sarnport_harbourside",
+    "map": {
+      "width": "11",
+      "height": "9",
+      "palette": "int_temple"
+    },
+    "position": {
+      "x": 13,
+      "y": 27
+    }
   }
 }

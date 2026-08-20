@@ -1,14 +1,11 @@
 {
-  "id": "cutters_bill",
-  "name": "The Reed-Cutter's Bill",
-  "description": "A hooked blade on a long haft, the only tool in the marsh that will take a cypress knee off level. Its edge is older than its handle by a century.",
-  "kind": "key",
-  "value": 0,
-  "weight": 0,
-  "tags": [
-    "keepsake"
-  ],
-  "extra": {
-    "heldBy": "reed_cutter_maud"
+  "@prefab": "content_items_entry_8",
+  "params": {
+    "id": "cutters_bill",
+    "name": "The Reed-Cutter's Bill",
+    "description": "A hooked blade on a long haft, the only tool in the marsh that will take a cypress knee off level. Its edge is older than its handle by a century.",
+    "extra": {
+      "heldBy": "reed_cutter_maud"
+    }
   }
 }

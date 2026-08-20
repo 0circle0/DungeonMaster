@@ -1,24 +1,14 @@
 {
-  "id": "blackrigging_apothecary",
-  "name": "The Wet Locker",
-  "description": "Rot, damp, salt sores, and the things a long voyage does.",
-  "area": "isles_blackrigging",
-  "kind": "market",
-  "descriptionKey": "int_store",
-  "travelMinutes": 3,
-  "tags": [
-    "shop"
-  ],
-  "services": [
-    "market"
-  ],
-  "map": {
-    "width": "11",
-    "height": "9",
-    "palette": "int_shop"
-  },
-  "position": {
-    "x": 29,
-    "y": 23
+  "@prefab": "world_points_f_nterest_int_store_2",
+  "params": {
+    "id": "blackrigging_apothecary",
+    "name": "The Wet Locker",
+    "description": "Rot, damp, salt sores, and the things a long voyage does.",
+    "area": "isles_blackrigging",
+    "position": {
+      "x": 29,
+      "y": 23
+    },
+    "variant": "v2"
   }
 }

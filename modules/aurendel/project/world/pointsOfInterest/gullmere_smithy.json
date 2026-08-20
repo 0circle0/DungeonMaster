@@ -1,24 +1,10 @@
 {
-  "id": "gullmere_smithy",
-  "name": "The Beach Forge",
-  "description": "Fittings, hooks, and boat-nails, mostly.",
-  "area": "coast_gullmere",
-  "kind": "market",
-  "descriptionKey": "int_smithy",
-  "travelMinutes": 3,
-  "tags": [
-    "shop"
-  ],
-  "services": [
-    "smith"
-  ],
-  "map": {
-    "width": "9",
-    "height": "7",
-    "palette": "int_forge"
-  },
-  "position": {
-    "x": 21,
-    "y": 3
+  "@prefab": "world_points_f_nterest_int_smithy_2",
+  "params": {
+    "id": "gullmere_smithy",
+    "name": "The Beach Forge",
+    "description": "Fittings, hooks, and boat-nails, mostly.",
+    "area": "coast_gullmere",
+    "variant": "v3"
   }
 }

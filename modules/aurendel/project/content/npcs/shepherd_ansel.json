@@ -1,33 +1,15 @@
 {
-  "id": "shepherd_ansel",
-  "name": "Ansel, on the Downs",
-  "description": "Runs four hundred sheep over the white rock and leads the spring clearing because his mother did and hers did.",
-  "disposition": 5,
-  "gullibility": 0.4,
-  "memorySpan": 150,
-  "offersQuests": [],
-  "caresAbout": [],
-  "reactions": [],
-  "faction": "the_salvors",
-  "dialogue": "coast_ansel_talk",
-  "home": "chalk_downs_shepherds_hut",
-  "statblock": "coast_shepherd",
-  "temperament": {
-    "roamRadius": 24,
-    "investigateRadius": 60,
-    "leashRadius": 90,
-    "wanderChance": 0.3,
-    "speeds": {
-      "wander": 0.5
-    },
-    "investigates": [
-      "sight",
-      "hearing"
-    ],
-    "notices": [
-      "hostile",
-      "neutral",
-      "ally"
-    ]
+  "@prefab": "content_npcs_entry_3",
+  "params": {
+    "id": "shepherd_ansel",
+    "name": "Ansel, on the Downs",
+    "description": "Runs four hundred sheep over the white rock and leads the spring clearing because his mother did and hers did.",
+    "disposition": 5,
+    "memorySpan": 150,
+    "faction": "the_salvors",
+    "dialogue": "coast_ansel_talk",
+    "home": "chalk_downs_shepherds_hut",
+    "statblock": "coast_shepherd",
+    "variant": "v4"
   }
 }

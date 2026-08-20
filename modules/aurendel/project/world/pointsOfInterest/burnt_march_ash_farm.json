@@ -1,19 +1,14 @@
 {
-  "id": "burnt_march_ash_farm",
-  "name": "The Ash Farm",
-  "description": "Somebody is farming the ash, which is extraordinarily fertile once it has had thirty years.",
-  "area": "ember_the_burnt_march",
-  "kind": "settlement",
-  "descriptionKey": "int_house",
-  "travelMinutes": 5,
-  "tags": [],
-  "map": {
-    "width": "11",
-    "height": "9",
-    "palette": "int_timber"
-  },
-  "position": {
-    "x": 14,
-    "y": 3
+  "@prefab": "world_points_f_nterest_int_house_2",
+  "params": {
+    "id": "burnt_march_ash_farm",
+    "name": "The Ash Farm",
+    "description": "Somebody is farming the ash, which is extraordinarily fertile once it has had thirty years.",
+    "area": "ember_the_burnt_march",
+    "position": {
+      "x": 14,
+      "y": 3
+    },
+    "variant": "v4"
   }
 }

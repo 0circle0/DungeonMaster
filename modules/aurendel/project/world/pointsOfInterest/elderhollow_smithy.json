@@ -1,24 +1,10 @@
 {
-  "id": "elderhollow_smithy",
-  "name": "The Ring Forge",
-  "description": "Axes, wedges, saw-teeth, and cart-iron for the timber wagons.",
-  "area": "duskwood_elderhollow",
-  "kind": "market",
-  "descriptionKey": "int_smithy",
-  "travelMinutes": 3,
-  "tags": [
-    "shop"
-  ],
-  "services": [
-    "smith"
-  ],
-  "map": {
-    "width": "15",
-    "height": "11",
-    "palette": "int_forge"
-  },
-  "position": {
-    "x": 28,
-    "y": 3
+  "@prefab": "world_points_f_nterest_int_smithy_2",
+  "params": {
+    "id": "elderhollow_smithy",
+    "name": "The Ring Forge",
+    "description": "Axes, wedges, saw-teeth, and cart-iron for the timber wagons.",
+    "area": "duskwood_elderhollow",
+    "variant": "v4"
   }
 }

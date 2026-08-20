@@ -1,24 +1,19 @@
 {
-  "id": "craftrow_cooper",
-  "name": "The Cooperage",
-  "description": "Barrels going out at one end and staves coming in at the other.",
-  "area": "aurenhal_craftrow",
-  "kind": "market",
-  "descriptionKey": "int_workshop",
-  "travelMinutes": 3,
-  "tags": [
-    "shop"
-  ],
-  "position": {
-    "x": 10,
-    "y": 20
-  },
-  "services": [
-    "market"
-  ],
-  "map": {
-    "width": "11",
-    "height": "9",
-    "palette": "int_shop"
+  "@prefab": "world_points_f_nterest_int_workshop",
+  "params": {
+    "id": "craftrow_cooper",
+    "name": "The Cooperage",
+    "description": "Barrels going out at one end and staves coming in at the other.",
+    "area": "aurenhal_craftrow",
+    "travelMinutes": 3,
+    "position": {
+      "x": 10,
+      "y": 20
+    },
+    "map": {
+      "width": "11",
+      "height": "9",
+      "palette": "int_shop"
+    }
   }
 }

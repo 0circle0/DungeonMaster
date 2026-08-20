@@ -1,86 +1,54 @@
 {
-  "id": "door_keeper_loosed",
-  "name": "A Keeper of the Middle",
-  "description": "Stone was put over three doors carefully. Something has been checking on the stone.",
-  "level": 14,
-  "xp": 3200,
-  "attributes": {
-    "might": 19,
-    "agility": 18,
-    "endurance": 19,
-    "intellect": 16,
-    "instinct": 18,
-    "presence": 15
-  },
-  "abilities": [
-    "rend",
-    "wither",
-    "cut_and_run"
-  ],
-  "behaviour": [
-    {
-      "priority": 15,
-      "use": "wither",
-      "when": {
-        "chance": 0.3
+  "@prefab": "content_monsters_entry_4",
+  "params": {
+    "id": "door_keeper_loosed",
+    "name": "A Keeper of the Middle",
+    "description": "Stone was put over three doors carefully. Something has been checking on the stone.",
+    "level": 14,
+    "xp": 3200,
+    "attributes": {
+      "might": 19,
+      "agility": 18,
+      "endurance": 19,
+      "intellect": 16,
+      "instinct": 18,
+      "presence": 15
+    },
+    "abilities": [
+      "rend",
+      "wither",
+      "cut_and_run"
+    ],
+    "behaviour": [
+      {
+        "priority": 15,
+        "use": "wither",
+        "when": {
+          "chance": 0.3
+        }
+      },
+      {
+        "priority": 5,
+        "use": "cut_and_run"
+      },
+      {
+        "priority": 0,
+        "use": "rend"
       }
+    ],
+    "descriptors": [
+      "a stone-dusted",
+      "a checking"
+    ],
+    "loot": "trial_loose_drop",
+    "conditionImmunities": [
+      "frightened",
+      "prone",
+      "poisoned"
+    ],
+    "resourceOverrides": {
+      "hp": 170
     },
-    {
-      "priority": 5,
-      "use": "cut_and_run"
-    },
-    {
-      "priority": 0,
-      "use": "rend"
-    }
-  ],
-  "faction": "the_unsealed",
-  "creatureType": "undead",
-  "size": "medium",
-  "descriptors": [
-    "a stone-dusted",
-    "a checking"
-  ],
-  "conditionalLoot": [],
-  "loot": "trial_loose_drop",
-  "damageInteractions": [
-    {
-      "damageType": "slashing",
-      "multiplier": 0.5,
-      "unless": [
-        "silvered"
-      ]
-    },
-    {
-      "damageType": "piercing",
-      "multiplier": 0.5,
-      "unless": [
-        "silvered"
-      ]
-    }
-  ],
-  "conditionImmunities": [
-    "frightened",
-    "prone",
-    "poisoned"
-  ],
-  "resourceOverrides": {
-    "hp": 170
-  },
-  "temperament": {
-    "roamRadius": 12,
-    "investigateRadius": 40,
-    "leashRadius": 60,
-    "wanderChance": 0.1,
-    "disengageTurns": 1,
-    "speeds": {
-      "wander": 0.5,
-      "investigate": 0.5
-    },
-    "investigates": [
-      "sight",
-      "hearing",
-      "smell"
-    ]
+    "variant": "v1"
   }
 }

@@ -1,14 +1,11 @@
 {
-  "id": "cart",
-  "name": "Cart",
-  "description": "Shafts down, tail-gate open.",
-  "glyph": "6",
-  "color": "yellow",
-  "passable": false,
-  "opaque": false,
-  "moveCost": 0,
-  "tags": [
-    "furniture"
-  ],
-  "providesCover": "half"
+  "@prefab": "world_terrains_entry_6",
+  "params": {
+    "id": "cart",
+    "name": "Cart",
+    "description": "Shafts down, tail-gate open.",
+    "glyph": "6",
+    "color": "yellow",
+    "variant": "v3"
+  }
 }

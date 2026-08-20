@@ -1,25 +1,14 @@
 {
-  "id": "harbourside_bond_stores",
-  "name": "The Bond Stores",
-  "description": "Four floors of other people's cargo, waiting on duty being paid.",
-  "area": "sarnport_harbourside",
-  "kind": "market",
-  "descriptionKey": "int_warehouse",
-  "travelMinutes": 3,
-  "tags": [
-    "docks",
-    "shop"
-  ],
-  "services": [
-    "market"
-  ],
-  "map": {
-    "width": "19",
-    "height": "13",
-    "palette": "int_shop"
-  },
-  "position": {
-    "x": 22,
-    "y": 3
+  "@prefab": "world_points_f_nterest_int_warehouse",
+  "params": {
+    "id": "harbourside_bond_stores",
+    "name": "The Bond Stores",
+    "description": "Four floors of other people's cargo, waiting on duty being paid.",
+    "area": "sarnport_harbourside",
+    "position": {
+      "x": 22,
+      "y": 3
+    },
+    "variant": "v1"
   }
 }

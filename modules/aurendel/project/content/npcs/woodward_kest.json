@@ -1,33 +1,15 @@
 {
-  "id": "woodward_kest",
-  "name": "Kest, who Keeps the Hut",
-  "description": "Lives in a woodward's hut, is not the woodward, and has stopped explaining the difference to people.",
-  "disposition": 1,
-  "gullibility": 0.2,
-  "memorySpan": 240,
-  "offersQuests": [],
-  "caresAbout": [],
-  "reactions": [],
-  "faction": "the_keepers",
-  "dialogue": "dusk_kest_talk",
-  "home": "undereaves_woodward_hut",
-  "statblock": "dusk_hutkeeper",
-  "temperament": {
-    "roamRadius": 24,
-    "investigateRadius": 60,
-    "leashRadius": 90,
-    "wanderChance": 0.3,
-    "speeds": {
-      "wander": 0.5
-    },
-    "investigates": [
-      "sight",
-      "hearing"
-    ],
-    "notices": [
-      "hostile",
-      "neutral",
-      "ally"
-    ]
+  "@prefab": "content_npcs_entry_3",
+  "params": {
+    "id": "woodward_kest",
+    "name": "Kest, who Keeps the Hut",
+    "description": "Lives in a woodward's hut, is not the woodward, and has stopped explaining the difference to people.",
+    "disposition": 1,
+    "memorySpan": 240,
+    "faction": "the_keepers",
+    "dialogue": "dusk_kest_talk",
+    "home": "undereaves_woodward_hut",
+    "statblock": "dusk_hutkeeper",
+    "variant": "v7"
   }
 }

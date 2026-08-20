@@ -1,21 +1,19 @@
 {
-  "id": "deeproads_the_rot",
-  "name": "The Rot",
-  "description": "Where the fungus canopy came down and the floor beneath it was eaten out from underneath.",
-  "biome": "dungeon_cave",
-  "roomCount": "12",
-  "depth": "3",
-  "algorithm": "caverns",
-  "lockedDoorChance": 0,
-  "doorGates": [],
-  "rollEncounters": false,
-  "safeEntrance": true,
-  "caverns": {
-    "fill": 0.47,
-    "smoothingPasses": 4,
-    "birthThreshold": 5
-  },
-  "width": "47",
-  "height": "47",
-  "bossTable": "the_rot_itself"
+  "@prefab": "world_dungeons_entry",
+  "params": {
+    "id": "deeproads_the_rot",
+    "name": "The Rot",
+    "description": "Where the fungus canopy came down and the floor beneath it was eaten out from underneath.",
+    "biome": "dungeon_cave",
+    "roomCount": "12",
+    "depth": "3",
+    "caverns": {
+      "fill": 0.47,
+      "smoothingPasses": 4,
+      "birthThreshold": 5
+    },
+    "width": "47",
+    "height": "47",
+    "bossTable": "the_rot_itself"
+  }
 }

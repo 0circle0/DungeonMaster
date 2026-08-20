@@ -1,48 +1,37 @@
 {
-  "id": "measurer_vare",
-  "name": "Vare of the Hall of Measures",
-  "description": "Keeps the Hold's standards — the yard, the mark, the fee — and by extension every decision the Hold has ever declined to revisit.",
-  "disposition": 5,
-  "gullibility": 0.15,
-  "memorySpan": 365,
-  "offersQuests": [
-    "seams_the_missing_year"
-  ],
-  "caresAbout": [
-    "hold_honoured",
-    "deep_door_opened"
-  ],
-  "reactions": [],
-  "faction": "karn_dolur",
-  "dialogue": "seams_vare_talk",
-  "home": "deep_market_hall_of_measures",
-  "shop": {
-    "lootTable": "deep_stock",
-    "buysTags": [
-      "treasure",
-      "material"
+  "@prefab": "content_npcs_entry",
+  "params": {
+    "id": "measurer_vare",
+    "name": "Vare of the Hall of Measures",
+    "description": "Keeps the Hold's standards — the yard, the mark, the fee — and by extension every decision the Hold has ever declined to revisit.",
+    "disposition": 5,
+    "gullibility": 0.15,
+    "memorySpan": 365,
+    "offersQuests": [
+      "seams_the_missing_year"
     ],
-    "priceMultiplier": 1.2,
-    "requires": {
-      "factions": [
-        {
-          "faction": "karn_dolur",
-          "minStanding": 20
-        }
-      ]
+    "caresAbout": [
+      "hold_honoured",
+      "deep_door_opened"
+    ],
+    "faction": "karn_dolur",
+    "dialogue": "seams_vare_talk",
+    "home": "deep_market_hall_of_measures",
+    "shop": {
+      "lootTable": "deep_stock",
+      "buysTags": [
+        "treasure",
+        "material"
+      ],
+      "priceMultiplier": 1.2,
+      "requires": {
+        "factions": [
+          {
+            "faction": "karn_dolur",
+            "minStanding": 20
+          }
+        ]
+      }
     }
-  },
-  "temperament": {
-    "roamRadius": 0,
-    "wanderChance": 0,
-    "speeds": {
-      "wander": 0
-    },
-    "investigates": [],
-    "notices": [
-      "hostile",
-      "neutral",
-      "ally"
-    ]
   }
 }

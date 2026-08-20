@@ -1,92 +1,60 @@
 {
-  "id": "first_through",
-  "name": "What Came Through the First",
-  "description": "A cellar bar chewed through and put back up from the inside, every year, for as long as there has been a ward-house over it.",
-  "level": 13,
-  "xp": 3400,
-  "attributes": {
-    "might": 20,
-    "agility": 17,
-    "endurance": 21,
-    "intellect": 16,
-    "instinct": 18,
-    "presence": 15
-  },
-  "abilities": [
-    "stone_fist",
-    "rend",
-    "shove",
-    "grave_chill"
-  ],
-  "behaviour": [
-    {
-      "priority": 25,
-      "use": "stone_fist",
-      "when": {
-        "chance": 0.4
+  "@prefab": "content_monsters_entry_4",
+  "params": {
+    "id": "first_through",
+    "name": "What Came Through the First",
+    "description": "A cellar bar chewed through and put back up from the inside, every year, for as long as there has been a ward-house over it.",
+    "level": 13,
+    "xp": 3400,
+    "attributes": {
+      "might": 20,
+      "agility": 17,
+      "endurance": 21,
+      "intellect": 16,
+      "instinct": 18,
+      "presence": 15
+    },
+    "abilities": [
+      "stone_fist",
+      "rend",
+      "shove",
+      "grave_chill"
+    ],
+    "behaviour": [
+      {
+        "priority": 25,
+        "use": "stone_fist",
+        "when": {
+          "chance": 0.4
+        }
+      },
+      {
+        "priority": 15,
+        "use": "grave_chill"
+      },
+      {
+        "priority": 5,
+        "use": "shove"
+      },
+      {
+        "priority": 0,
+        "use": "rend"
       }
+    ],
+    "descriptors": [
+      "a hunched",
+      "a patient"
+    ],
+    "loot": "trial_one_hoard_a",
+    "conditionImmunities": [
+      "frightened",
+      "prone",
+      "blinded",
+      "poisoned"
+    ],
+    "resourceOverrides": {
+      "hp": 210
     },
-    {
-      "priority": 15,
-      "use": "grave_chill"
-    },
-    {
-      "priority": 5,
-      "use": "shove"
-    },
-    {
-      "priority": 0,
-      "use": "rend"
-    }
-  ],
-  "faction": "the_unsealed",
-  "creatureType": "undead",
-  "size": "medium",
-  "descriptors": [
-    "a hunched",
-    "a patient"
-  ],
-  "conditionalLoot": [],
-  "loot": "trial_one_hoard_a",
-  "damageInteractions": [
-    {
-      "damageType": "slashing",
-      "multiplier": 0.5,
-      "unless": [
-        "silvered"
-      ]
-    },
-    {
-      "damageType": "piercing",
-      "multiplier": 0.5,
-      "unless": [
-        "silvered"
-      ]
-    }
-  ],
-  "conditionImmunities": [
-    "frightened",
-    "prone",
-    "blinded",
-    "poisoned"
-  ],
-  "resourceOverrides": {
-    "hp": 210
-  },
-  "temperament": {
-    "roamRadius": 12,
-    "investigateRadius": 40,
-    "leashRadius": 60,
-    "wanderChance": 0.1,
-    "disengageTurns": 1,
-    "speeds": {
-      "wander": 0.5,
-      "investigate": 0.5
-    },
-    "investigates": [
-      "sight",
-      "hearing",
-      "smell"
-    ]
+    "variant": "v1"
   }
 }

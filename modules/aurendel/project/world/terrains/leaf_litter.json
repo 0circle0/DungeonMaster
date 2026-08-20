@@ -1,17 +1,14 @@
 {
-  "id": "leaf_litter",
-  "name": "Leaf Litter",
-  "description": "Years of leaf-fall, and it announces every step.",
-  "glyph": "\"",
-  "color": "yellow",
-  "passable": true,
-  "opaque": false,
-  "moveCost": 1,
-  "tags": [
-    "soft"
-  ],
-  "marks": {
-    "tracks": 1,
-    "smell": 1
+  "@prefab": "world_terrains_entry",
+  "params": {
+    "id": "leaf_litter",
+    "name": "Leaf Litter",
+    "description": "Years of leaf-fall, and it announces every step.",
+    "glyph": "\"",
+    "color": "yellow",
+    "tags": [
+      "soft"
+    ],
+    "variant": "v1"
   }
 }

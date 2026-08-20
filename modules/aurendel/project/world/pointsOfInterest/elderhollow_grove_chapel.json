@@ -1,24 +1,18 @@
 {
-  "id": "elderhollow_grove_chapel",
-  "name": "The Grove Chapel",
-  "description": "Roofed with shingles off the same oaks it was built between.",
-  "area": "duskwood_elderhollow",
-  "kind": "shrine",
-  "descriptionKey": "int_temple",
-  "travelMinutes": 3,
-  "tags": [
-    "shrine"
-  ],
-  "services": [
-    "temple"
-  ],
-  "map": {
-    "width": "11",
-    "height": "9",
-    "palette": "int_temple"
-  },
-  "position": {
-    "x": 20,
-    "y": 23
+  "@prefab": "world_points_f_nterest_int_temple",
+  "params": {
+    "id": "elderhollow_grove_chapel",
+    "name": "The Grove Chapel",
+    "description": "Roofed with shingles off the same oaks it was built between.",
+    "area": "duskwood_elderhollow",
+    "map": {
+      "width": "11",
+      "height": "9",
+      "palette": "int_temple"
+    },
+    "position": {
+      "x": 20,
+      "y": 23
+    }
   }
 }

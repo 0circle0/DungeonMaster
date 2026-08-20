@@ -1,92 +1,74 @@
 {
-  "id": "wreck_shade",
-  "name": "The Light on the Point",
-  "description": "Something has been showing a light off Gannet Head for ninety years, and the lighthouse is not it.",
-  "level": 4,
-  "xp": 200,
-  "attributes": {
-    "might": 12,
-    "agility": 15,
-    "endurance": 13,
-    "intellect": 12,
-    "instinct": 14,
-    "presence": 16
-  },
-  "abilities": [
-    "grave_chill",
-    "wither",
-    "drag_under"
-  ],
-  "behaviour": [
-    {
-      "priority": 10,
-      "use": "wither"
+  "@prefab": "content_monsters_entry_3",
+  "params": {
+    "id": "wreck_shade",
+    "name": "The Light on the Point",
+    "description": "Something has been showing a light off Gannet Head for ninety years, and the lighthouse is not it.",
+    "level": 4,
+    "xp": 200,
+    "attributes": {
+      "might": 12,
+      "agility": 15,
+      "endurance": 13,
+      "intellect": 12,
+      "instinct": 14,
+      "presence": 16
     },
-    {
-      "priority": 0,
-      "use": "grave_chill"
-    }
-  ],
-  "faction": "the_unsealed",
-  "creatureType": "undead",
-  "size": "medium",
-  "descriptors": [
-    "a cold",
-    "a shining"
-  ],
-  "conditionalLoot": [
-    "silvered_cache"
-  ],
-  "loot": "saltcliff_hoard",
-  "damageInteractions": [
-    {
-      "damageType": "slashing",
-      "multiplier": 0.5,
-      "unless": [
-        "silvered"
-      ]
+    "abilities": [
+      "grave_chill",
+      "wither",
+      "drag_under"
+    ],
+    "behaviour": [
+      {
+        "priority": 10,
+        "use": "wither"
+      },
+      {
+        "priority": 0,
+        "use": "grave_chill"
+      }
+    ],
+    "descriptors": [
+      "a cold",
+      "a shining"
+    ],
+    "loot": "saltcliff_hoard",
+    "damageInteractions": [
+      {
+        "damageType": "slashing",
+        "multiplier": 0.5,
+        "unless": [
+          "silvered"
+        ]
+      },
+      {
+        "damageType": "piercing",
+        "multiplier": 0.5,
+        "unless": [
+          "silvered"
+        ]
+      },
+      {
+        "damageType": "cold",
+        "multiplier": 0.5
+      },
+      {
+        "damageType": "radiant",
+        "multiplier": 2
+      }
+    ],
+    "conditionImmunities": [
+      "frightened",
+      "poisoned",
+      "prone"
+    ],
+    "resourceOverrides": {
+      "hp": 38
     },
-    {
-      "damageType": "piercing",
-      "multiplier": 0.5,
-      "unless": [
-        "silvered"
-      ]
+    "derivedOverrides": {
+      "guard": 15
     },
-    {
-      "damageType": "cold",
-      "multiplier": 0.5
-    },
-    {
-      "damageType": "radiant",
-      "multiplier": 2
-    }
-  ],
-  "conditionImmunities": [
-    "frightened",
-    "poisoned",
-    "prone"
-  ],
-  "resourceOverrides": {
-    "hp": 38
-  },
-  "derivedOverrides": {
-    "guard": 15
-  },
-  "temperament": {
-    "roamRadius": 12,
-    "investigateRadius": 40,
-    "leashRadius": 60,
-    "wanderChance": 0.1,
-    "disengageTurns": 1,
-    "speeds": {
-      "wander": 0.5,
-      "investigate": 0.5
-    },
-    "investigates": [
-      "sight",
-      "hearing",
-      "smell"
-    ]
+    "variant": "v1"
   }
 }

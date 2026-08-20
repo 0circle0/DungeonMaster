@@ -1,53 +1,29 @@
 {
-  "id": "step_rider",
-  "name": "Talith of the Relay",
-  "description": "Sixty miles between remounts, in a day, routinely.",
-  "level": 5,
-  "xp": 0,
-  "attributes": {
-    "might": 13,
-    "agility": 16,
-    "endurance": 14,
-    "intellect": 12,
-    "instinct": 14,
-    "presence": 13
-  },
-  "abilities": [
-    "strike",
-    "quick_shot"
-  ],
-  "behaviour": [
-    {
-      "priority": 0,
-      "use": "strike"
-    }
-  ],
-  "faction": "the_horse_lords",
-  "creatureType": "humanoid",
-  "size": "medium",
-  "descriptors": [
-    "a wiry"
-  ],
-  "conditionalLoot": [],
-  "loot": "step_book_carried",
-  "resourceOverrides": {
-    "hp": 30
-  },
-  "temperament": {
-    "roamRadius": 24,
-    "investigateRadius": 70,
-    "leashRadius": 100,
-    "wanderChance": 0.4,
-    "disengageTurns": 2,
-    "investigates": [
-      "sight",
-      "hearing",
-      "tracks",
-      "smell"
+  "@prefab": "content_monsters_entry",
+  "params": {
+    "id": "step_rider",
+    "name": "Talith of the Relay",
+    "description": "Sixty miles between remounts, in a day, routinely.",
+    "attributes": {
+      "might": 13,
+      "agility": 16,
+      "endurance": 14,
+      "intellect": 12,
+      "instinct": 14,
+      "presence": 13
+    },
+    "abilities": [
+      "strike",
+      "quick_shot"
     ],
-    "notices": [
-      "hostile",
-      "neutral"
-    ]
+    "faction": "the_horse_lords",
+    "descriptors": [
+      "a wiry"
+    ],
+    "loot": "step_book_carried",
+    "resourceOverrides": {
+      "hp": 30
+    },
+    "variant": "v5"
   }
 }

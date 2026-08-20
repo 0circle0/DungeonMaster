@@ -1,25 +1,21 @@
 {
-  "id": "root_and_branch",
-  "name": "Root and Branch",
-  "description": "The beech has been growing round the hollow for four hundred years and has opinions about being disturbed.",
-  "actionType": "action",
-  "targeting": "single",
-  "attack": {
-    "stat": "might",
-    "against": "guard"
-  },
-  "onUse": [
-    {
-      "damage": {
-        "target": {
-          "ref": "target.id"
-        },
-        "amount": {
-          "roll": "2d6"
-        },
-        "damageType": "bludgeoning"
+  "@prefab": "content_abilities_entry_4",
+  "params": {
+    "id": "root_and_branch",
+    "name": "Root and Branch",
+    "description": "The beech has been growing round the hollow for four hundred years and has opinions about being disturbed.",
+    "onUse": [
+      {
+        "damage": {
+          "target": {
+            "ref": "target.id"
+          },
+          "amount": {
+            "roll": "2d6"
+          },
+          "damageType": "bludgeoning"
+        }
       }
-    }
-  ],
-  "cooldown": 2
+    ]
+  }
 }

@@ -1,24 +1,14 @@
 {
-  "id": "stiltmarket_boatyard",
-  "name": "The Punt Yard",
-  "description": "Flat-bottomed, shallow-draught, and every one of them made to the same pattern for six hundred years.",
-  "area": "thornmere_stiltmarket",
-  "kind": "market",
-  "descriptionKey": "int_workshop",
-  "travelMinutes": 3,
-  "tags": [
-    "shop"
-  ],
-  "services": [
-    "market"
-  ],
-  "map": {
-    "width": "15",
-    "height": "11",
-    "palette": "int_shop"
-  },
-  "position": {
-    "x": 28,
-    "y": 3
+  "@prefab": "world_points_f_nterest_int_workshop_2",
+  "params": {
+    "id": "stiltmarket_boatyard",
+    "name": "The Punt Yard",
+    "description": "Flat-bottomed, shallow-draught, and every one of them made to the same pattern for six hundred years.",
+    "area": "thornmere_stiltmarket",
+    "position": {
+      "x": 28,
+      "y": 3
+    },
+    "variant": "v1"
   }
 }

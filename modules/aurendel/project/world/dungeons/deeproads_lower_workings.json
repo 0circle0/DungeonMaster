@@ -1,18 +1,15 @@
 {
-  "id": "deeproads_lower_workings",
-  "name": "The Lower Workings",
-  "description": "Four hundred years of Lantern Deep quarrying its own cavern larger, and it goes further than the plan admits.",
-  "biome": "dungeon_delved",
-  "roomCount": "13",
-  "depth": "3",
-  "algorithm": "rooms",
-  "lockedDoorChance": 0,
-  "doorGates": [],
-  "rollEncounters": false,
-  "safeEntrance": true,
-  "branchiness": 0.5,
-  "width": "73",
-  "height": "73",
-  "corridorLength": "2d3",
-  "bossTable": "deep_workings_boss"
+  "@prefab": "world_dungeons_entry_6",
+  "params": {
+    "id": "deeproads_lower_workings",
+    "name": "The Lower Workings",
+    "description": "Four hundred years of Lantern Deep quarrying its own cavern larger, and it goes further than the plan admits.",
+    "roomCount": "13",
+    "depth": "3",
+    "branchiness": 0.5,
+    "width": "73",
+    "height": "73",
+    "bossTable": "deep_workings_boss",
+    "variant": "v1"
+  }
 }

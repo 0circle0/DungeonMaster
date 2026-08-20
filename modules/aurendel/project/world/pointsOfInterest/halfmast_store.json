@@ -1,24 +1,14 @@
 {
-  "id": "halfmast_store",
-  "name": "The Fort Store",
-  "description": "In the old magazine, which is the only dry room on the island.",
-  "area": "isles_halfmast",
-  "kind": "market",
-  "descriptionKey": "int_store",
-  "travelMinutes": 3,
-  "tags": [
-    "shop"
-  ],
-  "services": [
-    "market"
-  ],
-  "map": {
-    "width": "9",
-    "height": "7",
-    "palette": "int_shop"
-  },
-  "position": {
-    "x": 15,
-    "y": 3
+  "@prefab": "world_points_f_nterest_int_store_2",
+  "params": {
+    "id": "halfmast_store",
+    "name": "The Fort Store",
+    "description": "In the old magazine, which is the only dry room on the island.",
+    "area": "isles_halfmast",
+    "position": {
+      "x": 15,
+      "y": 3
+    },
+    "variant": "v4"
   }
 }

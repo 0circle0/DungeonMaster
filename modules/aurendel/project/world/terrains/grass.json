@@ -1,17 +1,14 @@
 {
-  "id": "grass",
-  "name": "Grass",
-  "description": "Ordinary turf, cropped short by whatever grazes here.",
-  "glyph": ".",
-  "color": "green",
-  "passable": true,
-  "opaque": false,
-  "moveCost": 1,
-  "tags": [
-    "soft"
-  ],
-  "marks": {
-    "tracks": 1,
-    "smell": 1
+  "@prefab": "world_terrains_entry",
+  "params": {
+    "id": "grass",
+    "name": "Grass",
+    "description": "Ordinary turf, cropped short by whatever grazes here.",
+    "glyph": ".",
+    "color": "green",
+    "tags": [
+      "soft"
+    ],
+    "variant": "v1"
   }
 }

@@ -1,53 +1,29 @@
 {
-  "id": "deep_surveyor",
-  "name": "Ilde, Surveyor",
-  "description": "Carries a plate, a rule and a light into places nobody has measured.",
-  "level": 7,
-  "xp": 0,
-  "attributes": {
-    "might": 12,
-    "agility": 16,
-    "endurance": 14,
-    "intellect": 17,
-    "instinct": 16,
-    "presence": 12
-  },
-  "abilities": [
-    "strike",
-    "quick_shot"
-  ],
-  "behaviour": [
-    {
-      "priority": 0,
-      "use": "strike"
-    }
-  ],
-  "faction": "the_wayfinders",
-  "creatureType": "humanoid",
-  "size": "medium",
-  "descriptors": [
-    "a careful"
-  ],
-  "conditionalLoot": [],
-  "loot": "deep_plate_carried",
-  "resourceOverrides": {
-    "hp": 42
-  },
-  "temperament": {
-    "roamRadius": 24,
-    "investigateRadius": 70,
-    "leashRadius": 100,
-    "wanderChance": 0.4,
-    "disengageTurns": 2,
-    "investigates": [
-      "sight",
-      "hearing",
-      "tracks",
-      "smell"
+  "@prefab": "content_monsters_entry",
+  "params": {
+    "id": "deep_surveyor",
+    "name": "Ilde, Surveyor",
+    "description": "Carries a plate, a rule and a light into places nobody has measured.",
+    "attributes": {
+      "might": 12,
+      "agility": 16,
+      "endurance": 14,
+      "intellect": 17,
+      "instinct": 16,
+      "presence": 12
+    },
+    "abilities": [
+      "strike",
+      "quick_shot"
     ],
-    "notices": [
-      "hostile",
-      "neutral"
-    ]
+    "faction": "the_wayfinders",
+    "descriptors": [
+      "a careful"
+    ],
+    "loot": "deep_plate_carried",
+    "resourceOverrides": {
+      "hp": 42
+    },
+    "variant": "v9"
   }
 }

@@ -1,18 +1,16 @@
 {
-  "id": "drowned_bell_the_old_church",
-  "name": "The Old Church",
-  "description": "Down the hatch, past the old bell, into a nave that has been under water for two hundred years and is not full.",
-  "area": "thornmere_drowned_bell",
-  "kind": "dungeonEntrance",
-  "descriptionKey": "generic_dungeon_mouth",
-  "travelMinutes": 12,
-  "tags": [
-    "dungeon"
-  ],
-  "gate": "drowned_bell_belfry",
-  "dungeon": "thornmere_old_church",
-  "position": {
-    "x": 27,
-    "y": 17
+  "@prefab": "world_points_f_nterest_generic_dungeon_mouth_5",
+  "params": {
+    "id": "drowned_bell_the_old_church",
+    "name": "The Old Church",
+    "description": "Down the hatch, past the old bell, into a nave that has been under water for two hundred years and is not full.",
+    "area": "thornmere_drowned_bell",
+    "travelMinutes": 12,
+    "gate": "drowned_bell_belfry",
+    "dungeon": "thornmere_old_church",
+    "position": {
+      "x": 27,
+      "y": 17
+    }
   }
 }

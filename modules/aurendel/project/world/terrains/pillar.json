@@ -1,14 +1,11 @@
 {
-  "id": "pillar",
-  "name": "Pillar",
-  "description": "Holding up more than it looks like it should.",
-  "glyph": "1",
-  "color": "gray",
-  "passable": false,
-  "opaque": true,
-  "moveCost": 0,
-  "tags": [
-    "furniture"
-  ],
-  "providesCover": "three_quarters"
+  "@prefab": "world_terrains_entry_6",
+  "params": {
+    "id": "pillar",
+    "name": "Pillar",
+    "description": "Holding up more than it looks like it should.",
+    "glyph": "1",
+    "color": "gray",
+    "variant": "v4"
+  }
 }

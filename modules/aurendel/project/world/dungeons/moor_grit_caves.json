@@ -1,21 +1,19 @@
 {
-  "id": "moor_grit_caves",
-  "name": "The Grit Caves",
-  "description": "Slots left where blocks came away from the edge, and one of them goes back into the hill and keeps going.",
-  "biome": "dungeon_cave",
-  "roomCount": "10",
-  "depth": "2",
-  "algorithm": "caverns",
-  "lockedDoorChance": 0,
-  "doorGates": [],
-  "rollEncounters": false,
-  "safeEntrance": true,
-  "caverns": {
-    "fill": 0.45,
-    "smoothingPasses": 4,
-    "birthThreshold": 5
-  },
-  "width": "43",
-  "height": "43",
-  "bossTable": "moor_shoot_boss"
+  "@prefab": "world_dungeons_entry",
+  "params": {
+    "id": "moor_grit_caves",
+    "name": "The Grit Caves",
+    "description": "Slots left where blocks came away from the edge, and one of them goes back into the hill and keeps going.",
+    "biome": "dungeon_cave",
+    "roomCount": "10",
+    "depth": "2",
+    "caverns": {
+      "fill": 0.45,
+      "smoothingPasses": 4,
+      "birthThreshold": 5
+    },
+    "width": "43",
+    "height": "43",
+    "bossTable": "moor_shoot_boss"
+  }
 }

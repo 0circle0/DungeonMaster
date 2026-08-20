@@ -1,24 +1,14 @@
 {
-  "id": "elderhollow_the_long_bough",
-  "name": "The Long Bough",
-  "description": "Beams out of the forest, floor out of the forest, and a fire that has never once gone out.",
-  "area": "duskwood_elderhollow",
-  "kind": "settlement",
-  "descriptionKey": "int_inn",
-  "travelMinutes": 3,
-  "tags": [
-    "inn"
-  ],
-  "services": [
-    "inn"
-  ],
-  "map": {
-    "width": "15",
-    "height": "11",
-    "palette": "int_timber"
-  },
-  "position": {
-    "x": 20,
-    "y": 3
+  "@prefab": "world_points_f_nterest_int_inn_2",
+  "params": {
+    "id": "elderhollow_the_long_bough",
+    "name": "The Long Bough",
+    "description": "Beams out of the forest, floor out of the forest, and a fire that has never once gone out.",
+    "area": "duskwood_elderhollow",
+    "position": {
+      "x": 20,
+      "y": 3
+    },
+    "variant": "v1"
   }
 }

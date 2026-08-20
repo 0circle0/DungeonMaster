@@ -1,0 +1,103 @@
+{
+  "id": "content_npcs_entry_3",
+  "label": "content_npcs_entry_3",
+  "collection": "content.npcs",
+  "params": [
+    {
+      "key": "id",
+      "kind": "string"
+    },
+    {
+      "key": "name",
+      "kind": "string"
+    },
+    {
+      "key": "description",
+      "kind": "text"
+    },
+    {
+      "key": "disposition",
+      "kind": "string"
+    },
+    {
+      "key": "memorySpan",
+      "kind": "string"
+    },
+    {
+      "key": "faction",
+      "kind": "string"
+    },
+    {
+      "key": "dialogue",
+      "kind": "string"
+    },
+    {
+      "key": "home",
+      "kind": "string"
+    },
+    {
+      "key": "statblock",
+      "kind": "string"
+    },
+    {
+      "key": "variant",
+      "kind": "enum",
+      "options": [
+        "v1",
+        "v2",
+        "v3",
+        "v4",
+        "v5",
+        "v6",
+        "v7",
+        "v8",
+        "v9"
+      ]
+    }
+  ],
+  "template": {
+    "id": "{{id}}",
+    "name": "{{name}}",
+    "description": "{{description}}",
+    "disposition": "{{disposition}}",
+    "gullibility": {
+      "@lookup": [
+        "content_npcs_entry_3_variant",
+        "{{variant}}",
+        "gullibility"
+      ]
+    },
+    "memorySpan": "{{memorySpan}}",
+    "offersQuests": [],
+    "caresAbout": {
+      "@lookup": [
+        "content_npcs_entry_3_variant",
+        "{{variant}}",
+        "caresAbout"
+      ]
+    },
+    "reactions": [],
+    "faction": "{{faction}}",
+    "dialogue": "{{dialogue}}",
+    "home": "{{home}}",
+    "statblock": "{{statblock}}",
+    "temperament": {
+      "roamRadius": 24,
+      "investigateRadius": 60,
+      "leashRadius": 90,
+      "wanderChance": 0.3,
+      "speeds": {
+        "wander": 0.5
+      },
+      "investigates": [
+        "sight",
+        "hearing"
+      ],
+      "notices": [
+        "hostile",
+        "neutral",
+        "ally"
+      ]
+    }
+  }
+}

@@ -1,20 +1,15 @@
 {
-  "id": "second_face_stone",
-  "name": "A Piece off the Second Face",
-  "description": "Finer than roadstone, and there is none of it in any road.",
-  "kind": "treasure",
-  "value": 0,
-  "weight": 0,
-  "tags": [
-    "clue",
-    "proof"
-  ],
-  "onUse": [
-    {
-      "learnLore": {
-        "entry": "kings_quarry_stone"
+  "@prefab": "content_items_entry_9",
+  "params": {
+    "id": "second_face_stone",
+    "name": "A Piece off the Second Face",
+    "description": "Finer than roadstone, and there is none of it in any road.",
+    "onUse": [
+      {
+        "learnLore": {
+          "entry": "kings_quarry_stone"
+        }
       }
-    }
-  ],
-  "consumedOnUse": false
+    ]
+  }
 }

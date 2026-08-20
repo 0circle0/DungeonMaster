@@ -1,18 +1,15 @@
 {
-  "id": "moor_beneath_sisters",
-  "name": "Beneath the Sisters",
-  "description": "A cut stair between the eastern stones, and chambers under the ring laid out to the same plan as the ring.",
-  "biome": "dungeon_barrow",
-  "roomCount": "12",
-  "depth": "3",
-  "algorithm": "rooms",
-  "lockedDoorChance": 0,
-  "doorGates": [],
-  "rollEncounters": false,
-  "safeEntrance": true,
-  "branchiness": 0.2,
-  "width": "81",
-  "height": "81",
-  "corridorLength": "3d3",
-  "bossTable": "the_sisters_shade"
+  "@prefab": "world_dungeons_entry_6",
+  "params": {
+    "id": "moor_beneath_sisters",
+    "name": "Beneath the Sisters",
+    "description": "A cut stair between the eastern stones, and chambers under the ring laid out to the same plan as the ring.",
+    "roomCount": "12",
+    "depth": "3",
+    "branchiness": 0.2,
+    "width": "81",
+    "height": "81",
+    "bossTable": "the_sisters_shade",
+    "variant": "v2"
+  }
 }

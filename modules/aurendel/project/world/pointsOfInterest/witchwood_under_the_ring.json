@@ -1,17 +1,12 @@
 {
-  "id": "witchwood_under_the_ring",
-  "name": "Under the Ring",
-  "description": "There is a stair inside the Ring, going down, and the ninth tree has grown over the top of it.",
-  "area": "duskwood_witchwood",
-  "kind": "dungeonEntrance",
-  "descriptionKey": "generic_dungeon_mouth",
-  "travelMinutes": 15,
-  "tags": [
-    "dungeon"
-  ],
-  "dungeon": "duskwood_under_ring",
-  "position": {
-    "x": 25,
-    "y": 3
+  "@prefab": "world_points_f_nterest_generic_dungeon_mouth_3",
+  "params": {
+    "id": "witchwood_under_the_ring",
+    "name": "Under the Ring",
+    "description": "There is a stair inside the Ring, going down, and the ninth tree has grown over the top of it.",
+    "area": "duskwood_witchwood",
+    "travelMinutes": 15,
+    "dungeon": "duskwood_under_ring",
+    "variant": "v1"
   }
 }

@@ -1,21 +1,17 @@
 {
-  "id": "barred_door_iron",
-  "name": "Iron off a Barred Door",
-  "description": "The bar off a door in the uncovered town, straightened and hafted. It was on the outside, and whoever put it there meant it.",
-  "kind": "weapon",
-  "slot": "hand",
-  "value": 950,
-  "weight": 1,
-  "tags": [
-    "fabled"
-  ],
-  "damage": {
-    "dice": "1d10",
-    "damageType": "bludgeoning",
-    "stat": "might"
-  },
-  "properties": [
-    "heavy"
-  ],
-  "rarity": "very_rare"
+  "@prefab": "content_items_entry_10",
+  "params": {
+    "id": "barred_door_iron",
+    "name": "Iron off a Barred Door",
+    "description": "The bar off a door in the uncovered town, straightened and hafted. It was on the outside, and whoever put it there meant it.",
+    "value": 950,
+    "damage": {
+      "dice": "1d10",
+      "damageType": "bludgeoning",
+      "stat": "might"
+    },
+    "properties": [
+      "heavy"
+    ]
+  }
 }

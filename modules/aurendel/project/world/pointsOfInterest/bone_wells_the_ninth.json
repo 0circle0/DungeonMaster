@@ -1,17 +1,12 @@
 {
-  "id": "bone_wells_the_ninth",
-  "name": "The Ninth Well",
-  "description": "The only one with rungs, and they go down further than the shaft was ever dug.",
-  "area": "glasslands_bone_wells",
-  "kind": "dungeonEntrance",
-  "descriptionKey": "generic_dungeon_mouth",
-  "travelMinutes": 14,
-  "tags": [
-    "dungeon"
-  ],
-  "dungeon": "glasslands_ninth_well",
-  "position": {
-    "x": 25,
-    "y": 3
+  "@prefab": "world_points_f_nterest_generic_dungeon_mouth_3",
+  "params": {
+    "id": "bone_wells_the_ninth",
+    "name": "The Ninth Well",
+    "description": "The only one with rungs, and they go down further than the shaft was ever dug.",
+    "area": "glasslands_bone_wells",
+    "travelMinutes": 14,
+    "dungeon": "glasslands_ninth_well",
+    "variant": "v1"
   }
 }

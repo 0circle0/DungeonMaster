@@ -1,19 +1,14 @@
 {
-  "id": "windbreak_shepherds_camp",
-  "name": "The Shade Camp",
-  "description": "The only shade on the steppe, and consequently the most contested ground in the region.",
-  "area": "steppe_windbreak",
-  "kind": "camp",
-  "descriptionKey": "int_house",
-  "travelMinutes": 5,
-  "tags": [],
-  "map": {
-    "width": "9",
-    "height": "7",
-    "palette": "int_timber"
-  },
-  "position": {
-    "x": 14,
-    "y": 3
+  "@prefab": "world_points_f_nterest_int_house_2",
+  "params": {
+    "id": "windbreak_shepherds_camp",
+    "name": "The Shade Camp",
+    "description": "The only shade on the steppe, and consequently the most contested ground in the region.",
+    "area": "steppe_windbreak",
+    "position": {
+      "x": 14,
+      "y": 3
+    },
+    "variant": "v5"
   }
 }

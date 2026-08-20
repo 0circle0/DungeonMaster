@@ -1,19 +1,13 @@
 {
-  "id": "deep_market_floor",
-  "name": "The Market Floor",
-  "description": "A cavern the size of a town square, four galleries of shopfronts cut round it, and a roof you cannot see.",
-  "area": "karn_dolur_deep_market",
-  "kind": "market",
-  "descriptionKey": "generic_market",
-  "travelMinutes": 2,
-  "tags": [
-    "shop"
-  ],
-  "services": [
-    "market"
-  ],
-  "position": {
-    "x": 3,
-    "y": 3
+  "@prefab": "world_points_f_nterest_generic_market",
+  "params": {
+    "id": "deep_market_floor",
+    "name": "The Market Floor",
+    "description": "A cavern the size of a town square, four galleries of shopfronts cut round it, and a roof you cannot see.",
+    "area": "karn_dolur_deep_market",
+    "position": {
+      "x": 3,
+      "y": 3
+    }
   }
 }

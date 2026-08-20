@@ -1,17 +1,14 @@
 {
-  "id": "saltflat",
-  "name": "Salt Flat",
-  "description": "White crust over old sea-bed. It crunches.",
-  "glyph": "-",
-  "color": "white",
-  "passable": true,
-  "opaque": false,
-  "moveCost": 1,
-  "tags": [
-    "stone"
-  ],
-  "marks": {
-    "tracks": 0,
-    "smell": 0.6
+  "@prefab": "world_terrains_entry",
+  "params": {
+    "id": "saltflat",
+    "name": "Salt Flat",
+    "description": "White crust over old sea-bed. It crunches.",
+    "glyph": "-",
+    "color": "white",
+    "tags": [
+      "stone"
+    ],
+    "variant": "v4"
   }
 }

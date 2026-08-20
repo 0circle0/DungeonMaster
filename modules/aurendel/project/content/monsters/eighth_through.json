@@ -1,92 +1,60 @@
 {
-  "id": "eighth_through",
-  "name": "What Came Through the Eighth",
-  "description": "Six hundred years of vent-readers signalling past a deep and never to it, and not one of them ever told why.",
-  "level": 19,
-  "xp": 9000,
-  "attributes": {
-    "might": 24,
-    "agility": 20,
-    "endurance": 25,
-    "intellect": 19,
-    "instinct": 21,
-    "presence": 19
-  },
-  "abilities": [
-    "vent_breath",
-    "cinder_lash",
-    "salt_burn",
-    "rend"
-  ],
-  "behaviour": [
-    {
-      "priority": 30,
-      "use": "vent_breath",
-      "when": {
-        "chance": 0.35
+  "@prefab": "content_monsters_entry_4",
+  "params": {
+    "id": "eighth_through",
+    "name": "What Came Through the Eighth",
+    "description": "Six hundred years of vent-readers signalling past a deep and never to it, and not one of them ever told why.",
+    "level": 19,
+    "xp": 9000,
+    "attributes": {
+      "might": 24,
+      "agility": 20,
+      "endurance": 25,
+      "intellect": 19,
+      "instinct": 21,
+      "presence": 19
+    },
+    "abilities": [
+      "vent_breath",
+      "cinder_lash",
+      "salt_burn",
+      "rend"
+    ],
+    "behaviour": [
+      {
+        "priority": 30,
+        "use": "vent_breath",
+        "when": {
+          "chance": 0.35
+        }
+      },
+      {
+        "priority": 20,
+        "use": "cinder_lash"
+      },
+      {
+        "priority": 10,
+        "use": "salt_burn"
+      },
+      {
+        "priority": 0,
+        "use": "rend"
       }
+    ],
+    "descriptors": [
+      "a furnace-hearted",
+      "a vast"
+    ],
+    "loot": "trial_three_hoard_b",
+    "conditionImmunities": [
+      "frightened",
+      "burning",
+      "prone",
+      "blinded"
+    ],
+    "resourceOverrides": {
+      "hp": 360
     },
-    {
-      "priority": 20,
-      "use": "cinder_lash"
-    },
-    {
-      "priority": 10,
-      "use": "salt_burn"
-    },
-    {
-      "priority": 0,
-      "use": "rend"
-    }
-  ],
-  "faction": "the_unsealed",
-  "creatureType": "undead",
-  "size": "medium",
-  "descriptors": [
-    "a furnace-hearted",
-    "a vast"
-  ],
-  "conditionalLoot": [],
-  "loot": "trial_three_hoard_b",
-  "damageInteractions": [
-    {
-      "damageType": "slashing",
-      "multiplier": 0.5,
-      "unless": [
-        "silvered"
-      ]
-    },
-    {
-      "damageType": "piercing",
-      "multiplier": 0.5,
-      "unless": [
-        "silvered"
-      ]
-    }
-  ],
-  "conditionImmunities": [
-    "frightened",
-    "burning",
-    "prone",
-    "blinded"
-  ],
-  "resourceOverrides": {
-    "hp": 360
-  },
-  "temperament": {
-    "roamRadius": 12,
-    "investigateRadius": 40,
-    "leashRadius": 60,
-    "wanderChance": 0.1,
-    "disengageTurns": 1,
-    "speeds": {
-      "wander": 0.5,
-      "investigate": 0.5
-    },
-    "investigates": [
-      "sight",
-      "hearing",
-      "smell"
-    ]
+    "variant": "v1"
   }
 }

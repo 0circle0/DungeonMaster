@@ -1,24 +1,14 @@
 {
-  "id": "drowned_bell_the_ringers",
-  "name": "The Ringers",
-  "description": "Six ringers, one inn, and they will tell you about the bell.",
-  "area": "thornmere_drowned_bell",
-  "kind": "settlement",
-  "descriptionKey": "int_inn",
-  "travelMinutes": 3,
-  "tags": [
-    "inn"
-  ],
-  "services": [
-    "inn"
-  ],
-  "map": {
-    "width": "9",
-    "height": "7",
-    "palette": "int_timber"
-  },
-  "position": {
-    "x": 9,
-    "y": 3
+  "@prefab": "world_points_f_nterest_int_inn_2",
+  "params": {
+    "id": "drowned_bell_the_ringers",
+    "name": "The Ringers",
+    "description": "Six ringers, one inn, and they will tell you about the bell.",
+    "area": "thornmere_drowned_bell",
+    "position": {
+      "x": 9,
+      "y": 3
+    },
+    "variant": "v3"
   }
 }

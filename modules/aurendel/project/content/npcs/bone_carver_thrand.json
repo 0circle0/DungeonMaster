@@ -1,36 +1,23 @@
 {
-  "id": "bone_carver_thrand",
-  "name": "Thrand, Bone Carver",
-  "description": "Cuts scrimshaw for the ships and has been counting the Strand for eleven years in a book he does not show people.",
-  "disposition": 0,
-  "gullibility": 0.3,
-  "memorySpan": 200,
-  "offersQuests": [],
-  "caresAbout": [],
-  "reactions": [],
-  "faction": "the_ice_moot",
-  "dialogue": "frost_thrand_talk",
-  "home": "whalebone_bone_carver",
-  "statblock": "frost_carver",
-  "shop": {
-    "lootTable": "keeper_stock",
-    "buysTags": [
-      "treasure",
-      "material"
-    ],
-    "priceMultiplier": 1.25
-  },
-  "temperament": {
-    "roamRadius": 0,
-    "wanderChance": 0,
-    "speeds": {
-      "wander": 0
-    },
-    "investigates": [],
-    "notices": [
-      "hostile",
-      "neutral",
-      "ally"
-    ]
+  "@prefab": "content_npcs_entry_4",
+  "params": {
+    "id": "bone_carver_thrand",
+    "name": "Thrand, Bone Carver",
+    "description": "Cuts scrimshaw for the ships and has been counting the Strand for eleven years in a book he does not show people.",
+    "disposition": 0,
+    "gullibility": 0.3,
+    "memorySpan": 200,
+    "faction": "the_ice_moot",
+    "dialogue": "frost_thrand_talk",
+    "home": "whalebone_bone_carver",
+    "statblock": "frost_carver",
+    "shop": {
+      "lootTable": "keeper_stock",
+      "buysTags": [
+        "treasure",
+        "material"
+      ],
+      "priceMultiplier": 1.25
+    }
   }
 }

@@ -1,65 +1,49 @@
 {
-  "id": "tube_breather",
-  "name": "What Breathes in the Tube",
-  "description": "It has kept the same rhythm for longer than the village, and the village has never once been cold.",
-  "level": 8,
-  "xp": 800,
-  "attributes": {
-    "might": 16,
-    "agility": 13,
-    "endurance": 18,
-    "intellect": 12,
-    "instinct": 16,
-    "presence": 13
-  },
-  "abilities": [
-    "vent_breath",
-    "cinder_lash",
-    "rend"
-  ],
-  "behaviour": [
-    {
-      "priority": 20,
-      "use": "vent_breath",
-      "when": {
-        "chance": 0.4
+  "@prefab": "content_monsters_entry_2",
+  "params": {
+    "id": "tube_breather",
+    "name": "What Breathes in the Tube",
+    "description": "It has kept the same rhythm for longer than the village, and the village has never once been cold.",
+    "level": 8,
+    "xp": 800,
+    "attributes": {
+      "might": 16,
+      "agility": 13,
+      "endurance": 18,
+      "intellect": 12,
+      "instinct": 16,
+      "presence": 13
+    },
+    "abilities": [
+      "vent_breath",
+      "cinder_lash",
+      "rend"
+    ],
+    "behaviour": [
+      {
+        "priority": 20,
+        "use": "vent_breath",
+        "when": {
+          "chance": 0.4
+        }
+      },
+      {
+        "priority": 0,
+        "use": "cinder_lash"
       }
+    ],
+    "descriptors": [
+      "a slow",
+      "a breathing"
+    ],
+    "loot": "ember_tube_hoard",
+    "conditionImmunities": [
+      "burning",
+      "frightened"
+    ],
+    "resourceOverrides": {
+      "hp": 94
     },
-    {
-      "priority": 0,
-      "use": "cinder_lash"
-    }
-  ],
-  "faction": "the_unsealed",
-  "creatureType": "undead",
-  "size": "medium",
-  "descriptors": [
-    "a slow",
-    "a breathing"
-  ],
-  "conditionalLoot": [],
-  "loot": "ember_tube_hoard",
-  "conditionImmunities": [
-    "burning",
-    "frightened"
-  ],
-  "resourceOverrides": {
-    "hp": 94
-  },
-  "temperament": {
-    "roamRadius": 12,
-    "investigateRadius": 40,
-    "leashRadius": 60,
-    "wanderChance": 0.1,
-    "disengageTurns": 1,
-    "speeds": {
-      "wander": 0.5,
-      "investigate": 0.5
-    },
-    "investigates": [
-      "sight",
-      "hearing",
-      "smell"
-    ]
+    "variant": "v1"
   }
 }

@@ -1,19 +1,13 @@
 {
-  "id": "ilkhet_horse_fair",
-  "name": "The Horse Fair",
-  "description": "Four times a year, and the town exists to hold it and to argue about it for the rest of the time.",
-  "area": "steppe_ilkhet",
-  "kind": "market",
-  "descriptionKey": "generic_market",
-  "travelMinutes": 2,
-  "tags": [
-    "shop"
-  ],
-  "services": [
-    "market"
-  ],
-  "position": {
-    "x": 11,
-    "y": 3
+  "@prefab": "world_points_f_nterest_generic_market",
+  "params": {
+    "id": "ilkhet_horse_fair",
+    "name": "The Horse Fair",
+    "description": "Four times a year, and the town exists to hold it and to argue about it for the rest of the time.",
+    "area": "steppe_ilkhet",
+    "position": {
+      "x": 11,
+      "y": 3
+    }
   }
 }

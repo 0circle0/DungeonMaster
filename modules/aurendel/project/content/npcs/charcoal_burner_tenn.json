@@ -1,33 +1,15 @@
 {
-  "id": "charcoal_burner_tenn",
-  "name": "Tenn, Charcoal Burner",
-  "description": "Burns the new treeline for charcoal and has been bothered by the rings in it for eleven years.",
-  "disposition": 2,
-  "gullibility": 0.4,
-  "memorySpan": 150,
-  "offersQuests": [],
-  "caresAbout": [],
-  "reactions": [],
-  "faction": "the_vent_readers",
-  "dialogue": "ember_tenn_talk",
-  "home": "smoking_road_waystation",
-  "statblock": "ember_burner",
-  "temperament": {
-    "roamRadius": 24,
-    "investigateRadius": 60,
-    "leashRadius": 90,
-    "wanderChance": 0.3,
-    "speeds": {
-      "wander": 0.5
-    },
-    "investigates": [
-      "sight",
-      "hearing"
-    ],
-    "notices": [
-      "hostile",
-      "neutral",
-      "ally"
-    ]
+  "@prefab": "content_npcs_entry_3",
+  "params": {
+    "id": "charcoal_burner_tenn",
+    "name": "Tenn, Charcoal Burner",
+    "description": "Burns the new treeline for charcoal and has been bothered by the rings in it for eleven years.",
+    "disposition": 2,
+    "memorySpan": 150,
+    "faction": "the_vent_readers",
+    "dialogue": "ember_tenn_talk",
+    "home": "smoking_road_waystation",
+    "statblock": "ember_burner",
+    "variant": "v4"
   }
 }

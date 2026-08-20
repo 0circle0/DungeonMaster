@@ -1,48 +1,37 @@
 {
-  "id": "well_keeper_saray",
-  "name": "Saray of the Wells",
-  "description": "Keeps three wells, two of which have water, and has kept the third swept for nine years on the grounds that it might come back.",
-  "disposition": 8,
-  "gullibility": 0.35,
-  "memorySpan": 250,
-  "offersQuests": [
-    "dryriver_the_third_well"
-  ],
-  "caresAbout": [
-    "line_ridden",
-    "horse_taken"
-  ],
-  "reactions": [],
-  "faction": "the_horse_lords",
-  "dialogue": "dryriver_saray_talk",
-  "home": "three_wells_the_wells",
-  "shop": {
-    "lootTable": "ratcatchers_stock",
-    "buysTags": [
-      "treasure",
-      "material"
+  "@prefab": "content_npcs_entry",
+  "params": {
+    "id": "well_keeper_saray",
+    "name": "Saray of the Wells",
+    "description": "Keeps three wells, two of which have water, and has kept the third swept for nine years on the grounds that it might come back.",
+    "disposition": 8,
+    "gullibility": 0.35,
+    "memorySpan": 250,
+    "offersQuests": [
+      "dryriver_the_third_well"
     ],
-    "priceMultiplier": 1.25,
-    "requires": {
-      "factions": [
-        {
-          "faction": "the_horse_lords",
-          "minStanding": 10
-        }
-      ]
+    "caresAbout": [
+      "line_ridden",
+      "horse_taken"
+    ],
+    "faction": "the_horse_lords",
+    "dialogue": "dryriver_saray_talk",
+    "home": "three_wells_the_wells",
+    "shop": {
+      "lootTable": "ratcatchers_stock",
+      "buysTags": [
+        "treasure",
+        "material"
+      ],
+      "priceMultiplier": 1.25,
+      "requires": {
+        "factions": [
+          {
+            "faction": "the_horse_lords",
+            "minStanding": 10
+          }
+        ]
+      }
     }
-  },
-  "temperament": {
-    "roamRadius": 0,
-    "wanderChance": 0,
-    "speeds": {
-      "wander": 0
-    },
-    "investigates": [],
-    "notices": [
-      "hostile",
-      "neutral",
-      "ally"
-    ]
   }
 }

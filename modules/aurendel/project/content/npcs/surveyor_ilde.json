@@ -1,33 +1,15 @@
 {
-  "id": "surveyor_ilde",
-  "name": "Ilde, Surveyor",
-  "description": "Scribes the guild's sections onto brass and once put a number beside a shaft and then scratched it out.",
-  "disposition": 4,
-  "gullibility": 0.2,
-  "memorySpan": 300,
-  "offersQuests": [],
-  "caresAbout": [],
-  "reactions": [],
-  "faction": "the_wayfinders",
-  "dialogue": "deep_ilde_talk",
-  "home": "sunless_river_the_crossing",
-  "statblock": "deep_surveyor",
-  "temperament": {
-    "roamRadius": 24,
-    "investigateRadius": 60,
-    "leashRadius": 90,
-    "wanderChance": 0.3,
-    "speeds": {
-      "wander": 0.5
-    },
-    "investigates": [
-      "sight",
-      "hearing"
-    ],
-    "notices": [
-      "hostile",
-      "neutral",
-      "ally"
-    ]
+  "@prefab": "content_npcs_entry_3",
+  "params": {
+    "id": "surveyor_ilde",
+    "name": "Ilde, Surveyor",
+    "description": "Scribes the guild's sections onto brass and once put a number beside a shaft and then scratched it out.",
+    "disposition": 4,
+    "memorySpan": 300,
+    "faction": "the_wayfinders",
+    "dialogue": "deep_ilde_talk",
+    "home": "sunless_river_the_crossing",
+    "statblock": "deep_surveyor",
+    "variant": "v7"
   }
 }

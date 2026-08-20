@@ -1,33 +1,15 @@
 {
-  "id": "well_watcher_ondir",
-  "name": "Ondir, at the Last Water",
-  "description": "Lives at the edge of where things grow and lets people drink, which is the whole of the job and takes all of it.",
-  "disposition": 2,
-  "gullibility": 0.2,
-  "memorySpan": 260,
-  "offersQuests": [],
-  "caresAbout": [],
-  "reactions": [],
-  "faction": "the_horse_lords",
-  "dialogue": "step_ondir_talk",
-  "home": "south_reach_last_water",
-  "statblock": "step_watcher",
-  "temperament": {
-    "roamRadius": 24,
-    "investigateRadius": 60,
-    "leashRadius": 90,
-    "wanderChance": 0.3,
-    "speeds": {
-      "wander": 0.5
-    },
-    "investigates": [
-      "sight",
-      "hearing"
-    ],
-    "notices": [
-      "hostile",
-      "neutral",
-      "ally"
-    ]
+  "@prefab": "content_npcs_entry_3",
+  "params": {
+    "id": "well_watcher_ondir",
+    "name": "Ondir, at the Last Water",
+    "description": "Lives at the edge of where things grow and lets people drink, which is the whole of the job and takes all of it.",
+    "disposition": 2,
+    "memorySpan": 260,
+    "faction": "the_horse_lords",
+    "dialogue": "step_ondir_talk",
+    "home": "south_reach_last_water",
+    "statblock": "step_watcher",
+    "variant": "v7"
   }
 }

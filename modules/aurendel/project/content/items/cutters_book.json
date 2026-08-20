@@ -1,14 +1,11 @@
 {
-  "id": "cutters_book",
-  "name": "The Cutters' Book",
-  "description": "Forty-one out and forty-one back, in four clerks' hands, with two lines that describe a difference and do not remark on it.",
-  "kind": "key",
-  "value": 0,
-  "weight": 0,
-  "tags": [
-    "keepsake"
-  ],
-  "extra": {
-    "heldBy": "peat_cutter_hald"
+  "@prefab": "content_items_entry_8",
+  "params": {
+    "id": "cutters_book",
+    "name": "The Cutters' Book",
+    "description": "Forty-one out and forty-one back, in four clerks' hands, with two lines that describe a difference and do not remark on it.",
+    "extra": {
+      "heldBy": "peat_cutter_hald"
+    }
   }
 }

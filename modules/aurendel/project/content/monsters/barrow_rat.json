@@ -1,56 +1,29 @@
 {
-  "id": "barrow_rat",
-  "name": "Barrow Rat",
-  "description": "Too large, too bold, and it came from under the mound.",
-  "level": 1,
-  "xp": 15,
-  "attributes": {
-    "might": 8,
-    "agility": 14,
-    "endurance": 10,
-    "intellect": 3,
-    "instinct": 12,
-    "presence": 6
-  },
-  "abilities": [
-    "rend"
-  ],
-  "behaviour": [
-    {
-      "priority": 0,
-      "use": "rend"
-    }
-  ],
-  "faction": "the_unsealed",
-  "creatureType": "beast",
-  "size": "small",
-  "descriptors": [
-    "a scrabbling",
-    "a bloated"
-  ],
-  "conditionalLoot": [],
-  "loot": "vermin_scraps",
-  "resourceOverrides": {
-    "hp": 6
-  },
-  "temperament": {
-    "roamRadius": 50,
-    "investigateRadius": 120,
-    "leashRadius": 180,
-    "wanderChance": 0.6,
-    "disengageTurns": 3,
-    "speeds": {
-      "wander": 0.5,
-      "investigate": 1.25
+  "@prefab": "content_monsters_entry",
+  "params": {
+    "id": "barrow_rat",
+    "name": "Barrow Rat",
+    "description": "Too large, too bold, and it came from under the mound.",
+    "attributes": {
+      "might": 8,
+      "agility": 14,
+      "endurance": 10,
+      "intellect": 3,
+      "instinct": 12,
+      "presence": 6
     },
-    "investigates": [
-      "smell",
-      "hearing",
-      "sight"
+    "abilities": [
+      "rend"
     ],
-    "notices": [
-      "hostile",
-      "neutral"
-    ]
+    "faction": "the_unsealed",
+    "descriptors": [
+      "a scrabbling",
+      "a bloated"
+    ],
+    "loot": "vermin_scraps",
+    "resourceOverrides": {
+      "hp": 6
+    },
+    "variant": "v1"
   }
 }

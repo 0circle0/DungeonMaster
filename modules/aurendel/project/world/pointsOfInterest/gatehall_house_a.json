@@ -1,21 +1,14 @@
 {
-  "id": "gatehall_house_a",
-  "name": "Gatewarden's Lodging",
-  "description": "Cut into the wall beside the gate, so the warden is never more than a minute from it.",
-  "area": "karn_dolur_gatehall",
-  "kind": "settlement",
-  "descriptionKey": "int_house",
-  "travelMinutes": 2,
-  "tags": [
-    "house"
-  ],
-  "map": {
-    "width": "9",
-    "height": "7",
-    "palette": "int_timber"
-  },
-  "position": {
-    "x": 32,
-    "y": 27
+  "@prefab": "world_points_f_nterest_int_house_2",
+  "params": {
+    "id": "gatehall_house_a",
+    "name": "Gatewarden's Lodging",
+    "description": "Cut into the wall beside the gate, so the warden is never more than a minute from it.",
+    "area": "karn_dolur_gatehall",
+    "position": {
+      "x": 32,
+      "y": 27
+    },
+    "variant": "v1"
   }
 }

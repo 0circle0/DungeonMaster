@@ -1,35 +1,22 @@
 {
-  "id": "harbour_master_veir",
-  "name": "Veir, Harbour Master",
-  "description": "Berths every hull that comes into Sarnport and keeps the night book her predecessors kept, without ever having been told why.",
-  "disposition": 2,
-  "gullibility": 0.2,
-  "memorySpan": 260,
-  "offersQuests": [],
-  "caresAbout": [],
-  "reactions": [],
-  "faction": "the_salvors",
-  "dialogue": "coast_veir_talk",
-  "home": "harbourside_harbour_master",
-  "statblock": "coast_harbourmaster",
-  "shop": {
-    "lootTable": "salvors_stock",
-    "buysTags": [
-      "treasure"
-    ],
-    "priceMultiplier": 1.2
-  },
-  "temperament": {
-    "roamRadius": 0,
-    "wanderChance": 0,
-    "speeds": {
-      "wander": 0
-    },
-    "investigates": [],
-    "notices": [
-      "hostile",
-      "neutral",
-      "ally"
-    ]
+  "@prefab": "content_npcs_entry_4",
+  "params": {
+    "id": "harbour_master_veir",
+    "name": "Veir, Harbour Master",
+    "description": "Berths every hull that comes into Sarnport and keeps the night book her predecessors kept, without ever having been told why.",
+    "disposition": 2,
+    "gullibility": 0.2,
+    "memorySpan": 260,
+    "faction": "the_salvors",
+    "dialogue": "coast_veir_talk",
+    "home": "harbourside_harbour_master",
+    "statblock": "coast_harbourmaster",
+    "shop": {
+      "lootTable": "salvors_stock",
+      "buysTags": [
+        "treasure"
+      ],
+      "priceMultiplier": 1.2
+    }
   }
 }

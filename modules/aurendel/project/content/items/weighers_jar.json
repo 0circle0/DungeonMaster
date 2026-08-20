@@ -1,14 +1,11 @@
 {
-  "id": "weighers_jar",
-  "name": "The Weigher's Jar",
-  "description": "A stoppered jar of the ninth course. Heavier than salt has any business being, and it does not taste of this sea.",
-  "kind": "key",
-  "value": 0,
-  "weight": 0,
-  "tags": [
-    "keepsake"
-  ],
-  "extra": {
-    "heldBy": "weigher_qasim"
+  "@prefab": "content_items_entry_8",
+  "params": {
+    "id": "weighers_jar",
+    "name": "The Weigher's Jar",
+    "description": "A stoppered jar of the ninth course. Heavier than salt has any business being, and it does not taste of this sea.",
+    "extra": {
+      "heldBy": "weigher_qasim"
+    }
   }
 }

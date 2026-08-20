@@ -1,25 +1,21 @@
 {
-  "id": "digging_claw",
-  "name": "Digging Claw",
-  "description": "Made for spoil, and it does not know the difference.",
-  "actionType": "action",
-  "targeting": "single",
-  "attack": {
-    "stat": "might",
-    "against": "guard"
-  },
-  "onUse": [
-    {
-      "damage": {
-        "target": {
-          "ref": "target.id"
-        },
-        "amount": {
-          "roll": "1d10"
-        },
-        "damageType": "slashing"
+  "@prefab": "content_abilities_entry_4",
+  "params": {
+    "id": "digging_claw",
+    "name": "Digging Claw",
+    "description": "Made for spoil, and it does not know the difference.",
+    "onUse": [
+      {
+        "damage": {
+          "target": {
+            "ref": "target.id"
+          },
+          "amount": {
+            "roll": "1d10"
+          },
+          "damageType": "slashing"
+        }
       }
-    }
-  ],
-  "cooldown": 2
+    ]
+  }
 }

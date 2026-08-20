@@ -1,19 +1,14 @@
 {
-  "id": "hollow_beeches_hermit",
-  "name": "The Hermit's Beech",
-  "description": "Somebody has lived in this tree. The door is fitted properly.",
-  "area": "duskwood_hollow_beeches",
-  "kind": "settlement",
-  "descriptionKey": "int_house",
-  "travelMinutes": 6,
-  "tags": [],
-  "map": {
-    "width": "9",
-    "height": "7",
-    "palette": "int_timber"
-  },
-  "position": {
-    "x": 14,
-    "y": 3
+  "@prefab": "world_points_f_nterest_int_house_2",
+  "params": {
+    "id": "hollow_beeches_hermit",
+    "name": "The Hermit's Beech",
+    "description": "Somebody has lived in this tree. The door is fitted properly.",
+    "area": "duskwood_hollow_beeches",
+    "position": {
+      "x": 14,
+      "y": 3
+    },
+    "variant": "v3"
   }
 }

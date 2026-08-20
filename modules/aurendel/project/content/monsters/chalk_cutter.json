@@ -1,64 +1,48 @@
 {
-  "id": "chalk_cutter",
-  "name": "What Cut Them Square",
-  "description": "Four feet of cut chalk square to a finger's width, on a hill with no cut chalk in it, kept clear by three parishes who think they are keeping a horse.",
-  "level": 5,
-  "xp": 300,
-  "attributes": {
-    "might": 14,
-    "agility": 16,
-    "endurance": 13,
-    "intellect": 13,
-    "instinct": 15,
-    "presence": 9
-  },
-  "abilities": [
-    "cut_and_run",
-    "rend",
-    "digging_claw"
-  ],
-  "behaviour": [
-    {
-      "priority": 15,
-      "use": "cut_and_run",
-      "when": {
-        "chance": 0.4
+  "@prefab": "content_monsters_entry_2",
+  "params": {
+    "id": "chalk_cutter",
+    "name": "What Cut Them Square",
+    "description": "Four feet of cut chalk square to a finger's width, on a hill with no cut chalk in it, kept clear by three parishes who think they are keeping a horse.",
+    "level": 5,
+    "xp": 300,
+    "attributes": {
+      "might": 14,
+      "agility": 16,
+      "endurance": 13,
+      "intellect": 13,
+      "instinct": 15,
+      "presence": 9
+    },
+    "abilities": [
+      "cut_and_run",
+      "rend",
+      "digging_claw"
+    ],
+    "behaviour": [
+      {
+        "priority": 15,
+        "use": "cut_and_run",
+        "when": {
+          "chance": 0.4
+        }
+      },
+      {
+        "priority": 0,
+        "use": "rend"
       }
+    ],
+    "descriptors": [
+      "a chalk-pale",
+      "a patient"
+    ],
+    "loot": "coast_horse_hoard",
+    "conditionImmunities": [
+      "frightened"
+    ],
+    "resourceOverrides": {
+      "hp": 46
     },
-    {
-      "priority": 0,
-      "use": "rend"
-    }
-  ],
-  "faction": "the_unsealed",
-  "creatureType": "undead",
-  "size": "medium",
-  "descriptors": [
-    "a chalk-pale",
-    "a patient"
-  ],
-  "conditionalLoot": [],
-  "loot": "coast_horse_hoard",
-  "conditionImmunities": [
-    "frightened"
-  ],
-  "resourceOverrides": {
-    "hp": 46
-  },
-  "temperament": {
-    "roamRadius": 12,
-    "investigateRadius": 40,
-    "leashRadius": 60,
-    "wanderChance": 0.1,
-    "disengageTurns": 1,
-    "speeds": {
-      "wander": 0.5,
-      "investigate": 0.5
-    },
-    "investigates": [
-      "sight",
-      "hearing",
-      "smell"
-    ]
+    "variant": "v1"
   }
 }

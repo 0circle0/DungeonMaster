@@ -1,24 +1,14 @@
 {
-  "id": "rooksrest_store",
-  "name": "The Charcoal Store",
-  "description": "Sacks to the roof, and everything in the building is black.",
-  "area": "duskwood_rooksrest",
-  "kind": "market",
-  "descriptionKey": "int_store",
-  "travelMinutes": 3,
-  "tags": [
-    "shop"
-  ],
-  "services": [
-    "market"
-  ],
-  "map": {
-    "width": "9",
-    "height": "7",
-    "palette": "int_shop"
-  },
-  "position": {
-    "x": 9,
-    "y": 3
+  "@prefab": "world_points_f_nterest_int_store_2",
+  "params": {
+    "id": "rooksrest_store",
+    "name": "The Charcoal Store",
+    "description": "Sacks to the roof, and everything in the building is black.",
+    "area": "duskwood_rooksrest",
+    "position": {
+      "x": 9,
+      "y": 3
+    },
+    "variant": "v4"
   }
 }

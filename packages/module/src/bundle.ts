@@ -23,8 +23,9 @@
  * repository does not have and a `module.json` that no longer matches it.
  */
 
-import { splitProject, joinProject } from './project.js';
+import { splitProject, joinProject, isAuthoringFile } from './project.js';
 import type { JoinIssue } from './project.js';
+import type { Prefab, StyleTables } from './prefab.js';
 import { splitStaticMap, assembleStaticMap, sortWorldMaps } from './staticmaps.js';
 import type { AssembleIssue } from './staticmaps.js';
 
@@ -44,10 +45,20 @@ export interface BundleIssue {
  * entries, `maps/<id>/…` for static maps. `module.json` is deliberately absent —
  * it is the build output, and `npm run project -- build` is what produces it.
  */
-export function bundleModule(document: Record<string, unknown>): {
-  files: Record<string, string>;
-} {
+export function bundleModule(
+  document: Record<string, unknown>,
+  authoring: { readonly prefabs?: readonly Prefab[]; readonly style?: StyleTables } = {},
+): { files: Record<string, string> } {
   const files: Record<string, string> = {};
+
+  // Carried through rather than derived: no document produces a prefab, and a
+  // compressed project cannot be rebuilt without them.
+  for (const prefab of authoring.prefabs ?? []) {
+    files[`project/prefabs/${prefab.id}.json`] = `${JSON.stringify(prefab, null, 2)}\n`;
+  }
+  if (authoring.style && Object.keys(authoring.style).length > 0) {
+    files['project/style.json'] = `${JSON.stringify(authoring.style, null, 2)}\n`;
+  }
 
   // Maps come out first, because the document handed to `splitProject` must be
   // the one the repository stores — the one with no `world.maps` key.
@@ -113,11 +124,22 @@ export function unbundleModule(files: Readonly<Record<string, string>>): {
 
   const entries: Record<string, string> = {};
   const mapFiles = new Map<string, Record<string, string>>();
+  const prefabs: Prefab[] = [];
+  let style: StyleTables = {};
 
   for (const [path, text] of Object.entries(files)) {
     if (path === PROJECT_MANIFEST) continue;
     if (path.startsWith('project/')) {
-      entries[path.slice('project/'.length)] = text;
+      const inner = path.slice('project/'.length);
+      // Authoring files are build inputs for a compressed project, not entries.
+      if (isAuthoringFile(inner)) {
+        if (inner === 'style.json') style = JSON.parse(text) as StyleTables;
+        else if (inner.startsWith('prefabs/') && !inner.endsWith('instances.json')) {
+          prefabs.push(JSON.parse(text) as Prefab);
+        }
+        continue;
+      }
+      entries[inner] = text;
       continue;
     }
     if (!path.startsWith('maps/')) continue;
@@ -129,7 +151,7 @@ export function unbundleModule(files: Readonly<Record<string, string>>): {
     mapFiles.set(folder, held);
   }
 
-  const joined = joinProject(manifest as Parameters<typeof joinProject>[0], entries);
+  const joined = joinProject(manifest as Parameters<typeof joinProject>[0], entries, { prefabs, style });
   for (const issue of joined.issues) issues.push(asBundleIssue(issue));
 
   const assembled: Record<string, unknown>[] = [];

@@ -1,85 +1,53 @@
 {
-  "id": "signal_keeper",
-  "name": "What Keeps the Correction True",
-  "description": "Four sightings in living memory, always the same week, in a tower with no stair — and two points to starboard is still the right correction.",
-  "level": 5,
-  "xp": 320,
-  "attributes": {
-    "might": 11,
-    "agility": 15,
-    "endurance": 14,
-    "intellect": 15,
-    "instinct": 16,
-    "presence": 14
-  },
-  "abilities": [
-    "wardlight",
-    "grave_chill",
-    "wither"
-  ],
-  "behaviour": [
-    {
-      "priority": 20,
-      "use": "wardlight",
-      "when": {
-        "chance": 0.35
+  "@prefab": "content_monsters_entry_4",
+  "params": {
+    "id": "signal_keeper",
+    "name": "What Keeps the Correction True",
+    "description": "Four sightings in living memory, always the same week, in a tower with no stair — and two points to starboard is still the right correction.",
+    "level": 5,
+    "xp": 320,
+    "attributes": {
+      "might": 11,
+      "agility": 15,
+      "endurance": 14,
+      "intellect": 15,
+      "instinct": 16,
+      "presence": 14
+    },
+    "abilities": [
+      "wardlight",
+      "grave_chill",
+      "wither"
+    ],
+    "behaviour": [
+      {
+        "priority": 20,
+        "use": "wardlight",
+        "when": {
+          "chance": 0.35
+        }
+      },
+      {
+        "priority": 10,
+        "use": "grave_chill"
+      },
+      {
+        "priority": 0,
+        "use": "wither"
       }
+    ],
+    "descriptors": [
+      "a steady",
+      "a lit"
+    ],
+    "loot": "coast_watch_hoard",
+    "conditionImmunities": [
+      "frightened",
+      "blinded"
+    ],
+    "resourceOverrides": {
+      "hp": 44
     },
-    {
-      "priority": 10,
-      "use": "grave_chill"
-    },
-    {
-      "priority": 0,
-      "use": "wither"
-    }
-  ],
-  "faction": "the_unsealed",
-  "creatureType": "undead",
-  "size": "medium",
-  "descriptors": [
-    "a steady",
-    "a lit"
-  ],
-  "conditionalLoot": [],
-  "loot": "coast_watch_hoard",
-  "damageInteractions": [
-    {
-      "damageType": "slashing",
-      "multiplier": 0.5,
-      "unless": [
-        "silvered"
-      ]
-    },
-    {
-      "damageType": "piercing",
-      "multiplier": 0.5,
-      "unless": [
-        "silvered"
-      ]
-    }
-  ],
-  "conditionImmunities": [
-    "frightened",
-    "blinded"
-  ],
-  "resourceOverrides": {
-    "hp": 44
-  },
-  "temperament": {
-    "roamRadius": 12,
-    "investigateRadius": 40,
-    "leashRadius": 60,
-    "wanderChance": 0.1,
-    "disengageTurns": 1,
-    "speeds": {
-      "wander": 0.5,
-      "investigate": 0.5
-    },
-    "investigates": [
-      "sight",
-      "hearing",
-      "smell"
-    ]
+    "variant": "v1"
   }
 }

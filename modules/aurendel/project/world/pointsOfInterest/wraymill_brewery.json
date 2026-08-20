@@ -1,24 +1,19 @@
 {
-  "id": "wraymill_brewery",
-  "name": "The Wraymill Brewery",
-  "description": "Uses the same leat as the mills, three hundred yards further down, which is a subject of correspondence.",
-  "area": "kingsvale_wraymill",
-  "kind": "market",
-  "descriptionKey": "int_workshop",
-  "travelMinutes": 3,
-  "tags": [
-    "shop"
-  ],
-  "position": {
-    "x": 16,
-    "y": 22
-  },
-  "services": [
-    "market"
-  ],
-  "map": {
-    "width": "15",
-    "height": "11",
-    "palette": "int_timber"
+  "@prefab": "world_points_f_nterest_int_workshop",
+  "params": {
+    "id": "wraymill_brewery",
+    "name": "The Wraymill Brewery",
+    "description": "Uses the same leat as the mills, three hundred yards further down, which is a subject of correspondence.",
+    "area": "kingsvale_wraymill",
+    "travelMinutes": 3,
+    "position": {
+      "x": 16,
+      "y": 22
+    },
+    "map": {
+      "width": "15",
+      "height": "11",
+      "palette": "int_timber"
+    }
   }
 }

@@ -1,24 +1,14 @@
 {
-  "id": "deep_market_stone_merchant",
-  "name": "The Stone Merchant",
-  "description": "Sells rock, by weight, by grade, and by argument.",
-  "area": "karn_dolur_deep_market",
-  "kind": "market",
-  "descriptionKey": "int_store",
-  "travelMinutes": 3,
-  "tags": [
-    "shop"
-  ],
-  "services": [
-    "market"
-  ],
-  "map": {
-    "width": "15",
-    "height": "11",
-    "palette": "int_shop"
-  },
-  "position": {
-    "x": 12,
-    "y": 3
+  "@prefab": "world_points_f_nterest_int_store_2",
+  "params": {
+    "id": "deep_market_stone_merchant",
+    "name": "The Stone Merchant",
+    "description": "Sells rock, by weight, by grade, and by argument.",
+    "area": "karn_dolur_deep_market",
+    "position": {
+      "x": 12,
+      "y": 3
+    },
+    "variant": "v1"
   }
 }

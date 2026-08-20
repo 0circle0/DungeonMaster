@@ -1,80 +1,48 @@
 {
-  "id": "strand_cutter",
-  "name": "The Cutter",
-  "description": "Whatever went through those skulls in one stroke, and it has not put the edge down since.",
-  "level": 8,
-  "xp": 750,
-  "attributes": {
-    "might": 18,
-    "agility": 15,
-    "endurance": 15,
-    "intellect": 9,
-    "instinct": 15,
-    "presence": 8
-  },
-  "abilities": [
-    "rend",
-    "cut_and_run",
-    "gore"
-  ],
-  "behaviour": [
-    {
-      "priority": 15,
-      "use": "cut_and_run",
-      "when": {
-        "chance": 0.4
+  "@prefab": "content_monsters_entry_4",
+  "params": {
+    "id": "strand_cutter",
+    "name": "The Cutter",
+    "description": "Whatever went through those skulls in one stroke, and it has not put the edge down since.",
+    "level": 8,
+    "xp": 750,
+    "attributes": {
+      "might": 18,
+      "agility": 15,
+      "endurance": 15,
+      "intellect": 9,
+      "instinct": 15,
+      "presence": 8
+    },
+    "abilities": [
+      "rend",
+      "cut_and_run",
+      "gore"
+    ],
+    "behaviour": [
+      {
+        "priority": 15,
+        "use": "cut_and_run",
+        "when": {
+          "chance": 0.4
+        }
+      },
+      {
+        "priority": 0,
+        "use": "rend"
       }
+    ],
+    "descriptors": [
+      "a long-armed",
+      "a patient"
+    ],
+    "loot": "frost_strand_hoard",
+    "conditionImmunities": [
+      "frightened"
+    ],
+    "resourceOverrides": {
+      "hp": 88
     },
-    {
-      "priority": 0,
-      "use": "rend"
-    }
-  ],
-  "faction": "the_unsealed",
-  "creatureType": "undead",
-  "size": "medium",
-  "descriptors": [
-    "a long-armed",
-    "a patient"
-  ],
-  "conditionalLoot": [],
-  "loot": "frost_strand_hoard",
-  "damageInteractions": [
-    {
-      "damageType": "slashing",
-      "multiplier": 0.5,
-      "unless": [
-        "silvered"
-      ]
-    },
-    {
-      "damageType": "piercing",
-      "multiplier": 0.5,
-      "unless": [
-        "silvered"
-      ]
-    }
-  ],
-  "conditionImmunities": [
-    "frightened"
-  ],
-  "resourceOverrides": {
-    "hp": 88
-  },
-  "temperament": {
-    "roamRadius": 12,
-    "investigateRadius": 40,
-    "leashRadius": 60,
-    "wanderChance": 0.1,
-    "disengageTurns": 1,
-    "speeds": {
-      "wander": 0.5,
-      "investigate": 0.5
-    },
-    "investigates": [
-      "sight",
-      "hearing",
-      "smell"
-    ]
+    "variant": "v1"
   }
 }

@@ -1,79 +1,67 @@
 {
-  "id": "vent_wyrm",
-  "name": "The Thing In the Throat",
-  "description": "Nine hundred years of the vent going quietly, and the reason it went quietly.",
-  "level": 6,
-  "xp": 330,
-  "attributes": {
-    "might": 17,
-    "agility": 12,
-    "endurance": 18,
-    "intellect": 7,
-    "instinct": 13,
-    "presence": 10
-  },
-  "abilities": [
-    "vent_breath",
-    "cinder_lash",
-    "stone_fist"
-  ],
-  "behaviour": [
-    {
-      "priority": 20,
-      "use": "vent_breath",
-      "when": {
-        "chance": 0.35
-      }
+  "@prefab": "content_monsters_entry_3",
+  "params": {
+    "id": "vent_wyrm",
+    "name": "The Thing In the Throat",
+    "description": "Nine hundred years of the vent going quietly, and the reason it went quietly.",
+    "level": 6,
+    "xp": 330,
+    "attributes": {
+      "might": 17,
+      "agility": 12,
+      "endurance": 18,
+      "intellect": 7,
+      "instinct": 13,
+      "presence": 10
     },
-    {
-      "priority": 10,
-      "use": "cinder_lash"
-    },
-    {
-      "priority": 0,
-      "use": "stone_fist"
-    }
-  ],
-  "faction": "the_unsealed",
-  "creatureType": "elemental",
-  "size": "large",
-  "descriptors": [
-    "a red",
-    "a slow-moving"
-  ],
-  "conditionalLoot": [],
-  "loot": "throat_hoard",
-  "damageInteractions": [
-    {
-      "damageType": "fire",
-      "multiplier": 0
-    },
-    {
-      "damageType": "cold",
-      "multiplier": 2
-    }
-  ],
-  "conditionImmunities": [
-    "burning",
-    "poisoned",
-    "frightened"
-  ],
-  "resourceOverrides": {
-    "hp": 62
-  },
-  "derivedOverrides": {
-    "guard": 15
-  },
-  "temperament": {
-    "roamRadius": 24,
-    "investigateRadius": 60,
-    "leashRadius": 80,
-    "wanderChance": 0.45,
-    "disengageTurns": 2,
-    "investigates": [
-      "sight",
-      "hearing"
+    "abilities": [
+      "vent_breath",
+      "cinder_lash",
+      "stone_fist"
     ],
-    "followsTrails": false
+    "behaviour": [
+      {
+        "priority": 20,
+        "use": "vent_breath",
+        "when": {
+          "chance": 0.35
+        }
+      },
+      {
+        "priority": 10,
+        "use": "cinder_lash"
+      },
+      {
+        "priority": 0,
+        "use": "stone_fist"
+      }
+    ],
+    "descriptors": [
+      "a red",
+      "a slow-moving"
+    ],
+    "loot": "throat_hoard",
+    "damageInteractions": [
+      {
+        "damageType": "fire",
+        "multiplier": 0
+      },
+      {
+        "damageType": "cold",
+        "multiplier": 2
+      }
+    ],
+    "conditionImmunities": [
+      "burning",
+      "poisoned",
+      "frightened"
+    ],
+    "resourceOverrides": {
+      "hp": 62
+    },
+    "derivedOverrides": {
+      "guard": 15
+    },
+    "variant": "v6"
   }
 }

@@ -1,18 +1,11 @@
 {
-  "id": "standing_stone",
-  "name": "Standing Stone",
-  "description": "Raised by somebody, for some reason, and still standing.",
-  "glyph": "I",
-  "color": "gray",
-  "passable": false,
-  "opaque": true,
-  "moveCost": 0,
-  "tags": [
-    "stone"
-  ],
-  "marks": {
-    "tracks": 0,
-    "smell": 0.6
-  },
-  "providesCover": "three_quarters"
+  "@prefab": "world_terrains_entry_4",
+  "params": {
+    "id": "standing_stone",
+    "name": "Standing Stone",
+    "description": "Raised by somebody, for some reason, and still standing.",
+    "glyph": "I",
+    "moveCost": 0,
+    "variant": "v2"
+  }
 }

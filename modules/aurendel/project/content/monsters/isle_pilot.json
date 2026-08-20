@@ -1,52 +1,28 @@
 {
-  "id": "isle_pilot",
-  "name": "Hesk, Pilot of the Narrows",
-  "description": "Forty years of standing on a heeling deck reading water.",
-  "level": 6,
-  "xp": 0,
-  "attributes": {
-    "might": 13,
-    "agility": 16,
-    "endurance": 14,
-    "intellect": 14,
-    "instinct": 16,
-    "presence": 12
-  },
-  "abilities": [
-    "strike"
-  ],
-  "behaviour": [
-    {
-      "priority": 0,
-      "use": "strike"
-    }
-  ],
-  "faction": "the_salvors",
-  "creatureType": "humanoid",
-  "size": "medium",
-  "descriptors": [
-    "a salt-cured"
-  ],
-  "conditionalLoot": [],
-  "loot": "isle_book_carried",
-  "resourceOverrides": {
-    "hp": 34
-  },
-  "temperament": {
-    "roamRadius": 24,
-    "investigateRadius": 70,
-    "leashRadius": 100,
-    "wanderChance": 0.4,
-    "disengageTurns": 2,
-    "investigates": [
-      "sight",
-      "hearing",
-      "tracks",
-      "smell"
+  "@prefab": "content_monsters_entry",
+  "params": {
+    "id": "isle_pilot",
+    "name": "Hesk, Pilot of the Narrows",
+    "description": "Forty years of standing on a heeling deck reading water.",
+    "attributes": {
+      "might": 13,
+      "agility": 16,
+      "endurance": 14,
+      "intellect": 14,
+      "instinct": 16,
+      "presence": 12
+    },
+    "abilities": [
+      "strike"
     ],
-    "notices": [
-      "hostile",
-      "neutral"
-    ]
+    "faction": "the_salvors",
+    "descriptors": [
+      "a salt-cured"
+    ],
+    "loot": "isle_book_carried",
+    "resourceOverrides": {
+      "hp": 34
+    },
+    "variant": "v6"
   }
 }

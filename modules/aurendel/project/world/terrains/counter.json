@@ -1,14 +1,11 @@
 {
-  "id": "counter",
-  "name": "Counter",
-  "description": "The line between the customer and the stock.",
-  "glyph": "=",
-  "color": "yellow",
-  "passable": false,
-  "opaque": false,
-  "moveCost": 0,
-  "tags": [
-    "furniture"
-  ],
-  "providesCover": "half"
+  "@prefab": "world_terrains_entry_6",
+  "params": {
+    "id": "counter",
+    "name": "Counter",
+    "description": "The line between the customer and the stock.",
+    "glyph": "=",
+    "color": "yellow",
+    "variant": "v3"
+  }
 }

@@ -1,95 +1,63 @@
 {
-  "id": "crater_founder",
-  "name": "What Has the Fire Under It",
-  "description": "Masonry under poured glass, and something below the masonry that the glass was poured to keep in. The city has been drinking the runoff for two hundred years.",
-  "level": 10,
-  "xp": 1500,
-  "attributes": {
-    "might": 20,
-    "agility": 12,
-    "endurance": 20,
-    "intellect": 17,
-    "instinct": 16,
-    "presence": 18
-  },
-  "abilities": [
-    "vent_breath",
-    "cinder_lash",
-    "unmaking_word",
-    "glass_shard"
-  ],
-  "behaviour": [
-    {
-      "priority": 30,
-      "use": "unmaking_word",
-      "when": {
-        "chance": 0.25
+  "@prefab": "content_monsters_entry_4",
+  "params": {
+    "id": "crater_founder",
+    "name": "What Has the Fire Under It",
+    "description": "Masonry under poured glass, and something below the masonry that the glass was poured to keep in. The city has been drinking the runoff for two hundred years.",
+    "level": 10,
+    "xp": 1500,
+    "attributes": {
+      "might": 20,
+      "agility": 12,
+      "endurance": 20,
+      "intellect": 17,
+      "instinct": 16,
+      "presence": 18
+    },
+    "abilities": [
+      "vent_breath",
+      "cinder_lash",
+      "unmaking_word",
+      "glass_shard"
+    ],
+    "behaviour": [
+      {
+        "priority": 30,
+        "use": "unmaking_word",
+        "when": {
+          "chance": 0.25
+        }
+      },
+      {
+        "priority": 20,
+        "use": "vent_breath",
+        "when": {
+          "chance": 0.35
+        }
+      },
+      {
+        "priority": 10,
+        "use": "glass_shard"
+      },
+      {
+        "priority": 0,
+        "use": "cinder_lash"
       }
+    ],
+    "descriptors": [
+      "a molten",
+      "a founding"
+    ],
+    "loot": "glass_crater_hoard",
+    "conditionImmunities": [
+      "frightened",
+      "poisoned",
+      "prone",
+      "burning"
+    ],
+    "resourceOverrides": {
+      "hp": 165
     },
-    {
-      "priority": 20,
-      "use": "vent_breath",
-      "when": {
-        "chance": 0.35
-      }
-    },
-    {
-      "priority": 10,
-      "use": "glass_shard"
-    },
-    {
-      "priority": 0,
-      "use": "cinder_lash"
-    }
-  ],
-  "faction": "the_unsealed",
-  "creatureType": "undead",
-  "size": "medium",
-  "descriptors": [
-    "a molten",
-    "a founding"
-  ],
-  "conditionalLoot": [],
-  "loot": "glass_crater_hoard",
-  "damageInteractions": [
-    {
-      "damageType": "slashing",
-      "multiplier": 0.5,
-      "unless": [
-        "silvered"
-      ]
-    },
-    {
-      "damageType": "piercing",
-      "multiplier": 0.5,
-      "unless": [
-        "silvered"
-      ]
-    }
-  ],
-  "conditionImmunities": [
-    "frightened",
-    "poisoned",
-    "prone",
-    "burning"
-  ],
-  "resourceOverrides": {
-    "hp": 165
-  },
-  "temperament": {
-    "roamRadius": 12,
-    "investigateRadius": 40,
-    "leashRadius": 60,
-    "wanderChance": 0.1,
-    "disengageTurns": 1,
-    "speeds": {
-      "wander": 0.5,
-      "investigate": 0.5
-    },
-    "investigates": [
-      "sight",
-      "hearing",
-      "smell"
-    ]
+    "variant": "v1"
   }
 }

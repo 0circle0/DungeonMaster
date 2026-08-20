@@ -1,0 +1,74 @@
+{
+  "id": "world_points_f_nterest_int_house_2",
+  "label": "world_points_f_nterest_int_house_2",
+  "collection": "world.pointsOfInterest",
+  "params": [
+    {
+      "key": "id",
+      "kind": "string"
+    },
+    {
+      "key": "name",
+      "kind": "string"
+    },
+    {
+      "key": "description",
+      "kind": "text"
+    },
+    {
+      "key": "area",
+      "kind": "string"
+    },
+    {
+      "key": "position",
+      "kind": "string"
+    },
+    {
+      "key": "variant",
+      "kind": "enum",
+      "options": [
+        "v1",
+        "v2",
+        "v3",
+        "v4",
+        "v5"
+      ]
+    }
+  ],
+  "template": {
+    "id": "{{id}}",
+    "name": "{{name}}",
+    "description": "{{description}}",
+    "area": "{{area}}",
+    "kind": {
+      "@lookup": [
+        "world_points_f_nterest_int_house_2_variant",
+        "{{variant}}",
+        "kind"
+      ]
+    },
+    "descriptionKey": "int_house",
+    "travelMinutes": {
+      "@lookup": [
+        "world_points_f_nterest_int_house_2_variant",
+        "{{variant}}",
+        "travelMinutes"
+      ]
+    },
+    "tags": {
+      "@lookup": [
+        "world_points_f_nterest_int_house_2_variant",
+        "{{variant}}",
+        "tags"
+      ]
+    },
+    "map": {
+      "@lookup": [
+        "world_points_f_nterest_int_house_2_variant",
+        "{{variant}}",
+        "map"
+      ]
+    },
+    "position": "{{position}}"
+  }
+}

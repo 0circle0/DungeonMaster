@@ -1,24 +1,14 @@
 {
-  "id": "elderhollow_sawpit",
-  "name": "The Sawpit",
-  "description": "Two men, one saw, one very long day. Somebody is always in the pit and it is never the same somebody.",
-  "area": "duskwood_elderhollow",
-  "kind": "market",
-  "descriptionKey": "int_workshop",
-  "travelMinutes": 3,
-  "tags": [
-    "shop"
-  ],
-  "services": [
-    "market"
-  ],
-  "map": {
-    "width": "15",
-    "height": "11",
-    "palette": "int_shop"
-  },
-  "position": {
-    "x": 37,
-    "y": 3
+  "@prefab": "world_points_f_nterest_int_workshop_2",
+  "params": {
+    "id": "elderhollow_sawpit",
+    "name": "The Sawpit",
+    "description": "Two men, one saw, one very long day. Somebody is always in the pit and it is never the same somebody.",
+    "area": "duskwood_elderhollow",
+    "position": {
+      "x": 37,
+      "y": 3
+    },
+    "variant": "v1"
   }
 }

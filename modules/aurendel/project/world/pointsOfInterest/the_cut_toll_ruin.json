@@ -1,21 +1,15 @@
 {
-  "id": "the_cut_toll_ruin",
-  "name": "The Old Toll Fort",
-  "description": "Built across the Cut to charge for it, and slighted by somebody who objected.",
-  "area": "skarnspine_the_cut",
-  "kind": "ruin",
-  "descriptionKey": "generic_ruin",
-  "travelMinutes": 8,
-  "tags": [
-    "ruin"
-  ],
-  "map": {
-    "width": "11",
-    "height": "9",
-    "palette": "int_stone"
-  },
-  "position": {
-    "x": 14,
-    "y": 3
+  "@prefab": "world_points_f_nterest_generic_ruin_3",
+  "params": {
+    "id": "the_cut_toll_ruin",
+    "name": "The Old Toll Fort",
+    "description": "Built across the Cut to charge for it, and slighted by somebody who objected.",
+    "area": "skarnspine_the_cut",
+    "map": {
+      "width": "11",
+      "height": "9",
+      "palette": "int_stone"
+    },
+    "variant": "v2"
   }
 }

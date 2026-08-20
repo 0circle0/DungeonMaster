@@ -1,21 +1,14 @@
 {
-  "id": "fenny_cross_house_b",
-  "name": "Duckboard House",
-  "description": "Reached by a plank, which says everything about the site.",
-  "area": "duskwood_fenny_cross",
-  "kind": "settlement",
-  "descriptionKey": "int_house",
-  "travelMinutes": 2,
-  "tags": [
-    "house"
-  ],
-  "map": {
-    "width": "9",
-    "height": "7",
-    "palette": "int_timber"
-  },
-  "position": {
-    "x": 27,
-    "y": 10
+  "@prefab": "world_points_f_nterest_int_house_2",
+  "params": {
+    "id": "fenny_cross_house_b",
+    "name": "Duckboard House",
+    "description": "Reached by a plank, which says everything about the site.",
+    "area": "duskwood_fenny_cross",
+    "position": {
+      "x": 27,
+      "y": 10
+    },
+    "variant": "v1"
   }
 }

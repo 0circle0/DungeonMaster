@@ -1,24 +1,14 @@
 {
-  "id": "gullmere_store",
-  "name": "The Beach Store",
-  "description": "Line, hooks, tar, and salt in the quantities a boat needs.",
-  "area": "coast_gullmere",
-  "kind": "market",
-  "descriptionKey": "int_store",
-  "travelMinutes": 3,
-  "tags": [
-    "shop"
-  ],
-  "services": [
-    "market"
-  ],
-  "map": {
-    "width": "9",
-    "height": "7",
-    "palette": "int_shop"
-  },
-  "position": {
-    "x": 9,
-    "y": 3
+  "@prefab": "world_points_f_nterest_int_store_2",
+  "params": {
+    "id": "gullmere_store",
+    "name": "The Beach Store",
+    "description": "Line, hooks, tar, and salt in the quantities a boat needs.",
+    "area": "coast_gullmere",
+    "position": {
+      "x": 9,
+      "y": 3
+    },
+    "variant": "v4"
   }
 }

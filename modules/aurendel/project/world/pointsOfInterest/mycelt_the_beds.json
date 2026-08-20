@@ -1,14 +1,11 @@
 {
-  "id": "mycelt_the_beds",
-  "name": "The Growing Beds",
-  "description": "Eleven acres of fungus in terraces, fed on what Lantern Deep produces, which is a subject nobody dwells on.",
-  "area": "deeproads_mycelt",
-  "kind": "landmark",
-  "descriptionKey": "generic_landmark",
-  "travelMinutes": 4,
-  "tags": [],
-  "position": {
-    "x": 3,
-    "y": 3
+  "@prefab": "world_points_f_nterest_generic_landmark",
+  "params": {
+    "id": "mycelt_the_beds",
+    "name": "The Growing Beds",
+    "description": "Eleven acres of fungus in terraces, fed on what Lantern Deep produces, which is a subject nobody dwells on.",
+    "area": "deeproads_mycelt",
+    "travelMinutes": 4,
+    "variant": "v3"
   }
 }

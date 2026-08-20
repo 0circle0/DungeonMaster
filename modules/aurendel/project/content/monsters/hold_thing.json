@@ -1,87 +1,55 @@
 {
-  "id": "hold_thing",
-  "name": "What They Shut In",
-  "description": "Her guns were run out at the island and her hatches were dogged from the deck. The crew made both of those decisions.",
-  "level": 8,
-  "xp": 950,
-  "attributes": {
-    "might": 19,
-    "agility": 14,
-    "endurance": 18,
-    "intellect": 12,
-    "instinct": 16,
-    "presence": 13
-  },
-  "abilities": [
-    "drag_under",
-    "rend",
-    "bleed_white",
-    "latch"
-  ],
-  "behaviour": [
-    {
-      "priority": 20,
-      "use": "drag_under",
-      "when": {
-        "chance": 0.35
+  "@prefab": "content_monsters_entry_4",
+  "params": {
+    "id": "hold_thing",
+    "name": "What They Shut In",
+    "description": "Her guns were run out at the island and her hatches were dogged from the deck. The crew made both of those decisions.",
+    "level": 8,
+    "xp": 950,
+    "attributes": {
+      "might": 19,
+      "agility": 14,
+      "endurance": 18,
+      "intellect": 12,
+      "instinct": 16,
+      "presence": 13
+    },
+    "abilities": [
+      "drag_under",
+      "rend",
+      "bleed_white",
+      "latch"
+    ],
+    "behaviour": [
+      {
+        "priority": 20,
+        "use": "drag_under",
+        "when": {
+          "chance": 0.35
+        }
+      },
+      {
+        "priority": 10,
+        "use": "latch"
+      },
+      {
+        "priority": 0,
+        "use": "rend"
       }
+    ],
+    "descriptors": [
+      "a bloated",
+      "a long-drowned"
+    ],
+    "loot": "isle_wreck_hoard",
+    "conditionImmunities": [
+      "frightened",
+      "poisoned",
+      "prone"
+    ],
+    "resourceOverrides": {
+      "hp": 110
     },
-    {
-      "priority": 10,
-      "use": "latch"
-    },
-    {
-      "priority": 0,
-      "use": "rend"
-    }
-  ],
-  "faction": "the_unsealed",
-  "creatureType": "undead",
-  "size": "medium",
-  "descriptors": [
-    "a bloated",
-    "a long-drowned"
-  ],
-  "conditionalLoot": [],
-  "loot": "isle_wreck_hoard",
-  "damageInteractions": [
-    {
-      "damageType": "slashing",
-      "multiplier": 0.5,
-      "unless": [
-        "silvered"
-      ]
-    },
-    {
-      "damageType": "piercing",
-      "multiplier": 0.5,
-      "unless": [
-        "silvered"
-      ]
-    }
-  ],
-  "conditionImmunities": [
-    "frightened",
-    "poisoned",
-    "prone"
-  ],
-  "resourceOverrides": {
-    "hp": 110
-  },
-  "temperament": {
-    "roamRadius": 12,
-    "investigateRadius": 40,
-    "leashRadius": 60,
-    "wanderChance": 0.1,
-    "disengageTurns": 1,
-    "speeds": {
-      "wander": 0.5,
-      "investigate": 0.5
-    },
-    "investigates": [
-      "sight",
-      "hearing",
-      "smell"
-    ]
+    "variant": "v1"
   }
 }

@@ -1,24 +1,10 @@
 {
-  "id": "mirestead_forge",
-  "name": "The Mire Forge",
-  "description": "Peat spades and turf irons, and it makes nothing else at all.",
-  "area": "moor_mirestead",
-  "kind": "market",
-  "descriptionKey": "int_smithy",
-  "travelMinutes": 3,
-  "tags": [
-    "shop"
-  ],
-  "services": [
-    "smith"
-  ],
-  "map": {
-    "width": "9",
-    "height": "7",
-    "palette": "int_forge"
-  },
-  "position": {
-    "x": 21,
-    "y": 3
+  "@prefab": "world_points_f_nterest_int_smithy_2",
+  "params": {
+    "id": "mirestead_forge",
+    "name": "The Mire Forge",
+    "description": "Peat spades and turf irons, and it makes nothing else at all.",
+    "area": "moor_mirestead",
+    "variant": "v3"
   }
 }

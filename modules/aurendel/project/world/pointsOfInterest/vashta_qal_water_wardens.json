@@ -1,24 +1,18 @@
 {
-  "id": "vashta_qal_water_wardens",
-  "name": "The Water Wardens",
-  "description": "Decide who drinks, how much, and in what order, and are the single most powerful body in the south.",
-  "area": "vashta_qal_oasis",
-  "kind": "market",
-  "descriptionKey": "generic_market",
-  "travelMinutes": 4,
-  "tags": [
-    "shop"
-  ],
-  "services": [
-    "guild"
-  ],
-  "map": {
-    "width": "19",
-    "height": "13",
-    "palette": "int_stone"
-  },
-  "position": {
-    "x": 31,
-    "y": 3
+  "@prefab": "world_points_f_nterest_generic_market_2",
+  "params": {
+    "id": "vashta_qal_water_wardens",
+    "name": "The Water Wardens",
+    "description": "Decide who drinks, how much, and in what order, and are the single most powerful body in the south.",
+    "area": "vashta_qal_oasis",
+    "map": {
+      "width": "19",
+      "height": "13",
+      "palette": "int_stone"
+    },
+    "position": {
+      "x": 31,
+      "y": 3
+    }
   }
 }

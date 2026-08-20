@@ -1,0 +1,84 @@
+{
+  "id": "world_dungeons_entry_6",
+  "label": "world_dungeons_entry_6",
+  "collection": "world.dungeons",
+  "params": [
+    {
+      "key": "id",
+      "kind": "string"
+    },
+    {
+      "key": "name",
+      "kind": "string"
+    },
+    {
+      "key": "description",
+      "kind": "text"
+    },
+    {
+      "key": "roomCount",
+      "kind": "string"
+    },
+    {
+      "key": "depth",
+      "kind": "string"
+    },
+    {
+      "key": "branchiness",
+      "kind": "string"
+    },
+    {
+      "key": "width",
+      "kind": "string"
+    },
+    {
+      "key": "height",
+      "kind": "string"
+    },
+    {
+      "key": "bossTable",
+      "kind": "string"
+    },
+    {
+      "key": "variant",
+      "kind": "enum",
+      "options": [
+        "v1",
+        "v2",
+        "v3",
+        "v4",
+        "v5"
+      ]
+    }
+  ],
+  "template": {
+    "id": "{{id}}",
+    "name": "{{name}}",
+    "description": "{{description}}",
+    "biome": {
+      "@lookup": [
+        "world_dungeons_entry_6_variant",
+        "{{variant}}",
+        "biome"
+      ]
+    },
+    "roomCount": "{{roomCount}}",
+    "depth": "{{depth}}",
+    "algorithm": "rooms",
+    "lockedDoorChance": 0,
+    "doorGates": [],
+    "rollEncounters": false,
+    "safeEntrance": true,
+    "branchiness": "{{branchiness}}",
+    "width": "{{width}}",
+    "height": "{{height}}",
+    "corridorLength": {
+      "@lookup": [
+        "world_dungeons_entry_6_variant",
+        "{{variant}}",
+        "corridorLength"
+      ]
+    },
+    "bossTable": "{{bossTable}}"
+  }
+}

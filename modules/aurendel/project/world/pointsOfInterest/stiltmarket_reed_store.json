@@ -1,24 +1,14 @@
 {
-  "id": "stiltmarket_reed_store",
-  "name": "The Reed Store",
-  "description": "Cut, bundled, dried, and shipped out as the region's one export.",
-  "area": "thornmere_stiltmarket",
-  "kind": "market",
-  "descriptionKey": "int_warehouse",
-  "travelMinutes": 3,
-  "tags": [
-    "shop"
-  ],
-  "services": [
-    "market"
-  ],
-  "map": {
-    "width": "19",
-    "height": "13",
-    "palette": "int_shop"
-  },
-  "position": {
-    "x": 29,
-    "y": 23
+  "@prefab": "world_points_f_nterest_int_warehouse",
+  "params": {
+    "id": "stiltmarket_reed_store",
+    "name": "The Reed Store",
+    "description": "Cut, bundled, dried, and shipped out as the region's one export.",
+    "area": "thornmere_stiltmarket",
+    "position": {
+      "x": 29,
+      "y": 23
+    },
+    "variant": "v2"
   }
 }

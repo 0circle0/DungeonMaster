@@ -1,24 +1,14 @@
 {
-  "id": "highpass_bakehouse",
-  "name": "The Ward Bakehouse",
-  "description": "Bakes for the garrison first and the town second, and says so.",
-  "area": "skarnspine_highpass",
-  "kind": "market",
-  "descriptionKey": "int_store",
-  "travelMinutes": 3,
-  "tags": [
-    "shop"
-  ],
-  "services": [
-    "market"
-  ],
-  "map": {
-    "width": "11",
-    "height": "9",
-    "palette": "int_timber"
-  },
-  "position": {
-    "x": 29,
-    "y": 23
+  "@prefab": "world_points_f_nterest_int_store_2",
+  "params": {
+    "id": "highpass_bakehouse",
+    "name": "The Ward Bakehouse",
+    "description": "Bakes for the garrison first and the town second, and says so.",
+    "area": "skarnspine_highpass",
+    "position": {
+      "x": 29,
+      "y": 23
+    },
+    "variant": "v3"
   }
 }

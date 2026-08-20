@@ -1,21 +1,15 @@
 {
-  "id": "broken_stair_the_landing",
-  "name": "The Great Landing",
-  "description": "Halfway up, an acre of flat floor with the bases of columns on it and nothing above them.",
-  "area": "deeproads_broken_stair",
-  "kind": "ruin",
-  "descriptionKey": "generic_ruin",
-  "travelMinutes": 8,
-  "tags": [
-    "ruin"
-  ],
-  "map": {
-    "width": "15",
-    "height": "11",
-    "palette": "int_delved"
-  },
-  "position": {
-    "x": 14,
-    "y": 3
+  "@prefab": "world_points_f_nterest_generic_ruin_3",
+  "params": {
+    "id": "broken_stair_the_landing",
+    "name": "The Great Landing",
+    "description": "Halfway up, an acre of flat floor with the bases of columns on it and nothing above them.",
+    "area": "deeproads_broken_stair",
+    "map": {
+      "width": "15",
+      "height": "11",
+      "palette": "int_delved"
+    },
+    "variant": "v2"
   }
 }

@@ -1,57 +1,41 @@
 {
-  "id": "workings_thing",
-  "name": "What Is in the Lower Workings",
-  "description": "Lantern Deep dug down and stopped, and did not say why.",
-  "level": 9,
-  "xp": 1100,
-  "attributes": {
-    "might": 18,
-    "agility": 13,
-    "endurance": 18,
-    "intellect": 9,
-    "instinct": 14,
-    "presence": 10
-  },
-  "abilities": [
-    "stone_fist",
-    "rend"
-  ],
-  "behaviour": [
-    {
-      "priority": 0,
-      "use": "stone_fist"
-    }
-  ],
-  "faction": "the_unsealed",
-  "creatureType": "undead",
-  "size": "medium",
-  "descriptors": [
-    "a hunched",
-    "a rock-pale"
-  ],
-  "conditionalLoot": [],
-  "loot": "deep_vault_hoard",
-  "conditionImmunities": [
-    "prone",
-    "frightened"
-  ],
-  "resourceOverrides": {
-    "hp": 130
-  },
-  "temperament": {
-    "roamRadius": 12,
-    "investigateRadius": 40,
-    "leashRadius": 60,
-    "wanderChance": 0.1,
-    "disengageTurns": 1,
-    "speeds": {
-      "wander": 0.5,
-      "investigate": 0.5
+  "@prefab": "content_monsters_entry_2",
+  "params": {
+    "id": "workings_thing",
+    "name": "What Is in the Lower Workings",
+    "description": "Lantern Deep dug down and stopped, and did not say why.",
+    "level": 9,
+    "xp": 1100,
+    "attributes": {
+      "might": 18,
+      "agility": 13,
+      "endurance": 18,
+      "intellect": 9,
+      "instinct": 14,
+      "presence": 10
     },
-    "investigates": [
-      "sight",
-      "hearing",
-      "smell"
-    ]
+    "abilities": [
+      "stone_fist",
+      "rend"
+    ],
+    "behaviour": [
+      {
+        "priority": 0,
+        "use": "stone_fist"
+      }
+    ],
+    "descriptors": [
+      "a hunched",
+      "a rock-pale"
+    ],
+    "loot": "deep_vault_hoard",
+    "conditionImmunities": [
+      "prone",
+      "frightened"
+    ],
+    "resourceOverrides": {
+      "hp": 130
+    },
+    "variant": "v1"
   }
 }

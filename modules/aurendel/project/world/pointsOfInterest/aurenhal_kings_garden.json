@@ -1,16 +1,11 @@
 {
-  "id": "aurenhal_kings_garden",
-  "name": "The King's Garden",
-  "description": "Walled, gravelled, and open to the public on days that keep changing.",
-  "area": "aurenhal_highgate",
-  "kind": "landmark",
-  "descriptionKey": "generic_landmark",
-  "travelMinutes": 3,
-  "tags": [
-    "aurenhal"
-  ],
-  "position": {
-    "x": 28,
-    "y": 4
+  "@prefab": "world_points_f_nterest_generic_landmark",
+  "params": {
+    "id": "aurenhal_kings_garden",
+    "name": "The King's Garden",
+    "description": "Walled, gravelled, and open to the public on days that keep changing.",
+    "area": "aurenhal_highgate",
+    "travelMinutes": 3,
+    "variant": "v1"
   }
 }

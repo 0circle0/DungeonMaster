@@ -37,7 +37,8 @@
     "mod": "tsx packages/mods/src/bin/mod-tool.ts",
     "content": "tsx packages/tools/src/bin/build-content.ts",
     "check:content": "tsx packages/tools/src/bin/check-content.ts",
-    "check:client": "tsx packages/tools/src/bin/check-client-only.ts"
+    "check:client": "tsx packages/tools/src/bin/check-client-only.ts",
+    "compress": "tsx packages/tools/src/bin/compress-project.ts"
   },
   "devDependencies": {
     "@types/node": "^22.10.2",

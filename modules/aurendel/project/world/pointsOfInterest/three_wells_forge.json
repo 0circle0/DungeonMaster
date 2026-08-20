@@ -1,24 +1,10 @@
 {
-  "id": "three_wells_forge",
-  "name": "The Well Forge",
-  "description": "Chain, windlass gear, and horseshoes.",
-  "area": "steppe_three_wells",
-  "kind": "market",
-  "descriptionKey": "int_smithy",
-  "travelMinutes": 3,
-  "tags": [
-    "shop"
-  ],
-  "services": [
-    "smith"
-  ],
-  "map": {
-    "width": "9",
-    "height": "7",
-    "palette": "int_forge"
-  },
-  "position": {
-    "x": 21,
-    "y": 3
+  "@prefab": "world_points_f_nterest_int_smithy_2",
+  "params": {
+    "id": "three_wells_forge",
+    "name": "The Well Forge",
+    "description": "Chain, windlass gear, and horseshoes.",
+    "area": "steppe_three_wells",
+    "variant": "v3"
   }
 }

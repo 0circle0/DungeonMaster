@@ -1,0 +1,47 @@
+{
+  "id": "rules_attributes_entry",
+  "label": "rules_attributes_entry",
+  "collection": "rules.attributes",
+  "params": [
+    {
+      "key": "id",
+      "kind": "string"
+    },
+    {
+      "key": "name",
+      "kind": "string"
+    },
+    {
+      "key": "description",
+      "kind": "text"
+    },
+    {
+      "key": "abbrev",
+      "kind": "string"
+    }
+  ],
+  "template": {
+    "id": "{{id}}",
+    "name": "{{name}}",
+    "abbrev": "{{abbrev}}",
+    "description": "{{description}}",
+    "min": 8,
+    "max": 20,
+    "default": 10,
+    "modifier": {
+      "floor": {
+        "div": [
+          {
+            "sub": [
+              {
+                "ref": "value"
+              },
+              10
+            ]
+          },
+          2
+        ]
+      }
+    }
+  }
+}

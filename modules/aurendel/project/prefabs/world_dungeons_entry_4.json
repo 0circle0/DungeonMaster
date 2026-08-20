@@ -1,0 +1,78 @@
+{
+  "id": "world_dungeons_entry_4",
+  "label": "world_dungeons_entry_4",
+  "collection": "world.dungeons",
+  "params": [
+    {
+      "key": "id",
+      "kind": "string"
+    },
+    {
+      "key": "name",
+      "kind": "string"
+    },
+    {
+      "key": "description",
+      "kind": "text"
+    },
+    {
+      "key": "biome",
+      "kind": "string"
+    },
+    {
+      "key": "bossTable",
+      "kind": "string"
+    },
+    {
+      "key": "variant",
+      "kind": "enum",
+      "options": [
+        "v1",
+        "v2",
+        "v3",
+        "v4"
+      ]
+    }
+  ],
+  "template": {
+    "id": "{{id}}",
+    "name": "{{name}}",
+    "description": "{{description}}",
+    "biome": "{{biome}}",
+    "roomCount": {
+      "@lookup": [
+        "world_dungeons_entry_4_variant",
+        "{{variant}}",
+        "roomCount"
+      ]
+    },
+    "depth": {
+      "@lookup": [
+        "world_dungeons_entry_4_variant",
+        "{{variant}}",
+        "depth"
+      ]
+    },
+    "algorithm": "rooms",
+    "lockedDoorChance": 0,
+    "doorGates": [],
+    "rollEncounters": false,
+    "safeEntrance": true,
+    "width": {
+      "@lookup": [
+        "world_dungeons_entry_4_variant",
+        "{{variant}}",
+        "width"
+      ]
+    },
+    "height": {
+      "@lookup": [
+        "world_dungeons_entry_4_variant",
+        "{{variant}}",
+        "height"
+      ]
+    },
+    "corridorLength": "3d3",
+    "bossTable": "{{bossTable}}"
+  }
+}

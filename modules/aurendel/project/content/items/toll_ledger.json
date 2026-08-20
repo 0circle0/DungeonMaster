@@ -1,14 +1,11 @@
 {
-  "id": "toll_ledger",
-  "name": "The Toll Ledger",
-  "description": "Two hundred years of a shilling a head, balanced every year, in one hand with a broken g.",
-  "kind": "key",
-  "value": 0,
-  "weight": 0,
-  "tags": [
-    "keepsake"
-  ],
-  "extra": {
-    "heldBy": "ferryman_sarl"
+  "@prefab": "content_items_entry_8",
+  "params": {
+    "id": "toll_ledger",
+    "name": "The Toll Ledger",
+    "description": "Two hundred years of a shilling a head, balanced every year, in one hand with a broken g.",
+    "extra": {
+      "heldBy": "ferryman_sarl"
+    }
   }
 }

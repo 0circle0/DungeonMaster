@@ -17,6 +17,7 @@ import { describe, it, expect } from 'vitest';
 import { readFileSync, existsSync, readdirSync, statSync } from 'node:fs';
 import { join, relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import type { Prefab, StyleTables } from './prefab.js';
 import { splitProject, joinProject, isAuthoringFile } from './project.js';
 import { compileModule, hashModule } from './compile.js';
 import { gameModuleSchema } from './schema/module.js';
@@ -72,13 +73,26 @@ describe('splitProject / joinProject', () => {
     const manifestText = files['project.json'];
     expect(manifestText, `${name}/project has no project.json`).toBeDefined();
     delete files['project.json'];
-    // Prefabs, style tables and the contract describe how the world is
-    // authored, not what it contains, so they are not part of the build.
-    for (const path of Object.keys(files)) if (isAuthoringFile(path)) delete files[path];
+
+    // Prefabs and style tables describe how the world is authored rather than
+    // what it contains, so they are still not *entries* — but a compressed
+    // project's entry files are recipes, and a recipe cannot expand without
+    // them. They come out of the entry set and go in as build inputs.
+    const prefabs: Prefab[] = [];
+    let style: StyleTables = {};
+    for (const path of Object.keys(files)) {
+      if (!isAuthoringFile(path)) continue;
+      if (path === 'style.json') style = JSON.parse(files[path]!) as StyleTables;
+      else if (path.startsWith('prefabs/') && !path.endsWith('instances.json')) {
+        prefabs.push(JSON.parse(files[path]!) as Prefab);
+      }
+      delete files[path];
+    }
 
     const { document, issues } = joinProject(
       JSON.parse(manifestText!) as ReturnType<typeof splitProject>['manifest'],
       files,
+      { prefabs, style },
     );
     expect(issues).toEqual([]);
     expect(`${JSON.stringify(document, null, 2)}\n`).toBe(raw(name));

@@ -1,0 +1,67 @@
+{
+  "id": "world_terrains_entry_6",
+  "label": "world_terrains_entry_6",
+  "collection": "world.terrains",
+  "params": [
+    {
+      "key": "id",
+      "kind": "string"
+    },
+    {
+      "key": "name",
+      "kind": "string"
+    },
+    {
+      "key": "description",
+      "kind": "text"
+    },
+    {
+      "key": "glyph",
+      "kind": "string"
+    },
+    {
+      "key": "color",
+      "kind": "string"
+    },
+    {
+      "key": "variant",
+      "kind": "enum",
+      "options": [
+        "v1",
+        "v2",
+        "v3",
+        "v4"
+      ]
+    }
+  ],
+  "template": {
+    "id": "{{id}}",
+    "name": "{{name}}",
+    "description": "{{description}}",
+    "glyph": "{{glyph}}",
+    "color": "{{color}}",
+    "passable": false,
+    "opaque": {
+      "@lookup": [
+        "world_terrains_entry_6_variant",
+        "{{variant}}",
+        "opaque"
+      ]
+    },
+    "moveCost": 0,
+    "tags": {
+      "@lookup": [
+        "world_terrains_entry_6_variant",
+        "{{variant}}",
+        "tags"
+      ]
+    },
+    "providesCover": {
+      "@lookup": [
+        "world_terrains_entry_6_variant",
+        "{{variant}}",
+        "providesCover"
+      ]
+    }
+  }
+}

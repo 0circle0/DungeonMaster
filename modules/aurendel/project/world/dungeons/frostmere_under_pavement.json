@@ -1,19 +1,14 @@
 {
-  "id": "frostmere_under_pavement",
-  "name": "Under the Pavement",
-  "description": "Whatever was quarried out from under the flats, opened again by wind taking the ice off the top of it.",
-  "biome": "dungeon_delved",
-  "roomCount": "13",
-  "depth": "3",
-  "algorithm": "bsp",
-  "lockedDoorChance": 0,
-  "doorGates": [],
-  "rollEncounters": false,
-  "safeEntrance": true,
-  "bsp": {
-    "minLeaf": 6
-  },
-  "width": "33",
-  "height": "33",
-  "bossTable": "frost_pavement_boss"
+  "@prefab": "world_dungeons_entry_2",
+  "params": {
+    "id": "frostmere_under_pavement",
+    "name": "Under the Pavement",
+    "description": "Whatever was quarried out from under the flats, opened again by wind taking the ice off the top of it.",
+    "biome": "dungeon_delved",
+    "roomCount": "13",
+    "width": "33",
+    "height": "33",
+    "bossTable": "frost_pavement_boss",
+    "variant": "v4"
+  }
 }

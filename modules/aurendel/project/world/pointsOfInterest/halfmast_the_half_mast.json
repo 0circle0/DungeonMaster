@@ -1,24 +1,14 @@
 {
-  "id": "halfmast_the_half_mast",
-  "name": "The Half Mast",
-  "description": "There is one, in the yard, cut off at about twelve feet, and nobody will say why it was cut.",
-  "area": "isles_halfmast",
-  "kind": "settlement",
-  "descriptionKey": "int_inn",
-  "travelMinutes": 3,
-  "tags": [
-    "inn"
-  ],
-  "services": [
-    "inn"
-  ],
-  "map": {
-    "width": "9",
-    "height": "7",
-    "palette": "int_timber"
-  },
-  "position": {
-    "x": 9,
-    "y": 3
+  "@prefab": "world_points_f_nterest_int_inn_2",
+  "params": {
+    "id": "halfmast_the_half_mast",
+    "name": "The Half Mast",
+    "description": "There is one, in the yard, cut off at about twelve feet, and nobody will say why it was cut.",
+    "area": "isles_halfmast",
+    "position": {
+      "x": 9,
+      "y": 3
+    },
+    "variant": "v3"
   }
 }

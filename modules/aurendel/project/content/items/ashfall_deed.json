@@ -1,14 +1,11 @@
 {
-  "id": "ashfall_deed",
-  "name": "The Ashfall Deed",
-  "description": "Title to a village nine feet under, held by a family that has farmed the ash over it for six generations and never once dug.",
-  "kind": "key",
-  "value": 0,
-  "weight": 0,
-  "tags": [
-    "keepsake"
-  ],
-  "extra": {
-    "heldBy": "ash_farmer_borsa"
+  "@prefab": "content_items_entry_8",
+  "params": {
+    "id": "ashfall_deed",
+    "name": "The Ashfall Deed",
+    "description": "Title to a village nine feet under, held by a family that has farmed the ash over it for six generations and never once dug.",
+    "extra": {
+      "heldBy": "ash_farmer_borsa"
+    }
   }
 }

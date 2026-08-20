@@ -1,24 +1,9 @@
 {
-  "id": "might",
-  "name": "Might",
-  "abbrev": "MIG",
-  "description": "Raw physical force: what you can lift, break, and hit with.",
-  "min": 8,
-  "max": 20,
-  "default": 10,
-  "modifier": {
-    "floor": {
-      "div": [
-        {
-          "sub": [
-            {
-              "ref": "value"
-            },
-            10
-          ]
-        },
-        2
-      ]
-    }
+  "@prefab": "rules_attributes_entry",
+  "params": {
+    "id": "might",
+    "name": "Might",
+    "description": "Raw physical force: what you can lift, break, and hit with.",
+    "abbrev": "MIG"
   }
 }

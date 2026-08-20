@@ -1,14 +1,11 @@
 {
-  "id": "stall",
-  "name": "Market Stall",
-  "description": "Trestle and awning, struck every evening.",
-  "glyph": "5",
-  "color": "magenta",
-  "passable": false,
-  "opaque": false,
-  "moveCost": 0,
-  "tags": [
-    "furniture"
-  ],
-  "providesCover": "half"
+  "@prefab": "world_terrains_entry_6",
+  "params": {
+    "id": "stall",
+    "name": "Market Stall",
+    "description": "Trestle and awning, struck every evening.",
+    "glyph": "5",
+    "color": "magenta",
+    "variant": "v3"
+  }
 }

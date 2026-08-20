@@ -1,21 +1,19 @@
 {
-  "id": "frostmere_the_hollow",
-  "name": "The Hollow",
-  "description": "The Last Cairn is standing on something, and the something is considerably larger than the cairn.",
-  "biome": "dungeon_ice",
-  "roomCount": "14",
-  "depth": "4",
-  "algorithm": "caverns",
-  "lockedDoorChance": 0,
-  "doorGates": [],
-  "rollEncounters": false,
-  "safeEntrance": true,
-  "caverns": {
-    "fill": 0.46,
-    "smoothingPasses": 4,
-    "birthThreshold": 5
-  },
-  "width": "51",
-  "height": "51",
-  "bossTable": "the_last_cairn"
+  "@prefab": "world_dungeons_entry",
+  "params": {
+    "id": "frostmere_the_hollow",
+    "name": "The Hollow",
+    "description": "The Last Cairn is standing on something, and the something is considerably larger than the cairn.",
+    "biome": "dungeon_ice",
+    "roomCount": "14",
+    "depth": "4",
+    "caverns": {
+      "fill": 0.46,
+      "smoothingPasses": 4,
+      "birthThreshold": 5
+    },
+    "width": "51",
+    "height": "51",
+    "bossTable": "the_last_cairn"
+  }
 }

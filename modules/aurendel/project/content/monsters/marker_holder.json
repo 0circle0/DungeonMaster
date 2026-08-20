@@ -1,69 +1,53 @@
 {
-  "id": "marker_holder",
-  "name": "What Holds Her",
-  "description": "Two hundred years of one bearing in a channel that redraws every spring. Something down there has been very patient.",
-  "level": 7,
-  "xp": 740,
-  "attributes": {
-    "might": 17,
-    "agility": 13,
-    "endurance": 17,
-    "intellect": 11,
-    "instinct": 15,
-    "presence": 12
-  },
-  "abilities": [
-    "latch",
-    "drag_under",
-    "rend"
-  ],
-  "behaviour": [
-    {
-      "priority": 20,
-      "use": "latch",
-      "when": {
-        "chance": 0.4
+  "@prefab": "content_monsters_entry_2",
+  "params": {
+    "id": "marker_holder",
+    "name": "What Holds Her",
+    "description": "Two hundred years of one bearing in a channel that redraws every spring. Something down there has been very patient.",
+    "level": 7,
+    "xp": 740,
+    "attributes": {
+      "might": 17,
+      "agility": 13,
+      "endurance": 17,
+      "intellect": 11,
+      "instinct": 15,
+      "presence": 12
+    },
+    "abilities": [
+      "latch",
+      "drag_under",
+      "rend"
+    ],
+    "behaviour": [
+      {
+        "priority": 20,
+        "use": "latch",
+        "when": {
+          "chance": 0.4
+        }
+      },
+      {
+        "priority": 10,
+        "use": "drag_under"
+      },
+      {
+        "priority": 0,
+        "use": "rend"
       }
+    ],
+    "descriptors": [
+      "a barnacled",
+      "a rooted"
+    ],
+    "loot": "isle_marker_hoard",
+    "conditionImmunities": [
+      "prone",
+      "frightened"
+    ],
+    "resourceOverrides": {
+      "hp": 86
     },
-    {
-      "priority": 10,
-      "use": "drag_under"
-    },
-    {
-      "priority": 0,
-      "use": "rend"
-    }
-  ],
-  "faction": "the_unsealed",
-  "creatureType": "undead",
-  "size": "medium",
-  "descriptors": [
-    "a barnacled",
-    "a rooted"
-  ],
-  "conditionalLoot": [],
-  "loot": "isle_marker_hoard",
-  "conditionImmunities": [
-    "prone",
-    "frightened"
-  ],
-  "resourceOverrides": {
-    "hp": 86
-  },
-  "temperament": {
-    "roamRadius": 12,
-    "investigateRadius": 40,
-    "leashRadius": 60,
-    "wanderChance": 0.1,
-    "disengageTurns": 1,
-    "speeds": {
-      "wander": 0.5,
-      "investigate": 0.5
-    },
-    "investigates": [
-      "sight",
-      "hearing",
-      "smell"
-    ]
+    "variant": "v1"
   }
 }

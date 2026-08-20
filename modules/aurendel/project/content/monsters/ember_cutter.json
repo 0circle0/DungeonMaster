@@ -1,53 +1,29 @@
 {
-  "id": "ember_cutter",
-  "name": "Ovid, Shelf-Cutter",
-  "description": "Works a material that opens a hand if you look away from it.",
-  "level": 6,
-  "xp": 0,
-  "attributes": {
-    "might": 14,
-    "agility": 16,
-    "endurance": 13,
-    "intellect": 13,
-    "instinct": 13,
-    "presence": 9
-  },
-  "abilities": [
-    "strike",
-    "cut_and_run"
-  ],
-  "behaviour": [
-    {
-      "priority": 0,
-      "use": "strike"
-    }
-  ],
-  "faction": "the_vent_readers",
-  "creatureType": "humanoid",
-  "size": "medium",
-  "descriptors": [
-    "a scarred"
-  ],
-  "conditionalLoot": [],
-  "loot": "ember_rule_carried",
-  "resourceOverrides": {
-    "hp": 33
-  },
-  "temperament": {
-    "roamRadius": 24,
-    "investigateRadius": 70,
-    "leashRadius": 100,
-    "wanderChance": 0.4,
-    "disengageTurns": 2,
-    "investigates": [
-      "sight",
-      "hearing",
-      "tracks",
-      "smell"
+  "@prefab": "content_monsters_entry",
+  "params": {
+    "id": "ember_cutter",
+    "name": "Ovid, Shelf-Cutter",
+    "description": "Works a material that opens a hand if you look away from it.",
+    "attributes": {
+      "might": 14,
+      "agility": 16,
+      "endurance": 13,
+      "intellect": 13,
+      "instinct": 13,
+      "presence": 9
+    },
+    "abilities": [
+      "strike",
+      "cut_and_run"
     ],
-    "notices": [
-      "hostile",
-      "neutral"
-    ]
+    "faction": "the_vent_readers",
+    "descriptors": [
+      "a scarred"
+    ],
+    "loot": "ember_rule_carried",
+    "resourceOverrides": {
+      "hp": 33
+    },
+    "variant": "v6"
   }
 }

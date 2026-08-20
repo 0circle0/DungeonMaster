@@ -1,25 +1,14 @@
 {
-  "id": "sunken_road_caravanserai",
-  "name": "The Caravanserai",
-  "description": "Four walls, one gate, a well, and it has been here since the road was above ground.",
-  "area": "glasslands_sunken_road",
-  "kind": "settlement",
-  "descriptionKey": "int_store",
-  "travelMinutes": 6,
-  "tags": [
-    "inn"
-  ],
-  "services": [
-    "inn",
-    "stable"
-  ],
-  "map": {
-    "width": "19",
-    "height": "13",
-    "palette": "int_mudbrick"
-  },
-  "position": {
-    "x": 14,
-    "y": 3
+  "@prefab": "world_points_f_nterest_int_store_2",
+  "params": {
+    "id": "sunken_road_caravanserai",
+    "name": "The Caravanserai",
+    "description": "Four walls, one gate, a well, and it has been here since the road was above ground.",
+    "area": "glasslands_sunken_road",
+    "position": {
+      "x": 14,
+      "y": 3
+    },
+    "variant": "v5"
   }
 }

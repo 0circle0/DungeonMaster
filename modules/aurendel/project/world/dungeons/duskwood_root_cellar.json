@@ -1,17 +1,11 @@
 {
-  "id": "duskwood_root_cellar",
-  "name": "The Root Cellar",
-  "description": "Dressed stone under the Beech King's roots, and the roots have been getting in for a century.",
-  "biome": "dungeon_delved",
-  "roomCount": "8",
-  "depth": "2",
-  "algorithm": "rooms",
-  "lockedDoorChance": 0,
-  "doorGates": [],
-  "rollEncounters": false,
-  "safeEntrance": true,
-  "width": "65",
-  "height": "65",
-  "corridorLength": "3d3",
-  "bossTable": "trial_one_third"
+  "@prefab": "world_dungeons_entry_4",
+  "params": {
+    "id": "duskwood_root_cellar",
+    "name": "The Root Cellar",
+    "description": "Dressed stone under the Beech King's roots, and the roots have been getting in for a century.",
+    "biome": "dungeon_delved",
+    "bossTable": "trial_one_third",
+    "variant": "v1"
+  }
 }

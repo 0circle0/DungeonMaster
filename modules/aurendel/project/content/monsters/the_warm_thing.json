@@ -1,85 +1,53 @@
 {
-  "id": "the_warm_thing",
-  "name": "What Keeps It Warm",
-  "description": "Nine hundred years of a spring that has never failed, running warm and tasting of iron two miles from a country where nothing runs at all.",
-  "level": 7,
-  "xp": 590,
-  "attributes": {
-    "might": 14,
-    "agility": 14,
-    "endurance": 16,
-    "intellect": 15,
-    "instinct": 16,
-    "presence": 13
-  },
-  "abilities": [
-    "salt_burn",
-    "wither",
-    "vent_breath"
-  ],
-  "behaviour": [
-    {
-      "priority": 20,
-      "use": "vent_breath",
-      "when": {
-        "chance": 0.3
+  "@prefab": "content_monsters_entry_4",
+  "params": {
+    "id": "the_warm_thing",
+    "name": "What Keeps It Warm",
+    "description": "Nine hundred years of a spring that has never failed, running warm and tasting of iron two miles from a country where nothing runs at all.",
+    "level": 7,
+    "xp": 590,
+    "attributes": {
+      "might": 14,
+      "agility": 14,
+      "endurance": 16,
+      "intellect": 15,
+      "instinct": 16,
+      "presence": 13
+    },
+    "abilities": [
+      "salt_burn",
+      "wither",
+      "vent_breath"
+    ],
+    "behaviour": [
+      {
+        "priority": 20,
+        "use": "vent_breath",
+        "when": {
+          "chance": 0.3
+        }
+      },
+      {
+        "priority": 10,
+        "use": "salt_burn"
+      },
+      {
+        "priority": 0,
+        "use": "wither"
       }
+    ],
+    "descriptors": [
+      "a fever-warm",
+      "a patient"
+    ],
+    "loot": "step_water_hoard",
+    "conditionImmunities": [
+      "frightened",
+      "burning"
+    ],
+    "resourceOverrides": {
+      "hp": 70
     },
-    {
-      "priority": 10,
-      "use": "salt_burn"
-    },
-    {
-      "priority": 0,
-      "use": "wither"
-    }
-  ],
-  "faction": "the_unsealed",
-  "creatureType": "undead",
-  "size": "medium",
-  "descriptors": [
-    "a fever-warm",
-    "a patient"
-  ],
-  "conditionalLoot": [],
-  "loot": "step_water_hoard",
-  "damageInteractions": [
-    {
-      "damageType": "slashing",
-      "multiplier": 0.5,
-      "unless": [
-        "silvered"
-      ]
-    },
-    {
-      "damageType": "piercing",
-      "multiplier": 0.5,
-      "unless": [
-        "silvered"
-      ]
-    }
-  ],
-  "conditionImmunities": [
-    "frightened",
-    "burning"
-  ],
-  "resourceOverrides": {
-    "hp": 70
-  },
-  "temperament": {
-    "roamRadius": 12,
-    "investigateRadius": 40,
-    "leashRadius": 60,
-    "wanderChance": 0.1,
-    "disengageTurns": 1,
-    "speeds": {
-      "wander": 0.5,
-      "investigate": 0.5
-    },
-    "investigates": [
-      "sight",
-      "hearing",
-      "smell"
-    ]
+    "variant": "v1"
   }
 }

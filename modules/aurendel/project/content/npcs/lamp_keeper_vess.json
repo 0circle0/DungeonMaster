@@ -1,32 +1,15 @@
 {
-  "id": "lamp_keeper_vess",
-  "name": "Vess, who Keeps the Lamps",
-  "description": "Holds an office that has nothing to do, since the lamps have not needed anything for four hundred years, and walks the road anyway.",
-  "disposition": 6,
-  "gullibility": 0.4,
-  "memorySpan": 250,
-  "offersQuests": [],
-  "caresAbout": [],
-  "reactions": [],
-  "faction": "the_wayfinders",
-  "dialogue": "deep_vess_talk",
-  "home": "market_road_the_lamps",
-  "temperament": {
-    "roamRadius": 24,
-    "investigateRadius": 60,
-    "leashRadius": 90,
-    "wanderChance": 0.3,
-    "speeds": {
-      "wander": 0.5
-    },
-    "investigates": [
-      "sight",
-      "hearing"
-    ],
-    "notices": [
-      "hostile",
-      "neutral",
-      "ally"
-    ]
+  "@prefab": "content_npcs_entry_2",
+  "params": {
+    "id": "lamp_keeper_vess",
+    "name": "Vess, who Keeps the Lamps",
+    "description": "Holds an office that has nothing to do, since the lamps have not needed anything for four hundred years, and walks the road anyway.",
+    "gullibility": 0.4,
+    "memorySpan": 250,
+    "caresAbout": [],
+    "faction": "the_wayfinders",
+    "dialogue": "deep_vess_talk",
+    "home": "market_road_the_lamps",
+    "variant": "v9"
   }
 }

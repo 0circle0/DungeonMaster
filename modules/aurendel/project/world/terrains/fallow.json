@@ -1,17 +1,14 @@
 {
-  "id": "fallow",
-  "name": "Fallow Field",
-  "description": "Turned earth resting a season.",
-  "glyph": "'",
-  "color": "yellow",
-  "passable": true,
-  "opaque": false,
-  "moveCost": 1,
-  "tags": [
-    "soft"
-  ],
-  "marks": {
-    "tracks": 1,
-    "smell": 1
+  "@prefab": "world_terrains_entry",
+  "params": {
+    "id": "fallow",
+    "name": "Fallow Field",
+    "description": "Turned earth resting a season.",
+    "glyph": "'",
+    "color": "yellow",
+    "tags": [
+      "soft"
+    ],
+    "variant": "v1"
   }
 }

@@ -1,14 +1,11 @@
 {
-  "id": "readers_rhythm",
-  "name": "The Reader's Rhythm",
-  "description": "Forty years of the tube's breathing, marked in soot on wood. It keeps no season, which is the entire point of it.",
-  "kind": "key",
-  "value": 0,
-  "weight": 0,
-  "tags": [
-    "keepsake"
-  ],
-  "extra": {
-    "heldBy": "tube_walker_esk"
+  "@prefab": "content_items_entry_8",
+  "params": {
+    "id": "readers_rhythm",
+    "name": "The Reader's Rhythm",
+    "description": "Forty years of the tube's breathing, marked in soot on wood. It keeps no season, which is the entire point of it.",
+    "extra": {
+      "heldBy": "tube_walker_esk"
+    }
   }
 }

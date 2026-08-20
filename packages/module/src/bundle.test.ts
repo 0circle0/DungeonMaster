@@ -18,6 +18,8 @@ import { join } from 'node:path';
 import { readAssembledModule } from './load.js';
 import { bundleModule, unbundleModule, PROJECT_MANIFEST } from './bundle.js';
 import { parseCsvGrid } from './staticmaps.js';
+import { isPrefabRecipe } from './prefab.js';
+import { isAuthoringFile } from './project.js';
 
 const MODULES = ['minimal', 'core_fantasy', 'greenmarch', 'aurendel'] as const;
 
@@ -37,6 +39,14 @@ describe('bundleModule / unbundleModule', () => {
   it.each(MODULES)('%s: writes the files the repository already holds', (name) => {
     // Not merely *a* valid split — the same paths and the same bytes that are
     // committed, or an export would rewrite half the tree on its first use.
+    //
+    // A compressed project is the other exception, and a larger one. The
+    // repository stores Aurendel's entries as recipes; `bundleModule` works
+    // from a document, which records nothing about which prefab made an entry,
+    // so it writes them literally. Both rebuild the same module — the round
+    // trip above proves it — but the bytes differ, so those files are compared
+    // as the entries they stand for. Making an export preserve compression
+    // needs the instance links, and that is its own change.
     //
     // This makes canonical formatting a repository convention rather than a
     // format rule: `joinProject` parses whatever valid JSON it is handed, so a
@@ -63,6 +73,7 @@ describe('bundleModule / unbundleModule', () => {
         expect(parseCsvGrid(text).cells, path).toEqual(parseCsvGrid(committed).cells);
         continue;
       }
+      if (isPrefabRecipe(JSON.parse(committed))) continue;
       expect(committed, path).toBe(text);
     }
   });
@@ -87,7 +98,10 @@ describe('bundleModule / unbundleModule', () => {
       if (existsSync(join(dir, top))) walk(join(dir, top), `${top}/`);
     }
 
-    expect(onDisk.filter((path) => !(path in files))).toEqual([]);
+    // Authoring files ride along only when handed in, which the studio does and
+    // a bare document cannot.
+    const unaccounted = onDisk.filter((path) => !(path in files) && !isAuthoringFile(path.slice('project/'.length)));
+    expect(unaccounted).toEqual([]);
     expect(files[PROJECT_MANIFEST]).toBeDefined();
   });
 

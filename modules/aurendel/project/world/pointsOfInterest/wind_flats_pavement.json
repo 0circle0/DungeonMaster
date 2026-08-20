@@ -1,14 +1,11 @@
 {
-  "id": "wind_flats_pavement",
-  "name": "The Pavement",
-  "description": "Polished ice over bare rock, and you can see the rock, and it has been quarried.",
-  "area": "frostmere_wind_scoured_flats",
-  "kind": "landmark",
-  "descriptionKey": "generic_landmark",
-  "travelMinutes": 8,
-  "tags": [],
-  "position": {
-    "x": 3,
-    "y": 3
+  "@prefab": "world_points_f_nterest_generic_landmark",
+  "params": {
+    "id": "wind_flats_pavement",
+    "name": "The Pavement",
+    "description": "Polished ice over bare rock, and you can see the rock, and it has been quarried.",
+    "area": "frostmere_wind_scoured_flats",
+    "travelMinutes": 8,
+    "variant": "v3"
   }
 }

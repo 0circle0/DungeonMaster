@@ -1,21 +1,14 @@
 {
-  "id": "cobbleway_house_a",
-  "name": "The Bailiff's House",
-  "description": "Sits at the top of the market place, looking down it.",
-  "area": "coast_cobbleway",
-  "kind": "settlement",
-  "descriptionKey": "int_house",
-  "travelMinutes": 2,
-  "tags": [
-    "house"
-  ],
-  "map": {
-    "width": "9",
-    "height": "7",
-    "palette": "int_timber"
-  },
-  "position": {
-    "x": 12,
-    "y": 23
+  "@prefab": "world_points_f_nterest_int_house_2",
+  "params": {
+    "id": "cobbleway_house_a",
+    "name": "The Bailiff's House",
+    "description": "Sits at the top of the market place, looking down it.",
+    "area": "coast_cobbleway",
+    "position": {
+      "x": 12,
+      "y": 23
+    },
+    "variant": "v1"
   }
 }

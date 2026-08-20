@@ -1,18 +1,16 @@
 {
-  "id": "kurgan_field_great_kurgan",
-  "name": "The Great Kurgan",
-  "description": "The largest, at the head of the middle row, and it is the only one with a way in.",
-  "area": "steppe_kurgan_field",
-  "kind": "dungeonEntrance",
-  "descriptionKey": "generic_dungeon_mouth",
-  "travelMinutes": 14,
-  "tags": [
-    "dungeon"
-  ],
-  "gate": "steppe_kurgan_ward",
-  "dungeon": "steppe_great_kurgan",
-  "position": {
-    "x": 25,
-    "y": 3
+  "@prefab": "world_points_f_nterest_generic_dungeon_mouth_5",
+  "params": {
+    "id": "kurgan_field_great_kurgan",
+    "name": "The Great Kurgan",
+    "description": "The largest, at the head of the middle row, and it is the only one with a way in.",
+    "area": "steppe_kurgan_field",
+    "travelMinutes": 14,
+    "gate": "steppe_kurgan_ward",
+    "dungeon": "steppe_great_kurgan",
+    "position": {
+      "x": 25,
+      "y": 3
+    }
   }
 }

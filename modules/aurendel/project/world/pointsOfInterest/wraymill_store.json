@@ -1,24 +1,19 @@
 {
-  "id": "wraymill_store",
-  "name": "Barrow's Provisions",
-  "description": "Everything a carter needs to get to Aurenhal and back.",
-  "area": "kingsvale_wraymill",
-  "kind": "market",
-  "descriptionKey": "int_store",
-  "travelMinutes": 3,
-  "tags": [
-    "shop"
-  ],
-  "position": {
-    "x": 24,
-    "y": 18
-  },
-  "services": [
-    "market"
-  ],
-  "map": {
-    "width": "11",
-    "height": "9",
-    "palette": "int_shop"
+  "@prefab": "world_points_f_nterest_int_store",
+  "params": {
+    "id": "wraymill_store",
+    "name": "Barrow's Provisions",
+    "description": "Everything a carter needs to get to Aurenhal and back.",
+    "area": "kingsvale_wraymill",
+    "position": {
+      "x": 24,
+      "y": 18
+    },
+    "map": {
+      "width": "11",
+      "height": "9",
+      "palette": "int_shop"
+    },
+    "variant": "v2"
   }
 }

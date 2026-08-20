@@ -1,53 +1,29 @@
 {
-  "id": "thorn_cutter",
-  "name": "Maud, Reed-Cutter",
-  "description": "Swings a hooked bill all day in water to the thigh.",
-  "level": 5,
-  "xp": 0,
-  "attributes": {
-    "might": 14,
-    "agility": 14,
-    "endurance": 14,
-    "intellect": 10,
-    "instinct": 13,
-    "presence": 11
-  },
-  "abilities": [
-    "strike",
-    "cut_and_run"
-  ],
-  "behaviour": [
-    {
-      "priority": 0,
-      "use": "strike"
-    }
-  ],
-  "faction": "the_ferrymen",
-  "creatureType": "humanoid",
-  "size": "medium",
-  "descriptors": [
-    "a sinewy"
-  ],
-  "conditionalLoot": [],
-  "loot": "thorn_bill_carried",
-  "resourceOverrides": {
-    "hp": 31
-  },
-  "temperament": {
-    "roamRadius": 24,
-    "investigateRadius": 70,
-    "leashRadius": 100,
-    "wanderChance": 0.4,
-    "disengageTurns": 2,
-    "investigates": [
-      "sight",
-      "hearing",
-      "tracks",
-      "smell"
+  "@prefab": "content_monsters_entry",
+  "params": {
+    "id": "thorn_cutter",
+    "name": "Maud, Reed-Cutter",
+    "description": "Swings a hooked bill all day in water to the thigh.",
+    "attributes": {
+      "might": 14,
+      "agility": 14,
+      "endurance": 14,
+      "intellect": 10,
+      "instinct": 13,
+      "presence": 11
+    },
+    "abilities": [
+      "strike",
+      "cut_and_run"
     ],
-    "notices": [
-      "hostile",
-      "neutral"
-    ]
+    "faction": "the_ferrymen",
+    "descriptors": [
+      "a sinewy"
+    ],
+    "loot": "thorn_bill_carried",
+    "resourceOverrides": {
+      "hp": 31
+    },
+    "variant": "v5"
   }
 }

@@ -1,24 +1,19 @@
 {
-  "id": "riverside_boatyard",
-  "name": "The Boatyard",
-  "description": "River barges on the stocks, and one sea-going hull that will never fit under the bridge.",
-  "area": "aurenhal_riverside",
-  "kind": "market",
-  "descriptionKey": "int_workshop",
-  "travelMinutes": 4,
-  "tags": [
-    "shop"
-  ],
-  "position": {
-    "x": 30,
-    "y": 16
-  },
-  "services": [
-    "market"
-  ],
-  "map": {
-    "width": "15",
-    "height": "11",
-    "palette": "int_hull"
+  "@prefab": "world_points_f_nterest_int_workshop",
+  "params": {
+    "id": "riverside_boatyard",
+    "name": "The Boatyard",
+    "description": "River barges on the stocks, and one sea-going hull that will never fit under the bridge.",
+    "area": "aurenhal_riverside",
+    "travelMinutes": 4,
+    "position": {
+      "x": 30,
+      "y": 16
+    },
+    "map": {
+      "width": "15",
+      "height": "11",
+      "palette": "int_hull"
+    }
   }
 }

@@ -1,21 +1,14 @@
 {
-  "id": "glass_quarter_house_a",
-  "name": "Cutters' Terrace",
-  "description": "Green-walled, and the residents claim it is cooler and it is not.",
-  "area": "vashta_qal_glass_quarter",
-  "kind": "settlement",
-  "descriptionKey": "int_house",
-  "travelMinutes": 2,
-  "tags": [
-    "house"
-  ],
-  "map": {
-    "width": "9",
-    "height": "7",
-    "palette": "int_timber"
-  },
-  "position": {
-    "x": 32,
-    "y": 27
+  "@prefab": "world_points_f_nterest_int_house_2",
+  "params": {
+    "id": "glass_quarter_house_a",
+    "name": "Cutters' Terrace",
+    "description": "Green-walled, and the residents claim it is cooler and it is not.",
+    "area": "vashta_qal_glass_quarter",
+    "position": {
+      "x": 32,
+      "y": 27
+    },
+    "variant": "v1"
   }
 }

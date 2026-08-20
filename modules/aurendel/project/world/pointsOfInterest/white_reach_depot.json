@@ -1,19 +1,15 @@
 {
-  "id": "white_reach_depot",
-  "name": "The Depot",
-  "description": "A sledge-load of fuel and food buried under a flag, restocked by whoever passes and used by whoever needs it.",
-  "area": "frostmere_the_white_reach",
-  "kind": "camp",
-  "descriptionKey": "generic_camp",
-  "travelMinutes": 8,
-  "tags": [],
-  "map": {
-    "width": "9",
-    "height": "7",
-    "palette": "int_cave"
-  },
-  "position": {
-    "x": 14,
-    "y": 3
+  "@prefab": "world_points_f_nterest_generic_camp",
+  "params": {
+    "id": "white_reach_depot",
+    "name": "The Depot",
+    "description": "A sledge-load of fuel and food buried under a flag, restocked by whoever passes and used by whoever needs it.",
+    "area": "frostmere_the_white_reach",
+    "travelMinutes": 8,
+    "map": {
+      "width": "9",
+      "height": "7",
+      "palette": "int_cave"
+    }
   }
 }

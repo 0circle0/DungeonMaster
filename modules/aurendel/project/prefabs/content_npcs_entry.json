@@ -1,0 +1,83 @@
+{
+  "id": "content_npcs_entry",
+  "label": "content_npcs_entry",
+  "collection": "content.npcs",
+  "params": [
+    {
+      "key": "id",
+      "kind": "string"
+    },
+    {
+      "key": "name",
+      "kind": "string"
+    },
+    {
+      "key": "description",
+      "kind": "text"
+    },
+    {
+      "key": "disposition",
+      "kind": "string"
+    },
+    {
+      "key": "gullibility",
+      "kind": "string"
+    },
+    {
+      "key": "memorySpan",
+      "kind": "string"
+    },
+    {
+      "key": "offersQuests",
+      "kind": "string"
+    },
+    {
+      "key": "caresAbout",
+      "kind": "string"
+    },
+    {
+      "key": "faction",
+      "kind": "string"
+    },
+    {
+      "key": "dialogue",
+      "kind": "string"
+    },
+    {
+      "key": "home",
+      "kind": "string"
+    },
+    {
+      "key": "shop",
+      "kind": "string"
+    }
+  ],
+  "template": {
+    "id": "{{id}}",
+    "name": "{{name}}",
+    "description": "{{description}}",
+    "disposition": "{{disposition}}",
+    "gullibility": "{{gullibility}}",
+    "memorySpan": "{{memorySpan}}",
+    "offersQuests": "{{offersQuests}}",
+    "caresAbout": "{{caresAbout}}",
+    "reactions": [],
+    "faction": "{{faction}}",
+    "dialogue": "{{dialogue}}",
+    "home": "{{home}}",
+    "shop": "{{shop}}",
+    "temperament": {
+      "roamRadius": 0,
+      "wanderChance": 0,
+      "speeds": {
+        "wander": 0
+      },
+      "investigates": [],
+      "notices": [
+        "hostile",
+        "neutral",
+        "ally"
+      ]
+    }
+  }
+}

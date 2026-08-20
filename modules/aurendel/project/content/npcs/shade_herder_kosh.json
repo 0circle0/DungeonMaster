@@ -1,32 +1,15 @@
 {
-  "id": "shade_herder_kosh",
-  "name": "Kosh, in the Shade",
-  "description": "Grazes four hundred head along eleven miles of trees and has walked the length of them more times than anybody alive.",
-  "disposition": 5,
-  "gullibility": 0.4,
-  "memorySpan": 170,
-  "offersQuests": [],
-  "caresAbout": [],
-  "reactions": [],
-  "faction": "the_horse_lords",
-  "dialogue": "step_kosh_talk",
-  "home": "windbreak_shepherds_camp",
-  "temperament": {
-    "roamRadius": 24,
-    "investigateRadius": 60,
-    "leashRadius": 90,
-    "wanderChance": 0.3,
-    "speeds": {
-      "wander": 0.5
-    },
-    "investigates": [
-      "sight",
-      "hearing"
-    ],
-    "notices": [
-      "hostile",
-      "neutral",
-      "ally"
-    ]
+  "@prefab": "content_npcs_entry_2",
+  "params": {
+    "id": "shade_herder_kosh",
+    "name": "Kosh, in the Shade",
+    "description": "Grazes four hundred head along eleven miles of trees and has walked the length of them more times than anybody alive.",
+    "gullibility": 0.4,
+    "memorySpan": 170,
+    "caresAbout": [],
+    "faction": "the_horse_lords",
+    "dialogue": "step_kosh_talk",
+    "home": "windbreak_shepherds_camp",
+    "variant": "v7"
   }
 }

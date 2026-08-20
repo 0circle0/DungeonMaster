@@ -1,0 +1,101 @@
+{
+  "id": "content_monsters_entry_2",
+  "label": "content_monsters_entry_2",
+  "collection": "content.monsters",
+  "params": [
+    {
+      "key": "id",
+      "kind": "string"
+    },
+    {
+      "key": "name",
+      "kind": "string"
+    },
+    {
+      "key": "description",
+      "kind": "text"
+    },
+    {
+      "key": "level",
+      "kind": "string"
+    },
+    {
+      "key": "xp",
+      "kind": "string"
+    },
+    {
+      "key": "attributes",
+      "kind": "string"
+    },
+    {
+      "key": "abilities",
+      "kind": "string"
+    },
+    {
+      "key": "behaviour",
+      "kind": "string"
+    },
+    {
+      "key": "descriptors",
+      "kind": "string"
+    },
+    {
+      "key": "loot",
+      "kind": "string"
+    },
+    {
+      "key": "conditionImmunities",
+      "kind": "string"
+    },
+    {
+      "key": "resourceOverrides",
+      "kind": "string"
+    },
+    {
+      "key": "variant",
+      "kind": "enum",
+      "options": [
+        "v1",
+        "v2",
+        "v3"
+      ]
+    }
+  ],
+  "template": {
+    "id": "{{id}}",
+    "name": "{{name}}",
+    "description": "{{description}}",
+    "level": "{{level}}",
+    "xp": "{{xp}}",
+    "attributes": "{{attributes}}",
+    "abilities": "{{abilities}}",
+    "behaviour": "{{behaviour}}",
+    "faction": "the_unsealed",
+    "creatureType": {
+      "@lookup": [
+        "content_monsters_entry_2_variant",
+        "{{variant}}",
+        "creatureType"
+      ]
+    },
+    "size": {
+      "@lookup": [
+        "content_monsters_entry_2_variant",
+        "{{variant}}",
+        "size"
+      ]
+    },
+    "descriptors": "{{descriptors}}",
+    "conditionalLoot": [],
+    "loot": "{{loot}}",
+    "conditionImmunities": "{{conditionImmunities}}",
+    "resourceOverrides": "{{resourceOverrides}}",
+    "temperament": {
+      "@lookup": [
+        "content_monsters_entry_2_variant",
+        "{{variant}}",
+        "temperament"
+      ]
+    }
+  }
+}

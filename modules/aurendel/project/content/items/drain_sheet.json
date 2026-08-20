@@ -1,14 +1,11 @@
 {
-  "id": "drain_sheet",
-  "name": "The Missing Drain Sheet",
-  "description": "One sheet out of four hundred years of Aurenhal's drains, in a copyist's hand rather than the Library's, because the original went and somebody copied it first.",
-  "kind": "key",
-  "value": 0,
-  "weight": 0,
-  "tags": [
-    "keepsake"
-  ],
-  "extra": {
-    "heldBy": "copyist_marn"
+  "@prefab": "content_items_entry_8",
+  "params": {
+    "id": "drain_sheet",
+    "name": "The Missing Drain Sheet",
+    "description": "One sheet out of four hundred years of Aurenhal's drains, in a copyist's hand rather than the Library's, because the original went and somebody copied it first.",
+    "extra": {
+      "heldBy": "copyist_marn"
+    }
   }
 }

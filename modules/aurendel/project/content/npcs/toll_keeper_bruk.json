@@ -1,33 +1,15 @@
 {
-  "id": "toll_keeper_bruk",
-  "name": "Bruk, at the Old Toll",
-  "description": "Sits at a toll post on a road the guild stopped tolling, because somebody has to, and keeps the tally because his father did.",
-  "disposition": 0,
-  "gullibility": 0.25,
-  "memorySpan": 300,
-  "offersQuests": [],
-  "caresAbout": [],
-  "reactions": [],
-  "faction": "the_wayfinders",
-  "dialogue": "deep_bruk_talk",
-  "home": "market_road_old_toll",
-  "statblock": "deep_tollkeeper",
-  "temperament": {
-    "roamRadius": 24,
-    "investigateRadius": 60,
-    "leashRadius": 90,
-    "wanderChance": 0.3,
-    "speeds": {
-      "wander": 0.5
-    },
-    "investigates": [
-      "sight",
-      "hearing"
-    ],
-    "notices": [
-      "hostile",
-      "neutral",
-      "ally"
-    ]
+  "@prefab": "content_npcs_entry_3",
+  "params": {
+    "id": "toll_keeper_bruk",
+    "name": "Bruk, at the Old Toll",
+    "description": "Sits at a toll post on a road the guild stopped tolling, because somebody has to, and keeps the tally because his father did.",
+    "disposition": 0,
+    "memorySpan": 300,
+    "faction": "the_wayfinders",
+    "dialogue": "deep_bruk_talk",
+    "home": "market_road_old_toll",
+    "statblock": "deep_tollkeeper",
+    "variant": "v5"
   }
 }

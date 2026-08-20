@@ -1,85 +1,53 @@
 {
-  "id": "the_long_fire",
-  "name": "What the Fire Feeds",
-  "description": "Two hundred years alight on a third of the peat it burns, and two nights a year when it goes green and a village is indoors before dark without anybody saying so.",
-  "level": 7,
-  "xp": 720,
-  "attributes": {
-    "might": 14,
-    "agility": 14,
-    "endurance": 16,
-    "intellect": 15,
-    "instinct": 16,
-    "presence": 15
-  },
-  "abilities": [
-    "cinder_lash",
-    "wither",
-    "grave_chill"
-  ],
-  "behaviour": [
-    {
-      "priority": 20,
-      "use": "cinder_lash",
-      "when": {
-        "chance": 0.35
+  "@prefab": "content_monsters_entry_4",
+  "params": {
+    "id": "the_long_fire",
+    "name": "What the Fire Feeds",
+    "description": "Two hundred years alight on a third of the peat it burns, and two nights a year when it goes green and a village is indoors before dark without anybody saying so.",
+    "level": 7,
+    "xp": 720,
+    "attributes": {
+      "might": 14,
+      "agility": 14,
+      "endurance": 16,
+      "intellect": 15,
+      "instinct": 16,
+      "presence": 15
+    },
+    "abilities": [
+      "cinder_lash",
+      "wither",
+      "grave_chill"
+    ],
+    "behaviour": [
+      {
+        "priority": 20,
+        "use": "cinder_lash",
+        "when": {
+          "chance": 0.35
+        }
+      },
+      {
+        "priority": 10,
+        "use": "wither"
+      },
+      {
+        "priority": 0,
+        "use": "grave_chill"
       }
+    ],
+    "descriptors": [
+      "a green-lit",
+      "a patient"
+    ],
+    "loot": "moor_fire_hoard",
+    "conditionImmunities": [
+      "frightened",
+      "burning"
+    ],
+    "resourceOverrides": {
+      "hp": 84
     },
-    {
-      "priority": 10,
-      "use": "wither"
-    },
-    {
-      "priority": 0,
-      "use": "grave_chill"
-    }
-  ],
-  "faction": "the_unsealed",
-  "creatureType": "undead",
-  "size": "medium",
-  "descriptors": [
-    "a green-lit",
-    "a patient"
-  ],
-  "conditionalLoot": [],
-  "loot": "moor_fire_hoard",
-  "damageInteractions": [
-    {
-      "damageType": "slashing",
-      "multiplier": 0.5,
-      "unless": [
-        "silvered"
-      ]
-    },
-    {
-      "damageType": "piercing",
-      "multiplier": 0.5,
-      "unless": [
-        "silvered"
-      ]
-    }
-  ],
-  "conditionImmunities": [
-    "frightened",
-    "burning"
-  ],
-  "resourceOverrides": {
-    "hp": 84
-  },
-  "temperament": {
-    "roamRadius": 12,
-    "investigateRadius": 40,
-    "leashRadius": 60,
-    "wanderChance": 0.1,
-    "disengageTurns": 1,
-    "speeds": {
-      "wander": 0.5,
-      "investigate": 0.5
-    },
-    "investigates": [
-      "sight",
-      "hearing",
-      "smell"
-    ]
+    "variant": "v1"
   }
 }

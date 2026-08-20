@@ -1,14 +1,11 @@
 {
-  "id": "takers_count",
-  "name": "The Bird-Taker's Count",
-  "description": "Eggs off the Bank by the season, back four generations. There is a year in it where the cut's column stops.",
-  "kind": "key",
-  "value": 0,
-  "weight": 0,
-  "tags": [
-    "keepsake"
-  ],
-  "extra": {
-    "heldBy": "bird_taker_nella"
+  "@prefab": "content_items_entry_8",
+  "params": {
+    "id": "takers_count",
+    "name": "The Bird-Taker's Count",
+    "description": "Eggs off the Bank by the season, back four generations. There is a year in it where the cut's column stops.",
+    "extra": {
+      "heldBy": "bird_taker_nella"
+    }
   }
 }

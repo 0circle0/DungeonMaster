@@ -1,17 +1,14 @@
 {
-  "id": "moss",
-  "name": "Mossy Ground",
-  "description": "Deep moss over old roots. Quiet underfoot.",
-  "glyph": "`",
-  "color": "green",
-  "passable": true,
-  "opaque": false,
-  "moveCost": 1,
-  "tags": [
-    "soft"
-  ],
-  "marks": {
-    "tracks": 1,
-    "smell": 1
+  "@prefab": "world_terrains_entry",
+  "params": {
+    "id": "moss",
+    "name": "Mossy Ground",
+    "description": "Deep moss over old roots. Quiet underfoot.",
+    "glyph": "`",
+    "color": "green",
+    "tags": [
+      "soft"
+    ],
+    "variant": "v1"
   }
 }

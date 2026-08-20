@@ -1,59 +1,39 @@
 {
-  "id": "weir_lamprey",
-  "name": "Weir Lamprey",
-  "description": "Two feet of it, and a mouth that is all of it.",
-  "level": 2,
-  "xp": 35,
-  "attributes": {
-    "might": 11,
-    "agility": 13,
-    "endurance": 13,
-    "intellect": 2,
-    "instinct": 11,
-    "presence": 4
-  },
-  "abilities": [
-    "latch"
-  ],
-  "behaviour": [
-    {
-      "priority": 0,
-      "use": "latch"
-    }
-  ],
-  "faction": "the_unsealed",
-  "creatureType": "beast",
-  "size": "small",
-  "descriptors": [
-    "a thrashing",
-    "a grey"
-  ],
-  "conditionalLoot": [],
-  "loot": "weir_scraps",
-  "conditionImmunities": [
-    "prone"
-  ],
-  "resourceOverrides": {
-    "hp": 8
-  },
-  "temperament": {
-    "roamRadius": 50,
-    "investigateRadius": 120,
-    "leashRadius": 180,
-    "wanderChance": 0.6,
-    "disengageTurns": 3,
-    "speeds": {
-      "wander": 0.5,
-      "investigate": 1.25
+  "@prefab": "content_monsters_entry_2",
+  "params": {
+    "id": "weir_lamprey",
+    "name": "Weir Lamprey",
+    "description": "Two feet of it, and a mouth that is all of it.",
+    "level": 2,
+    "xp": 35,
+    "attributes": {
+      "might": 11,
+      "agility": 13,
+      "endurance": 13,
+      "intellect": 2,
+      "instinct": 11,
+      "presence": 4
     },
-    "investigates": [
-      "smell",
-      "hearing",
-      "sight"
+    "abilities": [
+      "latch"
     ],
-    "notices": [
-      "hostile",
-      "neutral"
-    ]
+    "behaviour": [
+      {
+        "priority": 0,
+        "use": "latch"
+      }
+    ],
+    "descriptors": [
+      "a thrashing",
+      "a grey"
+    ],
+    "loot": "weir_scraps",
+    "conditionImmunities": [
+      "prone"
+    ],
+    "resourceOverrides": {
+      "hp": 8
+    },
+    "variant": "v2"
   }
 }

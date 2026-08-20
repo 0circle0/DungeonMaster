@@ -1,24 +1,14 @@
 {
-  "id": "glass_quarter_bond_store",
-  "name": "The Glass Store",
-  "description": "Packed in sand, crated, and shipped north eleven times a year.",
-  "area": "vashta_qal_glass_quarter",
-  "kind": "market",
-  "descriptionKey": "int_warehouse",
-  "travelMinutes": 3,
-  "tags": [
-    "shop"
-  ],
-  "services": [
-    "market"
-  ],
-  "map": {
-    "width": "15",
-    "height": "11",
-    "palette": "int_shop"
-  },
-  "position": {
-    "x": 41,
-    "y": 3
+  "@prefab": "world_points_f_nterest_int_warehouse",
+  "params": {
+    "id": "glass_quarter_bond_store",
+    "name": "The Glass Store",
+    "description": "Packed in sand, crated, and shipped north eleven times a year.",
+    "area": "vashta_qal_glass_quarter",
+    "position": {
+      "x": 41,
+      "y": 3
+    },
+    "variant": "v3"
   }
 }

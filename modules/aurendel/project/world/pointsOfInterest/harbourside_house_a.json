@@ -1,21 +1,14 @@
 {
-  "id": "harbourside_house_a",
-  "name": "Netloft Row",
-  "description": "Living below, nets above, and a smell that has soaked into the beams.",
-  "area": "sarnport_harbourside",
-  "kind": "settlement",
-  "descriptionKey": "int_house",
-  "travelMinutes": 2,
-  "tags": [
-    "house"
-  ],
-  "map": {
-    "width": "9",
-    "height": "7",
-    "palette": "int_timber"
-  },
-  "position": {
-    "x": 3,
-    "y": 27
+  "@prefab": "world_points_f_nterest_int_house_2",
+  "params": {
+    "id": "harbourside_house_a",
+    "name": "Netloft Row",
+    "description": "Living below, nets above, and a smell that has soaked into the beams.",
+    "area": "sarnport_harbourside",
+    "position": {
+      "x": 3,
+      "y": 27
+    },
+    "variant": "v1"
   }
 }

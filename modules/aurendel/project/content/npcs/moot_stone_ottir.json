@@ -1,50 +1,39 @@
 {
-  "id": "moot_stone_ottir",
-  "name": "Ottir, Stone-Setter",
-  "description": "Knows which stone goes where across eleven hundred cairns and has not slept properly since the glacier gave one back.",
-  "disposition": 10,
-  "gullibility": 0.3,
-  "memorySpan": 365,
-  "offersQuests": [
-    "lastcairn_what_the_ice_gave_back"
-  ],
-  "caresAbout": [
-    "cairn_set",
-    "ice_broken",
-    "ward_broken",
-    "ward_restored"
-  ],
-  "reactions": [],
-  "faction": "the_ice_moot",
-  "dialogue": "lastcairn_ottir_talk",
-  "home": "cairnhold_the_cairns",
-  "shop": {
-    "lootTable": "keeper_stock",
-    "buysTags": [
-      "treasure",
-      "ward"
+  "@prefab": "content_npcs_entry",
+  "params": {
+    "id": "moot_stone_ottir",
+    "name": "Ottir, Stone-Setter",
+    "description": "Knows which stone goes where across eleven hundred cairns and has not slept properly since the glacier gave one back.",
+    "disposition": 10,
+    "gullibility": 0.3,
+    "memorySpan": 365,
+    "offersQuests": [
+      "lastcairn_what_the_ice_gave_back"
     ],
-    "priceMultiplier": 1.3,
-    "requires": {
-      "factions": [
-        {
-          "faction": "the_ice_moot",
-          "minStanding": 15
-        }
-      ]
+    "caresAbout": [
+      "cairn_set",
+      "ice_broken",
+      "ward_broken",
+      "ward_restored"
+    ],
+    "faction": "the_ice_moot",
+    "dialogue": "lastcairn_ottir_talk",
+    "home": "cairnhold_the_cairns",
+    "shop": {
+      "lootTable": "keeper_stock",
+      "buysTags": [
+        "treasure",
+        "ward"
+      ],
+      "priceMultiplier": 1.3,
+      "requires": {
+        "factions": [
+          {
+            "faction": "the_ice_moot",
+            "minStanding": 15
+          }
+        ]
+      }
     }
-  },
-  "temperament": {
-    "roamRadius": 0,
-    "wanderChance": 0,
-    "speeds": {
-      "wander": 0
-    },
-    "investigates": [],
-    "notices": [
-      "hostile",
-      "neutral",
-      "ally"
-    ]
   }
 }

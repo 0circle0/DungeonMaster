@@ -1,49 +1,38 @@
 {
-  "id": "underwriter_maun",
-  "name": "Maun, Underwriter",
-  "description": "Nine years of losses off one headland, written down in a hand that gets smaller as the column gets longer.",
-  "disposition": 0,
-  "gullibility": 0.2,
-  "memorySpan": 250,
-  "offersQuests": [
-    "saltcliff_the_wrong_light"
-  ],
-  "caresAbout": [
-    "ledger_squared",
-    "ledger_cooked",
-    "wreck_informed"
-  ],
-  "reactions": [],
-  "faction": "the_countinghouse",
-  "dialogue": "saltcliff_maun_talk",
-  "home": "counting_insurers_hall",
-  "shop": {
-    "lootTable": "countinghouse_stock",
-    "buysTags": [
-      "treasure",
-      "material"
+  "@prefab": "content_npcs_entry",
+  "params": {
+    "id": "underwriter_maun",
+    "name": "Maun, Underwriter",
+    "description": "Nine years of losses off one headland, written down in a hand that gets smaller as the column gets longer.",
+    "disposition": 0,
+    "gullibility": 0.2,
+    "memorySpan": 250,
+    "offersQuests": [
+      "saltcliff_the_wrong_light"
     ],
-    "priceMultiplier": 1.2,
-    "requires": {
-      "factions": [
-        {
-          "faction": "the_countinghouse",
-          "minStanding": 10
-        }
-      ]
+    "caresAbout": [
+      "ledger_squared",
+      "ledger_cooked",
+      "wreck_informed"
+    ],
+    "faction": "the_countinghouse",
+    "dialogue": "saltcliff_maun_talk",
+    "home": "counting_insurers_hall",
+    "shop": {
+      "lootTable": "countinghouse_stock",
+      "buysTags": [
+        "treasure",
+        "material"
+      ],
+      "priceMultiplier": 1.2,
+      "requires": {
+        "factions": [
+          {
+            "faction": "the_countinghouse",
+            "minStanding": 10
+          }
+        ]
+      }
     }
-  },
-  "temperament": {
-    "roamRadius": 0,
-    "wanderChance": 0,
-    "speeds": {
-      "wander": 0
-    },
-    "investigates": [],
-    "notices": [
-      "hostile",
-      "neutral",
-      "ally"
-    ]
   }
 }

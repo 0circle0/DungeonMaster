@@ -1,24 +1,10 @@
 {
-  "id": "cobbleway_wheelwright",
-  "name": "The Wheelwright's",
-  "description": "Tyres shrunk on hot in the yard, which the whole street comes out for.",
-  "area": "coast_cobbleway",
-  "kind": "market",
-  "descriptionKey": "int_smithy",
-  "travelMinutes": 3,
-  "tags": [
-    "shop"
-  ],
-  "services": [
-    "smith"
-  ],
-  "map": {
-    "width": "15",
-    "height": "11",
-    "palette": "int_forge"
-  },
-  "position": {
-    "x": 20,
-    "y": 3
+  "@prefab": "world_points_f_nterest_int_smithy_2",
+  "params": {
+    "id": "cobbleway_wheelwright",
+    "name": "The Wheelwright's",
+    "description": "Tyres shrunk on hot in the yard, which the whole street comes out for.",
+    "area": "coast_cobbleway",
+    "variant": "v2"
   }
 }

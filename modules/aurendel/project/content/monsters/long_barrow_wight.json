@@ -1,99 +1,81 @@
 {
-  "id": "long_barrow_wight",
-  "name": "The East End",
-  "description": "The Long Barrow has two ends and only one of them was ever dug. This is the other one's opinion about that.",
-  "level": 5,
-  "xp": 245,
-  "attributes": {
-    "might": 13,
-    "agility": 12,
-    "endurance": 14,
-    "intellect": 11,
-    "instinct": 13,
-    "presence": 16
-  },
-  "abilities": [
-    "bleed_white",
-    "grave_chill",
-    "call_the_shut"
-  ],
-  "behaviour": [
-    {
-      "priority": 15,
-      "use": "call_the_shut",
-      "when": {
-        "chance": 0.3
+  "@prefab": "content_monsters_entry_3",
+  "params": {
+    "id": "long_barrow_wight",
+    "name": "The East End",
+    "description": "The Long Barrow has two ends and only one of them was ever dug. This is the other one's opinion about that.",
+    "level": 5,
+    "xp": 245,
+    "attributes": {
+      "might": 13,
+      "agility": 12,
+      "endurance": 14,
+      "intellect": 11,
+      "instinct": 13,
+      "presence": 16
+    },
+    "abilities": [
+      "bleed_white",
+      "grave_chill",
+      "call_the_shut"
+    ],
+    "behaviour": [
+      {
+        "priority": 15,
+        "use": "call_the_shut",
+        "when": {
+          "chance": 0.3
+        }
+      },
+      {
+        "priority": 10,
+        "use": "bleed_white"
+      },
+      {
+        "priority": 0,
+        "use": "grave_chill"
       }
+    ],
+    "descriptors": [
+      "a dry",
+      "a crowned"
+    ],
+    "loot": "diggers_hoard",
+    "damageInteractions": [
+      {
+        "damageType": "slashing",
+        "multiplier": 0.5,
+        "unless": [
+          "silvered"
+        ]
+      },
+      {
+        "damageType": "piercing",
+        "multiplier": 0.5,
+        "unless": [
+          "silvered"
+        ]
+      },
+      {
+        "damageType": "necrotic",
+        "multiplier": 0
+      },
+      {
+        "damageType": "radiant",
+        "multiplier": 2
+      }
+    ],
+    "conditionImmunities": [
+      "frightened",
+      "poisoned",
+      "bleeding"
+    ],
+    "resourceOverrides": {
+      "hp": 50
     },
-    {
-      "priority": 10,
-      "use": "bleed_white"
+    "derivedOverrides": {
+      "guard": 15
     },
-    {
-      "priority": 0,
-      "use": "grave_chill"
-    }
-  ],
-  "faction": "the_unsealed",
-  "creatureType": "undead",
-  "size": "medium",
-  "descriptors": [
-    "a dry",
-    "a crowned"
-  ],
-  "conditionalLoot": [
-    "silvered_cache"
-  ],
-  "loot": "diggers_hoard",
-  "damageInteractions": [
-    {
-      "damageType": "slashing",
-      "multiplier": 0.5,
-      "unless": [
-        "silvered"
-      ]
-    },
-    {
-      "damageType": "piercing",
-      "multiplier": 0.5,
-      "unless": [
-        "silvered"
-      ]
-    },
-    {
-      "damageType": "necrotic",
-      "multiplier": 0
-    },
-    {
-      "damageType": "radiant",
-      "multiplier": 2
-    }
-  ],
-  "conditionImmunities": [
-    "frightened",
-    "poisoned",
-    "bleeding"
-  ],
-  "resourceOverrides": {
-    "hp": 50
-  },
-  "derivedOverrides": {
-    "guard": 15
-  },
-  "temperament": {
-    "roamRadius": 12,
-    "investigateRadius": 40,
-    "leashRadius": 60,
-    "wanderChance": 0.1,
-    "disengageTurns": 1,
-    "speeds": {
-      "wander": 0.5,
-      "investigate": 0.5
-    },
-    "investigates": [
-      "sight",
-      "hearing",
-      "smell"
-    ]
+    "variant": "v1"
   }
 }

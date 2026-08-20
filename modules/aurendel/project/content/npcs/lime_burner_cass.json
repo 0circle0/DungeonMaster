@@ -1,35 +1,18 @@
 {
-  "id": "lime_burner_cass",
-  "name": "Cass of the Kiln",
-  "description": "Burnt chalk for sixty years until the kiln went cold, and has stayed on in the burner's hut because there is nowhere she would rather be cold.",
-  "disposition": 5,
-  "gullibility": 0.45,
-  "memorySpan": 300,
-  "offersQuests": [],
-  "caresAbout": [
-    "share_honoured",
-    "wreck_informed"
-  ],
-  "reactions": [],
-  "faction": "the_salvors",
-  "dialogue": "strand_cass_talk",
-  "home": "wreckers_strand_lime_kiln",
-  "temperament": {
-    "roamRadius": 24,
-    "investigateRadius": 60,
-    "leashRadius": 90,
-    "wanderChance": 0.3,
-    "speeds": {
-      "wander": 0.5
-    },
-    "investigates": [
-      "sight",
-      "hearing"
+  "@prefab": "content_npcs_entry_2",
+  "params": {
+    "id": "lime_burner_cass",
+    "name": "Cass of the Kiln",
+    "description": "Burnt chalk for sixty years until the kiln went cold, and has stayed on in the burner's hut because there is nowhere she would rather be cold.",
+    "gullibility": 0.45,
+    "memorySpan": 300,
+    "caresAbout": [
+      "share_honoured",
+      "wreck_informed"
     ],
-    "notices": [
-      "hostile",
-      "neutral",
-      "ally"
-    ]
+    "faction": "the_salvors",
+    "dialogue": "strand_cass_talk",
+    "home": "wreckers_strand_lime_kiln",
+    "variant": "v7"
   }
 }

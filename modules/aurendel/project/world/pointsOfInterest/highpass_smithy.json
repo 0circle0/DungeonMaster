@@ -1,24 +1,10 @@
 {
-  "id": "highpass_smithy",
-  "name": "The Ward Forge",
-  "description": "Cleats, crampons, shovel-blades, and cart-iron.",
-  "area": "skarnspine_highpass",
-  "kind": "market",
-  "descriptionKey": "int_smithy",
-  "travelMinutes": 3,
-  "tags": [
-    "shop"
-  ],
-  "services": [
-    "smith"
-  ],
-  "map": {
-    "width": "15",
-    "height": "11",
-    "palette": "int_forge"
-  },
-  "position": {
-    "x": 28,
-    "y": 3
+  "@prefab": "world_points_f_nterest_int_smithy_2",
+  "params": {
+    "id": "highpass_smithy",
+    "name": "The Ward Forge",
+    "description": "Cleats, crampons, shovel-blades, and cart-iron.",
+    "area": "skarnspine_highpass",
+    "variant": "v4"
   }
 }

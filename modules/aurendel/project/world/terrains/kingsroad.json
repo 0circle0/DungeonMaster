@@ -1,17 +1,14 @@
 {
-  "id": "kingsroad",
-  "name": "The Kingsroad",
-  "description": "Cut stone laid straight, kept up by the crown and its tolls.",
-  "glyph": "_",
-  "color": "gray",
-  "passable": true,
-  "opaque": false,
-  "moveCost": 0.6,
-  "tags": [
-    "stone"
-  ],
-  "marks": {
-    "tracks": 0,
-    "smell": 0.6
+  "@prefab": "world_terrains_entry",
+  "params": {
+    "id": "kingsroad",
+    "name": "The Kingsroad",
+    "description": "Cut stone laid straight, kept up by the crown and its tolls.",
+    "glyph": "_",
+    "color": "gray",
+    "tags": [
+      "stone"
+    ],
+    "variant": "v6"
   }
 }

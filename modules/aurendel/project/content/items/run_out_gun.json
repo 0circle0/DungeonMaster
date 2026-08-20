@@ -1,21 +1,17 @@
 {
-  "id": "run_out_gun",
-  "name": "The Gun That Was Run Out",
-  "description": "A ship's swivel cut down to a haft. It came up loaded and it is still loaded, and nobody has been able to draw it.",
-  "kind": "weapon",
-  "slot": "hand",
-  "value": 1250,
-  "weight": 1,
-  "tags": [
-    "fabled"
-  ],
-  "damage": {
-    "dice": "1d10",
-    "damageType": "piercing",
-    "stat": "agility"
-  },
-  "properties": [
-    "heavy"
-  ],
-  "rarity": "very_rare"
+  "@prefab": "content_items_entry_10",
+  "params": {
+    "id": "run_out_gun",
+    "name": "The Gun That Was Run Out",
+    "description": "A ship's swivel cut down to a haft. It came up loaded and it is still loaded, and nobody has been able to draw it.",
+    "value": 1250,
+    "damage": {
+      "dice": "1d10",
+      "damageType": "piercing",
+      "stat": "agility"
+    },
+    "properties": [
+      "heavy"
+    ]
+  }
 }

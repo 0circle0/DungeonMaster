@@ -1,25 +1,19 @@
 {
-  "id": "aurenhal_scriptorium",
-  "name": "The Scriptorium",
-  "description": "Copies made, letters written, contracts drawn, no questions logged.",
-  "area": "aurenhal_highgate",
-  "kind": "market",
-  "descriptionKey": "int_store",
-  "travelMinutes": 3,
-  "tags": [
-    "shop",
-    "aurenhal"
-  ],
-  "position": {
-    "x": 12,
-    "y": 22
-  },
-  "services": [
-    "market"
-  ],
-  "map": {
-    "width": "11",
-    "height": "9",
-    "palette": "int_shop"
+  "@prefab": "world_points_f_nterest_int_store",
+  "params": {
+    "id": "aurenhal_scriptorium",
+    "name": "The Scriptorium",
+    "description": "Copies made, letters written, contracts drawn, no questions logged.",
+    "area": "aurenhal_highgate",
+    "position": {
+      "x": 12,
+      "y": 22
+    },
+    "map": {
+      "width": "11",
+      "height": "9",
+      "palette": "int_shop"
+    },
+    "variant": "v1"
   }
 }

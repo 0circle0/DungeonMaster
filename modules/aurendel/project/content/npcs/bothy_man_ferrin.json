@@ -1,33 +1,15 @@
 {
-  "id": "bothy_man_ferrin",
-  "name": "Ferrin, at the Bothy",
-  "description": "Lives in the only shelter in the Heatherlands and keeps the estate's old map because the estate stopped wanting it.",
-  "disposition": 2,
-  "gullibility": 0.25,
-  "memorySpan": 210,
-  "offersQuests": [],
-  "caresAbout": [],
-  "reactions": [],
-  "faction": "the_library",
-  "dialogue": "moor_ferrin_talk",
-  "home": "heatherlands_bothy",
-  "statblock": "moor_bothy",
-  "temperament": {
-    "roamRadius": 24,
-    "investigateRadius": 60,
-    "leashRadius": 90,
-    "wanderChance": 0.3,
-    "speeds": {
-      "wander": 0.5
-    },
-    "investigates": [
-      "sight",
-      "hearing"
-    ],
-    "notices": [
-      "hostile",
-      "neutral",
-      "ally"
-    ]
+  "@prefab": "content_npcs_entry_3",
+  "params": {
+    "id": "bothy_man_ferrin",
+    "name": "Ferrin, at the Bothy",
+    "description": "Lives in the only shelter in the Heatherlands and keeps the estate's old map because the estate stopped wanting it.",
+    "disposition": 2,
+    "memorySpan": 210,
+    "faction": "the_library",
+    "dialogue": "moor_ferrin_talk",
+    "home": "heatherlands_bothy",
+    "statblock": "moor_bothy",
+    "variant": "v5"
   }
 }

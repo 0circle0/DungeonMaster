@@ -1,24 +1,14 @@
 {
-  "id": "vashta_qal_potter",
-  "name": "The Potters' Row",
-  "description": "Water jars, in four sizes, and the four sizes are legally defined.",
-  "area": "vashta_qal_oasis",
-  "kind": "market",
-  "descriptionKey": "int_workshop",
-  "travelMinutes": 3,
-  "tags": [
-    "shop"
-  ],
-  "services": [
-    "market"
-  ],
-  "map": {
-    "width": "15",
-    "height": "11",
-    "palette": "int_shop"
-  },
-  "position": {
-    "x": 41,
-    "y": 27
+  "@prefab": "world_points_f_nterest_int_workshop_2",
+  "params": {
+    "id": "vashta_qal_potter",
+    "name": "The Potters' Row",
+    "description": "Water jars, in four sizes, and the four sizes are legally defined.",
+    "area": "vashta_qal_oasis",
+    "position": {
+      "x": 41,
+      "y": 27
+    },
+    "variant": "v1"
   }
 }

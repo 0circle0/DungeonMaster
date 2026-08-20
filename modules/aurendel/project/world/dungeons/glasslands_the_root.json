@@ -1,21 +1,19 @@
 {
-  "id": "glasslands_the_root",
-  "name": "The Root",
-  "description": "A fulgurite that went down instead of up, wide enough to enter, and widened since by hands.",
-  "biome": "dungeon_cave",
-  "roomCount": "11",
-  "depth": "3",
-  "algorithm": "caverns",
-  "lockedDoorChance": 0,
-  "doorGates": [],
-  "rollEncounters": false,
-  "safeEntrance": true,
-  "caverns": {
-    "fill": 0.44,
-    "smoothingPasses": 5,
-    "birthThreshold": 5
-  },
-  "width": "45",
-  "height": "45",
-  "bossTable": "glass_root_boss"
+  "@prefab": "world_dungeons_entry",
+  "params": {
+    "id": "glasslands_the_root",
+    "name": "The Root",
+    "description": "A fulgurite that went down instead of up, wide enough to enter, and widened since by hands.",
+    "biome": "dungeon_cave",
+    "roomCount": "11",
+    "depth": "3",
+    "caverns": {
+      "fill": 0.44,
+      "smoothingPasses": 5,
+      "birthThreshold": 5
+    },
+    "width": "45",
+    "height": "45",
+    "bossTable": "glass_root_boss"
+  }
 }

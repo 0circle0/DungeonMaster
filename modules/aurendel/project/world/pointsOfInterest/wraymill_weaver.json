@@ -1,24 +1,19 @@
 {
-  "id": "wraymill_weaver",
-  "name": "The Weaving Shed",
-  "description": "Nine looms, and the noise of nine looms.",
-  "area": "kingsvale_wraymill",
-  "kind": "market",
-  "descriptionKey": "int_workshop",
-  "travelMinutes": 3,
-  "tags": [
-    "shop"
-  ],
-  "position": {
-    "x": 28,
-    "y": 22
-  },
-  "services": [
-    "market"
-  ],
-  "map": {
-    "width": "11",
-    "height": "9",
-    "palette": "int_timber"
+  "@prefab": "world_points_f_nterest_int_workshop",
+  "params": {
+    "id": "wraymill_weaver",
+    "name": "The Weaving Shed",
+    "description": "Nine looms, and the noise of nine looms.",
+    "area": "kingsvale_wraymill",
+    "travelMinutes": 3,
+    "position": {
+      "x": 28,
+      "y": 22
+    },
+    "map": {
+      "width": "11",
+      "height": "9",
+      "palette": "int_timber"
+    }
   }
 }

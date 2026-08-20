@@ -1,100 +1,82 @@
 {
-  "id": "bell_shade",
-  "name": "What Rings the Bell",
-  "description": "The old church went under in one night and the bell has been heard since, which is a thing the new tower will not discuss.",
-  "level": 5,
-  "xp": 255,
-  "attributes": {
-    "might": 11,
-    "agility": 14,
-    "endurance": 13,
-    "intellect": 13,
-    "instinct": 14,
-    "presence": 17
-  },
-  "abilities": [
-    "toll",
-    "grave_chill",
-    "bleed_white"
-  ],
-  "behaviour": [
-    {
-      "priority": 20,
-      "use": "toll",
-      "when": {
-        "chance": 0.35
+  "@prefab": "content_monsters_entry_3",
+  "params": {
+    "id": "bell_shade",
+    "name": "What Rings the Bell",
+    "description": "The old church went under in one night and the bell has been heard since, which is a thing the new tower will not discuss.",
+    "level": 5,
+    "xp": 255,
+    "attributes": {
+      "might": 11,
+      "agility": 14,
+      "endurance": 13,
+      "intellect": 13,
+      "instinct": 14,
+      "presence": 17
+    },
+    "abilities": [
+      "toll",
+      "grave_chill",
+      "bleed_white"
+    ],
+    "behaviour": [
+      {
+        "priority": 20,
+        "use": "toll",
+        "when": {
+          "chance": 0.35
+        }
+      },
+      {
+        "priority": 10,
+        "use": "bleed_white"
+      },
+      {
+        "priority": 0,
+        "use": "grave_chill"
       }
+    ],
+    "descriptors": [
+      "a tolling",
+      "a drowned"
+    ],
+    "loot": "bell_hoard",
+    "damageInteractions": [
+      {
+        "damageType": "slashing",
+        "multiplier": 0.5,
+        "unless": [
+          "silvered"
+        ]
+      },
+      {
+        "damageType": "piercing",
+        "multiplier": 0.5,
+        "unless": [
+          "silvered"
+        ]
+      },
+      {
+        "damageType": "necrotic",
+        "multiplier": 0
+      },
+      {
+        "damageType": "radiant",
+        "multiplier": 2
+      }
+    ],
+    "conditionImmunities": [
+      "frightened",
+      "poisoned",
+      "prone",
+      "silenced"
+    ],
+    "resourceOverrides": {
+      "hp": 48
     },
-    {
-      "priority": 10,
-      "use": "bleed_white"
+    "derivedOverrides": {
+      "guard": 15
     },
-    {
-      "priority": 0,
-      "use": "grave_chill"
-    }
-  ],
-  "faction": "the_unsealed",
-  "creatureType": "undead",
-  "size": "medium",
-  "descriptors": [
-    "a tolling",
-    "a drowned"
-  ],
-  "conditionalLoot": [
-    "silvered_cache"
-  ],
-  "loot": "bell_hoard",
-  "damageInteractions": [
-    {
-      "damageType": "slashing",
-      "multiplier": 0.5,
-      "unless": [
-        "silvered"
-      ]
-    },
-    {
-      "damageType": "piercing",
-      "multiplier": 0.5,
-      "unless": [
-        "silvered"
-      ]
-    },
-    {
-      "damageType": "necrotic",
-      "multiplier": 0
-    },
-    {
-      "damageType": "radiant",
-      "multiplier": 2
-    }
-  ],
-  "conditionImmunities": [
-    "frightened",
-    "poisoned",
-    "prone",
-    "silenced"
-  ],
-  "resourceOverrides": {
-    "hp": 48
-  },
-  "derivedOverrides": {
-    "guard": 15
-  },
-  "temperament": {
-    "roamRadius": 12,
-    "investigateRadius": 40,
-    "leashRadius": 60,
-    "wanderChance": 0.1,
-    "disengageTurns": 1,
-    "speeds": {
-      "wander": 0.5,
-      "investigate": 0.5
-    },
-    "investigates": [
-      "sight",
-      "hearing",
-      "smell"
-    ]
+    "variant": "v1"
   }
 }

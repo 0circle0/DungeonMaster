@@ -1,19 +1,13 @@
 {
-  "id": "cinderhold_glass_market",
-  "name": "The Glass Market",
-  "description": "Obsidian by the sheet, by the flake, and by the finished edge.",
-  "area": "ember_cinderhold",
-  "kind": "market",
-  "descriptionKey": "generic_market",
-  "travelMinutes": 2,
-  "tags": [
-    "shop"
-  ],
-  "services": [
-    "market"
-  ],
-  "position": {
-    "x": 20,
-    "y": 3
+  "@prefab": "world_points_f_nterest_generic_market",
+  "params": {
+    "id": "cinderhold_glass_market",
+    "name": "The Glass Market",
+    "description": "Obsidian by the sheet, by the flake, and by the finished edge.",
+    "area": "ember_cinderhold",
+    "position": {
+      "x": 20,
+      "y": 3
+    }
   }
 }

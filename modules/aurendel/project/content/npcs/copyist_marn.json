@@ -1,33 +1,15 @@
 {
-  "id": "copyist_marn",
-  "name": "Marn, a Copyist",
-  "description": "Copies the Library's drain sheets for the Craftrow guilds and once copied one the week before it went missing.",
-  "disposition": 2,
-  "gullibility": 0.25,
-  "memorySpan": 200,
-  "offersQuests": [],
-  "caresAbout": [],
-  "reactions": [],
-  "faction": "the_library",
-  "dialogue": "kings_marn_talk",
-  "home": "craftrow_market_square",
-  "statblock": "kings_copyist",
-  "temperament": {
-    "roamRadius": 24,
-    "investigateRadius": 60,
-    "leashRadius": 90,
-    "wanderChance": 0.3,
-    "speeds": {
-      "wander": 0.5
-    },
-    "investigates": [
-      "sight",
-      "hearing"
-    ],
-    "notices": [
-      "hostile",
-      "neutral",
-      "ally"
-    ]
+  "@prefab": "content_npcs_entry_3",
+  "params": {
+    "id": "copyist_marn",
+    "name": "Marn, a Copyist",
+    "description": "Copies the Library's drain sheets for the Craftrow guilds and once copied one the week before it went missing.",
+    "disposition": 2,
+    "memorySpan": 200,
+    "faction": "the_library",
+    "dialogue": "kings_marn_talk",
+    "home": "craftrow_market_square",
+    "statblock": "kings_copyist",
+    "variant": "v5"
   }
 }

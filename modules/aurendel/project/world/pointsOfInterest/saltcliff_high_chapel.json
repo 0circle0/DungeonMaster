@@ -1,24 +1,18 @@
 {
-  "id": "saltcliff_high_chapel",
-  "name": "The High Chapel",
-  "description": "Up here for the view, which the priesthood insists is theological.",
-  "area": "sarnport_saltcliff",
-  "kind": "shrine",
-  "descriptionKey": "int_temple",
-  "travelMinutes": 3,
-  "tags": [
-    "shrine"
-  ],
-  "services": [
-    "temple"
-  ],
-  "map": {
-    "width": "15",
-    "height": "11",
-    "palette": "int_temple"
-  },
-  "position": {
-    "x": 22,
-    "y": 3
+  "@prefab": "world_points_f_nterest_int_temple",
+  "params": {
+    "id": "saltcliff_high_chapel",
+    "name": "The High Chapel",
+    "description": "Up here for the view, which the priesthood insists is theological.",
+    "area": "sarnport_saltcliff",
+    "map": {
+      "width": "15",
+      "height": "11",
+      "palette": "int_temple"
+    },
+    "position": {
+      "x": 22,
+      "y": 3
+    }
   }
 }

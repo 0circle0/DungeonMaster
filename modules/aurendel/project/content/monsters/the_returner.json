@@ -1,86 +1,54 @@
 {
-  "id": "the_returner",
-  "name": "What Puts Them Back",
-  "description": "Forty-one out of the deep peat and forty-one written down as returned, in four clerks' hands, two of the lines noting a difference and none of them remarking on it.",
-  "level": 8,
-  "xp": 880,
-  "attributes": {
-    "might": 16,
-    "agility": 14,
-    "endurance": 18,
-    "intellect": 12,
-    "instinct": 15,
-    "presence": 12
-  },
-  "abilities": [
-    "drag_under",
-    "latch",
-    "bleed_white"
-  ],
-  "behaviour": [
-    {
-      "priority": 20,
-      "use": "drag_under",
-      "when": {
-        "chance": 0.4
+  "@prefab": "content_monsters_entry_4",
+  "params": {
+    "id": "the_returner",
+    "name": "What Puts Them Back",
+    "description": "Forty-one out of the deep peat and forty-one written down as returned, in four clerks' hands, two of the lines noting a difference and none of them remarking on it.",
+    "level": 8,
+    "xp": 880,
+    "attributes": {
+      "might": 16,
+      "agility": 14,
+      "endurance": 18,
+      "intellect": 12,
+      "instinct": 15,
+      "presence": 12
+    },
+    "abilities": [
+      "drag_under",
+      "latch",
+      "bleed_white"
+    ],
+    "behaviour": [
+      {
+        "priority": 20,
+        "use": "drag_under",
+        "when": {
+          "chance": 0.4
+        }
+      },
+      {
+        "priority": 10,
+        "use": "bleed_white"
+      },
+      {
+        "priority": 0,
+        "use": "latch"
       }
+    ],
+    "descriptors": [
+      "a tanned",
+      "an unhurried"
+    ],
+    "loot": "moor_cut_hoard",
+    "conditionImmunities": [
+      "frightened",
+      "poisoned",
+      "prone"
+    ],
+    "resourceOverrides": {
+      "hp": 100
     },
-    {
-      "priority": 10,
-      "use": "bleed_white"
-    },
-    {
-      "priority": 0,
-      "use": "latch"
-    }
-  ],
-  "faction": "the_unsealed",
-  "creatureType": "undead",
-  "size": "medium",
-  "descriptors": [
-    "a tanned",
-    "an unhurried"
-  ],
-  "conditionalLoot": [],
-  "loot": "moor_cut_hoard",
-  "damageInteractions": [
-    {
-      "damageType": "slashing",
-      "multiplier": 0.5,
-      "unless": [
-        "silvered"
-      ]
-    },
-    {
-      "damageType": "piercing",
-      "multiplier": 0.5,
-      "unless": [
-        "silvered"
-      ]
-    }
-  ],
-  "conditionImmunities": [
-    "frightened",
-    "poisoned",
-    "prone"
-  ],
-  "resourceOverrides": {
-    "hp": 100
-  },
-  "temperament": {
-    "roamRadius": 12,
-    "investigateRadius": 40,
-    "leashRadius": 60,
-    "wanderChance": 0.1,
-    "disengageTurns": 1,
-    "speeds": {
-      "wander": 0.5,
-      "investigate": 0.5
-    },
-    "investigates": [
-      "sight",
-      "hearing",
-      "smell"
-    ]
+    "variant": "v1"
   }
 }

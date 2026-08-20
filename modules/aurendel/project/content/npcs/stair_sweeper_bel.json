@@ -1,33 +1,15 @@
 {
-  "id": "stair_sweeper_bel",
-  "name": "Bel, on the Steps",
-  "description": "Fourth of the family to sweep a stair that is always already clean, and the fourth to go on doing it anyway.",
-  "disposition": 4,
-  "gullibility": 0.3,
-  "memorySpan": 220,
-  "offersQuests": [],
-  "caresAbout": [],
-  "reactions": [],
-  "faction": "karn_dolur",
-  "dialogue": "skarn_bel_talk",
-  "home": "ironstair_halfway_house",
-  "statblock": "skarn_sweeper",
-  "temperament": {
-    "roamRadius": 24,
-    "investigateRadius": 60,
-    "leashRadius": 90,
-    "wanderChance": 0.3,
-    "speeds": {
-      "wander": 0.5
-    },
-    "investigates": [
-      "sight",
-      "hearing"
-    ],
-    "notices": [
-      "hostile",
-      "neutral",
-      "ally"
-    ]
+  "@prefab": "content_npcs_entry_3",
+  "params": {
+    "id": "stair_sweeper_bel",
+    "name": "Bel, on the Steps",
+    "description": "Fourth of the family to sweep a stair that is always already clean, and the fourth to go on doing it anyway.",
+    "disposition": 4,
+    "memorySpan": 220,
+    "faction": "karn_dolur",
+    "dialogue": "skarn_bel_talk",
+    "home": "ironstair_halfway_house",
+    "statblock": "skarn_sweeper",
+    "variant": "v3"
   }
 }

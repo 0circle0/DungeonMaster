@@ -1,53 +1,29 @@
 {
-  "id": "glass_cutter",
-  "name": "Naim, at the Cutters' Hall",
-  "description": "Hands steady enough to grind a lens nobody is allowed to buy.",
-  "level": 5,
-  "xp": 0,
-  "attributes": {
-    "might": 12,
-    "agility": 15,
-    "endurance": 12,
-    "intellect": 15,
-    "instinct": 12,
-    "presence": 11
-  },
-  "abilities": [
-    "strike",
-    "cut_and_run"
-  ],
-  "behaviour": [
-    {
-      "priority": 0,
-      "use": "strike"
-    }
-  ],
-  "faction": "the_library",
-  "creatureType": "humanoid",
-  "size": "medium",
-  "descriptors": [
-    "a precise"
-  ],
-  "conditionalLoot": [],
-  "loot": "glass_lens_carried",
-  "resourceOverrides": {
-    "hp": 27
-  },
-  "temperament": {
-    "roamRadius": 24,
-    "investigateRadius": 70,
-    "leashRadius": 100,
-    "wanderChance": 0.4,
-    "disengageTurns": 2,
-    "investigates": [
-      "sight",
-      "hearing",
-      "tracks",
-      "smell"
+  "@prefab": "content_monsters_entry",
+  "params": {
+    "id": "glass_cutter",
+    "name": "Naim, at the Cutters' Hall",
+    "description": "Hands steady enough to grind a lens nobody is allowed to buy.",
+    "attributes": {
+      "might": 12,
+      "agility": 15,
+      "endurance": 12,
+      "intellect": 15,
+      "instinct": 12,
+      "presence": 11
+    },
+    "abilities": [
+      "strike",
+      "cut_and_run"
     ],
-    "notices": [
-      "hostile",
-      "neutral"
-    ]
+    "faction": "the_library",
+    "descriptors": [
+      "a precise"
+    ],
+    "loot": "glass_lens_carried",
+    "resourceOverrides": {
+      "hp": 27
+    },
+    "variant": "v5"
   }
 }

@@ -1,69 +1,53 @@
 {
-  "id": "the_unclaimed",
-  "name": "The October Entry",
-  "description": "Two hundred lines in a bailiff's book, all of them the same eleven words, and the fee paid in coin every year by somebody who has never once been seen at the yard.",
-  "level": 5,
-  "xp": 340,
-  "attributes": {
-    "might": 16,
-    "agility": 12,
-    "endurance": 16,
-    "intellect": 10,
-    "instinct": 13,
-    "presence": 11
-  },
-  "abilities": [
-    "gore",
-    "shove",
-    "rend"
-  ],
-  "behaviour": [
-    {
-      "priority": 15,
-      "use": "gore",
-      "when": {
-        "chance": 0.4
+  "@prefab": "content_monsters_entry_2",
+  "params": {
+    "id": "the_unclaimed",
+    "name": "The October Entry",
+    "description": "Two hundred lines in a bailiff's book, all of them the same eleven words, and the fee paid in coin every year by somebody who has never once been seen at the yard.",
+    "level": 5,
+    "xp": 340,
+    "attributes": {
+      "might": 16,
+      "agility": 12,
+      "endurance": 16,
+      "intellect": 10,
+      "instinct": 13,
+      "presence": 11
+    },
+    "abilities": [
+      "gore",
+      "shove",
+      "rend"
+    ],
+    "behaviour": [
+      {
+        "priority": 15,
+        "use": "gore",
+        "when": {
+          "chance": 0.4
+        }
+      },
+      {
+        "priority": 5,
+        "use": "shove"
+      },
+      {
+        "priority": 0,
+        "use": "rend"
       }
+    ],
+    "descriptors": [
+      "a hulking",
+      "an unshorn"
+    ],
+    "loot": "coast_yard_hoard",
+    "conditionImmunities": [
+      "frightened",
+      "prone"
+    ],
+    "resourceOverrides": {
+      "hp": 50
     },
-    {
-      "priority": 5,
-      "use": "shove"
-    },
-    {
-      "priority": 0,
-      "use": "rend"
-    }
-  ],
-  "faction": "the_unsealed",
-  "creatureType": "undead",
-  "size": "medium",
-  "descriptors": [
-    "a hulking",
-    "an unshorn"
-  ],
-  "conditionalLoot": [],
-  "loot": "coast_yard_hoard",
-  "conditionImmunities": [
-    "frightened",
-    "prone"
-  ],
-  "resourceOverrides": {
-    "hp": 50
-  },
-  "temperament": {
-    "roamRadius": 12,
-    "investigateRadius": 40,
-    "leashRadius": 60,
-    "wanderChance": 0.1,
-    "disengageTurns": 1,
-    "speeds": {
-      "wander": 0.5,
-      "investigate": 0.5
-    },
-    "investigates": [
-      "sight",
-      "hearing",
-      "smell"
-    ]
+    "variant": "v1"
   }
 }

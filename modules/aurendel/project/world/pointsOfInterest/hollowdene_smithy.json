@@ -1,24 +1,19 @@
 {
-  "id": "hollowdene_smithy",
-  "name": "Hollowdene Smithy",
-  "description": "Shoes, hinges, and the occasional argument about a bill.",
-  "area": "kingsvale_hollowdene",
-  "kind": "market",
-  "descriptionKey": "int_smithy",
-  "travelMinutes": 2,
-  "tags": [
-    "shop"
-  ],
-  "position": {
-    "x": 10,
-    "y": 8
-  },
-  "services": [
-    "smith"
-  ],
-  "map": {
-    "width": "11",
-    "height": "9",
-    "palette": "int_forge"
+  "@prefab": "world_points_f_nterest_int_smithy",
+  "params": {
+    "id": "hollowdene_smithy",
+    "name": "Hollowdene Smithy",
+    "description": "Shoes, hinges, and the occasional argument about a bill.",
+    "area": "kingsvale_hollowdene",
+    "travelMinutes": 2,
+    "position": {
+      "x": 10,
+      "y": 8
+    },
+    "map": {
+      "width": "11",
+      "height": "9",
+      "palette": "int_forge"
+    }
   }
 }

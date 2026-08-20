@@ -1,0 +1,1967 @@
+{
+  "content_loot_ables_entry_4_variant": {
+    "v1": {
+      "bonusRollSkill": "perception",
+      "emptyChance": 0,
+      "bonusRolls": {
+        "onSuccess": 1,
+        "onCritical": 2
+      },
+      "rolls": "2"
+    },
+    "v2": {
+      "bonusRollSkill": "perception",
+      "emptyChance": 0.1,
+      "bonusRolls": {
+        "onSuccess": 1,
+        "onCritical": 2
+      },
+      "rolls": "2"
+    },
+    "v3": {
+      "bonusRollSkill": "lore",
+      "emptyChance": 0,
+      "bonusRolls": {
+        "onSuccess": 1,
+        "onCritical": 2
+      },
+      "rolls": "3"
+    },
+    "v4": {
+      "bonusRollSkill": "perception",
+      "emptyChance": 0,
+      "bonusRolls": {
+        "onSuccess": 1,
+        "onCritical": 2
+      },
+      "rolls": "3"
+    },
+    "v5": {
+      "bonusRollSkill": "perception",
+      "emptyChance": 0.15,
+      "bonusRolls": {
+        "onSuccess": 1,
+        "onCritical": 2
+      },
+      "rolls": "2"
+    },
+    "v6": {
+      "bonusRollSkill": "lore",
+      "emptyChance": 0,
+      "bonusRolls": {
+        "onSuccess": 1,
+        "onCritical": 2
+      },
+      "rolls": "4"
+    },
+    "v7": {
+      "bonusRollSkill": "perception",
+      "emptyChance": 0.05,
+      "bonusRolls": {
+        "onSuccess": 1,
+        "onCritical": 2
+      },
+      "rolls": "2"
+    },
+    "v8": {
+      "bonusRollSkill": "perception",
+      "emptyChance": 0,
+      "bonusRolls": {
+        "onSuccess": 2,
+        "onCritical": 3
+      },
+      "rolls": "3"
+    },
+    "v9": {
+      "bonusRollSkill": "perception",
+      "emptyChance": 0,
+      "bonusRolls": {
+        "onSuccess": 2,
+        "onCritical": 3
+      },
+      "rolls": "4"
+    },
+    "v10": {
+      "bonusRollSkill": "perception",
+      "emptyChance": 0,
+      "bonusRolls": {
+        "onSuccess": 2,
+        "onCritical": 3
+      },
+      "rolls": "5"
+    },
+    "v11": {
+      "bonusRollSkill": "perception",
+      "emptyChance": 0,
+      "bonusRolls": {
+        "onSuccess": 2,
+        "onCritical": 4
+      },
+      "rolls": "5"
+    },
+    "v12": {
+      "bonusRollSkill": "perception",
+      "emptyChance": 0,
+      "bonusRolls": {
+        "onSuccess": 3,
+        "onCritical": 4
+      },
+      "rolls": "6"
+    }
+  },
+  "content_monsters_entry_variant": {
+    "v1": {
+      "size": "small",
+      "creatureType": "beast",
+      "temperament": {
+        "roamRadius": 50,
+        "investigateRadius": 120,
+        "leashRadius": 180,
+        "wanderChance": 0.6,
+        "disengageTurns": 3,
+        "speeds": {
+          "wander": 0.5,
+          "investigate": 1.25
+        },
+        "investigates": [
+          "smell",
+          "hearing",
+          "sight"
+        ],
+        "notices": [
+          "hostile",
+          "neutral"
+        ]
+      },
+      "behaviour": [
+        {
+          "priority": 0,
+          "use": "rend"
+        }
+      ],
+      "xp": 15,
+      "level": 1
+    },
+    "v2": {
+      "size": "medium",
+      "creatureType": "humanoid",
+      "temperament": {
+        "roamRadius": 24,
+        "investigateRadius": 70,
+        "leashRadius": 100,
+        "wanderChance": 0.4,
+        "disengageTurns": 2,
+        "investigates": [
+          "sight",
+          "hearing",
+          "tracks",
+          "smell"
+        ],
+        "notices": [
+          "hostile",
+          "neutral"
+        ]
+      },
+      "behaviour": [
+        {
+          "priority": 0,
+          "use": "cut_and_run"
+        }
+      ],
+      "xp": 45,
+      "level": 2
+    },
+    "v3": {
+      "size": "medium",
+      "creatureType": "humanoid",
+      "temperament": {
+        "roamRadius": 24,
+        "investigateRadius": 70,
+        "leashRadius": 100,
+        "wanderChance": 0.4,
+        "disengageTurns": 2,
+        "investigates": [
+          "sight",
+          "hearing",
+          "tracks",
+          "smell"
+        ],
+        "notices": [
+          "hostile",
+          "neutral"
+        ]
+      },
+      "behaviour": [
+        {
+          "priority": 0,
+          "use": "cudgel"
+        }
+      ],
+      "xp": 50,
+      "level": 2
+    },
+    "v4": {
+      "size": "medium",
+      "creatureType": "plant",
+      "temperament": {
+        "roamRadius": 0,
+        "wanderChance": 0,
+        "disengageTurns": 0,
+        "speeds": {
+          "wander": 0
+        },
+        "investigates": [],
+        "followsTrails": false
+      },
+      "behaviour": [
+        {
+          "priority": 0,
+          "use": "rend"
+        }
+      ],
+      "xp": 90,
+      "level": 3
+    },
+    "v5": {
+      "size": "medium",
+      "creatureType": "humanoid",
+      "temperament": {
+        "roamRadius": 24,
+        "investigateRadius": 70,
+        "leashRadius": 100,
+        "wanderChance": 0.4,
+        "disengageTurns": 2,
+        "investigates": [
+          "sight",
+          "hearing",
+          "tracks",
+          "smell"
+        ],
+        "notices": [
+          "hostile",
+          "neutral"
+        ]
+      },
+      "behaviour": [
+        {
+          "priority": 0,
+          "use": "strike"
+        }
+      ],
+      "xp": 0,
+      "level": 5
+    },
+    "v6": {
+      "size": "medium",
+      "creatureType": "humanoid",
+      "temperament": {
+        "roamRadius": 24,
+        "investigateRadius": 70,
+        "leashRadius": 100,
+        "wanderChance": 0.4,
+        "disengageTurns": 2,
+        "investigates": [
+          "sight",
+          "hearing",
+          "tracks",
+          "smell"
+        ],
+        "notices": [
+          "hostile",
+          "neutral"
+        ]
+      },
+      "behaviour": [
+        {
+          "priority": 0,
+          "use": "strike"
+        }
+      ],
+      "xp": 0,
+      "level": 6
+    },
+    "v7": {
+      "size": "medium",
+      "creatureType": "humanoid",
+      "temperament": {
+        "roamRadius": 24,
+        "investigateRadius": 70,
+        "leashRadius": 100,
+        "wanderChance": 0.4,
+        "disengageTurns": 2,
+        "investigates": [
+          "sight",
+          "hearing",
+          "tracks",
+          "smell"
+        ],
+        "notices": [
+          "hostile",
+          "neutral"
+        ]
+      },
+      "behaviour": [
+        {
+          "priority": 0,
+          "use": "strike"
+        }
+      ],
+      "xp": 0,
+      "level": 3
+    },
+    "v8": {
+      "size": "medium",
+      "creatureType": "humanoid",
+      "temperament": {
+        "roamRadius": 24,
+        "investigateRadius": 70,
+        "leashRadius": 100,
+        "wanderChance": 0.4,
+        "disengageTurns": 2,
+        "investigates": [
+          "sight",
+          "hearing",
+          "tracks",
+          "smell"
+        ],
+        "notices": [
+          "hostile",
+          "neutral"
+        ]
+      },
+      "behaviour": [
+        {
+          "priority": 0,
+          "use": "strike"
+        }
+      ],
+      "xp": 0,
+      "level": 8
+    },
+    "v9": {
+      "size": "medium",
+      "creatureType": "humanoid",
+      "temperament": {
+        "roamRadius": 24,
+        "investigateRadius": 70,
+        "leashRadius": 100,
+        "wanderChance": 0.4,
+        "disengageTurns": 2,
+        "investigates": [
+          "sight",
+          "hearing",
+          "tracks",
+          "smell"
+        ],
+        "notices": [
+          "hostile",
+          "neutral"
+        ]
+      },
+      "behaviour": [
+        {
+          "priority": 0,
+          "use": "strike"
+        }
+      ],
+      "xp": 0,
+      "level": 7
+    },
+    "v10": {
+      "size": "medium",
+      "creatureType": "humanoid",
+      "temperament": {
+        "roamRadius": 24,
+        "investigateRadius": 70,
+        "leashRadius": 100,
+        "wanderChance": 0.4,
+        "disengageTurns": 2,
+        "investigates": [
+          "sight",
+          "hearing",
+          "tracks",
+          "smell"
+        ],
+        "notices": [
+          "hostile",
+          "neutral"
+        ]
+      },
+      "behaviour": [
+        {
+          "priority": 0,
+          "use": "strike"
+        }
+      ],
+      "xp": 0,
+      "level": 4
+    }
+  },
+  "content_monsters_entry_2_variant": {
+    "v1": {
+      "creatureType": "undead",
+      "size": "medium",
+      "temperament": {
+        "roamRadius": 12,
+        "investigateRadius": 40,
+        "leashRadius": 60,
+        "wanderChance": 0.1,
+        "disengageTurns": 1,
+        "speeds": {
+          "wander": 0.5,
+          "investigate": 0.5
+        },
+        "investigates": [
+          "sight",
+          "hearing",
+          "smell"
+        ]
+      }
+    },
+    "v2": {
+      "creatureType": "beast",
+      "size": "small",
+      "temperament": {
+        "roamRadius": 50,
+        "investigateRadius": 120,
+        "leashRadius": 180,
+        "wanderChance": 0.6,
+        "disengageTurns": 3,
+        "speeds": {
+          "wander": 0.5,
+          "investigate": 1.25
+        },
+        "investigates": [
+          "smell",
+          "hearing",
+          "sight"
+        ],
+        "notices": [
+          "hostile",
+          "neutral"
+        ]
+      }
+    },
+    "v3": {
+      "creatureType": "plant",
+      "size": "large",
+      "temperament": {
+        "roamRadius": 0,
+        "wanderChance": 0,
+        "disengageTurns": 0,
+        "speeds": {
+          "wander": 0
+        },
+        "investigates": [],
+        "followsTrails": false
+      }
+    }
+  },
+  "content_monsters_entry_3_variant": {
+    "v1": {
+      "size": "medium",
+      "conditionalLoot": [
+        "silvered_cache"
+      ],
+      "creatureType": "undead",
+      "temperament": {
+        "roamRadius": 12,
+        "investigateRadius": 40,
+        "leashRadius": 60,
+        "wanderChance": 0.1,
+        "disengageTurns": 1,
+        "speeds": {
+          "wander": 0.5,
+          "investigate": 0.5
+        },
+        "investigates": [
+          "sight",
+          "hearing",
+          "smell"
+        ]
+      }
+    },
+    "v2": {
+      "size": "large",
+      "conditionalLoot": [
+        "silvered_cache"
+      ],
+      "creatureType": "undead",
+      "temperament": {
+        "roamRadius": 12,
+        "investigateRadius": 40,
+        "leashRadius": 60,
+        "wanderChance": 0.1,
+        "disengageTurns": 1,
+        "speeds": {
+          "wander": 0.5,
+          "investigate": 0.5
+        },
+        "investigates": [
+          "sight",
+          "hearing",
+          "smell"
+        ]
+      }
+    },
+    "v3": {
+      "size": "large",
+      "conditionalLoot": [
+        "silvered_cache"
+      ],
+      "creatureType": "plant",
+      "temperament": {
+        "roamRadius": 0,
+        "wanderChance": 0,
+        "disengageTurns": 0,
+        "speeds": {
+          "wander": 0
+        },
+        "investigates": [],
+        "followsTrails": false
+      }
+    },
+    "v4": {
+      "size": "medium",
+      "conditionalLoot": [],
+      "creatureType": "undead",
+      "temperament": {
+        "roamRadius": 12,
+        "investigateRadius": 40,
+        "leashRadius": 60,
+        "wanderChance": 0.1,
+        "disengageTurns": 1,
+        "speeds": {
+          "wander": 0.5,
+          "investigate": 0.5
+        },
+        "investigates": [
+          "sight",
+          "hearing",
+          "smell"
+        ]
+      }
+    },
+    "v5": {
+      "size": "large",
+      "conditionalLoot": [
+        "silvered_cache"
+      ],
+      "creatureType": "aberration",
+      "temperament": {
+        "roamRadius": 30,
+        "investigateRadius": 90,
+        "leashRadius": 140,
+        "wanderChance": 0.3,
+        "disengageTurns": 3,
+        "investigates": [
+          "hearing",
+          "smell",
+          "sight"
+        ],
+        "notices": [
+          "hostile",
+          "neutral"
+        ]
+      }
+    },
+    "v6": {
+      "size": "large",
+      "conditionalLoot": [],
+      "creatureType": "elemental",
+      "temperament": {
+        "roamRadius": 24,
+        "investigateRadius": 60,
+        "leashRadius": 80,
+        "wanderChance": 0.45,
+        "disengageTurns": 2,
+        "investigates": [
+          "sight",
+          "hearing"
+        ],
+        "followsTrails": false
+      }
+    },
+    "v7": {
+      "size": "large",
+      "conditionalLoot": [
+        "silvered_cache"
+      ],
+      "creatureType": "elemental",
+      "temperament": {
+        "roamRadius": 24,
+        "investigateRadius": 60,
+        "leashRadius": 80,
+        "wanderChance": 0.45,
+        "disengageTurns": 2,
+        "investigates": [
+          "sight",
+          "hearing"
+        ],
+        "followsTrails": false
+      }
+    },
+    "v8": {
+      "size": "medium",
+      "conditionalLoot": [
+        "silvered_cache"
+      ],
+      "creatureType": "aberration",
+      "temperament": {
+        "roamRadius": 30,
+        "investigateRadius": 90,
+        "leashRadius": 140,
+        "wanderChance": 0.3,
+        "disengageTurns": 3,
+        "investigates": [
+          "hearing",
+          "smell",
+          "sight"
+        ],
+        "notices": [
+          "hostile",
+          "neutral"
+        ]
+      }
+    }
+  },
+  "content_monsters_entry_4_variant": {
+    "v1": {
+      "creatureType": "undead",
+      "size": "medium",
+      "damageInteractions": [
+        {
+          "damageType": "slashing",
+          "multiplier": 0.5,
+          "unless": [
+            "silvered"
+          ]
+        },
+        {
+          "damageType": "piercing",
+          "multiplier": 0.5,
+          "unless": [
+            "silvered"
+          ]
+        }
+      ],
+      "temperament": {
+        "roamRadius": 12,
+        "investigateRadius": 40,
+        "leashRadius": 60,
+        "wanderChance": 0.1,
+        "disengageTurns": 1,
+        "speeds": {
+          "wander": 0.5,
+          "investigate": 0.5
+        },
+        "investigates": [
+          "sight",
+          "hearing",
+          "smell"
+        ]
+      }
+    },
+    "v2": {
+      "creatureType": "elemental",
+      "size": "large",
+      "damageInteractions": [
+        {
+          "damageType": "fire",
+          "multiplier": 0
+        },
+        {
+          "damageType": "cold",
+          "multiplier": 2
+        }
+      ],
+      "temperament": {
+        "roamRadius": 24,
+        "investigateRadius": 60,
+        "leashRadius": 80,
+        "wanderChance": 0.45,
+        "disengageTurns": 2,
+        "investigates": [
+          "sight",
+          "hearing"
+        ],
+        "followsTrails": false
+      }
+    },
+    "v3": {
+      "creatureType": "beast",
+      "size": "small",
+      "damageInteractions": [
+        {
+          "damageType": "slashing",
+          "multiplier": 0.5
+        },
+        {
+          "damageType": "piercing",
+          "multiplier": 0.5
+        },
+        {
+          "damageType": "fire",
+          "multiplier": 2
+        }
+      ],
+      "temperament": {
+        "roamRadius": 50,
+        "investigateRadius": 120,
+        "leashRadius": 180,
+        "wanderChance": 0.6,
+        "disengageTurns": 3,
+        "speeds": {
+          "wander": 0.5,
+          "investigate": 1.25
+        },
+        "investigates": [
+          "smell",
+          "hearing",
+          "sight"
+        ],
+        "notices": [
+          "hostile",
+          "neutral"
+        ]
+      }
+    }
+  },
+  "content_npcs_entry_2_variant": {
+    "v1": {
+      "temperament": {
+        "roamRadius": 0,
+        "wanderChance": 0,
+        "speeds": {
+          "wander": 0
+        },
+        "investigates": [],
+        "notices": [
+          "hostile",
+          "neutral",
+          "ally"
+        ]
+      },
+      "offersQuests": [
+        "the_crowns_commission"
+      ],
+      "disposition": 0
+    },
+    "v2": {
+      "temperament": {
+        "roamRadius": 0,
+        "wanderChance": 0,
+        "speeds": {
+          "wander": 0
+        },
+        "investigates": [],
+        "notices": [
+          "hostile",
+          "neutral",
+          "ally"
+        ]
+      },
+      "offersQuests": [
+        "the_librarians_errand"
+      ],
+      "disposition": 5
+    },
+    "v3": {
+      "temperament": {
+        "roamRadius": 24,
+        "investigateRadius": 60,
+        "leashRadius": 90,
+        "wanderChance": 0.3,
+        "speeds": {
+          "wander": 0.5
+        },
+        "investigates": [
+          "sight",
+          "hearing"
+        ],
+        "notices": [
+          "hostile",
+          "neutral",
+          "ally"
+        ]
+      },
+      "offersQuests": [],
+      "disposition": 10
+    },
+    "v4": {
+      "temperament": {
+        "roamRadius": 24,
+        "investigateRadius": 60,
+        "leashRadius": 90,
+        "wanderChance": 0.3,
+        "speeds": {
+          "wander": 0.5
+        },
+        "investigates": [
+          "sight",
+          "hearing"
+        ],
+        "notices": [
+          "hostile",
+          "neutral",
+          "ally"
+        ]
+      },
+      "offersQuests": [],
+      "disposition": 8
+    },
+    "v5": {
+      "temperament": {
+        "roamRadius": 24,
+        "investigateRadius": 60,
+        "leashRadius": 90,
+        "wanderChance": 0.3,
+        "speeds": {
+          "wander": 0.5
+        },
+        "investigates": [
+          "sight",
+          "hearing"
+        ],
+        "notices": [
+          "hostile",
+          "neutral",
+          "ally"
+        ]
+      },
+      "offersQuests": [],
+      "disposition": 0
+    },
+    "v6": {
+      "temperament": {
+        "roamRadius": 0,
+        "wanderChance": 0,
+        "speeds": {
+          "wander": 0
+        },
+        "investigates": [],
+        "notices": [
+          "hostile",
+          "neutral",
+          "ally"
+        ]
+      },
+      "offersQuests": [
+        "eelweir_out_of_season"
+      ],
+      "disposition": 8
+    },
+    "v7": {
+      "temperament": {
+        "roamRadius": 24,
+        "investigateRadius": 60,
+        "leashRadius": 90,
+        "wanderChance": 0.3,
+        "speeds": {
+          "wander": 0.5
+        },
+        "investigates": [
+          "sight",
+          "hearing"
+        ],
+        "notices": [
+          "hostile",
+          "neutral",
+          "ally"
+        ]
+      },
+      "offersQuests": [],
+      "disposition": 5
+    },
+    "v8": {
+      "temperament": {
+        "roamRadius": 0,
+        "wanderChance": 0,
+        "speeds": {
+          "wander": 0
+        },
+        "investigates": [],
+        "notices": [
+          "hostile",
+          "neutral",
+          "ally"
+        ]
+      },
+      "offersQuests": [
+        "beeches_what_wend_has_been_saying"
+      ],
+      "disposition": 10
+    },
+    "v9": {
+      "temperament": {
+        "roamRadius": 24,
+        "investigateRadius": 60,
+        "leashRadius": 90,
+        "wanderChance": 0.3,
+        "speeds": {
+          "wander": 0.5
+        },
+        "investigates": [
+          "sight",
+          "hearing"
+        ],
+        "notices": [
+          "hostile",
+          "neutral",
+          "ally"
+        ]
+      },
+      "offersQuests": [],
+      "disposition": 6
+    },
+    "v10": {
+      "temperament": {
+        "roamRadius": 24,
+        "investigateRadius": 60,
+        "leashRadius": 90,
+        "wanderChance": 0.3,
+        "speeds": {
+          "wander": 0.5
+        },
+        "investigates": [
+          "sight",
+          "hearing"
+        ],
+        "notices": [
+          "hostile",
+          "neutral",
+          "ally"
+        ]
+      },
+      "offersQuests": [],
+      "disposition": 2
+    },
+    "v11": {
+      "temperament": {
+        "roamRadius": 24,
+        "investigateRadius": 60,
+        "leashRadius": 90,
+        "wanderChance": 0.3,
+        "speeds": {
+          "wander": 0.5
+        },
+        "investigates": [
+          "sight",
+          "hearing"
+        ],
+        "notices": [
+          "hostile",
+          "neutral",
+          "ally"
+        ]
+      },
+      "offersQuests": [],
+      "disposition": 4
+    }
+  },
+  "content_npcs_entry_3_variant": {
+    "v1": {
+      "caresAbout": [
+        "cairn_set",
+        "ice_broken"
+      ],
+      "gullibility": 0.2
+    },
+    "v2": {
+      "caresAbout": [
+        "ice_broken",
+        "cairn_set"
+      ],
+      "gullibility": 0.15
+    },
+    "v3": {
+      "caresAbout": [],
+      "gullibility": 0.3
+    },
+    "v4": {
+      "caresAbout": [],
+      "gullibility": 0.4
+    },
+    "v5": {
+      "caresAbout": [],
+      "gullibility": 0.25
+    },
+    "v6": {
+      "caresAbout": [],
+      "gullibility": 0.45
+    },
+    "v7": {
+      "caresAbout": [],
+      "gullibility": 0.2
+    },
+    "v8": {
+      "caresAbout": [],
+      "gullibility": 0.15
+    },
+    "v9": {
+      "caresAbout": [],
+      "gullibility": 0.35
+    }
+  },
+  "world_terrains_entry_variant": {
+    "v1": {
+      "marks": {
+        "tracks": 1,
+        "smell": 1
+      },
+      "moveCost": 1
+    },
+    "v2": {
+      "marks": {
+        "tracks": 1,
+        "smell": 1
+      },
+      "moveCost": 1.5
+    },
+    "v3": {
+      "marks": {
+        "tracks": 0,
+        "smell": 0.6
+      },
+      "moveCost": 1.5
+    },
+    "v4": {
+      "marks": {
+        "tracks": 0,
+        "smell": 0.6
+      },
+      "moveCost": 1
+    },
+    "v5": {
+      "marks": {
+        "tracks": 1,
+        "smell": 1
+      },
+      "moveCost": 0.8
+    },
+    "v6": {
+      "marks": {
+        "tracks": 0,
+        "smell": 0.6
+      },
+      "moveCost": 0.6
+    },
+    "v7": {
+      "marks": {
+        "tracks": 0,
+        "smell": 0.6
+      },
+      "moveCost": 0.8
+    },
+    "v8": {
+      "marks": {
+        "tracks": 0,
+        "smell": 0.15
+      },
+      "moveCost": 2
+    },
+    "v9": {
+      "marks": {
+        "tracks": 1,
+        "smell": 1
+      },
+      "moveCost": 3
+    },
+    "v10": {
+      "marks": {
+        "tracks": 0.5,
+        "smell": 0.7
+      },
+      "moveCost": 2
+    },
+    "v11": {
+      "marks": {
+        "tracks": 1,
+        "smell": 1
+      },
+      "moveCost": 2
+    },
+    "v12": {
+      "marks": {
+        "tracks": 0.5,
+        "smell": 0.7
+      },
+      "moveCost": 1.5
+    },
+    "v13": {
+      "marks": {
+        "tracks": 0.5,
+        "smell": 0.7
+      },
+      "moveCost": 3
+    },
+    "v14": {
+      "marks": {
+        "tracks": 0,
+        "smell": 0.6
+      },
+      "moveCost": 2
+    }
+  },
+  "world_terrains_entry_4_variant": {
+    "v1": {
+      "color": "green",
+      "passable": true,
+      "opaque": true,
+      "tags": [
+        "soft"
+      ],
+      "marks": {
+        "tracks": 1,
+        "smell": 1
+      },
+      "providesCover": "half"
+    },
+    "v2": {
+      "color": "gray",
+      "passable": false,
+      "opaque": true,
+      "tags": [
+        "stone"
+      ],
+      "marks": {
+        "tracks": 0,
+        "smell": 0.6
+      },
+      "providesCover": "three_quarters"
+    },
+    "v3": {
+      "color": "gray",
+      "passable": true,
+      "opaque": false,
+      "tags": [
+        "stone"
+      ],
+      "marks": {
+        "tracks": 0,
+        "smell": 0.6
+      },
+      "providesCover": "half"
+    }
+  },
+  "world_terrains_entry_6_variant": {
+    "v1": {
+      "opaque": false,
+      "tags": [
+        "built"
+      ],
+      "providesCover": "half"
+    },
+    "v2": {
+      "opaque": true,
+      "tags": [
+        "built"
+      ],
+      "providesCover": "three_quarters"
+    },
+    "v3": {
+      "opaque": false,
+      "tags": [
+        "furniture"
+      ],
+      "providesCover": "half"
+    },
+    "v4": {
+      "opaque": true,
+      "tags": [
+        "furniture"
+      ],
+      "providesCover": "three_quarters"
+    }
+  },
+  "world_points_f_nterest_int_store_variant": {
+    "v1": {
+      "travelMinutes": 3,
+      "tags": [
+        "shop",
+        "aurenhal"
+      ]
+    },
+    "v2": {
+      "travelMinutes": 3,
+      "tags": [
+        "shop"
+      ]
+    },
+    "v3": {
+      "travelMinutes": 2,
+      "tags": [
+        "shop"
+      ]
+    }
+  },
+  "world_points_f_nterest_int_house_variant": {
+    "v1": {
+      "kind": "settlement",
+      "travelMinutes": 2,
+      "tags": [
+        "aurenhal",
+        "house"
+      ]
+    },
+    "v2": {
+      "kind": "settlement",
+      "travelMinutes": 2,
+      "tags": [
+        "house"
+      ]
+    },
+    "v3": {
+      "kind": "camp",
+      "travelMinutes": 15,
+      "tags": [
+        "camp"
+      ]
+    }
+  },
+  "world_points_f_nterest_generic_landmark_variant": {
+    "v1": {
+      "tags": [
+        "aurenhal"
+      ],
+      "position": {
+        "x": 28,
+        "y": 4
+      }
+    },
+    "v2": {
+      "tags": [],
+      "position": {
+        "x": 22,
+        "y": 27
+      }
+    },
+    "v3": {
+      "tags": [],
+      "position": {
+        "x": 3,
+        "y": 3
+      }
+    },
+    "v4": {
+      "tags": [
+        "landmark"
+      ],
+      "position": {
+        "x": 12,
+        "y": 3
+      }
+    },
+    "v5": {
+      "tags": [],
+      "position": {
+        "x": 11,
+        "y": 3
+      }
+    },
+    "v6": {
+      "tags": [
+        "landmark"
+      ],
+      "position": {
+        "x": 11,
+        "y": 3
+      }
+    },
+    "v7": {
+      "tags": [],
+      "position": {
+        "x": 14,
+        "y": 3
+      }
+    },
+    "v8": {
+      "tags": [
+        "landmark"
+      ],
+      "position": {
+        "x": 3,
+        "y": 3
+      }
+    }
+  },
+  "world_points_f_nterest_int_warehouse_variant": {
+    "v1": {
+      "tags": [
+        "docks",
+        "shop"
+      ],
+      "map": {
+        "width": "19",
+        "height": "13",
+        "palette": "int_shop"
+      }
+    },
+    "v2": {
+      "tags": [
+        "shop"
+      ],
+      "map": {
+        "width": "19",
+        "height": "13",
+        "palette": "int_shop"
+      }
+    },
+    "v3": {
+      "tags": [
+        "shop"
+      ],
+      "map": {
+        "width": "15",
+        "height": "11",
+        "palette": "int_shop"
+      }
+    }
+  },
+  "world_points_f_nterest_int_store_2_variant": {
+    "v1": {
+      "kind": "market",
+      "tags": [
+        "shop"
+      ],
+      "travelMinutes": 3,
+      "services": [
+        "market"
+      ],
+      "map": {
+        "width": "15",
+        "height": "11",
+        "palette": "int_shop"
+      }
+    },
+    "v2": {
+      "kind": "market",
+      "tags": [
+        "shop"
+      ],
+      "travelMinutes": 3,
+      "services": [
+        "market"
+      ],
+      "map": {
+        "width": "11",
+        "height": "9",
+        "palette": "int_shop"
+      }
+    },
+    "v3": {
+      "kind": "market",
+      "tags": [
+        "shop"
+      ],
+      "travelMinutes": 3,
+      "services": [
+        "market"
+      ],
+      "map": {
+        "width": "11",
+        "height": "9",
+        "palette": "int_timber"
+      }
+    },
+    "v4": {
+      "kind": "market",
+      "tags": [
+        "shop"
+      ],
+      "travelMinutes": 3,
+      "services": [
+        "market"
+      ],
+      "map": {
+        "width": "9",
+        "height": "7",
+        "palette": "int_shop"
+      }
+    },
+    "v5": {
+      "kind": "settlement",
+      "tags": [
+        "inn"
+      ],
+      "travelMinutes": 6,
+      "services": [
+        "inn",
+        "stable"
+      ],
+      "map": {
+        "width": "19",
+        "height": "13",
+        "palette": "int_mudbrick"
+      }
+    },
+    "v6": {
+      "kind": "settlement",
+      "tags": [
+        "inn"
+      ],
+      "travelMinutes": 5,
+      "services": [
+        "inn"
+      ],
+      "map": {
+        "width": "11",
+        "height": "9",
+        "palette": "int_delved"
+      }
+    }
+  },
+  "world_points_f_nterest_int_workshop_2_variant": {
+    "v1": {
+      "travelMinutes": 3,
+      "map": {
+        "width": "15",
+        "height": "11",
+        "palette": "int_shop"
+      }
+    },
+    "v2": {
+      "travelMinutes": 3,
+      "map": {
+        "width": "19",
+        "height": "13",
+        "palette": "int_shop"
+      }
+    },
+    "v3": {
+      "travelMinutes": 3,
+      "map": {
+        "width": "11",
+        "height": "9",
+        "palette": "int_shop"
+      }
+    },
+    "v4": {
+      "travelMinutes": 4,
+      "map": {
+        "width": "15",
+        "height": "11",
+        "palette": "int_forge"
+      }
+    },
+    "v5": {
+      "travelMinutes": 4,
+      "map": {
+        "width": "19",
+        "height": "13",
+        "palette": "int_hull"
+      }
+    },
+    "v6": {
+      "travelMinutes": 3,
+      "map": {
+        "width": "9",
+        "height": "7",
+        "palette": "int_shop"
+      }
+    }
+  },
+  "world_points_f_nterest_int_smithy_2_variant": {
+    "v1": {
+      "map": {
+        "width": "15",
+        "height": "11",
+        "palette": "int_forge"
+      },
+      "position": {
+        "x": 41,
+        "y": 27
+      }
+    },
+    "v2": {
+      "map": {
+        "width": "15",
+        "height": "11",
+        "palette": "int_forge"
+      },
+      "position": {
+        "x": 20,
+        "y": 3
+      }
+    },
+    "v3": {
+      "map": {
+        "width": "9",
+        "height": "7",
+        "palette": "int_forge"
+      },
+      "position": {
+        "x": 21,
+        "y": 3
+      }
+    },
+    "v4": {
+      "map": {
+        "width": "15",
+        "height": "11",
+        "palette": "int_forge"
+      },
+      "position": {
+        "x": 28,
+        "y": 3
+      }
+    },
+    "v5": {
+      "map": {
+        "width": "19",
+        "height": "13",
+        "palette": "int_forge"
+      },
+      "position": {
+        "x": 12,
+        "y": 3
+      }
+    },
+    "v6": {
+      "map": {
+        "width": "15",
+        "height": "11",
+        "palette": "int_forge"
+      },
+      "position": {
+        "x": 22,
+        "y": 3
+      }
+    },
+    "v7": {
+      "map": {
+        "width": "15",
+        "height": "11",
+        "palette": "int_forge"
+      },
+      "position": {
+        "x": 37,
+        "y": 3
+      }
+    },
+    "v8": {
+      "map": {
+        "width": "19",
+        "height": "13",
+        "palette": "int_forge"
+      },
+      "position": {
+        "x": 28,
+        "y": 3
+      }
+    },
+    "v9": {
+      "map": {
+        "width": "11",
+        "height": "9",
+        "palette": "int_forge"
+      },
+      "position": {
+        "x": 32,
+        "y": 27
+      }
+    },
+    "v10": {
+      "map": {
+        "width": "11",
+        "height": "9",
+        "palette": "int_forge"
+      },
+      "position": {
+        "x": 37,
+        "y": 3
+      }
+    }
+  },
+  "world_points_f_nterest_int_inn_2_variant": {
+    "v1": {
+      "travelMinutes": 3,
+      "services": [
+        "inn"
+      ],
+      "map": {
+        "width": "15",
+        "height": "11",
+        "palette": "int_timber"
+      }
+    },
+    "v2": {
+      "travelMinutes": 3,
+      "services": [
+        "inn"
+      ],
+      "map": {
+        "width": "11",
+        "height": "9",
+        "palette": "int_timber"
+      }
+    },
+    "v3": {
+      "travelMinutes": 3,
+      "services": [
+        "inn"
+      ],
+      "map": {
+        "width": "9",
+        "height": "7",
+        "palette": "int_timber"
+      }
+    },
+    "v4": {
+      "travelMinutes": 5,
+      "services": [
+        "inn"
+      ],
+      "map": {
+        "width": "9",
+        "height": "7",
+        "palette": "int_timber"
+      }
+    },
+    "v5": {
+      "travelMinutes": 5,
+      "services": [
+        "inn",
+        "stable"
+      ],
+      "map": {
+        "width": "11",
+        "height": "9",
+        "palette": "int_timber"
+      }
+    }
+  },
+  "world_points_f_nterest_int_house_2_variant": {
+    "v1": {
+      "kind": "settlement",
+      "tags": [
+        "house"
+      ],
+      "map": {
+        "width": "9",
+        "height": "7",
+        "palette": "int_timber"
+      },
+      "travelMinutes": 2
+    },
+    "v2": {
+      "kind": "camp",
+      "tags": [],
+      "map": {
+        "width": "9",
+        "height": "7",
+        "palette": "int_timber"
+      },
+      "travelMinutes": 6
+    },
+    "v3": {
+      "kind": "settlement",
+      "tags": [],
+      "map": {
+        "width": "9",
+        "height": "7",
+        "palette": "int_timber"
+      },
+      "travelMinutes": 6
+    },
+    "v4": {
+      "kind": "settlement",
+      "tags": [],
+      "map": {
+        "width": "11",
+        "height": "9",
+        "palette": "int_timber"
+      },
+      "travelMinutes": 5
+    },
+    "v5": {
+      "kind": "camp",
+      "tags": [],
+      "map": {
+        "width": "9",
+        "height": "7",
+        "palette": "int_timber"
+      },
+      "travelMinutes": 5
+    }
+  },
+  "world_points_f_nterest_int_stable_variant": {
+    "v1": {
+      "travelMinutes": 3,
+      "services": [
+        "stable"
+      ]
+    },
+    "v2": {
+      "travelMinutes": 5,
+      "services": [
+        "stable",
+        "inn"
+      ]
+    }
+  },
+  "world_points_f_nterest_generic_landmark_2_variant": {
+    "v1": {
+      "tags": [],
+      "position": {
+        "x": 14,
+        "y": 3
+      }
+    },
+    "v2": {
+      "tags": [],
+      "position": {
+        "x": 3,
+        "y": 3
+      }
+    },
+    "v3": {
+      "tags": [],
+      "position": {
+        "x": 13,
+        "y": 27
+      }
+    },
+    "v4": {
+      "tags": [],
+      "position": {
+        "x": 25,
+        "y": 3
+      }
+    },
+    "v5": {
+      "tags": [
+        "landmark"
+      ],
+      "position": {
+        "x": 3,
+        "y": 3
+      }
+    }
+  },
+  "world_points_f_nterest_generic_ruin_3_variant": {
+    "v1": {
+      "position": {
+        "x": 14,
+        "y": 3
+      },
+      "travelMinutes": 10
+    },
+    "v2": {
+      "position": {
+        "x": 14,
+        "y": 3
+      },
+      "travelMinutes": 8
+    },
+    "v3": {
+      "position": {
+        "x": 25,
+        "y": 3
+      },
+      "travelMinutes": 6
+    },
+    "v4": {
+      "position": {
+        "x": 25,
+        "y": 3
+      },
+      "travelMinutes": 8
+    },
+    "v5": {
+      "position": {
+        "x": 25,
+        "y": 3
+      },
+      "travelMinutes": 10
+    }
+  },
+  "world_points_f_nterest_generic_dungeon_mouth_3_variant": {
+    "v1": {
+      "tags": [
+        "dungeon"
+      ],
+      "position": {
+        "x": 25,
+        "y": 3
+      }
+    },
+    "v2": {
+      "tags": [
+        "dungeon"
+      ],
+      "position": {
+        "x": 13,
+        "y": 27
+      }
+    },
+    "v3": {
+      "tags": [
+        "dungeon",
+        "barrow"
+      ],
+      "position": {
+        "x": 14,
+        "y": 3
+      }
+    },
+    "v4": {
+      "tags": [
+        "dungeon"
+      ],
+      "position": {
+        "x": 3,
+        "y": 13
+      }
+    }
+  },
+  "world_dungeons_entry_2_variant": {
+    "v1": {
+      "bsp": {
+        "minLeaf": 6
+      },
+      "depth": "2"
+    },
+    "v2": {
+      "bsp": {
+        "minLeaf": 5
+      },
+      "depth": "2"
+    },
+    "v3": {
+      "bsp": {
+        "minLeaf": 5
+      },
+      "depth": "3"
+    },
+    "v4": {
+      "bsp": {
+        "minLeaf": 6
+      },
+      "depth": "3"
+    },
+    "v5": {
+      "bsp": {
+        "minLeaf": 6
+      },
+      "depth": "4"
+    },
+    "v6": {
+      "bsp": {
+        "minLeaf": 5
+      },
+      "depth": "4"
+    }
+  },
+  "world_dungeons_entry_4_variant": {
+    "v1": {
+      "depth": "2",
+      "roomCount": "8",
+      "width": "65",
+      "height": "65"
+    },
+    "v2": {
+      "depth": "2",
+      "roomCount": "9",
+      "width": "69",
+      "height": "69"
+    },
+    "v3": {
+      "depth": "2",
+      "roomCount": "10",
+      "width": "73",
+      "height": "73"
+    },
+    "v4": {
+      "depth": "3",
+      "roomCount": "9",
+      "width": "69",
+      "height": "69"
+    }
+  },
+  "world_dungeons_entry_6_variant": {
+    "v1": {
+      "corridorLength": "2d3",
+      "biome": "dungeon_delved"
+    },
+    "v2": {
+      "corridorLength": "3d3",
+      "biome": "dungeon_barrow"
+    },
+    "v3": {
+      "corridorLength": "3d3",
+      "biome": "dungeon_delved"
+    },
+    "v4": {
+      "corridorLength": "2d3",
+      "biome": "dungeon_ember"
+    },
+    "v5": {
+      "corridorLength": "3d3",
+      "biome": "dungeon_drowned"
+    }
+  },
+  "narrative_quests_entry_3_variant": {
+    "v1": {
+      "ordered": true,
+      "stages": [
+        {
+          "id": "get_below",
+          "name": "Get below",
+          "description": "The stair is behind the storerooms and nobody sweeps it.",
+          "objectives": [
+            {
+              "id": "enter_undercroft",
+              "description": "Go down into the undercroft.",
+              "kind": "reach",
+              "count": 1,
+              "hidden": false,
+              "optional": false,
+              "target": "aurenhal_kingshold_undercroft"
+            }
+          ]
+        },
+        {
+          "id": "the_warden",
+          "name": "What was set to keep it shut",
+          "description": "It is still doing its job. That is the problem.",
+          "objectives": [
+            {
+              "id": "kill_warden",
+              "description": "Put down the Door-Warden.",
+              "kind": "kill",
+              "count": 1,
+              "hidden": false,
+              "optional": false,
+              "target": "door_warden"
+            }
+          ],
+          "onComplete": [
+            {
+              "setFlag": {
+                "flag": "first_ward_seen",
+                "value": true
+              }
+            },
+            {
+              "emit": {
+                "event": "deed",
+                "data": {
+                  "kind": "crown_served"
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "v2": {
+      "ordered": false,
+      "stages": []
+    },
+    "v3": {
+      "ordered": true,
+      "stages": []
+    }
+  }
+}

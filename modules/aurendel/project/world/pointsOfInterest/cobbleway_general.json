@@ -1,24 +1,14 @@
 {
-  "id": "cobbleway_general",
-  "name": "Fennick's",
-  "description": "Sells to farms, carters, and anybody heading for the downs.",
-  "area": "coast_cobbleway",
-  "kind": "market",
-  "descriptionKey": "int_store",
-  "travelMinutes": 3,
-  "tags": [
-    "shop"
-  ],
-  "services": [
-    "market"
-  ],
-  "map": {
-    "width": "15",
-    "height": "11",
-    "palette": "int_shop"
-  },
-  "position": {
-    "x": 37,
-    "y": 3
+  "@prefab": "world_points_f_nterest_int_store_2",
+  "params": {
+    "id": "cobbleway_general",
+    "name": "Fennick's",
+    "description": "Sells to farms, carters, and anybody heading for the downs.",
+    "area": "coast_cobbleway",
+    "position": {
+      "x": 37,
+      "y": 3
+    },
+    "variant": "v1"
   }
 }

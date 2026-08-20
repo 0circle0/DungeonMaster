@@ -1,18 +1,11 @@
 {
-  "id": "reeds",
-  "name": "Reeds",
-  "description": "Tall enough to hide a person, and often does.",
-  "glyph": "R",
-  "color": "green",
-  "passable": true,
-  "opaque": true,
-  "moveCost": 2,
-  "tags": [
-    "soft"
-  ],
-  "marks": {
-    "tracks": 1,
-    "smell": 1
-  },
-  "providesCover": "half"
+  "@prefab": "world_terrains_entry_4",
+  "params": {
+    "id": "reeds",
+    "name": "Reeds",
+    "description": "Tall enough to hide a person, and often does.",
+    "glyph": "R",
+    "moveCost": 2,
+    "variant": "v1"
+  }
 }

@@ -1,24 +1,14 @@
 {
-  "id": "counting_map_seller",
-  "name": "Ottley's, Charts and Instruments",
-  "description": "Charts, compasses, glasses, and a proprietor who corrects you.",
-  "area": "sarnport_countinghouse",
-  "kind": "market",
-  "descriptionKey": "int_store",
-  "travelMinutes": 3,
-  "tags": [
-    "shop"
-  ],
-  "services": [
-    "market"
-  ],
-  "map": {
-    "width": "11",
-    "height": "9",
-    "palette": "int_shop"
-  },
-  "position": {
-    "x": 41,
-    "y": 3
+  "@prefab": "world_points_f_nterest_int_store_2",
+  "params": {
+    "id": "counting_map_seller",
+    "name": "Ottley's, Charts and Instruments",
+    "description": "Charts, compasses, glasses, and a proprietor who corrects you.",
+    "area": "sarnport_countinghouse",
+    "position": {
+      "x": 41,
+      "y": 3
+    },
+    "variant": "v2"
   }
 }

@@ -1,20 +1,15 @@
 {
-  "id": "short_tread",
-  "name": "A Tread Off the Older Stair",
-  "description": "Cut shorter and deeper than any step on the hold's stair, worn in the middle by something that did not walk the way we walk.",
-  "kind": "treasure",
-  "value": 0,
-  "weight": 0,
-  "tags": [
-    "clue",
-    "proof"
-  ],
-  "onUse": [
-    {
-      "learnLore": {
-        "entry": "skarn_stair_two"
+  "@prefab": "content_items_entry_9",
+  "params": {
+    "id": "short_tread",
+    "name": "A Tread Off the Older Stair",
+    "description": "Cut shorter and deeper than any step on the hold's stair, worn in the middle by something that did not walk the way we walk.",
+    "onUse": [
+      {
+        "learnLore": {
+          "entry": "skarn_stair_two"
+        }
       }
-    }
-  ],
-  "consumedOnUse": false
+    ]
+  }
 }

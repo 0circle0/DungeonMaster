@@ -1,24 +1,14 @@
 {
-  "id": "harbourside_the_capstan",
-  "name": "The Capstan",
-  "description": "Crews in, crews out, and a landlord who can tell which within a minute.",
-  "area": "sarnport_harbourside",
-  "kind": "settlement",
-  "descriptionKey": "int_inn",
-  "travelMinutes": 3,
-  "tags": [
-    "inn"
-  ],
-  "services": [
-    "inn"
-  ],
-  "map": {
-    "width": "15",
-    "height": "11",
-    "palette": "int_timber"
-  },
-  "position": {
-    "x": 22,
-    "y": 27
+  "@prefab": "world_points_f_nterest_int_inn_2",
+  "params": {
+    "id": "harbourside_the_capstan",
+    "name": "The Capstan",
+    "description": "Crews in, crews out, and a landlord who can tell which within a minute.",
+    "area": "sarnport_harbourside",
+    "position": {
+      "x": 22,
+      "y": 27
+    },
+    "variant": "v1"
   }
 }

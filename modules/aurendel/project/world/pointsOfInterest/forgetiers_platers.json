@@ -1,24 +1,10 @@
 {
-  "id": "forgetiers_platers",
-  "name": "The Platers' Tier",
-  "description": "Armour, and a waiting list measured in seasons.",
-  "area": "karn_dolur_forgetiers",
-  "kind": "market",
-  "descriptionKey": "int_smithy",
-  "travelMinutes": 3,
-  "tags": [
-    "shop"
-  ],
-  "services": [
-    "smith"
-  ],
-  "map": {
-    "width": "19",
-    "height": "13",
-    "palette": "int_forge"
-  },
-  "position": {
-    "x": 12,
-    "y": 3
+  "@prefab": "world_points_f_nterest_int_smithy_2",
+  "params": {
+    "id": "forgetiers_platers",
+    "name": "The Platers' Tier",
+    "description": "Armour, and a waiting list measured in seasons.",
+    "area": "karn_dolur_forgetiers",
+    "variant": "v5"
   }
 }

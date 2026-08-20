@@ -1,33 +1,15 @@
 {
-  "id": "bailiff_hask",
-  "name": "Hask, Bailiff of Cobbleway",
-  "description": "Impounds strays, collects the fee, and writes one line every October that he did not put anything into.",
-  "disposition": 1,
-  "gullibility": 0.15,
-  "memorySpan": 280,
-  "offersQuests": [],
-  "caresAbout": [],
-  "reactions": [],
-  "faction": "the_countinghouse",
-  "dialogue": "coast_hask_talk",
-  "home": "cobbleway_house_a",
-  "statblock": "coast_bailiff",
-  "temperament": {
-    "roamRadius": 24,
-    "investigateRadius": 60,
-    "leashRadius": 90,
-    "wanderChance": 0.3,
-    "speeds": {
-      "wander": 0.5
-    },
-    "investigates": [
-      "sight",
-      "hearing"
-    ],
-    "notices": [
-      "hostile",
-      "neutral",
-      "ally"
-    ]
+  "@prefab": "content_npcs_entry_3",
+  "params": {
+    "id": "bailiff_hask",
+    "name": "Hask, Bailiff of Cobbleway",
+    "description": "Impounds strays, collects the fee, and writes one line every October that he did not put anything into.",
+    "disposition": 1,
+    "memorySpan": 280,
+    "faction": "the_countinghouse",
+    "dialogue": "coast_hask_talk",
+    "home": "cobbleway_house_a",
+    "statblock": "coast_bailiff",
+    "variant": "v8"
   }
 }

@@ -1,19 +1,15 @@
 {
-  "id": "last_cairn_shelter",
-  "name": "The North Shelter",
-  "description": "Three walls, a roof, and a door that opens inward because of the drifts.",
-  "area": "frostmere_the_last_cairn",
-  "kind": "camp",
-  "descriptionKey": "generic_camp",
-  "travelMinutes": 6,
-  "tags": [],
-  "map": {
-    "width": "9",
-    "height": "7",
-    "palette": "int_cave"
-  },
-  "position": {
-    "x": 14,
-    "y": 3
+  "@prefab": "world_points_f_nterest_generic_camp",
+  "params": {
+    "id": "last_cairn_shelter",
+    "name": "The North Shelter",
+    "description": "Three walls, a roof, and a door that opens inward because of the drifts.",
+    "area": "frostmere_the_last_cairn",
+    "travelMinutes": 6,
+    "map": {
+      "width": "9",
+      "height": "7",
+      "palette": "int_cave"
+    }
   }
 }

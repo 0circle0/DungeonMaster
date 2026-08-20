@@ -1,20 +1,15 @@
 {
-  "id": "green_ash",
-  "name": "Ash That Burned Green",
-  "description": "Raked cold out of a fire that has been alight for two hundred years, off one of the two nights a year it changes colour.",
-  "kind": "treasure",
-  "value": 0,
-  "weight": 0,
-  "tags": [
-    "clue",
-    "proof"
-  ],
-  "onUse": [
-    {
-      "learnLore": {
-        "entry": "moor_fire_green"
+  "@prefab": "content_items_entry_9",
+  "params": {
+    "id": "green_ash",
+    "name": "Ash That Burned Green",
+    "description": "Raked cold out of a fire that has been alight for two hundred years, off one of the two nights a year it changes colour.",
+    "onUse": [
+      {
+        "learnLore": {
+          "entry": "moor_fire_green"
+        }
       }
-    }
-  ],
-  "consumedOnUse": false
+    ]
+  }
 }

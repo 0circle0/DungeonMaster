@@ -1,33 +1,15 @@
 {
-  "id": "fire_keeper_wenna",
-  "name": "Wenna, whose Turn It Is",
-  "description": "Holds the rota for a fire that has not gone out in two hundred years and has never once had to hurry.",
-  "disposition": 4,
-  "gullibility": 0.3,
-  "memorySpan": 230,
-  "offersQuests": [],
-  "caresAbout": [],
-  "reactions": [],
-  "faction": "the_library",
-  "dialogue": "moor_wenna_talk",
-  "home": "colders_hearth_house_a",
-  "statblock": "moor_keeper",
-  "temperament": {
-    "roamRadius": 24,
-    "investigateRadius": 60,
-    "leashRadius": 90,
-    "wanderChance": 0.3,
-    "speeds": {
-      "wander": 0.5
-    },
-    "investigates": [
-      "sight",
-      "hearing"
-    ],
-    "notices": [
-      "hostile",
-      "neutral",
-      "ally"
-    ]
+  "@prefab": "content_npcs_entry_3",
+  "params": {
+    "id": "fire_keeper_wenna",
+    "name": "Wenna, whose Turn It Is",
+    "description": "Holds the rota for a fire that has not gone out in two hundred years and has never once had to hurry.",
+    "disposition": 4,
+    "memorySpan": 230,
+    "faction": "the_library",
+    "dialogue": "moor_wenna_talk",
+    "home": "colders_hearth_house_a",
+    "statblock": "moor_keeper",
+    "variant": "v3"
   }
 }

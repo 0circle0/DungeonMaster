@@ -1,53 +1,29 @@
 {
-  "id": "step_watcher",
-  "name": "Ondir, at the Last Water",
-  "description": "Stands between everybody's thirst and the only water for two days in any direction.",
-  "level": 5,
-  "xp": 0,
-  "attributes": {
-    "might": 14,
-    "agility": 12,
-    "endurance": 16,
-    "intellect": 12,
-    "instinct": 15,
-    "presence": 11
-  },
-  "abilities": [
-    "strike",
-    "guarded_stance"
-  ],
-  "behaviour": [
-    {
-      "priority": 0,
-      "use": "strike"
-    }
-  ],
-  "faction": "the_horse_lords",
-  "creatureType": "humanoid",
-  "size": "medium",
-  "descriptors": [
-    "a still"
-  ],
-  "conditionalLoot": [],
-  "loot": "step_warrant_carried",
-  "resourceOverrides": {
-    "hp": 33
-  },
-  "temperament": {
-    "roamRadius": 24,
-    "investigateRadius": 70,
-    "leashRadius": 100,
-    "wanderChance": 0.4,
-    "disengageTurns": 2,
-    "investigates": [
-      "sight",
-      "hearing",
-      "tracks",
-      "smell"
+  "@prefab": "content_monsters_entry",
+  "params": {
+    "id": "step_watcher",
+    "name": "Ondir, at the Last Water",
+    "description": "Stands between everybody's thirst and the only water for two days in any direction.",
+    "attributes": {
+      "might": 14,
+      "agility": 12,
+      "endurance": 16,
+      "intellect": 12,
+      "instinct": 15,
+      "presence": 11
+    },
+    "abilities": [
+      "strike",
+      "guarded_stance"
     ],
-    "notices": [
-      "hostile",
-      "neutral"
-    ]
+    "faction": "the_horse_lords",
+    "descriptors": [
+      "a still"
+    ],
+    "loot": "step_warrant_carried",
+    "resourceOverrides": {
+      "hp": 33
+    },
+    "variant": "v5"
   }
 }

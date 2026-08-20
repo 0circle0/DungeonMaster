@@ -1,18 +1,15 @@
 {
-  "id": "steppe_great_kurgan",
-  "name": "The Great Kurgan",
-  "description": "The largest mound, at the head of the middle row, and the only one of the two hundred with a way in.",
-  "biome": "dungeon_barrow",
-  "roomCount": "12",
-  "depth": "3",
-  "algorithm": "rooms",
-  "lockedDoorChance": 0,
-  "doorGates": [],
-  "rollEncounters": false,
-  "safeEntrance": true,
-  "branchiness": 0.2,
-  "width": "81",
-  "height": "81",
-  "corridorLength": "3d3",
-  "bossTable": "the_kurgan_rider"
+  "@prefab": "world_dungeons_entry_6",
+  "params": {
+    "id": "steppe_great_kurgan",
+    "name": "The Great Kurgan",
+    "description": "The largest mound, at the head of the middle row, and the only one of the two hundred with a way in.",
+    "roomCount": "12",
+    "depth": "3",
+    "branchiness": 0.2,
+    "width": "81",
+    "height": "81",
+    "bossTable": "the_kurgan_rider",
+    "variant": "v2"
+  }
 }

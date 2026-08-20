@@ -1,86 +1,54 @@
 {
-  "id": "footing_hum",
-  "name": "What Hums in the Footings",
-  "description": "A bridge over nothing, standing on footings, and the hum comes up through the stone rather than down off the span.",
-  "level": 10,
-  "xp": 1600,
-  "attributes": {
-    "might": 19,
-    "agility": 12,
-    "endurance": 20,
-    "intellect": 15,
-    "instinct": 16,
-    "presence": 16
-  },
-  "abilities": [
-    "unmaking_word",
-    "stone_fist",
-    "grave_chill"
-  ],
-  "behaviour": [
-    {
-      "priority": 25,
-      "use": "unmaking_word",
-      "when": {
-        "chance": 0.3
+  "@prefab": "content_monsters_entry_4",
+  "params": {
+    "id": "footing_hum",
+    "name": "What Hums in the Footings",
+    "description": "A bridge over nothing, standing on footings, and the hum comes up through the stone rather than down off the span.",
+    "level": 10,
+    "xp": 1600,
+    "attributes": {
+      "might": 19,
+      "agility": 12,
+      "endurance": 20,
+      "intellect": 15,
+      "instinct": 16,
+      "presence": 16
+    },
+    "abilities": [
+      "unmaking_word",
+      "stone_fist",
+      "grave_chill"
+    ],
+    "behaviour": [
+      {
+        "priority": 25,
+        "use": "unmaking_word",
+        "when": {
+          "chance": 0.3
+        }
+      },
+      {
+        "priority": 10,
+        "use": "grave_chill"
+      },
+      {
+        "priority": 0,
+        "use": "stone_fist"
       }
+    ],
+    "descriptors": [
+      "a sounding",
+      "a rooted"
+    ],
+    "loot": "deep_footing_hoard",
+    "conditionImmunities": [
+      "prone",
+      "frightened",
+      "poisoned"
+    ],
+    "resourceOverrides": {
+      "hp": 175
     },
-    {
-      "priority": 10,
-      "use": "grave_chill"
-    },
-    {
-      "priority": 0,
-      "use": "stone_fist"
-    }
-  ],
-  "faction": "the_unsealed",
-  "creatureType": "undead",
-  "size": "medium",
-  "descriptors": [
-    "a sounding",
-    "a rooted"
-  ],
-  "conditionalLoot": [],
-  "loot": "deep_footing_hoard",
-  "damageInteractions": [
-    {
-      "damageType": "slashing",
-      "multiplier": 0.5,
-      "unless": [
-        "silvered"
-      ]
-    },
-    {
-      "damageType": "piercing",
-      "multiplier": 0.5,
-      "unless": [
-        "silvered"
-      ]
-    }
-  ],
-  "conditionImmunities": [
-    "prone",
-    "frightened",
-    "poisoned"
-  ],
-  "resourceOverrides": {
-    "hp": 175
-  },
-  "temperament": {
-    "roamRadius": 12,
-    "investigateRadius": 40,
-    "leashRadius": 60,
-    "wanderChance": 0.1,
-    "disengageTurns": 1,
-    "speeds": {
-      "wander": 0.5,
-      "investigate": 0.5
-    },
-    "investigates": [
-      "sight",
-      "hearing",
-      "smell"
-    ]
+    "variant": "v1"
   }
 }

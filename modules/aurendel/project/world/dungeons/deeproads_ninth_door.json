@@ -1,19 +1,14 @@
 {
-  "id": "deeproads_ninth_door",
-  "name": "Behind the Ninth Door",
-  "description": "The ninth door on the left of the Long Hall, and everything behind it laid out on the same plan as the other two hundred and ten.",
-  "biome": "dungeon_delved",
-  "roomCount": "14",
-  "depth": "4",
-  "algorithm": "bsp",
-  "lockedDoorChance": 0,
-  "doorGates": [],
-  "rollEncounters": false,
-  "safeEntrance": true,
-  "bsp": {
-    "minLeaf": 5
-  },
-  "width": "31",
-  "height": "31",
-  "bossTable": "the_keeper_of_the_ninth"
+  "@prefab": "world_dungeons_entry_2",
+  "params": {
+    "id": "deeproads_ninth_door",
+    "name": "Behind the Ninth Door",
+    "description": "The ninth door on the left of the Long Hall, and everything behind it laid out on the same plan as the other two hundred and ten.",
+    "biome": "dungeon_delved",
+    "roomCount": "14",
+    "width": "31",
+    "height": "31",
+    "bossTable": "the_keeper_of_the_ninth",
+    "variant": "v6"
+  }
 }

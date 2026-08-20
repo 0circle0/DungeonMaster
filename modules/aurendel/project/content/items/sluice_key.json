@@ -1,14 +1,11 @@
 {
-  "id": "sluice_key",
-  "name": "The Sluice Key",
-  "description": "For a gate the parish stopped paying anybody to work ninety years ago, and which is worked to the day.",
-  "kind": "key",
-  "value": 0,
-  "weight": 0,
-  "tags": [
-    "keepsake"
-  ],
-  "extra": {
-    "heldBy": "ford_farmer_alsey"
+  "@prefab": "content_items_entry_8",
+  "params": {
+    "id": "sluice_key",
+    "name": "The Sluice Key",
+    "description": "For a gate the parish stopped paying anybody to work ninety years ago, and which is worked to the day.",
+    "extra": {
+      "heldBy": "ford_farmer_alsey"
+    }
   }
 }

@@ -1,48 +1,37 @@
 {
-  "id": "wreckmaster_runa",
-  "name": "Runa, Wreckmaster of Blackrigging",
-  "description": "Has salvaged everything in these waters that can be got at, twice, and keeps a list of the four crews that went into the fort.",
-  "disposition": 0,
-  "gullibility": 0.25,
-  "memorySpan": 300,
-  "offersQuests": [
-    "drownedfort_four_crews"
-  ],
-  "caresAbout": [
-    "share_honoured",
-    "wreck_informed"
-  ],
-  "reactions": [],
-  "faction": "the_salvors",
-  "dialogue": "drownedfort_runa_talk",
-  "home": "blackrigging_the_hulks",
-  "shop": {
-    "lootTable": "salvors_stock",
-    "buysTags": [
-      "treasure",
-      "material"
+  "@prefab": "content_npcs_entry",
+  "params": {
+    "id": "wreckmaster_runa",
+    "name": "Runa, Wreckmaster of Blackrigging",
+    "description": "Has salvaged everything in these waters that can be got at, twice, and keeps a list of the four crews that went into the fort.",
+    "disposition": 0,
+    "gullibility": 0.25,
+    "memorySpan": 300,
+    "offersQuests": [
+      "drownedfort_four_crews"
     ],
-    "priceMultiplier": 1.2,
-    "requires": {
-      "factions": [
-        {
-          "faction": "the_salvors",
-          "minStanding": 15
-        }
-      ]
+    "caresAbout": [
+      "share_honoured",
+      "wreck_informed"
+    ],
+    "faction": "the_salvors",
+    "dialogue": "drownedfort_runa_talk",
+    "home": "blackrigging_the_hulks",
+    "shop": {
+      "lootTable": "salvors_stock",
+      "buysTags": [
+        "treasure",
+        "material"
+      ],
+      "priceMultiplier": 1.2,
+      "requires": {
+        "factions": [
+          {
+            "faction": "the_salvors",
+            "minStanding": 15
+          }
+        ]
+      }
     }
-  },
-  "temperament": {
-    "roamRadius": 0,
-    "wanderChance": 0,
-    "speeds": {
-      "wander": 0
-    },
-    "investigates": [],
-    "notices": [
-      "hostile",
-      "neutral",
-      "ally"
-    ]
   }
 }

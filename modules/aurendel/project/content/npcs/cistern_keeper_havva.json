@@ -1,33 +1,15 @@
 {
-  "id": "cistern_keeper_havva",
-  "name": "Havva, Keeper of the Cistern",
-  "description": "Holds an office three hundred years older than the last water in it, and keeps the key oiled.",
-  "disposition": 6,
-  "gullibility": 0.3,
-  "memorySpan": 365,
-  "offersQuests": [],
-  "caresAbout": [],
-  "reactions": [],
-  "faction": "the_water_wardens",
-  "dialogue": "glass_havva_talk",
-  "home": "dry_cistern_house_a",
-  "statblock": "glass_keeper",
-  "temperament": {
-    "roamRadius": 24,
-    "investigateRadius": 60,
-    "leashRadius": 90,
-    "wanderChance": 0.3,
-    "speeds": {
-      "wander": 0.5
-    },
-    "investigates": [
-      "sight",
-      "hearing"
-    ],
-    "notices": [
-      "hostile",
-      "neutral",
-      "ally"
-    ]
+  "@prefab": "content_npcs_entry_3",
+  "params": {
+    "id": "cistern_keeper_havva",
+    "name": "Havva, Keeper of the Cistern",
+    "description": "Holds an office three hundred years older than the last water in it, and keeps the key oiled.",
+    "disposition": 6,
+    "memorySpan": 365,
+    "faction": "the_water_wardens",
+    "dialogue": "glass_havva_talk",
+    "home": "dry_cistern_house_a",
+    "statblock": "glass_keeper",
+    "variant": "v3"
   }
 }

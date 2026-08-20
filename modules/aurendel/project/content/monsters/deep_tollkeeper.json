@@ -1,52 +1,28 @@
 {
-  "id": "deep_tollkeeper",
-  "name": "Bruk, at the Old Toll",
-  "description": "Sits at a post nobody pays at, and has for thirty years.",
-  "level": 7,
-  "xp": 0,
-  "attributes": {
-    "might": 16,
-    "agility": 12,
-    "endurance": 17,
-    "intellect": 12,
-    "instinct": 14,
-    "presence": 11
-  },
-  "abilities": [
-    "strike"
-  ],
-  "behaviour": [
-    {
-      "priority": 0,
-      "use": "strike"
-    }
-  ],
-  "faction": "the_wayfinders",
-  "creatureType": "humanoid",
-  "size": "medium",
-  "descriptors": [
-    "a stolid"
-  ],
-  "conditionalLoot": [],
-  "loot": "deep_tally_carried",
-  "resourceOverrides": {
-    "hp": 48
-  },
-  "temperament": {
-    "roamRadius": 24,
-    "investigateRadius": 70,
-    "leashRadius": 100,
-    "wanderChance": 0.4,
-    "disengageTurns": 2,
-    "investigates": [
-      "sight",
-      "hearing",
-      "tracks",
-      "smell"
+  "@prefab": "content_monsters_entry",
+  "params": {
+    "id": "deep_tollkeeper",
+    "name": "Bruk, at the Old Toll",
+    "description": "Sits at a post nobody pays at, and has for thirty years.",
+    "attributes": {
+      "might": 16,
+      "agility": 12,
+      "endurance": 17,
+      "intellect": 12,
+      "instinct": 14,
+      "presence": 11
+    },
+    "abilities": [
+      "strike"
     ],
-    "notices": [
-      "hostile",
-      "neutral"
-    ]
+    "faction": "the_wayfinders",
+    "descriptors": [
+      "a stolid"
+    ],
+    "loot": "deep_tally_carried",
+    "resourceOverrides": {
+      "hp": 48
+    },
+    "variant": "v9"
   }
 }

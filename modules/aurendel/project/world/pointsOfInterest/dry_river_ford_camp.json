@@ -1,34 +1,25 @@
 {
-  "id": "dry_river_ford_camp",
-  "name": "The Ford Camp",
-  "description": "Used by everybody crossing, and struck at the first sign of weather upstream.",
-  "area": "steppe_dry_river",
-  "kind": "camp",
-  "descriptionKey": "int_house",
-  "travelMinutes": 5,
-  "tags": [],
-  "map": {
-    "width": "9",
-    "height": "7",
-    "palette": "int_timber"
-  },
-  "position": {
-    "x": 14,
-    "y": 3
-  },
-  "triggers": [
-    {
-      "id": "step_found_camp",
-      "mode": "once",
-      "on": "enter",
-      "description": "Nine hundred years of hearths at a crossing nobody needs to cross.",
-      "effects": [
-        {
-          "learnLore": {
-            "entry": "step_bank_ford"
+  "@prefab": "world_points_f_nterest_int_house_3",
+  "params": {
+    "id": "dry_river_ford_camp",
+    "name": "The Ford Camp",
+    "description": "Used by everybody crossing, and struck at the first sign of weather upstream.",
+    "area": "steppe_dry_river",
+    "travelMinutes": 5,
+    "triggers": [
+      {
+        "id": "step_found_camp",
+        "mode": "once",
+        "on": "enter",
+        "description": "Nine hundred years of hearths at a crossing nobody needs to cross.",
+        "effects": [
+          {
+            "learnLore": {
+              "entry": "step_bank_ford"
+            }
           }
-        }
-      ]
-    }
-  ]
+        ]
+      }
+    ]
+  }
 }

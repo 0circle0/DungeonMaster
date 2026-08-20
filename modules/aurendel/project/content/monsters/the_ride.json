@@ -1,85 +1,53 @@
 {
-  "id": "the_ride",
-  "name": "What Goes Up It At Night",
-  "description": "Forty yards wide, nine miles straight, kept clear by something that has never once been seen doing it, and the deer will not cross.",
-  "level": 6,
-  "xp": 450,
-  "attributes": {
-    "might": 16,
-    "agility": 16,
-    "endurance": 15,
-    "intellect": 12,
-    "instinct": 15,
-    "presence": 15
-  },
-  "abilities": [
-    "gore",
-    "shove",
-    "root_and_branch"
-  ],
-  "behaviour": [
-    {
-      "priority": 20,
-      "use": "root_and_branch",
-      "when": {
-        "chance": 0.35
+  "@prefab": "content_monsters_entry_4",
+  "params": {
+    "id": "the_ride",
+    "name": "What Goes Up It At Night",
+    "description": "Forty yards wide, nine miles straight, kept clear by something that has never once been seen doing it, and the deer will not cross.",
+    "level": 6,
+    "xp": 450,
+    "attributes": {
+      "might": 16,
+      "agility": 16,
+      "endurance": 15,
+      "intellect": 12,
+      "instinct": 15,
+      "presence": 15
+    },
+    "abilities": [
+      "gore",
+      "shove",
+      "root_and_branch"
+    ],
+    "behaviour": [
+      {
+        "priority": 20,
+        "use": "root_and_branch",
+        "when": {
+          "chance": 0.35
+        }
+      },
+      {
+        "priority": 10,
+        "use": "gore"
+      },
+      {
+        "priority": 0,
+        "use": "shove"
       }
+    ],
+    "descriptors": [
+      "a antlered",
+      "a silent"
+    ],
+    "loot": "dusk_green_hoard",
+    "conditionImmunities": [
+      "frightened",
+      "poisoned"
+    ],
+    "resourceOverrides": {
+      "hp": 64
     },
-    {
-      "priority": 10,
-      "use": "gore"
-    },
-    {
-      "priority": 0,
-      "use": "shove"
-    }
-  ],
-  "faction": "the_unsealed",
-  "creatureType": "undead",
-  "size": "medium",
-  "descriptors": [
-    "a antlered",
-    "a silent"
-  ],
-  "conditionalLoot": [],
-  "loot": "dusk_green_hoard",
-  "damageInteractions": [
-    {
-      "damageType": "slashing",
-      "multiplier": 0.5,
-      "unless": [
-        "silvered"
-      ]
-    },
-    {
-      "damageType": "piercing",
-      "multiplier": 0.5,
-      "unless": [
-        "silvered"
-      ]
-    }
-  ],
-  "conditionImmunities": [
-    "frightened",
-    "poisoned"
-  ],
-  "resourceOverrides": {
-    "hp": 64
-  },
-  "temperament": {
-    "roamRadius": 12,
-    "investigateRadius": 40,
-    "leashRadius": 60,
-    "wanderChance": 0.1,
-    "disengageTurns": 1,
-    "speeds": {
-      "wander": 0.5,
-      "investigate": 0.5
-    },
-    "investigates": [
-      "sight",
-      "hearing",
-      "smell"
-    ]
+    "variant": "v1"
   }
 }

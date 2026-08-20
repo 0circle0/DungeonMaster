@@ -1,19 +1,14 @@
 {
-  "id": "ember_signal_deep",
-  "name": "The Signal Deep",
-  "description": "A shaft under the seventh tower that the tower was put on top of on purpose, and it goes considerably further than the ridge.",
-  "biome": "dungeon_delved",
-  "roomCount": "13",
-  "depth": "4",
-  "algorithm": "bsp",
-  "lockedDoorChance": 0,
-  "doorGates": [],
-  "rollEncounters": false,
-  "safeEntrance": true,
-  "bsp": {
-    "minLeaf": 6
-  },
-  "width": "33",
-  "height": "33",
-  "bossTable": "trial_three_eighth"
+  "@prefab": "world_dungeons_entry_2",
+  "params": {
+    "id": "ember_signal_deep",
+    "name": "The Signal Deep",
+    "description": "A shaft under the seventh tower that the tower was put on top of on purpose, and it goes considerably further than the ridge.",
+    "biome": "dungeon_delved",
+    "roomCount": "13",
+    "width": "33",
+    "height": "33",
+    "bossTable": "trial_three_eighth",
+    "variant": "v5"
+  }
 }

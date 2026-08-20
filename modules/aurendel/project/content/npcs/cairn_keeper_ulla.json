@@ -1,36 +1,19 @@
 {
-  "id": "cairn_keeper_ulla",
-  "name": "Ulla of Cairnhold",
-  "description": "Eleven years' training to know which stone goes where, and she is a long way from her cairns.",
-  "disposition": 10,
-  "gullibility": 0.25,
-  "memorySpan": 365,
-  "offersQuests": [],
-  "caresAbout": [
-    "ward_broken",
-    "ward_restored",
-    "barrow_robbed"
-  ],
-  "reactions": [],
-  "faction": "the_keepers",
-  "dialogue": "ulla_talk",
-  "home": "hollowdene_chapel",
-  "temperament": {
-    "roamRadius": 24,
-    "investigateRadius": 60,
-    "leashRadius": 90,
-    "wanderChance": 0.3,
-    "speeds": {
-      "wander": 0.5
-    },
-    "investigates": [
-      "sight",
-      "hearing"
+  "@prefab": "content_npcs_entry_2",
+  "params": {
+    "id": "cairn_keeper_ulla",
+    "name": "Ulla of Cairnhold",
+    "description": "Eleven years' training to know which stone goes where, and she is a long way from her cairns.",
+    "gullibility": 0.25,
+    "memorySpan": 365,
+    "caresAbout": [
+      "ward_broken",
+      "ward_restored",
+      "barrow_robbed"
     ],
-    "notices": [
-      "hostile",
-      "neutral",
-      "ally"
-    ]
+    "faction": "the_keepers",
+    "dialogue": "ulla_talk",
+    "home": "hollowdene_chapel",
+    "variant": "v3"
   }
 }

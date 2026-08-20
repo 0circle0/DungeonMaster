@@ -1,24 +1,14 @@
 {
-  "id": "tallgrass_store",
-  "name": "The Cut Store",
-  "description": "Blades, whetstones, and hay forks.",
-  "area": "steppe_tallgrass",
-  "kind": "market",
-  "descriptionKey": "int_store",
-  "travelMinutes": 3,
-  "tags": [
-    "shop"
-  ],
-  "services": [
-    "market"
-  ],
-  "map": {
-    "width": "9",
-    "height": "7",
-    "palette": "int_shop"
-  },
-  "position": {
-    "x": 15,
-    "y": 3
+  "@prefab": "world_points_f_nterest_int_store_2",
+  "params": {
+    "id": "tallgrass_store",
+    "name": "The Cut Store",
+    "description": "Blades, whetstones, and hay forks.",
+    "area": "steppe_tallgrass",
+    "position": {
+      "x": 15,
+      "y": 3
+    },
+    "variant": "v4"
   }
 }

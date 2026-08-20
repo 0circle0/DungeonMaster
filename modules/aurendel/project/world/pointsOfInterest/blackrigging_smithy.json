@@ -1,24 +1,10 @@
 {
-  "id": "blackrigging_smithy",
-  "name": "The Salvage Forge",
-  "description": "Works nothing but recovered iron, and there is a great deal of recovered iron.",
-  "area": "isles_blackrigging",
-  "kind": "market",
-  "descriptionKey": "int_smithy",
-  "travelMinutes": 3,
-  "tags": [
-    "shop"
-  ],
-  "services": [
-    "smith"
-  ],
-  "map": {
-    "width": "15",
-    "height": "11",
-    "palette": "int_forge"
-  },
-  "position": {
-    "x": 37,
-    "y": 3
+  "@prefab": "world_points_f_nterest_int_smithy_2",
+  "params": {
+    "id": "blackrigging_smithy",
+    "name": "The Salvage Forge",
+    "description": "Works nothing but recovered iron, and there is a great deal of recovered iron.",
+    "area": "isles_blackrigging",
+    "variant": "v7"
   }
 }

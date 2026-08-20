@@ -1,35 +1,18 @@
 {
-  "id": "hold_speaker_dath",
-  "name": "Dath, Speaker of the Gate",
-  "description": "Nine hundred years of not opening the Deep Door, and he has the ledger to prove every one of them.",
-  "disposition": 0,
-  "gullibility": 0.15,
-  "memorySpan": 365,
-  "offersQuests": [],
-  "caresAbout": [
-    "deep_door_opened",
-    "hold_honoured"
-  ],
-  "reactions": [],
-  "faction": "karn_dolur",
-  "dialogue": "dath_talk",
-  "home": "gatehall_wardens_hall",
-  "temperament": {
-    "roamRadius": 24,
-    "investigateRadius": 60,
-    "leashRadius": 90,
-    "wanderChance": 0.3,
-    "speeds": {
-      "wander": 0.5
-    },
-    "investigates": [
-      "sight",
-      "hearing"
+  "@prefab": "content_npcs_entry_2",
+  "params": {
+    "id": "hold_speaker_dath",
+    "name": "Dath, Speaker of the Gate",
+    "description": "Nine hundred years of not opening the Deep Door, and he has the ledger to prove every one of them.",
+    "gullibility": 0.15,
+    "memorySpan": 365,
+    "caresAbout": [
+      "deep_door_opened",
+      "hold_honoured"
     ],
-    "notices": [
-      "hostile",
-      "neutral",
-      "ally"
-    ]
+    "faction": "karn_dolur",
+    "dialogue": "dath_talk",
+    "home": "gatehall_wardens_hall",
+    "variant": "v5"
   }
 }

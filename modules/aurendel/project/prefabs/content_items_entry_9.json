@@ -1,0 +1,37 @@
+{
+  "id": "content_items_entry_9",
+  "label": "content_items_entry_9",
+  "collection": "content.items",
+  "params": [
+    {
+      "key": "id",
+      "kind": "string"
+    },
+    {
+      "key": "name",
+      "kind": "string"
+    },
+    {
+      "key": "description",
+      "kind": "text"
+    },
+    {
+      "key": "onUse",
+      "kind": "string"
+    }
+  ],
+  "template": {
+    "id": "{{id}}",
+    "name": "{{name}}",
+    "description": "{{description}}",
+    "kind": "treasure",
+    "value": 0,
+    "weight": 0,
+    "tags": [
+      "clue",
+      "proof"
+    ],
+    "onUse": "{{onUse}}",
+    "consumedOnUse": false
+  }
+}

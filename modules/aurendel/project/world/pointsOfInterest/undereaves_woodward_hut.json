@@ -1,34 +1,25 @@
 {
-  "id": "undereaves_woodward_hut",
-  "name": "The Woodward's Hut",
-  "description": "Where the forest warden sits when he wants to know who is going in.",
-  "area": "duskwood_the_undereaves",
-  "kind": "camp",
-  "descriptionKey": "int_house",
-  "travelMinutes": 5,
-  "tags": [],
-  "map": {
-    "width": "9",
-    "height": "7",
-    "palette": "int_timber"
-  },
-  "position": {
-    "x": 14,
-    "y": 3
-  },
-  "triggers": [
-    {
-      "id": "dusk_found_hut",
-      "mode": "once",
-      "on": "enter",
-      "description": "A hut kept, a hearth used, and no woodward on the parish roll.",
-      "effects": [
-        {
-          "learnLore": {
-            "entry": "dusk_ward_recut"
+  "@prefab": "world_points_f_nterest_int_house_3",
+  "params": {
+    "id": "undereaves_woodward_hut",
+    "name": "The Woodward's Hut",
+    "description": "Where the forest warden sits when he wants to know who is going in.",
+    "area": "duskwood_the_undereaves",
+    "travelMinutes": 5,
+    "triggers": [
+      {
+        "id": "dusk_found_hut",
+        "mode": "once",
+        "on": "enter",
+        "description": "A hut kept, a hearth used, and no woodward on the parish roll.",
+        "effects": [
+          {
+            "learnLore": {
+              "entry": "dusk_ward_recut"
+            }
           }
-        }
-      ]
-    }
-  ]
+        ]
+      }
+    ]
+  }
 }

@@ -1,14 +1,11 @@
 {
-  "id": "table",
-  "name": "Table",
-  "description": "Scarred, and bolted down in the rougher places.",
-  "glyph": "T",
-  "color": "yellow",
-  "passable": false,
-  "opaque": false,
-  "moveCost": 0,
-  "tags": [
-    "furniture"
-  ],
-  "providesCover": "half"
+  "@prefab": "world_terrains_entry_6",
+  "params": {
+    "id": "table",
+    "name": "Table",
+    "description": "Scarred, and bolted down in the rougher places.",
+    "glyph": "T",
+    "color": "yellow",
+    "variant": "v3"
+  }
 }

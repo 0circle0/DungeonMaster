@@ -1,25 +1,21 @@
 {
-  "id": "stone_fist",
-  "name": "Stone Fist",
-  "description": "Slow, and it does not need to be fast.",
-  "actionType": "action",
-  "targeting": "single",
-  "attack": {
-    "stat": "might",
-    "against": "guard"
-  },
-  "onUse": [
-    {
-      "damage": {
-        "target": {
-          "ref": "target.id"
-        },
-        "amount": {
-          "roll": "2d6"
-        },
-        "damageType": "bludgeoning"
+  "@prefab": "content_abilities_entry_4",
+  "params": {
+    "id": "stone_fist",
+    "name": "Stone Fist",
+    "description": "Slow, and it does not need to be fast.",
+    "onUse": [
+      {
+        "damage": {
+          "target": {
+            "ref": "target.id"
+          },
+          "amount": {
+            "roll": "2d6"
+          },
+          "damageType": "bludgeoning"
+        }
       }
-    }
-  ],
-  "cooldown": 2
+    ]
+  }
 }

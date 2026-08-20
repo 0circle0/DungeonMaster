@@ -1,0 +1,35 @@
+{
+  "id": "content_items_entry_8",
+  "label": "content_items_entry_8",
+  "collection": "content.items",
+  "params": [
+    {
+      "key": "id",
+      "kind": "string"
+    },
+    {
+      "key": "name",
+      "kind": "string"
+    },
+    {
+      "key": "description",
+      "kind": "text"
+    },
+    {
+      "key": "extra",
+      "kind": "string"
+    }
+  ],
+  "template": {
+    "id": "{{id}}",
+    "name": "{{name}}",
+    "description": "{{description}}",
+    "kind": "key",
+    "value": 0,
+    "weight": 0,
+    "tags": [
+      "keepsake"
+    ],
+    "extra": "{{extra}}"
+  }
+}

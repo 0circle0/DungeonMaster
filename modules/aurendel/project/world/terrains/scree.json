@@ -1,18 +1,11 @@
 {
-  "id": "scree",
-  "name": "Scree",
-  "description": "Loose slope that moves when you do.",
-  "glyph": "s",
-  "color": "gray",
-  "passable": true,
-  "opaque": false,
-  "moveCost": 2,
-  "tags": [
-    "stone"
-  ],
-  "marks": {
-    "tracks": 0,
-    "smell": 0.6
-  },
-  "providesCover": "half"
+  "@prefab": "world_terrains_entry_4",
+  "params": {
+    "id": "scree",
+    "name": "Scree",
+    "description": "Loose slope that moves when you do.",
+    "glyph": "s",
+    "moveCost": 2,
+    "variant": "v3"
+  }
 }

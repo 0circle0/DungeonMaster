@@ -1,14 +1,11 @@
 {
-  "id": "mile_book",
-  "name": "The Wayhouse Mile Book",
-  "description": "Every stage, every fare and every mark on the road, kept by four generations of the same family, all of whom counted fourteen.",
-  "kind": "key",
-  "value": 0,
-  "weight": 0,
-  "tags": [
-    "keepsake"
-  ],
-  "extra": {
-    "heldBy": "wayhouse_keeper_pyle"
+  "@prefab": "content_items_entry_8",
+  "params": {
+    "id": "mile_book",
+    "name": "The Wayhouse Mile Book",
+    "description": "Every stage, every fare and every mark on the road, kept by four generations of the same family, all of whom counted fourteen.",
+    "extra": {
+      "heldBy": "wayhouse_keeper_pyle"
+    }
   }
 }

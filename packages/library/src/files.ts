@@ -17,7 +17,7 @@
  */
 
 import { isEnvelope, envelopeFromDoc } from './envelope.js';
-import type { WorldEnvelope } from './envelope.js';
+import type { WorldEnvelope, WorldAuthoring } from './envelope.js';
 import { gunzip, gzip, isGzip } from './gzip.js';
 import { bundleModule, unbundleModule, PROJECT_MANIFEST } from '@dm/module';
 
@@ -76,8 +76,12 @@ export function downloadEnvelope(envelope: WorldEnvelope, filename?: string): vo
 export async function downloadProject(
   doc: Record<string, unknown>,
   filename: string,
+  authoring?: WorldAuthoring,
 ): Promise<void> {
-  const { files } = bundleModule(doc);
+  const { files } = bundleModule(doc, {
+    prefabs: authoring?.prefabs ?? [],
+    style: authoring?.style ?? {},
+  });
   const text = JSON.stringify({ dmProject: 1, files });
   const bytes = await gzip(new TextEncoder().encode(text));
 

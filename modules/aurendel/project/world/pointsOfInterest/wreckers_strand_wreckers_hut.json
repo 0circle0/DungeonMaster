@@ -1,19 +1,14 @@
 {
-  "id": "wreckers_strand_wreckers_hut",
-  "name": "The Wreckers' Hut",
-  "description": "Not the name they use. There is a good fire and a very good view of the bar.",
-  "area": "coast_wreckers_strand",
-  "kind": "camp",
-  "descriptionKey": "int_house",
-  "travelMinutes": 6,
-  "tags": [],
-  "map": {
-    "width": "9",
-    "height": "7",
-    "palette": "int_timber"
-  },
-  "position": {
-    "x": 25,
-    "y": 3
+  "@prefab": "world_points_f_nterest_int_house_2",
+  "params": {
+    "id": "wreckers_strand_wreckers_hut",
+    "name": "The Wreckers' Hut",
+    "description": "Not the name they use. There is a good fire and a very good view of the bar.",
+    "area": "coast_wreckers_strand",
+    "position": {
+      "x": 25,
+      "y": 3
+    },
+    "variant": "v2"
   }
 }

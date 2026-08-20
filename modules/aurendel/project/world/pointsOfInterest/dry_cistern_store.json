@@ -1,24 +1,14 @@
 {
-  "id": "dry_cistern_store",
-  "name": "The Cistern Store",
-  "description": "Water at a price that would be criminal anywhere else.",
-  "area": "glasslands_dry_cistern",
-  "kind": "market",
-  "descriptionKey": "int_store",
-  "travelMinutes": 3,
-  "tags": [
-    "shop"
-  ],
-  "services": [
-    "market"
-  ],
-  "map": {
-    "width": "9",
-    "height": "7",
-    "palette": "int_shop"
-  },
-  "position": {
-    "x": 15,
-    "y": 3
+  "@prefab": "world_points_f_nterest_int_store_2",
+  "params": {
+    "id": "dry_cistern_store",
+    "name": "The Cistern Store",
+    "description": "Water at a price that would be criminal anywhere else.",
+    "area": "glasslands_dry_cistern",
+    "position": {
+      "x": 15,
+      "y": 3
+    },
+    "variant": "v4"
   }
 }

@@ -1,17 +1,11 @@
 {
-  "id": "steppe_dry_well",
-  "name": "The Dry Well",
-  "description": "The fourth well, which nobody counts, dry for two hundred years, and with a dressed doorway at the bottom of it.",
-  "biome": "dungeon_delved",
-  "roomCount": "9",
-  "depth": "2",
-  "algorithm": "rooms",
-  "lockedDoorChance": 0,
-  "doorGates": [],
-  "rollEncounters": false,
-  "safeEntrance": true,
-  "width": "69",
-  "height": "69",
-  "corridorLength": "3d3",
-  "bossTable": "the_dry_river"
+  "@prefab": "world_dungeons_entry_4",
+  "params": {
+    "id": "steppe_dry_well",
+    "name": "The Dry Well",
+    "description": "The fourth well, which nobody counts, dry for two hundred years, and with a dressed doorway at the bottom of it.",
+    "biome": "dungeon_delved",
+    "bossTable": "the_dry_river",
+    "variant": "v2"
+  }
 }

@@ -1,0 +1,78 @@
+{
+  "id": "narrative_quests_entry_3",
+  "label": "narrative_quests_entry_3",
+  "collection": "narrative.quests",
+  "params": [
+    {
+      "key": "id",
+      "kind": "string"
+    },
+    {
+      "key": "name",
+      "kind": "string"
+    },
+    {
+      "key": "description",
+      "kind": "text"
+    },
+    {
+      "key": "tags",
+      "kind": "string"
+    },
+    {
+      "key": "objectives",
+      "kind": "string"
+    },
+    {
+      "key": "unlocks",
+      "kind": "string"
+    },
+    {
+      "key": "rewards",
+      "kind": "string"
+    },
+    {
+      "key": "requires",
+      "kind": "string"
+    },
+    {
+      "key": "onComplete",
+      "kind": "string"
+    },
+    {
+      "key": "variant",
+      "kind": "enum",
+      "options": [
+        "v1",
+        "v2",
+        "v3"
+      ]
+    }
+  ],
+  "template": {
+    "id": "{{id}}",
+    "name": "{{name}}",
+    "description": "{{description}}",
+    "autoStart": false,
+    "ordered": {
+      "@lookup": [
+        "narrative_quests_entry_3_variant",
+        "{{variant}}",
+        "ordered"
+      ]
+    },
+    "tags": "{{tags}}",
+    "objectives": "{{objectives}}",
+    "stages": {
+      "@lookup": [
+        "narrative_quests_entry_3_variant",
+        "{{variant}}",
+        "stages"
+      ]
+    },
+    "unlocks": "{{unlocks}}",
+    "rewards": "{{rewards}}",
+    "requires": "{{requires}}",
+    "onComplete": "{{onComplete}}"
+  }
+}

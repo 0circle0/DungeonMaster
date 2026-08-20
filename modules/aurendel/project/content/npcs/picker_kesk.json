@@ -1,49 +1,38 @@
 {
-  "id": "picker_kesk",
-  "name": "Kesk of the Beds",
-  "description": "Two hundred years of pickers before her held the line at the fifth gallery. She has been driven back to the second in one season and does the arithmetic out loud.",
-  "disposition": 8,
-  "gullibility": 0.3,
-  "memorySpan": 250,
-  "offersQuests": [
-    "rot_the_second_gallery"
-  ],
-  "caresAbout": [
-    "beds_saved",
-    "rot_spread",
-    "lantern_lit"
-  ],
-  "reactions": [],
-  "faction": "the_pickers",
-  "dialogue": "rot_kesk_talk",
-  "home": "mycelt_the_beds",
-  "shop": {
-    "lootTable": "deep_stock",
-    "buysTags": [
-      "treasure",
-      "material"
+  "@prefab": "content_npcs_entry",
+  "params": {
+    "id": "picker_kesk",
+    "name": "Kesk of the Beds",
+    "description": "Two hundred years of pickers before her held the line at the fifth gallery. She has been driven back to the second in one season and does the arithmetic out loud.",
+    "disposition": 8,
+    "gullibility": 0.3,
+    "memorySpan": 250,
+    "offersQuests": [
+      "rot_the_second_gallery"
     ],
-    "priceMultiplier": 1.15,
-    "requires": {
-      "factions": [
-        {
-          "faction": "the_pickers",
-          "minStanding": 10
-        }
-      ]
+    "caresAbout": [
+      "beds_saved",
+      "rot_spread",
+      "lantern_lit"
+    ],
+    "faction": "the_pickers",
+    "dialogue": "rot_kesk_talk",
+    "home": "mycelt_the_beds",
+    "shop": {
+      "lootTable": "deep_stock",
+      "buysTags": [
+        "treasure",
+        "material"
+      ],
+      "priceMultiplier": 1.15,
+      "requires": {
+        "factions": [
+          {
+            "faction": "the_pickers",
+            "minStanding": 10
+          }
+        ]
+      }
     }
-  },
-  "temperament": {
-    "roamRadius": 0,
-    "wanderChance": 0,
-    "speeds": {
-      "wander": 0
-    },
-    "investigates": [],
-    "notices": [
-      "hostile",
-      "neutral",
-      "ally"
-    ]
   }
 }

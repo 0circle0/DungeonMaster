@@ -1,24 +1,14 @@
 {
-  "id": "counting_the_ledger",
-  "name": "The Ledger",
-  "description": "A chophouse with rooms, where the food is incidental to the conversations.",
-  "area": "sarnport_countinghouse",
-  "kind": "settlement",
-  "descriptionKey": "int_inn",
-  "travelMinutes": 3,
-  "tags": [
-    "inn"
-  ],
-  "services": [
-    "inn"
-  ],
-  "map": {
-    "width": "11",
-    "height": "9",
-    "palette": "int_timber"
-  },
-  "position": {
-    "x": 41,
-    "y": 27
+  "@prefab": "world_points_f_nterest_int_inn_2",
+  "params": {
+    "id": "counting_the_ledger",
+    "name": "The Ledger",
+    "description": "A chophouse with rooms, where the food is incidental to the conversations.",
+    "area": "sarnport_countinghouse",
+    "position": {
+      "x": 41,
+      "y": 27
+    },
+    "variant": "v2"
   }
 }

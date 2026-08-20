@@ -1,20 +1,15 @@
 {
-  "id": "ninth_course_salt",
-  "name": "A Measure of the Ninth",
-  "description": "It draws water out of the air in a place that has none.",
-  "kind": "treasure",
-  "value": 0,
-  "weight": 0,
-  "tags": [
-    "clue",
-    "proof"
-  ],
-  "onUse": [
-    {
-      "learnLore": {
-        "entry": "glass_courses_taste"
+  "@prefab": "content_items_entry_9",
+  "params": {
+    "id": "ninth_course_salt",
+    "name": "A Measure of the Ninth",
+    "description": "It draws water out of the air in a place that has none.",
+    "onUse": [
+      {
+        "learnLore": {
+          "entry": "glass_courses_taste"
+        }
       }
-    }
-  ],
-  "consumedOnUse": false
+    ]
+  }
 }

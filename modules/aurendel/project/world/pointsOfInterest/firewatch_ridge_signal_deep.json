@@ -1,39 +1,31 @@
 {
-  "id": "firewatch_ridge_signal_deep",
-  "name": "The Signal Deep",
-  "description": "Under the seventh tower there is a shaft, and it was there before the tower, and the tower was put on top of it deliberately.",
-  "area": "ember_firewatch_ridge",
-  "kind": "dungeonEntrance",
-  "descriptionKey": "generic_dungeon_mouth",
-  "travelMinutes": 13,
-  "tags": [
-    "secret",
-    "dungeon"
-  ],
-  "hidden": true,
-  "discover": {
-    "skill": "lore",
-    "difficulty": 14
-  },
-  "dungeon": "ember_signal_deep",
-  "position": {
-    "x": 25,
-    "y": 3
-  },
-  "triggers": [
-    {
-      "id": "throat_in_the_signal_deep",
-      "mode": "once",
-      "on": "enter",
-      "description": "Nine hundred years of readings, cut into the wall in order.",
-      "effects": [
-        {
-          "setFlag": {
-            "flag": "throat_readings_found",
-            "value": true
+  "@prefab": "world_points_f_nterest_generic_dungeon_mouth_2",
+  "params": {
+    "id": "firewatch_ridge_signal_deep",
+    "name": "The Signal Deep",
+    "description": "Under the seventh tower there is a shaft, and it was there before the tower, and the tower was put on top of it deliberately.",
+    "area": "ember_firewatch_ridge",
+    "travelMinutes": 13,
+    "discover": {
+      "skill": "lore",
+      "difficulty": 14
+    },
+    "dungeon": "ember_signal_deep",
+    "triggers": [
+      {
+        "id": "throat_in_the_signal_deep",
+        "mode": "once",
+        "on": "enter",
+        "description": "Nine hundred years of readings, cut into the wall in order.",
+        "effects": [
+          {
+            "setFlag": {
+              "flag": "throat_readings_found",
+              "value": true
+            }
           }
-        }
-      ]
-    }
-  ]
+        ]
+      }
+    ]
+  }
 }

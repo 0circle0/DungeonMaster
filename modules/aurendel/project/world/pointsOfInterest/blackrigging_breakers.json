@@ -1,24 +1,14 @@
 {
-  "id": "blackrigging_breakers",
-  "name": "The Breakers' Yard",
-  "description": "Takes ships apart and sells them by the piece, which is most of the town's economy.",
-  "area": "isles_blackrigging",
-  "kind": "market",
-  "descriptionKey": "int_workshop",
-  "travelMinutes": 3,
-  "tags": [
-    "shop"
-  ],
-  "services": [
-    "market"
-  ],
-  "map": {
-    "width": "19",
-    "height": "13",
-    "palette": "int_shop"
-  },
-  "position": {
-    "x": 28,
-    "y": 3
+  "@prefab": "world_points_f_nterest_int_workshop_2",
+  "params": {
+    "id": "blackrigging_breakers",
+    "name": "The Breakers' Yard",
+    "description": "Takes ships apart and sells them by the piece, which is most of the town's economy.",
+    "area": "isles_blackrigging",
+    "position": {
+      "x": 28,
+      "y": 3
+    },
+    "variant": "v2"
   }
 }

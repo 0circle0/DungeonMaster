@@ -1,24 +1,9 @@
 {
-  "id": "intellect",
-  "name": "Intellect",
-  "abbrev": "INT",
-  "description": "Learning, reasoning, and the memory to hold a long thought.",
-  "min": 8,
-  "max": 20,
-  "default": 10,
-  "modifier": {
-    "floor": {
-      "div": [
-        {
-          "sub": [
-            {
-              "ref": "value"
-            },
-            10
-          ]
-        },
-        2
-      ]
-    }
+  "@prefab": "rules_attributes_entry",
+  "params": {
+    "id": "intellect",
+    "name": "Intellect",
+    "description": "Learning, reasoning, and the memory to hold a long thought.",
+    "abbrev": "INT"
   }
 }

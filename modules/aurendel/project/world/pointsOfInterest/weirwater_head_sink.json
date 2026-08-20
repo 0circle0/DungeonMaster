@@ -1,17 +1,12 @@
 {
-  "id": "weirwater_head_sink",
-  "name": "The Sink",
-  "description": "Follows the water in. It has been followed for two miles and somebody did not come back from the third.",
-  "area": "skarnspine_weirwater_head",
-  "kind": "dungeonEntrance",
-  "descriptionKey": "generic_dungeon_mouth",
-  "travelMinutes": 15,
-  "tags": [
-    "dungeon"
-  ],
-  "dungeon": "skarn_the_sink",
-  "position": {
-    "x": 25,
-    "y": 3
+  "@prefab": "world_points_f_nterest_generic_dungeon_mouth_3",
+  "params": {
+    "id": "weirwater_head_sink",
+    "name": "The Sink",
+    "description": "Follows the water in. It has been followed for two miles and somebody did not come back from the third.",
+    "area": "skarnspine_weirwater_head",
+    "travelMinutes": 15,
+    "dungeon": "skarn_the_sink",
+    "variant": "v1"
   }
 }

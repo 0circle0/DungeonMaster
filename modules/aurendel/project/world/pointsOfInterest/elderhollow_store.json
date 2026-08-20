@@ -1,24 +1,14 @@
 {
-  "id": "elderhollow_store",
-  "name": "Hask's",
-  "description": "Sells what the forest cannot provide, which is salt, iron, and news.",
-  "area": "duskwood_elderhollow",
-  "kind": "market",
-  "descriptionKey": "int_store",
-  "travelMinutes": 3,
-  "tags": [
-    "shop"
-  ],
-  "services": [
-    "market"
-  ],
-  "map": {
-    "width": "11",
-    "height": "9",
-    "palette": "int_shop"
-  },
-  "position": {
-    "x": 37,
-    "y": 23
+  "@prefab": "world_points_f_nterest_int_store_2",
+  "params": {
+    "id": "elderhollow_store",
+    "name": "Hask's",
+    "description": "Sells what the forest cannot provide, which is salt, iron, and news.",
+    "area": "duskwood_elderhollow",
+    "position": {
+      "x": 37,
+      "y": 23
+    },
+    "variant": "v2"
   }
 }

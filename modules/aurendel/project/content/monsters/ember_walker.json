@@ -1,52 +1,28 @@
 {
-  "id": "ember_walker",
-  "name": "Esk, who Walks the Tube",
-  "description": "Forty years of crawling up a hot tube builds a particular sort of person.",
-  "level": 6,
-  "xp": 0,
-  "attributes": {
-    "might": 13,
-    "agility": 15,
-    "endurance": 15,
-    "intellect": 12,
-    "instinct": 15,
-    "presence": 10
-  },
-  "abilities": [
-    "strike"
-  ],
-  "behaviour": [
-    {
-      "priority": 0,
-      "use": "strike"
-    }
-  ],
-  "faction": "the_vent_readers",
-  "creatureType": "humanoid",
-  "size": "medium",
-  "descriptors": [
-    "a soot-black"
-  ],
-  "conditionalLoot": [],
-  "loot": "ember_rhythm_carried",
-  "resourceOverrides": {
-    "hp": 34
-  },
-  "temperament": {
-    "roamRadius": 24,
-    "investigateRadius": 70,
-    "leashRadius": 100,
-    "wanderChance": 0.4,
-    "disengageTurns": 2,
-    "investigates": [
-      "sight",
-      "hearing",
-      "tracks",
-      "smell"
+  "@prefab": "content_monsters_entry",
+  "params": {
+    "id": "ember_walker",
+    "name": "Esk, who Walks the Tube",
+    "description": "Forty years of crawling up a hot tube builds a particular sort of person.",
+    "attributes": {
+      "might": 13,
+      "agility": 15,
+      "endurance": 15,
+      "intellect": 12,
+      "instinct": 15,
+      "presence": 10
+    },
+    "abilities": [
+      "strike"
     ],
-    "notices": [
-      "hostile",
-      "neutral"
-    ]
+    "faction": "the_vent_readers",
+    "descriptors": [
+      "a soot-black"
+    ],
+    "loot": "ember_rhythm_carried",
+    "resourceOverrides": {
+      "hp": 34
+    },
+    "variant": "v6"
   }
 }

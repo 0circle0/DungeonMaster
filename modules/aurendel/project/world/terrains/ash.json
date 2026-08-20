@@ -1,17 +1,14 @@
 {
-  "id": "ash",
-  "name": "Ash",
-  "description": "Grey drift that takes a footprint and keeps it.",
-  "glyph": "a",
-  "color": "gray",
-  "passable": true,
-  "opaque": false,
-  "moveCost": 1.5,
-  "tags": [
-    "soft"
-  ],
-  "marks": {
-    "tracks": 1,
-    "smell": 1
+  "@prefab": "world_terrains_entry",
+  "params": {
+    "id": "ash",
+    "name": "Ash",
+    "description": "Grey drift that takes a footprint and keeps it.",
+    "glyph": "a",
+    "color": "gray",
+    "tags": [
+      "soft"
+    ],
+    "variant": "v2"
   }
 }

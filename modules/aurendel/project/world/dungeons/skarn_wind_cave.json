@@ -1,21 +1,19 @@
 {
-  "id": "skarn_wind_cave",
-  "name": "The Wind Cave",
-  "description": "Breathes out at dawn and in at dusk, which means it connects to something with a great deal of air in it.",
-  "biome": "dungeon_cave",
-  "roomCount": "12",
-  "depth": "3",
-  "algorithm": "caverns",
-  "lockedDoorChance": 0,
-  "doorGates": [],
-  "rollEncounters": false,
-  "safeEntrance": true,
-  "caverns": {
-    "fill": 0.44,
-    "smoothingPasses": 5,
-    "birthThreshold": 5
-  },
-  "width": "47",
-  "height": "47",
-  "bossTable": "skarn_wind_boss"
+  "@prefab": "world_dungeons_entry",
+  "params": {
+    "id": "skarn_wind_cave",
+    "name": "The Wind Cave",
+    "description": "Breathes out at dawn and in at dusk, which means it connects to something with a great deal of air in it.",
+    "biome": "dungeon_cave",
+    "roomCount": "12",
+    "depth": "3",
+    "caverns": {
+      "fill": 0.44,
+      "smoothingPasses": 5,
+      "birthThreshold": 5
+    },
+    "width": "47",
+    "height": "47",
+    "bossTable": "skarn_wind_boss"
+  }
 }

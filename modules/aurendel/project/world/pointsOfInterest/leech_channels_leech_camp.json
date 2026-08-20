@@ -1,19 +1,14 @@
 {
-  "id": "leech_channels_leech_camp",
-  "name": "The Leech Camp",
-  "description": "They are farmed here and sold to every apothecary in the south, which is a living.",
-  "area": "thornmere_leech_channels",
-  "kind": "camp",
-  "descriptionKey": "int_house",
-  "travelMinutes": 6,
-  "tags": [],
-  "map": {
-    "width": "9",
-    "height": "7",
-    "palette": "int_timber"
-  },
-  "position": {
-    "x": 14,
-    "y": 3
+  "@prefab": "world_points_f_nterest_int_house_2",
+  "params": {
+    "id": "leech_channels_leech_camp",
+    "name": "The Leech Camp",
+    "description": "They are farmed here and sold to every apothecary in the south, which is a living.",
+    "area": "thornmere_leech_channels",
+    "position": {
+      "x": 14,
+      "y": 3
+    },
+    "variant": "v2"
   }
 }

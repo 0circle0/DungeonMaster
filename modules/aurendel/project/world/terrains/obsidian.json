@@ -1,18 +1,11 @@
 {
-  "id": "obsidian",
-  "name": "Obsidian Shelf",
-  "description": "Black glass in sheets, and every edge of it is an edge.",
-  "glyph": "x",
-  "color": "gray",
-  "passable": true,
-  "opaque": false,
-  "moveCost": 1,
-  "tags": [
-    "stone"
-  ],
-  "marks": {
-    "tracks": 0,
-    "smell": 0.6
-  },
-  "providesCover": "half"
+  "@prefab": "world_terrains_entry_4",
+  "params": {
+    "id": "obsidian",
+    "name": "Obsidian Shelf",
+    "description": "Black glass in sheets, and every edge of it is an edge.",
+    "glyph": "x",
+    "moveCost": 1,
+    "variant": "v3"
+  }
 }

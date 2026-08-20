@@ -1,21 +1,15 @@
 {
-  "id": "smoking_road_lost_cart",
-  "name": "The Lost Cart",
-  "description": "Off the line of posts by forty yards, and it has been there since before the posts.",
-  "area": "ember_smoking_road",
-  "kind": "ruin",
-  "descriptionKey": "generic_ruin",
-  "travelMinutes": 8,
-  "tags": [
-    "ruin"
-  ],
-  "map": {
-    "width": "9",
-    "height": "7",
-    "palette": "int_cave"
-  },
-  "position": {
-    "x": 25,
-    "y": 3
+  "@prefab": "world_points_f_nterest_generic_ruin_3",
+  "params": {
+    "id": "smoking_road_lost_cart",
+    "name": "The Lost Cart",
+    "description": "Off the line of posts by forty yards, and it has been there since before the posts.",
+    "area": "ember_smoking_road",
+    "map": {
+      "width": "9",
+      "height": "7",
+      "palette": "int_cave"
+    },
+    "variant": "v4"
   }
 }

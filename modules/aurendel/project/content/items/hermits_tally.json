@@ -1,14 +1,11 @@
 {
-  "id": "hermits_tally",
-  "name": "The Hermit's Tally",
-  "description": "The door post itself, cut out and carried off: ninety years of fives, and the last ones not weathered.",
-  "kind": "key",
-  "value": 0,
-  "weight": 0,
-  "tags": [
-    "keepsake"
-  ],
-  "extra": {
-    "heldBy": "wader_pell"
+  "@prefab": "content_items_entry_8",
+  "params": {
+    "id": "hermits_tally",
+    "name": "The Hermit's Tally",
+    "description": "The door post itself, cut out and carried off: ninety years of fives, and the last ones not weathered.",
+    "extra": {
+      "heldBy": "wader_pell"
+    }
   }
 }

@@ -1,0 +1,65 @@
+{
+  "id": "world_dungeons_entry_5",
+  "label": "world_dungeons_entry_5",
+  "collection": "world.dungeons",
+  "params": [
+    {
+      "key": "id",
+      "kind": "string"
+    },
+    {
+      "key": "name",
+      "kind": "string"
+    },
+    {
+      "key": "description",
+      "kind": "text"
+    },
+    {
+      "key": "biome",
+      "kind": "string"
+    },
+    {
+      "key": "roomCount",
+      "kind": "string"
+    },
+    {
+      "key": "depth",
+      "kind": "string"
+    },
+    {
+      "key": "branchiness",
+      "kind": "string"
+    },
+    {
+      "key": "width",
+      "kind": "string"
+    },
+    {
+      "key": "height",
+      "kind": "string"
+    },
+    {
+      "key": "bossTable",
+      "kind": "string"
+    }
+  ],
+  "template": {
+    "id": "{{id}}",
+    "name": "{{name}}",
+    "description": "{{description}}",
+    "biome": "{{biome}}",
+    "roomCount": "{{roomCount}}",
+    "depth": "{{depth}}",
+    "algorithm": "rooms",
+    "lockedDoorChance": 0,
+    "doorGates": [],
+    "rollEncounters": false,
+    "safeEntrance": true,
+    "branchiness": "{{branchiness}}",
+    "corridorLength": "3d3",
+    "width": "{{width}}",
+    "height": "{{height}}",
+    "bossTable": "{{bossTable}}"
+  }
+}

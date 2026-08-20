@@ -1,18 +1,11 @@
 {
-  "id": "thicket",
-  "name": "Thicket",
-  "description": "Young growth packed tight. Slow, and blind.",
-  "glyph": "t",
-  "color": "green",
-  "passable": true,
-  "opaque": true,
-  "moveCost": 3,
-  "tags": [
-    "soft"
-  ],
-  "marks": {
-    "tracks": 1,
-    "smell": 1
-  },
-  "providesCover": "half"
+  "@prefab": "world_terrains_entry_4",
+  "params": {
+    "id": "thicket",
+    "name": "Thicket",
+    "description": "Young growth packed tight. Slow, and blind.",
+    "glyph": "t",
+    "moveCost": 3,
+    "variant": "v1"
+  }
 }

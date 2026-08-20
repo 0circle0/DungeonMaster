@@ -1,14 +1,11 @@
 {
-  "id": "shaft_warrant",
-  "name": "The Warrant for the Shoring",
-  "description": "A timber order, signed and sealed, for a working on ground that has never been worked, dated in a year nobody uses any more.",
-  "kind": "key",
-  "value": 0,
-  "weight": 0,
-  "tags": [
-    "keepsake"
-  ],
-  "extra": {
-    "heldBy": "well_watcher_ondir"
+  "@prefab": "content_items_entry_8",
+  "params": {
+    "id": "shaft_warrant",
+    "name": "The Warrant for the Shoring",
+    "description": "A timber order, signed and sealed, for a working on ground that has never been worked, dated in a year nobody uses any more.",
+    "extra": {
+      "heldBy": "well_watcher_ondir"
+    }
   }
 }

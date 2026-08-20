@@ -1,63 +1,41 @@
 {
-  "id": "slag_crawler",
-  "name": "Slag Crawler",
-  "description": "Cooled enough to move and not enough to touch.",
-  "level": 4,
-  "xp": 170,
-  "attributes": {
-    "might": 16,
-    "agility": 9,
-    "endurance": 16,
-    "intellect": 4,
-    "instinct": 10,
-    "presence": 8
-  },
-  "abilities": [
-    "cinder_lash",
-    "stone_fist"
-  ],
-  "behaviour": [
-    {
-      "priority": 0,
-      "use": "cinder_lash"
-    }
-  ],
-  "faction": "the_unsealed",
-  "creatureType": "elemental",
-  "size": "large",
-  "descriptors": [
-    "a glowing",
-    "a cracked"
-  ],
-  "conditionalLoot": [],
-  "loot": "ember_scraps",
-  "damageInteractions": [
-    {
-      "damageType": "fire",
-      "multiplier": 0
+  "@prefab": "content_monsters_entry_4",
+  "params": {
+    "id": "slag_crawler",
+    "name": "Slag Crawler",
+    "description": "Cooled enough to move and not enough to touch.",
+    "level": 4,
+    "xp": 170,
+    "attributes": {
+      "might": 16,
+      "agility": 9,
+      "endurance": 16,
+      "intellect": 4,
+      "instinct": 10,
+      "presence": 8
     },
-    {
-      "damageType": "cold",
-      "multiplier": 2
-    }
-  ],
-  "conditionImmunities": [
-    "burning",
-    "poisoned"
-  ],
-  "resourceOverrides": {
-    "hp": 38
-  },
-  "temperament": {
-    "roamRadius": 24,
-    "investigateRadius": 60,
-    "leashRadius": 80,
-    "wanderChance": 0.45,
-    "disengageTurns": 2,
-    "investigates": [
-      "sight",
-      "hearing"
+    "abilities": [
+      "cinder_lash",
+      "stone_fist"
     ],
-    "followsTrails": false
+    "behaviour": [
+      {
+        "priority": 0,
+        "use": "cinder_lash"
+      }
+    ],
+    "descriptors": [
+      "a glowing",
+      "a cracked"
+    ],
+    "loot": "ember_scraps",
+    "conditionImmunities": [
+      "burning",
+      "poisoned"
+    ],
+    "resourceOverrides": {
+      "hp": 38
+    },
+    "variant": "v2"
   }
 }

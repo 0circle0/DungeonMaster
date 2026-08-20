@@ -1,14 +1,11 @@
 {
-  "id": "burners_core",
-  "name": "The Burner's Core",
-  "description": "A hand-span of trunk from the new treeline, bored out. Forty rings in eleven years of wood, running the wrong way.",
-  "kind": "key",
-  "value": 0,
-  "weight": 0,
-  "tags": [
-    "keepsake"
-  ],
-  "extra": {
-    "heldBy": "charcoal_burner_tenn"
+  "@prefab": "content_items_entry_8",
+  "params": {
+    "id": "burners_core",
+    "name": "The Burner's Core",
+    "description": "A hand-span of trunk from the new treeline, bored out. Forty rings in eleven years of wood, running the wrong way.",
+    "extra": {
+      "heldBy": "charcoal_burner_tenn"
+    }
   }
 }
