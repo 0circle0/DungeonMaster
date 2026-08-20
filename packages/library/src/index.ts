@@ -20,7 +20,7 @@ export { gzip, gunzip, gzipJson, gunzipJson, isGzip, canCompress } from './gzip.
 export type { Codec } from './gzip.js';
 
 export { openLibrary, hasStorage, closeLibrary, DB_NAME, DB_VERSION } from './db.js';
-export type { WorldMeta } from './db.js';
+export type { WorldMeta, FileRecord } from './db.js';
 
 export {
   listWorlds,
@@ -29,16 +29,20 @@ export {
   createWorld,
   deleteWorld,
   renameWorld,
-  writeDraft,
-  readDraft,
-  clearDraft,
+  // The studio's storage: a world is its project files, and a save writes the
+  // ones that changed.
+  readWorldFiles,
+  writeWorldFiles,
+  createWorldFromFiles,
+  factsFor,
   rememberLastOpened,
   lastOpened,
 } from './worlds.js';
+export type { FileChange, WorldFacts } from './worlds.js';
 
-export { downloadWorld, downloadEnvelope, downloadProject, readWorldFile } from './files.js';
+export { downloadProject, readWorldFile, readProjectFile, isProjectBundle } from './files.js';
 
-export { fetchCatalog, fetchExampleEnvelope, EMPTY_CATALOG, CONTENT_BASE } from './catalog.js';
+export { fetchCatalog, fetchExampleEnvelope, fetchExampleProject, EMPTY_CATALOG, CONTENT_BASE } from './catalog.js';
 export type { Catalog, CatalogEntry } from './catalog.js';
 
 export { resolveExtendsFor } from './extends.js';

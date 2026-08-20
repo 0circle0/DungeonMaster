@@ -75,17 +75,30 @@ function checkArtifacts(built: Map<string, BuiltModule>): string[] {
 
     for (const file of readdirSync(dir)) {
       if (!file.endsWith('.json.gz')) continue;
-      const id = file.slice(0, -'.json.gz'.length);
+
+      // Two artifacts per world, and each app carries the one it can use: the
+      // studio a project tree, the player a compiled module.
+      const project = file.endsWith('.project.json.gz');
+      const id = file.slice(0, -(project ? '.project.json.gz' : '.json.gz').length);
       const expected = [...built.values()].find((m) => m.id === id);
       if (!expected) {
         problems.push(`apps/${app}/public/content/${file} — nothing in the build produces this`);
         continue;
       }
+
+      const want = project
+        ? (expected.project ? gunzipSync(expected.project).toString('utf8') : null)
+        : expected.minified;
+      if (want === null) {
+        problems.push(`apps/${app}/public/content/${file} — the build produces no project for ${id}`);
+        continue;
+      }
+
       const actual = gunzipSync(readFileSync(join(dir, file))).toString('utf8');
-      if (actual !== expected.minified) {
+      if (actual !== want) {
         problems.push(
           `apps/${app}/public/content/${file} is stale ` +
-          `(${actual.length} bytes on disk, ${expected.minified.length} rebuilt)`,
+          `(${actual.length} bytes on disk, ${want.length} rebuilt)`,
         );
       }
     }

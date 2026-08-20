@@ -17,18 +17,37 @@
 
 import { useCallback, useEffect, useState } from 'react';
 import {
-  fetchCatalog, fetchExampleEnvelope, EMPTY_CATALOG,
-  listWorlds, readWorld, createWorld, deleteWorld,
-  readWorldFile, hasStorage, estimateStorage, envelopeFromDoc,
+  fetchCatalog, fetchExampleProject, EMPTY_CATALOG,
+  listWorlds, readWorldFiles, createWorldFromFiles, deleteWorld, factsFor,
+  readProjectFile, hasStorage, estimateStorage, NO_AUTHORING,
 } from '@dm/library';
 import type {
-  Catalog, CatalogEntry, WorldMeta, WorldEnvelope, StorageEstimate, WorldAuthoring,
+  Catalog, CatalogEntry, WorldMeta, StorageEstimate, WorldAuthoring,
 } from '@dm/library';
+import { bundleModule, unbundleModule } from '@dm/module';
+import { snapshotFrom } from './projectDiff';
+import type { ProjectSnapshot } from './projectDiff';
 
+/**
+ * A world opened from the store: its files, joined.
+ *
+ * No draft. A draft existed because a world was one blob that had to be either
+ * valid or set aside, so that the library always held something loadable. Files
+ * have no second version to hold — an entry with a half-typed reference is a
+ * file like any other and the world opens with a diagnostic against it.
+ */
 export interface LoadedWorld {
   readonly meta: WorldMeta;
-  readonly envelope: WorldEnvelope;
-  readonly draft: { savedAt: number; doc: Record<string, unknown> } | null;
+  readonly doc: Record<string, unknown>;
+  readonly authoring: WorldAuthoring;
+  /** Anything the project could not say — a bad file names itself. */
+  readonly issues: readonly string[];
+  /**
+   * The files as they were read, described. Without it the first save would
+   * compare against nothing and rewrite the whole world with the bytes it
+   * already had.
+   */
+  readonly snapshot: ProjectSnapshot;
 }
 
 export interface EditorLibraryApi {
@@ -87,13 +106,30 @@ export function useEditorLibrary(): EditorLibraryApi {
     return () => { live = false; };
   }, [refresh]);
 
+  /**
+   * Take a project into the library, once.
+   *
+   * The files land as they arrived — recipes still recipes, prefabs still
+   * prefabs — and are never joined on the way in. Joining happens when the world
+   * is opened, and what is stored is what the author was given.
+   */
   const store = useCallback(async (
-    envelope: WorldEnvelope,
-    origin: WorldMeta['origin'],
-    originId: string | null,
+    files: Record<string, string>,
+    seed: { title: string; filename: string; origin: WorldMeta['origin']; originId: string | null },
   ): Promise<WorldMeta | null> => {
     try {
-      const meta = await createWorld(envelope, origin, originId);
+      const { document, issues } = unbundleModule(files);
+      if (!document) {
+        setError(issues[0]?.message ?? 'that project could not be read');
+        return null;
+      }
+      const meta = await createWorldFromFiles(files, {
+        title: seed.title,
+        filename: seed.filename,
+        facts: factsFor(document),
+        origin: seed.origin,
+        originId: seed.originId,
+      });
       await refresh();
       setError(null);
       return meta;
@@ -104,27 +140,50 @@ export function useEditorLibrary(): EditorLibraryApi {
   }, [refresh]);
 
   const addExample = useCallback(async (id: string): Promise<WorldMeta | null> => {
-    const envelope = await fetchExampleEnvelope(id);
-    if (!envelope) { setError(`“${id}” is not available on this server.`); return null; }
-    return store(envelope, 'example', id);
-  }, [store]);
+    const files = await fetchExampleProject(id);
+    if (!files) { setError(`“${id}” is not available on this server.`); return null; }
+    const entry = catalog.modules.find((module) => module.id === id);
+    return store(files, {
+      title: entry?.title ?? id,
+      filename: `${id}.module.json`,
+      origin: 'example',
+      originId: id,
+    });
+  }, [store, catalog]);
 
   const importFile = useCallback(async (file: File): Promise<WorldMeta | null> => {
     try {
-      return await store(await readWorldFile(file), 'imported', null);
+      const files = await readProjectFile(file);
+      const named = file.name.replace(/\.project\.json(\.gz)?$/, '');
+      return await store(files, {
+        title: named,
+        filename: `${named}.module.json`,
+        origin: 'imported',
+        originId: null,
+      });
     } catch (err) {
       setError((err as Error).message);
       return null;
     }
   }, [store]);
 
+  /**
+   * A world the studio itself makes — a template, or a ruleset composed into
+   * one. It is split here rather than imported: nothing arrives from outside, so
+   * there is a document and it becomes the project it will be edited as.
+   */
   const createFrom = useCallback(async (
     doc: Record<string, unknown>,
     filename: string,
     authoring: WorldAuthoring | null = null,
   ): Promise<WorldMeta | null> => {
-    const envelope = { ...envelopeFromDoc(doc, filename, authoring), filename };
-    return store(envelope, 'created', null);
+    const meta = (doc['meta'] ?? {}) as Record<string, unknown>;
+    return store(bundleModule(doc, authoring ?? NO_AUTHORING).files, {
+      title: typeof meta['title'] === 'string' && meta['title'] ? meta['title'] : filename,
+      filename,
+      origin: 'created',
+      originId: null,
+    });
   }, [store]);
 
   const remove = useCallback(async (key: string): Promise<void> => {
@@ -132,10 +191,16 @@ export function useEditorLibrary(): EditorLibraryApi {
     await refresh();
   }, [refresh]);
 
+  /**
+   * The document behind an example, for composing a new world out of it.
+   *
+   * Joined here and thrown away: nothing is stored, so this is the one place the
+   * studio wants a document rather than a project.
+   */
   const exampleDoc = useCallback(async (id: string): Promise<Record<string, unknown> | null> => {
-    const envelope = await fetchExampleEnvelope(id);
-    if (!envelope) { setError(`“${id}” is not available on this server.`); return null; }
-    return envelope.doc;
+    const files = await fetchExampleProject(id);
+    if (!files) { setError(`“${id}” is not available on this server.`); return null; }
+    return unbundleModule(files).document;
   }, []);
 
   const taken = new Set(worlds.map((w) => w.originId).filter((id): id is string => id !== null));
@@ -148,10 +213,28 @@ export function useEditorLibrary(): EditorLibraryApi {
   };
 }
 
-/** One world, with whatever draft was left behind for it. */
+/**
+ * One world, joined from its files.
+ *
+ * This is the only place a project becomes a document, and it happens when a
+ * world is opened rather than on every save. Parsing all of Aurendel's files is
+ * about as much work as parsing `module.json` was, because it is the same bytes.
+ */
 export async function loadWorld(key: string): Promise<LoadedWorld | null> {
-  const found = await readWorld(key);
-  if (!found) return null;
-  const { readDraft } = await import('@dm/library');
-  return { meta: found.meta, envelope: found.envelope, draft: await readDraft(key) };
+  const [{ listWorlds: list }, files] = await Promise.all([
+    import('@dm/library'),
+    readWorldFiles(key),
+  ]);
+  const meta = (await list()).find((world) => world.key === key);
+  if (!meta || Object.keys(files).length === 0) return null;
+
+  const { document, authoring, issues } = unbundleModule(files);
+  if (!document) return null;
+  return {
+    meta,
+    doc: document,
+    authoring,
+    issues: issues.map((issue) => `${issue.file}: ${issue.message}`),
+    snapshot: snapshotFrom(document, authoring, files),
+  };
 }

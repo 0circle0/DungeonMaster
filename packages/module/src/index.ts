@@ -14,10 +14,17 @@ export {
   isAuthoringFile,
   AUTHORING_PATHS,
   PROJECT_FORMAT,
+  // The halves of a split, so the studio can recompute what a save needs
+  // (names and order) without serializing thirteen megabytes of entries.
+  manifestFor,
+  shellFor,
+  entryFileName,
+  serializeProjectValue,
+  entryFileText,
 } from './project.js';
 
-export { bundleModule, unbundleModule, PROJECT_MANIFEST } from './bundle.js';
-export type { BundleIssue } from './bundle.js';
+export { bundleModule, unbundleModule, liftMaps, authoringFromFiles, PROJECT_MANIFEST } from './bundle.js';
+export type { BundleIssue, BundleAuthoring } from './bundle.js';
 
 // Prefabs: an entry described once and placed many times. Pure — the studio
 // expands and previews in the browser.
@@ -40,6 +47,7 @@ export type {
   Prefab,
   PrefabParam,
   PrefabLink,
+  PrefabRecipe,
   InstanceMap,
   StyleTables,
   ExpandIssue,

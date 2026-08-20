@@ -16,7 +16,7 @@ import { fileURLToPath } from 'node:url';
 import { readFileSync, existsSync, readdirSync, statSync } from 'node:fs';
 import { join } from 'node:path';
 import { readAssembledModule } from './load.js';
-import { bundleModule, unbundleModule, PROJECT_MANIFEST } from './bundle.js';
+import { bundleModule, unbundleModule, liftMaps, PROJECT_MANIFEST } from './bundle.js';
 import { parseCsvGrid } from './staticmaps.js';
 import { isPrefabRecipe } from './prefab.js';
 import { isAuthoringFile } from './project.js';
@@ -114,5 +114,98 @@ describe('bundleModule / unbundleModule', () => {
     expect(issues).toEqual([
       { file: PROJECT_MANIFEST, code: 'bundle_no_manifest', message: 'no project manifest' },
     ]);
+  });
+});
+
+/**
+ * The authoring half of a project, which used to fall out on the way through.
+ *
+ * `bundleModule` wrote prefabs and style tables and nothing else, and
+ * `unbundleModule` read prefabs and style as expansion inputs and then dropped
+ * them. So a world could go out of the studio as files and come back with no
+ * prefabs, no instance map and no contract — which is how the shipped example
+ * ended up with 44 prefabs and nothing pointing at them.
+ */
+describe('authoring survives a bundle round trip', () => {
+  const doc = {
+    id: 'x',
+    world: { pointsOfInterest: [{ id: 'a', name: 'The Ford', kind: 'settlement' }] },
+  };
+  const authoring = {
+    prefabs: [{
+      id: 'inn',
+      collection: 'world.pointsOfInterest',
+      params: [{ key: 'id', kind: 'string' as const }, { key: 'name', kind: 'string' as const }],
+      template: { id: '{{id}}', name: '{{name}}', kind: 'settlement' },
+    }],
+    style: { inn_variant: { v1: { travelMinutes: 3 } } },
+    instances: { 'world.pointsOfInterest': { a: { id: 'inn', params: { id: 'a', name: 'The Ford' } } } },
+    contract: { exemptFactions: ['the_quiet'] },
+  };
+
+  it('carries prefabs, style, instances and contract both ways', () => {
+    const { files } = bundleModule(doc, authoring);
+    expect(Object.keys(files)).toEqual(expect.arrayContaining([
+      'project/prefabs/inn.json',
+      'project/style.json',
+      'project/prefabs/instances.json',
+      'project/contract.json',
+    ]));
+
+    const back = unbundleModule(files);
+    expect(back.issues).toEqual([]);
+    expect(back.document).toEqual(doc);
+    expect(back.authoring.prefabs).toEqual(authoring.prefabs);
+    expect(back.authoring.style).toEqual(authoring.style);
+    expect(back.authoring.instances).toEqual(authoring.instances);
+    expect(back.authoring.contract).toEqual(authoring.contract);
+  });
+
+  it('writes no authoring file for a world that has none', () => {
+    const { files } = bundleModule(doc);
+    expect(Object.keys(files).filter((path) => isAuthoringFile(path.slice('project/'.length)))).toEqual([]);
+  });
+
+  it('reports a broken authoring file instead of throwing', () => {
+    const { files } = bundleModule(doc, authoring);
+    const broken = { ...files, 'project/style.json': '{not json' };
+    const back = unbundleModule(broken);
+    expect(back.issues.map((issue) => issue.code)).toContain('bundle_bad_authoring');
+    expect(back.document).not.toBeNull();
+  });
+
+  it('recovers links from recipe files with no sidecar at all', () => {
+    const { files } = bundleModule(doc, { ...authoring, instances: {} });
+    // The entry, rewritten as the recipe it came from — which is what the studio
+    // will store once entries are files.
+    const recipe = { '@prefab': 'inn', params: { id: 'a', name: 'The Ford' } };
+    const asRecipes = {
+      ...files,
+      'project/world/pointsOfInterest/a.json': `${JSON.stringify(recipe, null, 2)}\n`,
+    };
+
+    const back = unbundleModule(asRecipes);
+    expect(back.issues).toEqual([]);
+    expect(back.document).toEqual(doc);
+    expect(back.authoring.instances).toEqual({
+      'world.pointsOfInterest': { a: { id: 'inn', params: { id: 'a', name: 'The Ford' } } },
+    });
+  });
+});
+
+/** Maps are not project files, and anything that names files has to know it. */
+describe('liftMaps', () => {
+  it('takes world.maps out and leaves the rest alone', () => {
+    const withMaps = { id: 'x', world: { areas: [{ id: 'a' }], maps: [{ id: 'm', layers: [] }] } };
+    const { document, maps } = liftMaps(withMaps);
+    expect(maps).toEqual([{ id: 'm', layers: [] }]);
+    expect(document).toEqual({ id: 'x', world: { areas: [{ id: 'a' }] } });
+    expect(withMaps.world.maps).toHaveLength(1);
+  });
+
+  it('passes a document with no maps through untouched', () => {
+    const plain = { id: 'x', world: { areas: [] } };
+    expect(liftMaps(plain).document).toBe(plain);
+    expect(liftMaps(plain).maps).toEqual([]);
   });
 });

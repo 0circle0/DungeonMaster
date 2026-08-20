@@ -33,33 +33,6 @@ function download(blob: Blob, filename: string): void {
 }
 
 /**
- * Download the document alone, pretty-printed.
- *
- * The default because it is the interchange format: the player reads it, the
- * repository stores this shape, and a person can open it in a text editor and
- * see what their world is. The envelope's extra fields are studio bookkeeping
- * that a bare document does without.
- */
-export function downloadWorld(envelope: WorldEnvelope, filename?: string): void {
-  const text = `${JSON.stringify(envelope.doc, null, 2)}\n`;
-  download(new Blob([text], { type: 'application/json' }), filename ?? envelope.filename);
-}
-
-/**
- * Download everything, including the authoring sidecar.
- *
- * Prefabs, instance links and the style tables are not part of the document —
- * they are how its entries were generated. A world that was built from prefabs
- * and comes back without them has lost the ability to regenerate anything, so
- * moving a project between machines needs this rather than the plain document.
- */
-export function downloadEnvelope(envelope: WorldEnvelope, filename?: string): void {
-  const text = `${JSON.stringify(envelope, null, 2)}\n`;
-  const name = filename ?? envelope.filename.replace(/\.module\.json$|\.json$/, '.dmworld.json');
-  download(new Blob([text], { type: 'application/json' }), name);
-}
-
-/**
  * Download the world as the files a repository would hold.
  *
  * The studio only ever sees an assembled document, and a repository holds a
@@ -71,7 +44,7 @@ export function downloadEnvelope(envelope: WorldEnvelope, filename?: string): vo
  * `npm run project -- unpack` is the other end.
  *
  * Takes the document rather than an envelope: the authoring sidecar is not part
- * of a repository's file tree, and `downloadEnvelope` is what carries it.
+ * of a repository's file tree; the studio keeps it in the store instead.
  */
 export async function downloadProject(
   doc: Record<string, unknown>,
@@ -90,11 +63,43 @@ export async function downloadProject(
 }
 
 /** What a project bundle looks like, so a reader can tell one at a glance. */
-function isProjectBundle(value: unknown): value is { files: Record<string, string> } {
+export function isProjectBundle(value: unknown): value is { files: Record<string, string> } {
   if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
   const files = (value as { files?: unknown }).files;
   if (files === null || typeof files !== 'object' || Array.isArray(files)) return false;
   return PROJECT_MANIFEST in (files as Record<string, unknown>);
+}
+
+/**
+ * The project files out of something the user picked, or a reason why not.
+ *
+ * The studio's import, and deliberately narrower than {@link readWorldFile}: the
+ * editor edits project files, so a project is what it accepts. A bare
+ * `module.json` is the *compiled* form — what a player receives — and there is
+ * nothing in it to edit a prefab or a style table with, so taking one would mean
+ * silently handing somebody a lesser world and calling it theirs.
+ */
+export async function readProjectFile(file: File): Promise<Record<string, string>> {
+  const bytes = new Uint8Array(await file.arrayBuffer());
+  const raw = isGzip(bytes) ? await gunzip(bytes) : bytes;
+
+  let parsed: unknown;
+  try {
+    parsed = JSON.parse(decoder.decode(raw));
+  } catch (err) {
+    throw new Error(`${file.name} is not JSON: ${(err as Error).message}`);
+  }
+
+  if (isProjectBundle(parsed)) return parsed.files;
+
+  const doc = parsed as Record<string, unknown> | null;
+  if (doc && typeof doc === 'object' && typeof doc['id'] === 'string' && doc['rules'] !== undefined) {
+    throw new Error(
+      `${file.name} is a compiled module, not a project. The studio edits project files — `
+      + 'export one with “Export project files”, or open the world it was built from.',
+    );
+  }
+  throw new Error(`${file.name} is not a project — a project has a ${PROJECT_MANIFEST}`);
 }
 
 /** A world from a file the user picked, whatever shape it arrived in. */

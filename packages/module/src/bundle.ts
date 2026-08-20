@@ -25,7 +25,9 @@
 
 import { splitProject, joinProject, isAuthoringFile } from './project.js';
 import type { JoinIssue } from './project.js';
-import type { Prefab, StyleTables } from './prefab.js';
+import { INSTANCES_FILE } from './prefab.js';
+import type { Prefab, StyleTables, InstanceMap } from './prefab.js';
+import type { Contract } from './diagnostics/rules.js';
 import { splitStaticMap, assembleStaticMap, sortWorldMaps } from './staticmaps.js';
 import type { AssembleIssue } from './staticmaps.js';
 
@@ -39,6 +41,49 @@ export interface BundleIssue {
 }
 
 /**
+ * Everything a project holds that no document produces.
+ *
+ * `prefabs` and `style` were always carried. `instances` and `contract` were
+ * not, which is why a world could go out of the studio as files and come back
+ * with no idea which entry came from which prefab.
+ */
+export interface BundleAuthoring {
+  readonly prefabs: readonly Prefab[];
+  readonly style: StyleTables;
+  readonly instances: InstanceMap;
+  readonly contract: Contract;
+}
+
+/**
+ * `world.maps` out of a document, because the repository does not store it there.
+ *
+ * A module read from disk has its map folders inlined into `world.maps`; the
+ * module *on* disk has no such key. Anything that names project files has to see
+ * the second form or it invents `project/world/maps/*.json` — files this module
+ * never writes and `npm run project -- unpack` would not know what to do with.
+ * Exported so the studio's incremental writer lifts them exactly as this does.
+ */
+export function liftMaps(document: Record<string, unknown>): {
+  readonly document: Record<string, unknown>;
+  readonly maps: readonly Record<string, unknown>[];
+} {
+  const world = document['world'];
+  const held = world && typeof world === 'object' && !Array.isArray(world)
+    ? (world as Record<string, unknown>)['maps']
+    : undefined;
+  if (!Array.isArray(held)) return { document, maps: [] };
+
+  const maps = held.filter((entry): entry is Record<string, unknown> => {
+    if (!entry || typeof entry !== 'object' || Array.isArray(entry)) return false;
+    const id = (entry as Record<string, unknown>)['id'];
+    return typeof id === 'string' && id !== '';
+  });
+
+  const { maps: _lifted, ...restOfWorld } = world as Record<string, unknown>;
+  return { document: { ...document, world: restOfWorld }, maps };
+}
+
+/**
  * An assembled document → every file a repository would hold for it.
  *
  * Paths are module-relative and match the repository exactly: `project/…` for
@@ -47,7 +92,7 @@ export interface BundleIssue {
  */
 export function bundleModule(
   document: Record<string, unknown>,
-  authoring: { readonly prefabs?: readonly Prefab[]; readonly style?: StyleTables } = {},
+  authoring: Partial<BundleAuthoring> = {},
 ): { files: Record<string, string> } {
   const files: Record<string, string> = {};
 
@@ -56,32 +101,26 @@ export function bundleModule(
   for (const prefab of authoring.prefabs ?? []) {
     files[`project/prefabs/${prefab.id}.json`] = `${JSON.stringify(prefab, null, 2)}\n`;
   }
+  // Each guarded on non-empty, or every project grows files it does not need and
+  // `npm run project -- unpack` starts producing a tree git does not match.
   if (authoring.style && Object.keys(authoring.style).length > 0) {
     files['project/style.json'] = `${JSON.stringify(authoring.style, null, 2)}\n`;
+  }
+  if (authoring.instances && Object.keys(authoring.instances).length > 0) {
+    files[`project/${INSTANCES_FILE}`] = `${JSON.stringify(authoring.instances, null, 2)}\n`;
+  }
+  if (authoring.contract && Object.keys(authoring.contract).length > 0) {
+    files['project/contract.json'] = `${JSON.stringify(authoring.contract, null, 2)}\n`;
   }
 
   // Maps come out first, because the document handed to `splitProject` must be
   // the one the repository stores — the one with no `world.maps` key.
-  const world = document['world'];
-  const maps = world && typeof world === 'object' && !Array.isArray(world)
-    ? (world as Record<string, unknown>)['maps']
-    : undefined;
-
-  let forProject = document;
-
-  if (Array.isArray(maps)) {
-    for (const entry of maps) {
-      if (!entry || typeof entry !== 'object') continue;
-      const id = (entry as Record<string, unknown>)['id'];
-      if (typeof id !== 'string' || id === '') continue;
-
-      const { manifest, files: layers } = splitStaticMap(entry as Record<string, unknown>);
-      files[`maps/${id}/map.json`] = `${JSON.stringify(manifest, null, 2)}\n`;
-      for (const [name, text] of Object.entries(layers)) files[`maps/${id}/${name}`] = text;
-    }
-
-    const { maps: _lifted, ...restOfWorld } = world as Record<string, unknown>;
-    forProject = { ...document, world: restOfWorld };
+  const { document: forProject, maps } = liftMaps(document);
+  for (const entry of maps) {
+    const id = entry['id'] as string;
+    const { manifest, files: layers } = splitStaticMap(entry);
+    files[`maps/${id}/map.json`] = `${JSON.stringify(manifest, null, 2)}\n`;
+    for (const [name, text] of Object.entries(layers)) files[`maps/${id}/${name}`] = text;
   }
 
   const split = splitProject(forProject);
@@ -89,6 +128,57 @@ export function bundleModule(
   for (const [path, text] of Object.entries(split.files)) files[`project/${path}`] = text;
 
   return { files };
+}
+
+/**
+ * The authoring files back out of a bundle.
+ *
+ * The inverse of what {@link bundleModule} writes, and the reason a world can
+ * now go out of the studio and come back whole. Parses are guarded: a project is
+ * a directory people edit by hand, so a broken `style.json` is an issue naming
+ * the file rather than an exception thrown out of a loader.
+ *
+ * Prefabs are read in sorted path order so a bundle read twice produces the same
+ * list whatever order the paths arrived in.
+ */
+export function authoringFromFiles(files: Readonly<Record<string, string>>): {
+  prefabs: readonly Prefab[];
+  style: StyleTables;
+  instances: InstanceMap;
+  contract: Contract;
+  issues: readonly BundleIssue[];
+} {
+  const issues: BundleIssue[] = [];
+  const prefabs: Prefab[] = [];
+  let style: StyleTables = {};
+  let instances: InstanceMap = {};
+  let contract: Contract = {};
+
+  const parse = <T>(path: string, text: string, fallback: T): T => {
+    try {
+      return JSON.parse(text) as T;
+    } catch (err) {
+      issues.push({ file: path, code: 'bundle_bad_authoring', message: (err as Error).message });
+      return fallback;
+    }
+  };
+
+  for (const path of Object.keys(files).sort()) {
+    if (!path.startsWith('project/')) continue;
+    const inner = path.slice('project/'.length);
+    if (!isAuthoringFile(inner)) continue;
+
+    const text = files[path]!;
+    if (inner === 'style.json') style = parse(path, text, style);
+    else if (inner === 'contract.json') contract = parse(path, text, contract);
+    else if (inner === INSTANCES_FILE) instances = parse(path, text, instances);
+    else if (inner.startsWith('prefabs/')) {
+      const prefab = parse<Prefab | null>(path, text, null);
+      if (prefab) prefabs.push(prefab);
+    }
+  }
+
+  return { prefabs, style, instances, contract, issues };
 }
 
 /**
@@ -100,15 +190,20 @@ export function bundleModule(
  */
 export function unbundleModule(files: Readonly<Record<string, string>>): {
   document: Record<string, unknown> | null;
+  authoring: BundleAuthoring;
   issues: readonly BundleIssue[];
 } {
   const issues: BundleIssue[] = [];
+  const { prefabs, style, instances, contract, issues: authoringIssues } = authoringFromFiles(files);
+  for (const issue of authoringIssues) issues.push(issue);
+  const authoring: BundleAuthoring = { prefabs, style, instances, contract };
 
   const manifestText = files[PROJECT_MANIFEST];
   if (manifestText === undefined) {
     return {
       document: null,
-      issues: [{ file: PROJECT_MANIFEST, code: 'bundle_no_manifest', message: 'no project manifest' }],
+      authoring,
+      issues: [...issues, { file: PROJECT_MANIFEST, code: 'bundle_no_manifest', message: 'no project manifest' }],
     };
   }
 
@@ -118,27 +213,21 @@ export function unbundleModule(files: Readonly<Record<string, string>>): {
   } catch (err) {
     return {
       document: null,
-      issues: [{ file: PROJECT_MANIFEST, code: 'bundle_bad_manifest', message: (err as Error).message }],
+      authoring,
+      issues: [...issues, { file: PROJECT_MANIFEST, code: 'bundle_bad_manifest', message: (err as Error).message }],
     };
   }
 
   const entries: Record<string, string> = {};
   const mapFiles = new Map<string, Record<string, string>>();
-  const prefabs: Prefab[] = [];
-  let style: StyleTables = {};
 
   for (const [path, text] of Object.entries(files)) {
     if (path === PROJECT_MANIFEST) continue;
     if (path.startsWith('project/')) {
       const inner = path.slice('project/'.length);
-      // Authoring files are build inputs for a compressed project, not entries.
-      if (isAuthoringFile(inner)) {
-        if (inner === 'style.json') style = JSON.parse(text) as StyleTables;
-        else if (inner.startsWith('prefabs/') && !inner.endsWith('instances.json')) {
-          prefabs.push(JSON.parse(text) as Prefab);
-        }
-        continue;
-      }
+      // Authoring files are build inputs for a compressed project, not entries;
+      // `authoringFromFiles` has already read them.
+      if (isAuthoringFile(inner)) continue;
       entries[inner] = text;
       continue;
     }
@@ -185,7 +274,18 @@ export function unbundleModule(files: Readonly<Record<string, string>>): {
     document = sortWorldMaps({ ...document, world: { ...world, maps: assembled } });
   }
 
-  return { document, issues };
+  // What the recipes said, under what the sidecar said. A link recovered from a
+  // recipe is the file speaking for itself; `instances.json` now carries only the
+  // remainder — links whose entry had to be written literally and so had nowhere
+  // else to live.
+  const links = joined.links;
+  const merged: Record<string, Record<string, (typeof instances)[string][string]>> = {};
+  for (const [collection, byId] of Object.entries(links)) merged[collection] = { ...byId };
+  for (const [collection, byId] of Object.entries(instances)) {
+    merged[collection] = { ...(merged[collection] ?? {}), ...byId };
+  }
+
+  return { document, authoring: { ...authoring, instances: merged }, issues };
 }
 
 function asBundleIssue(issue: JoinIssue): BundleIssue {

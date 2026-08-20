@@ -20,7 +20,8 @@ import { blankModule } from '@/lib/templates';
 import {
   RULESET_SECTIONS, DEFAULT_SECTIONS, composeModule, withPrerequisites, dependents,
 } from '@/lib/ruleset';
-import { readWorld } from '@dm/library';
+import { readWorldFiles } from '@dm/library';
+import { unbundleModule } from '@dm/module';
 import type { EditorLibraryApi } from '@/lib/useEditorLibrary';
 import styles from '@/app/studio/studio.module.css';
 
@@ -29,7 +30,7 @@ type Source = { kind: 'example'; id: string } | { kind: 'world'; key: string };
 export function NewModuleDialog(props: {
   library: EditorLibraryApi;
   dirty: boolean;
-  onExportFirst: () => void;
+  onSaveFirst: () => void;
   onCreate: (doc: ModuleDoc, filename: string) => void;
   onClose: () => void;
 }) {
@@ -78,7 +79,7 @@ export function NewModuleDialog(props: {
     try {
       const doc = chosen.source.kind === 'example'
         ? await library.exampleDoc(chosen.source.id)
-        : await readWorld(chosen.source.key).then((found) => found?.envelope.doc ?? null);
+        : unbundleModule(await readWorldFiles(chosen.source.key)).document;
       if (!doc) { setError('That world could not be read.'); return; }
       props.onCreate(composeModule(doc, selected), 'untitled.module.json');
     } catch (err) {
@@ -94,8 +95,8 @@ export function NewModuleDialog(props: {
         <h3>New module</h3>
         {props.dirty && (
           <p>
-            The current module has <strong>unsaved changes</strong>.{' '}
-            <button className="btn tiny" onClick={props.onExportFirst}>Export current first</button>
+            The current module has <strong>changes still in the idle window</strong>.{' '}
+            <button className="btn tiny" onClick={props.onSaveFirst}>Save it now</button>
           </p>
         )}
 

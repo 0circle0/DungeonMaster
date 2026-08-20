@@ -1,7 +1,15 @@
 /**
  * `npm run content`
  *
- * Emit the example worlds each app ships, pre-zipped.
+ * Emit the example worlds each app ships, pre-zipped — in the form each app can
+ * actually use.
+ *
+ * The player receives `<id>.json.gz`: the compiled `module.json`, which is what
+ * it reads and never edits. The studio receives `<id>.project.json.gz`: the
+ * project tree exactly as the repository holds it, recipes and prefabs and style
+ * tables included, because the studio edits project files and because somebody
+ * given an example should be given the whole of it — the same world we build
+ * from, not a lesser copy with the authoring taken out.
  *
  * The repository keeps its modules pretty-printed, because that is what makes a
  * diff readable and a merge possible. Neither is worth anything over the wire:
@@ -17,11 +25,11 @@
  * of an accident of directory contents.
  */
 
-import { mkdirSync, writeFileSync, readFileSync, readdirSync, existsSync, rmSync } from 'node:fs';
-import { join, dirname, resolve } from 'node:path';
+import { mkdirSync, writeFileSync, readFileSync, readdirSync, existsSync, rmSync, statSync } from 'node:fs';
+import { join, dirname, resolve, relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { gzipSync } from 'node:zlib';
-import { compileModule, hashModule, formatIssues } from '@dm/module';
+import { compileModule, hashModule, formatIssues, unbundleModule } from '@dm/module';
 import { readAssembledModule, formatMapIssues } from '@dm/module/load';
 import type { WorldEnvelope, WorldAuthoring } from '@dm/library/envelope';
 
@@ -64,6 +72,33 @@ export interface BuiltModule {
   readonly storedBytes: number;
   readonly minified: string;
   readonly gz: Buffer;
+  /** The project tree, gzipped. Absent for a module with no `project/`. */
+  readonly project: Buffer | null;
+  readonly projectBytes: number;
+}
+
+/**
+ * The committed project tree, verbatim.
+ *
+ * Read off disk rather than regenerated from `module.json`, because those are
+ * not the same thing: the build expands 767 of Aurendel's entry files from
+ * recipes, and re-splitting the result would hand somebody a world with the
+ * prefabs still in it and nothing pointing at them. What ships is what is in git.
+ */
+function projectFilesOf(dir: string): Record<string, string> | null {
+  if (!existsSync(join(dir, 'project'))) return null;
+
+  const files: Record<string, string> = {};
+  const walk = (current: string): void => {
+    for (const entry of readdirSync(current).sort()) {
+      const path = join(current, entry);
+      if (statSync(path).isDirectory()) walk(path);
+      else files[relative(dir, path).split('\\').join('/')] = readFileSync(path, 'utf8');
+    }
+  };
+  walk(join(dir, 'project'));
+  if (existsSync(join(dir, 'maps'))) walk(join(dir, 'maps'));
+  return files;
 }
 
 /** The authoring sidecar, when the module is a project. Empty when it is not. */
@@ -133,6 +168,22 @@ export function buildModule(name: string): BuiltModule {
   const minified = JSON.stringify(envelope);
   const gz = gzipSync(Buffer.from(minified, 'utf8'), { level: 9 });
 
+  // Proved against the same gate: a bundle that does not rebuild the document
+  // this module just compiled is not shippable, and an artifact nobody reviews
+  // is the wrong place to find that out.
+  const tree = projectFilesOf(dir);
+  let project: Buffer | null = null;
+  if (tree) {
+    const rebuilt = unbundleModule(tree);
+    if (!rebuilt.document) {
+      throw new Error(`${name}: its project does not rebuild\n${rebuilt.issues.map((i) => `${i.file}: ${i.message}`).join('\n')}`);
+    }
+    if (JSON.stringify(rebuilt.document) !== JSON.stringify(doc)) {
+      throw new Error(`${name}: its project rebuilds a different document than module.json`);
+    }
+    project = gzipSync(Buffer.from(JSON.stringify({ dmProject: 1, files: tree }), 'utf8'), { level: 9 });
+  }
+
   return {
     id: String(doc['id'] ?? name),
     version: String(doc['version'] ?? '0.0.0'),
@@ -144,6 +195,8 @@ export function buildModule(name: string): BuiltModule {
     storedBytes: gz.length,
     minified,
     gz,
+    project,
+    projectBytes: project?.length ?? 0,
   };
 }
 
@@ -187,7 +240,11 @@ function catalogFor(app: string, built: Map<string, BuiltModule>): string {
       title: m.title,
       description: m.description,
       extends: m.extends,
-      storedBytes: m.storedBytes,
+      // What *this* app will download, which is not the same file in both:
+      // the studio takes the project, the player takes the compiled module. The
+      // catalog exists so a button can say what a click costs, so it has to
+      // describe the artifact the app beside it will actually fetch.
+      storedBytes: app === 'editor' ? m.projectBytes : m.storedBytes,
       rawBytes: m.rawBytes,
       hash: m.hash,
     };
@@ -207,6 +264,16 @@ function writeApp(app: string, built: Map<string, BuiltModule>): number {
   for (const name of SHIP[app] ?? []) {
     const m = built.get(name);
     if (!m) continue;
+
+    if (app === 'editor') {
+      // The studio edits project files, so a compiled module would be no use to
+      // it — there is nothing in one to edit a prefab with.
+      if (!m.project) throw new Error(`${name}: the studio ships projects and this module has no project/`);
+      writeFileSync(join(dest, `${m.id}.project.json.gz`), m.project);
+      bytes += m.project.length;
+      continue;
+    }
+
     writeFileSync(join(dest, `${m.id}.json.gz`), m.gz);
     bytes += m.gz.length;
   }

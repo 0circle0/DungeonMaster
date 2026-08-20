@@ -17,8 +17,10 @@ import { fetchCatalog, fetchExampleEnvelope, EMPTY_CATALOG } from './catalog.js'
 import { closeLibrary, DB_NAME } from './db.js';
 import {
   listWorlds, readWorld, createWorld, writeWorld, deleteWorld, renameWorld,
-  writeDraft, readDraft, clearDraft, rememberLastOpened, lastOpened,
+  readWorldFiles, writeWorldFiles, createWorldFromFiles, factsFor,
+  rememberLastOpened, lastOpened,
 } from './worlds.js';
+import { bundleModule, unbundleModule } from '@dm/module';
 import type { WorldEnvelope } from './envelope.js';
 
 const MINIMAL = JSON.parse(
@@ -118,24 +120,16 @@ describe('worlds', () => {
     expect(stableStringify(read!.envelope.doc)).toBe(stableStringify(MINIMAL));
   });
 
-  it('deletes the world, its payload and its draft together', async () => {
+  it('deletes the world, its payload and every file together', async () => {
     const meta = await createWorld(envelopeOf());
-    await writeDraft(meta.key, { half: 'typed' });
+    const project = await createWorldFromFiles(bundleModule(MINIMAL).files, {
+      title: 'Files', filename: 'f.module.json', facts: factsFor(MINIMAL),
+    });
     await deleteWorld(meta.key);
+    await deleteWorld(project.key);
     expect(await readWorld(meta.key)).toBeNull();
-    expect(await readDraft(meta.key)).toBeNull();
+    expect(await readWorldFiles(project.key)).toEqual({});
     expect(await listWorlds()).toEqual([]);
-  });
-});
-
-describe('drafts', () => {
-  it('keeps work that does not validate, and clears when it does', async () => {
-    const meta = await createWorld(envelopeOf());
-    await writeDraft(meta.key, { id: 'half-typ' });
-    const draft = await readDraft(meta.key);
-    expect(draft?.doc).toEqual({ id: 'half-typ' });
-    await clearDraft(meta.key);
-    expect(await readDraft(meta.key)).toBeNull();
   });
 });
 
@@ -233,5 +227,110 @@ describe('catalog', () => {
         expect(envelope?.doc['id']).toBe('minimal');
       },
     );
+  });
+});
+
+/**
+ * The studio's storage, which is a filesystem rather than a bucket.
+ *
+ * The assertion that matters is a count. A world used to be one gzipped blob, so
+ * changing an integer from 5 to 3 re-serialized 1.6 MB and replaced the lot; the
+ * whole point of this shape is that it writes one record. A test that only
+ * checked the contents came back right would have passed against the old design
+ * too.
+ */
+describe('worlds as files', () => {
+  const filesOf = (doc: Record<string, unknown>) => bundleModule(doc).files;
+
+  const store = async (doc: Record<string, unknown> = MINIMAL) =>
+    createWorldFromFiles(filesOf(doc), {
+      title: 'Minimal', filename: 'minimal.module.json', facts: factsFor(doc),
+    });
+
+  it('stores a world as one record per project file', async () => {
+    const meta = await store();
+    const back = await readWorldFiles(meta.key);
+    expect(Object.keys(back).length).toBe(Object.keys(filesOf(MINIMAL)).length);
+    expect(back).toEqual(filesOf(MINIMAL));
+  });
+
+  it('rebuilds the same document from its files', async () => {
+    const meta = await store();
+    const { document, issues } = unbundleModule(await readWorldFiles(meta.key));
+    expect(issues).toEqual([]);
+    expect(stableStringify(document!)).toBe(stableStringify(MINIMAL));
+  });
+
+  it('writes one record for one edited entry and leaves the rest alone', async () => {
+    const meta = await store();
+    const before = await readWorldFiles(meta.key);
+    const [path, text] = Object.entries(before).find(([p]) => p.startsWith('project/rules/'))!;
+    const edited = `${JSON.stringify({ ...JSON.parse(text), touched: true }, null, 2)}\n`;
+
+    await writeWorldFiles(
+      meta.key,
+      { put: { [path]: edited }, remove: [] },
+      { facts: factsFor(MINIMAL), title: meta.title, storedBytes: meta.storedBytes },
+      meta,
+    );
+
+    const after = await readWorldFiles(meta.key);
+    expect(after[path]).toBe(edited);
+    // Everything else byte-for-byte what it was. This is the whole claim.
+    for (const [other, was] of Object.entries(before)) {
+      if (other === path) continue;
+      expect(after[other]).toBe(was);
+    }
+  });
+
+  it('removes the old path when an entry is renamed', async () => {
+    const meta = await store();
+    const before = await readWorldFiles(meta.key);
+    const old = Object.keys(before).find((p) => p.startsWith('project/rules/'))!;
+    const renamed = `${old.slice(0, old.lastIndexOf('/'))}/renamed.json`;
+
+    await writeWorldFiles(
+      meta.key,
+      { put: { [renamed]: before[old]! }, remove: [old] },
+      { facts: factsFor(MINIMAL), title: meta.title, storedBytes: meta.storedBytes },
+      meta,
+    );
+
+    const after = await readWorldFiles(meta.key);
+    expect(after[old]).toBeUndefined();
+    expect(after[renamed]).toBe(before[old]);
+  });
+
+  it('sweeps files a replaced document no longer has', async () => {
+    const meta = await store();
+    await writeWorldFiles(
+      meta.key,
+      { put: { 'project/shell.json': '{}\n' }, remove: [], sweep: true },
+      { facts: factsFor(MINIMAL), title: meta.title, storedBytes: 3 },
+      meta,
+    );
+    expect(Object.keys(await readWorldFiles(meta.key))).toEqual(['project/shell.json']);
+  });
+
+  it('stores a world that does not compile, and opens it again', async () => {
+    // A half-finished world is most of what a studio holds, and the draft store
+    // that used to keep the last good copy is gone — so this has to survive as
+    // itself rather than be set aside.
+    const broken = { ...MINIMAL, rules: { ...(MINIMAL['rules'] as object), attributes: 'not a list' } };
+    const meta = await createWorldFromFiles(bundleModule(broken).files, {
+      title: 'Broken', filename: 'b.module.json', facts: factsFor(broken, null),
+    });
+    expect(meta.hash).toBeNull();
+
+    const { document } = unbundleModule(await readWorldFiles(meta.key));
+    expect(stableStringify(document!)).toBe(stableStringify(broken));
+  });
+
+  it('renames without reading or rewriting a single file', async () => {
+    const meta = await store();
+    const before = await readWorldFiles(meta.key);
+    const renamed = await renameWorld(meta.key, 'A New Name');
+    expect(renamed?.title).toBe('A New Name');
+    expect(await readWorldFiles(meta.key)).toEqual(before);
   });
 });

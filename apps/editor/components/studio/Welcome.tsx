@@ -11,6 +11,12 @@
  * Nothing is downloaded until asked. An example is a file this deployment
  * happens to be carrying; it may not be carrying any, and that is a normal
  * state rather than an error.
+ *
+ * No IndexedDB is the one state that is not a normal one. A world here *is* its
+ * project files in the store, so a browser without one cannot open a world at
+ * all — not a lesser mode, no mode. It gets told so instead of being shown three
+ * buttons that will each fail, and instead of being told to download work it
+ * could never have made in the first place.
  */
 
 import { useRef, useState } from 'react';
@@ -38,17 +44,31 @@ export function Welcome(props: {
     try { await action(); } finally { setBusy(false); }
   };
 
+  if (library.ephemeral) {
+    return (
+      <div className={styles.welcome}>
+        <div className={styles.welcomeInner}>
+          <h1>DungeonMaster studio</h1>
+          <p className={styles.welcomeNote}>
+            <strong>This browser is not supported.</strong> The studio keeps your worlds in
+            IndexedDB — that is where the project files live and where every edit is written —
+            and this browser will not let the page use it.
+          </p>
+          <p className={styles.welcomeNote}>
+            Private or strict-privacy modes are the usual cause. Try an ordinary window, or a
+            current version of Firefox, Chrome, Edge or Safari.
+          </p>
+          {library.error && <p className="json-error">{library.error}</p>}
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className={styles.welcome}>
       <div className={styles.welcomeInner}>
         <h1>DungeonMaster studio</h1>
 
-        {library.ephemeral && (
-          <p className={styles.welcomeNote}>
-            This browser will not let the page store anything, so work here cannot be kept.
-            Export what you make before closing the tab.
-          </p>
-        )}
         {(props.error ?? library.error) && (
           <p className="json-error">{props.error ?? library.error}</p>
         )}
@@ -105,7 +125,8 @@ export function Welcome(props: {
             Open a file…
           </button>
           <span className={styles.welcomeMeta}>
-            A module exported from here or anywhere else. It joins your library.
+            A project — the files a world is made of, from here or anywhere else. It joins your
+            library. A compiled module.json is what a player loads, not what the studio edits.
           </span>
           <input
             ref={file}

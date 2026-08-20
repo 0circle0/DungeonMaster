@@ -9,14 +9,15 @@
  */
 
 import { compileModule, hashModule } from '@dm/module';
+import type { CompiledModule } from '@dm/module';
 import { gzipJson, gunzipJson } from './gzip.js';
 import type { WorldEnvelope } from './envelope.js';
 import { isQuotaError, OUT_OF_SPACE, requestPersistence } from './quota.js';
 import {
-  openLibrary, tx, get, getAll, remove,
-  WORLDS, PAYLOADS, DRAFTS, META,
+  openLibrary, tx, get, getAll, getRange, put, worldRange,
+  WORLDS, PAYLOADS, FILES, META,
 } from './db.js';
-import type { WorldMeta, PayloadRecord, DraftRecord } from './db.js';
+import type { WorldMeta, PayloadRecord, FileRecord } from './db.js';
 
 export type { WorldMeta } from './db.js';
 
@@ -44,17 +45,41 @@ export async function readWorld(key: string): Promise<{ meta: WorldMeta; envelop
   return { meta, envelope };
 }
 
-function describe(envelope: WorldEnvelope): { moduleId: string; version: string; description: string; hash: string | null } {
-  const doc = envelope.doc;
+export interface WorldFacts {
+  readonly moduleId: string;
+  readonly version: string;
+  readonly description: string;
+  readonly hash: string | null;
+}
+
+/**
+ * What the switcher needs to know about a world, without opening it.
+ *
+ * `compiled` is the seam that matters. The studio has already compiled this
+ * exact document to draw its diagnostics, and re-running a full schema parse
+ * here — six hundred milliseconds on Aurendel — to fill in a hash it is holding
+ * was the most expensive thing on the save path by an order of magnitude.
+ *
+ * Pass `undefined` to compile here (an import, where nobody has), or `null` to
+ * say it does not compile. Never pass a hash read from the editor's idle tier:
+ * that one is settled on a timer and is the *previous* document's while it
+ * settles, so a ⌘S would record it against content it does not describe.
+ */
+export function factsFor(
+  doc: Record<string, unknown>,
+  compiled?: CompiledModule | null,
+): WorldFacts {
   const meta = (doc['meta'] ?? {}) as Record<string, unknown>;
-  const compiled = compileModule(doc);
+  const module = compiled === undefined
+    ? (() => { const result = compileModule(doc); return result.ok ? result.module : null; })()
+    : compiled;
   return {
     moduleId: typeof doc['id'] === 'string' ? doc['id'] : 'untitled',
     version: typeof doc['version'] === 'string' ? doc['version'] : '0.0.0',
     description: typeof meta['description'] === 'string' ? meta['description'] : '',
     // A world that does not compile is still worth storing — that is most of
     // what a half-finished one is — so the hash is simply absent for it.
-    hash: compiled.ok ? hashModule(compiled.module.source) : null,
+    hash: module ? hashModule(module.source) : null,
   };
 }
 
@@ -73,11 +98,12 @@ export async function writeWorld(
   key: string,
   envelope: WorldEnvelope,
   previous?: WorldMeta,
+  known?: WorldFacts,
 ): Promise<WorldMeta> {
   const { bytes, codec, rawBytes } = await gzipJson(envelope);
   const db = await openLibrary();
   const now = Date.now();
-  const facts = describe(envelope);
+  const facts = known ?? factsFor(envelope.doc);
 
   const meta: WorldMeta = {
     key,
@@ -124,49 +150,140 @@ export async function createWorld(
 
 export async function deleteWorld(key: string): Promise<void> {
   const db = await openLibrary();
-  await tx(db, [WORLDS, PAYLOADS, DRAFTS], 'readwrite', (t) => {
+  await tx(db, [WORLDS, PAYLOADS, FILES], 'readwrite', (t) => {
     t.objectStore(WORLDS).delete(key);
     t.objectStore(PAYLOADS).delete(key);
-    t.objectStore(DRAFTS).delete(key);
+    // One range rather than one call per file: a world is a few thousand of
+    // them and the key was chosen so this is a single delete.
+    t.objectStore(FILES).delete(worldRange(key));
   });
 }
 
+/**
+ * A new title, and nothing else touched.
+ *
+ * This used to read the whole world, rewrite it and recompile it to change a
+ * string that lives in the metadata row and in no file at all.
+ */
 export async function renameWorld(key: string, title: string): Promise<WorldMeta | null> {
-  const existing = await readWorld(key);
-  if (!existing) return null;
-  return writeWorld(key, { ...existing.envelope, title }, existing.meta);
+  const db = await openLibrary();
+  const meta = await get<WorldMeta>(db, WORLDS, key);
+  if (!meta) return null;
+  const next: WorldMeta = { ...meta, title, updatedAt: Date.now() };
+  await put(db, WORLDS, next);
+  return next;
 }
 
 /**
- * Work that does not yet validate.
+ * Every file of a world, by path.
  *
- * Separate from the world itself for the same reason the studio always kept it
- * separate on disk: the document a game loads has to stay loadable, and a
- * half-typed id is a normal state of a text box. The draft is what makes
- * autosave safe to run against a broken document instead of refusing to.
+ * The studio's read: two thousand eight hundred records for Aurendel, which is
+ * one ranged `getAll` and about as much JSON as `module.json` was, because it is
+ * the same bytes spread over more keys.
  */
-export async function writeDraft(key: string, doc: Record<string, unknown>): Promise<void> {
-  const { bytes, codec } = await gzipJson(doc);
+export async function readWorldFiles(key: string): Promise<Record<string, string>> {
   const db = await openLibrary();
-  const record: DraftRecord = { key, savedAt: Date.now(), codec, bytes };
+  const records = await getRange<FileRecord>(db, FILES, worldRange(key));
+  const files: Record<string, string> = {};
+  for (const record of records) files[record.path] = record.text;
+  return files;
+}
+
+/** What a save has to do to the store, and nothing more. */
+export interface FileChange {
+  readonly put: Readonly<Record<string, string>>;
+  readonly remove: readonly string[];
+  /** Also delete every record not in `put` — a document replaced wholesale. */
+  readonly sweep?: boolean;
+}
+
+/**
+ * Write the files that changed.
+ *
+ * The point of the whole exercise: editing one integer puts one record. Metadata
+ * and files commit together, so there is no state where the switcher describes a
+ * world its files do not match — and no state where a recipe has landed but the
+ * prefab it names has not, which would not be a degraded entry but a destroyed
+ * one (`joinProject` yields `undefined`, which serializes to `null`).
+ *
+ * Everything here is synchronous, which is what lets it be one transaction.
+ * Compressing first was the reason the old write could not be: an IndexedDB
+ * transaction commits when the microtask queue drains, so awaiting a stream
+ * inside one ends in `TransactionInactiveError`.
+ */
+export async function writeWorldFiles(
+  key: string,
+  change: FileChange,
+  patch: { facts: WorldFacts; title: string; storedBytes: number },
+  previous: WorldMeta,
+): Promise<WorldMeta> {
+  const db = await openLibrary();
+  const meta: WorldMeta = {
+    ...previous,
+    key,
+    moduleId: patch.facts.moduleId,
+    version: patch.facts.version,
+    description: patch.facts.description,
+    hash: patch.facts.hash,
+    title: patch.title,
+    updatedAt: Date.now(),
+    storedBytes: patch.storedBytes,
+    rawBytes: patch.storedBytes,
+  };
+
   try {
-    await tx(db, [DRAFTS], 'readwrite', (t) => { t.objectStore(DRAFTS).put(record); });
+    await tx(db, [WORLDS, FILES], 'readwrite', (t) => {
+      const files = t.objectStore(FILES);
+      if (change.sweep) files.delete(worldRange(key));
+      for (const path of change.remove) files.delete([key, path]);
+      for (const [path, text] of Object.entries(change.put)) {
+        files.put({ world: key, path, text } satisfies FileRecord);
+      }
+      t.objectStore(WORLDS).put(meta);
+    });
   } catch (err) {
     if (isQuotaError(err)) throw new Error(OUT_OF_SPACE);
     throw err;
   }
+
+  void requestPersistence();
+  return meta;
 }
 
-export async function readDraft(key: string): Promise<{ savedAt: number; doc: Record<string, unknown> } | null> {
-  const db = await openLibrary();
-  const record = await get<DraftRecord>(db, DRAFTS, key);
-  if (!record) return null;
-  return { savedAt: record.savedAt, doc: await gunzipJson<Record<string, unknown>>(record.bytes) };
-}
-
-export async function clearDraft(key: string): Promise<void> {
-  const db = await openLibrary();
-  await remove(db, DRAFTS, key);
+/** A world that arrives as files — which, in the studio, is all of them. */
+export async function createWorldFromFiles(
+  files: Readonly<Record<string, string>>,
+  seed: {
+    title: string;
+    filename: string;
+    facts: WorldFacts;
+    origin?: WorldMeta['origin'];
+    originId?: string | null;
+  },
+): Promise<WorldMeta> {
+  const key = newKey();
+  const now = Date.now();
+  const bytes = Object.values(files).reduce((total, text) => total + text.length, 0);
+  return writeWorldFiles(
+    key,
+    { put: files, remove: [], sweep: true },
+    { facts: seed.facts, title: seed.title, storedBytes: bytes },
+    {
+      key,
+      moduleId: seed.facts.moduleId,
+      version: seed.facts.version,
+      title: seed.title,
+      description: seed.facts.description,
+      filename: seed.filename,
+      origin: seed.origin ?? 'created',
+      originId: seed.originId ?? null,
+      createdAt: now,
+      updatedAt: now,
+      storedBytes: bytes,
+      rawBytes: bytes,
+      hash: seed.facts.hash,
+    },
+  );
 }
 
 /** Which world was open last, so reopening the app resumes rather than guesses. */

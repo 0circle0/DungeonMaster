@@ -27,9 +27,10 @@ import { useRules } from '@/lib/useRules';
 import { useEditorMods } from '@/lib/useEditorMods';
 import type { ModWire } from '@/lib/modWire';
 import type { WorldAuthoring, WorldMeta } from '@dm/library';
-import { NO_AUTHORING, clearDraft, downloadProject, lastOpened, rememberLastOpened } from '@dm/library';
+import { downloadProject, lastOpened, rememberLastOpened } from '@dm/library';
 import { useEditorLibrary, loadWorld } from '@/lib/useEditorLibrary';
 import type { LoadedWorld } from '@/lib/useEditorLibrary';
+import type { ProjectSnapshot } from '@/lib/projectDiff';
 import type { EditorLibraryApi } from '@/lib/useEditorLibrary';
 import { useAutosave, interruptedAt, clearInterrupted } from '@/lib/useAutosave';
 import { Welcome } from '@/components/studio/Welcome';
@@ -67,9 +68,10 @@ function StudioShell(props: {
   library: EditorLibraryApi;
   /** Prefabs, style tables and instance links, when the world has them. */
   authoring: WorldAuthoring;
+  /** The world as it was read, so the first save is a diff and not a rewrite. */
+  loadedSnapshot: ProjectSnapshot | null;
   onAuthoringChange: (next: WorldAuthoring) => void;
   /** Work that did not validate last session, kept rather than lost. */
-  draft: { savedAt: number; doc: Record<string, unknown> } | null;
   onOpenWorld: (key: string) => void;
   onNewWorld: (doc: ModuleDoc, filename: string) => void;
 }) {
@@ -189,7 +191,6 @@ function StudioShell(props: {
    * choice away at the moment an author has least context — they have just
    * opened the module and do not yet know what is in either version.
    */
-  const [draft, setDraft] = useState(props.draft);
   const [interrupted, setInterrupted] = useState(() => interruptedAt(props.world));
 
   /**
@@ -248,7 +249,7 @@ function StudioShell(props: {
     });
   }, [props]);
 
-  const autosave = useAutosave(store, props.world, props.authoring, canSave);
+  const autosave = useAutosave(store, props.world, props.authoring, canSave, props.loadedSnapshot);
   const saveToDisk = autosave.flush;
 
   /**
@@ -299,17 +300,20 @@ function StudioShell(props: {
    */
   const paletteActions: readonly Command[] = useMemo(
     () => [
-      { kind: 'action', id: 'act:save', label: 'Save to disk', hint: '⌘S', run: () => void saveToDisk() },
-      { kind: 'action', id: 'act:export', label: 'Export module', hint: 'download', run: () => {
+      // Not "save to disk" — it never was. This writes the project files that
+      // moved, to the store, now rather than at the end of the idle window.
+      { kind: 'action', id: 'act:save', label: 'Save now', hint: '⌘S', run: () => void saveToDisk() },
+      // The compile. `module.json` is what a player loads, so producing one is
+      // an errand the author runs when they want to play — not something the
+      // studio does to its own storage, which stays the project files it was.
+      { kind: 'action', id: 'act:export', label: 'Compile module.json', hint: 'to play', run: () => {
         exportModule(store.doc, store.filename);
-        store.markSaved();
       } },
-      // The same world as the files a repository holds, rather than as one
-      // document: `project/` for entries and `maps/` for static maps, which is
-      // what git wants and what `npm run project -- unpack` reads back.
-      { kind: 'action', id: 'act:export-project', label: 'Export project files', hint: 'for git', run: () => {
-        void downloadProject(store.doc as Record<string, unknown>, store.filename, props.authoring)
-          .then(() => store.markSaved());
+      // The project itself, as a repository would hold it: `project/` for
+      // entries and `maps/` for static maps, which is what git wants and what
+      // `npm run project -- unpack` reads back.
+      { kind: 'action', id: 'act:export-project', label: 'Download project files', hint: 'for git', run: () => {
+        void downloadProject(store.doc, store.filename, props.authoring);
       } },
       { kind: 'action', id: 'act:new', label: 'New module…', hint: 'from a template', run: () => setNewDialog(true) },
       { kind: 'action', id: 'act:undo', label: 'Undo', hint: '⌘Z', run: () => store.undo() },
@@ -612,29 +616,44 @@ function StudioShell(props: {
         </div>
       )}
 
-      {draft && (
+
+      {modsOpen && (
+        <ModsPanel
+          mods={mods}
+          doc={store.doc}
+          declared={(store.doc['mods'] as { id: string; hash: string; target?: string; required?: boolean }[] | undefined)?.map((entry) => ({
+            id: entry.id,
+            hash: entry.hash,
+            target: entry.target ?? 'engine',
+            required: entry.required ?? false,
+          })) ?? []}
+          onPatch={(patches) => {
+            // Batched, because a mod command is one thing the author did and
+            // should be one press of undo. Applying them one at a time made a
+            // forty-patch transform need forty undos — which is the opposite
+            // of what both this panel and the mod ABI say happens.
+            const writes = patches.filter((patch) => patch.op === 'set');
+            const deletes = patches.filter((patch) => patch.op === 'delete');
+            if (writes.length > 0) {
+              store.setMany(writes.map((patch) => ({ path: patch.path, value: patch.value })));
+            }
+            if (deletes.length > 0) store.removeMany(deletes.map((patch) => patch.path));
+          }}
+        />
+      )}
+
+      {interrupted !== null && (
         <div className={styles.recovery}>
           <span>
-            Unsaved work from {new Date(draft.savedAt).toLocaleString()} — it had errors, so it was
-            kept here rather than written to the module.
+            The last few seconds before this world was closed on{' '}
+            {new Date(interrupted).toLocaleString()} may not have been saved — a browser can
+            cut a write short while a tab is closing.
           </span>
           <button
-            className="btn tiny primary"
-            onClick={() => {
-              store.replace(draft.doc);
-              setDraft(null);
-            }}
-          >
-            Restore it
-          </button>
-          <button
             className="btn tiny"
-            onClick={() => {
-              void clearDraft(props.world.key);
-              setDraft(null);
-            }}
+            onClick={() => { clearInterrupted(); setInterrupted(null); }}
           >
-            Discard
+            Dismiss
           </button>
         </div>
       )}
@@ -669,10 +688,10 @@ function StudioShell(props: {
         <NewModuleDialog
           library={props.library}
           dirty={store.dirty}
-          onExportFirst={() => {
-            exportModule(store.doc, store.filename);
-            store.markSaved();
-          }}
+          // Not an export any more. This world keeps its own files under its own
+          // key, so making another does not endanger it — the only gap is the
+          // idle window, and flushing closes that.
+          onSaveFirst={() => void saveToDisk()}
           onCreate={(doc, filename) => {
             // A new world is a library row before it is a document on screen,
             // so there is never a state where typing goes nowhere.
@@ -765,17 +784,15 @@ export function Studio() {
       // undo history all belong to one document, and carrying any of them
       // across a switch is how an edit lands in the wrong world.
       key={world.meta.key}
-      initialDoc={world.envelope.doc}
-      initialName={world.envelope.filename}
+      initialDoc={world.doc}
+      initialName={world.meta.filename}
       world={world.meta}
       library={library}
-      authoring={world.envelope.authoring ?? NO_AUTHORING}
+      authoring={world.authoring}
+      loadedSnapshot={world.snapshot}
       onAuthoringChange={(next) => {
-        setWorld((current) => (current
-          ? { ...current, envelope: { ...current.envelope, authoring: next } }
-          : current));
+        setWorld((current) => (current ? { ...current, authoring: next } : current));
       }}
-      draft={world.draft}
       onOpenWorld={(key) => void open(key)}
       onNewWorld={(doc, filename) => void newWorld(doc, filename)}
     />

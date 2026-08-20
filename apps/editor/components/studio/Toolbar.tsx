@@ -9,15 +9,17 @@ import styles from '@/app/studio/studio.module.css';
 const START_KIND_LABEL = { poi: 'POI', area: 'area', dungeon: 'dungeon' } as const;
 
 /**
- * What autosave last did. `draft` is the one worth reading: the work is kept,
- * but the module on disk is still the last valid one.
+ * What autosave last did.
+ *
+ * There is no `draft` any more. A world is its project files, so a document with
+ * errors in it is stored as itself rather than set aside — there is no last-valid
+ * copy underneath to be truthful about.
  */
 const AUTOSAVE_LABEL: Record<string, string> = {
   idle: 'Saved',
   pending: 'Saving…',
   saving: 'Saving…',
   saved: 'Saved',
-  draft: 'Draft',
   error: 'Not saved',
 };
 
@@ -46,7 +48,7 @@ export function Toolbar(props: {
   worlds: readonly WorldMeta[];
   onOpenWorld: (key: string) => void;
   /** Every module in this repository, for the switcher. */
-  saveState: 'idle' | 'pending' | 'saving' | 'saved' | 'draft' | 'error';
+  saveState: 'idle' | 'pending' | 'saving' | 'saved' | 'error';
   saveNote: string;
 }) {
   const { store } = props;
@@ -93,10 +95,9 @@ export function Toolbar(props: {
           className="btn"
           onClick={() => {
             exportModule(store.doc, store.filename);
-            store.markSaved();
           }}
         >
-          Export
+          Compile
         </button>
         {props.saveNote && (
           <span
@@ -110,7 +111,7 @@ export function Toolbar(props: {
         <input
           ref={fileInput}
           type="file"
-          accept="application/json,.json"
+          accept="application/json,.json,.gz"
           hidden
           onChange={(e) => {
             const file = e.target.files?.[0];

@@ -35,8 +35,8 @@
 import { readFileSync, writeFileSync, existsSync, mkdirSync } from 'node:fs';
 import { join, resolve } from 'node:path';
 import { readAssembledModule } from '@dm/module/load';
-import { asRecipe, expandRecipe } from '@dm/module';
-import type { Prefab, PrefabParam, StyleTables } from '@dm/module';
+import { asRecipe, expandRecipe, serializeProjectValue } from '@dm/module';
+import type { Prefab, PrefabParam, PrefabRecipe, StyleTables } from '@dm/module';
 
 /** Fields that are what an entry *is*, never a variant of something else. */
 const IDENTITY = ['id', 'name', 'description'];
@@ -234,14 +234,18 @@ function main(): number {
             params[param.key] = param.key === 'variant' ? made.variantOf(entry) : entry[param.key];
           }
 
-          const recipe = asRecipe(entry, made.prefab, params, made.style);
-          const { entry: rebuilt } = expandRecipe(recipe, [made.prefab], made.style);
+          const text = serializeProjectValue(asRecipe(entry, made.prefab, params, made.style));
+          // Expanded from the text rather than from the recipe object, because
+          // those are not the same thing: an override whose value is `undefined`
+          // survives in memory and suppresses the template's key, then vanishes
+          // in `JSON.stringify` and lets the key back in on the next build. The
+          // check has to see the bytes that will be on disk.
+          const { entry: rebuilt } = expandRecipe(JSON.parse(text) as PrefabRecipe, [made.prefab], made.style);
           // Serialized, so key order counts. Anything that does not survive
           // keeps the literal file it already had.
           if (JSON.stringify(rebuilt) !== JSON.stringify(entry)) return;
 
-          const file = `${section}/${name}/${files[index]!}`;
-          written.set(file, `${JSON.stringify(recipe, null, 2)}\n`);
+          written.set(`${section}/${name}/${files[index]!}`, text);
         });
       }
     }

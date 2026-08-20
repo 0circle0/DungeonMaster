@@ -18,7 +18,7 @@ import { readFileSync, existsSync, readdirSync, statSync } from 'node:fs';
 import { join, relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import type { Prefab, StyleTables } from './prefab.js';
-import { splitProject, joinProject, isAuthoringFile } from './project.js';
+import { splitProject, joinProject, isAuthoringFile, entryFileText } from './project.js';
 import { compileModule, hashModule } from './compile.js';
 import { gameModuleSchema } from './schema/module.js';
 
@@ -237,6 +237,181 @@ describe('a rebuilt module is the same module', () => {
     // only the two without folders compile straight from the file.
     if (name === 'minimal' || name === 'core_fantasy') {
       expect(compileModule(document).ok).toBe(true);
+    }
+  });
+});
+
+/**
+ * Provenance survives the round trip.
+ *
+ * A recipe file names a prefab and carries the parameters somebody typed, which
+ * is the whole record that an entry was generated rather than written. Expanding
+ * it and returning only the entry is how Aurendel ended up shipping 44 prefabs
+ * with nothing pointing at them — the links were in the files the entire time.
+ */
+describe('joinProject recovers prefab links', () => {
+  it('reports the prefab and params of every recipe it expands', () => {
+    const prefabs: Prefab[] = [{
+      id: 'inn',
+      collection: 'world.pointsOfInterest',
+      params: [{ key: 'id', kind: 'string' }, { key: 'name', kind: 'string' }],
+      template: { id: '{{id}}', name: '{{name}}', kind: 'settlement' },
+    }];
+
+    const manifest = {
+      format: 1,
+      keyOrder: ['world'],
+      sections: { world: { keyOrder: ['pointsOfInterest'], collections: { pointsOfInterest: ['a.json', 'b.json'] } } },
+    };
+    const files = {
+      'shell.json': '{"world":{}}',
+      'world/pointsOfInterest/a.json': '{"@prefab":"inn","params":{"id":"a","name":"The Ford"}}',
+      // A literal entry beside a recipe: it has no link and must not invent one.
+      'world/pointsOfInterest/b.json': '{"id":"b","name":"Hand written","kind":"settlement"}',
+    };
+
+    const { document, issues, links } = joinProject(manifest, files, { prefabs });
+
+    expect(issues).toEqual([]);
+    expect((document['world'] as Record<string, unknown[]>)['pointsOfInterest']).toEqual([
+      { id: 'a', name: 'The Ford', kind: 'settlement' },
+      { id: 'b', name: 'Hand written', kind: 'settlement' },
+    ]);
+    expect(links).toEqual({
+      'world.pointsOfInterest': { a: { id: 'inn', params: { id: 'a', name: 'The Ford' } } },
+    });
+  });
+
+  it('recovers a link for every recipe committed in aurendel', () => {
+    const projectDir = fileURLToPath(new URL('../../../modules/aurendel/project', import.meta.url));
+    if (!existsSync(projectDir)) return;
+
+    const files: Record<string, string> = {};
+    const walk = (current: string): void => {
+      for (const entry of readdirSync(current)) {
+        const path = join(current, entry);
+        if (statSync(path).isDirectory()) walk(path);
+        else if (path.endsWith('.json')) files[relative(projectDir, path).split('\\').join('/')] = readFileSync(path, 'utf8');
+      }
+    };
+    walk(projectDir);
+
+    const manifestText = files['project.json']!;
+    delete files['project.json'];
+
+    const prefabs: Prefab[] = [];
+    let style: StyleTables = {};
+    let recipes = 0;
+    for (const path of Object.keys(files)) {
+      if (isAuthoringFile(path)) {
+        if (path === 'style.json') style = JSON.parse(files[path]!) as StyleTables;
+        else if (path.startsWith('prefabs/') && !path.endsWith('instances.json')) {
+          prefabs.push(JSON.parse(files[path]!) as Prefab);
+        }
+        delete files[path];
+      } else if (files[path]!.includes('"@prefab"')) {
+        recipes += 1;
+      }
+    }
+
+    const { links } = joinProject(
+      JSON.parse(manifestText) as ReturnType<typeof splitProject>['manifest'],
+      files,
+      { prefabs, style },
+    );
+
+    const found = Object.values(links).reduce((n, byId) => n + Object.keys(byId).length, 0);
+    expect(recipes).toBeGreaterThan(700);
+    expect(found).toBe(recipes);
+  });
+});
+
+/**
+ * Names and bytes are decided in two passes now, and `forEach` skips holes.
+ *
+ * A writer that indexed `names[i]` instead of walking the entries would put the
+ * wrong contents in every file after a hole. Holes are not reachable from JSON,
+ * so nothing would have caught this until a document reached the splitter some
+ * other way.
+ */
+describe('manifestFor and the file writer agree', () => {
+  it('keeps names aligned with entries across an array hole', () => {
+    const entries: unknown[] = [];
+    entries[1] = { id: 'second' };
+    entries[2] = { id: 'third' };
+
+    const doc = { world: { areas: entries } };
+    const split = splitProject(doc);
+    const names = split.manifest.sections['world']!.collections['areas']!;
+
+    expect(names).toEqual(['second.json', 'third.json']);
+    for (const [i, name] of names.entries()) {
+      expect(JSON.parse(split.files[`world/areas/${name}`]!)).toEqual(entries[i + 1]);
+    }
+  });
+});
+
+/**
+ * The rule that decides what an entry file says.
+ *
+ * A recipe that does not expand back into the entry it was made from is a file
+ * that changes the world every time it is loaded. `asRecipe` cannot refuse to
+ * make one, so the caller has to check — and the two ways it goes wrong are not
+ * hypothetical, they are what `bin/compress-project.ts` leaves as literal files.
+ */
+describe('entryFileText', () => {
+  const inn: Prefab = {
+    id: 'inn',
+    collection: 'world.pointsOfInterest',
+    params: [{ key: 'id', kind: 'string' }, { key: 'name', kind: 'string' }],
+    template: { id: '{{id}}', name: '{{name}}', kind: 'settlement' },
+  };
+
+  it('writes a recipe when one reproduces the entry exactly', () => {
+    const entry = { id: 'a', name: 'The Ford', kind: 'settlement' };
+    const text = entryFileText(entry, { id: 'inn', params: { id: 'a', name: 'The Ford' } }, [inn]);
+    expect(JSON.parse(text)).toEqual({ '@prefab': 'inn', params: { id: 'a', name: 'The Ford' } });
+  });
+
+  it('writes the entry when the prefab cannot reproduce its key order', () => {
+    // The same three keys the template emits, in a different order. Overrides
+    // are applied by path onto the expansion, so no override can move a key.
+    const entry = { kind: 'settlement', id: 'a', name: 'The Ford' };
+    const text = entryFileText(entry, { id: 'inn', params: { id: 'a', name: 'The Ford' } }, [inn]);
+    expect(JSON.parse(text)).toEqual(entry);
+    expect(text).toBe(`${JSON.stringify(entry, null, 2)}\n`);
+  });
+
+  it('writes the entry when the template emits a key the entry does not have', () => {
+    // `kind` is missing, so the override value is `undefined`, which
+    // `JSON.stringify` drops — the recipe would expand with `kind` back.
+    const entry = { id: 'a', name: 'The Ford' };
+    const text = entryFileText(entry, { id: 'inn', params: { id: 'a', name: 'The Ford' } }, [inn]);
+    expect(JSON.parse(text)).toEqual(entry);
+  });
+
+  it('writes the entry when there is no link, and when the prefab is gone', () => {
+    const entry = { id: 'a', name: 'The Ford', kind: 'settlement' };
+    expect(JSON.parse(entryFileText(entry, null, [inn]))).toEqual(entry);
+    expect(JSON.parse(entryFileText(entry, { id: 'missing', params: {} }, [inn]))).toEqual(entry);
+  });
+
+  it('round-trips through joinProject whatever it decides', () => {
+    const cases = [
+      { id: 'a', name: 'The Ford', kind: 'settlement' },
+      { kind: 'settlement', id: 'b', name: 'Reordered' },
+      { id: 'c', name: 'Partial' },
+    ];
+    for (const entry of cases) {
+      const link = { id: 'inn', params: { id: entry.id, name: entry.name } };
+      const files = { 'shell.json': '{"world":{}}', 'world/pointsOfInterest/e.json': entryFileText(entry, link, [inn]) };
+      const manifest = {
+        format: 1,
+        keyOrder: ['world'],
+        sections: { world: { keyOrder: ['pointsOfInterest'], collections: { pointsOfInterest: ['e.json'] } } },
+      };
+      const { document } = joinProject(manifest, files, { prefabs: [inn] });
+      expect((document['world'] as Record<string, unknown[]>)['pointsOfInterest']![0]).toEqual(entry);
     }
   });
 });

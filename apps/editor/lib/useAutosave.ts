@@ -8,25 +8,22 @@
  * author's job. Undo is the safety net for a change you regret; it is not a
  * reason to keep work in memory.
  *
- * Two destinations, because a world has to stay loadable:
- *
- * - the document **validates** → the world itself, and any draft is cleared;
- * - it **does not** → a draft beside it, recovered when the world reopens.
- *
- * A half-typed id is a normal state of a text box, so the second case is
- * frequent and has to be as durable as the first.
+ * One destination now, because a world is its files. A draft used to exist so
+ * that the library always held a document that compiled while a half-typed one
+ * waited beside it — but a file with a half-typed reference is a file, the world
+ * still opens, and the diagnostic says so. Nothing has to be set aside.
  *
  * The delay is idle time, not a timer: it restarts on every keystroke, so a
- * sentence is written once when it is finished rather than once per letter.
- *
- * Both destinations are now on this machine rather than across a network, which
- * changes two things. The idle window is shorter, because a write costs
- * milliseconds instead of a round trip and a two-thousand-file repository
- * update. And durability at teardown is weaker — see `useEffect` below.
+ * sentence is written once when it is finished rather than once per letter. It
+ * was never the expensive part, though: the old save re-serialized the whole
+ * document and compressed it, so debouncing changed how often that happened and
+ * not what it cost. What a save writes now is the files that moved, which for an
+ * edited field is one of them.
  */
 
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { writeWorld, writeDraft, clearDraft, recomputeInstancesFor } from '@/lib/worldStore';
+import { saveWorld, recomputeInstancesFor } from '@/lib/worldStore';
+import type { ProjectSnapshot } from '@/lib/projectDiff';
 import type { ModuleStore } from './store';
 import type { WorldAuthoring, WorldMeta } from '@dm/library';
 
@@ -53,7 +50,7 @@ const IDLE_MS = 400;
  */
 const PENDING_KEY = 'dm.studio.pending';
 
-export type AutosaveState = 'idle' | 'pending' | 'saving' | 'saved' | 'draft' | 'error';
+export type AutosaveState = 'idle' | 'pending' | 'saving' | 'saved' | 'error';
 
 export interface Autosave {
   readonly state: AutosaveState;
@@ -70,14 +67,27 @@ export function useAutosave(
   world: WorldMeta | null,
   authoring: WorldAuthoring,
   enabled: boolean,
+  /** How the world was read, so the first save compares against it. */
+  loaded: ProjectSnapshot | null = null,
 ): Autosave {
   const [state, setState] = useState<AutosaveState>('idle');
   const [note, setNote] = useState('');
 
   // The save reads these at the moment it runs, not at the moment it was
   // scheduled — otherwise a burst of typing would each save its own stale copy.
-  const latest = useRef({ doc: store.doc, ok: store.validation.ok, authoring, world });
-  latest.current = { doc: store.doc, ok: store.validation.ok, authoring, world };
+  const latest = useRef({ doc: store.doc, compiled: store.validation.compiled, authoring, world });
+  latest.current = { doc: store.doc, compiled: store.validation.compiled, authoring, world };
+
+  /** The world as it was last written, and what the next diff compares against. */
+  const snapshot = useRef<ProjectSnapshot | null>(loaded);
+  /**
+   * Prefabs and style tables never go through the store — `savePrefab` and
+   * `linkInstance` set state on the loader instead — so `store.dirty` stays
+   * false for them and the idle effect below would never fire. That was already
+   * losing a prefab created and not followed by an edit; now that entry files can
+   * be recipes *built from* those prefabs, it would also let the two disagree.
+   */
+  const savedAuthoring = useRef<WorldAuthoring | null>(null);
 
   const inFlight = useRef(false);
   const again = useRef(false);
@@ -96,26 +106,31 @@ export function useAutosave(
 
     inFlight.current = true;
     setState('saving');
-    const { doc, ok, authoring: sidecar } = latest.current;
+    // Captured once. The diff, the write and the snapshot all have to be about
+    // the same document, or the snapshot claims files were written that were not.
+    const { doc, compiled, authoring: sidecar } = latest.current;
 
     try {
-      if (ok) {
-        // Which fields are the author's rather than the prefab's, worked out
-        // from the document being written. Derived rather than tracked, so it
-        // matches what the inspector shows by construction.
-        const meta = await writeWorld(target, doc, recomputeInstancesFor(doc, sidecar));
-        await clearDraft(target.key);
-        store.markSaved();
-        setState('saved');
-        setNote(kb(meta.storedBytes));
-      } else {
-        await writeDraft(target.key, doc);
-        // Deliberately *not* `markSaved`: the world in the library is still the
-        // last one that worked, and saying "saved" about a document with errors
-        // in it would be a lie the author acts on.
-        setState('draft');
-        setNote('kept as a draft — has errors');
-      }
+      // Which fields are the author's rather than the prefab's, worked out from
+      // the document being written. Derived rather than tracked, so it matches
+      // what the inspector shows by construction.
+      const written = recomputeInstancesFor(doc, sidecar);
+      const { meta, snapshot: next } = await saveWorld({
+        world: target,
+        doc,
+        authoring: written,
+        compiled,
+        previous: snapshot.current,
+      });
+
+      // Only now. A quota failure aborts the transaction, and a snapshot that
+      // moved first would make the next diff compare against files that were
+      // never stored — those edits would never be written again.
+      snapshot.current = next;
+      savedAuthoring.current = sidecar;
+      store.markSaved();
+      setState('saved');
+      setNote(kb(meta.storedBytes));
       window.localStorage.removeItem(PENDING_KEY);
     } catch (err) {
       setState('error');
@@ -129,13 +144,14 @@ export function useAutosave(
     }
   }, [enabled, store]);
 
-  // Idle, restarted by every edit.
+  // Idle, restarted by every edit — and by a prefab, which is not one.
+  const authoringDirty = savedAuthoring.current !== null && savedAuthoring.current !== authoring;
   useEffect(() => {
-    if (!enabled || !store.dirty) return;
+    if (!enabled || (!store.dirty && !authoringDirty)) return;
     setState('pending');
     const timer = setTimeout(() => void save(), IDLE_MS);
     return () => clearTimeout(timer);
-  }, [enabled, store.doc, store.dirty, save]);
+  }, [enabled, store.doc, store.dirty, authoringDirty, save]);
 
   /**
    * The tab going away.
@@ -149,7 +165,7 @@ export function useAutosave(
     if (!enabled) return;
     const onHide = () => {
       const target = latest.current.world;
-      if (!store.dirty || !target) return;
+      if ((!store.dirty && !authoringDirty) || !target) return;
       try {
         window.localStorage.setItem(PENDING_KEY, JSON.stringify({ key: target.key, at: Date.now() }));
       } catch {
@@ -166,7 +182,7 @@ export function useAutosave(
       document.removeEventListener('visibilitychange', onVisibility);
       window.removeEventListener('pagehide', onHide);
     };
-  }, [enabled, store.dirty, save]);
+  }, [enabled, store.dirty, authoringDirty, save]);
 
   return { state, note, flush: save };
 }
