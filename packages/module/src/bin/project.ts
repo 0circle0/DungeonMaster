@@ -17,8 +17,10 @@
  */
 
 import { readFileSync, writeFileSync, mkdirSync, existsSync, readdirSync, rmSync, statSync } from 'node:fs';
+import { gunzipSync } from 'node:zlib';
 import { dirname, join, relative, resolve } from 'node:path';
 import { splitProject, joinProject } from '../project.js';
+import { unbundleModule } from '../bundle.js';
 import type { ProjectManifest } from '../project.js';
 import { lintModule, formatDiagnostics } from '../diagnostics/lint.js';
 import { assembleMapFolders, formatMapIssues } from '../load.js';
@@ -28,8 +30,10 @@ const MANIFEST = 'project.json';
 function usage(): number {
   process.stderr.write(
     'usage: npm run project -- <split|build> <module-dir> [--force]\n' +
-      '  split  module.json -> project/   (one file per entry)\n' +
-      '  build  project/   -> module.json\n',
+      '       npm run project -- unpack <bundle.json[.gz]> <module-dir> [--force]\n' +
+      '  split   module.json -> project/   (one file per entry)\n' +
+      '  build   project/   -> module.json\n' +
+      '  unpack  a bundle exported from the studio -> project/ and maps/\n',
   );
   return 2;
 }
@@ -176,12 +180,85 @@ function build(moduleDir: string): number {
   return 0;
 }
 
+/**
+ * A bundle the studio exported, back into the tree it came from.
+ *
+ * The studio cannot hand over a directory, so it writes one gzipped file of
+ * path-to-contents. This is the other end of that, and it writes exactly what
+ * the bundle says — no merging, because a partial write is how two
+ * representations of one world start disagreeing.
+ *
+ * Authoring files are left alone: `prefabs/`, `style.json` and `contract.json`
+ * are not produced by any document, so a bundle never carries them and clearing
+ * them here would delete work nothing else holds.
+ */
+function unpack(bundlePath: string, moduleDir: string, force: boolean): number {
+  if (!existsSync(bundlePath)) {
+    process.stderr.write(`✗ ${bundlePath} does not exist\n`);
+    return 1;
+  }
+
+  const bytes = readFileSync(bundlePath);
+  const text = bytes[0] === 0x1f && bytes[1] === 0x8b
+    ? gunzipSync(bytes).toString('utf8')
+    : bytes.toString('utf8');
+
+  let parsed: { files?: Record<string, string> };
+  try {
+    parsed = JSON.parse(text) as { files?: Record<string, string> };
+  } catch (err) {
+    process.stderr.write(`✗ ${bundlePath}: ${(err as Error).message}\n`);
+    return 1;
+  }
+
+  const files = parsed.files;
+  if (!files || typeof files !== 'object') {
+    process.stderr.write(`✗ ${bundlePath} carries no files\n`);
+    return 1;
+  }
+
+  // Proven before anything is written, the same gate `split` uses: a bundle
+  // that does not rebuild is one nobody wants half-applied.
+  const { document, issues } = unbundleModule(files);
+  if (!document || issues.length > 0) {
+    process.stderr.write(`✗ ${bundlePath} does not rebuild a module\n`);
+    for (const issue of issues) process.stderr.write(`  ${issue.file}: ${issue.message}\n`);
+    return 1;
+  }
+
+  const projectDir = join(moduleDir, 'project');
+  if (existsSync(projectDir) && !force) {
+    process.stderr.write(
+      `✗ ${projectDir} already exists.\n  Pass --force to replace what is there.\n`,
+    );
+    return 1;
+  }
+
+  for (const [path, contents] of Object.entries(files)) {
+    const target = join(moduleDir, path);
+    mkdirSync(dirname(target), { recursive: true });
+    writeFileSync(target, contents);
+  }
+
+  process.stdout.write(
+    `✓ ${moduleDir} — ${Object.keys(files).length} files unpacked; ` +
+      'run `npm run project -- build` to rebuild module.json\n',
+  );
+  return 0;
+}
+
 function main(): number {
-  const [command, arg] = process.argv.slice(2);
+  const args = process.argv.slice(2).filter((arg) => arg !== '--force');
+  const [command, arg, second] = args;
   if (!command || !arg) return usage();
-  const moduleDir = resolve(arg);
   const force = process.argv.includes('--force');
 
+  if (command === 'unpack') {
+    if (!second) return usage();
+    return unpack(resolve(arg), resolve(second), force);
+  }
+
+  const moduleDir = resolve(arg);
   if (command === 'split') return split(moduleDir, force);
   if (command === 'build') return build(moduleDir);
   return usage();

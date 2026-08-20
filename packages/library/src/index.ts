@@ -36,7 +36,7 @@ export {
   lastOpened,
 } from './worlds.js';
 
-export { downloadWorld, downloadEnvelope, readWorldFile } from './files.js';
+export { downloadWorld, downloadEnvelope, downloadProject, readWorldFile } from './files.js';
 
 export { fetchCatalog, fetchExampleEnvelope, EMPTY_CATALOG, CONTENT_BASE } from './catalog.js';
 export type { Catalog, CatalogEntry } from './catalog.js';

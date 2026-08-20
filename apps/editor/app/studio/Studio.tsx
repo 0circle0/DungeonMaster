@@ -27,7 +27,7 @@ import { useRules } from '@/lib/useRules';
 import { useEditorMods } from '@/lib/useEditorMods';
 import type { ModWire } from '@/lib/modWire';
 import type { WorldAuthoring, WorldMeta } from '@dm/library';
-import { NO_AUTHORING, clearDraft, lastOpened, rememberLastOpened } from '@dm/library';
+import { NO_AUTHORING, clearDraft, downloadProject, lastOpened, rememberLastOpened } from '@dm/library';
 import { useEditorLibrary, loadWorld } from '@/lib/useEditorLibrary';
 import type { LoadedWorld } from '@/lib/useEditorLibrary';
 import type { EditorLibraryApi } from '@/lib/useEditorLibrary';
@@ -303,6 +303,13 @@ function StudioShell(props: {
       { kind: 'action', id: 'act:export', label: 'Export module', hint: 'download', run: () => {
         exportModule(store.doc, store.filename);
         store.markSaved();
+      } },
+      // The same world as the files a repository holds, rather than as one
+      // document: `project/` for entries and `maps/` for static maps, which is
+      // what git wants and what `npm run project -- unpack` reads back.
+      { kind: 'action', id: 'act:export-project', label: 'Export project files', hint: 'for git', run: () => {
+        void downloadProject(store.doc as Record<string, unknown>, store.filename)
+          .then(() => store.markSaved());
       } },
       { kind: 'action', id: 'act:new', label: 'New module…', hint: 'from a template', run: () => setNewDialog(true) },
       { kind: 'action', id: 'act:undo', label: 'Undo', hint: '⌘Z', run: () => store.undo() },

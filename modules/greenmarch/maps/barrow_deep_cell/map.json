@@ -3,8 +3,20 @@
   "name": "The Deep Cell",
   "description": "The wight's chamber, exactly as the wardens' oldest map draws it: a cell within a cell, one warded way in.",
   "layers": [
-    { "kind": "terrain", "name": "terrain", "file": "terrain.csv" },
-    { "kind": "gates", "name": "gates", "file": "gates.csv" },
-    { "kind": "markers", "name": "markers", "file": "markers.csv" }
+    {
+      "kind": "terrain",
+      "name": "terrain",
+      "file": "terrain.csv"
+    },
+    {
+      "kind": "gates",
+      "name": "gates",
+      "file": "gates.csv"
+    },
+    {
+      "kind": "markers",
+      "name": "markers",
+      "file": "markers.csv"
+    }
   ]
 }

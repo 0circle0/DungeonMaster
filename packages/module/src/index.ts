@@ -16,6 +16,9 @@ export {
   PROJECT_FORMAT,
 } from './project.js';
 
+export { bundleModule, unbundleModule, PROJECT_MANIFEST } from './bundle.js';
+export type { BundleIssue } from './bundle.js';
+
 // Prefabs: an entry described once and placed many times. Pure — the studio
 // expands and previews in the browser.
 export {

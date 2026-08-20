@@ -216,6 +216,27 @@ sight buys time to choose your ground; it is not, by itself, an escape. Staying
 in a fight is deliberately a lower bar than starting one, so something that can
 plainly smell you does not lose you the moment you round a corner.
 
+### Getting a world in and out
+
+`module.json` is what the engine loads and what a player downloads. It is also
+a hundred thousand lines, so both shipped worlds are *authored* as `project/`
+trees — one file per entry, named for its id — and `module.json` is built from
+them:
+
+```
+npm run project -- build modules/aurendel     # project/ -> module.json
+npm run project -- split modules/<name>       # module.json -> project/   (once)
+```
+
+The studio works on the assembled document, and **Export project files** hands
+back the same tree as one gzipped file, because a browser cannot download a
+folder. `npm run project -- unpack <bundle> modules/<name>` is the other end,
+and it refuses to write anything unless the bundle rebuilds a module first.
+
+That round trip is byte-exact in both directions, which is what lets the
+repository and the studio be two views of one world rather than two copies of
+it. `packages/module/src/bundle.test.ts` is the gate.
+
 ## Tooling
 
 Every `.ts` and `.tsx` file in the repo belongs to a TypeScript project, tests

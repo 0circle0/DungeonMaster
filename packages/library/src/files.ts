@@ -11,12 +11,15 @@
  *   - an envelope, which is what the library and the content build write;
  *   - a bare module document, which is what the studio's Export has always
  *     produced and must keep working forever;
- *   - either of those gzipped, which is what a downloaded artifact is.
+ *   - either of those gzipped, which is what a downloaded artifact is;
+ *   - a project bundle, which is the repository's own file tree flattened into
+ *     one file so a browser can hand it over in a single download.
  */
 
 import { isEnvelope, envelopeFromDoc } from './envelope.js';
 import type { WorldEnvelope } from './envelope.js';
-import { gunzip, isGzip } from './gzip.js';
+import { gunzip, gzip, isGzip } from './gzip.js';
+import { bundleModule, unbundleModule, PROJECT_MANIFEST } from '@dm/module';
 
 const decoder = new TextDecoder();
 
@@ -56,6 +59,40 @@ export function downloadEnvelope(envelope: WorldEnvelope, filename?: string): vo
   download(new Blob([text], { type: 'application/json' }), name);
 }
 
+/**
+ * Download the world as the files a repository would hold.
+ *
+ * The studio only ever sees an assembled document, and a repository holds a
+ * `project/` tree beside a `maps/` one — `bundleModule` is what reconciles
+ * those, so this writes paths and bytes that drop straight into git.
+ *
+ * One file rather than a folder because a browser cannot hand over a directory,
+ * and gzipped because the tree is a couple of megabytes of small JSON.
+ * `npm run project -- unpack` is the other end.
+ *
+ * Takes the document rather than an envelope: the authoring sidecar is not part
+ * of a repository's file tree, and `downloadEnvelope` is what carries it.
+ */
+export async function downloadProject(
+  doc: Record<string, unknown>,
+  filename: string,
+): Promise<void> {
+  const { files } = bundleModule(doc);
+  const text = JSON.stringify({ dmProject: 1, files });
+  const bytes = await gzip(new TextEncoder().encode(text));
+
+  const name = `${filename.replace(/\.module\.json$|\.json$/, '')}.project.json.gz`;
+  download(new Blob([bytes as BlobPart], { type: 'application/gzip' }), name);
+}
+
+/** What a project bundle looks like, so a reader can tell one at a glance. */
+function isProjectBundle(value: unknown): value is { files: Record<string, string> } {
+  if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
+  const files = (value as { files?: unknown }).files;
+  if (files === null || typeof files !== 'object' || Array.isArray(files)) return false;
+  return PROJECT_MANIFEST in (files as Record<string, unknown>);
+}
+
 /** A world from a file the user picked, whatever shape it arrived in. */
 export async function readWorldFile(file: File): Promise<WorldEnvelope> {
   const bytes = new Uint8Array(await file.arrayBuffer());
@@ -69,6 +106,20 @@ export async function readWorldFile(file: File): Promise<WorldEnvelope> {
   }
 
   if (isEnvelope(parsed)) return parsed;
+
+  // A project bundle rebuilds into a document, so everything downstream sees
+  // the shape it already handles. Issues are reported as one message rather
+  // than the first one, because a tree that lost several files should say so
+  // once rather than a file at a time.
+  if (isProjectBundle(parsed)) {
+    const { document, issues } = unbundleModule(parsed.files);
+    if (!document || issues.length > 0) {
+      const detail = issues.map((issue) => `${issue.file}: ${issue.message}`).join('; ');
+      throw new Error(`${file.name} is not a complete project — ${detail || 'no document'}`);
+    }
+    const named = file.name.replace(/\.project\.json(\.gz)?$/, '');
+    return envelopeFromDoc(document, named);
+  }
 
   if (typeof parsed !== 'object' || parsed === null || Array.isArray(parsed)) {
     throw new Error(`${file.name} does not contain a world`);

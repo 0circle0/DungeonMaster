@@ -18,7 +18,7 @@
   "reactions": [
     {
       "id": "turns_cold_on_thieves",
-      "description": "If she has heard you steal, she stops dealing with you \u2014 memory changing behaviour, not just dialogue.",
+      "description": "If she has heard you steal, she stops dealing with you — memory changing behaviour, not just dialogue.",
       "on": "seePlayer",
       "requires": {
         "memories": [
