@@ -3,34 +3,19 @@
  *
  * Every comment in the project, in one file, in folder order.
  *
- * The comments here carry most of the reasoning — why a thing is shaped the way
- * it is, what was tried first, which trap it exists to avoid — and that is spread
- * over four hundred files. Read end to end they are the closest thing this
- * project has to a design document, but nobody is going to open four hundred
- * files to read them.
+ * Uses the TypeScript parser for TS/TSX/JS rather than a regex: a regex for a
+ * line comment matches every URL, and one for a block comment matches every
+ * such sequence inside a string. `prelude.ts` holds five commented lines inside
+ * the template literal it ships to QuickJS, and a site page renders two more as
+ * example code; all seven must be excluded. The other languages get small
+ * scanners — none of them has a regex literal, which is the part that makes
+ * lexing JavaScript by hand hard.
  *
- * ## Why the TypeScript parser and not a regex
+ * Python docstrings count, because in `dmkit` that is where the explanation is.
+ * They are found by position — a string opening a file or a `def`/`class` block
+ * — so a triple-quoted value is not mistaken for one.
  *
- * A regex for `//` finds every URL in the codebase, and a regex for `/* ` finds
- * every one inside a string. Both mistakes are silent — the output looks fine
- * and is wrong. TypeScript is already a dependency and its parser knows exactly
- * what a comment is, including inside JSX, template literals and regex
- * literals, so the TS/TSX/JS half of the project is exact rather than
- * approximate.
- *
- * The other languages have no such parser here, so they get small scanners.
- * They are simpler problems: none of them has a regex literal, which is the
- * thing that makes lexing JavaScript by hand hard.
- *
- * ## What counts as a comment
- *
- * Python docstrings do, because in `dmkit` that is where the explanation lives —
- * a rule that only collected `#` would report the least interesting half. They
- * are recognised by position: a string opening a file, or opening the block
- * after a `def`/`class`. A string used as a value never opens a block, so it is
- * not mistaken for one.
- *
- * JSON is skipped. It has no comments, and it is 3,185 of the project's files.
+ * JSON is skipped: no comments, and 3,185 of the project's files.
  */
 
 import ts from 'typescript';
@@ -75,12 +60,9 @@ function lineAt(starts: readonly number[], offset: number): number {
 }
 
 /**
- * TypeScript, TSX and JavaScript, through the real parser.
- *
- * Comments are trivia: they hang off the token that follows them, so every
- * token in the tree is asked what precedes it. The end-of-file token is a child
- * of the source file like any other, which is what catches a comment with
- * nothing after it.
+ * Comments are trivia: they hang off the token that follows them, so every token
+ * in the tree is asked what precedes it. The end-of-file token is a child like
+ * any other, which is what catches a comment with nothing after it.
  */
 function scanTypeScript(path: string, text: string): Comment[] {
   const kind = path.endsWith('.tsx') ? ts.ScriptKind.TSX
@@ -111,12 +93,7 @@ function scanTypeScript(path: string, text: string): Comment[] {
   return [...found.values()].sort((a, b) => a.line - b.line);
 }
 
-/**
- * `#` to end of line, for YAML and shell.
- *
- * Quote-aware, because a `#` inside a string is not a comment — and in a deploy
- * file that string is often a URL fragment or a colour.
- */
+/** `#` to end of line, for YAML and shell. Quote-aware: a `#` in a string is not one. */
 function scanHash(text: string): Comment[] {
   const out: Comment[] = [];
   const lines = text.split('\n');
@@ -167,11 +144,9 @@ function scanCss(text: string): Comment[] {
 }
 
 /**
- * Python: `#` comments, and the docstrings that hold the actual explanation.
- *
- * A docstring is a string that *opens* something — the file, or the block after
- * a `def` or `class`. That is a position, not a shape, so a triple-quoted string
- * assigned to a variable is correctly left alone.
+ * A docstring is a string that *opens* something — the file, or the block after a
+ * `def` or `class`. That is a position, not a shape, so a triple-quoted string
+ * assigned to a variable is left alone.
  */
 function scanPython(text: string): Comment[] {
   const out: Comment[] = [];
@@ -229,14 +204,13 @@ function scanPython(text: string): Comment[] {
   return merge(out.sort((a, b) => a.line - b.line));
 }
 
-/** Comment markers off, so what is left is the prose somebody wrote. */
+/** Comment markers off. */
 function strip(raw: string): string {
   let text = raw.trim();
 
   if (text.startsWith('/*')) {
     text = text.slice(2).replace(/\*\/$/, '');
-    // A `*` gutter is decoration; a `*` that starts a bullet is content, and it
-    // is followed by a space that the gutter form has already consumed.
+    // A `*` gutter is decoration; `*/` is not, hence the lookahead.
     const lines = text.split('\n').map((line) => line.replace(/^\s*\*(?!\/)\s?/, ''));
     return dedent(lines.join('\n')).trim();
   }
@@ -253,12 +227,7 @@ function dedent(text: string): string {
   return lines.map((line) => line.slice(common)).join('\n').replace(/\s+$/, '');
 }
 
-/**
- * Consecutive single-line comments are one comment.
- *
- * Somebody writing four `//` lines wrote a paragraph, and splitting it into four
- * entries turns the reasoning into fragments.
- */
+/** Consecutive single-line comments are one paragraph, not four entries. */
 function merge(comments: readonly Comment[]): Comment[] {
   const out: Comment[] = [];
   for (const comment of comments) {
@@ -342,8 +311,8 @@ for (const entry of entries) {
   for (const comment of entry.comments) {
     const at = comment.line === comment.endLine ? `L${comment.line}` : `L${comment.line}–${comment.endLine}`;
     parts.push(`\n**${at}**\n`);
-    // A blockquote so the comment reads as prose and cannot be mistaken for the
-    // surrounding document's own headings — comments contain `#` and `-` freely.
+    // Blockquoted: comments contain `#` and `-` freely and would otherwise be
+    // read as this document's own headings.
     parts.push(comment.text.split('\n').map((line) => (line ? `> ${line}` : '>')).join('\n'));
     parts.push('');
   }
