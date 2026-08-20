@@ -1,5 +1,5 @@
 {
-  "@prefab": "world_points_f_nterest_int_temple",
+  "@prefab": "world_points_of_interest_int_temple",
   "params": {
     "id": "barrowgate_church",
     "name": "The Church on the Mound",

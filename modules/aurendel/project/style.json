@@ -1,5 +1,5 @@
 {
-  "content_loot_ables_entry_4_variant": {
+  "content_loot_tables_entry_4_variant": {
     "v1": {
       "bonusRollSkill": "perception",
       "emptyChance": 0,
@@ -1174,7 +1174,7 @@
       "providesCover": "three_quarters"
     }
   },
-  "world_points_f_nterest_int_store_variant": {
+  "world_points_of_interest_int_store_variant": {
     "v1": {
       "travelMinutes": 3,
       "tags": [
@@ -1195,7 +1195,7 @@
       ]
     }
   },
-  "world_points_f_nterest_int_house_variant": {
+  "world_points_of_interest_int_house_variant": {
     "v1": {
       "kind": "settlement",
       "travelMinutes": 2,
@@ -1219,7 +1219,7 @@
       ]
     }
   },
-  "world_points_f_nterest_generic_landmark_variant": {
+  "world_points_of_interest_generic_landmark_variant": {
     "v1": {
       "tags": [
         "aurenhal"
@@ -1285,7 +1285,7 @@
       }
     }
   },
-  "world_points_f_nterest_int_warehouse_variant": {
+  "world_points_of_interest_int_warehouse_variant": {
     "v1": {
       "tags": [
         "docks",
@@ -1318,7 +1318,7 @@
       }
     }
   },
-  "world_points_f_nterest_int_store_2_variant": {
+  "world_points_of_interest_int_store_2_variant": {
     "v1": {
       "kind": "market",
       "tags": [
@@ -1411,7 +1411,7 @@
       }
     }
   },
-  "world_points_f_nterest_int_workshop_2_variant": {
+  "world_points_of_interest_int_workshop_2_variant": {
     "v1": {
       "travelMinutes": 3,
       "map": {
@@ -1461,7 +1461,7 @@
       }
     }
   },
-  "world_points_f_nterest_int_smithy_2_variant": {
+  "world_points_of_interest_int_smithy_2_variant": {
     "v1": {
       "map": {
         "width": "15",
@@ -1573,7 +1573,7 @@
       }
     }
   },
-  "world_points_f_nterest_int_inn_2_variant": {
+  "world_points_of_interest_int_inn_2_variant": {
     "v1": {
       "travelMinutes": 3,
       "services": [
@@ -1631,7 +1631,7 @@
       }
     }
   },
-  "world_points_f_nterest_int_house_2_variant": {
+  "world_points_of_interest_int_house_2_variant": {
     "v1": {
       "kind": "settlement",
       "tags": [
@@ -1685,7 +1685,7 @@
       "travelMinutes": 5
     }
   },
-  "world_points_f_nterest_int_stable_variant": {
+  "world_points_of_interest_int_stable_variant": {
     "v1": {
       "travelMinutes": 3,
       "services": [
@@ -1700,46 +1700,7 @@
       ]
     }
   },
-  "world_points_f_nterest_generic_landmark_2_variant": {
-    "v1": {
-      "tags": [],
-      "position": {
-        "x": 14,
-        "y": 3
-      }
-    },
-    "v2": {
-      "tags": [],
-      "position": {
-        "x": 3,
-        "y": 3
-      }
-    },
-    "v3": {
-      "tags": [],
-      "position": {
-        "x": 13,
-        "y": 27
-      }
-    },
-    "v4": {
-      "tags": [],
-      "position": {
-        "x": 25,
-        "y": 3
-      }
-    },
-    "v5": {
-      "tags": [
-        "landmark"
-      ],
-      "position": {
-        "x": 3,
-        "y": 3
-      }
-    }
-  },
-  "world_points_f_nterest_generic_ruin_3_variant": {
+  "world_points_of_interest_generic_ruin_3_variant": {
     "v1": {
       "position": {
         "x": 14,
@@ -1776,7 +1737,7 @@
       "travelMinutes": 10
     }
   },
-  "world_points_f_nterest_generic_dungeon_mouth_3_variant": {
+  "world_points_of_interest_generic_dungeon_mouth_3_variant": {
     "v1": {
       "tags": [
         "dungeon"

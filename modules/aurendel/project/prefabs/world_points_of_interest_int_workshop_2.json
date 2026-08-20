@@ -1,6 +1,6 @@
 {
-  "id": "world_points_f_nterest_int_inn_2",
-  "label": "world_points_f_nterest_int_inn_2",
+  "id": "world_points_of_interest_int_workshop_2",
+  "label": "world_points_of_interest_int_workshop_2",
   "collection": "world.pointsOfInterest",
   "params": [
     {
@@ -31,7 +31,8 @@
         "v2",
         "v3",
         "v4",
-        "v5"
+        "v5",
+        "v6"
       ]
     }
   ],
@@ -40,28 +41,24 @@
     "name": "{{name}}",
     "description": "{{description}}",
     "area": "{{area}}",
-    "kind": "settlement",
-    "descriptionKey": "int_inn",
+    "kind": "market",
+    "descriptionKey": "int_workshop",
     "travelMinutes": {
       "@lookup": [
-        "world_points_f_nterest_int_inn_2_variant",
+        "world_points_of_interest_int_workshop_2_variant",
         "{{variant}}",
         "travelMinutes"
       ]
     },
     "tags": [
-      "inn"
+      "shop"
     ],
-    "services": {
-      "@lookup": [
-        "world_points_f_nterest_int_inn_2_variant",
-        "{{variant}}",
-        "services"
-      ]
-    },
+    "services": [
+      "market"
+    ],
     "map": {
       "@lookup": [
-        "world_points_f_nterest_int_inn_2_variant",
+        "world_points_of_interest_int_workshop_2_variant",
         "{{variant}}",
         "map"
       ]

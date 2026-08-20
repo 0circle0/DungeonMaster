@@ -1,6 +1,6 @@
 {
-  "id": "world_points_f_nterest_generic_ruin_3",
-  "label": "world_points_f_nterest_generic_ruin_3",
+  "id": "world_points_of_interest_int_smithy_2",
+  "label": "world_points_of_interest_int_smithy_2",
   "collection": "world.pointsOfInterest",
   "params": [
     {
@@ -20,10 +20,6 @@
       "kind": "string"
     },
     {
-      "key": "map",
-      "kind": "string"
-    },
-    {
       "key": "variant",
       "kind": "enum",
       "options": [
@@ -31,7 +27,12 @@
         "v2",
         "v3",
         "v4",
-        "v5"
+        "v5",
+        "v6",
+        "v7",
+        "v8",
+        "v9",
+        "v10"
       ]
     }
   ],
@@ -40,22 +41,25 @@
     "name": "{{name}}",
     "description": "{{description}}",
     "area": "{{area}}",
-    "kind": "ruin",
-    "descriptionKey": "generic_ruin",
-    "travelMinutes": {
+    "kind": "market",
+    "descriptionKey": "int_smithy",
+    "travelMinutes": 3,
+    "tags": [
+      "shop"
+    ],
+    "services": [
+      "smith"
+    ],
+    "map": {
       "@lookup": [
-        "world_points_f_nterest_generic_ruin_3_variant",
+        "world_points_of_interest_int_smithy_2_variant",
         "{{variant}}",
-        "travelMinutes"
+        "map"
       ]
     },
-    "tags": [
-      "ruin"
-    ],
-    "map": "{{map}}",
     "position": {
       "@lookup": [
-        "world_points_f_nterest_generic_ruin_3_variant",
+        "world_points_of_interest_int_smithy_2_variant",
         "{{variant}}",
         "position"
       ]

@@ -1,6 +1,6 @@
 {
-  "id": "world_points_f_nterest_generic_dungeon_mouth_2",
-  "label": "world_points_f_nterest_generic_dungeon_mouth_2",
+  "id": "world_points_of_interest_generic_camp",
+  "label": "world_points_of_interest_generic_camp",
   "collection": "world.pointsOfInterest",
   "params": [
     {
@@ -24,15 +24,7 @@
       "kind": "string"
     },
     {
-      "key": "discover",
-      "kind": "string"
-    },
-    {
-      "key": "dungeon",
-      "kind": "string"
-    },
-    {
-      "key": "triggers",
+      "key": "map",
       "kind": "string"
     }
   ],
@@ -41,20 +33,14 @@
     "name": "{{name}}",
     "description": "{{description}}",
     "area": "{{area}}",
-    "kind": "dungeonEntrance",
-    "descriptionKey": "generic_dungeon_mouth",
+    "kind": "camp",
+    "descriptionKey": "generic_camp",
     "travelMinutes": "{{travelMinutes}}",
-    "tags": [
-      "secret",
-      "dungeon"
-    ],
-    "hidden": true,
-    "discover": "{{discover}}",
-    "dungeon": "{{dungeon}}",
+    "tags": [],
+    "map": "{{map}}",
     "position": {
-      "x": 25,
+      "x": 14,
       "y": 3
-    },
-    "triggers": "{{triggers}}"
+    }
   }
 }

@@ -1,6 +1,6 @@
 {
-  "id": "world_points_f_nterest_int_workshop",
-  "label": "world_points_f_nterest_int_workshop",
+  "id": "world_points_of_interest_int_temple",
+  "label": "world_points_of_interest_int_temple",
   "collection": "world.pointsOfInterest",
   "params": [
     {
@@ -20,15 +20,11 @@
       "kind": "string"
     },
     {
-      "key": "travelMinutes",
+      "key": "map",
       "kind": "string"
     },
     {
       "key": "position",
-      "kind": "string"
-    },
-    {
-      "key": "map",
       "kind": "string"
     }
   ],
@@ -37,16 +33,16 @@
     "name": "{{name}}",
     "description": "{{description}}",
     "area": "{{area}}",
-    "kind": "market",
-    "descriptionKey": "int_workshop",
-    "travelMinutes": "{{travelMinutes}}",
+    "kind": "shrine",
+    "descriptionKey": "int_temple",
+    "travelMinutes": 3,
     "tags": [
-      "shop"
+      "shrine"
     ],
-    "position": "{{position}}",
     "services": [
-      "market"
+      "temple"
     ],
-    "map": "{{map}}"
+    "map": "{{map}}",
+    "position": "{{position}}"
   }
 }

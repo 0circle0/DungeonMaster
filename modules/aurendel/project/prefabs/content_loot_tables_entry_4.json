@@ -1,6 +1,6 @@
 {
-  "id": "content_loot_ables_entry_4",
-  "label": "content_loot_ables_entry_4",
+  "id": "content_loot_tables_entry_4",
+  "label": "content_loot_tables_entry_4",
   "collection": "content.lootTables",
   "params": [
     {
@@ -39,28 +39,28 @@
     "name": "{{name}}",
     "rolls": {
       "@lookup": [
-        "content_loot_ables_entry_4_variant",
+        "content_loot_tables_entry_4_variant",
         "{{variant}}",
         "rolls"
       ]
     },
     "emptyChance": {
       "@lookup": [
-        "content_loot_ables_entry_4_variant",
+        "content_loot_tables_entry_4_variant",
         "{{variant}}",
         "emptyChance"
       ]
     },
     "bonusRollSkill": {
       "@lookup": [
-        "content_loot_ables_entry_4_variant",
+        "content_loot_tables_entry_4_variant",
         "{{variant}}",
         "bonusRollSkill"
       ]
     },
     "bonusRolls": {
       "@lookup": [
-        "content_loot_ables_entry_4_variant",
+        "content_loot_tables_entry_4_variant",
         "{{variant}}",
         "bonusRolls"
       ]

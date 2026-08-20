@@ -1,5 +1,5 @@
 {
-  "@prefab": "world_points_f_nterest_generic_landmark",
+  "@prefab": "world_points_of_interest_generic_landmark",
   "params": {
     "id": "gatehall_muster_floor",
     "name": "The Muster Floor",

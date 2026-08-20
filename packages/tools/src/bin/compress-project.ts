@@ -86,7 +86,9 @@ function groupsOf(entries: readonly Record<string, unknown>[], collection: strin
       // Qualified by collection because prefabs share one flat folder and
       // `expandRecipe` resolves by id alone — every collection was producing
       // its own `entry`, and a monster was being rebuilt from an attribute.
-      const base = `${collection.replace(/\./g, '_')}_${pool}`;
+      // Lower-cased *before* stripping, or every capital is simply deleted and
+      // `world.pointsOfInterest` comes out as `world_points_f_nterest`.
+      const base = `${collection.replace(/\./g, '_').replace(/([a-z0-9])([A-Z])/g, '$1_$2').toLowerCase()}_${pool}`;
       return { key: n === 1 ? base : `${base}_${n}`, entries: held.entries, indexes: held.indexes };
     });
 }
@@ -143,7 +145,7 @@ function design(group: Group, collection: string): Design | null {
   // Nothing to save: every field is either unique or already spelled out.
   if (constant.length === 0 && variantFields.length === 0) return null;
 
-  const id = `${group.key}`.replace(/[^a-z0-9_]/g, '_');
+  const id = `${group.key}`.toLowerCase().replace(/[^a-z0-9_]/g, '_');
   const table = `${id}_variant`;
   const style: Record<string, Record<string, unknown>> = {};
   const names = new Map<string, string>();

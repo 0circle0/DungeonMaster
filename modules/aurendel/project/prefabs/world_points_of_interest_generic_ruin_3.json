@@ -1,6 +1,6 @@
 {
-  "id": "world_points_f_nterest_int_house",
-  "label": "world_points_f_nterest_int_house",
+  "id": "world_points_of_interest_generic_ruin_3",
+  "label": "world_points_of_interest_generic_ruin_3",
   "collection": "world.pointsOfInterest",
   "params": [
     {
@@ -20,7 +20,7 @@
       "kind": "string"
     },
     {
-      "key": "position",
+      "key": "map",
       "kind": "string"
     },
     {
@@ -29,7 +29,9 @@
       "options": [
         "v1",
         "v2",
-        "v3"
+        "v3",
+        "v4",
+        "v5"
       ]
     }
   ],
@@ -38,33 +40,25 @@
     "name": "{{name}}",
     "description": "{{description}}",
     "area": "{{area}}",
-    "kind": {
-      "@lookup": [
-        "world_points_f_nterest_int_house_variant",
-        "{{variant}}",
-        "kind"
-      ]
-    },
-    "descriptionKey": "int_house",
+    "kind": "ruin",
+    "descriptionKey": "generic_ruin",
     "travelMinutes": {
       "@lookup": [
-        "world_points_f_nterest_int_house_variant",
+        "world_points_of_interest_generic_ruin_3_variant",
         "{{variant}}",
         "travelMinutes"
       ]
     },
-    "tags": {
+    "tags": [
+      "ruin"
+    ],
+    "map": "{{map}}",
+    "position": {
       "@lookup": [
-        "world_points_f_nterest_int_house_variant",
+        "world_points_of_interest_generic_ruin_3_variant",
         "{{variant}}",
-        "tags"
+        "position"
       ]
-    },
-    "position": "{{position}}",
-    "map": {
-      "width": "9",
-      "height": "7",
-      "palette": "int_timber"
     }
   }
 }

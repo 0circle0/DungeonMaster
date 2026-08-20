@@ -1,6 +1,6 @@
 {
-  "id": "world_points_f_nterest_generic_landmark",
-  "label": "world_points_f_nterest_generic_landmark",
+  "id": "world_points_of_interest_int_house_2",
+  "label": "world_points_of_interest_int_house_2",
   "collection": "world.pointsOfInterest",
   "params": [
     {
@@ -20,7 +20,7 @@
       "kind": "string"
     },
     {
-      "key": "travelMinutes",
+      "key": "position",
       "kind": "string"
     },
     {
@@ -31,10 +31,7 @@
         "v2",
         "v3",
         "v4",
-        "v5",
-        "v6",
-        "v7",
-        "v8"
+        "v5"
       ]
     }
   ],
@@ -43,22 +40,35 @@
     "name": "{{name}}",
     "description": "{{description}}",
     "area": "{{area}}",
-    "kind": "landmark",
-    "descriptionKey": "generic_landmark",
-    "travelMinutes": "{{travelMinutes}}",
+    "kind": {
+      "@lookup": [
+        "world_points_of_interest_int_house_2_variant",
+        "{{variant}}",
+        "kind"
+      ]
+    },
+    "descriptionKey": "int_house",
+    "travelMinutes": {
+      "@lookup": [
+        "world_points_of_interest_int_house_2_variant",
+        "{{variant}}",
+        "travelMinutes"
+      ]
+    },
     "tags": {
       "@lookup": [
-        "world_points_f_nterest_generic_landmark_variant",
+        "world_points_of_interest_int_house_2_variant",
         "{{variant}}",
         "tags"
       ]
     },
-    "position": {
+    "map": {
       "@lookup": [
-        "world_points_f_nterest_generic_landmark_variant",
+        "world_points_of_interest_int_house_2_variant",
         "{{variant}}",
-        "position"
+        "map"
       ]
-    }
+    },
+    "position": "{{position}}"
   }
 }

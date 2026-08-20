@@ -1,6 +1,6 @@
 {
-  "id": "world_points_f_nterest_generic_dungeon_mouth_5",
-  "label": "world_points_f_nterest_generic_dungeon_mouth_5",
+  "id": "world_points_of_interest_generic_market_2",
+  "label": "world_points_of_interest_generic_market_2",
   "collection": "world.pointsOfInterest",
   "params": [
     {
@@ -20,15 +20,7 @@
       "kind": "string"
     },
     {
-      "key": "travelMinutes",
-      "kind": "string"
-    },
-    {
-      "key": "gate",
-      "kind": "string"
-    },
-    {
-      "key": "dungeon",
+      "key": "map",
       "kind": "string"
     },
     {
@@ -41,14 +33,16 @@
     "name": "{{name}}",
     "description": "{{description}}",
     "area": "{{area}}",
-    "kind": "dungeonEntrance",
-    "descriptionKey": "generic_dungeon_mouth",
-    "travelMinutes": "{{travelMinutes}}",
+    "kind": "market",
+    "descriptionKey": "generic_market",
+    "travelMinutes": 4,
     "tags": [
-      "dungeon"
+      "shop"
     ],
-    "gate": "{{gate}}",
-    "dungeon": "{{dungeon}}",
+    "services": [
+      "guild"
+    ],
+    "map": "{{map}}",
     "position": "{{position}}"
   }
 }

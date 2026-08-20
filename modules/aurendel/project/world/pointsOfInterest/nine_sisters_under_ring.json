@@ -1,16 +1,18 @@
 {
-  "@prefab": "world_points_f_nterest_generic_dungeon_mouth_5",
-  "params": {
-    "id": "nine_sisters_under_ring",
-    "name": "Beneath the Sisters",
-    "description": "A stair between the two eastern stones, going down, cut into the gritstone and worn in the middle.",
-    "area": "moor_nine_sisters",
-    "travelMinutes": 14,
-    "gate": "moor_sisters_ward",
-    "dungeon": "moor_beneath_sisters",
-    "position": {
-      "x": 25,
-      "y": 3
-    }
+  "id": "nine_sisters_under_ring",
+  "name": "Beneath the Sisters",
+  "description": "A stair between the two eastern stones, going down, cut into the gritstone and worn in the middle.",
+  "area": "moor_nine_sisters",
+  "kind": "dungeonEntrance",
+  "descriptionKey": "generic_dungeon_mouth",
+  "travelMinutes": 14,
+  "tags": [
+    "dungeon"
+  ],
+  "gate": "moor_sisters_ward",
+  "dungeon": "moor_beneath_sisters",
+  "position": {
+    "x": 25,
+    "y": 3
   }
 }

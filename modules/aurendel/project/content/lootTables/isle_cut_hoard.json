@@ -1,31 +1,34 @@
 {
-  "@prefab": "content_loot_ables_entry_4",
-  "params": {
-    "id": "isle_cut_hoard",
-    "name": "Under the Cut",
-    "entries": [
-      {
-        "weight": 3,
-        "value": {
-          "item": "old_coin",
-          "quantity": "3d6"
-        }
-      },
-      {
-        "weight": 2,
-        "value": {
-          "item": "ward_salt",
-          "quantity": "1d2"
-        }
-      },
-      {
-        "weight": 1,
-        "value": {
-          "item": "silvered_blade",
-          "quantity": "1"
-        }
+  "id": "isle_cut_hoard",
+  "name": "Under the Cut",
+  "rolls": "2",
+  "emptyChance": 0,
+  "bonusRollSkill": "perception",
+  "bonusRolls": {
+    "onSuccess": 1,
+    "onCritical": 2
+  },
+  "entries": [
+    {
+      "weight": 3,
+      "value": {
+        "item": "old_coin",
+        "quantity": "3d6"
       }
-    ],
-    "variant": "v1"
-  }
+    },
+    {
+      "weight": 2,
+      "value": {
+        "item": "ward_salt",
+        "quantity": "1d2"
+      }
+    },
+    {
+      "weight": 1,
+      "value": {
+        "item": "silvered_blade",
+        "quantity": "1"
+      }
+    }
+  ]
 }

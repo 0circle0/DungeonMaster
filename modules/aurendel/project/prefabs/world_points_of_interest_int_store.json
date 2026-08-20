@@ -1,6 +1,6 @@
 {
-  "id": "world_points_f_nterest_int_smithy",
-  "label": "world_points_f_nterest_int_smithy",
+  "id": "world_points_of_interest_int_store",
+  "label": "world_points_of_interest_int_store",
   "collection": "world.pointsOfInterest",
   "params": [
     {
@@ -20,16 +20,21 @@
       "kind": "string"
     },
     {
-      "key": "travelMinutes",
-      "kind": "string"
-    },
-    {
       "key": "position",
       "kind": "string"
     },
     {
       "key": "map",
       "kind": "string"
+    },
+    {
+      "key": "variant",
+      "kind": "enum",
+      "options": [
+        "v1",
+        "v2",
+        "v3"
+      ]
     }
   ],
   "template": {
@@ -38,14 +43,24 @@
     "description": "{{description}}",
     "area": "{{area}}",
     "kind": "market",
-    "descriptionKey": "int_smithy",
-    "travelMinutes": "{{travelMinutes}}",
-    "tags": [
-      "shop"
-    ],
+    "descriptionKey": "int_store",
+    "travelMinutes": {
+      "@lookup": [
+        "world_points_of_interest_int_store_variant",
+        "{{variant}}",
+        "travelMinutes"
+      ]
+    },
+    "tags": {
+      "@lookup": [
+        "world_points_of_interest_int_store_variant",
+        "{{variant}}",
+        "tags"
+      ]
+    },
     "position": "{{position}}",
     "services": [
-      "smith"
+      "market"
     ],
     "map": "{{map}}"
   }

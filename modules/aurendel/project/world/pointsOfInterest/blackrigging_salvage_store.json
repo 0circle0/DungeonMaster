@@ -1,5 +1,5 @@
 {
-  "@prefab": "world_points_f_nterest_int_warehouse",
+  "@prefab": "world_points_of_interest_int_warehouse",
   "params": {
     "id": "blackrigging_salvage_store",
     "name": "The Salvage Store",

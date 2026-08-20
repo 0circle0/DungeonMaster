@@ -1,6 +1,6 @@
 {
-  "id": "world_points_f_nterest_generic_camp",
-  "label": "world_points_f_nterest_generic_camp",
+  "id": "world_points_of_interest_int_house_3",
+  "label": "world_points_of_interest_int_house_3",
   "collection": "world.pointsOfInterest",
   "params": [
     {
@@ -24,7 +24,7 @@
       "kind": "string"
     },
     {
-      "key": "map",
+      "key": "triggers",
       "kind": "string"
     }
   ],
@@ -34,13 +34,18 @@
     "description": "{{description}}",
     "area": "{{area}}",
     "kind": "camp",
-    "descriptionKey": "generic_camp",
+    "descriptionKey": "int_house",
     "travelMinutes": "{{travelMinutes}}",
     "tags": [],
-    "map": "{{map}}",
+    "map": {
+      "width": "9",
+      "height": "7",
+      "palette": "int_timber"
+    },
     "position": {
       "x": 14,
       "y": 3
-    }
+    },
+    "triggers": "{{triggers}}"
   }
 }

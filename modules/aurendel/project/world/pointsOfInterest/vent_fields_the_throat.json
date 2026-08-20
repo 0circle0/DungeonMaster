@@ -1,16 +1,18 @@
 {
-  "@prefab": "world_points_f_nterest_generic_dungeon_mouth_5",
-  "params": {
-    "id": "vent_fields_the_throat",
-    "name": "The Throat",
-    "description": "Down the side of the Great Vent, on ledges, between eruptions.",
-    "area": "ember_vent_fields",
-    "travelMinutes": 16,
-    "gate": "ember_vent_ward",
-    "dungeon": "ember_the_throat",
-    "position": {
-      "x": 25,
-      "y": 3
-    }
+  "id": "vent_fields_the_throat",
+  "name": "The Throat",
+  "description": "Down the side of the Great Vent, on ledges, between eruptions.",
+  "area": "ember_vent_fields",
+  "kind": "dungeonEntrance",
+  "descriptionKey": "generic_dungeon_mouth",
+  "travelMinutes": 16,
+  "tags": [
+    "dungeon"
+  ],
+  "gate": "ember_vent_ward",
+  "dungeon": "ember_the_throat",
+  "position": {
+    "x": 25,
+    "y": 3
   }
 }

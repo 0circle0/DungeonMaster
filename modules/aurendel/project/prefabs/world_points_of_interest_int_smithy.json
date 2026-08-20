@@ -1,6 +1,6 @@
 {
-  "id": "world_points_f_nterest_generic_market",
-  "label": "world_points_f_nterest_generic_market",
+  "id": "world_points_of_interest_int_smithy",
+  "label": "world_points_of_interest_int_smithy",
   "collection": "world.pointsOfInterest",
   "params": [
     {
@@ -20,7 +20,15 @@
       "kind": "string"
     },
     {
+      "key": "travelMinutes",
+      "kind": "string"
+    },
+    {
       "key": "position",
+      "kind": "string"
+    },
+    {
+      "key": "map",
       "kind": "string"
     }
   ],
@@ -30,14 +38,15 @@
     "description": "{{description}}",
     "area": "{{area}}",
     "kind": "market",
-    "descriptionKey": "generic_market",
-    "travelMinutes": 2,
+    "descriptionKey": "int_smithy",
+    "travelMinutes": "{{travelMinutes}}",
     "tags": [
       "shop"
     ],
+    "position": "{{position}}",
     "services": [
-      "market"
+      "smith"
     ],
-    "position": "{{position}}"
+    "map": "{{map}}"
   }
 }

@@ -1,31 +1,34 @@
 {
-  "@prefab": "content_loot_ables_entry_4",
-  "params": {
-    "id": "thorn_toll_hoard",
-    "name": "Two Hundred Years of Shillings",
-    "entries": [
-      {
-        "weight": 5,
-        "value": {
-          "item": "old_coin",
-          "quantity": "6d6"
-        }
-      },
-      {
-        "weight": 2,
-        "value": {
-          "item": "barrow_torc",
-          "quantity": "1"
-        }
-      },
-      {
-        "weight": 1,
-        "value": {
-          "item": "silvered_blade",
-          "quantity": "1"
-        }
+  "id": "thorn_toll_hoard",
+  "name": "Two Hundred Years of Shillings",
+  "rolls": "3",
+  "emptyChance": 0,
+  "bonusRollSkill": "perception",
+  "bonusRolls": {
+    "onSuccess": 1,
+    "onCritical": 2
+  },
+  "entries": [
+    {
+      "weight": 5,
+      "value": {
+        "item": "old_coin",
+        "quantity": "6d6"
       }
-    ],
-    "variant": "v4"
-  }
+    },
+    {
+      "weight": 2,
+      "value": {
+        "item": "barrow_torc",
+        "quantity": "1"
+      }
+    },
+    {
+      "weight": 1,
+      "value": {
+        "item": "silvered_blade",
+        "quantity": "1"
+      }
+    }
+  ]
 }

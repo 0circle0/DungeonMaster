@@ -1,6 +1,6 @@
 {
-  "id": "world_points_f_nterest_int_house_3",
-  "label": "world_points_f_nterest_int_house_3",
+  "id": "world_points_of_interest_generic_dungeon_mouth_2",
+  "label": "world_points_of_interest_generic_dungeon_mouth_2",
   "collection": "world.pointsOfInterest",
   "params": [
     {
@@ -24,6 +24,14 @@
       "kind": "string"
     },
     {
+      "key": "discover",
+      "kind": "string"
+    },
+    {
+      "key": "dungeon",
+      "kind": "string"
+    },
+    {
       "key": "triggers",
       "kind": "string"
     }
@@ -33,17 +41,18 @@
     "name": "{{name}}",
     "description": "{{description}}",
     "area": "{{area}}",
-    "kind": "camp",
-    "descriptionKey": "int_house",
+    "kind": "dungeonEntrance",
+    "descriptionKey": "generic_dungeon_mouth",
     "travelMinutes": "{{travelMinutes}}",
-    "tags": [],
-    "map": {
-      "width": "9",
-      "height": "7",
-      "palette": "int_timber"
-    },
+    "tags": [
+      "secret",
+      "dungeon"
+    ],
+    "hidden": true,
+    "discover": "{{discover}}",
+    "dungeon": "{{dungeon}}",
     "position": {
-      "x": 14,
+      "x": 25,
       "y": 3
     },
     "triggers": "{{triggers}}"

@@ -1,16 +1,18 @@
 {
-  "@prefab": "world_points_f_nterest_generic_dungeon_mouth_5",
-  "params": {
-    "id": "cinderhold_slag_door",
-    "name": "The Slag Door",
-    "description": "In the floor of the cathedral, cast shut in one piece, and the cathedral was built to have it there.",
-    "area": "ember_cinderhold",
-    "travelMinutes": 10,
-    "gate": "cinderhold_slag_door",
-    "dungeon": "ember_under_cathedral",
-    "position": {
-      "x": 7,
-      "y": 7
-    }
+  "id": "cinderhold_slag_door",
+  "name": "The Slag Door",
+  "description": "In the floor of the cathedral, cast shut in one piece, and the cathedral was built to have it there.",
+  "area": "ember_cinderhold",
+  "kind": "dungeonEntrance",
+  "descriptionKey": "generic_dungeon_mouth",
+  "travelMinutes": 10,
+  "tags": [
+    "dungeon"
+  ],
+  "gate": "cinderhold_slag_door",
+  "dungeon": "ember_under_cathedral",
+  "position": {
+    "x": 7,
+    "y": 7
   }
 }

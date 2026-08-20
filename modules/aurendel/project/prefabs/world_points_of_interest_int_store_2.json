@@ -1,6 +1,6 @@
 {
-  "id": "world_points_f_nterest_int_store_2",
-  "label": "world_points_f_nterest_int_store_2",
+  "id": "world_points_of_interest_int_store_2",
+  "label": "world_points_of_interest_int_store_2",
   "collection": "world.pointsOfInterest",
   "params": [
     {
@@ -43,7 +43,7 @@
     "area": "{{area}}",
     "kind": {
       "@lookup": [
-        "world_points_f_nterest_int_store_2_variant",
+        "world_points_of_interest_int_store_2_variant",
         "{{variant}}",
         "kind"
       ]
@@ -51,28 +51,28 @@
     "descriptionKey": "int_store",
     "travelMinutes": {
       "@lookup": [
-        "world_points_f_nterest_int_store_2_variant",
+        "world_points_of_interest_int_store_2_variant",
         "{{variant}}",
         "travelMinutes"
       ]
     },
     "tags": {
       "@lookup": [
-        "world_points_f_nterest_int_store_2_variant",
+        "world_points_of_interest_int_store_2_variant",
         "{{variant}}",
         "tags"
       ]
     },
     "services": {
       "@lookup": [
-        "world_points_f_nterest_int_store_2_variant",
+        "world_points_of_interest_int_store_2_variant",
         "{{variant}}",
         "services"
       ]
     },
     "map": {
       "@lookup": [
-        "world_points_f_nterest_int_store_2_variant",
+        "world_points_of_interest_int_store_2_variant",
         "{{variant}}",
         "map"
       ]
