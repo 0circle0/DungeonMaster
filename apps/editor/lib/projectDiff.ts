@@ -43,9 +43,30 @@ import {
   linkFor,
   isPrefabRecipe,
   PROJECT_MANIFEST,
+  INSTANCES_FILE,
 } from '@dm/module';
-import type { ProjectManifest, Prefab, StyleTables } from '@dm/module';
+import type { ProjectManifest, Prefab, StyleTables, InstanceMap, PrefabLink } from '@dm/module';
 import type { WorldAuthoring, FileChange } from '@dm/library';
+
+/**
+ * What a string costs to store, which is not how long it is.
+ *
+ * `sizes` feeds `storedBytes`, and that number is shown to the author and
+ * compared against a quota. `text.length` counts UTF-16 code units, so every
+ * em dash in a world was being undercounted by two thirds and every emoji by
+ * half.
+ */
+function utf8Length(text: string): number {
+  let bytes = 0;
+  for (let i = 0; i < text.length; i++) {
+    const code = text.charCodeAt(i);
+    if (code < 0x80) bytes += 1;
+    else if (code < 0x800) bytes += 2;
+    else if (code >= 0xd800 && code < 0xdc00) { bytes += 4; i++; }
+    else bytes += 3;
+  }
+  return bytes;
+}
 
 /**
  * The document as it was last written, and enough about it to diff the next one.
@@ -76,9 +97,41 @@ export interface ProjectSnapshot {
    * complete and stays that way.
    */
   readonly literal: ReadonlySet<string>;
+  /** `prefabs/instances.json` as it was written, so it is not rewritten unchanged. */
+  readonly instancesText: string;
+  /**
+   * Every link by value, as `collection\u0000id` → signature.
+   *
+   * An entry's file text has three inputs — the entry, its prefab, and its link
+   * — and only the first two were being watched. Linking an existing entry to a
+   * prefab that has not itself changed moves no object the diff looks at, so
+   * the save wrote nothing and the link was gone on reload.
+   *
+   * By value and not by reference, because `recomputeInstances` rebuilds the
+   * whole map and every `PrefabLink` in it on every single save: reference
+   * comparison here would report that all 767 of Aurendel's links moved, every
+   * time, and rewrite their entries.
+   */
+  readonly linkSigs: ReadonlyMap<string, string>;
 }
 
-const linkKey = (collection: string, id: string): string => `${collection}\u0000${id}`;
+/** A link reduced to something comparable. Key order is fixed here, not inherited. */
+function linkSig(link: PrefabLink): string {
+  return JSON.stringify([link.id, link.params, link.overrides ?? []]);
+}
+
+/** Every link in an instance map, by value. */
+function linkSigsOf(instances: InstanceMap): Map<string, string> {
+  const sigs = new Map<string, string>();
+  for (const [collection, byId] of Object.entries(instances)) {
+    for (const [id, link] of Object.entries(byId)) sigs.set(linkKey(collection, id), linkSig(link));
+  }
+  return sigs;
+}
+
+/** Not a character an id or a collection name can hold, so the join is reversible. */
+const LINK_SEP = '\u0000';
+const linkKey = (collection: string, id: string): string => `${collection}${LINK_SEP}${id}`;
 
 export interface ProjectDiff {
   readonly change: FileChange;
@@ -150,7 +203,7 @@ export function diffProject(
 
   const write = (path: string, text: string): void => {
     put[path] = text;
-    sizes.set(path, text.length);
+    sizes.set(path, utf8Length(text));
   };
   const drop = (path: string): void => {
     remove.push(path);
@@ -173,6 +226,23 @@ export function diffProject(
 
   const { prefabs, style, instances } = next.authoring;
   const dirty = dirtyPrefabs(prefabs, style, previous);
+
+  // Links that are not what they were — including ones that have appeared and
+  // ones that have gone. An entry whose link moved has to be rewritten even
+  // though the entry itself did not: it is the difference between a recipe file
+  // and a literal one.
+  const linkSigs = linkSigsOf(instances);
+  const movedLinks = new Set<string>();
+  for (const [key, sig] of linkSigs) {
+    if (previous?.linkSigs.get(key) !== sig) movedLinks.add(key);
+  }
+  for (const key of previous?.linkSigs.keys() ?? []) {
+    if (!linkSigs.has(key)) movedLinks.add(key);
+  }
+  // Which collections that touches, so the whole-collection fast path below can
+  // stay a fast path.
+  const movedIn = new Set<string>();
+  for (const key of movedLinks) movedIn.add(key.slice(0, key.indexOf(LINK_SEP)));
 
   const sections = new Set([
     ...Object.keys(manifest.sections),
@@ -199,7 +269,7 @@ export function diffProject(
         && entries === ((previous.doc[section] as Record<string, unknown> | undefined)?.[name]);
       const sameNames = oldNames.length === names.length
         && oldNames.every((name, i) => name === names[i]);
-      if (sameArray && sameNames && dirty.size === 0) continue;
+      if (sameArray && sameNames && dirty.size === 0 && !movedIn.has(collection)) continue;
 
       let cursor = 0;
       entries.forEach((entry) => {
@@ -210,7 +280,12 @@ export function diffProject(
         const link = id ? linkFor(instances, collection, id) : null;
         // A prefab that moved rewrites its entries even though the document did
         // not touch them: the recipe on disk now expands to something else.
-        const forced = link !== null && dirty.has(link.id);
+        // Three inputs decide this file's text: the entry, the prefab behind it
+        // and the link itself. The entry is compared by reference below; the
+        // other two have to be asked about, or linking an entry to a prefab
+        // that did not itself change writes nothing at all.
+        const forced = (link !== null && dirty.has(link.id))
+          || (id !== null && movedLinks.has(linkKey(collection, id)));
         if (!forced && before.get(file) === entry) return;
 
         const text = entryFileText(entry, link, prefabs, style);
@@ -290,6 +365,33 @@ export function diffProject(
   sidecar('style.json', style, previous?.authoring.style);
   sidecar('contract.json', next.authoring.contract, previous?.authoring.contract);
 
+  /**
+   * The links that have nowhere else to live.
+   *
+   * `literal` has been maintained on every save since this file was written and
+   * read by nothing: the sidecar it exists to describe was never emitted, so a
+   * link whose entry could not be expressed as a recipe was simply lost on the
+   * next open. Recipe-backed entries stay out of it — the file names its own
+   * prefab, and recording it twice is how the shipped example ended up with
+   * prefabs pointing at nothing.
+   *
+   * Compared as text, like the manifest and the shell, because this object is
+   * rebuilt every save and a reference test would rewrite it every save.
+   */
+  const remainder: Record<string, Record<string, PrefabLink>> = {};
+  for (const key of literal) {
+    const cut = key.indexOf(LINK_SEP);
+    const collection = key.slice(0, cut);
+    const link = linkFor(instances, collection, key.slice(cut + 1));
+    if (link) (remainder[collection] ??= {})[key.slice(cut + 1)] = link;
+  }
+  const instancesPath = `${AUTHORING_PREFIX}${INSTANCES_FILE}`;
+  const instancesText = Object.keys(remainder).length > 0 ? serializeProjectValue(remainder) : '';
+  if (instancesText !== (previous?.instancesText ?? '')) {
+    if (instancesText) write(instancesPath, instancesText);
+    else drop(instancesPath);
+  }
+
   const storedBytes = [...sizes.values()].reduce((total, size) => total + size, 0);
 
   return {
@@ -303,6 +405,8 @@ export function diffProject(
       maps: mapsById,
       sizes,
       literal,
+      instancesText,
+      linkSigs,
     },
     storedBytes,
   };
@@ -323,7 +427,7 @@ export function snapshotFrom(
 ): ProjectSnapshot {
   const { document: lifted, maps } = liftMaps(doc);
   const sizes = new Map<string, number>();
-  for (const [path, text] of Object.entries(files)) sizes.set(path, text.length);
+  for (const [path, text] of Object.entries(files)) sizes.set(path, utf8Length(text));
 
   // A linked entry needs the sidecar only when its own file does not say so.
   const literal = new Set<string>();
@@ -349,6 +453,12 @@ export function snapshotFrom(
     manifest: manifestFor(lifted),
     manifestText: files[PROJECT_MANIFEST] ?? '',
     shellText: files[`${AUTHORING_PREFIX}shell.json`] ?? '',
+    instancesText: files[`${AUTHORING_PREFIX}${INSTANCES_FILE}`] ?? '',
+    // Seeded from what was read, so the first save rewrites an entry only if
+    // its link has actually moved since. `authoring.instances` here is the
+    // merged map the join produced — recipe-recovered links included — which is
+    // exactly what the next diff will be handed.
+    linkSigs: linkSigsOf(authoring.instances),
     authoring,
     maps: mapsById,
     sizes,

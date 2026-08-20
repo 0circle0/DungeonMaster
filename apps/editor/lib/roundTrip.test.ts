@@ -30,6 +30,7 @@ import {
 } from '@dm/library';
 import { setAt } from './store';
 import { diffProject, snapshotFrom } from './projectDiff';
+import { recomputeInstancesFor } from './worldStore';
 
 const ARTIFACT = fileURLToPath(new URL('../public/content/aurendel.project.json.gz', import.meta.url));
 /** What the player is shipped: the compiled module, from the other artifact. */
@@ -124,6 +125,83 @@ describe.skipIf(!existsSync(ARTIFACT) || !existsSync(PLAYED))('the shipped proje
     const reopened = unbundleModule(after).document!;
     const areasAgain = (reopened['world'] as Record<string, unknown[]>)['areas'];
     expect((areasAgain[target] as { dangerLevel: number }).dangerLevel).toBe(3);
+  });
+
+  /**
+   * Linking, on the world we ship, through the store.
+   *
+   * The unit test for this holds four entries; this one holds 2,858 files and a
+   * prefab that is already there and already unchanged — which is the case that
+   * was broken. The link moved no object the diff watched, so the save wrote
+   * nothing and the link was gone the next time the world was opened.
+   */
+  it('keeps a link made against a prefab that was already stored', async () => {
+    const files = shipped();
+    const opened = unbundleModule(files);
+    const doc = opened.document!;
+    const meta = await createWorldFromFiles(files, {
+      title: 'Aurendel', filename: 'aurendel.module.json', facts: factsFor(doc),
+    });
+    const snapshot = snapshotFrom(doc, opened.authoring, files);
+
+    // An entry that is not linked to anything, and a prefab already in the
+    // world that could have produced it. Nothing about either of them moves.
+    const collection = 'world.pointsOfInterest';
+    const prefab = opened.authoring.prefabs.find((candidate) => candidate.collection === collection);
+    const linkedAlready = opened.authoring.instances[collection] ?? {};
+    const [, listName] = collection.split('.');
+    const pois = (doc['world'] as Record<string, { id: string }[]>)[listName ?? ''] ?? [];
+    const target = pois.find((poi) => !(poi.id in linkedAlready));
+    if (!prefab || !target) throw new Error('aurendel has no unlinked point of interest to link');
+
+    const authoring = {
+      ...opened.authoring,
+      instances: {
+        ...opened.authoring.instances,
+        [collection]: { ...linkedAlready, [target.id]: { id: prefab.id, params: { id: target.id } } },
+      },
+    };
+
+    const { change, storedBytes } = diffProject({ doc, authoring }, snapshot);
+    // The entry it links, and nothing else in the world.
+    expect(Object.keys(change.put)).toContain(`project/${collection.replace('.', '/')}/${target.id}.json`);
+
+    await writeWorldFiles(
+      meta.key,
+      change,
+      { facts: factsFor(doc), title: meta.title, storedBytes },
+      meta,
+    );
+
+    const reopened = unbundleModule(await readWorldFiles(meta.key));
+    expect(reopened.authoring.instances[collection]?.[target.id]).toBeDefined();
+    // And the document is still the one the author was looking at: a link is a
+    // claim about where an entry came from, not a licence to change it.
+    expect(JSON.stringify(reopened.document)).toBe(JSON.stringify(doc));
+  });
+
+  /**
+   * The same claim, but through what autosave actually calls.
+   *
+   * `seeds from the files it read` below diffs the authoring exactly as it was
+   * loaded. A real save does not: `recomputeInstancesFor` rebuilds the instance
+   * map first, every link object in it, and works out afresh which fields are
+   * the author's rather than the prefab's. Since a link's *value* is now a
+   * reason to rewrite its entry, anything the recompute decides differently
+   * from what was stored would rewrite all 767 linked entries the moment a
+   * world was opened — and every one of them would come back byte-identical, so
+   * nothing but a count could see it.
+   */
+  it('writes nothing on an idle save through the path autosave takes', () => {
+    const files = shipped();
+    const opened = unbundleModule(files);
+    const seeded = snapshotFrom(opened.document!, opened.authoring, files);
+
+    const written = recomputeInstancesFor(opened.document!, opened.authoring);
+    const { change } = diffProject({ doc: opened.document!, authoring: written }, seeded);
+
+    expect(Object.keys(change.put)).toEqual([]);
+    expect(change.remove).toEqual([]);
   });
 
   it('seeds from the files it read, so the first save is a diff and not a rewrite', () => {

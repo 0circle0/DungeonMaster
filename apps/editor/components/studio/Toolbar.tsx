@@ -85,7 +85,7 @@ export function Toolbar(props: {
           title={
             props.canSave
               ? 'Autosaving to your library on this device — ⌘S writes now'
-              : 'Autosave writes back to a module in this repository; this document did not come from one'
+              : 'Another tab has this world open, so this one will not write to it'
           }
           onClick={props.onSave}
         >

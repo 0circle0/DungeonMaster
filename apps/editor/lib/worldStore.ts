@@ -62,9 +62,20 @@ export async function saveWorld(args: {
   const meta = (doc['meta'] ?? {}) as Record<string, unknown>;
 
   const { change, snapshot, storedBytes } = diffProject({ doc, authoring }, previous);
+
+  // A save never sweeps, whatever the diff decided.
+  //
+  // `diffProject` asks for one when it has no previous snapshot, which is right
+  // for a world being created — and `createWorldFromFiles` is the only caller
+  // that creates one. Reaching here without a snapshot means an *existing*
+  // world was opened and its baseline went missing, and sweeping then would
+  // delete every file the document does not itself reproduce. An import is
+  // stored exactly as it arrived, so that is not a hypothetical set.
+  const { sweep: _sweep, ...safe } = change;
+
   const written = await writeWorldFiles(
     world.key,
-    change,
+    safe,
     {
       facts: factsFor(doc, compiled),
       // The title follows the document, so renaming a world in its own `meta`

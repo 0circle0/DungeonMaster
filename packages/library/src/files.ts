@@ -45,6 +45,13 @@ function download(blob: Blob, filename: string): void {
  *
  * Takes the document rather than an envelope: the authoring sidecar is not part
  * of a repository's file tree; the studio keeps it in the store instead.
+ *
+ * **All four authoring fields, not two.** `splitProject` has no notion of a
+ * prefab link, so every entry it writes is literal — which makes
+ * `prefabs/instances.json` the *only* channel provenance has out of here. This
+ * used to pass `prefabs` and `style` alone, and `bundleModule` takes a
+ * `Partial`, so the omission typechecked and every export silently arrived
+ * somewhere else with its prefabs pointing at nothing and its contract gone.
  */
 export async function downloadProject(
   doc: Record<string, unknown>,
@@ -54,6 +61,8 @@ export async function downloadProject(
   const { files } = bundleModule(doc, {
     prefabs: authoring?.prefabs ?? [],
     style: authoring?.style ?? {},
+    instances: authoring?.instances ?? {},
+    contract: authoring?.contract ?? {},
   });
   const text = JSON.stringify({ dmProject: 1, files });
   const bytes = await gzip(new TextEncoder().encode(text));

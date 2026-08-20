@@ -18,7 +18,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import {
   fetchCatalog, fetchExampleProject, EMPTY_CATALOG,
-  listWorlds, readWorldFiles, createWorldFromFiles, deleteWorld, factsFor,
+  listWorlds, readWorldFiles, readWorldMeta, createWorldFromFiles, deleteWorld, factsFor,
   readProjectFile, hasStorage, estimateStorage, NO_AUTHORING,
 } from '@dm/library';
 import type {
@@ -221,11 +221,9 @@ export function useEditorLibrary(): EditorLibraryApi {
  * about as much work as parsing `module.json` was, because it is the same bytes.
  */
 export async function loadWorld(key: string): Promise<LoadedWorld | null> {
-  const [{ listWorlds: list }, files] = await Promise.all([
-    import('@dm/library'),
-    readWorldFiles(key),
-  ]);
-  const meta = (await list()).find((world) => world.key === key);
+  // One metadata row, not every row filtered down to one — and both reads at
+  // once, because neither depends on the other.
+  const [meta, files] = await Promise.all([readWorldMeta(key), readWorldFiles(key)]);
   if (!meta || Object.keys(files).length === 0) return null;
 
   const { document, authoring, issues } = unbundleModule(files);

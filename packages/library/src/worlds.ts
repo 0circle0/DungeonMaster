@@ -36,6 +36,12 @@ export async function listWorlds(): Promise<WorldMeta[]> {
   return all.sort((a, b) => b.updatedAt - a.updatedAt);
 }
 
+/** One world's metadata. The switcher lists; opening a world wants exactly one row. */
+export async function readWorldMeta(key: string): Promise<WorldMeta | null> {
+  const db = await openLibrary();
+  return (await get<WorldMeta>(db, WORLDS, key)) ?? null;
+}
+
 export async function readWorld(key: string): Promise<{ meta: WorldMeta; envelope: WorldEnvelope } | null> {
   const db = await openLibrary();
   const meta = await get<WorldMeta>(db, WORLDS, key);

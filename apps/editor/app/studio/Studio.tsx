@@ -10,7 +10,7 @@
  * at, the way selecting an asset in a game engine doesn't close the scene.
  */
 
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useModuleStore, exportModule, getAt } from '@/lib/store';
 import type { ModuleDoc } from '@/lib/store';
 import { collectionAt } from '@/lib/schema';
@@ -27,7 +27,8 @@ import { useRules } from '@/lib/useRules';
 import { useEditorMods } from '@/lib/useEditorMods';
 import type { ModWire } from '@/lib/modWire';
 import type { WorldAuthoring, WorldMeta } from '@dm/library';
-import { downloadProject, lastOpened, rememberLastOpened } from '@dm/library';
+import { claimWorld, downloadProject, lastOpened, rememberLastOpened } from '@dm/library';
+import type { WorldClaim } from '@dm/library';
 import { useEditorLibrary, loadWorld } from '@/lib/useEditorLibrary';
 import type { LoadedWorld } from '@/lib/useEditorLibrary';
 import type { ProjectSnapshot } from '@/lib/projectDiff';
@@ -70,6 +71,8 @@ function StudioShell(props: {
   authoring: WorldAuthoring;
   /** The world as it was read, so the first save is a diff and not a rewrite. */
   loadedSnapshot: ProjectSnapshot | null;
+  /** False when another tab has this world open, and this one must not write. */
+  claimed: boolean;
   onAuthoringChange: (next: WorldAuthoring) => void;
   /** Work that did not validate last session, kept rather than lost. */
   onOpenWorld: (key: string) => void;
@@ -181,7 +184,13 @@ function StudioShell(props: {
    * moment it exists, so the gate is gone.
    */
   const moduleName = store.filename.replace(/\.module\.json$|\.json$/, '');
-  const canSave = true;
+  /**
+   * Every world is a row in the library, so there is always somewhere to write —
+   * except when somebody else is already writing there. Two tabs saving one
+   * world do not race for a document, they interleave *files*, and the result is
+   * a tree neither author has ever seen. The tab that arrived second reads.
+   */
+  const canSave = props.claimed;
 
   /**
    * Work from a previous session that never validated.
@@ -600,6 +609,17 @@ function StudioShell(props: {
         />
       )}
 
+      {!props.claimed && (
+        <div className={styles.recovery}>
+          <span>
+            Another tab has this world open, so nothing typed here will be saved. Two tabs
+            writing one world do not overwrite each other — they each save the files they
+            changed, and what is left is a mixture of both. Close the other tab and reopen
+            this world to edit it here.
+          </span>
+        </div>
+      )}
+
       {interrupted !== null && (
         <div className={styles.recovery}>
           <span>
@@ -732,12 +752,33 @@ export function Studio() {
   const [world, setWorld] = useState<LoadedWorld | null>(null);
   const [opening, setOpening] = useState<string | null>(null);
   const [failed, setFailed] = useState<string | null>(null);
+  const [claimed, setClaimed] = useState(true);
+
+  /**
+   * The claim on the world this tab has open, given up when it opens another.
+   *
+   * A ref rather than state: nothing renders from it, and it has to be read and
+   * swapped inside `open` rather than a render later.
+   */
+  const claim = useRef<WorldClaim | null>(null);
+  useEffect(() => () => claim.current?.release(), []);
 
   const open = useCallback(async (key: string): Promise<void> => {
     setOpening(key);
     try {
-      const loaded = await loadWorld(key);
-      if (!loaded) { setFailed('That world is no longer in your library.'); return; }
+      // Claim before letting go, and let go only once the new world is in
+      // hand: releasing first would leave the world still on screen unclaimed
+      // if the open then failed, and another tab could start writing to it.
+      const [loaded, held] = await Promise.all([loadWorld(key), claimWorld(key)]);
+      if (!loaded) {
+        if (held !== claim.current) held.release();
+        setFailed('That world is no longer in your library.');
+        return;
+      }
+      const previous = claim.current;
+      claim.current = held;
+      if (previous && previous !== held) previous.release();
+      setClaimed(held.held);
       setFailed(null);
       setWorld(loaded);
       void rememberLastOpened(key);
@@ -790,6 +831,7 @@ export function Studio() {
       library={library}
       authoring={world.authoring}
       loadedSnapshot={world.snapshot}
+      claimed={claimed}
       onAuthoringChange={(next) => {
         setWorld((current) => (current ? { ...current, authoring: next } : current));
       }}

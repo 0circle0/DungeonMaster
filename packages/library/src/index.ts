@@ -25,6 +25,7 @@ export type { WorldMeta, FileRecord } from './db.js';
 export {
   listWorlds,
   readWorld,
+  readWorldMeta,
   writeWorld,
   createWorld,
   deleteWorld,
@@ -39,6 +40,9 @@ export {
   lastOpened,
 } from './worlds.js';
 export type { FileChange, WorldFacts } from './worlds.js';
+
+export { claimWorld } from './claim.js';
+export type { WorldClaim } from './claim.js';
 
 export { downloadProject, readWorldFile, readProjectFile, isProjectBundle } from './files.js';
 
