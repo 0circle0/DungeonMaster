@@ -682,6 +682,51 @@ describe('running away', () => {
     });
   });
 
+  /**
+   * Backing out carefully, which could not be written before.
+   *
+   * An opportunity's gate used to be handed the mover as `{ id }` alone, so it
+   * could learn who was leaving and nothing else -- there was no way to ask
+   * whether they were disengaging. It now gets the same `targetScope` an
+   * attack builds, and disengaging is ordinary content: a condition, an
+   * ability that applies it, and a `requires` on the opportunity.
+   */
+  it('is free to someone who spent their action backing out', () => {
+    const doc = JSON.parse(JSON.stringify(GREENMARCH.source)) as never as {
+      rules: { conditions: Record<string, unknown>[]; opportunities: Record<string, unknown>[] };
+    };
+    doc.rules.conditions.push({ id: 'disengaging', name: 'Disengaging' });
+    doc.rules.opportunities[0]!['requires'] = {
+      not: { exists: 'target.conditions.disengaging' },
+    };
+    const compiled = compileModule(doc);
+    if (!compiled.ok) throw new Error('fixture failed to compile');
+    const module = compiled.module;
+
+    const fled = (conditions: string[]): boolean => {
+      const base = arena([{ id: 'bog_hound', at: { x: 6, y: 5 } }], module);
+      const started = reduce(base, { type: 'wait', minutes: 0 }, { module }).state;
+      const hero = started.entities['e:1']!;
+      const ready = {
+        ...started,
+        entities: {
+          ...started.entities,
+          'e:1': {
+            ...hero,
+            conditions: conditions.map((condition) => ({
+              condition, remaining: null, magnitude: null, source: null,
+            })),
+          },
+        },
+      };
+      return reduce(ready, { type: 'flee' }, { module }).events
+        .some((event) => event.type === 'reacted' && event.reaction === 'parting_blow');
+    };
+
+    expect(fled([])).toBe(true);
+    expect(fled(['disengaging'])).toBe(false);
+  });
+
   it('replays identically', () => {
     const state = arena([{ id: 'bog_hound', at: { x: 6, y: 5 } }]);
     const script: Action[] = [{ type: 'wait', minutes: 0 }, { type: 'flee' }];

@@ -5,9 +5,11 @@ departs from them, and which of those departures were decisions rather than
 accidents.
 
 > **Status: first pass, 2026-08-19.** The defects in *[Defects](#defects)* are
-> fixed, and so are G1, G2, G3, G5, G6 and most of G7. **G4, creature
-> footprints, is deliberately held** — there are larger plans for that part of
-> the engine, and it says what it would cost. The entries under
+> fixed, and so are G1, G2, G3, G5, G6 and G7. **G4, creature footprints, is
+> deliberately held** — there are larger plans for that part of the engine, and
+> G4a records something worth knowing before it is touched. The one deliberate
+> deferral inside a closed entry is Ready, which is blocked on a trigger
+> vocabulary that is one-seventh implemented. The entries under
 > *[Choices](#choices)* are settled and need no further action.
 
 **Why this document exists.** The header of `../packages/module/src/schema/rules.ts`
@@ -231,6 +233,20 @@ defended against may crit; an item is not expected to but has no reason it could
 not. Note that using an item is not a d20 test at all, so an item "critting"
 means its attack or its proc, which travels the attack path under any setting.
 
+### G4a. The grid is as fine as the smallest creature declared
+
+Found while testing Disengage, and worth knowing before G4 is touched.
+`tileSize` is the **minimum** `sizes[].space` across the ruleset. `core_fantasy`
+declares tiny at 2 feet, so the whole map is on 2-foot tiles: a 30-foot speed is
+15 tiles, and a medium creature's 5-foot reach is 2 tiles.
+
+The consequence is not obvious. Stepping one tile away from an adjacent enemy
+moves you from distance 1 to distance 2 — still inside a reach of 2 — so it
+provokes nothing. A parting blow needs two steps. That is internally consistent
+and arguably correct at that resolution, but it makes opportunity attacks feel
+much rarer than the rule reads, and it is entirely an artefact of `tiny` being
+declared at all. Removing tiny would silently double every distance in the game.
+
 ### G4. Every creature occupies exactly one tile
 
 `sizes[].space` derives the global tile scale, and it does so from the
@@ -289,7 +305,7 @@ default. The worth is read from the statblock rather than the corpse, because
 `Entity.xp` holds what a character has earned *and* what a monster is worth —
 one field carrying two meanings, and the authored number is the one to trust.
 
-### G7. The named tactical actions are absent
+### G7. The named tactical actions were absent — **closed, three built and one deferred with reasons**
 
 **Partly closed with G1.** Dodge and Help were the two that could not be
 written at all, and both now exist in `core_fantasy` as `dodge` and `assist`,
@@ -305,27 +321,40 @@ rather than a free option. That is a better fit for this engine than the
 original, and the only genuinely open question is the multiplier: 1.5 against
 an effective 2.
 
-**Disengage cannot be expressed.** This entry previously claimed it could, as
-an opportunity suppression. It cannot. `provokeOpportunity` builds the gate's
-scope around the *reactor* and passes the mover as `{ id }` alone
-(`buildScope(module, state, other, { target: { id: mover.id } })`, with `extra`
-spread last), so `opportunities[].requires` can read the reactor's conditions
-and the mover's id and nothing else. There is no way to write "unless the one
-leaving is disengaging". `conditions[].prevents` does not reach either: it
-blocks its *bearer's* action types, and a parting blow is spent from the
-reactor's budget.
+**Disengage is built.** It could not be expressed, and this entry once claimed
+otherwise: `provokeOpportunity` handed the gate the mover as `{ id }` alone, so
+`opportunities[].requires` could learn who was leaving and nothing else. There
+was no way to write "unless the one leaving is disengaging", and
+`conditions[].prevents` did not reach either — it blocks its *bearer's* action
+types, while a parting blow is spent from the reactor's budget.
 
-The fix is small — pass the mover's full entity into that scope — after which a
-`disengaging` condition and an ability to apply it are pure content, exactly as
-`dodge` was.
+The gate now receives the same `targetScope` an attack builds, which moved from
+`attack.ts` to sit beside `buildScope` and gained implied conditions on the way:
+a creature that is unconscious *is* prone, and content asking should be told so.
+After that, disengaging is ordinary content — a `disengaging` condition, an
+ability applying it, and `requires: not(exists target.conditions.disengaging)`
+on the opportunity.
 
 **Hide means something else here, by design.** Stealth is not a roll: a stance
 *emits*, and `concealedBy` with `concealmentPerPoint` reduces that emission
 continuously. There is no moment to spend an action on. See Choices.
 
-**Ready needs persisted state.** `CombatState` has no slot for a held trigger
-and the action waiting on it, so this is a save-format migration — the same
-class of work as attunement, not a wiring job.
+**Ready is deferred, and blocked on two things rather than one.** `CombatState`
+has no slot for a held trigger and the action waiting on it, so it is a
+save-format migration, the same class of work as attunement.
+
+The second blocker is larger and was found while scoping the first.
+`rules.opportunities[].on` declares seven triggers — `moveAway`, `castSpell`,
+`rangedAttack`, `standUp`, `beHit`, `allyHit`, `custom` — and
+`provokeOpportunity` filters for `moveAway`. **Nothing dispatches the other
+six.** A readied action can only wait on a trigger the engine can detect, so
+today it could only wait on someone leaving your reach, which is an opportunity
+attack by another name. Ready is worth building after the trigger vocabulary is
+real, not before.
+
+Note this is a *second* trigger system: `content.monsters[].reactions[].on`
+declares twelve triggers of its own and those *are* dispatched, by
+`dispatchReactions`. Two overlapping vocabularies, one working.
 
 ---
 

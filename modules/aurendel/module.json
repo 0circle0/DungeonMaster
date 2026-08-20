@@ -432,6 +432,13 @@
         ]
       },
       {
+        "id": "disengaging",
+        "name": "Disengaging",
+        "description": "Backing out with your guard up, giving nobody a clean parting swing.",
+        "stacking": "refresh",
+        "defaultDuration": 1
+      },
+      {
         "id": "dodging",
         "name": "Dodging",
         "description": "Giving ground on purpose, and watching the hands.",
@@ -1115,7 +1122,12 @@
         "on": "moveAway",
         "actionType": "reaction",
         "use": "strike",
-        "usesPerRound": 1
+        "usesPerRound": 1,
+        "requires": {
+          "not": {
+            "exists": "target.conditions.disengaging"
+          }
+        }
       }
     ],
     "coverTypes": [
@@ -1414,6 +1426,24 @@
               },
               "condition": "emboldened",
               "duration": 2
+            }
+          }
+        ]
+      },
+      {
+        "id": "disengage",
+        "name": "Disengage",
+        "description": "Break away without turning your back on it.",
+        "actionType": "action",
+        "targeting": "self",
+        "onUse": [
+          {
+            "applyCondition": {
+              "target": {
+                "ref": "actor.id"
+              },
+              "condition": "disengaging",
+              "duration": 1
             }
           }
         ]
@@ -2593,7 +2623,8 @@
             "strike",
             "guarded_stance",
             "dodge",
-            "assist"
+            "assist",
+            "disengage"
           ],
           "2": [
             "rally"
@@ -2636,7 +2667,8 @@
             "strike",
             "quick_shot",
             "dodge",
-            "assist"
+            "assist",
+            "disengage"
           ],
           "3": [
             "shove"
@@ -2681,7 +2713,8 @@
             "strike",
             "quick_shot",
             "dodge",
-            "assist"
+            "assist",
+            "disengage"
           ],
           "2": [
             "first_aid"
@@ -2725,7 +2758,8 @@
             "wardlight",
             "arcane_bolt",
             "dodge",
-            "assist"
+            "assist",
+            "disengage"
           ],
           "2": [
             "read_runes"
@@ -2787,7 +2821,8 @@
             "strike",
             "mend_flesh",
             "dodge",
-            "assist"
+            "assist",
+            "disengage"
           ],
           "2": [
             "first_aid",

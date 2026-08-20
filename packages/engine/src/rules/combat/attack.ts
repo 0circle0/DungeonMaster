@@ -25,7 +25,7 @@ import type { Expr } from '@dm/module';
 import type { CompiledModule, Effect, EffectOp, Scope, Predicate, Requirement } from '@dm/module';
 import type { Entity, EntityId } from '../../state.js';
 import type { Position } from '../../grid/tiles.js';
-import { buildScope, statsOf, proficiencyOf, OPEN_NAMESPACES } from '../../stats.js';
+import { buildScope, statsOf, proficiencyOf, targetScope, OPEN_NAMESPACES } from '../../stats.js';
 import { Transaction, applyOps, adjustResource } from '../apply.js';
 import { preventsAction, swingsFrom } from '../conditions.js';
 import { check, savingThrow, succeeded, criticalMultiplier, difficultyOf } from '../check.js';
@@ -603,24 +603,6 @@ function withWeaponTags(ops: readonly EffectOp[], weapon: WeaponDef | null): Eff
 }
 
 /** The `target.*` half of the DSL scope. */
-function targetScope(module: CompiledModule, target: Entity): Record<string, never> {
-  const stats = statsOf(module, target);
-  const conditions: Record<string, unknown> = {};
-  for (const active of target.conditions) conditions[active.condition] = active.remaining ?? true;
-
-  return {
-    id: target.id,
-    name: target.name,
-    level: target.level,
-    alive: target.alive,
-    attr: target.attributes,
-    mod: stats.mod,
-    res: target.resources,
-    max: stats.max,
-    derived: stats.derived,
-    conditions,
-  } as unknown as Record<string, never>;
-}
 
 /**
  * A basic attack with whatever the actor is wielding.

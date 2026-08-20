@@ -430,6 +430,35 @@ export function evalContext(scope: Scope, rng: DslRng): { scope: Scope; rng: Dsl
  * DSL needs no game-specific primitives: `flags.met_vess` and
  * `actor.res.vitality` are ordinary paths.
  */
+/**
+ * The other side of a roll, as a predicate can read it.
+ *
+ * Deliberately narrower than `buildScope`: what an attacker or a reacting
+ * creature is entitled to know about the one in front of them, and nothing
+ * about the world. Implied conditions are included, because a creature that is
+ * unconscious *is* prone and content asking whether it is prone should be told
+ * the truth.
+ */
+export function targetScope(module: CompiledModule, target: Entity): Record<string, never> {
+  const stats = statsOf(module, target);
+  const conditions: Record<string, unknown> = {};
+  for (const active of target.conditions) conditions[active.condition] = active.remaining ?? true;
+  for (const id of impliedConditions(module, target)) conditions[id] ??= true;
+
+  return {
+    id: target.id,
+    name: target.name,
+    level: target.level,
+    alive: target.alive,
+    attr: target.attributes,
+    mod: stats.mod,
+    res: target.resources,
+    max: stats.max,
+    derived: stats.derived,
+    conditions,
+  } as unknown as Record<string, never>;
+}
+
 export function buildScope(
   module: CompiledModule,
   state: GameState,

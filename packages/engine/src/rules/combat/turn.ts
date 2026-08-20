@@ -16,7 +16,7 @@ import { evalEffects, evalPredicate, compileRequirement, isEmptyRequirement } fr
 import type { Effect, Predicate, Requirement } from '@dm/module';
 import type { Scope } from '@dm/module';
 import type { Entity, EntityId } from '../../state.js';
-import { buildScope, statsOf, OPEN_NAMESPACES } from '../../stats.js';
+import { buildScope, statsOf, targetScope, OPEN_NAMESPACES } from '../../stats.js';
 import { passiveBase, configOf } from '../config.js';
 import { Transaction, applyOps } from '../apply.js';
 import { tickConditions, rollConditionSaves } from '../conditions.js';
@@ -478,7 +478,12 @@ export function provokeOpportunity(
       // attack was free of the reaction economy the module had written down.
       if (!hasBudget(txn, opportunity.actionType)) continue;
 
-      const scope = buildScope(txn.module, txn.state, other, { target: { id: mover.id } as never });
+      // The whole mover, not just an id. A gate that can only learn who is
+      // leaving cannot ask whether they are disengaging, which is why
+      // disengaging could not be written.
+      const scope = buildScope(txn.module, txn.state, other, {
+        target: targetScope(txn.module, mover) as never,
+      });
       if (opportunity.requires && !evalPredicate(opportunity.requires, { scope, rng, openNamespaces: OPEN_NAMESPACES })) continue;
 
       if (combat) {
