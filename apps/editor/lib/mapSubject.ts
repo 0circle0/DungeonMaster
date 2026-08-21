@@ -1,24 +1,17 @@
 /**
  * What actually drew the map on screen.
  *
- * The viewport shows a generated map, and everything about it is authorable —
- * but the fields live two or three collections away. The reeds and water in an
- * area come from a palette's `scatter`, which is reached through the *biome*,
- * which is named on the area; a barrow's shape comes from the dungeon entry.
- * Nothing on the canvas said so, and `world.palettes` never appears in the
- * world tree at all, so the honest answer to "where is this controlled" was
- * "three hops away, if you already know".
+ * The viewport shows a generated map and everything about it is authorable, but the fields live two
+ * or three collections away: an area's reeds and water come from a palette's `scatter`, reached
+ * through the biome named on the area; a barrow's shape comes from the dungeon entry.
  *
- * This resolves that chain the way the engine does, so the controls beside the
- * map are the ones that actually moved the pixels. The per-type knowledge lives
- * here rather than in the panel because **the engine's palette resolution is
- * itself per-type** — an area takes its biome's palette as an override, a POI
- * interior takes no override at all, and a dungeon prefers its own. A panel
- * that guessed one rule for all three would quietly edit a field nothing reads.
+ * This resolves that chain the way the engine does, so the controls beside the map are the ones
+ * that moved the pixels. The per-type knowledge lives here because the engine's palette resolution
+ * is itself per-type — an area takes its biome's palette as an override, a POI interior takes no
+ * override, and a dungeon prefers its own.
  *
- * Works on the raw authored document, like the rest of the editor, so the
- * controls survive a module that does not currently compile — which is exactly
- * the state a half-typed `roomCount` puts it in.
+ * Works on the raw authored document, so the controls survive a module that does not currently
+ * compile.
  */
 
 import type { ModuleDoc, Path } from './store';
@@ -91,17 +84,13 @@ function paletteSubject(doc: ModuleDoc, id: string | null): MapSubject | null {
 }
 
 /**
- * Which entry and which palette produced the map for this target.
- *
- * The redirects matter as much as the palettes: a POI with no interior draws
- * its *area*, and a POI with a dungeon draws the *dungeon*. Without them the
- * panel would offer controls for a document node that has no effect on what is
- * on screen — the one way a panel like this can be actively worse than nothing.
+ * Which entry and which palette produced the map for this target. The redirects matter as much as
+ * the palettes: a POI with no interior draws its area, and a POI with a dungeon draws the dungeon.
  */
 export function resolveMapSubjects(doc: ModuleDoc, target: MapTarget): MapSubjects {
   switch (target.type) {
-    // The engine resolves the start the same way — POI, then area, then
-    // dungeon — so this reduces to whichever of those it picked.
+    // The engine resolves the start the same way — POI, then area, then dungeon — so this reduces
+    // to whichever of those it picked.
     case 'start': {
       const start = resolveStart(doc);
       if (!start) return NOTHING;
@@ -112,9 +101,9 @@ export function resolveMapSubjects(doc: ModuleDoc, target: MapTarget): MapSubjec
       const found = find(doc, 'areas', target.id);
       if (!found) return NOTHING;
 
-      // `buildMap(module, area.map, rng, biome?.palette)` — the biome's palette
-      // arrives as an *override*, and `resolvePalette` takes the override ahead
-      // of the spec's own. See preview.ts (previewArea) and mapgen.ts.
+      // `buildMap(module, area.map, rng, biome?.palette)`: the biome's palette arrives as an
+      // override, and `resolvePalette` takes the override ahead of the spec's own. See preview.ts
+      // and mapgen.ts.
       const biomeId = str(found.entry['biome']);
       const biome = biomeId ? find(doc, 'biomes', biomeId) : null;
       const fromBiome = str(biome?.entry['palette']);
@@ -150,7 +139,7 @@ export function resolveMapSubjects(doc: ModuleDoc, target: MapTarget): MapSubjec
         return { ...inner, redirect: `"${name}" descends into the dungeon "${dungeonId}" — that is the map drawn here, and these are its controls.` };
       }
 
-      // A POI with no interior *is* a spot on its area's map.
+      // A POI with no interior is a spot on its area's map.
       const spec = mapSpecOf(found.entry);
       if (!spec) {
         const areaId = str(found.entry['area']);
@@ -176,8 +165,8 @@ export function resolveMapSubjects(doc: ModuleDoc, target: MapTarget): MapSubjec
       const found = find(doc, 'dungeons', target.id);
       if (!found) return NOTHING;
 
-      // `resolvePalette(module, definition.palette ?? biome?.palette)` — the
-      // dungeon's own wins here, the opposite way round from an area.
+      // `resolvePalette(module, definition.palette ?? biome?.palette)` — the dungeon's own wins
+      // here, the opposite way round from an area.
       const own = str(found.entry['palette']);
       const biomeId = str(found.entry['biome']);
       const biome = biomeId ? find(doc, 'biomes', biomeId) : null;

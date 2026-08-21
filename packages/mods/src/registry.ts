@@ -1,16 +1,13 @@
 /**
  * Resolution and ordering.
  *
- * Two jobs, both of which have to be identical in the editor and the play app,
- * which is why they live here rather than in either:
+ * Two jobs, both of which have to be identical in the editor and the play app:
  *
- *   1. Decide which declared mods are actually going to run, and say clearly
- *      why any of them are not.
+ *   1. Decide which declared mods will run, and say why any of them will not.
  *   2. Put them in an order that is the same on every machine.
  *
- * Ordering is the subtle half. Load order changes behaviour, so it must not
- * depend on `readdir`, on insertion, or on a `Map`'s iteration — the same
- * reasoning `@dm/module/load` gives for sorting map folders before hashing.
+ * Ordering is the subtle half: load order changes behaviour, so it must not depend on `readdir`, on
+ * insertion, or on a `Map`'s iteration.
  */
 
 import type { LoadedMod } from './sandbox/host.js';
@@ -53,15 +50,12 @@ export interface ModResolution {
 /**
  * Resolve a game's declared mods against what is installed.
  *
- * The two policies that matter, both decided deliberately:
+ * Two policies:
  *
- *   - **A missing required mod blocks play.** The game says it needs it;
- *     pretending otherwise produces a broken session that looks like an engine
- *     bug.
- *   - **A hash mismatch warns and loads anyway.** The hash lives in a JSON file
- *     the player can edit, so a hard block teaches people to edit the hash
- *     rather than to fix the mismatch. A loud warning is honest about the risk
- *     and leaves the choice where it belongs.
+ *   - A missing required mod blocks play. The game says it needs it, and pretending otherwise
+ *     produces a broken session that looks like an engine bug.
+ *   - A hash mismatch warns and loads anyway. The hash lives in a JSON file the player can edit, so
+ *     a hard block teaches people to edit the hash rather than fix the mismatch.
  */
 export function resolveMods(
   declared: readonly ModDeclaration[],
@@ -100,8 +94,8 @@ export function resolveMods(
       return;
     }
 
-    // Prefer the exact pinned build; several versions of one mod can sit side
-    // by side because the folder name carries the hash.
+    // Prefer the exact pinned build; several versions of one mod can sit side by side because the
+    // folder name carries the hash.
     const exact = candidates.find((c) => c.hash === entry.hash);
     const mod = exact ?? candidates[0]!;
 
@@ -118,7 +112,7 @@ export function resolveMods(
       });
     }
 
-    // Required mods are forced on: the toggle is not consulted at all.
+    // Required mods are forced on: the toggle is not consulted.
     if (!entry.required && !isEnabled(entry.id)) {
       disabled.push(entry.id);
       return;
@@ -164,12 +158,11 @@ export function resolveMods(
 /**
  * Deterministic order.
  *
- * Base sequence is the order the game document declares, because that is
- * stable across machines, is part of the module hash, and is something an
- * author can *fix* by reordering. Ties break on the mod id, bytewise.
+ * The base sequence is the order the game document declares: stable across machines, part of the
+ * module hash, and something an author can fix by reordering. Ties break on the mod id, bytewise.
  *
- * `loadAfter` is then applied as a stable topological sort seeded by that
- * sequence, so a constraint reorders only what it has to.
+ * `loadAfter` is then applied as a stable topological sort seeded by that sequence, so a constraint
+ * reorders only what it has to.
  */
 function orderMods(
   chosen: readonly { mod: LoadedMod; declaredAt: number }[],
@@ -201,8 +194,8 @@ function orderMods(
   const byIdOrder = new Map(base.map((entry, i) => [entry.mod.manifest.id, i]));
   const modById = new Map(base.map((entry) => [entry.mod.manifest.id, entry.mod]));
 
-  // Kahn, always taking the earliest still-available id in the base sequence,
-  // which is what makes the result stable rather than merely valid.
+  // Kahn, always taking the earliest still-available id in the base sequence, which is what makes
+  // the result stable rather than merely valid.
   const ready = base.filter((e) => (indegree.get(e.mod.manifest.id) ?? 0) === 0).map((e) => e.mod.manifest.id);
   const out: LoadedMod[] = [];
   while (ready.length > 0) {
@@ -224,8 +217,7 @@ function orderMods(
       modId: stuck[0] ?? '',
       message: `loadAfter cycle between ${stuck.join(' -> ')} — one of them has to give`,
     });
-    // Fall back to the base order so callers still get something sensible to
-    // show; `ok` is already false.
+    // Fall back to the base order so callers still get something to show; `ok` is already false.
     return base.map((entry) => entry.mod);
   }
 
@@ -235,12 +227,11 @@ function orderMods(
 /**
  * Two mods replacing the same hook.
  *
- * Highest priority wins, then the earlier of the deterministic order. The loser
- * is reported rather than silently skipped — a mod that quietly did nothing is
- * the single most confusing outcome for a player.
+ * Highest priority wins, then the earlier of the deterministic order. The loser is reported rather
+ * than silently skipped.
  *
- * The exception is two *required* mods claiming the same replace: the game
- * insists on both, and silently picking one is worse than saying so.
+ * The exception is two required mods claiming the same replace: the game insists on both, and
+ * silently picking one is worse than saying so.
  */
 function resolveReplaceConflicts(
   ordered: readonly LoadedMod[],

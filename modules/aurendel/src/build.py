@@ -3,17 +3,14 @@
 
     python3 build.py && npm run validate -- modules/aurendel
 
-`extends: "core_fantasy@1.0.0"` was the obvious way to get the ruleset in, and
-it does not survive validation: `npm run validate` lints the **raw** document
-before resolving extends (bin/validate.ts:59 → diagnostics/lint.ts:1023), so a
-child that leans on its parent for `rules` fails the schema pass with
-"attributes is required", and `$delete` markers fail it too. Only `mods` may
-carry `$delete` in a raw document.
+`extends: "core_fantasy@1.0.0"` does not survive validation: `npm run validate` lints the raw
+document before resolving extends, so a child that leans on its parent for `rules` fails the schema
+pass with "attributes is required", and `$delete` markers fail it too. Only `mods` may carry
+`$delete` in a raw document.
 
-So the ruleset is *composed in* here instead. `modules/core_fantasy` stays the
-canonical base module and this script copies its rules, its character content,
-and its 198 system-text messages into the world. One source of truth, two
-standalone modules on disk — which is what the tooling wants.
+So the ruleset is composed in here instead. `modules/core_fantasy` stays the canonical base module
+and this script copies its rules, its character content, and its 198 system-text messages into the
+world.
 """
 import _bootstrap  # noqa: F401  sys.path; must come first
 import os  # noqa: E402
@@ -23,8 +20,8 @@ OUT = os.path.join(ROOT, "modules/aurendel")
 
 from dmkit.retired import refuse_if_handed_over  # noqa: E402
 
-# Handed over to `aurendel/project/`. See dmkit/retired.py for why this file is
-# kept rather than deleted.
+# Handed over to `aurendel/project/`. See dmkit/retired.py for why this file is kept rather than
+# deleted.
 refuse_if_handed_over(OUT)
 BASE = os.path.join(ROOT, "modules/core_fantasy/module.json")
 
@@ -51,12 +48,12 @@ def main():
     biome_list = materials.biomes()
 
     regions.attach_room_templates(biome_list)
-    # The questline turns its own route live — encounters, loot, and rooms
-    # that are not empty — and leaves the rest of the continent alone.
+    # The questline turns its own route live — encounters, loot, and rooms that are not empty — and
+    # leaves the rest of the continent alone.
     story.attach_content(biome_list, dungeons, room_templates, areas)
     story.attach_triggers(pois)
-    # Hidden threads build no geography; they patch places that were already
-    # there and unmentioned. Applied last so a patch sees the finished place.
+    # Hidden threads build no geography; they patch places that were already there. Applied last so
+    # a patch sees the finished place.
     story.attach_patches(pois)
 
     world = {
@@ -70,16 +67,15 @@ def main():
         "dungeons": dungeons,
         "encounterTables": loot.ENCOUNTER_TABLES + story.encounter_tables(),
         "time": materials.TIME,
-        # Nothing rolls encounters — this world has no monsters yet — but rooms
-        # still want loot spots and traps marked out for whoever fills them.
+        # Nothing rolls encounters — this world has no monsters yet — but rooms still want loot
+        # spots and traps marked out.
         "generationDefaults": {"encounterChance": 0, "lootChance": 0.2,
                                "trapChance": 0.12},
     }
 
-    # The ruleset, lifted wholesale from the base module — then armed. Without
-    # `classes[].startingItems` every non-caster in Aurendel swings for zero:
-    # `strike` declares no damage of its own, so damage comes entirely from an
-    # equipped weapon (rules/combat/attack.ts) and there were no weapons.
+    # The ruleset, lifted wholesale from the base module, then armed. Without
+    # `classes[].startingItems` every non-caster swings for zero: `strike` declares no damage of its
+    # own, so damage comes entirely from an equipped weapon (rules/combat/attack.ts).
     content = {k: list(base["content"][k])
                for k in ("skills", "abilities", "ancestries", "classes")}
     content["classes"] = dmkit_items.outfit(content["classes"], items.CLASS_KIT)
@@ -91,8 +87,8 @@ def main():
     content["npcs"] = story.npcs()
     content["traps"] = regions.traps()
 
-    # The base module's sense-impression pools come along with `rules.senses`,
-    # which points at them by name.
+    # The base module's sense-impression pools come along with `rules.senses`, which points at them
+    # by name.
     merged = assemble.text_grammar(base["narrative"]["textGrammar"],
                                    prose.registered())
 
@@ -123,11 +119,9 @@ def main():
     }
     start = regions.start()
 
-    # Winning the Unsealing does not end the run. Without this the engine sets
-    # `outcome: 'victory'` and `settle` returns early ever after — no combat,
-    # no encounters, no affordances — and every trial in `story.TRIAL_MODULES`
-    # would validate perfectly and be unreachable, because all of them are
-    # gated behind the flag `the_unsealing` writes on its way out.
+    # Winning the Unsealing does not end the run. Without this the engine sets `outcome: 'victory'`
+    # and `settle` returns early ever after — no combat, no encounters, no affordances — and every
+    # trial in `story.TRIAL_MODULES` would be unreachable.
     start["postVictory"] = "continue"
 
     doc = assemble.document(

@@ -1,16 +1,12 @@
 /**
  * Applying effects: the bridge from the DSL to game state.
  *
- * Content describes what should happen as data; `evalEffects` turns that into
- * `EffectOp[]`; this turns those into state changes and events. It is the only
- * place a module's declared intent becomes a fact about the world.
+ * Content describes what should happen as data, `evalEffects` turns that into `EffectOp[]`, and
+ * this turns those into state changes and events.
  *
- * The engine deliberately gets the last word. An op is a *request* — "damage
- * this entity by 7" — and this validates it before applying: the dead take no
- * damage, resources clamp to their bounds, immune creatures shrug off
- * conditions, and unknown ids are refused rather than crashing. Content is
- * written by hand and will be wrong sometimes; a module should not be able to
- * corrupt a save.
+ * An op is a request, and this validates it before applying: the dead take no damage, resources
+ * clamp to their bounds, immune creatures shrug off conditions, and unknown ids are refused rather
+ * than crashing. A module cannot corrupt a save.
  */
 
 import { Rng } from '@dm/core';
@@ -25,8 +21,7 @@ import { testConcentration } from './casting.js';
 import { message } from '../narrate/systemText.js';
 import { configOf } from './config.js';
 import { dispositionFor } from '../character.js';
-// Type-only: `runtime.ts` imports `applyOps` from here, so a value import
-// would close a cycle. Types are erased, so this one does not.
+// Type-only: `runtime.ts` imports `applyOps` from here, so a value import would close a cycle.
 import type { ModRuntime } from '../mods/runtime.js';
 
 /** Accumulates state changes and the events describing them. */
@@ -35,20 +30,15 @@ export class Transaction {
   private readonly events: GameEvent[] = [];
 
   /**
-   * Depletions currently unwinding, as `<entity>:<resource>`.
-   *
-   * Per-call scratch, deliberately not on `GameState`: a module whose
-   * `onDepleted` pushes the same pool back to its floor would otherwise recurse
-   * without end. Never serialized, so it cannot affect save equality.
+   * Depletions currently unwinding, as `<entity>:<resource>`. Per-call scratch, not on `GameState`:
+   * a module whose `onDepleted` pushes the same pool back to its floor would otherwise recurse
+   * without end. Never serialized.
    */
   readonly depleting = new Set<string>();
 
   /**
-   * Guards `event.emit` against re-entering itself.
-   *
-   * A mod that emits an event from inside an emit hook would otherwise recurse
-   * until the stack gave out. Per-call scratch, like `depleting`, and for the
-   * same reason: never serialized, so it cannot affect save equality.
+   * Guards `event.emit` against re-entering itself: a mod that emits from inside an emit hook would
+   * recurse until the stack gave out. Per-call scratch, never serialized.
    */
   private emitting = false;
 
@@ -56,13 +46,9 @@ export class Transaction {
     state: GameState,
     readonly module: CompiledModule,
     /**
-     * Installed mods, or null when there are none.
-     *
-     * Carried on the transaction rather than passed down because the deepest
-     * hook site — an unimplemented effect op — is several frames below
-     * `reduce`, and threading a parameter through every intermediate signature
-     * would touch far more code than it explains. Null is the common case and
-     * costs an optional-chain miss.
+     * Installed mods, or null when there are none. Carried on the transaction rather than passed
+     * down because the deepest hook site — an unimplemented effect op — is several frames below
+     * `reduce`. Null costs an optional-chain miss.
      */
     readonly mods: ModRuntime | null = null,
   ) {
@@ -74,13 +60,9 @@ export class Transaction {
   }
 
   /**
-   * Randomness for effects that are evaluated deep inside an application.
-   *
-   * `evalEffects` normally runs at the top of a reduction, where the reducer's
-   * own generator is in hand. A few things — an `onDepleted` that heals `1d4`,
-   * a condition whose `defaultDuration` is rolled — are only reached from here.
-   * Deriving from the state's own generator keeps them a pure function of the
-   * state they fire in, so a replay reproduces them exactly.
+   * Randomness for effects evaluated deep inside an application, such as an `onDepleted` that heals
+   * `1d4` or a condition whose `defaultDuration` is rolled. Derived from the state's own generator,
+   * so a replay reproduces them exactly.
    */
   rngFor(label: string): Rng {
     return Rng.fromState(this.current.rng).derive(label);
@@ -94,12 +76,9 @@ export class Transaction {
     this.events.push(event);
 
     /**
-     * Mods watching for this specific event type.
-     *
-     * The `match` on the declaration is mandatory for this hook, so the gate
-     * below is a `Set` miss for every event nobody asked about — which matters
-     * because this runs hundreds of times a turn. Re-entrancy is guarded: a mod
-     * that emits from inside an emit hook would otherwise recurse without end.
+     * Mods watching for this specific event type. The `match` on the declaration is mandatory for
+     * this hook, so the gate below is a `Set` miss for every event nobody asked about — this runs
+     * hundreds of times a turn. Re-entrancy is guarded.
      */
     if (this.emitting) return;
     if (!this.mods?.has('event.emit', event.type)) return;
@@ -156,16 +135,11 @@ interface MonsterDef {
 }
 
 /**
- * Every resistance, immunity and vulnerability that applies to a creature.
+ * Every resistance, immunity and vulnerability that applies to a creature: the statblock, the
+ * ancestry, and carried items.
  *
- * Only the statblock was consulted, and only monsters have one — so a *player
- * character* could not have a resistance at all, and `ancestries[].
- * damageInteractions` and `items[].damageInteractions` were unreachable by
- * construction rather than merely unimplemented.
- *
- * Sources compose multiplicatively: armour that halves fire on top of an
- * ancestry that already halves it leaves a quarter, which is the reading that
- * makes stacking protections worth having without making them additive-to-zero.
+ * Sources compose multiplicatively, so armour that halves fire on top of an ancestry that already
+ * halves it leaves a quarter.
  */
 function interactionsFor(module: CompiledModule, target: Entity): Interaction[] {
   const out: Interaction[] = [];
@@ -200,11 +174,9 @@ function immunitiesOf(module: CompiledModule, target: Entity): string[] {
 }
 
 /**
- * Damage multiplier for a type, from the target's resistances.
- *
- * One multiplier covers resistance (0.5), immunity (0), and vulnerability (2)
- * rather than three separate mechanisms — and lets a module express healing
- * from fire as -1 without the engine knowing that is unusual.
+ * Damage multiplier for a type, from the target's resistances. One multiplier covers resistance
+ * (0.5), immunity (0) and vulnerability (2), and lets a module express healing from a damage type
+ * as -1.
  */
 function damageMultiplier(
   module: CompiledModule,
@@ -218,8 +190,6 @@ function damageMultiplier(
   for (const interaction of interactionsFor(module, target)) {
     if (interaction.damageType !== damageType) continue;
     // `unless` is what makes "immune to slashing, except silvered" expressible.
-    // Without it the classic beat — an ordinary blade is useless, the warded one
-    // is not — had no way to be written.
     if (interaction.unless?.some((tag) => tags.includes(tag))) continue;
     multiplier *= interaction.multiplier;
   }
@@ -245,8 +215,8 @@ export function adjustResource(
   }
 
   const before = entity.resources[resourceId] ?? 0;
-  // Both bounds depend on gear and conditions, so they are computed rather than
-  // stored — see `stats.ts`.
+  // Both bounds depend on gear and conditions, so they are computed rather than stored; see
+  // `stats.ts`.
   const max = maximaFor(txn, entity)[resourceId] ?? before;
   const min = minimaFor(txn, entity)[resourceId] ?? 0;
 
@@ -267,8 +237,7 @@ export function adjustResource(
       source: options.source ?? null,
     });
 
-    // Being hurt is the only moment concentration is really tested, so the
-    // check lives on the damage rather than on a turn boundary.
+    // Concentration is tested on damage, so the check lives here rather than on a turn boundary.
     testConcentration(txn, entity, before - after, txn.rngFor(`concentration:${entity.id}`));
   } else if (delta > 0) {
     txn.emit({ type: 'healed', entity: entity.id, amount: after - before, resource: resourceId });
@@ -285,12 +254,10 @@ export function adjustResource(
 /**
  * What happens when a pool bottoms out.
  *
- * The order is the design: the module's own `onDepleted` runs **first**, and
- * death is only declared afterwards, if the character is still at the floor.
- * That is what lets `[heal 1, applyCondition downed]` mean "dropped to 0 and
- * stabilised" — the D&D shape — without the engine needing a concept of dying
- * separate from a resource running out. A resource that declares no
- * `onDepleted` behaves exactly as it did before.
+ * The module's own `onDepleted` runs first, and death is declared afterwards only if the character
+ * is still at the floor. That is what lets `[heal 1, applyCondition downed]` mean "dropped to 0 and
+ * stabilised" without the engine needing a concept of dying. A resource with no `onDepleted` is
+ * unaffected.
  */
 function runDepletion(
   txn: Transaction,
@@ -302,9 +269,8 @@ function runDepletion(
   const effects = (definition?.onDepleted ?? []) as Effect[];
 
   if (effects.length > 0) {
-    // `onDepleted` may itself damage, heal, or kill. Without a guard, a module
-    // whose effects push the same pool back down would recurse forever; the
-    // mark is per-call scratch on the transaction and is never serialized.
+    // `onDepleted` may itself damage, heal or kill, so a re-entry mark guards against a module
+    // whose effects push the same pool back down. Per-call scratch, never serialized.
     const mark = `${entityId}:${resourceId}`;
     if (txn.depleting.has(mark)) return;
     txn.depleting.add(mark);
@@ -320,9 +286,8 @@ function runDepletion(
     }
   }
 
-  // Death is not an engine concept: it is whatever the module attached to the
-  // vital resource running out — but only if the module did not just pull the
-  // character back off the floor.
+  // Death is whatever the module attached to the vital resource running out, and only if the module
+  // did not just pull the character back off the floor.
   if (resourceId !== txn.module.source.rules.vitalResource) return;
 
   const after = txn.entity(entityId);
@@ -336,11 +301,9 @@ function runDepletion(
 }
 
 /**
- * Resource maxima, cached per entity object.
- *
- * Maxima depend on gear and conditions so they are computed rather than stored,
- * but a burst of ops against one entity would otherwise recompute them per op.
- * The cache is keyed on the entity object, so any change invalidates it.
+ * Resource maxima, cached per entity object. Maxima depend on gear and conditions so they are
+ * computed rather than stored; the cache is keyed on the entity object, so any change invalidates
+ * it.
  */
 const maximaCache = new WeakMap<Entity, Record<string, number>>();
 
@@ -383,10 +346,7 @@ export function applyCondition(
     return;
   }
 
-  // An effect that names no duration gets the condition's own. Without this,
-  // every authored `defaultDuration` was ignored and the condition lasted until
-  // something removed it — so "frightened for 2 rounds" meant frightened for
-  // the rest of the game.
+  // An effect that names no duration gets the condition's own `defaultDuration`.
   const applied = duration ?? durationOf(txn, definition, entity, magnitude);
 
   const existing = entity.conditions.find((active) => active.condition === conditionId);
@@ -417,8 +377,8 @@ export function applyCondition(
   txn.putEntity({ ...entity, conditions });
   txn.emit({ type: 'conditionApplied', entity: entity.id, condition: conditionId, duration: applied, stacked });
 
-  // `onApply` fires when the condition actually takes hold — so a second dose
-  // of a `refresh` condition re-runs it, and one that was `ignore`d does not.
+  // `onApply` fires when the condition takes hold, so a second dose of a `refresh` condition re-
+  // runs it and one that was `ignore`d does not.
   const effects = (definition.onApply ?? []) as Effect[];
   if (effects.length > 0) {
     const current = txn.entity(entity.id);
@@ -509,10 +469,8 @@ export function adjustReputation(txn: Transaction, factionId: string, delta: num
 }
 
 /**
- * Apply a list of effect ops.
- *
- * Ops are applied in order and each reads the state the previous one left, so
- * content can rely on sequencing — damage then check whether the target died.
+ * Apply a list of effect ops. Ops are applied in order and each reads the state the previous one
+ * left, so content can rely on sequencing.
  */
 export function applyOps(txn: Transaction, ops: readonly EffectOp[], source: EntityId | null = null): void {
   for (const op of ops) {
@@ -521,8 +479,8 @@ export function applyOps(txn: Transaction, ops: readonly EffectOp[], source: Ent
         const target = asEntityId(op.target, txn.state);
         const entity = target ? txn.entity(target) : undefined;
         if (!entity) break;
-        // The dead take no further damage; without this, area effects would
-        // "kill" a corpse repeatedly and emit a death event each time.
+        // The dead take no further damage, so an area effect cannot kill a corpse repeatedly and
+        // emit a death event each time.
         if (!entity.alive) break;
 
         const multiplier = damageMultiplier(txn.module, entity, op.damageType, op.tags ?? []);
@@ -586,10 +544,8 @@ export function applyOps(txn: Transaction, ops: readonly EffectOp[], source: Ent
       }
 
       case 'learnLore': {
-        // Learning twice is not an event. Content teaches the same clue from
-        // several places on purpose — a thread that dies with one missed
-        // conversation is a thread nobody finishes — so the second telling has
-        // to be silent, and the recorded minute has to stay the first one.
+        // Learning a clue twice is silent, and the recorded minute stays the first one: content
+        // teaches the same clue from several places on purpose.
         if (!txn.module.find('narrative.lore', op.entry)) break;
         if (op.entry in txn.state.lore) break;
         txn.set({ ...txn.state, lore: { ...txn.state.lore, [op.entry]: txn.state.minute } });
@@ -602,11 +558,8 @@ export function applyOps(txn: Transaction, ops: readonly EffectOp[], source: Ent
         break;
 
       case 'setDisposition': {
-        // How a creature regards the party was written once, at spawn, and no
-        // effect could touch it — so an ally you had wronged past forgiveness
-        // stood there and let you kill her, because `isHostileTo` never
-        // changed its mind. Enrolling her in a fight already under way is
-        // `settle`'s job; this only moves the stance.
+        // Move a creature's stance toward the party. Enrolling it in a fight already under way is
+        // `settle`'s job.
         const subject = txn.entity(String(op.target));
         if (!subject) break;
 
@@ -634,10 +587,8 @@ export function applyOps(txn: Transaction, ops: readonly EffectOp[], source: Ent
       }
 
       case 'adjustCurrency': {
-        // Whether the purse can go below zero is the module's call. Clamped,
-        // a party that overspends is refused the difference rather than put
-        // into a debt nothing else knows how to read; allowed, a module can
-        // model exactly that.
+        // Whether the purse can go below zero is the module's call: clamped, a party that
+        // overspends is refused the difference; allowed, a module can model a debt.
         const before = txn.state.purse;
         const raw = before + op.amount;
         const after = configOf(txn.module).allowDebt ? raw : Math.max(0, raw);
@@ -651,8 +602,8 @@ export function applyOps(txn: Transaction, ops: readonly EffectOp[], source: Ent
         const target = asEntityId(op.target, txn.state);
         const entity = target ? txn.entity(target) : undefined;
         if (!entity) break;
-        // Teleporting to a named place is resolved by the caller, which knows
-        // about maps; here it only records the intent as a custom event.
+        // Teleporting to a named place is resolved by the caller, which knows about maps; here it
+        // records the intent as a custom event.
         txn.emit({ type: 'custom', event: 'moveRequested', data: { entity: entity.id, to: op.to } });
         break;
       }
@@ -679,16 +630,13 @@ export function applyOps(txn: Transaction, ops: readonly EffectOp[], source: Ent
       }
 
       default: {
-        // An op the engine does not implement did nothing, quietly — which is
-        // the exact failure this file exists to prevent on the content side.
-        // The `never` makes it a compile error to add an op and forget the
-        // case; the refusal covers a module built against a newer engine.
+        // Refuse an op the engine does not implement. The `never` makes it a compile error to add
+        // an op and forget the case; the refusal covers a module built against a newer engine.
         const unhandled: never = op;
         const name = (unhandled as { op: string }).op;
 
-        // Ask the mods before refusing. This is what lets a mod add a genuinely
-        // new effect op: module JSON can use it, the studio can edit it, and
-        // the engine needs no case for it.
+        // Ask the mods before refusing, so a mod can add a genuinely new effect op that module JSON
+        // uses and the studio edits without an engine case for it.
         if (txn.mods?.has('applyOp', name)) {
           const outcome = txn.mods.run(
             txn,

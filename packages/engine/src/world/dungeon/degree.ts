@@ -1,23 +1,20 @@
 /**
  * Room degree: how many ways in and out of a room there are.
  *
- * `roomTemplates[].minExits`/`maxExits` were validated against each other and
- * then ignored — room degree was whatever the spanning tree plus random loops
- * produced. Here they finally bite:
+ * `roomTemplates[].minExits`/`maxExits` are applied here:
  *
- *   - the spanning tree refuses to attach new rooms through a room already at
- *     its `maxExits`, so a `maxExits: 1` boss cell ends up a leaf;
- *   - after locking, rooms under their `minExits` get extra nearest-neighbour
- *     connections, without ever bypassing a lock;
+ *   - the spanning tree refuses to attach new rooms through a room already at its `maxExits`, so a
+ *     `maxExits: 1` boss cell ends up a leaf;
+ *   - after locking, rooms under their `minExits` get extra nearest-neighbour connections, without
+ *     ever bypassing a lock;
  *   - branchiness loops respect `maxExits` too.
  *
- * **Connectivity always wins.** When every connected room is saturated the cap
- * is relaxed on the lowest-degree one — a dungeon you cannot cross is worse
- * than a room with one door too many, and the static lint warns the author
- * long before this code has to choose.
+ * Connectivity always wins. When every connected room is saturated the cap is relaxed on the
+ * lowest-degree one, because a dungeon you cannot cross is worse than a room with one door too
+ * many.
  *
- * Everything here is deterministic — nearest-neighbour with index tie-breaks —
- * so it consumes no rng at all.
+ * Everything here is deterministic — nearest-neighbour with index tie-breaks — so it consumes no
+ * rng.
  */
 
 import type { Position } from '../../grid/tiles.js';
@@ -34,11 +31,8 @@ interface Node {
 const distanceOf = (a: Position, b: Position) => Math.abs(a.x - b.x) + Math.abs(a.y - b.y);
 
 /**
- * Prim-style spanning tree over room centres, honouring `maxExits`.
- *
- * Identical to the old nearest-neighbour tree when no template declares a cap
- * (every room defaults to Infinity), which keeps the untouched-module diff to
- * the corridor changes alone.
+ * Prim-style spanning tree over room centres, honouring `maxExits`. Identical to a plain nearest-
+ * neighbour tree when no template declares a cap, since every room defaults to Infinity.
  */
 export function degreeTree(
   rooms: readonly Node[],
@@ -59,9 +53,9 @@ export function degreeTree(
         if (connected.has(to)) continue;
         const distance = distanceOf(rooms[from]!.centre, rooms[to]!.centre);
 
-        // The relaxed candidate ignores caps entirely, preferring the
-        // lowest-degree attachment point so a forced violation lands where it
-        // does least harm. Ties break on distance then index, as ever.
+        // The relaxed candidate ignores caps entirely, preferring the lowest-degree attachment
+        // point so a forced violation lands where it does least harm. Ties break on distance then
+        // index.
         if (
           !relaxed ||
           degree[from]! < degree[relaxed.from]! ||
@@ -97,12 +91,9 @@ export function degreesOf(count: number, edges: readonly [number, number][]): nu
 }
 
 /**
- * Extra edges that raise every under-`minExits` room toward its floor.
- *
- * Runs after locking, so a candidate that would join the two sides of a locked
- * door is rejected the same way branchiness loops are — the key-before-lock
- * argument stays intact. An unsatisfiable minimum is simply left short; the
- * lint said so at author time.
+ * Extra edges that raise every under-`minExits` room toward its floor. Runs after locking, so a
+ * candidate that would join the two sides of a locked door is rejected the same way branchiness
+ * loops are. An unsatisfiable minimum is left short.
  */
 export function raiseToMinDegrees(
   rooms: readonly Node[],
@@ -120,8 +111,8 @@ export function raiseToMinDegrees(
     const min = limits[room]?.min ?? 0;
 
     while (degree[room]! < min) {
-      // Nearest room with headroom that is not already a neighbour and does
-      // not bridge a lock. Deterministic: distance, then index.
+      // Nearest room with headroom that is not already a neighbour and does not bridge a lock.
+      // Deterministic: distance, then index.
       let pick = -1;
       let pickDistance = Infinity;
       for (let other = 0; other < rooms.length; other += 1) {

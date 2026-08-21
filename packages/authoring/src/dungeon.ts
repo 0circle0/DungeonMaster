@@ -1,15 +1,5 @@
 /**
- * Sizing a dungeon so it holds the rooms you asked for.
- *
- * `roomCount` is a *request*, not a promise. `placeRooms` gives each room forty
- * attempts at a spot that keeps `corridorLength`'s mean away from every other
- * room, and when it runs out of attempts it stops — silently, with no error and
- * no diagnostic, leaving a map with fewer rooms than the number in the file.
- * Asking for fifteen rooms with `5d3` corridors on a 47×27 map produced two
- * rooms and a great deal of empty stone, which is why this exists.
- *
- * Nothing in the schema can catch that: every field is valid, the module
- * compiles, and the only symptom is a dungeon that reads bigger than it walks.
+ * Estimate a dungeon size that can hold the requested room count.
  */
 
 import { diceMean, generateDungeon, placeRooms, placementInputs } from '@dm/engine';
@@ -17,16 +7,13 @@ import type { PlacementInputs } from '@dm/engine';
 import type { CompiledModule } from '@dm/module';
 import { Rng } from '@dm/core';
 
-/**
- * How much of a map rejection sampling can fill before it starts dropping the
- * tail of the room list. Measured against `placeRooms`' forty attempts.
- */
+/** Fraction of the map that can be filled before room placement starts dropping the tail of the list. */
 export const PACKING = 0.42;
 
-/** The largest map worth generating; beyond this, spacing has to give way. */
+/** Maximum side length before spacing must be shortened to keep generation practical. */
 export const MAX_SIDE = 81;
 
-/** Progressively shorter corridors, tried only once the map hits its ceiling. */
+/** Corridor lengths to try as the map approaches its maximum size. */
 const FALLBACKS = ['4d3', '3d3', '2d3', '1d3+1', '1d2+1'] as const;
 
 export interface FitRequest {
@@ -52,11 +39,7 @@ export interface FitResult {
 }
 
 /**
- * A map — and if need be a corridor length — that holds `rooms` rooms.
- *
- * The map grows first, because a long corridor is the thing the author asked
- * for and the map is the thing they did not. Only when the map hits its
- * ceiling does the spacing give way, and then the result says so.
+ * Find a map size and, if needed, a shorter corridor length that fits the room count.
  */
 export function fit(request: FitRequest): FitResult {
   const aspect = request.aspect ?? 1;
@@ -72,8 +55,7 @@ export function fit(request: FitRequest): FitResult {
     const height = Math.max(21, Math.round(Math.sqrt(needed / aspect)));
     const width = Math.max(21, Math.round(height * aspect));
     return {
-      // Odd sides: a map with an even dimension wastes its last row to the
-      // wall, which is where a room the author counted on was going to go.
+      // Force odd dimensions so each map side can use its full interior.
       width: Math.min(MAX_SIDE, width | 1),
       height: Math.min(MAX_SIDE, height | 1),
       corridorLength: notation,
@@ -85,7 +67,7 @@ export function fit(request: FitRequest): FitResult {
   throw new Error('fit: the spacing walk did not terminate');
 }
 
-/** What the author asked for, then progressively shorter corridors. */
+/** Yield the requested corridor length and then progressively shorter fallbacks. */
 function* spacings(notation: string, wanted: number): Generator<[number, string]> {
   yield [wanted, notation];
   for (const fallback of FALLBACKS) {
@@ -106,19 +88,7 @@ export interface RoomMeasurement {
 }
 
 /**
- * How many rooms a dungeon *actually* generates, by generating it.
- *
- * Measured rather than predicted, and the first attempt here is why. Inverting
- * `fit`'s arithmetic looks like the obvious way to answer this and is wrong:
- * that formula is a sizing heuristic with deliberate headroom, so read as a
- * prediction it declared 63 of Aurendel's 68 dungeons broken when the engine
- * generates all but a handful of them in full. A warning that fires on
- * everything is worse than no warning, because it is the one an author learns
- * to dismiss.
- *
- * Placement is seeded, so the count varies by seed; several samples and the
- * worst of them is the honest figure — a dungeon that comes up short one run in
- * five is short.
+ * Measure how many rooms a dungeon actually generates across a few seeded runs.
  */
 export function measureRooms(
   module: CompiledModule,
@@ -140,35 +110,13 @@ export function measureRooms(
 
 
 /**
- * A size that has been *checked* to hold the rooms, rather than estimated.
- *
- * `fit` is a heuristic with headroom, and at the margin its headroom is not
- * enough: sizing greenmarch's barrow depths by `fit` took it from four rooms
- * out of six to five, which is better and still wrong. An author told "size it
- * to fit", who does so and is told again that it does not fit, has been given a
- * dead end.
- *
- * Two things make the check real rather than another estimate. It probes with
- * the engine's own `placeRooms`, using the templates the biome actually
- * supplies — which declare their own sizes, so `roomSize` is not what most
- * rooms are. And it takes the spacing from `placementInputs`, because
- * generation *rounds and clamps* the corridor mean to 1..12 and `fit`, ported
- * from the Python, uses the raw value: they disagree by a factor of two on
- * exactly the long corridors that cause the problem.
- *
- * It grows from whichever is larger, `fit`'s answer or the current size, so a
- * second attempt makes progress instead of proposing the same thing again.
+ * Check a size against the engine's actual placement behavior rather than the heuristic estimate.
  */
 export function sizeToFit(
   module: CompiledModule,
   dungeonId: string,
   current?: { readonly width: number; readonly height: number },
-  /**
-   * Placement is seeded and the probe cannot use generation's own stream, so
-   * "held on N samples" is evidence rather than proof. Twenty-four probes are
-   * still far cheaper than one generation, and the margin they buy is what
-   * stops the suggestion from being one that only usually works.
-   */
+  /** Sample a generated layout to validate the suggested size before proposing it. */
   samples = 24,
 ): FitResult {
   const inputs = placementInputs(module, dungeonId);

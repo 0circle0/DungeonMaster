@@ -1,13 +1,11 @@
 /**
  * Resolution: rolling against a number.
  *
- * Every uncertain outcome in the game funnels through here — skill checks,
- * saving throws, attack rolls, opposed contests. One implementation means
- * advantage, criticals, and modifiers behave identically wherever they appear.
+ * Every uncertain outcome funnels through here — skill checks, saving throws, attack rolls, opposed
+ * contests — so advantage, criticals and modifiers behave identically wherever they appear.
  *
- * Nothing about *how* to roll is decided here. The dice, what counts as a
- * critical, and how advantage is expressed all come from `rules.resolution`, so
- * a module can use `1d20`, `3d6`, or a dice pool without the engine changing.
+ * How to roll is not decided here. The dice, what counts as a critical, and how advantage is
+ * expressed all come from `rules.resolution`.
  */
 
 import { Rng, parseDice, rollDice } from '@dm/core';
@@ -36,11 +34,8 @@ interface Resolution {
 export type Swing = 'advantage' | 'disadvantage' | null;
 
 /**
- * What kind of d20 test this is.
- *
- * Only `criticalScope` reads it. A ruleset that wants a natural 20 to mean
- * something on a swung sword and nothing on a lockpick needs the engine to
- * know which it is holding, and `check` is one door for all of them.
+ * What kind of d20 test this is. Only `criticalScope` reads it, so a ruleset can let a natural 20
+ * mean something on a swung sword and nothing on a lockpick.
  */
 export type RollKind = 'attack' | 'save' | 'check';
 
@@ -50,12 +45,9 @@ export interface CheckOptions {
   /** The number to beat. Defaults to the module's `defaultDifficulty`. */
   readonly difficulty?: number;
   /**
-   * Which way the dice lean, and why this may be a list.
-   *
-   * A roll can be pulled in both directions at once — poisoned and helped,
-   * blinded and attacking something that cannot see you either. Callers hand
-   * over everything that applies and `check` reconciles it, so reconciling it
-   * is not a step a caller can forget.
+   * Which way the dice lean, and why this may be a list. A roll can be pulled both ways at once, so
+   * callers hand over everything that applies and `check` reconciles it, rather than leaving that
+   * to each caller.
    */
   readonly swing?: Swing | readonly Swing[] | undefined;
   /** Defaults to `check`, the least privileged of the three. */
@@ -69,10 +61,8 @@ function asList(given: Swing | readonly Swing[] | undefined): readonly Swing[] {
 }
 
 /**
- * One swing from however many apply, the module's way.
- *
- * Exported because it is worth testing directly: it is a pure function of a
- * list of enums, with no module state and no dice involved.
+ * One swing from however many apply, per `rules.resolution.swingStacking`. Exported because it is a
+ * pure function of a list of enums, with no module state and no dice.
  */
 export function resolveSwing(
   module: CompiledModule,
@@ -116,18 +106,13 @@ export function difficultyOf(module: CompiledModule, value: number | string | un
 /**
  * A difficulty the module wrote as a formula rather than as a number.
  *
- * `difficultyOf` answers *what number is `hard`*. This answers *what number is
- * fourteen, less what they think of you* — which is the difference between a
- * gate and a price. A door that needs a key is shut until you have the key; a
- * person who dislikes you is harder to talk round, and that is a number, not a
- * wall.
+ * `difficultyOf` answers what number `hard` is; this answers what number fourteen is, less what
+ * they think of you — the difference between a gate and a price.
  *
- * Every `difficulty` in the format takes an {@link Expr}, and a bare integer is
- * a valid one, so content written before this reads exactly as it always did.
- * A formula that fails to produce a finite number yields `undefined` rather
- * than zero: the caller then falls back to the module's default difficulty,
- * because a check that silently became automatic is worse than one that is
- * merely mistuned.
+ * Every `difficulty` in the format takes an {@link Expr} and a bare integer is a valid one, so
+ * older content reads unchanged. A formula that fails to produce a finite number yields `undefined`
+ * rather than zero, so the caller falls back to the module's default difficulty rather than the
+ * check becoming automatic.
  */
 export function difficultyFrom(
   module: CompiledModule,
@@ -138,9 +123,8 @@ export function difficultyFrom(
   extra: Scope = {},
 ): number | undefined {
   if (declared === undefined) return undefined;
-  // A plain number is the common case and needs no scope built for it — which
-  // also keeps the hot paths (every trap search, every locked door) free of a
-  // scope construction they never used before.
+  // A plain number is the common case and needs no scope built for it, which keeps the hot paths —
+  // every trap search, every locked door — free of a scope construction.
   if (typeof declared === 'number') return Math.floor(declared);
   if (typeof declared === 'string') return difficultyOf(module, declared);
 
@@ -150,10 +134,8 @@ export function difficultyFrom(
 }
 
 /**
- * Roll against a difficulty.
- *
- * The *natural* roll — before modifiers — decides criticals, which is why it is
- * recorded separately. A character with +9 who rolls a 1 has still fumbled.
+ * Roll against a difficulty. The natural roll, before modifiers, decides criticals, which is why it
+ * is recorded separately.
  */
 export function check(module: CompiledModule, rng: Rng, options: CheckOptions = {}): RollRecord {
   const resolution = resolutionOf(module);
@@ -174,8 +156,7 @@ export function check(module: CompiledModule, rng: Rng, options: CheckOptions = 
   const natural = kept.reduce((sum, die) => sum + die.value, 0) - rolled.modifier;
   const total = rolled.total + modifier;
 
-  // A roll of a kind the ruleset does not let crit is decided on its total
-  // alone, the same as any roll between the two thresholds.
+  // A roll of a kind the ruleset does not let crit is decided on its total alone.
   const canCrit = resolution.criticalScope.includes(options.kind ?? 'check');
 
   let outcome: RollRecord['outcome'];
@@ -207,13 +188,9 @@ export function succeeded(roll: RollRecord): boolean {
 }
 
 /**
- * The bonus a character brings to a skill check: the governing attribute's
- * modifier plus their rank in the skill.
- *
- * Every uncertain outcome that names a skill comes through here — dialogue
- * checks, gate bypasses, trap detection and disarming, opposed contests, the
- * bonus roll on a loot table — so equipment reaches all of them by reaching
- * `skillRankOf` and nothing else needs to know about gear.
+ * The bonus a character brings to a skill check: the governing attribute's modifier plus their rank
+ * in the skill. Every skill-named outcome comes through here, so equipment reaches all of them by
+ * reaching `skillRankOf`.
  */
 export function skillModifier(module: CompiledModule, entity: Entity, skillId: string): number {
   const skill = module.find<{ attribute: string }>('content.skills', skillId);
@@ -238,24 +215,17 @@ export function skillCheck(
   return check(module, rng, {
     modifier: skillModifier(module, entity, skillId),
     difficulty: difficultyOf(module, difficulty),
-    // Whatever the caller knows, plus whatever the creature is carrying. Every
-    // skill roll in the game comes through here, so wiring it once covers
-    // traps, dialogue, gates, loot and discovery at the same time.
+    // Whatever the caller knows, plus whatever the creature is carrying. Every skill roll comes
+    // through here, so traps, dialogue, gates, loot and discovery are covered at once.
     swing: [...asList(swing), ...swingsFrom(module, entity, 'checks')],
   });
 }
 
 /**
- * An opposed contest: both sides roll and the higher total wins.
+ * An opposed contest: both sides roll and the higher total wins. Ties go to the defender.
  *
- * Ties go to the defender, which is the convention that keeps a contested
- * action from succeeding on a draw.
- *
- * Both records are rolled against nothing and then restated against each
- * other, so `against` is the number that actually mattered and `outcome` says
- * who won. They used to carry a difficulty of zero, which made every roll here
- * report `success` — a record that read as a lie in any transcript that
- * showed it.
+ * Both records are rolled against nothing and then restated against each other, so `against` is the
+ * number that mattered and `outcome` says who won.
  */
 export function opposedCheck(
   module: CompiledModule,
@@ -263,8 +233,8 @@ export function opposedCheck(
   attacker: { entity: Entity; skill: string; swing?: Swing | readonly Swing[] },
   defender: { entity: Entity; skill: string; swing?: Swing | readonly Swing[] },
 ): { attacker: RollRecord; defender: RollRecord; attackerWins: boolean } {
-  // Each side is asked separately: a contest between a poisoned grappler and a
-  // blinded one pulls both ways at once, and neither swing is the other's.
+  // Each side is asked separately: a contest between a poisoned grappler and a blinded one pulls
+  // both ways, and neither swing is the other's.
   const attackerRoll = check(module, rng, {
     modifier: skillModifier(module, attacker.entity, attacker.skill),
     difficulty: 0,
@@ -285,10 +255,8 @@ export function opposedCheck(
 }
 
 /**
- * A roll measured against the other side rather than against nothing.
- *
- * A critical or a fumble is judged on the natural die and stands whatever the
- * comparison says, exactly as `check` decides it.
+ * A roll measured against the other side rather than against nothing. A critical or a fumble is
+ * judged on the natural die, exactly as `check` decides it.
  */
 function restate(roll: RollRecord, against: number, won: boolean): RollRecord {
   const decided = roll.outcome === 'critical' || roll.outcome === 'fumble';
@@ -302,11 +270,9 @@ interface SaveDef {
 }
 
 /**
- * A saving throw.
- *
- * Bonuses come from the governing attribute plus any `saveBonuses` on the
- * creature's statblock, so a module can make a creature resilient to one kind
- * of effect without touching its attributes.
+ * A saving throw. Bonuses come from the governing attribute plus any `saveBonuses` on the
+ * creature's statblock, so a module can make a creature resilient to one kind of effect without
+ * touching its attributes.
  */
 export function savingThrow(
   module: CompiledModule,
@@ -328,13 +294,11 @@ export function savingThrow(
     modifier += statblock?.saveBonuses?.[saveId] ?? 0;
   }
 
-  // A class trained in this save adds the module's proficiency bonus, which is
-  // what `saveProficiencies` has always meant and never did.
+  // A class trained in this save adds the module's proficiency bonus, per `saveProficiencies`.
   if (isSaveProficient(module, entity, saveId)) modifier += proficiencyOf(module, entity);
 
-  // A save that declares its own default is asking to be harder or easier than
-  // an ordinary check — that is the whole point of writing one — so it wins over
-  // the global difficulty whenever the caller named none.
+  // A save that declares its own default wins over the global difficulty whenever the caller named
+  // none.
   const against = difficulty ?? defaultDifficultyOf(module, definition, entity);
   return check(module, rng, {
     modifier,

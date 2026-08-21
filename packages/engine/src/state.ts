@@ -1,15 +1,12 @@
 /**
  * Game state.
  *
- * Everything here is plain, serializable data — no class instances, no
- * functions, no `Date`. A save file *is* this object, RNG state included, so
- * `seed + action log` reproduces a run exactly.
+ * Everything here is plain, serializable data — no class instances, no functions, no `Date`. A save
+ * file is this object, RNG state included, so seed plus action log reproduces a run exactly.
  *
- * The guiding rule is **store base facts, compute the rest**. Attributes and
- * current resource values are stored because nothing else determines them.
- * Maxima, Guard, and initiative are computed on demand, because they depend on
- * equipment and active conditions and would otherwise go stale the moment a
- * character puts on a helmet.
+ * Store base facts, compute the rest. Attributes and current resource values are stored because
+ * nothing else determines them. Maxima, Guard and initiative are computed on demand, because they
+ * depend on equipment and active conditions.
  */
 
 import type { RngState } from '@dm/core';
@@ -37,11 +34,9 @@ export interface ItemStack {
 }
 
 /**
- * A trace a creature left on a tile — a scent, a print, a lingering warmth.
- *
- * Strength is deliberately *not* stored. It is derived from how long ago the
- * mark was left, so nothing has to tick, nothing can drift, and a trail cannot
- * disagree with itself about how cold it is.
+ * A trace a creature left on a tile — a scent, a print, a lingering warmth. Strength is not stored;
+ * it is derived from how long ago the mark was left, so nothing has to tick and a trail cannot
+ * drift.
  */
 export interface Mark {
   readonly sense: string;
@@ -53,11 +48,9 @@ export interface Mark {
 }
 
 /**
- * Something a creature noticed and has not yet forgotten.
- *
- * This is why a creature walks somewhere nothing attacked it from. A list
- * rather than a record keyed by sense: `JSON.stringify` writes string keys in
- * insertion order, and saved state is compared by its serialization.
+ * Something a creature noticed and has not yet forgotten. A list rather than a record keyed by
+ * sense: `JSON.stringify` writes string keys in insertion order, and saved state is compared by its
+ * serialization.
  */
 export interface Alert {
   readonly sense: string;
@@ -69,9 +62,8 @@ export interface Alert {
 }
 
 /**
- * A character, monster, or NPC. One shape for all three: a monster is an
- * entity built from a statblock, and an NPC is one that can also talk. Keeping
- * them uniform means combat never branches on who is fighting.
+ * A character, monster, or NPC. One shape for all three: a monster is an entity built from a
+ * statblock, an NPC one that can also talk, so combat never branches on who is fighting.
  */
 export interface Entity {
   readonly id: EntityId;
@@ -102,31 +94,23 @@ export interface Entity {
   /** False once the vital resource is depleted. */
   readonly alive: boolean;
 
-  /** Which map this entity stands on, and where. The grid is always on. */
+  /** Which map this entity stands on, and where. */
   readonly map: string;
   readonly position: Position;
   /**
-   * The tile it was placed on: its territory, and where it goes back to.
-   *
-   * Null for the party, who have somewhere better to be. Stored rather than
-   * derived because there is nothing to derive it from — a creature that has
-   * wandered halfway across a marsh has no record of where it started except
-   * this one, and a wandering creature that forgot its anchor would drift until
-   * it hit a wall.
+   * The tile it was placed on: its territory, and where it returns to. Null for the party. Stored
+   * rather than derived, since a creature that has wandered has no other record of where it
+   * started.
    */
   readonly anchor: Position | null;
   /**
    * World minute it arrived on the tile it is standing on.
    *
-   * What a travelling signal is measured from. A scent is not a fact about
-   * where a creature *is*, it is a fact about where it has *been* and for how
-   * long — so something that just stepped into a room has not yet filled it,
-   * however keen the nose at the far end.
+   * What a travelling signal is measured from: a scent records where a creature has been and for
+   * how long, so something that just entered a room has not yet filled it.
    *
-   * Stored rather than read off the creature's own trail, which was the first
-   * attempt: a trace fades after `lingerMinutes`, so anything that stood still
-   * longer than that lost the record of when it arrived and went abruptly
-   * undetectable.
+   * Stored rather than read off the creature's own trail, which fades after `lingerMinutes` —
+   * anything standing still longer than that would lose the record and go undetectable.
    */
   readonly since: number;
   /** Movement modes available, e.g. `["walk"]`. Drawn from ancestry and gear. */
@@ -135,11 +119,9 @@ export interface Entity {
   /** What it has noticed and not yet forgotten, strongest first. */
   readonly alerts: readonly Alert[];
   /**
-   * Spell slots already spent, indexed by spell level.
-   *
-   * An array indexed by level rather than a record keyed by one: index order is
-   * a total order by construction, so two saves that spent the same slots
-   * compare equal without anything having to sort.
+   * Spell slots already spent, indexed by spell level. An array rather than a record keyed by
+   * level: index order is a total order, so two saves that spent the same slots compare equal
+   * without sorting.
    */
   readonly slotsUsed: readonly number[];
   /** The concentration spell this creature is holding, if any. */
@@ -151,10 +133,8 @@ export interface Entity {
   readonly disposition: 'ally' | 'neutral' | 'hostile';
 
   /**
-   * Who this creature walks with, or null to hold position.
-   *
-   * Per-creature rather than one party-wide switch, so leaving a scout behind
-   * while the rest close up costs nothing to express.
+   * Who this creature walks with, or null to hold position. Per-creature rather than one party-wide
+   * switch, so a scout can be left behind.
    */
   readonly following: EntityId | null;
 
@@ -163,8 +143,8 @@ export interface Entity {
 }
 
 /**
- * A map the party has been on, kept in state because it is generated from a
- * seed once and must not be regenerated differently later.
+ * A map the party has been on. Kept in state because it is generated from a seed once and must not
+ * be regenerated differently later.
  */
 export interface MapInstance {
   readonly id: string;
@@ -180,23 +160,17 @@ export interface MapInstance {
   /** Exits to other maps, by packed tile key. */
   readonly exits: Readonly<Record<number, { readonly toMap: string; readonly at: Position }>>;
   /**
-   * Traps installed on this map, by packed tile key.
-   *
-   * Shaped like {@link MapInstance.gates} on purpose: one per tile, keyed the
-   * same way, discovered and then dealt with. The generator has always *placed*
-   * traps and the arrival code threw them away, so `content.traps` — detect,
-   * disarm, onTrigger, onDisarm, reusable — was a whole collection that did
-   * nothing.
+   * Traps installed on this map, by packed tile key. Shaped like {@link MapInstance.gates}: one per
+   * tile, keyed the same way, discovered and then dealt with.
    */
   readonly traps: Readonly<Record<number, {
     readonly trap: string;
     readonly state: 'hidden' | 'found' | 'disarmed' | 'sprung';
   }>>;
   /**
-   * The rooms this map was generated from, in generator order.
-   *
-   * Kept so walking from one room into another can be noticed — which is what
-   * makes a room template's `descriptionKey` and its `triggers` reachable.
+   * The rooms this map was generated from, in generator order. Kept so walking from one room into
+   * another can be noticed, which is what makes a room template's `descriptionKey` and `triggers`
+   * reachable.
    */
   readonly rooms: readonly {
     readonly id: string;
@@ -210,20 +184,15 @@ export interface MapInstance {
   /** How deep this map sits, for the tables that gate on depth. */
   readonly depth: number;
   /**
-   * Items lying on the floor, by packed tile key.
-   *
-   * Kept on the map rather than in a global list so a dropped sword is *where*
-   * it was dropped, and leaving a dungeon does not tidy it away.
+   * Items lying on the floor, by packed tile key. Kept on the map rather than in a global list, so
+   * a dropped sword stays where it was dropped.
    */
   readonly items: Readonly<Record<number, readonly ItemStack[]>>;
 
   /**
-   * Traces left on tiles, by packed tile key — the trail a creature leaves.
-   *
-   * Keyed by the packed integer, never by a string: integer-like keys serialize
-   * in ascending numeric order whatever order they were written in, which is
-   * what lets marks be pruned by rebuilding the record without two equivalent
-   * runs producing different bytes.
+   * Traces left on tiles, by packed tile key. Keyed by the packed integer, never by a string:
+   * integer-like keys serialize in ascending numeric order whatever order they were written in, so
+   * pruning by rebuilding the record is byte-stable.
    */
   readonly marks: Readonly<Record<number, readonly Mark[]>>;
 }
@@ -242,12 +211,9 @@ export interface CombatState {
   /** Reactions used this round, by entity. */
   readonly reactionsUsed: Readonly<Record<EntityId, number>>;
   /**
-   * Abilities on cooldown, and the round they come back.
-   *
-   * An array with a total sort rather than a nested record, because this is a
-   * collection creatures accumulate — and it lives on the *combat*, not on the
-   * entity, because a cooldown is counted in rounds and there are no rounds
-   * outside a fight.
+   * Abilities on cooldown, and the round they come back. An array with a total sort rather than a
+   * nested record. Lives on the combat rather than the entity because a cooldown is counted in
+   * rounds, and there are no rounds outside a fight.
    */
   readonly cooldowns: readonly {
     readonly entity: EntityId;
@@ -259,25 +225,18 @@ export interface CombatState {
   /** Special turns taken this round, by entity — reset alongside `reactionsUsed`. */
   readonly specialUses: Readonly<Record<EntityId, number>>;
   /**
-   * The round in which everyone lost track of everyone, or null while someone
-   * can still be perceived.
+   * The round in which everyone lost track of everyone, or null while someone can still be
+   * perceived.
    *
-   * What turns "you broke line of sight" from an instant escape into a tactic.
-   * A round rather than a tally because `maybeEndCombat` is asked more than
-   * once per round — from `settle` and again from `endTurn` — and a counter
-   * would tick several times for a single round of nobody finding anybody.
-   * Stamping the round instead makes the question idempotent: ask it five
-   * times or once and the answer is the same.
+   * A round rather than a tally: `maybeEndCombat` is asked more than once per round, from `settle`
+   * and again from `endTurn`, so stamping the round keeps the question idempotent.
    */
   readonly unseenSince: number | null;
 }
 
 /**
- * Where the party currently is.
- *
- * Mirrors the world hierarchy: an area is a place on the map, a point of
- * interest is somewhere within it, and a dungeon is a generated space entered
- * from one.
+ * Where the party currently is. Mirrors the world hierarchy: an area is a place on the map, a point
+ * of interest is somewhere within it, and a dungeon is a generated space entered from one.
  */
 export type Location =
   | { readonly kind: 'area'; readonly area: string }
@@ -293,9 +252,8 @@ export interface QuestState {
 }
 
 /**
- * A notable act. The social simulation is built on these: a deed is known only
- * to its witnesses, then spreads by rumour, so killing someone with no
- * survivors genuinely goes unnoticed.
+ * A notable act. A deed is known only to its witnesses and then spreads by rumour, so killing
+ * someone with no survivors goes unnoticed.
  */
 export interface Deed {
   readonly id: string;
@@ -340,8 +298,8 @@ export interface GameState {
   readonly combat: CombatState | null;
 
   /**
-   * Triggers that have fired, and when. This is what `remember` means: a
-   * ransacked shrine stays ransacked because the trigger is recorded here.
+   * Triggers that have fired, and when. This is what `remember` means: a ransacked shrine stays
+   * ransacked because the trigger is recorded here.
    */
   readonly firedTriggers: Readonly<Record<string, number>>;
 
@@ -356,27 +314,21 @@ export interface GameState {
   /**
    * `narrative.lore` the party has learned, and the world minute it learned it.
    *
-   * Separate from `flags` rather than a `lore:` prefix inside it, for the same
-   * reason `quests` is separate: it is a declared collection with a closed set
-   * of ids, so the journal can list what is *missing* as well as what is known,
-   * and a misspelling is catchable. Flags cannot do either — they are free
-   * strings by design.
+   * Separate from `flags` rather than a `lore:` prefix inside it: it is a declared collection with
+   * a closed set of ids, so the journal can list what is missing as well as what is known, and a
+   * misspelling is catchable.
    *
-   * A record rather than an array, on the `modState` argument below: two runs
-   * that learn the same things in a different order must still compare equal,
-   * and `statesEqual` goes through `canonical()`, which sorts keys at every
-   * level.
+   * A record rather than an array: `statesEqual` goes through `canonical()`, which sorts keys at
+   * every level, so two runs that learn the same things in a different order compare equal.
    */
   readonly lore: Readonly<Record<string, number>>;
 
   /**
    * What the party has to spend.
    *
-   * Party-wide rather than per character, because a D&D party shares a purse
-   * and per-character coin is a bookkeeping tax nobody enjoys. A scalar rather
-   * than an item, because `item.value` and `start.creation.startingCurrency`
-   * are both numbers — an item-based purse would need a "which item is money"
-   * field, and would let a player drop three hundred coins on the floor.
+   * Party-wide rather than per character, and a scalar rather than an item: `item.value` and
+   * `start.creation.startingCurrency` are both numbers, so an item-based purse would need a "which
+   * item is money" field and would let a player drop coins on the floor.
    */
   readonly purse: number;
   readonly reputation: Readonly<Record<string, number>>;
@@ -386,17 +338,13 @@ export interface GameState {
   /**
    * Mod-owned state, namespaced by mod id.
    *
-   * A separate bag rather than `flags`: a mod writing into `flags` would
-   * collide with the module's own namespace and with the `setFlag` op, and
-   * `load` could not then tell an author that a save carries state for a mod
-   * they do not have installed.
+   * A separate bag rather than `flags`: a mod writing into `flags` would collide with the module's
+   * own namespace and with the `setFlag` op, and `load` could not then report that a save carries
+   * state for a mod that is not installed.
    *
-   * A record rather than an array, despite the "collections are arrays" rule
-   * above: those exist because `JSON.stringify` writes keys in insertion order,
-   * whereas `statesEqual` compares through `canonical()`, which sorts keys at
-   * every level. Two runs that write the same mod keys in different orders
-   * therefore still compare equal. Mods only ever write under their own id,
-   * enforced host-side, so the outer keys are a small fixed set.
+   * A record rather than an array, unlike the collections above: `statesEqual` compares through
+   * `canonical()`, which sorts keys at every level, so write order does not matter. Mods only ever
+   * write under their own id, enforced host-side.
    */
   readonly modState: Readonly<Record<string, Readonly<Record<string, Value>>>>;
 
@@ -417,12 +365,9 @@ export function livingParty(state: GameState): readonly Entity[] {
 }
 
 /**
- * Put a creature somewhere, and remember that somewhere as its ground.
- *
- * One helper rather than ten hand-written spreads, because `anchor` has to be
- * set at every site that assigns a position or a creature quietly wanders from
- * wherever it happened to be standing the first time anything asked. The party
- * keeps a null anchor: they are the ones with somewhere else to be.
+ * Put a creature somewhere, and record that place as its anchor. One helper rather than a spread at
+ * each site, because `anchor` has to be set wherever a position is assigned or a creature wanders
+ * from wherever it first stood. The party keeps a null anchor.
  */
 export function placeOn(entity: Entity, map: string, at: Position, minute: number): Entity {
   return {
@@ -435,11 +380,9 @@ export function placeOn(entity: Entity, map: string, at: Position, minute: numbe
 }
 
 /**
- * One step, and the clock that goes with it.
- *
- * Every site that changes a creature's tile goes through here, because a
- * position written without its minute is a creature whose scent silently dates
- * from wherever it last happened to be recorded.
+ * One step, and the arrival minute that goes with it. Every site that changes a creature's tile
+ * goes through here: a position written without its minute leaves the creature's scent dated from
+ * wherever it was last recorded.
  */
 export function steppedTo(entity: Entity, at: Position, minute: number): Entity {
   return { ...entity, position: at, since: minute };
@@ -451,15 +394,12 @@ export function withEntity(state: GameState, next: Entity): GameState {
 }
 
 /**
- * Which npc definition an entity came from.
+ * Which npc definition an entity came from. Prefers the recorded content id over the entity id, and
+ * never the statblock.
  *
- * Prefers the recorded content id over the entity id, and never the statblock —
- * looking a person up by the monster they fight like finds nothing.
- *
- * This and `memoryKeyOf` live here, on the leaf that owns `Entity`, rather than
- * in `character.ts` and `sim/gossip.ts` where they grew up: `stats.ts` needs
- * them to build the memory scope, and `character.ts` imports `stats.ts`. Both
- * are still re-exported from their old homes.
+ * This and `memoryKeyOf` live here, on the leaf that owns `Entity`, because `stats.ts` needs them
+ * to build the memory scope and `character.ts` imports `stats.ts`. Both are re-exported from
+ * `character.ts` and `sim/gossip.ts`.
  */
 export function npcIdOf(entity: Entity): string {
   const recorded = entity.extra['npc'];
@@ -467,11 +407,9 @@ export function npcIdOf(entity: Entity): string {
 }
 
 /**
- * The key an entity's memories are filed under.
- *
- * Named NPCs are persistent, so their memories belong to the *character*, not
- * to whichever entity instance happens to represent them. Monsters are
- * transient and keep theirs on the instance.
+ * The key an entity's memories are filed under. Named NPCs are persistent, so their memories belong
+ * to the character rather than the entity instance; monsters are transient and keep theirs on the
+ * instance.
  */
 export function memoryKeyOf(entity: Entity): string {
   return entity.kind === 'npc' ? npcIdOf(entity) : entity.id;

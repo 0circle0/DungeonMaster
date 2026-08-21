@@ -1,17 +1,15 @@
 /**
  * The premise incremental validation rests on.
  *
- * Checking one edited entry instead of the whole document is only sound if
- * whole-document `safeParse` *decomposes* — if the result for a collection is
- * exactly the union of the results for its entries. That holds as long as no
- * `.refine()` / `.superRefine()` sits above the element level: a cross-entry
- * refinement (say "no two areas may share a start marker") would pass per entry
- * and fail for the document, and an incremental validator would never notice.
+ * Checking one edited entry instead of the whole document is sound only if whole-document
+ * `safeParse` decomposes — if the result for a collection is exactly the union of the results for
+ * its entries. That holds as long as no `.refine()` / `.superRefine()` sits above the element
+ * level: a cross-entry refinement would pass per entry and fail for the document, and an
+ * incremental validator would never notice.
  *
- * The schema satisfies this today by accident of style rather than by rule, so
- * the rule is written down here. If this test fails, someone has added a
- * refinement that makes the document more than the sum of its entries, and the
- * incremental path has to learn about it — see `diagnostics/incremental.ts`.
+ * The schema satisfies this by style rather than by rule, so the rule is written down here. If this
+ * test fails, someone has added a refinement that makes the document more than the sum of its
+ * entries.
  */
 
 import { describe, it, expect } from 'vitest';
@@ -55,15 +53,12 @@ function reachesACollection(schema: z.ZodTypeAny, depth = 0, seen = new Set<z.Zo
 }
 
 /**
- * Every refinement above the entry level, split by whether it spans a
- * collection.
+ * Every refinement above the entry level, split by whether it spans a collection.
  *
- * The distinction is the whole point. A refinement over a *singleton* — "levels
- * must be ordered by non-decreasing xpRequired" on `rules.progression` — is
- * fine: singletons are small and the incremental validator re-parses them
- * whole. A refinement that reaches *across collection entries* is not: it would
- * pass for every entry and fail for the document, which is precisely the case
- * an incremental pass cannot see.
+ * A refinement over a singleton — "levels must be ordered by non-decreasing xpRequired" on
+ * `rules.progression` — is fine, because the incremental validator re-parses singletons whole. One
+ * that reaches across collection entries is not: it would pass for every entry and fail for the
+ * document.
  */
 function refinementsAboveEntries(): { spanning: string[]; singleton: string[] } {
   const spanning: string[] = [];
@@ -74,8 +69,8 @@ function refinementsAboveEntries(): { spanning: string[]; singleton: string[] } 
     if (depth > 12 || seen.has(schema)) return;
     seen.add(schema);
 
-    // An entry schema is the floor: what is inside one is per-entry business,
-    // free to refine as much as it likes.
+    // An entry schema is the floor: what is inside one is per-entry business, free to refine as
+    // much as it likes.
     if (ENTRY_SCHEMAS.has(schema)) return;
 
     const def = schema._def as { typeName?: string; [key: string]: unknown };
@@ -130,20 +125,18 @@ describe('collection element schemas', () => {
   });
 
   /**
-   * Pinned rather than asserted empty. These are legal — they refine a
-   * singleton, which the incremental validator re-parses whole — but a new one
-   * appearing is a decision someone should make on purpose, because each is a
-   * region that can never be checked entry-by-entry.
+   * Pinned rather than asserted empty. These are legal — they refine a singleton, which the
+   * incremental validator re-parses whole — but a new one appearing is a decision someone should
+   * make on purpose.
    */
   it('refines only these singletons above the entry level', () => {
     expect(refinementsAboveEntries().singleton).toEqual(['rules.progression']);
   });
 
   /**
-   * The equivalence the incremental validator relies on, checked end to end:
-   * an entry parsed alone must come out byte-for-byte what the whole-document
-   * parse produces — **defaults included**, since the content hash is taken
-   * after zod applies them and a save refuses to load on a hash mismatch.
+   * The equivalence the incremental validator relies on, checked end to end: an entry parsed alone
+   * must come out byte-for-byte what the whole-document parse produces, defaults included, since
+   * the content hash is taken after zod applies them.
    */
   it.each(MODULES)('parses one entry of %s the same way the whole document does', (name) => {
     const doc = moduleDoc(name);

@@ -1,19 +1,15 @@
 /**
  * Events: what happened.
  *
- * The engine never produces prose. It produces these, and the narrator turns
- * them into text. That separation is what lets the same run drive a terminal,
- * a browser, a combat log, or a test assertion without the rules knowing which.
+ * The engine never produces prose. It produces these, and the narrator turns them into text, so the
+ * same run can drive a terminal, a browser, a combat log or a test assertion.
  *
- * Two properties matter:
+ * Two properties:
  *
- *   - **Events are facts, not instructions.** `Damaged` records that damage was
- *     dealt; it does not cause it. State is already updated by the time one
- *     exists.
- *   - **Events carry their numbers.** The dice, the modifiers, the total, and
- *     what was being rolled against. A combat log that says "you hit" is much
- *     less useful than one that says "17 (14+3) vs Guard 12", and reconstructing
- *     the arithmetic later is impossible if it was not recorded.
+ *   - Events are facts, not instructions. `Damaged` records that damage was dealt; state is already
+ *     updated by the time one exists.
+ *   - Events carry their numbers — the dice, the modifiers, the total, and what was being rolled
+ *     against — because the arithmetic cannot be reconstructed later.
  */
 
 import type { Position } from './grid/tiles.js';
@@ -47,11 +43,9 @@ export type GameEvent =
 
   // — refusal ——————————————————————————————————————————————
   /**
-   * An action could not be taken, and why. Not an error: refusals are ordinary
-   * play, and the reason is what the player needs to read.
-   *
-   * The reason is a `systemText` key and its facts, not a finished sentence —
-   * the engine states what happened and the module decides the words.
+   * An action could not be taken, and why. Not an error: refusals are ordinary play. The reason is
+   * a `systemText` key and its facts rather than a finished sentence, so the module decides the
+   * words.
    */
   | { readonly type: 'refused'; readonly action: string; readonly reason: Message }
 
@@ -92,7 +86,7 @@ export type GameEvent =
   | { readonly type: 'itemEquipped'; readonly entity: EntityId; readonly item: string; readonly slot: string }
   | { readonly type: 'itemUnequipped'; readonly entity: EntityId; readonly item: string; readonly slot: string }
   | { readonly type: 'itemUsed'; readonly entity: EntityId; readonly item: string; readonly consumed: boolean }
-  /** What a dead creature left on the ground. Without this the drop is silent. */
+  /** What a dead creature left on the ground. */
   | {
       readonly type: 'droppedLoot';
       readonly from: EntityId;

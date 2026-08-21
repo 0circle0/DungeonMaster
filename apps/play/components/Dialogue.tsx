@@ -1,12 +1,8 @@
 'use client';
 
 /**
- * A conversation: the numbered replies as a clickable list.
- *
- * Locked options stay visible, greyed, with the module's own hint — knowing
- * what would unlock a reply is content, not chrome. Leave always works,
- * because a conversation with no exit was one of the bugs that sent this
- * project to the browser.
+ * Render the active dialogue as a numbered list of choices.
+ * Locked options remain visible with their unlock hint.
  */
 
 import { useMemo } from 'react';

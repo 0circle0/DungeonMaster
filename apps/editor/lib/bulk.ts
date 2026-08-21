@@ -1,16 +1,13 @@
 /**
  * Editing many entries at once.
  *
- * Every operation here returns the edits it *would* make rather than a new
- * document, for the same reason `planRename` does: an author asked to trust a
- * change to forty things wants to see the count first, and a preview is the
- * difference between a tool used once and a tool used daily.
+ * Every operation returns the edits it would make rather than a new document, for the same reason
+ * `planRename` does: an author asked to trust a change to forty things wants to see the count
+ * first.
  *
- * The edits are `(path, value)` pairs so the store can fold them through
- * `setAtMany`, which is the contract that keeps validation fast — see the note
- * there. Building a new document by cloning and mutating would give all 597
- * points of interest fresh identities and put a second back on every keystroke,
- * and nothing would fail.
+ * The edits are `(path, value)` pairs so the store can fold them through `setAtMany`, which is what
+ * keeps validation fast. Cloning and mutating a document would give all 597 points of interest
+ * fresh identities and put a second back on every keystroke, with nothing failing.
  */
 
 import type { Path } from './store';
@@ -46,11 +43,8 @@ function readField(entry: Record<string, unknown>, field: string): unknown {
 }
 
 /**
- * Set one field on every selected entry.
- *
- * Entries that already hold the value are left out of the plan entirely, so
- * the count is what will change rather than what was selected — "set 40, 3
- * changed" is a more useful thing to be told than "set 40".
+ * Set one field on every selected entry. Entries that already hold the value are left out of the
+ * plan, so the count is what will change rather than what was selected.
  */
 export function planSetField(
   entries: readonly Record<string, unknown>[],
@@ -77,11 +71,9 @@ export function planSetField(
 }
 
 /**
- * Add or remove a tag across a selection.
- *
- * Tags are how a module says what optional content belongs to what — the
- * Python linter reads chain membership straight off them — so adding one to
- * fifteen quests is a real operation rather than a convenience.
+ * Add or remove a tag across a selection. Tags are how a module says what optional content belongs
+ * to what — the linter reads chain membership off them — so this is a real operation rather than a
+ * convenience.
  */
 export function planTag(
   entries: readonly Record<string, unknown>[],
@@ -120,12 +112,9 @@ export function planTag(
 }
 
 /**
- * Replace text in one field across a selection.
- *
- * Scoped to a named field rather than the whole entry on purpose. A find and
- * replace that swept every string in a monster would rewrite its id and its
- * references along with its description, and the two are not the same kind of
- * change: one is prose, the other is `planRename`'s job.
+ * Replace text in one field across a selection. Scoped to a named field rather than the whole
+ * entry: a find-and-replace that swept every string in a monster would rewrite its id and its
+ * references along with its description, which is `planRename`'s job.
  */
 export function planReplace(
   entries: readonly Record<string, unknown>[],
@@ -154,11 +143,8 @@ export function planReplace(
 }
 
 /**
- * Move one entry within its collection.
- *
- * Order is not decoration: `narrative.textGrammar` is emitted sorted so a diff
- * is a function of content, and a collection's order is the order the format
- * preserves. There has been no way to change it in the editor at all.
+ * Move one entry within its collection. Order is not decoration: a collection's order is the order
+ * the format preserves, and there has been no way to change it in the editor.
  */
 export function planMove(
   entries: readonly Record<string, unknown>[],
@@ -173,8 +159,8 @@ export function planMove(
   const [moved] = next.splice(from, 1);
   next.splice(clamped, 0, moved);
 
-  // One edit for the whole list: moving an entry renumbers everything between
-  // the two positions, so a per-entry plan would be the same write in pieces.
+  // One edit for the whole list: moving an entry renumbers everything between the two positions, so
+  // a per-entry plan would be the same write in pieces.
   return {
     edits: [{ path: collection.split('.'), value: next }],
     changed: Math.abs(clamped - from) + 1,

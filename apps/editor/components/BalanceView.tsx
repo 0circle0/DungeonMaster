@@ -1,20 +1,6 @@
 /**
- * Balance: what a table can produce, and what it will actually produce.
- *
- * Two halves that answer different questions.
- *
- * **Budget** is analytic. It bounds what a table *can* do and rates it against
- * a party — the check that catches an area rated for level 2 holding a table
- * that can spawn something lethal.
- *
- * **Preview** is empirical. It rolls the table thousands of times through the
- * seeded RNG and reports the distribution that actually results. A 15% weight
- * is abstract; "you will see this once in seven fights, and never below level
- * 3" is not.
- *
- * The party controls at the top matter more than they look: gating is evaluated
- * against them, so raising the level makes entries appear and disappear. That
- * is the fastest way to see what a given party will actually encounter.
+ * Show a table's budget and preview under a chosen party level.
+ * The budget estimates risk; the preview simulates outcomes with the engine's RNG.
  */
 
 'use client';
@@ -22,8 +8,7 @@
 import { useMemo, useState } from 'react';
 import { assessTable, standardBudget, compileModule } from '@dm/module';
 import type { CompiledModule } from '@dm/module';
-// The previews call the engine's own draw functions, so what the Balance view
-// reports and what actually happens in play cannot drift apart.
+// Use the engine's own table logic so preview results match play behavior.
 import { simulateLoot, simulateEncounters } from '@dm/engine';
 import type { Difficulty } from '@dm/module';
 import type { Scope } from '@dm/module';
@@ -47,11 +32,7 @@ function list(doc: ModuleDoc, path: string): Row[] {
 }
 
 /**
- * A hypothetical party, for evaluating gates.
- *
- * Deliberately generous on skills and quests: the question this view answers is
- * "what *can* this party see", and a preview that silently gates everything out
- * because the imaginary party has no lore skill would be misleading.
+ * Build a generous party scope for evaluating gates and availability.
  */
 function buildScope(level: number, doc: ModuleDoc, generous: boolean): Scope {
   const skills: Record<string, number> = {};
@@ -99,9 +80,7 @@ export function BalanceView({ doc }: { doc: ModuleDoc }) {
   const lootTables = list(doc, 'content.lootTables');
   const monsters = list(doc, 'content.monsters');
   const items = list(doc, 'content.items');
-  // Memoized for the fallback, not the lookup: `?? []` builds a fresh array
-  // whenever the field is absent, and the budget memo below keys on it — so a
-  // module without a progression table would recompute on every render.
+  // Keep a stable empty list so the memo does not churn when progression tables are absent.
   const levels = useMemo(
     () => (getAt(doc, ['rules', 'progression', 'levels']) as Row[]) ?? [],
     [doc],
@@ -133,15 +112,7 @@ export function BalanceView({ doc }: { doc: ModuleDoc }) {
 
   const itemName = (id: string) => String(items.find((i) => i['id'] === id)?.['name'] ?? id);
 
-  /**
-   * Which areas send this table at a party it was not written for.
-   *
-   * `areas[].recommendedLevel` and `dangerLevel` were the author's own note
-   * about who a place is for, read by nothing — including this view, whose
-   * whole job is to answer that question. Now they answer it: an area rated for
-   * level 2 that draws on a table budgeted well above a level-2 party is worth
-   * saying out loud.
-   */
+  /** Flag areas whose recommended level is below the table's risk for the chosen party. */
   const overAimed = (table: Row): string[] => {
     const out: string[] = [];
     for (const area of list(doc, 'world.areas')) {
@@ -151,8 +122,7 @@ export function BalanceView({ doc }: { doc: ModuleDoc }) {
       const rated = Number(area['recommendedLevel'] ?? 0);
       if (!rated) continue;
 
-      // Judged at the level the area claims to be for, not at whatever is
-      // typed in the box above — that is the whole point of the field.
+      // Judge the table against the area's declared level, not the current slider value.
       const assessed = assessTable(table as never, monsters as never, levels as never, rated, partySize);
       if (assessed.worst === 'deadly' || assessed.expected === 'deadly') {
         out.push(`${String(area['name'] ?? area['id'])} is rated for level ${rated}, where this reads ${assessed.worst}`);

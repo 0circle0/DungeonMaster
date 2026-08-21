@@ -1,14 +1,12 @@
 /**
  * Actions: what was asked for.
  *
- * The only input to {@link reduce}. A save file plus the action log replays a
- * run exactly, so actions must be plain, serializable, and complete — no
- * callbacks, no references to live objects, and nothing the player could not
- * have expressed.
+ * The only input to {@link reduce}. A save plus the action log replays a run exactly, so actions
+ * must be plain, serializable and complete — no callbacks, no references to live objects, and
+ * nothing the player could not have expressed.
  *
- * Actions name *intent*, not outcome. `Move` asks to move; whether the move
- * happens, costs a turn, provokes an opportunity attack, or is refused because
- * a wall is in the way is the engine's business.
+ * Actions name intent, not outcome. `Move` asks to move; whether the move happens, costs a turn,
+ * provokes an opportunity attack, or is refused is the engine's business.
  */
 
 import type { Position } from './grid/tiles.js';
@@ -66,9 +64,8 @@ export type Action =
   | (Actor & { readonly type: 'search' })
   | (Actor & { readonly type: 'look'; readonly at?: string })
   /**
-   * Stop and use one sense deliberately. Carries the sense id rather than
-   * naming hearing and smell, so a module that declares tremorsense gets a
-   * verb for it without the engine knowing the word.
+   * Stop and use one sense deliberately. Carries the sense id rather than naming hearing and smell,
+   * so a module that declares tremorsense gets a verb for it without the engine knowing the word.
    */
   | (Actor & { readonly type: 'sense'; readonly sense: string })
   | (Actor & { readonly type: 'talk'; readonly npc: EntityId })
@@ -88,9 +85,8 @@ export type Action =
 
   // — meta ——————————————————————————————————————————————————
   /**
-   * Advance the world clock without the party doing anything, which is what
-   * drives off-screen simulation. Separate from `wait` so a test can tick the
-   * world without going through a character.
+   * Advance the world clock without the party doing anything, which drives off-screen simulation.
+   * Separate from `wait` so a test can tick the world without going through a character.
    */
   | { readonly type: 'advanceTime'; readonly minutes: number };
 

@@ -77,13 +77,9 @@ describe('tiles', () => {
 });
 
 /**
- * `moveCost` is documented as combining multiplicatively with the mover's
- * `movementModes[].terrainMultiplier`, and `costOf` does that. It had no test,
- * which is how a field goes back to being read by no one without anybody
- * noticing -- and this one had already spent a while that way.
- *
- * Every shipped mode declares a multiplier of 1, so the fixture has to invent
- * one: the assertion is about the arithmetic, not about greenmarch.
+ * `moveCost` combines multiplicatively with the mover's `movementModes[].terrainMultiplier`, and
+ * `costOf` does that. Every shipped mode declares a multiplier of 1, so the fixture invents one:
+ * the assertion is about the arithmetic, not about greenmarch.
  */
 describe('terrain cost and the mover', () => {
   /** Greenmarch where wading is half price and walking is double. */
@@ -115,8 +111,8 @@ describe('terrain cost and the mover', () => {
     expect(index.costOf(map, floor, ['walk'])).toBe(2);
   });
 
-  // A creature that can both walk and swim should not be slowed by owning a
-  // clumsier way of getting about than the one it is using.
+  // A creature that can both walk and swim should not be slowed by owning a clumsier way of getting
+  // about than the one it is using.
   it('uses whichever of a creature\'s modes crosses the ground best', () => {
     expect(waders().costOf(map, water, ['walk', 'swim'])).toBe(1);
   });
@@ -125,8 +121,8 @@ describe('terrain cost and the mover', () => {
     expect(waders().costOf(map, water, ['walk'])).toBe(Infinity);
   });
 
-  // The multiplier has to reach pathfinding too, or a route is chosen by one
-  // set of numbers and paid for with another.
+  // The multiplier has to reach pathfinding too, or a route is chosen by one set of numbers and
+  // paid for with another.
   it('reaches findPath, which is where a route is actually chosen', () => {
     const across = (index: TerrainIndex): number => findPath({
       map, terrain: index, from: { x: 0, y: 1 }, to: { x: 2, y: 1 },
@@ -154,10 +150,9 @@ describe('geometry', () => {
     for (let i = 1; i < path.length; i += 1) expect(isAdjacent(path[i - 1]!, path[i]!)).toBe(true);
   });
 
-  // Bresenham breaks ties by direction, so the tiles between the ends may
-  // differ. What must hold is that both traversals span the same endpoints and
-  // the same length — line-of-sight symmetry is enforced separately, by
-  // canonicalising the endpoints before tracing.
+  // Bresenham breaks ties by direction, so the tiles between the ends may differ. What must hold is
+  // that both traversals span the same endpoints and the same length; line-of-sight symmetry is
+  // enforced separately.
   it('spans the same endpoints and length in both directions', () => {
     const forward = line({ x: 0, y: 0 }, { x: 6, y: 3 });
     const backward = line({ x: 6, y: 3 }, { x: 0, y: 0 });
@@ -274,7 +269,7 @@ describe('field of view', () => {
     }
   });
 
-  // The property the plan calls for: adjacent open tiles always see each other.
+  // Adjacent open tiles always see each other.
   it('is reflexive between adjacent open tiles, over many maps', () => {
     for (let seed = 0; seed < 40; seed += 1) {
       const rng = Rng.fromSeed(seed);
@@ -308,8 +303,8 @@ describe('field of view', () => {
     for (const packed of visible) {
       const position = { x: packed & 0xffff, y: packed >>> 16 };
       if (terrain.isOpaque(map, position)) continue;
-      // Shadowcasting is permissive at the margins, so this is a sanity check
-      // on gross disagreement rather than an exact equivalence.
+      // Shadowcasting is permissive at the margins, so this checks gross disagreement rather than
+      // exact equivalence.
       checked += 1;
     }
     expect(checked).toBeGreaterThan(0);
@@ -414,7 +409,7 @@ describe('pathfinding', () => {
     expect(path.steps.at(-1)).toEqual({ x: 3, y: 1 });
   });
 
-  // Replays diverging because two equal-cost routes tied would be brutal to debug.
+  // Replays diverging because two equal-cost routes tied would be hard to debug.
   it('is deterministic: the same request gives the same path', () => {
     const map = createMap(12, 12, 'floor');
     const run = () =>

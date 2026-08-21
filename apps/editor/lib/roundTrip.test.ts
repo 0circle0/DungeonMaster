@@ -1,22 +1,17 @@
 /**
- * The whole path, on the world we actually ship.
+ * The whole path, on the world we ship.
  *
- * Every other test here holds one seam still and checks the next. This one does
- * what a person does: take the downloaded project, put it in the store, open it,
- * change one number, and open it again. The assertions are the four claims the
- * design rests on —
+ * Takes the downloaded project, puts it in the store, opens it, changes one number, and opens it
+ * again. Four claims:
  *
- *   1. what arrives is stored as files, verbatim, and nothing is joined on the
- *      way in;
- *   2. opening it rebuilds, byte for byte, the very document the player is
- *      shipped — so the world the studio edits and the world that gets played
- *      are provably the same one;
- *   3. the prefab links come back, all 767 of them, from the recipe files
- *      themselves;
+ *   1. what arrives is stored as files, verbatim, and nothing is joined on the way in;
+ *   2. opening it rebuilds, byte for byte, the document the player is shipped, so the world the
+ *      studio edits and the world that gets played are the same one;
+ *   3. the prefab links come back, all 767 of them, from the recipe files themselves;
  *   4. editing one integer writes exactly one record.
  *
- * It reads `apps/editor/public/content`, so it is also the test that fails when
- * somebody changes a world and forgets `npm run content`.
+ * It reads `apps/editor/public/content`, so it also fails when somebody changes a world and forgets
+ * `npm run content`.
  */
 
 import { describe, it, expect, beforeEach } from 'vitest';
@@ -56,8 +51,8 @@ describe.skipIf(!existsSync(ARTIFACT) || !existsSync(PLAYED))('the shipped proje
 
     const back = await readWorldFiles(meta.key);
     expect(back).toEqual(files);
-    // Recipes still recipes. Nothing was expanded on the way in, so what the
-    // author has is the project we build from and not a flattened copy.
+    // Recipes still recipes: nothing was expanded on the way in, so what the author has is the
+    // project we build from.
     expect(Object.values(back).filter((text) => text.includes('"@prefab"')).length).toBe(767);
     expect(Object.keys(back).filter((path) => path.startsWith('project/prefabs/')).length).toBe(44);
   });
@@ -70,13 +65,13 @@ describe.skipIf(!existsSync(ARTIFACT) || !existsSync(PLAYED))('the shipped proje
     const { document, authoring, issues } = unbundleModule(await readWorldFiles(meta.key));
     expect(issues).toEqual([]);
 
-    // Not `modules/aurendel/module.json` — that file pairs with `maps/<id>/`
-    // folders on disk and has no `world.maps` key at all. The compiled module is
-    // the assembled one, which is exactly what the player's artifact carries.
+    // Not `modules/aurendel/module.json` — that file pairs with `maps/<id>/` folders on disk and
+    // has no `world.maps` key. The compiled module is the assembled one, which is what the player's
+    // artifact carries.
     const played = JSON.parse(gunzipSync(readFileSync(PLAYED)).toString('utf8')) as { doc: unknown };
     expect(JSON.stringify(document)).toBe(JSON.stringify(played.doc));
 
-    // The links the old path threw away. 44 prefabs that point at something.
+    // The links: 44 prefabs that point at something.
     const links = Object.values(authoring.instances).reduce((n, byId) => n + Object.keys(byId).length, 0);
     expect(links).toBe(767);
     expect(authoring.prefabs).toHaveLength(44);
@@ -90,8 +85,8 @@ describe.skipIf(!existsSync(ARTIFACT) || !existsSync(PLAYED))('the shipped proje
       title: 'Aurendel', filename: 'aurendel.module.json', facts: factsFor(doc),
     });
 
-    // The snapshot as it stands after an import: the files on disk are what a
-    // diff should compare the next document against.
+    // The snapshot as it stands after an import: the files on disk are what a diff should compare
+    // the next document against.
     const { snapshot } = diffProject({ doc, authoring: opened.authoring }, null);
     const before = await readWorldFiles(meta.key);
 
@@ -128,12 +123,9 @@ describe.skipIf(!existsSync(ARTIFACT) || !existsSync(PLAYED))('the shipped proje
   });
 
   /**
-   * Linking, on the world we ship, through the store.
-   *
-   * The unit test for this holds four entries; this one holds 2,858 files and a
-   * prefab that is already there and already unchanged — which is the case that
-   * was broken. The link moved no object the diff watched, so the save wrote
-   * nothing and the link was gone the next time the world was opened.
+   * Linking, on the world we ship, through the store. The unit test holds four entries; this one
+   * holds 2,858 files and a prefab that is already there and unchanged, so the link moves no object
+   * a reference diff would watch.
    */
   it('keeps a link made against a prefab that was already stored', async () => {
     const files = shipped();
@@ -144,8 +136,8 @@ describe.skipIf(!existsSync(ARTIFACT) || !existsSync(PLAYED))('the shipped proje
     });
     const snapshot = snapshotFrom(doc, opened.authoring, files);
 
-    // An entry that is not linked to anything, and a prefab already in the
-    // world that could have produced it. Nothing about either of them moves.
+    // An entry that is not linked to anything, and a prefab already in the world that could have
+    // produced it. Nothing about either moves.
     const collection = 'world.pointsOfInterest';
     const prefab = opened.authoring.prefabs.find((candidate) => candidate.collection === collection);
     const linkedAlready = opened.authoring.instances[collection] ?? {};
@@ -175,22 +167,18 @@ describe.skipIf(!existsSync(ARTIFACT) || !existsSync(PLAYED))('the shipped proje
 
     const reopened = unbundleModule(await readWorldFiles(meta.key));
     expect(reopened.authoring.instances[collection]?.[target.id]).toBeDefined();
-    // And the document is still the one the author was looking at: a link is a
-    // claim about where an entry came from, not a licence to change it.
+    // And the document is still the one the author was looking at: a link is a claim about where an
+    // entry came from, not a licence to change it.
     expect(JSON.stringify(reopened.document)).toBe(JSON.stringify(doc));
   });
 
   /**
-   * The same claim, but through what autosave actually calls.
+   * The same claim, through what autosave actually calls.
    *
-   * `seeds from the files it read` below diffs the authoring exactly as it was
-   * loaded. A real save does not: `recomputeInstancesFor` rebuilds the instance
-   * map first, every link object in it, and works out afresh which fields are
-   * the author's rather than the prefab's. Since a link's *value* is now a
-   * reason to rewrite its entry, anything the recompute decides differently
-   * from what was stored would rewrite all 767 linked entries the moment a
-   * world was opened — and every one of them would come back byte-identical, so
-   * nothing but a count could see it.
+   * A real save runs `recomputeInstancesFor`, which rebuilds the instance map and every link object
+   * in it and works out afresh which fields are the author's. Since a link's value is a reason to
+   * rewrite its entry, anything the recompute decided differently from what was stored would
+   * rewrite all 767 linked entries on open — each byte-identical, so only a count could see it.
    */
   it('writes nothing on an idle save through the path autosave takes', () => {
     const files = shipped();
@@ -205,9 +193,8 @@ describe.skipIf(!existsSync(ARTIFACT) || !existsSync(PLAYED))('the shipped proje
   });
 
   it('seeds from the files it read, so the first save is a diff and not a rewrite', () => {
-    // Found in a browser, not here: after an import the snapshot was null, so
-    // the first save swept and rewrote all 2,858 records with the bytes they
-    // already had. Invisible to a contents check — every file came back equal.
+    // After an import the snapshot was null, so the first save swept and rewrote all 2,858 records
+    // with the bytes they already had — invisible to a contents check.
     const files = shipped();
     const opened = unbundleModule(files);
     const seeded = snapshotFrom(opened.document!, opened.authoring, files);
@@ -219,9 +206,8 @@ describe.skipIf(!existsSync(ARTIFACT) || !existsSync(PLAYED))('the shipped proje
   });
 
   it('leaves instances.json out when every link is in a recipe', () => {
-    // The sidecar is the remainder, not the record. Aurendel's 767 links are all
-    // carried by their own entry files, so writing them again would be the same
-    // fact in two places — which is the bug that started this.
+    // The sidecar is the remainder, not the record. Aurendel's 767 links are all carried by their
+    // own entry files, so writing them again would state the same fact twice.
     const files = shipped();
     const opened = unbundleModule(files);
     expect(files['project/prefabs/instances.json']).toBeUndefined();

@@ -3,14 +3,12 @@
 /**
  * The play shell.
  *
- * One client component owns everything: which world is compiled, the session
- * hook, which overlay is open. View routing is a discriminated union in state,
- * not Next routes — the editor's pattern, and the right one for an app that is
- * a single continuous scene.
+ * One client component owns everything: which world is compiled, the session hook, which overlay is
+ * open. View routing is a discriminated union in state rather than Next routes, which suits an app
+ * that is a single continuous scene.
  *
- * Nothing here talks to a server. Worlds come out of the library on this
- * machine; the examples a deployment carries are static files, fetched once
- * when somebody asks for one.
+ * Nothing here talks to a server. Worlds come out of the library on this machine; the examples a
+ * deployment carries are static files, fetched once when somebody asks for one.
  */
 
 import { useCallback, useMemo, useRef, useState } from 'react';
@@ -44,12 +42,9 @@ import { Creation } from '@/components/Creation';
 type Panel = 'journal' | 'lore' | 'sheet' | 'inventory' | 'shop' | 'saves' | 'help' | 'creation' | 'mods' | null;
 
 /**
- * Mods, which nothing currently installs.
- *
- * The engine-side machinery is intact and the shipped examples declare no mods,
- * so this is the unmodded engine by construction. Distributing mods to a static
- * deployment has no story yet: they are a local-development feature until it
- * does.
+ * Mods, which nothing currently installs. The engine-side machinery is intact and the shipped
+ * examples declare no mods, so this is the unmodded engine by construction. Distributing mods to a
+ * static deployment has no story yet.
  */
 const NO_MODS: readonly ModWire[] = [];
 
@@ -77,9 +72,8 @@ export function Play() {
 
   return (
     <Gate
-      // Composite, never the module id: two worlds may both be called
-      // `aurendel`, and keying on the id would carry a live session from one
-      // into the other.
+      // Composite, never the module id: two worlds may both be called `aurendel`, and keying on the
+      // id would carry a live session from one into the other.
       key={active.key}
       module={compiled.module}
       installed={NO_MODS}
@@ -92,12 +86,9 @@ export function Play() {
 }
 
 /**
- * Mods resolve before the game mounts.
- *
- * Not a nicety: a session started without its mods and then re-created with
- * them would already have advanced the RNG, so the run would no longer match
- * its own replay. A module that declares no mods skips all of this and mounts
- * on the first render exactly as it did before mods existed.
+ * Mods resolve before the game mounts. A session started without its mods and then re-created with
+ * them would already have advanced the RNG, so the run would no longer match its own replay. A
+ * module that declares no mods skips all of this.
  */
 function Gate({
   module, installed, choice, library, onLeave, onOpen,
@@ -115,9 +106,8 @@ function Gate({
     return <div className="app"><p className="error-note">Preparing mods…</p></div>;
   }
 
-  // A missing required mod is the one thing that stops play outright. The game
-  // said it needs it; running anyway produces a broken session that reads as an
-  // engine bug rather than a missing download.
+  // A missing required mod is the one thing that stops play outright: the game said it needs it,
+  // and running anyway produces a broken session that reads as an engine bug.
   if (mods.state.status === 'blocked') {
     const { missing, issues } = mods.state.setup.resolution;
     return (
@@ -214,9 +204,8 @@ function Game({
           onChange={(event) => {
             const picked = event.target.files?.[0];
             event.target.value = '';
-            // Imported worlds join the library rather than living in this
-            // tab's memory: the file was opened once, and it should be here
-            // next time without being found again.
+            // Imported worlds join the library rather than living in this tab's memory: the file
+            // was opened once, and it should be here next time.
             if (picked) void library.importFile(picked).then((next) => { if (next) onOpen(next); });
           }}
         />

@@ -1,23 +1,16 @@
 /**
  * Every moment in a module where something can happen, in one list.
  *
- * A module scatters its behaviour across triggers on places, reactions on
- * creatures, hooks on quests, effects on dialogue options, and procs on items.
- * Each is easy to read on its own and impossible to see as a whole, which is
- * how modules end up with an event that never fires or a consequence nobody
- * remembers writing.
+ * A module scatters its behaviour across triggers on places, reactions on creatures, hooks on
+ * quests, effects on dialogue options, and procs on items. Each is easy to read on its own and
+ * impossible to see as a whole.
  *
- * This flattens all of it into one shape answering five questions:
+ * This flattens all of it into one shape answering five questions: when fires it and whether it
+ * repeats, where it hangs off, whose behaviour it is, what effects it runs, and what gate has to
+ * pass first.
  *
- *   **when** — what fires it, and whether it repeats
- *   **where** — the place or thing it hangs off
- *   **who** — whose behaviour it is
- *   **what** — the effects it runs
- *   **why** — the gate that has to pass first
- *
- * It is derived from the raw document rather than the compiled module, so it
- * works on a document that does not yet validate — which is exactly when an
- * author most needs to see what they have.
+ * Derived from the raw document rather than the compiled module, so it works on a document that
+ * does not yet validate.
  */
 
 import type { ModuleDoc } from './store';
@@ -62,10 +55,8 @@ function asArray(value: unknown): Row[] {
 const nameOf = (row: Row | undefined) => String(row?.['name'] ?? row?.['id'] ?? '—');
 
 /**
- * Summarise an effect list into short human phrases.
- *
- * The point is scanning, not fidelity — a reader wants "damage, apply burning"
- * to decide whether to open it, and the JSON is one click away.
+ * Summarise an effect list into short human phrases. For scanning rather than fidelity: a reader
+ * wants "damage, apply burning" to decide whether to open it.
  */
 export function summariseEffects(effects: unknown): string[] {
   const out: string[] = [];
@@ -152,10 +143,8 @@ function describeTarget(payload: unknown): string {
 }
 
 /**
- * Summarise a requirement into short phrases.
- *
- * This is the "why" column, and the reason gating was unified into one shape:
- * every gate in the module can be described by the same function.
+ * Summarise a requirement into short phrases — the "why" column, and the reason gating was unified
+ * into one shape: every gate in the module is described by the same function.
  */
 export function summariseRequirement(requirement: unknown): string[] {
   if (typeof requirement !== 'object' || requirement === null) return [];
@@ -283,8 +272,8 @@ export function collectEvents(doc: ModuleDoc): GameEvent[] {
     });
   });
 
-  // Creatures and people react too — this is the half that is easiest to lose
-  // track of, because it is spread one or two rules at a time across a bestiary.
+  // Creatures and people react too, which is the half easiest to lose track of because it is spread
+  // one or two rules at a time across a bestiary.
   const pushReactions = (rows: Row[], collection: string) => {
     rows.forEach((row, index) => {
       asArray(row['reactions']).forEach((reaction, i) => {

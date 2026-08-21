@@ -1,14 +1,11 @@
 /**
  * Monster and NPC turns.
  *
- * Behaviour is declared, not coded. A creature's `behaviour` list is a set of
- * priority-ordered rules — "howl if you can, otherwise strike" — and the engine
- * picks the first whose conditions hold. That keeps tactics in the module where
- * an author can tune them, and keeps the engine from having opinions about how
- * a bog hound should fight.
+ * Behaviour is declared, not coded: a creature's `behaviour` list is a set of priority-ordered
+ * rules and the engine picks the first whose conditions hold.
  *
- * What the engine does supply is the part that needs the grid: choosing a
- * target, deciding whether to close the distance, and pathing there.
+ * What the engine supplies is the part that needs the grid — choosing a target, deciding whether to
+ * close the distance, and pathing there.
  */
 
 import { Rng } from '@dm/core';
@@ -41,11 +38,9 @@ interface BehaviourRule {
 }
 
 /**
- * Choose which ability to use.
- *
- * Rules are considered in priority order and the first usable one wins. A
- * creature whose rules all fail falls back to a basic attack, so a statblock
- * with no `behaviour` still fights rather than standing there.
+ * Choose which ability to use. Rules are considered in priority order and the first usable one
+ * wins; a creature whose rules all fail falls back to a basic attack, so a statblock with no
+ * `behaviour` still fights.
  */
 function chooseAbility(
   txn: Transaction,
@@ -58,10 +53,9 @@ function chooseAbility(
   const statblock = txn.module.find<{ behaviour?: BehaviourRule[] }>('content.monsters', actor.statblock);
   const rules = [...(statblock?.behaviour ?? [])].sort((a, b) => b.priority - a.priority);
 
-  // Built explicitly rather than with a conditional spread: a spread produces
-  // an optional property typed `X | undefined`, which the shared `Scope` index
-  // signature rejects under stricter settings — and this source is compiled by
-  // the editor as well as the engine.
+  // Built explicitly rather than with a conditional spread: a spread produces an optional property
+  // typed `X | undefined`, which the shared `Scope` index signature rejects under the editor's
+  // stricter settings.
   const extra: Scope = target ? { target: { id: target.id, name: target.name } } : {};
   const scope = buildScope(txn.module, txn.state, actor, extra);
 
@@ -80,12 +74,10 @@ function chooseAbility(
 /**
  * Whether going there would take this creature off its own ground.
  *
- * Measured on the **destination**, not on the step: a creature refuses the
- * chase rather than walking to the end of its rope and stopping there, which
- * is what stops a monster being towed one tile at a time to the entrance.
+ * Measured on the destination, not on the step, so a creature refuses the chase rather than walking
+ * to the end of its rope — otherwise it could be towed one tile at a time.
  *
- * A creature with no anchor, or a module with no opinion, is never held back —
- * which is exactly what every creature did before any of this existed.
+ * A creature with no anchor, or a module with no opinion, is never held back.
  */
 function offItsGround(actor: Entity, limit: number, goal: Position): boolean {
   if (!actor.anchor || !Number.isFinite(limit)) return false;
@@ -93,12 +85,8 @@ function offItsGround(actor: Entity, limit: number, goal: Position): boolean {
 }
 
 /**
- * Take one creature's turn.
- *
- * Move into range if needed, then act. Deliberately simple: closing to reach
- * and using the highest-priority available ability covers almost everything a
- * declarative statblock wants, and anything cleverer belongs in `behaviour`
- * rules rather than in engine heuristics.
+ * Take one creature's turn: move into range if needed, then act. Anything cleverer belongs in
+ * `behaviour` rules rather than in engine heuristics.
  */
 export function takeAiTurn(
   txn: Transaction,
@@ -109,9 +97,8 @@ export function takeAiTurn(
   const current = txn.entity(actor.id);
   if (!current || !current.alive) return;
 
-  // Only what this creature could actually notice. Without the cap it would
-  // fight something on the far side of the map that it has no way of knowing
-  // is there.
+  // Only what this creature could actually perceive, so it cannot fight something on the far side
+  // of the map.
   const target = nearestHostile(context, current, { range: detectionRange(context, current) });
   const abilityId = chooseAbility(txn, current, target, rng);
   const ability = abilityId
@@ -128,10 +115,8 @@ export function takeAiTurn(
     let actorNow = txn.entity(current.id)!;
 
     if (distance(actorNow.position, target.position) > range) {
-      // The leash gates the chase and nothing else. A creature drawn too far
-      // from its ground breaks off and heads back — but if you are standing
-      // next to it, it still swings, because giving up on a pursuit is not the
-      // same as declining to defend itself.
+      // The leash gates the chase and nothing else: a creature drawn too far from its ground breaks
+      // off, but still swings at whatever is beside it.
       if (offItsGround(actorNow, temper.leashRadius, target.position)) {
         txn.emit({ type: 'custom', event: 'brokeOff', data: { entity: actorNow.id, sense: '' } });
         goHome(txn, context, actorNow, rng, temper);
@@ -148,7 +133,7 @@ export function takeAiTurn(
     return;
   }
 
-  // Nothing to attack: close on whoever is nearest, so the fight comes to them.
+  // Nothing to attack: close on whoever is nearest.
   if (target) {
     if (offItsGround(current, temper.leashRadius, target.position)) {
       txn.emit({ type: 'custom', event: 'brokeOff', data: { entity: current.id, sense: '' } });
@@ -159,17 +144,13 @@ export function takeAiTurn(
     return;
   }
 
-  // Nothing in sight at all — but something was noticed. A creature that caught
-  // a scent or heard a door go walks over to find out, which is the difference
-  // between a monster that waits to be discovered and one that hunts.
+  // Nothing in sight, but something was noticed: walk over to find out.
   investigate(txn, context, current, rng);
 }
 
 /**
- * Break off and walk back to where it started.
- *
- * The other half of a leash: without it a creature that has given up simply
- * stands at the end of its rope, which reads as a bug rather than as a decision.
+ * Break off and walk back to where it started — the other half of a leash, so a creature that has
+ * given up does not stand at the end of its rope.
  */
 function goHome(
   txn: Transaction,
@@ -187,11 +168,9 @@ function goHome(
 }
 
 /**
- * Go and look at whatever was noticed.
- *
- * Arriving with nothing to show for it drops the alert, so a creature does not
- * pace back to the same empty tile for ever. A trail that has gone cold is
- * forgotten the same way, by `perceiveInto`.
+ * Go and look at whatever was noticed. Arriving with nothing to show for it drops the alert, so a
+ * creature does not pace back to the same empty tile forever; a cold trail is forgotten the same
+ * way, by `perceiveInto`.
  */
 function investigate(
   txn: Transaction,
@@ -201,18 +180,15 @@ function investigate(
   budget?: number,
 ): boolean {
   const alert = currentAlert(context, actor, 'investigate');
-  // Holding a lead and *acting* on one are different things: a creature whose
-  // `investigates` list does not name that sense has nothing to do here, and
-  // has to be free to get on with whatever it would otherwise be doing. Saying
-  // so is what this return value is for -- a creature that stood about because
-  // it remembered a smell it does not care about is a creature frozen for good.
+  // Holding a lead and acting on one are different: a creature whose `investigates` list does not
+  // name that sense has nothing to do here, and the return value says so, so it is free to do
+  // whatever else it would.
   if (!alert) return false;
 
   const temper = temperamentOf(txn.module, actor);
 
-  // A lead that would take it off its ground is one it declines to follow. The
-  // alert is dropped rather than held, so it does not stand there re-deciding
-  // not to go every turn for as long as it remembers.
+  // A lead that would take it off its ground is declined, and the alert is dropped rather than
+  // held, so it does not re-decide every turn.
   if (offItsGround(actor, temper.investigateRadius, alert.at)) {
     txn.putEntity({
       ...actor,
@@ -232,9 +208,8 @@ function investigate(
     return true;
   }
 
-  // Only when the trail is fresh this minute. A creature already padding
-  // toward something does not cast about again every step, and saying so every
-  // turn would bury the moment it first noticed you.
+  // Only when the trail is fresh this minute, so a creature already moving toward something does
+  // not narrate casting about every step.
   if (alert.minute === txn.state.minute) {
     txn.emit({
       type: 'custom',
@@ -247,19 +222,15 @@ function investigate(
 }
 
 /**
- * Creatures act on what they noticed even when nobody is fighting.
+ * Creatures act on what they noticed even when nobody is fighting, since turns only exist inside
+ * combat.
  *
- * Without this a hound could smell the party across the marsh and never do a
- * thing about it, because turns only exist inside combat.
+ * Paced by the clock rather than by actions: `tiles` is how far anything may come while that much
+ * time passes. Tying it to elapsed minutes stops a free action freezing the world, and makes a long
+ * rest genuinely risky.
  *
- * Paced by the clock rather than by actions: `tiles` is how far anything may
- * come while that much time passes. Tying it to elapsed minutes is what stops a
- * player learning to spam a free action to freeze the world — and what makes a
- * long rest genuinely risky, since eight hours is time enough for anything that
- * caught your scent to walk the length of the marsh.
- *
- * Every creature draws from its own stream, keyed by who it is and when, so
- * what one creature does cannot shift the dice for anything else.
+ * Every creature draws from its own stream, keyed by who it is and when, so what one creature does
+ * cannot shift the dice for anything else.
  */
 export function runIdleTurns(
   txn: Transaction,
@@ -275,9 +246,7 @@ export function runIdleTurns(
     if (actor.kind === 'character') continue;
     if (actor.map !== txn.state.currentMap) continue;
 
-    // How long a creature keeps caring. `perception.curiosityMinutes` has
-    // always described exactly this and was read by nothing, so a hound would
-    // walk purposefully towards a smell it noticed two hours ago.
+    // How long a creature keeps caring, from `perception.curiosityMinutes`.
     const curiosity = txn.module.source.rules.perception.curiosityMinutes;
     let leads = actor.alerts;
     if (curiosity > 0 && leads.length > 0) {
@@ -294,16 +263,13 @@ export function runIdleTurns(
       local,
       here,
       rng.derive(`investigate:${actor.id}:${txn.state.minute}`),
-      // A tile a minute, the same pace the party walks. Sprinting is a combat
-      // idea; crossing a marsh on a scent is not.
+      // A tile a minute, the same pace the party walks.
       tiles,
     );
     if (chased) continue;
 
-    // Nothing to chase. This is where a world stops being a diorama: a creature
-    // with ground of its own walks about on it, and a creature that has strayed
-    // off it heads back. Both leave a trail while they do, which is the whole
-    // reason footprints are worth anything.
+    // Nothing to chase: a creature with ground of its own walks about on it, and one that has
+    // strayed off it heads back. Both leave a trail while they do.
     wander(txn, local, here, rng.derive(`wander:${actor.id}:${txn.state.minute}`), tiles);
   }
 }
@@ -311,10 +277,8 @@ export function runIdleTurns(
 /**
  * Walk about, or walk home.
  *
- * Deliberately a random step rather than a path: a creature ambling around its
- * own patch has no destination, and asking the pathfinder for one would cost an
- * A* per creature per turn to answer a question nobody asked. Going home does
- * use the pathfinder, because that one genuinely has somewhere to be.
+ * A random step rather than a path: a creature ambling around its own patch has no destination, and
+ * asking the pathfinder would cost an A* per creature per turn. Going home does use the pathfinder.
  */
 function wander(
   txn: Transaction,
@@ -330,9 +294,8 @@ function wander(
   const map = txn.state.maps[actor.map];
   if (!map) return;
 
-  // Off its ground with nothing to chase: back it goes, whatever its roaming
-  // habits. This is what a chase costs the chaser, and what stops a dungeon
-  // slowly emptying itself into whichever room the party fought in.
+  // Off its ground with nothing to chase: back it goes, whatever its roaming habits, so a dungeon
+  // does not empty itself into whichever room the party fought in.
   if (distance(actor.position, home) > temper.roamRadius) {
     goHome(txn, context, actor, rng, temper, Math.floor(tiles * temper.speeds.returning));
     return;
@@ -343,10 +306,9 @@ function wander(
   const budget = Math.floor(tiles * temper.speeds.wander);
   if (budget <= 0) return;
 
-  // Rolled once for the whole tick rather than once per step. Per step it
-  // would mean a creature that failed its first roll stood still for the whole
-  // stretch of time, however long — so a long rest and a single minute would
-  // move it exactly as far, which is not what "odds it moves at all" says.
+  // Rolled once for the whole tick rather than once per step: per step, a creature that failed its
+  // first roll would stand still for the whole stretch, so a long rest and a single minute would
+  // move it equally far.
   if (!rng.chance(temper.wanderChance)) return;
 
   const blocked = new Set<number>();
@@ -360,9 +322,8 @@ function wander(
     const now = txn.entity(actor.id);
     if (!now || !now.alive) return;
 
-    // Every open neighbour that keeps it on its ground. Gathered rather than
-    // guessed at so the choice is a single draw against a stable list, which
-    // is what keeps two identical runs stepping identically.
+    // Every open neighbour that keeps it on its ground. Gathered rather than sampled, so the choice
+    // is a single draw against a stable list and two identical runs step identically.
     const open = neighbours(now.position).filter((side) => {
       if (!inBounds(map.tiles, side)) return false;
       if (blocked.has(key(side))) return false;
@@ -383,11 +344,8 @@ function wander(
 }
 
 /**
- * Walk toward a place until within `range`, spending the movement budget.
- *
- * A place, not a creature: closing on an enemy and walking over to whatever
- * made that noise are the same movement, and only one of them has something
- * standing at the far end.
+ * Walk toward a place until within `range`, spending the movement budget. A place, not a creature:
+ * closing on an enemy and walking over to a noise are the same movement.
  */
 function moveToward(
   txn: Transaction,
@@ -404,9 +362,8 @@ function moveToward(
 
   const combat = txn.state.combat;
   const allowance = budgetOverride ?? (combat ? combat.movement : Infinity);
-  // Why it is moving decides how fast: ambling around its own patch is not the
-  // same speed as running you down. A pace of zero is a creature that does not
-  // travel for that reason at all.
+  // Why it is moving decides how fast. A pace of zero is a creature that does not travel for that
+  // reason at all.
   const budget = Number.isFinite(allowance) ? Math.floor(allowance * pace) : allowance;
   if (budget <= 0) return;
 
@@ -444,22 +401,19 @@ function moveToward(
 
     txn.putEntity(steppedTo(after, step, txn.state.minute));
     txn.emit({ type: 'moved', entity: actor.id, from: after.position, to: step, cost });
-    // A creature leaves a trail exactly as the party does — which is what makes
-    // tracking a wounded beast back to its den possible.
+    // A creature leaves a trail exactly as the party does.
     leaveMarks(txn, context.terrain, txn.entity(actor.id) ?? after, step);
     spent += cost;
   }
 
-  // Charged at what it actually walked. `pace` shapes how far it was willing to
-  // go, not how cheap the ground was — a creature that ambles has movement left.
+  // Charged at what it actually walked: `pace` shapes how far it was willing to go, not how cheap
+  // the ground was.
   if (spent > 0 && budgetOverride === undefined) spendMovement(txn, spent);
 }
 
 /**
- * Run every non-player turn until it is a party member's turn again.
- *
- * Called after the player ends their turn, so control returns to them only when
- * there is something to decide.
+ * Run every non-player turn until it is a party member's turn again. Called after the player ends
+ * their turn, so control returns only when there is something to decide.
  */
 export function runAiTurns(txn: Transaction, context: TargetingContext, rng: Rng, endTurnFn: (txn: Transaction, context: TargetingContext, rng: Rng) => void): void {
   // Bounded so a bad statblock cannot spin forever.

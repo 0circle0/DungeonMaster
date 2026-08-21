@@ -1,7 +1,6 @@
-/* Studio shell. Everything here is scoped by CSS Modules so the classic
-   editor's stylesheet is never affected; the palette reuses the custom
-   properties globals.css defines on :root, so embedded schema forms and
-   analysis views match the shell without restyling. */
+/* Studio shell, scoped by CSS Modules so the classic editor's stylesheet is unaffected. The palette
+   reuses the custom properties globals.css defines on :root, so embedded schema forms and analysis
+   views match the shell without restyling. */
 
 .shell {
   position: fixed;
@@ -310,9 +309,8 @@
 /* individually collapsible form sections */
 .section { margin-bottom: 10px; }
 
-/* Slot 0 of the pinned-header stack: this names the top-level field, and the
-   nested .group-head.pinned headers offset themselves below it. Opaque, since
-   the form scrolls under it. */
+/* Slot 0 of the pinned-header stack: names the top-level field, and the nested .group-head.pinned
+   headers offset themselves below it. Opaque, since the form scrolls under it. */
 .sectionHead {
   display: flex;
   align-items: baseline;
@@ -509,9 +507,9 @@
 .dialogOption em { display: block; color: var(--muted); font-style: normal; font-size: 11.5px; margin-top: 2px; }
 .dialogActions { display: flex; justify-content: flex-end; gap: 8px; }
 
-/* Mods panel. A mod describes its UI and the host draws it, so these are the
-   only styles a mod's widget tree can reach — deliberately: an editor mod
-   cannot ship CSS, which is what keeps one mod from restyling the studio. */
+/* Mods panel. A mod describes its UI and the host draws it, so these are the only styles a mod's
+   widget tree can reach: an editor mod cannot ship CSS, which is what keeps one mod from restyling
+   the studio. */
 .modsBody { padding: 10px 12px; overflow: auto; }
 .modsBody h3 { font-size: 11px; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); margin: 14px 0 6px; }
 .modsBody h3:first-child { margin-top: 0; }
@@ -541,8 +539,8 @@
 .renameCount { margin: 0; font-size: 11px; opacity: 0.75; }
 .renameActions { display: flex; gap: 6px; }
 
-/* The half the rename cannot do for you. Deliberately not styled as an error:
-   nothing is wrong yet, but somebody has to go and look. */
+/* The half the rename cannot do for you. Not styled as an error: nothing is wrong yet, but somebody
+   has to go and look. */
 .renameWarn {
   font-size: 11px;
   border-left: 2px solid var(--warn, #d9a441);
@@ -560,8 +558,7 @@
 .queryHelp { margin: 0 0 6px; font-size: 11px; opacity: 0.55; font-family: var(--mono); }
 .cellCheck { width: 26px; text-align: center; }
 
-/* Only present while something is checked, so it never costs space it is not
-   using — the table is what the viewport is for. */
+/* Only present while something is checked, so it never costs space it is not using. */
 .bulkBar {
   display: flex;
   align-items: center;
@@ -647,8 +644,8 @@
   margin-bottom: 8px;
 }
 .modField { position: relative; }
-/* Whose it is. An unattributed field reads as part of the format, and would be
-   looked for in the schema by whoever inherits the module. */
+/* Whose it is. An unattributed field reads as part of the format, and would be looked for in the
+   schema. */
 .modFieldOwner {
   position: absolute;
   top: 0;
@@ -685,12 +682,12 @@
   gap: 8px;
   padding: 3px 0;
 }
-/* The value a person put there, not the prefab's — shown so "reset" is a
-   decision rather than a leap. */
+/* The value a person put there, not the prefab's — shown so "reset" is a decision rather than a
+   leap. */
 .prefabValue { flex: 1; opacity: 0.6; font-family: var(--mono); font-size: 10.5px; }
 
-/* A draft from a session that ended badly. Loud, because ignoring it loses it,
-   and it sits above everything until the author decides. */
+/* A draft from a session that ended badly. Loud, because ignoring it loses it, and it sits above
+   everything until the author decides. */
 .recovery {
   position: fixed;
   top: 12px;
@@ -709,7 +706,7 @@
 }
 
 .prefabPicker { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 8px; }
-/* Form on the left, what it makes on the right — the preview is the point. */
+/* Form on the left, what it makes on the right. */
 .placeBody { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; align-items: start; }
 .placeForm { max-height: 46vh; overflow-y: auto; padding-right: 4px; }
 .placePreview { min-width: 0; }
@@ -820,9 +817,7 @@
 }
 
 /* ── The welcome shelf ──────────────────────────────────────────────────────
-   Shown before a world is open, which is a state the studio never used to have:
-   there was always a module on disk for the server to pick. A fresh browser has
-   an empty library, and this is the honest answer to that. */
+   Shown before a world is open. A fresh browser has an empty library. */
 
 .welcome {
   height: 100vh;

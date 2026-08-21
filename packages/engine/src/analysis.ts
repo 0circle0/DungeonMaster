@@ -1,10 +1,9 @@
 /**
  * Preview simulations, for the editor.
  *
- * These are the *same* `rollLoot` and `rollEncounter` the game plays with, run
- * many times to produce a distribution. That identity is the point: a preview
- * with its own copy of the odds would drift from actual play, and a Balance
- * view that lies is worse than no Balance view.
+ * These are the same `rollLoot` and `rollEncounter` the game plays with, run many times to produce
+ * a distribution. That identity is the point: a preview with its own copy of the odds would drift
+ * from actual play.
  */
 
 import { Rng } from '@dm/core';
@@ -57,11 +56,8 @@ interface Options {
 }
 
 /**
- * Roll a loot table many times.
- *
- * Entries the party does not qualify for never appear, because the engine
- * removes them before drawing — so the reported odds are the odds this party
- * will actually experience.
+ * Roll a loot table many times. Entries the party does not qualify for never appear, because the
+ * engine removes them before drawing, so the reported odds are the odds this party will experience.
  */
 export function simulateLoot(
   module: CompiledModule,
@@ -205,11 +201,9 @@ export interface PerceptionPreview {
 /**
  * How far each sense reaches across a sketch of a map.
  *
- * For the editor: an author changing a threshold or a falloff should see the
- * shape of it immediately rather than having to play far enough into a dungeon
- * to find out. It runs the **engine's own** propagation rather than a
- * reimplementation, so what the editor draws and what happens in play cannot
- * drift apart — the same reason the loot and encounter previews live here.
+ * For the editor: an author changing a threshold or a falloff should see the shape of it
+ * immediately. It runs the engine's own propagation rather than a reimplementation, so what the
+ * editor draws and what happens in play cannot drift.
  *
  * `layout` is rows of terrain ids; the observer stands at `source`.
  */
@@ -235,8 +229,8 @@ export function simulatePerception(
   }
   const tiles = builder.freeze();
 
-  // A real game state holding nothing but this sketch, so the preview asks the
-  // same questions of the same functions the reducer does.
+  // A real game state holding nothing but this sketch, so the preview asks the same questions of
+  // the same functions the reducer does.
   const base = newGame(module, { seed: 1, party: [defaultChoices(module, 'Preview')] });
   const template = base.entities[base.party[0]!]!;
 
@@ -264,10 +258,9 @@ export function simulatePerception(
 
   for (let y = 0; y < height; y += 1) {
     for (let x = 0; x < width; x += 1) {
-      // Someone standing here: how much of the source reaches them? Built from
-      // the plain template rather than the source, so a statblock picked as the
-      // *emitter* cannot smuggle its own sense ranges into the *perceiver* —
-      // the drawn reach must be the module default the caller was told about.
+      // Someone standing here: how much of the source reaches them? Built from the plain template
+      // rather than the source, so a statblock picked as the emitter cannot smuggle its own sense
+      // ranges into the perceiver.
       const observer: Entity = { ...template, id: 'preview:observer', map: 'preview', position: { x, y } };
       const context = {
         module,

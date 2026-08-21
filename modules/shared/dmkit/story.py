@@ -6,8 +6,8 @@ Each module exports whatever it has:
     LOOT_TABLES  MONSTERS  ENCOUNTER_TABLES
     POI_TRIGGERS  POI_PATCHES  AREA_ENCOUNTERS  BOSSES
 
-As in `dmkit.regions`, the loaded module list is passed in: its order is the
-emitted order of every collection, so it belongs to the caller.
+As in `dmkit.regions`, the loaded module list is passed in: its order is the emitted order of every
+collection, so it belongs to the caller.
 """
 import collections
 import importlib
@@ -18,9 +18,8 @@ from dmkit.quests import arc as _arc
 def load(names):
     """Import each name, in order, and return the modules.
 
-    No `except ImportError`, for the reason `dmkit.regions.load` gives: a chain
-    or a thread that quietly fails to import becomes a raft of "nothing starts
-    it" problems in the linter that look like an entirely different bug.
+    No `except ImportError`: a chain or thread that quietly fails to import becomes a raft of
+    "nothing starts it" problems in the linter that look like a different bug.
     """
     return [importlib.import_module(name) for name in names]
 
@@ -35,10 +34,9 @@ def gather(modules, attr):
 def arcs(modules, *, ending=None):
     """Every arc, plus the ending arc if one is asked for.
 
-    `ending` is `(arc_id, name, description, [quest_id, ...])`. Only the quests
-    that actually exist go in, and in the order given. Assembled here rather
-    than in the last act's file because whether a run is over is a fact about
-    the whole questline: `isEnding` plus every quest in it complete is what
+    `ending` is `(arc_id, name, description, [quest_id, ...])`. Only the quests that exist go in, in
+    the order given. Assembled here rather than in the last act's file because whether a run is over
+    is a fact about the whole questline: `isEnding` plus every quest in it complete is what
     `endingReached` wins on.
     """
     out = gather(modules, "ARCS")
@@ -52,12 +50,9 @@ def arcs(modules, *, ending=None):
 
 
 def attach_triggers(modules, poi_list, *, base=None):
-    """Arrival triggers, from the questline and from whichever chains want one.
-
-    Optional content reaches places the spine never named, and "you have found
-    it" is the only event some of them produce — a sunken barge does not talk.
-    Each module may export its own `POI_TRIGGERS` in the same shape, gathered
-    here so the geography files still do not have to know a quest exists.
+    """Arrival triggers, from the questline and from whichever chains want one. Each module may
+    export its own `POI_TRIGGERS` in the same shape, gathered here so the geography files do not
+    have to know a quest exists.
     """
     wanted = dict(base or {})
     for module in modules:
@@ -73,14 +68,12 @@ def attach_triggers(modules, poi_list, *, base=None):
 def attach_patches(modules, poi_list):
     """Turn an existing place into a hidden one, or hang a door on it.
 
-    A hidden thread builds no geography — the anchors are points of interest
-    that have been standing there unmentioned since the continent was drawn. So
-    the only thing a thread does to the map is patch a place that already
-    exists: `hidden` plus a `discover` difficulty that falls as its thread
-    fills, and a `gate` that says in words what it wants.
+    A hidden thread builds no geography, so the only thing it does to the map is patch a place that
+    already exists: `hidden` plus a `discover` difficulty that falls as its thread fills, and a
+    `gate` that says in words what it wants.
 
-    Merged rather than replaced, so a patch cannot silently drop a place's
-    triggers or its residents.
+    Merged rather than replaced, so a patch cannot silently drop a place's triggers or its
+    residents.
     """
     wanted = {}
     for module in modules:
@@ -96,14 +89,13 @@ def attach_patches(modules, poi_list):
 
     missing = sorted(set(wanted) - seen)
     if missing:
-        # Loud, because a patch that lands on nothing is a thread whose anchor
-        # is not hidden, not gated, and reachable by walking in.
+        # Loud, because a patch that lands on nothing is a thread whose anchor is not hidden, not
+        # gated, and reachable by walking in.
         raise ValueError(f"POI_PATCHES names points of interest that do not exist: {missing}")
 
 
-# Which places a questline turns live. Everything not named here stays exactly
-# as quiet as the geography left it, which is what "questline-scoped bestiary"
-# means when it comes time to write one down.
+# Which places a questline turns live. Everything not named here stays as quiet as the geography
+# left it.
 Population = collections.namedtuple("Population", [
     "biome_encounters",    # biome id   -> [table id]
     "biome_loot",          # biome id   -> [table id]
@@ -117,18 +109,13 @@ def attach_content(modules, biome_list, dungeon_list, room_templates, area_list,
                    *, population=Population()):
     """Turn the route live: encounters, loot, and rooms that are not empty.
 
-    Everything here is scoped by `population`: a biome, area or dungeon the
-    questline did not name is left exactly as quiet as the geography made it.
-    A module's own `AREA_ENCOUNTERS` and `BOSSES` are gathered alongside, and
-    area tables are *appended* rather than replaced — post-game content's whole
-    claim is that a place already walked has something else in it now, and
-    replacing would turn the addition into a swap.
+    Everything is scoped by `population`: a biome, area or dungeon the questline did not name is
+    left as quiet as the geography made it. A module's own `AREA_ENCOUNTERS` and `BOSSES` are
+    gathered alongside, and area tables are appended rather than replaced.
 
-    The three room-encounter chances below are engine-shaped rather than
-    world-shaped: `roomTemplate.encounterChance` and
-    `world.generationDefaults.encounterChance` both default to 0, so without
-    this a dungeon full of monsters generates empty. They are the obvious next
-    parameter if a second world disagrees with the numbers.
+    The three room-encounter chances below exist because `roomTemplate.encounterChance` and
+    `world.generationDefaults.encounterChance` both default to 0, so without them a dungeon full of
+    monsters generates empty.
     """
     for biome in biome_list:
         tables = population.biome_encounters.get(biome["id"])
@@ -138,11 +125,9 @@ def attach_content(modules, biome_list, dungeon_list, room_templates, area_list,
         if drops:
             biome["lootTables"] = list(drops)
 
-    # An area's own tables, and then whatever a module wants to add to them.
-    # Appended rather than replaced, because the post-game content's whole
-    # claim is that a place the party already walked has something *else* in
-    # it now — replacing would quietly delete what was there and turn the
-    # change into a swap.
+    # An area's own tables, then whatever a module adds to them. Appended rather than replaced,
+    # because post-game content claims a place the party already walked has something else in it
+    # now.
     extra_area_tables = {}
     for module in modules:
         for area_id, tables in getattr(module, "AREA_ENCOUNTERS", {}).items():
@@ -155,10 +140,8 @@ def attach_content(modules, biome_list, dungeon_list, room_templates, area_list,
         if tables:
             area["encounterTables"] = tables
 
-    # Bosses the questline named, then the ones a module claims for itself. A
-    # boss room carrying `alwaysEncounter` with no table to draw from is a
-    # common state for a generated dungeon; anchoring content on one fixes it
-    # as a side effect.
+    # Bosses the questline named, then the ones a module claims for itself. A boss room carrying
+    # `alwaysEncounter` with no table to draw from generates empty.
     bosses = dict(population.dungeon_bosses)
     for module in modules:
         bosses.update(getattr(module, "BOSSES", {}))

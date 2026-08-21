@@ -3,17 +3,14 @@
  *
  * One object, two responsibilities:
  *
- *   - **`has()`** is the hot-path gate. It is a `Set` lookup over what the
- *     manifests declared, so a turn with no interested mod costs nothing —
- *     no allocation, no serialization, no boundary crossing.
- *   - **`run()`** crosses into the sandbox and applies whatever comes back.
- *     It never throws. A mod that explodes, hangs, or returns nonsense becomes
- *     a `modError` event and the turn continues.
+ *   - `has()` is the hot-path gate: a `Set` lookup over what the manifests declared, so a turn with
+ *     no interested mod costs no allocation, serialization, or boundary crossing.
+ *   - `run()` crosses into the sandbox and applies whatever comes back. It never throws — a mod
+ *     that explodes, hangs, or returns nonsense becomes a `modError` event and the turn continues.
  *
- * Mods are not restricted in *what* they change — `patch` writes anywhere in
- * `GameState`. The two things enforced here are the ones that are not game
- * rules: values must be JSON-safe so a replay reproduces, and a failure must
- * not take the session down.
+ * Mods are not restricted in what they change; `patch` writes anywhere in `GameState`. What is
+ * enforced here is that values are JSON-safe so a replay reproduces, and that a failure does not
+ * take the session down.
  */
 
 import { Rng } from '@dm/core';
@@ -35,12 +32,9 @@ import { matchKeyFor, MUST_MATCH, NO_HOOK_OUTCOME } from './hooks.js';
 import type { HookName, HookOutcome, HookSubjects } from './hooks.js';
 
 /**
- * Composite map keys.
- *
- * Each goes through one helper rather than being inlined at both ends, because
- * a `${a} ${b}` written twice is a key that agrees only by luck. When the two
- * spellings drift the lookup silently misses and the feature quietly does
- * nothing — which is exactly how the mod-refusal text went missing once.
+ * Composite map keys. Each goes through one helper rather than being inlined at both ends: a `${a}
+ * ${b}` written twice is a key that agrees only by luck, and when the spellings drift the lookup
+ * silently misses.
  */
 const KEY_SEP = String.fromCharCode(31);
 /** Stands for "this declaration did not narrow"; cannot collide with a real match. */
@@ -77,11 +71,9 @@ export class ModRuntime {
   /** A mod's prose is the mod author's to write. */
   private readonly systemText = new Map<string, string>();
   /**
-   * Declarations refused when the runtime was built, with the reason.
-   *
-   * Kept rather than thrown: one bad declaration should cost a mod that hook,
-   * not the whole session — and a silently ignored declaration is the most
-   * confusing outcome for the author.
+   * Declarations refused when the runtime was built, with the reason. Kept rather than thrown: one
+   * bad declaration costs a mod that hook, not the whole session, and a silently ignored
+   * declaration is the most confusing outcome.
    */
   readonly rejected: string[] = [];
 
@@ -96,10 +88,9 @@ export class ModRuntime {
       for (const decl of mod.manifest.hooks) {
         if (decl.mode === 'replace' && shadowed.has(shadowKey(mod.manifest.id, decl.hook))) continue;
 
-        // `event.emit` runs hundreds of times a turn. An unfiltered declaration
-        // would put a WASM crossing on every event in the game, so it is
-        // refused outright rather than merely discouraged — a mod author who
-        // wants everything can declare the handful of types they actually mean.
+        // `event.emit` runs hundreds of times a turn, so an unfiltered declaration would put a WASM
+        // crossing on every event in the game. Refused outright; a mod author who wants everything
+        // can declare the types they mean.
         if (MUST_MATCH.includes(decl.hook as HookName) && decl.match === undefined) {
           this.rejected.push(
             `${mod.manifest.id} declares ${decl.hook} without a \`match\`, which would fire on every event; ` +
@@ -117,15 +108,15 @@ export class ModRuntime {
         });
         this.byHook.set(decl.hook, list);
 
-        // An unfiltered declaration has to answer for every subject, so it
-        // registers the bare key too.
+        // An unfiltered declaration has to answer for every subject, so it registers the bare key
+        // too.
         this.gate.add(gateKey(decl.hook, decl.match));
         if (decl.match === undefined) this.gate.add(gateKey(decl.hook, ANY));
       }
     });
 
-    // Run order: before, then replace, then after; within a mode by priority
-    // descending, then by resolved position. Fixed here so `run` never sorts.
+    // Run order: before, then replace, then after; within a mode by priority descending, then by
+    // resolved position. Fixed here so `run` never sorts.
     const modeRank = { before: 0, replace: 1, after: 2 } as const;
     for (const list of this.byHook.values()) {
       list.sort((a, b) => {
@@ -143,11 +134,7 @@ export class ModRuntime {
     return match !== undefined && this.gate.has(gateKey(hook, match));
   }
 
-  /**
-   * Run every interested handler and apply what they return.
-   *
-   * Never throws.
-   */
+  /** Run every interested handler and apply what they return. Never throws. */
   run<K extends HookName>(
     txn: Transaction,
     hook: K,
@@ -173,8 +160,8 @@ export class ModRuntime {
         mod: registration.modId,
         hook,
         payload,
-        // Derived, so how many times a mod draws cannot perturb anything
-        // downstream — `derive` reads the parent without advancing it.
+        // Derived, so how many times a mod draws cannot perturb anything downstream: `derive` reads
+        // the parent without advancing it.
         random: () => {
           drew += 1;
           return stream.nextFloat();
@@ -227,16 +214,14 @@ export class ModRuntime {
   }
 
   /**
-   * Apply one directive. Returns whether it refused the action.
-   *
-   * Everything goes through the transaction, so a mod's changes land the same
-   * way the module's own do.
+   * Apply one directive. Returns whether it refused the action. Everything goes through the
+   * transaction, so a mod's changes land the same way the module's own do.
    */
   private apply(txn: Transaction, modId: string, directive: ModDirective): boolean {
     switch (directive.kind) {
       case 'ops': {
-        // Through the same door the module DSL uses: already validated,
-        // clamped, immunity-checked, and refusing by name on anything unknown.
+        // Through the same door the module DSL uses: already validated, clamped, immunity-checked,
+        // and refusing by name on anything unknown.
         applyOps(txn, directive.ops as readonly EffectOp[], null);
         return false;
       }
@@ -267,17 +252,16 @@ export class ModRuntime {
       }
 
       case 'say': {
-        // Resolved here and emitted as text, rather than emitted as a key for
-        // the narrator to resolve: the narrator has no idea which mod a key
-        // belongs to, and two mods may reasonably use the same key name.
+        // Resolved here and emitted as text rather than as a key: the narrator does not know which
+        // mod a key belongs to, and two mods may use the same key name.
         const template = this.systemText.get(textKey(modId, directive.textKey));
         txn.emit({
           type: 'custom',
           event: 'modSay',
           data: {
             mod: modId,
-            // A missing key shows the key rather than nothing at all, so an
-            // author sees which one they forgot instead of a silent turn.
+            // A missing key shows the key rather than nothing, so an author sees which one they
+            // forgot.
             text: template === undefined
               ? `${modId}: ${directive.textKey}`
               : interpolate(template, directive.params),
@@ -288,13 +272,9 @@ export class ModRuntime {
       }
 
       case 'refuse': {
-        // Resolved against the mod's own `systemText`, not the engine's.
-        //
-        // The engine's key union is closed on purpose — `spine.test.ts` fails
-        // on a literal string in engine code — but that rule exists so engine
-        // *prose* stays authorable, and a mod's prose is the mod author's to
-        // write. Resolving here keeps mod text as data while leaving the
-        // engine's union alone.
+        // Resolved against the mod's own `systemText`, not the engine's. The engine's key union is
+        // closed — `spine.test.ts` fails on a literal string in engine code — but that rule exists
+        // so engine prose stays authorable, and a mod's prose is the mod author's.
         const template = this.systemText.get(textKey(modId, directive.textKey));
         txn.emit({
           type: 'refused',
@@ -365,14 +345,12 @@ export class ModRuntime {
   /**
    * Pull one value by dotted path.
    *
-   * Pull rather than push: serializing `GameState` for every hook would be tens
-   * to hundreds of KB per crossing and would make mods unusable. A mod asks for
-   * the handful of fields it needs.
+   * Pull rather than push: serializing `GameState` for every hook would be tens to hundreds of KB
+   * per crossing. A mod asks for the handful of fields it needs.
    *
-   * Two roots. A bare path walks `GameState`. A `module.` prefix reaches the
-   * compiled module, and `module.<section>.<collection>.<id>` resolves through
-   * the id index rather than walking the array — which is the shape content is
-   * actually addressed by, and is how a mod reads an author's `extra` bag.
+   * Two roots. A bare path walks `GameState`. A `module.` prefix reaches the compiled module, and
+   * `module.<section>.<collection>.<id>` resolves through the id index rather than walking the
+   * array.
    */
   private query(txn: Transaction, path: string): string | null {
     const segments = path.split('.');

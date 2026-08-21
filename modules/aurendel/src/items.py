@@ -1,37 +1,30 @@
 """Aurendel — things you can carry.
 
-The first entry in this file is the reason it exists. `strike` declares no
-`onUse`, so an attack's damage comes entirely from `weaponOf()` reading the
-attacker's equipped gear (rules/combat/attack.ts). With no items in the module,
-every warden, stalker, ranger and keeper in Aurendel swung for exactly nothing
-and the only class that could hurt anything was the adept, whose spells carry
-their own damage. A weapon in `classes[].startingItems` is not flavour here; it
-is the difference between combat existing and not.
+`strike` declares no `onUse`, so an attack's damage comes entirely from `weaponOf()` reading the
+attacker's equipped gear (rules/combat/attack.ts). With no items in the module every warden,
+stalker, ranger and keeper swings for nothing. A weapon in `classes[].startingItems` is the
+difference between combat existing and not.
 
-Two other rules worth stating once:
+Two other rules:
 
-  * A **key** is `value: 0`, because `shopStock` skips anything worth nothing —
-    which is what keeps a quest object off a shopkeeper's shelf.
-  * `properties` and `tags` both matter and do different jobs. A weapon's
-    `tags` travel with its damage, so `damageInteractions[].unless` can name
-    one; that is how silver bites something that shrugs off ordinary steel.
+  * A key is `value: 0`, because `shopStock` skips anything worth nothing, which keeps a quest
+    object off a shopkeeper's shelf.
+  * `properties` and `tags` do different jobs. A weapon's `tags` travel with its damage, so
+    `damageInteractions[].unless` can name one; that is how silver bites something that shrugs off
+    ordinary steel.
 """
 from dmkit.items import (HEAL, armour, gear, key, potion,  # noqa: F401
                          treasure, weapon)
 
 
 # --- what the side chains pay in -------------------------------------------
-# Every piece of this is in `head`, `cloak`, `ring` or `belt`, and every one of
-# those four slots was empty. The questline's gear is hands and bodies — six
-# weapons and three coats, tuned against the fights on the road — so a chain can
-# hand out real power without touching a single number the main line was
+# Every piece of this is in `head`, `cloak`, `ring` or `belt`, all four of which the questline
+# leaves empty, so a chain can hand out real power without touching a number the main line was
 # measured against.
 #
-# `skillBonuses` is the other half of the reason. `item.modifiers` is keyed by
-# `rules.derivedStats` and can only ever reach guard, initiative and carry;
-# `skillRankOf` in the engine reads `skillBonuses`, and both the dice and the
-# `minRank` gates go through it. Gear is the only way a skill ever improves in
-# this ruleset — nothing raises `entity.skills` after character creation.
+# `skillBonuses` is the other half. `item.modifiers` is keyed by `rules.derivedStats` and can only
+# reach guard, initiative and carry; `skillRankOf` reads `skillBonuses`, and both the dice and the
+# `minRank` gates go through it. Gear is the only way a skill improves in this ruleset.
 
 
 SIDE_GEAR = [
@@ -176,13 +169,10 @@ ITEMS = [
     key("glass_key", "The Glass Key",
         "Fulgurite, hollow, and it rings a note that is very slightly wrong.",
         kind="trinket"),
-    # `thornward_token` — "the Elderhollow moot's leave" — was here with no
-    # source and no consumer. The Thornward states that leave as prose and
-    # gates on `minLevel` and a `nature` bypass instead, and gate keys live in
-    # `requires.items` (`opensWith` is abilities), so making the token real
-    # means adding an item requirement to a gate that already works. If the
-    # moot's leave should be a thing you carry, it wants earning somewhere
-    # first — an `anyOf` beside the level, never in front of it.
+    # `thornward_token` was here with no source and no consumer. The Thornward states that leave as
+    # prose and gates on `minLevel` and a `nature` bypass instead, and gate keys live in
+    # `requires.items` (`opensWith` is abilities). If the moot's leave should be a thing you carry,
+    # it wants earning somewhere first — an `anyOf` beside the level, never in front of it.
     key("hold_warrant", "A Deep Warrant",
         "Karn Dolur's seal on slate, and the ledger number that goes with it."),
 
@@ -219,9 +209,8 @@ ITEMS = [
 
 
 # --- what everybody walks out of character creation holding ----------------
-# `character.ts` merges `classes[].startingItems` with
-# `start.creation.startingItems` and equips what it can, so the party arrives
-# with the blade drawn rather than in the pack.
+# `character.ts` merges `classes[].startingItems` with `start.creation.startingItems` and equips
+# what it can, so the party arrives with the blade drawn.
 
 CLASS_KIT = {
     "warden":  [("iron_sword", 1), ("ring_mail", 1)],
@@ -231,6 +220,6 @@ CLASS_KIT = {
     "keeper":  [("iron_mace", 1), ("ring_mail", 1)],
 }
 
-# Everybody gets these on top of their class kit. Measured rather than
-# guessed: the barrow was a two-in-ten party wipe without them.
+# Everybody gets these on top of their class kit. Measured: the barrow was a two-in-ten party wipe
+# without them.
 PARTY_KIT = [("bandages", 3), ("healing_draught", 2)]

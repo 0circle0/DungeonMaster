@@ -1,14 +1,14 @@
 /**
  * Seed-faithful map previews.
  *
- * Everything here calls the real engine generators with the same rng
- * derivations the engine uses at game start — never a reimplementation — so
- * what the studio draws for seed N is what a player starting with seed N
- * walks into. The derivation chain mirrored is the one `startSession` uses:
- * `Rng.fromSeed(seed).derive('arrival')`, then the per-place stream
- * (`area:<id>`, `poi:<id>`, `dungeon:<id>`) exactly as `sim/enter.ts` derives
- * it. Maps entered later in a session come from a stream that has advanced,
- * which is why the viewport calls this a *seed preview*, not a save preview.
+ * Everything here calls the real engine generators with the same rng derivations the engine uses at
+ * game start, never a reimplementation, so what the studio draws for seed N is what a player
+ * starting with seed N walks into. The chain mirrored is `startSession`'s:
+ * `Rng.fromSeed(seed).derive('arrival')`, then the per-place stream (`area:<id>`, `poi:<id>`,
+ * `dungeon:<id>`) as `sim/enter.ts` derives it.
+ *
+ * Maps entered later in a session come from a stream that has advanced, which is why this is a seed
+ * preview rather than a save preview.
  */
 
 import { compileModule } from '@dm/module';
@@ -38,12 +38,9 @@ export interface Marker {
   readonly glyph: string;
   readonly label: string;
   /**
-   * The point of interest this marker *is*, when it is one.
-   *
-   * A marker drawn from a map's own layers is a picture of the layer; a marker
-   * drawn from `poi.position` is a picture of an entry, and an entry can be
-   * moved. Carrying the id is what lets the viewport put it back somewhere
-   * else — without it a drag knows where it landed and not what it moved.
+   * The point of interest this marker is, when it is one. A marker drawn from a map's layers is a
+   * picture of the layer; one drawn from `poi.position` is a picture of an entry, and an entry can
+   * be moved. Carrying the id is what lets the viewport put it back somewhere else.
    */
   readonly poi?: string;
 }
@@ -115,9 +112,8 @@ function isFail(value: BuiltStaticMap | PreviewResult): value is PreviewResult {
 }
 
 /**
- * Everything a static map's own layers place, as decorated markers: the entry,
- * the named marks, and the gates, traps, items and creatures the engine will
- * put there on every seed.
+ * Everything a static map's own layers place, as decorated markers: the entry, the named marks, and
+ * the gates, traps, items and creatures the engine will put there on every seed.
  */
 function staticMarkers(built: BuiltStaticMap): Marker[] {
   const markers: Marker[] = [
@@ -168,8 +164,8 @@ export function previewArea(
   }>('world.areas', areaId);
   if (!area) return fail(`No area "${areaId}" in world.areas.`);
 
-  // A static map wins over everything: the engine draws it verbatim and takes
-  // its entry from the map's own marker, ignoring entryPoint and palette.
+  // A static map wins over everything: the engine draws it verbatim and takes its entry from the
+  // map's own marker, ignoring entryPoint and palette.
   const staticId = area.map?.static;
   let tiles: TileMap;
   let authored: boolean;
@@ -200,8 +196,8 @@ export function previewArea(
     }
   }
 
-  // Every POI sits somewhere on this map. Showing them here is what answers
-  // "what is on this map, and where is everyone" without opening each POI.
+  // Every POI sits somewhere on this map, so showing them here answers "what is on this map, and
+  // where is everyone" without opening each POI.
   const startPoiId = module.source.start.startingPoi;
   for (const poi of poisIn(module, areaId)) {
     if (!poi.position) continue;
@@ -259,8 +255,8 @@ export function previewPoi(module: CompiledModule, poiId: string, seed: number):
 
   if (poi.dungeon) return previewDungeon(module, poi.dungeon, seed);
   if (!poi.map) {
-    // No interior means the place *is* a spot on its area map — so show that
-    // map with the spot highlighted, instead of apologizing in text.
+    // No interior means the place is a spot on its area map, so show that map with the spot
+    // highlighted.
     const areaResult = previewArea(module, poi.area, seed, { highlightPoi: poiId });
     if (!areaResult.ok) return areaResult;
     const at = poi.position ? `at its position (${poi.position.x},${poi.position.y}), marked ◉` : 'wherever it happens to stand (no position set)';
@@ -405,10 +401,9 @@ export function previewDungeon(module: CompiledModule, dungeonId: string, seed: 
 }
 
 /**
- * What one room from a template looks like. Room templates have no place of
- * their own in the world — the dungeon generator stamps them — so the preview
- * builds a single room exactly as the generator would: a static template is
- * its `world.maps` entry verbatim; anything else rolls the template's map spec.
+ * What one room from a template looks like. Room templates have no place of their own — the dungeon
+ * generator stamps them — so the preview builds a single room as the generator would: a static
+ * template is its `world.maps` entry verbatim; anything else rolls the template's map spec.
  */
 export function previewRoomTemplate(
   module: CompiledModule,
@@ -505,10 +500,9 @@ function dungeonMarkers(generated: GeneratedDungeon, population: PopulationLike)
 }
 
 /**
- * Ground truth for "what does a new game with this seed open onto": run the
- * real newGame + arrival sequence (the same calls startSession makes) and
- * read the resulting state — residents spawned, encounters rolled, party
- * placed. Throws are reported, which doubles as a will-this-module-boot check.
+ * Ground truth for what a new game with this seed opens onto: run the real newGame and arrival
+ * sequence and read the resulting state — residents spawned, encounters rolled, party placed.
+ * Throws are reported, which doubles as a will-this-module-boot check.
  */
 export function previewStart(module: CompiledModule, seed: number): PreviewResult {
   const start = module.source.start;
@@ -544,8 +538,7 @@ export function previewStart(module: CompiledModule, seed: number): PreviewResul
       `Opening map: ${mapId}. Everyone standing on it is shown at their true position.`,
     ];
 
-    // The placement chain, so "why is everyone standing there" has an answer
-    // on the map itself rather than in the engine source.
+    // The placement chain, so "why is everyone standing there" has an answer on the map itself.
     if (start.startingPoi) {
       const poi = module.get<PoiDef>('world.pointsOfInterest', start.startingPoi);
       const area = module.find<{ entryPoint?: Position }>('world.areas', poi.area);

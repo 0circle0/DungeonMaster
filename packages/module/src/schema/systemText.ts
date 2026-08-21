@@ -1,41 +1,25 @@
 /**
  * Everything the engine says out loud.
  *
- * The tactical layer has been data since the beginning — dice, criticals,
- * conditions, saves — but the *prose* was not. Seventy-three refusals and some
- * sixty narration templates were English string literals inside the engine, so
- * a module set in space still said "a critical hit" and "the party spreads
- * out", and a module in another language was impossible.
+ * A stable key for every sentence, with the canonical wording as data rather than as code. The
+ * engine emits a key and its values; the module decides the words.
  *
- * This is the registry that fixes it: a stable key for every sentence, and the
- * canonical wording as data rather than as code. The engine emits a key and its
- * values; the module decides the words.
+ * Two tiers
  *
- * ## Two tiers, and why
+ * - `fragment` — a piece another message interpolates. `combat.outcome.failure` is the word
+ *   `{outcome}` in `combat.attacked`; delete it and the sentence has a hole where its verb was.
+ *   These are required in the document and a module that omits one does not compile.
+ * - `message` — a sentence that stands on its own. These carry a schema default, so an author
+ *   writes only what they want to change.
  *
- * A message is one of two things, and they need different rules.
+ * A value is mandatory only when something else relies on it to convey a message.
  *
- * - **`fragment`** — a piece another message interpolates. `combat.outcome.failure`
- *   is the word `{outcome}` in `combat.attacked`. Delete it and you get
- *   `David  a bog hound`: a sentence with a hole where its verb was. Nothing
- *   can sensibly stand in, so these are **required in the document** and a
- *   module that omits one does not compile.
- * - **`message`** — a sentence that stands on its own. Delete `combat.died` and
- *   the worst case is that you get the shipped wording back, which is legible.
- *   These carry a schema default, so an author writes only what they want to
- *   change.
+ * `placeholders` lists the `{names}` a message cannot lose — the ones carrying the facts. Others
+ * (`type`, `resisted`) are optional colour the engine supplies. `compileModule` checks both, so the
+ * failure is a load error.
  *
- * That distinction is the whole validation policy: **a value is only mandatory
- * when something else is relying on it to convey a message.**
- *
- * `placeholders` lists the `{names}` a message cannot lose — the ones carrying
- * the facts. Others (`type`, `resisted`) are optional colour the engine supplies
- * and an author may drop. `compileModule` checks both, so the failure is a load
- * error rather than something a player finds three rooms in.
- *
- * A value may also be `{ "pool": "some_pool" }` instead of a string, which
- * hands the message to `narrative.textGrammar` and gets weighted, condition-
- * gated variation for free.
+ * A value may also be `{ "pool": "some_pool" }` instead of a string, which hands the message to
+ * `narrative.textGrammar` for weighted, condition-gated variation.
  */
 
 import { z } from 'zod';
@@ -47,8 +31,8 @@ export interface SystemTextEntry {
   /** What the message is for, published in the generated reference. */
   readonly doc: string;
   /**
-   * `fragment` — interpolated into another message; required in the document.
-   * `message` — stands alone; defaulted, so it may be omitted.
+   * `fragment` — interpolated into another message; required in the document. `message` — stands
+   * alone; defaulted, so it may be omitted.
    */
   readonly tier: 'fragment' | 'message';
   /** `{names}` the text must keep. Losing one leaves a hole in the sentence. */
@@ -58,9 +42,8 @@ export interface SystemTextEntry {
 }
 
 /**
- * Generic in the key so the literal survives into `SystemTextKey`, which is
- * what makes a typo in an engine call site a type error rather than a message
- * that silently never renders.
+ * Generic in the key so the literal survives into `SystemTextKey`, which makes a typo in an engine
+ * call site a type error rather than a message that never renders.
  */
 const entry = <K extends string>(
   key: K,
@@ -71,10 +54,8 @@ const entry = <K extends string>(
 ) => ({ key, tier, text, doc, placeholders });
 
 /**
- * Every message the engine can produce.
- *
- * Grouped the way a player meets them. Adding one here is the only way to add
- * engine prose; the guard test in `spine.test.ts` fails on a literal.
+ * Every message the engine can produce, grouped the way a player meets them. Adding one here is the
+ * only way to add engine prose; the guard test in `spine.test.ts` fails on a literal.
  */
 export const SYSTEM_TEXT = [
   // — grammar ————————————————————————————————————————————————
@@ -361,9 +342,8 @@ export function defaultSystemText(): Record<string, string> {
 }
 
 /**
- * Just the fragments — the smallest `systemText` block a module can compile
- * with. What a new module starts from, so a fresh scaffold is a working
- * document rather than a wall of prose nobody has read.
+ * Just the fragments — the smallest `systemText` block a module can compile with, so a fresh
+ * scaffold is a working document rather than a wall of prose.
  */
 export function requiredSystemText(): Record<string, string> {
   const out: Record<string, string> = {};
@@ -372,10 +352,8 @@ export function requiredSystemText(): Record<string, string> {
 }
 
 /**
- * One message: a string, or a text-grammar pool for weighted variation.
- *
- * The pool form is a `ref`, so a typo in it is a dangling reference at load
- * rather than a message that silently never appears.
+ * One message: a string, or a text-grammar pool for weighted variation. The pool form is a `ref`,
+ * so a typo is a dangling reference at load.
  */
 export const systemTextValueSchema = z.union([
   z.string(),
@@ -383,12 +361,9 @@ export const systemTextValueSchema = z.union([
 ]);
 
 /**
- * What the engine says, keyed.
- *
- * Fragments are declared optional here rather than required so that a module
- * missing one gets `compileModule`'s own diagnostic — which names the key and
- * quotes the canonical wording — instead of Zod's bare "required" on a key an
- * author has never seen before.
+ * What the engine says, keyed. Fragments are declared optional here so a module missing one gets
+ * `compileModule`'s diagnostic — which names the key and quotes the canonical wording — rather than
+ * Zod's bare "required".
  */
 export const systemTextSchema = z
   .object(

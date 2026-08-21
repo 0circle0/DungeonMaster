@@ -1,11 +1,9 @@
 /**
- * The ruleset — defined entirely in data.
+ * The ruleset, defined entirely in data.
  *
- * This is where "nothing is hardcoded" is enforced. The engine has no idea what
- * Might is, that hit points exist, that armour class is `10 + agility`, or that
- * checks roll a d20. All of it is declared here and evaluated through the DSL,
- * so a module can ship a dice-pool system or six alien attributes without the
- * engine changing.
+ * The engine does not know what Might is, that hit points exist, that armour class is `10 +
+ * agility`, or that checks roll a d20. All of it is declared here and evaluated through the DSL, so
+ * a module can ship a dice-pool system or six alien attributes without engine changes.
  */
 
 import { z } from 'zod';
@@ -28,11 +26,8 @@ import {
 } from './tactical.js';
 
 /**
- * A character attribute.
- *
- * `modifier` is a DSL expression evaluated with `{ value }` in scope, so the
- * familiar `floor((score - 10) / 2)` is a content decision rather than an
- * engine constant.
+ * A character attribute. `modifier` is a DSL expression evaluated with `{ value }` in scope, so
+ * `floor((score - 10) / 2)` is a content decision rather than an engine constant.
  */
 export const attributeSchema = z
   .object({
@@ -51,10 +46,8 @@ export const attributeSchema = z
   });
 
 /**
- * A depletable pool such as hit points or focus.
- *
- * Generalising these means the engine never mentions "HP". A module that wants
- * stamina, sanity, or heat adds a resource; nothing in the engine changes.
+ * A depletable pool such as hit points or focus. Generalised so the engine never mentions HP: a
+ * module that wants stamina, sanity or heat adds a resource.
  */
 export const resourceSchema = z
   .object({
@@ -122,34 +115,25 @@ export const conditionSchema = z
     /** Actions the condition forbids, e.g. `stunned` blocking `action`. */
     prevents: z.array(idSchema).default([]),
     /**
-     * Senses this shuts off, e.g. `blinded` closing `sight`.
+     * Senses this shuts off, e.g. `blinded` closing `sight`. The sense's own `ignores` is the
+     * exception, which is what blindsight is; neither half means anything without the other.
      *
-     * The sense's own `ignores` is the exception: a sense that ignores this
-     * condition keeps working through it, which is what blindsight is. Without
-     * one of these two halves the other means nothing, and for a long time
-     * only `ignores` existed.
-     *
-     * A bare id rather than a `ref`, matching `ignores` on the other side of
-     * the pair. A checked reference here would make the composer's `damage`
-     * section depend on `movement`, and `movement` already reaches back to
-     * `damage` through `skills` -- a cycle, for a link the semantic rules can
-     * check instead. See `diagnostics/rules.ts`.
+     * A bare id rather than a `ref`, matching `ignores` on the other side. A checked reference
+     * would make the composer's `damage` section depend on `movement`, which already reaches back
+     * to `damage` through `skills`. The semantic rules check the link instead; see
+     * `diagnostics/rules.ts`.
      */
     suppressesSenses: z.array(idSchema).optional(),
     /**
-     * Which way the dice lean while this is on you.
+     * Which way the dice lean while this condition is applied.
      *
-     * The four scopes a condition can reach: your own attacks, attacks made
-     * against you, your ability checks, and your saving throws. Every swing
-     * that applies is collected and reconciled by
-     * `rules.resolution.swingStacking`, so being both helped and poisoned is a
-     * question the ruleset answers rather than the engine.
+     * Four scopes: the bearer's attacks, attacks against them, their ability checks, and their
+     * saving throws. Every swing that applies is collected and reconciled by
+     * `rules.resolution.swingStacking`.
      *
-     * Not a substitute for `modifiers`, and worth choosing between rather than
-     * writing both. A penalty to a defence shifts the mean and leaves the
-     * critical rate alone; a swing changes the spread and moves criticals with
-     * it. Giving one condition both is a double penalty that nothing will warn
-     * you about.
+     * Not a substitute for `modifiers`, and worth choosing between: a penalty to a defence shifts
+     * the mean and leaves the critical rate alone, while a swing changes the spread and moves
+     * criticals with it.
      */
     swings: z
       .object({
@@ -161,9 +145,8 @@ export const conditionSchema = z
       .strict()
       .optional(),
     /**
-     * Whether being under this hides who you are, so a witness is less likely
-     * to name you. Typed rather than a magic tag the engine knows: a module
-     * using `hooded` or `veiled` got no disguise reduction and no error.
+     * Whether being under this hides who you are, so a witness is less likely to name you. Typed
+     * rather than a tag the engine recognises by name.
      */
     concealsIdentity: z.boolean().default(false),
     /** A save each round to shake it off. */
@@ -183,8 +166,8 @@ export const conditionSchema = z
   .strict();
 
 /**
- * How a check resolves. Written as dice notation so advantage is
- * `2d20kh1` rather than a special case buried in the engine.
+ * How a check resolves. Written as dice notation, so advantage is `2d20kh1` rather than an engine
+ * special case.
  */
 export const resolutionSchema = z
   .object({
@@ -194,90 +177,64 @@ export const resolutionSchema = z
     /**
      * What happens when a roll is handed more than one swing.
      *
-     * `cancel` is the common table reading: any advantage and any
-     * disadvantage together leave neither, and neither ever stacks past one.
-     * `net` goes by the sign of the count, so three advantages against one
-     * disadvantage still swing up.
+     * `cancel` is the common table reading: any advantage and any disadvantage together leave
+     * neither, and neither stacks past one. `net` goes by the sign of the count, so three
+     * advantages against one disadvantage still swing up.
      *
-     * There is no `stack`, because `advantageDice` is a single notation:
-     * there is no way to name two levels of advantage, so offering the option
-     * would be offering something the ruleset cannot express.
+     * There is no `stack`: `advantageDice` is a single notation, so two levels of advantage cannot
+     * be named.
      */
     swingStacking: z.enum(['cancel', 'net']).default('cancel'),
     /** Natural roll at or above this is a critical success; null disables crits. */
     criticalSuccessAt: z.number().int().nullable().default(20),
     criticalFailureAt: z.number().int().nullable().default(1),
     /**
-     * Which kinds of roll a critical and a fumble can happen on.
-     *
-     * `criticalSuccessAt` is all or nothing: setting it to null switches
-     * criticals off everywhere, including on attacks. This is the narrower
-     * dial. The default lists all three because that is what the engine has
-     * always done, and it is worth seeing rather than inheriting: with
-     * `check` in the list, a natural 20 picks a lock that no amount of skill
-     * could open, and a natural 1 fumbles a formality.
+     * Which kinds of roll a critical and a fumble can happen on. `criticalSuccessAt` is all or
+     * nothing; this is the narrower dial. The default lists all three, so with `check` in the list
+     * a natural 20 picks a lock no amount of skill could open.
      */
     criticalScope: z
       .array(z.enum(['attack', 'save', 'check']))
       .default(['attack', 'save', 'check']),
     /**
-     * What a critical hit multiplies damage by.
-     *
-     * The whole amount, modifier included, not the dice alone. Tabletop
-     * convention is usually to double the dice and add the modifier once; a
-     * damage op carries a rolled number rather than the expression that
-     * produced it, so the distinction is not available here. It matters most
-     * with a large modifier and a small die.
+     * What a critical hit multiplies damage by: the whole amount, modifier included, not the dice
+     * alone. A damage op carries a rolled number rather than the expression that produced it, so
+     * the tabletop convention of doubling only the dice is not available here.
      */
     criticalDamageMultiplier: z.number().min(1).default(2),
     /**
-     * What a successful save against `onSuccess: "half"` leaves, as a fraction.
-     *
-     * The mirror of `criticalDamageMultiplier`, and it was a literal `0.5` three
-     * lines away from it — so a crit could be ×3 but a save could never take a
-     * quarter or two thirds.
+     * What a successful save against `onSuccess: "half"` leaves, as a fraction. The mirror of
+     * `criticalDamageMultiplier`.
      */
     saveSuccessMultiplier: z.number().min(0).max(1).default(0.5),
     /**
-     * The floor a passive score is measured from: `passiveBase + modifier`.
-     *
-     * D&D's convention, and the engine's until now. A `3d6` ruleset where 10 is
-     * the *mean* rather than a floor needs a different number here.
+     * The floor a passive score is measured from: `passiveBase + modifier`. A `3d6` ruleset where
+     * 10 is the mean rather than a floor needs a different number.
      */
     passiveBase: z.number().int().default(10),
     /**
-     * What "opposed" means when one side is only resisting.
-     *
-     * `passive` measures against `passiveBase + modifier`, which is stable and
-     * cheap. `contested` has the other side roll too. The engine held both
-     * readings at once — a reaction used the passive one, `opposedCheck` rolled
-     * — so the same word meant two things depending on which path you were on.
+     * What "opposed" means when one side is only resisting. `passive` measures against `passiveBase
+     * + modifier`; `contested` has the other side roll too.
      */
     opposedMode: z.enum(['passive', 'contested']).default('passive'),
     /**
-     * Which way a scaled damage number is rounded — resistance, a save for
-     * half, a critical. Tables disagree about this and it is systematic, not
-     * incidental: at `round`, seven halved is four; at `floor` it is three.
+     * Which way a scaled damage number is rounded — resistance, a save for half, a critical. At
+     * `round`, seven halved is four; at `floor`, three.
      */
     damageRounding: z.enum(['floor', 'round', 'ceil']).default('round'),
     /**
-     * Which way a reputation spill is rounded. `trunc` means a relation weight
-     * of 0.4 on a ±2 deed spills nothing at all, silently — which is a balance
-     * decision rather than an arithmetic one.
+     * Which way a reputation spill is rounded. Under `trunc` a relation weight of 0.4 on a ±2 deed
+     * spills nothing.
      */
     reputationRounding: z.enum(['floor', 'round', 'ceil', 'trunc']).default('trunc'),
     /**
-     * What a weapon attack adds, when the ruleset wants more than the bare
-     * attribute modifier.
+     * What a weapon attack adds, when the ruleset wants more than the bare attribute modifier.
      *
-     * `actor.attackMod` is the modifier for whichever attribute the attack
-     * resolved to, and `actor.proficiency` is the module's own curve. Omitted,
-     * an attack adds the attribute modifier alone, which is what the engine
-     * always did -- and which means a weapon never improves with level, since
-     * nothing raises an attribute after character creation.
+     * `actor.attackMod` is the modifier for whichever attribute the attack resolved to, and
+     * `actor.proficiency` is the module's own curve. Omitted, an attack adds the attribute modifier
+     * alone, so a weapon never improves with level.
      *
-     * The mirror of `spellcasting.attackBonus`. A ruleset that scales one and
-     * not the other is choosing that, rather than inheriting it.
+     * The mirror of `spellcasting.attackBonus`.
      */
     attackBonus: ExprSchema.optional(),
     defaultDifficulty: z.number().int().default(12),
@@ -296,24 +253,16 @@ export const levelSchema = z
   .strict();
 
 /**
- * What a level beyond the first adds to the vital resource.
+ * What a level beyond the first adds to the vital resource, on top of `rules.resources[].max`.
  *
- * This was the D&D hit-point model written into the one place a character is
- * built: a die rolled per level, stacked on top of whatever
- * `rules.resources[].max` already said, for the vital resource only. The
- * default here reproduces it exactly; the other policies are the variants
- * tables actually use.
+ * - `roll` — roll the die.
+ * - `average` — its mean, rounded up.
+ * - `max` — the top face.
+ * - `none` — add nothing, leaving `resources[].max` to do the whole job.
  *
- * - `roll` — roll the die, as before.
- * - `average` — take its mean, rounded up. The common table variant.
- * - `max` — take the top face.
- * - `none` — add nothing, and let `resources[].max` do the whole job. This is
- *   the honest option for a module that already scales its pools by level.
- *
- * `die` chooses whose die: the class's, or the creature's size — which is what
- * finally makes `rules.sizes[].hitDie` mean something. `bonus` is an expression
- * over the character, so "constitution modifier per level" is expressible at
- * last.
+ * `die` chooses whose die: the class's, or the creature's size, which is what
+ * `rules.sizes[].hitDie` feeds. `bonus` is an expression over the character, so "constitution
+ * modifier per level" is expressible.
  */
 export const levelVitalitySchema = z
   .object({
@@ -330,9 +279,8 @@ export const progressionSchema = z
     /** Proficiency-style bonus by level, if the module uses one. */
     proficiency: ExprSchema.optional(),
     /**
-     * The rank a bare `skillProficiencies` entry grants. Training always meant
-     * exactly 1, while `ancestry.skillBonuses` carried real numbers — so the
-     * two sources of skill disagreed about what a number was.
+     * The rank a bare `skillProficiencies` entry grants. Without it, training meant exactly 1 while
+     * `ancestry.skillBonuses` carried arbitrary numbers.
      */
     proficiencyRank: z.number().int().min(0).default(1),
     levelVitality: levelVitalitySchema.default({}),
@@ -343,7 +291,7 @@ export const progressionSchema = z
     { message: 'levels must be ordered by non-decreasing xpRequired' },
   );
 
-/** What a turn is made of. Even the action economy is data. */
+/** What a turn is made of. */
 export const actionTypeSchema = z
   .object({
     id: idSchema,
@@ -370,11 +318,8 @@ export const restSchema = z
   .strict();
 
 /**
- * A named rung on the skill ladder — novice, adept, master.
- *
- * Mastery is what lets loot and gates ask for competence rather than a bare
- * number, so content reads as "requires journeyman smithing" instead of
- * "requires rank >= 3".
+ * A named rung on the skill ladder — novice, adept, master. Lets loot and gates ask for competence
+ * rather than a bare rank number.
  */
 export const masteryTierSchema = z
   .object({
@@ -388,12 +333,8 @@ export const masteryTierSchema = z
 
 /** Equipment slots, so gear layout is a module decision. */
 /**
- * A named quality a weapon can have: finesse, versatile, two-handed, thrown.
- *
- * `items[].properties` was an `idSchema[]` naming nothing declared anywhere —
- * tags with extra steps, and unvalidated. Making the vocabulary real means a
- * property can carry modifiers and a requirement can ask for one, which is what
- * a D&D weapon property actually is.
+ * A named quality a weapon can have: finesse, versatile, two-handed, thrown. Declaring the
+ * vocabulary means a property can carry modifiers and a requirement can ask for one.
  */
 export const itemPropertySchema = z
   .object({
@@ -403,17 +344,14 @@ export const itemPropertySchema = z
     /** Additive modifiers to derived stats while a weapon with this is wielded. */
     modifiers: z.record(idSchema, ExprSchema).default({}),
     /**
-     * Attributes a weapon with this property may attack with, on top of the
-     * one the ability names. The best of them is used, for the attack roll and
-     * for the weapon's damage alike.
+     * Attributes a weapon with this property may attack with, on top of the one the ability names.
+     * The best of them is used, for the attack roll and for the weapon's damage.
      *
-     * This is what finesse is: not a bonus to anything, but a *choice* of
-     * which attribute the roll uses. `modifiers` cannot express it, because
-     * there is no number you can add to a defence that means "use agility
-     * instead of might" -- which is why the property shipped doing nothing.
+     * This is what finesse is: a choice of which attribute the roll uses, which `modifiers` cannot
+     * express.
      *
-     * It belongs to the property rather than the ability so that the weapon in
-     * your hand decides, and one authored `strike` still serves everyone.
+     * It belongs to the property rather than the ability, so the weapon decides and one authored
+     * `strike` serves everyone.
      */
     attackStats: z.array(ref('rules.attributes')).optional(),
     extra,
@@ -421,17 +359,12 @@ export const itemPropertySchema = z
   .strict();
 
 /**
- * What money is called here.
- *
- * The engine keeps a single scalar purse; this is only what to print beside it.
- * A module that never mentions money simply never shows one.
+ * What money is called here. The engine keeps a single scalar purse; this is what to print beside
+ * it.
  */
 /**
- * How far the party can reach without moving.
- *
- * Reach in combat comes from `sizes[].reach`, but these three did not: talking,
- * picking things up, and handing something over were fixed at two tiles, one
- * tile, and one tile in three different files.
+ * How far the party can reach without moving. Combat reach comes from `sizes[].reach`; talking,
+ * picking things up and handing something over are set here.
  */
 export const interactionRangeSchema = z
   .object({
@@ -443,14 +376,12 @@ export const interactionRangeSchema = z
   .strict();
 
 /**
- * Searching a room, and defusing what it turns up.
- *
- * Both govern how a dungeon crawl feels — how much of a room one `search`
- * covers, and whether disarming means standing on the thing.
+ * Searching a room, and defusing what it turns up: how much of a room one `search` covers, and
+ * whether disarming means standing on the thing.
  */
 export const searchSchema = z
   .object({
-    /** How far a search reaches. Arm's length plus a step, not the whole room. */
+    /** How far a search reaches. */
     trapRadius: z.number().int().min(0).default(2),
     /** How close you must be to disarm what you found. */
     disarmReach: z.number().int().min(0).default(1),
@@ -462,8 +393,7 @@ export const currencySchema = z
     name: displayName.default('coins'),
     abbrev: z.string().max(6).default('c'),
     /**
-     * Whether the purse can go below zero. Off, the engine clamps and a module
-     * simply cannot express a debt; on, it can.
+     * Whether the purse can go below zero. Off, the engine clamps and a debt cannot be expressed.
      */
     allowNegative: z.boolean().default(false),
   })
@@ -493,8 +423,8 @@ export const rulesSchema = z
     resolution: resolutionSchema.default({}),
     progression: progressionSchema,
 
-    // The tactical layer. Every one of these is an empty list by default, so a
-    // module takes on only the complexity it actually wants.
+    // The tactical layer. Each of these is an empty list by default, so a module takes on only the
+    // complexity it wants.
     savingThrows: z.array(savingThrowSchema).default([]),
     sizes: z.array(sizeSchema).default([]),
     creatureTypes: z.array(creatureTypeSchema).default([]),
@@ -508,11 +438,8 @@ export const rulesSchema = z
     spellcasting: spellcastingSchema.default({}),
     perception: perceptionSchema.default({}),
     /**
-     * What creatures do when nothing is telling them what to do.
-     *
-     * Sits beside `perception` because the two are halves of one idea: that one
-     * decides what a creature can tell is there, this one decides what it does
-     * about it. Per-creature `temperament` overrides any of it.
+     * What creatures do when nothing is telling them what to do. Beside `perception`, which decides
+     * what a creature can tell is there. Per-creature `temperament` overrides any of it.
      */
     temperament: temperamentSchema.default({}),
     /** Resource consumed when a character is reduced to zero, e.g. `hp`. */
@@ -523,23 +450,17 @@ export const rulesSchema = z
     /** Default size for creatures that do not declare one. */
     defaultSize: ref('rules.sizes').optional(),
     /**
-     * How a creature gets about when it declares no speeds of its own, and how
-     * generation decides a map is connected.
-     *
-     * Without this the engine took the mode named `walk`, or else whichever was
-     * declared first — so a module whose modes are `glide` and `phase` got an
-     * ordering dependency dressed up as a default.
+     * How a creature gets about when it declares no speeds of its own, and how generation decides a
+     * map is connected. Without it the engine took the mode named `walk`, or else whichever was
+     * declared first.
      */
     defaultMovementMode: ref('rules.movementModes').optional(),
     interactionRange: interactionRangeSchema.default({}),
     search: searchSchema.default({}),
     /**
-     * How an NPC's signed `disposition` becomes a stance toward the party.
-     *
-     * Bands are matched highest `atLeast` first. The engine used to cut at
-     * exactly zero and offer only two of the three stances, so however warmly a
-     * module wrote somebody they could never spawn as an ally. The default
-     * reproduces that cut; adding a band above it is how you get allies.
+     * How an NPC's signed `disposition` becomes a stance toward the party. Bands are matched
+     * highest `atLeast` first. The default cuts at zero and offers two stances; adding a band above
+     * it is how an NPC can spawn as an ally.
      */
     dispositionBands: z
       .array(

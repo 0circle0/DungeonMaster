@@ -1,15 +1,5 @@
 /**
- * Editing a prefab, and seeing what that does to the things placed from it.
- *
- * "Editing `inn` updates thirty-six inns" is the feature and the hazard in one
- * sentence. The planner behind this has been tested since it was written; what
- * was missing was anywhere for an author to stand while they used it. So: the
- * definition on the left, and on the right the answer to the only question that
- * matters before pressing anything — which instances move, and what moves in
- * them.
- *
- * The plan is against the *edited* prefab and the document as it stands, so it
- * updates as the template is typed. Nothing is written until Apply.
+ * Edit a prefab and preview which instances would change.
  */
 
 'use client';
@@ -25,7 +15,7 @@ export function PrefabsView(props: {
   prefabs: readonly Prefab[];
   instances: InstanceMap;
   style: StyleTables;
-  /** Record the edited definition. Persisted by the studio's autosave. */
+  /** Persist the edited prefab definition through the studio autosave. */
   onSavePrefab: (prefab: Prefab) => void;
   onOpen: (collection: string, index: number) => void;
 }) {
@@ -37,7 +27,7 @@ export function PrefabsView(props: {
   const original = props.prefabs.find((prefab) => prefab.id === selectedId) ?? null;
   const current = edited ?? original;
 
-  /** How many entries follow each prefab, so the list says what is at stake. */
+  /** Count how many instances follow each prefab. */
   const counts = useMemo(() => {
     const out = new Map<string, number>();
     for (const links of Object.values(props.instances)) {
@@ -55,12 +45,9 @@ export function PrefabsView(props: {
     if (!current || !plan || plan.changed.length === 0) return;
     setSaving(true);
     try {
-      // The definition and the entries it produced move together, and both are
-      // carried to the library by the same autosave — so there is no window
-      // where a prefab on disk describes entries that were never updated.
+      // Save the prefab definition and the fan-out updates together so they stay in sync.
       props.onSavePrefab(current);
-      // One undo step for the whole fan-out, and every entry the plan did not
-      // name comes back as the same object.
+      // Apply the full fan-out in one undo step so unchanged entries keep their object identity.
       props.store.setMany(fanoutEdits(plan));
       setNote(`${plan.changed.length} updated`);
       setEdited(null);
@@ -153,8 +140,7 @@ export function PrefabsView(props: {
                       <span className="fanout-to">{show(field.to)}</span>
                     </div>
                   ))}
-                  {/* What the prefab wanted and did not get. Without this an
-                      override reads as the edit doing less than was asked. */}
+                  {/* Show values the prefab wanted but could not override. */}
                   {change.kept.length > 0 && (
                     <div className="fanout-kept">
                       kept as yours: {change.kept.map((path) => <code key={path}>{path}</code>)}
@@ -186,7 +172,7 @@ export function PrefabsView(props: {
   );
 }
 
-/** Enough of a value to recognise, never enough to fill the column. */
+/** Truncate long values so lists remain readable in a narrow fan-out view. */
 function show(value: unknown): string {
   if (value === undefined) return '—';
   const text = typeof value === 'string' ? value : JSON.stringify(value);

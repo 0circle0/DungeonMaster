@@ -1,19 +1,16 @@
 /**
  * Static map files: the CSV-per-layer form and its assembly.
  *
- * A static map lives on disk as a folder — `maps/<id>/` beside `module.json` —
- * holding a `map.json` manifest and one CSV per layer. In the assembled
- * document it is an ordinary `world.maps` entry with the grids inlined. This
- * module is the bridge, in both directions, and it is deliberately pure: no
- * filesystem, no Node imports, because the editor needs `splitStaticMap` in
- * the browser to save a painted map and `@dm/module`'s main index is bundled
- * client-side. Filesystem policy lives in `load.ts`.
+ * A static map lives on disk as a folder — `maps/<id>/` beside `module.json` — holding a `map.json`
+ * manifest and one CSV per layer. In the assembled document it is an ordinary `world.maps` entry
+ * with the grids inlined. This module is the bridge in both directions, and is pure: the editor
+ * needs `splitStaticMap` in the browser, and `@dm/module`'s main index is bundled client-side.
+ * Filesystem policy lives in `load.ts`.
  *
- * CSV here is the trivial dialect: ids are `[a-z][a-z0-9_]*`, so no cell ever
- * needs quoting and a parser is a split on commas. Cells are trimmed; an empty
- * cell means nothing; a line whose first non-space character is `#` is a
- * comment. Anything irregular — ragged rows, blank lines, characters outside
- * an id — is an error with a line and column, never a guess.
+ * CSV here is the trivial dialect: ids are `[a-z][a-z0-9_]*`, so no cell needs quoting and a parser
+ * is a split on commas. Cells are trimmed, an empty cell means nothing, and a line whose first non-
+ * space character is `#` is a comment. Anything irregular is an error with a line and column, never
+ * a guess.
  */
 
 export interface CsvIssue {
@@ -41,8 +38,8 @@ export function parseCsvGrid(text: string): { cells: string[][]; issues: CsvIssu
   const issues: CsvIssue[] = [];
   const cells: string[][] = [];
 
-  // One trailing newline is the POSIX-correct way to end a file, not an empty
-  // final row; strip exactly one so serialize ∘ parse is the identity.
+  // One trailing newline ends a file rather than adding an empty final row; strip exactly one so
+  // serialize ∘ parse is the identity.
   const body = text.endsWith('\n') ? text.slice(0, -1) : text;
   const lines = body === '' ? [] : body.split('\n');
 
@@ -53,8 +50,8 @@ export function parseCsvGrid(text: string): { cells: string[][]; issues: CsvIssu
     const stripped = raw.trim();
     if (stripped.startsWith('#')) return;
     if (stripped === '') {
-      // A blank line is ambiguous — a row of empties or a stray newline — so
-      // it is refused rather than interpreted.
+      // A blank line is ambiguous — a row of empties or a stray newline — so it is refused rather
+      // than interpreted.
       issues.push({
         line,
         col: 1,
@@ -102,13 +99,12 @@ export function serializeCsvGrid(cells: readonly (readonly string[])[]): string 
 }
 
 /**
- * Manifest + CSV texts → an assembled `world.maps` entry.
+ * Manifest plus CSV texts → an assembled `world.maps` entry.
  *
- * Deliberately structural, not schema-validating: unknown manifest fields ride
- * through untouched (so `extra` and future fields round-trip), and the zod
- * check happens later at compile where every other validation lives. The only
- * errors raised here are the ones a schema can never see — a layer naming a
- * file that is not in the folder, CSV syntax.
+ * Structural rather than schema-validating: unknown manifest fields ride through untouched, so
+ * `extra` and future fields round-trip, and the zod check happens later at compile. The only errors
+ * raised here are the ones a schema can never see — a layer naming a file that is not in the
+ * folder, and CSV syntax.
  */
 export function assembleStaticMap(
   manifest: unknown,
@@ -181,11 +177,10 @@ export function assembleStaticMap(
 }
 
 /**
- * An assembled entry → manifest + CSV texts, the deterministic inverse.
- *
- * The written manifest always lists explicit `file` names — layer `name` when
- * present, layer kind otherwise, suffixed with the layer index on collision —
- * so a folder written twice from the same entry is byte-identical.
+ * An assembled entry → manifest plus CSV texts, the deterministic inverse. The written manifest
+ * always lists explicit `file` names — layer `name` when present, layer kind otherwise, suffixed
+ * with the layer index on collision — so a folder written twice from the same entry is byte-
+ * identical.
  */
 export function splitStaticMap(entry: Record<string, unknown>): {
   manifest: Record<string, unknown>;
@@ -213,12 +208,9 @@ export function splitStaticMap(entry: Record<string, unknown>): {
 }
 
 /**
- * Normalize `world.maps` to id order.
- *
- * Assembly discovers folders in directory order and `extends` appends in merge
- * order; sorting afterwards makes the assembled document — and therefore the
- * module hash — a pure function of content, independent of where each map was
- * stored or which filesystem listed it.
+ * Normalize `world.maps` to id order. Assembly discovers folders in directory order and `extends`
+ * appends in merge order, so sorting afterwards makes the assembled document — and the module hash
+ * — a pure function of content.
  */
 export function sortWorldMaps(doc: Record<string, unknown>): Record<string, unknown> {
   const world = doc['world'];

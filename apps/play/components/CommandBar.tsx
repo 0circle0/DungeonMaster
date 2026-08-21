@@ -1,13 +1,7 @@
 'use client';
 
 /**
- * The typed command line, kept — with the two upgrades typing always needed.
- *
- * Completions come from `@dm/play`'s `complete`, which reads the same verb
- * table and candidate pools the parser matches against, so the dropdown can
- * never offer a line the parser would then reject. And an ambiguous noun — two
- * bog hounds — opens the shared picker with positions instead of printing an
- * unanswerable "Which do you mean".
+ * Command input with completion and noun disambiguation.
  */
 
 import { useMemo, useRef, useState } from 'react';
@@ -43,8 +37,7 @@ export function CommandBar({
     setOpen(false);
     setActive(0);
 
-    // A tie between identically-named creatures becomes a picker, not an error:
-    // re-resolve the noun here to get the candidates the parser saw.
+    // Resolve ambiguous nouns to a picker rather than a parser error.
     const parsed = parse(text, { module, state: frame.state });
     if (parsed.kind === 'error' && /^attack|^talk|^look/.test(text)) {
       const noun = text.replace(/^\S+\s*/, '');

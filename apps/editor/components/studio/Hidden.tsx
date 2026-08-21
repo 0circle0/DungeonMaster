@@ -1,22 +1,8 @@
 'use client';
 
 /**
- * Somewhere the party walks past until they know enough to look.
- *
- * A hidden place is not a locked door. Knowing the thread's clues does not open
- * it — it turns finding it from luck into method, by lowering the check a step
- * for every clue collected. That is stored as a formula rather than a number,
- * and it is the one thing in this format nobody can reasonably write by hand:
- *
- *     { "max": [ 6, { "sub": [ 18, { "mul": [ 3, { "ref": "threads.x.known" } ] } ] } ] }
- *
- * Five values produce it, so this asks for five values and says what they mean
- * in the only terms that matter — *what the party has to roll knowing nothing,
- * and knowing everything*.
- *
- * A place whose formula was written some other way is shown and not touched:
- * the panel says so and leaves the raw field to the form, rather than
- * pretending to understand something it would then overwrite.
+ * Edit hidden-place discovery checks and a thread-based formula.
+ * If the formula is not in the supported shape, leave the raw field alone.
  */
 
 import { useState } from 'react';
@@ -35,7 +21,7 @@ export function Hidden(props: { store: ModuleStore; index: number; entry: Record
   const anchoredTo = threadAnchored(entry['discover']);
   const threads = store.idsByCollection['narrative.loreThreads'] ?? [];
 
-  /** What the fields show while editing, before anything is written. */
+  /** Draft values used while the user is editing before they save. */
   const [draft, setDraft] = useState<Rumoured>(
     spec ?? { thread: threads[0] ?? '', base: 18, step: 3, entries: 4, skill: 'perception' },
   );
@@ -56,8 +42,7 @@ export function Hidden(props: { store: ModuleStore; index: number; entry: Record
     store.remove([...base, 'discover']);
   };
 
-  // A formula somebody wrote by hand, or a plain number. Say what it is and
-  // leave it alone — rewriting it from five fields would be a guess.
+  // Preserve hand-written formulas or plain-number checks; this panel only rewrites supported shapes.
   if (isHidden && !spec) {
     return (
       <div className={styles.hiddenPanel}>

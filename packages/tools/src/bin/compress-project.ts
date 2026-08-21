@@ -1,35 +1,30 @@
 /**
  * `npm run compress -- <module-dir> [--write]`
  *
- * Turn a project's entry files into recipes: a prefab id, a handful of
- * parameters, and whatever the prefab did not reproduce.
+ * Turn a project's entry files into recipes: a prefab id, a handful of parameters, and whatever the
+ * prefab did not reproduce.
  *
- * Aurendel's 597 points of interest are thirteen shapes filled in over and over
- * — the Python that made them says so, and the data agrees: group them by their
- * description pool and 107 are houses, 61 are stores, 45 are inns. Storing each
- * one whole writes the same eleven keys 597 times.
+ * Aurendel's 597 points of interest are thirteen shapes filled in repeatedly — group them by
+ * description pool and 107 are houses, 61 stores, 45 inns — so storing each one whole writes the
+ * same eleven keys 597 times.
  *
- * ## How a prefab is found rather than guessed
+ * How a prefab is found
  *
  * Per group, every field is sorted into one of three kinds:
  *
- *   - **constant** — one value across the whole group, so it belongs in the
- *     template and is written once instead of N times;
- *   - **co-varying** — several fields that move together over a small set of
- *     combinations, which becomes a style table and a single `variant`
- *     parameter. This is where the compression actually is: an inn's map,
- *     services and travel time are one fact about what kind of inn it is, and
- *     `place.py` spelled that as `TRADE_PALETTE` and `ROOM_SIZES`;
- *   - **free** — genuinely per-entry, so a parameter.
+ *   - constant — one value across the whole group, so it belongs in the template and is written
+ *     once instead of N times;
+ *   - co-varying — several fields that move together over a small set of combinations, which
+ *     becomes a style table and a single `variant` parameter. This is where the compression is;
+ *   - free — genuinely per-entry, so a parameter.
  *
- * Nothing is inferred about *meaning*; this is arithmetic over the values that
- * are there.
+ * Nothing is inferred about meaning; this is arithmetic over the values that are there.
  *
- * ## Why it cannot produce a wrong module
+ * Why it cannot produce a wrong module
  *
- * Every recipe is expanded again and compared to the entry it replaced, as
- * serialized text so key order counts. An entry that does not round-trip keeps
- * its literal file. The worst outcome is a project that did not get smaller.
+ * Every recipe is expanded again and compared to the entry it replaced, as serialized text so key
+ * order counts. An entry that does not round-trip keeps its literal file. The worst outcome is a
+ * project that did not get smaller.
  */
 
 import { readFileSync, writeFileSync, existsSync, mkdirSync } from 'node:fs';
@@ -38,7 +33,7 @@ import { readAssembledModule } from '@dm/module/load';
 import { asRecipe, expandRecipe, serializeProjectValue } from '@dm/module';
 import type { Prefab, PrefabParam, PrefabRecipe, StyleTables } from '@dm/module';
 
-/** Fields that are what an entry *is*, never a variant of something else. */
+/** Fields that are what an entry is, never a variant of something else. */
 const IDENTITY = ['id', 'name', 'description'];
 
 /** Above this many combinations a "variant" stops being a vocabulary. */
@@ -53,21 +48,19 @@ interface Group {
 }
 
 /**
- * Entries that plainly came from one shape: the prose pool they share, **and**
- * the order their keys are written in.
+ * Entries that plainly came from one shape: the prose pool they share, and the order their keys are
+ * written in.
  *
- * The order half is not fussiness. A template emits keys in its own order and a
- * rebuilt module has to match `module.json` byte for byte, so two entries that
- * differ only in where `position` sits cannot come from one template. It costs
- * little: Aurendel's forty-five inns are written two ways, its hundred and
- * seven houses five, so the split makes more prefabs rather than fewer recipes.
+ * The order half matters because a template emits keys in its own order and a rebuilt module has to
+ * match `module.json` byte for byte. It costs little — Aurendel's forty-five inns are written two
+ * ways and its hundred and seven houses five — so the split makes more prefabs rather than fewer
+ * recipes.
  */
 function groupsOf(entries: readonly Record<string, unknown>[], collection: string): Group[] {
   const by = new Map<string, { entries: Record<string, unknown>[]; indexes: number[] }>();
   entries.forEach((entry, index) => {
-    // The pool when there is one, because it is the most legible name a
-    // generated prefab can have; the key order always, because a template emits
-    // one order and byte-identity depends on it.
+    // The pool when there is one, because it is the most legible name a generated prefab can have;
+    // the key order always, because byte-identity depends on it.
     const pool = typeof entry['descriptionKey'] === 'string' ? entry['descriptionKey'] : 'entry';
     const key = `${pool}|${Object.keys(entry).join(',')}`;
     const held = by.get(key) ?? { entries: [], indexes: [] };
@@ -83,11 +76,10 @@ function groupsOf(entries: readonly Record<string, unknown>[], collection: strin
       const pool = key.split('|')[0]!;
       const n = (seen.get(pool) ?? 0) + 1;
       seen.set(pool, n);
-      // Qualified by collection because prefabs share one flat folder and
-      // `expandRecipe` resolves by id alone — every collection was producing
-      // its own `entry`, and a monster was being rebuilt from an attribute.
-      // Lower-cased *before* stripping, or every capital is simply deleted and
-      // `world.pointsOfInterest` comes out as `world_points_f_nterest`.
+      // Qualified by collection because prefabs share one flat folder and `expandRecipe` resolves
+      // by id alone.
+      // Lower-cased before stripping, or every capital is deleted and `world.pointsOfInterest`
+      // comes out as `world_points_f_nterest`.
       const base = `${collection.replace(/\./g, '_').replace(/([a-z0-9])([A-Z])/g, '$1_$2').toLowerCase()}_${pool}`;
       return { key: n === 1 ? base : `${base}_${n}`, entries: held.entries, indexes: held.indexes };
     });
@@ -107,8 +99,8 @@ function design(group: Group, collection: string): Design | null {
   const varying: string[] = [];
   for (const field of fields) {
     const values = new Set(group.entries.map((entry) => json(entry[field])));
-    // A field absent from some entries cannot be a template constant: the
-    // template would give it to everyone.
+    // A field absent from some entries cannot be a template constant: the template would give it to
+    // everyone.
     const everywhere = group.entries.every((entry) => field in entry);
     if (values.size === 1 && everywhere) constant.push(field);
     else varying.push(field);
@@ -116,19 +108,17 @@ function design(group: Group, collection: string): Design | null {
 
   const candidates = varying.filter((field) => !IDENTITY.includes(field));
 
-  // A field can only belong to a vocabulary if it has one: `position` is
-  // different for every entry and `area` takes fifty-five values, so neither is
-  // a variant of anything and including them would poison every combination
-  // they appear in. Filtering on each field's own spread before looking at
-  // combinations is the whole difference between finding `TRADE_PALETTE` and
-  // finding nothing.
+  // A field can only belong to a vocabulary if it has one: `position` is different for every entry
+  // and `area` takes fifty-five values, so including them would poison every combination they
+  // appear in. Filtering on each field's own spread before looking at combinations is what makes
+  // this find anything.
   const vocabulary = candidates.filter((field) => {
     const distinct = new Set(group.entries.map((entry) => json(entry[field]))).size;
     return distinct <= MAX_VARIANTS && distinct * 3 <= group.entries.length;
   });
 
-  // Then the largest subset of those that still moves together over few enough
-  // combinations. Dropping the widest field first is what makes this converge.
+  // Then the largest subset of those that still moves together over few enough combinations.
+  // Dropping the widest field first is what makes this converge.
   let variantFields = [...vocabulary].sort(
     (a, b) =>
       new Set(group.entries.map((entry) => json(entry[a]))).size
@@ -169,8 +159,8 @@ function design(group: Group, collection: string): Design | null {
     params.push({ key: 'variant', kind: 'enum', options: [...names.values()] });
   }
 
-  // Template key order follows the entries' own, because a rebuilt module has
-  // to match `module.json` byte for byte and key order is part of that.
+  // Template key order follows the entries' own, because a rebuilt module has to match
+  // `module.json` byte for byte.
   const order = Object.keys(group.entries[0]!);
   const template: Record<string, unknown> = {};
   for (const field of order) {
@@ -235,14 +225,12 @@ function main(): number {
           }
 
           const text = serializeProjectValue(asRecipe(entry, made.prefab, params, made.style));
-          // Expanded from the text rather than from the recipe object, because
-          // those are not the same thing: an override whose value is `undefined`
-          // survives in memory and suppresses the template's key, then vanishes
-          // in `JSON.stringify` and lets the key back in on the next build. The
-          // check has to see the bytes that will be on disk.
+          // Expanded from the text rather than from the recipe object: an override whose value is
+          // `undefined` survives in memory and suppresses the template's key, then vanishes in
+          // `JSON.stringify`. The check has to see the bytes that will be on disk.
           const { entry: rebuilt } = expandRecipe(JSON.parse(text) as PrefabRecipe, [made.prefab], made.style);
-          // Serialized, so key order counts. Anything that does not survive
-          // keeps the literal file it already had.
+          // Serialized, so key order counts. Anything that does not survive keeps the literal file
+          // it already had.
           if (JSON.stringify(rebuilt) !== JSON.stringify(entry)) return;
 
           written.set(`${section}/${name}/${files[index]!}`, text);
@@ -278,8 +266,7 @@ function main(): number {
   }
 
   if (write) {
-    // Only the prefabs that earned a recipe, and only the style rows they use:
-    // a prefab nothing points at is a file somebody has to wonder about later.
+    // Only the prefabs that earned a recipe, and only the style rows they use.
     const used = new Set([...written.values()].map((text) => (JSON.parse(text) as { '@prefab': string })['@prefab']));
     const prefabDir = join(projectDir, 'prefabs');
     mkdirSync(prefabDir, { recursive: true });

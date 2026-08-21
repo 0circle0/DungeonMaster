@@ -1,10 +1,8 @@
 /**
- * The claim this whole change exists to make: editing one thing writes one file.
+ * The claim this exists to make: editing one thing writes one file.
  *
- * So these assert *counts*, not contents. A diff that returned the right bytes
- * for every file in the world would pass a contents test and be exactly the
- * design being replaced — the old save re-serialized 1.6 MB to change an integer
- * from 5 to 3, and it was correct the entire time.
+ * So these assert counts, not contents. A diff that returned the right bytes for every file in the
+ * world would pass a contents test and be exactly the design being replaced.
  */
 
 import { describe, it, expect } from 'vitest';
@@ -103,8 +101,8 @@ describe('diffProject', () => {
     const attributes = (MINIMAL['rules'] as Record<string, unknown[]>)['attributes'];
     const rules = MINIMAL['rules'] as Record<string, unknown>;
 
-    // The same entry objects in a different order — every name still maps to the
-    // object it named, so no entry file has anything new to say.
+    // The same entry objects in a different order — every name still maps to the object it named,
+    // so no entry file has anything new to say.
     const next = { ...MINIMAL, rules: { ...rules, attributes: [...attributes].reverse() } };
     const { change } = diffProject({ doc: next, authoring: NO_AUTHORING }, snapshot);
 
@@ -129,19 +127,17 @@ describe('diffProject', () => {
 
     const { snapshot, first } = stored(doc, authoring);
 
-    // The prefab changes and the document does not. The entry file is a recipe,
-    // so it now expands to something other than what is on screen — it has to be
-    // rewritten even though nobody touched it.
+    // The prefab changes and the document does not. The entry file is a recipe, so it now expands
+    // to something other than what is on screen and has to be rewritten.
     const moved: Prefab = { ...prefab, template: { ...prefab.template as object, kind: 'landmark' } };
     const { change } = diffProject({ doc, authoring: { ...authoring, prefabs: [moved] } }, snapshot);
 
     expect(paths(change)).toContain('project/world/pointsOfInterest/ford.json');
     expect(paths(change)).toContain('project/prefabs/inn.json');
 
-    // What it writes is whatever reproduces the entry on screen — here a recipe
-    // that overrides the `kind` the moved template would otherwise supply. The
-    // invariant is not "a recipe" or "a literal", it is that reading the files
-    // back gives the author the world they were looking at.
+    // What it writes is whatever reproduces the entry on screen — here a recipe that overrides the
+    // `kind` the moved template would supply. The invariant is not "a recipe" or "a literal", it is
+    // that reading the files back gives the author the world they were looking at.
     const back = unbundleModule({ ...first.change.put, ...change.put });
     expect(back.issues).toEqual([]);
     expect((back.document!['world'] as Record<string, unknown[]>)['pointsOfInterest']).toEqual([poi]);
@@ -174,8 +170,8 @@ describe('diffProject', () => {
 
   it('rewrites everything when identity is lost, with no special case for it', () => {
     const { snapshot } = stored();
-    // What the raw-JSON editor does: parse a fresh copy. Nothing matches by
-    // reference, so the ordinary algorithm reports the whole world.
+    // What the raw-JSON editor does: parse a fresh copy. Nothing matches by reference, so the
+    // ordinary algorithm reports the whole world.
     const foreign = JSON.parse(JSON.stringify(MINIMAL)) as Record<string, unknown>;
     const { change } = diffProject({ doc: foreign, authoring: NO_AUTHORING }, snapshot);
 
@@ -217,12 +213,9 @@ describe('diffProject', () => {
   /**
    * The third input to an entry file.
    *
-   * A file's text is decided by the entry, the prefab behind it, and the link
-   * between them. The first two were watched and the third was not, so linking
-   * an entry to a prefab that had not itself changed moved nothing the diff
-   * looked at: it wrote no file, and the link was gone on the next open. It only
-   * ever appeared to work because linking usually follows creating the prefab,
-   * and a new prefab is dirty.
+   * A file's text is decided by the entry, the prefab behind it, and the link between them.
+   * Watching only the first two means linking an entry to a prefab that had not itself changed
+   * moves nothing the diff looks at: no file is written, and the link is gone on the next open.
    */
   describe('a link is a reason to rewrite an entry', () => {
     const poi = { id: 'ford', name: 'The Ford', kind: 'settlement' };
@@ -241,8 +234,7 @@ describe('diffProject', () => {
       const before = linked({ 'world.pointsOfInterest': { ford: link('ford', 'The Ford') } });
       const { snapshot, first } = stored(doc, before);
 
-      // The prefab is already stored and untouched. Only the second entry's
-      // link appears.
+      // The prefab is already stored and untouched. Only the second entry's link appears.
       const after = linked({
         'world.pointsOfInterest': { ford: link('ford', 'The Ford'), mill: link('mill', 'The Mill') },
       });
@@ -270,10 +262,9 @@ describe('diffProject', () => {
       const instances = { 'world.pointsOfInterest': { ford: link('ford', 'The Ford') } };
       const { snapshot } = stored(doc, linked(instances));
 
-      // `recomputeInstances` returns a brand-new map with brand-new link objects
-      // on every save, so this is the ordinary case and not an edge one. Compared
-      // by reference, every linked entry in the world would be rewritten every
-      // time.
+      // `recomputeInstances` returns a brand-new map with brand-new link objects on every save, so
+      // this is the ordinary case. Compared by reference, every linked entry in the world would be
+      // rewritten every time.
       const rebuilt = linked({ 'world.pointsOfInterest': { ford: link('ford', 'The Ford') } });
       const { change } = diffProject({ doc, authoring: rebuilt }, snapshot);
       expect(paths(change)).toEqual([]);
@@ -282,15 +273,14 @@ describe('diffProject', () => {
   });
 
   /**
-   * `literal` was maintained on every save and read by nothing: the sidecar it
-   * describes was never emitted, so a link whose entry could not be written as a
-   * recipe was lost on the next open.
+   * `literal` was maintained on every save and read by nothing: the sidecar it describes was never
+   * emitted, so a link whose entry could not be written as a recipe was lost on the next open.
    */
   it('carries a link its entry file cannot express', () => {
     const poi = { id: 'ford', name: 'The Ford', kind: 'landmark' };
     const doc = { ...MINIMAL, world: { ...(MINIMAL['world'] as object), pointsOfInterest: [poi] } };
-    // The template cannot produce `kind: landmark` from these params, and an
-    // override cannot remove a key, so the file has to be literal.
+    // The template cannot produce `kind: landmark` from these params, and an override cannot remove
+    // a key, so the file has to be literal.
     const prefab: Prefab = {
       id: 'inn',
       collection: 'world.pointsOfInterest',
@@ -304,8 +294,7 @@ describe('diffProject', () => {
     };
 
     const { first } = stored(doc, authoring);
-    // The point of the test: the entry could not be a recipe, so the sidecar is
-    // the only place its link exists.
+    // The point: the entry could not be a recipe, so the sidecar is the only place its link exists.
     expect(paths(first.change)).toContain('project/prefabs/instances.json');
     const back = unbundleModule(first.change.put);
     expect(back.issues).toEqual([]);

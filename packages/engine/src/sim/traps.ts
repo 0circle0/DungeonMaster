@@ -1,20 +1,14 @@
 /**
  * Traps: finding them, springing them, and taking them apart.
  *
- * The generator has always placed traps and the arrival code always threw them
- * away, so the whole `content.traps` collection — a detect check, a disarm
- * check, effects on both — was accepted, validated, documented, and incapable
- * of doing anything.
+ * A trap lives on the map beside the gates, keyed by the same packed tile integer, and moves
+ * through four states: `hidden` until somebody searches, `found` once they have, then `disarmed` or
+ * `sprung`.
  *
- * A trap lives on the map beside the gates, keyed by the same packed tile
- * integer, and moves through four states: `hidden` until somebody searches,
- * `found` once they have, then `disarmed` or `sprung`.
- *
- * **There is deliberately no passive detection roll on movement.** A roll
- * re-made on every step is a treadmill that finds everything eventually and
- * teaches the player nothing; making `search` the only way to find a trap is
- * deterministic, gives `search` a job inside a dungeon, and leaves walking into
- * one a real consequence of not looking.
+ * There is deliberately no passive detection roll on movement. A roll re-made on every step finds
+ * everything eventually and teaches the player nothing; making `search` the only way to find a trap
+ * is deterministic, gives `search` a job inside a dungeon, and leaves walking into one a real
+ * consequence of not looking.
  */
 
 import { Rng } from '@dm/core';
@@ -62,12 +56,8 @@ function setTrapState(txn: Transaction, tile: number, state: TrapState): void {
 }
 
 /**
- * Step onto a tile that may be trapped.
- *
- * A trap that has been found is still a trap: knowing where it is does not stop
- * you walking into it, which is why disarming exists. Monsters spring traps too
- * — the trap does not know who is standing on it, and a hound blundering into
- * the party's own snare is a good moment rather than an edge case.
+ * Step onto a tile that may be trapped. A trap that has been found is still a trap, which is why
+ * disarming exists. Monsters spring traps too — the trap does not know who is standing on it.
  */
 export function springTrap(txn: Transaction, mover: Entity, rng: Rng): void {
   const map = txn.state.maps[mover.map];
@@ -82,8 +72,8 @@ export function springTrap(txn: Transaction, mover: Entity, rng: Rng): void {
   txn.emit({ type: 'trapSprung', trap: placed.trap, entity: mover.id, at: mover.position });
 
   if (definition.onTrigger.length > 0) {
-    // `target` is the one who stepped on it, which is what an authored trap
-    // means by `{ "ref": "target.id" }`.
+    // `target` is the one who stepped on it, which is what an authored trap means by `{ "ref":
+    // "target.id" }`.
     const scope = { ...buildScope(txn.module, txn.state, mover), target: { id: mover.id } };
     applyOps(txn, evalEffects(definition.onTrigger, { scope, rng, openNamespaces: OPEN_NAMESPACES }), null);
   }
@@ -93,10 +83,8 @@ export function springTrap(txn: Transaction, mover: Entity, rng: Rng): void {
 }
 
 /**
- * Look for what is hidden underfoot.
- *
- * Returns whether anything was in range at all, so the caller can tell "you
- * find nothing here" from "there was nothing to find".
+ * Look for what is hidden underfoot. Returns whether anything was in range at all, so the caller
+ * can tell "you find nothing here" from "there was nothing to find".
  */
 export function searchForTraps(txn: Transaction, searcher: Entity, rng: Rng): boolean {
   const map = txn.state.maps[searcher.map];
@@ -146,10 +134,8 @@ export function reachableTrap(txn: Transaction, actor: Entity): { tile: number; 
 }
 
 /**
- * Take a found trap apart.
- *
- * Failing costs time; only a fumble sets it off. A trap that punished every
- * failed attempt would make disarming strictly worse than walking around.
+ * Take a found trap apart. Failing costs time; only a fumble sets it off, since a trap that
+ * punished every failed attempt would make disarming strictly worse than walking around.
  */
 export function disarmTrap(txn: Transaction, actor: Entity, rng: Rng): boolean {
   const target = reachableTrap(txn, actor);

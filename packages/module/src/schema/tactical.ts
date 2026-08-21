@@ -1,13 +1,10 @@
 /**
- * The tactical layer: the vocabulary a D&D-shaped game needs.
+ * The tactical layer: saving throws, resistances, spell slots, concentration, size and reach,
+ * senses, movement modes, opportunity attacks.
  *
- * Saving throws, resistances, spell slots, concentration, size and reach,
- * senses, movement modes, opportunity attacks. None of it is hardcoded — each
- * is a declared list a module fills in, so a game can have three saving throws
- * or nine, spell slots or spell points or neither.
- *
- * The rule this file follows is that if a table in a rulebook would list it,
- * it belongs here as data rather than as an engine assumption.
+ * None of it is hardcoded — each is a declared list a module fills in, so a game can have three
+ * saving throws or nine, spell slots or spell points or neither. If a rulebook would list it as a
+ * table, it belongs here as data.
  */
 
 import { z } from 'zod';
@@ -15,8 +12,8 @@ import { ExprSchema, PredicateSchema, EffectSchema, diceNotation } from '../dsl/
 import { idSchema, displayName, description, ref, tags, extra } from './common.js';
 
 /**
- * A saving throw. Naming them in data is what lets a module ship the six D&D
- * saves, or Fortitude/Reflex/Will, or none at all.
+ * A saving throw. Declared in data, so a module can ship the six D&D saves, Fortitude/Reflex/Will,
+ * or none.
  */
 export const savingThrowSchema = z
   .object({
@@ -30,10 +27,7 @@ export const savingThrowSchema = z
   })
   .strict();
 
-/**
- * A creature size. Carries the numbers that depend on it, so "Large" means
- * something to the engine rather than being a label.
- */
+/** A creature size, carrying the numbers that depend on it. */
 export const sizeSchema = z
   .object({
     id: idSchema,
@@ -62,14 +56,11 @@ export const creatureTypeSchema = z
   .strict();
 
 /**
- * A way of noticing things: sight, hearing, smell — or tremorsense, or a
- * wraith's nose for fear.
+ * A way of noticing things: sight, hearing, smell, tremorsense.
  *
- * Every sense answers one question, *how strong is the signal here*, as a
- * number from zero to one. The thresholds below carve that into bands, which is
- * what separates noticing something from going to look at it from attacking it,
- * and what lets a cold trail be faint at arm's length — something no plain
- * radius can say.
+ * Every sense answers one question — how strong is the signal here — as a number from zero to one.
+ * The thresholds below carve that into bands, which separates noticing something from going to look
+ * at it from attacking it, and lets a cold trail be faint at arm's length.
  */
 export const senseSchema = z
   .object({
@@ -82,77 +73,63 @@ export const senseSchema = z
     ignores: z.array(idSchema).default([]),
 
     /**
-     * `line` travels straight and needs an unobstructed path — sight, and sound.
-     * `field` seeps around corners through open space, which is how a smell
-     * finds its way down a corridor you cannot see along.
+     * `line` travels straight and needs an unobstructed path — sight, and sound. `field` seeps
+     * around corners through open space, which is how a smell reaches down a corridor you cannot
+     * see along.
      */
     propagation: z.enum(['line', 'field']).default('line'),
 
     /**
-     * What stops it. `opaque` is what blocks sight; `impassable` is what blocks
-     * everything else, so a reed bed or an open doorway hides you from view
-     * while carrying your noise and your scent perfectly well.
+     * What stops it. `opaque` blocks sight; `impassable` blocks everything else, so a reed bed or
+     * an open doorway hides you from view while carrying your noise and scent.
      */
     blockedBy: z.enum(['opaque', 'impassable', 'nothing']).default('opaque'),
 
     /**
-     * `cliff` is full strength to the edge of range and nothing beyond — a thing
-     * is either in view or it is not. `linear` fades with distance, so how close
-     * something is decides what a creature does about it.
+     * `cliff` is full strength to the edge of range and nothing beyond. `linear` fades with
+     * distance, so how close something is decides what a creature does about it.
      */
     falloff: z.enum(['cliff', 'linear']).default('cliff'),
 
     /**
-     * Minutes a trace left on the ground stays perceptible. Zero leaves none,
-     * which is right for sight: nothing lingers where you were seen.
+     * Minutes a trace left on the ground stays perceptible. Zero leaves none, which is right for
+     * sight.
      */
     lingerMinutes: z.number().min(0).default(0),
 
     /**
      * How fast this sense travels, in tiles per minute. Zero arrives at once.
      *
-     * **This is a speed, not a bonus to anyone's reach.** A signal given off at
-     * a place has only got `spreadPerMinute` tiles away for each minute since,
-     * so a creature further out than that simply cannot perceive it yet however
-     * keen its nose. Sight and sound leave this at zero and are heard the
-     * instant they happen; a smell does not, which is why walking into a
-     * dungeon starts filling it rather than filling it.
+     * A speed, not a bonus to reach: a signal has only got `spreadPerMinute` tiles from its source
+     * for each minute since, so a creature further out cannot perceive it yet. Sight and sound
+     * leave this at zero.
      *
-     * It is also what makes a trail worth more than the thing that left it: an
-     * old trace has been spreading longer, so it reaches you while the fresh
-     * one beside its owner has not got anywhere yet.
+     * It is also why an old trace can reach an observer while a fresh one beside its owner has not.
      */
     spreadPerMinute: z.number().min(0).default(0),
     /**
-     * Signal left at the far edge of reach, once it has spread that far.
-     *
-     * The same scent over more ground is weaker. Eased from full strength at
-     * the source to this at the limit of the sense, so it thins with distance
-     * rather than switching over at the first tile.
+     * Signal left at the far edge of reach, once it has spread that far. Eased from full strength
+     * at the source to this at the limit of the sense, rather than switching over at the first
+     * tile.
      */
     spreadRetention: z.number().min(0).max(1).default(0.5),
 
     /**
-     * Minutes a creature remembers having perceived something. Zero forgets at
-     * once, which is right for sight — what you can still see needs no memory.
+     * Minutes a creature remembers having perceived something. Zero forgets at once, which is right
+     * for sight.
      */
     rememberMinutes: z.number().min(0).default(0),
 
     /**
-     * Text grammar keys for what noticing something with this sense reads like:
-     * one for a strong impression, one for a faint or stale one. Without them
-     * the engine falls back to a plain line, which works but says nothing about
-     * your world.
-     *
+     * Text grammar keys for what noticing something with this sense reads like: one for a strong
+     * impression, one for a faint or stale one. Without them the engine falls back to a plain line.
      * `{direction}` is interpolated with where it lies.
      */
     impressionTextKey: ref('narrative.textGrammar').optional(),
     faintImpressionTextKey: ref('narrative.textGrammar').optional(),
     /**
-     * What stopping to use this sense reads like when it turns nothing up.
-     *
-     * A sense that says nothing at all reads to a player as a broken command,
-     * so there is always a line; this is how a module writes its own.
+     * What stopping to use this sense reads like when it turns nothing up. There is always a line,
+     * since silence reads as a broken command; this is how a module writes its own.
      */
     emptyTextKey: ref('narrative.textGrammar').optional(),
 
@@ -175,11 +152,9 @@ export const senseSchema = z
   });
 
 /**
- * How a creature is moving, and therefore what it gives off.
- *
- * Sneaking is not a roll. A stance sets what you emit to each sense and a
- * declared skill shifts it, so the same approach always sounds the same and a
- * player can learn the rules by playing rather than by losing a coin flip.
+ * How a creature is moving, and therefore what it gives off. A stance sets what you emit to each
+ * sense and a declared skill shifts it; there is no roll, so the same approach always sounds the
+ * same.
  */
 export const stanceSchema = z
   .object({
@@ -188,10 +163,7 @@ export const stanceSchema = z
     description: description.default(''),
     /** Multiplies movement allowance: creeping is slow, running is not. */
     speedMultiplier: z.number().min(0).default(1),
-    /**
-     * What this stance gives off to each sense, as a multiplier. Absent means
-     * one — exactly as noticeable as standing still.
-     */
+    /** What this stance gives off to each sense, as a multiplier. Absent means one. */
     emits: z.record(ref('rules.senses'), z.number().min(0)).default({}),
     /** Skill whose ranks quieten this stance further. */
     concealedBy: ref('content.skills').optional(),
@@ -202,10 +174,8 @@ export const stanceSchema = z
   .strict();
 
 /**
- * How perception behaves overall.
- *
- * Only the parts the engine cannot infer: which sense draws the map, and how
- * long a creature stays curious about something it noticed and lost.
+ * How perception behaves overall: which sense draws the map, and how long a creature stays curious
+ * about something it noticed and lost.
  */
 export const perceptionSchema = z
   .object({
@@ -216,24 +186,19 @@ export const perceptionSchema = z
     /** Stance a creature uses when it has chosen none. */
     defaultStance: ref('rules.stances').optional(),
     /**
-     * The least a creature can ever give off, whatever its stance or skill.
-     *
-     * Above zero, perfect stealth is impossible — which is a design opinion
-     * about whether a skill should be a win condition, and so the module's to
-     * hold rather than the engine's.
+     * The least a creature can ever give off, whatever its stance or skill. Above zero, perfect
+     * stealth is impossible.
      */
     minimumEmission: z.number().min(0).max(1).default(0.01),
 
     /**
-     * How many traces one tile keeps, per sense. The oldest fall off.
+     * How many traces one tile keeps, per sense; the oldest fall off.
      *
-     * A thousand of a thing crossing one tile is still, to a nose, "they came
-     * through here" — the thousandth trace says nothing the first did not. Two
-     * of them passing in opposite directions is genuinely two things, which is
-     * why this is a small number rather than one.
+     * A small number rather than one, because two creatures passing in opposite directions is
+     * genuinely two things.
      *
-     * It is a performance bound as much as a storage one: every trace on every
-     * tile is read for every sense, for every creature, every turn.
+     * A performance bound as much as a storage one: every trace on every tile is read for every
+     * sense, for every creature, every turn.
      */
     maxMarksPerTile: z.number().int().min(1).default(4),
     extra,
@@ -243,40 +208,28 @@ export const perceptionSchema = z
 /**
  * What a creature does when nobody is telling it what to do.
  *
- * Perception answers *what can it tell is there*; this answers *what does it
- * bother to do about it*. The two are deliberately separate: a hound and a
- * shopkeeper standing in the same doorway smell the same street, and only one
- * of them goes to look.
+ * Perception answers what it can tell is there; this answers what it does about it.
  *
- * Every default here reproduces the engine's older behaviour exactly — nothing
- * wanders, nothing is leashed, and a fight ends the moment nobody can be
- * perceived. A world comes alive by opting in.
+ * Every default reproduces the engine's older behaviour: nothing wanders, nothing is leashed, and a
+ * fight ends the moment nobody can be perceived.
  */
 export const temperamentSchema = z
   .object({
     /**
-     * How far from where it was placed it will wander, in module units.
-     *
-     * Zero is a creature with no territory, which is one that stands where it
-     * was put. That is the default, and it is what every creature did before
-     * this existed.
+     * How far from where it was placed it will wander, in module units. Zero is a creature that
+     * stands where it was put, which is the default.
      */
     roamRadius: z.number().min(0).default(0),
 
     /**
-     * How far from that same spot a lead may pull it. Absent is no limit.
-     *
-     * Separate from `roamRadius` because catching a scent is exactly the reason
-     * to leave your own patch of ground.
+     * How far from that same spot a lead may pull it. Absent is no limit. Separate from
+     * `roamRadius` because catching a scent is a reason to leave its own ground.
      */
     investigateRadius: z.number().min(0).optional(),
 
     /**
-     * How far it will chase before it gives up and turns for home. Absent is no
-     * limit, which is what makes a chase trainable across a whole map.
-     *
-     * This gates **pursuit only**. A leashed creature with something in reach
-     * still fights; it simply will not follow you any further.
+     * How far it will chase before turning for home. Absent is no limit. Gates pursuit only: a
+     * leashed creature with something in reach still fights.
      */
     leashRadius: z.number().min(0).optional(),
 
@@ -284,19 +237,14 @@ export const temperamentSchema = z
     wanderChance: z.number().min(0).max(1).default(0),
 
     /**
-     * Rounds it stays in a fight after nobody can perceive anybody.
-     *
-     * Zero ends the fight at the end of the round somebody breaks away, which
-     * is what made stepping around a corner a complete escape. One or two is
-     * enough that a corner is a tactic rather than an exit.
+     * Rounds it stays in a fight after nobody can perceive anybody. Zero ends the fight at the end
+     * of the round somebody breaks away; one or two makes a corner a tactic rather than an exit.
      */
     disengageTurns: z.number().int().min(0).default(0),
 
     /**
-     * Multipliers on how fast it moves for each reason it moves.
-     *
-     * Zero never moves that way at all: a shopkeeper sets `wander` to zero and
-     * stays behind the counter however interesting the street gets.
+     * Multipliers on how fast it moves for each reason it moves. Zero never moves that way at all:
+     * a shopkeeper sets `wander` to zero and stays behind the counter.
      */
     speeds: z
       .object({
@@ -309,31 +257,20 @@ export const temperamentSchema = z
       .default({}),
 
     /**
-     * Which senses it acts on, best first. Absent means all of them, strongest
-     * signal first, which is what the engine did before.
-     *
-     * An empty list is a creature that notices everything and investigates
-     * none of it. Order is preference, not strength: a wolf listing smell
-     * first follows its nose past something it can plainly see.
+     * Which senses it acts on, best first. Absent means all of them, strongest signal first. An
+     * empty list notices everything and investigates none of it. Order is preference, not strength.
      */
     investigates: z.array(ref('rules.senses')).optional(),
 
     /**
-     * Whether a trace left on the ground is worth following.
-     *
-     * False is a creature that can smell you perfectly well but has no idea
-     * what a footprint means — it acts on what is there now, never on what
-     * passed through an hour ago.
+     * Whether a trace left on the ground is worth following. False is a creature that acts on what
+     * is there now, never on what passed through an hour ago.
      */
     followsTrails: z.boolean().default(true),
 
     /**
-     * Whose presence it registers at all.
-     *
-     * Defaults to enemies only, which is exactly the filter perception used to
-     * apply with no way to say otherwise — so a shopkeeper perceived nothing
-     * whatever and no wolf could track a deer. Widening it is what lets
-     * creatures notice each other.
+     * Whose presence it registers at all. Defaults to enemies only, which is the filter perception
+     * applied with no way to say otherwise. Widening it is what lets creatures notice each other.
      */
     notices: z.array(z.enum(['hostile', 'neutral', 'ally'])).default(['hostile']),
     extra,
@@ -341,14 +278,12 @@ export const temperamentSchema = z
   .strict();
 
 /**
- * The same thing as a per-creature override, where every field is genuinely
- * absent rather than defaulted.
+ * The same thing as a per-creature override, where every field is genuinely absent rather than
+ * defaulted.
  *
- * Written out rather than derived with `.partial()`, which is shallow: it would
- * leave `speeds` carrying its inner defaults, so a wolf that only wanted to say
- * "I lope when I wander" would silently reset its investigate, engage and
- * return speeds to one. An override has to be able to say nothing at all about
- * a field, and that is not expressible in the schema it overrides.
+ * Written out rather than derived with `.partial()`, which is shallow: that would leave `speeds`
+ * carrying its inner defaults, so a creature overriding only its wander speed would silently reset
+ * the others to one.
  */
 export const temperamentOverrideSchema = z
   .object({
@@ -410,10 +345,8 @@ export const alignmentSchema = z
   .strict();
 
 /**
- * How damage of a type is modified for a creature.
- *
- * A single multiplier covers resistance (0.5), immunity (0), vulnerability (2),
- * and the healing-from-fire case (-1) without three separate mechanisms.
+ * How damage of a type is modified for a creature. A single multiplier covers resistance (0.5),
+ * immunity (0), vulnerability (2) and healing from damage (-1).
  */
 export const damageInteractionSchema = z
   .object({
@@ -426,11 +359,8 @@ export const damageInteractionSchema = z
   .strict();
 
 /**
- * Spellcasting.
- *
- * `mode` chooses the economy: Vancian slots, a points pool, both, or neither.
- * A module using the Focus pool from the reference ruleset simply leaves this
- * out entirely.
+ * Spellcasting. `mode` chooses the economy: Vancian slots, a points pool, both, or neither. A
+ * module using only the Focus pool leaves this out.
  */
 export const spellcastingSchema = z
   .object({
@@ -463,12 +393,8 @@ export const spellcastingSchema = z
     recoverOn: z.array(ref('rules.rests')).default([]),
     ritualCasting: z.boolean().default(false),
     /**
-     * Which action a spell component actually is, so silence and manacles work.
-     *
-     * The engine used to look for action types named exactly `speak` and
-     * `gesture`. Nothing validated that — a module naming its own `vocalize`
-     * got components that could never be blocked, silently and only in play.
-     * As refs, a wrong id is a load error instead.
+     * Which action a spell component is, so silence and manacles work. Refs rather than the engine
+     * looking for action types named `speak` and `gesture`, so a wrong id is a load error.
      */
     componentActionTypes: z
       .object({
@@ -482,8 +408,8 @@ export const spellcastingSchema = z
   .strict();
 
 /**
- * Reactions triggered by someone else's action — opportunity attacks, shield,
- * counterspell. Declared rather than built in, so a module can remove them.
+ * Reactions triggered by someone else's action — opportunity attacks, shield, counterspell.
+ * Declared rather than built in, so a module can remove them.
  */
 export const opportunitySchema = z
   .object({

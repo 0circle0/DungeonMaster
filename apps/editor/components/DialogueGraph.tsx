@@ -1,15 +1,6 @@
 /**
- * Dialogue as a graph.
- *
- * A branching conversation is nearly impossible to verify as a list of nodes —
- * you cannot see which lines are unreachable, which branches loop back, or
- * which ending nobody can get to. Laid out as nodes and edges, all three are
- * obvious at a glance.
- *
- * Layout is by depth from the start node: reachability is the property being
- * checked, so distance-from-start is the axis worth showing. Anything the walk
- * never touches is drawn separately as unreachable, which is the finding this
- * view exists to produce.
+ * Render dialogue reachability as a graph.
+ * Nodes are laid out by depth from the start node; unreachable nodes sit in a trailing column.
  */
 
 'use client';
@@ -78,7 +69,7 @@ function layout(dialogue: Row): { nodes: Node[]; edges: Edge[] } {
           kind: 'option',
         });
       }
-      // A check branches two ways, and both need to land somewhere real.
+      // Add both success and failure branches for each check.
       if (check?.['onSuccess']) {
         edges.push({ from, to: String(check['onSuccess']), label: `${text} ✓`, gated: true, kind: 'check' });
       }
@@ -88,7 +79,7 @@ function layout(dialogue: Row): { nodes: Node[]; edges: Edge[] } {
     }
   }
 
-  // Breadth-first from the start node gives both depth and reachability.
+  // Breadth-first traversal assigns depth and reachability.
   const depth = new Map<string, number>();
   const queue: string[] = start ? [start] : [];
   depth.set(start, 0);
@@ -108,7 +99,7 @@ function layout(dialogue: Row): { nodes: Node[]; edges: Edge[] } {
   const nodes: Node[] = rows.map((row) => {
     const id = String(row['id']);
     const reachable = depth.has(id);
-    // Unreachable nodes go in a column past the end, visibly apart.
+    // Place unreachable nodes after the reachable graph.
     const column = reachable ? depth.get(id)! : maxDepth + 1;
     const position = perColumn.get(column) ?? 0;
     perColumn.set(column, position + 1);

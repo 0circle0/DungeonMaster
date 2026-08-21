@@ -1,20 +1,13 @@
 /**
- * Drive one side chain through the real engine and say what happened.
+ * Drive one side chain through the real engine and report what happened.
  *
  *     npx tsx packages/tools/src/bin/playchain.ts eelweir
  *     npx tsx packages/tools/src/bin/playchain.ts eelweir --transcript
  *
- * The property tests assert the invariants somebody thought to write down.
- * Playing asserts the ones they did not, and on this project that is where
- * every interesting defect has come from: a dungeon with three entrances, a
- * silent `search`, two of three Deeproads entrances unreachable. So a chain is
- * not finished when it validates — it is finished when a party has walked it.
- *
- * This is deliberately not a vitest file. It teleports the party, grants quest
- * items and kills bosses outright rather than fighting them fairly, because
- * what is under test is the *chain* — does the giver offer it, do the
- * objectives fire, does the reward land, does the standing move — and not the
- * combat maths, which has its own tests. Wiring is what breaks silently.
+ * Not a vitest file. It teleports the party, grants quest items and kills bosses outright rather
+ * than fighting them, because what is under test is the chain's wiring — does the giver offer it,
+ * do the objectives fire, does the reward land, does the standing move — and not the combat maths,
+ * which has its own tests.
  */
 import { fileURLToPath } from 'node:url';
 import { Rng } from '@dm/core';
@@ -58,13 +51,9 @@ const SEED = Number(argv.find((a) => a.startsWith('--seed='))?.slice(7) ?? 11);
 /** Which way to go at a fork. Run a branching chain once per alternative. */
 const BRANCH = Number(argv.find((a) => a.startsWith('--branch='))?.slice(9) ?? 0);
 /**
- * A trial is post-game content, so the party it needs is a different party.
- *
- * Everything behind `aurendel_finished` is unreachable to the ordinary setup
- * below — not because the wiring is wrong but because the run is supposed to be
- * over. Recognised by the key rather than by a flag, because `trialkit.tier`
- * writes the tier key as the second tag and there is nothing else to confuse it
- * with.
+ * A trial is post-game content, so the party it needs is a different party. Everything behind
+ * `aurendel_finished` is unreachable to the ordinary setup below. Recognised by the tier key, which
+ * `trialkit.tier` writes as the second tag.
  */
 const TRIAL = CHAIN.startsWith('trial_');
 
@@ -83,18 +72,14 @@ function fail(what: string) { problems.push(what); }
 function note(what: string) { notes.push(what); }
 
 const quests = module_.source.narrative.quests as unknown as QuestLike[];
-// `spine` walks the questline itself — every quest that is not side content —
-// which is the regression that matters most: side chains are allowed to be
-// skipped, and the story is not allowed to be unfinishable.
-// `spine` means the questline, not "everything that is not a side chain".
-// Hidden threads are neither: nobody offers them, they start from a trigger on
-// a doorway, and `playlore.ts` is what walks them. Sweeping them in here made
-// the spine run fail on three quests it has no way to begin.
+// `spine` walks the questline itself, which is the regression that matters most: side chains may be
+// skipped, the story may not be unfinishable.
 //
-// Trials are the same mistake one level further out, and made again: they are
-// gated on the ending the spine run is trying to *reach*, so a spine walk that
-// includes them reports nine quests that would not start and twelve rewards
-// that never landed, all of which is the content behaving exactly as designed.
+// Hidden threads are excluded: nobody offers them, they start from a trigger on a doorway, and
+// `playlore.ts` walks them.
+//
+// Trials are excluded too: they are gated on the ending the spine run is trying to reach, so
+// including them reports quests that would not start and rewards that never landed.
 const chainQuests = CHAIN === 'spine'
   ? quests.filter((q) => {
       const tags = q.tags ?? [];
@@ -109,8 +94,8 @@ if (chainQuests.length === 0) {
 }
 
 /**
- * The level the tier itself asks for, taken from the content rather than
- * restated here, so retuning a tier retunes its driver with it.
+ * The level the tier itself asks for, taken from the content rather than restated here, so retuning
+ * a tier retunes its driver.
  */
 const trialLevel = Math.max(
   14,
@@ -118,18 +103,14 @@ const trialLevel = Math.max(
 );
 
 // --- a party good enough to be the subject of the experiment ---------------
-// Level 6 with the ward-keys in the pack clears every act gate, so one driver
-// works for a chain in any act. What is being tested is the chain's own wiring.
+// Level 6 with the ward-keys in the pack clears every act gate, so one driver works for a chain in
+// any act.
 const session: Session = startSession(module_, SEED);
 
 /**
- * Everything the fake actions have emitted and the quest watcher has not seen.
- *
- * This is the whole trick, and getting it wrong is what made the first run of
- * this driver report nine failures against a chain that was fine: `reduce.ts`
- * hands `advanceQuests` the events the turn produced, so a transaction whose
- * events are dropped on the floor advances nothing. Objectives observe the
- * event stream; there is no polling to fall back on.
+ * Everything the fake actions have emitted and the quest watcher has not seen. `reduce.ts` hands
+ * `advanceQuests` the events the turn produced, so a transaction whose events are dropped advances
+ * nothing: objectives observe the event stream and there is no polling.
  */
 let pending: GameEvent[] = [];
 
@@ -150,9 +131,9 @@ session.state = edit(session.state, (txn) => {
     { op: 'setFlag', flag: 'act_two_open', value: true },
     { op: 'adjustCurrency', amount: 500 },
   ], txn.state.selected);
-  // The act gates, satisfied outright: Act I wants the barrow dealt with, Act
-  // II the undercroft, Act III any two ward-keys. Skipped when walking the
-  // spine itself, which has to start from nothing or it proves nothing.
+  // The act gates, satisfied outright: Act I wants the barrow dealt with, Act II the undercroft,
+  // Act III any two ward-keys. Skipped when walking the spine itself, which has to start from
+  // nothing.
   if (CHAIN !== 'spine') {
     for (const id of ['the_open_door', 'word_to_aurenhal', 'the_undercroft']) {
       txn.set({
@@ -165,11 +146,9 @@ session.state = edit(session.state, (txn) => {
     applyOps(txn, [{ op: 'grantItem', target: txn.state.selected, item, quantity: 1 }], txn.state.selected);
   }
 
-  // A party that has finished the game: the ending flag every trial is gated
-  // on, the level the tier's own head asks for, and the warrants the tiers
-  // below pay out. The relic the door wants is *not* granted here — proving
-  // that the door refuses an empty-handed party is the point of the check
-  // below, so it is handed over there and only after the refusal.
+  // A party that has finished the game: the ending flag every trial is gated on, the level the
+  // tier's head asks for, and the warrants the tiers below pay out. The relic the door wants is
+  // granted below, after the refusal is checked.
   if (TRIAL) {
     for (const id of txn.state.party) {
       const member = txn.entity(id);
@@ -191,9 +170,8 @@ function goTo(target: string): boolean {
   const dungeon = module_.find<{ id: string }>('world.dungeons', target);
   const gate = module_.find<{ id: string }>('world.gates', target);
 
-  // A `reach` may name a gate, and is satisfied by `gateOpened`. The driver
-  // cannot pay a toll or pass a lore check at difficulty 18, so it walks to
-  // whatever fronts the gate and reports it open.
+  // A `reach` may name a gate, satisfied by `gateOpened`. The driver cannot pay a toll or pass a
+  // lore check, so it walks to whatever fronts the gate and reports it open.
   if (gate && !poi && !area && !dungeon) {
     const fronting = module_.all<{ id: string; gate?: string }>('world.pointsOfInterest')
       .find((entry) => entry.gate === target);
@@ -257,8 +235,8 @@ function has(item: string): number {
 
 /** Push whatever the fake actions emitted through the quest watcher. */
 function pump() {
-  // Drained before the edit, because `edit` appends to the same list and an
-  // event fed to the watcher twice counts twice against a counted objective.
+  // Drained before the edit, because `edit` appends to the same list and an event fed to the
+  // watcher twice counts twice against a counted objective.
   const batch = pending;
   pending = [];
   session.state = edit(session.state, (txn) => {
@@ -274,7 +252,7 @@ const head = chainQuests.find((q) => !unlockedWithin.has(q.id));
 if (!head) {
   fail('no head: every quest in the chain is unlocked by another one');
 } else if (head.autoStart) {
-  // The questline's own head starts itself and needs no giver at all.
+  // The questline's own head starts itself and needs no giver.
   note(`head ${head.id} starts itself`);
 } else {
   const giver = head.giver;
@@ -291,12 +269,9 @@ if (!head) {
 }
 
 // --- 1b. the door that wants the relic worn -------------------------------
-//
-// Only trials have one, and it is the claim worth checking: a tier tuned for
-// fabled gear should refuse a party that has not brought any, say so in words,
-// and open once they have put it on. Driven through `openGate` rather than by
-// setting the flag the objective waits on, because setting the flag proves the
-// objective is wired and proves nothing whatever about the door.
+// Only trials have one: a tier tuned for fabled gear should refuse a party that has not brought
+// any, say so in words, and open once they have put it on. Driven through `openGate` rather than by
+// setting the flag, which would prove nothing about the door.
 if (TRIAL) {
   const door = module_.all<{ id: string; tags?: string[]; requires?: unknown }>('world.gates')
     .find((g) => (g.tags ?? []).includes('trial') && JSON.stringify(g).includes(CHAIN));
@@ -333,10 +308,8 @@ if (TRIAL) {
       if (tryOpen()) note(`${door.id}: opens once ${relic} is worn`);
       else fail(`${door.id}: refuses a party wearing ${relic}, which is what it asked for`);
 
-      // And take it off again. The relic was only ever worn to prove the door
-      // checks for it, and leaving it on makes the reward check downstream
-      // measure a *swap* rather than a gain — a reward ring reads as +1 resolve
-      // when it grants +3 because the one it displaced granted +2.
+      // And take it off again: leaving it on makes the reward check downstream measure a swap
+      // rather than a gain.
       session.state = edit(session.state, (txn) => {
         const actor = txn.entity(txn.state.selected);
         if (actor) unequipItem(txn, actor, relic);
@@ -346,11 +319,9 @@ if (TRIAL) {
 }
 
 // --- 2. walk every quest, in order ----------------------------------------
-// Declaration order, which both `sidekit.chain` and the act files already emit
-// in play order. Following `unlocks` from the head instead looks tidier and
-// silently drops every branch — Act I forks, Act II has three parallel routes,
-// and a walk that takes the first unlock only would report two thirds of the
-// questline as unvisited.
+// Declaration order, which `sidekit.chain` and the act files emit in play order. Following
+// `unlocks` from the head silently drops every branch — Act I forks and Act II has three parallel
+// routes.
 const order: QuestLike[] = chainQuests;
 
 for (const quest of order) {
@@ -358,9 +329,8 @@ for (const quest of order) {
     startQuest(txn, quest.id, Rng.fromSeed(SEED).derive(`start:${quest.id}`));
   });
   if (questState(quest.id)?.status !== 'active') {
-    // A quest locked out by one already taken is the branch working, not a
-    // break: Act I's commission and errand exclude each other with `without`,
-    // and exactly one of them is meant to be refused on every run.
+    // A quest locked out by one already taken is the branch working: Act I's commission and errand
+    // exclude each other with `without`, and exactly one is refused on every run.
     const excluded = (quest.requires?.without?.quests ?? [])
       .map((clause) => clause.quest)
       .filter((id) => ['active', 'complete'].includes(questState(id)?.status ?? ''));
@@ -375,13 +345,9 @@ for (const quest of order) {
   ];
 
   /**
-   * One pass at every unfinished objective.
-   *
-   * Repeated until a pass changes nothing, because `ordered` is the default and
-   * an objective that is not yet active ignores the event that would satisfy
-   * it — so "walk to the cellar, then go and tell him" needs the telling
-   * attempted again *after* the seeing has landed. One pass reported the
-   * content as broken when it was the driver that was.
+   * One pass at every unfinished objective, repeated until a pass changes nothing. `ordered` is the
+   * default and an objective that is not yet active ignores the event that would satisfy it, so a
+   * later step must be attempted again after an earlier one lands.
    */
   const attempt = (objective: ObjectiveLike) => {
     switch (objective.kind) {
@@ -394,9 +360,8 @@ for (const quest of order) {
         }
         break;
       case 'talk':
-        // `matchesEvent` accepts the npc's id directly as well as an entity's
-        // statblock, so the conversation need not be held to prove the
-        // objective is wired to the right person.
+        // `matchesEvent` accepts the npc's id as well as an entity's statblock, so the conversation
+        // need not be held to prove the objective is wired to the right person.
         session.state = edit(session.state, (txn) => {
           txn.emit({ type: 'dialogueStarted', npc: objective.target!, dialogue: `${objective.target!}_talk` });
         });
@@ -407,9 +372,8 @@ for (const quest of order) {
         });
         break;
       default:
-        // A `custom` objective waits on a flag somebody sets in conversation.
-        // The driver cannot hold a conversation, so it sets the flag it is
-        // waiting on and reports that it had to.
+        // A `custom` objective waits on a flag somebody sets in conversation. The driver cannot
+        // hold one, so it sets the flag and reports that it had to.
         break;
     }
     pump();
@@ -427,9 +391,8 @@ for (const quest of order) {
     if (outstanding().length === before) break;
   }
 
-  // Whatever survives that is flag-driven: somebody sets it in conversation and
-  // the driver cannot hold one. Set each and say so, because a chain that needs
-  // a great many of these is a chain that plays as a cutscene.
+  // Whatever survives is flag-driven. Set each and say so, because a chain that needs a great many
+  // of these plays as a cutscene.
   for (const objective of outstanding()) {
     const flags = reachableFlags(objective);
     if (flags.length === 0) {
@@ -441,8 +404,7 @@ for (const quest of order) {
     });
     note(`${quest.id}/${objective.id}: satisfied by setting ${flags.join(', ')}`);
     pump();
-    // And another round of events, since satisfying a flag can activate the
-    // ordered objective that comes after it.
+    // Another round of events, since satisfying a flag can activate the ordered objective after it.
     for (const next of outstanding()) attempt(next);
   }
 
@@ -472,11 +434,9 @@ function flagsUnder(node: unknown, out: string[] = []): string[] {
 /**
  * The flags one player could actually have set to finish this objective.
  *
- * `resolved_either_way` builds `{any: [...]}` over mutually exclusive outcomes —
- * you seal the chapel *or* you put it in the Crown's ledger, and the dialogue
- * options that set them are `onceOnly` on two different people. Satisfying an
- * `any` by setting every branch at once completes the quest but tests a state
- * no run can reach, and quietly runs both halves of the `either` in
+ * `resolved_either_way` builds `{any: [...]}` over mutually exclusive outcomes whose dialogue
+ * options are `onceOnly` on two different people. Satisfying an `any` by setting every branch
+ * completes the quest but tests a state no run can reach, and runs both halves of the `either` in
  * `onComplete`. So one branch is chosen, and `--branch=N` walks the others.
  */
 function reachableFlags(objective: ObjectiveLike & { when?: unknown }): string[] {
@@ -495,8 +455,8 @@ for (const item of rewardItems) {
   else note(`reward ${item} is in the pack`);
 }
 
-// The whole point of the engine change: a chain's gear must actually do
-// something, and `skillBonuses` is invisible until something is worn.
+// A chain's gear must actually do something, and `skillBonuses` is invisible until something is
+// worn.
 for (const item of rewardItems) {
   const definition = module_.find<{ id: string; slot?: string; skillBonuses?: Record<string, number> }>('content.items', item);
   if (!definition?.skillBonuses) continue;

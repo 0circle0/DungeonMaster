@@ -1,14 +1,12 @@
 /**
  * Triggers: things that happen because you went somewhere.
  *
- * The interesting part is repetition. A set piece fires once; an ambush can
- * fire every visit; a ritual repeats until it is completed; ambience loops on a
- * cooldown; a shifting barrow resets itself. All five are the same declaration
- * with a different `mode`.
+ * The interesting part is repetition. A set piece fires once; an ambush can fire every visit; a
+ * ritual repeats until it is completed; ambience loops on a cooldown; a shifting barrow resets
+ * itself. All five are the same declaration with a different `mode`.
  *
- * `remember` decides whether the world keeps a record. With it on, a ransacked
- * shrine stays ransacked across visits — that persistence is what makes a place
- * feel like it was somewhere you had been, rather than a scene replayed.
+ * `remember` decides whether the world keeps a record, which is what makes a ransacked shrine stay
+ * ransacked across visits.
  */
 
 import { Rng } from '@dm/core';
@@ -41,10 +39,8 @@ export interface TriggerSource {
 }
 
 /**
- * Whether a trigger should fire now.
- *
- * Separated from firing so the decision can be tested on its own — the modes
- * are where the bugs live.
+ * Whether a trigger should fire now. Separated from firing so the decision can be tested on its own
+ * — the modes are where the bugs live.
  */
 export function shouldFire(
   txn: Transaction,
@@ -85,18 +81,16 @@ export function shouldFire(
   }
   if (trigger.when && !evalPredicate(trigger.when, { scope, rng, openNamespaces: OPEN_NAMESPACES })) return false;
 
-  // Chance is rolled last, so a trigger that fails its gate does not consume
-  // randomness and shift everything downstream.
+  // Chance is rolled last, so a trigger that fails its gate does not consume randomness and shift
+  // everything downstream.
   if (trigger.chance < 1 && !rng.chance(trigger.chance)) return false;
 
   return true;
 }
 
 /**
- * Fire the triggers on a place for one occasion.
- *
- * `on` names the occasion — entering, resting, finishing a fight — and only
- * triggers declaring that occasion are considered.
+ * Fire the triggers on a place for one occasion. `on` names the occasion — entering, resting,
+ * finishing a fight — and only triggers declaring that occasion are considered.
  */
 export function runTriggers(
   txn: Transaction,
@@ -114,8 +108,8 @@ export function runTriggers(
     const triggerRng = rng.derive(`trigger:${trigger.id}`);
     let willFire = shouldFire(txn, trigger, actor, triggerRng);
 
-    // A mod gets the last word on whether a module trigger fires. `replace`
-    // decides it outright; anything else just observes.
+    // A mod gets the last word on whether a module trigger fires. `replace` decides it outright;
+    // anything else just observes.
     if (txn.mods?.has('trigger.shouldFire', occasion)) {
       const outcome = txn.mods.run(
         txn,
@@ -128,8 +122,8 @@ export function runTriggers(
 
     if (!willFire) continue;
 
-    // A restart wipes what the world remembered about this place, so returning
-    // to an unfinished barrow finds it reordered rather than half-cleared.
+    // A restart wipes what the world remembered about this place, so returning to an unfinished
+    // barrow finds it reordered rather than half-cleared.
     if (trigger.mode === 'restart') {
       forgetTriggersFrom(txn, source, trigger.id);
     }
@@ -156,11 +150,9 @@ export function runTriggers(
 }
 
 /**
- * Forget that a place's triggers ever fired.
- *
- * Trigger ids are namespaced by their source in practice, but a module may
- * reuse one, so the restarting trigger itself is deliberately kept — otherwise
- * a `restart` would immediately be eligible to fire again.
+ * Forget that a place's triggers ever fired. Trigger ids are namespaced by their source in
+ * practice, but a module may reuse one, so the restarting trigger itself is kept — otherwise a
+ * `restart` would immediately be eligible to fire again.
  */
 function forgetTriggersFrom(txn: Transaction, source: TriggerSource, keep: string): void {
   const remaining: Record<string, number> = {};

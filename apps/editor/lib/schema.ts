@@ -1,15 +1,12 @@
 /**
  * Turning Zod schemas into form descriptions.
  *
- * The editor renders forms from the schema rather than from hand-written UI per
- * content type. That is what keeps this app honest: when a field is added to
- * `packages/module`, it appears here automatically, correctly typed and
- * validated, with no UI change. It also means the editor can never drift out of
- * sync with what the engine will actually accept.
+ * The editor renders forms from the schema rather than from hand-written UI per content type, so a
+ * field added to `packages/module` appears here automatically, correctly typed and validated, and
+ * the editor cannot drift out of sync with what the engine accepts.
  *
- * The one deliberate exception is the DSL. Effects and predicates are recursive
- * unions that a generic form renders badly, so they are edited as JSON with
- * schema validation — see `kind: 'dsl'`.
+ * The one exception is the DSL: effects and predicates are recursive unions that a generic form
+ * renders badly, so they are edited as JSON with schema validation — see `kind: 'dsl'`.
  */
 
 import { z } from 'zod';
@@ -80,18 +77,15 @@ function unwrap(schema: z.ZodTypeAny): Unwrapped {
 }
 
 /**
- * `ref:` markers become dropdowns bound to that collection.
- *
- * Read through `@dm/module` rather than parsed here. This file used to carry
- * its own `description.slice(4)`, which was the same thing right up until the
- * marker learned to carry help text after a `|` — at which point a second
- * parser is just a second place to be wrong.
+ * `ref:` markers become dropdowns bound to that collection. Read through `@dm/module` rather than
+ * parsed here, since the marker can carry help text after a `|` and a second parser is a second
+ * place to be wrong.
  */
 
 /** Which recursive DSL schema this is, so the JSON editor can label it. */
 function dslFlavour(schema: z.ZodTypeAny): 'expr' | 'predicate' | 'effect' | 'rule' | 'unknown' {
-  // Probing is more robust than name matching, since the schemas are anonymous
-  // once wrapped in `z.lazy`.
+  // Probing is more robust than name matching, since the schemas are anonymous once wrapped in
+  // `z.lazy`.
   if (schema.safeParse({ damage: { target: 'x', amount: 1 } }).success) return 'effect';
   if (schema.safeParse({ gte: [1, 1] }).success) return 'predicate';
   if (schema.safeParse({ add: [1, 2] }).success) return 'expr';
@@ -188,15 +182,12 @@ export function labelFor(key: string): string {
 /**
  * How much one press of a number input's arrows should move it.
  *
- * Read off the bounds the schema already declares, because the browser's own
- * answer is useless here: `step="any"` makes the arrows move by 1, and a
- * scatter frequency lives entirely between 0 and 1 — one press took 0.16 to
- * 1.16, past the maximum, when 0.01 is already a visible change in the map.
+ * Read off the bounds the schema declares, because `step="any"` makes the arrows move by 1 and a
+ * scatter frequency lives entirely between 0 and 1.
  *
- * A schema that writes `z.number()` rather than `.int()` is stating that
- * fractions are meaningful, so the arrows never move a float by a whole unit.
- * A narrow declared range means every hundredth counts; anything wider or
- * unbounded is a quantity rather than a ratio, and a tenth is fine.
+ * A schema that writes `z.number()` rather than `.int()` is stating that fractions are meaningful,
+ * so the arrows never move a float by a whole unit. A narrow declared range means every hundredth
+ * counts; anything wider or unbounded is a quantity rather than a ratio.
  */
 export function stepFor(spec: Extract<FieldSpec, { kind: 'number' }>): number {
   if (spec.int) return 1;
@@ -214,10 +205,9 @@ export interface CollectionInfo {
 }
 
 /**
- * Every editable collection, discovered from the module schema.
- *
- * Driving navigation from `COLLECTION_PATHS` rather than a hand-kept list means
- * a new collection shows up in the sidebar as soon as it exists in the schema.
+ * Every editable collection, discovered from the module schema. Driving navigation from
+ * `COLLECTION_PATHS` rather than a hand-kept list means a new collection shows up in the sidebar as
+ * soon as it exists.
  */
 function buildCollections(): CollectionInfo[] {
   const out: CollectionInfo[] = [];
@@ -269,8 +259,8 @@ export function collectionAt(path: string): CollectionInfo | undefined {
 }
 
 /**
- * Singleton sections that are objects rather than lists — `start`, the world
- * clock, and the resolution rules. They get the same generated form treatment.
+ * Singleton sections that are objects rather than lists — `start`, the world clock, and the
+ * resolution rules. They get the same generated form treatment.
  */
 export const SINGLETONS: readonly { path: string; label: string; spec: FieldSpec }[] = (() => {
   const rootShape = gameModuleSchema.shape as Record<string, z.ZodTypeAny>;

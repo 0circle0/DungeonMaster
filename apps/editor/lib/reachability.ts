@@ -1,28 +1,20 @@
 /**
  * How content gets reached when nothing points at it.
  *
- * "What references this?" is answered exactly by the schema — `ref()` marks
- * every declared reference. "Is this reachable?" is a different question, and
- * the difference is where a naive unreferenced-content report goes wrong. Run
- * against `modules/aurendel` before this file existed, it reported 137 entries,
- * of which 124 were fine: every one of the 105 NPCs, because an NPC is placed
- * by naming its own home rather than by a place naming it, and every one of the
- * 38 lore threads, because a thread is read through a DSL path the schema
- * cannot see.
+ * "What references this?" is answered by the schema — `ref()` marks every declared reference. "Is
+ * this reachable?" is a different question. Run against `modules/aurendel` before this file
+ * existed, a naive unreferenced-content report flagged 137 entries of which 124 were fine: every
+ * NPC, because an NPC is placed by naming its own home, and every lore thread, because a thread is
+ * read through a DSL path the schema cannot see.
  *
- * A report that is 90% wrong is worse than no report. It trains an author to
- * scroll past it, and then the thirteen real findings underneath go with it.
- *
- * So the exceptions are written down, each with the reason, and
- * `reachability.test.ts` greps the engine to keep the claims from rotting the
- * way `inertFields.ts` once did.
+ * A report that is 90% wrong trains an author to scroll past it, and the real findings go with it.
+ * So the exceptions are written down with reasons, and `reachability.test.ts` greps the engine to
+ * keep the claims from rotting.
  */
 
 /**
- * Collections whose entries are reached without any static reference.
- *
- * Shared with the used-by panel, which has to stay quiet about the same things
- * for the same reasons.
+ * Collections whose entries are reached without any static reference. Shared with the used-by
+ * panel, which stays quiet about the same things for the same reasons.
  */
 export const REACHED_INDIRECTLY: ReadonlyMap<string, string> = new Map([
   ['narrative.textGrammar', 'named by key from a prose field'],
@@ -59,13 +51,11 @@ export const REACHED_INDIRECTLY: ReadonlyMap<string, string> = new Map([
 /**
  * Entries that place themselves by naming something else.
  *
- * The reference points the other way: an NPC says where it lives, and the
- * engine gathers everyone whose `home` matches when the party arrives
- * (`sim/enter.ts`, `residentsOf`). Nothing points at the NPC, and it is on the
- * map regardless — so "unreferenced" is simply the wrong question for it.
+ * The reference points the other way: an NPC says where it lives, and the engine gathers everyone
+ * whose `home` matches when the party arrives (`sim/enter.ts`, `residentsOf`).
  *
- * `poi.residents` says the same thing from the other end and *is* a declared
- * reference, which is why only the self-declaring direction needs a note here.
+ * `poi.residents` says the same thing from the other end and is a declared reference, which is why
+ * only the self-declaring direction needs a note.
  */
 export interface SelfPlacing {
   readonly collection: string;

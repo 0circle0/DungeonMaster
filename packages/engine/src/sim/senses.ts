@@ -1,21 +1,13 @@
 /**
- * Perception.
+ * Perception: whether a creature can perceive something, asked in one place so combat entry, target
+ * selection, witnessing and room description all agree.
  *
- * One question — *can this creature perceive that?* — asked in one place, so
- * that combat entry, target selection, witnessing a crime, and describing a
- * room all answer it the same way. Before this existed the answer was written
- * out four separate times and the four did not agree: a creature would notice
- * you at twelve tiles, target you at any distance, be described at ten, and be
- * drawn at eight.
+ * Everything reduces to a single number: signal strength at the observer, between zero and one.
+ * Thresholds rather than ranges decide what that number means, which lets a cold trail be weak at
+ * close range.
  *
- * Everything here reduces to a single number: **signal strength at the
- * observer**, between zero and one. Thresholds, not ranges, decide what that
- * number means, which is what lets a cold trail be *weak at close range* —
- * something no radius can express.
- *
- * The engine names no sense. Sight, hearing and smell are whatever the module
- * calls them, and a module that declares none gets one nameless implicit sense
- * that reproduces the engine's original behaviour exactly.
+ * The engine names no sense. Sight, hearing and smell are whatever the module calls them; a module
+ * that declares none gets one nameless implicit sense.
  */
 
 import type { CompiledModule, SystemTextKey } from '@dm/module';
@@ -43,18 +35,15 @@ export type Falloff = 'cliff' | 'linear';
 export type Threshold = 'detect' | 'investigate' | 'aggro';
 
 /**
- * A sense with every default resolved and every distance already in tiles.
- *
- * Built once per module and cached, the way `TerrainIndex` is, because
- * resolving it touches several collections and it is read on every perception
- * query.
+ * A sense with every default resolved and every distance already in tiles. Built once per module
+ * and cached, like `TerrainIndex`, because it is read on every perception query.
  */
 export interface SenseDef {
   readonly id: string;
   readonly propagation: Propagation;
   readonly blockedBy: Barrier;
   readonly falloff: Falloff;
-  /** Baseline reach in **tiles**, converted from module units exactly once. */
+  /** Baseline reach in tiles, converted from module units exactly once. */
   readonly range: number;
   /** Conditions this sense works through anyway, e.g. blindsight and blinded. */
   readonly ignores: readonly string[];
@@ -78,8 +67,7 @@ export interface SenseDef {
 }
 
 /**
- * Structurally what `TargetingContext` already is, declared here so perception
- * does not depend on combat. Existing callers pass theirs unchanged.
+ * Structurally what `TargetingContext` is, declared here so perception does not depend on combat.
  */
 export interface PerceptionContext {
   readonly module: CompiledModule;
@@ -90,14 +78,11 @@ export interface PerceptionContext {
 /**
  * The sense a module gets when it declares none.
  *
- * `defaultRange` is the schema's own default of 60 module units, which at the
- * fallback tile size of 5 is twelve tiles — the constant this engine used
- * before any of it was declarable. A cliff falloff yields one inside that reach
- * with a clear line and zero otherwise, so `strength > 0` is exactly the old
- * `hasLineOfSight(...) && distance(...) <= 12`.
+ * `defaultRange` is the schema's default of 60 module units, which at the fallback tile size of 5
+ * is twelve tiles. A cliff falloff yields one inside that reach with a clear line and zero
+ * otherwise, so `strength > 0` is exactly `hasLineOfSight(...) && distance(...) <= 12`.
  *
- * The id is empty rather than "sight" on purpose: naming it would put a game
- * concept in the engine, which is the one thing this codebase does not do.
+ * The id is empty rather than "sight": the engine names no sense.
  */
 const IMPLICIT_RANGE_UNITS = 60;
 
@@ -155,8 +140,8 @@ export function sensesOf(module: CompiledModule): readonly SenseDef[] {
         propagation: sense.propagation,
         blockedBy: sense.blockedBy,
         falloff: sense.falloff,
-        // Converted from module units to tiles once, here, so nothing
-        // downstream has to remember which it is holding.
+        // Converted from module units to tiles here, so nothing downstream has to track which unit
+        // it holds.
         range: toTiles(module, sense.defaultRange),
         ignores: sense.ignores,
         lingerMinutes: sense.lingerMinutes,
@@ -181,11 +166,8 @@ export function senseOf(module: CompiledModule, id: string): SenseDef | undefine
 }
 
 /**
- * How far this creature reaches with this sense, in tiles.
- *
- * Mirrors how `speedOf` resolves movement: the creature's own declaration
- * first, the rule's default behind it, so there is one pattern for "a creature
- * overrides a rules default".
+ * How far this creature reaches with this sense, in tiles. Resolves like `speedOf`: the creature's
+ * own declaration first, the rule's default behind it.
  */
 export function rangeOf(
   context: PerceptionContext,
@@ -194,9 +176,8 @@ export function rangeOf(
 ): number {
   const module = context.module;
 
-  // The creature's own declaration first, the sense's default behind it.
-  // A monster's statblock wins over its ancestry, since a statblock is the more
-  // specific statement about that particular creature.
+  // The creature's own declaration first, the sense's default behind it. A monster's statblock wins
+  // over its ancestry.
   const sources = [
     observer.statblock
       ? module.find<{ senses?: Record<string, number> }>('content.monsters', observer.statblock)
@@ -206,9 +187,8 @@ export function rangeOf(
       : undefined,
   ];
 
-  // Shut off entirely by something the creature is under, unless this sense is
-  // the kind that does not care. Checked here because every use of a sense's
-  // reach comes through this function, so there is one place to close it.
+  // A condition can shut the sense off unless the sense ignores it. Checked here because every use
+  // of a sense's reach comes through this function.
   if (senseSuppressed(module, observer, sense)) return 0;
 
   for (const source of sources) {
@@ -220,13 +200,8 @@ export function rangeOf(
 }
 
 /**
- * Whether anything the creature is under closes this sense.
- *
- * The two halves have to be read together. A condition names the senses it
- * shuts off; a sense names the conditions it works through anyway. `ignores`
- * shipped on its own for a long time, which made it an exception to a rule
- * nobody had written -- blindsight ignored a blindness that was never applied
- * to it in the first place.
+ * Whether anything the creature is under closes this sense. Read as a pair: a condition names the
+ * senses it shuts off, and a sense names the conditions it works through anyway.
  */
 export function senseSuppressed(
   module: CompiledModule,
@@ -242,11 +217,8 @@ export function senseSuppressed(
 }
 
 /**
- * How strongly a signal from `from` reaches `observer`.
- *
- * The single place propagation, barriers and falloff are applied; everything
- * else in this module composes this one function. Distance is measured the way
- * movement is, so perception and reach agree tile for tile.
+ * How strongly a signal from `from` reaches `observer`. The one place propagation, barriers and
+ * falloff are applied; everything else here composes it. Distance is measured the way movement is.
  */
 export function signalAt(
   context: PerceptionContext,
@@ -264,9 +236,8 @@ export function signalAt(
   const reach = rangeOf(context, observer, sense);
   if (reach <= 0) return 0;
 
-  // How far the signal actually had to travel. A `line` sense measures the way
-  // movement does; a `field` sense measures the way water finds a drain, which
-  // is why a smell reaches around a corner and a shout does not.
+  // How far the signal had to travel. A `line` sense measures the way movement does; a `field`
+  // sense floods, which is why a smell reaches around a corner and a shout does not.
   let travelled: number;
 
   if (sense.propagation === 'field') {
@@ -278,23 +249,20 @@ export function signalAt(
     travelled = distance(observer.position, from);
     if (travelled > reach) return 0;
 
-    // Measured on the observer's own map, so a creature can never perceive
-    // through the geometry of somewhere it is not standing.
+    // Measured on the observer's own map, so a creature cannot perceive through the geometry of
+    // somewhere it is not standing.
     if (sense.blockedBy !== 'nothing' && !clearLine(context, sense, map, observer.position, from)) {
       return 0;
     }
   }
 
-  // Whether it has got here yet. A shout is instant and a smell is not, and
-  // that difference is the whole reason a nose is worth having: what reaches
-  // you is where something *was*, however long ago the air took to bring it.
+  // Whether the signal has arrived yet. What reaches you is where something was, however long the
+  // air took to bring it.
   if (!hasArrived(sense, travelled, context.state.minute - (options.since ?? -Infinity))) return 0;
 
   const carried = sense.falloff === 'cliff' ? 1 : 1 - travelled / (reach + 1);
-  // Thinner for having spread out: the same scent over more ground. Eased from
-  // full at the source to `spreadRetention` at the edge of reach rather than
-  // switched on at the first tile, which would make standing *on* something
-  // twice as pungent as standing beside it.
+  // Thinner for having spread out. Eased from full at the source to `spreadRetention` at the edge
+  // of reach, rather than switched on at the first tile.
   const diluted = travels(sense)
     ? 1 - (1 - sense.spreadRetention) * Math.min(1, travelled / Math.max(1, reach))
     : 1;
@@ -309,16 +277,11 @@ export function travels(sense: SenseDef): boolean {
 /**
  * Has the signal had time to get here?
  *
- * A sense that does not travel is always yes, which is sight and sound and
- * everything else that arrives at the speed of noticing. For one that does,
- * the front of it is `spreadPerMinute` tiles out per minute since it was given
- * off — so walking into a dungeon does not fill the dungeon, it starts filling
- * it, and the far end has a while yet.
+ * A sense that does not travel is always yes. For one that does, the front is `spreadPerMinute`
+ * tiles out per minute since it was given off.
  *
- * An unknown emission time is treated as long past rather than as just now.
- * The callers that leave it out are asking about a place rather than about a
- * creature — a noise, a deed, an editor's preview — and none of them wants a
- * sense to answer "not yet" to a question with no clock in it.
+ * An unknown emission time is treated as long past rather than as just now: the callers that omit
+ * it are asking about a place rather than a creature.
  */
 function hasArrived(sense: SenseDef, travelled: number, age: number): boolean {
   if (!travels(sense)) return true;
@@ -337,8 +300,8 @@ function clearLine(
     return hasLineOfSight(map.tiles, context.terrain, from, to);
   }
 
-  // `impassable` blocks sound: a reed bed or an open doorway hides you from
-  // sight while carrying every noise you make perfectly well.
+  // `impassable` blocks sound; terrain that hides you from sight may still carry every noise you
+  // make.
   for (const step of lineBetween(from, to)) {
     if (step.x === from.x && step.y === from.y) continue;
     if (step.x === to.x && step.y === to.y) continue;
@@ -348,12 +311,8 @@ function clearLine(
 }
 
 /**
- * Whether a tile is solid enough to stop a signal.
- *
- * The terrain's own `passable` flag, deliberately *not* `isPassable` — that
- * asks whether a particular creature could walk there, and a stretch of deep
- * water that needs a swim mode is impassable to a hound while doing nothing
- * whatever to stop it hearing or smelling across.
+ * Whether a tile is solid enough to stop a signal. Uses the terrain's own `passable` flag, not
+ * `isPassable`, which asks whether a particular creature could walk there.
  */
 function isSolid(context: PerceptionContext, tiles: TileMap, at: Position): boolean {
   return !context.terrain.at(tiles, at).passable;
@@ -377,13 +336,12 @@ function lineBetween(from: Position, to: Position): Position[] {
 /**
  * How far a spreading signal has to go to reach each tile.
  *
- * A uniform-cost flood from the *observer*, deliberately not the pathfinder:
- * `reachable()` weights by movement cost and honours movement modes, which
- * would make deep water smell distant because it is tiring to wade through, and
- * would stop a hound smelling across a stream it cannot swim.
+ * A uniform-cost flood from the observer, not the pathfinder: `reachable()` weights by movement
+ * cost and honours movement modes, which would make deep water smell distant and stop a hound
+ * smelling across a stream it cannot swim.
  *
- * Flooding from the observer rather than from each trace is what keeps this
- * affordable: one flood per creature per question, not one per scent mark.
+ * Flooding from the observer rather than from each trace keeps it to one flood per creature per
+ * question.
  */
 function fieldDistances(
   context: PerceptionContext,
@@ -429,8 +387,8 @@ function fieldDistances(
 }
 
 /**
- * Cached per state object, which is safe because state is replaced rather than
- * mutated — a new state is a new cache, and a stale flood can never be read.
+ * Cached per state object, which is safe because state is replaced rather than mutated: a new state
+ * is a new cache.
  */
 const fieldCache = new WeakMap<GameState, Map<string, ReadonlyMap<number, number>>>();
 
@@ -451,12 +409,8 @@ export function stanceOf(module: CompiledModule, entity: Entity): DeclaredStance
 }
 
 /**
- * How loud, how rank, how visible a creature is right now.
- *
- * Stance sets it and a declared skill quietens it further. No dice: the same
- * approach always sounds the same, so a player learns the rules by playing
- * rather than by losing a coin flip. One is ordinary presence — a creature that
- * has no opinion about how it moves is exactly as noticeable as it looks.
+ * How loud, how rank, how visible a creature is right now. Stance sets it and a declared skill
+ * quietens it further. No dice: the same approach always sounds the same. One is ordinary presence.
  */
 export function emissionOf(
   module: CompiledModule,
@@ -473,17 +427,15 @@ export function emissionOf(
     emission -= rank * stance.concealmentPerPoint;
   }
 
-  // Never silent outright by default: whether perfect stealth is possible is
-  // an opinion about the game, and it is the module's to hold.
+  // Never silent outright by default; whether perfect stealth is possible is the module's to
+  // decide.
   return Math.max(module.source.rules.perception.minimumEmission, emission);
 }
 
 /**
- * Whether `observer` perceives `subject` well enough to act on it.
- *
- * **This replaces `hasLineOfSight(...) && distance(...) <= 12`** at every site
- * that used to spell it out. Asked of every declared sense, so a creature that
- * cannot see you may still hear you.
+ * Whether `observer` perceives `subject` well enough to act on it. Replaces `hasLineOfSight(...) &&
+ * distance(...) <= 12` at every call site. Asked of every declared sense, so a creature that cannot
+ * see you may still hear you.
  */
 export function canPerceive(
   context: PerceptionContext,
@@ -501,10 +453,8 @@ export function canPerceive(
 }
 
 /**
- * The same question about a place rather than a creature.
- *
- * A deed happens on a tile, and a witness perceives the act — not the actor —
- * which is why witnessing asks this one.
+ * The same question about a place rather than a creature. A deed happens on a tile and a witness
+ * perceives the act, not the actor.
  */
 export function canPerceiveTile(
   context: PerceptionContext,
@@ -516,7 +466,7 @@ export function canPerceiveTile(
     readonly emission?: number;
     readonly subject?: Entity;
     readonly range?: number;
-    /** When the signal started coming from there. Absent is "long enough ago". */
+    /** When the signal started coming from there. Absent means long enough ago. */
     readonly since?: number;
   } = {},
 ): boolean {
@@ -557,12 +507,8 @@ export function detectionRange(context: PerceptionContext, observer: Entity): nu
 }
 
 /**
- * The stance a creature uses when it has chosen none.
- *
- * The module's declared default first, then the first stance it declares at
- * all, and null for a module with no notion of stances — which is what keeps
- * the field inert rather than requiring every ruleset to have an opinion about
- * how carefully its creatures walk.
+ * The stance a creature uses when it has chosen none: the module's declared default, then the first
+ * stance it declares, then null for a module with no stances.
  */
 export function defaultStanceOf(module: CompiledModule): string | null {
   const declared = module.source.rules.perception?.defaultStance;
@@ -571,12 +517,9 @@ export function defaultStanceOf(module: CompiledModule): string | null {
 }
 
 /**
- * How strong a trace still is, from how long ago it was left.
- *
- * Never stored, always derived — which is why nothing has to tick and a trail
- * cannot drift out of step with the clock. The zero point is an integer
- * comparison on minutes rather than a float on strength, so "faded" and
- * "pruned" can never disagree about which traces still exist.
+ * How strong a trace still is, from how long ago it was left. Always derived, never stored, so
+ * nothing has to tick. The zero point is an integer comparison on minutes, so "faded" and "pruned"
+ * cannot disagree.
  */
 export function markStrength(sense: SenseDef, mark: Mark, minute: number): number {
   if (sense.lingerMinutes <= 0) return 0;
@@ -589,13 +532,8 @@ export function markStrength(sense: SenseDef, mark: Mark, minute: number): numbe
 }
 
 /**
- * How far a trace has got from where it was left, in tiles.
- *
- * The front of the cloud, not a bonus to anybody's reach. It used to be the
- * latter — a trace within the observer's range was smelled the instant it
- * existed, and `spread` only extended things *past* that range, so walking into
- * a dungeon filled the whole dungeon with your scent at once. This is now what
- * decides whether the smell has arrived at all.
+ * How far a trace has got from where it was left, in tiles. This is the front of the cloud, not a
+ * bonus to the observer's reach, and it decides whether the smell has arrived at all.
  */
 export function markSpread(sense: SenseDef, mark: Mark, minute: number): number {
   if (sense.spreadPerMinute <= 0) return 0;
@@ -608,11 +546,9 @@ export function leavesMarks(module: CompiledModule): boolean {
 }
 
 /**
- * Leave traces on a tile a creature just entered.
- *
- * Faded traces on that same tile are dropped in the same write, so ground that
- * is walked over again and again never accumulates. A ruleset whose senses
- * leave nothing writes nothing at all.
+ * Leave traces on a tile a creature just entered. Faded traces on the same tile are dropped in the
+ * same write, so repeatedly walked ground never accumulates. A ruleset whose senses leave nothing
+ * writes nothing.
  */
 export function leaveMarks(
   txn: Transaction,
@@ -630,7 +566,7 @@ export function leaveMarks(
   const tile = packKey(at);
   const kept: Mark[] = [];
 
-  // Prune this tile while we are already rewriting it.
+  // Prune this tile while it is already being rewritten.
   for (const mark of map.marks[tile] ?? []) {
     const sense = senseOf(module, mark.sense);
     if (!sense) continue;
@@ -641,9 +577,8 @@ export function leaveMarks(
 
   for (const sense of sensesOf(module)) {
     if (sense.lingerMinutes <= 0) continue;
-    // What the ground will hold. Bare rock takes no print however heavily you
-    // walk on it, and that is a fact about the stone rather than about the
-    // creature — so it scales the emission rather than the sense.
+    // What the ground will hold. A fact about the terrain rather than the creature, so it scales
+    // the emission rather than the sense.
     const held = terrain.marksKept(map.tiles, at, sense.id);
     if (held <= 0) continue;
 
@@ -658,20 +593,14 @@ export function leaveMarks(
 /**
  * Keep only the freshest few traces per sense on one tile.
  *
- * A thousand of a thing crossing one tile is still, to a nose, "they came
- * through here": the thousandth trace says nothing the first did not. Two of
- * them passing in opposite directions is genuinely two things, which is why
- * this trims to a few rather than to one.
+ * Trimmed to a few rather than to one: two creatures passing in opposite directions is genuinely
+ * two things.
  *
- * It matters more for speed than for space. {@link perceive} reads every trace
- * on every tile, for every sense, for every creature, every turn — so an
- * unbounded tile is an unbounded inner loop, and no amount of later pruning
- * could reach it.
+ * Matters for speed more than space: {@link perceive} reads every trace on every tile, for every
+ * sense, for every creature, every turn.
  *
- * The result carries a **total order** — oldest first, ties broken on sense and
- * then on who left it. Truncation is exactly where a partial order would start
- * costing runs their determinism: two equivalent games would drop different
- * traces and stop comparing equal.
+ * The result carries a total order — oldest first, ties broken on sense then on who left it —
+ * because truncation on a partial order would drop different traces on two equivalent runs.
  */
 function capMarks(module: CompiledModule, marks: readonly Mark[]): Mark[] {
   const cap = module.source.rules.perception.maxMarksPerTile;
@@ -693,7 +622,7 @@ function capMarks(module: CompiledModule, marks: readonly Mark[]): Mark[] {
   return out.sort(byAgeThenId);
 }
 
-/** Oldest first, and total — the order a tile's traces are stored in. */
+/** Oldest first, and total: the order a tile's traces are stored in. */
 function byAgeThenId(a: Mark, b: Mark): number {
   if (a.at !== b.at) return a.at - b.at;
   if (a.sense !== b.sense) return a.sense < b.sense ? -1 : 1;
@@ -702,11 +631,8 @@ function byAgeThenId(a: Mark, b: Mark): number {
 }
 
 /**
- * The one place a trace is constructed.
- *
- * Field order in an object literal is serialization order, and saved state is
- * compared by its serialization — so two traces that are equal must also be
- * *written* the same way, which means exactly one factory.
+ * The one place a trace is constructed. Field order in an object literal is serialization order,
+ * and saved state is compared by its serialization, so equal traces must be written the same way.
  */
 function newMark(sense: string, by: string, at: number, strength: number): Mark {
   return { sense, by, at, strength };
@@ -730,11 +656,8 @@ function writeMarks(
 }
 
 /**
- * Drop faded traces everywhere.
- *
- * Housekeeping, not decay — a faded trace is already invisible either way, and
- * this only stops a save growing. It catches the corridor walked once and never
- * returned to, which pruning at the point of writing can never reach.
+ * Drop faded traces everywhere. Housekeeping rather than decay: it only stops a save growing, and
+ * catches the corridor walked once and never returned to.
  */
 export function pruneMarks(txn: Transaction): void {
   const module = txn.module;
@@ -769,14 +692,11 @@ export function pruneMarks(txn: Transaction): void {
 }
 
 /**
- * The tiles a creature perceives with one sense — what to draw, and what to
- * describe.
+ * The tiles a creature perceives with one sense — what to draw and what to describe.
  *
- * Deliberately not the same operation as {@link canPerceive}. This is a field,
- * computed by shadowcasting for a straight sense and by flooding for a
- * spreading one, and shadowcasting uses a round disk where perception measures
- * the way movement does. Folding them together would quietly change what a
- * creature notices on the diagonal.
+ * Not the same operation as {@link canPerceive}: this is a field, computed by shadowcasting for a
+ * straight sense and by flooding for a spreading one, and shadowcasting uses a round disk where
+ * perception measures the way movement does.
  */
 export function perceivedTiles(
   context: PerceptionContext,
@@ -802,10 +722,8 @@ export function perceivedTiles(
 }
 
 /**
- * The sense a module draws its map with.
- *
- * Falls back to the first declared sense, and then to the implicit one, so
- * something is always drawable even for a ruleset that never mentions sight.
+ * The sense a module draws its map with. Falls back to the first declared sense, then to the
+ * implicit one, so something is always drawable.
  */
 export function sightSenseOf(module: CompiledModule): SenseDef {
   const declared = module.source.rules.perception?.sightSense;
@@ -824,11 +742,8 @@ export interface Percept {
 }
 
 /**
- * Everything a creature perceives right now, strongest first.
- *
- * Living creatures and cold trails come back through the same shape, so a hound
- * following a scent and a hound watching you are one code path rather than two
- * that have to be kept in step.
+ * Everything a creature perceives right now, strongest first. Living creatures and cold trails come
+ * back in the same shape, so following a scent and watching a target are one code path.
  */
 export function perceive(context: PerceptionContext, observer: Entity): readonly Percept[] {
   const module = context.module;
@@ -843,13 +758,12 @@ export function perceive(context: PerceptionContext, observer: Entity): readonly
     // Creatures, where they actually are.
     for (const other of Object.values(context.state.entities)) {
       if (other.id === observer.id || !other.alive || other.map !== observer.map) continue;
-      // What it bothers to register. Enemies only by default, which is the
-      // filter this was born with; a module widens it per creature, which is
-      // how a wolf comes to track a deer and a shopkeeper comes to see anyone.
+      // What it registers. Enemies only by default; a module widens it per creature, which is how a
+      // wolf tracks a deer and a shopkeeper sees anyone.
       if (!registers(module, observer, other)) continue;
 
-      // Measured from when it got there, not from now: something that has just
-      // stepped into the room has not yet filled it.
+      // Measured from when it arrived, not from now: something that has just stepped into the room
+      // has not yet filled it.
       const strength = signalAt(
         context, sense, observer, other.position, emissionOf(module, other, sense),
         { since: other.since },
@@ -861,8 +775,7 @@ export function perceive(context: PerceptionContext, observer: Entity): readonly
 
     // And the traces they left behind, which is what makes a trail followable.
     if (sense.lingerMinutes <= 0) continue;
-    // Something that does not know what a footprint is. It can smell you
-    // perfectly well; it simply has no idea that the ground remembers.
+    // A creature that does not read traces. It can still perceive the source directly.
     if (!temperamentOf(module, observer).followsTrails) continue;
 
     for (const [rawTile, marks] of Object.entries(map.marks)) {
@@ -878,10 +791,8 @@ export function perceive(context: PerceptionContext, observer: Entity): readonly
         const remaining = markStrength(sense, mark, minute);
         if (remaining <= 0) continue;
 
-        // The trace is its own clock. It began spreading where it was laid, so
-        // an old one has reached further than a fresh one — which is what makes
-        // a cold trail perceptible from across a room while the warm one you
-        // are standing beside has not got anywhere yet.
+        // The trace is its own clock: it began spreading where it was laid, so an old one has
+        // reached further than a fresh one.
         const strength = signalAt(context, sense, observer, at, remaining, { since: mark.at });
 
         if (strength > sense.detect) {
@@ -901,13 +812,12 @@ function txnEntityIsHostile(
   leftBy: EntityId,
 ): boolean {
   const other = context.state.entities[leftBy];
-  // A trace outlives whoever left it, and a cold trail of something long gone
-  // is still worth following.
+  // A trace outlives whoever left it, so a trail of something long gone is still followable.
   if (!other) return true;
   return registers(context.module, observer, other);
 }
 
-/** Strongest first; ties settled by sense order then subject, so it is total. */
+/** Strongest first; ties settled by sense order then subject, so the order is total. */
 function byStrengthThenId(senses: readonly SenseDef[]) {
   const order = new Map(senses.map((sense, index) => [sense.id, index]));
   return (a: Percept, b: Percept): number => {
@@ -919,9 +829,7 @@ function byStrengthThenId(senses: readonly SenseDef[]) {
   };
 }
 
-/**
- * The one place an alert is constructed — same reason as {@link newMark}.
- */
+/** The one place an alert is constructed — same reason as {@link newMark}. */
 function newAlert(percept: Percept, minute: number): Alert {
   return {
     sense: percept.sense,
@@ -933,11 +841,8 @@ function newAlert(percept: Percept, minute: number): Alert {
 }
 
 /**
- * Fold what a creature perceives into what it remembers.
- *
- * At most one alert per sense and subject, so a hound tracking you across a
- * room holds one steadily-updating idea of where you are rather than a hundred.
- * Writes nothing at all when nothing changed, so a quiet turn costs no state.
+ * Fold what a creature perceives into what it remembers. At most one alert per sense and subject.
+ * Writes nothing when nothing changed, so a quiet turn costs no state.
  */
 export function perceiveInto(txn: Transaction, terrain: TerrainIndex, observer: Entity): void {
   const module = txn.module;
@@ -960,8 +865,8 @@ export function perceiveInto(txn: Transaction, terrain: TerrainIndex, observer: 
     if (!sense || sense.rememberMinutes <= 0) continue;
     if (percept.strength <= sense.investigate) continue;
 
-    // A fresher or stronger reading replaces the older one: what matters is the
-    // best current idea of where the thing is, not a history of glimpses.
+    // A fresher or stronger reading replaces the older one: the alert is the best current idea of
+    // where the thing is, not a history of glimpses.
     byKey.set(`${percept.sense}:${percept.of}`, newAlert(percept, minute));
   }
 
@@ -986,11 +891,9 @@ function sameAlerts(a: readonly Alert[], b: readonly Alert[]): boolean {
 }
 
 /**
- * Somebody who has just become aware of a party member.
- *
- * Returned rather than acted on here: `seePlayer` reactions are driven from
- * this, and importing `runReactions` into this file would close a cycle —
- * `rules/combat/turn.ts` already imports `canPerceive` from here.
+ * Somebody who has just become aware of a party member. Returned rather than acted on: importing
+ * `runReactions` here would close a cycle, since `rules/combat/turn.ts` already imports
+ * `canPerceive`.
  */
 export interface Noticed {
   readonly observer: EntityId;
@@ -998,11 +901,8 @@ export interface Noticed {
 }
 
 /**
- * Let everything on the party's map notice what there is to notice.
- *
- * Returns the pairs that are *new* this pass, which is the only honest way to
- * express "spotted you": noticing is a difference between two perception
- * passes, not an event anything emits.
+ * Let everything on the party's map notice what there is to notice. Returns the pairs that are new
+ * this pass: noticing is a difference between two perception passes, not an emitted event.
  */
 export function perceiveAll(
   txn: Transaction,
@@ -1021,9 +921,8 @@ export function perceiveAll(
     perceiveInto(txn, terrain, entity);
     const after = txn.entity(id)?.alerts ?? [];
 
-    // Somebody who has just caught sight — or scent, or sound — of a party
-    // member. Deduped on *who* was noticed rather than on which sense noticed
-    // them, so a creature that both sees and smells you reacts once.
+    // Somebody who has just perceived a party member. Deduped on who was noticed rather than on
+    // which sense noticed them, so a creature that both sees and smells you reacts once.
     if (entity.kind !== 'character') {
       const already = new Set<string>();
       for (const alert of after) {
@@ -1036,9 +935,8 @@ export function perceiveAll(
       continue;
     }
 
-    // The party is told what it just noticed. Creatures act on it silently;
-    // a player has only the prose, so a new impression has to be announced or
-    // it may as well not exist.
+    // Announce what the party just noticed. Creatures act on it silently; the player has only the
+    // prose.
     for (const alert of after) {
       const known = before.some((held) => held.sense === alert.sense && held.of === alert.of);
       if (known) continue;
@@ -1074,15 +972,14 @@ export function currentAlert(
     return alert.strength > thresholdOf(sense, threshold);
   };
 
-  // Which sense it trusts. Absent is "whichever is shouting loudest", since
-  // `alerts` is already strongest first — the behaviour this had before a
-  // creature could hold an opinion about its own nose.
+  // Which sense it trusts. Absent means whichever is strongest, since `alerts` is already strongest
+  // first.
   const preference = temperamentOf(context.module, observer).investigates;
   if (preference === null) return observer.alerts.find(usable) ?? null;
 
-  // Named senses are a **preference order**, not a filter on strength: a wolf
-  // that lists smell first follows its nose past something it can plainly see.
-  // An empty list is a creature that notices everything and acts on none of it.
+  // Named senses are a preference order, not a filter on strength: a wolf that lists smell first
+  // follows its nose past something it can see. An empty list notices everything and acts on none
+  // of it.
   for (const senseId of preference) {
     const found = observer.alerts.find((alert) => alert.sense === senseId && usable(alert));
     if (found) return found;
@@ -1091,13 +988,12 @@ export function currentAlert(
 }
 
 /**
- * Something made a sound. Everything that can hear it takes note.
+ * Something made a sound; everything that can hear it takes note.
  *
- * Instant, unlike a scent: sound is resolved where it happens rather than left
- * lying about, so this both emits the event and writes the alerts in one go.
+ * Instant, unlike a scent: resolved where it happens rather than left lying about, so this emits
+ * the event and writes the alerts in one go.
  *
- * `loudness` scales the signal, which is how a stance makes the same footstep
- * carry twice as far or a third as far.
+ * `loudness` scales the signal, which is how a stance makes the same footstep carry further.
  */
 export function makeNoise(
   txn: Transaction,
@@ -1146,11 +1042,8 @@ export function makeNoise(
 }
 
 /**
- * What the party notices without being told — the "you hear something" line.
- *
- * Vague on purpose, and vaguer the fainter the signal. A player should learn
- * that something is out there and roughly where, not be handed a creature's
- * name and coordinates; the whole value of a nose is that it is imprecise.
+ * What the party notices without being told — the "you hear something" line. Vaguer the fainter the
+ * signal: it reports that something is out there and roughly where, not a name and coordinates.
  */
 export function impressions(
   context: PerceptionContext,
@@ -1161,8 +1054,7 @@ export function impressions(
   const out: { sense: string; direction: string; strength: number; fresh: boolean }[] = [];
   const seen = new Set<string>();
 
-  // Anything already in plain view is described by name elsewhere. Being told
-  // you can also smell the hound you are looking at is noise.
+  // Anything already in plain view is described by name elsewhere.
   const visible = new Set(
     perceive(context, observer)
       .filter((percept) => percept.sense === sight.id)
@@ -1170,7 +1062,7 @@ export function impressions(
   );
 
   for (const percept of perceive(context, observer)) {
-    // What you can see is described properly elsewhere; this is for the rest.
+    // What you can see is described elsewhere; this is for the rest.
     if (percept.sense === sight.id) continue;
     if (percept.fresh && visible.has(percept.of)) continue;
 
@@ -1201,22 +1093,19 @@ export interface SenseReading {
 /**
  * Everything one sense currently has to say, on demand.
  *
- * Deliberately different from {@link impressions}, which answers "what is
- * reaching me right now". Stopping to listen must also report what you already
- * heard and have not forgotten — otherwise listening twice in a row is silent,
- * because the alert is held rather than new, and the command reads as broken.
+ * Different from {@link impressions}, which answers what is reaching the observer right now.
+ * Stopping to listen also reports what was already heard and not yet forgotten, so listening twice
+ * in a row is not silent.
  *
- * Strongest first, then by bearing, so the ordering is total and the same
- * situation always reads the same way.
+ * Strongest first, then by bearing, so the ordering is total.
  */
 export function senseReport(
   context: PerceptionContext,
   observer: Entity,
   senseId: string,
 ): SenseReading[] {
-  // Keyed by bearing, because that is all the player is told. Two creatures
-  // both somewhere north are one "something to the north" — collapsing them is
-  // the honest answer, not a loss of detail.
+  // Keyed by bearing, because that is all the player is told: two creatures both to the north are
+  // one "something to the north".
   const byBearing = new Map<string, SenseReading>();
 
   const keep = (reading: SenseReading): void => {
@@ -1251,14 +1140,11 @@ export function senseReport(
 /**
  * Which way something lies — the fuzzy reading.
  *
- * Deliberately coarser than the octant `bearing` in `grid/geometry.ts`: a
- * sense report should be allowed to say "nearby", and its diagonal band is
- * wider. Both readings are right for their own purpose; there is one copy of
- * each.
+ * Coarser than the octant `bearing` in `grid/geometry.ts`: this one can say "nearby" and its
+ * diagonal band is wider.
  *
- * Returns a `systemText` **key**, not a word. The engine works out which way is
- * which; the module says what that direction is called, which is what lets a
- * `{direction}` placeholder read in the module's own language.
+ * Returns a `systemText` key, not a word, so a `{direction}` placeholder reads in the module's own
+ * language.
  */
 export function roughBearing(from: Position, to: Position): SystemTextKey {
   const dx = to.x - from.x;

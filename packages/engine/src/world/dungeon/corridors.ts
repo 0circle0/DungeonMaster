@@ -1,15 +1,12 @@
 /**
- * Corridor carving, in three characters.
+ * Corridor carving, in three styles.
  *
- * `l` is the classic elbow — two straight runs meeting at a corner, the shape
- * every roguelike reader knows. `straight` runs point to point, which suits
- * mines and made places. `winding` is a target-biased walk, for burrows and
- * things that were dug rather than built.
+ * `l` is the classic elbow — two straight runs meeting at a corner. `straight` runs point to point,
+ * which suits mines and made places. `winding` is a target-biased walk, for burrows.
  *
- * Every style reports its **crossings** — the cells that were wall before the
- * corridor went through — because a crossing is where a door belongs. Width
- * carves a broader brush along the run, but a crossing itself is never
- * widened: a locked door is one door tile, not a doorway with a hole beside it.
+ * Every style reports its crossings — the cells that were wall before the corridor went through —
+ * because a crossing is where a door belongs. Width carves a broader brush along the run, but a
+ * crossing is never widened: a locked door is one door tile.
  */
 
 import type { Rng } from '@dm/core';
@@ -24,19 +21,16 @@ export interface CorridorSpec {
   /** Carve brush, 1–3 tiles. Wall piercings stay one tile wide regardless. */
   readonly width: number;
   /**
-   * How a `winding` corridor wanders: the chance a step carries on toward the
-   * target rather than drifting, and what a change of direction costs when
-   * routing. Aesthetic tuning, and strongly felt — so the dungeon's to set.
+   * How a `winding` corridor wanders: the chance a step carries on toward the target rather than
+   * drifting, and what a change of direction costs when routing.
    */
   readonly winding: { readonly continueChance: number; readonly turnPenalty: number };
 }
 
 /**
- * Carve a corridor and return the wall cells it pierced, in carve order.
- *
- * The centre line is carved first, recording piercings; the widening pass then
- * broadens every step that did *not* pierce a wall. That ordering is what
- * keeps a door one tile wide however broad the corridor is.
+ * Carve a corridor and return the wall cells it pierced, in carve order. The centre line is carved
+ * first, recording piercings; the widening pass then broadens every step that did not pierce a
+ * wall, which is what keeps a door one tile wide.
  */
 export function carvePath(
   builder: MapBuilder,
@@ -47,16 +41,15 @@ export function carvePath(
   rng: Rng,
   minLength = 0,
   /**
-   * Door spots placed so far, packed `y * width + x`. Widening never carves
-   * within a tile of one — without this, a later corridor's brush could erode
-   * the wall around an earlier corridor's (possibly locked) door. This call's
-   * own first crossing — its candidate door — is protected the same way.
+   * Door spots placed so far, packed `y * width + x`. Widening never carves within a tile of one,
+   * or a later corridor's brush could erode the wall around an earlier corridor's door. This call's
+   * own first crossing is protected the same way.
    */
   doorSpots: ReadonlySet<number> = new Set(),
   /**
-   * Cells no corridor may ever cross, packed — the interiors and walls of
-   * hand-authored static rooms, whose only openings are their door markers.
-   * A styled line that would clip one is re-routed around it.
+   * Cells no corridor may cross, packed — the interiors and walls of hand-authored static rooms,
+   * whose only openings are their door markers. A styled line that would clip one is re-routed
+   * around it.
    */
   forbidden: ReadonlySet<number> = new Set(),
 ): Position[] {
@@ -65,8 +58,8 @@ export function carvePath(
     : spec.style === 'winding' ? windingLine(from, to, rng, minLength, builder, spec.winding.continueChance)
     : elbowLine(from, to, rng.chance(0.5));
 
-  // The endpoints themselves are legal — a corridor targeting a static room
-  // ends on its door marker, which sits inside the room's rectangle.
+  // The endpoints themselves are legal: a corridor targeting a static room ends on its door marker,
+  // which sits inside the room's rectangle.
   const packed = (at: Position) => at.y * builder.width + at.x;
   const isForbidden = (at: Position) =>
     forbidden.has(packed(at)) && !(at.x === from.x && at.y === from.y) && !(at.x === to.x && at.y === to.y);
@@ -84,13 +77,13 @@ export function carvePath(
     } else if (current === palette.floor) {
       // Already open; nothing to do.
     }
-    // Anything else — a door, an authored terrain — is left exactly as it is:
-    // a corridor ending on a static room's door marker must not pave it over.
+    // Anything else — a door, an authored terrain — is left as it is, so a corridor ending on a
+    // static room's door marker does not pave it over.
   }
 
   // — widen ————————————————————————————————————————————————
-  // Perpendicular to the direction of travel, never near a doorway and never
-  // touching the map's outer ring.
+  // Perpendicular to the direction of travel, never near a doorway and never touching the map's
+  // outer ring.
   const protectedSpots = crossings.length > 0
     ? [...doorSpots, crossings[0]!.y * builder.width + crossings[0]!.x]
     : [...doorSpots];
@@ -102,8 +95,8 @@ export function carvePath(
     });
 
   for (let extra = 1; extra < spec.width; extra += 1) {
-    // Alternate sides so a width-2 corridor hugs one side and width-3 is
-    // symmetric: offsets +1, -1, +2, -2, …
+    // Alternate sides so a width-2 corridor hugs one side and width-3 is symmetric: offsets +1, -1,
+    // +2, -2, …
     const offset = extra % 2 === 1 ? Math.ceil(extra / 2) : -Math.ceil(extra / 2);
 
     for (let i = 0; i < line.length; i += 1) {
@@ -131,11 +124,10 @@ export function carvePath(
 }
 
 /**
- * A shortest orthogonal path around forbidden cells, preferring straight runs.
- *
- * Plain A* over the grid with a small turn penalty, so the detour reads as a
- * corridor with corners rather than a staircase. Deterministic: ties break on
- * insertion order. Returns null only when the target is walled off entirely.
+ * A shortest orthogonal path around forbidden cells, preferring straight runs. A* over the grid
+ * with a small turn penalty, so the detour reads as a corridor with corners rather than a
+ * staircase. Deterministic: ties break on insertion order. Returns null only when the target is
+ * walled off entirely.
  */
 function detourLine(
   from: Position,
@@ -228,8 +220,8 @@ function elbowLine(from: Position, to: Position, horizontalFirst: boolean): Posi
 }
 
 /**
- * Point to point, with every diagonal step squared off so the corridor is
- * walkable by 4-way movement — a diagonal gap reads as two sealed rooms.
+ * Point to point, with every diagonal step squared off so the corridor is walkable by 4-way
+ * movement — a diagonal gap reads as two sealed rooms.
  */
 function straightLine(from: Position, to: Position): Position[] {
   const out: Position[] = [{ ...from }];
@@ -256,9 +248,9 @@ function straightLine(from: Position, to: Position): Position[] {
 }
 
 /**
- * A target-biased walk: mostly toward the goal, sometimes sideways, finished
- * with an elbow if the wander budget runs out. `minLength` stretches the path
- * — the per-edge `corridorLength` roll read as "at least this long".
+ * A target-biased walk: mostly toward the goal, sometimes sideways, finished with an elbow if the
+ * wander budget runs out. `minLength` stretches the path, since the per-edge `corridorLength` roll
+ * means "at least this long".
  */
 function windingLine(
   from: Position,

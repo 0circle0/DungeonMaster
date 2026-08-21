@@ -1,13 +1,11 @@
 /**
  * Tile maps.
  *
- * A map is a flat array of terrain ids with a width — flat rather than nested
- * because it serializes compactly into a save file and indexes without
- * allocating. Everything spatial in the engine reads through this.
+ * A map is a flat array of terrain ids with a width — flat rather than nested because it serializes
+ * compactly into a save and indexes without allocating.
  *
- * The map stores *terrain ids only*. Whether a tile can be walked on is a
- * question for the module's terrain definitions, not a property baked into the
- * map, so the same map means different things under different rulesets.
+ * The map stores terrain ids only. Whether a tile can be walked on is a question for the module's
+ * terrain definitions, so the same map means different things under different rulesets.
  */
 
 import type { CompiledModule } from '@dm/module';
@@ -37,10 +35,9 @@ export interface TerrainDef {
   readonly lightRadius: number;
   readonly isDoor: boolean;
   /**
-   * How well this ground keeps a trace, per sense. Absent is one.
-   *
-   * A record rather than a single number because whether ground takes a print
-   * and whether it holds a smell are different questions about the same stone.
+   * How well this ground keeps a trace, per sense. Absent is one. A record rather than a single
+   * number because whether ground takes a print and whether it holds a smell are different
+   * questions.
    */
   readonly marks?: Readonly<Record<string, number>>;
 }
@@ -75,11 +72,8 @@ export function createMap(width: number, height: number, fill: string): TileMap 
 }
 
 /**
- * Return a copy with one tile changed.
- *
- * Copying a whole map per tile would be wasteful during generation, so
- * generators use {@link MapBuilder}; this exists for the rare in-play change,
- * such as a door being broken open.
+ * Return a copy with one tile changed. Generators use {@link MapBuilder} instead; this exists for
+ * the rare in-play change, such as a door being broken open.
  */
 export function withTile(map: TileMap, position: Position, terrain: string): TileMap {
   if (!inBounds(map, position)) return map;
@@ -137,11 +131,8 @@ export class MapBuilder {
 }
 
 /**
- * Terrain lookup for a compiled module.
- *
- * Built once per module rather than per query: movement and field of view read
- * terrain properties for every tile they touch, and a map lookup per tile adds
- * up quickly across a whole party's turn.
+ * Terrain lookup for a compiled module. Built once per module rather than per query: movement and
+ * field of view read terrain properties for every tile they touch.
  */
 export class TerrainIndex {
   private readonly byId: ReadonlyMap<string, TerrainDef>;
@@ -172,9 +163,8 @@ export class TerrainIndex {
     }
     this.byId = map;
 
-    // Out-of-bounds and unknown terrain read as solid rock: impassable and
-    // opaque. Treating the unknown as open would let creatures walk off the
-    // edge of the world.
+    // Out-of-bounds and unknown terrain read as solid rock: impassable and opaque. Treating the
+    // unknown as open would let creatures walk off the edge of the world.
     this.fallback = {
       id: '',
       glyph: ' ',
@@ -196,11 +186,9 @@ export class TerrainIndex {
   }
 
   /**
-   * How much of a trace this ground keeps for one sense, from zero to one.
-   *
-   * One when the terrain says nothing, so a module that has never heard of this
-   * leaves exactly the trails it always did. Zero is bare rock: nothing to
-   * print on, and nothing written.
+   * How much of a trace this ground keeps for one sense, from zero to one. One when the terrain
+   * says nothing, so a module that has never heard of this leaves the trails it always did. Zero is
+   * bare rock.
    */
   marksKept(map: TileMap, position: Position, sense: string): number {
     const declared = this.at(map, position).marks?.[sense];
@@ -210,8 +198,7 @@ export class TerrainIndex {
   isPassable(map: TileMap, position: Position, modes: readonly string[] = []): boolean {
     const terrain = this.at(map, position);
     if (!terrain.passable) return false;
-    // Terrain that demands a mode — deep water, a chasm — is impassable to
-    // anything lacking it.
+    // Terrain that demands a mode — deep water, a chasm — is impassable to anything lacking it.
     if (terrain.requiresMode.length === 0) return true;
     return terrain.requiresMode.some((mode) => modes.includes(mode));
   }
@@ -223,15 +210,13 @@ export class TerrainIndex {
   /**
    * Movement cost to enter, or `Infinity` when the tile cannot be entered.
    *
-   * The terrain's own cost times the mover's cheapest mode multiplier, which is
-   * what `space.ts` has always documented `moveCost` as meaning and what
-   * nothing did — `movementModes[].terrainMultiplier` was authored, validated,
-   * and read by no one, so a flier waded through a bog at a walker's pace. A
-   * creature with several modes uses whichever crosses this ground best.
+   * The terrain's own cost times the mover's cheapest mode multiplier, per
+   * `movementModes[].terrainMultiplier`. A creature with several modes uses whichever crosses this
+   * ground best.
    *
-   * "Best of the modes it has", not "best of those and also 1": the running
-   * minimum used to start at 1, so a multiplier above 1 could never win and a
-   * mode declared as *worse* over some ground was quietly free.
+   * "Best of the modes it has", not "best of those and also 1": a running minimum starting at 1
+   * would mean a multiplier above 1 could never win, and a mode declared as worse over some ground
+   * would be free.
    */
   costOf(map: TileMap, position: Position, modes: readonly string[] = []): number {
     if (!this.isPassable(map, position, modes)) return Infinity;
@@ -273,11 +258,9 @@ export function neighbours(position: Position, diagonal = true): Position[] {
 }
 
 /**
- * The terrain index for a module, built once.
- *
- * Keyed on the module object, so replacing the module replaces the index. Lives
- * here rather than in the reducer because the combat turn needs one too, and
- * importing the reducer from inside it would be a cycle.
+ * The terrain index for a module, built once and keyed on the module object. Lives here rather than
+ * in the reducer because the combat turn needs one too, and importing the reducer from inside it
+ * would be a cycle.
  */
 const terrainCache = new WeakMap<CompiledModule, TerrainIndex>();
 

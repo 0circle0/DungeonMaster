@@ -1,31 +1,22 @@
 /**
  * A module as a directory of files, and back again.
  *
- * `module.json` is what the engine loads and what a player receives, and at
- * Aurendel's size it is a hundred thousand lines. That is fine for a machine
- * and hopeless for the two things people actually do with a repository: read a
- * diff, and put two hands on the same world. Renaming one point of interest
- * shows up as a change to a file called `module.json`, and nothing about the
- * line numbers says which of the five hundred and ninety-seven moved.
+ * `module.json` is what the engine loads, and at Aurendel's size it is a hundred thousand lines —
+ * hopeless for reading a diff or for two people editing one world.
  *
- * So a module may also exist as `project/`: one file per entry, named for its
- * id, plus everything that is not a collection in one `shell.json`, plus a
- * manifest. `module.json` becomes a build artifact — the same relationship
- * `maps/<id>/` already has with `world.maps`, which is why this file follows
- * `staticmaps.ts` and is pure for the same reason: the studio needs both
- * directions in the browser.
+ * So a module may also exist as `project/`: one file per entry, named for its id, plus everything
+ * that is not a collection in one `shell.json`, plus a manifest. `module.json` becomes a build
+ * artifact, the same relationship `maps/<id>/` has with `world.maps`. Pure, like `staticmaps.ts`,
+ * because the studio needs both directions in the browser.
  *
- * ## Order is recorded, not recovered
+ * Order is recorded, not recovered
  *
- * Two things would otherwise be lost, and both were found by trying it before
- * designing it. A directory comes back in filesystem order, so the manifest
- * records the filenames of each collection in document order. And JavaScript
- * objects keep insertion order, so the manifest records key order too — the
- * generators write the root keys in schema order and a rebuilt document has to
- * agree, or every build is a diff.
+ * A directory comes back in filesystem order, so the manifest records the filenames of each
+ * collection in document order. JavaScript objects keep insertion order, so the manifest records
+ * key order too — a rebuilt document must agree, or every build is a diff.
  *
- * Nothing here decides *whether* a module uses this form. A `project/` on disk
- * means it does; that policy, and the filesystem, live in `bin/project.ts`.
+ * Nothing here decides whether a module uses this form. A `project/` on disk means it does; that
+ * policy and the filesystem live in `bin/project.ts`.
  */
 
 import { COLLECTION_PATHS } from './schema/module.js';
@@ -60,11 +51,8 @@ export interface JoinIssue {
 const SECTIONS = [...new Set(COLLECTION_PATHS.map((path) => path.split('.')[0]!))];
 
 /**
- * How every file in a project is written.
- *
- * Exported because the studio writes one entry file at a time and a second
- * spelling of this would be a byte-identity bug nobody would find until a
- * rebuilt `module.json` stopped matching the one in git.
+ * How every file in a project is written. Exported because the studio writes one entry file at a
+ * time, and a second spelling of this would be a byte-identity bug.
  */
 export function serializeProjectValue(value: unknown): string {
   return `${JSON.stringify(value, null, 2)}\n`;
@@ -73,13 +61,12 @@ export function serializeProjectValue(value: unknown): string {
 /**
  * A filename for an entry.
  *
- * Ids are `[a-z][a-z0-9_]*`, so they are already safe and already unique — the
- * compiler rejects a duplicate. An entry without one still needs a home, and
- * gets its index; the manifest records whatever was chosen either way, so
- * nothing downstream has to reproduce this rule.
+ * Ids are `[a-z][a-z0-9_]*`, so they are safe and unique — the compiler rejects a duplicate. An
+ * entry without one gets its index; the manifest records whatever was chosen, so nothing downstream
+ * reproduces this rule.
  *
- * `taken` is per collection and must be filled in document order: the `_2`
- * suffix a collision gets depends on how many earlier entries claimed the base.
+ * `taken` is per collection and must be filled in document order: the `_2` suffix a collision gets
+ * depends on how many earlier entries claimed the base.
  */
 export function entryFileName(entry: unknown, index: number, taken: Set<string>): string {
   const id = (entry as { id?: unknown } | null)?.id;
@@ -92,13 +79,9 @@ export function entryFileName(entry: unknown, index: number, taken: Set<string>)
 }
 
 /**
- * The one pass that decides names, used by both halves of a split.
- *
- * `forEach` skips array holes, so the names it produces line up with the
- * entries it visited and *not* with `entries[i]`. Both callers therefore walk
- * `entries.forEach` and take names from a cursor rather than indexing by `i` —
- * see `filesFor`. Holes are not reachable from JSON, but the two passes have to
- * agree by construction rather than by luck.
+ * The one pass that decides names, used by both halves of a split. `forEach` skips array holes, so
+ * the names it produces line up with the entries it visited and not with `entries[i]`. Both callers
+ * walk `entries.forEach` and take names from a cursor rather than indexing by `i`.
  */
 function collectionNames(entries: readonly unknown[]): string[] {
   const taken = new Set<string>();
@@ -130,9 +113,8 @@ function collectionsOf(document: Record<string, unknown>): {
       if (owner !== section) continue;
 
       const entries = container[name];
-      // Absent stays absent: `narrative.lore` is `.optional()` rather than
-      // defaulted so a module that does not use it does not carry it, and a
-      // rebuilt document that grew an empty array would not be the same file.
+      // Absent stays absent: `narrative.lore` is `.optional()` rather than defaulted, so a rebuilt
+      // document that grew an empty array would not be the same file.
       if (!Array.isArray(entries)) continue;
       named.push({ name, entries: entries as readonly unknown[] });
     }
@@ -144,13 +126,11 @@ function collectionsOf(document: Record<string, unknown>): {
 /**
  * The manifest alone, without serializing a single entry.
  *
- * This is the half the studio needs on every save: names and order are a pure
- * function of the document and cost a regex per entry, while the other half is
- * thirteen megabytes of `JSON.stringify`. Splitting them is what lets a save
- * write one file instead of two thousand eight hundred.
+ * The half the studio needs on every save: names and order are a pure function of the document and
+ * cost a regex per entry, while the other half is thirteen megabytes of `JSON.stringify`.
  *
- * Give it a document with `world.maps` still inlined and it will name map files
- * `bundleModule` never writes — always `liftMaps` first.
+ * Given a document with `world.maps` still inlined it will name map files `bundleModule` never
+ * writes — always `liftMaps` first.
  */
 export function manifestFor(document: Record<string, unknown>): ProjectManifest {
   const sections: Record<string, { keyOrder: string[]; collections: Record<string, string[]> }> = {};
@@ -165,9 +145,8 @@ export function manifestFor(document: Record<string, unknown>): ProjectManifest 
 }
 
 /**
- * The document with its collections lifted out — everything `shell.json` holds.
- *
- * The caller's document is not modified: sections are copied one level deep.
+ * The document with its collections lifted out — everything `shell.json` holds. The caller's
+ * document is not modified: sections are copied one level deep.
  */
 export function shellFor(document: Record<string, unknown>): Record<string, unknown> {
   const shell: Record<string, unknown> = { ...document };
@@ -182,11 +161,9 @@ export function shellFor(document: Record<string, unknown>): Record<string, unkn
 }
 
 /**
- * Every entry file, given the manifest that named them.
- *
- * Walks `entries.forEach` and takes each name from a cursor, mirroring
- * `collectionNames` exactly. Indexing `names[i]` instead would misalign every
- * entry after an array hole, because only one of the two passes would skip it.
+ * Every entry file, given the manifest that named them. Walks `entries.forEach` and takes each name
+ * from a cursor, mirroring `collectionNames`; indexing `names[i]` would misalign every entry after
+ * an array hole.
  */
 function filesFor(
   document: Record<string, unknown>,
@@ -218,33 +195,27 @@ export function splitProject(document: Record<string, unknown>): SplitProject {
 }
 
 /**
- * Put a document back together.
- *
- * `files` is every file under `project/` except the manifest, by relative path.
- * Anything missing or unparseable is an issue rather than a throw: a project is
- * a directory people edit by hand, and the useful answer names the file.
+ * Put a document back together. `files` is every file under `project/` except the manifest, by
+ * relative path. Anything missing or unparseable is an issue rather than a throw, and the issue
+ * names the file.
  */
 export function joinProject(
   manifest: ProjectManifest,
   files: Readonly<Record<string, string>>,
   /**
-   * What recipes expand against. Absent means a module that does not use them,
-   * which is every module that existed before they did — an entry file is read
-   * as an entry and nothing changes.
+   * What recipes expand against. Absent means a module that does not use them, and an entry file is
+   * read as an entry.
    *
-   * This is the one place the authoring sidecar becomes a *build input*, and
-   * only for the files that ask: `AUTHORING_PATHS` still describes what a save
-   * must not sweep away, and a collection can hold recipes and literal entries
-   * side by side while it is being converted.
+   * This is the one place the authoring sidecar becomes a build input, and only for the files that
+   * ask: a collection can hold recipes and literal entries side by side while it is being
+   * converted.
    */
   authoring: { readonly prefabs?: readonly Prefab[]; readonly style?: StyleTables } = {},
 ): { document: Record<string, unknown>; issues: readonly JoinIssue[]; links: InstanceMap } {
   const issues: JoinIssue[] = [];
   const prefabs = authoring.prefabs ?? [];
-  // Provenance, recovered rather than remembered. A recipe file *is* the record
-  // that an entry came from a prefab — it names one and carries the parameters —
-  // so expanding it and dropping that on the floor is how a project ends up with
-  // prefabs nothing points at. Aurendel has 767 of these and no sidecar at all.
+  // Provenance, recovered rather than remembered: a recipe file names a prefab and carries the
+  // parameters, so expanding it without recording that leaves prefabs nothing points at.
   const links: Record<string, Record<string, PrefabLink>> = {};
 
   const read = (file: string): unknown => {
@@ -297,11 +268,9 @@ export function joinProject(
             message: `${path}: ${issue.path ? `${issue.path}: ` : ''}${issue.message}`,
           });
         }
-        // `overrides` are deliberately not recorded here. A recipe's overrides
-        // are the *shallowest* differing path and the inspector needs leaves, so
-        // `recomputeInstances` derives them from the entry it can see. Half a
-        // link remembered and half observed is the split the sidecar already
-        // documents.
+        // `overrides` are not recorded here. A recipe's overrides are the shallowest differing path
+        // and the inspector needs leaves, so `recomputeInstances` derives them from the entry it
+        // can see.
         const id = (entry as { id?: unknown } | null)?.id;
         if (entry && typeof id === 'string') {
           (links[`${key}.${name}`] ??= {})[id] = { id: parsed['@prefab'], params: parsed.params };
@@ -318,20 +287,16 @@ export function joinProject(
 /**
  * The stored text for one entry: a recipe when one reproduces it, else the entry.
  *
- * One rule, no modes. It is the same rule `bin/compress-project.ts` follows, and
- * the verify step is the whole of it — `asRecipe` never throws but a recipe is
- * not guaranteed to rebuild what it was made from:
+ * `asRecipe` never throws, but a recipe is not guaranteed to rebuild what it was made from:
  *
- *   - `expandRecipe` builds in the *template's* key order and `setPath` appends
- *     a genuinely new key at the end, so no set of overrides can reproduce an
- *     arbitrary key order;
- *   - an override whose value is `undefined` — a key the template emits and the
- *     entry lacks — is dropped by `JSON.stringify`, so the expansion comes back
- *     with a key the entry never had.
+ *   - `expandRecipe` builds in the template's key order and `setPath` appends a genuinely new key
+ *     at the end, so no set of overrides can reproduce an arbitrary key order;
+ *   - an override whose value is `undefined` — a key the template emits and the entry lacks — is
+ *     dropped by `JSON.stringify`, so the expansion comes back with a key the entry never had.
  *
- * Both produce a file that quietly expands into something else on the next load.
- * So: try it, expand it again, and keep the literal entry unless the two agree.
- * The worst case is a file that did not get smaller.
+ * Both produce a file that quietly expands into something else on the next load. So: try it, expand
+ * it again, and keep the literal entry unless the two agree. The worst case is a file that did not
+ * get smaller.
  */
 export function entryFileText(
   entry: unknown,
@@ -348,11 +313,9 @@ export function entryFileText(
 
   const text = serializeProjectValue(asRecipe(entry as Record<string, unknown>, prefab, link.params, style));
 
-  // Expanded from the *text*, not from the recipe object it came from. An
-  // override whose value is `undefined` still sits in the in-memory recipe and
-  // still suppresses the template's key, so checking that copy says the round
-  // trip works; `JSON.stringify` then drops it on the way to the file and the
-  // key comes back on the next load. The stored bytes are the only honest input.
+  // Expanded from the text, not from the recipe object it came from. An override whose value is
+  // `undefined` still sits in the in-memory recipe and suppresses the template's key, while
+  // `JSON.stringify` drops it on the way to the file. The stored bytes are the only honest input.
   const { entry: rebuilt } = expandRecipe(JSON.parse(text) as PrefabRecipe, prefabs, style);
   return JSON.stringify(rebuilt) === JSON.stringify(entry) ? text : serializeProjectValue(entry);
 }
@@ -360,18 +323,14 @@ export function entryFileText(
 /**
  * Files a project keeps that no document produces.
  *
- * A project holds two kinds of thing. Most of it is *derived*: split the
- * document and you get the same files back, so anything not in that set is
- * stale and should go. Prefabs and the style tables are not — they are the
- * authored source that entries were generated *from*, and a save that tidied
- * them away because the document did not mention them would delete the work.
+ * Most of a project is derived: split the document and the same files come back, so anything not in
+ * that set is stale. Prefabs and the style tables are not — they are the authored source that
+ * entries were generated from.
  *
  * `joinProject` never reads them: it reads exactly what the manifest names.
  *
- * `contract.json` belongs here for the same reason and was missing: it is read
- * by the editor, by `npm run validate` and by the Rules panel, and none of that
- * put it on this list — so the first save of a project that had one would have
- * swept it away. Nothing had hit it only because no project has a contract yet.
+ * `contract.json` belongs here too: it is read by the editor, by `npm run validate` and by the
+ * Rules panel.
  */
 export const AUTHORING_PATHS = ['prefabs/', 'style.json', 'contract.json'] as const;
 
@@ -381,7 +340,7 @@ export function isAuthoringFile(path: string): boolean {
   );
 }
 
-/** Every path a split project writes, manifest included. Handy for cleanup. */
+/** Every path a split project writes, manifest included. */
 export function projectFiles(split: SplitProject): readonly string[] {
   return ['project.json', ...Object.keys(split.files)].sort();
 }

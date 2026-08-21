@@ -1,25 +1,7 @@
 'use client';
 
 /**
- * What this dungeon actually generates, next to what it says.
- *
- * `roomCount` is a request, not a promise. `placeRooms` gives each room forty
- * attempts at a spot that keeps `corridorLength`'s mean clear of every other
- * room, and when it runs out it stops — no error, no diagnostic, just a map
- * with fewer rooms than the number in the file. Fifteen rooms with `5d3`
- * corridors on a 47×27 map produced two.
- *
- * Nothing else can tell an author this. Every field is valid, the module
- * compiles, and the only symptom is a dungeon that reads bigger than it walks.
- *
- * The figure is *measured*, by generating the dungeon several times and taking
- * the worst run. Predicting it by inverting the sizing arithmetic was the first
- * attempt and was badly wrong — it called 63 of Aurendel's 68 dungeons broken
- * when the engine builds all but one of them in full. Placement is seeded, so
- * a dungeon that comes up short one run in five is short.
- *
- * A reading, never a rule: it says what will happen and offers a size that
- * would make the file true. It does not edit on its own.
+ * Measure the room count a dungeon actually generates and suggest a safe size.
  */
 
 import { useMemo, useState } from 'react';
@@ -37,20 +19,14 @@ export function DungeonFit(props: {
   const compiled = store.validation.compiled;
   const [expanded, setExpanded] = useState(false);
 
-  /**
-   * Generating a dungeon five times is milliseconds, but it is milliseconds on
-   * every keystroke if it is not held. Keyed on the compiled module, which the
-   * idle tier replaces — so this follows the settled document rather than the
-   * one being typed into.
-   */
+  /** Measure the dungeon against the current compiled module, not the draft being typed. */
   const measured = useMemo(() => {
     if (!compiled || !id) return null;
     if (String(entry['algorithm'] ?? 'rooms') !== 'rooms') return null;
     try {
       return measureRooms(compiled, id, 5);
     } catch {
-      // A dungeon mid-edit may name a biome that does not exist yet. That is
-      // the console's business, not this panel's.
+      // Ignore incomplete dungeon definitions while the document is in flux.
       return null;
     }
   }, [compiled, id, entry]);
@@ -62,17 +38,13 @@ export function DungeonFit(props: {
   const height = Number.parseInt(String(entry['height'] ?? ''), 10);
   const sized = Number.isFinite(width) && Number.isFinite(height);
 
-  // A dungeon with no size of its own is sized by the engine, and that is
-  // exactly the case that comes up short — so it gets a suggestion too.
+  // If the dungeon relies on engine sizing, suggest a size that avoids a shortfall.
   const suggestion =
     short && compiled
       ? sizeToFit(compiled, id, sized ? { width, height } : undefined)
       : null;
 
-  // A suggestion that is the size it already is means the map is not the
-  // constraint — placement succeeds there and something later drops the room.
-  // Offering "size it to fit" then is a dead end, and an author who takes it
-  // twice has been told the tool does not work.
+  // If the suggestion matches the current size, the issue is not room sizing but later placement.
   const sizeWouldHelp =
     suggestion !== null && (!sized || suggestion.width !== width || suggestion.height !== height);
 

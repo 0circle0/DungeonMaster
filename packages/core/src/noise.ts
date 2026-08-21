@@ -1,16 +1,12 @@
 /**
  * Value noise, in integer arithmetic.
  *
- * The point of a noise field is *spatial correlation*: two tiles next to each
- * other get similar values, two tiles far apart get unrelated ones. That is the
- * whole difference between a lake and a scattering of puddles, and it is not
- * something an independent roll per tile can ever produce, however the odds are
- * tuned.
+ * The point of a noise field is spatial correlation: neighbouring tiles get similar values and
+ * distant ones unrelated values. That is the difference between a lake and a scattering of puddles,
+ * and no independent roll per tile can produce it.
  *
- * Every step is integer arithmetic with one division at the very end. Doubles
- * represent all of these exactly, so the field is bit-identical on every
- * platform — the same discipline `weightedPick` uses in `rng.ts`, and for the
- * same reason: a generated world has to be reproducible from its seed.
+ * Every step is integer arithmetic with one division at the end. Doubles represent all of these
+ * exactly, so the field is bit-identical on every platform.
  */
 
 export interface NoiseOptions {
@@ -43,11 +39,9 @@ function avalanche(value: number): number {
 }
 
 /**
- * The lattice value at an integer corner, as a 24-bit integer.
- *
- * Hashed rather than stored, so a field costs nothing to create and can be
- * sampled anywhere — including at negative coordinates — without allocating a
- * grid or wrapping at some arbitrary period.
+ * The lattice value at an integer corner, as a 24-bit integer. Hashed rather than stored, so a
+ * field costs nothing to create and can be sampled anywhere — negative coordinates included —
+ * without allocating a grid.
  */
 function corner(seed: number, ix: number, iy: number): number {
   const mixed = (seed ^ Math.imul(ix, 0x8da6_b343) ^ Math.imul(iy, 0xd816_3841)) | 0;
@@ -55,23 +49,16 @@ function corner(seed: number, ix: number, iy: number): number {
 }
 
 /**
- * Smoothstep in 8-bit fixed point: `3t² − 2t³`, with `t` in `[0, 256)`.
- *
- * Interpolating linearly between lattice corners leaves visible creases along
- * the lattice; this rounds them off, which is what makes a coastline read as a
- * coastline rather than as a polygon.
+ * Smoothstep in 8-bit fixed point: `3t² − 2t³`, with `t` in `[0, 256)`. Linear interpolation
+ * between lattice corners leaves visible creases; this rounds them off.
  */
 function ease(t: number): number {
   return (Math.imul(Math.imul(t, t), 768 - 2 * t) >> 16) & 0xff;
 }
 
 /**
- * Blend two 24-bit values by an 8-bit fraction.
- *
- * `Math.floor(… / 256)` rather than `>> 8`: the product reaches 0xFFFFFF × 255,
- * which is over four billion, and a shift would coerce that to int32 and wrap
- * it to a negative number. Doubles hold it exactly, so flooring is both correct
- * and still bit-identical everywhere.
+ * Blend two 24-bit values by an 8-bit fraction. `Math.floor(… / 256)` rather than `>> 8`: the
+ * product reaches 0xFFFFFF × 255, and a shift would coerce that to int32 and wrap it negative.
  */
 function lerp(a: number, b: number, t: number): number {
   return a + Math.floor(((b - a) * t) / 256);
@@ -79,8 +66,8 @@ function lerp(a: number, b: number, t: number): number {
 
 /** One octave, sampled at an integer tile with a given lattice size. */
 function octave(seed: number, x: number, y: number, scale: number): number {
-  // `Math.floor` rather than `| 0`, which truncates toward zero and would fold
-  // the lattice back on itself either side of the origin.
+  // `Math.floor` rather than `| 0`, which truncates toward zero and would fold the lattice back on
+  // itself either side of the origin.
   const ix = Math.floor(x / scale);
   const iy = Math.floor(y / scale);
 
@@ -94,19 +81,17 @@ function octave(seed: number, x: number, y: number, scale: number): number {
 }
 
 /**
- * A deterministic value-noise field.
- *
- * Seeded by a plain integer rather than an {@link import('./rng.js').Rng}: the
- * caller derives a throwaway sub-stream and takes one number from it, so
- * sampling the field cannot advance — or depend on — the run's generator.
+ * A deterministic value-noise field. Seeded by a plain integer rather than an `Rng`: the caller
+ * derives a throwaway sub-stream and takes one number from it, so sampling cannot advance or depend
+ * on the run's generator.
  */
 export function valueNoise(seed: number, options: NoiseOptions = {}): NoiseField {
   const baseScale = Math.max(2, Math.trunc(options.scale ?? DEFAULT_SCALE));
   const octaves = Math.max(1, Math.trunc(options.octaves ?? DEFAULT_OCTAVES));
   const persistence = Math.max(1, Math.min(255, Math.trunc(options.persistence ?? DEFAULT_PERSISTENCE)));
 
-  // Amplitudes in 1/256ths, and the total to divide by — both fixed up front,
-  // so `at` is a pure sum of integers with a single division at the end.
+  // Amplitudes in 1/256ths, and the total to divide by, both fixed up front so `at` is a pure sum
+  // of integers with a single division at the end.
   const layers: { seed: number; scale: number; amplitude: number }[] = [];
   let amplitude = 256;
   let scale = baseScale;

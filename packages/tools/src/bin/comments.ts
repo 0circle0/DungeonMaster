@@ -3,17 +3,15 @@
  *
  * Every comment in the project, in one file, in folder order.
  *
- * Uses the TypeScript parser for TS/TSX/JS rather than a regex: a regex for a
- * line comment matches every URL, and one for a block comment matches every
- * such sequence inside a string. `prelude.ts` holds five commented lines inside
- * the template literal it ships to QuickJS, and a site page renders two more as
- * example code; all seven must be excluded. The other languages get small
- * scanners — none of them has a regex literal, which is the part that makes
- * lexing JavaScript by hand hard.
+ * Uses the TypeScript parser for TS/TSX/JS rather than a regex: a regex for a line comment matches
+ * every URL, and one for a block comment matches every such sequence inside a string. `prelude.ts`
+ * holds five commented lines inside the template literal it ships to QuickJS, and a site page
+ * renders two more as example code; all seven must be excluded. The other languages get small
+ * scanners, none of which has a regex literal.
  *
- * Python docstrings count, because in `dmkit` that is where the explanation is.
- * They are found by position — a string opening a file or a `def`/`class` block
- * — so a triple-quoted value is not mistaken for one.
+ * Python docstrings count, because in `dmkit` that is where the explanation is. They are found by
+ * position — a string opening a file or a `def`/`class` block — so a triple-quoted value is not
+ * mistaken for one.
  *
  * JSON is skipped: no comments, and 3,185 of the project's files.
  */
@@ -60,9 +58,9 @@ function lineAt(starts: readonly number[], offset: number): number {
 }
 
 /**
- * Comments are trivia: they hang off the token that follows them, so every token
- * in the tree is asked what precedes it. The end-of-file token is a child like
- * any other, which is what catches a comment with nothing after it.
+ * Comments are trivia: they hang off the token that follows them, so every token in the tree is
+ * asked what precedes it. The end-of-file token is a child like any other, which catches a comment
+ * with nothing after it.
  */
 function scanTypeScript(path: string, text: string): Comment[] {
   const kind = path.endsWith('.tsx') ? ts.ScriptKind.TSX
@@ -144,9 +142,9 @@ function scanCss(text: string): Comment[] {
 }
 
 /**
- * A docstring is a string that *opens* something — the file, or the block after a
- * `def` or `class`. That is a position, not a shape, so a triple-quoted string
- * assigned to a variable is left alone.
+ * A docstring is a string that opens something — the file, or the block after a `def` or `class`.
+ * That is a position rather than a shape, so a triple-quoted string assigned to a variable is left
+ * alone.
  */
 function scanPython(text: string): Comment[] {
   const out: Comment[] = [];
@@ -196,8 +194,8 @@ function scanPython(text: string): Comment[] {
       continue;
     }
 
-    // A line ending in `:` opens a block, and the next statement in it may be a
-    // docstring. Anything else means the block has started without one.
+    // A line ending in `:` opens a block, and the next statement in it may be a docstring. Anything
+    // else means the block has started without one.
     opensBlock = /:\s*(#.*)?$/.test(line);
   }
 
@@ -311,8 +309,8 @@ for (const entry of entries) {
   for (const comment of entry.comments) {
     const at = comment.line === comment.endLine ? `L${comment.line}` : `L${comment.line}–${comment.endLine}`;
     parts.push(`\n**${at}**\n`);
-    // Blockquoted: comments contain `#` and `-` freely and would otherwise be
-    // read as this document's own headings.
+    // Blockquoted: comments contain `#` and `-` freely and would otherwise be read as this
+    // document's own headings.
     parts.push(comment.text.split('\n').map((line) => (line ? `> ${line}` : '>')).join('\n'));
     parts.push('');
   }

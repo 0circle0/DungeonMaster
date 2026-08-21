@@ -52,8 +52,8 @@ describe('describeSchema', () => {
   const fields = monster.spec.kind === 'object' ? monster.spec.fields : [];
   const field = (key: string) => fields.find((f) => f.key === key)!;
 
-  // Turning ref markers into dropdowns is what makes dangling references
-  // nearly unauthorable, so it has to survive schema changes.
+  // Turning ref markers into dropdowns is what makes dangling references nearly unauthorable, so it
+  // has to survive schema changes.
   it('marks reference fields with their target collection', () => {
     expect(field('loot').spec).toMatchObject({ kind: 'string', ref: 'content.lootTables' });
     expect(field('faction').spec).toMatchObject({ kind: 'string', ref: 'content.factions' });
@@ -91,8 +91,8 @@ describe('describeSchema', () => {
     expect(when.spec).toMatchObject({ kind: 'dsl', flavour: 'predicate' });
   });
 
-  // Gating is structured rather than raw predicate JSON, so the editor renders
-  // a real form for it — dropdowns of quests, items, skills and factions.
+  // Gating is structured rather than raw predicate JSON, so the editor renders a real form for it —
+  // dropdowns of quests, items, skills and factions.
   it('renders requirements as a structured gate form, not JSON', () => {
     const ability = collectionAt('content.abilities')!;
     const abilityFields = ability.spec.kind === 'object' ? ability.spec.fields : [];
@@ -128,8 +128,8 @@ describe('describeSchema', () => {
   });
 
   /**
-   * `step="any"` makes a browser's arrows move by 1, which walks a probability
-   * clean past its own maximum. The bounds to do better are already declared.
+   * `step="any"` makes a browser's arrows move by 1, which walks a probability past its own
+   * maximum. The bounds to do better are already declared.
    */
   it('steps a number by something the schema makes sensible', () => {
     const palette = collectionAt('world.palettes')!;
@@ -150,8 +150,8 @@ describe('describeSchema', () => {
     if (level.spec.kind !== 'number') return;
     expect(stepFor(level.spec)).toBe(1);
 
-    // A float with no declared ceiling is a quantity, not a ratio — but it is
-    // still a float, so the arrows must not move it by a whole unit.
+    // A float with no declared ceiling is a quantity rather than a ratio, but it is still a float,
+    // so the arrows must not move it by a whole unit.
     const terrain = collectionAt('world.terrains')!;
     const terrainFields = terrain.spec.kind === 'object' ? terrain.spec.fields : [];
     const moveCost = terrainFields.find((f) => f.key === 'moveCost')!;
@@ -160,8 +160,8 @@ describe('describeSchema', () => {
     expect(stepFor(moveCost.spec)).toBe(0.1);
   });
 
-  // Every 0..1 field in the format is a probability or a ratio; none of them
-  // should ever have been steppable by a whole unit.
+  // Every 0..1 field in the format is a probability or a ratio, so none should be steppable by a
+  // whole unit.
   it('gives every declared ratio a hundredth-sized step', () => {
     const seen: string[] = [];
     const walk = (spec: FieldSpec, where: string, depth = 0) => {
@@ -224,11 +224,10 @@ describe('immutable editing', () => {
   /**
    * The contract bulk editing has to keep.
    *
-   * Validation caches per entry, keyed on the entry *object*, so an edit is
-   * cheap only because `setAt` leaves every untouched entry as the same object.
-   * A bulk operation written the obvious way — clone the document, mutate it —
-   * satisfies every other test in this file and quietly makes validation an
-   * order of magnitude slower. So it is asserted rather than assumed.
+   * Validation caches per entry, keyed on the entry object, so an edit is cheap only because
+   * `setAt` leaves every untouched entry as the same object. Cloning the document and mutating it
+   * satisfies every other test in this file and quietly makes validation an order of magnitude
+   * slower.
    */
   describe('setAtMany keeps untouched entries identical', () => {
     it('shares every entry it did not edit', () => {
@@ -278,13 +277,13 @@ describe('immutable editing', () => {
 });
 
 /**
- * The editor's headline requirement: load a JSON module, edit it, export a
- * module. Export must be the authored document, not a compiled expansion —
- * otherwise every save would bloat the file with schema defaults.
+ * The editor's headline requirement: load a JSON module, edit it, export a module. Export must be
+ * the authored document rather than a compiled expansion, or every save would bloat the file with
+ * schema defaults.
  */
 describe('load → edit → export round trip', () => {
-  // Export re-serializes, so blank lines and key spacing are normalized. What
-  // must survive exactly is the content: no field added, dropped, or reordered.
+  // Export re-serializes, so blank lines and key spacing are normalized. What must survive exactly
+  // is the content: no field added, dropped, or reordered.
   it('exports the same content when nothing was edited', () => {
     const doc = loadMinimal();
     const exported = JSON.parse(`${JSON.stringify(doc, null, 2)}\n`) as ModuleDoc;
@@ -343,19 +342,17 @@ describe('load → edit → export round trip', () => {
 });
 
 /**
- * The clutter fix: a clause an author never touched should not draw a box.
- *
- * Nearly every collection in the schema is `.default([])`, which the form
- * reports as optional *with* a default — and the form then paints that default
- * over the absent key. These pin the predicate that decides otherwise.
+ * A clause an author never touched should not draw a box. Nearly every collection in the schema is
+ * `.default([])`, which the form reports as optional with a default and then paints over the absent
+ * key. These pin the predicate that decides otherwise.
  */
 describe('empty nested sections fold away', () => {
   it('treats absence and emptiness alike, but keeps what was written', () => {
     for (const empty of [undefined, null, [], {}, '']) {
       expect(hasContent(empty), JSON.stringify(empty) ?? 'undefined').toBe(false);
     }
-    // 0 and false are things an author wrote down. Folding them would put
-    // `oneWay: false` out of reach of everything but the raw JSON editor.
+    // 0 and false are things an author wrote down. Folding them would put `oneWay: false` out of
+    // reach of everything but the raw JSON editor.
     for (const present of [0, false, 'x', [0], { a: 1 }]) {
       expect(hasContent(present), JSON.stringify(present)).toBe(true);
     }
@@ -380,7 +377,7 @@ describe('empty nested sections fold away', () => {
     for (const spec of rows) expect(rendersAsGroup(spec), spec.kind).toBe(false);
   });
 
-  // The complaint, in numbers: an empty gate used to paint a box per clause.
+  // In numbers: an empty gate used to paint a box per clause.
   it('reduces an untouched requirement to its three scalar rows', () => {
     const gate = collectionAt('world.gates')!;
     const requires = gate.spec.kind === 'object'
@@ -401,9 +398,8 @@ describe('empty nested sections fold away', () => {
         ? requires.spec.fields.filter((f) => !foldable(raw).includes(f.key)).map((f) => f.key)
         : [];
 
-    // Nothing gated: every container clause folds, leaving only the scalar
-    // rows. `currency` joined them when a toll became something a gate can ask
-    // for — it is a plain number, so there is no container to fold away.
+    // Nothing gated: every container clause folds, leaving only the scalar rows. `currency` is
+    // among them because a toll is a plain number, so there is no container to fold away.
     expect(shown({}).sort()).toEqual(['currency', 'description', 'maxLevel', 'minLevel']);
     expect(foldable({}).length).toBeGreaterThan(12);
 
@@ -428,8 +424,8 @@ describe('empty nested sections fold away', () => {
 
     for (const collection of COLLECTIONS) {
       for (const field of walk(collection.spec, new Set())) {
-        // The fold operates on optional fields only; this is the guard that
-        // says so from the outside.
+        // The fold operates on optional fields only; this is the guard that says so from the
+        // outside.
         if (!field.optional) {
           expect(field.optional, `${collection.path}.${field.key}`).toBe(false);
         }
@@ -439,8 +435,8 @@ describe('empty nested sections fold away', () => {
 });
 
 /**
- * The map drawer edits whatever actually drew the map — which is not always the
- * thing that was selected, and whose palette is resolved three different ways.
+ * The map drawer edits whatever actually drew the map, which is not always the thing that was
+ * selected and whose palette is resolved three different ways.
  */
 describe('what drew the map', () => {
   it('gives an area its biome\'s palette, not its own', () => {
@@ -493,9 +489,8 @@ describe('what drew the map', () => {
   });
 
   /**
-   * The guard that matters. Three collections resolve their palette three
-   * different ways, and the drawer's whole value is being right about which.
-   * If anyone changes the override order in the engine, this fails here.
+   * Three collections resolve their palette three different ways, and the drawer's value is being
+   * right about which. If the override order in the engine changes, this fails here.
    */
   it('resolves the same palette the engine does, everywhere', () => {
     for (const [name, doc] of [['greenmarch', loadGreenmarch()], ['minimal', loadMinimal()]] as const) {
@@ -511,8 +506,8 @@ describe('what drew the map', () => {
       for (const target of targets) {
         const mine = resolveMapSubjects(doc, target);
         const theirs = resolvePalette(module, mine.paletteId ?? undefined);
-        // `resolvePalette` always returns something; what is being pinned is
-        // that we hand it the same id the engine would have.
+        // `resolvePalette` always returns something; what is pinned is that we hand it the same id
+        // the engine would have.
         expect(theirs.floor, `${name} ${target.type}:${target.id}`).toBeTruthy();
         if (mine.paletteId) expect(theirs.id).toBe(mine.paletteId);
       }
@@ -521,8 +516,8 @@ describe('what drew the map', () => {
 });
 
 /**
- * The two hand-kept registries fail open — an unknown path is simply an empty
- * set — so a typo silently drops a note rather than breaking anything.
+ * The two hand-kept registries fail open — an unknown path is an empty set — so a typo silently
+ * drops a note rather than breaking anything.
  */
 describe('the studio registries stay in step with the schema', () => {
   const pathsInSchema = new Set<string>([...COLLECTION_PATHS, ...SINGLETONS.map((s) => s.path)]);

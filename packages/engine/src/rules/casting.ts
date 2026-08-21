@@ -1,20 +1,12 @@
 /**
  * Casting: slots, points, concentration, rituals, and components.
  *
- * `rules.spellcasting` described a whole economy — Vancian slots, a points
- * pool, concentration with its save, ritual casting, upcasting, and the verbal,
- * somatic and material components that make a bound caster a problem — and not
- * one field of it was read. A module that declared a wizard got a fighter whose
- * abilities happened to cost focus.
- *
  * Two things decide the shape here:
  *
- * - **The engine owns no spell list.** Which abilities are spells is decided by
- *   an ability carrying a `spellLevel`, exactly as the schema says. An ability
- *   without one is unaffected by everything in this file.
- * - **A slot is spent, not reserved.** `Entity.slotsUsed` counts what is gone,
- *   indexed by level, so a character who levels up gains slots without anything
- *   having to reconcile a stored maximum.
+ * - The engine owns no spell list. Which abilities are spells is decided by an ability carrying a
+ *   `spellLevel`; an ability without one is unaffected by everything in this file.
+ * - A slot is spent, not reserved. `Entity.slotsUsed` counts what is gone, indexed by level, so a
+ *   character who levels up gains slots without anything reconciling a stored maximum.
  */
 
 import { Rng } from '@dm/core';
@@ -50,11 +42,8 @@ export interface SpellDef {
 }
 
 /**
- * The module's casting rules.
- *
- * The schema's own type, not a copy of it: a hand-written mirror here meant an
- * `as unknown as` cast, and a field added to one and not the other would have
- * type-checked all the way to a runtime undefined.
+ * The module's casting rules. The schema's own type rather than a hand-written mirror, which would
+ * need an `as unknown as` cast and could drift.
  */
 export function spellcastingOf(module: CompiledModule): Spellcasting {
   return module.source.rules.spellcasting;
@@ -76,11 +65,8 @@ export function isSpell(ability: { spellLevel?: number }): boolean {
 }
 
 /**
- * Slots this character has at each level, before any are spent.
- *
- * `slotTable` is keyed by caster level and `progression` scales it, so a
- * half-caster reads the same table at half the rate — which is what the field
- * has always meant and never done.
+ * Slots this character has at each level, before any are spent. `slotTable` is keyed by caster
+ * level and `progression` scales it, so a half-caster reads the same table at half the rate.
  */
 export function slotsFor(module: CompiledModule, actor: Entity): number[] {
   const casting = spellcastingOf(module);
@@ -92,8 +78,8 @@ export function slotsFor(module: CompiledModule, actor: Entity): number[] {
   const effective = Math.max(0, Math.floor(actor.level * (caster.progression ?? 1)));
   if (effective <= 0) return [];
 
-  // The highest declared level at or below the caster's, so a table that only
-  // lists odd levels still works.
+  // The highest declared level at or below the caster's, so a table that only lists odd levels
+  // still works.
   let best: number[] = [];
   for (const [levelKey, slots] of Object.entries(casting.slotTable)) {
     if (Number(levelKey) <= effective) {
@@ -118,10 +104,8 @@ export function slotsLeft(module: CompiledModule, actor: Entity): number[] {
 }
 
 /**
- * The lowest slot that can carry this spell, or null when none can.
- *
- * A spell may be cast from a higher slot than its own — that is what upcasting
- * *is* — so the search runs upward from the spell's level.
+ * The lowest slot that can carry this spell, or null when none can. A spell may be cast from a
+ * higher slot than its own, so the search runs upward.
  */
 export function slotForSpell(
   module: CompiledModule,
@@ -129,8 +113,7 @@ export function slotForSpell(
   spellLevel: number,
 ): number | null {
   if (spellLevel <= 0) return 0; // Cantrips cost nothing.
-  // `maxSpellLevel` was declared by every module with magic and consulted by
-  // nothing, so a spell above the ruleset's own ceiling cast perfectly well.
+  // `maxSpellLevel` caps the ruleset's own ceiling.
   const ceiling = spellcastingOf(module).maxSpellLevel;
   if (spellLevel > ceiling) return null;
 
@@ -166,10 +149,8 @@ function evaluate(module: CompiledModule, actor: Entity, expr: Expr): number | u
       derived: stats.derived,
       // The attribute the class casts with, so one formula covers every caster.
       castingMod: caster ? (stats.mod[caster.castingAttribute] ?? 0) : 0,
-      // Without this a caster's save DC and attack bonus cannot grow with
-      // level, because this scope is built here rather than by `buildScope`:
-      // a formula could name `actor.level` but not the module's own
-      // proficiency curve, which is the number a ruleset actually tunes.
+      // This scope is built here rather than by `buildScope`, so the proficiency curve has to be
+      // supplied explicitly or a caster's save DC and attack bonus cannot grow with level.
       proficiency: proficiencyOf(module, actor),
     },
   };
@@ -178,21 +159,16 @@ function evaluate(module: CompiledModule, actor: Entity, expr: Expr): number | u
 }
 
 /**
- * Whether the caster can supply what the spell asks for.
- *
- * A gagged caster cannot speak the words and a bound one cannot make the signs
- * — which is the entire point of components, and the reason a module declares
- * them. Blocking conditions are named by the module's own `prevents` lists, so
- * the engine still knows nothing about what silence or manacles are.
+ * Whether the caster can supply what the spell asks for. Blocking conditions are named by the
+ * module's own `prevents` lists, so the engine knows nothing about what silence or manacles are.
  */
 export function componentsMissing(
   txn: Transaction,
   actor: Entity,
   spell: SpellDef,
 ): Message | null {
-  // Which action a component actually is, per the module. A ruleset that names
-  // neither cannot have its casting interrupted that way, which is a coherent
-  // thing for a ruleset to say.
+  // Which action a component is, per the module. A ruleset that names neither cannot have its
+  // casting interrupted that way.
   const { verbal, somatic } = spellcastingOf(txn.module).componentActionTypes;
 
   for (const component of spell.components) {
@@ -225,10 +201,8 @@ export function consumeComponents(txn: Transaction, actor: Entity, spell: SpellD
 }
 
 /**
- * Pay for a spell, in whatever currency the module casts in.
- *
- * Returns the slot the spell went into, so the caller knows how far it was
- * upcast. A ritual pays nothing and takes time instead.
+ * Pay for a spell, in whatever currency the module casts in. Returns the slot the spell went into,
+ * so the caller knows how far it was upcast. A ritual pays nothing and takes time instead.
  */
 export function paySpell(
   txn: Transaction,
@@ -246,8 +220,7 @@ export function paySpell(
     return { ok: true, slot: level };
   }
 
-  // Points first when a module casts both ways: a points caster who also has
-  // slots should burn the renewable resource before the scarce one.
+  // Points first when a module casts both ways: burn the renewable resource before the scarce one.
   if ((casting.mode === 'points' || casting.mode === 'both') && casting.pointResource) {
     const cost = casting.pointCosts[String(level)] ?? 0;
     if (cost > 0) {
@@ -282,11 +255,8 @@ export function paySpell(
 }
 
 /**
- * Take up concentration on a spell, dropping whatever was already held.
- *
- * One at a time unless the module says otherwise — and because only one is
- * tracked per creature, `maxConcurrent` above one simply means the previous
- * spell is not dropped.
+ * Take up concentration on a spell, dropping whatever was already held. Only one is tracked per
+ * creature, so `maxConcurrent` above one means the previous spell is not dropped.
  */
 export function beginConcentration(txn: Transaction, actor: Entity, spellId: string): void {
   const casting = spellcastingOf(txn.module);
@@ -300,11 +270,8 @@ export function beginConcentration(txn: Transaction, actor: Entity, spellId: str
 }
 
 /**
- * A blow that might shake a caster's hold on a spell.
- *
- * Called from the damage path, because that is the only moment concentration is
- * ever really tested. The difficulty is the module's formula — usually "ten, or
- * half the damage, whichever is worse".
+ * A blow that might shake a caster's hold on a spell. Called from the damage path, since that is
+ * when concentration is tested. The difficulty is the module's formula.
  */
 export function testConcentration(
   txn: Transaction,

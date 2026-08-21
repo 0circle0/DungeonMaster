@@ -1,16 +1,12 @@
 /**
  * Loading a module from disk — the one place filesystem policy lives.
  *
- * Historically every consumer (CLI, validate, both web apps) carried its own
- * copy of "read `<dir>/module.json`", which meant a change to what a module
- * *is* on disk had five places to miss. A module is now a directory: the
- * `module.json` document plus any number of static map folders under `maps/`,
- * each assembled into the document's `world.maps` before compilation.
+ * A module is a directory: the `module.json` document plus any number of static map folders under
+ * `maps/`, each assembled into the document's `world.maps` before compilation.
  *
- * This file is Node-only and is published as the `@dm/module/load` subpath —
- * deliberately not exported from the package index, which browser code
- * bundles. A client import of this file is a build error, and that is the
- * guard, not a convention.
+ * Node-only, published as the `@dm/module/load` subpath and deliberately not exported from the
+ * package index, which browser code bundles. A client import of this file is a build error, and
+ * that is the guard.
  */
 
 import { readFileSync, readdirSync, existsSync, statSync } from 'node:fs';
@@ -59,12 +55,10 @@ export function resolveModulePath(input: string): string {
 }
 
 /**
- * Read a module directory and inline its `maps/` folders into `world.maps`.
- *
- * Folder discovery is sorted bytewise and the result re-sorted by map id, so
- * the assembled document — and therefore the module hash — never depends on
- * what order a filesystem happened to list entries in. A module with no
- * `maps/` directory assembles to exactly its `module.json`, byte for byte.
+ * Read a module directory and inline its `maps/` folders into `world.maps`. Folder discovery is
+ * sorted bytewise and the result re-sorted by map id, so the assembled document — and the module
+ * hash — never depends on filesystem enumeration order. A module with no `maps/` directory
+ * assembles to exactly its `module.json`.
  */
 export function readAssembledModule(input: string): AssembledModule {
   const path = resolveModulePath(input);
@@ -75,13 +69,10 @@ export function readAssembledModule(input: string): AssembledModule {
 }
 
 /**
- * Inline a module directory's `maps/<id>/` folders into a document it is given.
- *
- * Separate from reading the file because a document does not always come from
- * one: `bin/project.ts` builds `module.json` out of `project/` and has to
- * validate the *assembled* form before writing the raw one, or every module
- * that keeps its maps in folders fails its own build on references assembly
- * would have resolved.
+ * Inline a module directory's `maps/<id>/` folders into a document it is given. Separate from
+ * reading the file because a document does not always come from one: `bin/project.ts` builds
+ * `module.json` out of `project/` and has to validate the assembled form before writing the raw
+ * one.
  */
 export function assembleMapFolders(
   doc: Record<string, unknown>,
@@ -114,9 +105,8 @@ export function assembleMapFolders(
         continue;
       }
 
-      // The folder name is the map's address for the editor's save endpoint;
-      // letting it drift from the manifest id would make "which folder do I
-      // write" a guess.
+      // The folder name is the map's address for the editor's save endpoint; letting it drift from
+      // the manifest id would make "which folder do I write" a guess.
       if (manifest['id'] !== folder) {
         issues.push({
           file: at('map.json'),
@@ -159,8 +149,8 @@ export function formatMapIssues(issues: readonly MapFileIssue[]): string {
 }
 
 /**
- * Find `extends` bases among sibling module directories — each assembled the
- * same way, so a base module's map folders merge like any other content.
+ * Find `extends` bases among sibling module directories, each assembled the same way, so a base
+ * module's map folders merge like any other content.
  */
 export function siblingLoader(modulesRoot: string) {
   return (identity: string): Record<string, unknown> | undefined => {

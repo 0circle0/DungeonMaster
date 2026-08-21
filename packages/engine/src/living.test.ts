@@ -71,10 +71,9 @@ describe('memory keys', () => {
 });
 
 describe('memory in scope', () => {
-  // `requirement.memories` compiles to `{exists: "memory.<who>.<kind>"}`, and
-  // until the namespace was built in `buildScope` it was populated in exactly
-  // one place — dialogue. Everywhere else the path resolved to null, so
-  // `known: true` never passed and `known: false` always did, silently.
+  // `requirement.memories` compiles to `{exists: "memory.<who>.<kind>"}`, and until the namespace
+  // was built in `buildScope` it was populated only in dialogue. Everywhere else the path resolved
+  // to null, so `known: true` never passed and `known: false` always did.
   const gate = (who: string, kind: string, withinDays?: number) =>
     compileRequirement({ memories: [{ deedKind: kind, who, known: true, ...(withinDays !== undefined ? { withinDays } : {}) }] } as never);
 
@@ -112,9 +111,8 @@ describe('memory in scope', () => {
     expect(holds(txn, 'vess', gate('anyone', 'barrow_robbed'))).toBe(false);
   });
 
-  // The regression that matters: `withinDays` compared `world.day` (a day
-  // index) against a record's `.at` (a minute count), so the subtraction was
-  // hugely negative and every window ever declared passed.
+  // `withinDays` compared `world.day` (a day index) against a record's `.at` (a minute count), so
+  // the subtraction was hugely negative and every window ever declared passed.
   it('measures withinDays in days, so an old memory falls outside the window', () => {
     const txn = afterTheft();
     const aged = new Transaction({ ...txn.state, minute: txn.state.minute + DAY * 90 }, GREENMARCH);
@@ -124,9 +122,8 @@ describe('memory in scope', () => {
   });
 
   it('costs nothing until something reads it', () => {
-    // The five `who` keys are getters; building a scope must not walk the deed
-    // log. Proven by building a scope against a state whose deed list would
-    // throw if it were iterated.
+    // The five `who` keys are getters, so building a scope must not walk the deed log. Proven
+    // against a state whose deed list would throw if it were iterated.
     const txn = afterTheft();
     const booby = new Proxy([] as unknown[], {
       get(target, prop) {
@@ -199,8 +196,8 @@ describe('gossip', () => {
       spreadRumours(txn, day, Rng.fromSeed(day));
       spread = Object.keys(txn.state.memory).length > 1;
     }
-    // greenmarch has a single NPC, so the honest assertion is that the machinery
-    // ran without inventing knowers.
+    // greenmarch has a single NPC, so the honest assertion is that the machinery ran without
+    // inventing knowers.
     expect(Object.keys(txn.state.memory)).toContain('vess');
   });
 
@@ -313,8 +310,8 @@ describe('quest timers', () => {
     const doc = JSON.parse(JSON.stringify(GREENMARCH.source)) as never as {
       narrative: { quests: Record<string, unknown>[] };
     };
-    // By id, not by position — a module gaining a quest must not silently
-    // repoint this fixture at a different one.
+    // By id, not by position — a module gaining a quest must not silently repoint this fixture at a
+    // different one.
     const timed = doc.narrative.quests.find((quest) => quest['id'] === 'the_mill_door');
     if (!timed) throw new Error('fixture failed: no the_mill_door');
     timed['timeLimitDays'] = 2;
@@ -345,7 +342,7 @@ describe('the world clock', () => {
   });
 });
 
-// The plan's headline requirement for this phase.
+// The headline requirement for this phase.
 describe('determinism across a hundred simulated days', () => {
   const script: Action[] = [
     { type: 'acceptQuest', quest: 'the_mill_door' },
@@ -361,8 +358,8 @@ describe('determinism across a hundred simulated days', () => {
     expect(JSON.stringify(a.events)).toBe(JSON.stringify(b.events));
   });
 
-  // A day's off-screen activity must not depend on what the party did with
-  // their turns — only on the seed and the day number.
+  // A day's off-screen activity must not depend on what the party did with their turns — only on
+  // the seed and the day number.
   it('is unaffected by how the party spent their time getting there', () => {
     const straight = reduceAll(fresh(77), [{ type: 'advanceTime', minutes: DAY * 30 }], ctx);
     const dawdled = reduceAll(fresh(77), [

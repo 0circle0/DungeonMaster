@@ -1,18 +1,14 @@
 /**
  * Pathfinding: A* over the tile map.
  *
- * Runs for every creature that moves, every turn, so it uses a binary heap
- * rather than scanning an array for the cheapest node — the difference is
- * invisible on a small room and very visible in a large cavern with a dozen
- * combatants.
+ * Runs for every creature that moves, every turn, so it uses a binary heap rather than scanning an
+ * array for the cheapest node.
  *
- * Movement cost comes from the module: each terrain declares a `moveCost` and
- * each movement mode a `terrainMultiplier`, so a swimmer crosses water cheaply
- * and a walker cannot cross it at all. The engine contributes only the search.
+ * Movement cost comes from the module: each terrain declares a `moveCost` and each movement mode a
+ * `terrainMultiplier`, so a swimmer crosses water cheaply and a walker cannot cross it at all.
  *
- * Determinism matters as much as speed. Ties are broken by insertion order, so
- * the same request always returns the same path — a replay that diverged
- * because two routes tied would be very hard to debug.
+ * Ties are broken by insertion order, so the same request always returns the same path — a replay
+ * that diverged because two routes tied would be hard to debug.
  */
 
 import { key } from './tiles.js';
@@ -90,8 +86,8 @@ export interface PathOptions {
   /** Whether diagonal steps are allowed. */
   readonly diagonal?: boolean;
   /**
-   * Stop on reaching any tile adjacent to the goal rather than the goal itself
-   * — what a melee attacker wants, since the target's own tile is occupied.
+   * Stop on reaching any tile adjacent to the goal rather than the goal itself — what a melee
+   * attacker wants, since the target's own tile is occupied.
    */
   readonly adjacentIsEnough?: boolean;
 }
@@ -138,8 +134,8 @@ export function findPath(options: PathOptions): Path {
       const next = { x: current.x + offset.x, y: current.y + offset.y };
       const nextKey = key(next);
 
-      // The goal itself may be occupied — that is the normal case when moving
-      // to attack — so an occupied goal is still worth reaching.
+      // The goal itself may be occupied — the normal case when moving to attack — so an occupied
+      // goal is still worth reaching.
       if (blocked.has(nextKey) && nextKey !== goalKey) continue;
 
       const step = terrain.costOf(map, next, modes);
@@ -180,9 +176,8 @@ function reconstruct(
 }
 
 /**
- * Every tile reachable within a movement budget, with what it costs to get
- * there. This is what draws the "where can I move" highlight, and what an AI
- * uses to decide where to stand.
+ * Every tile reachable within a movement budget, with what it costs to get there. Draws the "where
+ * can I move" highlight, and tells an AI where it can stand.
  */
 export function reachable(
   options: Omit<PathOptions, 'to' | 'adjacentIsEnough'> & { budget: number },
@@ -226,10 +221,8 @@ export function reachable(
 }
 
 /**
- * Flood fill of everything connected to a start tile.
- *
- * Used by generation to prove a dungeon has no sealed-off rooms — the property
- * test that keeps a generator from producing an unplayable map.
+ * Flood fill of everything connected to a start tile. Used by generation to prove a dungeon has no
+ * sealed-off rooms.
  */
 export function floodFill(
   map: TileMap,

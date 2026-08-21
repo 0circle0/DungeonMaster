@@ -1,12 +1,10 @@
 """The roads between the regions.
 
-Region files own the lanes inside a region; the highways that stitch the
-continent together live here, in one table, because that is the only way to see
-whether the map is actually connected.
+Region files own the lanes inside a region; the highways that stitch the continent together live
+here, in one table, because that is the only way to see whether the map is connected.
 
-Times are in minutes and they are long on purpose: crossing from the Kingsvale
-to the Ember Reach should feel like a decision, not a step. The engine spends
-them on `advanceTime` before the destination is entered (reduce.ts:300).
+Times are in minutes and long on purpose: the engine spends them on `advanceTime` before the
+destination is entered (reduce.ts).
 
 Geography, so the table can be checked against something:
 

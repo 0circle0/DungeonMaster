@@ -1,27 +1,22 @@
 /**
  * The editor mod contract.
  *
- * An engine mod changes how a game plays; an editor mod changes how a game is
- * authored. They are separate targets because they run against different hosts,
- * and a feature normally ships as one of each — an editor mod adds a field, and
- * its paired engine mod reads it.
+ * An engine mod changes how a game plays; an editor mod changes how a game is authored. They are
+ * separate targets because they run against different hosts, and a feature normally ships as one of
+ * each — an editor mod adds a field, and its paired engine mod reads it.
  *
- * ## Why widgets are described rather than rendered
+ * Why widgets are described rather than rendered
  *
- * Mod code runs inside QuickJS, which has no DOM and no React. It cannot return
- * a component. So it returns a **description** of one, and the host renders it
- * with the editor's own components. That is a real limit and worth stating
- * plainly: this model covers extra fields, tables, buttons, and text. It cannot
- * express a canvas, a map overlay, a graph, drag-and-drop, or per-keystroke
- * feedback. An editor mod that needs those needs a core editor change instead.
+ * Mod code runs inside QuickJS, which has no DOM and no React, so it returns a description of a
+ * component and the host renders it with the editor's own components. That covers extra fields,
+ * tables, buttons and text. It cannot express a canvas, a map overlay, a graph, drag-and-drop, or
+ * per-keystroke feedback; an editor mod that needs those needs a core editor change.
  *
- * ## Why fields write into `extra`
+ * Why fields write into `extra`
  *
- * `schema/common.ts` already documents `extra` as "the supported way to exceed
- * what the format ships with". A mod adding `morale` to a monster writes into
- * that bag, so the module still validates and still hashes stably against a
- * stock engine — no schema change, and a game carrying mod data is not a broken
- * game to anyone who lacks the mod.
+ * `schema/common.ts` documents `extra` as the supported way to exceed what the format ships with. A
+ * mod adding `morale` to a monster writes into that bag, so the module still validates and hashes
+ * stably against a stock engine.
  */
 
 import { z } from 'zod';
@@ -49,11 +44,8 @@ export function isEditorHookName(value: string): value is EditorHookName {
 }
 
 /**
- * A field description.
- *
- * Deliberately a subset of the editor's own `FieldSpec`, which is already plain
- * data — so the existing `Field` component renders a mod's field with no new
- * rendering code at all.
+ * A field description. A subset of the editor's own `FieldSpec`, which is already plain data, so
+ * the existing `Field` component renders a mod's field with no new rendering code.
  */
 export const modFieldSchema = z
   .object({
@@ -61,10 +53,9 @@ export const modFieldSchema = z
     path: z.array(z.union([z.string(), z.number().int()])).min(1).max(8),
     label: z.string().min(1).max(120),
     kind: z.enum(['string', 'number', 'boolean', 'select']),
-    // `.optional()` rather than `.default()` so the schema's input and output
-    // types stay identical — `modWidgetSchema` is recursive and needs an
-    // explicit `ZodType<ModWidget>` annotation, which a default would break.
-    // Readers use `?? []` / `?? ''`.
+    // `.optional()` rather than `.default()` so the schema's input and output types stay identical:
+    // `modWidgetSchema` is recursive and needs an explicit `ZodType<ModWidget>` annotation, which a
+    // default would break. Readers use `?? []` / `?? ''`.
     /** For `select`. */
     options: z.array(z.string()).max(200).optional(),
     help: z.string().max(400).optional(),
@@ -76,8 +67,8 @@ export const modFieldSchema = z
 export type ModField = z.infer<typeof modFieldSchema>;
 
 /** A widget tree the host renders with the editor's own components. */
-// The `| undefined` on every optional is `exactOptionalPropertyTypes` talking:
-// zod's parsed output admits it, so the hand-written mirror has to as well.
+// The `| undefined` on every optional is `exactOptionalPropertyTypes`: zod's parsed output admits
+// it, so the hand-written mirror has to as well.
 export type ModWidget =
   | { readonly kind: 'text'; readonly text: string; readonly tone?: 'note' | 'warn' | 'error' | undefined }
   | { readonly kind: 'field'; readonly field: ModField }
@@ -85,10 +76,9 @@ export type ModWidget =
   | { readonly kind: 'table'; readonly columns: readonly string[]; readonly rows: readonly (readonly string[])[] }
   | { readonly kind: 'rows'; readonly children: readonly ModWidget[] };
 
-// `z.lazy` plus an explicit annotation is how Zod expresses a recursive shape,
-// and the trailing cast is what `dsl/schema.ts` does for the same reason: the
-// defaults inside make the parsed output differ from the accepted input, which
-// a bare `ZodType<T>` will not admit.
+// `z.lazy` plus an explicit annotation is how Zod expresses a recursive shape, and the trailing
+// cast is what `dsl/schema.ts` does for the same reason: the defaults inside make the parsed output
+// differ from the accepted input.
 export const modWidgetSchema: z.ZodType<ModWidget> = z.lazy(() =>
   z.discriminatedUnion('kind', [
     z.object({ kind: z.literal('text'), text: z.string().max(4000), tone: z.enum(['note', 'warn', 'error']).optional() }).strict(),

@@ -1,18 +1,16 @@
 /**
- * The world: where things are, what happens when you go there, and what stops
- * you getting in.
+ * The world: where things are, what happens when you go there, and what stops you getting in.
  *
- * The spatial hierarchy is **Biome → Area → Point of Interest**:
+ * The spatial hierarchy is Biome → Area → Point of Interest:
  *
- *   - a **biome** is a theme (the marsh, the deep vaults) supplying room
- *     templates, encounter tables, and ambience;
- *   - an **area** is a named place on the map, belonging to a biome, connected
- *     to other areas, and holding points of interest;
- *   - a **point of interest** is somewhere you actually go: a shrine, a locked
- *     door, a camp, a dungeon mouth, a market.
+ *   - a biome is a theme supplying room templates, encounter tables and ambience;
+ *   - an area is a named place on the map, belonging to a biome, connected to other areas, and
+ *     holding points of interest;
+ *   - a point of interest is somewhere you go: a shrine, a locked door, a camp, a dungeon mouth, a
+ *     market.
  *
- * Procedural dungeons hang off a point of interest rather than replacing it, so
- * an authored world and a generated one compose instead of competing.
+ * Procedural dungeons hang off a point of interest rather than replacing it, so an authored world
+ * and a generated one compose.
  */
 
 import { z } from 'zod';
@@ -23,10 +21,8 @@ import { terrainSchema, paletteSchema, mapSpecSchema, positionSchema } from './s
 import { staticMapSchema } from './staticmap.js';
 
 /**
- * How an automatic event behaves on repeat visits.
- *
- * This is the difference between a set piece that fires once, an ambush that
- * can happen every time, and a ritual that resets if you leave it unfinished.
+ * How an automatic event behaves on repeat visits: a set piece that fires once, an ambush that can
+ * happen every time, or a ritual that resets if you leave it unfinished.
  */
 export const triggerModeSchema = z.enum([
   'once', // ever, for this save
@@ -37,11 +33,8 @@ export const triggerModeSchema = z.enum([
 ]);
 
 /**
- * An automatic event.
- *
- * `remember` is what gives a place continuity: with it on, the fact that this
- * fired is written to the world and survives leaving and returning, so a
- * ransacked shrine stays ransacked.
+ * An automatic event. `remember` writes the fact that this fired to the world, so it survives
+ * leaving and returning and a ransacked shrine stays ransacked.
  */
 export const triggerSchema = z
   .object({
@@ -73,9 +66,8 @@ export const triggerSchema = z
   .strict();
 
 /**
- * A barrier. Locked doors, wards, riddles, and tolls are the same shape: a
- * requirement that opens it, an optional roll to force it, and what happens
- * either way.
+ * A barrier. Locked doors, wards, riddles and tolls are the same shape: a requirement that opens
+ * it, an optional roll to force it, and what happens either way.
  */
 export const gateSchema = z
   .object({
@@ -126,12 +118,7 @@ export const roomTemplateSchema = z
     encounterChance: z.number().min(0).max(1).default(0.3),
     trapChance: z.number().min(0).max(1).default(0.1),
     lootChance: z.number().min(0).max(1).default(0.25),
-    /**
-     * Override the roll entirely. The engine used to read `role: "boss"` as
-     * "always" and the dungeon's entrance room as "never", which made the role
-     * vocabulary load-bearing and put a design opinion — that the way in is
-     * safe — where a horror module could not reverse it.
-     */
+    /** Override the trap roll entirely, rather than letting the room's `role` decide. */
     alwaysEncounter: z.boolean().default(false),
     neverEncounter: z.boolean().default(false),
     neverTrap: z.boolean().default(false),
@@ -154,11 +141,9 @@ export const encounterEntrySchema = z
   .strict();
 
 /**
- * One possible encounter, with its odds.
- *
- * `weight` sets relative probability within the table; `requires` removes the
- * group from the draw entirely when the party does not qualify, which is how a
- * table stays level-appropriate without separate tables per tier.
+ * One possible encounter, with its odds. `weight` sets relative probability within the table;
+ * `requires` removes the group from the draw entirely when the party does not qualify, which keeps
+ * a table level-appropriate without separate tables per tier.
  */
 export const encounterGroupSchema = z
   .object({
@@ -187,9 +172,8 @@ export const encounterTableSchema = z
     /** Nothing happened: the weight given to a quiet result. */
     emptyWeight: z.number().min(0).default(0),
     /**
-     * Levels per extra creature for entries that scale. "One more per two
-     * levels" was a design decision written as `floor((level - 1) / 2)` in the
-     * engine, where a module could neither see nor change it.
+     * Levels per extra creature for entries that scale. The engine's fixed rule was `floor((level -
+     * 1) / 2)`.
      */
     scalePerLevels: z.number().int().min(1).default(2),
     groups: z.array(encounterGroupSchema).min(1),
@@ -233,10 +217,8 @@ export const poiKindSchema = z.enum([
 ]);
 
 /**
- * Somewhere the party can actually go.
- *
- * A point of interest carries its own triggers, encounters, gate, and
- * inhabitants, so the interesting behaviour of a place lives with the place.
+ * Somewhere the party can go. A point of interest carries its own triggers, encounters, gate and
+ * inhabitants, so the behaviour of a place lives with the place.
  */
 export const pointOfInterestSchema = z
   .object({
@@ -314,10 +296,8 @@ export const areaSchema = z
     controllingFaction: ref('content.factions').optional(),
     dangerLevel: z.number().int().min(0).default(1),
     /**
-     * Odds of a wandering encounter on entering, as an expression over
-     * `dangerLevel`. The engine's curve was `min(0.75, danger * 0.15)` — the
-     * ceiling in particular is an argument about what a wilderness is, and that
-     * argument belongs to the GM. The default reproduces it exactly.
+     * Odds of a wandering encounter on entering, as an expression over `dangerLevel`. The default
+     * is `min(0.75, danger * 0.15)`.
      */
     encounterChance: ExprSchema.default({
       min: [0.75, { mul: [{ ref: 'dangerLevel' }, 0.15] }],
@@ -347,26 +327,20 @@ export const dungeonGenSchema = z
     /** Gates the generator may place on interior doors. */
     doorGates: z.array(ref('world.gates')).default([]),
     guaranteedRoles: z.array(z.string()).default(['entrance', 'boss']),
-    /**
-     * Whether the room you arrive in is quiet — no encounter, no trap.
-     *
-     * A defensible design opinion, and the engine used to hold it as a fact. A
-     * horror module wanting the door to close behind you turns it off.
-     */
+    /** Whether the room the party arrives in is quiet — no encounter, no trap. */
     safeEntrance: z.boolean().default(true),
     bossTable: ref('world.encounterTables', 'Drawn in the boss room. Without one the deepest room generates like any other.').optional(),
     completionTriggers: z.array(triggerSchema).default([]),
     /** Overrides the biome's palette for this dungeon. */
     palette: ref('world.palettes').optional(),
     /**
-     * Tiles of corridor between rooms. Its mean sets the spacing rooms are
-     * placed at; `winding` corridors also read each edge's roll as a minimum
-     * path length.
+     * Tiles of corridor between rooms. Its mean sets the spacing rooms are placed at; `winding`
+     * corridors also read each edge's roll as a minimum path length.
      */
     corridorLength: diceNotation.default('3d3'),
     /**
-     * How a `winding` corridor wanders: the chance it carries straight on, and
-     * how much a turn is penalised when routing. Aesthetic, and strongly felt.
+     * How a `winding` corridor wanders: the chance it carries straight on, and how much a turn is
+     * penalised when routing.
      */
     winding: z
       .object({
@@ -378,21 +352,19 @@ export const dungeonGenSchema = z
     /** Room size when a template declares no map spec of its own. */
     roomSize: diceNotation.default('2d3+3'),
     /**
-     * How the dungeon is made: `rooms` and corridors (the classic), `bsp`
-     * (dense building-like interiors, rooms sharing walls), or `caverns`
-     * (organic cellular caves — no doors, so no locks or branchiness).
+     * How the dungeon is made: `rooms` and corridors, `bsp` (dense building-like interiors, rooms
+     * sharing walls), or `caverns` (organic cellular caves — no doors, so no locks or branchiness).
      */
     algorithm: z.enum(['rooms', 'bsp', 'caverns']).default('rooms'),
     /**
-     * Tuning for `bsp`: the smallest leaf the space is cut into, which decides
-     * how fine-grained the interior reads.
+     * Tuning for `bsp`: the smallest leaf the space is cut into, which decides how fine-grained the
+     * interior reads.
      */
     bsp: z.object({ minLeaf: z.number().int().min(2).default(5) }).strict().default({}),
     /**
-     * Tuning for `caverns` — the classic cellular-automaton dials. These shape
-     * how a cave *feels* more than any other numbers in generation: `fill` is
-     * how much rock the noise starts as, `smoothingPasses` how many rounds it
-     * is eroded, and `birthThreshold` how many rock neighbours make rock.
+     * Tuning for `caverns`, the cellular-automaton dials: `fill` is how much rock the noise starts
+     * as, `smoothingPasses` how many rounds it is eroded, and `birthThreshold` how many rock
+     * neighbours make rock.
      */
     caverns: z
       .object({
@@ -403,14 +375,13 @@ export const dungeonGenSchema = z
       .strict()
       .default({}),
     /**
-     * A hand-built `world.maps` entry used as the whole dungeon, identical
-     * across seeds. Generation is skipped entirely; the map's own layers place
-     * its gates, traps, items and creatures.
+     * A hand-built `world.maps` entry used as the whole dungeon, identical across seeds. Generation
+     * is skipped; the map's own layers place its gates, traps, items and creatures.
      */
     staticMap: ref('world.maps').optional(),
     /**
-     * Static dungeons only: roll the biome's encounter tables once per `spawn`
-     * marker on the map, so a fixed castle can still have variable guards.
+     * Static dungeons only: roll the biome's encounter tables once per `spawn` marker on the map,
+     * so a fixed castle can still have variable guards.
      */
     rollEncounters: z.boolean().default(false),
     /** What the passages are like. */
@@ -430,13 +401,13 @@ export const dungeonGenSchema = z
   })
   .strict();
 
-/** The world clock. Even day length is a module decision. */
+/** The world clock. */
 export const timeSchema = z
   .object({
     minutesPerDay: z.number().int().min(1).default(1440),
     /**
-     * How long an hour is. `minutesPerDay` was a module decision and this was
-     * not, so a calendar of hundred-minute hours could not be expressed.
+     * How long an hour is, so a calendar of hundred-minute hours is expressible alongside
+     * `minutesPerDay`.
      */
     minutesPerHour: z.number().int().min(1).default(60),
     daysPerMonth: z.number().int().min(1).default(30),
@@ -447,23 +418,14 @@ export const timeSchema = z
       )
       .default([]),
     startMinute: z.number().int().min(0).default(480),
-    /**
-     * What an action costs in world-clock minutes, by action id.
-     *
-     * `minutesPerTile` and rest durations were already the GM's; searching a
-     * room and disarming a trap were ten minutes each because the engine said
-     * so. Absent entries cost nothing.
-     */
+    /** What an action costs in world-clock minutes, by action id. Absent entries cost nothing. */
     actionMinutes: z.record(z.string(), z.number().int().min(0)).default({
       search: 10,
       disarm: 10,
       sense: 1,
       wait: 10,
     }),
-    /**
-     * Minutes spent crossing one tile out of combat. Zero — the default — means
-     * walking is free, which suits a module that would rather not track it.
-     */
+    /** Minutes spent crossing one tile out of combat. Zero, the default, means walking is free. */
     minutesPerTile: z.number().int().min(0).default(0),
   })
   .strict();
@@ -480,18 +442,15 @@ export const worldSchema = z
     encounterTables: z.array(encounterTableSchema).default([]),
     dungeons: z.array(dungeonGenSchema).default([]),
     /**
-     * Hand-authored maps, identical across seeds. Authored as folders of CSV
-     * layers beside `module.json` (`maps/<id>/`) and inlined here at load;
-     * inline entries are also legal, which is what a browser export produces.
+     * Hand-authored maps, identical across seeds. Authored as folders of CSV layers beside
+     * `module.json` (`maps/<id>/`) and inlined here at load; inline entries are also legal, which
+     * is what a browser export produces.
      */
     maps: z.array(staticMapSchema).default([]),
     time: timeSchema.default({}),
     /**
-     * What generation does for a room that names no template.
-     *
-     * That is exactly the new-author case, and the numbers used to be invented
-     * in the engine where the schema could not show them. They match
-     * `roomTemplates`' own defaults, which stay the per-room source.
+     * What generation does for a room that names no template. Matches `roomTemplates`' own
+     * defaults, which stay the per-room source.
      */
     generationDefaults: z
       .object({

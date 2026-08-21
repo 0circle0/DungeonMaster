@@ -1,10 +1,8 @@
 /**
- * Building an entity from module content.
- *
- * Three entry points, one shape out: {@link createCharacter} assembles a player
- * character from ancestry, class, and attribute choices, {@link spawnMonster}
- * instantiates a statblock, and {@link spawnNpc} puts a named person on the map.
- * All produce an {@link Entity}, so nothing downstream branches on who is here.
+ * Building an entity from module content. {@link createCharacter} assembles a player character from
+ * ancestry, class and attribute choices, {@link spawnMonster} instantiates a statblock, and {@link
+ * spawnNpc} puts a named person on the map. All produce an {@link Entity}, so nothing downstream
+ * branches on who is here.
  */
 
 import { Rng, roll, parseDice } from '@dm/core';
@@ -21,7 +19,7 @@ interface AncestryDef {
   attributeBonuses: Record<string, number>;
   grantedAbilities: string[];
   skillBonuses: Record<string, number>;
-  /** How this ancestry moves. Dropped on the floor until now, so nothing flew. */
+  /** How this ancestry moves. */
   speeds?: Record<string, number>;
   senses?: Record<string, number>;
   size?: string;
@@ -57,7 +55,7 @@ interface MonsterDef {
   abilities: string[];
   faction?: string;
   speeds?: Record<string, number>;
-  /** Trained skills. Discarded at spawn, so every monster had rank 0 in all. */
+  /** Trained skills. */
   skillBonuses?: Record<string, number>;
   size?: string;
   creatureType?: string;
@@ -67,12 +65,8 @@ interface MonsterDef {
 }
 
 /**
- * Movement modes an entity has.
- *
- * A creature with declared `speeds` uses exactly those, which is how a fish
- * gets swimming and nothing else. Everything else gets the ruleset's own
- * default — named by `rules.defaultMovementMode`, not by the engine guessing
- * at a word.
+ * Movement modes an entity has. A creature with declared `speeds` uses exactly those; everything
+ * else gets `rules.defaultMovementMode`.
  */
 function movementModesFor(module: CompiledModule, declared: Record<string, number> | undefined): string[] {
   const declaredModes = Object.keys(declared ?? {});
@@ -82,11 +76,9 @@ function movementModesFor(module: CompiledModule, declared: Record<string, numbe
 }
 
 /**
- * Which stance a signed disposition lands in.
- *
- * Bands are matched by the highest threshold the number meets; a band with no
- * `atLeast` is the catch-all below all of them. Sorting here rather than
- * trusting declaration order means an author cannot break it by reordering.
+ * Which stance a signed disposition lands in. Bands are matched by the highest threshold the number
+ * meets; a band with no `atLeast` is the catch-all. Sorted here rather than trusting declaration
+ * order.
  */
 export function dispositionFor(module: CompiledModule, disposition: number): Entity['disposition'] {
   const bands = module.source.rules.dispositionBands;
@@ -101,12 +93,9 @@ export function dispositionFor(module: CompiledModule, disposition: number): Ent
 }
 
 /**
- * What levels beyond the first add to the vital resource.
- *
- * The die comes from the class or from the creature's size, as the ruleset
- * says — which is what finally makes `rules.sizes[].hitDie` do something. A
- * module whose resources already scale by level says `policy: "none"` and gets
- * nothing added on top.
+ * What levels beyond the first add to the vital resource. The die comes from the class or from the
+ * creature's size, per `rules.progression.levelVitality`. A module whose resources already scale by
+ * level says `policy: "none"`.
  */
 function levelVitality(
   module: CompiledModule,
@@ -132,8 +121,8 @@ function levelVitality(
     }),
   );
 
-  // A fixed policy needs the die's value once; `roll` draws per level, which
-  // is what makes creation take an RNG at all.
+  // A fixed policy needs the die's value once; `roll` draws per level, which is why creation takes
+  // an RNG.
   const fixed = policy.policy === 'roll' || policy.policy === 'none' || !die
     ? 0
     : dieValue(die, policy.policy);
@@ -176,12 +165,9 @@ export class CreationError extends Error {
 }
 
 /**
- * What a class actually knows at a level.
- *
- * `abilitiesByLevel` grants automatically; `spellcasting.knownByLevel` caps how
- * many *spells* of those a caster has picked up — the sorcerer shape, where the
- * list is long and the memory is not. The cap applies only to abilities the
- * module marked as spells, so a class feature is never crowded out by one.
+ * What a class actually knows at a level. `abilitiesByLevel` grants automatically;
+ * `spellcasting.knownByLevel` caps how many of those spells a caster has picked up. The cap applies
+ * only to abilities marked as spells, so a class feature is never crowded out.
  */
 function knownAtLevel(
   module: CompiledModule,
@@ -198,8 +184,8 @@ function knownAtLevel(
     const ability = module.find<{ spellLevel?: number }>('content.abilities', id);
     (typeof ability?.spellLevel === 'number' ? spells : rest).push(id);
   }
-  // The first `known` in declaration order, so what a character has is a
-  // property of the module rather than of the dice.
+  // The first `known` in declaration order, so what a character has is a property of the module
+  // rather than of the dice.
   return [...rest, ...spells.slice(0, Math.max(0, known))];
 }
 
@@ -223,12 +209,8 @@ function vocabularyOf(ancestry: AncestryDef): Record<string, never> {
 }
 
 /**
- * Put the gear a character starts with *on* them.
- *
- * Starting items landed in the bag and nowhere else, so a fresh party stood in
- * the first fight holding their swords in their packs — and, now that a weapon
- * decides what a blow does, hitting for nothing. Anything with a declared slot
- * is worn, up to that slot's capacity, in the order the module lists it.
+ * Put the gear a character starts with on them. Anything with a declared slot is worn, up to that
+ * slot's capacity, in the order the module lists it.
  */
 function equipStartingGear(
   module: CompiledModule,
@@ -270,12 +252,9 @@ function mergeStacks(stacks: readonly ItemStack[]): ItemStack[] {
 }
 
 /**
- * Assemble a player character.
- *
- * Attribute scores are the sum of the player's allocation and the bonuses from
- * ancestry and class, clamped to the range the module declares. Resources start
- * full, which requires the maxima to be computed first — the dependency order
- * documented in `stats.ts`.
+ * Assemble a player character. Attribute scores are the sum of the player's allocation and the
+ * bonuses from ancestry and class, clamped to the module's declared range. Resources start full,
+ * which requires the maxima first — see the dependency order in `stats.ts`.
  */
 export function createCharacter(
   module: CompiledModule,
@@ -291,9 +270,7 @@ export function createCharacter(
     throw new CreationError(`unknown class ${JSON.stringify(choices.characterClass)}`);
   }
 
-  // The campaign's own limits, enforced here rather than only in whichever
-  // screen happened to be asking — a party built any other way used to bypass
-  // them entirely.
+  // The campaign's own limits, enforced here rather than in whichever screen happens to be asking.
   const problem = creationProblem(module, choices);
   if (problem) throw new CreationError(problem);
 
@@ -308,9 +285,8 @@ export function createCharacter(
     attributes[attr.id] = Math.min(attr.max, Math.max(attr.min, total));
   }
 
-  // A bare id means the ruleset's own idea of "trained"; an entry that names a
-  // rank says exactly what it is worth. Ancestry bonuses add on top, so the two
-  // sources of skill finally agree about what a number means.
+  // A bare id means `rules.progression.proficiencyRank`; an entry that names a rank says exactly
+  // what it is worth. Ancestry bonuses add on top.
   const skills: Record<string, number> = {};
   const trained = module.source.rules.progression.proficiencyRank;
   for (const entry of characterClass.skillProficiencies) {
@@ -334,18 +310,16 @@ export function createCharacter(
     ...knownAtLevel(module, characterClass, level),
   ])];
 
-  // What a level beyond the first adds, per the ruleset's declared policy.
-  // Rolling is why creation takes an RNG: under `roll` a level-3 character is
-  // not deterministic from choices alone. Under the other policies it is.
+  // What a level beyond the first adds, per the ruleset's declared policy. Under `roll` a level-3
+  // character is not deterministic from choices alone; under the other policies it is.
   const bonusVitality = levelVitality(module, characterClass, ancestry, attributes, level, rng);
 
   const draft: Entity = {
-    // Position is assigned when the party is placed on a map; character
-    // creation happens before any map exists.
+    // Position is assigned by `placeOn` when the party is placed; creation happens before any map
+    // exists.
     map: '',
     position: { x: 0, y: 0 },
-    // Filled in by `placeOn` when this creature is actually put on a map;
-    // creation happens before any map exists.
+    // Filled in by `placeOn`; creation happens before any map exists.
     anchor: null,
     since: 0,
     movementModes: movementModesFor(module, ancestry.speeds),
@@ -354,13 +328,11 @@ export function createCharacter(
     alerts: [],
     slotsUsed: [],
     concentrating: null,
-    // Null means "however this ruleset says creatures move by default", which
-    // is resolved when it is read. Baking it in here would copy the default
-    // into every creature and quietly ignore a module that changed it.
+    // Null resolves to the ruleset's default when read. Baking it in here would copy the default
+    // into every creature and ignore a module that changed it.
     stance: null,
-    // Size, kind, tongues. These live in the open `extra` bag rather than as new
-    // typed fields: it is already part of `Entity` and already serialized, so a
-    // character finally carrying them costs no save migration.
+    // Size, kind and tongues live in the open `extra` bag rather than as new typed fields: it is
+    // already part of `Entity` and already serialized, so carrying them costs no save migration.
     extra: vocabularyOf(ancestry),
     id,
     name: choices.name,
@@ -381,8 +353,8 @@ export function createCharacter(
     alive: true,
   };
 
-  // 2-3. Modifiers, then each resource at its starting value — full unless the
-  // module said otherwise, which is what `initial` being optional means.
+  // 2-3. Modifiers, then each resource at its starting value — full unless `initial` says
+  // otherwise.
   const mods = modifiersOf(module, attributes);
   const starting = initialOf(module, draft, mods);
   const vital = module.source.rules.vitalResource;
@@ -408,8 +380,7 @@ export function spawnMonster(module: CompiledModule, id: string, monsterId: stri
   const draft: Entity = {
     map: '',
     position: { x: 0, y: 0 },
-    // Filled in by `placeOn` when this creature is actually put on a map;
-    // creation happens before any map exists.
+    // Filled in by `placeOn`; creation happens before any map exists.
     anchor: null,
     since: 0,
     movementModes: movementModesFor(module, monster.speeds),
@@ -418,9 +389,7 @@ export function spawnMonster(module: CompiledModule, id: string, monsterId: stri
     alerts: [],
     slotsUsed: [],
     concentrating: null,
-    // Null means "however this ruleset says creatures move by default", which
-    // is resolved when it is read. Baking it in here would copy the default
-    // into every creature and quietly ignore a module that changed it.
+    // Null resolves to the ruleset's default when read.
     stance: null,
     extra: monsterVocabulary(monster),
     id,
@@ -430,9 +399,8 @@ export function spawnMonster(module: CompiledModule, id: string, monsterId: stri
     xp: monster.xp,
     attributes,
     resources: {},
-    // A statblock's trained skills. Left empty until now, so a creature the
-    // module described as stealthy or perceptive rolled at rank 0 like anything
-    // else — and every opposed check against one was decided by attributes.
+    // A statblock's trained skills, so a creature the module describes as stealthy does not roll at
+    // rank 0.
     skills: { ...(monster.skillBonuses ?? {}) },
     conditions: [],
     inventory: [],
@@ -461,14 +429,12 @@ interface NpcDef {
 /**
  * Put a named person on the map.
  *
- * The entity id *is* the npc's content id. That is not a shortcut — reactions
- * (`turn.ts`), deed memory (`gossip.ts`) and `talk` objectives all look the
- * speaker up by id already, so any other scheme would need each of them
- * changed and would break the module's own `target: "vess"`.
+ * The entity id is the npc's content id: reactions (`turn.ts`), deed memory (`gossip.ts`) and
+ * `talk` objectives all look the speaker up by id, and a module's own `target: "vess"` depends on
+ * it.
  *
- * A person who can fight reuses a monster statblock for their numbers; one who
- * cannot gets the module's default attributes, because a miller still has to
- * have a value for Might when someone swings at her.
+ * A person who can fight reuses a monster statblock for their numbers; one who cannot gets the
+ * module's default attributes, since a miller still needs a value for Might.
  */
 export function spawnNpc(module: CompiledModule, npcId: string): Entity {
   const npc = module.find<NpcDef>('content.npcs', npcId);
@@ -484,22 +450,19 @@ export function spawnNpc(module: CompiledModule, npcId: string): Entity {
   const draft: Entity = {
     map: '',
     position: { x: 0, y: 0 },
-    // Filled in by `placeOn` when this creature is actually put on a map;
-    // creation happens before any map exists.
+    // Filled in by `placeOn`; creation happens before any map exists.
     anchor: null,
     since: 0,
     movementModes: base?.movementModes ?? movementModesFor(module, undefined),
-    // Which band a signed disposition falls in is the ruleset's call. The
-    // engine used to cut at exactly zero and never offer `ally`, so however
-    // warmly a module wrote somebody they could not spawn as one.
+    // Which band a signed disposition falls in is the ruleset's call, via `rules.dispositionBands`.
     disposition: dispositionFor(module, npc.disposition),
     following: null,
     alerts: [],
     slotsUsed: [],
     concentrating: null,
     stance: null,
-    // What content this person came from, so dialogue and memory can find their
-    // definition back from the entity even when a statblock renamed them.
+    // What content this person came from, so dialogue and memory can find their definition even
+    // when a statblock renamed them.
     extra: { npc: npcId },
     id: npcId,
     name: npc.name,
@@ -526,9 +489,7 @@ export function spawnNpc(module: CompiledModule, npcId: string): Entity {
 }
 
 /**
- * Which npc definition an entity came from.
- *
- * Defined on `state.ts` now — `stats.ts` needs it and `character.ts` imports
- * `stats.ts` — and re-exported here so every existing caller is unaffected.
+ * Which npc definition an entity came from. Defined in `state.ts`, which `stats.ts` needs, and re-
+ * exported here.
  */
 export { npcIdOf } from './state.js';

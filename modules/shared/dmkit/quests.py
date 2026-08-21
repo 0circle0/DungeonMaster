@@ -1,37 +1,28 @@
 """Quests, dialogue, and the shapes branching actually takes.
 
-The engine has no branch primitive. A quest has one linear stage cursor and one
-completion test, and everything that forks is built out of flags and
-predicates. These helpers are the four idioms that come up, written once:
+The engine has no branch primitive. A quest has one linear stage cursor and one completion test, and
+everything that forks is built out of flags and predicates. These helpers are the four idioms that
+come up:
 
-  * **`resolved_either_way`** — the branch objectives are `optional`, and one
-    required `custom` objective completes when *any* of the branch flags is
-    set. Without it a quest with only optional objectives can never complete at
-    all, because `checkQuestCompletion` insists on at least one required one.
-  * **`either`** — an `if` effect, which is how one quest produces two
-    different outcomes from the same `onComplete`.
-  * **`take_job`** — the dialogue option that hands a quest over: gate on the
-    quest being unstarted, `emit: startQuest`, hand over whatever comes with it.
-  * **`remembered_as`** — put the deed on the *dialogue node* where the work is
-    turned in, not on the quest.
+  * `resolved_either_way` — the branch objectives are `optional`, and one required `custom`
+    objective completes when any branch flag is set. Without it a quest with only optional
+    objectives can never complete, because `checkQuestCompletion` insists on at least one required
+    one.
+  * `either` — an `if` effect, which is how one quest produces two outcomes from the same
+    `onComplete`.
+  * `take_job` — the dialogue option that hands a quest over: gate on the quest being unstarted,
+    `emit: startQuest`, hand over whatever comes with it.
+  * `remembered_as` — put the deed on the dialogue node where the work is turned in, not on the
+    quest, so it is witnessed by the person being reported to.
 
-That last one is worth a paragraph. `quest.remembersAs` now works — the
-emission scan loops, so a quest's own events get read — but the deed is still
-recorded with the party leader as actor and no NPC in particular watching. A
-deed emitted from the node where you report in is witnessed by the person you
-are reporting to, which is the entire point of a reputation system.
+Traps this file avoids:
 
-Traps this file exists to avoid:
-
-  * `ordered` defaults to **True**, and quest-level objectives sort *before*
-    stage objectives. Mixing the two under the default forces the loose ones
-    first, which is almost never what was meant.
-  * A stage whose objectives are all `optional` is skipped entirely — its
-    `onStart` and `onComplete` never run.
-  * **`objective.target` is not a ref.** A typo compiles perfectly clean and
-    the objective simply never fires. `dmkit.lint.objective_targets` is the
-    answer to that, and it is the reason a module wants a linter of its own on
-    top of `npm run validate`.
+  * `ordered` defaults to True, and quest-level objectives sort before stage objectives, so mixing
+    the two under the default forces the loose ones first.
+  * A stage whose objectives are all `optional` is skipped entirely — its `onStart` and `onComplete`
+    never run.
+  * `objective.target` is not a ref, so a typo compiles clean and the objective never fires.
+    `dmkit.lint.objective_targets` is the answer.
 """
 
 
@@ -58,7 +49,7 @@ def reach(oid, description, target, **kw):
 
 
 def kill(oid, description, monster, count=1, **kw):
-    """`target` is a **monster** id — it is matched against `entity.statblock`."""
+    """`target` is a monster id — it is matched against `entity.statblock`."""
     return obj(oid, description, kind="kill", target=monster, count=count, **kw)
 
 
@@ -71,14 +62,14 @@ def talk(oid, description, npc, **kw):
 
 
 def flagged(oid, description, flag, **kw):
-    """Done when a flag is set — the workhorse for anything the engine has no
-    event for."""
+    """Done when a flag is set — the workhorse for anything the engine has no event for."""
     return obj(oid, description, when={"test": {"ref": f"flags.{flag}"}}, **kw)
 
 
 def resolved_either_way(oid, description, flags, **kw):
-    """One required objective satisfied by any of several mutually exclusive
-    outcomes. This is what makes a branch completable."""
+    """One required objective satisfied by any of several mutually exclusive outcomes, which is what
+    makes a branch completable.
+    """
     return obj(oid, description,
                when={"any": [{"test": {"ref": f"flags.{f}"}} for f in flags]},
                **kw)
@@ -112,7 +103,7 @@ def either(flag, then, otherwise=()):
 
 
 def turn_hostile(entity):
-    """Somebody has had enough of you. Works now; did not before."""
+    """Somebody has had enough of you."""
     return {"setDisposition": {"target": entity, "to": "hostile"}}
 
 
@@ -129,8 +120,7 @@ def quest(qid, name, description, objectives, *, giver=None, requires=None,
         "stages": list(stages or []),
         "unlocks": list(unlocks),
         "rewards": {
-            # The only source of experience in the engine: nothing is granted
-            # for a kill, so every level the party gains is granted here.
+            # Quest rewards are one of two sources of experience, alongside kills.
             "xp": xp,
             "items": [{"item": i, "quantity": q} for i, q in items],
             "reputation": reputation or {},
@@ -178,9 +168,8 @@ def arc(aid, name, description, quests, *, ending=False):
 def node(nid, says, *, options=(), on_enter=(), remembers=None, redirects=()):
     """A conversation node.
 
-    **A node with no options ends the conversation.** That is the engine's rule
-    and it is the single easiest way to strand a player, so every node below
-    that is not meant to be a parting word carries a way out.
+    A node with no options ends the conversation, so every node that is not meant to be a parting
+    word carries a way out.
     """
     out = {"id": nid, "says": [{"text": t} if isinstance(t, str) else t
                                for t in (says if isinstance(says, (list, tuple)) else [says])],
@@ -209,16 +198,14 @@ def option(oid, text, *, goto=None, requires=None, when=None, effects=(),
 
 
 def take_job(oid, text, quest_id, goto, *, gives=(), effects=(), requires=None):
-    """The quest-giver pattern, entire.
+    """The quest-giver pattern.
 
-    Gated on the quest being unstarted so it disappears once taken, and the
-    acceptance is an emitted event the reducer picks up *before* quests advance
-    — so the job can be progressed by the same batch of events that granted it.
+    Gated on the quest being unstarted so it disappears once taken, and the acceptance is an emitted
+    event the reducer picks up before quests advance, so the job can be progressed by the same batch
+    that granted it.
     """
-    # Merged key by key rather than `update`d. A caller passing its own
-    # `quests` clause — an act gate, say — would otherwise *replace* the
-    # unstarted check, and the offer would go on being made after it had been
-    # taken. Lists concatenate; everything else the caller wins.
+    # Merged key by key rather than `update`d: a caller passing its own `quests` clause would
+    # otherwise replace the unstarted check. Lists concatenate; everything else the caller wins.
     gate = {"quests": [{"quest": quest_id, "status": "unstarted"}]}
     for key, value in (requires or {}).items():
         if isinstance(value, list) and isinstance(gate.get(key), list):
@@ -236,12 +223,8 @@ def dialogue(did, start, nodes):
     return {"id": did, "start": start, "nodes": list(nodes)}
 
 
-# Somebody who stands where you left them.
-#
-# A shopkeeper with a job to do does not go and investigate a noise, and a
-# questgiver who wandered off would be a bug rather than a living world. They
-# notice everyone, though -- that is the difference between incurious and
-# blind, and it is what lets them witness a theft.
+# Somebody who stands where you left them: no wandering, no investigating. They notice everyone,
+# though, which is what lets them witness a theft.
 MINDS_THE_SHOP = {
     "roamRadius": 0,
     "wanderChance": 0,
@@ -280,9 +263,8 @@ def npc(nid, name, description, *, faction=None, dialogue_id=None, home=None,
     if shop:
         out["shop"] = shop
 
-    # Anyone with a counter to mind or a job to hand out stays put; everyone
-    # else has the run of the place. Stated rather than left to the ruleset so
-    # a village reads as a village rather than as a crowd milling at random.
+    # Anyone with a counter to mind or a job to hand out stays put; everyone else has the run of the
+    # place. Stated rather than left to the ruleset.
     habits = temperament
     if habits is None:
         habits = MINDS_THE_SHOP if (shop or offers) else WALKS_ABOUT

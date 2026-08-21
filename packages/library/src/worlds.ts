@@ -1,11 +1,9 @@
 /**
  * Worlds, as the user's own property.
  *
- * Everything in the library belongs to whoever is sitting there. The shipped
- * examples are not in it until they ask for one, and the moment they do it is
- * an ordinary world they can edit, rename and delete — there is no read-only
- * state anywhere, because an example that cannot be changed is not an example
- * of what can be built.
+ * Everything in the library belongs to whoever is sitting there. The shipped examples are not in it
+ * until they ask for one, and the moment they do it is an ordinary world they can edit, rename and
+ * delete: there is no read-only state anywhere.
  */
 
 import { compileModule, hashModule } from '@dm/module';
@@ -61,15 +59,13 @@ export interface WorldFacts {
 /**
  * What the switcher needs to know about a world, without opening it.
  *
- * `compiled` is the seam that matters. The studio has already compiled this
- * exact document to draw its diagnostics, and re-running a full schema parse
- * here — six hundred milliseconds on Aurendel — to fill in a hash it is holding
- * was the most expensive thing on the save path by an order of magnitude.
+ * `compiled` is the seam that matters: the studio has already compiled this document to draw its
+ * diagnostics, and re-running a full schema parse here — six hundred milliseconds on Aurendel — was
+ * the most expensive thing on the save path.
  *
- * Pass `undefined` to compile here (an import, where nobody has), or `null` to
- * say it does not compile. Never pass a hash read from the editor's idle tier:
- * that one is settled on a timer and is the *previous* document's while it
- * settles, so a ⌘S would record it against content it does not describe.
+ * Pass `undefined` to compile here (an import, where nobody has), or `null` to say it does not
+ * compile. Never pass a hash read from the editor's idle tier: that one settles on a timer and is
+ * the previous document's while it settles.
  */
 export function factsFor(
   doc: Record<string, unknown>,
@@ -83,8 +79,7 @@ export function factsFor(
     moduleId: typeof doc['id'] === 'string' ? doc['id'] : 'untitled',
     version: typeof doc['version'] === 'string' ? doc['version'] : '0.0.0',
     description: typeof meta['description'] === 'string' ? meta['description'] : '',
-    // A world that does not compile is still worth storing — that is most of
-    // what a half-finished one is — so the hash is simply absent for it.
+    // A world that does not compile is still worth storing, so the hash is simply absent for it.
     hash: module ? hashModule(module.source) : null,
   };
 }
@@ -92,13 +87,12 @@ export function factsFor(
 /**
  * Store a world.
  *
- * The compression happens *before* the transaction opens. An IndexedDB
- * transaction commits as soon as the microtask queue drains, so awaiting a
- * compression stream inside one ends in `TransactionInactiveError` — a failure
- * that is invisible in the code and reliable in production.
+ * The compression happens before the transaction opens. An IndexedDB transaction commits as soon as
+ * the microtask queue drains, so awaiting a compression stream inside one ends in
+ * `TransactionInactiveError`.
  *
- * Metadata and payload go in one transaction, so there is no state where a
- * world's size says one thing and its bytes another.
+ * Metadata and payload go in one transaction, so there is no state where a world's size says one
+ * thing and its bytes another.
  */
 export async function writeWorld(
   key: string,
@@ -159,17 +153,14 @@ export async function deleteWorld(key: string): Promise<void> {
   await tx(db, [WORLDS, PAYLOADS, FILES], 'readwrite', (t) => {
     t.objectStore(WORLDS).delete(key);
     t.objectStore(PAYLOADS).delete(key);
-    // One range rather than one call per file: a world is a few thousand of
-    // them and the key was chosen so this is a single delete.
+    // One range rather than one call per file: a world is a few thousand of them, and the key was
+    // chosen so this is a single delete.
     t.objectStore(FILES).delete(worldRange(key));
   });
 }
 
 /**
- * A new title, and nothing else touched.
- *
- * This used to read the whole world, rewrite it and recompile it to change a
- * string that lives in the metadata row and in no file at all.
+ * A new title, and nothing else touched. The title lives in the metadata row and in no file at all.
  */
 export async function renameWorld(key: string, title: string): Promise<WorldMeta | null> {
   const db = await openLibrary();
@@ -181,11 +172,8 @@ export async function renameWorld(key: string, title: string): Promise<WorldMeta
 }
 
 /**
- * Every file of a world, by path.
- *
- * The studio's read: two thousand eight hundred records for Aurendel, which is
- * one ranged `getAll` and about as much JSON as `module.json` was, because it is
- * the same bytes spread over more keys.
+ * Every file of a world, by path. The studio's read: two thousand eight hundred records for
+ * Aurendel, which is one ranged `getAll` and about as much JSON as `module.json` was.
  */
 export async function readWorldFiles(key: string): Promise<Record<string, string>> {
   const db = await openLibrary();
@@ -204,18 +192,16 @@ export interface FileChange {
 }
 
 /**
- * Write the files that changed.
+ * Write the files that changed: editing one integer puts one record.
  *
- * The point of the whole exercise: editing one integer puts one record. Metadata
- * and files commit together, so there is no state where the switcher describes a
- * world its files do not match — and no state where a recipe has landed but the
- * prefab it names has not, which would not be a degraded entry but a destroyed
- * one (`joinProject` yields `undefined`, which serializes to `null`).
+ * Metadata and files commit together, so there is no state where the switcher describes a world its
+ * files do not match, and none where a recipe has landed but the prefab it names has not — which
+ * would destroy the entry rather than degrade it, since `joinProject` yields `undefined` and that
+ * serializes to `null`.
  *
- * Everything here is synchronous, which is what lets it be one transaction.
- * Compressing first was the reason the old write could not be: an IndexedDB
- * transaction commits when the microtask queue drains, so awaiting a stream
- * inside one ends in `TransactionInactiveError`.
+ * Everything here is synchronous, which is what lets it be one transaction: an IndexedDB
+ * transaction commits when the microtask queue drains, so awaiting a compression stream inside one
+ * ends in `TransactionInactiveError`.
  */
 export async function writeWorldFiles(
   key: string,

@@ -1,13 +1,5 @@
 /**
- * The memory timeline.
- *
- * Forgetting curves and gossip rates are abstract numbers until you can see
- * what they do. Seed a deed, scrub through the days, and watch who knows —
- * how strongly, how many retellings from the source, and how distorted.
- *
- * This is the view that makes the memory dials tunable rather than guessed at.
- * It runs the declared model on the seeded RNG, so the same seed gives the same
- * spread and a surprising result can be investigated instead of re-rolled.
+ * Simulate memory spread over time for a chosen deed and witness set.
  */
 
 'use client';
@@ -29,9 +21,7 @@ const DAYS = 180;
 export function TimelineView({ doc }: { doc: ModuleDoc }) {
   const deedKinds = list(doc, 'narrative.deedKinds');
   const npcs = list(doc, 'content.npcs');
-  // `narrative.memory` is optional, and `?? {}` is a new object each render;
-  // the simulation memo below keys on it, so without this it re-runs forever
-  // on exactly the modules that do not configure memory.
+  // Keep a stable empty memory object so the memo does not recompute forever on unconfigured modules.
   const memory = useMemo(
     () => (getAt(doc, ['narrative', 'memory']) as Row | undefined) ?? {},
     [doc],
@@ -58,8 +48,7 @@ export function TimelineView({ doc }: { doc: ModuleDoc }) {
         kind: deedKind,
         day: 0,
         witnesses: witness ? [witness] : [],
-        // Severity drives the minimum-severity gossip threshold, so a deed's
-        // own weight decides whether it travels at all.
+        // Use deed severity as the minimum gossip threshold for the simulation.
         severity: Math.abs(severity),
       },
       { days: DAYS, seed },

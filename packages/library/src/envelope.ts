@@ -1,21 +1,17 @@
 /**
  * What a world is, once it leaves the repository.
  *
- * The studio and the player are separate origins with separate stores, so a
- * file is the only thing that passes between them — and a file is also what a
- * player hands to a friend, and what the content build ships. One shape for all
- * three, versioned from the first commit, because the alternative is two
- * hand-maintained readers that agree until the day they do not.
+ * The studio and the player are separate origins with separate stores, so a file is the only thing
+ * that passes between them — and it is also what a player hands to a friend and what the content
+ * build ships. One shape for all three, versioned from the first commit.
  *
- * A separate export entry — `@dm/library/envelope` — because this file is the
- * half with no browser in it. The content build runs in Node and needs the
- * shape; importing the package root would drag IndexedDB and CompressionStream
- * into a project that has no DOM lib and no business having one. Exactly the
- * split `@dm/module` and `@dm/module/load` already draw, for the same reason.
+ * A separate export entry — `@dm/library/envelope` — because this file is the half with no browser
+ * in it: the content build runs in Node, and importing the package root would drag IndexedDB and
+ * CompressionStream into a project with no DOM lib. The same split `@dm/module` and
+ * `@dm/module/load` draw.
  *
- * Deliberately *not* the split `project/` file map. That form exists to give
- * git a readable diff, and there is no git in a browser; regenerating it from
- * the document is a pure function away when an export ever needs it.
+ * Deliberately not the split `project/` file map: that form exists to give git a readable diff, and
+ * there is no git in a browser.
  */
 
 import type { Prefab, InstanceMap, StyleTables, Contract } from '@dm/module';
@@ -24,13 +20,8 @@ import type { Prefab, InstanceMap, StyleTables, Contract } from '@dm/module';
 export const WORLD_FORMAT = 1;
 
 /**
- * The authored half of a world: what generated its entries, rather than the
- * entries themselves.
- *
- * Replaces the studio's old `ProjectAuthoring`, minus the two fields that were
- * really filesystem facts — `moduleName` was a directory and `isProject` was
- * whether that directory existed. A world either carries prefabs or it does
- * not, which is a question the data answers by itself.
+ * The authored half of a world: what generated its entries, rather than the entries themselves. A
+ * world either carries prefabs or it does not, which is a question the data answers by itself.
  */
 export interface WorldAuthoring {
   readonly prefabs: readonly Prefab[];
@@ -51,9 +42,9 @@ export interface WorldEnvelope {
   readonly dmWorld: 1;
   readonly format: number;
   /**
-   * The assembled document — `maps/<id>/` folders inlined into `world.maps`,
-   * and `extends` deliberately left unresolved. Baking a base into a document
-   * the studio then saves would corrupt it permanently.
+   * The assembled document — `maps/<id>/` folders inlined into `world.maps`, and `extends`
+   * deliberately left unresolved. Baking a base into a document the studio then saves would corrupt
+   * it permanently.
    */
   readonly doc: Record<string, unknown>;
   /** Null for a world that was never a project, and for a bare import. */

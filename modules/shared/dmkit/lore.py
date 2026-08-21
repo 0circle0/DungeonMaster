@@ -1,49 +1,35 @@
 """Hidden threads — content nobody hands you, and the rules it keeps.
 
-A hidden thread is a thing nobody hands you. You hear a partial fact in one
-village, another one four days away, and eventually you know where to go. There
-is no quest-giver, no marker, and no point at which the game tells you a thread
-exists — the first you know of it is somebody mentioning, in passing, that the
-tide only falls that far at the turn of the year.
+A hidden thread has no quest-giver and no marker. You hear a partial fact in one village and another
+four days away, and eventually you know where to go.
 
 The contract, all asserted by `check_quests.py`:
 
-  1. **Empty ground only.** A thread lives in an area no quest, dialogue, NPC
-     home or trigger already touches. `hiddenspace.EMPTY` is that list, frozen
-     from the built module — 61 of Aurendel's 108 areas, holding 307 points of
-     interest and 32 dungeons that nothing has ever named.
-  2. **Nothing new is built.** No areas, no points of interest, no dungeons. The
-     geography is already there and unused; what it lacks is people and reasons.
-  3. **A clue informs the search, it does not gate it.** The anchor is `hidden`
-     with a `discover.difficulty` that *falls* as the thread fills, so a party
-     that searches everything can find it cold and a party that listens finds it
-     on purpose. Finding it is never enough on its own — entry wants a key item.
-  4. **Standing is a price, not a wall.** Somebody you have wronged is harder to
-     talk round. `requires` is for *what* they will discuss; the check's
-     difficulty is for *how hard it is to get it out of them*. A clue behind a
-     `minStanding` is a bug, and the linter says so.
-  5. **Every key item has two routes.** Asked for, or taken off the body. A party
-     that has burned a faction past speaking can still get in; what it pays is
-     standing, witnesses, and a merchant it no longer has.
+  1. Empty ground only. A thread lives in an area no quest, dialogue, NPC home or trigger already
+     touches. `hiddenspace.EMPTY` is that list, frozen from the built module.
+  2. Nothing new is built: no areas, no points of interest, no dungeons.
+  3. A clue informs the search, it does not gate it. The anchor is `hidden` with a
+     `discover.difficulty` that falls as the thread fills. Entry still wants a key item.
+  4. Standing is a price, not a wall. `requires` is for what a person will discuss; the check's
+     difficulty is for how hard it is to get it out of them. A clue behind a `minStanding` is a bug.
+  5. Every key item has two routes: asked for, or taken off the body.
 
-Two engine facts this file exists to encode, both of which bite silently:
+Two engine facts this file encodes, both of which fail silently:
 
-  * **`option.effects` run before `option.check`**, unconditionally
-    (`sim/dialogue.ts`). A `learnLore` in an option's effects is therefore taught
-    on a *failed* persuasion too. Clues are taught from the success node's
-    `onEnter`, which is what `rumour()` builds.
-  * **`difficulty` is an `Expr`**, and evaluated against the *speaker's* scope,
-    so `reputation.<faction>` in the formula is their faction's opinion of you.
+  * `option.effects` run before `option.check`, unconditionally (`sim/dialogue.ts`), so a
+    `learnLore` in an option's effects is taught on a failed persuasion too. Clues are taught from
+    the success node's `onEnter`, which is what `rumour()` builds.
+  * `difficulty` is an `Expr` evaluated against the speaker's scope, so `reputation.<faction>` in
+    the formula is their faction's opinion of you.
 """
 import collections
 
 from dmkit.items import gear
 from dmkit.prose import pool
 
-# The player-facing English these constructors would otherwise have to invent.
-# A module supplies it once; there is no default, because a refusal line is
-# authored narration and a shared guess would be one world's register imposed
-# on every other. See `modules/aurendel/src/lore.py` for a worked set.
+# The player-facing English these constructors would otherwise have to invent. A module supplies it
+# once; there is no default, because a refusal line is authored narration. See
+# `modules/aurendel/src/lore.py` for a worked set.
 Voice = collections.namedtuple("Voice", [
     "go_on",           # take the next clue and return to the greeting
     "leave_it",        # decline, or walk away from a cold shoulder
@@ -60,13 +46,9 @@ Voice = collections.namedtuple("Voice", [
 def clue(cid, text, source=""):
     """One thing the party can come to know.
 
-    `text` is the clue as the player reads it, and it is bound by the rule that
-    makes this content worth having: **true, partial, and never a direction.**
-    "The tide only falls that far at the turn of the year" is a clue. "Go to the
-    Ribcage" is a waypoint marker with extra words.
-
-    `check_quests.py` enforces the mechanical half of that — a clue may not
-    contain the name or id of the place it points at.
+    `text` is the clue as the player reads it, and must be true, partial, and never a direction.
+    `check_quests.py` enforces the mechanical half: a clue may not contain the name or id of the
+    place it points at.
     """
     out = {"id": cid, "name": text}
     if source:
@@ -75,11 +57,8 @@ def clue(cid, text, source=""):
 
 
 def thread(tid, name, description, clues):
-    """The heading several clues hang under, so a partial answer reads as one.
-
-    Declaring the whole set is what lets the journal say *three of five*. The
-    count of what is still missing is the part that makes a thread worth
-    pulling; a flat list of three unrelated facts is not.
+    """The heading several clues hang under, so a partial answer reads as one. Declaring the whole
+    set is what lets the journal say three of five.
     """
     return {"id": tid, "name": name, "description": description,
             "entries": [c["id"] for c in clues]}
@@ -94,13 +73,9 @@ def learn(cid):
 def standing_dc(base, faction, *, span=6, per=5):
     """A difficulty that moves with what a faction thinks of you.
 
-    At standing 0 it is `base`. Every `per` points of standing moves it a point
-    in your favour, to a maximum of `span` either way — so the whole range is
-    `base ± span` and no amount of goodwill makes a hard thing automatic, nor
-    any amount of hostility make it impossible.
-
-    That last clause is the whole design. A gate is shut until you have the key;
-    a person is *harder*, and there is always a roll.
+    At standing 0 it is `base`. Every `per` points of standing moves it one point in your favour, to
+    a maximum of `span` either way, so the range is `base ± span`: no amount of goodwill makes a
+    hard thing automatic, and no amount of hostility makes it impossible.
     """
     return {"sub": [base, {"clamp": [
         {"div": [{"ref": f"reputation.{faction}", "else": 0}, per]}, -span, span]}]}
@@ -111,18 +86,14 @@ def rumour(key, ask, told, cid, *, voice, skill="persuasion", base=12,
            span=6):
     """A clue somebody has, behind a roll that their opinion of you moves.
 
-    Returns `(option, nodes)` — three pieces, because the clue cannot live on
-    the option. `option.effects` run before `option.check` and regardless of it,
-    so a `learnLore` there is taught on a failure too. It goes on the success
-    node's `onEnter` instead.
+    Returns `(option, nodes)`. The clue cannot live on the option: `option.effects` run before
+    `option.check` and regardless of it, so a `learnLore` there is taught on a failure too. It goes
+    on the success node's `onEnter`.
 
-    The option is gated `without: {lore: [cid]}`, which is what makes it vanish
-    once you know: an NPC who keeps offering to tell you a thing you already
-    know is a menu, not a person.
+    The option is gated `without: {lore: [cid]}`, so it vanishes once you know.
 
-    `cost` is standing lost on a failure. Small on purpose — the roll is
-    retryable, and every thread has at least two sources in two areas, so a
-    soured relationship narrows the route rather than closing it.
+    `cost` is standing lost on a failure. Small, because the roll is retryable and every thread has
+    at least two sources in two areas.
     """
     gate = {"without": {"lore": [cid]}}
     for name, value in (requires or {}).items():
@@ -166,14 +137,11 @@ def favour(key, ask, given_says, iid, *, voice, skill="persuasion", base=14,
            span=6, extra=()):
     """Asking somebody for the thing they are holding.
 
-    The same three pieces as {@link rumour} and for the same reason — the item
-    is handed over from the success node's `onEnter`, because an option's
-    effects run before its check and regardless of it.
+    The same three pieces as {@link rumour} and for the same reason: the item is handed over from
+    the success node's `onEnter`.
 
-    Gated on not already having it and on the gift not already having been made,
-    never on standing. That is rule 4: the roll gets harder as they like you
-    less, and there is no floor below which asking stops being possible. The
-    other route is always open too, and costs more than a roll.
+    Gated on not already having it and on the gift not already having been made, never on standing —
+    rule 4. The other route is always open too.
     """
     gate = {"without": {"items": [iid], "flags": [{"flag": given(iid)}]}}
     for name, value in (requires or {}).items():
@@ -216,10 +184,9 @@ def talk(did, start, greet_says, pieces, *, voice, extra_nodes=(), redirects=(),
          extra_options=(), leave=None):
     """A conversation assembled from `rumour`/`favour` pieces.
 
-    Each piece is an `(option, nodes)` pair. The greeting collects the options
-    and the dialogue collects every node, which is the whole of the bookkeeping
-    and exactly the part that is easy to get wrong: a `goto` into a node nobody
-    added is a load error, and a node with no options ends the conversation.
+    Each piece is an `(option, nodes)` pair. The greeting collects the options and the dialogue
+    collects every node: a `goto` into a node nobody added is a load error, and a node with no
+    options ends the conversation.
     """
     options = [piece[0] for piece in pieces] + list(extra_options)
     options.append({"id": f"{start}_leave", "text": leave or voice.leave,
@@ -242,13 +209,11 @@ def talk(did, start, greet_says, pieces, *, voice, extra_nodes=(), redirects=(),
 def coldshoulder(key, faction, at, says, *, voice, back=None):
     """Below `at` standing, this person will not discuss it at all.
 
-    Returns `(redirect, node)`. The node has one way out rather than none: a
-    node with no options ends the conversation outright, which is right for
-    somebody who has turned their back and wrong for a shopkeeper who will still
-    sell you rope.
+    Returns `(redirect, node)`. The node has one way out rather than none, since a node with no
+    options ends the conversation outright.
 
-    Reserved for people you have genuinely wronged. Everything above this floor
-    is a roll, not a refusal.
+    Reserved for people you have genuinely wronged; everything above this floor is a roll, not a
+    refusal.
     """
     nid = f"{key}_cold"
     redirect = ({"factions": [{"faction": faction, "maxStanding": at}]}, nid)
@@ -264,12 +229,7 @@ def coldshoulder(key, faction, at, says, *, voice, back=None):
 # --- finding things -------------------------------------------------------
 
 def finding(tid, description, cid, *, mode="once"):
-    """A clue the place itself gives up, on arrival.
-
-    Some facts have nobody standing next to them. A ship in the middle of the
-    ice does not talk, and which way it is pointed is the whole of what it has
-    to say.
-    """
+    """A clue the place itself gives up, on arrival, for facts with nobody standing next to them."""
     return {"id": tid, "mode": mode, "on": "enter", "description": description,
             "effects": [learn(cid)]}
 
@@ -277,13 +237,9 @@ def finding(tid, description, cid, *, mode="once"):
 def rumoured(thread_key, *, base, step, skill="perception", entries):
     """A point of interest that is findable without the clues, and rarely.
 
-    Returns the patch that makes an existing place hidden with a discovery
-    difficulty that falls as the thread fills: `base` knowing nothing, down to
-    `base - step * entries` knowing all of it.
-
-    This is the shape rule 3 asks for, and it needs `difficulty` to be a formula
-    — which is why the engine change went in first. Knowing the clues does not
-    unlock the place; it turns luck into method.
+    Returns the patch that makes an existing place hidden with a discovery difficulty that falls as
+    the thread fills: `base` knowing nothing, down to `base - step * entries` knowing all of it.
+    Knowing the clues does not unlock the place; it turns luck into method.
     """
     return {
         "hidden": True,
@@ -300,12 +256,8 @@ def rumoured(thread_key, *, base, step, skill="perception", entries):
 # --- things -----------------------------------------------------------------
 
 def token(iid, name, description, *, value=0):
-    """A clue you can carry: a scrap, a rubbing, a tally-stick.
-
-    `weight: 0` and `consumedOnUse`, so reading it moves the words into the
-    journal and leaves nothing in the pack. The knowledge is the point; the
-    paper is not, and an inventory silting up with paper is the failure this
-    avoids.
+    """A clue you can carry: a scrap, a rubbing, a tally-stick. `weight: 0` and `consumedOnUse`, so
+    reading it moves the words into the journal and leaves nothing in the pack.
     """
     return {"id": iid, "name": name, "description": description,
             "kind": "key", "value": value, "weight": 0, "tags": ["clue"],
@@ -318,11 +270,8 @@ def reading(iid, cid):
 
 
 def trophy(iid, name, description, cid):
-    """Proof you put something down, and what it taught you.
-
-    Not consumed: a trial gate takes these in payment, so the object has to
-    outlive the reading of it. `weight: 0` for the same reason as `token` —
-    eleven of these is a bookkeeping tax, not a decision.
+    """Proof you put something down, and what it taught you. Not consumed, because a trial gate
+    takes these in payment. `weight: 0` for the same reason as `token`.
     """
     return {"id": iid, "name": name, "description": description,
             "kind": "treasure", "value": 0, "weight": 0,
@@ -331,12 +280,9 @@ def trophy(iid, name, description, cid):
 
 
 def keepsake(iid, name, description, *, holder, value=0, tags=()):
-    """A key item somebody has, obtainable two ways and always obtainable.
-
-    Asked for, behind the persuasion roll; or taken off the body. Both routes
-    exist for every one of these, and `check_quests.py` treats a key item with
-    only one as an error rather than a warning — one route is how a party locks
-    itself out of content it cannot see.
+    """A key item somebody has, obtainable two ways and always obtainable: asked for behind the
+    persuasion roll, or taken off the body. `check_quests.py` treats a key item with only one
+    route as an error.
 
     `holder` is recorded so the linter can find the statblock that must drop it.
     """
@@ -346,11 +292,8 @@ def keepsake(iid, name, description, *, holder, value=0, tags=()):
 
 
 def given(iid):
-    """The flag that says a key item was handed over rather than taken.
-
-    Read by the holder's loot entry, so a gift already made cannot be looted a
-    second time off the corpse. Without it, asking politely and then killing
-    them yields two.
+    """The flag that says a key item was handed over rather than taken. Read by the holder's loot
+    entry, so a gift already made cannot be looted a second time off the corpse.
     """
     return f"given:{iid}"
 
@@ -365,13 +308,10 @@ def handover(iid, *, quantity=1):
 
 
 def carried(table_id, name, iid, *, weight=1):
-    """The loot table that drops a key item off its holder.
-
-    `unique` so it can never be found twice, and gated on the gift not having
-    been made — the other half of `handover`. The holder needs a statblock of
-    their own for this to mean anything: `dropDeathLoot` resolves loot through
-    `corpse.statblock`, so a shared one would have every guard in the region
-    dropping the seal.
+    """The loot table that drops a key item off its holder. `unique` so it can never be found twice,
+    and gated on the gift not having been made. The holder needs a statblock of their own:
+    `dropDeathLoot` resolves loot through `corpse.statblock`, so a shared one would have every
+    guard dropping the seal.
     """
     return {
         "id": table_id, "name": name, "rolls": "1", "emptyChance": 0,
@@ -386,11 +326,8 @@ def carried(table_id, name, iid, *, weight=1):
 def relic(gid, name, slot, description, *, value, rarity=None, skills=None,
           guard=None, initiative=None, carry=None, resist=(), damage=None,
           properties=(), weight=1, tags=()):
-    """The payoff: gear no questline offers.
-
-    Same shape as `dmkit.items.gear`, and deliberately the same four slots — `head`,
-    `cloak`, `ring`, `belt` hold nothing the main line was tuned against, so a
-    thread can pay in real power without touching those numbers.
+    """The payoff: gear no questline offers. Same shape as `dmkit.items.gear`, and the same four
+    slots — `head`, `cloak`, `ring`, `belt` — which hold nothing the main line was tuned against.
     """
     return gear(gid, name, slot, value, description, skills=skills, guard=guard,
                 initiative=initiative, carry=carry, resist=resist, weight=weight,
@@ -402,12 +339,9 @@ def relic(gid, name, slot, description, *, value, rarity=None, skills=None,
 
 def sealed(gid, name, description, blocked_key, *, items=(), lore=(), consume=False,
            kind="ward", faction_hint=None, opens_flag=None):
-    """A door that says in words what it wants.
-
-    `blockedTextKey` is not decoration: a hard gate with generic flavour reads
-    as a bug, and a hard gate that states its price reads as the next clue. The
-    engine renders `describeRequirement` into the ways-out list as well, so the
-    reason is on screen before the player even tries it.
+    """A door that says in words what it wants. `blockedTextKey` is rendered by
+    `describeRequirement` into the ways-out list, so the reason is on screen before the player
+    tries it.
     """
     requires = {}
     if items:
@@ -416,10 +350,9 @@ def sealed(gid, name, description, blocked_key, *, items=(), lore=(), consume=Fa
     if lore:
         requires["lore"] = [{"entry": c, "known": True} for c in lore]
 
-    # `gate:<id>:open` is the engine's own record and content cannot read it as
-    # an objective, so a door that a quest waits on has to say so in its own
-    # words. Without this the objective waits on a flag nobody writes, which
-    # validates perfectly and hangs the quest forever.
+    # `gate:<id>:open` is the engine's own record and content cannot read it as an objective, so a
+    # door a quest waits on must also write its own flag. Without it the objective waits on a flag
+    # nobody writes.
     out = {"id": gid, "name": name, "description": description, "kind": kind,
            "blockedTextKey": blocked_key, "staysOpen": True,
            "onOpen": ([{"setFlag": {"flag": opens_flag, "value": True}}]
@@ -433,11 +366,8 @@ def sealed(gid, name, description, blocked_key, *, items=(), lore=(), consume=Fa
 
 
 def trial(gid, name, description, blocked_key, trophies):
-    """The many-bosses door: it takes the proofs, and it keeps them.
-
-    `consume: true` is implemented at gates and nowhere else, which is exactly
-    where it belongs — you carry the trophies to the stone and the stone takes
-    them.
+    """The many-bosses door: it takes the proofs and keeps them. `consume: true` is implemented at
+    gates and nowhere else.
     """
     return sealed(gid, name, description, blocked_key, items=trophies,
                   consume=True, kind="story")

@@ -1,26 +1,17 @@
 /**
  * A whole module as a flat map of paths to text, and back.
  *
- * `project.ts` turns a document into entry files, and `staticmaps.ts` turns one
- * `world.maps` entry into a folder. Neither is the whole module: what a
- * repository holds is *both*, side by side, and what a person wants out of the
- * studio is that same pair — the thing they can drop into git.
+ * `project.ts` turns a document into entry files and `staticmaps.ts` turns one `world.maps` entry
+ * into a folder. What a repository holds is both, side by side, and this composes the two. Pure for
+ * the same reason both halves are: the studio has no filesystem.
  *
- * So this composes the two, and nothing else. It is pure for the same reason
- * both halves are: the studio has no filesystem, and the CLI would rather share
- * one implementation than keep a second one in step.
+ * One thing a round trip does not carry: a `#` comment in a map's CSV layer. `parseCsvGrid` drops
+ * those by design, so an export re-writes such a layer without its annotations. Three of
+ * greenmarch's thirty-four layers are affected.
  *
- * One thing a round trip does not carry: a `#` comment in a map's CSV layer.
- * `parseCsvGrid` drops those by design, so they are not in the grid and nothing
- * downstream could put them back — an export re-writes such a layer without its
- * annotations. Three of greenmarch's thirty-four layers are affected and none
- * of aurendel's, because those are written programmatically.
- *
- * The asymmetry it exists to resolve: a module *read* from disk has its maps
- * inlined into `world.maps` by `assembleMapFolders`, while the module *on* disk
- * has no `world.maps` key at all. The studio only ever sees the assembled form,
- * so without this, exporting from the studio would produce fourteen files the
- * repository does not have and a `module.json` that no longer matches it.
+ * The asymmetry it resolves: a module read from disk has its maps inlined into `world.maps` by
+ * `assembleMapFolders`, while the module on disk has no `world.maps` key. Without this, exporting
+ * from the studio would produce files the repository does not have.
  */
 
 import { splitProject, joinProject, isAuthoringFile } from './project.js';
@@ -41,11 +32,8 @@ export interface BundleIssue {
 }
 
 /**
- * Everything a project holds that no document produces.
- *
- * `prefabs` and `style` were always carried. `instances` and `contract` were
- * not, which is why a world could go out of the studio as files and come back
- * with no idea which entry came from which prefab.
+ * Everything a project holds that no document produces: `prefabs`, `style`, `instances` and
+ * `contract`.
  */
 export interface BundleAuthoring {
   readonly prefabs: readonly Prefab[];
@@ -55,12 +43,8 @@ export interface BundleAuthoring {
 }
 
 /**
- * `world.maps` out of a document, because the repository does not store it there.
- *
- * A module read from disk has its map folders inlined into `world.maps`; the
- * module *on* disk has no such key. Anything that names project files has to see
- * the second form or it invents `project/world/maps/*.json` — files this module
- * never writes and `npm run project -- unpack` would not know what to do with.
+ * `world.maps` out of a document, because the repository does not store it there. Anything that
+ * names project files has to see the on-disk form, or it invents `project/world/maps/*.json`.
  * Exported so the studio's incremental writer lifts them exactly as this does.
  */
 export function liftMaps(document: Record<string, unknown>): {
@@ -84,11 +68,9 @@ export function liftMaps(document: Record<string, unknown>): {
 }
 
 /**
- * An assembled document → every file a repository would hold for it.
- *
- * Paths are module-relative and match the repository exactly: `project/…` for
- * entries, `maps/<id>/…` for static maps. `module.json` is deliberately absent —
- * it is the build output, and `npm run project -- build` is what produces it.
+ * An assembled document → every file a repository would hold for it. Paths are module-relative and
+ * match the repository: `project/…` for entries, `maps/<id>/…` for static maps. `module.json` is
+ * absent — it is the build output of `npm run project -- build`.
  */
 export function bundleModule(
   document: Record<string, unknown>,
@@ -96,13 +78,13 @@ export function bundleModule(
 ): { files: Record<string, string> } {
   const files: Record<string, string> = {};
 
-  // Carried through rather than derived: no document produces a prefab, and a
-  // compressed project cannot be rebuilt without them.
+  // Carried through rather than derived: no document produces a prefab, and a compressed project
+  // cannot be rebuilt without them.
   for (const prefab of authoring.prefabs ?? []) {
     files[`project/prefabs/${prefab.id}.json`] = `${JSON.stringify(prefab, null, 2)}\n`;
   }
-  // Each guarded on non-empty, or every project grows files it does not need and
-  // `npm run project -- unpack` starts producing a tree git does not match.
+  // Each guarded on non-empty, or a project grows files it does not need and `npm run project --
+  // unpack` produces a tree git does not match.
   if (authoring.style && Object.keys(authoring.style).length > 0) {
     files['project/style.json'] = `${JSON.stringify(authoring.style, null, 2)}\n`;
   }
@@ -113,8 +95,8 @@ export function bundleModule(
     files['project/contract.json'] = `${JSON.stringify(authoring.contract, null, 2)}\n`;
   }
 
-  // Maps come out first, because the document handed to `splitProject` must be
-  // the one the repository stores — the one with no `world.maps` key.
+  // Maps come out first, because the document handed to `splitProject` must be the one the
+  // repository stores — the one with no `world.maps` key.
   const { document: forProject, maps } = liftMaps(document);
   for (const entry of maps) {
     const id = entry['id'] as string;
@@ -131,15 +113,12 @@ export function bundleModule(
 }
 
 /**
- * The authoring files back out of a bundle.
+ * The authoring files back out of a bundle, the inverse of what {@link bundleModule} writes.
  *
- * The inverse of what {@link bundleModule} writes, and the reason a world can
- * now go out of the studio and come back whole. Parses are guarded: a project is
- * a directory people edit by hand, so a broken `style.json` is an issue naming
- * the file rather than an exception thrown out of a loader.
+ * Parses are guarded: a project is a directory people edit by hand, so a broken `style.json` is an
+ * issue naming the file rather than an exception out of a loader.
  *
- * Prefabs are read in sorted path order so a bundle read twice produces the same
- * list whatever order the paths arrived in.
+ * Prefabs are read in sorted path order, so a bundle read twice produces the same list.
  */
 export function authoringFromFiles(files: Readonly<Record<string, string>>): {
   prefabs: readonly Prefab[];
@@ -182,11 +161,9 @@ export function authoringFromFiles(files: Readonly<Record<string, string>>): {
 }
 
 /**
- * Every file back into the assembled document the studio and engine expect.
- *
- * The inverse of {@link bundleModule}, maps inlined again — so a round trip
- * through a bundle lands on the same document it started from, which is the
- * only property that makes the export worth offering.
+ * Every file back into the assembled document the studio and engine expect. The inverse of {@link
+ * bundleModule}, maps inlined again, so a round trip through a bundle lands on the document it
+ * started from.
  */
 export function unbundleModule(files: Readonly<Record<string, string>>): {
   document: Record<string, unknown> | null;
@@ -244,9 +221,8 @@ export function unbundleModule(files: Readonly<Record<string, string>>): {
   for (const issue of joined.issues) issues.push(asBundleIssue(issue));
 
   const assembled: Record<string, unknown>[] = [];
-  // Sorted so a bundle read twice produces the same document whatever order the
-  // paths arrived in — a `Map` keeps insertion order, and a file map does not
-  // promise one.
+  // Sorted so a bundle read twice produces the same document whatever order the paths arrived in: a
+  // `Map` keeps insertion order, and a file map does not promise one.
   for (const folder of [...mapFiles.keys()].sort()) {
     const held = mapFiles.get(folder)!;
     const manifestFile = held['map.json'];
@@ -274,10 +250,9 @@ export function unbundleModule(files: Readonly<Record<string, string>>): {
     document = sortWorldMaps({ ...document, world: { ...world, maps: assembled } });
   }
 
-  // What the recipes said, under what the sidecar said. A link recovered from a
-  // recipe is the file speaking for itself; `instances.json` now carries only the
-  // remainder — links whose entry had to be written literally and so had nowhere
-  // else to live.
+  // What the recipes said, under what the sidecar said. A link recovered from a recipe is the file
+  // speaking for itself; `instances.json` carries only the remainder — links whose entry had to be
+  // written literally.
   const links = joined.links;
   const merged: Record<string, Record<string, (typeof instances)[string][string]>> = {};
   for (const [collection, byId] of Object.entries(links)) merged[collection] = { ...byId };

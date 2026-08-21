@@ -1,12 +1,5 @@
 /**
- * The events browser: when, where, who, what, why.
- *
- * One table of everything that can happen in the module. Filterable by kind and
- * by free text, and every row links back to the entry that defines it.
- *
- * The value is not any single row — it is seeing the set. An author scanning
- * this notices the trigger with no effects, the reaction nothing can satisfy,
- * and the three separate places that quietly adjust the same faction.
+ * List all module events in one table, grouped by kind and filterable by text.
  */
 
 'use client';
@@ -27,7 +20,7 @@ const KINDS: { id: GameEvent['kind'] | 'all'; label: string }[] = [
   { id: 'condition', label: 'Conditions' },
 ];
 
-/** Repetition is the property most likely to be wrong, so it gets a colour. */
+/** Distinguish repeating event modes with a color hint. */
 const MODE_CLASS: Record<string, string> = {
   once: 'mode-once',
   everyEntry: 'mode-every',
@@ -123,7 +116,7 @@ export function EventsView({
               <td className="col-who">{event.who}</td>
               <td className="col-what">
                 {event.what.length === 0 ? (
-                  // A trigger that does nothing is almost always a mistake.
+                  // Empty effects are usually a bug in the definition.
                   <em className="event-nothing">nothing</em>
                 ) : (
                   event.what.map((entry, i) => (

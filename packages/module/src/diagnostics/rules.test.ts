@@ -1,10 +1,7 @@
 /**
- * Each of these has the same shape: a module that passes every existing check
- * and is broken anyway. That is the whole reason the file exists — if `validate`
- * already caught it, a second checker would just be noise.
- *
- * So every rule is tested twice: it fires on the broken document, and the
- * broken document *compiles*. The second assertion is the interesting one.
+ * Each of these has the same shape: a module that passes every existing check and is broken anyway.
+ * So every rule is tested twice — it fires on the broken document, and the broken document
+ * compiles.
  */
 
 import { describe, it, expect } from 'vitest';
@@ -44,17 +41,15 @@ const codes = (doc: Record<string, unknown>, rules = DEFAULT_RULES) =>
   runRules(doc, rules).map((d) => d.code);
 
 /**
- * What the rules say about the modules that ship — pinned rather than asserted
- * empty, because they are not empty and that is the point.
+ * What the rules say about the modules that ship — pinned rather than asserted empty, because they
+ * are not empty.
  *
- * Every one of these compiles, validates and plays. They are flags that three
- * places wait on and nothing sets, which is the exact failure this file exists
- * for: silent at load, silent at validate, and visible only to whoever
- * eventually plays far enough to notice a door that never opens.
+ * Every one of these compiles, validates and plays. They are flags that three places wait on and
+ * nothing sets: silent at load, silent at validate, and visible only to whoever plays far enough to
+ * notice a door that never opens.
  *
- * `dmkit/lint.py` has a check with the same name and misses all four, because
- * it counts *any* value under a `flag` key as a write — including the reads in
- * a structured gate. Worth recording as the reason this is not a port.
+ * `dmkit/lint.py` has a check with the same name and misses all four, because it counts any value
+ * under a `flag` key as a write — including the reads in a structured gate.
  */
 describe('what the rules find in the modules that ship', () => {
   it('says nothing about minimal, which has no quests to get wrong', () => {
@@ -78,10 +73,9 @@ describe('what the rules find in the modules that ship', () => {
   });
 
   /**
-   * The same missing flag breaks two opposite ways, and an author sent looking
-   * for the wrong one looks in the wrong place. Two of aurendel's three are
-   * read only under `without`: the gate they guard never closes, and telling
-   * that author it "never comes true" points them at the wrong end of it.
+   * The same missing flag breaks two opposite ways, and an author sent looking for the wrong one
+   * looks in the wrong place. Two of aurendel's three are read only under `without`: the gate they
+   * guard never closes.
    */
   it('says which way the gate is stuck', () => {
     const gate = (requires: unknown) =>
@@ -100,11 +94,9 @@ describe('what the rules find in the modules that ship', () => {
 /**
  * The pair that looks like one rule in a report and is two problems to fix.
  *
- * A flag nobody wrote is a typo. A flag written only inside a dialogue no NPC
- * owns is worse: the writer is in the file, so searching for the name finds it,
- * `flag_never_set` is correctly silent, and the objective still never
- * completes. Splitting them is the whole point, so the test proves each stays
- * quiet on the other's case.
+ * A flag nobody wrote is a typo. A flag written only inside a dialogue no NPC owns is worse: the
+ * writer is in the file, `flag_never_set` is correctly silent, and the objective still never
+ * completes. So each test proves the other rule stays quiet on its case.
  */
 describe('a flag whose writer cannot be reached', () => {
   /** Add a dialogue nobody owns that sets `ghost_flag`, and wait on it. */
@@ -147,10 +139,9 @@ describe('a flag whose writer cannot be reached', () => {
 });
 
 /**
- * Zero one-sided roads across 296 in Aurendel is not luck — `edges()` emits
- * both directions from one declaration. A world authored by hand has no such
- * guarantee, and the symptom is a party that walks somewhere and cannot walk
- * back, which reads as design.
+ * Zero one-sided roads across 296 in Aurendel is not luck — `edges()` emits both directions from
+ * one declaration. A world authored by hand has no such guarantee, and the symptom is a party that
+ * walks somewhere and cannot walk back.
  */
 describe('roads', () => {
   it('says nothing about the modules that ship', () => {
@@ -184,9 +175,7 @@ describe('roads', () => {
   });
 });
 
-/**
- * The ordering that makes a persuasion check free.
- */
+/** The ordering that makes a persuasion check free. */
 describe('effects before checks', () => {
   it('says nothing about the modules that ship', () => {
     for (const name of ['greenmarch', 'aurendel']) {
@@ -216,10 +205,8 @@ describe('effects before checks', () => {
 });
 
 /**
- * Secrets. Aurendel hides 50 places and every one of them has a way in, and
- * all 38 of its threads are anchored — so both of these are silent on what
- * ships, which is the point: the failures they catch are edits away, not
- * present.
+ * Secrets. Aurendel hides 50 places and every one has a way in, and all 38 of its threads are
+ * anchored, so both rules are silent on what ships: the failures they catch are edits away.
  */
 describe('hidden places', () => {
   it('says nothing about the modules that ship', () => {
@@ -252,14 +239,14 @@ describe('hidden places', () => {
     expect(found).toHaveLength(1);
     expect(found[0]?.message).toMatch(/never gets easier/);
     expect(found[0]?.hint).toMatch(/did you mean/);
-    // The whole point: this is invisible to everything else.
+    // Invisible to everything else.
     expect(compileModule(doc).ok).toBe(true);
   });
 });
 
 /**
- * The engine keeps its own records in the same flag space, under computed
- * names. A rule that did not know would call every one a broken flag.
+ * The engine keeps its own records in the same flag space under computed names. A rule that did not
+ * know would call every one a broken flag.
  */
 describe('flags the engine writes', () => {
   it('still appears in the engine', () => {
@@ -304,7 +291,7 @@ describe('objective targets', () => {
     });
 
     expect(codes(doc, [objectiveTargetsResolve])).toEqual(['objective_target_missing']);
-    // The point: nothing else complains.
+    // Nothing else complains.
     expect(compileModule(doc).ok, 'this is why the rule has to exist').toBe(true);
   });
 
@@ -332,8 +319,7 @@ describe('flags', () => {
       ];
     });
 
-    // greenmarch already has one of these, so look for the injected one rather
-    // than for a count — see the pinned findings above.
+    // greenmarch already has one of these, so look for the injected one rather than for a count.
     const found = runRules(doc, [flagsHaveWriters]).filter((d) => d.message.includes('mill_cleer'));
     expect(found).toHaveLength(1);
     expect(found[0]?.hint).toMatch(/mill_clear/);
@@ -343,9 +329,8 @@ describe('flags', () => {
 
 describe('reachability', () => {
   it('catches a quest nobody can be offered', () => {
-    // Cut one quest off rather than gutting the module: the point is that the
-    // document is otherwise entirely well-formed, which a wholesale deletion
-    // would stop being.
+    // Cut one quest off rather than gutting the module: the point is that the document is otherwise
+    // entirely well-formed.
     let orphaned = '';
     const doc = broken('greenmarch', (d) => {
       const quest = d.narrative.quests.at(-1);
@@ -382,8 +367,8 @@ describe('reachability', () => {
 describe('kill targets can appear', () => {
   it('catches a creature no referenced table produces', () => {
     const doc = broken('greenmarch', (d) => {
-      // The monster exists and the objective is correct; it just cannot be met,
-      // because nothing draws from a table that produces it any more.
+      // The monster exists and the objective is correct; it cannot be met because nothing draws
+      // from a table that produces it.
       d.world.encounterTables = [];
       for (const area of d.world.areas) area.encounterTables = [];
       for (const poi of d.world.pointsOfInterest) poi.encounterTables = [];

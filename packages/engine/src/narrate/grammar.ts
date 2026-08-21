@@ -1,11 +1,9 @@
 /**
  * Prose from templates.
  *
- * With no LLM at runtime, variety comes from weighted pools keyed on world
- * state. The important property is that expansion is **seeded per scene**, not
- * per call: re-describing the same room gives the same sentence, so a place
- * reads as a place rather than shuffling every time you look at it. Two
- * different playthroughs still describe it differently.
+ * With no LLM at runtime, variety comes from weighted pools keyed on world state. Expansion is
+ * seeded per scene rather than per call, so re-describing the same room gives the same sentence
+ * while two playthroughs describe it differently.
  *
  * Templates interpolate `{placeholder}` from a context the caller supplies.
  */
@@ -33,8 +31,8 @@ export interface NarrateOptions {
   /** Scope for evaluating variant conditions. */
   readonly scope?: Scope;
   /**
-   * Stable identity for the thing being described. The same key always yields
-   * the same phrasing within a run.
+   * Stable identity for the thing being described. The same key always yields the same phrasing
+   * within a run.
    */
   readonly sceneKey?: string;
   readonly openNamespaces?: readonly string[];
@@ -47,17 +45,15 @@ export function interpolate(
 ): string {
   return template.replace(/\{(\w+)\}/g, (whole, name: string) => {
     const value = context[name];
-    // An unresolved placeholder is left in place rather than blanked, so a
-    // missing value is visible in play instead of producing a hole in a sentence.
+    // An unresolved placeholder is left in place rather than blanked, so a missing value is visible
+    // in play instead of leaving a hole in a sentence.
     return value === undefined ? whole : String(value);
   });
 }
 
 /**
- * Expand a text pool into a line.
- *
- * Returns an empty string when the pool does not exist, so a missing
- * `textKey` degrades to silence rather than throwing mid-scene.
+ * Expand a text pool into a line. Returns an empty string when the pool does not exist, so a
+ * missing `textKey` degrades to silence rather than throwing mid-scene.
  */
 export function narrateFrom(
   module: CompiledModule,
@@ -68,8 +64,8 @@ export function narrateFrom(
   const pool = module.find<TextPool>('narrative.textGrammar', poolId);
   if (!pool || pool.variants.length === 0) return '';
 
-  // The scene key decides the phrasing, so the same room reads the same way
-  // every time it is described within one run.
+  // The scene key decides the phrasing, so the same room reads the same way every time it is
+  // described within one run.
   const rng = Rng.fromSeed(seed ^ hashString(options.sceneKey ?? poolId));
 
   const eligible = options.scope
@@ -95,20 +91,17 @@ function allows(
     }
     if (variant.when && !evalPredicate(variant.when, context)) return false;
   } catch {
-    // A variant whose condition cannot be evaluated is skipped rather than
-    // crashing the scene; the pool's other phrasings still work.
+    // A variant whose condition cannot be evaluated is skipped rather than crashing the scene; the
+    // pool's other phrasings still work.
     return false;
   }
   return true;
 }
 
 /**
- * The words a sentence is assembled from, resolved from the module once.
- *
- * These helpers used to hold their own English — "and", "a"/"an", and a ladder
- * of number words. The *rules* are still here (where the conjunction goes, that
- * a vowel takes the other article); only the words moved out, which is the line
- * this file draws between grammar and vocabulary.
+ * The words a sentence is assembled from, resolved from the module once. The rules stay here —
+ * where the conjunction goes, that a vowel takes the other article — and only the words live in the
+ * module.
  */
 export interface Grammar {
   readonly and: string;
@@ -144,10 +137,8 @@ export function list(grammar: Grammar, items: readonly string[], conjunction = g
 }
 
 /**
- * "a sword" / "an apple".
- *
- * The vowel test is a rule about how the language works, so it stays; which
- * word each branch produces is the module's business.
+ * "a sword" / "an apple". The vowel test is a rule about how the language works; which word each
+ * branch produces is the module's business.
  */
 export function article(grammar: Grammar, noun: string): string {
   return interpolate(/^[aeiou]/i.test(noun) ? grammar.vowel : grammar.consonant, { noun });
@@ -167,15 +158,12 @@ export function count(
 /**
  * How well a typed noun matches a name, from 100 down to 0 for no match.
  *
- * The ladder is the whole point, and the order of its rungs is load-bearing: a
- * **whole word** beats the **start of a longer word**, which is the difference
- * between `enter mill` finding The Old Mill and finding Millford Village. Put
- * the plain substring test above the word test and the word test becomes dead
- * code, since anything containing a word contains the substring too.
+ * The order of the rungs is load-bearing: a whole word beats the start of a longer word, which is
+ * the difference between `enter mill` finding The Old Mill and finding Millford Village. Putting
+ * the plain substring test above the word test makes the word test dead code.
  *
- * Lives here rather than in either front end because the parser and the
- * narrator must agree about what a name means. When they disagreed, `look mill`
- * described one place and `enter mill` walked to another.
+ * Lives here rather than in either front end because the parser and the narrator must agree about
+ * what a name means.
  */
 export function nameScore(needle: string, name: string): number {
   const typed = needle.trim().toLowerCase();
@@ -192,13 +180,9 @@ export function nameScore(needle: string, name: string): number {
 }
 
 /**
- * How a creature reads in prose: "a lean, mud-slicked bog hound".
- *
- * `monsters[].descriptors` was declared and used nowhere, so every creature was
- * described by its bare name however much colour the module wrote. Picked with
- * a scene-seeded generator, so the same hound reads the same way each time it
- * is mentioned and differently between playthroughs — the same rule room
- * descriptions follow.
+ * How a creature reads in prose: "a lean, mud-slicked bog hound", from `monsters[].descriptors`.
+ * Picked with a scene-seeded generator, so the same hound reads the same way each time it is
+ * mentioned and differently between playthroughs.
  */
 export function describeCreature(
   module: CompiledModule,

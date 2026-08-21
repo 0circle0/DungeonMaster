@@ -3,16 +3,11 @@
 /**
  * The author's own worlds.
  *
- * The studio used to read `modules/` on the server and write back to it, which
- * meant every visitor to a deployment was editing the same files. Now a world
- * belongs to whoever is sitting at the browser: it is stored here, it never
- * leaves, and the only way it reaches another machine is a file the author
- * chooses to export.
+ * A world belongs to whoever is sitting at the browser: it is stored here, it never leaves, and the
+ * only way it reaches another machine is a file the author chooses to export.
  *
- * The shipped examples are static files. One is fetched when somebody asks for
- * it, and from that moment it is theirs — editable in place, with no pristine
- * copy underneath to fork from, because a world you cannot change is not an
- * example of what can be built.
+ * The shipped examples are static files. One is fetched when somebody asks for it, and from that
+ * moment it is theirs — editable in place, with no pristine copy underneath to fork from.
  */
 
 import { useCallback, useEffect, useState } from 'react';
@@ -31,10 +26,9 @@ import type { ProjectSnapshot } from './projectDiff';
 /**
  * A world opened from the store: its files, joined.
  *
- * No draft. A draft existed because a world was one blob that had to be either
- * valid or set aside, so that the library always held something loadable. Files
- * have no second version to hold — an entry with a half-typed reference is a
- * file like any other and the world opens with a diagnostic against it.
+ * No draft. A draft existed because a world was one blob that had to be either valid or set aside;
+ * files have no second version to hold, and an entry with a half-typed reference is a file like any
+ * other.
  */
 export interface LoadedWorld {
   readonly meta: WorldMeta;
@@ -43,9 +37,8 @@ export interface LoadedWorld {
   /** Anything the project could not say — a bad file names itself. */
   readonly issues: readonly string[];
   /**
-   * The files as they were read, described. Without it the first save would
-   * compare against nothing and rewrite the whole world with the bytes it
-   * already had.
+   * The files as they were read, described. Without it the first save would compare against nothing
+   * and rewrite the whole world with the bytes it already had.
    */
   readonly snapshot: ProjectSnapshot;
 }
@@ -107,11 +100,9 @@ export function useEditorLibrary(): EditorLibraryApi {
   }, [refresh]);
 
   /**
-   * Take a project into the library, once.
-   *
-   * The files land as they arrived — recipes still recipes, prefabs still
-   * prefabs — and are never joined on the way in. Joining happens when the world
-   * is opened, and what is stored is what the author was given.
+   * Take a project into the library, once. The files land as they arrived — recipes still recipes,
+   * prefabs still prefabs — and are never joined on the way in; joining happens when the world is
+   * opened.
    */
   const store = useCallback(async (
     files: Record<string, string>,
@@ -168,9 +159,9 @@ export function useEditorLibrary(): EditorLibraryApi {
   }, [store]);
 
   /**
-   * A world the studio itself makes — a template, or a ruleset composed into
-   * one. It is split here rather than imported: nothing arrives from outside, so
-   * there is a document and it becomes the project it will be edited as.
+   * A world the studio itself makes — a template, or a ruleset composed into one. Split here rather
+   * than imported: nothing arrives from outside, so there is a document and it becomes the project
+   * it will be edited as.
    */
   const createFrom = useCallback(async (
     doc: Record<string, unknown>,
@@ -192,10 +183,9 @@ export function useEditorLibrary(): EditorLibraryApi {
   }, [refresh]);
 
   /**
-   * The document behind an example, for composing a new world out of it.
-   *
-   * Joined here and thrown away: nothing is stored, so this is the one place the
-   * studio wants a document rather than a project.
+   * The document behind an example, for composing a new world out of it. Joined here and thrown
+   * away: nothing is stored, so this is the one place the studio wants a document rather than a
+   * project.
    */
   const exampleDoc = useCallback(async (id: string): Promise<Record<string, unknown> | null> => {
     const files = await fetchExampleProject(id);
@@ -214,15 +204,13 @@ export function useEditorLibrary(): EditorLibraryApi {
 }
 
 /**
- * One world, joined from its files.
- *
- * This is the only place a project becomes a document, and it happens when a
- * world is opened rather than on every save. Parsing all of Aurendel's files is
- * about as much work as parsing `module.json` was, because it is the same bytes.
+ * One world, joined from its files. The only place a project becomes a document, and it happens
+ * when a world is opened rather than on every save. Parsing all of Aurendel's files is about as
+ * much work as parsing `module.json` was, because it is the same bytes.
  */
 export async function loadWorld(key: string): Promise<LoadedWorld | null> {
-  // One metadata row, not every row filtered down to one — and both reads at
-  // once, because neither depends on the other.
+  // One metadata row rather than every row filtered down to one, and both reads at once because
+  // neither depends on the other.
   const [meta, files] = await Promise.all([readWorldMeta(key), readWorldFiles(key)]);
   if (!meta || Object.keys(files).length === 0) return null;
 

@@ -59,10 +59,9 @@ function transact(state: GameState, module = GREENMARCH): Transaction {
   return new Transaction(state, module);
 }
 
-// Greenmarch authors no interior POIs, so interior tests run on a fixture: the
-// village given a small generated interior, and an outdoor `position` that
-// lies outside the interior's bounds — which is the normal case, since
-// `position` is in area coordinates.
+// Greenmarch authors no interior POIs, so interior tests run on a fixture: the village given a
+// small generated interior, and an outdoor `position` outside the interior's bounds, which is the
+// normal case since `position` is in area coordinates.
 function withInteriorVillage(): CompiledModule {
   const dir = fileURLToPath(new URL('../../../modules/greenmarch', import.meta.url));
   const doc = readAssembledModule(dir).doc as unknown as {
@@ -160,14 +159,10 @@ describe('triggers', () => {
   });
 
   /**
-   * A place that fronts a dungeon is still a place you arrived at.
-   *
-   * `enterPoi` hands straight off to `enterDungeon` for these, and used to do
-   * it before running the point of interest's own triggers — so every trigger
-   * on every dungeon mouth was dead. In Aurendel that was all three ways into
-   * the Deeproads, which set the only three flags that can finish `the_way_
-   * below`, which is the only route to the ending arc: the questline was
-   * unwinnable and nothing anywhere said so.
+   * A place that fronts a dungeon is still a place you arrived at. `enterPoi` hands off to
+   * `enterDungeon` for these, and must run the point of interest's own triggers first — in Aurendel
+   * those are the three ways into the Deeproads, which set the only three flags that finish
+   * `the_way_below`.
    */
   it('fires a dungeon mouth\'s own triggers before descending', () => {
     const dir = fileURLToPath(new URL('../../../modules/greenmarch', import.meta.url));
@@ -253,9 +248,8 @@ describe('gates', () => {
     expect(outcome.opened).toBe(true);
   });
 
-  // The exits panel and the affordance list have always decided "barred" by
-  // reading this flag. Nothing wrote it, so a door the party had opened went on
-  // reading as locked for the rest of the run.
+  // The exits panel and the affordance list decide "barred" by reading this flag, so a door the
+  // party has opened must stop reading as locked.
   it('records that it stands open, so the way stops reading as barred', () => {
     const state = fresh();
     const hero = state.entities['e:1']!;
@@ -269,9 +263,8 @@ describe('gates', () => {
     expect(txn.finish().state.flags['gate:mill_door:open']).toBe(true);
   });
 
-  // A standing door is not re-opened on the way back through: `onOpen` fires
-  // once, so a gate that grants something cannot be farmed by walking in and
-  // out of it.
+  // A standing door is not re-opened on the way back through: `onOpen` fires once, so a gate that
+  // grants something cannot be farmed.
   it('does not open twice', () => {
     const state = fresh();
     const hero = state.entities['e:1']!;
@@ -290,10 +283,8 @@ describe('gates', () => {
     expect(second.finish().events.filter((e) => e.type === 'gateOpened')).toHaveLength(0);
   });
 
-  // `minTier` compiled to a comparison against a namespace nothing populated,
-  // which resolved to null and then threw inside the comparison — from
-  // `useAbility`, which does not catch. Greenmarch's `read_runes` carries one,
-  // so any character who learned it took the whole reduction down on use.
+  // `minTier` compiles to a comparison against the `tiers` namespace; an unpopulated one resolved
+  // to null and threw inside the comparison, from `useAbility`, which does not catch.
   it('resolves a mastery-tier gate on an ability instead of throwing', () => {
     const state = fresh();
     const hero = state.entities['e:1']!;
@@ -393,10 +384,10 @@ describe('quests', () => {
     expect(txn.state.flags['quest:the_mill_door:kill_hounds:count']).toBe(1);
   });
 
-  // Levelling used to be a number going up and nothing else.
+  // Levelling grants the class's abilities, not just a higher number.
   it('unlocks the class abilities the new level opens', () => {
     const txn = transact(fresh());
-    // The warden declares `rally` at level 2 and could never reach it.
+    // The warden declares `rally` at level 2.
     expect(txn.entity('e:1')!.abilities).not.toContain('rally');
 
     grantXp(txn, 150, Rng.fromSeed(1));
@@ -472,8 +463,8 @@ describe('quests', () => {
     void allObjectives;
   });
 
-  // The cursor is derived from the completed list rather than stored, so these
-  // pin the derivation rather than a field.
+  // The cursor is derived from the completed list rather than stored, so these pin the derivation
+  // rather than a field.
   it('tracks which stage a quest is on', () => {
     const quest = GREENMARCH.get<QuestDef>('narrative.quests', 'the_mill_door');
     expect(stageIndexOf(quest, new Set())).toBe(0);

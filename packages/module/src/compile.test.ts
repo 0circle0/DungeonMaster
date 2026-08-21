@@ -105,8 +105,8 @@ describe('compileModule', () => {
     });
 
     it('accepts every reference in the fixture, proving the walker reaches them', () => {
-      // A walker that silently visits nothing would also report zero errors, so
-      // confirm it actually found references by breaking one of each kind.
+      // A walker that silently visits nothing would also report zero errors, so confirm it found
+      // references by breaking one of each kind.
       const kinds: Array<(doc: GameModule) => void> = [
         (d) => { d.content.monsters[0]!.abilities = ['nope']; },
         (d) => { d.world.biomes[0]!.roomTemplates = ['nope']; },
@@ -190,79 +190,41 @@ describe('hashModule', () => {
   });
 
   /**
-   * ⚠️ DO NOT "fix" this test by updating the expected values. ⚠️
+   * Do not "fix" this test by updating the expected values.
    *
-   * `compileModule` hashes `parsed.data` — the document *after* zod applies
-   * defaults. So any new top-level field carrying a `.default()` silently
-   * changes the hash of every module ever authored, and `load()` in the engine
-   * refuses a save whose recorded module hash no longer matches. The first
-   * symptom is every player's save file failing to load.
+   * `compileModule` hashes `parsed.data` — the document after zod applies defaults — so any new
+   * top-level field carrying a `.default()` changes the hash of every module ever authored, and
+   * `load()` refuses a save whose recorded hash no longer matches.
    *
-   * If this test fails, a schema change did that. The fix is to make the new
-   * field `.optional()` (an absent key stays absent in `parsed.data`, so the
-   * hash is untouched), not to re-stamp the numbers below.
+   * If this test fails, a schema change did it. The fix is to make the new field `.optional()`,
+   * since an absent key stays absent in `parsed.data`.
    *
-   * There is **one** change that cannot take that fix, and it is worth naming
-   * so the next person does not go looking for a way out that is not there:
-   * **a new sentence for the engine to say.** `systemTextSchema` gives every
-   * `message` a `.default()` so an author writes only what they want to change,
-   * which means a new `SYSTEM_TEXT` entry appears in `parsed.data` for every
-   * module that has not declared it. Making messages `.optional()` with the
-   * reader falling back would not avoid it either — the nine messages `minimal`
-   * currently leaves to their defaults would then vanish from the document, and
-   * the hash would move by exactly as much. Adding engine prose moves the hash.
-   * Everything else has a way not to.
+   * One change cannot take that fix: a new sentence for the engine to say. `systemTextSchema` gives
+   * every `message` a `.default()`, so a new `SYSTEM_TEXT` entry appears in `parsed.data` for every
+   * module that has not declared it. Making messages `.optional()` would not help — the messages
+   * `minimal` leaves to their defaults would then vanish from the document and move the hash by as
+   * much.
    *
-   * The number below was re-stamped once, for the `lore.learned` pair. The lore
-   * feature's three *structural* additions — `narrative.lore`,
-   * `narrative.loreThreads` and `requirement.lore` — are all `.optional()`
-   * precisely so they contributed nothing to that move; the sentences were the
-   * whole of it. Saves written before it need `allowModuleDrift`.
-   *
-   * Re-stamped a second time for `rules.resolution.swingStacking`. That one
-   * could have been `.optional()` with the engine falling back to `cancel`,
-   * and the hash would not have moved — but an invented fallback is the thing
-   * `hardcoded-audit.md` spent a pass removing, and a resolution policy an
-   * author cannot see in their own document is not a policy they can change.
-   * A declared default is worth a hash move. Its companion
-   * `rules.conditions[].swings` landed in the same pass and is `.optional()`,
-   * and the number below did not budge for it — which is the distinction
-   * working: a policy the ruleset holds an opinion about is declared, and
-   * per entry structure that is usually absent stays absent.
-   *
-   * Re-stamped a third time for `rules.resolution.criticalScope`, on the same
-   * reasoning: which rolls can crit is an opinion, and an author who cannot
-   * see it in their own document cannot tell they hold it.
-   *
-   * Re-stamped a fourth time for `rules.temperament` and
-   * `rules.perception.maxMarksPerTile`. Same distinction, applied twice over:
-   * how far a creature strays from its own ground, how long it keeps looking
-   * for you, and how many traces a tile is worth remembering are all opinions
-   * the ruleset holds, and a world whose creatures never wandered held them
-   * silently. The per-creature half of the same feature —
-   * `content.monsters[].temperament`, `content.npcs[].temperament` and
-   * `world.terrains[].marks` — is `.optional()` and contributed nothing to the
-   * move, which is the distinction working again. Saves from before it need
-   * `allowModuleDrift`.
+   * The number below has been re-stamped for: the `lore.learned` sentences;
+   * `rules.resolution.swingStacking`; `rules.resolution.criticalScope`; and `rules.temperament`
+   * with `rules.perception.maxMarksPerTile`. Each is a policy the ruleset holds an opinion about,
+   * which is declared rather than invented as a fallback. Their per-entry companions —
+   * `rules.conditions[].swings`, `content.monsters[].temperament`, `content.npcs[].temperament`,
+   * `world.terrains[].marks` — are `.optional()` and moved nothing. Saves from before each move
+   * need `allowModuleDrift`.
    */
   it('is unchanged for a module that declares no mods', () => {
-    // `minimal` is the witness, and deliberately not greenmarch: greenmarch
-    // carries mods and authored `extra` data now, so its hash moves whenever
-    // its *content* does, which would make this test noise. `minimal` declares
-    // no mods and is the no-hardcoding control, so the only thing that can
-    // move this number is the schema itself.
+    // `minimal` is the witness rather than greenmarch: greenmarch carries mods and authored `extra`
+    // data, so its hash moves whenever its content does. `minimal` declares no mods, so only the
+    // schema can move this number.
     const at = (name: string) => fileURLToPath(new URL(`../../../modules/${name}`, import.meta.url));
     expect(loadModuleFrom(at('minimal')).hash).toBe('25b811d298a743a2');
   });
 
   it('treats an absent `mods` key as absent, not as an empty list', () => {
-    // The property the pinned number above depends on, stated directly.
-    //
-    // `compileModule` hashes `parsed.data`, so if `mods` were `.default([])`
-    // rather than `.optional()`, zod would insert `mods: []` into every
-    // document ever parsed and every module hash in existence would change —
-    // and `load()` refuses a save whose recorded hash no longer matches. The
-    // two hashes below being *different* is what proves the key stays out.
+    // The property the pinned number depends on. If `mods` were `.default([])` rather than
+    // `.optional()`, zod would insert `mods: []` into every document ever parsed and every module
+    // hash would change. The two hashes below being different is what proves the key stays out.
     const bare = compileModule(loadMinimal());
     const doc = loadMinimal();
     doc['mods'] = [];

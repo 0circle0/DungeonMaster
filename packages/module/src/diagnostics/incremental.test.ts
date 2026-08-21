@@ -1,14 +1,13 @@
 /**
  * `ValidationIndex.parse` must be indistinguishable from `safeParse`.
  *
- * Everything downstream — reference resolution, the semantic passes, the
- * content hash a save refuses to load without — reads the parsed document. If
- * the incremental parse differs by so much as an applied default, saves break
- * and no test above this one would notice.
+ * Everything downstream — reference resolution, the semantic passes, the content hash a save
+ * refuses to load without — reads the parsed document, so a difference of one applied default
+ * breaks saves.
  *
- * The mutation test is the one that earns its keep. A cache is easy to make
- * correct on first parse and wrong on the second, and only editing the document
- * repeatedly and comparing against a from-scratch parse each time finds that.
+ * The mutation test earns its keep: a cache is easy to make correct on first parse and wrong on the
+ * second, and only editing repeatedly and comparing against a from-scratch parse each time finds
+ * that.
  */
 
 import { describe, it, expect } from 'vitest';
@@ -56,7 +55,7 @@ describe('ValidationIndex', () => {
     if (!actual.ok) return;
 
     expect(actual.data).toEqual(expected.data);
-    // The hash is the thing a save is pinned to, so it gets its own assertion.
+    // The hash is what a save is pinned to, so it gets its own assertion.
     expect(hashModule(actual.data)).toBe(hashModule(expected.data));
   });
 
@@ -103,9 +102,8 @@ describe('ValidationIndex', () => {
   });
 
   /**
-   * The index is only useful if `lintModule` says the same thing with it as
-   * without. This is the assertion the editor's correctness actually rests on:
-   * "valid in the studio" has to keep meaning "will load at play time".
+   * The index is only useful if `lintModule` says the same thing with it as without: "valid in the
+   * studio" has to keep meaning "will load at play time".
    */
   describe('inside lintModule', () => {
     it.each(MODULES)('reports the same diagnostics for %s', (name) => {
@@ -134,8 +132,8 @@ describe('ValidationIndex', () => {
 
     it('falls back to the ordinary pass so schema errors keep their suggestions', () => {
       const doc = moduleDoc('greenmarch');
-      // A misspelled property: the message worth reading is "did you mean …?",
-      // which only the full schema pass produces.
+      // A misspelled property: the message worth reading is "did you mean …?", which only the full
+      // schema pass produces.
       const broken = setAt(doc, ['content', 'monsters', 0], {
         ...((doc['content'] as { monsters: Record<string, unknown>[] }).monsters[0]!),
         nmae: 'typo',
@@ -151,22 +149,16 @@ describe('ValidationIndex', () => {
   /**
    * Guards against the cache being silently defeated.
    *
-   * This has happened twice already and neither time did a test notice: once by
-   * linting the serialized text, which rebuilds every object and so recognises
-   * nothing as unchanged, and once by a *second* full compile living in a
-   * component that wanted a `CompiledModule` of its own. Both cost about a
-   * second per keystroke on `modules/aurendel` and both looked completely
-   * correct.
+   * This has happened twice without a test noticing: once by linting the serialized text, which
+   * rebuilds every object so nothing is recognised as unchanged, and once by a second full compile
+   * in a component that wanted its own `CompiledModule`. Both cost about a second per keystroke on
+   * `modules/aurendel`.
    *
-   * The miss count is the sharp one: it fails for any of the ways the cache has
-   * actually been broken. The timing below is a coarse backstop that only fires
-   * when the index has stopped working outright — checked by disabling each
-   * cache in turn and watching which test noticed, because a guard nobody has
-   * seen fail is a guard nobody knows the shape of.
+   * The miss count is the sharp assertion; the timing below is a coarse backstop that only fires
+   * when the index has stopped working outright.
    *
-   * It is a ratio rather than a millisecond budget on purpose. A budget fails on
-   * a loaded machine and teaches people to skip the suite; a ratio compares two
-   * things measured back to back under the same conditions.
+   * A ratio rather than a millisecond budget: a budget fails on a loaded machine and teaches people
+   * to skip the suite.
    */
   describe('stays incremental', () => {
     it('re-parses one entry per edit when driven through lintModule', () => {
@@ -212,9 +204,9 @@ describe('ValidationIndex', () => {
   });
 
   /**
-   * Linting the document loses line numbers; the editor gets them back on the
-   * idle tier. What it gets back has to be what linting the text would have
-   * said, or "go to line 807" sends the author somewhere else.
+   * Linting the document loses line numbers and the editor gets them back on the idle tier. What it
+   * gets back has to be what linting the text would have said, or "go to line 807" sends the author
+   * somewhere else.
    */
   describe('attachPositions', () => {
     it.each(MODULES)('restores the positions %s would have had', (name) => {

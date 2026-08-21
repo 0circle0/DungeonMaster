@@ -1,5 +1,4 @@
-/* Dark, dense, and quiet. This is a tool for long authoring sessions, so the
-   chrome stays out of the way and the content carries the contrast. */
+/* Low-contrast chrome keeps authored content visually prominent. */
 
 :root {
   --bg: #12131a;
@@ -10,8 +9,7 @@
   --muted: #8890a6;
   --accent: #d9a441;
   --accent-dim: #8a6a2c;
-  /* Named because a pinned .group-head has to repaint its group's background
-     exactly; the two drifting apart would show as a seam while scrolling. */
+  /* Pinned group headers must match the group background while scrolling. */
   --group-bg: #15171f;
   --ok: #5fb87a;
   --err: #e06c6c;
@@ -68,19 +66,11 @@ button, input, select, textarea { font: inherit; color: inherit; }
 .label { font-size: 12px; color: var(--muted); display: flex; align-items: center; gap: 6px; }
 .hint { font-size: 11px; color: #5d6478; font-style: normal; margin: 2px 0 0; }
 
-/* A problem, shown on the field it is about rather than only in the console.
-   It replaces the hint rather than stacking under it: two lines of small text
-   under one input is where an author stops reading either. */
+/* Field diagnostics replace hints to keep one message below each input. */
 .field-problem { font-size: 11px; font-style: normal; margin: 2px 0 0; }
 .field-problem.error { color: var(--err); }
 .field-problem.warning { color: var(--warn); }
-/* A field that no longer follows its prefab.
-
-   The two states an author must be able to tell apart are "editing the prefab
-   still reaches this" and "this is mine now", and until this existed they
-   looked identical in the only place anybody looks. So the value is emphasised
-   rather than the label — the value is the thing that stopped being shared —
-   and the way back sits beside the name. */
+/* Emphasize values that no longer inherit from their prefab. */
 .field-overridden > .label { color: var(--fg); }
 .field-overridden > .input,
 .field-overridden > .code,
@@ -118,10 +108,7 @@ textarea.input { resize: vertical; font-family: inherit; }
 }
 .group-head { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
 
-/* A pinned header needs a background of its own, because the group's content
-   scrolls underneath it. `top` is set inline from the nesting depth so headers
-   stack instead of covering one another. Beware: an `overflow` on .group or
-   .card would disable all of this silently. */
+/* Inline `top` offsets stack nested headers. Ancestor overflow disables sticky positioning. */
 .group-head.pinned {
   position: sticky;
   background: var(--group-bg);
@@ -129,9 +116,7 @@ textarea.input { resize: vertical; font-family: inherit; }
   margin-bottom: 2px;
 }
 
-/* Adding a section that is not there yet — see ObjectField in Field.tsx.
-   The select shrinks with the column rather than overflowing it, since these
-   sit at the bottom of groups that may be five levels deep and narrow. */
+/* Optional-section controls must shrink inside deeply nested groups. */
 .add-row { display: flex; align-items: center; gap: 8px; margin-top: 4px; min-width: 0; }
 .add-row select { flex: 1; min-width: 0; max-width: 200px; }
 .add-row .count { white-space: nowrap; }
@@ -187,14 +172,7 @@ textarea.input { resize: vertical; font-family: inherit; }
 .tree-chip.hidden { background: #2a2035; color: #b48ad6; }
 .tree-chip.err { background: #3a2224; color: var(--err); }
 
-/* ── problems ────────────────────────────────────────────────
-   A row is where + what + why, in that order.
-
-   The rule code used to be `class="code"`, which is also the class on the JSON
-   editing textarea — so every row carried a full-width bordered box that sat
-   on top of the row and squeezed the message into a column one word wide. It
-   has its own name now. Nothing else should be called `code`: that name
-   belongs to a textarea. */
+/* ── problems: location, message, rationale, rule ─────────── */
 
 .problem {
   display: flex; gap: 10px; align-items: baseline; width: 100%; text-align: left;
@@ -204,7 +182,7 @@ textarea.input { resize: vertical; font-family: inherit; }
 .problem:hover { background: var(--panel-2); }
 .problem.err { border-left: 2px solid var(--err); }
 .problem.warn { border-left: 2px solid var(--warn); }
-/* A note is not a problem; it should not look like one. */
+/* Informational notes use lower contrast than actionable diagnostics. */
 .problem.note { border-left: 2px solid #3a3f52; }
 .problem.note .problem-message { color: var(--muted); }
 .problem-where {
@@ -216,7 +194,7 @@ textarea.input { resize: vertical; font-family: inherit; }
 .problem-message { color: var(--text); }
 .problem-hint { color: #6fb3c4; font-size: 11.5px; }
 .problem-path { font-family: var(--mono); font-size: 10.5px; color: #4e5468; }
-/* Last, and out of the way: which rule said so matters after what it said. */
+/* Rule codes remain secondary to diagnostic messages. */
 .problem-code {
   margin-left: auto; flex: none; white-space: nowrap;
   font-family: var(--mono); font-size: 10px; color: #4e5468;
@@ -343,8 +321,7 @@ textarea.input { resize: vertical; font-family: inherit; }
 .spark-bar:hover { background: #4a7290; }
 .spark-bar.current { background: var(--accent); }
 
-/* Reordering an array item. Kept beside the remove button, small, because most
-   lists are not ordered and the controls should not claim otherwise. */
+/* Array reorder controls stay compact because most lists are unordered. */
 .reorder { display: inline-flex; gap: 2px; }
 .reorder .btn { padding: 0 5px; line-height: 1.4; }
 
@@ -354,15 +331,14 @@ textarea.input { resize: vertical; font-family: inherit; }
 
 .prefabs { padding: 4px 2px; }
 .prefab-list { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 14px; }
-/* Definition on the left, consequences on the right. The right half is the
-   reason this screen exists. */
+/* Show the prefab definition beside its affected instances. */
 .prefab-body { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; align-items: start; }
 .fanout-row { border-left: 2px solid var(--line); padding-left: 8px; margin-bottom: 8px; }
 .fanout-field { display: flex; gap: 6px; align-items: baseline; font-size: 11px; padding-left: 8px; }
 .fanout-from { color: #5d6478; text-decoration: line-through; }
 .fanout-arrow { opacity: 0.4; }
 .fanout-to { color: var(--accent); }
-/* Not a warning: the author asked for this, and the prefab simply lost. */
+/* Preserved overrides are expected fan-out results, not diagnostics. */
 .fanout-kept { font-size: 11px; color: var(--warn); padding-left: 8px; margin-top: 2px; }
 .fanout-kept code { margin-right: 6px; }
 .dialog-actions { display: flex; gap: 8px; align-items: center; margin-top: 12px; }

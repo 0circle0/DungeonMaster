@@ -11,13 +11,11 @@ Each module exports whatever it has:
     TRAPS      list of trap dicts
     BIOME_ROOMS / BIOME_TRAPS   {biome_id: [id, ...]}
 
-Roads are declared once and emitted on both sides, because
-`world.areas[].connections` is one-directional in the engine (reduce.ts:300)
-and a road you can only walk one way is almost never what was meant. Pass
-`{"oneWay": True}` when it is.
+Roads are declared once and emitted on both sides, because `world.areas[].connections` is one-
+directional in the engine (reduce.ts). Pass `{"oneWay": True}` when a one-way road is meant.
 
-Everything here takes the loaded module list explicitly. The order of that list
-is the emitted order of every collection, so it is the caller's to decide.
+Everything takes the loaded module list explicitly: the order of that list is the emitted order of
+every collection, so it is the caller's to decide.
 """
 import importlib
 
@@ -25,10 +23,9 @@ import importlib
 def load(names):
     """Import each name, in order, and return the modules.
 
-    No `except ImportError`. A region that fails to import is a third of a
-    continent silently missing from a build that otherwise succeeds and prints
-    a slightly smaller number nobody reads — which is worth a traceback. The
-    genuinely-not-built-yet case is handled by `areas()`, loudly.
+    No `except ImportError`: a region that fails to import is a third of a continent silently
+    missing from a build that otherwise succeeds. The genuinely-not-built-yet case is handled by
+    `areas()`, loudly.
     """
     return [importlib.import_module(name) for name in names]
 
@@ -56,11 +53,9 @@ def edges(modules):
 def areas(modules):
     """Areas with their connections attached, in declaration order.
 
-    Idempotent: the area dicts are the very objects the region files hold, so
-    a second call would otherwise append a second copy of every road and the
-    play layer would offer each destination twice. It is called more than once
-    — `pois()` asks for them again to lay its entries out — so the reset is not
-    optional.
+    Idempotent: the area dicts are the objects the region files hold, so a second call would append
+    a second copy of every road. It is called more than once — `pois()` asks for them again — so the
+    reset is not optional.
     """
     entries = gather(modules, "AREAS")
     known = {a["id"] for a in entries}
@@ -70,11 +65,9 @@ def areas(modules):
 
     deferred = []
     for (a, b), (minutes, opts) in edges(modules).items():
-        # Regions can land one at a time, while the inter-region roads are
-        # declared all at once. A road to a region that does not exist yet
-        # is dropped and reported rather than crashing the build — but it is
-        # reported, because a silently missing highway is how a continent ends
-        # up with an unreachable third of itself.
+        # Regions can land one at a time while inter-region roads are declared all at once. A road
+        # to a region that does not exist yet is dropped and reported rather than crashing the
+        # build.
         if a not in known or b not in known:
             deferred.append(f"{a} <-> {b}")
             continue
@@ -102,12 +95,9 @@ def areas(modules):
 
 
 def pois(modules):
-    """Points of interest, each promoted to its own prose if any was written.
-
-    A place earns a unique voice simply by having a `<id>_desc` pool declared
-    somewhere; otherwise it keeps the shared pool for its kind. That makes
-    "write prose for this one" a one-line change in the region file rather than
-    an edit in two places that can fall out of step.
+    """Points of interest, each promoted to its own prose if any was written. A place earns a unique
+    voice by having a `<id>_desc` pool declared somewhere; otherwise it keeps the shared pool for
+    its kind.
     """
     from dmkit import prose
     entries = gather(modules, "POIS")
@@ -122,12 +112,10 @@ def pois(modules):
 def lay_out(entries, area_list):
     """Give every point of interest a spot on its area's map.
 
-    `position` is where the party stands when they arrive somewhere with no
-    interior, and where the place shows on the map when it has one. Hand-placing
-    four hundred of them is not a good use of anyone; hand-placing the ones that
-    matter and laying the rest out on a grid is. `freeNear` (sim/enter.ts:82)
-    shifts anybody who lands on a wall, so the only hard requirement is that a
-    spot is inside the map.
+    `position` is where the party stands when they arrive somewhere with no interior, and where the
+    place shows on the map when it has one. The ones that matter are hand-placed and the rest laid
+    out on a grid; `freeNear` (sim/enter.ts) shifts anybody who lands on a wall, so the only hard
+    requirement is that a spot is inside the map.
     """
     sizes = {a["id"]: (int(a["map"]["width"]), int(a["map"]["height"]))
              for a in area_list}
@@ -139,9 +127,8 @@ def lay_out(entries, area_list):
         index = counters.get(entry["area"], 0)
         counters[entry["area"]] = index + 1
 
-        # A ring of spots inset from the wall, filled clockwise, then a second
-        # ring further in. Two rings hold twenty-odd places, which is more than
-        # any settlement here has.
+        # A ring of spots inset from the wall, filled clockwise, then a second ring further in. Two
+        # rings hold twenty-odd places.
         ring = index // 12
         step = index % 12
         inset = 3 + ring * 4
@@ -164,10 +151,8 @@ def lay_out(entries, area_list):
 
 
 def attach_room_templates(modules, biome_list):
-    """Wire each biome's room templates and traps in, from wherever they came.
-
-    Stable and de-duplicated: two regions may contribute to the same biome, and
-    a repeated id is a weighting bug rather than a feature.
+    """Wire each biome's room templates and traps in. Stable and de-duplicated: two regions may
+    contribute to the same biome, and a repeated id is a weighting bug.
     """
     for field, attr in (("roomTemplates", "BIOME_ROOMS"), ("traps", "BIOME_TRAPS")):
         wanted = {}

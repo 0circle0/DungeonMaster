@@ -1,28 +1,7 @@
 'use client';
 
 /**
- * The words a player reads on arrival, written where the place is.
- *
- * The text is not stored on the place. It lives in `narrative.textGrammar` as a
- * bundle of variants, and the place points at it by name — which is the right
- * shape, because a bundle holds several lines so somewhere does not read
- * word-for-word identically every time you walk in, and because two hundred
- * generic doorways can share one bundle between them.
- *
- * It is also two jobs in two different tables for what an author experiences as
- * one thing: write the words. The Python removed that entirely — name a bundle
- * `<place>_desc` and it attaches itself. This does the same from the other end:
- * type here and the bundle is created, named by convention, and linked, in one
- * edit and one undo step.
- *
- * Three cases, because they want different things:
- *
- * - **No bundle yet.** Offer the box. This is the one that matters.
- * - **Its own `<id>_desc` bundle.** Edit the variants in place; going to find
- *   them in another table to change one sentence is the friction this removes.
- * - **A shared bundle.** Leave it alone and say so, with the count of who else
- *   uses it — editing it here would silently rewrite somewhere else. Offer a
- *   copy of its own instead.
+ * Edit a place's arrival description and handle shared versus local text bundles.
  */
 
 import { useState } from 'react';
@@ -41,7 +20,7 @@ interface Pool {
   [key: string]: unknown;
 }
 
-/** The bundle a place gets when it has words of its own. */
+/** Default bundle id for a place that owns its own arrival text. */
 export function ownPoolId(entryId: string): string {
   return `${entryId}_desc`;
 }
@@ -64,7 +43,7 @@ export function Description(props: {
   const keyPath: Path = [...props.collection.split('.'), props.index, 'descriptionKey'];
   const own = ownPoolId(id);
 
-  /** Create the bundle and link it, as one thing the author did. */
+  /** Create the text bundle and link it to this place in one edit. */
   const write = (text: string) => {
     if (!text.trim() || !id) return;
     const existing = pools.findIndex((entry_) => String(entry_['id']) === own);
@@ -149,9 +128,7 @@ export function Description(props: {
 
   // --- its own bundle, named but never written -----------------------------
 
-  // A prefab template can name `{{id}}_desc` before anything creates it, which
-  // is a dangling reference until somebody writes the words. Offering the box
-  // here is the whole fix: the place already knows what its bundle is called.
+  // A prefab template can name `{{id}}_desc` before the bundle exists; allow the author to create it here.
   if (!pool) {
     return (
       <div className={styles.describe}>
@@ -224,14 +201,7 @@ function asVariants(pool: Pool): Variant[] {
   return Array.isArray(pool['variants']) ? (pool['variants'] as Variant[]) : [];
 }
 
-/**
- * How many entries point at a bundle.
- *
- * Every `descriptionKey` in the document, not just this collection's — a
- * generic doorway is shared between places, areas and room templates alike, and
- * saying "shared with two others" while three more quietly use it would be
- * worse than saying nothing.
- */
+/** Count how many entries reference a text bundle across the whole document. */
 function countUsers(doc: unknown, key: string): number {
   let count = 0;
   const walk = (node: unknown, depth: number): void => {

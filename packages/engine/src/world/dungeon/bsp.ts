@@ -1,16 +1,15 @@
 /**
  * BSP interiors: the made place.
  *
- * Recursive splits carve the bounds into leaves that tile it completely, every
- * room sharing its walls with its neighbours — the floor plan of a building,
- * where rooms-and-corridors reads as a warren. The recursion's own structure
- * is the spanning tree: each split connects its two halves through one door
- * punched in the shared wall, so connectivity and the key-before-lock argument
- * hold for exactly the reason they do in the rooms algorithm — every tree edge
- * is a bridge until loops are added.
+ * Recursive splits carve the bounds into leaves that tile it completely, every room sharing its
+ * walls with its neighbours — the floor plan of a building, where rooms-and-corridors reads as a
+ * warren.
  *
- * `corridorLength` is naturally inert here — there are no corridors, doors
- * join rooms directly — and that is documented behaviour, not an oversight.
+ * The recursion's structure is the spanning tree: each split connects its two halves through one
+ * door punched in the shared wall, so connectivity and the key-before-lock argument hold for the
+ * same reason as in the rooms algorithm.
+ *
+ * `corridorLength` is naturally inert here, since doors join rooms directly.
  */
 
 import type { Rng } from '@dm/core';
@@ -37,10 +36,8 @@ export interface BspLayout {
 const DEFAULT_MIN_LEAF = 5;
 
 /**
- * Split the bounds into at least `count` leaves and carve them.
- *
- * Adjacent leaves overlap on their boundary line — the shared wall — so a
- * leaf's interior is `rect` shrunk by one on every side.
+ * Split the bounds into at least `count` leaves and carve them. Adjacent leaves overlap on their
+ * boundary line — the shared wall — so a leaf's interior is `rect` shrunk by one on every side.
  */
 export function bspLayout(
   builder: MapBuilder,
@@ -88,8 +85,8 @@ export function bspLayout(
     if (!node) break;
     const { rect } = node;
 
-    // Wider than tall splits vertically, and vice versa; square rects pick by
-    // whichever axis has room.
+    // Wider than tall splits vertically, and vice versa; square rects pick by whichever axis has
+    // room.
     const canX = rect.width >= MIN_LEAF * 2 - 1;
     const canY = rect.height >= MIN_LEAF * 2 - 1;
     const axis: 'x' | 'y' = canX && canY ? (rect.width >= rect.height ? 'x' : 'y') : canX ? 'x' : 'y';
@@ -124,8 +121,7 @@ export function bspLayout(
   };
   collect(root);
 
-  // Same draw-order rules as the rooms algorithm: one of each guaranteed role,
-  // filler for the rest.
+  // Same draw-order rules as the rooms algorithm: one of each guaranteed role, filler for the rest.
   const ordered: PlaceableTemplate[] = [];
   const guaranteed = new Set(guaranteedRoles);
   for (const role of guaranteedRoles) {
@@ -158,8 +154,8 @@ export function bspLayout(
   }
 
   // — connect ——————————————————————————————————————————————
-  // Each split joins its halves: pick the adjacent leaf pair sharing the
-  // longest boundary, punch a door at the shared wall's midpoint.
+  // Each split joins its halves: pick the adjacent leaf pair sharing the longest boundary, punch a
+  // door at the shared wall's midpoint.
   const tree: [number, number][] = [];
   const treeCrossings: { edge: [number, number]; crossings: Position[] }[] = [];
 
@@ -208,8 +204,8 @@ function area(rect: Rect): number {
 }
 
 /**
- * The interior span two leaves share along a split line, or null when they do
- * not touch it opposite each other.
+ * The interior span two leaves share along a split line, or null when they do not touch it opposite
+ * each other.
  */
 function sharedWall(
   a: Rect,
@@ -229,12 +225,11 @@ function sharedWall(
 }
 
 /**
- * Where a door between two rooms would go, or null when they do not share a
- * wall. Pure, so minExits raising can ask "could these connect?" without
- * carving anything.
+ * Where a door between two rooms would go, or null when they do not share a wall. Pure, so minExits
+ * raising can ask whether two rooms could connect without carving anything.
  */
 export function findPunch(a: PlacedRoom, b: PlacedRoom): Position | null {
-  // Vertical shared wall: a's right edge is b's left edge (or vice versa).
+  // Vertical shared wall: a's right edge is b's left edge, or vice versa.
   const vertical = (left: PlacedRoom, right: PlacedRoom): Position | null => {
     if (left.x + left.width - 1 !== right.x) return null;
     const lo = Math.max(left.y + 1, right.y + 1);
@@ -254,10 +249,9 @@ export function findPunch(a: PlacedRoom, b: PlacedRoom): Position | null {
 }
 
 /**
- * A door punch between two adjacent rooms, for minExits raising and
- * branchiness loops. Returns the punched cell, or null when the rooms do not
- * share a wall — BSP never carves corridors, so non-adjacent rooms simply
- * cannot gain an extra connection.
+ * A door punch between two adjacent rooms, for minExits raising and branchiness loops. Returns the
+ * punched cell, or null when the rooms do not share a wall — BSP never carves corridors, so non-
+ * adjacent rooms cannot gain an extra connection.
  */
 export function punchAdjacent(
   builder: MapBuilder,

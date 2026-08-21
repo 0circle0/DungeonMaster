@@ -1,11 +1,9 @@
 /**
  * Prefabs, measured against the thing they have to replace.
  *
- * `place.py`'s `inn()` is one line over four lookup tables, and an author
- * writing four strings gets an eleven-key point of interest. If a prefab cannot
- * do that, it is a worse way to fill in a form. So the fixture here is that
- * shorthand, expressed as a template, and the tests ask whether it produces
- * what the Python produces.
+ * `place.py`'s `inn()` is one line over four lookup tables, and an author writing four strings gets
+ * an eleven-key point of interest. The fixture here is that shorthand expressed as a template, and
+ * the tests ask whether it produces what the Python produces.
  */
 
 import { describe, it, expect } from 'vitest';
@@ -53,8 +51,8 @@ const INN: Prefab = {
     travelMinutes: 3,
     services: ['inn'],
     tags: ['inn'],
-    // The interior exists only when there is a trade to give it a palette —
-    // `poi()` drops `footprint` the same way, making a place you stand *at*.
+    // The interior exists only when there is a trade to give it a palette; `poi()` drops
+    // `footprint` the same way, making a place you stand at.
     map: {
       '@when': 'trade',
       then: {
@@ -74,10 +72,9 @@ const FOUR_STRINGS = {
 
 describe('expandPrefab', () => {
   /**
-   * A row that decides several fields at once is the reason a style table is a
-   * table. `place.py`'s SIZES maps one size to a width and a height together,
-   * and a lookup that could only fetch whole rows would force an author to
-   * split exactly the values that exist to stay in step.
+   * A row that decides several fields at once is why a style table is a table. `place.py`'s SIZES
+   * maps one size to a width and a height together, and a lookup that could only fetch whole rows
+   * would force an author to split exactly the values that exist to stay in step.
    */
   it('walks into a row, so one key can decide several fields', () => {
     const { entry, issues } = expandPrefab(
@@ -131,9 +128,8 @@ describe('expandPrefab', () => {
   });
 
   /**
-   * The `interior and trade` rule: without a trade there is no palette and no
-   * footprint, and the keys are *absent* rather than null — a null would reach
-   * the schema and the content hash.
+   * The `interior and trade` rule: without a trade there is no palette and no footprint, and the
+   * keys are absent rather than null — a null would reach the schema and the content hash.
    */
   it('omits a key rather than nulling it', () => {
     const { entry } = expandPrefab(INN, { ...FOUR_STRINGS, trade: '' }, STYLE);
@@ -181,9 +177,9 @@ describe('instances', () => {
   };
 
   /**
-   * The link lives beside the entries, not in one. Every collection schema is
-   * `.strict()`, so a `$prefab` key on a point of interest is a validation
-   * error — and the studio validates exactly the document it is editing.
+   * The link lives beside the entries, not in one. Every collection schema is `.strict()`, so a
+   * `$prefab` key on a point of interest is a validation error, and the studio validates exactly
+   * the document it is editing.
    */
   it('keeps the entry itself something the schema accepts', () => {
     const { entry } = place(FOUR_STRINGS);
@@ -238,10 +234,7 @@ describe('instances', () => {
     expect(overriddenPaths(INN, entry, link, STYLE)).toEqual([]);
   });
 
-  /**
-   * Copying a prefab and changing the copy must not reach the original — the
-   * ordinary expectation from every engine that has ever had prefabs.
-   */
+  /** Copying a prefab and changing the copy must not reach the original. */
   it('does not let a copied prefab reach the one it came from', () => {
     const copy: Prefab = { ...INN, id: 'roadhouse', template: { ...(INN.template as object), travelMinutes: 9 } };
     const { entry, link } = place(FOUR_STRINGS);
@@ -253,11 +246,9 @@ describe('instances', () => {
 });
 
 /**
- * Nobody designs a template first. They build one place, get it right, and then
- * want thirty more like it — so the entry is the specification, and a prefab
- * derived from it has to expand back to exactly that entry. Linking the
- * original is the same as replacing it with the expansion, so anything less
- * than exact would silently edit the thing it was derived from.
+ * Nobody designs a template first: they build one place, get it right, and then want thirty more
+ * like it. The entry is the specification, and a prefab derived from it has to expand back to
+ * exactly that entry, since linking the original is the same as replacing it with the expansion.
  */
 describe('derivePrefab', () => {
   const entry = {

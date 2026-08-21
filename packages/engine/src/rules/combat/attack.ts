@@ -1,10 +1,9 @@
 /**
  * Using an ability, and hitting with it.
  *
- * One path for everything a creature actively does: a sword swing, a spell, a
- * shout, a healing touch. The differences are declared in the ability — whether
- * it rolls to hit, whether the target saves, what it costs — so the engine has
- * no separate notion of "attack" versus "spell".
+ * One path for everything a creature actively does: a sword swing, a spell, a shout, a healing
+ * touch. The differences are declared in the ability, so the engine has no separate notion of
+ * attack versus spell.
  *
  * Order of resolution:
  *
@@ -38,11 +37,9 @@ import { count } from '../../narrate/grammar.js';
 import type { Message } from '../../narrate/systemText.js';
 
 /**
- * What a spell gains from being cast out of a bigger slot.
- *
- * Applied once per level above the spell's own, with `upcastLevels` in scope so
- * one authored effect can scale itself rather than being repeated. Nothing at
- * all for a spell cast at its own level, which is the common case.
+ * What a spell gains from being cast out of a bigger slot. Applied once per level above the spell's
+ * own, with `upcastLevels` in scope so one authored effect can scale itself. Nothing for a spell
+ * cast at its own level.
  */
 function upcastEffects(
   ability: AbilityDef,
@@ -128,11 +125,8 @@ export interface UseResult {
 }
 
 /**
- * Scale damage in a set of ops — used for criticals and half-damage saves.
- *
- * Rounded the module's way. `damageRounding` claims resistance, a save for
- * half, and a critical; it governed only resistance, because this rounded with
- * a hardcoded floor. At the default `round`, seven halved is four, not three.
+ * Scale damage in a set of ops — used for criticals and half-damage saves. Rounded by
+ * `rules.resolution.damageRounding`; at the default `round`, seven halved is four.
  */
 function scaleDamage(
   module: CompiledModule,
@@ -147,11 +141,9 @@ function scaleDamage(
 }
 
 /**
- * Evaluate an ability's costs.
- *
- * Costs are DSL expressions, so a spell can cost more at higher level. Rolled
- * once and reused for both the affordability check and the payment — evaluating
- * twice would let a random cost differ between the two.
+ * Evaluate an ability's costs. Costs are DSL expressions, so a spell can cost more at higher level.
+ * Rolled once and reused for the affordability check and the payment, so a random cost cannot
+ * differ between the two.
  */
 function costsOf(txn: Transaction, actor: Entity, ability: AbilityDef, rng: Rng): Map<string, number> {
   const scope = buildScope(txn.module, txn.state, actor);
@@ -184,10 +176,8 @@ function payCosts(txn: Transaction, actor: Entity, costs: ReadonlyMap<string, nu
 }
 
 /**
- * Use an ability.
- *
- * Refusals are ordinary play — out of range, not enough focus, stunned — and
- * each returns a reason the player can read rather than failing silently.
+ * Use an ability. Refusals are ordinary play — out of range, not enough focus, stunned — and each
+ * returns a reason the player can read.
  */
 export function useAbility(
   txn: Transaction,
@@ -218,9 +208,8 @@ export function useAbility(
     return refuse(txn, message('refused.ability.unavailable', { ability: ability.name }));
   }
 
-  // Still catching its breath. Cooldowns count in rounds, so out of combat
-  // there is nothing to count and an ability is always ready — which is the
-  // honest reading of a field measured in rounds.
+  // Cooldowns count in rounds, so out of combat there is nothing to count and an ability is always
+  // ready.
   const combat = txn.state.combat;
   if (combat && ability.cooldown > 0) {
     const waiting = combat.cooldowns.find(
@@ -240,8 +229,8 @@ export function useAbility(
   }
 
   // — casting ————————————————————————————————————————————————
-  // Everything below is skipped entirely for an ability with no `spellLevel`,
-  // which is what makes a module with no magic in it unaffected.
+  // Everything below is skipped for an ability with no `spellLevel`, so a module with no magic is
+  // unaffected.
   let slot = 0;
   if (isSpell(ability)) {
     const spell = asSpell(ability);
@@ -268,8 +257,7 @@ export function useAbility(
     consumeComponents(txn, actor, spell);
     if (spell.concentration) beginConcentration(txn, txn.entity(actor.id) ?? actor, ability.id);
 
-    // A ritual is cast slowly instead of expensively, which is what makes the
-    // trade real — `castingTime` had no job at all before.
+    // A ritual is cast slowly instead of expensively, per `castingTime`.
     if (explicit.ritual && spell.castingTime) {
       txn.emit({ type: 'custom', event: 'ritualCast', data: { spell: ability.id, time: spell.castingTime } });
     }
@@ -282,8 +270,8 @@ export function useAbility(
     });
   }
 
-  // The cooldown starts when the ability is actually spent, not when it is
-  // attempted — a refusal must not put it on the shelf.
+  // The cooldown starts when the ability is spent, not when it is attempted: a refusal must not put
+  // it on the shelf.
   const running = txn.state.combat;
   if (running && ability.cooldown > 0) {
     const rest = running.cooldowns.filter(
@@ -293,8 +281,7 @@ export function useAbility(
       ...txn.state,
       combat: {
         ...running,
-        // Sorted by entity then ability: a creature-accumulated collection with
-        // a total order, so two runs that spent the same abilities compare equal.
+        // Sorted by entity then ability, so two runs that spent the same abilities compare equal.
         cooldowns: [...rest, { entity: actor.id, ability: abilityId, until: running.round + ability.cooldown }]
           .sort((a, b) => a.entity.localeCompare(b.entity) || a.ability.localeCompare(b.ability)),
       },
@@ -348,20 +335,20 @@ function resolveAgainst(
     const reach = reachability(context, actor.position, current.position, range);
     const defenceWithCover = defence + coverBonus(module, reach.cover);
 
-    // The weapon is chosen before the roll, not after it: which attribute the
-    // blow uses can depend on what is in the hand, which is what finesse means.
+    // The weapon is chosen before the roll: which attribute the blow uses can depend on what is in
+    // the hand, which is what finesse means.
     const wielded = weaponOf(module, actor);
     const attackStat = attackStatFor(module, actor, ability.attack.stat, wielded);
     const attackMod = stats.mod[attackStat] ?? 0;
 
-    // A spell attack uses the caster's own bonus, when the module declares one
-    // — the single most-felt number in casting, and it was unreachable.
+    // A spell attack uses the caster's own `spellcasting.attackBonus`, when the module declares
+    // one.
     const spellBonus = isSpell(ability) ? attackBonusOf(module, actor) : undefined;
     const roll = check(module, rng, {
       modifier: spellBonus ?? weaponAttackBonus(module, actor, attackMod),
       difficulty: defenceWithCover,
-      // Both sides of the blow: what the attacker is carrying, and what the
-      // target's own conditions do to anyone swinging at them.
+      // Both sides of the blow: what the attacker is carrying, and what the target's own conditions
+      // do to anyone swinging at them.
       swing: [
         ability.swing ?? null,
         ...swingsFrom(module, actor, 'ownAttacks'),
@@ -381,16 +368,15 @@ function resolveAgainst(
       ...evalEffects(ability.onUse, { scope: scopeFor(), rng }),
       ...upcastEffects(ability, slot, scopeFor(), rng),
     ];
-    // The blow was struck with whatever is in the actor's hands, so the blade's
-    // own qualities travel with it — a resistance's `unless` is asking about the
-    // weapon, not about the ability. Damage the ability tagged itself is left
-    // alone. Then, if the ability named no damage at all, the weapon supplies it.
+    // The blow carries the wielded weapon's qualities, so a resistance's `unless` is asking about
+    // the weapon rather than the ability. Damage the ability tagged itself is left alone, and if
+    // the ability named no damage the weapon supplies it.
     const ops = [
       ...withWeaponTags(declared, wielded),
       ...weaponDamage(module, actor, current, declared, wielded, rng, attackStat),
     ];
-    // A critical multiplies damage by whatever the module says, and then runs
-    // any extra `onCritical` effects on top.
+    // A critical multiplies damage by whatever the module says, then runs any extra `onCritical`
+    // effects.
     const factor = roll.outcome === 'critical' ? criticalMultiplier(module) : 1;
     applyOps(txn, scaleDamage(module, ops, factor), actor.id);
 
@@ -402,8 +388,8 @@ function resolveAgainst(
 
   // — a saving throw, when the ability declares one ——————————
   if (ability.savingThrow) {
-    // The spell's own DC when the ability names one, then the caster's formula,
-    // then the module's ordinary difficulty.
+    // The spell's own DC when the ability names one, then the caster's formula, then the module's
+    // ordinary difficulty.
     const declared = ability.savingThrow.difficulty as number | undefined;
     const casterDc = isSpell(ability) ? saveDifficultyOf(module, actor) : undefined;
     const difficulty = difficultyOf(module, declared ?? casterDc);
@@ -454,10 +440,8 @@ interface WeaponDef {
 }
 
 /**
- * The weapon a character is actually wielding.
- *
- * Weapon-kind items only: a shield and a ring are equipped too, and neither
- * should decide how hard you hit.
+ * The weapon a character is actually wielding. Weapon-kind items only: a shield and a ring are
+ * equipped too.
  */
 export function weaponOf(module: CompiledModule, actor: Entity): WeaponDef | null {
   for (const items of Object.values(actor.equipped)) {
@@ -470,14 +454,9 @@ export function weaponOf(module: CompiledModule, actor: Entity): WeaponDef | nul
 }
 
 /**
- * Which attribute this blow is actually swung with.
- *
- * The ability names one; the weapon's properties may offer others, and the
- * best of them wins. That is finesse: a choice of attribute rather than a
- * bonus, which is why `itemProperties[].modifiers` could never express it.
- *
- * Ties keep the ability's own attribute, so a weapon that offers nothing
- * better changes nothing at all.
+ * Which attribute this blow is swung with. The ability names one; the weapon's properties may offer
+ * others, and the best wins — that is finesse, a choice of attribute rather than a bonus. Ties keep
+ * the ability's own attribute.
  */
 /** Whether any of this weapon's properties offer a choice of attack attribute. */
 function offersAttackStats(module: CompiledModule, weapon: WeaponDef | null): boolean {
@@ -509,13 +488,8 @@ export function attackStatFor(
 }
 
 /**
- * What a weapon attack adds to the die.
- *
- * The attribute modifier alone unless the ruleset says otherwise, which is
- * what the engine always did -- and what meant a weapon never improved with
- * level, since nothing raises an attribute after character creation. Spells
- * had `spellcasting.attackBonus` and weapons had nothing, so fixing the caster
- * side alone would have left the martial side further behind than it started.
+ * What a weapon attack adds to the die: the attribute modifier alone unless
+ * `rules.resolution.weaponAttackBonus` says otherwise. The mirror of `spellcasting.attackBonus`.
  */
 function weaponAttackBonus(
   module: CompiledModule,
@@ -532,8 +506,8 @@ function weaponAttackBonus(
       mod: stats.mod,
       derived: stats.derived,
       proficiency: proficiencyOf(module, actor),
-      // The modifier for whichever attribute the attack resolved to, so one
-      // formula covers a might swing and an agility one.
+      // The modifier for whichever attribute the attack resolved to, so one formula covers a might
+      // swing and an agility one.
       attackMod,
     },
   };
@@ -542,12 +516,8 @@ function weaponAttackBonus(
 }
 
 /**
- * Damage from the wielded weapon, when the ability produced none of its own.
- *
- * `content.items[].damage` was unread, so a bare `strike` dealt whatever the
- * ability declared no matter what was in your hands — swapping a 15-gold iron
- * sword for a 200-gold warded blade changed nothing at all. An ability that
- * *does* declare damage keeps it, so a fireball is still a fireball.
+ * Damage from the wielded weapon, when the ability produced none of its own. An ability that does
+ * declare damage keeps it.
  */
 function weaponDamage(
   module: CompiledModule,
@@ -562,10 +532,8 @@ function weaponDamage(
   if (!weapon?.damage) return [];
 
   const stats = statsOf(module, actor);
-  // The attribute the blow was swung with, when the weapon offered a choice of
-  // them. Choosing once and using it for both halves is the whole point: a
-  // finesse weapon that was aimed with agility and hit with might is the
-  // incoherence this replaces.
+  // The attribute the blow was swung with, when the weapon offered a choice. Chosen once and used
+  // for both halves, so a finesse weapon is not aimed with agility and hit with might.
   const chosen = offersAttackStats(module, weapon) ? attackStat : weapon.damage.stat;
   const bonus = chosen ? (stats.mod[chosen] ?? 0) : 0;
 
@@ -581,8 +549,8 @@ function weaponDamage(
     target: target.id,
     amount: Math.max(0, rolled + bonus),
     damageType: weapon.damage.damageType,
-    // The blade's own tags travel with the blow, so a wight immune to slashing
-    // `unless: ['silvered']` can be cut by a silvered blade and nothing else.
+    // The blade's own tags travel with the blow, so a wight immune to slashing `unless:
+    // ['silvered']` can be cut by a silvered blade.
     tags: qualitiesOf(weapon),
   }];
 }
@@ -605,15 +573,12 @@ function withWeaponTags(ops: readonly EffectOp[], weapon: WeaponDef | null): Eff
 /** The `target.*` half of the DSL scope. */
 
 /**
- * A basic attack with whatever the actor is wielding.
- *
- * Looks for an equipped weapon's ability, then falls back to the first ability
- * the actor knows that declares an attack roll — so `attack goblin` works
- * without the player knowing ability names.
+ * A basic attack with whatever the actor is wielding. Looks for an equipped weapon's ability, then
+ * the first ability the actor knows that declares an attack roll, so `attack goblin` works without
+ * ability names.
  */
 export function defaultAttackAbility(module: CompiledModule, actor: Entity): string | null {
-  // A weapon's own ability first: a shield or a ring may also grant one, and
-  // "attack" should mean the thing you are swinging.
+  // A weapon's own ability first: a shield or a ring may also grant one.
   for (const items of Object.values(actor.equipped)) {
     for (const itemId of items) {
       const item = module.find<{ kind: string; grantedAbilities: string[] }>('content.items', itemId);

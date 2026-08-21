@@ -1,13 +1,12 @@
 /**
  * Editor mods at work.
  *
- * The engine's `ModRuntime` applies directives to a `GameState`; this one
- * applies them to the authored document and the studio's own surfaces. Kept in
- * the app rather than in `@dm/mods` because everything it produces —
- * diagnostics, field specs, patches — is shaped for this editor.
+ * The engine's `ModRuntime` applies directives to a `GameState`; this one applies them to the
+ * authored document and the studio's own surfaces. Kept in the app rather than in `@dm/mods`
+ * because everything it produces — diagnostics, field specs, patches — is shaped for this editor.
  *
- * Every call is wrapped: a mod that throws produces a diagnostic against
- * itself, never a broken studio.
+ * Every call is wrapped: a mod that throws produces a diagnostic against itself, never a broken
+ * studio.
  */
 
 import {
@@ -55,18 +54,13 @@ export function createEditorModRuntime(
     mod.manifest.hooks.some((decl) => decl.hook === hook);
 
   /**
-   * One crossing. Never throws — a broken mod must not be able to stop the
-   * studio from rendering the document the author is trying to fix.
+   * One crossing. Never throws — a broken mod must not stop the studio rendering the document the
+   * author is trying to fix.
    */
   /**
-   * A mod hook that fails should say so.
-   *
-   * `lint` turns its failures into diagnostics, which is why a broken lint hook
-   * gets noticed. `fields` and `commands` passed `() => {}` and dropped theirs
-   * on the floor — so a mod whose field never appeared looked exactly like a
-   * mod that had decided not to add one, and there was nowhere to look. The
-   * console is not a great channel, but it beats silence, and these are
-   * developer-facing failures in code the studio did not write.
+   * A mod hook that fails should say so. `lint` turns its failures into diagnostics; `fields` and
+   * `commands` would otherwise drop theirs, so a mod whose field never appeared would look like a
+   * mod that decided not to add one.
    */
   function warn(message: string): void {
     // eslint-disable-next-line no-console
@@ -85,9 +79,8 @@ export function createEditorModRuntime(
       mod: mod.manifest.id,
       hook,
       payload: JSON.stringify(payload),
-      // Editor hooks are not part of a game's replay, so there is no derived
-      // stream to draw from. A mod that wants randomness while authoring can
-      // have it; nothing downstream depends on the sequence.
+      // Editor hooks are not part of a game's replay, so there is no derived stream to draw from.
+      // Nothing downstream depends on the sequence.
       random: () => 0.5,
       query: () => null,
     });
@@ -121,9 +114,8 @@ export function createEditorModRuntime(
         for (const directive of call(mod, 'editor.lint', { doc, meta: metaOf(doc) }, fail)) {
           if (directive.kind !== 'diagnostics') continue;
           for (const diagnostic of directive.diagnostics) {
-            // Prefixed so a reader can tell at a glance which mod is
-            // complaining — an unattributed complaint from a mod reads as an
-            // engine bug.
+            // Prefixed so a reader can tell which mod is complaining; an unattributed complaint
+            // from a mod reads as an engine bug.
             out.push(toDiagnostic(mod.manifest.id, diagnostic));
           }
         }
@@ -192,14 +184,13 @@ function metaOf(doc: ModuleDoc): { id: string; version: string; title: string } 
 function toDiagnostic(modId: string, diagnostic: ModDiagnostic): Diagnostic {
   return {
     severity: diagnostic.severity,
-    // Prefixed so a reader can tell at a glance which mod is complaining. An
-    // unattributed complaint from a mod reads as an engine bug.
+    // Prefixed so a reader can tell which mod is complaining.
     code: `mod:${modId}:${diagnostic.code}`,
     path: diagnostic.path,
     message: diagnostic.message,
     hint: diagnostic.hint,
-    // The host fills these: a mod has no view of the source text, so it cannot
-    // know where in the file its complaint lands.
+    // The host fills these: a mod has no view of the source text, so it cannot know where in the
+    // file its complaint lands.
     position: null,
     excerpt: null,
   };

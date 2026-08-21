@@ -1,14 +1,12 @@
 /**
  * Condition lifecycle.
  *
- * Everything that expires runs through one tick, which is what stops durations
- * leaking. A condition applied by a spell, a trap, or a terrain tile is the
- * same object and ages the same way.
+ * Everything that expires runs through one tick, so durations cannot leak: a condition applied by a
+ * spell, a trap, or a terrain tile is the same object and ages the same way.
  *
- * Order within a tick matters and is fixed: `onTick` effects fire first, then
- * durations decrease, then anything at zero expires and fires `onExpire`. A
- * poison that deals damage on the round it wears off is the correct reading —
- * it was still active for that round.
+ * Order within a tick is fixed: `onTick` effects fire first, then durations decrease, then anything
+ * at zero expires and fires `onExpire`. A poison that deals damage on the round it wears off is
+ * correct — it was still active for that round.
  */
 
 import { Rng } from '@dm/core';
@@ -48,13 +46,9 @@ function savesAt(
 }
 
 /**
- * Give an entity its saves against the conditions that allow one.
- *
- * "Save ends" is the shape of half of D&D's conditions, and the schema has
- * always described it — a save, a difficulty, and a timing. Nothing rolled it,
- * so a condition with a save behaved exactly like one without: it sat there
- * until its duration ran out. The `saved` reason on `conditionRemoved` has
- * existed and been unreachable for as long.
+ * Give an entity its saves against the conditions that allow one. "Save ends" is a save, a
+ * difficulty and a timing; without this pass a condition with a save behaves exactly like one
+ * without, and the `saved` reason on `conditionRemoved` is unreachable.
  */
 export function rollConditionSaves(
   txn: Transaction,
@@ -119,13 +113,12 @@ export function preventsAction(txn: Transaction, entity: Entity, actionType: str
 /**
  * Every swing an entity's conditions impose on one kind of roll.
  *
- * A list rather than a single answer, because reconciling them is
- * `resolveSwing`'s job and `check`'s alone to do — collecting here and
- * deciding there is what stops two call sites disagreeing about what being
- * both helped and poisoned means.
+ * A list rather than a single answer, because reconciling them is `resolveSwing`'s job and
+ * `check`'s alone to do — collecting here and deciding there is what stops two call sites
+ * disagreeing.
  *
- * Takes a module rather than a transaction, unlike `preventsAction` beside it,
- * because the roll sites that need this do not all have one.
+ * Takes a module rather than a transaction, unlike `preventsAction`, because the roll sites that
+ * need this do not all have one.
  */
 export function swingsFrom(
   module: CompiledModule,
@@ -142,11 +135,8 @@ export function swingsFrom(
 }
 
 /**
- * Advance every condition on one entity by a round.
- *
- * `rng` is passed in rather than drawn from state because a tick happens inside
- * a turn that already has its own sub-stream — ticking must not perturb the
- * dice the turn itself will roll.
+ * Advance every condition on one entity by a round. `rng` is passed in rather than drawn from state
+ * because a tick happens inside a turn that already has its own sub-stream.
  */
 export function tickConditions(txn: Transaction, entityId: EntityId, rng: Rng): void {
   const entity = txn.entity(entityId);
@@ -185,14 +175,13 @@ export function tickConditions(txn: Transaction, entityId: EntityId, rng: Rng): 
     else expired.push(active.condition);
   }
 
-  // Always write the aged conditions back. Returning early when nothing
-  // expired would discard the decremented durations, and conditions would
-  // tick forever without ever running out.
+  // Always write the aged conditions back: returning early when nothing expired would discard the
+  // decremented durations, and conditions would tick forever without running out.
   txn.putEntity({ ...after, conditions: surviving });
   if (expired.length === 0) return;
 
-  // 3. Expiry effects run once the condition is already gone, so an `onExpire`
-  // that reapplies it does not immediately expire again.
+  // 3. Expiry effects run once the condition is already gone, so an `onExpire` that reapplies it
+  //    does not immediately expire again.
   for (const conditionId of expired) {
     txn.emit({ type: 'conditionRemoved', entity: entityId, condition: conditionId, reason: 'expired' });
 

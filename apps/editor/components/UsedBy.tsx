@@ -1,12 +1,6 @@
 /**
- * "What points at this?"
- *
- * Shown beside every entry. The question it answers is the one asked before
- * deleting or renaming anything, and the alternative is grepping the JSON.
- *
- * An entry nothing references is called out rather than left blank — a loot
- * table no creature drops is invisible work, and the only way to notice is to
- * be told.
+ * Show which entries reference this item.
+ * Empty results are surfaced as a warning so orphaned content is visible.
  */
 
 'use client';
@@ -28,12 +22,7 @@ export function UsedBy({
   id: string;
   onOpen: (collection: string, index: number) => void;
 }) {
-  // Rebuilding per entry would be wasteful; the index covers the whole module.
-  //
-  // Deferred, because building it walks the schema alongside the whole document
-  // — ~23 ms on a large module, on every keystroke, for a panel nobody is
-  // looking at while they type. `useDeferredValue` lets the field they *are*
-  // looking at paint first and rebuilds this behind it.
+  // Build the reference index once per document and defer the expensive recomputation.
   const deferredDoc = useDeferredValue(doc);
   const index = useMemo(() => buildReferenceIndex(deferredDoc), [deferredDoc]);
   const references = useMemo(() => referencesTo(index, collection, id), [index, collection, id]);
@@ -52,8 +41,7 @@ export function UsedBy({
     );
   }
 
-  // Group by the entry doing the referencing, so one monster with three
-  // references to this item reads as one row rather than three.
+  // Group references by the source entry so one entity with multiple links reads as one row.
   const grouped = new Map<string, { label: string; collection: string; index: number; fields: string[] }>();
   for (const reference of references) {
     const key = `${reference.fromCollection}:${reference.fromIndex}`;

@@ -1,14 +1,6 @@
 /**
- * The generated form renderer.
- *
- * Renders any {@link FieldSpec} the schema produces. The payoff is that no
- * content type has bespoke UI: monsters, quests, biomes, and anything added
- * later all render through this one component.
- *
- * The most useful behaviour here is that `ref:` fields become dropdowns of the
- * ids that actually exist in the module. Dangling references are the failure
- * the compiler works hardest to catch, and this makes them close to unauthorable
- * in the first place.
+ * Render the schema-driven form for any field type.
+ * Reference fields resolve to IDs that actually exist in the current module.
  */
 
 'use client';
@@ -24,37 +16,19 @@ import { JsonBox } from './JsonBox';
 import { withEntryIndex } from '@/lib/diagnosticPath';
 
 /**
- * Height of one pinned header, and how many may stack.
- *
- * A gate inside a dialogue option reaches nine levels, and nine stacked
- * headers would be the whole panel. Four costs 104px of a ~600px column, which
- * is already as much as orientation is worth; deeper groups simply scroll.
+ * Height of one pinned section header and the maximum stack before the form scrolls.
  */
 const HEAD_ROW = 26;
 const MAX_PINNED = 4;
 
 /**
- * Problems, keyed by the path they are about.
- *
- * The console at the bottom of the studio has always known what is wrong and
- * where, but a path is not where the author is looking — the field is. Passing
- * this through context rather than as a prop keeps the recursive renderer's
- * signature unchanged; every leaf is wrapped by `Labelled`, so one lookup there
- * covers every content type there will ever be.
+ * Diagnostics keyed by field path so form leaves can show the right problems.
  */
 export const FieldDiagnostics = createContext<ReadonlyMap<string, readonly Diagnostic[]>>(new Map());
 
 /**
- * Which fields of the entry being edited no longer follow their prefab.
- *
- * The prefab panel already lists them, and that is not the same thing. An
- * author changing a value needs to know *at the value* that they have just
- * unlinked it — otherwise the two states that matter most, "this follows the
- * prefab" and "this is mine now", look identical in the only place anybody
- * looks. Overridden fields render marked, with the way back next to them.
- *
- * `base` is the entry's own path, so a leaf can work out what it is called
- * relative to the entry, which is the spelling `overriddenPaths` returns.
+ * Track fields that no longer follow the parent prefab.
+ * The base path is used to resolve relative override paths for the form.
  */
 export interface OverrideInfo {
   readonly base: Path;
@@ -64,14 +38,7 @@ export interface OverrideInfo {
 
 export const FieldOverrides = createContext<OverrideInfo | null>(null);
 
-/**
- * Group diagnostics by path, for the context above.
- *
- * Two spellings have to be flattened into the one the form uses. The compiler
- * writes `monsters[0]` where a form path is dotted, and a mod names an entry by
- * id — `content.monsters.grave_hound` — where a form path counts. Without the
- * second, a mod could say which field was wrong and the field would never know.
- */
+/** Normalize diagnostic paths to the form's dotted path format. */
 export function diagnosticsByPath(
   diagnostics: readonly Diagnostic[],
   /** The document, for turning an id into an index. */
@@ -99,23 +66,15 @@ export interface FieldProps {
   onChange: (path: Path, value: unknown) => void;
   onRemove: (path: Path) => void;
   depth?: number;
-  /** Render optional object fields inline rather than behind a fold. Off by default. */
+  /** Render optional object fields inline instead of in a collapsed section. */
   expandOptional?: boolean;
-  /**
-   * What the enclosing section is called, for levels whose own label is a bare
-   * index. Lets an array item head read "Nodes 3" rather than "3".
-   */
+  /** Section name used when an array item label is just an index. */
   context?: string;
-  /** Put an empty revealed section away again. Absent when there is nothing to undo. */
+  /** Hide an empty revealed section after the user collapses it. */
   onHide?: () => void;
 }
 
-/**
- * The same list with one item somewhere else.
- *
- * Every other item comes back as the same object, so moving a dialogue option
- * re-checks that option rather than the whole entry it lives in.
- */
+/** Move an array item while preserving identity for the rest of the list. */
 function moved(items: readonly unknown[], from: number, to: number): unknown[] {
   const next = [...items];
   const [item] = next.splice(from, 1);
@@ -123,7 +82,7 @@ function moved(items: readonly unknown[], from: number, to: number): unknown[] {
   return next;
 }
 
-/** A sensible empty value, so "Add" produces something the schema accepts. */
+/** Default empty value for a field so the add action creates valid input. */
 export function emptyValue(spec: FieldSpec): unknown {
   switch (spec.kind) {
     case 'string':
@@ -202,8 +161,7 @@ export function Field(props: FieldProps) {
             className="input narrow"
             type="number"
             step={step}
-            // The declared bounds, so the arrows stop where the schema does
-            // instead of walking a probability past 1 and failing validation.
+            // Respect schema bounds so numeric edits stay valid.
             {...(spec.min !== null ? { min: spec.min } : {})}
             {...(spec.max !== null ? { max: spec.max } : {})}
             value={typeof value === 'number' ? value : ''}
@@ -250,10 +208,9 @@ export function Field(props: FieldProps) {
 
     case 'array': {
       const items = Array.isArray(value) ? value : [];
-      // Short scalar lists (tags, ability ids) render inline rather than as cards.
+      // Render simple scalar lists inline instead of as card rows.
       const inline = spec.element.kind === 'string' || spec.element.kind === 'number';
-      // The section head supplies the name at the top level, so `label` is blank
-      // there; `context` carries it down so an item still knows what it is one of.
+      // Top-level array sections use the section head for naming; `context` carries the name to item rows.
       const name = label ?? props.context;
       return (
         <div className="group">
@@ -283,11 +240,7 @@ export function Field(props: FieldProps) {
                   context={name}
                   onHide={undefined}
                 />
-                {/* Order is content here, not presentation: quest objectives
-                    are checked in order unless `ordered` is off, and dialogue
-                    options are read top to bottom by whoever is playing. Until
-                    now the only way to move one was to delete it and retype it
-                    at the end. */}
+                {/* Array order is content; keep list items in their authored order. */}
                 {items.length > 1 && (
                   <div className="reorder">
                     <button
@@ -374,8 +327,7 @@ export function Field(props: FieldProps) {
       );
     }
 
-    // The DSL is edited as JSON: a generic form renders recursive unions badly,
-    // and authors reason about effects as the JSON they will read back.
+    // DSL values are edited as JSON because the recursive structure is not rendered well by a generic form.
     case 'dsl':
       return (
         <div className="group">
@@ -401,21 +353,7 @@ export function Field(props: FieldProps) {
 }
 
 /**
- * One group's header bar, pinned so you can still see what you are inside.
- *
- * The offset comes from `depth`, which every recursion already threads, so
- * nested headers stack rather than cover one another; shallower ones sit on top,
- * which is what makes the hand-off read right as a deep group scrolls away under
- * its parent. Sticky is bounded by the parent's padding box, so a header never
- * outlives its own content.
- *
- * Two things this depends on and would break silently: `.group-head.pinned`
- * needs an opaque background (content scrolls *under* it), and no ancestor may
- * set `overflow`.
- *
- * The label span is rendered only when there is a label. A top-level container
- * is named by its section head instead, and pinning a blank bar would cost a row
- * and say nothing.
+ * Header row for a grouped section; pinned rows stay visible while the form scrolls.
  */
 function GroupHead(props: { depth: number; label?: string; children?: React.ReactNode }) {
   const slot = props.depth - 1;
@@ -441,16 +379,7 @@ function HideButton(props: { onHide: () => void }) {
 }
 
 /**
- * An object's fields, with the empty optional ones folded into one dropdown.
- *
- * A component rather than a `case` because it holds state, and a hook inside a
- * switch is a rules-of-hooks violation nothing here would catch.
- *
- * Revealing writes **nothing to the document**. Writing the schema default back
- * would be invisible (the section would re-hide itself on the next render, since
- * emptiness is judged on the raw value) and writing a blank entry would fail
- * `idSchema` and post an error for what was only a request to see a field. So
- * "which sections am I looking at" stays where it belongs, in the view.
+ * Render an object field and allow optional subfields to be revealed on demand.
  */
 function ObjectField(props: FieldProps & { spec: Extract<FieldSpec, { kind: 'object' }>; depth: number }) {
   const { spec, value, path, label, description, optional, onChange, onRemove, depth } = props;
@@ -463,10 +392,7 @@ function ObjectField(props: FieldProps & { spec: Extract<FieldSpec, { kind: 'obj
     setRevealed(next);
   };
 
-  // An absent optional object is not there at all. Rendering its fields
-  // with the schema defaults filled in reads as "this exists" — a POI with
-  // no interior map showed a live 7×7 — and a single keystroke in any of
-  // them would silently materialize the object.
+  // Optional objects are only materialized when explicitly added.
   if (optional && value == null) {
     return (
       <div className="group">
@@ -486,9 +412,7 @@ function ObjectField(props: FieldProps & { spec: Extract<FieldSpec, { kind: 'obj
   const required = spec.fields.filter((f) => !f.optional);
   const extras = spec.fields.filter((f) => f.optional);
 
-  // Only below the top level: `ItemForm` gives depth-1 fields their own section
-  // heads and counts, and folding those would move the form's outline about
-  // depending on what happens to be filled in.
+  // Fold optional groups only below the top level so the form outline stays stable.
   const nested = depth >= 1 && props.expandOptional === true;
   const foldable = (field: FieldEntry) =>
     nested && rendersAsGroup(field.spec) && !hasContent(object[field.key]) && !revealed.has(field.key);

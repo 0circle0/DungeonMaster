@@ -1,30 +1,24 @@
 """Constructors for places — areas, points of interest, and the ways between.
 
-Nothing here names a palette, a text pool or a size. `area()` takes the map it
-should be, `poi()` takes the palette and footprint it should have, and the
-tables that decide those — what a "city" measures, which palette a smithy gets,
-which pool an unnamed shrine falls back on — belong to the module, because
-every one of them is a choice about a world rather than a fact about the
-engine. See `modules/aurendel/src/place.py` for a worked set.
+Nothing here names a palette, a text pool or a size. `area()` takes the map it should be, `poi()`
+takes the palette and footprint it should have, and the tables that decide those belong to the
+module, because each is a choice about a world rather than a fact about the engine. See
+`modules/aurendel/src/place.py`.
 
 Two engine facts these do encode:
 
-  * a place narrates from the `narrative.textGrammar` pool named by its
-    `descriptionKey`; the plain `description` is only ever shown by
-    `look <name>` (narrate.ts:709);
-  * a generated interior is one undivided walled rectangle
-    (sim/enter.ts sets `rooms: []`), so `poi.map` is outside dimensions —
-    subtract two in each direction for floor.
+  * a place narrates from the `narrative.textGrammar` pool named by its `descriptionKey`; the plain
+    `description` is only shown by `look <name>` (narrate.ts);
+  * a generated interior is one undivided walled rectangle (sim/enter.ts sets `rooms: []`), so
+    `poi.map` is outside dimensions — subtract two in each direction for floor.
 """
 from dmkit import prose
 
 
 def area(aid, name, biome, role, danger, level, description, *, size,
          entry=None, tags=(), faction=None, **kw):
-    """One place with a map.
-
-    `size` is the `(width, height)` the map should be; `role` is recorded on
-    `extra` and is otherwise the module's business.
+    """One place with a map. `size` is the `(width, height)` the map should be; `role` is recorded
+    on `extra` and is otherwise the module's business.
     """
     width, height = size
     entry_point = entry or {"x": int(width) // 2, "y": int(height) // 2}
@@ -50,14 +44,13 @@ def poi(pid, name, in_area, kind, description, *, desc_key, at=None,
         discover=None, **kw):
     """A building, landmark, or way down.
 
-    `palette` and `footprint` together make an interior; leave both off for
-    something you stand *at* rather than *in* — a well, a stone circle, a
-    crossroads — which leaves the party on the area map. A `dungeon` or a
-    `static` map wins over both.
+    `palette` and `footprint` together make an interior; leave both off for something you stand at
+    rather than in, which leaves the party on the area map. A `dungeon` or a `static` map wins over
+    both.
 
-    `desc_key` is required rather than defaulted: which pool an unnamed place
-    falls back on is a decision about a world's prose, and a silently wrong
-    `descriptionKey` is a place that narrates as something else.
+    `desc_key` is required rather than defaulted: which pool an unnamed place falls back on is a
+    decision about a world's prose, and a silently wrong `descriptionKey` is a place that narrates
+    as something else.
     """
     out = {
         "id": pid, "name": name, "description": description,

@@ -1,18 +1,16 @@
 /**
  * The sandbox contract.
  *
- * Separated from the QuickJS implementation so the engine depends on an
- * interface rather than on a WASM module, and so tests can substitute a fake
- * host without instantiating anything.
+ * Separated from the QuickJS implementation so the engine depends on an interface rather than a
+ * WASM module, and so tests can substitute a fake host.
  *
- * Two properties the engine relies on and this interface promises:
+ * Two properties the engine relies on:
  *
- *   - **`call` is synchronous.** `reduce()` is a pure synchronous function and
- *     is not becoming async for mods. QuickJS instantiation is async, so a host
- *     is built once up front and handed in ready.
- *   - **`call` never throws.** A mod that explodes, hangs, or returns nonsense
- *     produces a failed result, and the engine turns that into a reported
- *     `modError` event rather than a lost session.
+ *   - `call` is synchronous. `reduce()` is a pure synchronous function and is not becoming async
+ *     for mods; QuickJS instantiation is async, so a host is built once up front and handed in
+ *     ready.
+ *   - `call` never throws. A mod that explodes, hangs, or returns nonsense produces a failed
+ *     result, which the engine turns into a reported `modError` event.
  */
 
 import type { ModManifest } from '../schema/manifest.js';
@@ -75,9 +73,9 @@ export interface SandboxHost {
 export interface HostOptions {
   readonly target: 'engine' | 'editor';
   /**
-   * Failures before a mod is switched off for the rest of the run. Tests that
-   * assert determinism pass `Infinity`, so a throwing mod fails loudly instead
-   * of being quietly disabled halfway through.
+   * Failures before a mod is switched off for the rest of the run. Tests that assert determinism
+   * pass `Infinity`, so a throwing mod fails loudly instead of being quietly disabled halfway
+   * through.
    */
   readonly quarantineAfter?: number;
 }

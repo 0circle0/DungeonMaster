@@ -1,24 +1,17 @@
 /**
  * What a mod hands back.
  *
- * Mods never mutate state directly. They return **requests**, which the host
- * feeds through the engine's own doors — `applyOps` for effect ops, the
- * transaction for patches and events. That is not a restriction on what a mod
- * may change; `patch` can write anywhere in `GameState`. It is about there
- * being one place where mod output enters the engine, so a bad directive
- * produces a reported mod error instead of a half-applied mutation.
+ * Mods never mutate state directly. They return requests, which the host feeds through the engine's
+ * own doors — `applyOps` for effect ops, the transaction for patches and events. That is not a
+ * restriction on what a mod may change; `patch` can write anywhere in `GameState`. It is about
+ * there being one place where mod output enters the engine.
  *
  * Two rules are enforced on the way through, and neither is a game rule:
  *
- *   - **JSON-safety and determinism.** `NaN` and `±Infinity` are rejected,
- *     because `JSON.stringify` turns them into `null` — a state carrying `NaN`
- *     would compare equal under `statesEqual` while behaving differently, which
- *     is the worst desync available.
- *   - **Size.** A mod that stuffs a map into `modState` makes every save
- *     unusable.
- *
- * Everything else — invincibility, one-hit kills, rewriting combat — is a mod
- * doing its job.
+ *   - JSON-safety and determinism. `NaN` and `±Infinity` are rejected, because `JSON.stringify`
+ *     turns them into `null` — a state carrying `NaN` would compare equal under `statesEqual` while
+ *     behaving differently.
+ *   - Size. A mod that stuffs a map into `modState` makes every save unusable.
  */
 
 import { z } from 'zod';
@@ -56,13 +49,8 @@ export const modDirectiveSchema = z.discriminatedUnion('kind', [
     })
     .strict(),
   /**
-   * Put a line in the transcript.
-   *
-   * Keyed, not literal: the text comes from the mod's own `systemText`, so a
-   * mod's prose is data the same way a module's is — translatable, editable,
-   * and never buried in a string inside its code. Without this a mod could
-   * change the world but never say anything about it, which is most of why
-   * `thorns` read as invisible before.
+   * Put a line in the transcript. Keyed rather than literal: the text comes from the mod's own
+   * `systemText`, so a mod's prose is data the same way a module's is.
    */
   z
     .object({
@@ -81,10 +69,7 @@ export const modDirectiveSchema = z.discriminatedUnion('kind', [
       value: z.unknown(),
     })
     .strict(),
-  /**
-   * Only meaningful from a `replace` handler: run the core implementation
-   * after all. Override with super.
-   */
+  /** Only meaningful from a `replace` handler: run the core implementation after all. */
   z.object({ kind: z.literal('core') }).strict(),
 ]);
 
@@ -94,13 +79,9 @@ export type ModDirective = z.infer<typeof modDirectiveSchema>;
 export const modDirectivesSchema = z.array(modDirectiveSchema);
 
 /**
- * Reject values that survive `JSON.stringify` in a shape that lies.
- *
- * `NaN` and `Infinity` serialize to `null`, so a state holding one compares
- * equal to a state holding the other under `statesEqual` while behaving
- * differently on reload. Functions and `undefined` vanish entirely. Catching
- * them here means a mod gets a clear error instead of a save that cannot
- * reproduce its own run.
+ * Reject values that survive `JSON.stringify` in a shape that lies. `NaN` and `Infinity` serialize
+ * to `null`, so a state holding one compares equal to a state holding the other under `statesEqual`
+ * while behaving differently on reload. Functions and `undefined` vanish entirely.
  */
 export function checkJsonSafe(value: unknown, path = 'value'): string | null {
   if (value === null) return null;

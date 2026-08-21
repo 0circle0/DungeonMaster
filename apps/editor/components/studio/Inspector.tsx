@@ -1,8 +1,6 @@
 /**
- * The right-hand properties panel: whatever is selected renders here as its
- * schema-generated form — a new zod field appears with no UI work. The studio
- * adds three things around the form: duplicate, used-by navigation, and
- * engine-coverage notes.
+ * Inspector for the selected module item.
+ * It renders the generated form plus item-specific actions and diagnostics.
  */
 
 import { useMemo, useState } from 'react';
@@ -70,14 +68,7 @@ interface InspectorProps {
 const DESCRIBED = new Set(['world.pointsOfInterest', 'world.areas', 'world.roomTemplates']);
 
 export function Inspector(props: InspectorProps) {
-  /**
-   * Problems, indexed for the forms inside.
-   *
-   * The console has always said what is wrong; this puts it on the field it is
-   * about, so fixing happens where the author already is rather than after a
-   * round trip through the path at the bottom of the screen. Warnings are
-   * included — a thin text pool is worth seeing beside the pool.
-   */
+  /** Diagnostics grouped by field path for the generated form. */
   const problems = useMemo(
     () =>
       diagnosticsByPath(
@@ -98,7 +89,7 @@ function InspectorPanel(props: InspectorProps) {
   const { store, selection } = props;
   const [renaming, setRenaming] = useState(false);
 
-  // A different entry is a different rename, so the panel does not carry over.
+  // Rename state is scoped to the current selection.
   const selectionKey = selection.kind === 'item' ? `${selection.path}.${selection.index}` : selection.kind;
   const [lastKey, setLastKey] = useState(selectionKey);
   if (lastKey !== selectionKey) {
@@ -106,17 +97,14 @@ function InspectorPanel(props: InspectorProps) {
     setRenaming(false);
   }
 
-  // Derived before the early returns below, because the hook that follows must
-  // run on every render of this component and several of those returns sit
-  // between here and where the values are used.
+  // Compute item metadata before the early returns so hooks stay stable.
   const info = selection.kind === 'item' ? collectionAt(selection.path) : null;
   const entries = selection.kind === 'item' ? getAt(store.doc, selection.path.split('.')) : null;
   const entry =
     selection.kind === 'item' && Array.isArray(entries)
       ? (entries[selection.index] as Record<string, unknown> | undefined)
       : undefined;
-  // Memoized so its identity is stable: `usePrefabState` keys on it, and a
-  // fresh array per render would make that memo do nothing at all.
+  // Keep the base path stable so prefab state memoization remains effective.
   const basePath: Path = useMemo(
     () => (selection.kind === 'item' ? [...selection.path.split('.'), selection.index] : []),
     [selection],
@@ -182,14 +170,7 @@ function InspectorPanel(props: InspectorProps) {
     );
   }
 
-  /**
-   * Turn this entry into a prefab and link it to the result.
-   *
-   * The derived prefab expands back to exactly this entry, so linking it is a
-   * no-op on the content — which is what makes doing it to something already
-   * finished safe. What varies is a starting guess; the prefab is a file and
-   * the next thing anyone does is decide what else should.
-   */
+  /** Save the current entry as a prefab and link it to the generated prefab definition. */
   const saveAsPrefab = () => {
     const entryId = String(entry['id'] ?? '');
     if (!entryId) return;
@@ -214,12 +195,7 @@ function InspectorPanel(props: InspectorProps) {
     });
   };
 
-  /**
-   * Move this entry one place, and follow it.
-   *
-   * The selection is by index, so leaving it where it was would silently open
-   * whichever entry took this one's place.
-   */
+  /** Move the selected entry in its collection and keep the selection on the new item. */
   const moveEntry = (delta: number) => {
     const list = Array.isArray(entries) ? (entries as Record<string, unknown>[]) : [];
     const plan = planMove(list, selection.path, selection.index, selection.index + delta);

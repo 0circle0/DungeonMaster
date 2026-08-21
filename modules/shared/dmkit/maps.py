@@ -1,37 +1,32 @@
 """Hand-drawn interiors: ASCII art in, a `maps/<id>/` folder out.
 
-A folder is one CSV per layer plus a manifest, and the loader inlines it into
-`world.maps` (packages/module/src/load.ts). Writing those CSVs by hand is
-miserable, so a map is drawn as art and expanded here.
+A folder is one CSV per layer plus a manifest, and the loader inlines it into `world.maps`
+(packages/module/src/load.ts). A map is drawn as art and expanded here.
 
-Rules the module linter enforces, all of them checked at drawing time instead,
-where the error can point at the art:
+Rules the module linter enforces, checked at drawing time instead so the error can point at the art:
 
-  * every layer is the same rectangle, and the first terrain layer has no empty
-    cells — so the art is always a solid block, never ragged;
-  * there must be an `entry` marker, it must be standable, and everything else
-    must be reachable from it;
+  * every layer is the same rectangle, and the first terrain layer has no empty cells;
+  * there must be an `entry` marker, it must be standable, and everything else must be reachable
+    from it;
   * a gate cell has to sit on door-like terrain.
 
-`Map` names no terrain. `TERRAIN`, `MARKER` and `IMPASSABLE` are class
-attributes a module must supply by subclassing — a world's terrain vocabulary
-is its own, and a shared default would be one world's guess imposed on every
-other. See `modules/aurendel/src/staticmaps.py`.
+`Map` names no terrain. `TERRAIN`, `MARKER` and `IMPASSABLE` are class attributes a module must
+supply by subclassing, because a world's terrain vocabulary is its own. See
+`modules/aurendel/src/staticmaps.py`.
 """
 import json
 import os
 
 class Map:
-    """One hand-drawn interior. Subclass and override the three tables for a
-    world whose terrain vocabulary differs."""
+    """One hand-drawn interior. Subclass and override the three tables for a world whose terrain
+    vocabulary differs.
+    """
 
-    # Declared, never assigned: a subclass must supply all three. An
-    # annotation without a value is the contract — there is no default a
-    # shared file could give, because these are a world's terrain vocabulary.
+    # Declared, never assigned: a subclass must supply all three. An annotation without a value is
+    # the contract, because these are a world's terrain vocabulary.
     #
-    # TERRAIN    art character -> terrain id. A character not in it is an
-    #            error, deliberately: a typo in the art must not silently
-    #            become floor.
+    # TERRAIN    art character -> terrain id. A character not in it is an error, so a typo in the
+    # art cannot silently become floor.
     # MARKER     art character -> marker name, for the cells that carry one.
     # IMPASSABLE terrain ids you cannot stand on, to catch drawing mistakes.
     TERRAIN: dict
@@ -62,11 +57,9 @@ class Map:
         self._check_reachable()
 
     def _check_reachable(self):
-        """Fail here rather than in the linter.
-
-        Furniture is impassable, and a ring of tables or a column of shelving
-        will seal a room off as effectively as a wall. Catching it at drawing
-        time is the difference between a one-line fix and a rebuild.
+        """Fail here rather than in the linter. Furniture is impassable, and a ring of tables will
+        seal a room off as effectively as a wall; catching it at drawing time is the difference
+        between a one-line fix and a rebuild.
         """
         height, width = len(self.art), len(self.art[0])
         walkable = {(x, y) for y in range(height) for x in range(width)

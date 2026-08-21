@@ -1,22 +1,16 @@
 /**
  * What the party has found out.
  *
- * A quest records what somebody told you to do. Lore records what you worked
- * out, which is most of what a world knows about itself and none of it anyone's
- * errand — a tide that only falls that far at the turn of the year, a door that
- * answers to an older name.
+ * A quest records what somebody told you to do; lore records what you worked out.
  *
  * Three properties decide the shape:
  *
- *   - **Learning is permanent and unordered.** There is no forgetting and no
- *     sequence, so state is a flat id → minute map and everything else here is
- *     derived. Nothing is stored twice.
- *   - **A thread declares its whole set.** That is what lets the journal say
- *     *three of five* rather than listing three facts and implying nothing.
- *     Knowing how much is missing is what makes a thread worth pulling.
- *   - **An unknown entry has no text.** `loreByThread` returns the slot and
- *     withholds the words, so a front end cannot accidentally render a clue the
- *     party has not earned. Spoiling it would take deliberate effort.
+ *   - Learning is permanent and unordered, so state is a flat id → minute map and everything else
+ *     here is derived.
+ *   - A thread declares its whole set, which is what lets the journal say three of five rather than
+ *     listing three facts and implying nothing.
+ *   - An unknown entry has no text. `loreByThread` returns the slot and withholds the words, so a
+ *     front end cannot accidentally render a clue the party has not earned.
  */
 
 import type { CompiledModule, Value } from '@dm/module';
@@ -73,9 +67,8 @@ function entryView(module: CompiledModule, state: GameState, id: string): LoreEn
     learnedAt: known ? learnedAt : null,
     ...(known
       ? {
-          // An entry with no authored text still has to say something, so its id
-          // reads as a phrase rather than as an identifier — the same fallback
-          // `questview.describe` makes for an objective.
+          // An entry with no authored text still has to say something, so its id reads as a phrase
+          // — the same fallback `questview.describe` makes for an objective.
           name: lore?.name ?? id.replace(/_/g, ' '),
           description: lore?.description ?? '',
           source: lore?.source ?? '',
@@ -86,11 +79,8 @@ function entryView(module: CompiledModule, state: GameState, id: string): LoreEn
 }
 
 /**
- * Every thread the module declares, and how far along it the party is.
- *
- * Threads with nothing known are still returned. A journal that hid them would
- * be honest about the party's knowledge and useless as a journal: the point of
- * an empty thread is that its heading is the only thing you have.
+ * Every thread the module declares, and how far along it the party is. Threads with nothing known
+ * are still returned: the point of an empty thread is that its heading is the only thing you have.
  */
 export function loreByThread(module: CompiledModule, state: GameState): readonly LoreThreadView[] {
   return module.all<LoreThreadDef>('narrative.loreThreads').map((thread) => {
@@ -107,12 +97,9 @@ export function loreByThread(module: CompiledModule, state: GameState): readonly
 }
 
 /**
- * Known entries belonging to no thread, newest first.
- *
- * Loose lore is the module's business, not a mistake — a single fact with no
- * wider story behind it is a legitimate thing to write. Unknown ones are
- * omitted here rather than listed as blanks, because with no heading over them
- * a row of blanks says nothing at all.
+ * Known entries belonging to no thread, newest first. Loose lore is the module's business rather
+ * than a mistake. Unknown ones are omitted rather than listed as blanks, because with no heading
+ * over them a row of blanks says nothing.
  */
 export function looseLore(module: CompiledModule, state: GameState): readonly LoreEntryView[] {
   const claimed = new Set(
@@ -127,12 +114,9 @@ export function looseLore(module: CompiledModule, state: GameState): readonly Lo
 }
 
 /**
- * Thread progress as the DSL sees it.
- *
- * Populated for **every** declared thread rather than only the started ones, so
- * `threads` is a closed namespace and a misspelled id is a loud error rather
- * than a silent zero — the argument `arcScope` already makes. A gate that reads
- * `threads.the_proving.known` on a thread that does not exist should say so.
+ * Thread progress as the DSL sees it. Populated for every declared thread rather than only the
+ * started ones, so `threads` is a closed namespace and a misspelled id is a loud error rather than
+ * a silent zero.
  */
 export function threadScope(module: CompiledModule, state: GameState): Record<string, Value> {
   const out: Record<string, Value> = {};

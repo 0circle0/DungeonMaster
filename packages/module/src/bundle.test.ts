@@ -1,14 +1,11 @@
 /**
  * A module out to files and back.
  *
- * The property that matters is the same one `project.test.ts` holds for the
- * document alone, extended to the pair a repository actually stores: an
- * assembled module — maps inlined, which is the only form the studio ever sees
- * — must survive a trip out to files and back unchanged.
+ * The property `project.test.ts` holds for the document alone, extended to the pair a repository
+ * stores: an assembled module — maps inlined, the only form the studio sees — must survive a trip
+ * out to files and back unchanged.
  *
- * Aurendel is the case worth testing. It has fourteen static map folders and no
- * `world.maps` key on disk, so it is the module where getting this wrong is
- * invisible until somebody's export stops matching the repository.
+ * Aurendel is the case worth testing: fourteen static map folders and no `world.maps` key on disk.
  */
 
 import { describe, it, expect } from 'vitest';
@@ -37,30 +34,22 @@ describe('bundleModule / unbundleModule', () => {
   });
 
   it.each(MODULES)('%s: writes the files the repository already holds', (name) => {
-    // Not merely *a* valid split — the same paths and the same bytes that are
-    // committed, or an export would rewrite half the tree on its first use.
+    // Not merely a valid split, but the same paths and the same bytes that are committed, or an
+    // export would rewrite half the tree on its first use.
     //
-    // A compressed project is the other exception, and a larger one. The
-    // repository stores Aurendel's entries as recipes; `bundleModule` works
-    // from a document, which records nothing about which prefab made an entry,
-    // so it writes them literally. Both rebuild the same module — the round
-    // trip above proves it — but the bytes differ, so those files are compared
-    // as the entries they stand for. Making an export preserve compression
-    // needs the instance links, and that is its own change.
+    // A compressed project is the exception. The repository stores Aurendel's entries as recipes;
+    // `bundleModule` works from a document, which records nothing about which prefab made an entry,
+    // so it writes them literally. Both rebuild the same module, so those files are compared as the
+    // entries they stand for.
     //
-    // This makes canonical formatting a repository convention rather than a
-    // format rule: `joinProject` parses whatever valid JSON it is handed, so a
-    // hand-edited entry can drift and still build correctly. Three did, from
-    // `json.dumps` escaping an em dash. Nothing was wrong with them; they just
-    // made an export a diff. Re-running the export is the fix.
+    // That makes canonical formatting a repository convention rather than a format rule:
+    // `joinProject` parses whatever valid JSON it is handed, so a hand-edited entry can drift and
+    // still build correctly.
     //
-    // CSV layers are the one exception, and it is the format's rather than
-    // this file's: `parseCsvGrid` treats a `#` line as a comment and drops it,
-    // so a comment is not in the parsed grid and nothing downstream could put
-    // it back. Three of greenmarch's thirty-four layers are hand-annotated that
-    // way. They are compared as grids, which is the whole of what they mean —
-    // and the consequence, that a studio export drops such comments, is stated
-    // in `bundle.ts` rather than hidden here.
+    // CSV layers are the format's own exception: `parseCsvGrid` treats a `#` line as a comment and
+    // drops it, so a comment is not in the parsed grid and nothing downstream could put it back.
+    // Three of greenmarch's thirty-four layers are hand-annotated that way, and are compared as
+    // grids.
     const dir = dirOf(name);
     const { files } = bundleModule(readAssembledModule(dir).doc);
 
@@ -79,10 +68,8 @@ describe('bundleModule / unbundleModule', () => {
   });
 
   it('accounts for every committed project and map file', () => {
-    // The other direction of the same claim: nothing on disk is missing from a
-    // bundle. Authoring files are the documented exception — they describe how
-    // a world is made rather than what it contains, and no document produces
-    // them.
+    // The other direction: nothing on disk is missing from a bundle. Authoring files are the
+    // documented exception, since they describe how a world is made rather than what it contains.
     const dir = dirOf('aurendel');
     const { files } = bundleModule(readAssembledModule(dir).doc);
 
@@ -98,8 +85,8 @@ describe('bundleModule / unbundleModule', () => {
       if (existsSync(join(dir, top))) walk(join(dir, top), `${top}/`);
     }
 
-    // Authoring files ride along only when handed in, which the studio does and
-    // a bare document cannot.
+    // Authoring files ride along only when handed in, which the studio does and a bare document
+    // cannot.
     const unaccounted = onDisk.filter((path) => !(path in files) && !isAuthoringFile(path.slice('project/'.length)));
     expect(unaccounted).toEqual([]);
     expect(files[PROJECT_MANIFEST]).toBeDefined();
@@ -118,13 +105,10 @@ describe('bundleModule / unbundleModule', () => {
 });
 
 /**
- * The authoring half of a project, which used to fall out on the way through.
- *
- * `bundleModule` wrote prefabs and style tables and nothing else, and
- * `unbundleModule` read prefabs and style as expansion inputs and then dropped
- * them. So a world could go out of the studio as files and come back with no
- * prefabs, no instance map and no contract — which is how the shipped example
- * ended up with 44 prefabs and nothing pointing at them.
+ * The authoring half of a project, which used to fall out on the way through. `bundleModule` wrote
+ * prefabs and style tables and nothing else, and `unbundleModule` read prefabs and style as
+ * expansion inputs and then dropped them — so a world could go out of the studio as files and come
+ * back with no prefabs, no instance map and no contract.
  */
 describe('authoring survives a bundle round trip', () => {
   const doc = {
@@ -176,8 +160,8 @@ describe('authoring survives a bundle round trip', () => {
 
   it('recovers links from recipe files with no sidecar at all', () => {
     const { files } = bundleModule(doc, { ...authoring, instances: {} });
-    // The entry, rewritten as the recipe it came from — which is what the studio
-    // will store once entries are files.
+    // The entry, rewritten as the recipe it came from — which is what the studio stores once
+    // entries are files.
     const recipe = { '@prefab': 'inn', params: { id: 'a', name: 'The Ford' } };
     const asRecipes = {
       ...files,

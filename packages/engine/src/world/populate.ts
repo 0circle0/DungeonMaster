@@ -1,15 +1,11 @@
 /**
  * Filling a dungeon: encounters, loot, and traps.
  *
- * This is the **authoritative** implementation of drawing from an encounter or
- * loot table. The editor's Balance preview calls these same functions rather
- * than keeping its own copy, because a preview that disagreed with play would
- * be worse than no preview at all.
+ * The authoritative implementation of drawing from an encounter or loot table. The editor's Balance
+ * preview calls these same functions rather than keeping its own copy.
  *
- * Gating is evaluated before the draw, not after. An entry the party does not
- * qualify for is removed from the table entirely, so the odds shown and the
- * odds experienced are the same odds — rolling and discarding would quietly
- * inflate the chance of everything else.
+ * Gating is evaluated before the draw, not after: an entry the party does not qualify for is
+ * removed from the table entirely, so the odds shown and the odds experienced are the same.
  */
 
 import { Rng, parseDice, rollDice } from '@dm/core';
@@ -72,12 +68,8 @@ interface BiomeDef {
 }
 
 /**
- * Who a loot gate is asked about.
- *
- * `requirementScope` has always offered three answers — the one who found it,
- * any member of the party, or all of them — and a single `Scope` could only
- * express the first. A treasure that "the party must be level 3 to find" and
- * one that "someone must be able to read" are different questions.
+ * Who a loot gate is asked about. `requirementScope` offers three answers — the finder, any member
+ * of the party, or all of them — and a single `Scope` can only express the first.
  */
 export interface ScopeSet {
   /** The finder: the killer, the searcher, the one who opened the chest. */
@@ -135,22 +127,17 @@ export interface LootDraw {
 
 export interface LootOptions {
   /**
-   * Extra draws earned by a scavenging skill.
-   *
-   * Computed by the caller rather than here, because the roll needs a character
-   * and this function deliberately knows only scopes — and because the editor's
-   * preview wants to show the odds with and without it.
+   * Extra draws earned by a scavenging skill. Computed by the caller, because the roll needs a
+   * character and this function knows only scopes — and because the editor's preview wants the odds
+   * with and without it.
    */
   readonly bonusRolls?: number;
 }
 
 /**
- * Draw from a loot table.
- *
- * Shared with the editor preview, which simply calls this many times. Gating is
- * evaluated before the draw so the odds shown and the odds experienced are the
- * same odds — which is also why a `unique` item already taken is removed from
- * the table rather than rolled and discarded.
+ * Draw from a loot table. Shared with the editor preview, which calls this many times. Gating is
+ * evaluated before the draw, which is also why a `unique` item already taken is removed from the
+ * table rather than rolled and discarded.
  */
 export function rollLoot(
   module: CompiledModule,
@@ -163,8 +150,8 @@ export function rollLoot(
   if (!table) return [];
   if (!passes(table.requires, scopes, rng)) return [];
 
-  // `flags` is where the engine records what has already dropped; the finder's
-  // scope carries it, and the editor's preview simply has none set.
+  // `flags` is where the engine records what has already dropped; the finder's scope carries it,
+  // and the editor's preview has none set.
   const taken = (scopes.finder['flags'] ?? {}) as Record<string, unknown>;
 
   const eligible = table.entries.filter((entry) => {
@@ -232,9 +219,8 @@ export function rollEncounter(
     roll -= group.weight ?? 1;
     if (roll > 0) continue;
 
-    // A scaling group gains a creature every `scalePerLevels` levels above the
-    // first, which keeps a table relevant without becoming a second table. How
-    // steep that is belongs to the table, not here.
+    // A scaling group gains a creature every `scalePerLevels` levels above the first. How steep
+    // that is belongs to the table.
     const level = Number((scope['actor'] as { level?: unknown } | undefined)?.level ?? 1);
     const bonus = Math.max(0, Math.floor((level - 1) / table.scalePerLevels));
 
@@ -305,18 +291,16 @@ export interface PopulateOptions {
   readonly scopes: ScopeSet;
   readonly depth?: number;
   /**
-   * Tiles rolled placement must avoid, packed — the cells an embedded static
-   * room's author already filled. Rolled loot never lands on authored loot.
+   * Tiles rolled placement must avoid, packed — the cells an embedded static room's author already
+   * filled, so rolled loot never lands on authored loot.
    */
   readonly occupied?: readonly number[];
   readonly rng: Rng;
 }
 
 /**
- * Fill a generated dungeon.
- *
- * The entrance room is deliberately left empty of monsters: arriving inside an
- * ambush with no chance to react reads as unfair rather than dangerous.
+ * Fill a generated dungeon. The entrance room is left empty of monsters: arriving inside an ambush
+ * with no chance to react reads as unfair rather than dangerous.
  */
 export function populateDungeon(options: PopulateOptions): Population {
   const { module, dungeon, terrain, scopes, rng } = options;
@@ -330,8 +314,8 @@ export function populateDungeon(options: PopulateOptions): Population {
   const traps: PlacedTrap[] = [];
   const taken = new Set<number>([packKey(dungeon.entrance), ...(options.occupied ?? [])]);
 
-  // Keys the generator promised are placed first, so a locked door always has
-  // its key somewhere findable.
+  // Keys the generator promised are placed first, so a locked door always has its key somewhere
+  // findable.
   for (const placement of dungeon.keyPlacements) {
     const room = dungeon.rooms.find((entry) => entry.id === placement.room);
     if (!room) continue;
@@ -364,10 +348,8 @@ export function populateDungeon(options: PopulateOptions): Population {
           ? roomRng.pick(tables)
           : null;
 
-    // Whether a room fights you is the module's call twice over: the template
-    // may force or forbid it, and the dungeon says whether arriving is quiet.
-    // Both used to be engine knowledge — `role === 'boss'` meant always, and
-    // "it is the entrance" meant never, with no way to argue.
+    // Whether a room fights you is the module's call twice over: the template may force or forbid
+    // it, and the dungeon says whether arriving is quiet.
     const wantsEncounter = template?.alwaysEncounter === true
       || (template?.neverEncounter !== true
         && !quietEntrance

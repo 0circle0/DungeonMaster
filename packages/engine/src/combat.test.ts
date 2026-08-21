@@ -32,8 +32,8 @@ const MINIMAL = loadModule('minimal');
 const ctx = { module: GREENMARCH };
 
 /**
- * A refusal is a key now, not a sentence, so tests assert on the key — which
- * is the durable thing. The wording is the module's and may change freely.
+ * A refusal is a key, not a sentence, so tests assert on the key. The wording is the module's and
+ * may change.
  */
 const isCooldownRefusal = (event: GameEvent): boolean =>
   event.type === 'refused' && 'key' in event.reason && event.reason.key === 'refused.ability.cooldown';
@@ -153,8 +153,8 @@ describe('resolution', () => {
     expect(a.total - b.total).toBe(3);
   });
 
-  // Gear is the only way a skill rank ever moves: `entity.skills` is written at
-  // character creation and never again, and no effect op raises one.
+  // Gear is the only way a skill rank moves: `entity.skills` is written at character creation and
+  // never again, and no effect op raises one.
   describe('skill bonuses from gear', () => {
     /** Greenmarch, with its blade worth two ranks of lore to whoever holds it. */
     const LENS = (() => {
@@ -190,8 +190,8 @@ describe('resolution', () => {
       expect(worn.total).toBe(packed.total);
     });
 
-    // The half that is easy to leave out: gear that improves the roll but still
-    // reads as untrained at a gate would be a lie about what the wearer can do.
+    // Gear that improves the roll must also satisfy a `minRank` gate, or it is a lie about what the
+    // wearer can do.
     it('satisfies a minRank requirement the wearer could not meet unaided', () => {
       const state = arena([], LENS);
       const gate = compileRequirement(
@@ -213,8 +213,8 @@ describe('resolution', () => {
     const doc = JSON.parse(JSON.stringify(GREENMARCH.source)) as never as {
       rules: { savingThrows: unknown[] };
     };
-    // Appended, not replaced: the module's own saves are referenced by its
-    // conditions, and dropping them makes the fixture fail to compile.
+    // Appended, not replaced: the module's own saves are referenced by its conditions, and dropping
+    // them makes the fixture fail to compile.
     doc.rules.savingThrows = [
       ...(doc.rules.savingThrows ?? []),
       { id: 'fortitude', name: 'Fortitude', attribute: 'endurance' },
@@ -435,8 +435,8 @@ describe('turn order', () => {
     let current = started();
     expect(current.combat).not.toBeNull();
 
-    // Whenever reduce hands control back, the active combatant is a party
-    // member — and must be the selected one.
+    // Whenever reduce hands control back, the active combatant is a party member, and must be the
+    // selected one.
     for (let i = 0; i < 8 && current.combat; i += 1) {
       const active = current.combat.order[current.combat.turn]!;
       expect(current.entities[active]?.kind).toBe('character');
@@ -544,7 +544,7 @@ describe('determinism under combat', () => {
   });
 });
 
-// The proof the whole loop works, not just its parts.
+// The whole loop end to end, not just its parts.
 describe('a fight, fought to the end', () => {
   it('resolves to victory or defeat within a bounded number of turns', () => {
     let current = arena([{ id: 'bog_hound', at: { x: 7, y: 5 } }], GREENMARCH, 12345);
@@ -612,8 +612,8 @@ describe('running away', () => {
     const { state: next, events } = reduce(started, { type: 'flee' }, ctx);
     expect(events.some((e) => e.type === 'custom' && e.event === 'fled')).toBe(true);
 
-    // The hound gives chase on its own turn, so compare against where the hero
-    // ran to rather than against the gap at the end of the round.
+    // The hound gives chase on its own turn, so compare against where the hero ran to rather than
+    // the gap at the end of the round.
     const ran = events.filter((e) => e.type === 'moved' && e.entity === 'e:1');
     expect(ran.length).toBeGreaterThan(0);
     const landed = ran.at(-1)!;
@@ -634,8 +634,8 @@ describe('running away', () => {
     };
     const started = reduce(cornered, { type: 'wait', minutes: 0 }, ctx).state;
     const { events } = reduce(started, { type: 'flee' }, ctx);
-    // Either it found no better tile, or it ran; only the refusal is asserted
-    // when it truly cannot improve its position.
+    // Either it found no better tile or it ran; only the refusal is asserted when it truly cannot
+    // improve its position.
     const refused = events.find((e) => e.type === 'refused' && e.action === 'flee');
     const moved = events.some((e) => e.type === 'moved' && e.entity === 'e:1');
     expect(Boolean(refused) !== moved).toBe(true);
@@ -660,14 +660,13 @@ describe('running away', () => {
       },
     };
 
-    // Breaking line of sight is no longer the whole of an escape: a bog hound
-    // keeps looking for three rounds, so a corner buys time to choose your
-    // ground rather than ending the encounter on the spot.
+    // Breaking line of sight is not the whole of an escape: a bog hound keeps looking for three
+    // rounds, so a corner buys time rather than ending the encounter.
     const { state: hidden } = reduce(separated, { type: 'wait', minutes: 0 }, ctx);
     expect(hidden.combat).not.toBeNull();
 
-    // It ends when whatever is hunting you gives up, which is what
-    // `temperament.disengageTurns` is counting down.
+    // It ends when whatever is hunting gives up, which is what `temperament.disengageTurns` counts
+    // down.
     let after = hidden;
     let events: ReturnType<typeof reduce>['events'] = [];
     for (let guard = 0; guard < 40 && after.combat; guard += 1) {
@@ -698,13 +697,9 @@ describe('running away', () => {
   });
 
   /**
-   * Backing out carefully, which could not be written before.
-   *
-   * An opportunity's gate used to be handed the mover as `{ id }` alone, so it
-   * could learn who was leaving and nothing else -- there was no way to ask
-   * whether they were disengaging. It now gets the same `targetScope` an
-   * attack builds, and disengaging is ordinary content: a condition, an
-   * ability that applies it, and a `requires` on the opportunity.
+   * Backing out carefully. An opportunity's gate gets the same `targetScope` an attack builds, so
+   * disengaging is ordinary content: a condition, an ability that applies it, and a `requires` on
+   * the opportunity.
    */
   it('is free to someone who spent their action backing out', () => {
     const doc = JSON.parse(JSON.stringify(GREENMARCH.source)) as never as {
@@ -772,16 +767,15 @@ describe('combat has depth', () => {
     };
   }
 
-  // `abilities[].cooldown` was declared on every ability and tracked nowhere,
-  // so a once-every-three-rounds shout could be used every single round.
+  // `abilities[].cooldown` is tracked, so a once-every-three-rounds shout cannot be used every
+  // round.
   it('puts an ability on cooldown, and refuses it until it comes back', () => {
     const first = reduce(fighting(), { type: 'useAbility', ability: 'rally' }, ctx);
     expect(first.state.combat!.cooldowns).toContainEqual(
       expect.objectContaining({ entity: 'e:1', ability: 'rally' }),
     );
 
-    // A fresh action budget, so the refusal that comes back is the cooldown's
-    // and not "no action left this turn".
+    // A fresh action budget, so the refusal is the cooldown's and not "no action left this turn".
     const ready: GameState = { ...first.state, combat: { ...first.state.combat!, spent: {} } };
     const again = reduce(ready, { type: 'useAbility', ability: 'rally' }, ctx);
     const refusal = again.events.find((e) => e.type === 'refused');
@@ -801,16 +795,15 @@ describe('combat has depth', () => {
   });
 
   it('does not put anything on cooldown outside a fight, where there are no rounds', () => {
-    // No combat, no rounds to count in — so the ability is always ready, and
-    // there is nowhere to record a cooldown even if there were one.
+    // No combat, no rounds to count in, so the ability is always ready and there is nowhere to
+    // record a cooldown.
     const peace: GameState = { ...fighting(), combat: null };
     const first = reduce(peace, { type: 'useAbility', ability: 'rally' }, ctx);
     const again = reduce({ ...first.state, combat: null }, { type: 'useAbility', ability: 'rally' }, ctx);
     expect(again.events.some(isCooldownRefusal)).toBe(false);
   });
 
-  // `specialTurns` — legendary and lair actions — was declared and read by
-  // nothing, so a boss was a monster with more hit points.
+  // `specialTurns` — legendary and lair actions.
   const cold = (events: readonly GameEvent[]) =>
     events.filter((e) => e.type === 'damaged' && e.damageType === 'cold').length;
 
@@ -820,8 +813,8 @@ describe('combat has depth', () => {
     expect(cold(events)).toBeGreaterThan(0);
   });
 
-  // Once a *round*, not once a turn — which is what makes a lair action a
-  // budget rather than a tax on every other creature acting.
+  // Once a round, not once a turn, so a lair action is a budget rather than a tax on every other
+  // creature acting.
   it('spends a lair action once a round, however many turns pass', () => {
     // Three in the order, so two turns can end inside one round.
     const base = arena([{ id: 'barrow_wight', at: { x: 6, y: 5 } }], GREENMARCH, 5, ['Ash', 'Korrin']);
@@ -834,8 +827,8 @@ describe('combat has depth', () => {
       },
     };
 
-    // One use, reaching both party members — so the count is the party, not
-    // the number of times the barrow stirred.
+    // One use, reaching both party members, so the count is the party rather than the number of
+    // times the barrow stirred.
     const first = reduce(state, { type: 'endTurn' }, ctx);
     expect(first.state.combat?.round).toBe(1);
     expect(cold(first.events)).toBe(2);
@@ -873,9 +866,7 @@ describe('a reaction that fires once a fight', () => {
 });
 
 describe('changing sides', () => {
-  // How a creature regarded the party was written once, at spawn, and no
-  // effect could touch it — so a friend you had wronged past forgiveness stood
-  // there and let you kill her, because `isHostileTo` never changed its mind.
+  // An effect can move how a creature regards the party, so `isHostileTo` changes its mind.
   const flip = (target: string, to: unknown) =>
     ({ setDisposition: { target, to } }) as never;
 
@@ -900,8 +891,8 @@ describe('changing sides', () => {
   });
 
   it('sorts a number through the module\'s own bands', () => {
-    // greenmarch declares no `ally` band, so a high number still lands neutral —
-    // which is the point: the ruleset decides, not the engine.
+    // greenmarch declares no `ally` band, so a high number still lands neutral: the ruleset
+    // decides, not the engine.
     const txn = new Transaction(withNeutral(), GREENMARCH);
     applyOps(txn, evalEffects([flip('m:0', -50)], {
       scope: {}, rng: Rng.fromSeed(1), openNamespaces: OPEN_NAMESPACES,
@@ -939,16 +930,15 @@ describe('changing sides', () => {
 
     const { state, events } = reduce(txn.finish().state, { type: 'wait', minutes: 0 }, ctx);
     expect(state.combat!.order).toContain('m:1');
-    // Appended, never sorted in: `combat.turn` is an index, and inserting by
-    // initiative could hand the turn to somebody else mid-round.
+    // Appended, never sorted in: `combat.turn` is an index, and inserting by initiative could hand
+    // the turn to somebody else mid-round.
     expect(state.combat!.order.at(-1)).toBe('m:1');
     expect(events.some((e) => e.type === 'joinedCombat' && e.entity === 'm:1')).toBe(true);
   });
 
   it('does not enrol a grudge held behind a wall', () => {
-    // The awareness boundary holds here exactly as it does at the start of a
-    // fight: turning hostile is not the same as having noticed anybody. A
-    // solid wall down the middle is what makes that testable.
+    // The awareness boundary holds here as at the start of a fight: turning hostile is not the same
+    // as having noticed anybody. A solid wall down the middle makes that testable.
     const builder = new MapBuilder(15, 15, 'floor');
     for (let y = 0; y < 15; y += 1) builder.set(9, y, 'wall');
 
@@ -978,17 +968,15 @@ describe('changing sides', () => {
 });
 
 describe('reactions fire on the trigger they declare', () => {
-  // Eleven of the twelve declared triggers were never broadcast, so greenmarch
-  // has carried a death-wail and two memory-gated reactions since it was
-  // written and not one of them had ever fired.
+  // Every declared reaction trigger is broadcast, including greenmarch's death-wail and its two
+  // memory-gated reactions.
 
   it('fires selfHurt when something is struck', () => {
     const state = arena([{ id: 'barrow_wight', at: { x: 6, y: 5 } }]);
     expect(state.flags['wight_wailed']).toBeUndefined();
 
     const { state: next } = reduce(state, { type: 'attack', target: 'm:0' }, ctx);
-    // The wail is `oncePerEncounter`, and either the blow landed or it did not;
-    // when it lands, the flag is set.
+    // The wail is `oncePerEncounter`, and the flag is set when the blow lands.
     const damaged = reduce(state, { type: 'attack', target: 'm:0' }, ctx)
       .events.some((e) => e.type === 'damaged' && e.entity === 'm:0');
     if (damaged) expect(next.flags['wight_wailed']).toBe(true);
@@ -1034,8 +1022,8 @@ describe('reactions fire on the trigger they declare', () => {
   });
 
   it('works with no fight in progress at all', () => {
-    // `oncePerEncounter` is recorded on combat state, so out of combat there is
-    // nothing to record it in — which is honest, since there is no encounter.
+    // `oncePerEncounter` is recorded on combat state, so out of combat there is nothing to record
+    // it in.
     const module = withCustomReaction('the_bell_rang');
     const state = arena([{ id: 'bog_hound', at: { x: 14, y: 14 } }], module);
     expect(state.combat).toBeNull();
@@ -1047,10 +1035,8 @@ describe('reactions fire on the trigger they declare', () => {
 });
 
 describe('being noticed', () => {
-  // `seePlayer` is where three separate fixes cash out at once: the trigger
-  // now broadcasts, `requirement.memories` now resolves outside dialogue, and
-  // `withinDays` now measures days. Greenmarch's wight has declared this
-  // reaction since it was written and it has never once fired.
+  // `seePlayer` needs three things at once: the trigger broadcasts, `requirement.memories` resolves
+  // outside dialogue, and `withinDays` measures days.
   function wightThatRemembers(remembers: boolean, agoDays = 0): GameState {
     const base = arena([{ id: 'barrow_wight', at: { x: 8, y: 5 } }]);
     if (!remembers) return base;
@@ -1077,10 +1063,8 @@ describe('being noticed', () => {
   });
 
   it('fires once per noticing, not once per sense that noticed', () => {
-    // Sight and hearing both reach across an open arena. The reaction applies
-    // `frightened` for a fixed duration, so a second application in the same
-    // pass would be invisible — the assertion that matters is the count of
-    // reaction effects, which is one condition, once.
+    // Sight and hearing both reach across an open arena, and the reaction applies `frightened` for
+    // a fixed duration, so the assertion is the count of reaction effects: one condition, once.
     const { state } = reduce(wightThatRemembers(true), { type: 'wait', minutes: 0 }, ctx);
     const frightened = state.entities['e:1']!.conditions.filter((c) => c.condition === 'frightened');
     expect(frightened).toHaveLength(1);

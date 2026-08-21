@@ -1,22 +1,8 @@
 'use client';
 
 /**
- * Adding a piece of conversation, correctly.
- *
- * Three shapes make up most of a world's dialogue: a clue somebody has behind
- * a roll, a thing somebody is holding behind a roll, and something they will
- * simply tell you. Each is an option, two nodes, a check, a gate and a way
- * back — about forty lines of nested JSON, assembled the same way every time.
- *
- * Doing that by hand in the generated form is possible and nobody would. Worse,
- * doing it by hand gets the one thing wrong that matters: `option.effects` run
- * *before* `option.check` and regardless of it, so the obvious place to put the
- * reward hands it over on a failed roll. The dialogue still validates and still
- * compiles, and plays as a conversation where failing costs nothing.
- *
- * So this is not a shortcut for the form — it is the difference between a
- * conversation that works and one that quietly does not. `@dm/authoring` owns
- * the composition; this collects the words.
+ * Build a standard dialogue fragment for common conversation shapes.
+ * The generated form can assemble these manually, but the fragment keeps the reward and check ordering correct.
  */
 
 import { useState } from 'react';
@@ -34,11 +20,7 @@ const SHAPES: { id: Shape; label: string; blurb: string }[] = [
   { id: 'talk', label: 'Something they just say', blurb: 'No roll. Still lands on its own node, so adding a roll later does not move the reward.' },
 ];
 
-/**
- * The words that are the same in every piece. Real worlds give each speaker
- * their own; one set here is enough to make the shape, and every line is an
- * ordinary field afterwards.
- */
+/** Shared wording reused by all dialogue fragments. */
 const VOICE: Voice = {
   goOn: 'Go on.',
   leaveIt: 'Leave it, then.',

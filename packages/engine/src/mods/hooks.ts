@@ -1,25 +1,21 @@
 /**
- * The hook contract.
+ * The hook contract: the whole surface a mod attaches to.
  *
- * This file is the whole surface a mod attaches to. It is deliberately small:
- * every hook is a place the engine already had a seam, and each one costs a
- * call site in a hot function, so they are added when something needs them
- * rather than speculatively.
+ * Deliberately small. Every hook is a place the engine already had a seam, and each costs a call
+ * site in a hot function, so they are added when something needs them.
  *
- * ## Why hooks rather than patching functions
+ * Why hooks rather than patching functions
  *
- * Both front ends are browsers and packages are bundled from source, so there
- * is no module registry to reach into and ESM live bindings are read-only. A
- * mod cannot literally replace `applyOps`. Declared hook points with
- * before / after / replace semantics give the same power — including full
- * override — while leaving one place where mod output enters the engine.
+ * Both front ends are browsers and packages are bundled from source, so there is no module registry
+ * to reach into and ESM live bindings are read-only: a mod cannot literally replace `applyOps`.
+ * Declared hook points with before / after / replace semantics give the same power while leaving
+ * one place where mod output enters the engine.
  *
- * ## What a mod may do
+ * What a mod may do
  *
- * Anything. `replace` on `action.before` skips the core handler outright, and
- * the `patch` directive writes anywhere in `GameState`. Invincibility, one-hit
- * kills, rewriting the turn economy — all supported, none special-cased. The
- * runtime enforces determinism and containment, and nothing else.
+ * Anything. `replace` on `action.before` skips the core handler outright, and the `patch` directive
+ * writes anywhere in `GameState`. The runtime enforces determinism and containment, and nothing
+ * else.
  */
 
 import type { Action } from '../actions.js';
@@ -32,23 +28,19 @@ export type HookName =
   /** After the action switch, before the rng is written back. */
   | 'action.after'
   /**
-   * An effect op the engine does not implement.
-   *
-   * The highest-value hook in the set: the branch already existed to refuse
-   * unknown ops, so a mod can add a genuinely new effect op — usable from
-   * module JSON, editable in the studio — with no core change at all.
+   * An effect op the engine does not implement. The branch already existed to refuse unknown ops,
+   * so a mod can add a genuinely new effect op — usable from module JSON, editable in the studio —
+   * with no core change.
    */
   | 'applyOp'
   /** An occasion firing, before the module's own triggers run. */
   | 'occasion'
   /**
-   * After a reduction settles: perception, combat start/stop, AI turns, and
-   * the victory and defeat checks have all run.
+   * After a reduction settles: perception, combat start/stop, AI turns, and the victory and defeat
+   * checks have all run.
    *
-   * No `replace`. `settle` is where the invariants that keep a game coherent
-   * are enforced, and a mod standing in for all of them would not be modding a
-   * rule so much as removing the floor. A mod that wants that can still do it
-   * from `action.before` with `replace`, where the intent is explicit.
+   * No `replace`. `settle` enforces the invariants that keep a game coherent. A mod that wants to
+   * stand in for them can do it from `action.before` with `replace`, where the intent is explicit.
    */
   | 'settle.after'
   /** After the world clock advances, once per call rather than per minute. */
@@ -60,11 +52,9 @@ export type HookName =
   /** A creature's chance to react, alongside its statblock's own reactions. */
   | 'reactions'
   /**
-   * Every event, as it is emitted.
-   *
-   * The one hook that fires hundreds of times a turn, so a declaration
-   * **must** carry a `match` naming the event type — an unfiltered one would
-   * put a WASM crossing on every event in the game.
+   * Every event, as it is emitted. Fires hundreds of times a turn, so a declaration must carry a
+   * `match` naming the event type — an unfiltered one would put a WASM crossing on every event in
+   * the game.
    */
   | 'event.emit';
 
@@ -132,10 +122,9 @@ export interface HookSubjects {
 }
 
 /**
- * The narrowing key for a hook, matched against a declaration's `match`.
- *
- * This is what keeps the boundary crossing rare: a mod that declares
- * `applyOp` with `match: "gainMomentum"` is only consulted for that op.
+ * The narrowing key for a hook, matched against a declaration's `match`. This is what keeps the
+ * boundary crossing rare: a mod declaring `applyOp` with `match: "gainMomentum"` is only consulted
+ * for that op.
  */
 export function matchKeyFor<K extends HookName>(hook: K, subject: HookSubjects[K]): string | undefined {
   switch (hook) {
@@ -157,8 +146,8 @@ export function matchKeyFor<K extends HookName>(hook: K, subject: HookSubjects[K
     case 'settle.after':
     case 'time.after':
     case 'passives':
-      // Nothing sensible to narrow on: these fire once per reduction, which is
-      // rare enough that a crossing per call is affordable.
+      // Nothing sensible to narrow on: these fire once per reduction, which is rare enough that a
+      // crossing per call is affordable.
       return undefined;
     default:
       return undefined;

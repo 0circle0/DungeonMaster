@@ -1,9 +1,7 @@
 /**
- * Authored content: what populates a world.
- *
- * Everything here is addressed by id and cross-references other collections
- * through `ref()`, so the compiler can prove a class's starting weapon and a
- * monster's loot table actually exist before play begins.
+ * Authored content: what populates a world. Everything here is addressed by id and cross-references
+ * other collections through `ref()`, so the compiler can prove a class's starting weapon and a
+ * monster's loot table exist before play begins.
  */
 
 import { z } from 'zod';
@@ -42,13 +40,9 @@ export const abilitySchema = z
       .strict()
       .optional(),
     /**
-     * Which way this ability's own attack roll leans, always.
-     *
-     * For an ability that is *inherently* surer or wilder than an ordinary
-     * one: a blessed strike, a shot loosed blind. Circumstance belongs
-     * elsewhere; this is a property of the ability itself, so it applies every
-     * time and needs no condition to carry it. Combined with every other swing
-     * that applies by `rules.resolution.swingStacking`.
+     * Which way this ability's own attack roll leans, always. A property of the ability itself
+     * rather than of circumstance, so it applies every time and needs no condition to carry it.
+     * Combined with every other swing by `rules.resolution.swingStacking`.
      */
     swing: z.enum(['advantage', 'disadvantage']).optional(),
     /** A save the target makes instead of the caster rolling to hit. */
@@ -82,9 +76,8 @@ export const abilitySchema = z
         /** Everyone in the area, or only enemies. */
         affects: z.enum(['all', 'enemies', 'allies', 'others']).default('all'),
         /**
-         * Half-angle of a cone, in degrees. The engine's 45 each side is the
-         * familiar quarter-circle blast; a narrower one is a jet and a wider
-         * one is a wash, and neither could be asked for.
+         * Half-angle of a cone, in degrees. 45 each side is a quarter-circle blast; narrower is a
+         * jet, wider is a wash.
          */
         angle: z.number().min(1).max(180).default(45),
       })
@@ -146,10 +139,8 @@ export const characterClassSchema = z
     /** The attribute this class's abilities key off. */
     primaryAttribute: ref('rules.attributes'),
     /**
-     * Skills the class starts trained in. A bare id grants
-     * `rules.progression.proficiencyRank`; `{ skill, rank }` says exactly what
-     * "trained" is worth, which a module with a rank ladder needs and could not
-     * previously say.
+     * Skills the class starts trained in. A bare id grants `rules.progression.proficiencyRank`; `{
+     * skill, rank }` states the rank exactly, for a module with a rank ladder.
      */
     skillProficiencies: z
       .array(
@@ -224,15 +215,12 @@ export const itemSchema = z
     /**
      * Skill ranks added while equipped.
      *
-     * Read by both the roll and the gate: a lens worth `{"lore": 2}` improves
-     * every lore check *and* satisfies a `minRank` requirement that the wearer
-     * could not meet unaided. Keeping those two in step is the whole point —
-     * gear that helped you roll but still read as untrained would be a lie.
+     * Read by both the roll and the gate: a lens worth `{"lore": 2}` improves every lore check and
+     * satisfies a `minRank` requirement the wearer could not meet unaided.
      *
-     * `.optional()` rather than `.default({})`, deliberately: a defaulted field
-     * is written into every parsed item and so changes the hash of every module
-     * ever authored, which makes `load()` reject every existing save. See the
-     * hash test in `compile.test.ts`.
+     * `.optional()` rather than `.default({})`: a defaulted field is written into every parsed item
+     * and so changes the hash of every module, which makes `load()` reject every existing save. See
+     * the hash test in `compile.test.ts`.
      */
     skillBonuses: z.record(ref('content.skills'), z.number().int()).optional(),
     /** Consumables and wands: what happens on use. */
@@ -268,12 +256,9 @@ export const itemSchema = z
   .strict();
 
 /**
- * One possible drop.
- *
- * `requires` is what makes loot respond to character development: a rune only
- * a scholar can read, a blade that needs weapon mastery, a relic that appears
- * only past level 8. An entry the party does not qualify for is removed from
- * the draw rather than rolled and discarded, so the odds stay meaningful.
+ * One possible drop. `requires` makes loot respond to character development; an entry the party
+ * does not qualify for is removed from the draw rather than rolled and discarded, so the odds stay
+ * meaningful.
  */
 export const lootEntrySchema = z
   .object({
@@ -301,10 +286,7 @@ export const lootTableSchema = z
     requires: requirementSchema.optional(),
     /** Extra draws granted by a scavenging-style skill. */
     bonusRollSkill: ref('content.skills').optional(),
-    /**
-     * What that skill is worth. The skill was data; what succeeding at it
-     * bought you was not.
-     */
+    /** What that skill is worth, in extra draws. */
     bonusRolls: z
       .object({
         onSuccess: z.number().int().min(0).default(1),
@@ -316,12 +298,8 @@ export const lootTableSchema = z
   .strict();
 
 /**
- * A reaction: how a creature or person responds to what happens around them.
- *
- * Player characters are not the only actors. Anything with reactions can roll
- * dice, spend resources, take offence, and act on memory — which is what lets
- * NPCs, enemies, creatures, and heroes genuinely affect one another rather
- * than the world only responding to the party.
+ * A reaction: how a creature or person responds to what happens around them. Anything with
+ * reactions can roll dice, spend resources, take offence, and act on memory.
  */
 export const reactionSchema = z
   .object({
@@ -337,7 +315,7 @@ export const reactionSchema = z
       .default('turnStart'),
     event: z.string().optional(),
     priority: z.number().int().default(0),
-    /** Gated on the *reacting* actor's own state, memory, and faction ties. */
+    /** Gated on the reacting actor's own state, memory, and faction ties. */
     requires: requirementSchema.optional(),
     when: PredicateSchema.optional(),
     chance: z.number().min(0).max(1).default(1),
@@ -364,7 +342,7 @@ export const reactionSchema = z
   })
   .strict();
 
-/** How a monster chooses its action; kept declarative so it stays inspectable. */
+/** How a monster chooses its action; declarative so it stays inspectable. */
 export const behaviourSchema = z
   .object({
     /** Higher priority rules are considered first. */
@@ -399,8 +377,8 @@ export const monsterSchema = z
     /** How it reads in prose: "a hulking", "two skittering". */
     descriptors: z.array(z.string()).default([]),
 
-    // Tactical detail. All optional: a module that does not declare sizes or
-    // saving throws simply never fills these in.
+    // Tactical detail. All optional: a module that declares no sizes or saving throws never fills
+    // these in.
     size: ref('rules.sizes').optional(),
     creatureType: ref('rules.creatureTypes').optional(),
     alignment: ref('rules.alignments').optional(),
@@ -413,11 +391,9 @@ export const monsterSchema = z
     senses: z.record(ref('rules.senses'), z.number().int()).default({}),
     speeds: z.record(ref('rules.movementModes'), z.number().int()).default({}),
     /**
-     * What it does when nothing is telling it what to do — wandering, giving
-     * chase, giving up. Anything left out falls back to `rules.temperament`.
-     *
-     * Distinct from `behaviour` above, which is how it picks an attack once a
-     * fight is already happening.
+     * What it does when nothing is telling it what to do — wandering, giving chase, giving up.
+     * Anything left out falls back to `rules.temperament`. Distinct from `behaviour`, which is how
+     * it picks an attack once a fight is happening.
      */
     temperament: temperamentOverrideSchema.optional(),
     languages: z.array(ref('rules.languages')).default([]),
@@ -488,11 +464,9 @@ export const npcSchema = z
     statblock: ref('content.monsters').optional(),
     dialogue: ref('narrative.dialogues').optional(),
     /**
-     * Where they can normally be found.
-     *
-     * A real reference now, so a typo is a load error rather than a person who
-     * simply never appears. Naming a home is enough to place someone: listing
-     * them in that place's `residents` says the same thing from the other end.
+     * Where they can normally be found. A checked reference, so a typo is a load error. Naming a
+     * home is enough to place someone; listing them in that place's `residents` says the same thing
+     * from the other end.
      */
     home: ref('world.pointsOfInterest', 'Enough to place them: the engine gathers everyone whose home is here when the party arrives.').optional(),
     /** How readily they believe rumours about the party, 0..1. */
@@ -502,10 +476,8 @@ export const npcSchema = z
     /** Starting attitude toward the party, -100..100. */
     disposition: z.number().int().min(-100).max(100).default(0),
     /**
-     * What they do when nobody is talking to them — whether they keep to their
-     * counter or walk the lane, and what they bother to look into.
-     *
-     * Anything left out falls back to `rules.temperament`.
+     * What they do when nobody is talking to them: whether they keep to their counter or walk the
+     * lane, and what they look into. Anything left out falls back to `rules.temperament`.
      */
     temperament: temperamentOverrideSchema.optional(),
     /** They act too: reactions to deeds, quests, and what they are shown. */

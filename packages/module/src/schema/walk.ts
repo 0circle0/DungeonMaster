@@ -1,22 +1,18 @@
 /**
  * One walk of the module schemas, shared by everything that describes them.
  *
- * The format is large enough that a hand-maintained description of it is wrong
- * within a week, so the reference docs, the field-gloss coverage test, and the
- * documentation site all read the same walk of the real Zod schemas. Whatever
- * the validator enforces is what they show.
+ * The reference docs, the field-gloss coverage test and the documentation site all read the same
+ * walk of the real Zod schemas, so whatever the validator enforces is what they show.
  *
- * Two things here are easy to get wrong and are handled once:
+ * Two things handled once:
  *
- * - **Shared schemas are documented once.** `requirement` appears on some thirty
- *   entities; recursing into it every time runs the reference to fifteen
- *   thousand lines of duplicates. Identity is the schema object itself, which
- *   Zod shares between every use site, and the first path that reaches one wins.
- *   A path is claimed as the child is *scanned*, not as it is visited, so two
- *   sibling fields sharing a schema both link to the same section.
- * - **Types are returned as a small tree, not as text.** The reference renders
- *   Markdown and the site renders elements; formatting either into the walk
- *   would leave the other reimplementing it.
+ * - Shared schemas are documented once. `requirement` appears on some thirty entities, and
+ *   recursing into it every time runs the reference to fifteen thousand lines. Identity is the
+ *   schema object itself, which Zod shares between use sites, and the first path that reaches one
+ *   wins. A path is claimed as the child is scanned, not as it is visited, so two sibling fields
+ *   sharing a schema both link to the same section.
+ * - Types are returned as a small tree, not as text, so the reference can render Markdown and the
+ *   site elements without either reimplementing the other.
  */
 
 import { z } from 'zod';
@@ -31,13 +27,10 @@ import {
 } from '../dsl/schema.js';
 
 /**
- * Deepest section the walk emits, counting the document itself as 0.
- *
- * `content` is 1, `content.abilities` is 2, `content.abilities.requires` is 3,
- * and `content.abilities.requires.attributes` is 4. Nothing in the format nests
- * an object further than that, and the bound keeps a cyclic schema from
- * becoming an infinite document. A field below the bound still gets a row; it
- * just renders as a plain object with no section to link to.
+ * Deepest section the walk emits, counting the document itself as 0: `content` is 1,
+ * `content.abilities` 2, `content.abilities.requires` 3, `content.abilities.requires.attributes` 4.
+ * The bound keeps a cyclic schema from becoming an infinite document; a field below it still gets a
+ * row, rendered as a plain object with no section to link to.
  */
 export const MAX_SECTION_DEPTH = 4;
 
@@ -62,14 +55,12 @@ export type TypeNode =
   | { kind: 'union'; of: TypeNode[] };
 
 /**
- * Schemas that mean something specific and would otherwise read as `string` or
- * as one undifferentiated union.
+ * Schemas that mean something specific and would otherwise read as `string` or as one
+ * undifferentiated union.
  *
- * Matched by object identity, checked at every step of the optional/default
- * unwrap, because `EffectSchema` reached through `z.array(...).default([])` is
- * still the same object. `ref()` calls clone `idSchema` through `.describe()`,
- * so a reference field never matches the bare id entry here and is reported as
- * the reference it is.
+ * Matched by object identity, checked at every step of the optional/default unwrap, because
+ * `EffectSchema` reached through `z.array(...).default([])` is the same object. `ref()` calls clone
+ * `idSchema` through `.describe()`, so a reference field never matches the bare id entry.
  */
 const NAMED: readonly (readonly [z.ZodTypeAny, TypeNode])[] = [
   [ExprSchema, { kind: 'dsl', dsl: 'expression' }],
@@ -110,11 +101,9 @@ export interface SectionRow {
   trail: string[];
   fields: FieldRow[];
   /**
-   * True for `narrative.systemText`, whose two hundred keys come from the
-   * `SYSTEM_TEXT` registry. The registry carries the tier, the placeholders a
-   * message may not drop, and a description per key, none of which live in the
-   * Zod type, so a generic field table would say much less at ten times the
-   * length.
+   * True for `narrative.systemText`, whose two hundred keys come from the `SYSTEM_TEXT` registry.
+   * The registry carries the tier, the placeholders a message may not drop, and a description per
+   * key, none of which live in the Zod type.
    */
   fromRegistry: boolean;
 }
@@ -173,12 +162,9 @@ function typeNameOf(def: { typeName?: string }): string {
 }
 
 /**
- * The object a field is built from, looking through arrays and unions.
- *
- * A union contributes its first object branch only. That covers both unions the
- * format has: static map layers, whose seven branches differ only in the `kind`
- * literal and which collection the cells resolve against, and a class's skill
- * proficiencies, where one branch is a bare reference and the other an object.
+ * The object a field is built from, looking through arrays and unions. A union contributes its
+ * first object branch only, which covers both unions the format has: static map layers, whose
+ * branches differ only in the `kind` literal, and a class's skill proficiencies.
  */
 function objectOf(schema: z.ZodTypeAny): z.ZodTypeAny | null {
   const { schema: inner, namedType } = unwrap(schema);
@@ -230,8 +216,8 @@ export function walkModuleSchema(): SectionRow[] {
       case 'ZodUnion': {
         const branches = unionBranches(inner);
         const objects = branches.filter((branch) => objectOf(branch));
-        // Every branch an object, all the same shape bar a discriminating
-        // literal: one section says it, and the variant count says the rest.
+        // Every branch an object, all the same shape bar a discriminating literal: one section says
+        // it, and the variant count says the rest.
         if (objects.length === branches.length && branches.length > 0) {
           const first = objectOf(branches[0]!)!;
           return { kind: 'object', section: sectionOf(first), variants: branches.length };
@@ -270,12 +256,9 @@ export function walkModuleSchema(): SectionRow[] {
       const childPath = path === '' ? key : `${path}.${key}`;
 
       /**
-       * Claim a section for an object field as it is scanned. Two siblings
-       * sharing one schema then resolve to the same section instead of the
-       * second one linking at a heading that is never written.
-       *
-       * `extra` is an open bag with no shape worth tabulating, so it stays a
-       * plain record row.
+       * Claim a section for an object field as it is scanned, so two siblings sharing one schema
+       * resolve to the same section. `extra` is an open bag with no shape worth tabulating, so it
+       * stays a plain record row.
        */
       const sectionOf = (candidate: z.ZodTypeAny): string | null => {
         const existing = claimed.get(candidate);

@@ -1,16 +1,15 @@
 #!/usr/bin/env python3
 """Aurendel — the hand-drawn interiors.
 
-A `maps/<id>/` folder is one CSV per layer plus a manifest, and the loader
-inlines it into `world.maps` (packages/module/src/load.ts). Writing those CSVs
-by hand is miserable, so each map is drawn here as ASCII art and expanded.
+A `maps/<id>/` folder is one CSV per layer plus a manifest, and the loader inlines it into
+`world.maps` (packages/module/src/load.ts). Each map is drawn here as ASCII art and expanded into
+those CSVs.
 
-Rules the linter enforces, all of them worth knowing before you draw:
+Rules the linter enforces:
 
-  * every layer is the same rectangle, and the first terrain layer has no empty
-    cells — so the art is always a solid block, never ragged;
-  * there must be an `entry` marker, it must be standable, and everything else
-    must be reachable from it;
+  * every layer is the same rectangle, and the first terrain layer has no empty cells;
+  * there must be an `entry` marker, it must be standable, and everything else must be reachable
+    from it;
   * a gate cell has to sit on door-like terrain.
 
 Run directly to write every folder:  python3 staticmaps.py
@@ -23,8 +22,8 @@ from dmkit.maps import Map as _Map, write_all  # noqa: E402
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", ".."))
 MAPS = os.path.join(ROOT, "modules/aurendel/maps")
 
-# Art character -> terrain id. Anything not here is an error, deliberately:
-# a typo in the art should not silently become floor.
+# Art character -> terrain id. Anything not listed is an error, so a typo in the art cannot silently
+# become floor.
 TERRAIN = {
     "#": "wall_stone", "H": "wall_timber", "B": "wall_mudbrick",
     "h": "wall_hull", "I": "wall_ice", "^": "rock", "C": "cliff",
@@ -46,8 +45,8 @@ TERRAIN = {
 MARKER = {"@": "entry", "1": "entry", "0": "entry",
           "9": "entry", "8": "entry", "7": "entry"}
 
-# Terrain ids you cannot stand on. Kept in step with materials.py by hand,
-# which is fine because it is only used to catch drawing mistakes.
+# Terrain ids you cannot stand on. Kept in step with materials.py by hand; used only to catch
+# drawing mistakes.
 IMPASSABLE = {
     "wall_stone", "wall_timber", "wall_mudbrick", "wall_hull", "wall_ice",
     "rock", "cliff", "tree", "portcullis", "fence", "hedgerow", "palisade",

@@ -1,9 +1,5 @@
 /**
- * Raw JSON editing.
- *
- * Text is held locally while editing and only committed upstream once it
- * parses. Committing on every keystroke would destroy the document the moment
- * a user typed an opening brace.
+ * Edit raw JSON in a local buffer until it parses successfully.
  */
 
 'use client';
@@ -15,7 +11,7 @@ export interface JsonBoxProps {
   onChange: (value: unknown) => void;
   placeholder?: string;
   rows?: number;
-  /** Full-height mode for the whole-module view. */
+  /** Full-height mode used by the whole-module view. */
   fill?: boolean;
 }
 
@@ -25,7 +21,7 @@ export function JsonBox({ value, onChange, placeholder, rows = 6, fill = false }
   const [error, setError] = useState<string | null>(null);
   const editing = useRef(false);
 
-  // Adopt external changes (undo, switching entries) unless actively typing.
+  // Sync external changes unless the user is actively editing this field.
   useEffect(() => {
     if (!editing.current) {
       setText(serialized);
@@ -62,12 +58,12 @@ export function JsonBox({ value, onChange, placeholder, rows = 6, fill = false }
         }}
         onBlur={() => {
           editing.current = false;
-          // Reformat from the committed value once the field settles.
+          // Reformat from the committed value after the user stops editing.
           if (!error) setText(serialized);
         }}
         onChange={(e) => commit(e.target.value)}
         onKeyDown={(e) => {
-          // Tab inserts indentation instead of leaving the field.
+          // Insert indentation on Tab instead of moving focus away.
           if (e.key === 'Tab') {
             e.preventDefault();
             const target = e.currentTarget;

@@ -1,22 +1,18 @@
 /**
  * Turning events into reactions.
  *
- * `content.monsters[].reactions` and `content.npcs[].reactions` declare twelve
- * triggers — `seePlayer`, `allyHurt`, `allyKilled`, `selfHurt`, `lowHealth`,
- * `combatStart`, `combatEnd`, `turnStart`, `witnessDeed`, `questComplete`,
- * `itemShown`, `custom` — and exactly one of them was ever broadcast. Eleven
- * were schema that read like a feature and behaved like a comment. Greenmarch's
- * wight has kept a death-wail and a memory of thieves since it was written, and
- * neither had ever fired.
+ * `content.monsters[].reactions` and `content.npcs[].reactions` declare twelve triggers —
+ * `seePlayer`, `allyHurt`, `allyKilled`, `selfHurt`, `lowHealth`, `combatStart`, `combatEnd`,
+ * `turnStart`, `witnessDeed`, `questComplete`, `itemShown`, `custom` — and all of them are
+ * broadcast from here.
  *
- * The dispatch is **event-driven** rather than hooked at each origin. Damage
- * alone arrives from six places — a player ability, an AI ability, a trap,
- * terrain, a condition tick, and a resource bottoming out — and hooking all six
- * is six edits that rot. `damaged` is one event, emitted once, from all of them.
+ * The dispatch is event-driven rather than hooked at each origin. Damage alone arrives from six
+ * places — a player ability, an AI ability, a trap, terrain, a condition tick, and a resource
+ * bottoming out — so `damaged` is one event, emitted once, from all of them.
  *
- * It also cannot be driven from inside `adjustResource`: reaction effects call
- * `applyOps`, which calls `adjustResource`, and the only thing standing between
- * that and unbounded recursion would be a scratch set meant for something else.
+ * It cannot be driven from inside `adjustResource`: reaction effects call `applyOps`, which calls
+ * `adjustResource`, and nothing but a scratch set meant for something else would stand between that
+ * and unbounded recursion.
  */
 
 import { Rng } from '@dm/core';
@@ -33,12 +29,8 @@ function bystanders(txn: Transaction, subject: Entity | null): readonly Entity[]
 }
 
 /**
- * Fan a batch of events out to whoever declared a reaction to them.
- *
- * `died` is deliberately absent: `allyKilled` is still broadcast from
- * `performAbility`, where it has always been. Moving its timing is a separate
- * change from making eleven dead triggers live, and tangling the two would make
- * a regression in either impossible to bisect.
+ * Fan a batch of events out to whoever declared a reaction to them. `died` is deliberately absent:
+ * `allyKilled` is broadcast from `performAbility`, where it has always been.
  */
 export function dispatchReactions(
   txn: Transaction,
@@ -75,10 +67,9 @@ export function dispatchReactions(
 
         runReactions(txn, victim, 'selfHurt', source, rng.derive(`selfHurt:${victim.id}`));
 
-        // "Ally" is read the way `isHostileTo` reads every other question about
-        // sides: anyone who is not hostile to the victim. That makes a monster
-        // pack care about its own without a module declaring a faction, and
-        // keeps one definition of whose side somebody is on.
+        // "Ally" is read the way `isHostileTo` reads every other question about sides: anyone who
+        // is not hostile to the victim. That makes a monster pack care about its own without a
+        // module declaring a faction.
         for (const entity of bystanders(txn, victim)) {
           if (isHostileTo(entity, victim)) continue;
           runReactions(txn, entity, 'allyHurt', victim, rng.derive(`allyHurt:${entity.id}`));
@@ -87,10 +78,9 @@ export function dispatchReactions(
       }
 
       case 'deedDone': {
-        // Exactly the people who saw it, which is the whole point of the
-        // witness roll in `recordDeed` — not everyone standing about. The
-        // event carries the deed's id rather than its doer, so who to be
-        // annoyed at comes back out of the log.
+        // Exactly the people who saw it, which is the point of the witness roll in `recordDeed`.
+        // The event carries the deed's id rather than its doer, so who to be annoyed at comes back
+        // out of the log.
         const deed = txn.state.deeds.find((entry) => entry.id === event.deed);
         const actor = deed ? txn.entity(deed.actor) ?? null : null;
         for (const id of event.witnesses) {
@@ -108,9 +98,9 @@ export function dispatchReactions(
       }
 
       case 'custom': {
-        // `deed` and `startQuest` are the reducer's own vocabulary and are
-        // handled there; re-broadcasting them here would fire a reaction on the
-        // machinery rather than on the event the content meant.
+        // `deed` and `startQuest` are the reducer's own vocabulary and are handled there; re-
+        // broadcasting them here would fire a reaction on the machinery rather than on the event
+        // the content meant.
         if (event.event === 'deed' || event.event === 'startQuest') break;
         for (const entity of bystanders(txn, null)) {
           runReactions(
@@ -128,13 +118,10 @@ export function dispatchReactions(
 }
 
 /**
- * Reactions to being noticed.
- *
- * Split from the event fan-out because noticing is not an event: it is a
- * difference between two perception passes, which `perceiveAll` computes and
- * now returns. Passing the pairs in rather than importing `runReactions` into
- * `sim/senses.ts` is deliberate — `rules/combat/turn.ts` already imports
- * `canPerceive` from there, so the reverse edge would close a cycle.
+ * Reactions to being noticed. Split from the event fan-out because noticing is a difference between
+ * two perception passes rather than an event. Passing the pairs in rather than importing
+ * `runReactions` into `sim/senses.ts` avoids a cycle: `rules/combat/turn.ts` already imports
+ * `canPerceive` from there.
  */
 export function dispatchNoticed(
   txn: Transaction,

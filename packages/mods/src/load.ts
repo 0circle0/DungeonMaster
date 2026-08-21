@@ -1,9 +1,8 @@
 /**
  * Reading mods off disk.
  *
- * Node-only, and published as `@dm/mods/load` rather than from the index, so a
- * client import of this file is a build error. That is the guard, not a
- * convention — the same arrangement `@dm/module/load` uses.
+ * Node-only, and published as `@dm/mods/load` rather than from the index, so a client import of
+ * this file is a build error — the same arrangement `@dm/module/load` uses.
  *
  * Layout, mirroring how modules are directories:
  *
@@ -12,12 +11,11 @@
  *     mods/engine/<id>-<hash>/lib/anything.js
  *     mods/editor/<id>-<hash>/...
  *
- * The folder name is the mod's address, and `mod.json` has to agree with it —
- * checked the way `readAssembledModule` checks a map folder's id. Letting the
- * two drift would make "which folder is this mod" a guess.
+ * The folder name is the mod's address and `mod.json` has to agree with it, checked the way
+ * `readAssembledModule` checks a map folder's id.
  *
- * Every directory walk is sorted, so the file map, and therefore the hash,
- * never depends on filesystem enumeration order.
+ * Every directory walk is sorted, so the file map — and therefore the hash — never depends on
+ * filesystem enumeration order.
  */
 
 import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
@@ -54,12 +52,8 @@ export interface LoadedModFromDisk {
 }
 
 /**
- * A mod that could not be read at all.
- *
- * Kept separate from `LoadedModFromDisk` rather than served as one with a null
- * manifest: a mod whose manifest failed to parse has no id, no entry, and no
- * hooks, and every caller would have to remember to check before touching any
- * of them.
+ * A mod that could not be read at all. Kept separate from `LoadedModFromDisk` rather than served as
+ * one with a null manifest: a mod whose manifest failed to parse has no id, no entry and no hooks.
  */
 export interface UnreadableMod {
   readonly dir: string;
@@ -156,8 +150,8 @@ export function readMod(dir: string): ModReadResult | null {
 
   const hash = hashMod(manifest, files);
 
-  // The folder name is the address. A mismatch means tooling and the manifest
-  // disagree about which mod this is, which is worth saying out loud.
+  // The folder name is the address. A mismatch means tooling and the manifest disagree about which
+  // mod this is.
   const folder = dir.split(sep).filter(Boolean).pop() ?? '';
   const identity = parseModIdentity(folder);
   if (!identity) {
@@ -176,8 +170,8 @@ export function readMod(dir: string): ModReadResult | null {
     });
   }
 
-  // Drift warns rather than blocks. The hash sits in a file the author can
-  // edit, so refusing to load only teaches people to edit the hash.
+  // Drift warns rather than blocks. The hash sits in a file the author can edit, so refusing to
+  // load only teaches people to edit the hash.
   if (manifest.hash !== hash) {
     issues.push({
       file: MANIFEST_FILE,
@@ -197,11 +191,9 @@ export interface LoadedMods {
 }
 
 /**
- * Read every mod under a root, both targets, in sorted order.
- *
- * Unreadable mods are reported rather than dropped: a mod that silently fails
- * to appear looks exactly like a mod that was never installed, and the two need
- * very different fixes.
+ * Read every mod under a root, both targets, in sorted order. Unreadable mods are reported rather
+ * than dropped: a mod that silently fails to appear looks exactly like one that was never
+ * installed.
  */
 export function loadModsFrom(root: string): LoadedMods {
   const mods: LoadedModFromDisk[] = [];

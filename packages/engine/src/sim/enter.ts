@@ -1,10 +1,6 @@
 /**
- * Arriving somewhere.
- *
- * Generating a place and putting the party on it. Maps are generated once and
- * kept in state, so walking back out of a dungeon and returning finds the same
- * dungeon — regenerating it from the seed on every visit would be cheaper in
- * memory and completely wrong.
+ * Arriving somewhere: generating a place and putting the party on it. Maps are generated once and
+ * kept in state, so walking back into a dungeon finds the same dungeon.
  */
 
 import { Rng, parseDice, rollDice } from '@dm/core';
@@ -93,13 +89,9 @@ function scopeOf(txn: Transaction): Scope {
 }
 
 /**
- * Remember the way out, on first entry only.
- *
- * `MapInstance.exits` existed from the start and was written by nothing, which
- * left two holes at once: re-entering a dungeon dropped the party at `{1,1}`
- * (frequently inside the wall ring), and there was no way to leave one at all.
- * The record is written *before* `placeParty` flips `currentMap`, because the
- * whole point is where the party came **from**.
+ * Remember the way out, on first entry only. Written before `placeParty` flips `currentMap`,
+ * because the record is where the party came from. `MapInstance.exits` is what a return trip and a
+ * `leave` both read.
  */
 function recordExit(txn: Transaction, mapId: string, arrival: Position): void {
   const from = txn.state.currentMap;
@@ -130,12 +122,10 @@ function exitTileOf(map: { exits: Readonly<Record<number, unknown>> }): Position
 }
 
 /**
- * Put a static map's authored creatures on it, at map creation.
- *
- * NPCs are keyed by their own id — the same once-semantics as
- * {@link spawnResidents}, so the shopkeeper painted into the shop is the same
- * person on every visit and stays dead if killed. Monsters get fresh ids in
- * cell order, which is a total order because the layers are.
+ * Put a static map's authored creatures on it, at map creation. NPCs are keyed by their own id, the
+ * same once-semantics as {@link spawnResidents}, so the shopkeeper painted into the shop is the
+ * same person on every visit. Monsters get fresh ids in cell order, which is a total order because
+ * the layers are.
  */
 function spawnStaticContent(
   txn: Transaction,
@@ -201,11 +191,9 @@ function staticInstance(
 }
 
 /**
- * The party as a set of scopes, for gates that ask about more than the leader.
- *
- * A loot entry's `requirementScope` distinguishes "the finder can read this"
- * from "somebody in the party can" from "all of you are high enough level", and
- * only the first of those is answerable from the leader alone.
+ * The party as a set of scopes, for gates that ask about more than the leader. A loot entry's
+ * `requirementScope` distinguishes "the finder can read this" from "somebody in the party can" from
+ * "all of you are high enough level".
  */
 export function partyScopes(txn: Transaction): ScopeSet {
   const finder = scopeOf(txn);
@@ -217,11 +205,9 @@ export function partyScopes(txn: Transaction): ScopeSet {
 }
 
 /**
- * Put a place's residents on the map, once.
- *
- * Keyed by the npc's own id, so coming back to a village finds the same miller
- * with the same memory of you rather than a second copy of her. Somebody who
- * has died stays dead, and somebody who has wandered off is not teleported home.
+ * Put a place's residents on the map, once. Keyed by the npc's own id, so returning finds the same
+ * person with the same memory rather than a second copy; the dead stay dead and anyone who has
+ * wandered off is not teleported home.
  */
 function spawnResidents(
   txn: Transaction,
@@ -243,8 +229,8 @@ function spawnResidents(
     try {
       person = spawnNpc(txn.module, npcId);
     } catch {
-      // A resident the content does not define is an authoring error the linter
-      // reports; it must not stop the party from entering the village.
+      // A resident the content does not define is an authoring error the linter reports; it must
+      // not stop the party entering.
       continue;
     }
 
@@ -271,13 +257,11 @@ function residentsOf(
 /**
  * Put whatever lives in a place onto the map when the party walks in.
  *
- * Rolled per visit rather than once, because that is what a module means by an
- * `encounterChance` on a place you can leave and come back to — and it is how
- * the reference module's "repeats until the mill is actually clear" trigger is
- * meant to work.
+ * Rolled per visit rather than once, which is what an `encounterChance` on a place you can leave
+ * and come back to means.
  *
- * Nothing spawns while something hostile from the last visit is still standing,
- * so coming back mid-fight does not stack a second pack on top of the first.
+ * Nothing spawns while something hostile from the last visit is still standing, so returning mid-
+ * fight does not stack a second pack on the first.
  */
 function spawnEncounter(
   txn: Transaction,
@@ -325,16 +309,13 @@ function spawnEncounter(
 
   txn.set({ ...txn.state, nextEntityId: nextId });
 
-  // What the group itself has to say and do. Both were authored and neither was
-  // ever reached — greenmarch's `mill_things` declares an `onEncounter` today.
+  // What the group itself has to say and do, from its `onEncounter`.
   runEncounterGroup(txn, draw.group, rng.derive('onEncounter'));
 }
 
 /**
- * The effects and prose a drawn encounter group declares.
- *
- * Found by scanning the tables rather than being handed down, because the draw
- * reports only the group id — and a group id is unique across the module.
+ * The effects and prose a drawn encounter group declares. Found by scanning the tables, because the
+ * draw reports only the group id, which is unique across the module.
  */
 function runEncounterGroup(txn: Transaction, groupId: string, rng: Rng): void {
   interface GroupDef { id: string; onEncounter?: Effect[]; textKey?: string }
@@ -357,10 +338,8 @@ function runEncounterGroup(txn: Transaction, groupId: string, rng: Rng): void {
 }
 
 /**
- * Put a place's own loot on its floor, the first time the party arrives.
- *
- * Once, not per visit: a place's treasure is a thing that is there, unlike an
- * encounter, which is a thing that happens.
+ * Put a place's own loot on its floor, the first time the party arrives. Once, not per visit:
+ * treasure is a thing that is there, unlike an encounter, which is a thing that happens.
  */
 function spawnPoiLoot(
   txn: Transaction,
@@ -405,11 +384,9 @@ function spawnPoiLoot(
 }
 
 /**
- * Enter a dungeon, generating it on first visit.
- *
- * The map, its inhabitants, and its loot are all derived from a sub-stream of
- * the run's seed, so the same seed always produces the same dungeon — and
- * fighting in it never changes what the next dungeon looks like.
+ * Enter a dungeon, generating it on first visit. The map, its inhabitants and its loot all derive
+ * from a sub-stream of the run's seed, so the same seed always produces the same dungeon and
+ * fighting in it does not change the next one.
  */
 export function enterDungeon(
   txn: Transaction,
@@ -421,10 +398,7 @@ export function enterDungeon(
   const existing = txn.state.maps[mapId];
 
   if (existing) {
-    // Been here before: walk back in at the tile we first arrived on — the
-    // exit tile recorded on first entry. (The old code read `exits[0]?.at`,
-    // which was wrong twice: nothing ever wrote the record, and `at` is a
-    // position on the *other* map.)
+    // Been here before: walk back in at the exit tile recorded on first entry.
     txn.set({ ...txn.state, location: { kind: 'dungeon', dungeon: dungeonId, room: '' } });
     placeParty(txn, terrain, mapId, exitTileOf(existing) ?? { x: 1, y: 1 });
     return true;
@@ -461,8 +435,8 @@ export function enterDungeon(
     recordExit(txn, mapId, built.entry);
     placeParty(txn, terrain, mapId, built.entry);
 
-    // The author's toggle for rolled life in a fixed place: one draw from the
-    // biome's tables per `spawn` marker.
+    // The author's toggle for rolled life in a fixed place: one draw from the biome's tables per
+    // `spawn` marker.
     if (definition.rollEncounters) {
       const biome = txn.module.find<{ encounterTables?: string[] }>(
         'world.biomes', definition.biome ?? '',
@@ -513,10 +487,8 @@ export function enterDungeon(
 
   const generated = generateDungeon(txn.module, dungeonId, dungeonRng, scopeOf(txn));
 
-  // How deep this place runs. Rolled once and kept on the map, so a return trip
-  // finds the same dungeon — and so the `minDepth`/`maxDepth` every encounter
-  // table declares finally bites in play, rather than only in the editor's
-  // Balance preview.
+  // How deep this place runs. Rolled once and kept on the map, so a return trip finds the same
+  // dungeon and the `minDepth`/`maxDepth` on each encounter table applies in play.
   const depth = rollDepth(definition.depth, dungeonRng.derive('depth'));
 
   const instance: MapInstance = {
@@ -531,8 +503,8 @@ export function enterDungeon(
     items: {},
     marks: {},
     traps: {},
-    // Kept so walking from one room into another can be noticed, which is what
-    // makes a template's `descriptionKey` and its `triggers` reachable at all.
+    // Kept so walking from one room into another can be noticed, which is what makes a template's
+    // `descriptionKey` and `triggers` reachable.
     rooms: generated.rooms.map((room) => ({
       id: room.id, template: room.template, role: room.role,
       x: room.x, y: room.y, width: room.width, height: room.height,
@@ -541,8 +513,8 @@ export function enterDungeon(
   };
   txn.set({ ...txn.state, maps: { ...txn.state.maps, [mapId]: instance } });
 
-  // The cells an embedded static room's author already filled: rolled
-  // placement must not stack on them.
+  // The cells an embedded static room's author already filled: rolled placement must not stack on
+  // them.
   const authoredTiles = [
     ...Object.keys(generated.authored.items),
     ...Object.keys(generated.authored.traps),
@@ -582,8 +554,8 @@ export function enterDungeon(
   // The creatures an embedded static room authored, exactly where drawn.
   spawnStaticContent(txn, terrain, mapId, generated.authored.spawns);
 
-  // Where the party *is* — not just which map is drawn. Everything that asks
-  // "where are we?" reads this, which is why entering must set it.
+  // Where the party is, not just which map is drawn. Everything that asks "where are we?" reads
+  // this.
   txn.set({
     ...txn.state,
     location: { kind: 'dungeon', dungeon: dungeonId, room: generated.entranceRoom },
@@ -591,9 +563,7 @@ export function enterDungeon(
   recordExit(txn, mapId, generated.entrance);
   placeParty(txn, terrain, mapId, generated.entrance);
 
-  // The traps the generator placed — these were computed on every visit and
-  // thrown away, so `content.traps` was a collection that could never fire —
-  // plus any an embedded static room authored.
+  // The traps the generator placed, plus any an embedded static room authored.
   const installed: Record<number, { trap: string; state: 'hidden' }> = {
     ...generated.authored.traps,
   };
@@ -609,8 +579,7 @@ export function enterDungeon(
     });
   }
 
-  // Loot goes on the floor where the generator put it — and where an embedded
-  // room's author drew it.
+  // Loot goes on the floor where the generator put it, and where an embedded room's author drew it.
   const floor: Record<number, ItemStack[]> = {};
   for (const [tile, stack] of Object.entries(generated.authored.items)) {
     floor[Number(tile)] = stack.map((entry) => ({ ...entry }));
@@ -666,9 +635,9 @@ export function enterArea(
   }
 
   const mapId = `area:${areaId}`;
-  // A static map is authored, identical across seeds, and knows its own entry;
-  // built here even when the instance exists because the entry tile is needed
-  // on every visit and the build is a pure function of the module.
+  // A static map is authored, identical across seeds, and knows its own entry. Built here even when
+  // the instance exists, because the entry tile is needed on every visit and the build is a pure
+  // function of the module.
   const authored = area.map?.static ? buildStaticMap(txn.module, area.map.static) : null;
 
   if (!txn.state.maps[mapId]) {
@@ -680,8 +649,8 @@ export function enterArea(
       spawnStaticContent(txn, terrain, mapId, authored.spawns);
     } else {
       const biome = txn.module.find<{ palette?: string }>('world.biomes', area.biome);
-      // The entry point goes in so the generator can guarantee the party can
-      // reach the rest of the map from where they will be standing.
+      // The entry point goes in so the generator can guarantee the rest of the map is reachable
+      // from where the party will stand.
       const built = buildMap(txn.module, area.map, rng.derive(`area:${areaId}`), biome?.palette, {
         entry: area.entryPoint ?? { x: 1, y: 1 },
       });
@@ -699,17 +668,13 @@ export function enterArea(
   placeParty(txn, terrain, mapId, arrival);
   txn.set({ ...txn.state, location: { kind: 'area', area: areaId } });
 
-  // What lives out here. An area's own `encounterTables` were declared by every
-  // module that has one and rolled by nothing, so walking into the fens found
-  // an empty marsh however many wanderers it listed.
+  // What lives out here, drawn from the area's own `encounterTables`.
   //
-  // `dangerLevel` sets the odds: a settlement at 0 is quiet by definition, and
-  // each step up makes an arrival more likely, to a ceiling short of certainty
-  // — a place you can never cross in peace is a wall, not a wilderness.
+  // `dangerLevel` sets the odds: 0 is quiet by definition, and each step up makes an arrival more
+  // likely, to a ceiling short of certainty.
   //
-  // The curve from danger to probability is the area's own expression, so a
-  // module that wants "danger 5 means near-certain ambush" can say it. The
-  // default reproduces the engine's old `min(0.75, danger * 0.15)` exactly.
+  // The curve from danger to probability is the area's own expression. The default is `min(0.75,
+  // danger * 0.15)`.
   const encounterRng = rng.derive(`area:${areaId}:encounter`);
   const chance = Number(
     evalExpr(area.encounterChance, {
@@ -728,9 +693,8 @@ export function enterArea(
     encounterRng,
   );
 
-  // What the place is like right now. A biome's `ambienceKey` was declared and
-  // narrated nowhere, so the fens read the same at dawn as at midnight — the
-  // phase goes into the context so one pool can cover the whole day.
+  // What the place is like right now, from the biome's `ambienceKey`. The time-of-day phase goes
+  // into the context so one pool can cover the whole day.
   const biome = txn.module.find<{ ambienceKey?: string }>('world.biomes', area.biome);
   if (biome?.ambienceKey) {
     const phase = phaseOf(txn.module, txn.state.minute, layerOf(txn.module, txn.state.location));
@@ -759,10 +723,8 @@ export function enterArea(
 }
 
 /**
- * Enter a point of interest.
- *
- * A gated place is refused until the gate opens, and a place that leads into a
- * dungeon hands straight over to {@link enterDungeon}.
+ * Enter a point of interest. A gated place is refused until the gate opens, and a place that leads
+ * into a dungeon hands straight over to {@link enterDungeon}.
  */
 export function enterPoi(
   txn: Transaction,
@@ -793,21 +755,11 @@ export function enterPoi(
   }
   if (poi.gate && !gateOpened) return false;
 
-  // A place that fronts a dungeon is still a place you arrived at. Handing
-  // straight off meant the `entered` event below never fired for any of them,
-  // so a `reach` objective naming a barrow mouth or a stair head could never
-  // complete — and `objective.target` is not a ref, so nothing said a word
-  // about it. The event goes first, then the descent.
+  // A place that fronts a dungeon is still a place the party arrived at, so the `entered` event
+  // fires before the descent — a `reach` objective naming a barrow mouth depends on it.
   if (poi.dungeon) {
     txn.emit({ type: 'custom', event: 'entered', data: { place: poiId, kind: 'poi' } });
-    // And its own triggers, for the same reason and before the descent. The
-    // `entered` event above was added when a `reach` on a barrow mouth turned
-    // out to be uncompletable; the triggers sat one line further down and were
-    // missed, so every trigger on all sixty-eight dungeon-fronting places in
-    // Aurendel was dead. That included the three that set `down_by_the_tarn`,
-    // `down_by_the_crater` and `down_by_karn_dolur` — the only three ways to
-    // finish `the_way_below`, and therefore the only three ways to reach the
-    // ending at all.
+    // And its own triggers, also before the descent, for the same reason.
     runTriggers(
       txn,
       triggersFor(txn, [{ collection: 'world.pointsOfInterest', id: poiId }]),
@@ -819,7 +771,7 @@ export function enterPoi(
     return enterDungeon(txn, terrain, poi.dungeon, rng);
   }
 
-  // An interior, if the place has one; otherwise the party simply stands here.
+  // An interior, if the place has one; otherwise the party stands here.
   const mapId = `poi:${poiId}`;
   if (poi.map) {
     const authored = poi.map.static ? buildStaticMap(txn.module, poi.map.static) : null;
@@ -849,42 +801,33 @@ export function enterPoi(
         });
       }
     }
-    // Every visit walks in at the door — a return trip re-enters the interior
-    // rather than standing the party on the area map outside it. A static
+    // Every visit walks in at the door, so a return trip re-enters the interior. A static
     // interior's door is its entry marker; a generated one keeps `{1,1}`.
     const door = authored?.entry ?? { x: 1, y: 1 };
     recordExit(txn, mapId, door);
     placeParty(txn, terrain, mapId, door);
   } else if (poi.position && txn.state.currentMap) {
-    // A place with no interior is still somewhere you stand. Without this the
-    // party "enters the village" from wherever they happened to be on the area
-    // map — often ten tiles away from the village and everyone in it.
+    // A place with no interior is still somewhere the party stands, so move them onto it rather
+    // than leaving them wherever they were on the area map.
     placeParty(txn, terrain, txn.state.currentMap, poi.position);
   }
 
   txn.set({ ...txn.state, location: { kind: 'poi', area: poi.area, poi: poiId } });
 
-  // Say where the party now is. A place with no interior map and no authored
-  // description used to produce no output whatsoever, so entering it was
-  // indistinguishable from the command doing nothing — and nothing watching the
-  // event stream, quests included, could tell they had arrived.
+  // Say where the party now is, so a place with no interior map and no authored description still
+  // produces output and an event quests can watch.
   txn.emit({ type: 'custom', event: 'entered', data: { place: poiId, kind: 'poi' } });
 
-  // `position` is in *area* coordinates. Inside an interior it points at
-  // nothing (often outside the map entirely), so spawns anchor to the party.
+  // `position` is in area coordinates and points at nothing inside an interior, so spawns anchor to
+  // the party.
   const anchor = poi.map ? undefined : poi.position;
 
-  // The people who live here. Declared by every module that has ever used
-  // `residents` and, until now, instantiated by nothing — so the quest-givers
-  // named in the content were not on the map to be talked to.
-  // Anyone the place lists, plus anyone who lists the place. Declaring a home
-  // was inert and unvalidated, so an NPC given one and left out of `residents`
-  // existed in the content and nowhere in the world.
+  // The people who live here, so the quest-givers named in the content are on the map to be talked
+  // to.
+  // Anyone the place lists, plus anyone who lists the place as `home`.
   spawnResidents(txn, terrain, residentsOf(txn, poiId, poi.residents ?? []), anchor);
 
-  // And whatever else is in it. A ruin that declares an encounter table and
-  // spawns nothing is a room the party walks into, finds empty, and has no way
-  // to clear — which is the shape of a quest objective that can never progress.
+  // And whatever else is in it, from the place's encounter tables.
   spawnEncounter(
     txn,
     terrain,
@@ -894,9 +837,7 @@ export function enterPoi(
     rng.derive(`encounter:${poiId}`),
   );
 
-  // Whatever the place itself is worth searching for, once. A ruin's own loot
-  // tables were declared by every module that has ever used them and rolled by
-  // nothing, so the miller's effects sat in the mill and could never be found.
+  // Whatever the place itself is worth searching, once, from its own loot tables.
   spawnPoiLoot(txn, terrain, poiId, poi.loot ?? [], anchor, rng.derive(`loot:${poiId}`));
 
   if (poi.descriptionKey) {

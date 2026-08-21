@@ -1,15 +1,9 @@
 /**
  * A world that keeps moving when nobody is looking at it.
  *
- * Perception was already good enough to track something across a marsh; what
- * it had no way to express was a creature that *goes* anywhere on its own. So
- * a dungeon was a diorama: nothing wandered, nothing laid a trail the party had
- * not laid itself, nothing ever gave up a chase, and stepping round a corner
- * ended a fight outright.
- *
- * These tests pin the four halves of the fix — territory, trails, a leash, and
- * a fight that survives a corner — and, just as importantly, pin that a module
- * which asks for none of it behaves exactly as it did before.
+ * These pin the four halves of idle behaviour — territory, trails, a leash, and a fight that
+ * survives a corner — and pin that a module which asks for none of it behaves exactly as it did
+ * before.
  */
 
 import { describe, it, expect } from 'vitest';
@@ -39,11 +33,9 @@ const ctx = { module: GREENMARCH };
 const HERO = { x: 2, y: 4 };
 
 /**
- * A long strip of ground with the party at one end.
- *
- * Creatures are placed far enough away that nothing can perceive anything —
- * greenmarch's longest reach is smell at 25 tiles — because a fight starting
- * would take these turns away from the idle path that is under test.
+ * A long strip of ground with the party at one end. Creatures are placed far enough away that
+ * nothing can perceive anything — greenmarch's longest reach is smell at 25 tiles — because a fight
+ * starting would take these turns away from the idle path under test.
  */
 function strip(
   creatures: { id: string; at: Position; statblock?: string; anchor?: Position }[] = [],
@@ -83,12 +75,9 @@ function strip(
 }
 
 /**
- * Let the clock run, which is the only thing that moves an idle world.
- *
- * In several ticks rather than one long one, because whether a creature stirs
- * at all is a single roll per tick: one thirty-minute wait is one coin flip,
- * and a test that depends on which way it lands is a test that fails for the
- * next person who changes an unrelated seed.
+ * Let the clock run, which is the only thing that moves an idle world. In several ticks rather than
+ * one long one, because whether a creature stirs is a single roll per tick, and a test that depends
+ * on which way one coin flip lands fails for the next person who changes an unrelated seed.
  */
 const wait = (state: GameState, minutes: number, module = GREENMARCH): GameState => {
   let held = state;
@@ -113,16 +102,13 @@ describe('ground of its own', () => {
     const moved = after.entities['m:0']!.position;
     expect(moved).not.toEqual({ x: 30, y: 4 });
 
-    // But only about it. A hound's roam radius is 90 feet, and eighteen tiles
-    // is as far as it has any business going.
+    // But only about it. A hound's roam radius is 90 feet, so eighteen tiles is as far as it goes.
     const roam = temperamentOf(GREENMARCH, after.entities['m:0']!).roamRadius;
     expect(distance(moved, { x: 30, y: 4 })).toBeLessThanOrEqual(roam);
   });
 
   it('lays a trail while it does, which is what makes tracking worth anything', () => {
-    // The party has not moved, so every trace on this map was left by the
-    // hound — the thing that could not happen before, and the reason a
-    // footprint was previously only ever your own.
+    // The party has not moved, so every trace on this map was left by the hound.
     const after = wait(strip([{ id: 'm:0', at: { x: 30, y: 4 } }]), 30);
 
     const left = Object.values(after.maps['strip']!.marks).flat();
@@ -132,8 +118,8 @@ describe('ground of its own', () => {
   });
 
   it('stays put when the module says it has no territory', () => {
-    // A wight keeps to its barrow; the real "never moves" case is a shopkeeper,
-    // and both come down to a wander speed or a roam radius of zero.
+    // A wight keeps to its barrow; the real "never moves" case is a shopkeeper, and both come down
+    // to a wander speed or a roam radius of zero.
     const start = strip([{ id: 'm:0', at: { x: 30, y: 4 }, statblock: 'barrow_wight' }]);
     const pinned: GameState = {
       ...start,
@@ -159,8 +145,8 @@ describe('ground of its own', () => {
       },
     };
 
-    // Twenty-six tiles out, against a roam radius of eighteen: genuinely off
-    // its own ground, and with nothing to chase it has no reason to be here.
+    // Twenty-six tiles out against a roam radius of eighteen: genuinely off its own ground, with
+    // nothing to chase.
     const after = wait(strayed, 30);
     const closed = distance(after.entities['m:0']!.position, { x: 34, y: 4 });
     expect(closed).toBeLessThan(distance({ x: 8, y: 4 }, { x: 34, y: 4 }));
@@ -200,20 +186,17 @@ describe('a leash, so a chase cannot be trained across a map', () => {
   };
 
   it('still fights what is standing next to it', () => {
-    // The leash gates the chase and nothing else. A creature that has given up
-    // on following you is not a creature that has agreed to be hit.
+    // The leash gates the chase and nothing else: a creature that has given up following is not one
+    // that has agreed to be hit.
     const state = wait(dragged(200), 0);
     expect(state.combat).not.toBeNull();
   });
 
   it('drops a lead that would take it off its ground, rather than following it', () => {
-    // A wight investigates twelve tiles from its barrow and no further. Give it
-    // something to hear twenty tiles away and it declines — and *forgets*,
-    // rather than standing there re-deciding not to go every turn for as long
-    // as it remembers.
-    // Anchored at the far end of the strip, thirty tiles from the party, which
-    // is past every sense greenmarch declares — so the only lead it has is the
-    // one planted here, and nothing re-plants it.
+    // A wight investigates twelve tiles from its barrow and no further. Given something to hear
+    // twenty tiles away it declines, and forgets rather than re-deciding every turn.
+    // Anchored at the far end of the strip, thirty tiles from the party, which is past every sense
+    // greenmarch declares — so the only lead it has is the one planted here.
     const base = strip([{ id: 'm:0', at: { x: 32, y: 4 }, statblock: 'barrow_wight' }]);
     const called: GameState = {
       ...base,
@@ -231,17 +214,16 @@ describe('a leash, so a chase cannot be trained across a map', () => {
 
     const { state: after, events } = reduce(called, { type: 'wait', minutes: 1 }, ctx);
 
-    // The noise it declined to walk to is forgotten. It may well still smell
-    // the party from here — perception is not what the leash governs — but
-    // that is a lead its own `investigates` list does not act on either.
+    // The noise it declined to walk to is forgotten. It may still smell the party from here, but
+    // that is a lead its `investigates` list does not act on.
     expect(after.entities['m:0']!.alerts).toEqual([]);
     expect(events.some((e) => e.type === 'custom' && e.event === 'lostInterest')).toBe(true);
     expect(after.entities['m:0']!.position).toEqual({ x: 32, y: 4 });
   });
 
   it('follows a lead that stays on it', () => {
-    // The same wight, the same noise, eight tiles out instead of twenty. The
-    // leash is a bound, not a brake: inside it, it still comes looking.
+    // The same wight and noise, eight tiles out instead of twenty: the leash is a bound, not a
+    // brake.
     const base = strip([{ id: 'm:0', at: { x: 32, y: 4 }, statblock: 'barrow_wight' }]);
     const called: GameState = {
       ...base,
@@ -279,8 +261,7 @@ describe('what a creature bothers to register', () => {
   });
 
   it('lets a module say which senses a creature acts on, in the order it trusts them', () => {
-    // A hound's nose comes first, and it has no idea what a footprint is —
-    // `tracks` is simply absent from the list it will act on.
+    // A hound's nose comes first, and `tracks` is absent from the list it will act on.
     const hound = temperamentOf(GREENMARCH, spawnMonster(GREENMARCH, 'm:0', 'bog_hound'));
     expect(hound.investigates).toEqual(['smell', 'hearing', 'sight']);
 
@@ -290,9 +271,9 @@ describe('what a creature bothers to register', () => {
   });
 
   it('resolves a creature override on top of the ruleset, field by field', () => {
-    // The hound states four speeds and the wight states two; whichever it
-    // leaves out has to keep the ruleset's answer rather than silently
-    // resetting to one, which is why the override schema is written longhand.
+    // The hound states four speeds and the wight two; whichever a creature leaves out keeps the
+    // ruleset's answer rather than resetting to one, which is why the override schema is written
+    // longhand.
     const wight = temperamentOf(GREENMARCH, spawnMonster(GREENMARCH, 'm:0', 'barrow_wight'));
     expect(wight.speeds.investigate).toBe(0.5);
     expect(wight.speeds.engage).toBe(GREENMARCH.source.rules.temperament.speeds.engage);
@@ -301,8 +282,8 @@ describe('what a creature bothers to register', () => {
 
 describe('a module that asks for none of it', () => {
   it('leaves minimal exactly as still as it always was', () => {
-    // `minimal` declares no senses and no temperament. It is the control: if
-    // any of this leaked into the engine as a default, this is where it shows.
+    // `minimal` declares no senses and no temperament. It is the control: if any of this leaked
+    // into the engine as a default, this is where it shows.
     const start = strip([{ id: 'm:0', at: { x: 30, y: 4 }, statblock: 'husk' }], { module: MINIMAL });
     const after = wait(start, 120, MINIMAL);
 
@@ -331,9 +312,8 @@ describe('determinism, with the world moving underneath', () => {
   };
 
   it('produces the same world twice from the same seed', () => {
-    // Wandering draws dice per creature per minute. If any of those streams
-    // were shared, or if the per-tile trace list were trimmed in an unstable
-    // order, this is the test that would catch it.
+    // Wandering draws dice per creature per minute. A shared stream, or an unstably trimmed per-
+    // tile trace list, would fail here.
     expect(statesEqual(run(), run())).toBe(true);
   });
 
@@ -366,8 +346,8 @@ describe('migration to version 10', () => {
     const result = load(legacy, GREENMARCH);
     if (!result.ok) throw new Error(result.error);
 
-    // It adopts where it stands: a null anchor would leave every creature in
-    // every old save permanently unable to wander, which is the worse lie.
+    // It adopts where it stands: a null anchor would leave every creature in every old save
+    // permanently unable to wander.
     expect(result.state.entities['m:0']!.anchor).toEqual({ x: 30, y: 4 });
     expect(result.state.entities[fresh.party[0]!]!.anchor).toBeNull();
     expect(result.state.saveVersion).toBe(SAVE_VERSION);

@@ -1,23 +1,21 @@
 """Aurendel — the conventions its places are built on.
 
-`dmkit.places` shapes an area or a point of interest; this file decides what
-the shapes are for Aurendel. Four tables and the shorthands that use them:
-how big each kind of settlement's map is, which interior palette a trade gets,
-what an interior measures, and which pool a place falls back on when it has not
-earned prose of its own.
+`dmkit.places` shapes an area or a point of interest; this file decides what the shapes are for
+Aurendel. Four tables and the shorthands that use them: how big each kind of settlement's map is,
+which interior palette a trade gets, what an interior measures, and which pool a place falls back on
+when it has not earned prose of its own.
 
-The region files import from here rather than from `dmkit.places`, so they go
-on reading like a gazetteer.
+The region files import from here rather than from `dmkit.places`, so they read as a gazetteer.
 """
 from dmkit import places as _kit
 from dmkit.places import gate, shared, toll  # noqa: F401  re-exported
 
-# The pools `KIND_POOL` and the shorthands name. Imported for the side effect:
-# the file that names a pool is the file that has to make sure it exists.
+# The pools `KIND_POOL` and the shorthands name. Imported for the side effect: the file that names a
+# pool has to make sure it exists.
 import prose  # noqa: F401
 
-# Map sizes by the role a place plays. Wilderness is the biggest because it is
-# the only one you cross rather than arrive in.
+# Map sizes by the role a place plays. Wilderness is the biggest because it is the only one you
+# cross rather than arrive in.
 SIZES = {
     "wild":     ("51", "35"),
     "frontier": ("45", "31"),
@@ -41,17 +39,16 @@ TRADE_PALETTE = {
     "cave": "int_cave",
 }
 
-# Interior footprints. A generated interior is a walled rectangle, so these are
-# outside dimensions: subtract two in each direction for floor.
+# Interior footprints. A generated interior is a walled rectangle, so these are outside dimensions:
+# subtract two in each direction for floor.
 ROOM_SIZES = {
     "small": ("9", "7"), "medium": ("11", "9"),
     "large": ("15", "11"), "hall": ("19", "13"),
 }
 
-# Where an ordinary place gets its prose from when it has not earned its own.
-# Four hundred points of interest cannot each have a hand-written pool, and
-# most of them should not: a house in Ashcott and a house in Slagfoot want the
-# same three sentences, and the *named* places want all the attention.
+# Where an ordinary place gets its prose from when it has not earned its own. Four hundred points of
+# interest cannot each have a hand-written pool, and most should not: a house in Ashcott and a house
+# in Slagfoot want the same three sentences.
 KIND_POOL = {
     "settlement": "generic_settlement", "market": "generic_market",
     "shrine": "generic_shrine", "ruin": "generic_ruin",
@@ -71,10 +68,9 @@ def poi(pid, name, in_area, kind, description, *, trade=None, size="medium",
         desc_key=None, unique=False, interior=True, **kw):
     """`dmkit.places.poi`, resolving trade and size against Aurendel's tables.
 
-    `trade` picks the interior palette and, with `size`, the footprint. Pass
-    `interior=False` for something you stand *at* rather than *in*. Prose comes
-    from `desc_key` if given, from a pool of the place's own name if `unique`,
-    and otherwise from the shared pool for its `kind`.
+    `trade` picks the interior palette and, with `size`, the footprint. Pass `interior=False` for
+    something you stand at rather than in. Prose comes from `desc_key` if given, from a pool of the
+    place's own name if `unique`, and otherwise from the shared pool for its `kind`.
     """
     return _kit.poi(
         pid, name, in_area, kind, description,
@@ -85,9 +81,8 @@ def poi(pid, name, in_area, kind, description, *, trade=None, size="medium",
 
 
 # --- settlement shorthands --------------------------------------------------
-# A town has an inn, a smithy, a store, a temple and some houses wherever it
-# is; only the names and the reasons change. These keep the region files to the
-# part that is actually different.
+# A town has an inn, a smithy, a store, a temple and some houses wherever it is; only the names and
+# the reasons change. These keep the region files to the part that is different.
 
 def house(pid, name, in_area, description, at=None, tags=()):
     return poi(pid, name, in_area, "settlement", description, at=at, minutes=2,

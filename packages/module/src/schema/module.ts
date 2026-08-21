@@ -1,10 +1,9 @@
 /**
  * The module document: an entire game as one JSON file.
  *
- * This is the unit that gets authored, validated, shared, and played. A save
- * records the module id, version, and content hash it was created against, so
- * loading a save into a module that has since changed fails loudly instead of
- * corrupting a character.
+ * This is the unit that gets authored, validated, shared and played. A save records the module id,
+ * version and content hash it was created against, so loading a save into a module that has since
+ * changed fails loudly.
  */
 
 import { z } from 'zod';
@@ -63,11 +62,7 @@ export const startSchema = z
     startingDungeon: ref('world.dungeons').optional(),
     /** Text-grammar pool for the opening scene. */
     openingTextKey: ref('narrative.textGrammar').optional(),
-    /**
-     * How the rest of the party keeps up with whoever is leading.
-     *
-     * Party cohesion, previously two invented numbers in `moveFollowers`.
-     */
+    /** How the rest of the party keeps up with whoever is leading. */
     partyFollow: z
       .object({
         /** Beyond this many tiles, a follower hurries. */
@@ -83,17 +78,13 @@ export const startSchema = z
     victoryWhen: PredicateSchema.optional(),
     defeatWhen: PredicateSchema.optional(),
     /**
-     * What finishing an `isEnding` arc does.
+     * What finishing an `isEnding` arc does. `end` stops the run; `continue` records the win,
+     * narrates it, and leaves the world live so a module can put content on the far side of its own
+     * ending.
      *
-     * `end` stops the run, which is what winning has always meant. `continue`
-     * records the win and narrates it and then leaves the world live, so a
-     * module can put content on the far side of its own ending.
-     *
-     * ⚠️ `.optional()`, and it must stay that way, for the same reason `mods`
-     * is — `compileModule` hashes `parsed.data`, so a `.default('end')` here
-     * would insert the key into every document zod has ever parsed, change the
-     * content hash of every module, and make `load()` refuse every existing
-     * save. Optional means only a module that opts in moves.
+     * `.optional()`, and it must stay that way: `compileModule` hashes `parsed.data`, so a
+     * `.default('end')` would insert the key into every document zod has ever parsed, change every
+     * module's content hash, and make `load()` refuse every existing save.
      */
     postVictory: z.enum(['end', 'continue']).optional(),
   })
@@ -102,12 +93,10 @@ export const startSchema = z
 /**
  * A mod this game expects, pinned to the exact build it was authored against.
  *
- * `id` and `hash` are separate fields rather than one `"thorns-3f2a…"` string,
- * and that is load-bearing: `mergeModules` merges by `id`, so a combined string
- * would make a base pinning one version and a patch pinning another look like
- * two different mods, and **both** would survive the merge. Split, the existing
- * merge does the right thing and `$delete` works — a pack drops an inherited
- * mod with `{ "id": "thorns", "$delete": true }`.
+ * `id` and `hash` are separate fields rather than one `"thorns-3f2a…"` string because
+ * `mergeModules` merges by `id`: a combined string would make a base pinning one version and a
+ * patch pinning another look like two different mods, and both would survive the merge. Split,
+ * `$delete` also works — a pack drops an inherited mod with `{ "id": "thorns", "$delete": true }`.
  */
 export const moduleModSchema = z
   .object({
@@ -133,9 +122,8 @@ export const gameModuleSchema = z
     /** Engine range this module expects, e.g. `^1.0.0`. */
     engine: z.string().default('^1.0.0'),
     /**
-     * Base module to layer on, as `id@version`. The named module is loaded
-     * first and this document is merged over it, so a pack can ship twelve
-     * monsters instead of forking an entire game.
+     * Base module to layer on, as `id@version`. The named module is loaded first and this document
+     * is merged over it, so a pack can ship twelve monsters instead of forking an entire game.
      */
     extends: z
       .string()
@@ -145,16 +133,13 @@ export const gameModuleSchema = z
     /**
      * Mods this game expects.
      *
-     * ⚠️ `.optional()`, and it must stay that way. `compileModule` hashes
-     * `parsed.data`, so a `.default([])` here would insert `mods: []` into
-     * every document zod has ever parsed, changing the hash of every module —
-     * and `load()` in the engine refuses a save whose recorded module hash no
-     * longer matches. Every existing save would stop loading. `compile.test.ts`
-     * pins the shipped modules' hashes to catch exactly that.
+     * `.optional()`, and it must stay that way: `compileModule` hashes `parsed.data`, so a
+     * `.default([])` would insert `mods: []` into every document zod has ever parsed and change
+     * every module's hash, and `load()` refuses a save whose recorded hash no longer matches.
+     * `compile.test.ts` pins the shipped modules' hashes to catch that.
      *
-     * The section does participate in the hash once an author adds it, which is
-     * the point: changing a required mod pin has to surface as drift on an old
-     * save rather than pass silently.
+     * The section does participate in the hash once an author adds it, so changing a required mod
+     * pin surfaces as drift on an old save rather than passing silently.
      */
     mods: z.array(moduleModSchema).optional(),
     meta: moduleMetaSchema,
@@ -221,9 +206,9 @@ export const COLLECTION_PATHS = [
   'narrative.lore',
   'narrative.loreThreads',
   'narrative.deedKinds',
-  // `narrative.memory` is deliberately absent: it is a settings block edited as
-  // one section, not a collection of independently addressable entries. Its
-  // `rules` list is nested inside it.
+  // `narrative.memory` is deliberately absent: it is a settings block edited as one section rather
+  // than a collection of independently addressable entries, and its `rules` list is nested inside
+  // it.
 ] as const;
 
 export type CollectionPath = (typeof COLLECTION_PATHS)[number];

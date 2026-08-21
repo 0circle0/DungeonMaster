@@ -1,21 +1,18 @@
 /**
  * Deriving a character's numbers from the module's formulas.
  *
- * Nothing here knows what an attribute *means*. It reads `rules.attributes`,
- * evaluates each one's `modifier` expression, then feeds the results to the
- * resource and derived-stat formulas.
+ * Nothing here knows what an attribute means. It reads `rules.attributes`, evaluates each one's
+ * `modifier` expression, then feeds the results to the resource and derived-stat formulas.
  *
- * **Evaluation order is a contract**, because the formulas reference each
- * other:
+ * Evaluation order is a contract, because the formulas reference each other:
  *
  *   1. `attributes` — stored on the entity, depends on nothing
  *   2. `mod`        — from each attribute's `modifier`, sees only `value`
  *   3. `max`        — resource maxima, may see `attr`, `mod`, `level`
  *   4. `derived`    — may additionally see `res` and `max`
  *
- * A resource maximum therefore cannot depend on a derived stat. That is a
- * deliberate restriction: allowing both directions would let a module express
- * a cycle (Guard from HP from Guard) that could only be caught at runtime.
+ * A resource maximum therefore cannot depend on a derived stat, so a module cannot express a cycle
+ * that could only be caught at runtime.
  */
 
 import { Rng } from '@dm/core';
@@ -50,13 +47,10 @@ interface FactionRankDef {
 /**
  * The thresholds a requirement compares against: mastery tiers and faction ranks.
  *
- * `compileRequirement` lowers "requires journeyman smithing" to a comparison
- * against `tiers.journeyman`, and "requires the Wardens to trust you" to one
- * against `ranks.wardens.trusted`. Neither namespace was ever supplied, and
- * because both sat in {@link OPEN_NAMESPACES} the miss resolved to `null`
- * rather than erroring — which then threw inside the comparison, from a call
- * site most callers do not guard. Both are pure functions of the module, so
- * they are built once and cached on the module object.
+ * `compileRequirement` lowers "requires journeyman smithing" to a comparison against
+ * `tiers.journeyman`, and "requires the Wardens to trust you" to one against
+ * `ranks.wardens.trusted`. Both are pure functions of the module, so they are built once and cached
+ * on the module object.
  */
 const thresholdCache = new WeakMap<CompiledModule, { tiers: Scope; ranks: Scope }>();
 
@@ -168,13 +162,8 @@ export function maximaOf(
 }
 
 /**
- * Step 3, the other end: resource minima.
- *
- * Zero is the obvious floor and was hardcoded as one, which quietly denied a
- * module any resource that bottoms out somewhere else — a corruption track that
- * cannot fall below its starting taint, a morale scale that runs negative. It
- * sees exactly what `max` sees, for the same reason: a minimum that depended on
- * a derived stat could express a cycle.
+ * Step 3, the other end: resource minima. Sees exactly what `max` sees, for the same reason — a
+ * minimum that depended on a derived stat could express a cycle.
  */
 export function minimaOf(
   module: CompiledModule,
@@ -189,12 +178,7 @@ export function minimaOf(
   return out;
 }
 
-/**
- * What a resource starts at.
- *
- * Defaults to full, which is what `initial` being optional means. A module that
- * wants a character to begin bloodied, or a spell pool to begin empty, says so.
- */
+/** What a resource starts at. Defaults to full, which is what `initial` being optional means. */
 export function initialOf(
   module: CompiledModule,
   entity: Entity,
@@ -215,10 +199,8 @@ export function initialOf(
 }
 
 /**
- * Additive modifiers contributed by equipped items and active conditions.
- *
- * Computing these each time is why derived stats are not stored: equipping a
- * shield or catching fire changes them, and a cached copy would go stale.
+ * Additive modifiers contributed by equipped items and active conditions. Computed each time rather
+ * than stored, because equipping a shield or catching fire changes them.
  */
 function externalModifiers(
   module: CompiledModule,
@@ -238,9 +220,7 @@ function externalModifiers(
       for (const [statId, expr] of Object.entries(item.modifiers)) {
         add(statId, evaluate(expr, scope, `modifier from item ${itemId}`));
       }
-      // And whatever its declared properties are worth. `properties` named
-      // nothing before, so a "finesse" or "two-handed" weapon differed from a
-      // plain one only in the word.
+      // And whatever its declared `properties` are worth.
       for (const propertyId of item.properties ?? []) {
         const property = module.find<ItemDef>('rules.itemProperties', propertyId);
         for (const [statId, expr] of Object.entries(property?.modifiers ?? {})) {
@@ -259,9 +239,8 @@ function externalModifiers(
     }
   }
 
-  // What those conditions imply counts too, at magnitude 1: an implied
-  // condition was never applied, so there is no magnitude to inherit and
-  // nothing sensible to inherit it from.
+  // What those conditions imply counts too, at magnitude 1: an implied condition was never applied,
+  // so there is no magnitude to inherit.
   for (const id of impliedConditions(module, entity)) {
     const condition = module.find<ConditionDef>('rules.conditions', id);
     if (!condition) continue;
@@ -313,29 +292,22 @@ export function statsOf(module: CompiledModule, entity: Entity): EntityStats {
 /**
  * Namespaces where a missing key means "not yet" rather than "typo".
  *
- * Flags, quests, and memory are written during play and are legitimately empty
- * at the start — content asking about a flag nobody has set is normal. Anything
- * structural (`actor.attr`, `actor.derived`) stays strict, so a misspelling
- * there is still an error rather than a silent zero.
+ * Flags, quests and memory are written during play and are legitimately empty at the start.
+ * Anything structural (`actor.attr`, `actor.derived`) stays strict, so a misspelling there is an
+ * error rather than a silent zero.
  *
- * `tiers` and `ranks` used to be listed here. They are derived from the module
- * rather than written during play, so a missing key is a misspelled tier rather
- * than a "not yet" — and being open is what let the miss resolve to `null` and
- * then throw inside the comparison it was feeding.
+ * `tiers` and `ranks` are not open: they are derived from the module rather than written during
+ * play, so a missing key is a misspelled tier.
  *
- * `lore` is open and `threads` is not, which looks inconsistent and is not: a
- * lore id is absent from state until the party learns it, exactly as a flag is,
- * while a thread is declared by the module and `threadScope` populates every
- * one of them.
+ * `lore` is open and `threads` is not: a lore id is absent from state until the party learns it,
+ * exactly as a flag is, while a thread is declared by the module and `threadScope` populates every
+ * one.
  */
 export const OPEN_NAMESPACES = ['flags', 'quests', 'memory', 'reputation', 'lore'] as const;
 
 /**
- * The module's proficiency-style bonus for a character, if it declares one.
- *
- * A single formula over `actor.level` — the "+2 rising to +6" shape — which the
- * schema has always accepted and nothing evaluated, so a module that wrote one
- * got a flat zero everywhere it was referenced.
+ * The module's proficiency-style bonus for a character, if it declares one: a single formula over
+ * `actor.level`.
  */
 export function proficiencyOf(module: CompiledModule, entity: Entity): number {
   const formula = module.source.rules.progression.proficiency;
@@ -348,13 +320,11 @@ export function proficiencyOf(module: CompiledModule, entity: Entity): number {
 /**
  * A character's effective rank in a skill: what they trained, plus what they wear.
  *
- * `entity.skills` is written at character creation and at monster spawn and
- * never again — the engine has no op that raises a skill — so equipment is the
- * only way a rank ever moves during play. It is summed here rather than at the
- * two call sites so a check and a `minRank` gate can never disagree about what
- * someone is capable of.
+ * `entity.skills` is written at character creation and at monster spawn and never again, so
+ * equipment is the only way a rank moves during play. Summed here rather than at the two call
+ * sites, so a check and a `minRank` gate cannot disagree.
  *
- * Only equipped items count. A lens in the pack is not a lens at the eye.
+ * Only equipped items count.
  */
 export function skillRankOf(module: CompiledModule, entity: Entity, skillId: string): number {
   let rank = entity.skills[skillId] ?? 0;
@@ -387,11 +357,9 @@ export function carriedWeight(module: CompiledModule, entity: Entity): number {
 }
 
 /**
- * The world half of the scope: the clock, and what the module makes of it.
- *
- * Phase, month and year are derived on every read rather than stored, so
- * content can write `{"eq": [{"ref": "world.phase"}, "night"]}` in a trigger's
- * condition or a text variant's gate without anything having to tick.
+ * The world half of the scope: the clock, and what the module makes of it. Phase, month and year
+ * are derived on every read rather than stored, so content can gate on `world.phase` without
+ * anything having to tick.
  */
 function worldScope(module: CompiledModule, state: GameState): Scope {
   const date = dateOf(module, state.minute);
@@ -424,20 +392,14 @@ export function evalContext(scope: Scope, rng: DslRng): { scope: Scope; rng: Dsl
 }
 
 /**
- * The scope handed to the DSL during play.
- *
- * Every readable value the content can reference lives here, which is why the
- * DSL needs no game-specific primitives: `flags.met_vess` and
- * `actor.res.vitality` are ordinary paths.
+ * The scope handed to the DSL during play. Every readable value content can reference lives here,
+ * which is why the DSL needs no game-specific primitives: `flags.met_vess` and `actor.res.vitality`
+ * are ordinary paths.
  */
 /**
- * The other side of a roll, as a predicate can read it.
- *
- * Deliberately narrower than `buildScope`: what an attacker or a reacting
- * creature is entitled to know about the one in front of them, and nothing
- * about the world. Implied conditions are included, because a creature that is
- * unconscious *is* prone and content asking whether it is prone should be told
- * the truth.
+ * The other side of a roll, as a predicate can read it. Narrower than `buildScope`: what an
+ * attacker or a reacting creature may know about the one in front of them, and nothing about the
+ * world. Implied conditions are included.
  */
 export function targetScope(module: CompiledModule, target: Entity): Record<string, never> {
   const stats = statsOf(module, target);
@@ -478,8 +440,8 @@ export function buildScope(
     inventory[stack.item] = (inventory[stack.item] as number | undefined ?? 0) + stack.quantity;
   }
 
-  // Equipped items are counted separately, so a requirement can insist a blade
-  // is drawn rather than merely carried.
+  // Equipped items are counted separately, so a requirement can insist a blade is drawn rather than
+  // merely carried.
   const equippedItems: Record<string, Value> = {};
   for (const slot of Object.values(actor.equipped)) {
     for (const item of slot) {
@@ -511,22 +473,19 @@ export function buildScope(
       inventory,
       equippedItems,
       abilities: [...actor.abilities],
-      // Trained rank plus equipment, so `requirement.skills[].minRank` and the
-      // mastery tiers see the same number the dice do.
+      // Trained rank plus equipment, so `requirement.skills[].minRank` and the mastery tiers see
+      // the same number the dice do.
       skills: skillRanksOf(module, actor) as Record<string, Value>,
       ancestry: actor.ancestry,
       class: actor.characterClass,
-      // The proficiency-style bonus a module may declare, and the attribute its
-      // class keys off. `primaryMod` is what lets one authored `strike` serve a
-      // might class and an agility class without duplicating the ability.
+      // The proficiency-style bonus a module may declare, and the attribute its class keys off.
+      // `primaryMod` lets one authored `strike` serve a might class and an agility class.
       proficiency: proficiencyOf(module, actor),
-      // Total weight carried. The engine deliberately owns no encumbrance rule:
-      // a module builds one out of a derived stat and a condition, which is the
-      // "nothing is hardcoded" answer and what makes `item.weight` mean anything.
+      // Total weight carried. The engine owns no encumbrance rule; a module builds one out of a
+      // derived stat and a condition.
       carried: carriedWeight(module, actor),
-      // What the creature *is*, for content that gates on it: "only affects
-      // undead", "only if you speak Dwarvish". Empty rather than absent, so a
-      // module that declares none of this vocabulary still resolves the paths.
+      // What the creature is, for content that gates on it. Empty rather than absent, so a module
+      // that declares none of this vocabulary still resolves the paths.
       creatureType: (actor.extra['creatureType'] as Value) ?? null,
       alignment: (actor.extra['alignment'] as Value) ?? null,
       size: (actor.extra['size'] as Value) ?? null,
@@ -536,17 +495,15 @@ export function buildScope(
     },
     quests,
     flags: state.flags,
-    // What is remembered, so `requirement.memories` works at every gate rather
-    // than only inside a conversation. Built lazily — see sim/memoryscope.ts.
+    // What is remembered, so `requirement.memories` works at every gate rather than only inside a
+    // conversation. Built lazily; see sim/memoryscope.ts.
     memory: memoryScope(module, state, actor),
     reputation: state.reputation,
     purse: state.purse,
     ...thresholdsOf(module),
     arcs: arcScope(module, state),
-    // What the party has found out, and how far along each thread it is. `lore`
-    // is open (a bare id, absent until learned) and `threads` is closed, for
-    // the reason `arcs` is closed: a thread is declared, so a misspelling is a
-    // typo rather than a "not yet".
+    // What the party has found out, and how far along each thread it is. `lore` is open (a bare id,
+    // absent until learned) and `threads` is closed, since a thread is declared.
     lore: state.lore,
     threads: threadScope(module, state),
     world: worldScope(module, state),

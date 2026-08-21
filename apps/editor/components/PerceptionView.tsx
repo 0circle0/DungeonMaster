@@ -1,17 +1,6 @@
 /**
- * What each sense actually reaches.
- *
- * Ranges, falloffs and thresholds are abstract numbers until you can see the
- * shape of them. Sketch a bit of map, put something on it, and watch how far
- * sight, sound and scent each carry — and where they stop.
- *
- * The point is the difference between them: sight dies at the first wall, sound
- * goes through the doorway, and smell fills the room next door. Reading three
- * thresholds off a form will not tell you that; a heat map will.
- *
- * It runs the **engine's own** propagation, so what is drawn here is what
- * happens in play. A preview that reimplemented the rules would quietly drift
- * and be worse than none.
+ * Show how far each sense reaches across a simple test layout.
+ * The preview uses the engine's own propagation rules.
  */
 
 'use client';
@@ -29,13 +18,7 @@ function list(doc: ModuleDoc, path: string): Row[] {
   return Array.isArray(value) ? (value as Row[]) : [];
 }
 
-/**
- * A room, a wall with a doorway in it, and a corridor.
- *
- * Chosen because it is the arrangement that tells the three senses apart: a
- * creature on the far side is invisible, audible through the gap, and smelled
- * around the corner.
- */
+/** Simple map layout used to distinguish sight, sound, and scent propagation. */
 const SKETCH_WIDTH = 25;
 const SKETCH_HEIGHT = 13;
 const WALL_COLUMN = 12;
@@ -54,7 +37,7 @@ function buildLayout(floor: string, wall: string, gap: boolean): string[][] {
   return rows;
 }
 
-/** Faint to strong, so a threshold boundary is visible as a colour step. */
+/** Map signal strength to a color ramp so threshold bands remain visible. */
 function shade(strength: number): string {
   if (strength <= 0) return 'transparent';
   const alpha = 0.12 + Math.min(1, strength) * 0.68;
@@ -72,8 +55,7 @@ export function PerceptionView({ doc }: { doc: ModuleDoc }) {
   const [statblock, setStatblock] = useState('');
   const [doorway, setDoorway] = useState(true);
 
-  // The first passable terrain to stand on, and the first solid one to hide
-  // behind — whatever this module happens to call them.
+  // Pick the first passable terrain and the first solid terrain from the module.
   const floor = terrains.find((t) => t['passable'] !== false)?.['id'];
   const wall = terrains.find((t) => t['passable'] === false)?.['id'];
 
@@ -90,7 +72,7 @@ export function PerceptionView({ doc }: { doc: ModuleDoc }) {
         ...(stance ? { stance } : {}),
       });
     } catch {
-      // A module mid-edit is routinely invalid; showing nothing beats throwing.
+      // Ignore preview errors while the module is still being edited.
       return null;
     }
   }, [doc, floor, wall, doorway, statblock, stance]);
@@ -203,8 +185,7 @@ export function PerceptionView({ doc }: { doc: ModuleDoc }) {
               const solid = cell.terrain === String(wall);
               const isSource = cell.x === preview.source.x && cell.y === preview.source.y;
 
-              // Which band it falls in, so a threshold is legible as an edge
-              // rather than as a smooth gradient.
+              // Show threshold bands as discrete labels instead of a smooth gradient.
               const band = shown && strength > shown.aggro
                 ? '⚔'
                 : shown && strength > shown.investigate

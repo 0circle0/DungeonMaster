@@ -1,13 +1,12 @@
 /**
  * The DSL evaluator.
  *
- * Every system in the game routes its logic through these three entry points:
- * {@link evalExpr}, {@link evalPredicate}, and {@link evalEffects}. Evaluation
- * is pure — effects produce intents rather than mutating state — and every
+ * Every system routes its logic through {@link evalExpr}, {@link evalPredicate} and {@link
+ * evalEffects}. Evaluation is pure — effects produce intents rather than mutating state — and every
  * source of chance comes from the injected RNG, so a replay reproduces exactly.
  *
- * Errors carry a path trace (`then[1].damage.amount`) because these messages
- * are read by content authors in the editor, not by engine developers.
+ * Errors carry a path trace (`then[1].damage.amount`), because these messages are read by content
+ * authors in the editor.
  */
 
 import { parseDice, rollDice } from '@dm/core';
@@ -28,14 +27,12 @@ export interface EvalContext {
   /**
    * Namespaces where a missing path means "not yet", not "typo".
    *
-   * `ref` throws on an unknown path by default, because a silent zero is the
-   * worst failure mode for a data-driven game — an ability quietly stops
-   * working and nothing says why. But some namespaces are *open*: a flag that
-   * has never been set, a quest never started, a deed nobody remembers. For
-   * those, absence is ordinary and reads as null.
+   * `ref` throws on an unknown path by default, because a silent zero is the worst failure mode for
+   * a data-driven game. But some namespaces are open — a flag never set, a quest never started, a
+   * deed nobody remembers — and there absence is ordinary and reads as null.
    *
-   * Structural paths — `actor.attr.might`, `actor.derived.guard` — stay strict,
-   * because there a missing key really is a mistake.
+   * Structural paths like `actor.attr.might` stay strict, because there a missing key really is a
+   * mistake.
    */
   readonly openNamespaces?: readonly string[];
 }
@@ -51,9 +48,8 @@ export class DslError extends Error {
 }
 
 /**
- * Dice expressions are parsed once and reused; content re-rolls the same
- * strings constantly. Capped because `roll` accepts a computed notation, which
- * could otherwise grow the cache without bound.
+ * Dice expressions are parsed once and reused; content re-rolls the same strings constantly. Capped
+ * because `roll` accepts a computed notation, which could otherwise grow the cache without bound.
  */
 const diceCache = new Map<string, ReturnType<typeof parseDice>>();
 const DICE_CACHE_LIMIT = 1024;
@@ -90,12 +86,9 @@ export const EFFECT_OPS = new Set([
 ]);
 
 /**
- * Identify a node's operator.
- *
- * Deliberately matched against the known operator set rather than taking the
- * first key: some forms carry sibling keys (`{ref, else}`, `{cond, then, else}`)
- * and JSON key order is not something a shared module file can be trusted to
- * preserve. Ambiguity is an error rather than a silent pick.
+ * Identify a node's operator. Matched against the known operator set rather than taking the first
+ * key: some forms carry sibling keys (`{ref, else}`, `{cond, then, else}`) and JSON key order
+ * cannot be trusted. Ambiguity is an error rather than a silent pick.
  */
 function operatorOf(node: object, path: string, known: ReadonlySet<string>): string {
   const keys = Object.keys(node);
@@ -133,8 +126,8 @@ function expectString(v: Value, path: string, what: string): string {
 }
 
 /**
- * Walk a dotted path through scope. Returns `undefined` for a missing path so
- * callers can distinguish "absent" from a stored `null`.
+ * Walk a dotted path through scope. Returns `undefined` for a missing path so callers can
+ * distinguish absent from a stored `null`.
  */
 function lookup(scope: Scope, path: string): Value | undefined {
   if (path === '') return undefined;
@@ -346,8 +339,8 @@ export function evalPredicate(pred: Predicate, ctx: EvalContext, path = ''): boo
   const at = (child: string) => (path ? `${path}.${child}` : child);
 
   switch (op) {
-    // `all` on an empty list is true and `any` is false, matching the usual
-    // identities. That means an absent condition list permits by default.
+    // `all` on an empty list is true and `any` is false, so an absent condition list permits by
+    // default.
     case 'all':
       return asPredicates(node['all'], at('all')).every((p, i) =>
         evalPredicate(p, ctx, `${at('all')}[${i}]`),
@@ -378,8 +371,8 @@ export function evalPredicate(pred: Predicate, ctx: EvalContext, path = ''): boo
       const [a, b] = asPair(node[op], at(op));
       const left = evalExpr(a, ctx, `${at(op)}[0]`);
       const right = evalExpr(b, ctx, `${at(op)}[1]`);
-      // Strings compare lexicographically; anything else must be numeric, so
-      // comparing an object silently yielding false never happens.
+      // Strings compare lexicographically; anything else must be numeric, so comparing an object
+      // cannot silently yield false.
       if (typeof left === 'string' && typeof right === 'string') {
         return compare(op, left < right ? -1 : left > right ? 1 : 0);
       }
@@ -636,14 +629,13 @@ function evalEffect(effect: Effect, ctx: EvalContext, path: string, out: EffectO
       return;
 
     case 'noise': {
-      // Anything can make a sound: a shattering jar, a sprung trap, a shout.
-      // Which sense carries it is the module's business, not the engine's.
+      // Anything can make a sound. Which sense carries it is the module's business.
       out.push({
         op: 'noise',
         sense: str('sense'),
         loudness: num('loudness', 1) ?? 1,
-        // Through `str`, so a module that hands this an object is told where
-        // and why rather than quietly making a noise nobody made.
+        // Through `str`, so a module that hands this an object is told where and why rather than
+        // quietly making a noise nobody made.
         source: spec['source'] === undefined ? null : str('source'),
       });
       return;

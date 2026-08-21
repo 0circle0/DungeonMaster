@@ -1,14 +1,9 @@
 /**
  * Which way the dice lean.
  *
- * `check` has always known how to roll `2d20kh1`, the roll event has always
- * carried a `swing`, and system text has always had a fragment to narrate one.
- * Nothing ever passed one. This is the first half of closing that: the rule
- * for reconciling several swings into one, owned by `check` so that no caller
- * can forget to apply it.
- *
- * Nothing declares a swing yet, so the second half of the point is that none
- * of this changes a single roll.
+ * `check` has always known how to roll `2d20kh1`, the roll event has always carried a `swing`, and
+ * system text has always had a fragment to narrate one. This covers the rule for reconciling
+ * several swings into one, owned by `check` so no caller can forget to apply it.
  */
 
 import { describe, it, expect } from 'vitest';
@@ -103,8 +98,8 @@ describe('a resolved swing reaches the dice', () => {
     expect(rolled(null)).toBe('1d20');
   });
 
-  // The cancellation has to happen before the notation is chosen, or a
-  // cancelled pair would still consume two dice and shift every later roll.
+  // The cancellation has to happen before the notation is chosen, or a cancelled pair would still
+  // consume two dice and shift every later roll.
   it('rolls one die when a pair cancels', () => {
     expect(rolled(['advantage', 'disadvantage'])).toBe('1d20');
   });
@@ -119,11 +114,9 @@ describe('a resolved swing reaches the dice', () => {
 });
 
 /**
- * The first thing that can actually declare one.
- *
- * Two schema fields and two engine lines, chosen before anything harder
- * because they exercise the entire pipe: schema, compile, engine, the notation
- * that gets rolled, and the `swing` that comes back out on the event.
+ * The first thing that can declare one. Two schema fields and two engine lines, which exercise the
+ * entire pipe: schema, compile, engine, the notation that gets rolled, and the `swing` that comes
+ * back on the event.
  */
 describe('an ability that always leans', () => {
   /** Greenmarch with `barrow_bolt` made surer, or wilder, than it was. */
@@ -152,8 +145,7 @@ describe('an ability that always leans', () => {
   it('rolls the module\'s own notation for it', () => {
     expect(cast(bolt('advantage')).notation).toBe('2d20kh1');
     expect(cast(bolt('disadvantage')).notation).toBe('2d20kl1');
-    // Untouched, the same ability rolls one die -- so this is the field
-    // talking and not the fixture.
+    // Untouched, the same ability rolls one die, so this is the field talking and not the fixture.
     expect(cast(GREENMARCH).notation).toBe('1d20');
   });
 
@@ -169,11 +161,8 @@ describe('an ability that always leans', () => {
 });
 
 /**
- * The prize: circumstance, not just the ability.
- *
- * This is what the mechanic was missing and why every shipped condition is a
- * flat penalty to a defence instead. A condition can now say which way it
- * leans each of the four kinds of roll it can reach.
+ * Circumstance, not just the ability. A condition can say which way it leans each of the four kinds
+ * of roll it can reach.
  */
 describe('a condition that leans the dice', () => {
   /** Greenmarch with one extra condition, declared however the test needs. */
@@ -224,8 +213,8 @@ describe('a condition that leans the dice', () => {
     expect(notation(withCondition({ attacksAgainstSelf: 'advantage' }), 'e:1')).toBe('1d20');
   });
 
-  // Both sides are asked, and the module's own policy settles it. This is the
-  // case that would need saying twice if `check` did not own the rule.
+  // Both sides are asked, and the module's own policy settles it — the case that would need saying
+  // twice if `check` did not own the rule.
   it('cancels an attacker\'s edge against a target\'s', () => {
     const module = withCondition({ ownAttacks: 'advantage', attacksAgainstSelf: 'advantage' });
     const both = afflicted(afflicted(caster(module), 'e:1', ['tilted']), 'e:99', ['tilted']);
@@ -259,11 +248,8 @@ describe('a condition that leans the dice', () => {
 });
 
 /**
- * The whole safety argument for this slice.
- *
- * `2d20kh1` draws twice where `1d20` draws once, and a reduce threads one
- * generator, so a swing shifts every later roll in the same action. That is
- * fine as long as nothing declares one yet -- and nothing does.
+ * `2d20kh1` draws twice where `1d20` draws once, and a reduce threads one generator, so a swing
+ * shifts every later roll in the same action.
  */
 describe('nothing declared, nothing changed', () => {
   it('replays a run of actions identically', () => {

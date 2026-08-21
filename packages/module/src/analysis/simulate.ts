@@ -1,11 +1,9 @@
 /**
  * Memory timeline preview.
  *
- * Loot and encounter previews used to live here too. They now call the engine's
- * own `rollLoot` and `rollEncounter`, because a preview with a second copy of
- * the odds drifts from actual play — and a Balance view that lies is worse than
- * none. What remains is the memory timeline, which models the declared gossip
- * parameters rather than duplicating engine logic.
+ * Loot and encounter previews call the engine's own `rollLoot` and `rollEncounter`, because a
+ * preview with a second copy of the odds drifts from actual play. What remains here is the memory
+ * timeline, which models the declared gossip parameters.
  */
 
 import { Rng } from '@dm/core';
@@ -82,11 +80,8 @@ function retention(curve: string, days: number, halfLife: number, floor: number)
 }
 
 /**
- * Propagate one deed through the population, day by day.
- *
- * A preview of the declared model rather than the engine itself — the engine
- * does not exist yet. It reads the same parameters the engine will, so tuning
- * the dials here tunes the real thing.
+ * Propagate one deed through the population, day by day. A preview of the declared model, reading
+ * the same parameters the engine does, so tuning the dials here tunes the real thing.
  */
 export function simulateMemory(
   memory: MemoryConfig,
@@ -112,11 +107,9 @@ export function simulateMemory(
   const manualOnly = applicable.some((r) => r.manualOnly === true);
 
   /**
-   * A rule that names people scopes its overrides to them.
-   *
-   * "Vess never forgets a theft" should pin *Vess's* memory, not lengthen the
-   * memory of everyone who ever hears about it. A rule with no named people
-   * applies to the deed generally.
+   * A rule that names people scopes its overrides to them. "Vess never forgets a theft" should pin
+   * Vess's memory rather than lengthening the memory of everyone who hears about it; a rule with no
+   * named people applies to the deed generally.
    */
   const pinnedFor = new Map<string, number>();
   let deedWideHalfLife: number | undefined;
@@ -181,9 +174,8 @@ export function simulateMemory(
     const knowers: Knower[] = [];
     for (const [npc, info] of learned) {
       const elapsed = day - info.day;
-      // An NPC's own span normally caps the half-life, but a rule that pins
-      // one for them is an explicit GM decision and overrides it — that is the
-      // whole point of a targeted override.
+      // An NPC's own span normally caps the half-life, but a rule that pins one for them is an
+      // explicit GM decision and overrides it.
       const pinned = pinnedFor.get(npc) ?? (deedWideHalfLife !== undefined ? deedWideHalfLife : undefined);
       const span = npcs.find((n) => n.id === npc)?.memorySpan;
       const effectiveHalfLife =

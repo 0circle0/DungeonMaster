@@ -1,27 +1,19 @@
 /**
  * What is remembered, as something the DSL can read.
  *
- * `requirement.memories` compiles to `{exists: "memory.<who>.<deedKind>"}`
- * (schema/requirement.ts), so a gate on what somebody remembers is only as good
- * as the `memory` namespace in scope. Until now exactly one place filled it —
- * `sim/dialogue.ts` — which meant a `memories` clause on a quest, a door, a
- * trigger, a loot table or a reaction resolved to `null` and silently answered
- * "no" forever. Worse than silently: `known: false` inverted it, so "has *not*
- * heard about this" was permanently true.
+ * `requirement.memories` compiles to `{exists: "memory.<who>.<deedKind>"}`, so a gate on what
+ * somebody remembers is only as good as the `memory` namespace in scope.
  *
- * Two things make this cheap enough to put in `buildScope`, which runs several
- * times per entity per turn:
+ * Two things make this cheap enough to put in `buildScope`, which runs several times per entity per
+ * turn:
  *
- *   * **The five `who` keys are getters, memoized on first read.** Almost every
- *     scope is built for something that never mentions memory, and that case
- *     costs one object literal.
- *   * **`memory` is a plain object whose *keys* are getters, not a getter
- *     called `memory`.** Eight call sites do `{ ...buildScope(...) }`; a shallow
- *     spread copies the reference and the inner getters survive it. A computed
- *     field would be evaluated by the spread every single time.
+ *   * The five `who` keys are getters, memoized on first read, so a scope built for something that
+ *     never mentions memory costs one object literal.
+ *   * `memory` is a plain object whose keys are getters, not a getter called `memory`. Eight call
+ *     sites do `{ ...buildScope(...) }`; a shallow spread copies the reference and the inner
+ *     getters survive it.
  *
- * `lookup()` in the DSL walks the scope with plain property access, so a getter
- * is invisible to it.
+ * `lookup()` in the DSL walks the scope with plain property access, so a getter is invisible to it.
  */
 
 import type { CompiledModule, Value } from '@dm/module';
@@ -32,10 +24,8 @@ import { dateOf } from './clock.js';
 /** What the DSL sees for one remembered deed kind. */
 export interface RecalledDeed extends Record<string, Value> {
   /**
-   * When it happened, as a **day index** — the same units as `world.day`, so
-   * `requirement.withinDays` subtracts like with like. The records themselves
-   * store `state.minute`, and comparing that against a day number is what made
-   * `withinDays` pass for every window ever declared.
+   * When it happened, as a day index — the same units as `world.day`, so `requirement.withinDays`
+   * subtracts like with like. The records themselves store `state.minute`.
    */
   readonly at: number;
   /** The raw minute, for content that wants finer arithmetic than a day. */
@@ -84,11 +74,9 @@ function lazily(target: Record<string, Value>, key: string, build: () => Recolle
 }
 
 /**
- * The `memory` namespace for a scope.
- *
- * `subject` is whose recollection `speaker` means: the person being talked to
- * in a conversation, the reactor in a reaction, and otherwise the actor the
- * scope was built for.
+ * The `memory` namespace for a scope. `subject` is whose recollection `speaker` means: the person
+ * being talked to in a conversation, the reactor in a reaction, and otherwise the actor the scope
+ * was built for.
  */
 export function memoryScope(
   module: CompiledModule,
@@ -100,15 +88,13 @@ export function memoryScope(
 
   const own = () => strongestByKind(state.deeds, state.memory[memoryKeyOf(subject)], toDay);
 
-  // What this person knows. `self` is the same thing under a name that reads
-  // properly outside a conversation, where "speaker" is a strange word for the
-  // creature whose reaction is being tested.
+  // What this person knows. `self` is the same thing under a name that reads properly outside a
+  // conversation.
   lazily(out, 'speaker', own);
   lazily(out, 'self', own);
 
-  // What the party *did*, rather than what it knows: witnesses never include
-  // characters (`deeds.ts` skips them), so "the party saw it" is not a thing
-  // the simulation records, and pretending otherwise would be a lie.
+  // What the party did, rather than what it knows: witnesses never include characters (`deeds.ts`
+  // skips them), so "the party saw it" is not something the simulation records.
   lazily(out, 'party', () => {
     const mine = new Set(state.party);
     const into: Recollection = {};
@@ -126,8 +112,8 @@ export function memoryScope(
     return into;
   });
 
-  // Anybody at all knows it. Used to be aliased to the speaker, which made
-  // "word has got around" indistinguishable from "this one person saw you".
+  // Anybody at all knows it. Distinct from the speaker, or "word has got around" would be
+  // indistinguishable from "this one person saw you".
   lazily(out, 'anyone', () => {
     const into: Recollection = {};
     for (const held of Object.values(state.memory)) {
@@ -136,7 +122,7 @@ export function memoryScope(
     return into;
   });
 
-  // What the subject's own people know. Used to be hardcoded empty.
+  // What the subject's own people know.
   lazily(out, 'faction', () => {
     const faction = module.find<{ faction?: string }>(
       'content.npcs', memoryKeyOf(subject))?.faction;

@@ -1,21 +1,16 @@
 /**
- * What the party can do right now, and what they can do with *that*.
+ * What the party can do right now, and what they can do with that.
  *
- * Every front end asks these two questions constantly — a context bar asks the
- * first, a clicked tile asks the second — and each answer carries the `Action`
- * that does it, so a button or a click dispatches with no glue code and no
- * re-derivation.
+ * Every front end asks these two questions — a context bar asks the first, a clicked tile the
+ * second — and each answer carries the `Action` that does it, so a button dispatches with no glue
+ * code.
  *
- * Two rules shape everything here:
+ * Two rules:
  *
- * - **A refusal is an answer.** The parser's own doctrine is that "a bare
- *   rejection teaches them nothing"; a click that silently offers nothing is
- *   the same failure with a mouse. So an unreachable tile still yields a walk,
- *   `blocked` with the reason, and a barred door yields an enter that names
- *   what it would take.
- * - **Never offer what the party cannot perceive.** A tile that is neither in
- *   view nor remembered yields nothing at all — anything else leaks world
- *   state through the UI.
+ * - A refusal is an answer. An unreachable tile still yields a walk, `blocked` with the reason, and
+ *   a barred door yields an enter that names what it would take.
+ * - Never offer what the party cannot perceive. A tile neither in view nor remembered yields
+ *   nothing, since anything else leaks world state through the UI.
  */
 
 import type { Action, Entity, EntityId, Position } from '@dm/engine';
@@ -49,10 +44,8 @@ import { waysFromHere } from './views/exits.js';
 import { duration } from './views/format.js';
 
 /**
- * The reason a gate refuses, in the shortest honest form.
- *
- * An authored description says it all; the mechanical item list is the
- * fallback for gates that never wrote one, not an addition to those that did.
+ * The reason a gate refuses, in the shortest honest form. An authored description says it all; the
+ * mechanical item list is the fallback for gates that never wrote one.
  */
 function gateReason(requires: Requirement | undefined): readonly Message[] {
   const described = describeRequirement(requires);
@@ -60,11 +53,8 @@ function gateReason(requires: Requirement | undefined): readonly Message[] {
 }
 
 /**
- * What you do to a barrier of this kind.
- *
- * "Open the barrow ward" is the wrong sentence for a seal, and "open the ferry
- * toll" is not a sentence at all. The gate's `kind` has always said which of
- * these it is; only the label never asked.
+ * What you do to a barrier of this kind. The gate's `kind` decides the verb: "open the barrow ward"
+ * is the wrong sentence for a seal.
  */
 const OPEN_VERB: Record<string, string> = {
   lock: 'Unlock',
@@ -86,12 +76,9 @@ export type AffordanceKind =
   | 'endTurn' | 'flee' | 'rest' | 'wait' | 'travel' | 'quest';
 
 /**
- * Whether the place the party is standing in offers a counter.
- *
- * `pointsOfInterest[].services` was display-only data. This is what it decides:
- * which of a settlement's affordances are on offer. Outside a point of interest
- * — on the open road, in a dungeon — a trader who happens to be there still
- * trades, because there is no place to have said otherwise.
+ * Whether the place the party is standing in offers a counter. `pointsOfInterest[].services`
+ * decides which of a settlement's affordances are on offer. Outside a point of interest a trader
+ * who happens to be there still trades, because no place has said otherwise.
  */
 function servesTrade(context: PlayContext): boolean {
   const here = context.state.location;
@@ -116,7 +103,7 @@ export interface Affordance {
   readonly kind: AffordanceKind;
   /** Imperative, sentence case, no trailing punctuation: "Attack the bog hound". */
   readonly label: string;
-  /** Dispatch this and the thing happens. Nothing else is needed. */
+  /** Dispatch this and the thing happens. */
   readonly action: Action;
   readonly subject?: Subject;
   /** Why it would be refused. Set ⇒ render disabled, with this as the reason. */
@@ -148,10 +135,8 @@ function perception(
 }
 
 /**
- * What clicking a tile can mean, heaviest first.
- *
- * Unknown ground yields nothing at all; everything else yields *something*,
- * blocked if need be, because a click has to say something.
+ * What clicking a tile can mean, heaviest first. Unknown ground yields nothing; everything else
+ * yields something, blocked if need be.
  */
 export function affordancesAt(context: PlayContext, at: Position): readonly Affordance[] {
   const { module, state, terrain } = context;
@@ -237,8 +222,8 @@ export function affordancesAt(context: PlayContext, at: Position): readonly Affo
         action: { type: 'enter', target: poi.id },
         subject: { kind: 'poi', id: poi.id },
         weight: 80,
-        // Entering *attempts* the gate — the party may hold the key — so this
-        // is a hint about what stands in the way, not a hard refusal.
+        // Entering attempts the gate — the party may hold the key — so this is a hint about what
+        // stands in the way, not a hard refusal.
         ...(barred && needs.length > 0
           ? { blocked: text(module, 'affordance.barred', { what: joinMessages(module, needs) }) }
           : {}),
@@ -318,10 +303,8 @@ export function affordancesFor(context: PlayContext, target: EntityId): readonly
 }
 
 /**
- * The context bar: what is worth offering right now, unprompted.
- *
- * While a conversation is open this returns nothing — the dialogue owns the
- * turn, and burying its replies under travel buttons would be noise.
+ * The context bar: what is worth offering right now, unprompted. Returns nothing while a
+ * conversation is open, since the dialogue owns the turn.
  */
 export function affordances(context: PlayContext): readonly Affordance[] {
   const { module, state } = context;
@@ -416,9 +399,8 @@ export function affordances(context: PlayContext): readonly Affordance[] {
     });
   }
 
-  // — senses, one button per declared sense: this is how listen and smell
-  // become buttons without the engine knowing either word. A module with other
-  // senses gets other buttons.
+  // — senses, one button per declared sense, so listen and smell become buttons without the engine
+  // knowing either word. A module with other senses gets other buttons.
   const sight = sightSenseOf(module).id;
   for (const sense of module.all<{ id: string; name?: string }>('rules.senses')) {
     if (sense.id === sight) continue;
@@ -441,9 +423,9 @@ export function affordances(context: PlayContext): readonly Affordance[] {
     action: { type: 'search' }, weight: 35,
   });
 
-  // Trade, where the party is standing with someone who deals — and where the
-  // place says so. `services` decides which counters a settlement offers; a
-  // shopkeeper in a place with no market is somebody you can still talk to.
+  // Trade, where the party is standing with someone who deals and the place says so. `services`
+  // decides which counters a settlement offers; a shopkeeper in a place with no market is still
+  // someone to talk to.
   const trader = traderNearby(context);
   if (trader && servesTrade(context)) {
     const txn = reading(context);
@@ -466,8 +448,8 @@ export function affordances(context: PlayContext): readonly Affordance[] {
     });
   }
 
-  // Only once something has actually been found. Offering "Disarm" with nothing
-  // in reach would tell the player a trap is there.
+  // Only once something has been found: offering "Disarm" with nothing in reach would tell the
+  // player a trap is there.
   const trap = reachableTrap(reading(context), actor);
   if (trap) {
     const definition = module.find<{ name?: string }>('content.traps', trap.trap);

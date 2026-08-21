@@ -1,77 +1,58 @@
 /**
- * Composing the conversation shapes that make up most of a world's dialogue.
- *
- * 211 calls to three functions produce most of Aurendel's 105 dialogues, and
- * the reason is not that a conversation is long — it is that each of these is
- * a fixed arrangement of an option, two nodes, a check and a way back, and
- * every one of them has a trap in it that the schema cannot see.
- *
- * ## The trap
- *
- * **`option.effects` run before `option.check`, and regardless of it.** So a
- * `learnLore` on the option teaches the clue on a *failed* roll too, and a
- * `grantItem` hands the item over to someone who was refused. The payload
- * belongs on the success node's `onEnter`, and nowhere else.
- *
- * A dialogue that gets this wrong validates perfectly, compiles, and plays as
- * a conversation where failing a persuasion check costs nothing — which reads
- * as generosity rather than as a bug, and is the reason these ship as code
- * instead of as a shape an author assembles by hand.
- *
- * Each function returns the option and the nodes separately, because that
- * separation *is* the fix.
+ * Build standard dialogue fragments for rumour, favour, and talk prompts.
+ * Each fragment keeps the option payload on the success path so failed rolls do not grant rewards.
  */
 
 import { standingDc } from './standing.js';
 
 export interface Voice {
-  /** "Go on." — leaving a told clue. */
+  /** Continue text after a successful clue. */
   readonly goOn: string;
-  /** "Leave it." — leaving a refusal. */
+  /** Continue text after a refusal. */
   readonly leaveIt: string;
-  /** What they say when they will not tell you. */
+  /** Refusal text for a rumour. */
   readonly rumourRefused: string;
-  /** "Thank you." — leaving a gift. */
+  /** Continue text after a gift. */
   readonly thanks: string;
-  /** What they say when they will not hand it over. */
+  /** Refusal text for a favour. */
   readonly favourRefused: string;
 }
 
 export interface Fragment {
-  /** Goes in the greeting node's `options`. */
+  /** Option attached to the opening node. */
   readonly option: Record<string, unknown>;
-  /** Go in the dialogue's `nodes`. */
+  /** Dialogue nodes created by the fragment. */
   readonly nodes: readonly Record<string, unknown>[];
 }
 
 interface Common {
-  /** Prefixes every id this makes, so two fragments cannot collide. */
+  /** Prefix used for all generated ids. */
   readonly key: string;
-  /** What the party says to ask. */
+  /** Prompt text shown to the player. */
   readonly ask: string;
   readonly voice: Voice;
   readonly skill?: string;
   readonly base?: number;
-  /** When set, the check moves with standing in this faction. */
+  /** Faction used for a standing-based check. */
   readonly faction?: string;
   readonly span?: number;
-  /** Standing lost on a refusal. */
+  /** Reputation lost on refusal. */
   readonly cost?: number;
-  /** Where both outcomes return to. */
+  /** Node both outcomes return to. */
   readonly back?: string;
-  /** Merged into the option's gate. */
+  /** Extra gate requirements merged into the option. */
   readonly requires?: Record<string, unknown>;
   readonly refused?: string;
 }
 
 const NO_HINT = { onceOnly: false, showWhenLocked: false, lockedHint: '' };
 
-/** The flag that says a key item was given rather than taken off the body. */
+/** Flag set when a key item is given instead of looted. */
 export function givenFlag(itemId: string): string {
   return `given:${itemId}`;
 }
 
-/** Merge a caller's requirements into a gate, unioning the `without` lists. */
+/** Merge requirements into a gate, combining `without` lists. */
 function mergeGate(
   gate: Record<string, unknown>,
   extra: Record<string, unknown> | undefined,
@@ -105,8 +86,7 @@ function checkedOption(
     id: common.key,
     text: common.ask,
     requires: gate,
-    // Empty, and that is the point: anything here would run before the check
-    // and on a failure too.
+    // Effects must stay off the option; they run on the success path only.
     effects: [],
     ...NO_HINT,
     check: {
@@ -125,11 +105,8 @@ function exit(id: string, text: string, back: string): Record<string, unknown> {
 }
 
 /**
- * A clue somebody has, behind a roll their opinion of you moves.
- *
- * Gated `without: {lore: [id]}`, which is what makes the option disappear once
- * you know — an NPC who keeps offering to tell you a thing you already know is
- * a menu, not a person.
+ * Offer a clue behind a persuasion check.
+ * The option disappears once the party already knows the clue.
  */
 export function rumour(
   common: Common & { readonly told: string; readonly clue: string },
@@ -146,7 +123,7 @@ export function rumour(
       {
         id: yes,
         says: [{ text: common.told }],
-        // Here, not on the option. This is the whole reason for the shape.
+        // Keep the lore gain on the success node, not the option.
         onEnter: [{ learnLore: { entry: common.clue } }],
         options: [exit(`${common.key}_on`, common.voice.goOn, back)],
         redirectWhen: [],
@@ -166,12 +143,8 @@ export function rumour(
 }
 
 /**
- * Asking somebody for the thing they are holding.
- *
- * Gated on not already having it and on the gift not already having been made
- * — never on standing. The roll gets harder as they like you less and there is
- * no floor below which asking stops being possible, because the other route
- * (taking it off the body) is always open and costs more than a roll.
+ * Offer an item behind a persuasion check.
+ * The option is blocked if the party already has it or has already been gifted it.
  */
 export function favour(
   common: Common & {
@@ -199,8 +172,7 @@ export function favour(
         says: [{ text: common.given }],
         onEnter: [
           { grantItem: { target: { ref: 'actor.id' }, item: common.item, quantity: common.quantity ?? 1 } },
-          // So a gift already made cannot be looted a second time off the
-          // corpse: ask politely, then kill them, and you would have two.
+          // Prevent a gifted item from being looted twice from the same corpse.
           { setFlag: { flag: givenFlag(common.item), value: true } },
           ...(common.extra ?? []),
         ],
@@ -222,11 +194,8 @@ export function favour(
 }
 
 /**
- * Something they will simply tell you, with no roll.
- *
- * The same shape minus the check, so the payload still lands on a node rather
- * than the option — an author who later adds a roll does not have to know to
- * move it.
+ * Offer a plain statement with no skill check.
+ * The payload remains on the node so a later roll can be added without moving effects.
  */
 export function talk(
   common: Pick<Common, 'key' | 'ask' | 'voice' | 'back' | 'requires'> & {

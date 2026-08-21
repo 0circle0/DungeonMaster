@@ -1,14 +1,11 @@
 /**
  * Conversation.
  *
- * A dialogue is a graph whose edges are gated by the same requirement
- * vocabulary as everything else — so a line can appear only for a certain
- * class, only while carrying proof, only once a faction trusts you, or only if
- * this NPC has *not* heard what you did.
+ * A dialogue is a graph whose edges are gated by the same requirement vocabulary as everything
+ * else.
  *
- * The last of those is the point. Options are evaluated against what the
- * speaker knows, not against what is true, which is what lets the same NPC
- * greet one party warmly and turn another away.
+ * Options are evaluated against what the speaker knows rather than against what is true, which is
+ * what lets the same NPC greet one party warmly and turn another away.
  */
 
 import { Rng } from '@dm/core';
@@ -71,20 +68,15 @@ export interface VisibleOption {
 }
 
 /**
- * The scope a conversation is judged in.
- *
- * `memory.speaker.<deedKind>` is filled from what *this* NPC knows, which is
- * how `memories` requirements in dialogue work at all.
+ * The scope a conversation is judged in. `memory.speaker.<deedKind>` is filled from what this NPC
+ * knows, which is how `memories` requirements in dialogue work.
  */
 function conversationScope(txn: Transaction, actor: Entity, speaker: Entity) {
   return buildScope(txn.module, txn.state, actor, {
     speaker: { id: speaker.id, name: speaker.name } as never,
-    // `buildScope` already supplies `memory`, but keyed on the *actor*. In a
-    // conversation `speaker` has to mean the person being talked to, so this
-    // rebuilds it around them. It also replaces a hand-rolled version in which
-    // `anyone` was aliased to the speaker and `party` and `faction` were empty
-    // objects — so "word has got around" was indistinguishable from "this one
-    // person saw you", and two of the four `who` values never answered yes.
+    // `buildScope` supplies `memory` keyed on the actor, but in a conversation `speaker` has to
+    // mean the person being talked to, so this rebuilds it around them — with `anyone`, `party` and
+    // `faction` all properly populated.
     memory: memoryScope(txn.module, txn.state, speaker) as never,
   });
 }
@@ -161,9 +153,8 @@ function enterNode(
 
   const scope = conversationScope(txn, actor, speaker);
 
-  // A redirect jumps straight past a node the party has outgrown — or, in
-  // greenmarch's case, straight to the cold shoulder. Bounded so a pair of
-  // nodes redirecting at each other cannot spin.
+  // A redirect jumps past a node the party has outgrown. Bounded, so a pair of nodes redirecting at
+  // each other cannot spin.
   let node: NodeDef = start;
   for (let hops = 0; hops < txn.module.source.narrative.maxDialogueHops; hops += 1) {
     const redirect = node.redirectWhen.find((entry) =>
@@ -190,25 +181,20 @@ function enterNode(
     txn.emit({ type: 'custom', event: 'deed', data: { kind: node.remembers } });
   }
 
-  // A node that offers nothing to say back is the end of the conversation.
-  // Left open, it stranded the player in a dialogue with no replies and no way
-  // out of it. Checked after `remembers`, so a parting word is still recorded.
+  // A node that offers nothing to say back ends the conversation, or the player is stranded with no
+  // replies. Checked after `remembers`, so a parting word is still recorded.
   if (node.options.length === 0) endDialogue(txn);
 }
 
 /** The options a player can currently see. */
 /**
- * The flag that makes `onceOnly` mean what the schema says it means.
+ * The flag that makes `onceOnly` mean "selectable once, ever".
  *
- * `onceOnly` is documented as "selectable once, ever" and was implemented
- * against `state.dialogue.taken`, which `startDialogue` clears on every
- * conversation — so it meant *once per conversation*, and walking out and back
- * in reset it. Anything a person can only tell you once was therefore something
- * they told you as often as you liked.
+ * `state.dialogue.taken` is cleared by `startDialogue`, so recording it there would mean once per
+ * conversation and walking out and back in would reset it.
  *
- * Recorded as a flag rather than a new state field: it is the same kind of fact
- * as `found:<poi>`, `looted:<poi>` and `gate:<id>:open`, all of which live here
- * already, and it needs no migration.
+ * Recorded as a flag rather than a new state field: it is the same kind of fact as `found:<poi>`,
+ * `looted:<poi>` and `gate:<id>:open`, and it needs no migration.
  */
 function saidKey(dialogue: string, node: string, option: string): string {
   return `said:${dialogue}:${node}:${option}`;
@@ -275,9 +261,9 @@ export function chooseOption(
     return false;
   }
 
-  // `visibleOptions` hides a spent one-shot, but a front end that dispatches by
-  // id — or a player typing the reply back — went straight past that filter. An
-  // option that hands over an item has to refuse the second asking.
+  // `visibleOptions` hides a spent one-shot, but a front end that dispatches by id — or a player
+  // typing the reply back — goes past that filter, so an option that hands over an item refuses the
+  // second asking.
   if (option.onceOnly && takenBefore(txn, conversation, option.id)) {
     txn.emit({ type: 'refused', action: 'choose', reason: message('refused.reply.unknown') });
     return false;
@@ -292,8 +278,8 @@ export function chooseOption(
   txn.set({
     ...txn.state,
     dialogue: { ...conversation, taken: [...conversation.taken, option.id] },
-    // Only `onceOnly` options are recorded. Writing a flag for every reply
-    // would grow the save by the size of the script the player has read.
+    // Only `onceOnly` options are recorded: a flag for every reply would grow the save by the size
+    // of the script the player has read.
     flags: option.onceOnly
       ? { ...txn.state.flags, [saidKey(conversation.dialogue, conversation.node, option.id)]: true }
       : txn.state.flags,
@@ -313,9 +299,9 @@ export function chooseOption(
         })
       : skillCheck(
           txn.module, rng, actor, option.check.skill,
-          // Evaluated against the *speaker's* scope, not the party's: the number
-          // is how hard this person is to move, and the formula that says so
-          // reads their faction's standing and their own disposition.
+          // Evaluated against the speaker's scope, not the party's: the number is how hard this
+          // person is to move, and the formula reads their faction's standing and their own
+          // disposition.
           difficultyFrom(txn.module, txn.state, speaker, option.check.difficulty, rng.derive('talkDc')),
         );
 

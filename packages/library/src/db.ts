@@ -1,21 +1,6 @@
 /**
- * The IndexedDB underneath the library.
- *
- * For the studio this is a filesystem. A world is not a document here — it is
- * the project files it is made of, one record each, and editing an entry writes
- * that entry's record and nothing else. That is the whole reason the store
- * exists in this shape: the old form kept one gzipped blob per world, so
- * changing an integer from 5 to 3 re-serialized 1.6 MB, compressed it, and
- * replaced the lot.
- *
- * The player still keeps one document per world in `payloads`, because that is
- * genuinely what it has: a compiled `module.json` it reads and never edits. The
- * two apps are separate origins with separate databases, so the stores never
- * meet — they are two access patterns, not two ways of doing one thing.
- *
- * Metadata is separate from both on purpose. Both apps list worlds on mount to
- * render a switcher, and a list must never read a world's contents to show a
- * title.
+ * IndexedDB schema for the library and world storage.
+ * The studio stores project files by path; the player stores compiled payloads per world.
  */
 
 import type { Codec } from './gzip.js';
@@ -29,24 +14,24 @@ export const FILES = 'files';
 export const SAVES = 'saves';
 export const META = 'meta';
 
-/** What a world is, apart from its bytes. */
+/** World metadata stored alongside the project files and payloads. */
 export interface WorldMeta {
-  /** A uuid, not the module id: two worlds may both call themselves Aurendel. */
+  /** Unique world key, not the module id. */
   readonly key: string;
   readonly moduleId: string;
   readonly version: string;
   readonly title: string;
   readonly description: string;
   readonly filename: string;
-  /** How it got here, which is the only thing an example is remembered by. */
+  /** How the world was created or imported. */
   readonly origin: 'created' | 'imported' | 'example';
-  /** The catalog id it came from, so it can be offered again if deleted. */
+  /** Catalog id for offering the world again after deletion. */
   readonly originId: string | null;
   readonly createdAt: number;
   readonly updatedAt: number;
   readonly storedBytes: number;
   readonly rawBytes: number;
-  /** `hashModule`, when it compiles. Null when it does not. */
+  /** Module hash when the document compiles; null otherwise. */
   readonly hash: string | null;
 }
 
@@ -58,12 +43,8 @@ export interface PayloadRecord {
 }
 
 /**
- * One project file.
- *
- * `path` is module-relative and exactly what `bundleModule` emits — `project/…`
- * for entries, `maps/<id>/…` for static maps — so the records of a world *are* a
- * project bundle. One vocabulary across storage, the shipped artifact and the
- * repository, and therefore one place it can drift instead of three.
+ * One project file stored for a world.
+ * The path matches the module bundle layout and is used as the record key.
  */
 export interface FileRecord {
   readonly world: string;
@@ -72,23 +53,13 @@ export interface FileRecord {
 }
 
 /**
- * Every file of one world.
- *
- * IndexedDB orders arrays after strings, so a compound `[world, path]` key makes
- * this range both the read and the delete, and no secondary index is needed.
+ * Key range covering every file record for a single world.
  */
 export function worldRange(key: string): IDBKeyRange {
   return IDBKeyRange.bound([key], [key, []]);
 }
 
-/**
- * A `DOMException` as an `Error`, keeping the name.
- *
- * IndexedDB reports failures as `DOMException`, which is not an `Error`
- * subclass. The name is the part that matters — `QuotaExceededError` is the one
- * failure a person can actually act on — so it is carried across rather than
- * flattened into a message.
- */
+/** Convert a DOMException into an Error while preserving the original name. */
 function asError(cause: DOMException | null, fallback: string): Error {
   if (!cause) return new Error(fallback);
   const error = new Error(cause.message || fallback);
@@ -98,7 +69,7 @@ function asError(cause: DOMException | null, fallback: string): Error {
 
 let opening: Promise<IDBDatabase> | null = null;
 
-/** Is there an IndexedDB here at all? Server rendering says no. */
+/** Return true when IndexedDB is available in this environment. */
 export function hasStorage(): boolean {
   return typeof indexedDB !== 'undefined';
 }
@@ -164,13 +135,7 @@ export function openLibrary(): Promise<IDBDatabase> {
   return opening;
 }
 
-/**
- * Close the connection and forget it.
- *
- * `indexedDB.deleteDatabase` blocks for as long as any connection is open, so a
- * test that only dropped the cached promise would hang rather than fail — the
- * handle has to be closed, not forgotten.
- */
+/** Close the current library connection and clear the cached handle. */
 export async function closeLibrary(): Promise<void> {
   const pending = opening;
   opening = null;

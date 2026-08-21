@@ -1,8 +1,8 @@
 /**
  * `npm run validate -- modules/<name>`
  *
- * Validates a module: schema, reference integrity, duplicate ids, and content
- * lints. This is the gate a module passes before it can be played or shared.
+ * Validates a module: schema, reference integrity, duplicate ids, and content lints. The gate a
+ * module passes before it can be played or shared.
  */
 
 import { readFileSync, existsSync } from 'node:fs';
@@ -36,10 +36,9 @@ function main(): number {
     return 2;
   }
 
-  // Assembly first: static map folders get inlined and their problems come
-  // back with per-file positions, and the lint's reference-integrity pass
-  // needs the assembled document — the raw text alone would call every
-  // folder-map reference dangling.
+  // Assembly first: static map folders get inlined and their problems come back with per-file
+  // positions, and the lint's reference-integrity pass needs the assembled document — the raw text
+  // alone would call every folder-map reference dangling.
   const colour = process.stdout.isTTY === true;
   let assembled: ReturnType<typeof readAssembledModule> | null;
   try {
@@ -56,16 +55,15 @@ function main(): number {
     return 1;
   }
 
-  // Resolve `extends` *before* linting, not after.
+  // Resolve `extends` before linting, not after.
   //
-  // This used to run below the lint, which meant every pass saw the unresolved
-  // document: a module leaning on a parent for its ruleset failed the schema
-  // with "attributes is required", and every reference into the parent came
-  // back dangling — so `extends` was unusable and modules composed their base
-  // in at build time instead. Handing the resolved document down as `assembled`
-  // fixes that, using a channel that already carries exactly this meaning: a
-  // document containing things the raw text never mentions. Inherited paths
-  // have no span and `locate()` already reports those without a position.
+  // Run below the lint, every pass sees the unresolved document: a module leaning on a parent for
+  // its ruleset fails the schema with "attributes is required", and every reference into the parent
+  // comes back dangling.
+  //
+  // Handing the resolved document down as `assembled` uses a channel that already carries this
+  // meaning — a document containing things the raw text never mentions. Inherited paths have no
+  // span, and `locate()` already reports those without a position.
   let subject: Record<string, unknown> | null = null;
   if (assembled) {
     const modulesRoot = dirname(assembled.dir);
@@ -77,8 +75,8 @@ function main(): number {
     subject = sortWorldMaps(resolved.document);
   }
 
-  // Lint the raw text: it is the only pass that can report line and column
-  // numbers, and it produces far better messages than the schema alone.
+  // Lint the raw text: it is the only pass that can report line and column numbers, and it produces
+  // far better messages than the schema alone.
   const lint = lintModule(rawText, subject ? { assembled: subject } : {});
   const errors = lint.diagnostics.filter((d) => d.severity === 'error');
   const lintWarnings = lint.diagnostics.filter((d) => d.severity === 'warning');
@@ -98,8 +96,8 @@ function main(): number {
     return 1;
   }
 
-  // The lint compiled the resolved document to prove its references resolve,
-  // so its result is reused rather than the module being parsed a second time.
+  // The lint compiled the resolved document to prove its references resolve, so its result is
+  // reused rather than the module being parsed a second time.
   const module = lint.compiled;
   if (!module) {
     process.stderr.write(`✗ ${arg}: passed the lint but did not compile\n`);
@@ -109,12 +107,12 @@ function main(): number {
   /**
    * The contracts the schema cannot see.
    *
-   * Run after the module is known to be valid, because they read a document
-   * rather than check its shape: asking whether a flag has a writer only means
-   * something once the document is known to *have* flags where flags go.
+   * Run after the module is known to be valid, because they read a document rather than check its
+   * shape: asking whether a flag has a writer only means something once the document is known to
+   * have flags where flags go.
    *
-   * A module may ship its own `project/contract.json` — the few facts a shared
-   * checker cannot know, like which quests gate an act.
+   * A module may ship its own `project/contract.json` — the few facts a shared checker cannot know,
+   * like which quests gate an act.
    */
   const contractPath = join(assembled.dir, 'project', 'contract.json');
   let contract: Contract = {};

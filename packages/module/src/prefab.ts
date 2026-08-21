@@ -1,44 +1,31 @@
 /**
  * Prefabs: an entry described once and placed many times.
  *
- * This is the thing that makes a world the size of Aurendel authorable at all.
- * Its 597 points of interest are not 597 unique creations — they are a small
- * vocabulary instantiated over and over, and the Python that generates them
- * says so: thirteen one-line constructors over four lookup tables produce every
- * one. An author writes four strings and gets an eight-to-eleven key entry with
- * a palette, a footprint, a description key, travel minutes and services.
+ * A world the size of Aurendel is a small vocabulary instantiated repeatedly — thirteen one-line
+ * constructors over four lookup tables produce all 597 of its points of interest. An author writes
+ * four strings and gets an eight-to-eleven key entry with a palette, a footprint, a description
+ * key, travel minutes and services.
  *
- * A form that makes you fill in all eleven, 597 times, is not a smaller version
- * of that. It is a different job.
+ * What a prefab is, and is not
  *
- * ## What a prefab is, and is not
+ * It is a template: interpolation, a lookup into the project's own tables, and conditional
+ * presence. Being data is what lets the studio render a parameter form for it, show a diff before
+ * applying it, and refuse to run anything.
  *
- * It is a *template*: interpolation, a lookup into the project's own tables,
- * and conditional presence. That covers all thirteen shorthands, and it is
- * data — which is what lets the studio render a parameter form for it, show a
- * diff before applying it, and refuse to run anything.
+ * It is not a program. `fit()`, `lay_out()`, `chain()` and `standing_dc()` are real algorithms and
+ * ship as code, not as user script in a sandbox.
  *
- * It is not a program. `fit()`, `lay_out()`, `chain()` and `standing_dc()` are
- * real algorithms, there are four of them, and they are *ours* — they ship as
- * code where they can be typed and tested, not as user script in a sandbox.
+ * Overrides
  *
- * ## Overrides
- *
- * An instance records which fields a person edited by hand. Re-expanding a
- * prefab rewrites everything else and leaves those alone, because the whole
- * value of the link is that changing `inn` updates thirty-six inns, and the
- * whole value of an override is that the one you tuned stays tuned.
+ * An instance records which fields a person edited by hand. Re-expanding a prefab rewrites
+ * everything else and leaves those alone, so changing `inn` updates thirty-six inns while the one
+ * that was tuned stays tuned.
  */
 
 /**
- * Where an instance's provenance lives: beside the entries, never inside one.
- *
- * The first attempt put a `$prefab` key on the entry itself, which reads well
- * and cannot work: every collection schema is `.strict()`, so an unknown key is
- * a validation error, and the studio validates the document it is editing. A
- * sidecar keeps the document exactly what the format allows and keeps the link
- * exactly where the plan says provenance belongs — in the project, never in
- * `module.json`.
+ * Where an instance's provenance lives: beside the entries, never inside one. Every collection
+ * schema is `.strict()`, so a `$prefab` key on the entry itself would be a validation error in the
+ * document the studio is editing. A sidecar keeps the document exactly what the format allows.
  */
 export const INSTANCES_FILE = 'prefabs/instances.json';
 
@@ -66,7 +53,7 @@ export interface Prefab {
   readonly template: unknown;
 }
 
-/** The project's own lookup tables — `place.py`'s four, whatever a world needs. */
+/** The project's own lookup tables. */
 export type StyleTables = Readonly<Record<string, Readonly<Record<string, unknown>>>>;
 
 /** What the sidecar records about one placed entry. */
@@ -101,8 +88,8 @@ function interpolate(
   path: string,
   issues: ExpandIssue[],
 ): unknown {
-  // `"{{size}}"` yields the parameter itself; `"a {{x}} b"` yields a string.
-  // Without this a numeric parameter would come back as its own digits.
+  // `"{{size}}"` yields the parameter itself; `"a {{x}} b"` yields a string. Without this a numeric
+  // parameter would come back as its own digits.
   const whole = WHOLE.exec(text);
   if (whole) {
     const key = whole[1]!;
@@ -136,8 +123,7 @@ function evaluate(
     const out: unknown[] = [];
     node.forEach((item, i) => {
       const value = evaluate(item, params, style, `${path}.${i}`, issues);
-      // An omitted item leaves no hole: a list of three where one is skipped is
-      // a list of two, not a list with an `undefined` in the middle.
+      // An omitted item leaves no hole: a list of three where one is skipped is a list of two.
       if (value !== undefined) out.push(value);
     });
     return out;
@@ -147,10 +133,8 @@ function evaluate(
 
   const record = node as Record<string, unknown>;
 
-  // `{ "@when": "trade", "then": ... }` — present only if the parameter is set.
-  // This is what `poi()` does when it gives a place an interior *only* if it
-  // has both a trade and a size; a place you stand at rather than in is the
-  // same template minus a key.
+  // `{ "@when": "trade", "then": ... }` — present only if the parameter is set. This is how `poi()`
+  // gives a place an interior only when it has both a trade and a size.
   if ('@when' in record) {
     const key = record['@when'];
     const flag = typeof key === 'string' ? params[key] : undefined;
@@ -159,14 +143,11 @@ function evaluate(
     return evaluate(record['then'], params, style, path, issues);
   }
 
-  // `{ "@lookup": ["roomSizes", "{{size}}"] }` — the project's own tables, which
-  // is where `SIZES`, `TRADE_PALETTE`, `ROOM_SIZES` and `KIND_POOL` live.
+  // `{ "@lookup": ["roomSizes", "{{size}}"] }` — the project's own tables.
   //
-  // More than two segments walks into the row: `place.py`'s tables map one key
-  // to several fields at once, which is the whole reason they are tables —
-  // a settlement's size decides both what it offers and how far word of it
-  // travels, and those two must not be able to drift apart. Requiring one
-  // table per field would split exactly the rows that exist to stay together.
+  // More than two segments walks into the row: a table maps one key to several fields at once, so a
+  // settlement's size can decide both what it offers and how far word of it travels without the two
+  // drifting apart.
   if ('@lookup' in record) {
     const spec = record['@lookup'];
     if (!Array.isArray(spec) || spec.length < 2) {
@@ -194,8 +175,7 @@ function evaluate(
   const out: Record<string, unknown> = {};
   for (const [key, value] of Object.entries(record)) {
     const evaluated = evaluate(value, params, style, path ? `${path}.${key}` : key, issues);
-    // An omitted key is absent, not null: `narrative.lore` being `.optional()`
-    // rather than defaulted is the same distinction, and it reaches the hash.
+    // An omitted key is absent, not null, and the distinction reaches the hash.
     if (evaluated !== undefined) out[key] = evaluated;
   }
   return out;
@@ -284,17 +264,12 @@ function setPath(target: Record<string, unknown>, path: string, value: unknown):
 export const PREFAB_KEY = '@prefab';
 
 /**
- * An entry stored as what makes it, rather than as what it is.
+ * An entry stored as what makes it, rather than as what it is: name the shape, give the handful of
+ * things that differ, and let the build do the rest.
  *
- * Aurendel's 597 points of interest are thirteen shapes filled in over and
- * over, so storing each one whole writes the same eleven keys 597 times. This
- * is the other way round: name the shape, give it the handful of things that
- * are actually different, and let the build do the rest.
- *
- * `overrides` carries **values**, not the paths that {@link PrefabLink} records.
- * A link sits beside a complete entry and only has to say which fields a person
- * touched; a recipe *is* the entry, so anything the prefab does not reproduce
- * has nowhere else to live.
+ * `overrides` carries values, not the paths that {@link PrefabLink} records. A link sits beside a
+ * complete entry and only says which fields a person touched; a recipe is the entry, so anything
+ * the prefab does not reproduce has nowhere else to live.
  */
 export interface PrefabRecipe {
   readonly [PREFAB_KEY]: string;
@@ -303,20 +278,16 @@ export interface PrefabRecipe {
   readonly overrides?: Readonly<Record<string, unknown>>;
 }
 
-/** Whether a parsed entry file is a recipe. Cheap, and the only test needed. */
+/** Whether a parsed entry file is a recipe. */
 export function isPrefabRecipe(value: unknown): value is PrefabRecipe {
   if (value === null || typeof value !== 'object' || Array.isArray(value)) return false;
   return typeof (value as Record<string, unknown>)[PREFAB_KEY] === 'string';
 }
 
 /**
- * A recipe back into the entry it stands for.
- *
- * Overrides are applied by path onto the expansion, which is what keeps key
- * order intact: `setPath` writes an existing key in place and only a genuinely
- * new one lands at the end. That matters more here than anywhere else in this
- * file — a compressed module has to rebuild `module.json` byte for byte, and
- * key order is the half of that no schema would ever catch.
+ * A recipe back into the entry it stands for. Overrides are applied by path onto the expansion,
+ * which keeps key order intact: `setPath` writes an existing key in place and only a new one lands
+ * at the end. A compressed module has to rebuild `module.json` byte for byte.
  */
 export function expandRecipe(
   recipe: PrefabRecipe,
@@ -335,12 +306,9 @@ export function expandRecipe(
 }
 
 /**
- * The inverse: an entry plus the prefab that nearly makes it.
- *
- * Whatever the expansion got wrong becomes an override, so this never fails and
- * never lies — a poor match simply produces a recipe with more overrides than
- * it saved. Callers choose the prefab by which answer comes out smallest, and
- * the worst case is a file no smaller than the entry it replaced.
+ * The inverse: an entry plus the prefab that nearly makes it. Whatever the expansion got wrong
+ * becomes an override, so this never fails — a poor match produces a recipe with more overrides
+ * than it saved. Callers choose the prefab by which answer comes out smallest.
  */
 export function asRecipe(
   entry: Record<string, unknown>,
@@ -364,12 +332,9 @@ function setPathValue(target: Record<string, unknown>, path: string, value: unkn
 }
 
 /**
- * The shallowest paths at which two entries disagree.
- *
- * Shallowest on purpose: recording `map` once beats recording `map.width`,
- * `map.height` and `map.palette`, and a whole-value override is what a reader
- * can see the shape of. Descends only where both sides are plain objects and
- * the disagreement is genuinely partial.
+ * The shallowest paths at which two entries disagree. Recording `map` once beats recording
+ * `map.width`, `map.height` and `map.palette`. Descends only where both sides are plain objects and
+ * the disagreement is partial.
  */
 function differingPaths(made: Record<string, unknown>, want: Record<string, unknown>): string[] {
   const out: string[] = [];
@@ -382,8 +347,8 @@ function differingPaths(made: Record<string, unknown>, want: Record<string, unkn
 
     if (plain(a) && plain(b)) {
       const keys = [...new Set([...Object.keys(a), ...Object.keys(b)])];
-      // Only worth descending when most of the object already agrees; a wholly
-      // different object reads better as one override than as five.
+      // Only worth descending when most of the object already agrees; a wholly different object
+      // reads better as one override.
       const differing = keys.filter((key) => JSON.stringify(a[key]) !== JSON.stringify(b[key]));
       if (differing.length * 2 <= keys.length) {
         for (const key of differing) walk(a[key], b[key], path ? `${path}.${key}` : key);
@@ -401,11 +366,8 @@ function differingPaths(made: Record<string, unknown>, want: Record<string, unkn
 }
 
 /**
- * Rebuild an instance from its prefab, keeping what was overridden.
- *
- * The two halves of the promise: editing `inn` updates every inn, and the one
- * you hand-tuned stays tuned. An override is recorded by path, so a field the
- * prefab has stopped emitting still keeps the value a person put there.
+ * Rebuild an instance from its prefab, keeping what was overridden. An override is recorded by
+ * path, so a field the prefab has stopped emitting keeps the value a person put there.
  */
 export function reexpand(
   prefab: Prefab,
@@ -422,10 +384,9 @@ export function reexpand(
 }
 
 /**
- * Which paths differ between an instance and what its prefab would produce.
- *
- * Used to record an override when someone edits a linked entry, and to show
- * them which fields are theirs rather than the prefab's.
+ * Which paths differ between an instance and what its prefab would produce. Used to record an
+ * override when someone edits a linked entry, and to show which fields are theirs rather than the
+ * prefab's.
  */
 export function overriddenPaths(
   prefab: Prefab,
@@ -464,26 +425,17 @@ export function overriddenPaths(
 // ---------------------------------------------------------------------------
 
 /**
- * Fields that become parameters when a prefab is derived from an entry.
- *
- * The ones that are *this* thing rather than *this kind of* thing. Everything
- * else is what the prefab is for — a settlement's services and its kind are the
- * pattern; its name is not.
- *
- * A starting point rather than a rule: the prefab is a file, and the first thing
- * anyone does with a derived one is decide what else should vary.
+ * Fields that become parameters when a prefab is derived from an entry: the ones that are this
+ * thing rather than this kind of thing. A starting point rather than a rule — the prefab is a file,
+ * and the first thing anyone does with a derived one is decide what else should vary.
  */
 export const IDENTITY_FIELDS = ['id', 'name', 'description'] as const;
 
 /**
- * Turn an entry that already exists into a prefab, plus the parameters that
- * reproduce it.
+ * Turn an entry that already exists into a prefab, plus the parameters that reproduce it.
  *
- * This is how a prefab gets written in practice. Nobody designs the template
- * first — they build one place, get it right, and then want thirty more like
- * it. So the entry is the specification, and the derived prefab has to expand
- * back to exactly it: that equality is what makes linking the original safe,
- * because linking it is the same as replacing it with the expansion.
+ * The derived prefab must expand back to exactly the entry: that equality is what makes linking the
+ * original safe, since linking it is the same as replacing it with the expansion.
  */
 export function derivePrefab(
   entry: Record<string, unknown>,

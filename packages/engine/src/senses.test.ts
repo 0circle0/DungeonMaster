@@ -1,15 +1,11 @@
 /**
- * What the engine can perceive, pinned exactly as it behaves today.
+ * What the engine can perceive, pinned at the boundaries.
  *
- * This file exists to be written *before* perception is refactored. Sight is
- * currently the expression `hasLineOfSight(...) && distance(...) <= 12`, spelled
- * out in four separate places that do not agree with each other, and the point
- * of these tests is to record each one at its exact boundary — including the
- * inconsistencies — so that extracting them into one declared sense can be
+ * Sight was `hasLineOfSight(...) && distance(...) <= 12`, spelled out in four places that did not
+ * agree. These tests record each boundary so that extracting them into one declared sense can be
  * proven to change nothing.
  *
- * Where a test pins behaviour that is arguably wrong, it says so. Those are the
- * assertions expected to move later, deliberately and one at a time.
+ * Where a test pins behaviour that is arguably wrong, it says so.
  */
 
 import { describe, it, expect } from 'vitest';
@@ -47,11 +43,8 @@ const terrain = new TerrainIndex(GREENMARCH);
 const HERO = { x: 2, y: 4 };
 
 /**
- * A long open corridor.
- *
- * Wide enough to place a creature past every threshold that matters — the arena
- * in `combat.test.ts` is 15×15, which cannot express a gap of 13 tiles, and that
- * is exactly the gap these tests need.
+ * A long open corridor, wide enough to place a creature past every threshold that matters. The
+ * 15×15 arena in `combat.test.ts` cannot express a gap of 13 tiles.
  */
 function field(
   monsters: { at: { x: number; y: number }; id?: string; statblock?: string }[] = [],
@@ -95,8 +88,7 @@ function field(
 const settle = (state: GameState) => reduce(state, { type: 'wait', minutes: 0 }, ctx).state;
 
 describe('the awareness boundary', () => {
-  // 12 tiles is the engine's only perception constant. It appears as a bare
-  // literal in turn.ts and again in deeds.ts, and nothing declares it.
+  // 12 tiles is the engine's only perception constant, a bare literal in turn.ts and deeds.ts.
   it('starts combat at exactly twelve tiles', () => {
     const state = settle(field([{ at: { x: HERO.x + 12, y: HERO.y } }]));
     expect(state.combat).not.toBeNull();
@@ -131,11 +123,8 @@ describe('the awareness boundary', () => {
     const started = settle(field([{ at: { x: HERO.x + 3, y: HERO.y } }]));
     expect(started.combat).not.toBeNull();
 
-    // Pull them apart past the threshold, and wall the gap. The wall is the
-    // point: a hound that has lost you now *hunts* for a few rounds rather than
-    // shrugging at the top of the next one, so an open field is no longer an
-    // escape — it closes the distance and finds you again. Getting away has to
-    // be something the geometry makes true.
+    // Pull them apart past the threshold, and wall the gap. Without the wall a hound hunts for a
+    // few rounds and closes the distance again, so an open field is not an escape.
     const builder = new MapBuilder(40, 9, 'floor');
     for (let y = 0; y < 9; y += 1) builder.set(HERO.x + 10, y, 'wall');
 
@@ -148,8 +137,8 @@ describe('the awareness boundary', () => {
       },
     };
 
-    // Losing them starts a count rather than ending the fight; greenmarch's
-    // hounds give it three rounds before they let it go.
+    // Losing them starts a count rather than ending the fight; greenmarch's hounds give it three
+    // rounds.
     let state = reduce(separated, { type: 'wait', minutes: 0 }, ctx).state;
     expect(state.combat).not.toBeNull();
 
@@ -168,9 +157,9 @@ describe('the awareness boundary', () => {
 describe('who a creature will attack', () => {
   const targeting = (state: GameState) => ({ module: GREENMARCH, state, terrain });
 
-  // Pinned as-is, and it disagrees with combat entry: `nearestHostile` applies
-  // no distance cap at all, so a creature already in a fight will target
-  // something it could never have noticed. Expected to change.
+  // Pinned as-is, and it disagrees with combat entry: `nearestHostile` applies no distance cap, so
+  // a creature already in a fight targets something it could never have noticed. Expected to
+  // change.
   it('has no range limit of its own today', () => {
     const state = field([{ at: { x: HERO.x + 14, y: HERO.y } }]);
     const hound = state.entities['m:0']!;
@@ -201,10 +190,8 @@ describe('who witnessed it', () => {
     return witnessesOf(txn, terrain, txn.entity('e:1')!);
   }
 
-  // Twelve tiles is greenmarch's own sight: `defaultRange: 60` at five units to
-  // the tile. It is not an engine constant, and the note that used to stand
-  // here saying the engine floored `witness.radius` at 12 was describing a
-  // different branch — the one below, for modules that switch sight off.
+  // Twelve tiles is greenmarch's own sight: `defaultRange: 60` at five units to the tile, not an
+  // engine constant.
   it('sees a deed twelve tiles away', () => {
     expect(onlookerAt(HERO.x + 12)).toEqual(['w:1']);
   });
@@ -225,12 +212,9 @@ describe('who witnessed it', () => {
   });
 
   /**
-   * With sight not required, `radius: 0` means everyone here.
-   *
-   * The engine used to floor it at twelve tiles, so a module that turned line
-   * of sight off and left the radius at its schema default silently got a
-   * twelve-tile circle instead of the whole place — and no way to ask for the
-   * whole place at all.
+   * With sight not required, `radius: 0` means everyone here. The engine used to floor it at twelve
+   * tiles, so a module that turned line of sight off got a twelve-tile circle instead of the whole
+   * place.
    */
   describe('when the module says sight is not required', () => {
     function blindWitness(radius: number, distance: number): string[] {
@@ -259,9 +243,8 @@ describe('who witnessed it', () => {
 });
 
 describe('what the party is told is around them', () => {
-  // Was a third, unrelated radius of 10. Prose now uses the character's own
-  // declared sight, so what you are told about and what starts a fight are the
-  // same reach — which is the point of folding sight in beside the rest.
+  // Prose uses the character's own declared sight, so what you are told about and what starts a
+  // fight are the same reach.
   const scene = (x: number) => {
     const state = field([{ at: { x, y: HERO.y } }]);
     return describeSurroundings({ module: GREENMARCH, state, seed: 1 })
@@ -290,8 +273,8 @@ describe('line of sight itself', () => {
   });
 
   it('does not let a creature standing in a doorway block itself', () => {
-    // Both endpoints are exempt from the opacity test, so standing on an opaque
-    // tile does not blind you.
+    // Both endpoints are exempt from the opacity test, so standing on an opaque tile does not blind
+    // you.
     const builder = new MapBuilder(9, 3, 'floor');
     builder.set(4, 1, 'reeds');
     const tiles = builder.freeze();
@@ -300,9 +283,8 @@ describe('line of sight itself', () => {
 });
 
 describe('the alien ruleset perceives the same way', () => {
-  // minimal declares no senses, no sizes, and no perception of any kind. It
-  // must keep behaving exactly like greenmarch does here — that equivalence is
-  // what proves perception is engine behaviour and not content.
+  // minimal declares no senses, no sizes and no perception, and must behave exactly as greenmarch
+  // does here — the equivalence that proves perception is engine behaviour and not content.
   const alien = { module: MINIMAL };
 
   it('starts combat at twelve and not thirteen', () => {
@@ -323,16 +305,13 @@ describe('the alien ruleset perceives the same way', () => {
 });
 
 describe('a declared sense reproduces the constant it replaced', () => {
-  // The whole compatibility argument in one test. greenmarch declares sight
-  // with nothing but a name; every other field defaults. The schema's
-  // `defaultRange` of 60 module units, at the fallback tile size of 5, is
-  // twelve tiles — the literal the engine used to carry.
+  // greenmarch declares sight with nothing but a name; every other field defaults. `defaultRange`
+  // of 60 module units at the fallback tile size of 5 is twelve tiles.
   it('resolves a bare declaration to twelve tiles', () => {
     const sight = sensesOf(GREENMARCH).find((sense) => sense.id === 'sight')!;
     expect(sight.range).toBe(12);
     expect(sight.falloff).toBe('cliff');
-    // Sight remembers nothing and leaves nothing: what you can still see needs
-    // no memory, and being seen leaves no trace where you stood.
+    // Sight remembers nothing and leaves nothing.
     expect(sight.lingerMinutes).toBe(0);
     expect(sight.rememberMinutes).toBe(0);
   });
@@ -366,11 +345,8 @@ describe('a declared sense reproduces the constant it replaced', () => {
 });
 
 /**
- * A sense can be shut off, and a sense can be the kind that does not care.
- *
- * `senses[].ignores` shipped for a long time on its own, which made it an
- * exception to a rule nobody had written: no condition suppressed a sense, so
- * ignoring one bought nothing. Both halves are now read together.
+ * A sense can be shut off, and a sense can be the kind that does not care. `senses[].ignores` means
+ * nothing without a condition that suppresses; both halves are read together.
  */
 describe('a sense that has been closed', () => {
   /** Greenmarch where `dazzled` shuts sight, and optionally sight shrugs it off. */
@@ -420,7 +396,7 @@ describe('a sense that has been closed', () => {
     expect(rangeOf(context, under, hearing)).toBeGreaterThan(0);
   });
 
-  // The whole point of `ignores`, and what it never bought before.
+  // What `ignores` buys.
   it('works through it when the sense ignores that condition', () => {
     const module = dazzling(true);
     expect(reach(module, ['dazzled'])).toBeGreaterThan(0);
@@ -465,8 +441,8 @@ describe('hearing', () => {
   });
 
   it('passes a reed bed, which sight does not', () => {
-    // greenmarch's reeds are opaque but passable: you cannot see through them
-    // and they muffle nothing.
+    // greenmarch's reeds are opaque but passable: you cannot see through them and they muffle
+    // nothing.
     const builder = new MapBuilder(20, 5, 'floor');
     for (let y = 0; y < 5; y += 1) builder.set(6, y, 'reeds');
 
@@ -496,8 +472,7 @@ describe('hearing', () => {
   });
 
   it('is not loud enough to start a fight from across the marsh', () => {
-    // Audible at twenty tiles, but nowhere near the aggro threshold — the whole
-    // point of separating noticing from attacking.
+    // Audible at twenty tiles, but below the aggro threshold — noticing is separate from attacking.
     const state = settle(field([{ at: { x: HERO.x + 20, y: HERO.y } }]));
     expect(state.combat).toBeNull();
   });
@@ -557,8 +532,8 @@ describe('the trail a creature leaves', () => {
     const tiles = Object.keys(marks).map(Number);
     expect(tiles.length).toBeGreaterThanOrEqual(3);
 
-    // Only senses that linger leave anything: sight and hearing do not, and
-    // both a scent and a print do.
+    // Only senses that linger leave anything: sight and hearing do not, and both a scent and a
+    // print do.
     const left = Object.values(marks).flat();
     expect(new Set(left.map((mark) => mark.sense))).toEqual(new Set(['smell', 'tracks']));
     expect(left.every((mark) => mark.by === 'e:1')).toBe(true);
@@ -570,8 +545,8 @@ describe('the trail a creature leaves', () => {
 
     expect(markStrength(smell, mark, 100)).toBe(1);
     expect(markStrength(smell, mark, 145)).toBeCloseTo(0.5);
-    // Exactly zero at the declared span, by an integer comparison on minutes —
-    // so "faded" and "pruned" can never disagree by an epsilon.
+    // Exactly zero at the declared span, by an integer comparison on minutes, so "faded" and
+    // "pruned" cannot disagree by an epsilon.
     expect(markStrength(smell, mark, 100 + smell.lingerMinutes)).toBe(0);
     expect(markStrength(smell, mark, 100 + smell.lingerMinutes + 500)).toBe(0);
   });
@@ -593,9 +568,8 @@ describe('the trail a creature leaves', () => {
       state = reduce(state, { type: 'step', direction }, ctx).state;
     }
 
-    // Two tiles paced between, one trace per sense each — not twelve stacked
-    // up. Counted per sense because a creature leaves a scent *and* a print,
-    // and it is refreshing both rather than layering either.
+    // Two tiles paced between, one trace per sense each rather than twelve stacked up: a creature
+    // refreshes both its scent and its print rather than layering either.
     const cap = GREENMARCH.source.rules.perception.maxMarksPerTile;
     for (const marks of Object.values(state.maps['field']!.marks)) {
       const perSense = new Map<string, number>();
@@ -606,9 +580,8 @@ describe('the trail a creature leaves', () => {
   });
 
   it('keeps only the freshest few traces when a crowd crosses one tile', () => {
-    // A thousand of a thing crossing one tile is still "they came through
-    // here". The cap is what stops the tile — and the loop that reads it every
-    // turn for every creature — growing with the size of the herd.
+    // The cap is what stops the tile — and the loop that reads it every turn for every creature —
+    // growing with the size of the herd.
     const walkers = Array.from({ length: 9 }, (_, i) => ({
       id: `m:${i}`, at: { x: HERO.x + 6, y: HERO.y + 2 },
     }));
@@ -631,9 +604,7 @@ describe('the trail a creature leaves', () => {
       for (const mark of marks) perSense.set(mark.sense, (perSense.get(mark.sense) ?? 0) + 1);
       for (const count of perSense.values()) expect(count).toBeLessThanOrEqual(cap);
 
-      // And what survived is a total order, oldest first — which is what makes
-      // the truncation reproducible rather than whichever one happened to be
-      // written last.
+      // What survived is a total order, oldest first, which makes the truncation reproducible.
       const ordered = [...marks].sort((a, b) =>
         a.at - b.at || (a.sense < b.sense ? -1 : a.sense > b.sense ? 1 : 0)
         || (a.by < b.by ? -1 : a.by > b.by ? 1 : 0) || a.strength - b.strength);
@@ -659,8 +630,8 @@ describe('a ruleset with no senses leaves no trace of the machinery', () => {
 
 describe('a creature acts on what it noticed', () => {
   it('walks toward a noise it has no way of seeing', () => {
-    // A wall with a gap at the bottom. The hound cannot see the party at all,
-    // but sound carries through the gap and around it.
+    // A wall with a gap at the bottom: the hound cannot see the party, but sound carries through
+    // the gap and around it.
     const builder = new MapBuilder(30, 9, 'floor');
     for (let y = 0; y < 8; y += 1) builder.set(9, y, 'wall');
 
@@ -808,7 +779,7 @@ describe('how you move decides what hears you', () => {
   });
 
   it('never makes you truly silent', () => {
-    // A skill should be an advantage, not a win condition.
+    // A skill lowers emission but never to silence.
     expect(heard('sneak')).toBeGreaterThan(0);
   });
 
@@ -875,15 +846,14 @@ describe('the party has senses of its own', () => {
       .map((line) => line.text)
       .join(' ');
 
-    // greenmarch writes these; the engine only decides that something reached
-    // them and how strongly.
+    // greenmarch writes these; the engine only decides that something reached them and how
+    // strongly.
     expect(lines).toMatch(/reeds|splash|smell|musk|sour|water|sound/i);
     expect(lines).not.toContain('hearing');
   });
 
   it('never names what it cannot see', () => {
-    // A hound investigating out of sight is the party's problem to discover,
-    // not something the narrator hands them.
+    // A hound investigating out of sight is not announced to the party.
     const builder = new MapBuilder(30, 9, 'floor');
     for (let y = 0; y < 9; y += 1) builder.set(10, y, 'wall');
 
@@ -963,29 +933,21 @@ describe('the editor preview and play agree', () => {
     expect(at('sneak', 'hearing')).toBeLessThan(at('walk', 'hearing'));
     expect(at('walk', 'hearing')).toBeLessThan(at('dash', 'hearing'));
 
-    // Smell too: greenmarch declares that dashing stirs up more scent and
-    // sneaking leaves less, so the stance dropdown moves this sense as well.
-    // The multipliers come from the stance's own `emits` table, not the engine.
+    // Smell too: greenmarch declares that dashing stirs up more scent and sneaking leaves less. The
+    // multipliers come from the stance's own `emits` table.
     expect(at('sneak', 'smell')).toBeCloseTo(at('walk', 'smell') * 0.6, 10);
     expect(at('dash', 'smell')).toBeCloseTo(at('walk', 'smell') * 1.4, 10);
   });
 });
 
 /**
- * Stopping to use a sense on purpose.
- *
- * `listen` and `smell` used to be the same one-minute `wait`, and the only
- * thing that ever spoke was the *moment of noticing* — which fires once, for a
- * new alert. Asking again a minute later was silence, and a command that says
- * nothing reads as a command that does not work.
+ * Stopping to use a sense on purpose. `listen` and `smell` were the same one-minute `wait`, and
+ * only the moment of noticing spoke — so asking again a minute later was silence.
  */
 describe('using a sense deliberately', () => {
   /**
-   * The party having heard something east of them, which has since moved off.
-   *
-   * Nothing is on the map to be perceived now, so everything reported comes
-   * from what the party *remembers* — which is precisely the case the old code
-   * had no way to speak about.
+   * The party having heard something east of them, which has since moved off. Nothing is on the map
+   * to be perceived, so everything reported comes from what the party remembers.
    */
   function heardSomething(): GameState {
     const state = field();
@@ -1020,8 +982,8 @@ describe('using a sense deliberately', () => {
     }
   });
 
-  // How long ago it was is the difference between "something is there" and
-  // "something was there", so the reading carries it.
+  // How long ago it was is the difference between "something is there" and "something was there",
+  // so the reading carries it.
   it('ages a held reading as the clock moves on', () => {
     const state = heardSomething();
     const later: GameState = { ...state, minute: state.minute + 12 };
@@ -1036,8 +998,8 @@ describe('using a sense deliberately', () => {
     expect(held.fresh).toBe(false);
   });
 
-  // The whole bug: `perceiveAll` announces a *new* alert once, and the alert
-  // then persists for half an hour — so asking again used to be silence.
+  // `perceiveAll` announces a new alert once and the alert persists for half an hour, so asking
+  // again used to be silence.
   it('still speaks the second and third time it is asked', () => {
     let state = heardSomething();
     const context = { module: GREENMARCH, terrain };
@@ -1075,10 +1037,8 @@ describe('using a sense deliberately', () => {
 
 describe('a smell has to get to you', () => {
   /**
-   * The bug this pins: a `field` sense used to arrive everywhere at once. Walk
-   * into a dungeon and every creature in it, around every corner, smelled you
-   * on the same tick — because the flood from the observer only asked *can this
-   * reach* and never *has it yet*.
+   * A `field` sense used to arrive everywhere at once: the flood from the observer asked only
+   * whether it could reach, never whether it had yet.
    */
   const settled = (state: GameState, id: string, minute: number): GameState => ({
     ...state,
@@ -1102,8 +1062,7 @@ describe('a smell has to get to you', () => {
   });
 
   it('arrives once it has had the minutes to cross the gap', () => {
-    // Greenmarch scent creeps a little over a tile a minute, so twelve tiles is
-    // ten minutes away however keen the nose at this end.
+    // Greenmarch scent creeps a little over a tile a minute, so twelve tiles is ten minutes away.
     const state = justArrived(12);
     const hound = state.entities['m:0']!;
     const hero = state.entities[state.party[0]!]!;
@@ -1132,8 +1091,8 @@ describe('a smell has to get to you', () => {
   });
 
   it('leaves the party unsmelled through a whole walk in, and then catches up', () => {
-    // The end-to-end shape, through the reducer rather than through `signalAt`:
-    // nobody has anything at first, and somebody does later.
+    // The end-to-end shape, through the reducer rather than `signalAt`: nobody has anything at
+    // first, and somebody does later.
     let state = settled(field([{ at: { x: HERO.x + 10, y: HERO.y } }]), 'm:0', 0);
     state = settled(state, state.party[0]!, state.minute);
     const context = () => ({ module: GREENMARCH, state, terrain });
@@ -1147,17 +1106,11 @@ describe('a smell has to get to you', () => {
 
 describe('nearer is never worse', () => {
   /**
-   * The invariant a travelling sense could plausibly break, and the one that
-   * makes it read as sane: of two creatures with the same nose, the closer one
-   * smells at least as much.
+   * Of two creatures with the same nose, the closer one smells at least as much.
    *
-   * It was broken once, and not by the arithmetic — aurendel's undead were
-   * given `followsTrails: false`, which switches off *every* lingering trace
-   * rather than only footprints. The two nearest creatures in a barrow were
-   * grave hounds, so the party was smelled by the rats across the room and not
-   * by the hounds beside them. The lesson is in the field, not the formula:
-   * `followsTrails` is "perceives nothing the ground kept", which is a
-   * construct, and almost never what an author means about an animal.
+   * Broken once, not by the arithmetic: aurendel's undead were given `followsTrails: false`, which
+   * switches off every lingering trace rather than only footprints, so the party was smelled by
+   * rats across the room and not by the grave hounds beside them.
    */
   it('smells a thing more strongly the closer it is', () => {
     const base = field([
@@ -1177,9 +1130,8 @@ describe('nearer is never worse', () => {
   });
 
   it('leaves a live nose alone when a creature will not read the ground', () => {
-    // `followsTrails: false` must gate traces only. A creature that cannot
-    // track still smells whatever is standing in front of it, or the field is
-    // not "ignores trails", it is "has no nose".
+    // `followsTrails: false` gates traces only. A creature that cannot track still smells whatever
+    // is standing in front of it.
     const base = field([{ id: 'm:0', at: { x: HERO.x + 3, y: HERO.y } }]);
     const state: GameState = { ...base, minute: base.minute + 240 };
     const context = { module: GREENMARCH, state, terrain };
@@ -1192,8 +1144,7 @@ describe('nearer is never worse', () => {
 
 describe('a sound does not', () => {
   it('arrives the instant it is made, however far across the room', () => {
-    // The other half of the same rule. Hearing does not spread, so there is
-    // nothing to wait for: it is heard now or not at all.
+    // Hearing does not spread, so there is nothing to wait for: it is heard now or not at all.
     const base = field([{ at: { x: HERO.x + 20, y: HERO.y } }]);
     const state = { ...base, entities: { ...base.entities,
       [base.party[0]!]: { ...base.entities[base.party[0]!]!, since: base.minute } } };
@@ -1205,9 +1156,8 @@ describe('a sound does not', () => {
   });
 
   it('never arrives at all from beyond its range, however long anyone waits', () => {
-    // Greenmarch hearing reaches 24 tiles. Thirty is silence, and waiting an
-    // hour does not make it less so — which is what separates a range from a
-    // travel time.
+    // Greenmarch hearing reaches 24 tiles. Thirty is silence, and waiting an hour does not change
+    // that — a range is not a travel time.
     const base = field([{ at: { x: HERO.x + 30, y: HERO.y } }]);
     const hearing = sensesOf(GREENMARCH).find((sense) => sense.id === 'hearing')!;
     const hero = base.entities[base.party[0]!]!;

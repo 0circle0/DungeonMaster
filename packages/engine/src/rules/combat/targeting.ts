@@ -1,14 +1,11 @@
 /**
  * Targeting: who can be hit, from where.
  *
- * This is where the grid earns its cost. Range, reach, line of sight, cover,
- * and area shapes are all real geometry rather than tags, so a wall genuinely
- * protects you and a fireball genuinely catches your own party if you aim it
- * badly.
+ * Range, reach, line of sight, cover and area shapes are real geometry rather than tags, so a wall
+ * genuinely protects you and a fireball genuinely catches your own party.
  *
- * Distances are in **tiles**. The module measures range in its own units — feet,
- * by convention — so conversion happens once, here, using the tile size derived
- * from `rules.sizes`.
+ * Distances are in tiles. The module measures range in its own units, so conversion happens once,
+ * here, using the tile size derived from `rules.sizes`.
  */
 
 import type { CompiledModule } from '@dm/module';
@@ -26,10 +23,8 @@ import type { Message } from '../../narrate/systemText.js';
 const DEFAULT_TILE_SIZE = 5;
 
 /**
- * How many module units one tile represents.
- *
- * Taken from the smallest declared size's `space`, since that is the creature
- * that fits in exactly one tile.
+ * How many module units one tile represents. Taken from the smallest declared size's `space`, since
+ * that is the creature that fits in exactly one tile.
  */
 export function tileSize(module: CompiledModule): number {
   const sizes = module.all<{ space: number }>('rules.sizes');
@@ -49,10 +44,7 @@ export function reachOf(module: CompiledModule, entity: Entity): number {
     ? module.find<{ size?: string }>('content.monsters', entity.statblock)
     : undefined;
 
-  // A creature that declares no size falls back to the module's own default,
-  // which is what `rules.defaultSize` is for and what nothing consulted — so a
-  // module declaring "everything is Medium unless it says otherwise" was
-  // ignored and every player character had a reach of exactly one tile.
+  // A creature that declares no size falls back to `rules.defaultSize`.
   const sizeId = statblock?.size
     ?? (entity.extra['size'] as string | undefined)
     ?? module.source.rules.defaultSize;
@@ -79,8 +71,8 @@ export function speedOf(module: CompiledModule, entity: Entity): number {
   const stance = stanceOf(module, entity);
   if (stance) best = Math.floor(best * stance.speedMultiplier);
 
-  // A creature with no declared movement still shuffles one tile; being unable
-  // to move at all should come from a condition, not from missing data.
+  // A creature with no declared movement still shuffles one tile; being unable to move at all
+  // should come from a condition, not from missing data.
   return Math.max(1, best);
 }
 
@@ -111,11 +103,9 @@ export interface Reachability {
 }
 
 /**
- * Whether a target can be reached from a position, and what protects it.
- *
- * Cover is read from the terrain between the two — a creature standing behind
- * rubble is harder to hit, and the module decides how much by declaring the
- * cover type on the terrain.
+ * Whether a target can be reached from a position, and what protects it. Cover is read from the
+ * terrain between the two, and the module decides how much by declaring the cover type on the
+ * terrain.
  */
 export function reachability(
   context: TargetingContext,
@@ -130,8 +120,8 @@ export function reachability(
 
   const hasSight = hasLineOfSight(map.tiles, context.terrain, from, to);
 
-  // Cover comes from the tile immediately adjacent to the target along the
-  // line of fire — the thing it is standing behind.
+  // Cover comes from the tile immediately adjacent to the target along the line of fire — the thing
+  // it is standing behind.
   let cover: string | null = null;
   if (hasSight && gap > 1) {
     for (const offset of [{ x: -1, y: 0 }, { x: 1, y: 0 }, { x: 0, y: -1 }, { x: 0, y: 1 }]) {
@@ -149,13 +139,7 @@ export function reachability(
   return { inRange: gap <= range, hasSight, distance: gap, cover };
 }
 
-/**
- * Cover so complete there is no shot at all.
- *
- * `blocksTargeting` was declared on every cover type and consulted by nothing,
- * so total cover was worth a defence bonus and no more — a creature behind a
- * pillar could still be picked off through it.
- */
+/** Cover so complete there is no shot at all, per `blocksTargeting` on the cover type. */
 export function blocksTargeting(module: CompiledModule, cover: string | null): boolean {
   if (!cover) return false;
   return module.find<{ blocksTargeting?: boolean }>('rules.coverTypes', cover)?.blocksTargeting === true;
@@ -179,11 +163,8 @@ interface AbilityDef {
 }
 
 /**
- * Everyone an ability would affect.
- *
- * Area abilities catch whoever is standing in the shape, including the caster's
- * own party — `affects` is how content narrows that, and a module that leaves
- * it at `all` gets friendly fire, which is usually the intent.
+ * Everyone an ability would affect. Area abilities catch whoever is standing in the shape,
+ * including the caster's own party; `affects` is how content narrows that.
  */
 export function resolveTargets(
   context: TargetingContext,
@@ -277,9 +258,8 @@ export function nearestHostile(
   const map = context.state.maps[actor.map];
   if (!map) return null;
 
-  // Uncapped unless a caller says otherwise. How far a creature can notice
-  // something is a question about *that creature*, so the limit belongs to
-  // whoever is asking rather than being baked into a shared query.
+  // Uncapped unless a caller says otherwise: how far a creature can notice something is a question
+  // about that creature, so the limit belongs to whoever is asking.
   const limit = options.range ?? Infinity;
 
   let best: Entity | null = null;

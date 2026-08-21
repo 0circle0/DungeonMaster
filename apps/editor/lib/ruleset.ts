@@ -1,26 +1,18 @@
 /**
  * Starting a world from someone else's rules.
  *
- * Aurendel does this already, and has always done it in Python:
- * `modules/aurendel/src/build.py` hardcodes `core_fantasy/module.json` as its
- * base and copies the ruleset in at build time. `extends` cannot express it —
- * the linter schema-checks a raw child before resolving the merge, so a module
- * without its own `rules` block fails with "attributes is required" — which is
- * exactly why that script copies rather than inherits.
+ * `extends` cannot express this: the linter schema-checks a raw child before resolving the merge,
+ * so a module without its own `rules` block fails with "attributes is required". That is why
+ * `modules/aurendel/src/build.py` copies `core_fantasy/module.json` in at build time rather than
+ * inheriting it.
  *
- * That left the studio with no path to a ruleset at all. `blankModule()` gives
- * one attribute, one resource and one class; everything past that had to be
- * typed. So this is build.py's composition step, moved somewhere an author can
- * reach it, and generalised: the source is any world, not one hardcoded file.
+ * This is that composition step, moved somewhere an author can reach it and generalised so the
+ * source is any world rather than one hardcoded file.
  *
- * What is *not* here is `narrative.systemText`'s 54 fragments. They are not
- * optional and never a choice: `compileModule` treats a missing one as a load
- * error, because `{actor} {outcome} {target}` renders as "David  a bog hound"
- * without them. `blankModule()` writes them from `requiredSystemText()`, and
- * every composition starts from `blankModule()`, so they are always present.
- * The other 146 messages carry schema defaults — omitting one is how an author
- * says the shipped wording is fine — so they are worth copying only when the
- * source has rewritten them, which is the one prose checkbox below.
+ * Not here: `narrative.systemText`'s 54 fragments. They are never a choice — `compileModule` treats
+ * a missing one as a load error — and `blankModule()` writes them from `requiredSystemText()`, so
+ * they are always present. The other 146 messages carry schema defaults and are worth copying only
+ * when the source has rewritten them, which is the one prose checkbox below.
  */
 
 import { blankModule } from './templates';
@@ -35,9 +27,8 @@ export interface RulesetSection {
   /** Sections whose absence would leave this one referring to nothing. */
   readonly requires: readonly string[];
   /**
-   * The schema will not accept a document without this. Unchecking does not
-   * omit it — there is nothing to omit to — it falls back to the one-of-each
-   * version in the blank scaffold.
+   * The schema will not accept a document without this. Unchecking falls back to the one-of-each
+   * version in the blank scaffold rather than omitting it.
    */
   readonly required?: boolean;
   /** Off unless asked for. */
@@ -45,11 +36,9 @@ export interface RulesetSection {
 }
 
 /**
- * The sections, in the order they are worth thinking about.
- *
- * Grouped by what an author would decide together rather than by where the
- * schema happens to put them: "damage and conditions" is one decision across
- * three keys, and `rules.spellcasting` is one key that is a whole decision.
+ * The sections, grouped by what an author would decide together rather than by where the schema
+ * puts them: "damage and conditions" is one decision across three keys, and `rules.spellcasting` is
+ * one key that is a whole decision.
  */
 export const RULESET_SECTIONS: readonly RulesetSection[] = [
   {
@@ -88,17 +77,14 @@ export const RULESET_SECTIONS: readonly RulesetSection[] = [
     id: 'movement',
     label: 'Movement, stances & senses',
     detail: 'How things move and carry themselves, what they notice, and how big they are.',
-    // Stances live here rather than with combat, and the schema insists: a
-    // stance emits an impression a sense must be able to pick up, while
-    // `perception.defaultStance` names one back. Splitting them would be a
-    // dependency cycle, and the honest grouping is that a stance is a way of
-    // moving.
+    // Stances live here rather than with combat: a stance emits an impression a sense must pick up,
+    // while `perception.defaultStance` names one back, so splitting them would be a dependency
+    // cycle.
     paths: [
       'rules.senses', 'rules.perception', 'rules.stances', 'rules.movementModes', 'rules.sizes',
       'rules.defaultSize', 'rules.defaultMovementMode', 'rules.interactionRange', 'rules.search',
     ],
-    // Senses name the phrasings they describe with; a stance is concealed by a
-    // skill.
+    // Senses name the phrasings they describe with; a stance is concealed by a skill.
     requires: ['grammar', 'skills'],
   },
   {
@@ -106,10 +92,8 @@ export const RULESET_SECTIONS: readonly RulesetSection[] = [
     label: 'Equipment & economy',
     detail: 'Where gear goes, what it can be, and what it costs.',
     paths: ['rules.equipmentSlots', 'rules.itemProperties', 'rules.currency'],
-    // A property may name the attributes a weapon carrying it can be swung
-    // with, which is what finesse is. The tenth cross-reference, and the first
-    // that cost nothing: `attributes` requires nothing, so there is no cycle
-    // to route around.
+    // A property may name the attributes a weapon carrying it can be swung with, which is what
+    // finesse is. `attributes` requires nothing, so there is no cycle to route around.
     requires: ['attributes'],
   },
   {
@@ -131,12 +115,11 @@ export const RULESET_SECTIONS: readonly RulesetSection[] = [
     id: 'skills',
     label: 'Skills & abilities',
     detail: 'What characters can be good at, the things they can do, and what each costs to use.',
-    // `rules.actionTypes` sits here rather than with combat because every
-    // ability names one, while combat's own opportunities name an ability —
-    // splitting them the other way round is a dependency cycle.
+    // `rules.actionTypes` sits here rather than with combat because every ability names one, while
+    // combat's opportunities name an ability — splitting them the other way is a dependency cycle.
     paths: ['content.skills', 'content.abilities', 'rules.actionTypes'],
-    // Abilities name the attribute they use, the mastery tier they need, and
-    // the save they are resisted by.
+    // Abilities name the attribute they use, the mastery tier they need, and the save they are
+    // resisted by.
     requires: ['attributes', 'progression', 'damage'],
   },
   {
@@ -180,12 +163,9 @@ export const DEFAULT_SECTIONS: readonly string[] =
 const byId = new Map(RULESET_SECTIONS.map((section) => [section.id, section]));
 
 /**
- * Close a selection over its prerequisites.
- *
- * Taking classes without attributes leaves every `primaryAttribute` pointing at
- * nothing — a document that fails to compile the moment it is made, for a
- * reason expressed nowhere on the screen that made it. So the dialog adds what
- * is needed rather than letting somebody find out afterwards.
+ * Close a selection over its prerequisites. Taking classes without attributes leaves every
+ * `primaryAttribute` pointing at nothing, so the dialog adds what is needed rather than producing a
+ * document that fails to compile.
  */
 export function withPrerequisites(selected: Iterable<string>): Set<string> {
   const out = new Set(selected);
@@ -223,13 +203,9 @@ function write(doc: Record<string, unknown>, path: string, value: unknown): void
 }
 
 /**
- * A new document, built from the blank scaffold and whatever was ticked.
- *
- * The scaffold is always the base rather than the source: it is the thing known
- * to compile, and it deliberately sets no start location and no areas so the
- * console reads as a to-do list. A section that is not taken simply keeps
- * whatever the scaffold had — which for the schema minimums is one attribute,
- * one resource and one class, and for everything else is nothing at all.
+ * A new document, built from the blank scaffold and whatever was ticked. The scaffold is always the
+ * base because it is known to compile, and it sets no start location and no areas so the console
+ * reads as a to-do list. A section that is not taken keeps whatever the scaffold had.
  */
 export function composeModule(
   source: Record<string, unknown>,

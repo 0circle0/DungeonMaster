@@ -3,12 +3,10 @@
 /**
  * The session as React state.
  *
- * The engine's `reduce` is deliberately NOT the React reducer: React 19
- * StrictMode double-invokes reducers, and `state.rng` advances per action — the
- * second invocation's events would be silently dropped, a divergent-replay bug
- * found days later. So the engine call happens in the event handler, and the
- * React reducer only files results. `sessionReducer` is exported separately so
- * it is testable without a DOM.
+ * The engine's `reduce` is deliberately not the React reducer: React 19 StrictMode double-invokes
+ * reducers and `state.rng` advances per action, so the second invocation's events would be silently
+ * dropped. The engine call happens in the event handler and the React reducer only files results.
+ * `sessionReducer` is exported separately so it is testable without a DOM.
  */
 
 import { useCallback, useMemo, useReducer, useRef } from 'react';
@@ -58,11 +56,9 @@ export interface SessionApi {
   readonly restore: (text: string, allowDrift?: boolean) => string | null;
   readonly note: (text: string, kind?: Line['kind']) => void;
   /**
-   * Serialize the run, carrying the lineage and the active mod set.
-   *
-   * On the API rather than left to each caller because the append rule is easy
-   * to get subtly wrong, and a lineage that silently restarts is worse than
-   * none — it would claim a save had only ever seen one module build.
+   * Serialize the run, carrying the lineage and the active mod set. On the API rather than left to
+   * each caller, because a lineage that silently restarts is worse than none — it would claim a
+   * save had only ever seen one module build.
    */
   readonly serialize: (savedAt: number) => string;
 }
@@ -77,15 +73,13 @@ export function useSession(
   const modIds = useMemo(() => setup?.identities ?? [], [setup]);
 
   /**
-   * The save this run was loaded from, so its lineage carries forward.
-   *
-   * Without it every load-then-save would start the chain over, and the chain
-   * is the whole point: it is what says which module build a broken save came
-   * from.
+   * The save this run was loaded from, so its lineage carries forward. Without it every load-then-
+   * save would start the chain over, and the chain is what says which module build a broken save
+   * came from.
    */
   const previousRef = useRef<SaveFile | null>(null);
-  // Large, non-serializable, constant per module — a ref, not a memo: useMemo
-  // is a hint, and losing the terrain index mid-run would rebuild it silently.
+  // Large, non-serializable, constant per module — a ref rather than a memo: `useMemo` is a hint,
+  // and losing the terrain index mid-run would rebuild it silently.
   const terrainRef = useRef<{ module: CompiledModule; terrain: TerrainIndex } | null>(null);
   if (!terrainRef.current || terrainRef.current.module !== module) {
     terrainRef.current = { module, terrain: new TerrainIndex(module) };
@@ -101,8 +95,8 @@ export function useSession(
     },
   );
 
-  // The frame the *next* handler should read: React state is asynchronous, and
-  // two clicks in one tick must not both apply to the same starting state.
+  // The frame the next handler should read: React state is asynchronous, and two clicks in one tick
+  // must not both apply to the same starting state.
   const liveRef = useRef(frame);
   liveRef.current = frame;
 
@@ -154,9 +148,8 @@ export function useSession(
     const result = loadState(text, module, { allowModuleDrift: allowDrift, mods: modIds });
     if (!result.ok) return result.error;
 
-    // Mod drift never blocks a load. The engine cannot tell whether a different
-    // mod set matters, because it does not know what any mod changed — so it
-    // names what differs and leaves the judgement to the player.
+    // Mod drift never blocks a load: the engine cannot tell whether a different mod set matters, so
+    // it names what differs and leaves the judgement to the player.
     const notes: Line[] = [
       { text: 'Loaded.', kind: 'note' },
       ...result.warnings.map((text): Line => ({ text, kind: 'refusal' })),
@@ -178,8 +171,8 @@ export function useSession(
   const serialize = useCallback(
     (savedAt: number) =>
       saveState(liveRef.current.state, savedAt, {
-        // Carrying the file this run was loaded from is what keeps the lineage
-        // a chain rather than a single link.
+        // Carrying the file this run was loaded from is what keeps the lineage a chain rather than
+        // a single link.
         previous: previousRef.current,
         mods: modIds,
       }),

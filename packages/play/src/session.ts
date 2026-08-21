@@ -1,9 +1,6 @@
 /**
- * A play session.
- *
- * Holds the state, applies actions, and keeps the narrated transcript. Separated
- * from the REPL so a scripted playthrough and an interactive one drive exactly
- * the same code — which is what makes the smoke test meaningful.
+ * A play session. Holds the state, applies actions, and keeps the narrated transcript. Separated
+ * from the REPL so a scripted playthrough and an interactive one drive the same code.
  */
 
 import type { CompiledModule } from '@dm/module';
@@ -41,10 +38,9 @@ export interface Session {
 const PARTY_NAMES = ['Ash', 'Korrin', 'Mire', 'Sable', 'Dun', 'Wren', 'Halt', 'Brann'];
 
 /**
- * Begin a session, placing the party where the module says play starts.
- *
- * Character creation is deliberately quick here — the module's declared
- * defaults — so the game is playable before the creation screens exist.
+ * Begin a session, placing the party where the module says play starts. Character creation is quick
+ * here — the module's declared defaults — so the game is playable before the creation screens
+ * exist.
  */
 export function startSession(
   module: CompiledModule,
@@ -55,8 +51,8 @@ export function startSession(
   const size = Math.min(partySize ?? module.source.start.partySize, module.source.start.partySize);
   const state = newGame(module, {
     seed,
-    // A roster from character creation when there is one; the module's own
-    // defaults otherwise, so a quick start is always available.
+    // A roster from character creation when there is one; the module's own defaults otherwise, so a
+    // quick start is always available.
     party: roster && roster.length > 0
       ? roster.slice(0, size)
       : Array.from({ length: size }, (_, i) => defaultChoices(module, PARTY_NAMES[i] ?? `Hero ${i + 1}`)),
@@ -81,18 +77,15 @@ export function startSession(
     enterDungeon(txn, terrain, start.startingDungeon, rng);
   }
 
-  // Whatever the party is already committed to when play opens. Done inside the
-  // arrival transaction so its effects run and its announcement lands in the
-  // opening transcript rather than a turn later.
+  // Whatever the party is already committed to when play opens. Inside the arrival transaction so
+  // its effects run and its announcement lands in the opening transcript.
   startAutoQuests(txn, rng.derive('quests'));
 
   const arrived = txn.finish();
   session.state = arrived.state;
 
-  // Order matters. The module's opening text is the framing — who the party is
-  // and why they are standing here — so it goes first; the room, the people in
-  // it, and the job come after. Printed last, as it used to be, the premise
-  // arrived after the player had already started reading the scenery.
+  // Order matters: the module's opening text is the framing, so it goes first; the room, the people
+  // in it, and the job come after.
   const context = { module, state: session.state, seed };
 
   if (start.openingTextKey) {
@@ -103,16 +96,15 @@ export function startSession(
 
   session.transcript.push(...describeSurroundings(context));
 
-  // Arriving somewhere narrates that place's description, and so does looking
-  // around — which is right in play, and says the same paragraph twice when
-  // both happen on the opening screen. The look wins; the arrival copy goes.
+  // Arriving somewhere narrates that place's description, and so does looking around, which says
+  // the same paragraph twice on the opening screen. The look wins.
   const described = placeOf(module, session.state).descriptionKey;
   const location = session.state.location;
   const herePoi = location.kind === 'poi' ? location.poi : null;
   const arrival = arrived.events.filter((event) => {
     if (event.type === 'narrate' && event.textKey === described) return false;
-    // The arrival event for the place the surroundings just named would print
-    // its name a second time on the same screen.
+    // The arrival event for the place the surroundings just named would print its name a second
+    // time on the same screen.
     if (event.type === 'custom' && event.event === 'entered'
       && event.data['place'] === herePoi) return false;
     return true;
@@ -128,11 +120,8 @@ export interface PlayContext {
   readonly state: GameState;
   readonly terrain: TerrainIndex;
   /**
-   * Installed mods, when a game uses any.
-   *
-   * Optional, and absent is byte-for-byte the unmodded engine — the same
-   * arrangement `ReduceContext` uses, and for the same reason: mods must cost
-   * nothing at all when there are none.
+   * Installed mods, when a game uses any. Optional, and absent is byte-for-byte the unmodded engine
+   * — the same arrangement `ReduceContext` uses.
    */
   readonly mods?: ModRuntime | undefined;
 }
@@ -146,10 +135,9 @@ export interface Turn {
 /**
  * Apply one action to a state. No session, no mutation.
  *
- * The pure form the browser front end builds on: React state must change by
- * replacement, and a `Session` mutates in place where a renderer cannot see
- * it. The mutable `applyAction` below is three lines over this, so the two
- * shells cannot disagree about what applying an action means.
+ * The pure form the browser front end builds on: React state must change by replacement, and a
+ * `Session` mutates in place. The mutable `applyAction` below is three lines over this, so the two
+ * shells cannot disagree.
  */
 export function applyTo(context: PlayContext & { readonly seed: number }, action: Action): Turn {
   const result = reduce(context.state, action, {
@@ -184,11 +172,8 @@ export type CommandOutcome =
   | { readonly kind: 'error'; readonly message: string };
 
 /**
- * Run one line of player input against a state — the pure form.
- *
- * Dialogue is handled before the parser sees it: while a conversation is open,
- * a bare number picks a reply, which is far less frustrating than making the
- * player retype an option's exact wording.
+ * Run one line of player input against a state — the pure form. Dialogue is handled before the
+ * parser sees it: while a conversation is open, a bare number picks a reply.
  */
 export function interpret(
   context: PlayContext & { readonly seed: number },

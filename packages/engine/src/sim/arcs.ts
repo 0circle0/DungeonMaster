@@ -1,14 +1,9 @@
 /**
  * Story arcs: the shape a run has, above its quests.
  *
- * `narrative.arcs` was never queried at all — a collection the schema accepted,
- * the linter cleared and the docs described, that no code path had ever
- * dereferenced. `isEnding` in particular promised the game would end and did
- * nothing whatsoever.
- *
- * An arc's status is **derived from its quests**, never stored. Storing it would
- * create a second source of truth that a save could disagree with — the same
- * argument `stageIndexOf` already makes for which stage a quest is on.
+ * An arc's status is derived from its quests, never stored. Storing it would create a second source
+ * of truth that a save could disagree with — the same argument `stageIndexOf` makes for which stage
+ * a quest is on.
  */
 
 import type { CompiledModule, Value } from '@dm/module';
@@ -45,16 +40,14 @@ export interface ArcView {
 }
 
 /**
- * Where every arc stands.
- *
- * `failed` beats `complete` beats `active`: an arc with a failed quest in it has
- * gone wrong however much of the rest was finished, which is the reading that
- * lets a module write a story that can be lost.
+ * Where every arc stands. `failed` beats `complete` beats `active`: an arc with a failed quest in
+ * it has gone wrong however much of the rest was finished, which is what lets a module write a
+ * story that can be lost.
  */
 export function arcsOf(module: CompiledModule, state: GameState): readonly ArcView[] {
   return module.all<ArcDef>('narrative.arcs').map((arc) => {
-    // A quest with no record has not been taken; the state only holds the ones
-    // that have been offered or started.
+    // A quest with no record has not been taken; the state only holds the ones that have been
+    // offered or started.
     const quests: ArcView['quests'] = arc.quests.map((id) => ({
       id,
       name: module.find<{ name: string }>('narrative.quests', id)?.name ?? id,
@@ -92,24 +85,20 @@ export function endingReached(module: CompiledModule, state: GameState): ArcView
 /**
  * The engine's record that an ending has already been reached and announced.
  *
- * A flag rather than a field on `GameState`, in the same family as
- * `gate:<id>:open` — an existing save reads it as absent, which is exactly
- * right, so there is nothing to migrate.
+ * A flag rather than a field on `GameState`, in the same family as `gate:<id>:open` — an existing
+ * save reads it as absent, so there is nothing to migrate.
  *
- * Needed because `start.postVictory: 'continue'` leaves `outcome` at `playing`,
- * and an arc that has been finished stays finished: without a record of its own
- * the ending would be reached again on every reduction for the rest of the run.
+ * Needed because `start.postVictory: 'continue'` leaves `outcome` at `playing`, and a finished arc
+ * stays finished: without a record of its own the ending would be reached again on every reduction.
  */
 export function endingFlag(arcId: string): string {
   return `ending:${arcId}`;
 }
 
 /**
- * Arc status as the DSL sees it.
- *
- * Populated for **every** declared arc rather than only the started ones, so
- * `arcs` is a closed namespace and a misspelled arc id is a loud error rather
- * than a silent `unstarted`.
+ * Arc status as the DSL sees it. Populated for every declared arc rather than only the started
+ * ones, so `arcs` is a closed namespace and a misspelled arc id is a loud error rather than a
+ * silent `unstarted`.
  */
 export function arcScope(module: CompiledModule, state: GameState): Record<string, Value> {
   const out: Record<string, Value> = {};

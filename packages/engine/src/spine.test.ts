@@ -94,9 +94,8 @@ describe('reduce', () => {
     expect(events.find((e) => e.type === 'blocked')).toMatchObject({ by: 'Bog Hound' });
   });
 
-  // What the party *saw*, not where they trod. Recording only the tile under
-  // their feet left the remembered layer as a one-tile breadcrumb trail through
-  // rooms they had stood in the middle of and looked around.
+  // What the party saw, not where they trod: recording only the tile underfoot leaves the
+  // remembered layer a one-tile breadcrumb trail.
   it('remembers what the party could see, not just where they walked', () => {
     const state = started();
     const { state: next } = reduce(state, { type: 'step', direction: 'east' }, ctx);
@@ -119,8 +118,7 @@ describe('reduce', () => {
       expect(at.y).toBeLessThan(map.tiles.height);
     }
 
-    // Sorted, so two runs that saw the same ground in a different order still
-    // compare equal.
+    // Sorted, so two runs that saw the same ground in a different order compare equal.
     expect([...explored].sort((a, b) => a - b)).toEqual([...explored]);
   });
 
@@ -165,8 +163,8 @@ describe('reduce', () => {
     ).toBe(true);
   });
 
-  // Tests the default branch directly rather than naming a specific
-  // unimplemented action, which goes stale the moment that action is built.
+  // Tests the default branch directly rather than naming a specific unimplemented action, which
+  // would go stale once that action is built.
   it('refuses an action it does not recognise, rather than throwing', () => {
     const bogus = { type: 'polymorph_into_a_goose' } as unknown as Action;
     const { events } = reduce(started(), bogus, ctx);
@@ -197,15 +195,14 @@ describe('the clock while walking', () => {
   });
 
   it('spends nothing for a module that does not track it', () => {
-    // minimal declares no clock at all, so walking is free — the feature is
-    // opt-in, like everything else.
+    // minimal declares no clock, so walking is free: the feature is opt-in.
     const state = started(MINIMAL, 2);
     const { state: next } = reduce(state, { type: 'step', direction: 'east' }, { module: MINIMAL });
     expect(next.minute).toBe(state.minute);
   });
 
   it('does not run the clock during a fight', () => {
-    // A round is seconds long; the world clock has no business moving.
+    // A round is seconds long; the world clock does not move.
     const state = withMonster(started(), GREENMARCH, 'bog_hound', { x: 8, y: 5 });
     const fighting = reduce(state, { type: 'wait', minutes: 0 }, ctx).state;
     expect(fighting.combat).not.toBeNull();
@@ -424,9 +421,8 @@ describe('conditions', () => {
     expect(txn.entity('e:1')!.resources['hp']).toBe(before - 2);
   });
 
-  // Greenmarch's `frightened` declares `defaultDuration: 2`, and that used to be
-  // ignored — so "frightened for two rounds" meant frightened until something
-  // removed it, for the rest of the game.
+  // Greenmarch's `frightened` declares `defaultDuration: 2`, and an effect that names no duration
+  // must honour it.
   it('falls back to the condition\'s own duration when an effect names none', () => {
     const txn = transact(started());
     applyCondition(txn, txn.entity('e:1')!, 'frightened', null, null, null);
@@ -437,8 +433,8 @@ describe('conditions', () => {
   });
 
   it('leaves a condition with no declared duration in place forever', () => {
-    // Both shipped modules give every condition a default, so "until removed"
-    // needs a module that does not.
+    // Both shipped modules give every condition a default, so "until removed" needs a module that
+    // does not.
     const doc = JSON.parse(JSON.stringify(GREENMARCH.source)) as never as {
       rules: { conditions: Record<string, unknown>[] };
     };
@@ -455,10 +451,9 @@ describe('conditions', () => {
     expect(txn.entity('e:1')!.conditions).toHaveLength(1);
   });
 
-  // The whole point of running `onDepleted` before declaring death: a module
-  // that catches the character on the way down keeps them alive, which is the
-  // D&D "dropped to 0 and stabilised" shape. The engine needs no concept of
-  // dying separate from a resource running out.
+  // `onDepleted` runs before death is declared, so a module that catches the character on the way
+  // down keeps them alive. The engine needs no concept of dying separate from a resource running
+  // out.
   it('lets onDepleted catch a character before death is declared', () => {
     const doc = JSON.parse(JSON.stringify(GREENMARCH.source)) as never as {
       rules: { resources: Record<string, unknown>[]; conditions: Record<string, unknown>[] };
@@ -490,9 +485,8 @@ describe('conditions', () => {
     expect(txn.finish().events.some((e) => e.type === 'died')).toBe(true);
   });
 
-  // "Save ends" is half of D&D's conditions, and the schema has always
-  // described it — a save, a difficulty, a timing. Nothing rolled it, so a
-  // condition with a save behaved exactly like one without.
+  // "Save ends" — a save, a difficulty, a timing — must actually be rolled, or a condition with a
+  // save behaves like one without.
   it('rolls a save to shake off a condition that allows one', () => {
     const doc = JSON.parse(JSON.stringify(GREENMARCH.source)) as never as {
       rules: { conditions: Record<string, unknown>[]; savingThrows?: unknown[] };
@@ -566,12 +560,12 @@ describe('save and load', () => {
     expect(statesEqual(result.state, state)).toBe(true);
   });
 
-  // The migration machinery had never once run before perception needed it.
+  // The migration machinery, end to end.
   it('carries a save forward from the version before perception', () => {
     const current = started(GREENMARCH, 77);
 
-    // A version 1 save is this one with the three perception fields stripped,
-    // which is exactly what an older engine would have written.
+    // A version 1 save is this one with the three perception fields stripped, which is what an
+    // older engine would have written.
     const old = JSON.parse(save(current, 0)) as {
       saveVersion: number;
       state: Record<string, any>;
@@ -594,8 +588,8 @@ describe('save and load', () => {
     // Every step of the chain runs, not just the first.
     expect(result.warnings).toContain('migrated save from version 1 to 2');
     expect(result.warnings).toContain('migrated save from version 2 to 3');
-    // Not merely loadable — indistinguishable from a save written today, which
-    // is the property that stops a migrated game drifting from a fresh one.
+    // Not merely loadable but indistinguishable from a save written today, which is what stops a
+    // migrated game drifting from a fresh one.
     expect(statesEqual(result.state, current)).toBe(true);
   });
 
@@ -648,9 +642,8 @@ describe('save and load', () => {
     if (allowed.ok) expect(allowed.warnings[0]).toMatch(/has changed/);
   });
 
-  // A migration that forgets to move `saveVersion` produces a state forever
-  // unequal to an identical fresh one, which the determinism net then blames on
-  // whatever changed last.
+  // A migration that forgets to move `saveVersion` produces a state forever unequal to an identical
+  // fresh one.
   it('migrates a v3 save forward into a world with no traps and no money', () => {
     const current = started(GREENMARCH, 21);
     const raw = JSON.parse(save(current, 0)) as {
@@ -680,9 +673,8 @@ describe('save and load', () => {
     // An old party is exactly as poor as it was.
     expect(loaded.state.purse).toBe(0);
 
-    // And it is otherwise the same game it was saved from. The purse is the one
-    // thing a v3 save genuinely does not know, so it is compared against zero
-    // rather than against a party that started with coin.
+    // And otherwise the same game it was saved from. The purse is the one thing a v3 save does not
+    // know, so it is compared against zero.
     expect(statesEqual(loaded.state, { ...current, purse: 0 })).toBe(true);
   });
 
@@ -719,21 +711,20 @@ describe('save and load', () => {
 /**
  * The standing net for everything that adds to state.
  *
- * `statesEqual` compares canonical JSON *including the RNG position*, so one
- * script run twice catches the four ways a new state field goes wrong: a `Set`
- * or `Map` (which `JSON.stringify` flattens to `{}`), a `"x,y"` tile key
- * (which enumerates in string order), an id-keyed record where an array with a
- * total sort was needed, and a migration that forgot to move `saveVersion`.
+ * `statesEqual` compares canonical JSON including the RNG position, so one script run twice catches
+ * the four ways a new state field goes wrong: a `Set` or `Map` (flattened to `{}` by
+ * `JSON.stringify`), a `"x,y"` tile key (enumerating in string order), an id-keyed record where an
+ * array with a total sort was needed, and a migration that forgot to move `saveVersion`.
  *
- * It runs against a real `newGame` rather than a synthetic map so that map
- * generation, arrival, and the world clock are all inside the comparison.
+ * It runs against a real `newGame`, so map generation, arrival and the world clock are inside the
+ * comparison.
  */
 describe('determinism', () => {
   const step = (...directions: readonly ('north' | 'south' | 'east' | 'west')[]): Action[] =>
     directions.map((direction) => ({ type: 'step', direction }));
 
-  // `newGame` leaves the party on no map — arriving is the front end's first
-  // act — so the script travels before it tries to walk.
+  // `newGame` leaves the party on no map — arriving is the front end's first act — so the script
+  // travels before it walks.
   const script: Action[] = [
     { type: 'travelToArea', area: 'the_fens' },
     { type: 'look' },
@@ -754,8 +745,8 @@ describe('determinism', () => {
     reduceAll(newGame(GREENMARCH, { seed, party: [defaultChoices(GREENMARCH, 'Ash')] }), script, ctx);
   const play = (seed: number) => run(seed).state;
 
-  // A script of nothing but refusals would replay identically too, so the net
-  // is only worth having while the run is genuinely doing something.
+  // A script of nothing but refusals would replay identically too, so the net is only worth having
+  // while the run is doing something.
   it('is a script that actually plays', () => {
     const { state, events } = run(4242);
     expect(events.filter((event) => event.type === 'moved').length).toBeGreaterThanOrEqual(8);
@@ -784,7 +775,7 @@ describe('determinism', () => {
   });
 });
 
-// The no-hardcoding proof, now that the engine actually does something.
+// The no-hardcoding proof.
 describe('nothing is hardcoded', () => {
   it('runs the whole spine against minimal\'s alien ruleset', () => {
     const state = started(MINIMAL, 9);
@@ -809,11 +800,9 @@ describe('nothing is hardcoded', () => {
   });
 
   it('has no game-specific vocabulary in the engine source', () => {
-    // If the engine mentions a fantasy attribute or resource by name, some
-    // module out there cannot run on it. `walk`, `disguised`, `speak` and
-    // `gesture` are here because each was once a bare string the engine
-    // compared against, so a module that named the same idea differently got
-    // silently wrong behaviour and no error.
+    // If the engine names a fantasy attribute or resource, some module cannot run on it. `walk`,
+    // `disguised`, `speak` and `gesture` are listed because each was once a bare string the engine
+    // compared against.
     const banned = [
       '"might"', '"agility"', '"hp"', "'hp'", '"fire"', '"slashing"', '"warden"',
       "'walk'", "'disguised'", "'speak'", "'gesture'",
@@ -835,10 +824,9 @@ describe('nothing is hardcoded', () => {
   /**
    * The engine says nothing of its own.
    *
-   * Every sentence a player reads now comes from `narrative.systemText`, so a
-   * multi-word English string literal in the narrator or in a refusal path is
-   * a regression — it means somebody wrote prose in code again. Ids, keys, dsl
-   * operators and format strings are single words or punctuation and pass.
+   * Every sentence a player reads comes from `narrative.systemText`, so a multi-word English string
+   * literal in the narrator or a refusal path is a regression. Ids, keys, DSL operators and format
+   * strings are single words or punctuation and pass.
    */
   it('writes no prose of its own', () => {
     const files = [
@@ -847,8 +835,8 @@ describe('nothing is hardcoded', () => {
       'sim/traps.ts', 'sim/enter.ts', 'rules/apply.ts', 'rules/casting.ts',
       'rules/combat/attack.ts', 'rules/combat/targeting.ts',
     ];
-    // Three or more space-separated words of letters inside a quoted string:
-    // that is a sentence, not an identifier.
+    // Three or more space-separated words of letters inside a quoted string: a sentence, not an
+    // identifier.
     const prose = /(['"`])[a-z]+ [a-z]+ [a-z]+[^'"`]*\1/i;
 
     for (const file of files) {

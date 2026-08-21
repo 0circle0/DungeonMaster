@@ -1,19 +1,14 @@
 /**
  * Worlds as files.
  *
- * The studio and the player are separate origins, so a file is the only thing
- * that passes between them — and it is also how a world reaches another
- * machine, or a friend, or a backup. That makes the reader the most
- * compatibility-sensitive code here: it has to accept anything this project has
- * ever handed somebody.
+ * The studio and the player are separate origins, so a file is the only thing that passes between
+ * them — and it is also how a world reaches another machine or a backup. The reader has to accept
+ * anything this project has ever handed somebody:
  *
- * Three shapes, all of them real:
  *   - an envelope, which is what the library and the content build write;
- *   - a bare module document, which is what the studio's Export has always
- *     produced and must keep working forever;
+ *   - a bare module document, which is what the studio's Export has always produced;
  *   - either of those gzipped, which is what a downloaded artifact is;
- *   - a project bundle, which is the repository's own file tree flattened into
- *     one file so a browser can hand it over in a single download.
+ *   - a project bundle, the repository's own file tree flattened into one file.
  */
 
 import { isEnvelope, envelopeFromDoc } from './envelope.js';
@@ -35,23 +30,18 @@ function download(blob: Blob, filename: string): void {
 /**
  * Download the world as the files a repository would hold.
  *
- * The studio only ever sees an assembled document, and a repository holds a
- * `project/` tree beside a `maps/` one — `bundleModule` is what reconciles
- * those, so this writes paths and bytes that drop straight into git.
+ * The studio only sees an assembled document and a repository holds a `project/` tree beside a
+ * `maps/` one, so `bundleModule` reconciles them and this writes paths and bytes that drop straight
+ * into git. One file rather than a folder, because a browser cannot hand over a directory; gzipped,
+ * because the tree is a couple of megabytes of small JSON. `npm run project -- unpack` is the other
+ * end.
  *
- * One file rather than a folder because a browser cannot hand over a directory,
- * and gzipped because the tree is a couple of megabytes of small JSON.
- * `npm run project -- unpack` is the other end.
+ * Takes the document rather than an envelope: the authoring sidecar is not part of a repository's
+ * file tree.
  *
- * Takes the document rather than an envelope: the authoring sidecar is not part
- * of a repository's file tree; the studio keeps it in the store instead.
- *
- * **All four authoring fields, not two.** `splitProject` has no notion of a
- * prefab link, so every entry it writes is literal — which makes
- * `prefabs/instances.json` the *only* channel provenance has out of here. This
- * used to pass `prefabs` and `style` alone, and `bundleModule` takes a
- * `Partial`, so the omission typechecked and every export silently arrived
- * somewhere else with its prefabs pointing at nothing and its contract gone.
+ * All four authoring fields, not two. `splitProject` has no notion of a prefab link, so every entry
+ * it writes is literal, which makes `prefabs/instances.json` the only channel provenance has out of
+ * here.
  */
 export async function downloadProject(
   doc: Record<string, unknown>,
@@ -80,13 +70,9 @@ export function isProjectBundle(value: unknown): value is { files: Record<string
 }
 
 /**
- * The project files out of something the user picked, or a reason why not.
- *
- * The studio's import, and deliberately narrower than {@link readWorldFile}: the
- * editor edits project files, so a project is what it accepts. A bare
- * `module.json` is the *compiled* form — what a player receives — and there is
- * nothing in it to edit a prefab or a style table with, so taking one would mean
- * silently handing somebody a lesser world and calling it theirs.
+ * The project files out of something the user picked, or a reason why not. Narrower than {@link
+ * readWorldFile}: the editor edits project files. A bare `module.json` is the compiled form, with
+ * nothing in it to edit a prefab or a style table with.
  */
 export async function readProjectFile(file: File): Promise<Record<string, string>> {
   const bytes = new Uint8Array(await file.arrayBuffer());
@@ -125,10 +111,8 @@ export async function readWorldFile(file: File): Promise<WorldEnvelope> {
 
   if (isEnvelope(parsed)) return parsed;
 
-  // A project bundle rebuilds into a document, so everything downstream sees
-  // the shape it already handles. Issues are reported as one message rather
-  // than the first one, because a tree that lost several files should say so
-  // once rather than a file at a time.
+  // A project bundle rebuilds into a document, so everything downstream sees the shape it already
+  // handles. Issues are reported as one message rather than the first one.
   if (isProjectBundle(parsed)) {
     const { document, issues } = unbundleModule(parsed.files);
     if (!document || issues.length > 0) {

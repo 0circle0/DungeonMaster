@@ -1,24 +1,19 @@
 /**
  * Ruleset knobs, read once.
  *
- * The engine reaches `module.source.rules.*` from a hundred places, and the
- * numbers it finds there used to be split between the schema and literals in
- * code — `criticalDamageMultiplier` was data while the save-for-half beside it
- * was `0.5`, `defaultSize` was declarable while the movement mode was the
- * string `walk`. These accessors are the other half of those pairs.
+ * The engine reaches `module.source.rules.*` from a hundred places. These accessors are the half of
+ * those numbers that used to be literals in code.
  *
  * Two rules hold here:
  *
- * - **No `??` chains.** `compileModule` runs the document through Zod, so a
- *   declared default is already present. Restating one here would be a second
- *   source of truth, and the two would drift.
- * - **Resolved, not merely read**, where "the module's answer" takes more than
- *   a property access — a default that falls back to the first declared entry,
- *   or a rounding mode that has to become a function.
+ * - No `??` chains. `compileModule` runs the document through Zod, so a declared default is already
+ *   present; restating one would be a second source of truth.
+ * - Resolved, not merely read, where the module's answer takes more than a property access — a
+ *   default that falls back to the first declared entry, or a rounding mode that has to become a
+ *   function.
  *
- * Resolution is memoized per module because these are read per operation and
- * a module never changes. Nothing else in the engine memoizes; this is the one
- * place where the cost is worth the WeakMap.
+ * Resolution is memoized per module because these are read per operation and a module never
+ * changes.
  */
 
 import type { CompiledModule } from '@dm/module';
@@ -49,9 +44,8 @@ export interface ResolvedConfig {
   /** Minutes in an hour, for the calendar. */
   readonly minutesPerHour: number;
   /**
-   * How a creature gets about when it declares nothing: the module's own
-   * default, then the first mode it declares at all, and null for a ruleset
-   * with no notion of movement modes.
+   * How a creature gets about when it declares nothing: the module's own default, then the first
+   * mode it declares at all, and null for a ruleset with no movement modes.
    */
   readonly defaultMovementMode: string | null;
 }
@@ -85,11 +79,9 @@ export function saveMultiplier(module: CompiledModule): number {
 }
 
 /**
- * How a scaled damage number is rounded.
- *
- * Every path that scales damage goes through this: resistance, a critical, and
- * a save for half. `damageRounding` says so, and a second rounding rule hidden
- * in one of them is a systematic difference, not an incidental one.
+ * How a scaled damage number is rounded. Every path that scales damage goes through this —
+ * resistance, a critical, and a save for half — because a second rounding rule hidden in one of
+ * them is a systematic difference.
  */
 export function roundDamageOf(module: CompiledModule): (n: number) => number {
   return configOf(module).roundDamage;
@@ -101,10 +93,8 @@ export function passiveBase(module: CompiledModule): number {
 }
 
 /**
- * The movement mode a creature uses when it declares none.
- *
- * The same shape as `defaultStanceOf` and `reachOf`'s size fallback: declared
- * first, then the first entry, then nothing.
+ * The movement mode a creature uses when it declares none. The same shape as `defaultStanceOf` and
+ * `reachOf`'s size fallback: declared first, then the first entry, then nothing.
  */
 export function defaultMovementModeOf(module: CompiledModule): string | null {
   return configOf(module).defaultMovementMode;

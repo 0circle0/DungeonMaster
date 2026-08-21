@@ -1,17 +1,14 @@
 /**
  * Thorns.
  *
- * Taking a wound **while standing in briar** leaves thorns in you. Three or
- * more and you cannot settle enough to rest; waiting picks one out.
+ * Taking a wound while standing in briar leaves thorns in you. Three or more and you cannot settle
+ * enough to rest; waiting picks one out.
  *
- * The briar check is the point. An earlier draft of this mod claimed briar in
- * its description and counted every wound anywhere, which made the fiction a
- * lie and the mechanic impossible to reason about. It now reads the terrain
- * under your feet, so getting bitten on dry stone costs you nothing.
+ * The briar check is the point: it reads the terrain under your feet, so getting bitten on dry
+ * stone costs you nothing.
  *
- * It also happens to use every hook and directive kind the mod system has,
- * which is why the test suite drives this mod rather than a synthetic one — a
- * fixture that is also a real feature cannot quietly stop making sense.
+ * It also uses every hook and directive kind the mod system has, which is why the test suite drives
+ * this mod rather than a synthetic one.
  */
 
 /** Thorns at or above this and rest is off the table. */
@@ -25,11 +22,9 @@ function held(ctx) {
 }
 
 /**
- * Is the given entity standing in briar?
- *
- * `TileMap` is a flat row-major array of terrain ids, so the tile under a
- * position is `tiles[y * width + x]` — the same arithmetic `terrainAt` does
- * inside the engine.
+ * Is the given entity standing in briar? `TileMap` is a flat row-major array of terrain ids, so the
+ * tile under a position is `tiles[y * width + x]` — the same arithmetic `terrainAt` does inside the
+ * engine.
  */
 function standingInBriar(entityId) {
   const entity = dm.state.get('entities.' + entityId);
@@ -45,17 +40,15 @@ function standingInBriar(entityId) {
 }
 
 /**
- * A wound taken in the briar leaves something behind.
- *
- * `event.emit` has to name the event type it wants — an unfiltered declaration
- * would put a sandbox crossing on every event in the game — so this is
- * declared `match: "damaged"` and is never consulted for anything else.
+ * A wound taken in the briar leaves something behind. `event.emit` has to name the event type it
+ * wants — an unfiltered declaration would put a sandbox crossing on every event in the game — so
+ * this is declared `match: "damaged"`.
  */
 dm.hook('event.emit', (ctx) => {
   const event = ctx.subject.event;
 
-  // Only what the player is controlling: a hound bleeding in the same thicket
-  // is not something the party has to pick out later.
+  // Only what the player is controlling: a hound bleeding in the same thicket is not something the
+  // party has to pick out later.
   if (event.entity !== ctx.selected) return null;
   if (!standingInBriar(event.entity)) return null;
 
@@ -72,8 +65,8 @@ dm.hook('action.before', (ctx) => {
   const stacks = held(ctx);
   if (stacks < TOO_MANY) return null;
 
-  // The refusal reads in this mod's own words: every key here is resolved from
-  // this mod's `systemText`, not from the engine's table.
+  // The refusal reads in this mod's own words: every key here is resolved from this mod's
+  // `systemText`, not the engine's table.
   return [{ kind: 'refuse', action: 'rest', textKey: 'thorns.tooSharp', params: { stacks: stacks } }];
 });
 
@@ -96,11 +89,9 @@ dm.hook('action.after', (ctx) => {
 });
 
 /**
- * `pluckThorns`, an effect op the engine has never heard of.
- *
- * Declared `replace`, so this stands in for the engine's unknown-op refusal.
- * Any module's JSON can use `{ "op": "pluckThorns", "amount": 2 }` now — from
- * an item, a trigger, a dialogue node — with no core change at all.
+ * `pluckThorns`, an effect op the engine has never heard of. Declared `replace`, so this stands in
+ * for the engine's unknown-op refusal, and any module's JSON can use `{ "op": "pluckThorns",
+ * "amount": 2 }` with no core change.
  */
 dm.hook('applyOp', (ctx) => {
   const op = ctx.subject.op;

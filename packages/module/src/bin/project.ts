@@ -1,19 +1,15 @@
 /**
  * `npm run project -- split <module>` / `build <module>`
  *
- * Turns a module into a directory of files, and back. `split` is a one-time
- * import: it reads `module.json` and writes `project/`. `build` is the step
- * that runs afterwards forever, reading `project/` and writing `module.json`.
+ * Turns a module into a directory of files, and back. `split` is a one-time import: it reads
+ * `module.json` and writes `project/`. `build` runs afterwards forever, reading `project/` and
+ * writing `module.json`.
  *
- * The safety property is that `build` never invents anything. Splitting and
- * rebuilding a module reproduces its file byte for byte — checked for all four
- * shipped modules in `project.test.ts` — so adopting the format is not a
- * rewrite of the content, and abandoning it is `rm -r project/`.
+ * The safety property is that `build` never invents anything: splitting and rebuilding a module
+ * reproduces its file byte for byte, checked for all four shipped modules in `project.test.ts`.
  *
- * `split` refuses to overwrite an existing `project/` without `--force`, and
- * `build` refuses to write a `module.json` that does not compile. Both write
- * whole files rather than patching, so a partial run leaves nothing half-done
- * beyond the file it was on.
+ * `split` refuses to overwrite an existing `project/` without `--force`, and `build` refuses to
+ * write a `module.json` that does not compile. Both write whole files rather than patching.
  */
 
 import { readFileSync, writeFileSync, mkdirSync, existsSync, readdirSync, rmSync, statSync } from 'node:fs';
@@ -40,11 +36,9 @@ function usage(): number {
 }
 
 /**
- * The prefabs and style tables a project's recipes expand against.
- *
- * Read here rather than by `joinProject`, which has no filesystem — and read at
- * all only because a compressed project's entry files are recipes. A project
- * with no `prefabs/` gets an empty pair and builds exactly as it always did.
+ * The prefabs and style tables a project's recipes expand against. Read here rather than by
+ * `joinProject`, which has no filesystem. A project with no `prefabs/` gets an empty pair and
+ * builds as it always did.
  */
 function readAuthoringFor(projectDir: string): { prefabs: Prefab[]; style: StyleTables } {
   const prefabDir = join(projectDir, 'prefabs');
@@ -81,16 +75,12 @@ function readTree(root: string): Record<string, string> {
 /**
  * Refuse to give a generated module a second source of truth.
  *
- * A generator that overwrites `module.json` rather than merging into it makes a
- * `project/` beside it a third representation of the same world, silently stale
- * from the next run onwards. One source of truth per file.
+ * A generator that overwrites `module.json` rather than merging into it makes a `project/` beside
+ * it a third representation of the same world, silently stale from the next run onwards.
  *
- * Aurendel and core_fantasy have since been through exactly this door — their
- * generators are retired and their `project/` trees are the source now, so the
- * marker files are still on disk and this correctly stops saying anything about
- * them, because a module that already *has* a `project/` has made its choice.
- * The hazard moved rather than went away: it is now somebody re-running a
- * retired generator, and the refusal for that lives at the top of the generator
+ * Aurendel and core_fantasy have been through this door — their generators are retired and their
+ * `project/` trees are the source now — so this correctly says nothing about them. The hazard is
+ * now somebody re-running a retired generator, and that refusal lives at the top of the generator
  * itself.
  */
 function generatedElsewhere(moduleDir: string): string | null {
@@ -128,8 +118,8 @@ function split(moduleDir: string, force: boolean): number {
   const doc = JSON.parse(text) as Record<string, unknown>;
   const result = splitProject(doc);
 
-  // Verified before anything is written: if the round trip is not exact, the
-  // split is not safe to adopt and saying so beats leaving a directory behind.
+  // Verified before anything is written: if the round trip is not exact, the split is not safe to
+  // adopt.
   const check = joinProject(result.manifest, result.files);
   const rebuilt = `${JSON.stringify(check.document, null, 2)}\n`;
   if (check.issues.length > 0 || rebuilt !== text) {
@@ -175,8 +165,8 @@ function build(moduleDir: string): number {
     return 1;
   }
 
-  // A project that does not compile is a build that must not land: `module.json`
-  // is what the game loads, and a broken one is discovered three rooms in.
+  // A project that does not compile is a build that must not land: `module.json` is what the game
+  // loads.
   //
   // Checked against the *assembled* document — static maps live in
   // `maps/<id>/` folders, so the raw form a module is written as has fourteen

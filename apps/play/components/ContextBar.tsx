@@ -1,11 +1,8 @@
 'use client';
 
 /**
- * What the party can do right now, as buttons.
- *
- * Straight from `@dm/play`'s `affordances` — the same list the terminal prints
- * as its hint line. A blocked entry renders disabled with its reason in the
- * tooltip, because a bare absence teaches the player nothing.
+ * Show the current affordances as action buttons.
+ * Blocked actions keep their reason in the tooltip.
  */
 
 import { useMemo } from 'react';
