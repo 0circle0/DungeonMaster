@@ -3447,7 +3447,7 @@
   "mods": [
     {
       "id": "thorns",
-      "hash": "5422f9a9bca0a023",
+      "hash": "3a52f301a7162a9b",
       "target": "engine",
       "required": false,
       "note": "Briar in the fen leaves thorns in you; three or more and you cannot rest."
