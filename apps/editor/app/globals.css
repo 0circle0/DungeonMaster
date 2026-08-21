@@ -1,4 +1,3 @@
-/* Low-contrast chrome keeps authored content visually prominent. */
 
 :root {
   --bg: #12131a;
@@ -9,7 +8,6 @@
   --muted: #8890a6;
   --accent: #d9a441;
   --accent-dim: #8a6a2c;
-  /* Pinned group headers must match the group background while scrolling. */
   --group-bg: #15171f;
   --ok: #5fb87a;
   --err: #e06c6c;
@@ -29,8 +27,6 @@ html, body {
 
 button, input, select, textarea { font: inherit; color: inherit; }
 
-/* ── status dots & buttons ───────────────────────────────── */
-
 .ok-dot, .err-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
 .ok-dot { background: var(--ok); }
 .err-dot { background: var(--err); }
@@ -45,8 +41,6 @@ button, input, select, textarea { font: inherit; color: inherit; }
 .btn.danger { color: var(--err); border-color: #4a2b2b; }
 .btn.tiny { padding: 2px 7px; font-size: 12px; border-radius: 4px; }
 
-/* ── layout ──────────────────────────────────────────────── */
-
 .pill {
   font-size: 11px; font-family: var(--mono); color: #5d6478;
   background: #22252f; padding: 1px 6px; border-radius: 9px;
@@ -59,18 +53,14 @@ button, input, select, textarea { font: inherit; color: inherit; }
 .pane-title { margin: 0 0 14px; font-size: 17px; font-weight: 600; }
 .pane-path { font-family: var(--mono); font-size: 11px; color: #5d6478; margin-left: 10px; font-weight: 400; }
 
-/* ── fields ──────────────────────────────────────────────── */
-
 .form { display: flex; flex-direction: column; gap: 12px; }
 .field { display: flex; flex-direction: column; gap: 4px; margin-bottom: 10px; }
 .label { font-size: 12px; color: var(--muted); display: flex; align-items: center; gap: 6px; }
 .hint { font-size: 11px; color: #5d6478; font-style: normal; margin: 2px 0 0; }
 
-/* Field diagnostics replace hints to keep one message below each input. */
 .field-problem { font-size: 11px; font-style: normal; margin: 2px 0 0; }
 .field-problem.error { color: var(--err); }
 .field-problem.warning { color: var(--warn); }
-/* Emphasize values that no longer inherit from their prefab. */
 .field-overridden > .label { color: var(--fg); }
 .field-overridden > .input,
 .field-overridden > .code,
@@ -108,7 +98,6 @@ textarea.input { resize: vertical; font-family: inherit; }
 }
 .group-head { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
 
-/* Inline `top` offsets stack nested headers. Ancestor overflow disables sticky positioning. */
 .group-head.pinned {
   position: sticky;
   background: var(--group-bg);
@@ -116,7 +105,6 @@ textarea.input { resize: vertical; font-family: inherit; }
   margin-bottom: 2px;
 }
 
-/* Optional-section controls must shrink inside deeply nested groups. */
 .add-row { display: flex; align-items: center; gap: 8px; margin-top: 4px; min-width: 0; }
 .add-row select { flex: 1; min-width: 0; max-width: 200px; }
 .add-row .count { white-space: nowrap; }
@@ -129,7 +117,6 @@ textarea.input { resize: vertical; font-family: inherit; }
 
 .stack { display: flex; flex-direction: column; gap: 8px; }
 .card { border: 1px solid #232734; border-radius: 6px; padding: 10px; position: relative; background: #12141b; }
-/* Above a pinned header, so remove stays clickable where the two overlap. */
 .card > .btn.tiny.danger { position: absolute; top: 6px; right: 6px; z-index: 11; }
 
 .inline-list { display: flex; flex-wrap: wrap; gap: 6px; }
@@ -147,8 +134,6 @@ textarea.input { resize: vertical; font-family: inherit; }
 .collapse-toggle:hover { color: var(--text); }
 .collapse-body { padding-top: 8px; }
 
-/* ── json ────────────────────────────────────────────────── */
-
 .jsonbox { display: flex; flex-direction: column; gap: 4px; }
 .jsonbox.fill { height: calc(100vh - 260px); }
 .jsonbox.fill .code { height: 100%; }
@@ -164,15 +149,11 @@ textarea.input { resize: vertical; font-family: inherit; }
 .raw-entry { margin-top: 18px; border-top: 1px solid var(--line); padding-top: 12px; }
 .raw-entry summary { cursor: pointer; color: var(--muted); font-size: 12px; }
 
-/* ── chips (balance & timeline views) ────────────────────── */
-
 .tree-chip { font-size: 10.5px; background: #22252f; color: #8890a6; padding: 1px 7px; border-radius: 9px; }
 .tree-chip.gate { background: #2f2718; color: var(--accent); }
 .tree-chip.dungeon { background: #1b2a2f; color: #6fb3c4; }
 .tree-chip.hidden { background: #2a2035; color: #b48ad6; }
 .tree-chip.err { background: #3a2224; color: var(--err); }
-
-/* ── problems: location, message, rationale, rule ─────────── */
 
 .problem {
   display: flex; gap: 10px; align-items: baseline; width: 100%; text-align: left;
@@ -182,7 +163,6 @@ textarea.input { resize: vertical; font-family: inherit; }
 .problem:hover { background: var(--panel-2); }
 .problem.err { border-left: 2px solid var(--err); }
 .problem.warn { border-left: 2px solid var(--warn); }
-/* Informational notes use lower contrast than actionable diagnostics. */
 .problem.note { border-left: 2px solid #3a3f52; }
 .problem.note .problem-message { color: var(--muted); }
 .problem-where {
@@ -194,13 +174,10 @@ textarea.input { resize: vertical; font-family: inherit; }
 .problem-message { color: var(--text); }
 .problem-hint { color: #6fb3c4; font-size: 11.5px; }
 .problem-path { font-family: var(--mono); font-size: 10.5px; color: #4e5468; }
-/* Rule codes remain secondary to diagnostic messages. */
 .problem-code {
   margin-left: auto; flex: none; white-space: nowrap;
   font-family: var(--mono); font-size: 10px; color: #4e5468;
 }
-
-/* ── events browser ──────────────────────────────────────── */
 
 .events { max-width: 1200px; }
 .events-filters { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin: 12px 0 14px; }
@@ -251,7 +228,6 @@ textarea.input { resize: vertical; font-family: inherit; }
 .event-nothing { color: var(--err); font-size: 11.5px; }
 .event-always { color: #4e5468; font-size: 11.5px; }
 
-/* ── used-by ─────────────────────────────────────────────── */
 .usedby { margin-top: 18px; border-top: 1px solid var(--line); padding-top: 12px; }
 .usedby-head { font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: #5d6478; margin-bottom: 8px; }
 .usedby-count { background: #22252f; border-radius: 9px; padding: 1px 6px; font-family: var(--mono); }
@@ -266,7 +242,6 @@ textarea.input { resize: vertical; font-family: inherit; }
 .usedby-fields { font-size: 11px; color: var(--accent); margin-left: auto; }
 .usedby-orphan { font-size: 12px; color: var(--warn); margin: 0; }
 
-/* ── balance ─────────────────────────────────────────────── */
 .balance { max-width: 1100px; }
 .balance-controls {
   display: flex; flex-wrap: wrap; gap: 14px; align-items: flex-end;
@@ -296,7 +271,6 @@ textarea.input { resize: vertical; font-family: inherit; }
 .bar { display: inline-block; width: 62px; height: 6px; background: #22252f; border-radius: 3px; margin-right: 7px; vertical-align: middle; overflow: hidden; }
 .bar-fill { display: block; height: 100%; background: var(--accent); }
 
-/* ── dialogue graph ──────────────────────────────────────── */
 .graph-scroll { overflow: auto; border: 1px solid var(--line); border-radius: 8px; background: #101219; margin: 12px 0; max-height: 62vh; }
 .graph-svg { display: block; }
 .gnode { fill: #1c1f29; stroke: var(--line); }
@@ -311,7 +285,6 @@ textarea.input { resize: vertical; font-family: inherit; }
 .graph-warnings p { margin: 0 0 4px; }
 .graph-warnings strong { color: var(--err); }
 
-/* ── timeline ────────────────────────────────────────────── */
 .timeline { max-width: 900px; }
 .scrubber { display: flex; align-items: center; gap: 12px; margin: 14px 0 6px; }
 .scrubber input[type="range"] { flex: 1; accent-color: var(--accent); }
@@ -321,24 +294,19 @@ textarea.input { resize: vertical; font-family: inherit; }
 .spark-bar:hover { background: #4a7290; }
 .spark-bar.current { background: var(--accent); }
 
-/* Array reorder controls stay compact because most lists are unordered. */
 .reorder { display: inline-flex; gap: 2px; }
 .reorder .btn { padding: 0 5px; line-height: 1.4; }
 
 .orphans { padding: 4px 2px; }
 
-/* — prefabs view ———————————————————————————————————————————— */
-
 .prefabs { padding: 4px 2px; }
 .prefab-list { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 14px; }
-/* Show the prefab definition beside its affected instances. */
 .prefab-body { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; align-items: start; }
 .fanout-row { border-left: 2px solid var(--line); padding-left: 8px; margin-bottom: 8px; }
 .fanout-field { display: flex; gap: 6px; align-items: baseline; font-size: 11px; padding-left: 8px; }
 .fanout-from { color: #5d6478; text-decoration: line-through; }
 .fanout-arrow { opacity: 0.4; }
 .fanout-to { color: var(--accent); }
-/* Preserved overrides are expected fan-out results, not diagnostics. */
 .fanout-kept { font-size: 11px; color: var(--warn); padding-left: 8px; margin-top: 2px; }
 .fanout-kept code { margin-right: 6px; }
 .dialog-actions { display: flex; gap: 8px; align-items: center; margin-top: 12px; }
