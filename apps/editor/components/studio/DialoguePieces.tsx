@@ -1,9 +1,6 @@
 'use client';
 
-/**
- * Build a standard dialogue fragment for common conversation shapes.
- * The generated form can assemble these manually, but the fragment keeps the reward and check ordering correct.
- */
+/** Build a standard dialogue fragment for common conversation shapes. */
 
 import { useState } from 'react';
 import { rumour, favour, talk } from '@dm/authoring';

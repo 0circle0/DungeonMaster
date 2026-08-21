@@ -1,7 +1,4 @@
-/**
- * Inspector for the selected module item.
- * It renders the generated form plus item-specific actions and diagnostics.
- */
+/** Inspector for the selected module item. */
 
 import { useMemo, useState } from 'react';
 import { getAt } from '@/lib/store';
@@ -46,13 +43,7 @@ interface InspectorProps {
   modFields: readonly OwnedField[];
   authoring: WorldAuthoring;
   onAuthoringChange: (next: WorldAuthoring) => void;
-  /**
-   * Everything wrong with the module, mods and rules included.
-   *
-   * Not `store.validation`, which is the schema alone: a mod that says which
-   * field is wrong, and a rule that says which entry is, were both being told
-   * to the console and to nobody else.
-   */
+  /** Everything wrong with the module, mods and rules included. */
   diagnostics: {
     errors: readonly Diagnostic[];
     warnings: readonly Diagnostic[];
@@ -60,11 +51,7 @@ interface InspectorProps {
   };
 }
 
-/**
- * Collections whose entries carry a `descriptionKey` — the three that name a
- * bundle of arrival prose. Dungeons and biomes carry a plain `description`
- * string instead, which the generated form already handles.
- */
+/** Collections whose entries carry a `descriptionKey` — the three that name a bundle of arrival prose. */
 const DESCRIBED = new Set(['world.pointsOfInterest', 'world.areas', 'world.roomTemplates']);
 
 export function Inspector(props: InspectorProps) {
@@ -179,9 +166,7 @@ function InspectorPanel(props: InspectorProps) {
 
     const { prefab, params } = derivePrefab(entry, info.path, prefabId);
 
-    // Client state, and that is the whole change: the prefab list used to be a
-    // server prop, so the only way to see a new one was to reload the page and
-    // read it again. It lives in the studio now, and the panel re-renders.
+    // Client state, so a new prefab appears without a reload.
     props.onAuthoringChange({
       ...props.authoring,
       prefabs: [...props.authoring.prefabs.filter((p) => p.id !== prefabId), prefab],
@@ -268,8 +253,7 @@ function InspectorPanel(props: InspectorProps) {
             registryPath={info.path}
             basePath={basePath}
             store={store}
-            // A static map's layers are thousands of cells; the generic array
-            // editor would render them as a wall of inputs. The painter owns them.
+            // A static map's layers are thousands of cells; the painter owns them.
             {...(info.path === 'world.maps' ? { omit: new Set(['layers']) } : {})}
           />
         </FieldOverrides.Provider>

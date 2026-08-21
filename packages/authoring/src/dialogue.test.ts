@@ -1,17 +1,4 @@
-/**
- * One assertion matters more than the rest: nothing is ever granted from an
- * option's `effects`.
- *
- * `option.effects` run *before* `option.check` and regardless of it, so a
- * `learnLore` or a `grantItem` there is handed over on a failed roll too. The
- * dialogue still validates, still compiles, and plays as a conversation where
- * failing a persuasion check costs nothing — which reads as generosity rather
- * than as a bug. That is why these are functions.
- *
- * The composed fragments are also checked against the real schema, because a
- * generator that emits something the format rejects is worse than no
- * generator.
- */
+/** One assertion matters more than the rest: nothing is ever granted from an option's `effects`. */
 
 import { describe, it, expect } from 'vitest';
 import { fileURLToPath } from 'node:url';
@@ -28,20 +15,11 @@ const VOICE: Voice = {
   favourRefused: '"It is not mine to give."',
 };
 
-// Assembled, because greenmarch keeps its static maps in folders — the raw
-// file does not compile on its own, which is the assembled/raw distinction the
-// studio also has to live with.
 const BASE = readAssembledModule(
   fileURLToPath(new URL('../../../modules/greenmarch', import.meta.url)),
 ).doc;
 
-/**
- * Put a fragment into a real module and compile it.
- *
- * greenmarch ships no lore, so the clue a rumour teaches has to exist before
- * the gate that references it can resolve — which is itself the point of
- * compiling rather than eyeballing the shape.
- */
+/** Put a fragment into a real module and compile it. */
 function compiled(fragments: readonly Fragment[]) {
   const doc = JSON.parse(JSON.stringify(BASE)) as {
     narrative: {
@@ -135,8 +113,6 @@ describe('the gates', () => {
 
 describe('what it emits', () => {
   it('compiles inside a real module', () => {
-    // greenmarch's greeting node is `opening`; `back` defaults to `greet`,
-    // which is a convention rather than a guarantee.
     const back = 'opening';
     const result = compiled([
       rumour({ key: 'ask_fire', ask: 'What burned?', told: '"The mill."', clue: 'vess_journal_clue', voice: VOICE, back }),

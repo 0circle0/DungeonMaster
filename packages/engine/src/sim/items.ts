@@ -1,13 +1,4 @@
-/**
- * Carrying, wearing, and using things.
- *
- * Items live in a character's inventory or on a tile, and move between them. Equipment is a third
- * state layered on the first: an equipped sword is still carried, which is why `equipped` holds ids
- * rather than removing the stack.
- *
- * Slot capacity comes from `rules.equipmentSlots`, so a module deciding you have two hands, or
- * four, or none, needs no engine change.
- */
+/** Carrying, wearing, and using things. */
 
 import { Rng, parseDice, rollDice } from '@dm/core';
 import { evalEffects } from '@dm/module';
@@ -91,8 +82,7 @@ export function takeItem(
     return false;
   }
 
-  // No item named: take everything within reach, which is what a player means by "take" standing on
-  // a pile.
+  // No item named: take everything within reach, which is what a player means by "take" standing on a pile.
   const wanted = itemId
     ? reachable.filter((entry) => entry.item === itemId)
     : reachable;
@@ -195,8 +185,7 @@ export function equipItem(
 
   if (worn.includes(itemId)) return true;
 
-  // A full slot displaces its oldest occupant, which is friendlier than refusing and making the
-  // player unequip by hand.
+  // A full slot displaces its oldest occupant.
   const next = worn.length >= capacity ? [...worn.slice(1), itemId] : [...worn, itemId];
   const displaced = worn.length >= capacity ? worn[0] : undefined;
 
@@ -259,9 +248,7 @@ export function useItem(
     return false;
   }
 
-  // A wand with nothing left in it. Charges are counted per character per item in `flags` rather
-  // than as item instances, which the engine has no concept of, so the limit is one charged copy
-  // each.
+  // A wand with nothing left in it.
   const charges = item.charges;
   if (charges) {
     const key = chargeKey(current.id, itemId);
@@ -279,9 +266,7 @@ export function useItem(
   }
 
   const subject = target ? txn.entity(target) : current;
-  // Built explicitly rather than with a conditional spread: an optional property typed `X |
-  // undefined` is rejected by the shared `Scope` index signature under the editor's stricter
-  // settings.
+  // Built explicitly: a conditional spread types the property `X | undefined`, which `Scope` rejects.
   const extra: Scope = subject ? { target: { id: subject.id, name: subject.name } } : {};
   const scope = buildScope(txn.module, txn.state, current, extra);
 
@@ -299,10 +284,7 @@ export function chargeKey(entityId: string, itemId: string): string {
   return `charges:${entityId}:${itemId}`;
 }
 
-/**
- * Refill charged items on a rest of the kind they recharge on, per `rechargeOn` and
- * `rechargeAmount`.
- */
+/** Refill charged items on a rest of the kind they recharge on, per `rechargeOn` and `rechargeAmount`. */
 export function rechargeItems(txn: Transaction, restId: string, rng: Rng): void {
   for (const id of txn.state.party) {
     const holder = txn.entity(id);

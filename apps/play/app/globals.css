@@ -17,8 +17,7 @@
   --warn: #d9a441;
   --mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
 
-  /* The eight tones a text map can carry — @dm/play decides which, this
-     decides what they look like. */
+  /* The eight tones a text map can carry — @dm/play decides which, this decides what they look like. */
   --tone-red: #e06c6c;
   --tone-green: #5fb87a;
   --tone-yellow: #d9a441;
@@ -412,9 +411,7 @@ button, input, select, textarea { font: inherit; color: inherit; }
 .arc .count { letter-spacing: normal; text-transform: none; }
 .quest-card h4 .count { color: var(--muted); font-weight: normal; font-size: 12px; }
 
-/* A clue is not a task, so it is neither ticked nor struck through. An unknown
-   one is a rule rather than words: the engine withholds the text, and the blank
-   is what makes a half-finished thread read as half finished. */
+/* A clue is not a task, so it is neither ticked nor struck through. */
 .clue { margin: 3px 0; color: var(--text); }
 .clue .source { color: var(--muted); font-style: italic; }
 .clue.unknown { color: var(--line); letter-spacing: 0.15em; }

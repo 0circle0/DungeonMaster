@@ -1,8 +1,4 @@
-/**
- * "Editing `inn` updates thirty-six inns" is the feature and the hazard in one
- * sentence. An author who cannot see the second half before it happens learns
- * not to touch prefabs at all, which costs more than the link was worth.
- */
+/** "Editing `inn` updates thirty-six inns" is the feature and the hazard in one sentence. */
 
 import { describe, it, expect } from 'vitest';
 import { planFanout, fanoutEdits } from './prefabFanout.js';
@@ -79,11 +75,7 @@ describe('planFanout', () => {
     expect(plan.changed.some((c) => c.id === 'handmade')).toBe(false);
   });
 
-  /**
-   * The difference between "this did nothing" and "this was already yours".
-   * Without it, an author who overrode a field sees a prefab edit silently do
-   * less than they asked for.
-   */
+  /** The difference between "this did nothing" and "this was already yours". */
   it('says what the prefab wanted and did not get', () => {
     const { doc, instances } = world();
     const entries = (doc['world'] as { pointsOfInterest: Record<string, unknown>[] }).pointsOfInterest;

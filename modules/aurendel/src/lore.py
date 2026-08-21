@@ -1,15 +1,4 @@
-"""Aurendel — how its people say no, and how a conversation gets out.
-
-`dmkit.lore` builds the hidden-thread conversations; the seven sentences below
-are the ones it would otherwise have had to invent. They are here because a
-refusal is authored narration in a particular register — third person, present
-tense, nobody's name — and a shared default would be Aurendel's register
-imposed on whatever world came next.
-
-The `hidden_*.py` files import from here rather than from `dmkit.lore`, so they
-go on reading as prose. Everything `dmkit.lore` exports that needs no voice —
-`clue`, `thread`, `relic`, `sealed`, and the rest — is re-exported unchanged.
-"""
+"""Aurendel — how its people say no, and how a conversation gets out."""
 from dmkit import lore as _kit
 from dmkit.lore import (  # noqa: F401  re-exported unchanged
     blocked, carried, clue, finding, given, handover, keepsake, learn,

@@ -1,17 +1,4 @@
-"""The Diggers' Camp — a Weeping Moor side chain, Act II.
-
-The Library is paying for a dig at the Long Barrow, which is four hundred feet
-of ridge with two ends, and only the west end has ever been opened. Pell has
-opened it, recorded it, and would very much like to open the other one. The
-moot has said no twice, in writing, and the Library has filed both letters.
-
-This is the Crown-or-Library fork of Act I, played again at parish scale and
-with the Keepers standing where the Crown stood. It is the chain that makes
-`the_library` mean something outside the capital: Pell has a fellow's warrant,
-a purse, and a shop of things the fourth gallery will not admit exists.
-
-Both endings put the east end back. One of them writes it down first.
-"""
+"""The Diggers' Camp — a Weeping Moor side chain, Act II."""
 from dmkit.quests import (
     arc, stage, reach, kill, talk, flagged, resolved_either_way,
     set_flag, rep, give, deed, either, node, option, take_job, dialogue, npc,

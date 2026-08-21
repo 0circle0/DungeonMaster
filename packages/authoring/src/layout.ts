@@ -1,17 +1,4 @@
-/**
- * Putting every point of interest somewhere on its area's map.
- *
- * `position` is where the party stands when they arrive at a place with no
- * interior, and where it shows on the area map when it has one. Hand-placing
- * four hundred of them is not a good use of anybody; hand-placing the ones that
- * matter and laying out the rest is.
- *
- * The only hard requirement is that a spot is inside the map — `freeNear`
- * shifts anyone who lands on a wall — so this optimises for legibility rather
- * than correctness: a ring inset from the edge, filled clockwise, then a second
- * ring further in. Two rings hold twenty-odd places, which is more than any one
- * settlement has.
- */
+/** Putting every point of interest somewhere on its area's map. */
 
 export interface Positioned {
   readonly id: string;
@@ -35,17 +22,7 @@ export interface Placement {
   readonly position: { readonly x: number; readonly y: number };
 }
 
-/**
- * Spots for the entries that have none.
- *
- * Returns placements rather than mutating, so the caller decides what to do
- * with them — the studio shows them as a diff before applying, because a
- * hundred positions appearing without warning is not a generator, it is an
- * accident.
- *
- * An entry that already has a position keeps it, and is not returned. That is
- * what makes this safe to re-run: hand placement always wins.
- */
+/** Spots for the entries that have none. */
 export function layOut(entries: readonly Positioned[], areas: readonly AreaSize[]): Placement[] {
   const sizes = new Map(areas.map((area) => [area.id, { width: area.width, height: area.height }]));
   const counters = new Map<string, number>();
@@ -72,8 +49,7 @@ export function ringSpot(index: number, width: number, height: number): { x: num
   let right = width - 1 - inset;
   let top = inset;
   let bottom = height - 1 - inset;
-  // A ring that has collapsed to nothing is no longer a ring. Fall back to the
-  // outermost one rather than emitting a column of identical positions.
+  // A ring that has collapsed to nothing is no longer a ring.
   if (right - left < 4 || bottom - top < 4) {
     left = 3;
     right = width - 4;

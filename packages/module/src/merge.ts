@@ -1,13 +1,4 @@
-/**
- * Module layering.
- *
- * `extends` lets a pack ship twelve monsters instead of forking an entire game. The base document
- * is loaded first and the patch is merged over it.
- *
- * Collections merge by id, not by position, because that is what an author means: an entry whose id
- * already exists overrides it field by field, and a new id is appended. Positional merging would
- * silently rewrite whichever monster happened to sit at index 3.
- */
+/** Module layering. */
 
 import { COLLECTION_PATHS } from './schema/module.js';
 
@@ -23,23 +14,10 @@ function isPlainObject(v: unknown): v is Record<string, unknown> {
   return typeof v === 'object' && v !== null && !Array.isArray(v);
 }
 
-/**
- * Paths whose arrays merge entry-by-entry on `id`.
- *
- * `mods` is in here but is not a collection: it is a single-segment top-level path with no
- * `section.collection` address, it is not indexed, and `collectionAt` cannot reach it. It merges by
- * id for the same reason the collections do — a base pinning a mod and a patch re-pinning it must
- * end up with one entry — and `$delete` then lets a pack drop an inherited mod.
- */
+/** Paths whose arrays merge entry-by-entry on `id`. */
 const COLLECTION_SET = new Set<string>([...COLLECTION_PATHS, 'mods']);
 
-/**
- * Merge a patch over a base document.
- *
- * - Collections (`content.monsters` and friends) merge by id.
- * - Other objects merge key by key, recursively.
- * - Other arrays are replaced wholesale, since a bare list has no identity to merge on.
- */
+/** Merge a patch over a base document. */
 export function mergeModules(base: unknown, patch: unknown): unknown {
   return mergeValue(base, patch, '');
 }
@@ -107,11 +85,7 @@ export function parseExtends(value: string): { id: string; version: string } | n
   return { id: match[1]!, version: match[2]! };
 }
 
-/**
- * Resolve an `extends` chain into a single document. `load` fetches a base by `id@version`. The
- * chain is walked to its root and merged downward, so a pack may itself extend another pack. Cycles
- * are rejected rather than followed.
- */
+/** Resolve an `extends` chain into a single document. */
 export function resolveExtends(
   document: Record<string, unknown>,
   load: (identity: string) => Record<string, unknown> | undefined,

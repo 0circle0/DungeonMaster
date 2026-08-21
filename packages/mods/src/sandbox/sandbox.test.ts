@@ -1,9 +1,4 @@
-/**
- * What the sandbox promises the engine.
- *
- * These are the properties `reduce` relies on: a mod cannot reach a clock or
- * unseeded randomness, cannot hang the host, and cannot throw into it.
- */
+/** What the sandbox promises the engine. */
 
 import { describe, it, expect, beforeAll, afterAll } from 'vitest';
 
@@ -123,9 +118,6 @@ describe('containment', () => {
   it('rejects a return that is not a directive list', () => {
     const mod = modOf('junk', `dm.hook('action.before', () => 'not a list');`);
     host.install(mod);
-    // The dispatcher wraps a bare value into a list, so this one arrives as a
-    // list of junk and is caught by the directive schema in the runtime; what
-    // the host must guarantee is only that it does not throw.
     const result = call('junk');
     expect(result.ok).toBe(true);
   });

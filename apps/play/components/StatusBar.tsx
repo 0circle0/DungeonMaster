@@ -1,8 +1,6 @@
 'use client';
 
-/**
- * How the selected character is doing, pinned along the bottom.
- */
+/** How the selected character is doing, pinned along the bottom. */
 
 import { useMemo } from 'react';
 import { statusView } from '@dm/play';

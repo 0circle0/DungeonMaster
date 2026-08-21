@@ -1,9 +1,4 @@
-"""Region 5 — The Frostmere Waste.
-
-North of the Skarnspine, past the Ice Road. A glacier with a coastline, one
-whaling town, one village of cairn-keepers, and six stretches of ice that do
-not much care about any of it. The hardest overland country on the continent.
-"""
+"""Region 5 — The Frostmere Waste."""
 from place import (
     area, poi, gate, house, inn, smithy, store, workshop, temple, warehouse,
     landmark, ruin, delve,

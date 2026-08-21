@@ -1,12 +1,4 @@
-/**
- * Deeds and who saw them.
- *
- * A deed is not a global fact: it is witnessed by particular people, and only those people can
- * spread or act on it. That is what makes stealth and massacre mechanically different.
- *
- * Witnessing uses the same field of view the map is drawn with, so a wall that hides you from a
- * creature also hides what you did from it.
- */
+/** Deeds and who saw them. */
 
 import { Rng } from '@dm/core';
 import type { CompiledModule, MemoryModel } from '@dm/module';
@@ -26,15 +18,12 @@ interface DeedKindDef {
   distortion: number;
 }
 
-/**
- * The module's witness settings. A read, not a merge: `compileModule` runs the document through
- * Zod, so every default in `witnessSchema` is already present.
- */
+/** The module's witness settings. */
 function witnessConfig(module: CompiledModule): MemoryModel['witness'] {
   return module.source.narrative.memory.witness;
 }
 
-/** Who could see this happen. Only the living count when `deadMenTellNoTales` is set. */
+/** Who could see this happen. */
 export function witnessesOf(
   txn: Transaction,
   terrain: TerrainIndex,
@@ -48,16 +37,11 @@ export function witnessesOf(
   const out: string[] = [];
   const context = { module: txn.module, state: txn.state, terrain };
 
-  // A witness perceives the act, which happens on a tile — not the actor, who may already have
-  // walked away.
-  //
-  // An explicit override wins; a module that declares a witness radius gets it; otherwise each
-  // sense reaches as far as it reaches.
+  // A witness perceives the act, which happens on a tile — not the actor, who may already have walked away.
   const declared = radiusOverride ?? (config.radius > 0 ? config.radius : undefined);
   const range = declared === undefined ? {} : { range: declared };
 
-  // "Requires line of sight" means the sense that travels in lines. Catching a scent tells a
-  // creature something happened, not what.
+  // "Requires line of sight" means the sense that travels in lines.
   const sighted = txn.module.source.rules.perception?.sightSense;
   const options = sighted === undefined ? range : { ...range, sense: sighted };
 
@@ -69,8 +53,7 @@ export function witnessesOf(
     if (other.kind === 'character') continue;
 
     if (!config.requiresLineOfSight) {
-      // A module that says sight is not required is asking for presence alone, and `radius: 0`
-      // means everyone here.
+      // No sight required means presence alone; `radius: 0` means everyone here.
       const radius = radiusOverride ?? config.radius;
       if (radius === 0 || distance(other.position, at.position) <= radius) out.push(other.id);
       continue;
@@ -82,15 +65,8 @@ export function witnessesOf(
   return out;
 }
 
-/**
- * Record a deed. The severity and the faction that cares come from the module's `deedKinds`.
- * Reputation only moves if somebody was there to see it.
- */
-/**
- * Whether this actor is going unrecognised. A disguise is any condition declaring
- * `concealsIdentity`, so the relationship is typed and a module that gets it wrong fails to load
- * rather than quietly never disguising anyone.
- */
+/** Record a deed. */
+/** Whether this actor is going unrecognised. */
 function isDisguised(txn: Transaction, actor: Entity): boolean {
   for (const active of actor.conditions) {
     const condition = txn.module.find<{ concealsIdentity?: boolean }>(
@@ -138,9 +114,6 @@ export function recordDeed(
   txn.emit({ type: 'deedDone', deed: deed.id, kind: kindId, witnesses: identified });
 
   // Witnesses know it immediately; everyone else has to hear about it.
-  //
-  // Memories are filed under the persistent key — a named NPC's content id — so what Vess knows
-  // survives her entity being respawned, while a monster's knowledge dies with it.
   const known = { at: txn.state.minute, strength: 1, hops: 0 };
   const memory = { ...txn.state.memory };
   for (const witness of identified) {

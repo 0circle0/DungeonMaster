@@ -1,25 +1,8 @@
-"""Room vocabularies and dungeon constructors.
-
-`world.roomTemplates` is what a generated room can be. Every template needs a `descriptionKey`, and
-`enterRoom` fires it once per room per save, so a room family is mostly prose — which is why the
-prose lives in the module and only the shaping lives here.
-
-`fit()` is the part that is not obvious: `corridorLength` is room spacing rather than corridor
-length, and `roomCount` is a request rather than a promise — a map too small for the rooms asked for
-silently gets fewer.
-"""
+"""Room vocabularies and dungeon constructors."""
 from dmkit.prose import pool
 
 def family(biome, label, texts, *, roles, role_names, trap=0.12, loot=0.2):
-    """Build the seven room templates for one dungeon biome.
-
-    `roles` maps a role id to `(weight, minExits, maxExits, extras)` and `role_names` to the word
-    that goes in the template's name; both belong to the module. The one role the engine reads is
-    `boss`, off whatever string the module wrote (world/dungeon.ts).
-
-    `texts` maps role -> tuple of variant strings. Returns (templates, ids) and registers a
-    `<biome>_<role>_desc` pool for each.
-    """
+    """Build the seven room templates for one dungeon biome."""
     templates = []
     for role, (weight, lo, hi, extras) in roles.items():
         rid = f"{biome}_{role}"
@@ -54,21 +37,12 @@ def dice_mean(notation, fallback):
 
 
 # How much of a dungeon's map rejection sampling can fill before it starts dropping rooms.
-# `placeRooms` gives each room forty attempts, so packing much past this loses the tail of the list
-# silently.
 PACKING = 0.42
 MAX_SIDE = 81
 
 
 def fit(rooms, room_size, corridor_length, aspect=1.0):
-    """Pick a map — and if need be a corridor length — that holds `rooms` rooms.
-
-    `placeRooms` uses `corridorLength`'s mean as the spacing every room must keep from every other
-    (world/dungeon/rooms.ts). Fifteen rooms with `5d3` corridors on a 47x27 map produced two.
-
-    Returns (width, height, corridor_length). Grows the map first, because a long corridor is what
-    the author asked for; only when the map hits its ceiling does the spacing give way.
-    """
+    """Pick a map — and if need be a corridor length — that holds `rooms` rooms."""
     room_mean = dice_mean(room_size, 7)
     wanted = dice_mean(corridor_length, 6)
     ceiling = MAX_SIDE * MAX_SIDE
@@ -97,18 +71,12 @@ def _spacings(notation, wanted):
 
 def dungeon(did, name, biome, description, *, rooms="10", depth="1",
             algorithm="rooms", size=None, palette=None, aspect=1.0, **kw):
-    """One generated complex.
-
-    One map — the engine has no notion of levels, so a deep place is several of these, each behind
-    its own point of interest. The map is sized from the room count and the corridor length unless
-    `size` says otherwise.
-    """
+    """One generated complex."""
     out = {
         "id": did, "name": name, "description": description,
         "biome": biome, "roomCount": rooms, "depth": depth,
         "algorithm": algorithm,
-        # No items in this world, so a locked door would place a key that does not exist. Gating
-        # happens on the way in, at the point of interest.
+        # No items in this world, so a locked door would place a key that does not exist.
         "lockedDoorChance": 0, "doorGates": [],
         "rollEncounters": False,
         "safeEntrance": True,
@@ -126,14 +94,12 @@ def dungeon(did, name, biome, description, *, rooms="10", depth="1",
         out["width"], out["height"] = width, height
         out["corridorLength"] = corridor
     elif algorithm == "caverns":
-        # Caverns do not place rooms; the chambers are whatever the automaton leaves behind. Room
-        # count is a target for how much cave to carve.
+        # Caverns do not place rooms; the chambers are whatever the automaton leaves behind.
         side = max(27, int(round(((int(rooms) * 90) / 0.5) ** 0.5)))
         out["width"] = str(min(MAX_SIDE, side | 1))
         out["height"] = str(min(MAX_SIDE, int(round(side / aspect)) | 1))
     elif algorithm == "bsp":
-        # BSP splits the whole rectangle, so it wants room for `minLeaf` cells rather than spacing —
-        # but it still cannot make more leaves than fit.
+        # BSP wants room for `minLeaf` cells rather than spacing.
         leaf = out.get("bsp", {}).get("minLeaf", 5) + 2
         side = max(25, int(round(((int(rooms) * leaf * leaf) / 0.75) ** 0.5)))
         out["width"] = str(min(MAX_SIDE, side | 1))

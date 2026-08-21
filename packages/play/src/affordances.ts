@@ -1,17 +1,4 @@
-/**
- * What the party can do right now, and what they can do with that.
- *
- * Every front end asks these two questions — a context bar asks the first, a clicked tile the
- * second — and each answer carries the `Action` that does it, so a button dispatches with no glue
- * code.
- *
- * Two rules:
- *
- * - A refusal is an answer. An unreachable tile still yields a walk, `blocked` with the reason, and
- *   a barred door yields an enter that names what it would take.
- * - Never offer what the party cannot perceive. A tile neither in view nor remembered yields
- *   nothing, since anything else leaks world state through the UI.
- */
+/** What the party can do right now, and what they can do with that. */
 
 import type { Action, Entity, EntityId, Position } from '@dm/engine';
 import {
@@ -43,19 +30,13 @@ import type { PlayContext } from './session.js';
 import { waysFromHere } from './views/exits.js';
 import { duration } from './views/format.js';
 
-/**
- * The reason a gate refuses, in the shortest honest form. An authored description says it all; the
- * mechanical item list is the fallback for gates that never wrote one.
- */
+/** The reason a gate refuses, in the shortest honest form. */
 function gateReason(requires: Requirement | undefined): readonly Message[] {
   const described = describeRequirement(requires);
   return requires?.description ? described.slice(0, 1) : described;
 }
 
-/**
- * What you do to a barrier of this kind. The gate's `kind` decides the verb: "open the barrow ward"
- * is the wrong sentence for a seal.
- */
+/** What you do to a barrier of this kind. */
 const OPEN_VERB: Record<string, string> = {
   lock: 'Unlock',
   ward: 'Dispel',
@@ -75,11 +56,7 @@ export type AffordanceKind =
   | 'look' | 'search' | 'disarm' | 'trade' | 'sense' | 'select' | 'stance' | 'follow'
   | 'endTurn' | 'flee' | 'rest' | 'wait' | 'travel' | 'quest';
 
-/**
- * Whether the place the party is standing in offers a counter. `pointsOfInterest[].services`
- * decides which of a settlement's affordances are on offer. Outside a point of interest a trader
- * who happens to be there still trades, because no place has said otherwise.
- */
+/** Whether the place the party is standing in offers a counter. */
 function servesTrade(context: PlayContext): boolean {
   const here = context.state.location;
   if (here.kind !== 'poi') return true;
@@ -106,9 +83,9 @@ export interface Affordance {
   /** Dispatch this and the thing happens. */
   readonly action: Action;
   readonly subject?: Subject;
-  /** Why it would be refused. Set ⇒ render disabled, with this as the reason. */
+  /** Why it would be refused. */
   readonly blocked?: string;
-  /** High first. The primary action for a click is the heaviest unblocked one. */
+  /** High first. */
   readonly weight: number;
   /** For walks: the route, so hover can draw it and the label can say the cost. */
   readonly path?: { readonly steps: readonly Position[]; readonly cost: number };
@@ -134,10 +111,7 @@ function perception(
   return { seen: visible.has(packed), known: map.explored.includes(packed) };
 }
 
-/**
- * What clicking a tile can mean, heaviest first. Unknown ground yields nothing; everything else
- * yields something, blocked if need be.
- */
+/** What clicking a tile can mean, heaviest first. */
 export function affordancesAt(context: PlayContext, at: Position): readonly Affordance[] {
   const { module, state, terrain } = context;
   const actor = state.entities[state.selected];
@@ -222,8 +196,7 @@ export function affordancesAt(context: PlayContext, at: Position): readonly Affo
         action: { type: 'enter', target: poi.id },
         subject: { kind: 'poi', id: poi.id },
         weight: 80,
-        // Entering attempts the gate — the party may hold the key — so this is a hint about what
-        // stands in the way, not a hard refusal.
+        // Entering attempts the gate, so this is a hint rather than a hard refusal.
         ...(barred && needs.length > 0
           ? { blocked: text(module, 'affordance.barred', { what: joinMessages(module, needs) }) }
           : {}),
@@ -302,10 +275,7 @@ export function affordancesFor(context: PlayContext, target: EntityId): readonly
     .filter((entry) => entry.subject?.kind === 'entity' && entry.subject.id === target);
 }
 
-/**
- * The context bar: what is worth offering right now, unprompted. Returns nothing while a
- * conversation is open, since the dialogue owns the turn.
- */
+/** The context bar: what is worth offering right now, unprompted. */
 export function affordances(context: PlayContext): readonly Affordance[] {
   const { module, state } = context;
   const actor = state.entities[state.selected];
@@ -399,8 +369,7 @@ export function affordances(context: PlayContext): readonly Affordance[] {
     });
   }
 
-  // — senses, one button per declared sense, so listen and smell become buttons without the engine
-  // knowing either word. A module with other senses gets other buttons.
+  // --- senses: one button per declared sense ---------------------------------
   const sight = sightSenseOf(module).id;
   for (const sense of module.all<{ id: string; name?: string }>('rules.senses')) {
     if (sense.id === sight) continue;
@@ -423,9 +392,7 @@ export function affordances(context: PlayContext): readonly Affordance[] {
     action: { type: 'search' }, weight: 35,
   });
 
-  // Trade, where the party is standing with someone who deals and the place says so. `services`
-  // decides which counters a settlement offers; a shopkeeper in a place with no market is still
-  // someone to talk to.
+  // Trade, where the party is standing with someone who deals and the place says so.
   const trader = traderNearby(context);
   if (trader && servesTrade(context)) {
     const txn = reading(context);
@@ -448,8 +415,7 @@ export function affordances(context: PlayContext): readonly Affordance[] {
     });
   }
 
-  // Only once something has been found: offering "Disarm" with nothing in reach would tell the
-  // player a trap is there.
+  // Only once something has been found.
   const trap = reachableTrap(reading(context), actor);
   if (trap) {
     const definition = module.find<{ name?: string }>('content.traps', trap.trap);

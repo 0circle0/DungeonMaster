@@ -1,6 +1,4 @@
-/**
- * Edit raw JSON in a local buffer until it parses successfully.
- */
+/** Edit raw JSON in a local buffer until it parses successfully. */
 
 'use client';
 

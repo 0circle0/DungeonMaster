@@ -1,14 +1,4 @@
-/**
- * A collection as a filterable table in the viewport. Row click selects the
- * entry into the inspector; the table stays visible so moving between entries
- * is one click, not a navigation.
- *
- * Two things make it usable at Aurendel's size, where a collection is 597 rows
- * rather than four. The filter box takes a small query grammar, so "which of
- * these have no loot table" is a question rather than a scroll. And rows can be
- * checked, because the answer to that question is usually something you want to
- * do to all of them at once — see `BulkBar`.
- */
+/** A collection as a filterable table in the viewport. */
 
 import { useEffect, useMemo, useRef, useState } from 'react';
 import type { Diagnostic } from '@dm/module';
@@ -58,8 +48,7 @@ export function CollectionTable(props: {
     [props.entries, terms],
   );
 
-  // Changing collection is a different set of rows, so a selection cannot mean
-  // anything any more.
+  // Changing collection is a different set of rows, so a selection cannot mean anything any more.
   const [lastPath, setLastPath] = useState(props.path);
   if (lastPath !== props.path) {
     setLastPath(props.path);
@@ -71,20 +60,7 @@ export function CollectionTable(props: {
     props.selection.kind === 'item' && props.selection.path === props.path ? props.selection.index : -1;
   const visibleIndices = visible.map((v) => v.index);
 
-  /**
-   * Bring the selected entry into view when the selection came from somewhere
-   * else — clicking a problem in the console, or a link in another panel.
-   *
-   * Opening the right table and highlighting a row four hundred down is, from
-   * the author's side, indistinguishable from nothing happening: the inspector
-   * fills in on the far side of the screen and the middle of it looks untouched.
-   *
-   * A filter makes it worse, because the row is not rendered at all. Clearing
-   * the filter takes a render to take effect, so the jump stays *pending* until
-   * the row exists and can be scrolled to — one attempt, dropped after it lands,
-   * which is what keeps this from dragging the view around while somebody is
-   * narrowing a filter by hand.
-   */
+  /** Bring the selected entry into view when the selection came from somewhere else. */
   const pendingJump = useRef(false);
   useEffect(() => {
     pendingJump.current = selectedIndex >= 0;
@@ -92,9 +68,7 @@ export function CollectionTable(props: {
 
   useEffect(() => {
     if (!pendingJump.current || selectedIndex < 0) return;
-    // Hidden by the filter rather than absent. That cannot happen from a click
-    // in this table — every row you can click is one you can see — so clearing
-    // it never fights a filter somebody is typing.
+    // Hidden by the filter rather than absent.
     if (selectedIndex < props.entries.length && !visibleIndices.includes(selectedIndex)) {
       setFilter('');
       return;
@@ -111,8 +85,7 @@ export function CollectionTable(props: {
   const toggle = (index: number, shift: boolean) => {
     const next = new Set(checked);
     if (shift && anchor !== null) {
-      // A range over what is *shown*, not over the underlying indices: with a
-      // filter on, the rows between two clicks are the rows you can see.
+      // A range over what is shown, not over the underlying indices.
       const from = visibleIndices.indexOf(anchor);
       const to = visibleIndices.indexOf(index);
       if (from >= 0 && to >= 0) {

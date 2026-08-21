@@ -1,6 +1,4 @@
-/**
- * Preview a map as a canvas with marker overlays and generation controls.
- */
+/** Preview a map as a canvas with marker overlays and generation controls. */
 
 import { useEffect, useMemo, useRef, useState } from 'react';
 import type { ModuleStore } from '@/lib/store';
@@ -43,9 +41,7 @@ export function MapViewport(props: { store: ModuleStore; target: PreviewTarget }
     }
   }, [module, props.target, seed]);
 
-  /**
-   * Move a point of interest to a new map position.
-   */
+  /** Move a point of interest to a new map position. */
   const movePoi = (id: string, x: number, y: number) => {
     const pois = (getAt(props.store.doc, ['world', 'pointsOfInterest']) ?? []) as Record<string, unknown>[];
     const index = pois.findIndex((poi) => String(poi['id']) === id);
@@ -178,14 +174,7 @@ function MapCanvas(props: {
 }) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [hover, setHover] = useState<{ x: number; y: number; terrain: string } | null>(null);
-  /**
-   * Where a marker is being dragged to, before it is written.
-   *
-   * The ref is the truth and the state is only so it draws. A drag reads its
-   * own position in the very next pointer event, and React state is not applied
-   * by then — so keeping it in state alone means every move handler sees the
-   * drag as not started, and the drop writes nothing.
-   */
+  /** Where a marker is being dragged to, before it is written. */
   const dragRef = useRef<{ poi: string; x: number; y: number } | null>(null);
   const [dragging, setDragging] = useState<{ poi: string; x: number; y: number } | null>(null);
   const { tiles, markers, rooms } = props.preview;
@@ -278,9 +267,7 @@ function MapCanvas(props: {
                 onPointerDown={(e) => {
                   if (!movable || !marker.poi) return;
                   e.preventDefault();
-                  // Capture keeps the drag alive when the pointer leaves the
-                  // glyph, which it does immediately. A pointer the browser
-                  // does not know is not a reason to refuse the drag.
+                  // Capture keeps the drag alive when the pointer leaves the glyph.
                   try {
                     e.currentTarget.setPointerCapture(e.pointerId);
                   } catch {
@@ -302,8 +289,7 @@ function MapCanvas(props: {
                   dragRef.current = null;
                   setDragging(null);
                   if (!drag || drag.poi !== marker.poi) return;
-                  // Written once, on drop: a write per tile crossed would be a
-                  // revalidation per tile and an undo step per tile with it.
+                  // Written once, on drop: a write per tile would be an undo step per tile.
                   if (drag.x !== marker.x || drag.y !== marker.y) {
                     props.onMovePoi?.(drag.poi, drag.x, drag.y);
                   }

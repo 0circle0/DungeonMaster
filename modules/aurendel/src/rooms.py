@@ -1,24 +1,4 @@
-"""Aurendel — what a generated room can be, and what it says.
-
-`world.roomTemplates` is drawn from per biome, and `enterRoom` fires a
-template's `descriptionKey` once per room per save — so this file is mostly
-prose. Eight dungeon biomes rather than one, because a barrow chamber and a
-sewer chamber want completely different sentences.
-
-The shaping is `dmkit.dungeons`; the vocabulary is here. `ROLES` is Aurendel's
-answer to what rooms a dungeon is made of: the weights, the exit counts and the
-loot and trap chances are all tuning, and `ROLE_NAMES` is English. The engine
-reads exactly one of these strings, `boss`, and only to decide which room to
-put the boss in (world/dungeon.ts:660).
-
-Keys deliberately left alone throughout:
-
-  * `lockedDoorChance` / `doorGates` — locked doors place *keys*, which are
-    items, and a generated dungeon has none to place (world/dungeon.ts:564).
-  * `encounterChance` is 0 on every template here. `story.attach_content`
-    raises it on the biomes the questline actually crosses and leaves the rest
-    of the continent quiet.
-"""
+"""Aurendel — what a generated room can be, and what it says."""
 from dmkit.dungeons import family as _family, trap as _trap
 
 # roles -> (weight, minExits, maxExits, extras)
@@ -384,11 +364,7 @@ BIOME_ROOMS = {
 }
 
 
-# --- traps ------------------------------------------------------------------
-# The one piece of `content` this world authors. A trap needs a skill to spot
-# it and a skill to defuse it — both come from core_fantasy — and damage types
-# from the rules. It needs no items and no monsters, which is why it is here
-# and vendors are not: without them a dungeon has nothing to say no with.
+# --- traps: the one piece of `content` this world authors ---
 
 
 TRAPS = [

@@ -1,13 +1,6 @@
 'use client';
 
-/**
- * The disambiguation popover.
- *
- * One component for both askers: a map click that could mean several things,
- * and a typed command that tied between identically-named creatures. Each row
- * carries the detail that actually distinguishes the candidates — position and
- * health, since two bog hounds differ in nothing else.
- */
+/** The disambiguation popover. */
 
 import { useEffect, useRef } from 'react';
 

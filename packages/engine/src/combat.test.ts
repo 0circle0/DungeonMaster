@@ -31,10 +31,7 @@ const GREENMARCH = loadModule('greenmarch');
 const MINIMAL = loadModule('minimal');
 const ctx = { module: GREENMARCH };
 
-/**
- * A refusal is a key, not a sentence, so tests assert on the key. The wording is the module's and
- * may change.
- */
+/** A refusal is a key, not a sentence, so tests assert on the key. */
 const isCooldownRefusal = (event: GameEvent): boolean =>
   event.type === 'refused' && 'key' in event.reason && event.reason.key === 'refused.ability.cooldown';
 const terrain = new TerrainIndex(GREENMARCH);
@@ -153,8 +150,6 @@ describe('resolution', () => {
     expect(a.total - b.total).toBe(3);
   });
 
-  // Gear is the only way a skill rank moves: `entity.skills` is written at character creation and
-  // never again, and no effect op raises one.
   describe('skill bonuses from gear', () => {
     /** Greenmarch, with its blade worth two ranks of lore to whoever holds it. */
     const LENS = (() => {
@@ -190,8 +185,6 @@ describe('resolution', () => {
       expect(worn.total).toBe(packed.total);
     });
 
-    // Gear that improves the roll must also satisfy a `minRank` gate, or it is a lie about what the
-    // wearer can do.
     it('satisfies a minRank requirement the wearer could not meet unaided', () => {
       const state = arena([], LENS);
       const gate = compileRequirement(
@@ -213,8 +206,7 @@ describe('resolution', () => {
     const doc = JSON.parse(JSON.stringify(GREENMARCH.source)) as never as {
       rules: { savingThrows: unknown[] };
     };
-    // Appended, not replaced: the module's own saves are referenced by its conditions, and dropping
-    // them makes the fixture fail to compile.
+    // Appended, not replaced: the module's own saves are referenced by its conditions.
     doc.rules.savingThrows = [
       ...(doc.rules.savingThrows ?? []),
       { id: 'fortitude', name: 'Fortitude', attribute: 'endurance' },
@@ -435,8 +427,6 @@ describe('turn order', () => {
     let current = started();
     expect(current.combat).not.toBeNull();
 
-    // Whenever reduce hands control back, the active combatant is a party member, and must be the
-    // selected one.
     for (let i = 0; i < 8 && current.combat; i += 1) {
       const active = current.combat.order[current.combat.turn]!;
       expect(current.entities[active]?.kind).toBe('character');
@@ -612,8 +602,6 @@ describe('running away', () => {
     const { state: next, events } = reduce(started, { type: 'flee' }, ctx);
     expect(events.some((e) => e.type === 'custom' && e.event === 'fled')).toBe(true);
 
-    // The hound gives chase on its own turn, so compare against where the hero ran to rather than
-    // the gap at the end of the round.
     const ran = events.filter((e) => e.type === 'moved' && e.entity === 'e:1');
     expect(ran.length).toBeGreaterThan(0);
     const landed = ran.at(-1)!;
@@ -634,8 +622,6 @@ describe('running away', () => {
     };
     const started = reduce(cornered, { type: 'wait', minutes: 0 }, ctx).state;
     const { events } = reduce(started, { type: 'flee' }, ctx);
-    // Either it found no better tile or it ran; only the refusal is asserted when it truly cannot
-    // improve its position.
     const refused = events.find((e) => e.type === 'refused' && e.action === 'flee');
     const moved = events.some((e) => e.type === 'moved' && e.entity === 'e:1');
     expect(Boolean(refused) !== moved).toBe(true);
@@ -660,13 +646,10 @@ describe('running away', () => {
       },
     };
 
-    // Breaking line of sight is not the whole of an escape: a bog hound keeps looking for three
-    // rounds, so a corner buys time rather than ending the encounter.
     const { state: hidden } = reduce(separated, { type: 'wait', minutes: 0 }, ctx);
     expect(hidden.combat).not.toBeNull();
 
-    // It ends when whatever is hunting gives up, which is what `temperament.disengageTurns` counts
-    // down.
+    // It ends when whatever is hunting gives up, which is what `temperament.disengageTurns` counts down.
     let after = hidden;
     let events: ReturnType<typeof reduce>['events'] = [];
     for (let guard = 0; guard < 40 && after.combat; guard += 1) {
@@ -696,11 +679,7 @@ describe('running away', () => {
     });
   });
 
-  /**
-   * Backing out carefully. An opportunity's gate gets the same `targetScope` an attack builds, so
-   * disengaging is ordinary content: a condition, an ability that applies it, and a `requires` on
-   * the opportunity.
-   */
+  /** Backing out carefully. */
   it('is free to someone who spent their action backing out', () => {
     const doc = JSON.parse(JSON.stringify(GREENMARCH.source)) as never as {
       rules: { conditions: Record<string, unknown>[]; opportunities: Record<string, unknown>[] };
@@ -767,8 +746,7 @@ describe('combat has depth', () => {
     };
   }
 
-  // `abilities[].cooldown` is tracked, so a once-every-three-rounds shout cannot be used every
-  // round.
+  // `abilities[].cooldown` is tracked, so a once-every-three-rounds shout cannot be used every round.
   it('puts an ability on cooldown, and refuses it until it comes back', () => {
     const first = reduce(fighting(), { type: 'useAbility', ability: 'rally' }, ctx);
     expect(first.state.combat!.cooldowns).toContainEqual(
@@ -795,8 +773,6 @@ describe('combat has depth', () => {
   });
 
   it('does not put anything on cooldown outside a fight, where there are no rounds', () => {
-    // No combat, no rounds to count in, so the ability is always ready and there is nowhere to
-    // record a cooldown.
     const peace: GameState = { ...fighting(), combat: null };
     const first = reduce(peace, { type: 'useAbility', ability: 'rally' }, ctx);
     const again = reduce({ ...first.state, combat: null }, { type: 'useAbility', ability: 'rally' }, ctx);
@@ -813,8 +789,6 @@ describe('combat has depth', () => {
     expect(cold(events)).toBeGreaterThan(0);
   });
 
-  // Once a round, not once a turn, so a lair action is a budget rather than a tax on every other
-  // creature acting.
   it('spends a lair action once a round, however many turns pass', () => {
     // Three in the order, so two turns can end inside one round.
     const base = arena([{ id: 'barrow_wight', at: { x: 6, y: 5 } }], GREENMARCH, 5, ['Ash', 'Korrin']);
@@ -827,8 +801,6 @@ describe('combat has depth', () => {
       },
     };
 
-    // One use, reaching both party members, so the count is the party rather than the number of
-    // times the barrow stirred.
     const first = reduce(state, { type: 'endTurn' }, ctx);
     expect(first.state.combat?.round).toBe(1);
     expect(cold(first.events)).toBe(2);
@@ -891,8 +863,6 @@ describe('changing sides', () => {
   });
 
   it('sorts a number through the module\'s own bands', () => {
-    // greenmarch declares no `ally` band, so a high number still lands neutral: the ruleset
-    // decides, not the engine.
     const txn = new Transaction(withNeutral(), GREENMARCH);
     applyOps(txn, evalEffects([flip('m:0', -50)], {
       scope: {}, rng: Rng.fromSeed(1), openNamespaces: OPEN_NAMESPACES,
@@ -930,15 +900,12 @@ describe('changing sides', () => {
 
     const { state, events } = reduce(txn.finish().state, { type: 'wait', minutes: 0 }, ctx);
     expect(state.combat!.order).toContain('m:1');
-    // Appended, never sorted in: `combat.turn` is an index, and inserting by initiative could hand
-    // the turn to somebody else mid-round.
+    // Appended, never sorted in: `combat.turn` is an index.
     expect(state.combat!.order.at(-1)).toBe('m:1');
     expect(events.some((e) => e.type === 'joinedCombat' && e.entity === 'm:1')).toBe(true);
   });
 
   it('does not enrol a grudge held behind a wall', () => {
-    // The awareness boundary holds here as at the start of a fight: turning hostile is not the same
-    // as having noticed anybody. A solid wall down the middle makes that testable.
     const builder = new MapBuilder(15, 15, 'floor');
     for (let y = 0; y < 15; y += 1) builder.set(9, y, 'wall');
 
@@ -968,8 +935,6 @@ describe('changing sides', () => {
 });
 
 describe('reactions fire on the trigger they declare', () => {
-  // Every declared reaction trigger is broadcast, including greenmarch's death-wail and its two
-  // memory-gated reactions.
 
   it('fires selfHurt when something is struck', () => {
     const state = arena([{ id: 'barrow_wight', at: { x: 6, y: 5 } }]);
@@ -1022,8 +987,7 @@ describe('reactions fire on the trigger they declare', () => {
   });
 
   it('works with no fight in progress at all', () => {
-    // `oncePerEncounter` is recorded on combat state, so out of combat there is nothing to record
-    // it in.
+    // `oncePerEncounter` is recorded on combat state, so out of combat there is nothing to record it in.
     const module = withCustomReaction('the_bell_rang');
     const state = arena([{ id: 'bog_hound', at: { x: 14, y: 14 } }], module);
     expect(state.combat).toBeNull();
@@ -1035,8 +999,6 @@ describe('reactions fire on the trigger they declare', () => {
 });
 
 describe('being noticed', () => {
-  // `seePlayer` needs three things at once: the trigger broadcasts, `requirement.memories` resolves
-  // outside dialogue, and `withinDays` measures days.
   function wightThatRemembers(remembers: boolean, agoDays = 0): GameState {
     const base = arena([{ id: 'barrow_wight', at: { x: 8, y: 5 } }]);
     if (!remembers) return base;
@@ -1063,8 +1025,6 @@ describe('being noticed', () => {
   });
 
   it('fires once per noticing, not once per sense that noticed', () => {
-    // Sight and hearing both reach across an open arena, and the reaction applies `frightened` for
-    // a fixed duration, so the assertion is the count of reaction effects: one condition, once.
     const { state } = reduce(wightThatRemembers(true), { type: 'wait', minutes: 0 }, ctx);
     const frightened = state.entities['e:1']!.conditions.filter((c) => c.condition === 'frightened');
     expect(frightened).toHaveLength(1);

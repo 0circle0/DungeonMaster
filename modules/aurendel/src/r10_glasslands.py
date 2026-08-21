@@ -1,9 +1,4 @@
-"""Region 10 — The Glasslands.
-
-The far south: dune over fused sand, a crater of green glass, and a city that
-the sand has mostly won. Vashta Qal in two districts, one town on a salt run,
-one village at a cistern, and five stretches of desert.
-"""
+"""Region 10 — The Glasslands."""
 from place import (area, poi, gate, toll, house, inn, smithy, store, workshop,
                    temple, stable, warehouse, guild, square, landmark, ruin,
                    delve)

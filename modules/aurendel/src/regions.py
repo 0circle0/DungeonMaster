@@ -1,21 +1,4 @@
-"""Aurendel — the twelve regions, assembled.
-
-Each `r??_*.py` module owns one region and exports whatever it has so far:
-
-    AREAS      list of area dicts (no `connections` — see EDGES)
-    EDGES      (a, b, minutes) or (a, b, minutes, {...opts}) — written BOTH ways
-    POIS       list of point-of-interest dicts
-    GATES      list of gate dicts
-    DUNGEONS   list of dungeon dicts
-    ROOM_TEMPLATES  list of room-template dicts
-    TRAPS      list of trap dicts
-    BIOME_ROOMS  {biome_id: [room_template_id, ...]}
-
-Roads are declared once here and emitted on both sides, because
-`world.areas[].connections` is one-directional in the engine (reduce.ts:300)
-and a road you can only walk one way is almost never what was meant. Pass
-`{"oneWay": True}` when it is.
-"""
+"""Aurendel — the twelve regions, assembled."""
 from dmkit import regions as _kit
 
 import rooms
@@ -27,9 +10,7 @@ REGION_MODULES = [
     "roads",
 ]
 
-# `rooms` goes first, where "dungeonkit" used to sit at the head of
-# `REGION_MODULES`. Position is not cosmetic: `gather` concatenates in this
-# order, so this is the emitted order of `world.roomTemplates` and of the traps.
+# `rooms` goes first, where "dungeonkit" used to sit at the head of `REGION_MODULES`.
 _LOADED = [rooms] + _kit.load(REGION_MODULES)
 
 
@@ -62,8 +43,7 @@ def attach_room_templates(biome_list):
 
 
 def start():
-    # Imported here rather than at module level: `items` is content, and the
-    # geography has no business importing it to be assembled.
+    # Imported here rather than at module level: `items` is content.
     from items import PARTY_KIT
 
     return {

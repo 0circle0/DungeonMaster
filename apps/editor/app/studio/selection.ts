@@ -1,11 +1,4 @@
-/**
- * Studio selection model.
- *
- * One selection drives the whole shell: the inspector shows the selected
- * thing's form, the viewport shows its big picture (a map for world entities,
- * a table for collections), and the dock highlights where it lives. Keeping
- * this a single value is what makes the panels agree with each other.
- */
+/** Studio selection model. */
 
 import type { Diagnostic } from '@dm/module';
 import { SINGLETONS } from '@/lib/schema';
@@ -41,10 +34,7 @@ export type MapTarget =
   | { type: 'roomTemplate'; id: string }
   | { type: 'map'; id: string };
 
-/**
- * Targets the read-only preview can draw. `map` is excluded: a `world.maps`
- * entry opens in the paint tool, not in a seed preview of itself.
- */
+/** Targets the read-only preview can draw. */
 export type PreviewTarget = Exclude<MapTarget, { type: 'map' }>;
 
 export type ViewportKind = 'map' | 'table' | ViewId;
@@ -65,11 +55,7 @@ export function mapTargetFor(path: string, entry: Record<string, unknown> | unde
   return { type, id };
 }
 
-/**
- * Where a diagnostic should take the user. Item paths resolve to the owning
- * entry so the fix happens in a form, not in raw JSON; anything unrecognized
- * falls back to the raw view, which can always show the offending line.
- */
+/** Where a diagnostic should take the user. */
 export function selectionForDiagnostic(
   diagnostic: Diagnostic,
   /** Needed to turn an id into an index; a mod names entries by id. */

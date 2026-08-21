@@ -1,18 +1,6 @@
 'use client';
 
-/**
- * The Mods panel.
- *
- * Three jobs: say what is installed, let editor mods be switched off, and run
- * whatever those mods offer — their commands and their own panels.
- *
- * The widget renderer below is the honest boundary of this design. Mod code
- * runs inside QuickJS, which has no DOM: it returns a *description* of a UI and
- * this draws it with the studio's own components. That covers text, tables,
- * buttons, and fields. It does not cover a canvas, a map overlay, a graph, or
- * anything that needs per-keystroke feedback — a mod wanting those needs a core
- * editor change, not a mod.
- */
+/** The Mods panel. */
 
 import { useState } from 'react';
 import type { ModWidget } from '@dm/mods';
@@ -68,9 +56,7 @@ export function ModsPanel({
                         ? 'This module pins it, so its opinions apply here'
                         : 'This module does not pin it — switch it on to borrow it while you try it out'
                   }
-                  // Engine mods are listed here but belong to the play app;
-                  // toggling one in the studio would promise something this
-                  // app cannot deliver.
+                  // Engine mods are listed but belong to the play app, so they are not toggleable here.
                   disabled={!editable}
                   onChange={(event) => mods.setEnabled(mod.manifest.id, event.target.checked)}
                 />{' '}
@@ -130,8 +116,7 @@ export function ModsPanel({
                 <button
                   className={styles.modsBtn}
                   onClick={() => {
-                    // Patches go through the store, so a mod's bulk edit lands
-                    // in the existing undo stack like any other change.
+                    // Patches go through the store, so a mod's bulk edit lands in the undo stack.
                     onPatch(runtime!.runCommand(doc, command.modId, command.id));
                   }}
                 >
@@ -204,9 +189,7 @@ function Widget({ node, onEvent }: { node: ModWidget | null; onEvent: (widgetId:
       );
 
     case 'field':
-      // Fields are drawn where the thing they describe is being edited — the
-      // inspector — not here. Showing one in a panel would leave it with
-      // nothing to write to.
+      // Fields are drawn where the thing they describe is being edited — the inspector — not here.
       return <p className={styles.modsHint}>{node.field.label}</p>;
 
     default:

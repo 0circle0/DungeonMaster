@@ -1,7 +1,4 @@
-/**
- * Show how far each sense reaches across a simple test layout.
- * The preview uses the engine's own propagation rules.
- */
+/** Show how far each sense reaches across a simple test layout. */
 
 'use client';
 

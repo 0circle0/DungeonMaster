@@ -1,8 +1,4 @@
-/**
- * Module compilation: validate, prove references resolve, index, and hash. A module is authored as
- * loose JSON but played from an indexed runtime form, so the hot path never walks raw JSON and
- * never discovers a dangling id mid-dungeon.
- */
+/** Module compilation: validate, prove references resolve, index, and hash. */
 
 import { z } from 'zod';
 import { hash64, stableStringify } from '@dm/core';
@@ -34,10 +30,7 @@ interface Identified {
   readonly id: string;
 }
 
-/**
- * A validated module with lookup tables built. `index` maps each collection path to an id-keyed
- * map, so resolving `content.monsters` → `skeleton` is a map hit rather than an array scan.
- */
+/** A validated module with lookup tables built. */
 export class CompiledModule {
   readonly source: GameModule;
   readonly warnings: readonly CompileIssue[];
@@ -54,11 +47,7 @@ export class CompiledModule {
     this.warnings = warnings;
   }
 
-  /**
-   * Content hash — computed on first read, then kept. Hashing walks and serializes the whole
-   * document, ~36 ms of a ~60 ms budget on `modules/aurendel`, and the editor compiles on every
-   * keystroke without needing it.
-   */
+  /** Content hash — computed on first read, then kept. */
   get hash(): string {
     this.cachedHash ??= hashModule(this.source);
     return this.cachedHash;
@@ -69,7 +58,7 @@ export class CompiledModule {
     return `${this.source.id}@${this.source.version}`;
   }
 
-  /** Look up a content entry, throwing if absent. Compilation makes that unreachable. */
+  /** Look up a content entry, throwing if absent. */
   get<T = unknown>(collection: CollectionPath | string, id: string): T {
     const found = this.index.get(collection)?.get(id);
     if (found === undefined) {
@@ -103,19 +92,7 @@ export type CompileResult =
 /** Below this many phrasings, players start noticing the repetition. */
 const THIN_TEXT_POOL = 3;
 
-/**
- * Check the engine's own vocabulary.
- *
- * Two failures produce a sentence with a hole in it rather than an obvious break, which is why they
- * are load errors:
- *
- * - a fragment another message interpolates is missing or blank, so `{actor} {outcome} {target}`
- *   renders as `David  a bog hound`;
- * - a message has lost a placeholder it needs, so the fact it carried never reaches the player.
- *
- * Messages that stand on their own are not checked for presence: they carry a schema default, so
- * omitting one accepts the shipped wording.
- */
+/** Check the engine's own vocabulary. */
 function checkSystemText(module: GameModule, errors: CompileIssue[]): void {
   const declared = module.narrative.systemText as Record<string, unknown>;
 
@@ -137,8 +114,7 @@ function checkSystemText(module: GameModule, errors: CompileIssue[]): void {
       continue;
     }
 
-    // A pool carries its own variants and `thin_text_pool` speaks for those; only a literal string
-    // can be blank or lose a placeholder here.
+    // Only a literal string can be blank or lose a placeholder here.
     if (typeof value !== 'string') continue;
 
     if (value.trim() === '') {
@@ -171,14 +147,7 @@ function collectionAt(module: GameModule, path: string): Identified[] {
   return Array.isArray(value) ? (value as Identified[]) : [];
 }
 
-/**
- * One reference found in a document.
- *
- * `kind` matters to anything that wants to change an id rather than check it. A `value` reference
- * is a string field holding the id, so its path addresses something to overwrite. A `key` reference
- * is a record key that is the id, and its path addresses the entry beside the name; renaming one
- * means rebuilding the record.
- */
+/** One reference found in a document. */
 export interface RefSite {
   readonly path: string;
   readonly target: string;
@@ -186,11 +155,7 @@ export interface RefSite {
   readonly kind: 'value' | 'key';
 }
 
-/**
- * Walk a Zod schema alongside a value, collecting every `ref:` marked string. Traversing the schema
- * rather than hand-listing reference sites means a new `ref()` field is checked the moment it is
- * added.
- */
+/** Walk a Zod schema alongside a value, collecting every `ref:` marked string. */
 export function collectRefs(
   schema: z.ZodTypeAny,
   value: unknown,
@@ -216,8 +181,7 @@ export function collectRefs(
       collectRefs(def['schema'] as z.ZodTypeAny, value, path, out);
       return;
 
-    // DSL nodes are the only recursive schemas and contain no refs; skipping avoids infinite
-    // descent.
+    // DSL nodes are the only recursive schemas and contain no refs; skipping avoids infinite descent.
     case 'ZodLazy':
       return;
 
@@ -286,11 +250,7 @@ export function collectRefs(
   }
 }
 
-/**
- * Internal consistency of the `mods` section. Presence is not checked here: this package has no
- * filesystem and must not depend on `@dm/mods`, so whether a mod is installed, its hash matches,
- * and its dependencies are active are load-time questions for `resolveMods`.
- */
+/** Internal consistency of the `mods` section. */
 function checkMods(module: GameModule, errors: CompileIssue[], warnings: CompileIssue[]): void {
   const mods = module.mods ?? [];
   const seen = new Set<string>();
@@ -306,8 +266,7 @@ function checkMods(module: GameModule, errors: CompileIssue[], warnings: Compile
     }
     seen.add(entry.id);
 
-    // An editor mod is not consulted at play time, so `required` on one promises a guarantee
-    // nothing delivers.
+    // An editor mod is not consulted at play time, so `required` promises nothing.
     if (entry.target === 'editor' && entry.required) {
       warnings.push({
         path: `mods[${i}].required`,
@@ -318,16 +277,7 @@ function checkMods(module: GameModule, errors: CompileIssue[], warnings: Compile
   });
 }
 
-/**
- * Content hash, for change detection rather than security. The recipe and `stableStringify` live in
- * `@dm/core`, so the mod format hashes the same way. The salt separator is a NUL byte; see
- * `hash64`.
- *
- * This hashes the module after zod applies defaults, because `compileModule` calls it on
- * `parsed.data`. Any new top-level field carrying a `.default()` therefore changes the hash of
- * every module ever authored, and `load()` refuses a save whose recorded hash no longer matches.
- * New optional sections must use `.optional()`; `compile.test.ts` pins the shipped modules' hashes.
- */
+/** Content hash, for change detection rather than security. */
 export function hashModule(module: GameModule): string {
   return hash64(stableStringify(module));
 }
@@ -349,16 +299,7 @@ export function compileModule(raw: unknown): CompileResult {
   return compileParsed(parsed.data);
 }
 
-/**
- * Compile a document that has already been through the schema.
- *
- * `gameModuleSchema.safeParse` is by far the most expensive thing the compiler or the linter does —
- * ~610 ms on a 2.9 MB module against single-digit milliseconds for everything below — so the parse
- * is hoisted out and the result handed down.
- *
- * Callers that already hold a parsed `GameModule` should use this; anything starting from raw JSON
- * wants `compileModule`.
- */
+/** Compile a document that has already been through the schema. */
 export function compileParsed(module: GameModule): CompileResult {
   const errors: CompileIssue[] = [];
   const warnings: CompileIssue[] = [];

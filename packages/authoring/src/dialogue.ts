@@ -1,7 +1,4 @@
-/**
- * Build standard dialogue fragments for rumour, favour, and talk prompts.
- * Each fragment keeps the option payload on the success path so failed rolls do not grant rewards.
- */
+/** Build standard dialogue fragments for rumour, favour, and talk prompts. */
 
 import { standingDc } from './standing.js';
 
@@ -104,10 +101,7 @@ function exit(id: string, text: string, back: string): Record<string, unknown> {
   return { id, text, goto: back, effects: [], ...NO_HINT };
 }
 
-/**
- * Offer a clue behind a persuasion check.
- * The option disappears once the party already knows the clue.
- */
+/** Offer a clue behind a persuasion check. */
 export function rumour(
   common: Common & { readonly told: string; readonly clue: string },
 ): Fragment {
@@ -142,10 +136,7 @@ export function rumour(
   };
 }
 
-/**
- * Offer an item behind a persuasion check.
- * The option is blocked if the party already has it or has already been gifted it.
- */
+/** Offer an item behind a persuasion check. */
 export function favour(
   common: Common & {
     readonly given: string;
@@ -193,10 +184,7 @@ export function favour(
   };
 }
 
-/**
- * Offer a plain statement with no skill check.
- * The payload remains on the node so a later roll can be added without moving effects.
- */
+/** Offer a plain statement with no skill check. */
 export function talk(
   common: Pick<Common, 'key' | 'ask' | 'voice' | 'back' | 'requires'> & {
     readonly says: string;

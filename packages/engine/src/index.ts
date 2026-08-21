@@ -53,11 +53,7 @@ export type { ShopDef, StockEntry } from './sim/trade.js';
 export type { ScopeSet, LootOptions } from './world/populate.js';
 export type { Population, PlacedMonster, PlacedLoot, PlacedTrap, LootDraw, EncounterDraw } from './world/populate.js';
 export { generateDungeon, gatesOf, placementInputs } from './world/dungeon.js';
-// The spacing arithmetic a generator has to agree with. `placeRooms` uses the
-// *mean* of `corridorLength` as the distance every room keeps from every
-// other, so anything that sizes a map has to compute the same number the
-// engine will — from the same function, not from a second implementation of
-// it. `@dm/authoring`'s `fit` is the caller.
+// The spacing arithmetic a generator has to agree with.
 export { diceMean, placeRooms } from './world/dungeon/rooms.js';
 export type { PlaceableTemplate, PlacedRoom } from './world/dungeon/rooms.js';
 export type { GeneratedDungeon, Room, Door, PlacementInputs } from './world/dungeon.js';
@@ -179,8 +175,7 @@ export { takeAiTurn, runAiTurns } from './rules/combat/ai.js';
 export { save, load, statesEqual } from './save.js';
 export type { SaveFile, LoadResult, SaveOptions, SaveLineageEntry } from './save.js';
 
-// Mods. `ModRuntime` is what a front end builds and hands to `reduce` via
-// `ReduceContext.mods`; the hook names are the contract a mod attaches to.
+// Mods.
 export { ModRuntime } from './mods/runtime.js';
 export type { ModRuntimeOptions } from './mods/runtime.js';
 export { HOOK_NAMES, isHookName } from './mods/hooks.js';

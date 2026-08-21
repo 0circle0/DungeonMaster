@@ -1,15 +1,4 @@
-/**
- * Worlds as files.
- *
- * The studio and the player are separate origins, so a file is the only thing that passes between
- * them — and it is also how a world reaches another machine or a backup. The reader has to accept
- * anything this project has ever handed somebody:
- *
- *   - an envelope, which is what the library and the content build write;
- *   - a bare module document, which is what the studio's Export has always produced;
- *   - either of those gzipped, which is what a downloaded artifact is;
- *   - a project bundle, the repository's own file tree flattened into one file.
- */
+/** Worlds as files, in and out. */
 
 import { isEnvelope, envelopeFromDoc } from './envelope.js';
 import type { WorldEnvelope, WorldAuthoring } from './envelope.js';
@@ -27,22 +16,7 @@ function download(blob: Blob, filename: string): void {
   URL.revokeObjectURL(url);
 }
 
-/**
- * Download the world as the files a repository would hold.
- *
- * The studio only sees an assembled document and a repository holds a `project/` tree beside a
- * `maps/` one, so `bundleModule` reconciles them and this writes paths and bytes that drop straight
- * into git. One file rather than a folder, because a browser cannot hand over a directory; gzipped,
- * because the tree is a couple of megabytes of small JSON. `npm run project -- unpack` is the other
- * end.
- *
- * Takes the document rather than an envelope: the authoring sidecar is not part of a repository's
- * file tree.
- *
- * All four authoring fields, not two. `splitProject` has no notion of a prefab link, so every entry
- * it writes is literal, which makes `prefabs/instances.json` the only channel provenance has out of
- * here.
- */
+/** Downloads the world as a gzipped project bundle: the paths and bytes a repository would hold. */
 export async function downloadProject(
   doc: Record<string, unknown>,
   filename: string,
@@ -69,11 +43,7 @@ export function isProjectBundle(value: unknown): value is { files: Record<string
   return PROJECT_MANIFEST in (files as Record<string, unknown>);
 }
 
-/**
- * The project files out of something the user picked, or a reason why not. Narrower than {@link
- * readWorldFile}: the editor edits project files. A bare `module.json` is the compiled form, with
- * nothing in it to edit a prefab or a style table with.
- */
+/** The project files out of a file the user picked, or a reason why not. */
 export async function readProjectFile(file: File): Promise<Record<string, string>> {
   const bytes = new Uint8Array(await file.arrayBuffer());
   const raw = isGzip(bytes) ? await gunzip(bytes) : bytes;
@@ -111,8 +81,7 @@ export async function readWorldFile(file: File): Promise<WorldEnvelope> {
 
   if (isEnvelope(parsed)) return parsed;
 
-  // A project bundle rebuilds into a document, so everything downstream sees the shape it already
-  // handles. Issues are reported as one message rather than the first one.
+  // A project bundle is rebuilt into a document; issues are reported together.
   if (isProjectBundle(parsed)) {
     const { document, issues } = unbundleModule(parsed.files);
     if (!document || issues.length > 0) {

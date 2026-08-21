@@ -1,20 +1,7 @@
-"""Aurendel — the prose a place falls back on.
-
-Every point of interest that has not earned its own pool narrates from one of
-these: the nine interiors, for being *inside* an ordinary building anywhere on
-the continent, and the ten `generic_*` pools `place.KIND_POOL` names for the
-places that only have a kind.
-
-They have to work in a fishing village and in a dwarf hold both, so they
-describe the *situation* and leave the local colour to the place's name and to
-the biome ambience in `ambience.py`.
-"""
+"""Aurendel — the prose a place falls back on."""
 from dmkit.prose import pool
 
-# --- interiors --------------------------------------------------------------
-# A POI interior is one undivided map with one description (sim/enter.ts sets
-# `rooms: []` for them), so these are what being *inside* an ordinary building
-# reads like anywhere on the continent.
+# --- interiors: one undivided map with one description ---
 
 pool("int_house",
      "One room and a loft, a banked fire, and a smell of last night's supper.",
@@ -76,11 +63,7 @@ pool("int_mill",
      "Gears the size of a cart, all of them wooden, all of them working.")
 
 
-# --- the generic pools ------------------------------------------------------
-# Every point of interest that has not earned its own prose falls back to the
-# pool for its `kind`. These have to work in a fishing village and in a dwarf
-# hold both, so they describe the *situation* and let the place's name and the
-# biome ambience supply the local colour.
+# --- the generic pools: fallback prose by `kind` ---
 
 pool("generic_settlement",
      "Somewhere people actually live, going about it without reference to you.",

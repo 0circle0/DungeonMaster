@@ -1,13 +1,4 @@
-/**
- * Rumour and forgetting.
- *
- * A deed spreads from people who know it to people who do not, losing fidelity with each retelling,
- * and fades unless something renews it. Both run once a day on the world clock, whether or not the
- * party is near.
- *
- * Every knob comes from `narrative.memory`. `mode` decides who is driving: `simulated`, `manual`,
- * or `hybrid`, where the engine simulates but targeted rules overrule the result.
- */
+/** Rumour and forgetting. */
 
 import { Rng } from '@dm/core';
 import type { CompiledModule, MemoryModel } from '@dm/module';
@@ -31,10 +22,7 @@ export function memoryModel(module: CompiledModule): MemoryModel {
   return module.source.narrative.memory;
 }
 
-/**
- * The key an entity's memories are filed under. Named NPCs are persistent, so their memories belong
- * to the character rather than the entity instance; monsters keep theirs on the instance.
- */
+/** The key an entity's memories are filed under. */
 export { memoryKeyOf } from '../state.js';
 
 /** Rules that apply to a deed kind. */
@@ -48,10 +36,7 @@ export function retention(
   days: number,
   halfLife: number,
   floor: number,
-  /**
-   * How far a `linear` curve runs, as a multiple of the half-life. Passed in rather than read from
-   * the module, so this stays a pure function of the numbers.
-   */
+  /** How far a `linear` curve runs, as a multiple of the half-life. */
   linearSpan = 2,
 ): number {
   if (curve === 'none' || halfLife <= 0) return 1;
@@ -68,11 +53,7 @@ function populace(module: CompiledModule): { id: string; gullibility: number; fa
     .map((npc) => ({ id: npc.id, gullibility: npc.gullibility, ...(npc.faction ? { faction: npc.faction } : {}) }));
 }
 
-/**
- * Spread rumours by one day. Spread is per-hop rather than global: a rumour moves from someone who
- * knows to someone who does not, weakening each time, so a village two days away has a garbled
- * version and the next has heard nothing.
- */
+/** Spread rumours by one day. */
 export function spreadRumours(txn: Transaction, day: number, rng: Rng): void {
   const model = memoryModel(txn.module);
   if (model.mode === 'manual' || !model.gossip.enabled) return;
@@ -140,8 +121,7 @@ export function spreadRumours(txn: Transaction, day: number, rng: Rng): void {
         changed = true;
         txn.emit({ type: 'rumourSpread', deed: deed.id, to: listener.id, hops: held.hops + 1 });
 
-        // The story distorts as it travels: `distortion` on the deed kind and `distortionPerHop` on
-        // the model weaken the memory a garbled retelling leaves.
+        // `distortion` and `distortionPerHop` weaken the memory a garbled retelling leaves.
         const garbled = rng
           .derive(`garble:${deed.id}:${listener.id}`)
           .chance(Math.min(1, distortion + kind.distortion));
@@ -159,15 +139,7 @@ export function spreadRumours(txn: Transaction, day: number, rng: Rng): void {
   if (changed) txn.set({ ...txn.state, memory });
 }
 
-/**
- * Where a person belongs, as the module names it.
- *
- * The declared `home` rather than whatever map they are standing on: a map id and a point-of-
- * interest id are different vocabularies, and comparing one to the other would make everybody a
- * stranger to everybody.
- *
- * Null means the module has not placed them, and an unplaced person is not separated from anyone.
- */
+/** Where a person belongs, as the module names it. */
 function homeOfNpc(txn: Transaction, npcId: string): string | null {
   return txn.module.find<{ home?: string }>('content.npcs', npcId)?.home ?? null;
 }
@@ -181,17 +153,7 @@ function together(txn: Transaction, a: string, b: string): boolean {
   return here === there;
 }
 
-/**
- * How readily news leaves a place, as the place itself declares.
- *
- * A deed records `state.currentMap` as its location and map ids are minted `poi:<id>` / `area:<id>`
- * / `dungeon:<id>`, so the prefix has to be stripped before looking the id up in
- * `world.pointsOfInterest`.
- *
- * Only a point of interest declares a reach. Standing at a POI with no interior leaves `currentMap`
- * on the area, so that deed takes the area's silence rather than the POI's reach — the map is what
- * the deed knows.
- */
+/** How readily news leaves a place, as the place itself declares. */
 function rumourReachOf(txn: Transaction, location: string | null): number {
   if (!location) return 1;
   const split = location.indexOf(':');
@@ -201,10 +163,7 @@ function rumourReachOf(txn: Transaction, location: string | null): number {
   return poi?.rumourReach ?? 1;
 }
 
-/**
- * Age every memory by one day. A memory below the floor is dropped entirely, so an NPC genuinely
- * forgets rather than carrying a vanishing trace forever.
- */
+/** Age every memory by one day. */
 export function decayMemories(txn: Transaction, _day: number, _rng: Rng): void {
   const model = memoryModel(txn.module);
   const perDay = txn.module.source.world.time.minutesPerDay;
@@ -226,8 +185,7 @@ export function decayMemories(txn: Transaction, _day: number, _rng: Rng): void {
       }
 
       const applicable = rulesFor(model, deed.kind);
-      // A rule that names this person pins their memory specifically; one that names nobody applies
-      // to the deed generally.
+      // A rule naming this person pins their memory; one naming nobody applies generally.
       const pinned = applicable.find(
         (rule) => rule.halfLifeDays !== undefined && rule.alwaysKnownBy.includes(npcId),
       )?.halfLifeDays
@@ -240,8 +198,7 @@ export function decayMemories(txn: Transaction, _day: number, _rng: Rng): void {
         npcId,
       );
 
-      // How memorable the deed is, and how much this module weighs that. Someone who cares about
-      // this kind of thing remembers it longer still.
+      // How memorable the deed is, and how much this module weighs that.
       const kind = txn.module.find<{ memorability: number }>('narrative.deedKinds', deed.kind);
       const memorability = Math.max(0, kind?.memorability ?? 1);
       const personal = npc?.caresAbout?.includes(deed.kind)
@@ -277,10 +234,7 @@ export function decayMemories(txn: Transaction, _day: number, _rng: Rng): void {
   if (changed) txn.set({ ...txn.state, memory });
 }
 
-/**
- * Faction standing drifts back toward neutral, so a single early outrage does not define a run
- * forever. The rate is per faction.
- */
+/** Faction standing drifts back toward neutral, so a single early outrage does not define a run forever. */
 export function driftFactions(txn: Transaction): void {
   const factions = txn.module.all<{ id: string; decayPerDay: number }>('content.factions');
   const reputation = { ...txn.state.reputation };

@@ -1,20 +1,11 @@
-/**
- * Value noise, in integer arithmetic.
- *
- * The point of a noise field is spatial correlation: neighbouring tiles get similar values and
- * distant ones unrelated values. That is the difference between a lake and a scattering of puddles,
- * and no independent roll per tile can produce it.
- *
- * Every step is integer arithmetic with one division at the end. Doubles represent all of these
- * exactly, so the field is bit-identical on every platform.
- */
+/** Value noise, in integer arithmetic. */
 
 export interface NoiseOptions {
-  /** Tiles across one lattice cell. Larger means broader features. */
+  /** Tiles across one lattice cell. */
   readonly scale?: number;
   /** Layers of detail, each half the scale and (by `persistence`) quieter. */
   readonly octaves?: number;
-  /** Amplitude decay per octave, in 1/256ths. 128 is a half. */
+  /** Amplitude decay per octave, in 1/256ths. */
   readonly persistence?: number;
 }
 
@@ -38,36 +29,25 @@ function avalanche(value: number): number {
   return t >>> 0;
 }
 
-/**
- * The lattice value at an integer corner, as a 24-bit integer. Hashed rather than stored, so a
- * field costs nothing to create and can be sampled anywhere — negative coordinates included —
- * without allocating a grid.
- */
+/** The lattice value at an integer corner, as a 24-bit integer. */
 function corner(seed: number, ix: number, iy: number): number {
   const mixed = (seed ^ Math.imul(ix, 0x8da6_b343) ^ Math.imul(iy, 0xd816_3841)) | 0;
   return avalanche(mixed) >>> 8;
 }
 
-/**
- * Smoothstep in 8-bit fixed point: `3t² − 2t³`, with `t` in `[0, 256)`. Linear interpolation
- * between lattice corners leaves visible creases; this rounds them off.
- */
+/** Smoothstep in 8-bit fixed point: `3t² − 2t³`, with `t` in `[0, 256)`. */
 function ease(t: number): number {
   return (Math.imul(Math.imul(t, t), 768 - 2 * t) >> 16) & 0xff;
 }
 
-/**
- * Blend two 24-bit values by an 8-bit fraction. `Math.floor(… / 256)` rather than `>> 8`: the
- * product reaches 0xFFFFFF × 255, and a shift would coerce that to int32 and wrap it negative.
- */
+/** Blend two 24-bit values by an 8-bit fraction. */
 function lerp(a: number, b: number, t: number): number {
   return a + Math.floor(((b - a) * t) / 256);
 }
 
 /** One octave, sampled at an integer tile with a given lattice size. */
 function octave(seed: number, x: number, y: number, scale: number): number {
-  // `Math.floor` rather than `| 0`, which truncates toward zero and would fold the lattice back on
-  // itself either side of the origin.
+  // `Math.floor`, not `| 0`: truncating toward zero folds the lattice at the origin.
   const ix = Math.floor(x / scale);
   const iy = Math.floor(y / scale);
 
@@ -80,18 +60,13 @@ function octave(seed: number, x: number, y: number, scale: number): number {
   return lerp(top, bottom, fy);
 }
 
-/**
- * A deterministic value-noise field. Seeded by a plain integer rather than an `Rng`: the caller
- * derives a throwaway sub-stream and takes one number from it, so sampling cannot advance or depend
- * on the run's generator.
- */
+/** A deterministic value-noise field. */
 export function valueNoise(seed: number, options: NoiseOptions = {}): NoiseField {
   const baseScale = Math.max(2, Math.trunc(options.scale ?? DEFAULT_SCALE));
   const octaves = Math.max(1, Math.trunc(options.octaves ?? DEFAULT_OCTAVES));
   const persistence = Math.max(1, Math.min(255, Math.trunc(options.persistence ?? DEFAULT_PERSISTENCE)));
 
-  // Amplitudes in 1/256ths, and the total to divide by, both fixed up front so `at` is a pure sum
-  // of integers with a single division at the end.
+  // Amplitudes in 1/256ths, summed as integers with one division at the end.
   const layers: { seed: number; scale: number; amplitude: number }[] = [];
   let amplitude = 256;
   let scale = baseScale;

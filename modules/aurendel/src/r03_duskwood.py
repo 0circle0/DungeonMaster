@@ -1,9 +1,4 @@
-"""Region 3 — Duskwood.
-
-Primeval forest across the north-west, standing over elf-work that the forest
-got to first. One town, two villages, six stretches of trees, and a corner
-called the Witchwood that the other five stretches do not talk about.
-"""
+"""Region 3 — Duskwood."""
 from place import (
     area, poi, gate, house, inn, smithy, store, workshop, temple, stable,
     square, landmark, ruin, delve,

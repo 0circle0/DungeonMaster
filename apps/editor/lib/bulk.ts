@@ -1,14 +1,4 @@
-/**
- * Editing many entries at once.
- *
- * Every operation returns the edits it would make rather than a new document, for the same reason
- * `planRename` does: an author asked to trust a change to forty things wants to see the count
- * first.
- *
- * The edits are `(path, value)` pairs so the store can fold them through `setAtMany`, which is what
- * keeps validation fast. Cloning and mutating a document would give all 597 points of interest
- * fresh identities and put a second back on every keystroke, with nothing failing.
- */
+/** Editing many entries at once. */
 
 import type { Path } from './store';
 
@@ -42,10 +32,7 @@ function readField(entry: Record<string, unknown>, field: string): unknown {
   return current;
 }
 
-/**
- * Set one field on every selected entry. Entries that already hold the value are left out of the
- * plan, so the count is what will change rather than what was selected.
- */
+/** Set one field on every selected entry. */
 export function planSetField(
   entries: readonly Record<string, unknown>[],
   collection: string,
@@ -70,11 +57,7 @@ export function planSetField(
   };
 }
 
-/**
- * Add or remove a tag across a selection. Tags are how a module says what optional content belongs
- * to what — the linter reads chain membership off them — so this is a real operation rather than a
- * convenience.
- */
+/** Add or remove a tag across a selection. */
 export function planTag(
   entries: readonly Record<string, unknown>[],
   collection: string,
@@ -111,11 +94,7 @@ export function planTag(
   };
 }
 
-/**
- * Replace text in one field across a selection. Scoped to a named field rather than the whole
- * entry: a find-and-replace that swept every string in a monster would rewrite its id and its
- * references along with its description, which is `planRename`'s job.
- */
+/** Replace text in one field across a selection. */
 export function planReplace(
   entries: readonly Record<string, unknown>[],
   collection: string,
@@ -142,10 +121,7 @@ export function planReplace(
   };
 }
 
-/**
- * Move one entry within its collection. Order is not decoration: a collection's order is the order
- * the format preserves, and there has been no way to change it in the editor.
- */
+/** Move one entry within its collection. */
 export function planMove(
   entries: readonly Record<string, unknown>[],
   collection: string,
@@ -159,8 +135,7 @@ export function planMove(
   const [moved] = next.splice(from, 1);
   next.splice(clamped, 0, moved);
 
-  // One edit for the whole list: moving an entry renumbers everything between the two positions, so
-  // a per-entry plan would be the same write in pieces.
+  // One edit for the whole list: a move renumbers everything between the two positions.
   return {
     edits: [{ path: collection.split('.'), value: next }],
     changed: Math.abs(clamped - from) + 1,

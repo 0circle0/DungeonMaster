@@ -1,10 +1,6 @@
 'use client';
 
-/**
- * The right-hand column: who you are, what you are doing, where you can go,
- * and what the glyphs mean. Every row that can be acted on is a button
- * dispatching the action its view model already carries.
- */
+/** The right-hand column: who you are, what you are doing, where you can go, and what the glyphs mean. */
 
 import { useMemo } from 'react';
 import { currentObjective } from '@dm/engine';

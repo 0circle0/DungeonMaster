@@ -1,10 +1,4 @@
-/**
- * Resolution and ordering.
- *
- * Load order is behaviour, so "the same everywhere" is a correctness property
- * rather than a nicety — two players running the same mods must get the same
- * game.
- */
+/** Resolution and ordering. */
 
 import { describe, it, expect } from 'vitest';
 
@@ -111,8 +105,6 @@ describe('ordering is the same on every machine', () => {
     const expected = resolveMods(declared, installed, on, 'engine').active.map((m) => m.manifest.id);
 
     for (let seed = 0; seed < 10; seed++) {
-      // A fixed rotation per iteration: deterministic, and enough to prove the
-      // result does not depend on input order.
       const shuffled = [...installed.slice(seed % 5), ...installed.slice(0, seed % 5)];
       const actual = resolveMods(declared, shuffled, on, 'engine').active.map((m) => m.manifest.id);
       expect(actual).toEqual(expected);

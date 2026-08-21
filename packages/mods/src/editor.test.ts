@@ -1,11 +1,4 @@
-/**
- * The editor target, and the pairing it exists for.
- *
- * The interesting claim here is not that an editor mod runs — it is that the
- * two halves of a paired mod agree through a monster's `extra` bag, with no
- * schema change, so a module carrying mod data still compiles and still hashes
- * stably against a stock engine.
- */
+/** The editor target, and the pairing it exists for. */
 
 import { describe, it, expect, beforeAll, afterAll } from 'vitest';
 import { fileURLToPath } from 'node:url';
@@ -118,8 +111,6 @@ describe('an editor mod runs bulk edits', () => {
       },
     });
     const patches = directives.flatMap((d) => (d.kind === 'patch' ? d.patches : []));
-    // `b` already had one and must be left alone; a bulk action that overwrote
-    // authored values would be a data-loss bug.
     expect(patches.map((p) => p.path)).toEqual([
       ['content', 'monsters', 0, 'extra', 'morale'],
       ['content', 'monsters', 2, 'extra', 'morale'],
@@ -156,8 +147,6 @@ describe('the pairing costs the format nothing', () => {
     first.extra = { ...(first.extra ?? {}), morale: 4 };
 
     const result = compileModule(doc);
-    // No schema change was needed for any of this: `extra` is documented as the
-    // supported way to exceed what the format ships with.
     expect(result.ok).toBe(true);
   });
 
@@ -167,9 +156,6 @@ describe('the pairing costs the format nothing', () => {
       content: { monsters: { id: string; extra?: Record<string, unknown> }[] };
     };
     const first = doc.content.monsters[0]!;
-    // Shifted from whatever is authored rather than set to a literal:
-    // greenmarch ships morale values now, so a fixed number could silently
-    // match one and make this assertion pass by doing nothing.
     const current = first.extra?.['morale'];
     first.extra = { ...(first.extra ?? {}), morale: typeof current === 'number' ? current + 1 : 4 };
 

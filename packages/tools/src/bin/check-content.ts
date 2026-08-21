@@ -1,17 +1,4 @@
-/**
- * `npm run check:content`
- *
- * Prove the shipped examples still are what the repository says they are.
- *
- * The artifacts are generated, gitignored binaries, so nothing about them shows up in a diff —
- * which makes "edit a world, forget to run `npm run content`" a mistake with no symptom until a
- * deployment serves the old one. The committed `modules/content-manifest.json` carries the id,
- * version, hash and size of every module that ships, so a content change is a readable one-line
- * diff.
- *
- * This belongs inside `npm run check`: it shells out to nothing, takes under a second, and never
- * writes to the working tree.
- */
+/** `npm run check:content` */
 
 import { readFileSync, existsSync, readdirSync } from 'node:fs';
 import { join, dirname, resolve } from 'node:path';
@@ -20,11 +7,7 @@ import { gunzipSync } from 'node:zlib';
 import { buildAll, manifestOf, MANIFEST_PATH } from './build-content.js';
 import type { BuiltModule } from './build-content.js';
 
-/**
- * The repository root, from this file rather than from the shell. `predev` and `prebuild` run with
- * the cwd set to the app being built, so `process.cwd()` would look for `apps/play/modules/` and
- * find nothing.
- */
+/** The repository root, from this file rather than from the shell. */
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..', '..', '..', '..');
 
 /** Never shipped, whatever anyone adds to the allowlist later. */
@@ -49,11 +32,7 @@ function checkNoFixtures(built: Map<string, BuiltModule>): string[] {
   return problems;
 }
 
-/**
- * Compare what is on disk against what was just built. Decompressed bytes, never compressed ones:
- * `gzipSync` at a fixed level is deterministic for a given zlib, but the gzip header carries an OS
- * byte, so comparing compressed bytes would fail for the wrong reason on somebody else's machine.
- */
+/** Compare what is on disk against what was just built. */
 function checkArtifacts(built: Map<string, BuiltModule>): string[] {
   const problems: string[] = [];
 
@@ -64,8 +43,7 @@ function checkArtifacts(built: Map<string, BuiltModule>): string[] {
     for (const file of readdirSync(dir)) {
       if (!file.endsWith('.json.gz')) continue;
 
-      // Two artifacts per world, and each app carries the one it can use: the studio a project
-      // tree, the player a compiled module.
+      // Two artifacts per world: a project tree for the studio, a compiled module for the player.
       const project = file.endsWith('.project.json.gz');
       const id = file.slice(0, -(project ? '.project.json.gz' : '.json.gz').length);
       const expected = [...built.values()].find((m) => m.id === id);
@@ -127,8 +105,7 @@ function main(): number {
     return 1;
   }
 
-  // Only worth comparing when they exist. A fresh checkout has not generated them yet, and failing
-  // there would make the first `npm run check` a puzzle.
+  // Only worth comparing when they exist.
   const anyGenerated = ['editor', 'play'].some((app) =>
     existsSync(join(root, 'apps', app, 'public', 'content')));
 

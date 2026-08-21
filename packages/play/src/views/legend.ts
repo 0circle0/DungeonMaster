@@ -1,10 +1,4 @@
-/**
- * What the glyphs on screen mean.
- *
- * Built from an already-computed {@link MapView} rather than rescanning the
- * whole map — the terminal version walked width × height on every call, which
- * a browser would repeat on every render.
- */
+/** What the glyphs on screen mean. */
 
 import type { CompiledModule } from '@dm/module';
 import type { MapView } from './map.js';
@@ -18,12 +12,7 @@ export interface LegendEntry {
   readonly selected: boolean;
 }
 
-/**
- * The glyphs present in this view, creatures first, terrain after.
- *
- * Only what is actually on screen: listing every terrain the module declares
- * would be a wall of text about places the party has never been.
- */
+/** The glyphs present in this view, creatures first, terrain after. */
 export function legend(module: CompiledModule, view: MapView): readonly LegendEntry[] {
   const out: LegendEntry[] = [];
   const seenTerrain = new Set<string>();
@@ -63,8 +52,7 @@ export function legend(module: CompiledModule, view: MapView): readonly LegendEn
     if (seenTerrain.has(cell.terrain)) continue;
     seenTerrain.add(cell.terrain);
 
-    // `TerrainDef` carries only what the rules need; the display name lives in
-    // the module beside it.
+    // `TerrainDef` carries only what the rules need; the display name lives in the module beside it.
     const named = module.find<{ name?: string }>('world.terrains', cell.terrain);
     out.push({
       glyph: cell.glyph,

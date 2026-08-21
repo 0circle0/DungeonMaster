@@ -1,15 +1,4 @@
-/**
- * What the player is allowed to read about their quests.
- *
- * The journal and the objective line on screen are the same question asked at
- * two lengths, so they are answered in one place. A front end that formatted its
- * own view of quest state would eventually disagree with the journal about what
- * the party is doing, and the player would believe whichever was on screen.
- *
- * Nothing here is stored. Progress counts come from the flags the reducer
- * already writes, and the stage cursor is derived, so this cannot fall out of
- * step with the state it describes.
- */
+/** What the player is allowed to read about their quests. */
 
 import type { CompiledModule } from '@dm/module';
 import type { GameState, QuestState } from '../state.js';
@@ -69,8 +58,7 @@ function entryOf(
 
   const objectives = objectivesOf(quest)
     .filter(({ objective, stage: owner }) => {
-      // A hidden objective stays hidden until it is met — that is the point of
-      // it. Stages the party has not reached are not spoilers to be listed.
+      // A hidden objective stays hidden until it is met — that is the point of it.
       if (objective.hidden && !done.has(objective.id)) return false;
       return owner === null || owner === stage?.id || done.has(objective.id);
     })
@@ -102,8 +90,7 @@ function describe(
 
   return {
     id: objective.id,
-    // An objective with no authored text still has to say something, so its id
-    // reads as a phrase rather than as an identifier.
+    // An objective with no authored text reads its id as a phrase.
     description: objective.description || objective.id.replace(/_/g, ' '),
     done: complete,
     progress: complete ? objective.count : Math.min(counted, objective.count),
@@ -119,12 +106,7 @@ export interface CurrentObjective {
   readonly objective: JournalObjective;
 }
 
-/**
- * The one line worth keeping on screen: what to do next.
- *
- * The oldest active quest wins, because that is the thread the party picked up
- * first and the one they are most likely to mean.
- */
+/** The one line worth keeping on screen: what to do next. */
 export function currentObjective(
   module: CompiledModule,
   state: GameState,
@@ -149,14 +131,7 @@ export function currentObjective(
   return null;
 }
 
-/**
- * The journal, grouped by the arcs a module declares.
- *
- * `narrative.arcs` existed and nothing read it, so a module that described its
- * story in three acts showed the player a flat list of jobs. Quests belonging to
- * no arc come last, under no heading — which is what a module with no arcs at
- * all sees, unchanged.
- */
+/** The journal, grouped by the arcs a module declares. */
 export function journalByArc(
   module: CompiledModule,
   state: GameState,

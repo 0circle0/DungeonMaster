@@ -1,27 +1,9 @@
-/**
- * The behaviour DSL.
- *
- * A small JSON language covering every place a module needs logic: ability effects, spell payloads,
- * item procs, trap triggers, dialogue gates, loot rules, and quest objectives. One evaluator serves
- * all of them.
- *
- * Three properties are non-negotiable:
- *
- *   - Sandboxed. No `eval`, no host access. A shared module cannot run code.
- *   - Deterministic. Chance flows through the passed-in RNG.
- *   - Inspectable. Plain JSON, so the editor can render, validate and diff it without executing
- *     anything.
- *
- * Reads go through one mechanism: `{ "ref": "actor.attr.might" }` walks the scope the engine
- * supplies. There is no `hasFlag` / `hasItem` / `hasCondition` primitive, because those are paths —
- * which keeps the language small and lets the editor autocomplete every readable value from one
- * schema.
- */
+/** The behaviour DSL. */
 
 /** Anything the DSL can read or produce. */
 export type Value = number | string | boolean | null | readonly Value[] | { readonly [k: string]: Value };
 
-/** An expression evaluating to a {@link Value}. Bare literals are valid expressions. */
+/** An expression evaluating to a {@link Value}. */
 export type Expr =
   | number
   | string
@@ -77,11 +59,7 @@ export type Predicate =
   /** Truthiness of an expression: non-zero, non-empty, true. */
   | { readonly test: Expr };
 
-/**
- * Effects do not mutate anything. They evaluate to a list of {@link EffectOp} intents that the
- * engine validates and applies, which keeps evaluation pure and lets the engine veto an illegal op
- * in one place rather than in every content file.
- */
+/** Effects do not mutate anything. */
 export type Effect =
   | { readonly damage: { readonly target: Expr; readonly amount: Expr; readonly damageType?: Expr } }
   | { readonly heal: { readonly target: Expr; readonly amount: Expr } }
@@ -140,10 +118,7 @@ export type EffectOp =
       readonly target: Value;
       readonly amount: number;
       readonly damageType: string | null;
-      /**
-       * What the blow carries besides its type — `silvered`, `magical`, `cold_iron`. A resistance
-       * may declare itself void `unless` the damage has one of these.
-       */
+      /** What the blow carries besides its type — `silvered`, `magical`, `cold_iron`. */
       readonly tags?: readonly string[];
     }
   | { readonly op: 'heal'; readonly target: Value; readonly amount: number }

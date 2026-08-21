@@ -1,12 +1,4 @@
-/**
- * The map painter: `world.maps` entries, edited by clicking on them.
- *
- * The document is the source of truth and every stroke is one edit: cells
- * accumulate locally while the pointer is down and commit as a single
- * `store.set` on release, so undo steps back a stroke at a time through the
- * store's ordinary history. Saving PUTs the assembled entry to the module's
- * map folder — the editor's one write path to disk.
- */
+/** The map painter: `world.maps` entries, edited by clicking on them. */
 
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { LAYER_TARGETS } from '@dm/module';
@@ -271,8 +263,7 @@ export function MapPainter(props: { store: ModuleStore; mapId: string }) {
     if (w === width && h === height) return;
 
     const base = layers.findIndex((data) => data.kind === 'terrain');
-    // Pad the base with its most common border tile, so growing a room grows
-    // its surrounding rock rather than leaving holes.
+    // Pad the base with its most common border tile.
     const counts = new Map<string, number>();
     const baseCells = layers[base]?.cells ?? [];
     baseCells.forEach((row, y) =>
@@ -294,13 +285,6 @@ export function MapPainter(props: { store: ModuleStore; mapId: string }) {
   };
 
   // — saving —————————————————————————————————————————————————
-  //
-  // There isn't any, here. A painted map already lives at
-  // `store.doc.world.maps[index]`, and the studio's autosave carries the whole
-  // document to the library — so this panel's "Save to disk" button was a
-  // second write path to a second destination, which only ever meant something
-  // while that destination was a git repository on the machine serving the
-  // page. One document, one save.
 
   const hoverCells = hover
     ? layers

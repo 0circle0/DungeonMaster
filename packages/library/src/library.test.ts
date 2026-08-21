@@ -1,9 +1,4 @@
-/**
- * The library is where the user's work lives, so these tests are about not
- * losing it: a world stored and read back must be the same world, a file from
- * any era must still open, and the absence of a server must never look like a
- * failure.
- */
+/** Tests for the world library: gzip, world storage, file reads and the catalog. */
 
 import 'fake-indexeddb/auto';
 import { describe, it, expect, beforeEach } from 'vitest';
@@ -29,7 +24,7 @@ const MINIMAL = JSON.parse(
 
 const envelopeOf = (doc: Record<string, unknown> = MINIMAL): WorldEnvelope => envelopeFromDoc(doc, 'minimal');
 
-/** A fresh database per test: leftovers between them hide ordering bugs. */
+/** Closes the library and deletes its IndexedDB database. */
 async function freshLibrary(): Promise<void> {
   await closeLibrary();
   await new Promise<void>((resolve) => {
@@ -52,8 +47,6 @@ describe('gzip', () => {
   });
 
   it('inflates only what is actually compressed', async () => {
-    // A host that sets `Content-Encoding: gzip` from the file extension has
-    // already inflated the body; handing plain JSON to a decompressor throws.
     const plain = new TextEncoder().encode(JSON.stringify({ hello: 'world' }));
     expect(isGzip(plain)).toBe(false);
     expect(await gunzipJson(plain)).toEqual({ hello: 'world' });
@@ -79,8 +72,6 @@ describe('worlds', () => {
   });
 
   it('still stores a world that does not compile', async () => {
-    // Most of a half-finished world does not compile, and refusing to store it
-    // is how an afternoon gets lost.
     const broken = { ...MINIMAL, rules: {} };
     const meta = await createWorld(envelopeOf(broken));
     expect(meta.hash).toBeNull();
@@ -174,7 +165,7 @@ describe('readWorldFile', () => {
 });
 
 describe('catalog', () => {
-  /** A deployment that ships nothing is a supported configuration. */
+  /** Runs `body` with `globalThis.fetch` replaced by `impl`, then restores it. */
   const withFetch = async (impl: typeof fetch, body: () => Promise<void>): Promise<void> => {
     const original = globalThis.fetch;
     globalThis.fetch = impl;
@@ -230,15 +221,7 @@ describe('catalog', () => {
   });
 });
 
-/**
- * The studio's storage, which is a filesystem rather than a bucket.
- *
- * The assertion that matters is a count. A world used to be one gzipped blob, so
- * changing an integer from 5 to 3 re-serialized 1.6 MB and replaced the lot; the
- * whole point of this shape is that it writes one record. A test that only
- * checked the contents came back right would have passed against the old design
- * too.
- */
+/** Worlds stored as one record per project file. */
 describe('worlds as files', () => {
   const filesOf = (doc: Record<string, unknown>) => bundleModule(doc).files;
 
@@ -276,7 +259,7 @@ describe('worlds as files', () => {
 
     const after = await readWorldFiles(meta.key);
     expect(after[path]).toBe(edited);
-    // Everything else byte-for-byte what it was. This is the whole claim.
+    // Every other file unchanged.
     for (const [other, was] of Object.entries(before)) {
       if (other === path) continue;
       expect(after[other]).toBe(was);
@@ -313,9 +296,6 @@ describe('worlds as files', () => {
   });
 
   it('stores a world that does not compile, and opens it again', async () => {
-    // A half-finished world is most of what a studio holds, and the draft store
-    // that used to keep the last good copy is gone — so this has to survive as
-    // itself rather than be set aside.
     const broken = { ...MINIMAL, rules: { ...(MINIMAL['rules'] as object), attributes: 'not a list' } };
     const meta = await createWorldFromFiles(bundleModule(broken).files, {
       title: 'Broken', filename: 'b.module.json', facts: factsFor(broken, null),

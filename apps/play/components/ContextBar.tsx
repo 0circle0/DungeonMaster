@@ -1,9 +1,6 @@
 'use client';
 
-/**
- * Show the current affordances as action buttons.
- * Blocked actions keep their reason in the tooltip.
- */
+/** Show the current affordances as action buttons. */
 
 import { useMemo } from 'react';
 import { affordances } from '@dm/play';

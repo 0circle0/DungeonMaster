@@ -1,13 +1,4 @@
-/**
- * Gates: barriers and how they open.
- *
- * A locked door, a warded seal, a riddle and a toll are the same shape — a requirement that opens
- * it, an optional roll to force it, and effects either way — which is why the world can be gated by
- * a key, a spell, a faction rank or a completed quest without any of them being special.
- *
- * When a gate refuses, the party is told what is missing: "the brass key, or a steady hand with
- * picks" is a lead where "it is locked" is a dead end.
- */
+/** Gates: barriers and how they open. */
 
 import { Rng } from '@dm/core';
 import { evalEffects, evalPredicate, compileRequirement, isEmptyRequirement } from '@dm/module';
@@ -48,8 +39,7 @@ export function describeRequirement(requirement: Requirement | undefined): Messa
   const r = requirement!;
   const out: Message[] = [];
 
-  // The requirement's own `description` is authored prose and passes through; everything else is
-  // the engine naming a thing, and that is keyed.
+  // The requirement's own `description` is authored prose; everything else is keyed.
   if (r.description) out.push(literal(r.description));
   for (const item of r.items ?? []) {
     out.push(message('requirement.item', { item: item.item.replace(/_/g, ' ') }));
@@ -77,11 +67,7 @@ export function describeRequirement(requirement: Requirement | undefined): Messa
   return out;
 }
 
-/**
- * Try to open a gate. Order matters: meeting the requirement outright is tried first, then an
- * ability that opens it, and only then a roll to force it. Someone holding the key should never be
- * asked to pick the lock.
- */
+/** Try to open a gate. */
 export function openGate(
   txn: Transaction,
   gateId: string,
@@ -95,8 +81,7 @@ export function openGate(
     return { opened: false, missing: [] };
   }
 
-  // Already standing open. Returning here must not re-run `onOpen`, re-consume the key, or re-roll
-  // the lockpick.
+  // Already standing open.
   if (gate.staysOpen && txn.state.flags[`gate:${gate.id}:open`] === true) {
     return { opened: true, how: 'requirement' };
   }
@@ -124,9 +109,7 @@ export function openGate(
     }
   }
 
-  // — forcing it ——————————————————————————————————————————
-  // A gate that is not `retryable` gives one attempt ever. The requirement and ability paths above
-  // stay open, so failing to pick a lock never bars you from coming back with the key.
+  // --- forcing it: a gate that is not `retryable` gives one attempt ever.
   const spent = txn.state.flags[`gate:${gate.id}:tried`] === true;
   if (gate.bypass && options.force !== false && !(spent && !gate.bypass.retryable)) {
     const difficulty = difficultyFrom(
@@ -176,9 +159,7 @@ function succeed(
   how: 'requirement' | 'bypass' | 'ability',
   rng: Rng,
 ): GateOutcome {
-  // `staysOpen` is the difference between a door and a turnstile, recorded here rather than on a
-  // tile because a gate can bar a road or a point of interest that has no tile. The exits panel and
-  // the affordance list read this flag to decide whether a way is barred.
+  // `staysOpen` rides on the gate, since a gate can bar a road or a place with no tile.
   if (gate.staysOpen) {
     txn.set({ ...txn.state, flags: { ...txn.state.flags, [`gate:${gate.id}:open`]: true } });
   }

@@ -1,18 +1,4 @@
-"""The Throat — an Ember Reach side chain, Act II.
-
-The Great Vent has gone quiet. Cinderhold has eleven people whose entire office
-is knowing what that means, and they are believed, because the two times they
-were not there is a village under the ash.
-
-Ilka is the youngest of the eleven and the only one prepared to say the word
-out loud, which is that a vent that goes quiet is not a vent that has finished.
-The foundry has forty tons of ore in the shed and a contract with Karn Dolur,
-and the Reach runs on the foundry.
-
-The branch is that, exactly: heed the reading and stop the works, or keep the
-ore moving and hope the eleven are wrong for the third time in nine hundred
-years. Neither faction is villainous. One of them is going to be wrong.
-"""
+"""The Throat — an Ember Reach side chain, Act II."""
 from dmkit.quests import (
     arc, stage, reach, kill, talk, flagged, resolved_either_way,
     set_flag, rep, give, deed, either, node, option, take_job, dialogue, npc,

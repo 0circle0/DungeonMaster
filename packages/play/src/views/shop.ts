@@ -1,12 +1,4 @@
-/**
- * A shopkeeper's counter, as data.
- *
- * Both front ends want the same four things — who, what they have, what they
- * will take, and what is in your pocket — and neither should be re-deriving
- * prices. A barred shop still returns a view, carrying *why*, for the same
- * reason a barred door does: "no" with no reason is the least useful thing a
- * UI can say.
- */
+/** A shopkeeper's counter, as data. */
 
 import { Rng } from '@dm/core';
 import type { CompiledModule } from '@dm/module';

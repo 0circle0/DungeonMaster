@@ -1,9 +1,4 @@
-/**
- * The centre of the studio. A tab strip of the big-picture views — the map
- * always first, the analysis views after it — with whatever table a dock
- * click opened slotted in between. The analysis views are standalone
- * components (`components/*View.tsx`) mounted unchanged.
- */
+/** The centre of the studio. */
 
 import { collectionAt } from '@/lib/schema';
 import { getAt } from '@/lib/store';

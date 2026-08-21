@@ -1,13 +1,4 @@
-/**
- * The DSL evaluator.
- *
- * Every system routes its logic through {@link evalExpr}, {@link evalPredicate} and {@link
- * evalEffects}. Evaluation is pure — effects produce intents rather than mutating state — and every
- * source of chance comes from the injected RNG, so a replay reproduces exactly.
- *
- * Errors carry a path trace (`then[1].damage.amount`), because these messages are read by content
- * authors in the editor.
- */
+/** The DSL evaluator. */
 
 import { parseDice, rollDice } from '@dm/core';
 import type { Effect, EffectOp, Expr, Predicate, Rule, Value } from './types.js';
@@ -18,22 +9,13 @@ export interface DslRng {
   nextFloat(): number;
 }
 
-/** The readable world, as nested plain data. `ref` paths walk this. */
+/** The readable world, as nested plain data. */
 export type Scope = { readonly [k: string]: Value };
 
 export interface EvalContext {
   readonly scope: Scope;
   readonly rng: DslRng;
-  /**
-   * Namespaces where a missing path means "not yet", not "typo".
-   *
-   * `ref` throws on an unknown path by default, because a silent zero is the worst failure mode for
-   * a data-driven game. But some namespaces are open — a flag never set, a quest never started, a
-   * deed nobody remembers — and there absence is ordinary and reads as null.
-   *
-   * Structural paths like `actor.attr.might` stay strict, because there a missing key really is a
-   * mistake.
-   */
+  /** Namespaces where a missing path means "not yet", not "typo". */
   readonly openNamespaces?: readonly string[];
 }
 
@@ -47,10 +29,7 @@ export class DslError extends Error {
   }
 }
 
-/**
- * Dice expressions are parsed once and reused; content re-rolls the same strings constantly. Capped
- * because `roll` accepts a computed notation, which could otherwise grow the cache without bound.
- */
+/** Dice expressions are parsed once and reused; content re-rolls the same strings constantly. */
 const diceCache = new Map<string, ReturnType<typeof parseDice>>();
 const DICE_CACHE_LIMIT = 1024;
 
@@ -85,11 +64,7 @@ export const EFFECT_OPS = new Set([
   'if', 'repeat', 'forEach', 'let',
 ]);
 
-/**
- * Identify a node's operator. Matched against the known operator set rather than taking the first
- * key: some forms carry sibling keys (`{ref, else}`, `{cond, then, else}`) and JSON key order
- * cannot be trusted. Ambiguity is an error rather than a silent pick.
- */
+/** Identify a node's operator. */
 function operatorOf(node: object, path: string, known: ReadonlySet<string>): string {
   const keys = Object.keys(node);
   if (keys.length === 0) throw new DslError('empty object is not a valid node', path);
@@ -125,10 +100,7 @@ function expectString(v: Value, path: string, what: string): string {
   return v;
 }
 
-/**
- * Walk a dotted path through scope. Returns `undefined` for a missing path so callers can
- * distinguish absent from a stored `null`.
- */
+/** Walk a dotted path through scope. */
 function lookup(scope: Scope, path: string): Value | undefined {
   if (path === '') return undefined;
   let current: Value | undefined = scope;
@@ -147,9 +119,7 @@ function lookup(scope: Scope, path: string): Value | undefined {
   return current;
 }
 
-// ---------------------------------------------------------------------------
-// Expressions
-// ---------------------------------------------------------------------------
+// --- Expressions -----------------------------------------------------------
 
 export function evalExpr(expr: Expr, ctx: EvalContext, path = ''): Value {
   if (expr === null) return null;
@@ -324,9 +294,7 @@ function asPair(v: unknown, path: string): readonly [Expr, Expr] {
   return arr as unknown as readonly [Expr, Expr];
 }
 
-// ---------------------------------------------------------------------------
-// Predicates
-// ---------------------------------------------------------------------------
+// --- Predicates ------------------------------------------------------------
 
 export function evalPredicate(pred: Predicate, ctx: EvalContext, path = ''): boolean {
   if (typeof pred === 'boolean') return pred;
@@ -339,8 +307,7 @@ export function evalPredicate(pred: Predicate, ctx: EvalContext, path = ''): boo
   const at = (child: string) => (path ? `${path}.${child}` : child);
 
   switch (op) {
-    // `all` on an empty list is true and `any` is false, so an absent condition list permits by
-    // default.
+    // `all` on an empty list is true and `any` is false, so an absent condition list permits by default.
     case 'all':
       return asPredicates(node['all'], at('all')).every((p, i) =>
         evalPredicate(p, ctx, `${at('all')}[${i}]`),
@@ -371,8 +338,7 @@ export function evalPredicate(pred: Predicate, ctx: EvalContext, path = ''): boo
       const [a, b] = asPair(node[op], at(op));
       const left = evalExpr(a, ctx, `${at(op)}[0]`);
       const right = evalExpr(b, ctx, `${at(op)}[1]`);
-      // Strings compare lexicographically; anything else must be numeric, so comparing an object
-      // cannot silently yield false.
+      // Strings compare lexicographically; anything else must be numeric.
       if (typeof left === 'string' && typeof right === 'string') {
         return compare(op, left < right ? -1 : left > right ? 1 : 0);
       }
@@ -451,9 +417,7 @@ function deepEqual(a: Value, b: Value): boolean {
   return false;
 }
 
-// ---------------------------------------------------------------------------
-// Effects
-// ---------------------------------------------------------------------------
+// --- Effects ---------------------------------------------------------------
 
 /** Bound to stop a malformed or hostile module from looping forever. */
 const MAX_REPEAT = 10_000;
@@ -629,13 +593,12 @@ function evalEffect(effect: Effect, ctx: EvalContext, path: string, out: EffectO
       return;
 
     case 'noise': {
-      // Anything can make a sound. Which sense carries it is the module's business.
+      // Anything can make a sound.
       out.push({
         op: 'noise',
         sense: str('sense'),
         loudness: num('loudness', 1) ?? 1,
-        // Through `str`, so a module that hands this an object is told where and why rather than
-        // quietly making a noise nobody made.
+        // Through `str`, so an object is reported rather than silently stringified.
         source: spec['source'] === undefined ? null : str('source'),
       });
       return;

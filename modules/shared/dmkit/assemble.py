@@ -1,13 +1,4 @@
-"""Emitting a module document.
-
-`extends: "<base>@1.0.0"` does not survive validation: `npm run validate` lints the raw document
-before resolving extends, so a child that leans on its parent for `rules` fails the schema pass with
-"attributes is required", and `$delete` markers fail it too — only `mods` may carry those in a raw
-document.
-
-So a base ruleset is composed in rather than inherited: the base module stays canonical on disk and
-a build copies its rules, its character content and its system text into the world.
-"""
+"""Emitting a module document."""
 import collections
 import json
 import os
@@ -20,10 +11,7 @@ def load_base(path):
 
 
 def text_grammar(*pool_lists):
-    """Merge text-grammar pools: first spelling of an id wins, sorted by id. Sorted because a diff
-    of a multi-megabyte document is only useful if the order is a function of the content rather
-    than of the import graph.
-    """
+    """Merge text-grammar pools: first spelling of an id wins, sorted by id."""
     seen, merged = set(), []
     for entries in pool_lists:
         for entry in entries:
@@ -54,12 +42,7 @@ def document(*, module_id, version, engine, meta, rules, content, world,
 
 
 def jsonable(value):
-    """A document Python and JavaScript serialize identically.
-
-    One conversion: a float that happens to be whole becomes an int. JSON has a single number type,
-    but Python writes `emptyChance: 0.0` where `JSON.stringify` writes `0`. Neither the schema nor
-    the content hash can tell them apart, so the only thing the difference produces is a diff.
-    """
+    """A document Python and JavaScript serialize identically."""
     if isinstance(value, bool):
         return value
     if isinstance(value, float) and value.is_integer():
@@ -72,13 +55,7 @@ def jsonable(value):
 
 
 def write(doc, out_dir, *, name="module.json", indent=2):
-    """Write the document and return the path.
-
-    `ensure_ascii=False` because the studio writes these files too and `JSON.stringify` emits an em
-    dash as itself; escaping it here would make the first save through the editor rewrite several
-    hundred unchanged lines. `modules/core_fantasy/gen_core.py` keeps its own copy of this, because
-    that module is generated without dmkit on the path.
-    """
+    """Write the document and return the path."""
     os.makedirs(out_dir, exist_ok=True)
     path = os.path.join(out_dir, name)
     with open(path, "w", encoding="utf-8") as f:

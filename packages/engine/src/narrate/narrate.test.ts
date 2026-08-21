@@ -1,13 +1,4 @@
-/**
- * The narrator — the layer that turns events into sentences.
- *
- * The engine emits `Event[]` and never prose, which is what lets a browser and
- * a template swap places without touching a rule. That promise only holds while
- * this layer keeps two properties: the numbers behind a roll stay visible, and
- * a scene reads the same way every time it is described within a run. Both are
- * pinned below, along with the grammar helpers that take their words from the
- * module and only their placement from here.
- */
+/** The narrator — the layer that turns events into sentences. */
 
 import { describe, it, expect } from 'vitest';
 import { fileURLToPath } from 'node:url';

@@ -1,17 +1,4 @@
-"""What drops, what is on the shelf, and what wanders the roads.
-
-Three things here that are easy to get wrong and invisible when you do:
-
-  * `entries` is a **weighted wrapper** — `{"weight": n, "value": {...}}` — not
-    a bare loot entry. The schema will tell you, at least.
-  * An encounter table consulted on the overworld is passed **no depth**, so it
-    defaults to 0. A table with `minDepth` above zero never fires outside a
-    dungeon, silently.
-  * `roomTemplate.encounterChance` defaults to 0, and so does
-    `world.generationDefaults.encounterChance` — so a dungeon stays empty
-    however many monsters exist. Something has to raise it on the biomes a
-    questline actually crosses; see `dmkit.story.attach_content`.
-"""
+"""What drops, what is on the shelf, and what wanders the roads."""
 
 
 def w(weight, item, quantity="1", **kw):

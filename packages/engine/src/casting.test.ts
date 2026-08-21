@@ -1,11 +1,4 @@
-/**
- * Casting.
- *
- * `rules.spellcasting` described slots, a points pool, concentration with its
- * save, rituals, upcasting and components — and not one field of it was read,
- * so a module that declared a wizard got a fighter whose abilities happened to
- * cost focus.
- */
+/** Casting. */
 
 import { describe, it, expect } from 'vitest';
 import { fileURLToPath } from 'node:url';
@@ -74,8 +67,6 @@ describe('slots', () => {
   });
 
   it('are spent by casting, and run out', () => {
-    // Alone, so the refusal that lands is the empty slot rather than the action
-    // budget of a fight that started when the hound noticed us.
     const armed = caster(1);
     let state: GameState = {
       ...armed,
@@ -112,7 +103,7 @@ describe('slots', () => {
   it('reaches for a bigger slot when the right one is gone', () => {
     const state = caster(3);
     const hero = state.entities['e:1']!;
-    // Level 3 gives [4, 2]. Spend every first-level slot.
+    // Level 3 gives [4, 2].
     const spent = { ...hero, slotsUsed: [4, 0] };
     expect(slotForSpell(GREENMARCH, spent, 1)).toBe(2);
 
@@ -136,15 +127,7 @@ describe('the numbers a caster imposes', () => {
     expect(attackBonusOf(GREENMARCH, hero)).toBe(expected);
   });
 
-  /**
-   * This scope is built here rather than by `buildScope`, so it holds only
-   * what is listed in it. Without `actor.proficiency` a ruleset could name the
-   * level but not its own proficiency curve, and the only way to make a caster
-   * improve was to write the curve out a second time inside each formula.
-   *
-   * Greenmarch keeps the flat numbers, so this proves the scope rather than
-   * the fixture: same module, one formula swapped.
-   */
+  /** This scope is built here rather than by `buildScope`, so it holds only what is listed in it. */
   it('lets those formulas name the module\'s proficiency curve', () => {
     const doc = JSON.parse(JSON.stringify(GREENMARCH.source)) as never as {
       rules: { spellcasting: Record<string, unknown> };
@@ -168,8 +151,6 @@ describe('the numbers a caster imposes', () => {
   });
 
   it('uses the caster\'s bonus for a spell attack, not the raw attribute', () => {
-    // `barrow_bolt` attacks with intellect; the module's bonus adds 2 on top,
-    // so a spell attack must land more often than the bare modifier would.
     let landed = 0;
     for (let seed = 0; seed < 60; seed += 1) {
       const state = caster(3, seed);
@@ -250,8 +231,6 @@ describe('concentration', () => {
     const held = reduce(caster(1), { type: 'useAbility', ability: 'wardlight' }, ctx).state;
     expect(held.entities['e:1']!.concentrating).toBe('wardlight');
 
-    // A heavy blow makes the save hard; over a spread of seeds it must
-    // sometimes break, and the save must actually be rolled.
     let broken = 0;
     let rolled = 0;
     for (let seed = 0; seed < 40; seed += 1) {
@@ -274,8 +253,7 @@ describe('concentration', () => {
 
 describe('upcasting', () => {
   it('adds the spell\'s own extra effect for every level above its level', () => {
-    // `barrow_bolt` is 2d6, rising 1d6 per level. Cast from a second-level slot
-    // it must land harder over a run than from a first.
+    // `barrow_bolt` is 2d6, rising 1d6 per level.
     const total = (usedFirst: number) => {
       let sum = 0;
       for (let seed = 0; seed < 80; seed += 1) {
@@ -293,8 +271,6 @@ describe('upcasting', () => {
       return sum;
     };
 
-    // With first-level slots left it goes in a first-level slot; with none, a
-    // second — which is where the extra die comes from.
     expect(total(4)).toBeGreaterThan(total(0));
   });
 });

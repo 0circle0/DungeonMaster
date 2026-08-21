@@ -1,6 +1,4 @@
-/**
- * Edit a prefab and preview which instances would change.
- */
+/** Edit a prefab and preview which instances would change. */
 
 'use client';
 

@@ -1,7 +1,4 @@
-/**
- * A play session. Holds the state, applies actions, and keeps the narrated transcript. Separated
- * from the REPL so a scripted playthrough and an interactive one drive the same code.
- */
+/** A play session. */
 
 import type { CompiledModule } from '@dm/module';
 import type { Action, GameState, Line, ModRuntime } from '@dm/engine';
@@ -37,11 +34,7 @@ export interface Session {
 
 const PARTY_NAMES = ['Ash', 'Korrin', 'Mire', 'Sable', 'Dun', 'Wren', 'Halt', 'Brann'];
 
-/**
- * Begin a session, placing the party where the module says play starts. Character creation is quick
- * here — the module's declared defaults — so the game is playable before the creation screens
- * exist.
- */
+/** Begin a session, placing the party where the module says play starts. */
 export function startSession(
   module: CompiledModule,
   seed: number,
@@ -51,8 +44,7 @@ export function startSession(
   const size = Math.min(partySize ?? module.source.start.partySize, module.source.start.partySize);
   const state = newGame(module, {
     seed,
-    // A roster from character creation when there is one; the module's own defaults otherwise, so a
-    // quick start is always available.
+    // A roster from character creation when there is one; the module's defaults otherwise.
     party: roster && roster.length > 0
       ? roster.slice(0, size)
       : Array.from({ length: size }, (_, i) => defaultChoices(module, PARTY_NAMES[i] ?? `Hero ${i + 1}`)),
@@ -61,7 +53,7 @@ export function startSession(
   const terrain = new TerrainIndex(module);
   const session: Session = { module, state, terrain, seed, transcript: [] };
 
-  // Put the party somewhere real. The module decides where.
+  // Put the party somewhere real.
   const txn = new Transaction(state, module);
   const rng = Rng.fromSeed(seed).derive('arrival');
   const start = module.source.start;
@@ -77,15 +69,13 @@ export function startSession(
     enterDungeon(txn, terrain, start.startingDungeon, rng);
   }
 
-  // Whatever the party is already committed to when play opens. Inside the arrival transaction so
-  // its effects run and its announcement lands in the opening transcript.
+  // Whatever the party is already committed to when play opens.
   startAutoQuests(txn, rng.derive('quests'));
 
   const arrived = txn.finish();
   session.state = arrived.state;
 
-  // Order matters: the module's opening text is the framing, so it goes first; the room, the people
-  // in it, and the job come after.
+  // Order: the module's opening text, then the room, the people and the job.
   const context = { module, state: session.state, seed };
 
   if (start.openingTextKey) {
@@ -96,15 +86,13 @@ export function startSession(
 
   session.transcript.push(...describeSurroundings(context));
 
-  // Arriving somewhere narrates that place's description, and so does looking around, which says
-  // the same paragraph twice on the opening screen. The look wins.
+  // The look wins: arriving and looking around would print the same paragraph twice.
   const described = placeOf(module, session.state).descriptionKey;
   const location = session.state.location;
   const herePoi = location.kind === 'poi' ? location.poi : null;
   const arrival = arrived.events.filter((event) => {
     if (event.type === 'narrate' && event.textKey === described) return false;
-    // The arrival event for the place the surroundings just named would print its name a second
-    // time on the same screen.
+    // The arrival event would print the place's name a second time.
     if (event.type === 'custom' && event.event === 'entered'
       && event.data['place'] === herePoi) return false;
     return true;
@@ -119,10 +107,7 @@ export interface PlayContext {
   readonly module: CompiledModule;
   readonly state: GameState;
   readonly terrain: TerrainIndex;
-  /**
-   * Installed mods, when a game uses any. Optional, and absent is byte-for-byte the unmodded engine
-   * — the same arrangement `ReduceContext` uses.
-   */
+  /** Installed mods, when a game uses any. */
   readonly mods?: ModRuntime | undefined;
 }
 
@@ -132,13 +117,7 @@ export interface Turn {
   readonly lines: readonly Line[];
 }
 
-/**
- * Apply one action to a state. No session, no mutation.
- *
- * The pure form the browser front end builds on: React state must change by replacement, and a
- * `Session` mutates in place. The mutable `applyAction` below is three lines over this, so the two
- * shells cannot disagree.
- */
+/** Apply one action to a state. */
 export function applyTo(context: PlayContext & { readonly seed: number }, action: Action): Turn {
   const result = reduce(context.state, action, {
     module: context.module,
@@ -171,10 +150,7 @@ export type CommandOutcome =
   | { readonly kind: 'meta'; readonly command: MetaCommand }
   | { readonly kind: 'error'; readonly message: string };
 
-/**
- * Run one line of player input against a state — the pure form. Dialogue is handled before the
- * parser sees it: while a conversation is open, a bare number picks a reply.
- */
+/** Run one line of player input against a state — the pure form. */
 export function interpret(
   context: PlayContext & { readonly seed: number },
   input: string,

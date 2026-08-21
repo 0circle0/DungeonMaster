@@ -1,11 +1,4 @@
-/**
- * Clicking a warning has to go where the warning is.
- *
- * It did not, for 127 of the 130 rows aurendel shows: a mod names an entry by
- * id and the resolver only understood indices, so every one of them fell
- * through to "somewhere in this document" — which is the raw JSON, and is not
- * an answer.
- */
+/** Clicking a warning has to go where the warning is. */
 
 import { describe, it, expect } from 'vitest';
 import { withEntryIndex, splitEntryPath } from './diagnosticPath.js';
@@ -36,11 +29,6 @@ describe('withEntryIndex', () => {
     );
   });
 
-  /**
-   * `Number.parseInt` stops at the first non-digit, so an id that begins with
-   * one reads as an index and opens whatever happens to be there — silently,
-   * and at the wrong entry, which is worse than not navigating at all.
-   */
   it('does not mistake an id that starts with a digit for an index', () => {
     expect(withEntryIndex(DOC, 'content.monsters.3rd_thing')).toBe('content.monsters.2');
   });
@@ -65,8 +53,6 @@ describe('splitEntryPath', () => {
   });
 
   it('returns nothing for a path outside every collection', () => {
-    // `rules.progression` is a singleton section, not a collection, so a path
-    // into it has no entry to name and the resolver leaves it to the raw view.
     expect(splitEntryPath(DOC, 'rules.progression.levels.0')).toBeNull();
     expect(splitEntryPath(DOC, 'meta.title')).toBeNull();
   });

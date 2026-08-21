@@ -1,10 +1,4 @@
-/**
- * Every formula printed on the site is a formula that would load.
- *
- * The examples are the part of the documentation most likely to be copied, so
- * they are parsed as JSON and put through the same schemas the validator uses.
- * A typo in an example fails here rather than in somebody's world.
- */
+/** Every formula printed on the site is a formula that would load. */
 
 import { describe, it, expect } from 'vitest';
 import { z } from 'zod';
@@ -42,14 +36,7 @@ describe('the formulas on the site', () => {
   });
 });
 
-/**
- * The schema cannot catch a path the engine never supplies.
- *
- * `{ "ref": "enemies" }` is a perfectly valid ref: a string, correctly shaped,
- * accepted by every schema. It simply throws at runtime, because nothing puts
- * `enemies` in scope. So the roots are read off a real scope built from a real
- * world, and every path in every example is checked against them.
- */
+/** The schema cannot catch a path the engine never supplies. */
 describe('every path an example reads', () => {
   const module = loadModuleFrom('modules/greenmarch');
   const game = newGame(module, { seed: 1, party: [defaultChoices(module, 'Tester')] });

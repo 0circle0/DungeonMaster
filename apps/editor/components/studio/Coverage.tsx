@@ -1,9 +1,4 @@
-/**
- * Which of a type's fields the engine ignores — see lib/inertFields.ts.
- *
- * Shown wherever those fields can be edited, so a field that looks authorable
- * and does nothing says so next to itself rather than in a changelog.
- */
+/** Which of a type's fields the engine ignores — see lib/inertFields.ts. */
 
 import { coverageNotesFor } from '@/lib/inertFields';
 import styles from '@/app/studio/studio.module.css';

@@ -1,10 +1,4 @@
-/**
- * A mod as it crosses from the server.
- *
- * Split from `modsOnDisk.ts` so a client component can import the *type*
- * without dragging `node:fs` into the browser bundle — the same split
- * `@dm/mods` makes between its index and `./load`.
- */
+/** A mod as it crosses from the server. */
 
 import type { ModManifest } from '@dm/mods';
 

@@ -1,12 +1,4 @@
-/**
- * Point-buy character creation.
- *
- * The rules here are entirely the module's: how many points, which attributes,
- * what each score costs. The tests below pin that nothing about the *shape* of
- * a ruleset is assumed — greenmarch spends 27 points across six attributes with
- * a hand-authored cost curve, minimal spends 4 across two with no table at all,
- * and the same code runs both.
- */
+/** Point-buy character creation. */
 
 import { describe, it, expect } from 'vitest';
 import { fileURLToPath } from 'node:url';
@@ -115,8 +107,6 @@ describe('character creation', () => {
     expect(hero.name).toBe('Brannoc');
     expect(hero.characterClass).toBe(rules.classes[0]?.id);
 
-    // Ancestry and class add their own bonuses on top, so compare against the
-    // same character built without the four points rather than to a number.
     const flat = toChoices(GREENMARCH, 'Brannoc', rules.ancestries[1]?.id, rules.classes[0]?.id, baseAllocation(GREENMARCH));
     const plain = Object.values(startSession(GREENMARCH, 11, 1, [flat]).state.entities)
       .find((e) => e.kind === 'character')!;

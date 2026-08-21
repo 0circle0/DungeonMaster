@@ -1,11 +1,4 @@
-/**
- * The static map file form: CSV grids, assembly, and its inverse.
- *
- * The property that matters most is at the bottom: a module whose maps are
- * authored inline hashes identically to the same module with those maps in
- * folders. Everything else — trimming, comments, error positions — exists so
- * an author editing a CSV by hand gets told exactly where they went wrong.
- */
+/** The static map file form: CSV grids, assembly, and its inverse. */
 
 import { describe, it, expect } from 'vitest';
 import {
@@ -223,9 +216,6 @@ describe('world.maps in the compiled document', () => {
   it('hashes identically however the maps were stored or ordered', () => {
     const second = { ...JSON.parse(JSON.stringify(validMap)) as typeof validMap, id: 'another' };
 
-    // Inline in one order, or "assembled from folders" in the other — after
-    // normalization they are the same document, so the same hash. This is the
-    // invariant that makes folder storage invisible to saves.
     const inline = sortWorldMaps(withMaps([validMap, second]));
     const folderish = sortWorldMaps(withMaps([second, validMap]));
     expect(hashModule(folderish as unknown as GameModule)).toBe(

@@ -1,13 +1,4 @@
-/**
- * Editor mods at work.
- *
- * The engine's `ModRuntime` applies directives to a `GameState`; this one applies them to the
- * authored document and the studio's own surfaces. Kept in the app rather than in `@dm/mods`
- * because everything it produces — diagnostics, field specs, patches — is shaped for this editor.
- *
- * Every call is wrapped: a mod that throws produces a diagnostic against itself, never a broken
- * studio.
- */
+/** Editor mods at work. */
 
 import {
   editorDirectivesSchema,
@@ -53,15 +44,8 @@ export function createEditorModRuntime(
   const declares = (mod: LoadedMod, hook: string) =>
     mod.manifest.hooks.some((decl) => decl.hook === hook);
 
-  /**
-   * One crossing. Never throws — a broken mod must not stop the studio rendering the document the
-   * author is trying to fix.
-   */
-  /**
-   * A mod hook that fails should say so. `lint` turns its failures into diagnostics; `fields` and
-   * `commands` would otherwise drop theirs, so a mod whose field never appeared would look like a
-   * mod that decided not to add one.
-   */
+  /** One crossing. */
+  /** A mod hook that fails should say so. */
   function warn(message: string): void {
     // eslint-disable-next-line no-console
     console.warn(`[mod] ${message}`);
@@ -80,7 +64,6 @@ export function createEditorModRuntime(
       hook,
       payload: JSON.stringify(payload),
       // Editor hooks are not part of a game's replay, so there is no derived stream to draw from.
-      // Nothing downstream depends on the sequence.
       random: () => 0.5,
       query: () => null,
     });
@@ -114,8 +97,7 @@ export function createEditorModRuntime(
         for (const directive of call(mod, 'editor.lint', { doc, meta: metaOf(doc) }, fail)) {
           if (directive.kind !== 'diagnostics') continue;
           for (const diagnostic of directive.diagnostics) {
-            // Prefixed so a reader can tell which mod is complaining; an unattributed complaint
-            // from a mod reads as an engine bug.
+            // Prefixed, so a reader can tell which mod is complaining.
             out.push(toDiagnostic(mod.manifest.id, diagnostic));
           }
         }
@@ -189,8 +171,7 @@ function toDiagnostic(modId: string, diagnostic: ModDiagnostic): Diagnostic {
     path: diagnostic.path,
     message: diagnostic.message,
     hint: diagnostic.hint,
-    // The host fills these: a mod has no view of the source text, so it cannot know where in the
-    // file its complaint lands.
+    // The host fills these: a mod has no view of the source text.
     position: null,
     excerpt: null,
   };

@@ -1,21 +1,4 @@
-"""The Ledger and the Light — a Sarnport side chain, Act I.
-
-The Insurers' Hall makes a living being right about how dangerous the sea is,
-and for nine years it has been wrong about one headland in a way that is
-costing it money. Maun has the losses written down. What she does not have is
-anybody willing to go and stand under the Saltcliff Light on a night it is not
-lit and find out what is shining.
-
-This is the other half of the coast's argument, told from the room with the
-ledger in it, and the two chains can be run in either order or not at all. What
-they share is a fact: something has been showing a light off Gannet Head for
-ninety years, and the Strand has been blamed for all ninety of them.
-
-The reward is the Pilot's Glass, ground at Vashta Qal and worth more than the
-boat it is usually in — two ranks of perception, which is the difference
-between finding the fourteen hidden places on this continent and walking past
-them.
-"""
+"""The Ledger and the Light — a Sarnport side chain, Act I."""
 from dmkit.quests import (
     arc, stage, reach, kill, talk, flagged, resolved_either_way,
     set_flag, rep, give, deed, either, node, option, take_job, dialogue, npc,
@@ -122,8 +105,7 @@ QUESTS = chain(KEY, [
          items=[("pilots_glass", 1)],
          on_complete=[
              either("saltcliff_buried",
-                    # The Hall keeps ninety years of recoveries it should not
-                    # have had, and knows it.
+                    # The Hall keeps ninety years of recoveries it should not have had, and knows it.
                     [rep("the_countinghouse", 15), rep("the_salvors", -20),
                      rep("the_crown", -6), set_flag("saltcliff_stands")],
                     [rep("the_countinghouse", 10), rep("the_salvors", 20),

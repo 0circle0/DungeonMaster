@@ -1,16 +1,4 @@
-/**
- * Events: what happened.
- *
- * The engine never produces prose. It produces these, and the narrator turns them into text, so the
- * same run can drive a terminal, a browser, a combat log or a test assertion.
- *
- * Two properties:
- *
- *   - Events are facts, not instructions. `Damaged` records that damage was dealt; state is already
- *     updated by the time one exists.
- *   - Events carry their numbers — the dice, the modifiers, the total, and what was being rolled
- *     against — because the arithmetic cannot be reconstructed later.
- */
+/** Events: what happened. */
 
 import type { Position } from './grid/tiles.js';
 import type { EntityId } from './state.js';

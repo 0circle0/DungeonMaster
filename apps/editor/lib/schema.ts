@@ -1,13 +1,4 @@
-/**
- * Turning Zod schemas into form descriptions.
- *
- * The editor renders forms from the schema rather than from hand-written UI per content type, so a
- * field added to `packages/module` appears here automatically, correctly typed and validated, and
- * the editor cannot drift out of sync with what the engine accepts.
- *
- * The one exception is the DSL: effects and predicates are recursive unions that a generic form
- * renders badly, so they are edited as JSON with schema validation — see `kind: 'dsl'`.
- */
+/** Turning Zod schemas into form descriptions. */
 
 import { z } from 'zod';
 import { gameModuleSchema, COLLECTION_PATHS, refTarget, refHelp } from '@dm/module';
@@ -76,16 +67,11 @@ function unwrap(schema: z.ZodTypeAny): Unwrapped {
   return { schema: current, optional, defaultValue, description };
 }
 
-/**
- * `ref:` markers become dropdowns bound to that collection. Read through `@dm/module` rather than
- * parsed here, since the marker can carry help text after a `|` and a second parser is a second
- * place to be wrong.
- */
+/** `ref:` markers become dropdowns bound to that collection. */
 
 /** Which recursive DSL schema this is, so the JSON editor can label it. */
 function dslFlavour(schema: z.ZodTypeAny): 'expr' | 'predicate' | 'effect' | 'rule' | 'unknown' {
-  // Probing is more robust than name matching, since the schemas are anonymous once wrapped in
-  // `z.lazy`.
+  // Probing is more robust than name matching, since the schemas are anonymous once wrapped in `z.lazy`.
   if (schema.safeParse({ damage: { target: 'x', amount: 1 } }).success) return 'effect';
   if (schema.safeParse({ gte: [1, 1] }).success) return 'predicate';
   if (schema.safeParse({ add: [1, 2] }).success) return 'expr';
@@ -179,16 +165,7 @@ export function labelFor(key: string): string {
   return spaced.charAt(0).toUpperCase() + spaced.slice(1);
 }
 
-/**
- * How much one press of a number input's arrows should move it.
- *
- * Read off the bounds the schema declares, because `step="any"` makes the arrows move by 1 and a
- * scatter frequency lives entirely between 0 and 1.
- *
- * A schema that writes `z.number()` rather than `.int()` is stating that fractions are meaningful,
- * so the arrows never move a float by a whole unit. A narrow declared range means every hundredth
- * counts; anything wider or unbounded is a quantity rather than a ratio.
- */
+/** How much one press of a number input's arrows should move it. */
 export function stepFor(spec: Extract<FieldSpec, { kind: 'number' }>): number {
   if (spec.int) return 1;
   const bounded = spec.min !== null && spec.max !== null;
@@ -204,11 +181,7 @@ export interface CollectionInfo {
   readonly spec: FieldSpec;
 }
 
-/**
- * Every editable collection, discovered from the module schema. Driving navigation from
- * `COLLECTION_PATHS` rather than a hand-kept list means a new collection shows up in the sidebar as
- * soon as it exists.
- */
+/** Every editable collection, discovered from the module schema. */
 function buildCollections(): CollectionInfo[] {
   const out: CollectionInfo[] = [];
   const rootShape = gameModuleSchema.shape as Record<string, z.ZodTypeAny>;
@@ -258,10 +231,7 @@ export function collectionAt(path: string): CollectionInfo | undefined {
   return COLLECTIONS.find((c) => c.path === path);
 }
 
-/**
- * Singleton sections that are objects rather than lists — `start`, the world clock, and the
- * resolution rules. They get the same generated form treatment.
- */
+/** Singleton sections that are objects rather than lists. */
 export const SINGLETONS: readonly { path: string; label: string; spec: FieldSpec }[] = (() => {
   const rootShape = gameModuleSchema.shape as Record<string, z.ZodTypeAny>;
   const out: { path: string; label: string; spec: FieldSpec }[] = [];

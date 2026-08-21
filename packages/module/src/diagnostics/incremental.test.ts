@@ -1,14 +1,4 @@
-/**
- * `ValidationIndex.parse` must be indistinguishable from `safeParse`.
- *
- * Everything downstream — reference resolution, the semantic passes, the content hash a save
- * refuses to load without — reads the parsed document, so a difference of one applied default
- * breaks saves.
- *
- * The mutation test earns its keep: a cache is easy to make correct on first parse and wrong on the
- * second, and only editing repeatedly and comparing against a from-scratch parse each time finds
- * that.
- */
+/** `ValidationIndex.parse` must be indistinguishable from `safeParse`. */
 
 import { describe, it, expect } from 'vitest';
 import { readFileSync } from 'node:fs';
@@ -101,10 +91,6 @@ describe('ValidationIndex', () => {
     }
   });
 
-  /**
-   * The index is only useful if `lintModule` says the same thing with it as without: "valid in the
-   * studio" has to keep meaning "will load at play time".
-   */
   describe('inside lintModule', () => {
     it.each(MODULES)('reports the same diagnostics for %s', (name) => {
       const doc = moduleDoc(name);
@@ -132,8 +118,6 @@ describe('ValidationIndex', () => {
 
     it('falls back to the ordinary pass so schema errors keep their suggestions', () => {
       const doc = moduleDoc('greenmarch');
-      // A misspelled property: the message worth reading is "did you mean …?", which only the full
-      // schema pass produces.
       const broken = setAt(doc, ['content', 'monsters', 0], {
         ...((doc['content'] as { monsters: Record<string, unknown>[] }).monsters[0]!),
         nmae: 'typo',
@@ -146,20 +130,7 @@ describe('ValidationIndex', () => {
     });
   });
 
-  /**
-   * Guards against the cache being silently defeated.
-   *
-   * This has happened twice without a test noticing: once by linting the serialized text, which
-   * rebuilds every object so nothing is recognised as unchanged, and once by a second full compile
-   * in a component that wanted its own `CompiledModule`. Both cost about a second per keystroke on
-   * `modules/aurendel`.
-   *
-   * The miss count is the sharp assertion; the timing below is a coarse backstop that only fires
-   * when the index has stopped working outright.
-   *
-   * A ratio rather than a millisecond budget: a budget fails on a loaded machine and teaches people
-   * to skip the suite.
-   */
+  /** Guards against the cache being silently defeated. */
   describe('stays incremental', () => {
     it('re-parses one entry per edit when driven through lintModule', () => {
       const index = new ValidationIndex();
@@ -198,16 +169,12 @@ describe('ValidationIndex', () => {
       colds.sort((a, b) => a - b);
       warms.sort((a, b) => a - b);
 
-      // Really ~250x. Ten is the threshold at which something is clearly wrong.
+      // Really ~250x.
       expect(colds[1]! / warms[1]!).toBeGreaterThan(10);
     });
   });
 
-  /**
-   * Linting the document loses line numbers and the editor gets them back on the idle tier. What it
-   * gets back has to be what linting the text would have said, or "go to line 807" sends the author
-   * somewhere else.
-   */
+  /** Linting the document loses line numbers and the editor gets them back on the idle tier. */
   describe('attachPositions', () => {
     it.each(MODULES)('restores the positions %s would have had', (name) => {
       const doc = moduleDoc(name);

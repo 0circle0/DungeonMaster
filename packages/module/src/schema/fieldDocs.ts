@@ -1,21 +1,4 @@
-/**
- * One line per field, saying what it is.
- *
- * The Zod schemas already carry the type, whether a field is required, and its
- * default, and `walkModuleSchema` reads all three straight off them. What they
- * cannot carry is a sentence for a person: `.describe()` is the only annotation
- * slot Zod gives a string, and `ref:` took it. So the prose lives here, keyed by
- * the canonical path the walk produces.
- *
- * `fieldDocs.test.ts` holds this file to the schema in both directions. Every
- * field must have a line, and no line may name a field that no longer exists,
- * so adding to the format means describing the addition and removing from it
- * cannot leave litter behind.
- *
- * Style, because a thousand of these are only readable if they are uniform:
- * one sentence, the shortest that is still true, and the trap rather than the
- * obvious meaning wherever a field has one.
- */
+/** One line per field, saying what it is. */
 
 export const FIELD_DOCS: Record<string, string> = {
   // ---------------------------------------------------------------- document

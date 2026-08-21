@@ -1,17 +1,4 @@
-"""Aurendel — what each biome sounds like.
-
-Fired on entering any area of the biome (sim/enter.ts, `biome.ambienceKey`), so
-one of these is the first thing a player reads on arriving anywhere, and it is
-doing most of the work of making a region feel like itself. The place's own
-`descriptionKey` says what is here; this says what it is like to be standing in
-it.
-
-Kept apart from the generic pools in `dmkit.prose` because these are the ones
-that could not be lifted to another world: every line names Aurendel's weather,
-its birds, its barrows and its hold-cities. `materials.BIOMES` names the pools
-by key, so that file imports this one for its side effect — the file that names
-a pool is the file that has to make sure it is registered.
-"""
+"""Aurendel — what each biome sounds like."""
 from dmkit.prose import pool
 
 # Fired on entering any area of the biome (sim/enter.ts, biome.ambienceKey).

@@ -1,32 +1,6 @@
-/**
- * Prefabs: an entry described once and placed many times.
- *
- * A world the size of Aurendel is a small vocabulary instantiated repeatedly — thirteen one-line
- * constructors over four lookup tables produce all 597 of its points of interest. An author writes
- * four strings and gets an eight-to-eleven key entry with a palette, a footprint, a description
- * key, travel minutes and services.
- *
- * What a prefab is, and is not
- *
- * It is a template: interpolation, a lookup into the project's own tables, and conditional
- * presence. Being data is what lets the studio render a parameter form for it, show a diff before
- * applying it, and refuse to run anything.
- *
- * It is not a program. `fit()`, `lay_out()`, `chain()` and `standing_dc()` are real algorithms and
- * ship as code, not as user script in a sandbox.
- *
- * Overrides
- *
- * An instance records which fields a person edited by hand. Re-expanding a prefab rewrites
- * everything else and leaves those alone, so changing `inn` updates thirty-six inns while the one
- * that was tuned stays tuned.
- */
+/** Prefabs: an entry described once and placed many times. */
 
-/**
- * Where an instance's provenance lives: beside the entries, never inside one. Every collection
- * schema is `.strict()`, so a `$prefab` key on the entry itself would be a validation error in the
- * document the studio is editing. A sidecar keeps the document exactly what the format allows.
- */
+/** Where an instance's provenance lives: beside the entries, never inside one. */
 export const INSTANCES_FILE = 'prefabs/instances.json';
 
 export interface PrefabParam {
@@ -88,8 +62,7 @@ function interpolate(
   path: string,
   issues: ExpandIssue[],
 ): unknown {
-  // `"{{size}}"` yields the parameter itself; `"a {{x}} b"` yields a string. Without this a numeric
-  // parameter would come back as its own digits.
+  // `"{{size}}"` yields the parameter itself; `"a {{x}} b"` yields a string.
   const whole = WHOLE.exec(text);
   if (whole) {
     const key = whole[1]!;
@@ -133,8 +106,7 @@ function evaluate(
 
   const record = node as Record<string, unknown>;
 
-  // `{ "@when": "trade", "then": ... }` — present only if the parameter is set. This is how `poi()`
-  // gives a place an interior only when it has both a trade and a size.
+  // `{ "@when": "trade", "then": ...
   if ('@when' in record) {
     const key = record['@when'];
     const flag = typeof key === 'string' ? params[key] : undefined;
@@ -144,10 +116,6 @@ function evaluate(
   }
 
   // `{ "@lookup": ["roomSizes", "{{size}}"] }` — the project's own tables.
-  //
-  // More than two segments walks into the row: a table maps one key to several fields at once, so a
-  // settlement's size can decide both what it offers and how far word of it travels without the two
-  // drifting apart.
   if ('@lookup' in record) {
     const spec = record['@lookup'];
     if (!Array.isArray(spec) || spec.length < 2) {
@@ -221,7 +189,7 @@ export function checkParams(
   return issues;
 }
 
-/** Build an entry from a prefab. Never throws; problems come back as issues. */
+/** Build an entry from a prefab. */
 export function expandPrefab(
   prefab: Prefab,
   params: Readonly<Record<string, unknown>>,
@@ -236,9 +204,7 @@ export function expandPrefab(
   return { entry, issues };
 }
 
-// ---------------------------------------------------------------------------
-// Instances
-// ---------------------------------------------------------------------------
+// --- Instances -------------------------------------------------------------
 
 function getPath(value: unknown, path: string): unknown {
   let current = value;
@@ -263,14 +229,7 @@ function setPath(target: Record<string, unknown>, path: string, value: unknown):
 /** The marker that makes an entry file a recipe rather than an entry. */
 export const PREFAB_KEY = '@prefab';
 
-/**
- * An entry stored as what makes it, rather than as what it is: name the shape, give the handful of
- * things that differ, and let the build do the rest.
- *
- * `overrides` carries values, not the paths that {@link PrefabLink} records. A link sits beside a
- * complete entry and only says which fields a person touched; a recipe is the entry, so anything
- * the prefab does not reproduce has nowhere else to live.
- */
+/** An entry stored as what makes it: a prefab, plus the values that differ. */
 export interface PrefabRecipe {
   readonly [PREFAB_KEY]: string;
   readonly params: Readonly<Record<string, unknown>>;
@@ -284,11 +243,7 @@ export function isPrefabRecipe(value: unknown): value is PrefabRecipe {
   return typeof (value as Record<string, unknown>)[PREFAB_KEY] === 'string';
 }
 
-/**
- * A recipe back into the entry it stands for. Overrides are applied by path onto the expansion,
- * which keeps key order intact: `setPath` writes an existing key in place and only a new one lands
- * at the end. A compressed module has to rebuild `module.json` byte for byte.
- */
+/** A recipe back into the entry it stands for. */
 export function expandRecipe(
   recipe: PrefabRecipe,
   prefabs: readonly Prefab[],
@@ -305,11 +260,7 @@ export function expandRecipe(
   return { entry, issues };
 }
 
-/**
- * The inverse: an entry plus the prefab that nearly makes it. Whatever the expansion got wrong
- * becomes an override, so this never fails — a poor match produces a recipe with more overrides
- * than it saved. Callers choose the prefab by which answer comes out smallest.
- */
+/** The inverse: an entry plus the prefab that nearly makes it. */
 export function asRecipe(
   entry: Record<string, unknown>,
   prefab: Prefab,
@@ -331,11 +282,7 @@ function setPathValue(target: Record<string, unknown>, path: string, value: unkn
   target[path] = value;
 }
 
-/**
- * The shallowest paths at which two entries disagree. Recording `map` once beats recording
- * `map.width`, `map.height` and `map.palette`. Descends only where both sides are plain objects and
- * the disagreement is partial.
- */
+/** The shallowest paths at which two entries disagree. */
 function differingPaths(made: Record<string, unknown>, want: Record<string, unknown>): string[] {
   const out: string[] = [];
 
@@ -347,8 +294,7 @@ function differingPaths(made: Record<string, unknown>, want: Record<string, unkn
 
     if (plain(a) && plain(b)) {
       const keys = [...new Set([...Object.keys(a), ...Object.keys(b)])];
-      // Only worth descending when most of the object already agrees; a wholly different object
-      // reads better as one override.
+      // Only worth descending when most of the object already agrees.
       const differing = keys.filter((key) => JSON.stringify(a[key]) !== JSON.stringify(b[key]));
       if (differing.length * 2 <= keys.length) {
         for (const key of differing) walk(a[key], b[key], path ? `${path}.${key}` : key);
@@ -365,10 +311,7 @@ function differingPaths(made: Record<string, unknown>, want: Record<string, unkn
   return out;
 }
 
-/**
- * Rebuild an instance from its prefab, keeping what was overridden. An override is recorded by
- * path, so a field the prefab has stopped emitting keeps the value a person put there.
- */
+/** Rebuild an instance from its prefab, keeping what was overridden. */
 export function reexpand(
   prefab: Prefab,
   instance: Record<string, unknown>,
@@ -383,11 +326,7 @@ export function reexpand(
   return { entry, issues };
 }
 
-/**
- * Which paths differ between an instance and what its prefab would produce. Used to record an
- * override when someone edits a linked entry, and to show which fields are theirs rather than the
- * prefab's.
- */
+/** Which paths differ between an instance and what its prefab would produce. */
 export function overriddenPaths(
   prefab: Prefab,
   instance: Record<string, unknown>,
@@ -420,23 +359,12 @@ export function overriddenPaths(
   return out;
 }
 
-// ---------------------------------------------------------------------------
-// Going the other way
-// ---------------------------------------------------------------------------
+// --- Going the other way ---------------------------------------------------
 
-/**
- * Fields that become parameters when a prefab is derived from an entry: the ones that are this
- * thing rather than this kind of thing. A starting point rather than a rule — the prefab is a file,
- * and the first thing anyone does with a derived one is decide what else should vary.
- */
+/** Fields that become parameters when a prefab is derived from an entry. */
 export const IDENTITY_FIELDS = ['id', 'name', 'description'] as const;
 
-/**
- * Turn an entry that already exists into a prefab, plus the parameters that reproduce it.
- *
- * The derived prefab must expand back to exactly the entry: that equality is what makes linking the
- * original safe, since linking it is the same as replacing it with the expansion.
- */
+/** Turn an entry that already exists into a prefab, plus the parameters that reproduce it. */
 export function derivePrefab(
   entry: Record<string, unknown>,
   collection: string,

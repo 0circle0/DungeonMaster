@@ -1,18 +1,4 @@
-"""The Last Cairn — a Frostmere side chain, Act III.
-
-The Ice Moot keeps eleven hundred cairns across the White Reach and counts
-them from one: the Last Cairn, out past the wind-scoured flats, which is the
-oldest and the largest and the one every other cairn is measured against. It
-has been counted from for nine hundred years and opened by nobody.
-
-This spring the glacier gave back a body with a moot-mark on it, forty miles
-from where a moot-marked body ought to be, and Ottir has stopped sleeping.
-
-It is the Keepers' habit kept eleven hundred miles from anybody who would call
-it that — `the_ice_moot` relates to `the_keepers` at 0.4, so a party that has
-been restoring wards all game arrives here already trusted, and a party that
-has been breaking them arrives to a very short conversation.
-"""
+"""The Last Cairn — a Frostmere side chain, Act III."""
 from dmkit.quests import (
     arc, stage, reach, kill, talk, flagged, resolved_either_way, set_flag,
     rep, deed, either, node, option, take_job, dialogue, npc, shop,

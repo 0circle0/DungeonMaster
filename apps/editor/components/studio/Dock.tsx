@@ -1,9 +1,4 @@
-/**
- * The left dock: five tabs that organize the module the way it is authored,
- * not the way the schema file happens to be ordered. World comes first and
- * opens on the containment tree; the flat collection lists live behind their
- * own tabs with count/error pills.
- */
+/** The left dock: five tabs over the module, World first on the containment tree. */
 
 import { useState } from 'react';
 import { SECTIONS, SINGLETONS } from '@/lib/schema';

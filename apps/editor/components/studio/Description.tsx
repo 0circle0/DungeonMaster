@@ -1,8 +1,6 @@
 'use client';
 
-/**
- * Edit a place's arrival description and handle shared versus local text bundles.
- */
+/** Edit a place's arrival description and handle shared versus local text bundles. */
 
 import { useState } from 'react';
 import { getAt } from '@/lib/store';

@@ -1,12 +1,4 @@
-/**
- * Static maps in the engine: built verbatim, arrived at correctly.
- *
- * Two behaviours are pinned here. First, `buildStaticMap` is a pure function
- * of the module — no rng anywhere — so the mill is the same mill on every
- * seed. Second, the arrival fixes: `MapInstance.exits` is finally written, so
- * leaving a dungeon works and re-entering one lands on the tile you first
- * arrived at instead of `{1,1}` inside the wall ring.
- */
+/** Static maps in the engine: built verbatim, arrived at correctly. */
 
 import { describe, it, expect } from 'vitest';
 import { fileURLToPath } from 'node:url';
@@ -58,9 +50,6 @@ describe('buildStaticMap', () => {
   });
 
   it('composites terrain layers last-wins and orders spawns row-major', () => {
-    // A synthetic module document is heavier than this deserves; the layer
-    // compositing rules are pinned at the schema/staticmaps level, and here we
-    // pin the one engine-visible consequence: cells stamp over the base.
     const built = buildStaticMap(GREENMARCH, 'mill_interior');
     // The base layer filled every cell; nothing later erased one.
     expect(built.tiles.tiles.every((id) => id !== '')).toBe(true);
@@ -72,8 +61,7 @@ describe('entering a static interior', () => {
     const base = newGame(GREENMARCH, { seed, party: [defaultChoices(GREENMARCH, 'Ash')] });
     const txn = new Transaction(base, GREENMARCH);
     const rng = Rng.fromSeed(seed);
-    // Straight in: the gate check is the caller's job, and this test is not
-    // about the mill door.
+    // Straight in: the gate check is the caller's job, and this test is not about the mill door.
     const hero = txn.entity(txn.state.selected)!;
     enterPoi(txn, terrain, 'the_mill', hero, rng, true);
     return txn;
@@ -104,8 +92,6 @@ describe('the way out is recorded and used', () => {
   /** A fresh game standing on the millford area map. */
   function inMillford(seed: number): GameState {
     const base = newGame(GREENMARCH, { seed, party: [defaultChoices(GREENMARCH, 'Ash')] });
-    // A new game has no current map — arrival is the front end's job — so the
-    // test arrives the same way the session does.
     const txn = new Transaction(base, GREENMARCH);
     enterArea(txn, terrain, 'millford', Rng.fromSeed(seed));
     return txn.state;
@@ -161,8 +147,6 @@ describe('the way out is recorded and used', () => {
     const txn = new Transaction(state, GREENMARCH);
     enterDungeon(txn, terrain, 'barrow_depths', Rng.fromSeed(11));
 
-    // Shove the leader clear of the exit — "beside it" still counts as at the
-    // way out, because the party clusters on arrival.
     const hero = txn.entity(txn.state.selected)!;
     const map = txn.state.maps[txn.state.currentMap]!;
     const exitTile = hero.position;

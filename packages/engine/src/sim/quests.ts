@@ -1,13 +1,4 @@
-/**
- * Quests: stages, objectives, and completion.
- *
- * Objectives watch the event stream rather than being polled: when a creature dies, a place is
- * reached or a flag is set, every active objective gets a chance to notice. Quest logic therefore
- * stays out of the actions themselves.
- *
- * Common shapes (`kill`, `collect`, `reach`, `talk`) are recognised directly; `custom` takes a DSL
- * predicate for everything else.
- */
+/** Quests: stages, objectives, and completion. */
 
 import { Rng } from '@dm/core';
 import { evalEffects, evalExpr, evalPredicate, compileRequirement, isEmptyRequirement } from '@dm/module';
@@ -81,11 +72,7 @@ export function objectivesOf(quest: QuestDef): { stage: string | null; objective
   return out;
 }
 
-/**
- * Which stage a quest is on, derived rather than stored: the first stage still holding an
- * unfinished required objective. Deriving it means no new state field and no save migration, and it
- * cannot drift out of step with the completed list. Stage-less objectives never move the cursor.
- */
+/** The first stage still holding an unfinished required objective; derived, never stored. */
 export function stageIndexOf(quest: QuestDef, done: ReadonlySet<string>): number {
   for (let index = 0; index < quest.stages.length; index += 1) {
     const pending = quest.stages[index]!.objectives.some(
@@ -145,11 +132,7 @@ export function startQuest(txn: Transaction, questId: string, rng: Rng): boolean
   return true;
 }
 
-/**
- * Start every quest the module marks as beginning on its own. Run as the party is placed, inside
- * the arrival transaction, so `onStart` can run and its event reaches the transcript; `newGame` has
- * no transaction.
- */
+/** Start every quest the module marks as beginning on its own. */
 export function startAutoQuests(txn: Transaction, rng: Rng): void {
   for (const quest of txn.module.all<QuestDef>('narrative.quests')) {
     if (!quest.autoStart) continue;
@@ -158,10 +141,7 @@ export function startAutoQuests(txn: Transaction, rng: Rng): void {
   }
 }
 
-/**
- * Note quests the world has opened up but nobody has offered yet. An `available` quest is one the
- * party could take if they knew to ask, which is what the journal shows under "available".
- */
+/** Note quests the world has opened up but nobody has offered yet. */
 export function refreshQuestAvailability(txn: Transaction, rng: Rng): void {
   const leader = txn.state.entities[txn.state.selected];
   if (!leader) return;
@@ -189,10 +169,7 @@ export function refreshQuestAvailability(txn: Transaction, rng: Rng): void {
   }
 }
 
-/**
- * Give up on a quest. It drops back to available rather than vanishing, and progress is cleared:
- * walking away and coming back means doing the work.
- */
+/** Give up on a quest. */
 export function abandonQuest(txn: Transaction, questId: string): boolean {
   const questState = txn.state.quests[questId];
   if (!questState || questState.status !== 'active') {
@@ -218,10 +195,7 @@ export function abandonQuest(txn: Transaction, questId: string): boolean {
   return true;
 }
 
-/**
- * Whether an event satisfies an objective. The recognised shapes cover what quests usually ask for;
- * anything else declares a `when` predicate and is checked against world state.
- */
+/** Whether an event satisfies an objective. */
 function matchesEvent(objective: ObjectiveDef, event: GameEvent, txn: Transaction): boolean {
   switch (objective.kind) {
     case 'kill': {
@@ -239,8 +213,7 @@ function matchesEvent(objective: ObjectiveDef, event: GameEvent, txn: Transactio
       if (event.type === 'enteredMap') return !objective.target || event.map.includes(objective.target);
       if (event.type === 'triggerFired') return !objective.target || event.at === objective.target;
       if (event.type === 'gateOpened') return !objective.target || event.gate === objective.target;
-      // Arriving at a place with no interior map of its own, which emits no `enteredMap`, so a
-      // "reach the mill" objective can still complete.
+      // Arriving at a place with no interior map, which emits no `enteredMap`.
       if (event.type === 'custom' && event.event === 'entered') {
         return !objective.target || event.data['place'] === objective.target;
       }
@@ -262,10 +235,7 @@ function progressKey(questId: string, objectiveId: string): string {
   return `quest:${questId}:${objectiveId}:count`;
 }
 
-/**
- * Offer events to every active quest. Called once after an action resolves, with everything that
- * action produced.
- */
+/** Offer events to every active quest. */
 export function advanceQuests(txn: Transaction, events: readonly GameEvent[], rng: Rng): void {
   refreshQuestAvailability(txn, rng.derive('available'));
 
@@ -304,9 +274,7 @@ export function advanceQuests(txn: Transaction, events: readonly GameEvent[], rn
         if (next && next.objective.id !== objective.id) continue;
       }
 
-      // An objective can declare what it takes to be active. Not threaded into `stageIndexOf`: on
-      // an ordered quest the cursor sits on the gated objective and the quest waits, which keeps
-      // the stage cursor derived from `completedObjectives` alone.
+      // An objective can declare what it takes to be active.
       if (!isEmptyRequirement(objective.requires) && leader) {
         const scope = buildScope(txn.module, txn.state, leader);
         const gate = compileRequirement(objective.requires);
@@ -319,8 +287,7 @@ export function advanceQuests(txn: Transaction, events: readonly GameEvent[], rn
         const scope = buildScope(txn.module, txn.state, leader);
         satisfied = evalPredicate(objective.when, { scope, rng, openNamespaces: OPEN_NAMESPACES });
       } else {
-        // On an event-driven kind, `when` is an extra gate the event must also satisfy, not a
-        // second way to finish — that would give a `kill` objective two completion paths.
+        // On an event-driven kind, `when` is an extra gate rather than a second way to finish.
         if (objective.when && leader) {
           const scope = buildScope(txn.module, txn.state, leader);
           if (!evalPredicate(objective.when, { scope, rng, openNamespaces: OPEN_NAMESPACES })) continue;
@@ -373,8 +340,7 @@ function completeObjective(
 
   applyEffects(txn, objective.onComplete, rng);
 
-  // Finishing the last required objective of a stage closes it and opens the next. The cursor is
-  // derived, so this is the only place that has to notice.
+  // Finishing the last required objective of a stage closes it and opens the next.
   const after = stageIndexOf(quest, new Set(completed));
   if (after === before) return;
 
@@ -475,25 +441,13 @@ function evalNumber(expr: unknown, txn: Transaction, actorId: string, rng: Rng):
   return typeof value === 'number' && Number.isFinite(value) ? value : 0;
 }
 
-/**
- * Award experience to the whole party, and level anyone who has earned it. Each crossed level is
- * applied in order, because a module may grant something at 2 that something at 3 depends on.
- */
-/**
- * Experience for what the party killed, from `content.monsters[].xp`.
- *
- * There is no switch for this: a ruleset that does not want experience for killing gives its
- * creatures none, which is the schema default.
- *
- * Read from the statblock rather than from the corpse. `Entity.xp` holds both what a character has
- * earned and what a monster is worth, so the authored number is the one to trust.
- */
+/** Award experience to the whole party, and level anyone who has earned it. */
+/** Experience for what the party killed, from `content.monsters[].xp`. */
 export function awardKillXp(txn: Transaction, events: readonly GameEvent[], rng: Rng): void {
   for (const event of events) {
     if (event.type !== 'died') continue;
 
-    // Only what the party brought down. A creature killed by another creature, or by the ground it
-    // was standing on, teaches the party nothing.
+    // Only what the party brought down.
     if (!event.killer || !txn.state.party.includes(event.killer)) continue;
 
     const corpse = txn.entity(event.entity);
@@ -548,8 +502,7 @@ function applyLevel(
   levels: readonly { level: number; grants?: Effect[] }[],
   rng: Rng,
 ): void {
-  // What the class has unlocked by now. A union rather than a replacement, so an ability granted by
-  // an ancestry or an item is not revoked.
+  // What the class has unlocked by now.
   const current = txn.entity(id);
   if (current?.characterClass) {
     const characterClass = txn.module.find<ClassDef>('content.classes', current.characterClass);
@@ -562,9 +515,7 @@ function applyLevel(
     }
   }
 
-  // Then the module's own effects for reaching it, scoped to the character who levelled rather than
-  // the party leader — `applyEffects` uses the leader, which would give everyone's level-up bonus
-  // to one person.
+  // Scoped to the character who levelled, not the party leader.
   const grants = levels.find((entry) => entry.level === level)?.grants ?? [];
   if (grants.length === 0) return;
 
@@ -574,11 +525,7 @@ function applyLevel(
   applyOps(txn, evalEffects(grants, { scope, rng, openNamespaces: OPEN_NAMESPACES }), id);
 }
 
-/**
- * Quests this person can hand over, that the party could take right now. Answers both
- * `npcs[].offersQuests` and `quests[].giver`, so a front end can offer the job and a bare `talk`
- * can mention it without a dialogue tree.
- */
+/** Quests this person can hand over, that the party could take right now. */
 export function questsOffered(txn: Transaction, npcId: string, rng: Rng): readonly QuestDef[] {
   const npc = txn.module.find<{ offersQuests?: string[] }>('content.npcs', npcId);
 

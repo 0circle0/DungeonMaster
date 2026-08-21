@@ -1,7 +1,4 @@
-/**
- * Show a table's budget and preview under a chosen party level.
- * The budget estimates risk; the preview simulates outcomes with the engine's RNG.
- */
+/** Show a table's budget and preview under a chosen party level. */
 
 'use client';
 
@@ -31,9 +28,7 @@ function list(doc: ModuleDoc, path: string): Row[] {
   return Array.isArray(value) ? (value as Row[]) : [];
 }
 
-/**
- * Build a generous party scope for evaluating gates and availability.
- */
+/** Build a generous party scope for evaluating gates and availability. */
 function buildScope(level: number, doc: ModuleDoc, generous: boolean): Scope {
   const skills: Record<string, number> = {};
   const quests: Record<string, unknown> = {};
@@ -93,12 +88,7 @@ export function BalanceView({ doc }: { doc: ModuleDoc }) {
   const [trials, setTrials] = useState(2000);
   const [seed, setSeed] = useState(1);
 
-  /**
-   * The previews run the engine's own draw functions, which need a compiled
-   * module. Compiling here rather than passing one in keeps the view usable on
-   * a document that is still being edited — it simply shows nothing until the
-   * module is valid.
-   */
+  /** The previews run the engine's own draw functions, which need a compiled module. */
   const moduleRef = useMemo<CompiledModule | null>(() => {
     const compiled = compileModule(doc);
     return compiled.ok ? compiled.module : null;

@@ -1,12 +1,6 @@
 'use client';
 
-/**
- * The takeover panels: journal, sheet, inventory, saves, help.
- *
- * Each is a pure rendering of an engine or `@dm/play` view model. The overlay
- * chrome is shared; the content of each is small enough that one file beats
- * six.
- */
+/** The takeover panels: journal, sheet, inventory, saves, help. */
 
 import { useMemo, useRef } from 'react';
 import { journalByArc, loreByThread, looseLore, narrateFrom } from '@dm/engine';
@@ -40,13 +34,7 @@ const STATUS_PILL: Record<string, string> = {
   active: 'active', available: 'available', complete: 'done', failed: 'failed',
 };
 
-/**
- * The quest log, grouped by the acts the module declares.
- *
- * `journalByArc` had existed and been called by nothing, so a story written in
- * three acts showed the player one flat list of jobs. Quests belonging to no arc
- * come last under no heading, which is exactly what a module with no arcs sees.
- */
+/** The quest log, grouped by the acts the module declares. */
 export function Quests({ session }: { session: SessionApi }) {
   const { module, frame } = session;
   const groups = useMemo(() => journalByArc(module, frame.state), [module, frame.state]);
@@ -105,14 +93,7 @@ export function Quests({ session }: { session: SessionApi }) {
   );
 }
 
-/**
- * What the party has worked out, as opposed to what it was told to do.
- *
- * A thread nothing is known about still gets its heading — the heading is the
- * only thing you have, and hiding it would hide that there is anything to find.
- * Unknown clues render as a rule rather than as text, because `loreByThread`
- * does not hand out words for a clue that has not been earned.
- */
+/** What the party has worked out, as opposed to what it was told to do. */
 export function Lore({ session }: { session: SessionApi }) {
   const { module, frame } = session;
   const threads = useMemo(() => loreByThread(module, frame.state), [module, frame.state]);
@@ -317,13 +298,7 @@ export function Help() {
   );
 }
 
-/**
- * A shopkeeper's counter.
- *
- * The same `shopView` the terminal paints, with buttons instead of prices in
- * dim text. A barred shop shows the reason rather than an empty shelf, for the
- * same reason a barred door names its key.
- */
+/** A shopkeeper's counter. */
 export function Shop({ session, npc }: { session: SessionApi; npc: string }) {
   const { module, frame, dispatchAction } = session;
   const view = useMemo(() => shopView(module, frame.state, npc), [module, frame.state, npc]);

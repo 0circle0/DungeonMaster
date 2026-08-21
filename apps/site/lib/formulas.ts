@@ -1,11 +1,4 @@
-/**
- * Every formula shown on the site, as data.
- *
- * `formulas.test.ts` parses each one and validates it against the schema its
- * `kind` names, so nothing on the page can be an example that would not load.
- * The text is stored verbatim rather than pretty printed, so the layout on the
- * page is the layout written here. That rules out comments, since JSON has none.
- */
+/** Every formula shown on the site, as data. */
 
 export type FormulaKind = 'expr' | 'predicate' | 'effects' | 'rule';
 
@@ -15,7 +8,7 @@ export interface Formula {
   readonly kind: FormulaKind;
   /** JSON, exactly as it should appear. */
   readonly json: string;
-  /** One line under the block. Omitted where the title says enough. */
+  /** One line under the block. */
   readonly note?: string;
 }
 

@@ -1,14 +1,6 @@
 'use client';
 
-/**
- * The author's own worlds.
- *
- * A world belongs to whoever is sitting at the browser: it is stored here, it never leaves, and the
- * only way it reaches another machine is a file the author chooses to export.
- *
- * The shipped examples are static files. One is fetched when somebody asks for it, and from that
- * moment it is theirs — editable in place, with no pristine copy underneath to fork from.
- */
+/** The author's own worlds. */
 
 import { useCallback, useEffect, useState } from 'react';
 import {
@@ -23,23 +15,14 @@ import { bundleModule, unbundleModule } from '@dm/module';
 import { snapshotFrom } from './projectDiff';
 import type { ProjectSnapshot } from './projectDiff';
 
-/**
- * A world opened from the store: its files, joined.
- *
- * No draft. A draft existed because a world was one blob that had to be either valid or set aside;
- * files have no second version to hold, and an entry with a half-typed reference is a file like any
- * other.
- */
+/** A world opened from the store: its files, joined. */
 export interface LoadedWorld {
   readonly meta: WorldMeta;
   readonly doc: Record<string, unknown>;
   readonly authoring: WorldAuthoring;
   /** Anything the project could not say — a bad file names itself. */
   readonly issues: readonly string[];
-  /**
-   * The files as they were read, described. Without it the first save would compare against nothing
-   * and rewrite the whole world with the bytes it already had.
-   */
+  /** The files as they were read, described. */
   readonly snapshot: ProjectSnapshot;
 }
 
@@ -99,11 +82,7 @@ export function useEditorLibrary(): EditorLibraryApi {
     return () => { live = false; };
   }, [refresh]);
 
-  /**
-   * Take a project into the library, once. The files land as they arrived — recipes still recipes,
-   * prefabs still prefabs — and are never joined on the way in; joining happens when the world is
-   * opened.
-   */
+  /** Take a project into the library, once. */
   const store = useCallback(async (
     files: Record<string, string>,
     seed: { title: string; filename: string; origin: WorldMeta['origin']; originId: string | null },
@@ -158,11 +137,7 @@ export function useEditorLibrary(): EditorLibraryApi {
     }
   }, [store]);
 
-  /**
-   * A world the studio itself makes — a template, or a ruleset composed into one. Split here rather
-   * than imported: nothing arrives from outside, so there is a document and it becomes the project
-   * it will be edited as.
-   */
+  /** A world the studio itself makes — a template, or a ruleset composed into one. */
   const createFrom = useCallback(async (
     doc: Record<string, unknown>,
     filename: string,
@@ -182,11 +157,7 @@ export function useEditorLibrary(): EditorLibraryApi {
     await refresh();
   }, [refresh]);
 
-  /**
-   * The document behind an example, for composing a new world out of it. Joined here and thrown
-   * away: nothing is stored, so this is the one place the studio wants a document rather than a
-   * project.
-   */
+  /** The document behind an example, for composing a new world out of it. */
   const exampleDoc = useCallback(async (id: string): Promise<Record<string, unknown> | null> => {
     const files = await fetchExampleProject(id);
     if (!files) { setError(`“${id}” is not available on this server.`); return null; }
@@ -203,14 +174,9 @@ export function useEditorLibrary(): EditorLibraryApi {
   };
 }
 
-/**
- * One world, joined from its files. The only place a project becomes a document, and it happens
- * when a world is opened rather than on every save. Parsing all of Aurendel's files is about as
- * much work as parsing `module.json` was, because it is the same bytes.
- */
+/** One world, joined from its files. */
 export async function loadWorld(key: string): Promise<LoadedWorld | null> {
-  // One metadata row rather than every row filtered down to one, and both reads at once because
-  // neither depends on the other.
+  // One metadata row rather than every row filtered down, and both reads at once.
   const [meta, files] = await Promise.all([readWorldMeta(key), readWorldFiles(key)]);
   if (!meta || Object.keys(files).length === 0) return null;
 

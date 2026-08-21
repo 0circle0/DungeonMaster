@@ -1,13 +1,4 @@
-/**
- * Corridor carving, in three styles.
- *
- * `l` is the classic elbow — two straight runs meeting at a corner. `straight` runs point to point,
- * which suits mines and made places. `winding` is a target-biased walk, for burrows.
- *
- * Every style reports its crossings — the cells that were wall before the corridor went through —
- * because a crossing is where a door belongs. Width carves a broader brush along the run, but a
- * crossing is never widened: a locked door is one door tile.
- */
+/** Corridor carving, in three styles. */
 
 import type { Rng } from '@dm/core';
 import { MapBuilder } from '../../grid/tiles.js';
@@ -18,20 +9,13 @@ export type CorridorStyle = 'l' | 'straight' | 'winding';
 
 export interface CorridorSpec {
   readonly style: CorridorStyle;
-  /** Carve brush, 1–3 tiles. Wall piercings stay one tile wide regardless. */
+  /** Carve brush, 1–3 tiles. */
   readonly width: number;
-  /**
-   * How a `winding` corridor wanders: the chance a step carries on toward the target rather than
-   * drifting, and what a change of direction costs when routing.
-   */
+  /** How a `winding` corridor wanders: the chance of carrying on, and what a turn costs. */
   readonly winding: { readonly continueChance: number; readonly turnPenalty: number };
 }
 
-/**
- * Carve a corridor and return the wall cells it pierced, in carve order. The centre line is carved
- * first, recording piercings; the widening pass then broadens every step that did not pierce a
- * wall, which is what keeps a door one tile wide.
- */
+/** Carve a corridor and return the wall cells it pierced, in carve order. */
 export function carvePath(
   builder: MapBuilder,
   from: Position,
@@ -40,17 +24,9 @@ export function carvePath(
   spec: CorridorSpec,
   rng: Rng,
   minLength = 0,
-  /**
-   * Door spots placed so far, packed `y * width + x`. Widening never carves within a tile of one,
-   * or a later corridor's brush could erode the wall around an earlier corridor's door. This call's
-   * own first crossing is protected the same way.
-   */
+  /** Door spots placed so far, packed `y * width + x`. */
   doorSpots: ReadonlySet<number> = new Set(),
-  /**
-   * Cells no corridor may cross, packed — the interiors and walls of hand-authored static rooms,
-   * whose only openings are their door markers. A styled line that would clip one is re-routed
-   * around it.
-   */
+  /** Cells no corridor may cross, packed: the interiors and walls of static rooms. */
   forbidden: ReadonlySet<number> = new Set(),
 ): Position[] {
   let line =
@@ -58,8 +34,7 @@ export function carvePath(
     : spec.style === 'winding' ? windingLine(from, to, rng, minLength, builder, spec.winding.continueChance)
     : elbowLine(from, to, rng.chance(0.5));
 
-  // The endpoints themselves are legal: a corridor targeting a static room ends on its door marker,
-  // which sits inside the room's rectangle.
+  // The endpoints themselves are legal: a door marker sits inside the room's rectangle.
   const packed = (at: Position) => at.y * builder.width + at.x;
   const isForbidden = (at: Position) =>
     forbidden.has(packed(at)) && !(at.x === from.x && at.y === from.y) && !(at.x === to.x && at.y === to.y);
@@ -81,9 +56,7 @@ export function carvePath(
     // static room's door marker does not pave it over.
   }
 
-  // — widen ————————————————————————————————————————————————
-  // Perpendicular to the direction of travel, never near a doorway and never touching the map's
-  // outer ring.
+  // --- widen: perpendicular to travel, never near a doorway or the outer ring ---
   const protectedSpots = crossings.length > 0
     ? [...doorSpots, crossings[0]!.y * builder.width + crossings[0]!.x]
     : [...doorSpots];
@@ -95,8 +68,7 @@ export function carvePath(
     });
 
   for (let extra = 1; extra < spec.width; extra += 1) {
-    // Alternate sides so a width-2 corridor hugs one side and width-3 is symmetric: offsets +1, -1,
-    // +2, -2, …
+    // Alternate sides: offsets +1, -1, +2, -2, and so on.
     const offset = extra % 2 === 1 ? Math.ceil(extra / 2) : -Math.ceil(extra / 2);
 
     for (let i = 0; i < line.length; i += 1) {
@@ -105,8 +77,8 @@ export function carvePath(
       const after = line[i + 1] ?? at;
       const dx = Math.sign(after.x - before.x);
       const dy = Math.sign(after.y - before.y);
-      if (dx !== 0 && dy !== 0) continue; // a corner widens on neither axis
-      if (dx === 0 && dy === 0) continue; // isolated endpoint
+      if (dx !== 0 && dy !== 0) continue; // a corner widens on neither axis isolated endpoint
+      if (dx === 0 && dy === 0) continue; 
 
       // Perpendicular: offset along the axis not travelled.
       const side = { x: at.x + (dy === 0 ? 0 : offset), y: at.y + (dx === 0 ? 0 : offset) };
@@ -123,12 +95,7 @@ export function carvePath(
   return crossings;
 }
 
-/**
- * A shortest orthogonal path around forbidden cells, preferring straight runs. A* over the grid
- * with a small turn penalty, so the detour reads as a corridor with corners rather than a
- * staircase. Deterministic: ties break on insertion order. Returns null only when the target is
- * walled off entirely.
- */
+/** A shortest orthogonal path around forbidden cells, preferring straight runs. */
 function detourLine(
   from: Position,
   to: Position,
@@ -219,10 +186,7 @@ function elbowLine(from: Position, to: Position, horizontalFirst: boolean): Posi
   return out;
 }
 
-/**
- * Point to point, with every diagonal step squared off so the corridor is walkable by 4-way
- * movement — a diagonal gap reads as two sealed rooms.
- */
+/** Point to point, with every diagonal step squared off for 4-way movement. */
 function straightLine(from: Position, to: Position): Position[] {
   const out: Position[] = [{ ...from }];
   let { x, y } = from;
@@ -247,11 +211,7 @@ function straightLine(from: Position, to: Position): Position[] {
   return out;
 }
 
-/**
- * A target-biased walk: mostly toward the goal, sometimes sideways, finished with an elbow if the
- * wander budget runs out. `minLength` stretches the path, since the per-edge `corridorLength` roll
- * means "at least this long".
- */
+/** A target-biased walk, elbowed to the goal when the wander budget runs out; `minLength` stretches it. */
 function windingLine(
   from: Position,
   to: Position,

@@ -1,6 +1,4 @@
-/**
- * Estimate a dungeon size that can hold the requested room count.
- */
+/** Estimate a dungeon size that can hold the requested room count. */
 
 import { diceMean, generateDungeon, placeRooms, placementInputs } from '@dm/engine';
 import type { PlacementInputs } from '@dm/engine';
@@ -23,7 +21,7 @@ export interface FitRequest {
   readonly roomSize: string;
   /** `corridorLength` notation — the spacing, whatever it is called. */
   readonly corridorLength: string;
-  /** Width over height. 1 is square. */
+  /** Width over height. */
   readonly aspect?: number;
 }
 
@@ -38,9 +36,7 @@ export interface FitResult {
   readonly spacing: number;
 }
 
-/**
- * Find a map size and, if needed, a shorter corridor length that fits the room count.
- */
+/** Find a map size and, if needed, a shorter corridor length that fits the room count. */
 export function fit(request: FitRequest): FitResult {
   const aspect = request.aspect ?? 1;
   const roomMean = diceMean(request.roomSize, 7);
@@ -87,9 +83,7 @@ export interface RoomMeasurement {
   readonly samples: number;
 }
 
-/**
- * Measure how many rooms a dungeon actually generates across a few seeded runs.
- */
+/** Measure how many rooms a dungeon actually generates across a few seeded runs. */
 export function measureRooms(
   module: CompiledModule,
   dungeonId: string,
@@ -109,9 +103,7 @@ export function measureRooms(
 }
 
 
-/**
- * Check a size against the engine's actual placement behavior rather than the heuristic estimate.
- */
+/** Check a size against the engine's actual placement behavior rather than the heuristic estimate. */
 export function sizeToFit(
   module: CompiledModule,
   dungeonId: string,
@@ -146,8 +138,7 @@ export function sizeToFit(
       continue;
     }
 
-    // At the ceiling the spacing gives way, in `fit`'s order of preference —
-    // a long corridor is what was asked for, so it goes last.
+    // At the ceiling the spacing gives way, in `fit`'s order of preference.
     const shorter = nextShorter(notation);
     if (!shorter) break;
     notation = shorter;
@@ -171,11 +162,7 @@ function holds(
   spacing: number,
   samples: number,
 ): boolean {
-  // One room of headroom. Generation draws placement from a *derived* stream
-  // that a probe cannot reproduce, so holding exactly the room count on every
-  // sample here still failed about one real run in twenty — rejection sampling
-  // gets unlucky. Asking the probe for one more than is needed buys the margin
-  // that makes the suggestion one that works rather than one that usually does.
+  // One room of headroom.
   const want = inputs.roomCount + 1;
   for (let seed = 1; seed <= samples; seed += 1) {
     const placed = placeRooms(

@@ -1,21 +1,6 @@
-/**
- * The `dm` global, and the removal of everything non-deterministic.
- *
- * This runs once per mod context before the mod's own code. It is a source
- * string rather than a module because it has to be evaluated *inside* QuickJS,
- * where our imports do not reach.
- *
- * Determinism is achieved by **deletion, not policing**: `Date` and
- * `Math.random` are removed, so a mod cannot reach them by accident or on
- * purpose. `dm.random()` is the only entropy available and it draws from an Rng
- * derived off game state, so a replay reproduces it exactly.
- */
+/** The `dm` global, and the removal of everything non-deterministic. */
 
-/**
- * Host-bound functions the prelude expects to already exist as globals:
- * `__dm_random`, `__dm_query`, `__dm_log`. They are installed by the host
- * before this source is evaluated.
- */
+/** Host-bound globals the prelude expects: `__dm_random`, `__dm_query`, `__dm_log`. */
 export const PRELUDE_SOURCE = `
 (() => {
   'use strict';

@@ -1,13 +1,4 @@
-"""Monsters, and the one rule that governs every entry.
-
-A monster's ability must carry its own damage. `weaponDamage` only fires when an ability produced
-none itself, and it reads the attacker's `equipped`, which for a spawned monster is empty — so an
-ability with no `onUse` hits for nothing and nothing reports it.
-
-`faction` and `creature_type` are required. Both are facts about the world rather than about the
-engine, and a monster that quietly picks up a default fights on the wrong side and validates
-perfectly. A module that wants defaults should wrap this.
-"""
+"""Monsters, and the one rule that governs every entry."""
 
 
 def bite(aid, name, dice, damage_type, description, *, stat="might", range_=0,
@@ -31,17 +22,7 @@ def bite(aid, name, dice, damage_type, description, *, stat="might", range_=0,
     return out
 
 
-# What a creature does when nothing is telling it what to do, keyed by what it is. A table rather
-# than a block per monster: what a thing is decides how it hunts more reliably than which dungeon it
-# was dropped into.
-#
-# Anything absent inherits `rules.temperament`. `investigates` is a preference order rather than a
-# filter, and omitting `tracks` from that list is how a creature comes to have no idea what a
-# footprint means.
-#
-# Every distance below is in module units, and a tile is two feet, because `tileSize` is the
-# smallest declared size and this ruleset declares tiny at 2. Halve to read these in tiles. See
-# `docs/rules-provenance.md` G4a.
+# What a creature does when nothing is telling it what to do, keyed by what it is.
 TEMPERAMENTS = {
     # Ranges wide, hunts by nose, cannot read the ground.
     "beast": {
@@ -51,9 +32,7 @@ TEMPERAMENTS = {
         "investigates": ["smell", "hearing", "sight"],
         "notices": ["hostile", "neutral"],
     },
-    # Keeps to its barrow, and slow about it, but it hunts. `tracks` is absent from the list it acts
-    # on, which is the whole of what it fails to understand. `followsTrails` would be wrong: that
-    # switch turns off every lingering trace, scent included.
+    # Keeps to its barrow, and slow about it, but it hunts.
     "undead": {
         "roamRadius": 12, "investigateRadius": 40, "leashRadius": 60,
         "wanderChance": 0.1, "disengageTurns": 1,
@@ -67,7 +46,7 @@ TEMPERAMENTS = {
         "investigates": ["sight", "hearing", "tracks", "smell"],
         "notices": ["hostile", "neutral"],
     },
-    # Holds its post exactly. Never wanders, never gives up.
+    # Holds its post exactly.
     "construct": {
         "roamRadius": 0, "investigateRadius": 16, "leashRadius": 16,
         "wanderChance": 0, "disengageTurns": 4,
@@ -93,8 +72,7 @@ TEMPERAMENTS = {
         "investigates": ["hearing", "smell", "sight"],
         "notices": ["hostile", "neutral"],
     },
-    # Fire and air leave no nose behind them: this one perceives nothing the ground has kept, which
-    # is what `followsTrails` is for.
+    # Perceives nothing the ground has kept; `followsTrails` is the other half.
     "elemental": {
         "roamRadius": 24, "investigateRadius": 60, "leashRadius": 80,
         "wanderChance": 0.45, "disengageTurns": 2,
@@ -134,8 +112,7 @@ def creature(mid, name, level, xp, attrs, abilities, description, *,
     if guard is not None:
         out["derivedOverrides"] = {"guard": guard}
 
-    # What it is, unless this particular one says otherwise. Merged shallowly, so a monster can say
-    # "like other beasts, but it never leaves the pool" without restating the rest.
+    # What it is, unless this particular one says otherwise.
     habits = dict(TEMPERAMENTS.get(creature_type, {}))
     habits.update(temperament or {})
     if habits:

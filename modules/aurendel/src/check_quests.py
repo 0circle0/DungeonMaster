@@ -1,17 +1,5 @@
 #!/usr/bin/env python3
-"""Check the references and the contracts `npm run validate` cannot.
-
-    python3 check_quests.py
-
-The generic half lives in `dmkit.lint`. What is here is the part that is a fact about Aurendel
-rather than about the engine: the two act gates, the XP curve the acts were tuned against, the empty
-half of the map, and the three tiers.
-
-It reads the built `module.json`, so it checks what actually shipped.
-
-The order of `CHECKS` is the order of the report. Problems and warnings are flat lists printed in
-append order, so reordering would be a diff in every future run.
-"""
+"""Check the references and the contracts `npm run validate` cannot."""
 import _bootstrap  # noqa: F401  sys.path; must come first
 import json  # noqa: E402
 import os  # noqa: E402
@@ -28,10 +16,8 @@ MODULE = os.path.join(ROOT, "modules/aurendel/module.json")
 
 CONTRACT = lint.Contract(
     # The spine quests a side chain may name in `requires`: the act gates from `acts.ACT_GATES`.
-    # Anything else means a chain has grown a dependency on the story.
     act_gate_quests={"the_open_door", "the_undercroft"},
-    # `the_unsealed` is what the wards were built against. It has no rank ladder, gates nothing and
-    # is never gained — it exists so creatures have a side.
+    # `the_unsealed` is what the wards were built against.
     exempt_factions={"the_unsealed"},
     tier_gates=postgame.TIER_GATES,
 )
@@ -41,7 +27,7 @@ TRIAL_MODULES = ("trial_one", "trial_two", "trial_three")
 FINISHED = "aurendel_finished"
 
 
-# --- 8. the XP budget, reported rather than asserted ----------------------
+# --- 8.
 
 def xp_budget(ctx):
     """What a run banks by the end of each act, and the level it reaches."""
@@ -51,10 +37,7 @@ def xp_budget(ctx):
     side_xp = {a: sum(lint.xp_of(q) for q in ctx.side if a in q.get("tags", []))
                for a in acts}
 
-    # Two places in the spine authorise more than any one run can collect, so counting what is
-    # written rather than what is banked would overstate a party's level. Act I forks into the
-    # Crown's commission or the Library's errand and you take one; Act II writes three ward routes
-    # and asks for any two.
+    # Two places in the spine authorise more than any one run can collect.
     branch_xp = sum(lint.xp_of(q) for q in ctx.spine
                     if "act1" in q.get("tags", []) and "branch" in q.get("tags", []))
     spine_run = dict(spine_xp)
@@ -72,14 +55,10 @@ def xp_budget(ctx):
             f"level {ctx.level_at(running_all):>2} doing everything")
 
 
-# --- 9d. hidden threads stand on empty ground ----------------------------
+# --- 9d.
 
 def hidden_threads_stand_on_empty_ground(ctx):
-    """Nothing hidden stands on ground a questline already uses.
-
-    `hiddenspace.EMPTY` is the frozen snapshot of the areas neither the spine nor a side chain
-    touches — the sixty-one places a thread may use.
-    """
+    """Nothing hidden stands on ground a questline already uses."""
     empty = set(hiddenspace.areas())
     for quest in ctx.hidden:
         for objective in objectives_of(quest):
@@ -102,7 +81,7 @@ def hidden_threads_stand_on_empty_ground(ctx):
                 f"{npc_id}: lives in {where!r}, which a questline already uses")
 
 
-# --- 9g. nothing playable early reads a hidden flag ----------------------
+# --- 9g.
 
 def nothing_early_reads_a_hidden_flag(ctx):
     """The hidden quests and the `frost_` gates own their flags."""
@@ -120,14 +99,10 @@ def nothing_early_reads_a_hidden_flag(ctx):
                 f"the main line would then wait on content nobody offers")
 
 
-# --- 10b. trials own the `trial_` prefix ---------------------------------
+# --- 10b.
 
 def trials_own_their_prefix(ctx):
-    """Written, not merely mentioned.
-
-    `walk(..., "flag")` cannot tell a `setFlag` from a `requires.flags[].flag`, and every trial door
-    reads `aurendel_finished` on purpose, so this reads writes only.
-    """
+    """Written, not merely mentioned."""
     trial_flags = set()
     for quest in ctx.trials:
         lint.flag_writes(quest, trial_flags)
@@ -148,7 +123,7 @@ def trials_own_their_prefix(ctx):
                 f"only exists after it")
 
 
-# --- 10e. post-game encounter groups are gated on the ending -------------
+# --- 10e.
 
 def post_game_groups_are_gated(ctx):
     """A group left out of the gating is a level-nineteen monster in Act I."""
@@ -168,8 +143,7 @@ def post_game_groups_are_gated(ctx):
                         f"not gated on the ending — this draws in Act I")
 
 
-# The order of this list is the order of the report, which is why it is spelled out rather than
-# concatenated from two halves.
+# The order of this list is the order of the report.
 CHECKS = [
     lint.objective_targets,                   # §1
     lint.flags_have_writers,                  # §2

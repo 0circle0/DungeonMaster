@@ -1,15 +1,4 @@
-/**
- * The engine's own words, looked up rather than written.
- *
- * Every sentence the engine produces lives in `narrative.systemText` and is reached through here.
- * There is no English fallback: a key that resolves to nothing throws, because a silent empty
- * string is the failure this mechanism exists to prevent. Nothing reaches that throw through a
- * normal load — `compileModule` proves every fragment is present and every message keeps its
- * placeholders.
- *
- * A message may be a plain string or `{ pool }`, which hands it to `narrative.textGrammar` for
- * weighted, condition-gated variation.
- */
+/** The engine's own words, looked up rather than written. */
 
 import type { CompiledModule, SystemTextKey, SystemTextValue } from '@dm/module';
 import { SYSTEM_TEXT_BY_KEY } from '@dm/module';
@@ -19,21 +8,12 @@ import type { Grammar } from './grammar.js';
 /** Values for a message's `{placeholders}`. */
 export type TextParams = Readonly<Record<string, string | number>>;
 
-/**
- * A sentence the engine wants said, carried as a key and its facts.
- *
- * Events hold one of these rather than finished prose, so what the player reads is decided by the
- * module at render time and the same event can render into a terminal, a browser, or a different
- * language.
- *
- * The `text` form is for prose the module already wrote — a dialogue option's `lockedHint`, say —
- * which is authored content passing through and needs no key.
- */
+/** A sentence the engine wants said, carried as a key and its facts. */
 export type Message =
   | { readonly key: SystemTextKey; readonly params?: TextParams }
   | { readonly text: string };
 
-/** Build a message. Shorter than the object literal at ninety-odd call sites. */
+/** Build a message. */
 export function message(key: SystemTextKey, params?: TextParams): Message {
   return params === undefined ? { key } : { key, params };
 }
@@ -47,18 +27,14 @@ function valueOf(module: CompiledModule, key: SystemTextKey): SystemTextValue {
   const declared = (module.source.narrative.systemText as Record<string, SystemTextValue | undefined>)[key];
   if (declared !== undefined) return declared;
 
-  // Only reachable if a module was assembled without compiling it, which the loaders make
-  // impossible. Naming the key beats rendering a blank.
+  // Only reachable if a module was assembled without compiling it, which the loaders make impossible.
   throw new Error(
     `narrative.systemText is missing ${JSON.stringify(key)}` +
       (SYSTEM_TEXT_BY_KEY.has(key) ? '' : ' — and no such message exists'),
   );
 }
 
-/**
- * Render one message. `sceneKey` gives a pool-backed message a stable identity, so the same refusal
- * about the same door reads the same way each time within a run.
- */
+/** Render one message. */
 export function text(
   module: CompiledModule,
   key: SystemTextKey,
@@ -85,9 +61,7 @@ export function render(
   return text(module, msg.key, msg.params ?? {}, seed, sceneKey);
 }
 
-/**
- * Several messages as one readable phrase, for a refusal that has to name a list inside a sentence.
- */
+/** Several messages as one readable phrase, for a refusal that has to name a list inside a sentence. */
 export function joinMessages(
   module: CompiledModule,
   messages: readonly Message[],
@@ -97,10 +71,7 @@ export function joinMessages(
   return list(grammar, messages.map((msg) => render(module, msg)), conjunction ?? grammar.and);
 }
 
-/**
- * The module's own words for joining, counting, and articles. Built once per module: the narrator
- * runs several times a turn and these never change.
- */
+/** The module's own words for joining, counting, and articles. */
 const grammarCache = new WeakMap<CompiledModule, Grammar>();
 
 export function grammarOf(module: CompiledModule): Grammar {

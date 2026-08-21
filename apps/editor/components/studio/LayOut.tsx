@@ -1,23 +1,6 @@
 'use client';
 
-/**
- * Spots for the places in this area that have none.
- *
- * `position` is where the party stands when they arrive somewhere with no
- * interior, and where the place shows on the area map when it has one.
- * Aurendel has 597 of them and every one is placed, because the Python laid
- * them out — a ring inset from the wall, filled clockwise, then a second ring
- * further in.
- *
- * That algorithm is ported and pinned against the Python's own output, and
- * until now was wired to nothing: the only way to place somewhere was to type
- * two numbers. This is the button.
- *
- * Shown as a list before it is applied, never as an implicit rewrite — the same
- * rule prefab fan-out follows, because a dozen positions appearing without
- * warning is not a generator, it is an accident. Anything already placed is
- * left alone, which is what makes it safe to press twice.
- */
+/** Spots for the places in this area that have none. */
 
 import { useState } from 'react';
 import { layOut } from '@dm/authoring';

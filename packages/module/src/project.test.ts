@@ -1,13 +1,4 @@
-/**
- * The gate the project format has to pass.
- *
- * A module split into files and rejoined must be byte-identical to what it was — the same file,
- * because `module.json` is a build artifact and a build whose output drifts is one nobody will run
- * twice.
- *
- * Asserted against the files on disk rather than a re-serialized copy, which became possible once
- * the generators were aligned on character and number formatting.
- */
+/** The gate the project format has to pass. */
 
 import { describe, it, expect } from 'vitest';
 import { readFileSync, existsSync, readdirSync, statSync } from 'node:fs';
@@ -35,16 +26,7 @@ describe('splitProject / joinProject', () => {
     expect(`${JSON.stringify(document, null, 2)}\n`).toBe(text);
   });
 
-  /**
-   * The gate for a project that is actually committed.
-   *
-   * The test above proves the round trip on a document held in memory; this one proves it on the
-   * files in the repository, where `modules/greenmarch/project` is the authored form and
-   * `modules/greenmarch/module.json` its build output.
-   *
-   * Any module that grows a `project/` is covered automatically, so adopting the format opts you
-   * into the check.
-   */
+  /** The gate for a project that is actually committed. */
   it.each(MODULES)('%s: a committed project still builds its module.json', (name) => {
     const dir = fileURLToPath(new URL(`../../../modules/${name}`, import.meta.url));
     const projectDir = join(dir, 'project');
@@ -66,9 +48,6 @@ describe('splitProject / joinProject', () => {
     expect(manifestText, `${name}/project has no project.json`).toBeDefined();
     delete files['project.json'];
 
-    // Prefabs and style tables describe how the world is authored rather than what it contains, so
-    // they are not entries — but a compressed project's entry files are recipes, and a recipe
-    // cannot expand without them. They come out of the entry set and go in as build inputs.
     const prefabs: Prefab[] = [];
     let style: StyleTables = {};
     for (const path of Object.keys(files)) {
@@ -109,9 +88,7 @@ describe('splitProject / joinProject', () => {
     expect(JSON.parse(split.files[`content/monsters/${String(first['id'])}.json`]!)).toEqual(first);
   });
 
-  /**
-   * Rejoining from directory order is not the same document, which is why a manifest exists at all.
-   */
+  /** Rejoining from directory order is not the same document, which is why a manifest exists at all. */
   it('needs the manifest, because sorted filenames are a different order', () => {
     const doc = JSON.parse(raw('aurendel')) as Record<string, unknown>;
     const split = splitProject(doc);
@@ -124,8 +101,6 @@ describe('splitProject / joinProject', () => {
   });
 
   it('keeps an absent optional collection absent', () => {
-    // `narrative.lore` is `.optional()` rather than `.default([])`, so a rebuild that grew an empty
-    // array would change that module's content hash.
     const doc = { id: 'x', narrative: { quests: [] } } as Record<string, unknown>;
     const split = splitProject(doc);
     const { document } = joinProject(split.manifest, split.files);
@@ -165,18 +140,12 @@ describe('splitProject / joinProject', () => {
   });
 });
 
-/**
- * A project holds two kinds of file, and confusing them deletes work. Most of it is derived — split
- * the document and the same files come back — but prefabs and the style tables are what entries
- * were generated from, and the document never mentions them.
- */
+/** A project holds two kinds of file, and confusing them deletes work. */
 describe('authored files are not derived files', () => {
   it('knows which is which', () => {
     expect(isAuthoringFile('prefabs/inn.json')).toBe(true);
     expect(isAuthoringFile('prefabs/instances.json')).toBe(true);
     expect(isAuthoringFile('style.json')).toBe(true);
-    // Read by the editor, the CLI and the Rules panel, and once absent from this list, which made
-    // the first save of a project with one delete it.
     expect(isAuthoringFile('contract.json')).toBe(true);
 
     expect(isAuthoringFile('shell.json')).toBe(false);
@@ -218,19 +187,13 @@ describe('a rebuilt module is the same module', () => {
     if (!before.success || !after.success) return;
     expect(hashModule(after.data)).toBe(hashModule(before.data));
 
-    // A module whose maps live in `maps/<id>/` folders has references the raw document cannot
-    // resolve, so only the two without folders compile straight from the file.
     if (name === 'minimal' || name === 'core_fantasy') {
       expect(compileModule(document).ok).toBe(true);
     }
   });
 });
 
-/**
- * Provenance survives the round trip. A recipe file names a prefab and carries the parameters
- * somebody typed, which is the record that an entry was generated rather than written; expanding it
- * and returning only the entry loses that.
- */
+/** Provenance survives the round trip. */
 describe('joinProject recovers prefab links', () => {
   it('reports the prefab and params of every recipe it expands', () => {
     const prefabs: Prefab[] = [{
@@ -308,11 +271,7 @@ describe('joinProject recovers prefab links', () => {
   });
 });
 
-/**
- * Names and bytes are decided in two passes, and `forEach` skips holes. A writer that indexed
- * `names[i]` instead of walking the entries would put the wrong contents in every file after a
- * hole.
- */
+/** Names and bytes are decided in two passes, and `forEach` skips holes. */
 describe('manifestFor and the file writer agree', () => {
   it('keeps names aligned with entries across an array hole', () => {
     const entries: unknown[] = [];
@@ -330,11 +289,7 @@ describe('manifestFor and the file writer agree', () => {
   });
 });
 
-/**
- * The rule that decides what an entry file says. A recipe that does not expand back into the entry
- * it was made from is a file that changes the world every time it is loaded, and `asRecipe` cannot
- * refuse to make one, so the caller checks.
- */
+/** The rule that decides what an entry file says. */
 describe('entryFileText', () => {
   const inn: Prefab = {
     id: 'inn',
@@ -350,8 +305,7 @@ describe('entryFileText', () => {
   });
 
   it('writes the entry when the prefab cannot reproduce its key order', () => {
-    // The same three keys the template emits, in a different order. Overrides are applied by path
-    // onto the expansion, so no override can move a key.
+    // The same three keys the template emits, in a different order.
     const entry = { kind: 'settlement', id: 'a', name: 'The Ford' };
     const text = entryFileText(entry, { id: 'inn', params: { id: 'a', name: 'The Ford' } }, [inn]);
     expect(JSON.parse(text)).toEqual(entry);
@@ -359,8 +313,6 @@ describe('entryFileText', () => {
   });
 
   it('writes the entry when the template emits a key the entry does not have', () => {
-    // `kind` is missing, so the override value is `undefined`, which `JSON.stringify` drops — the
-    // recipe would expand with `kind` back.
     const entry = { id: 'a', name: 'The Ford' };
     const text = entryFileText(entry, { id: 'inn', params: { id: 'a', name: 'The Ford' } }, [inn]);
     expect(JSON.parse(text)).toEqual(entry);

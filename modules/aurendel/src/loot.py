@@ -1,14 +1,4 @@
-"""Aurendel — what drops, what is on the shelf, and what wanders the roads.
-
-Three things that are easy to get wrong and invisible when you do:
-
-  * `entries` is a weighted wrapper — `{"weight": n, "value": {...}}` — not a bare loot entry.
-  * An encounter table consulted on the overworld is passed no depth, so it defaults to 0. A table
-    with `minDepth` above zero never fires outside a dungeon.
-  * `roomTemplate.encounterChance` is 0 on all fifty-six templates and
-    `world.generationDefaults.encounterChance` is 0 too, so a dungeon stays empty however many
-    monsters exist. `story.attach_content` raises it on the biomes the questline crosses.
-"""
+"""Aurendel — what drops, what is on the shelf, and what wanders the roads."""
 from dmkit.loot import encounters, group, table, w  # noqa: F401
 
 LOOT_TABLES = [
@@ -40,8 +30,6 @@ LOOT_TABLES = [
     table("ice_scraps", [
         w(5, "old_coin"), w(3, "barrow_torc"), w(2, "ward_salt"),
     ], empty=0.45, bonus_skill="survival"),
-    # `alpine_scraps` was keyed for a `dungeon_alpine` biome that does not exist, so it was rolled
-    # by nothing. Everything it dropped drops elsewhere.
 
     # -- act payoffs ------------------------------------------------------
     table("door_warden_hoard", [
@@ -64,9 +52,7 @@ LOOT_TABLES = [
         w(3, "healing_draught", "1d3"), w(2, "warded_coat"),
     ], rolls="3", name="Behind the Ninth Door"),
 
-    # -- side chain payoffs -----------------------------------------------
-    # Smaller than an act's hoard and richer than a wandering table: a detour is paid better per
-    # fight than the road.
+    # --- side chain payoffs ---
     table("setts_hoard", [
         w(4, "old_coin", "2d4"), w(3, "poachers_lamp"), w(2, "healing_draught"),
         w(2, "amber_lump"),
@@ -75,8 +61,7 @@ LOOT_TABLES = [
         w(4, "old_coin", "2d6"), w(3, "tallow_hood"), w(2, "barrow_torc"),
         w(2, "healing_draught", "1d2"),
     ], rolls="2", name="What Was Bricked Up With Him"),
-    # `smugglers_hoard` duplicated `the_run` for the same dungeon, and `DUNGEON_BOSSES` picks
-    # `the_run`.
+    # `smugglers_hoard` duplicated `the_run` for the same dungeon, and `DUNGEON_BOSSES` picks `the_run`.
     table("saltcliff_hoard", [
         w(4, "wreck_brass", "1d4"), w(3, "pilots_glass"), w(2, "amber_lump"),
         w(2, "healing_draught", "1d2"),
@@ -130,8 +115,7 @@ LOOT_TABLES = [
 
     # -- the silvered blade, once, and only for somebody who could use it --
     table("silvered_cache", [
-        # `unique` removes it from the table for good rather than rolling and discarding, so the
-        # odds shown are the odds experienced.
+        # `unique` removes it from the table for good rather than rolling and discarding.
         w(1, "silvered_blade", unique=True,
           requires={"description": "somebody who would know what it is",
                     "skills": [{"skill": "lore", "minRank": 1}]},
@@ -175,9 +159,7 @@ LOOT_TABLES = [
 ]
 
 
-# --- encounters -----------------------------------------------------------
-# `minDepth: 0` throughout: area and POI entry pass no depth, so anything higher never fires above
-# ground.
+# --- encounters: `minDepth: 0` throughout, since area and POI entry pass no depth ---
 
 ENCOUNTER_TABLES = [
     encounters("kingsvale_wanderers", [
@@ -227,8 +209,7 @@ ENCOUNTER_TABLES = [
               weight=2, requires={"minLevel": 7}),
     ], chance=0.5, empty=3),
 
-    # The Act I side chains. The Kingsvale's own wandering table covers the hedges and the road;
-    # these are the water and the city under the city.
+    # The Act I side chains.
     encounters("weirwater_things", [
         group("lampreys", [("weir_lamprey", "1d2", True)], weight=5),
         group("a_hand", [("drowned_hand", "1", False)], weight=1,
@@ -249,13 +230,7 @@ ENCOUNTER_TABLES = [
               requires={"minLevel": 3}),
     ], chance=0.35, empty=6),
 
-    # --- the shared dungeon biomes, bracketed by level --------------------
-    # `dungeon_cave` and `dungeon_delved` are kinds of place rather than places: thirty-three
-    # dungeons between them, from the Hedge Setts to the workings under Karn Dolur. Pointing a whole
-    # biome at one table had the Badger Hole rolling Deeproads horrors at level 1.
-    #
-    # `requires` on a group takes the whole requirement vocabulary, so each tier states the levels
-    # it belongs to and the engine picks from the ones that hold.
+    # --- the shared dungeon biomes, bracketed by level ---
     encounters("cave_things", [
         group("vermin", [("barrow_rat", "1d3", True)], weight=5,
               requires={"maxLevel": 4}),
@@ -284,12 +259,7 @@ ENCOUNTER_TABLES = [
               requires={"minLevel": 7}),
     ], chance=0.45, empty=4),
 
-    # Boss tables are consulted only where a room template says `alwaysEncounter`, and there is
-    # exactly one such room per dungeon. The Dene Barrow is the first dungeon a level-1 party sees,
-    # so its boss room holds hounds; the Door-Warden waits under the Kingshold at level 3.
-    #
-    # `1d2`, not `1d2+1`: three hounds wipes a level-1 party of four in two seeds out of three,
-    # measured.
+    # Boss tables are consulted only where a room template says `alwaysEncounter`.
     encounters("the_barrow_pack", [
         group("pack", [("grave_hound", "1d2", False)])], chance=1, empty=0),
     encounters("the_door_warden", [
@@ -308,8 +278,7 @@ ENCOUNTER_TABLES = [
         group("delver", [("sett_delver", "1", False)])], chance=1, empty=0),
     encounters("the_gaoler", [
         group("gaoler", [("the_gaoler", "1", False)])], chance=1, empty=0),
-    # Fixed counts, not `1d2`. A boss room that rolls one wrecker cannot satisfy an objective asking
-    # for two, and the quest simply never finishes.
+    # Fixed counts, not `1d2`.
     encounters("the_run", [
         group("wreckers", [("strand_wrecker", "2", False),
                            ("drowned_hand", "1", False)])], chance=1, empty=0),
@@ -342,9 +311,7 @@ ENCOUNTER_TABLES = [
     encounters("the_drowned_battery", [
         group("battery", [("reef_thing", "1", False)])], chance=1, empty=0),
 
-    # The last three boss rooms with nothing to draw from. No quest, chain or thread goes near these
-    # dungeons, so what waits at the bottom is a fixed group: a boss room that rolls empty is the
-    # one room a player is guaranteed to notice.
+    # The last three boss rooms with nothing to draw from.
     encounters("the_deeps_below", [
         group("deeps", [("slag_crawler", "2", False),
                         ("fungal_horror", "1", False)])], chance=1, empty=0),
@@ -371,8 +338,6 @@ ENCOUNTER_TABLES = [
               requires={"minLevel": 7}),
     ], chance=0.4, empty=5),
 
-    # The marsh and the mountain, which had no wandering monsters because the questline never
-    # crossed either.
     encounters("marsh_things", [
         group("leeches", [("leech_swarm", "1", True)], weight=5),
         group("walkers", [("bog_walker", "1d2", True)], weight=4),
@@ -387,8 +352,7 @@ ENCOUNTER_TABLES = [
               requires={"minLevel": 5}),
     ], chance=0.35, empty=6),
 
-    # The drowned dungeons, fifteen of the sixty-eight, which generated an empty room on every
-    # visit.
+    # The drowned dungeons, fifteen of the sixty-eight, which generated an empty room on every visit.
     encounters("drowned_things", [
         group("leeches", [("leech_swarm", "1d2", True)], weight=4,
               requires={"maxLevel": 5}),
@@ -401,9 +365,7 @@ ENCOUNTER_TABLES = [
 ]
 
 
-# --- where all of that gets attached --------------------------------------
-# Only the biomes and areas the questline crosses; the rest of the continent stays as empty as it
-# was.
+# --- where all of that gets attached ---
 
 BIOME_ENCOUNTERS = {
     "vale": ["kingsvale_wanderers"],
@@ -416,15 +378,12 @@ BIOME_ENCOUNTERS = {
     "desert": ["glasslands_things"],
     "underdeep": ["deeproads_things"],
     "dungeon_barrow": ["barrow_things"],
-    # Both span the continent and every tier of it, so they draw from the level-bracketed tables
-    # rather than one region's monsters.
+    # Both span the continent, so they draw from the level-bracketed tables.
     "dungeon_delved": ["delved_things"],
     "dungeon_cave": ["cave_things"],
     "dungeon_ruin": ["duskwood_things"],
     "dungeon_ember": ["ember_things"],
     "dungeon_sewer": ["undercity_things"],
-    # Fifteen dungeons across Thornmere, the Isles, the Frostmere and the moor that generated an
-    # empty room on every visit.
     "dungeon_drowned": ["drowned_things"],
     "dungeon_ice": ["ice_things"],
     # And the overworld the side chains cross.
@@ -521,7 +480,6 @@ DUNGEON_BOSSES = {
 LIVE_ROOM_BIOMES = {
     "dungeon_barrow", "dungeon_delved", "dungeon_ruin",
     "dungeon_ember", "dungeon_sewer", "dungeon_cave",
-    # Added with the side chains. `dungeon_drowned` and `dungeon_ice` had seven room templates each
-    # and fifteen dungeons between them, and were never turned on.
+    # Added with the side chains.
     "dungeon_drowned", "dungeon_ice",
 }

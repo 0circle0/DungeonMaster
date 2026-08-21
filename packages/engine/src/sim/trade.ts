@@ -1,11 +1,4 @@
-/**
- * Buying and selling.
- *
- * Stock is derived, not stored. A shopkeeper's shelf is `rollLoot(seed, npc, day)`: a pure function
- * of the run's seed, whose day it is, and what the party qualifies for. That means no new state, no
- * migration, and a shop that restocks at dawn for free — the same derive-from-`state.minute` rule
- * the scent trails follow. What has already been bought today is remembered in `flags`.
- */
+/** Buying and selling. */
 
 import { Rng } from '@dm/core';
 import type { Requirement } from '@dm/module';
@@ -55,10 +48,7 @@ export function shopOf(txn: Transaction, npcId: string): ShopDef | null {
   return txn.module.find<NpcDef>('content.npcs', npcId)?.shop ?? null;
 }
 
-/**
- * Whether this shopkeeper will deal with the party, and what it would take. Refusing with a reason
- * rather than a shrug: greenmarch's Vess wants the Wardens to vouch for you.
- */
+/** Whether this shopkeeper will deal with the party, and what it would take. */
 export function shopBarred(
   txn: Transaction,
   npcId: string,
@@ -95,10 +85,7 @@ export function priceOf(module: Transaction['module'], itemId: string, shop: Sho
   };
 }
 
-/**
- * What is on the shelf today. An item with no `value` is not for sale — greenmarch's brass key is
- * `value: 0` and is a quest object, not merchandise.
- */
+/** What is on the shelf today. */
 export function shopStock(txn: Transaction, npcId: string): readonly StockEntry[] {
   const shop = shopOf(txn, npcId);
   if (!shop?.lootTable) return [];
@@ -153,11 +140,7 @@ export function sellable(txn: Transaction, npcId: string, actor: Entity): readon
   return out.sort((a, b) => a.item.localeCompare(b.item));
 }
 
-/**
- * Whether a shopkeeper deals in this. Matched against the item's `kind` as well as its `tags`,
- * since `buysTags: ["treasure"]` plainly means the treasure kind. An empty list means they will
- * take anything.
- */
+/** Whether a shopkeeper deals in this. */
 function buys(shop: ShopDef, item: ItemDef): boolean {
   if (shop.buysTags.length === 0) return true;
   const qualities = [...(item.tags ?? []), item.kind];
@@ -208,8 +191,7 @@ export function buyItem(
     purse: txn.state.purse - cost,
     flags: { ...txn.state.flags, [key]: Number(txn.state.flags[key] ?? 0) + wanted },
   });
-  // No `currencyChanged` here: `traded` already carries the price, and two lines saying the same
-  // number reads as a bug in the transcript.
+  // No `currencyChanged` here: `traded` already carries the price.
   changeInventory(txn, txn.entity(actor.id) ?? actor, itemId, wanted);
   txn.emit({ type: 'traded', npc: npcId, item: itemId, quantity: wanted, price: cost, bought: true });
   return true;

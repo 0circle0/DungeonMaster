@@ -1,21 +1,6 @@
-/**
- * How content gets reached when nothing points at it.
- *
- * "What references this?" is answered by the schema — `ref()` marks every declared reference. "Is
- * this reachable?" is a different question. Run against `modules/aurendel` before this file
- * existed, a naive unreferenced-content report flagged 137 entries of which 124 were fine: every
- * NPC, because an NPC is placed by naming its own home, and every lore thread, because a thread is
- * read through a DSL path the schema cannot see.
- *
- * A report that is 90% wrong trains an author to scroll past it, and the real findings go with it.
- * So the exceptions are written down with reasons, and `reachability.test.ts` greps the engine to
- * keep the claims from rotting.
- */
+/** How content gets reached when nothing points at it. */
 
-/**
- * Collections whose entries are reached without any static reference. Shared with the used-by
- * panel, which stays quiet about the same things for the same reasons.
- */
+/** Collections whose entries are reached without any static reference. */
 export const REACHED_INDIRECTLY: ReadonlyMap<string, string> = new Map([
   ['narrative.textGrammar', 'named by key from a prose field'],
   ['narrative.arcs', 'a top-level container; nothing contains it'],
@@ -48,15 +33,7 @@ export const REACHED_INDIRECTLY: ReadonlyMap<string, string> = new Map([
   ['content.monsters', 'may be placed only by a generator'],
 ]);
 
-/**
- * Entries that place themselves by naming something else.
- *
- * The reference points the other way: an NPC says where it lives, and the engine gathers everyone
- * whose `home` matches when the party arrives (`sim/enter.ts`, `residentsOf`).
- *
- * `poi.residents` says the same thing from the other end and is a declared reference, which is why
- * only the self-declaring direction needs a note.
- */
+/** Entries that place themselves by naming something else. */
 export interface SelfPlacing {
   readonly collection: string;
   /** The field that does the placing. */

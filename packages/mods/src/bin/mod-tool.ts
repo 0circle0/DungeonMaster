@@ -1,14 +1,4 @@
-/**
- * Mod authoring tool.
- *
- *   npm run mod -- hash mods/engine/thorns-<anything>   re-stamp and rename
- *   npm run mod -- check                                 validate every mod
- *   npm run mod -- pack mods/engine/thorns-<hash>        write a shareable bundle
- *
- * `hash` is the one an author runs constantly: it recomputes the content tag,
- * writes it into `mod.json`, and renames the folder to `<id>-<hash>` so the
- * folder name and the manifest never drift apart.
- */
+/** Mod authoring tool. */
 
 import { existsSync, renameSync, writeFileSync } from 'node:fs';
 import { basename, dirname, join, resolve } from 'node:path';
@@ -31,8 +21,7 @@ function hashCommand(dir: string): void {
   if (!result.ok) fail(`${dir} could not be read:\n${formatModIssues(result.failure.issues)}`);
 
   const { manifest, files } = result.mod;
-  // Recompute from the file map with the old tag removed, which is what
-  // `hashMod` does anyway — the stamped value never feeds its own hash.
+  // Recompute from the file map with the old tag removed.
   const hash = hashMod(manifest, files);
 
   const stamped = { ...manifest, hash };
@@ -80,8 +69,7 @@ function packCommand(dir: string): void {
   if (!result) fail(`${dir} has no mod.json`);
   if (!result.ok) fail(`${dir} could not be read:\n${formatModIssues(result.failure.issues)}`);
 
-  // The bundle hashes identically to the folder, because `hashMod` works on the
-  // file map and neither form contributes anything the other does not.
+  // The bundle hashes identically to the folder.
   const bundle = { manifest: result.mod.manifest, files: result.mod.files };
   const out = `${result.mod.manifest.id}-${result.mod.hash}.dmmod.json`;
   writeFileSync(out, `${JSON.stringify(bundle, null, 2)}\n`);

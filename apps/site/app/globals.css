@@ -1,5 +1,4 @@
-/* Dark and dense, matching the studio. A reference page is read for a long time in one sitting, so
-   the chrome stays quiet and the tables carry the contrast. */
+/* Dark and dense, matching the studio. */
 
 :root {
   --bg: #12131a;
@@ -55,9 +54,7 @@ code { font-family: var(--mono); font-size: 0.9em; }
   margin-bottom: 18px;
 }
 
-/* The two applications, at the top of the sidebar on every page. Filled rather than outlined and
-   full width rather than paired side by side, so they do not read as the first two entries of a
-   list of documentation pages. */
+/* The two applications, at the top of the sidebar on every page. */
 .nav-apps { display: grid; gap: 8px; margin: 0 0 22px; }
 .nav-app {
   display: block;
@@ -95,9 +92,7 @@ code { font-family: var(--mono); font-size: 0.9em; }
 .page-head { border-bottom: 1px solid var(--line); padding-bottom: 14px; margin-bottom: 22px; }
 h1 { font-size: 26px; margin: 0 0 6px; font-weight: 650; }
 h2 { font-size: 19px; margin: 34px 0 10px; font-weight: 650; }
-/* The title and the dotted path sit on one line where there is room and stack where there is not.
-   Without the wrap, a long path is a flex item that will not shrink below its own width and pushes
-   the page sideways on a phone. */
+/* The title and the dotted path sit on one line where there is room and stack where there is not. */
 h3 {
   font-size: 15px;
   margin: 26px 0 8px;
@@ -136,13 +131,10 @@ tbody tr:nth-child(odd) { background: rgba(255, 255, 255, 0.012); }
 .f-key { color: var(--accent); }
 .f-req .req { color: var(--ok); font-size: 12px; }
 .f-def code { color: var(--muted); }
-/* Wide enough that a one-line gloss stays close to one line. On a desktop the column is already
-   wider; on a phone this is what stops every row growing to four lines. */
+/* Wide enough that a one-line gloss stays close to one line. */
 .f-doc { color: var(--text); min-width: 34ch; }
 
-/* The type column carries everything from `number` to a twelve-value enum. Under automatic table
-   layout a `max-width` on the cell is ignored, so the bound goes on an inline-block inside it.
-   Below that width types wrap; above it nothing can force a horizontal scrollbar. */
+/* The type column carries everything from `number` to a twelve-value enum. */
 .f-type { color: var(--muted); }
 .f-type .t-wrap { display: inline-block; max-width: 34ch; }
 
@@ -152,8 +144,7 @@ tbody tr:nth-child(odd) { background: rgba(255, 255, 255, 0.012); }
 .t-scalar, .t-arr, .t-record { color: var(--muted); }
 .t-bar { color: var(--muted); opacity: 0.55; white-space: nowrap; }
 
-/* Enum values as chips. They wrap as a group and read better than a run of pipes once there are
-   more than three or four. */
+/* Enum values as chips. */
 /* Plain `inline`, not `inline-flex`: a flex container is block-level enough that a following `[]`
    cannot sit beside the last chip and drops to its own line. */
 .t-enum { display: inline; }
@@ -196,17 +187,14 @@ tbody tr:nth-child(odd) { background: rgba(255, 255, 255, 0.012); }
   cursor: pointer;
 }
 
-/* A row of code chips that wraps. Not a plain run of inline `<code>`: JSX emits no whitespace
-   between mapped elements, so there is no break opportunity and the row runs off the page. Flex
-   supplies both the wrap and the gap. */
+/* A row of code chips that wraps. */
 .chips {
   display: flex;
   flex-wrap: wrap;
   gap: 5px 10px;
   max-width: 78ch;
 }
-/* A single chip may be longer than a narrow screen, so let one break inside itself as a last
-   resort. */
+/* A single chip may be longer than a narrow screen, so let one break inside itself as a last resort. */
 .chips code { color: var(--muted); min-width: 0; overflow-wrap: anywhere; }
 
 /* ── prose blocks ────────────────────────────────────────── */

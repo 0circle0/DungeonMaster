@@ -1,10 +1,4 @@
-"""Region 7 — The Ember Reach.
-
-Volcanic badlands on the eastern edge, where the weather comes from below. One
-town built on slag, one village at the foot of a vent field, and six stretches
-of ash. The most dangerous overland country south of the ice, and the richest
-in obsidian, iron, and things worth digging up.
-"""
+"""Region 7 — The Ember Reach."""
 from place import (
     area, poi, gate, house, inn, smithy, store, warehouse, guild, square,
     landmark, ruin, delve,

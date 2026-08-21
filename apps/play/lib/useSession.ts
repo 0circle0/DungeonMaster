@@ -1,13 +1,6 @@
 'use client';
 
-/**
- * The session as React state.
- *
- * The engine's `reduce` is deliberately not the React reducer: React 19 StrictMode double-invokes
- * reducers and `state.rng` advances per action, so the second invocation's events would be silently
- * dropped. The engine call happens in the event handler and the React reducer only files results.
- * `sessionReducer` is exported separately so it is testable without a DOM.
- */
+/** The session as React state. */
 
 import { useCallback, useMemo, useReducer, useRef } from 'react';
 import type { CompiledModule } from '@dm/module';
@@ -48,18 +41,14 @@ export interface SessionApi {
   readonly terrain: TerrainIndex;
   /** Apply an engine action — a click, a button, a picked option. */
   readonly dispatchAction: (action: Action) => void;
-  /** Run a typed line. Returns a meta command for the shell to handle, if any. */
+  /** Run a typed line. */
   readonly submit: (input: string) => MetaCommand | null;
   /** Start over, optionally with a created roster and a fresh seed. */
   readonly restart: (seed: number, roster?: readonly CharacterChoicesLike[]) => void;
-  /** Replace the run with a loaded save. Returns an error to show, or null. */
+  /** Replace the run with a loaded save. */
   readonly restore: (text: string, allowDrift?: boolean) => string | null;
   readonly note: (text: string, kind?: Line['kind']) => void;
-  /**
-   * Serialize the run, carrying the lineage and the active mod set. On the API rather than left to
-   * each caller, because a lineage that silently restarts is worse than none — it would claim a
-   * save had only ever seen one module build.
-   */
+  /** Serialize the run, carrying the lineage and the active mod set. */
   readonly serialize: (savedAt: number) => string;
 }
 
@@ -72,14 +61,9 @@ export function useSession(
   const mods = setup?.runtime ?? undefined;
   const modIds = useMemo(() => setup?.identities ?? [], [setup]);
 
-  /**
-   * The save this run was loaded from, so its lineage carries forward. Without it every load-then-
-   * save would start the chain over, and the chain is what says which module build a broken save
-   * came from.
-   */
+  /** The save this run was loaded from, so its lineage carries forward. */
   const previousRef = useRef<SaveFile | null>(null);
-  // Large, non-serializable, constant per module — a ref rather than a memo: `useMemo` is a hint,
-  // and losing the terrain index mid-run would rebuild it silently.
+  // A ref rather than a memo: large, non-serializable, and constant per module.
   const terrainRef = useRef<{ module: CompiledModule; terrain: TerrainIndex } | null>(null);
   if (!terrainRef.current || terrainRef.current.module !== module) {
     terrainRef.current = { module, terrain: new TerrainIndex(module) };
@@ -95,8 +79,7 @@ export function useSession(
     },
   );
 
-  // The frame the next handler should read: React state is asynchronous, and two clicks in one tick
-  // must not both apply to the same starting state.
+  // The frame the next handler should read; React state is asynchronous.
   const liveRef = useRef(frame);
   liveRef.current = frame;
 
@@ -148,8 +131,7 @@ export function useSession(
     const result = loadState(text, module, { allowModuleDrift: allowDrift, mods: modIds });
     if (!result.ok) return result.error;
 
-    // Mod drift never blocks a load: the engine cannot tell whether a different mod set matters, so
-    // it names what differs and leaves the judgement to the player.
+    // Mod drift never blocks a load: it is named, and the judgement is the player's.
     const notes: Line[] = [
       { text: 'Loaded.', kind: 'note' },
       ...result.warnings.map((text): Line => ({ text, kind: 'refusal' })),
@@ -171,8 +153,7 @@ export function useSession(
   const serialize = useCallback(
     (savedAt: number) =>
       saveState(liveRef.current.state, savedAt, {
-        // Carrying the file this run was loaded from is what keeps the lineage a chain rather than
-        // a single link.
+        // Carrying the file this run was loaded from keeps the lineage a chain.
         previous: previousRef.current,
         mods: modIds,
       }),

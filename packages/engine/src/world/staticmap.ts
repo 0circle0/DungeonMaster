@@ -1,20 +1,4 @@
-/**
- * Building a hand-authored map, exactly as written.
- *
- * A static map is the author's promise that a place is *this*, not "something
- * like this": the same castle on every seed, in every run. Accordingly this
- * file consumes **no rng anywhere** — everything it produces is a pure
- * function of the module — and it never "fixes" the map. Where `buildMap`
- * guarantees a connected floor by digging, a disconnected static map is the
- * author's decision (or the linter's warning), never silently re-carved.
- *
- * The layer kinds compose into the existing `MapInstance` shape: terrain
- * layers composite into the tile array (last non-empty cell wins, so a base
- * layer carries the ground and later layers lay roads over it), object layers
- * become the packed-key records the instance already has, and marker layers
- * become named positions — `entry` for arrival, `door` for where corridors may
- * attach when the map is stamped into a dungeon.
- */
+/** Building a hand-authored map, exactly as written. */
 
 import type { CompiledModule, StaticMap } from '@dm/module';
 import type { TileMap, Position } from '../grid/tiles.js';
@@ -42,7 +26,7 @@ export interface BuiltStaticMap {
   readonly spawns: readonly StaticSpawn[];
 }
 
-/** Build a `world.maps` entry. Throws on an unknown id; compile makes that unreachable. */
+/** Build a `world.maps` entry. */
 export function buildStaticMap(module: CompiledModule, mapId: string): BuiltStaticMap {
   const def = module.get<StaticMap>('world.maps', mapId);
 
@@ -95,9 +79,7 @@ export function buildStaticMap(module: CompiledModule, mapId: string): BuiltStat
 
   const map: TileMap = { width, height, tiles };
 
-  // The entry marker names the arrival tile. A map that lacks one (legal for a
-  // room only ever stamped into dungeons) falls back to the first passable
-  // tile in row-major order — deterministic, and never a wall.
+  // The entry marker names the arrival tile.
   const terrain = terrainFor(module);
   const entry = marks[def.entry]?.[0] ?? firstPassable(map, terrain.isPassable.bind(terrain));
 

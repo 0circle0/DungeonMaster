@@ -1,18 +1,4 @@
-/**
- * What a prefab put here, and what you changed afterwards.
- *
- * The point of a linked instance is that editing `inn` updates thirty-six
- * inns; the point of an override is that the one you tuned stays tuned. Both
- * are useless if an author cannot see which fields are which — an entry that
- * silently stops following its prefab, or silently starts, is worse than one
- * that was never linked.
- *
- * The marking that matters is on the fields themselves, in `Field.tsx`, where
- * the author already is. This panel is the summary: the whole list in one
- * place, a value beside each so a changed field can be recognised without
- * hunting for it, and one way back for all of them. Both read the same
- * `usePrefabState`, so they cannot disagree about what an override is.
- */
+/** What a prefab put here, and what you changed afterwards. */
 
 'use client';
 

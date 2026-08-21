@@ -1,14 +1,4 @@
-/**
- * Grid geometry: distance, lines, and area shapes.
- *
- * Distance is Chebyshev — diagonal movement costs the same as orthogonal. It is the convention
- * tabletop games use for a square grid, it keeps circles from looking like diamonds, and it means
- * "within 6" is a square of side 13. Euclidean distance is available where a genuinely round shape
- * is wanted.
- *
- * Lines are Bresenham — integer-only and the same routine for line of sight, line-shaped spells and
- * thrown objects, so a spell can never reach somewhere the eye cannot see it.
- */
+/** Grid geometry: distance, lines, and area shapes. */
 
 import type { Position } from './tiles.js';
 import type { SystemTextKey } from '@dm/module';
@@ -34,10 +24,7 @@ export function isAdjacent(a: Position, b: Position): boolean {
   return distance(a, b) === 1;
 }
 
-/**
- * Every tile on the line from `from` to `to`, inclusive of both. Bresenham's algorithm; the order
- * matters, because callers walk it outward from the origin to find the first blocking tile.
- */
+/** Every tile on the line from `from` to `to`, inclusive of both. */
 export function line(from: Position, to: Position): Position[] {
   const points: Position[] = [];
 
@@ -100,17 +87,13 @@ export interface AreaSpec {
   readonly origin: Position;
   /** Direction for cones and lines; ignored by the rest. */
   readonly toward?: Position;
-  /** Half-angle of a cone, in degrees. Defaults to the quarter-circle blast. */
+  /** Half-angle of a cone, in degrees. */
   readonly angle?: number;
   /** Width of a line shape. */
   readonly width?: number;
 }
 
-/**
- * The tiles an area covers. Shapes are computed geometrically and then filtered by what can
- * actually be reached, since a fireball does not curve around a corner. The caller supplies that
- * filter, because the line-of-sight check needs the map and this module does not have it.
- */
+/** The tiles an area covers. */
 export function area(spec: AreaSpec): Position[] {
   const { shape, size, origin } = spec;
   const radius = Math.max(0, Math.floor(size));
@@ -160,9 +143,7 @@ export function area(spec: AreaSpec): Position[] {
       const direction = normalize(origin, spec.toward);
       const out: Position[] = [];
 
-      // A tile is in the cone when it is within range and its bearing from the origin is within the
-      // cone's half-angle — 45 degrees each side unless the ability says otherwise. A small
-      // tolerance keeps the edges from looking ragged.
+      // In range, and bearing within the cone's half-angle plus a small tolerance.
       const halfAngle = ((spec.angle ?? 45) * Math.PI) / 180;
       const limit = Math.cos(halfAngle) - 0.007;
       for (const point of within(origin, radius)) {
@@ -192,10 +173,7 @@ function normalize(from: Position, to: Position): { x: number; y: number } {
   return { x: dx / length, y: dy / length };
 }
 
-/**
- * The eight-way compass direction from one tile to another, as a `systemText` key. Geometry decides
- * which octant; the module decides what to call it.
- */
+/** The eight-way compass direction from one tile to another, as a `systemText` key. */
 export function bearing(from: Position, to: Position): SystemTextKey {
   const dx = to.x - from.x;
   const dy = to.y - from.y;

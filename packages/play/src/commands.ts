@@ -1,10 +1,4 @@
-/**
- * Command completion, from the same tables the parser reads.
- *
- * The design principle in one line: **the dropdown can never offer a noun the
- * parser would then reject**, because both read the same candidate pools. A
- * completion is a full replacement line, so accepting one is just submitting.
- */
+/** Command completion, from the same tables the parser reads. */
 
 import { VERB_SPECS, visibleEntities, carried, carriedOrNearby, reachablePlaces } from './parser.js';
 import type { ParseContext, Candidate, VerbTakes, VerbSpec } from './parser.js';
@@ -68,12 +62,7 @@ export function candidatesFor(takes: VerbTakes, context: ParseContext): readonly
 const specFor = (word: string): VerbSpec | undefined =>
   VERB_SPECS.find((spec) => spec.spellings.includes(word));
 
-/**
- * Completions for a partial input line.
- *
- * First word ⇒ verbs by prefix over every spelling, canonical spelling first.
- * Verb typed ⇒ the nouns that verb can take, filtered by what follows it.
- */
+/** Completions for a partial input line. */
 export function complete(input: string, context: ParseContext): readonly Completion[] {
   const trimmed = input.replace(/^\s+/, '');
   const words = trimmed.toLowerCase().split(/\s+/);

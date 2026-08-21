@@ -1,14 +1,4 @@
-/**
- * Drive one side chain through the real engine and report what happened.
- *
- *     npx tsx packages/tools/src/bin/playchain.ts eelweir
- *     npx tsx packages/tools/src/bin/playchain.ts eelweir --transcript
- *
- * Not a vitest file. It teleports the party, grants quest items and kills bosses outright rather
- * than fighting them, because what is under test is the chain's wiring — does the giver offer it,
- * do the objectives fire, does the reward land, does the standing move — and not the combat maths,
- * which has its own tests.
- */
+/** Drive one side chain through the real engine and report what happened. */
 import { fileURLToPath } from 'node:url';
 import { Rng } from '@dm/core';
 import { loadModuleFrom } from '@dm/module/load';
@@ -48,13 +38,9 @@ const argv = process.argv.slice(2);
 const CHAIN = argv.find((a) => !a.startsWith('-')) ?? '';
 const SHOW_TRANSCRIPT = argv.includes('--transcript');
 const SEED = Number(argv.find((a) => a.startsWith('--seed='))?.slice(7) ?? 11);
-/** Which way to go at a fork. Run a branching chain once per alternative. */
+/** Which way to go at a fork. */
 const BRANCH = Number(argv.find((a) => a.startsWith('--branch='))?.slice(9) ?? 0);
-/**
- * A trial is post-game content, so the party it needs is a different party. Everything behind
- * `aurendel_finished` is unreachable to the ordinary setup below. Recognised by the tier key, which
- * `trialkit.tier` writes as the second tag.
- */
+/** A trial is post-game content, so the party it needs is a different party. */
 const TRIAL = CHAIN.startsWith('trial_');
 
 if (!CHAIN) {
@@ -72,14 +58,7 @@ function fail(what: string) { problems.push(what); }
 function note(what: string) { notes.push(what); }
 
 const quests = module_.source.narrative.quests as unknown as QuestLike[];
-// `spine` walks the questline itself, which is the regression that matters most: side chains may be
-// skipped, the story may not be unfinishable.
-//
-// Hidden threads are excluded: nobody offers them, they start from a trigger on a doorway, and
-// `playlore.ts` walks them.
-//
-// Trials are excluded too: they are gated on the ending the spine run is trying to reach, so
-// including them reports quests that would not start and rewards that never landed.
+// `spine` walks the questline itself; hidden threads and trials are excluded.
 const chainQuests = CHAIN === 'spine'
   ? quests.filter((q) => {
       const tags = q.tags ?? [];
@@ -93,25 +72,16 @@ if (chainQuests.length === 0) {
   process.exit(2);
 }
 
-/**
- * The level the tier itself asks for, taken from the content rather than restated here, so retuning
- * a tier retunes its driver.
- */
+/** The level the tier itself asks for, taken from the content. */
 const trialLevel = Math.max(
   14,
   ...chainQuests.map((q) => (q.requires as { minLevel?: number } | undefined)?.minLevel ?? 0),
 );
 
 // --- a party good enough to be the subject of the experiment ---------------
-// Level 6 with the ward-keys in the pack clears every act gate, so one driver works for a chain in
-// any act.
 const session: Session = startSession(module_, SEED);
 
-/**
- * Everything the fake actions have emitted and the quest watcher has not seen. `reduce.ts` hands
- * `advanceQuests` the events the turn produced, so a transaction whose events are dropped advances
- * nothing: objectives observe the event stream and there is no polling.
- */
+/** Everything the fake actions have emitted and the quest watcher has not seen. */
 let pending: GameEvent[] = [];
 
 function edit(state: GameState, fn: (txn: Transaction) => void): GameState {
@@ -131,9 +101,7 @@ session.state = edit(session.state, (txn) => {
     { op: 'setFlag', flag: 'act_two_open', value: true },
     { op: 'adjustCurrency', amount: 500 },
   ], txn.state.selected);
-  // The act gates, satisfied outright: Act I wants the barrow dealt with, Act II the undercroft,
-  // Act III any two ward-keys. Skipped when walking the spine itself, which has to start from
-  // nothing.
+  // The act gates, satisfied outright; skipped when walking the spine itself.
   if (CHAIN !== 'spine') {
     for (const id of ['the_open_door', 'word_to_aurenhal', 'the_undercroft']) {
       txn.set({
@@ -146,9 +114,7 @@ session.state = edit(session.state, (txn) => {
     applyOps(txn, [{ op: 'grantItem', target: txn.state.selected, item, quantity: 1 }], txn.state.selected);
   }
 
-  // A party that has finished the game: the ending flag every trial is gated on, the level the
-  // tier's head asks for, and the warrants the tiers below pay out. The relic the door wants is
-  // granted below, after the refusal is checked.
+  // A party that has finished the game: ending flag, tier level, and the warrants below.
   if (TRIAL) {
     for (const id of txn.state.party) {
       const member = txn.entity(id);
@@ -170,8 +136,7 @@ function goTo(target: string): boolean {
   const dungeon = module_.find<{ id: string }>('world.dungeons', target);
   const gate = module_.find<{ id: string }>('world.gates', target);
 
-  // A `reach` may name a gate, satisfied by `gateOpened`. The driver cannot pay a toll or pass a
-  // lore check, so it walks to whatever fronts the gate and reports it open.
+  // A `reach` may name a gate, satisfied by `gateOpened`.
   if (gate && !poi && !area && !dungeon) {
     const fronting = module_.all<{ id: string; gate?: string }>('world.pointsOfInterest')
       .find((entry) => entry.gate === target);
@@ -235,8 +200,7 @@ function has(item: string): number {
 
 /** Push whatever the fake actions emitted through the quest watcher. */
 function pump() {
-  // Drained before the edit, because `edit` appends to the same list and an event fed to the
-  // watcher twice counts twice against a counted objective.
+  // Drained before the edit, since `edit` appends to the same list.
   const batch = pending;
   pending = [];
   session.state = edit(session.state, (txn) => {
@@ -244,7 +208,7 @@ function pump() {
   });
 }
 
-// --- 1. is the head offered at all? ---------------------------------------
+// --- 1.
 const unlockedWithin = new Set(chainQuests.flatMap((q) =>
   (q.unlocks ?? []).filter((u) => chainQuests.some((c) => c.id === u))));
 const head = chainQuests.find((q) => !unlockedWithin.has(q.id));
@@ -268,10 +232,7 @@ if (!head) {
   }
 }
 
-// --- 1b. the door that wants the relic worn -------------------------------
-// Only trials have one: a tier tuned for fabled gear should refuse a party that has not brought
-// any, say so in words, and open once they have put it on. Driven through `openGate` rather than by
-// setting the flag, which would prove nothing about the door.
+// --- 1b.
 if (TRIAL) {
   const door = module_.all<{ id: string; tags?: string[]; requires?: unknown }>('world.gates')
     .find((g) => (g.tags ?? []).includes('trial') && JSON.stringify(g).includes(CHAIN));
@@ -308,8 +269,7 @@ if (TRIAL) {
       if (tryOpen()) note(`${door.id}: opens once ${relic} is worn`);
       else fail(`${door.id}: refuses a party wearing ${relic}, which is what it asked for`);
 
-      // And take it off again: leaving it on makes the reward check downstream measure a swap
-      // rather than a gain.
+      // And take it off again, so the reward check measures a gain rather than a swap.
       session.state = edit(session.state, (txn) => {
         const actor = txn.entity(txn.state.selected);
         if (actor) unequipItem(txn, actor, relic);
@@ -318,10 +278,7 @@ if (TRIAL) {
   }
 }
 
-// --- 2. walk every quest, in order ----------------------------------------
-// Declaration order, which `sidekit.chain` and the act files emit in play order. Following
-// `unlocks` from the head silently drops every branch — Act I forks and Act II has three parallel
-// routes.
+// --- 2.
 const order: QuestLike[] = chainQuests;
 
 for (const quest of order) {
@@ -329,8 +286,7 @@ for (const quest of order) {
     startQuest(txn, quest.id, Rng.fromSeed(SEED).derive(`start:${quest.id}`));
   });
   if (questState(quest.id)?.status !== 'active') {
-    // A quest locked out by one already taken is the branch working: Act I's commission and errand
-    // exclude each other with `without`, and exactly one is refused on every run.
+    // A quest locked out by one already taken is the branch working.
     const excluded = (quest.requires?.without?.quests ?? [])
       .map((clause) => clause.quest)
       .filter((id) => ['active', 'complete'].includes(questState(id)?.status ?? ''));
@@ -344,11 +300,7 @@ for (const quest of order) {
     ...(quest.stages ?? []).flatMap((s) => s.objectives),
   ];
 
-  /**
-   * One pass at every unfinished objective, repeated until a pass changes nothing. `ordered` is the
-   * default and an objective that is not yet active ignores the event that would satisfy it, so a
-   * later step must be attempted again after an earlier one lands.
-   */
+  /** One pass at every unfinished objective, repeated until a pass changes nothing. */
   const attempt = (objective: ObjectiveLike) => {
     switch (objective.kind) {
       case 'reach':
@@ -360,8 +312,7 @@ for (const quest of order) {
         }
         break;
       case 'talk':
-        // `matchesEvent` accepts the npc's id as well as an entity's statblock, so the conversation
-        // need not be held to prove the objective is wired to the right person.
+        // `matchesEvent` accepts the npc's id as well as an entity's statblock.
         session.state = edit(session.state, (txn) => {
           txn.emit({ type: 'dialogueStarted', npc: objective.target!, dialogue: `${objective.target!}_talk` });
         });
@@ -372,8 +323,7 @@ for (const quest of order) {
         });
         break;
       default:
-        // A `custom` objective waits on a flag somebody sets in conversation. The driver cannot
-        // hold one, so it sets the flag and reports that it had to.
+        // A `custom` objective waits on a flag somebody sets in conversation.
         break;
     }
     pump();
@@ -391,8 +341,7 @@ for (const quest of order) {
     if (outstanding().length === before) break;
   }
 
-  // Whatever survives is flag-driven. Set each and say so, because a chain that needs a great many
-  // of these plays as a cutscene.
+  // Whatever survives is flag-driven.
   for (const objective of outstanding()) {
     const flags = reachableFlags(objective);
     if (flags.length === 0) {
@@ -431,14 +380,7 @@ function flagsUnder(node: unknown, out: string[] = []): string[] {
   return out;
 }
 
-/**
- * The flags one player could actually have set to finish this objective.
- *
- * `resolved_either_way` builds `{any: [...]}` over mutually exclusive outcomes whose dialogue
- * options are `onceOnly` on two different people. Satisfying an `any` by setting every branch
- * completes the quest but tests a state no run can reach, and runs both halves of the `either` in
- * `onComplete`. So one branch is chosen, and `--branch=N` walks the others.
- */
+/** The flags one player could actually have set to finish this objective. */
 function reachableFlags(objective: ObjectiveLike & { when?: unknown }): string[] {
   const when = objective.when as { any?: unknown[] } | undefined;
   if (when && Array.isArray(when.any) && when.any.length > 0) {
@@ -448,15 +390,14 @@ function reachableFlags(objective: ObjectiveLike & { when?: unknown }): string[]
   return flagsUnder(objective);
 }
 
-// --- 3. did it pay? --------------------------------------------------------
+// --- 3.
 const rewardItems = order.flatMap((q) => (q.rewards?.items ?? []).map((r) => r.item));
 for (const item of rewardItems) {
   if (has(item) < 1) fail(`reward ${item} never reached the party`);
   else note(`reward ${item} is in the pack`);
 }
 
-// A chain's gear must actually do something, and `skillBonuses` is invisible until something is
-// worn.
+// A chain's gear must actually do something, and `skillBonuses` is invisible until something is worn.
 for (const item of rewardItems) {
   const definition = module_.find<{ id: string; slot?: string; skillBonuses?: Record<string, number> }>('content.items', item);
   if (!definition?.skillBonuses) continue;
@@ -479,7 +420,7 @@ for (const item of rewardItems) {
   }
 }
 
-// --- 4. did anybody's opinion change? -------------------------------------
+// --- 4.
 const fresh = startSession(module_, SEED);
 const factionsMoved = Object.entries(session.state.reputation)
   .filter(([id, value]) => value !== (fresh.state.reputation[id] ?? 0))
@@ -488,7 +429,7 @@ const factionsMoved = Object.entries(session.state.reputation)
 if (factionsMoved.length === 0) fail('no faction standing moved anywhere in the chain');
 else note(`standing moved: ${factionsMoved.join(', ')}`);
 
-// --- 5. the spine is still winnable ---------------------------------------
+// --- 5.
 const ending = (module_.source.narrative.arcs as unknown as { id: string; isEnding?: boolean; quests: string[] }[])
   .find((a) => a.isEnding);
 if (ending && CHAIN !== 'spine') {

@@ -1,9 +1,4 @@
-"""Region 8 — Thornmere.
-
-Drowned cypress swamp in the south-east. Everything here stands on piles or
-does not stand. One town on a boardwalk, two villages, five stretches of black
-water, and paths that are only paths this season.
-"""
+"""Region 8 — Thornmere."""
 from place import (
     area, poi, gate, toll, house, inn, smithy, store, workshop, temple,
     warehouse, square, landmark, ruin, delve,

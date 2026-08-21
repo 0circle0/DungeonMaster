@@ -1,13 +1,6 @@
 'use client';
 
-/**
- * Hides rows that do not match, rather than re-rendering them.
- *
- * The tables are server rendered and there are a thousand rows across the site,
- * so the filter walks the DOM the build already produced. A section whose rows
- * are all hidden hides itself, which is what keeps the page readable at three
- * characters typed.
- */
+/** Hides rows that do not match, rather than re-rendering them. */
 
 import { useCallback, useState } from 'react';
 

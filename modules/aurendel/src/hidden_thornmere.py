@@ -1,20 +1,4 @@
-"""Thornmere's hidden threads — three, in the five areas nothing else uses.
-
-Reedy Bottom is a reed-cutting village with a thatcher, a store and an inn
-called the Bundle, and nobody had ever stood in any of them. The Sunken Causeway
-has a toll house two hundred years abandoned. The Cypress Maze has knees
-standing in rows. The Hummocks have a hermit's island with no hermit. The Leech
-Channels are warm.
-
-Three threads, and they share a shape: **the marsh keeps accounts.**
-
-  * **The Knees** — cypress knees do not grow in rows, and these are in rows,
-    and the rows point at the mound.
-  * **The Toll That Is Still Collected** — the toll house has taken nothing for
-    two hundred years and the ledger balances every year.
-  * **What the Hermit Was Watching** — an island with a hut, a fire pit and
-    ninety years of tally marks, and nobody in the marsh can name the hermit.
-"""
+"""Thornmere's hidden threads — three, in the five areas nothing else uses."""
 from dmkit.quests import npc, shop, quest, reach, kill, flagged, arc
 from lore import (
     clue, thread, rumour, favour, talk, coldshoulder, finding, rumoured,
@@ -187,11 +171,7 @@ POI_PATCHES = {
     "cypress_maze_the_mound": {**rumoured("thorn_knees", base=21, step=3, entries=4,
                                           skill="survival"),
                                "gate": "thorn_mound_rows"},
-    # The collector is not down a dungeon, so `BOSSES` cannot reach him: the
-    # anchor is a point of interest and the table has to hang on the place
-    # itself. Both halves are needed — `enterPoi` reads `poi.encounterChance ??
-    # 0`, so a place that declares a table and no chance spawns nothing at all,
-    # and the kill objective waits forever on a monster that is nowhere.
+    # A point of interest, so the table and `encounterChance` both hang on the place.
     "sunken_causeway_toll_ruin": {**rumoured("thorn_toll", base=19, step=3, entries=4),
                                   "gate": "thorn_toll_strongroom",
                                   "encounterTables": ["thorn_toll_boss"],
@@ -223,9 +203,7 @@ POI_TRIGGERS = {
         "effects": [{"emit": {"event": "startQuest",
                               "data": {"quest": "thorn_the_knees"}}}],
     }],
-    # One key, one list. This is a plain dict literal and a repeated key
-    # silently discards the earlier value — which is how the toll ruin's
-    # `finding` was written, accepted, and never reached the module.
+    # One key, one list.
     "sunken_causeway_toll_ruin": [
         finding("thorn_found_toll",
                 "A counting room, and the hinges oiled.", "thorn_toll_paid"),

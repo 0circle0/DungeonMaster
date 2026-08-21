@@ -1,16 +1,4 @@
-/**
- * Phase 0 spike: does QuickJS-in-WASM meet the three properties the mod design
- * depends on?
- *
- *   1. It instantiates and evaluates **synchronously** after an async setup, so
- *      `reduce()` can stay a synchronous pure function.
- *   2. Non-determinism can be removed by construction — `Date` and
- *      `Math.random` deleted rather than policed.
- *   3. A runaway mod is interrupted rather than hanging the host.
- *
- * If any of these fail the sandbox choice changes, so this file runs first and
- * is kept afterwards as the regression guard on the QuickJS upgrade path.
- */
+/** Phase 0 spike: does QuickJS-in-WASM meet the three properties the mod design depends on? */
 
 import { describe, it, expect, beforeAll } from 'vitest';
 import { newQuickJSWASMModuleFromVariant } from 'quickjs-emscripten-core';
@@ -171,9 +159,6 @@ describe('quickjs spike', () => {
       // eslint-disable-next-line no-console
       console.log(`[bench] ${payload.length}B payload: ${perCall.toFixed(1)}µs per crossing`);
 
-      // A turn makes well under 20 crossings, so anything at or below ~100µs
-      // keeps mods invisible next to perceiveAll and runAiTurns. Generous
-      // enough not to flake on a loaded machine.
       expect(perCall).toBeLessThan(100);
     } finally {
       context.dispose();

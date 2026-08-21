@@ -1,8 +1,4 @@
-/**
- * The bottom console. Same diagnostics the CLI prints, but each row jumps to
- * the owning entry's form rather than to a line of raw JSON — fixing happens
- * where the field is. Rows the resolver cannot place fall back to raw JSON.
- */
+/** The bottom console. */
 
 import { useState } from 'react';
 import type { Validation } from '@/lib/store';
@@ -14,14 +10,7 @@ export function ProblemsConsole(props: {
   onOpen: (diagnostic: Diagnostic) => void;
 }) {
   const [open, setOpen] = useState(true);
-  /**
-   * Notes are hidden by default, and that is the point of having them.
-   *
-   * A note is a thing worth knowing, not a thing to fix — "this monster has no
-   * morale, so it fights to the death" is a choice somebody made. There are 127
-   * of those on aurendel and three real findings, and a list where the three
-   * are outnumbered forty to one is a list nobody reads to the end of.
-   */
+  /** Notes are hidden by default, and that is the point of having them. */
   const [showNotes, setShowNotes] = useState(false);
   const { errors, warnings, infos } = props.validation;
   const all = [...errors, ...warnings, ...(showNotes ? infos : [])];

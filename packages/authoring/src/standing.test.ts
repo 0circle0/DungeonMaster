@@ -1,11 +1,4 @@
-/**
- * The clamp is the design, so it is what the tests are about.
- *
- * `standingDc` builds a requirement expression, and `dcAt` predicts what it
- * comes to — two implementations of one rule, which is a liability unless
- * something proves they agree. The DSL evaluator settles it: the expression is
- * run for real, at a range of standings, against `dcAt`'s answer.
- */
+/** The clamp is the design, so it is what the tests are about. */
 
 import { describe, it, expect } from 'vitest';
 import { Rng } from '@dm/core';
@@ -40,8 +33,6 @@ describe('standingDc', () => {
   });
 
   it('is fractional between steps, because the DSL divides for real', () => {
-    // Not a rounding bug to fix: this is what every shipped standing check
-    // already does, and 19.4 means the roll has to be 20.
     expect(run(standingDc(14, 'wardens'), -27)).toBeCloseTo(19.4);
     expect(dcAt(14, -27)).toBeCloseTo(19.4);
   });

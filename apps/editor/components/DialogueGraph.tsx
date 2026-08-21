@@ -1,7 +1,4 @@
-/**
- * Render dialogue reachability as a graph.
- * Nodes are laid out by depth from the start node; unreachable nodes sit in a trailing column.
- */
+/** Render dialogue reachability as a graph. */
 
 'use client';
 

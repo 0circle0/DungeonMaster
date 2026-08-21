@@ -59,9 +59,7 @@ function transact(state: GameState, module = GREENMARCH): Transaction {
   return new Transaction(state, module);
 }
 
-// Greenmarch authors no interior POIs, so interior tests run on a fixture: the village given a
-// small generated interior, and an outdoor `position` outside the interior's bounds, which is the
-// normal case since `position` is in area coordinates.
+// Greenmarch authors no interior POIs, so interior tests run on a fixture.
 function withInteriorVillage(): CompiledModule {
   const dir = fileURLToPath(new URL('../../../modules/greenmarch', import.meta.url));
   const doc = readAssembledModule(dir).doc as unknown as {
@@ -158,12 +156,7 @@ describe('triggers', () => {
     expect(next.flags['seen_fens']).toBe(true);
   });
 
-  /**
-   * A place that fronts a dungeon is still a place you arrived at. `enterPoi` hands off to
-   * `enterDungeon` for these, and must run the point of interest's own triggers first — in Aurendel
-   * those are the three ways into the Deeproads, which set the only three flags that finish
-   * `the_way_below`.
-   */
+  /** A place that fronts a dungeon is still a place you arrived at. */
   it('fires a dungeon mouth\'s own triggers before descending', () => {
     const dir = fileURLToPath(new URL('../../../modules/greenmarch', import.meta.url));
     const doc = readAssembledModule(dir).doc as unknown as {
@@ -248,8 +241,6 @@ describe('gates', () => {
     expect(outcome.opened).toBe(true);
   });
 
-  // The exits panel and the affordance list decide "barred" by reading this flag, so a door the
-  // party has opened must stop reading as locked.
   it('records that it stands open, so the way stops reading as barred', () => {
     const state = fresh();
     const hero = state.entities['e:1']!;
@@ -263,8 +254,6 @@ describe('gates', () => {
     expect(txn.finish().state.flags['gate:mill_door:open']).toBe(true);
   });
 
-  // A standing door is not re-opened on the way back through: `onOpen` fires once, so a gate that
-  // grants something cannot be farmed.
   it('does not open twice', () => {
     const state = fresh();
     const hero = state.entities['e:1']!;
@@ -283,8 +272,6 @@ describe('gates', () => {
     expect(second.finish().events.filter((e) => e.type === 'gateOpened')).toHaveLength(0);
   });
 
-  // `minTier` compiles to a comparison against the `tiers` namespace; an unpopulated one resolved
-  // to null and threw inside the comparison, from `useAbility`, which does not catch.
   it('resolves a mastery-tier gate on an ability instead of throwing', () => {
     const state = fresh();
     const hero = state.entities['e:1']!;
@@ -407,8 +394,8 @@ describe('quests', () => {
     expect(hero.level).toBeGreaterThanOrEqual(3);
 
     const after = hero.inventory.find((s) => s.item === 'rope')?.quantity ?? 0;
-    expect(after).toBe(before + 2);          // level 2 granted two ropes
-    expect(txn.state.flags['veteran']).toBe(true); // level 3 set the flag
+    expect(after).toBe(before + 2);          // level 2 granted two ropes level 3 set the flag
+    expect(txn.state.flags['veteran']).toBe(true); 
   });
 
   it('adds proficiency to a save the class is trained in', () => {
@@ -463,8 +450,6 @@ describe('quests', () => {
     void allObjectives;
   });
 
-  // The cursor is derived from the completed list rather than stored, so these pin the derivation
-  // rather than a field.
   it('tracks which stage a quest is on', () => {
     const quest = GREENMARCH.get<QuestDef>('narrative.quests', 'the_mill_door');
     expect(stageIndexOf(quest, new Set())).toBe(0);
@@ -546,12 +531,7 @@ describe('quests', () => {
   });
 });
 
-// Only the selected character used to move; the rest stood where they had been
-// dropped until the player switched to each one and walked them individually.
 describe('consequences of consequences', () => {
-  // Everything a quest emits used to land after the scan that looks for it, so
-  // `remembersAs` produced no deed at all, and a quest could not hand out
-  // another quest on completion.
   function finishQuestVia(doc: Record<string, unknown>): ReturnType<typeof reduce> {
     const result = compileModule(doc);
     if (!result.ok) throw new Error(`fixture failed: ${JSON.stringify(result.errors)}`);
@@ -604,8 +584,6 @@ describe('consequences of consequences', () => {
   });
 
   it('counts a multi-kill objective once per death, not once per pass', () => {
-    // The reason each pass sees only the previous pass's events: re-feeding the
-    // accumulated list would tally the same corpse twice.
     const txn = transact(fresh());
     startQuest(txn, 'the_mill_door', Rng.fromSeed(1));
     const questState = txn.state.quests['the_mill_door']!;
@@ -623,9 +601,6 @@ describe('consequences of consequences', () => {
 });
 
 describe('objectives that are gated', () => {
-  // Both `requires` and `when` were accepted by the schema and read by nothing
-  // on an event-driven objective, so an author who wrote either got no gate and
-  // no warning.
   function withGatedKill(gate: Record<string, unknown>): CompiledModule {
     const dir = fileURLToPath(new URL('../../../modules/greenmarch', import.meta.url));
     const doc = readAssembledModule(dir).doc as unknown as {
@@ -744,8 +719,6 @@ describe('walking together', () => {
     for (const id of off.party) expect(off.entities[id]!.following).toBeNull();
   });
 
-  // In a fight initiative decides who acts; auto-walking the others would spend
-  // their turns before the player had a say.
   it('refuses to set a follow order in combat', () => {
     const state = party();
     const fighting: GameState = {
@@ -762,8 +735,6 @@ describe('walking together', () => {
   });
 });
 
-// `victoryWhen` was declared, linted, and evaluated by nothing, so winning was
-// unreachable however well the party played.
 describe('ending the game', () => {
   it('wins when the module says the party has won', () => {
     const state = fresh();
@@ -783,14 +754,7 @@ describe('ending the game', () => {
 });
 
 describe('dialogue', () => {
-  /**
-   * The party standing beside Vess.
-   *
-   * Built the way the game builds her — an npc entity keyed by her own content
-   * id. The fixture used to fake one by putting an *npc* id in `statblock`,
-   * which is a field that means "the monster whose numbers this uses", and so
-   * hid the fact that dialogue could not find a person who really had one.
-   */
+  /** The party standing beside Vess. */
   function withVess(state = fresh()): GameState {
     const vess = spawnNpc(GREENMARCH, 'vess');
     return {
@@ -859,15 +823,11 @@ describe('dialogue', () => {
     const txn = transact(cold);
     startDialogue(txn, txn.entity('e:1')!, txn.entity('vess')!, Rng.fromSeed(1));
 
-    // Asserted on the event rather than on lingering state: `cold` offers no
-    // reply, and a node with nothing to say back closes the conversation.
     const { state: after, events } = txn.finish();
     expect(events.find((event) => event.type === 'dialogueNode')).toMatchObject({ node: 'cold' });
     expect(after.dialogue).toBeNull();
   });
 
-  // Every option in greenmarch led to another node, and no verb ended a
-  // conversation, so talking to Vess was a room with no door.
   it('lets the party stop talking', () => {
     const txn = transact(withVess());
     startDialogue(txn, txn.entity('e:1')!, txn.entity('vess')!, Rng.fromSeed(1));
@@ -885,15 +845,7 @@ describe('dialogue', () => {
     expect(txn.state.dialogue).toBeNull();
   });
 
-  /**
-   * `onceOnly` says "selectable once, ever" and meant "once per conversation":
-   * it was checked against `state.dialogue.taken`, which `startDialogue` clears
-   * every time you walk up to someone. So anything a person could only tell you
-   * once, they told you as often as you asked.
-   */
   describe('an option marked once-only', () => {
-    // `haggle` is greenmarch's only shipped one-shot, and it is gated on the
-    // mill job being active — so the quest has to be running for it to show.
     const once = (state = withVess()) => {
       const txn = transact(state);
       startQuest(txn, 'the_mill_door', Rng.fromSeed(1));
@@ -915,9 +867,6 @@ describe('dialogue', () => {
     });
 
     it('is refused when asked for by id, not merely hidden', () => {
-      // A front end that dispatches by id, or a player typing the reply back,
-      // walked straight past the filter in `visibleOptions`. An option that
-      // hands over an item cannot be answerable twice.
       const first = once();
       chooseOption(first, 'haggle', first.entity('e:1')!, Rng.fromSeed(1));
 
@@ -951,12 +900,6 @@ describe('dialogue', () => {
   });
 });
 
-/**
- * `difficulty` used to be `z.number().int()` in six places and `ExprSchema` in
- * three, which meant a lock could scale with the world and a conversation could
- * not. Widening the six is only safe if a bare integer is untouched by it, so
- * that is the first thing asserted here.
- */
 describe('a difficulty is a formula', () => {
   const hero = () => {
     const state = fresh();
@@ -983,8 +926,6 @@ describe('a difficulty is a formula', () => {
   });
 
   it('reads standing, which is the point of the change', () => {
-    // Hostility raises the bar rather than closing the door: at -30 with the
-    // wardens this is a hard roll, at +30 it is a formality. Neither is a gate.
     const { state, actor } = hero();
     const expr = { sub: [14, { clamp: [{ div: [{ ref: 'reputation.wardens', else: 0 }, 5] }, -6, 6] }] };
     const at = (standing: number) =>
@@ -996,21 +937,15 @@ describe('a difficulty is a formula', () => {
   });
 
   it('falls back rather than becoming automatic when a formula yields no number', () => {
-    // The failure that matters. Returning 0 would turn a mistuned gate into one
-    // that opens on any roll, which is worse than one that is merely wrong.
+    // The failure that matters.
     const { state, actor } = hero();
     expect(difficultyFrom(GREENMARCH, state, actor, { concat: ['not', 'a number'] }, Rng.fromSeed(1)))
       .toBeUndefined();
-    // `skillCheck` hands `undefined` to `difficultyOf`, which is the module's
-    // own default — 12 for greenmarch.
     const roll = skillCheck(GREENMARCH, Rng.fromSeed(1), actor, 'lockpicking', undefined);
     expect(roll.against).toBe(12);
   });
 
   it('a gate written with a formula is rolled against that number', () => {
-    // End to end through `openGate`, so the wiring is proven and not just the
-    // helper: greenmarch's mill door is a flat 14, and the same door written as
-    // a formula over level has to land somewhere else.
     const { state, actor } = hero();
     const flat = GREENMARCH.get<{ bypass?: { difficulty: unknown } }>('world.gates', 'mill_door');
     expect(flat.bypass?.difficulty).toBe(14);
@@ -1143,8 +1078,6 @@ describe('entering places', () => {
     expect(new Set(positions).size).toBe(positions.length);
   });
 
-  // `residents` was declared by the content and instantiated by nothing, so the
-  // quest-giver named in the module was not on the map to be talked to.
   it('puts a place\'s residents on the map when the party arrives', () => {
     const txn = transact(fresh());
     const actor = txn.entity('e:1')!;
@@ -1181,16 +1114,11 @@ describe('entering places', () => {
     const actor = txn.entity('e:1')!;
     enterPoi(txn, terrain, 'millford_village', actor, Rng.fromSeed(5), true);
 
-    // millford_village sits at (6,6); arriving must put the party there rather
-    // than leaving them wherever they were on the area map.
     const leader = txn.entity(txn.state.selected)!;
     expect(Math.max(Math.abs(leader.position.x - 6), Math.abs(leader.position.y - 6)))
       .toBeLessThanOrEqual(2);
   });
 
-  // A place with no interior map produced no events at all, so entering it was
-  // indistinguishable from the command doing nothing — and a "reach the mill"
-  // objective could never complete, because there was no `enteredMap` to see.
   it('says so when the party arrives somewhere with no interior', () => {
     const txn = transact(fresh());
     const actor = txn.entity('e:1')!;
@@ -1203,10 +1131,7 @@ describe('entering places', () => {
     expect((arrived as { data: Record<string, unknown> }).data['place']).toBe('the_mill');
   });
 
-  // The same, for a place whose whole purpose is to be a way down. Handing
-  // straight off to the dungeon meant a `reach` objective naming a barrow
-  // mouth or a stair head could never complete, and since `objective.target`
-  // is a plain id rather than a ref, nothing anywhere said so.
+  // The same, for a place whose whole purpose is to be a way down.
   it('says so when the party arrives at a way down, before descending', () => {
     const txn = transact(fresh());
     const actor = txn.entity('e:1')!;
@@ -1219,8 +1144,6 @@ describe('entering places', () => {
 
     // And it still descends: the arrival does not replace the dungeon.
     expect(txn.state.location).toMatchObject({ kind: 'dungeon', dungeon: 'fen_caves' });
-    // The arrival is announced before the descent, so a quest watching for it
-    // sees the point of interest and then the map, in that order.
     const enteredMap = events.findIndex((e) => e.type === 'enteredMap');
     expect(events.indexOf(arrived!)).toBeLessThan(enteredMap);
   });
@@ -1235,8 +1158,6 @@ describe('entering places', () => {
     expect(txn.state.currentMap).toBe('poi:millford_village');
     expect(txn.entity(txn.state.selected)!.map).toBe('poi:millford_village');
 
-    // Step back outside, then enter again: the return visit used to leave the
-    // party standing on the area map at the POI's outdoor coordinates.
     placeParty(txn, inside, 'here', { x: 6, y: 6 });
     enterPoi(txn, inside, 'millford_village', actor, Rng.fromSeed(5), true);
     expect(txn.state.currentMap).toBe('poi:millford_village');
@@ -1251,8 +1172,6 @@ describe('entering places', () => {
 
     enterPoi(txn, inside, 'millford_village', actor, Rng.fromSeed(5), true);
 
-    // The outdoor position (24,5) does not exist on the 7×7 interior; anchoring
-    // there used to leave residents standing outside the map entirely.
     const vess = txn.entity('vess')!;
     const tiles = txn.state.maps['poi:millford_village']!.tiles;
     expect(vess.map).toBe('poi:millford_village');
@@ -1274,9 +1193,6 @@ describe('entering places', () => {
     expect(txn.state.quests['the_mill_door']!.completedObjectives).toContain('open_door');
   });
 
-  // Leaving a place used to re-enter its area, which re-placed the party at the
-  // area's arrival point — from the player's chair, being thrown across the map
-  // for saying "leave".
   it('does not move the party when they step back out onto ground they are already on', () => {
     const txn = transact(fresh());
     const actor = txn.entity('e:1')!;
@@ -1451,8 +1367,6 @@ describe('leaving a place', () => {
     const txn = transact(fresh());
     enterDungeon(txn, terrain, 'barrow_depths', Rng.fromSeed(4));
 
-    // Move the leader clear of the exit tile (on or beside it counts as at
-    // the way out): from anywhere else the dungeon still has to be crossed.
     const hero = txn.entity(txn.state.selected)!;
     const inside = txn.state.maps[txn.state.currentMap]!;
     let off: { x: number; y: number } | undefined;
@@ -1513,8 +1427,6 @@ describe('story arcs', () => {
     return result.module;
   }
 
-  // `narrative.arcs` was never queried at all — a whole collection the schema
-  // accepted, the linter cleared, the docs described, and nothing read.
   it('derives an arc\'s standing from its quests, storing nothing', () => {
     const base = fresh();
     const [arc] = arcsOf(GREENMARCH, base);
@@ -1555,14 +1467,9 @@ describe('story arcs', () => {
 
     const { state, events } = reduce(done, { type: 'wait', minutes: 1 }, ctx);
     expect(state.outcome).toBe('victory');
-    // The arc path used to emit only `custom/arcCompleted`, and `narrate`
-    // renders `game.victory` from `gameOver` alone — so a module whose ending
-    // was an arc announced its own ending to nobody.
     expect(events.some((event) => event.type === 'gameOver')).toBe(true);
   });
 
-  // `postVictory: 'continue'` is what lets a module put content on the far side
-  // of its own ending: the win is announced and the world stays live.
   it('keeps the world live after the ending when the module asks it to', () => {
     const module = withPostVictory('continue');
     const done = arcFinished();
@@ -1571,8 +1478,7 @@ describe('story arcs', () => {
     expect(won.state.outcome).toBe('playing');
     expect(won.events.filter((event) => event.type === 'gameOver')).toHaveLength(1);
 
-    // Announced once. The arc stays complete for the rest of the run, so
-    // without a record of its own this would fire on every reduction.
+    // Announced once.
     const after = reduce(won.state, { type: 'wait', minutes: 1 }, { module });
     expect(after.events.some((event) => event.type === 'gameOver')).toBe(false);
     expect(after.state.outcome).toBe('playing');
@@ -1602,8 +1508,6 @@ describe('story arcs', () => {
 });
 
 describe('who hands out work', () => {
-  // `offersQuests` was read only by the linter and `giver` by nothing at all,
-  // so a module that said who gives what still needed a dialogue tree.
   it('offers what an NPC declares, when the party could take it', () => {
     const txn = transact(fresh());
     const offered = questsOffered(txn, 'vess', Rng.fromSeed(1)).map((quest) => quest.id);

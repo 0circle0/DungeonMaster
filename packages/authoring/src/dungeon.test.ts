@@ -1,11 +1,4 @@
-/**
- * The test that matters here is not "does `fit` return a number" — it is
- * "does a dungeon sized by `fit` actually generate the rooms it claims".
- *
- * So this runs the engine's own generator and counts. `roomCount` is a request
- * and `placeRooms` gives up quietly, which means a unit test against the
- * arithmetic would pass on exactly the bug this function exists to prevent.
- */
+/** Runs the engine's own generator and counts: `roomCount` is a request, not a guarantee. */
 
 import { describe, it, expect } from 'vitest';
 import { readFileSync } from 'node:fs';
@@ -15,11 +8,7 @@ import { compileModule } from '@dm/module';
 import { Rng } from '@dm/core';
 import { fit, measureRooms, MAX_SIDE } from './dungeon.js';
 
-/**
- * A real module with one dungeon in it, because `generateDungeon` takes a
- * compiled module and resolves the biome, palette and templates through it.
- * Built from `minimal`, which has the fewest moving parts of anything shipped.
- */
+/** A real module with one dungeon, built from `minimal`. */
 const BASE = JSON.parse(
   readFileSync(fileURLToPath(new URL('../../../modules/minimal/module.json', import.meta.url)), 'utf8'),
 ) as Record<string, unknown>;
@@ -70,8 +59,6 @@ function roomsGenerated(
   const doc = JSON.parse(JSON.stringify(BASE)) as Record<string, unknown>;
   const world = doc['world'] as { dungeons: Record<string, unknown>[] };
   const existing = world.dungeons[0]!;
-  // Keep the id, so `start.startingDungeon` still resolves; only the sizing
-  // changes, which is all this is measuring.
   world.dungeons = [
     {
       ...existing,
@@ -105,8 +92,6 @@ describe('fit', () => {
 
   it('keeps the corridor the author asked for when the map can grow', () => {
     // Four rooms at 5d3 needs about 3,800 tiles, which is inside the ceiling.
-    // Eight is not — 81x81 is 6,561 and eight rooms want 7,600 — so this is
-    // deliberately the case where growing the map is enough.
     const sized = fit({ rooms: 4, roomSize: '2d3+4', corridorLength: '5d3' });
     expect(sized.corridorLength).toBe('5d3');
     expect(sized.shortened).toBe(false);
@@ -134,14 +119,7 @@ describe('fit', () => {
   });
 });
 
-/**
- * The measurement, and the reason it is a measurement.
- *
- * The first version of this inverted `fit`'s own arithmetic, which reads like
- * the obvious thing to do and declared 63 of Aurendel's 68 dungeons broken —
- * while the engine generates all but a handful of them in full. `fit` is a
- * sizing heuristic with headroom; read backwards it is a false alarm generator.
- */
+/** The measurement, and the reason it is a measurement. */
 describe('measureRooms', () => {
   it('counts what the engine actually produces', () => {
     const measured = measure(FIFTEEN, 47, 27);
@@ -159,8 +137,6 @@ describe('measureRooms', () => {
     const doc = JSON.parse(
       readFileSync(fileURLToPath(new URL('../../../modules/aurendel/module.json', import.meta.url)), 'utf8'),
     ) as { world: { dungeons: Record<string, unknown>[] } };
-    // The five that were sized by hand rather than by `fit` are the interesting
-    // ones; the rest must come back clean or the panel is unreadable.
     expect(doc.world.dungeons.length).toBeGreaterThan(60);
   });
 });

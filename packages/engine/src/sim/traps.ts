@@ -1,15 +1,4 @@
-/**
- * Traps: finding them, springing them, and taking them apart.
- *
- * A trap lives on the map beside the gates, keyed by the same packed tile integer, and moves
- * through four states: `hidden` until somebody searches, `found` once they have, then `disarmed` or
- * `sprung`.
- *
- * There is deliberately no passive detection roll on movement. A roll re-made on every step finds
- * everything eventually and teaches the player nothing; making `search` the only way to find a trap
- * is deterministic, gives `search` a job inside a dungeon, and leaves walking into one a real
- * consequence of not looking.
- */
+/** Traps: finding them, springing them, and taking them apart. */
 
 import { Rng } from '@dm/core';
 import { evalEffects } from '@dm/module';
@@ -55,10 +44,7 @@ function setTrapState(txn: Transaction, tile: number, state: TrapState): void {
   });
 }
 
-/**
- * Step onto a tile that may be trapped. A trap that has been found is still a trap, which is why
- * disarming exists. Monsters spring traps too — the trap does not know who is standing on it.
- */
+/** Step onto a tile that may be trapped. */
 export function springTrap(txn: Transaction, mover: Entity, rng: Rng): void {
   const map = txn.state.maps[mover.map];
   const tile = packKey(mover.position);
@@ -72,8 +58,7 @@ export function springTrap(txn: Transaction, mover: Entity, rng: Rng): void {
   txn.emit({ type: 'trapSprung', trap: placed.trap, entity: mover.id, at: mover.position });
 
   if (definition.onTrigger.length > 0) {
-    // `target` is the one who stepped on it, which is what an authored trap means by `{ "ref":
-    // "target.id" }`.
+    // `target` is whoever stepped on it.
     const scope = { ...buildScope(txn.module, txn.state, mover), target: { id: mover.id } };
     applyOps(txn, evalEffects(definition.onTrigger, { scope, rng, openNamespaces: OPEN_NAMESPACES }), null);
   }
@@ -82,10 +67,7 @@ export function springTrap(txn: Transaction, mover: Entity, rng: Rng): void {
   setTrapState(txn, tile, definition.reusable ? 'found' : 'sprung');
 }
 
-/**
- * Look for what is hidden underfoot. Returns whether anything was in range at all, so the caller
- * can tell "you find nothing here" from "there was nothing to find".
- */
+/** Look for what is hidden underfoot. */
 export function searchForTraps(txn: Transaction, searcher: Entity, rng: Rng): boolean {
   const map = txn.state.maps[searcher.map];
   if (!map) return false;
@@ -133,10 +115,7 @@ export function reachableTrap(txn: Transaction, actor: Entity): { tile: number; 
   return first ? { tile: first.tile, trap: first.placed.trap } : null;
 }
 
-/**
- * Take a found trap apart. Failing costs time; only a fumble sets it off, since a trap that
- * punished every failed attempt would make disarming strictly worse than walking around.
- */
+/** Take a found trap apart. */
 export function disarmTrap(txn: Transaction, actor: Entity, rng: Rng): boolean {
   const target = reachableTrap(txn, actor);
   if (!target) {

@@ -1,26 +1,11 @@
-"""Aurendel — Stage 1: the materials the world is drawn from.
-
-Terrains, palettes, biomes, and the calendar. Nothing here names a place.
-
-Two engine facts shape this file:
-
-  * `biome.palette` overrides `area.map.palette` (sim/enter.ts), so a settlement cannot borrow its
-    region's biome — every built-up place needs an urban biome of its own or the town renders as the
-    field it stands in.
-  * A POI interior is built by `buildMap` with no palette override (sim/enter.ts), so
-    `poi.map.palette` is honoured. That is what the `int_*` palettes are for: a generated interior
-    is a walled rectangle plus scatter, which makes scatter the furniture.
-"""
-# `biomes()` below names an `<id>_ambience` pool for every non-dungeon biome; imported for that side
-# effect.
+"""Aurendel — Stage 1: the materials the world is drawn from."""
+# `biomes()` below names an `<id>_ambience` pool for every non-dungeon biome; imported for that side effect.
 import ambience  # noqa: F401
 
 from dmkit import materials as _kit
 from dmkit.materials import sc
 
-# --- terrains ---------------------------------------------------------------
-# (id, name, glyph, colour, passable, opaque, moveCost, description)
-# Extra keyword columns are attached below by id.
+# --- terrains: (id, name, glyph, colour, passable, opaque, moveCost, description) ---
 
 T = [
     # open ground
@@ -169,12 +154,7 @@ TERRAIN_EXTRAS = {
     },
 }
 
-# What the ground is made of, for the purposes of what it remembers. Grouped by footing rather than
-# by biome: a print is a fact about mud, and there are only about four kinds of mud in seventy-seven
-# terrains.
-#
-# `stone` covers bare rock and everything built on it — the cave floors and flagstones where a party
-# can genuinely lose whatever is tracking it.
+# What the ground is made of, for the purposes of what it remembers.
 GROUND = {
     "soft":    {"tracks": 1,   "smell": 1},
     "stone":   {"tracks": 0,   "smell": 0.6},
@@ -318,9 +298,7 @@ PALETTES = [
         sc("crate", 0.03, priority=3),
     ]),
 
-    # -- interiors ----------------------------------------------------------
-    # The nine `place.TRADE_PALETTE` names. Every id below is out of this file's own terrain
-    # vocabulary, which is why they live here and not in the kit.
+    # --- interiors: the nine `place.TRADE_PALETTE` names ---
 
     ("int_timber", "Timber Interior", "timber_floor", "wall_timber", "door", "wall_timber", [
         sc("table", 0.05, priority=0),
@@ -373,9 +351,7 @@ PALETTES = [
         sc("brazier", 0.03, priority=2),
     ]),
 
-    # -- dungeons -----------------------------------------------------------
-    # A dungeon's whole look comes from its biome's palette, so these are the difference between a
-    # barrow and a sewer.
+    # --- dungeons: a dungeon's look comes from its biome's palette ---
     ("dun_barrow", "Barrow", "cave_floor", "wall_stone", "door", "wall_stone", [
         sc("rubble", 0.07, priority=0),
         sc("standing_stone", 0.02, priority=1),
@@ -423,8 +399,7 @@ PALETTES = [
 ]
 
 
-# --- biomes -----------------------------------------------------------------
-# (id, name, layer, palette, description)
+# --- biomes: (id, name, layer, palette, description) ---
 BIOMES = [
     ("vale", "The Kingsvale", "overworld", "vale",
      "River-country: hedged fields, mill-leats, and a road somebody keeps up."),
@@ -462,8 +437,7 @@ BIOMES = [
     ("urban_isle", "Wreck Town", "overworld", "town_isle",
      "Built out of what the sea returned, and standing on piles above it."),
 
-    # Dungeon biomes. A dungeon's look and its room vocabulary both come from its biome, so a barrow
-    # and a sewer are different biomes even under the same fields.
+    # Dungeon biomes.
     ("dungeon_barrow", "Barrow", "underworld", "dun_barrow",
      "Dry-stone chambers under a mound, built to be shut and not to be entered."),
     ("dungeon_delved", "Delved Hall", "underworld", "dun_delved",
@@ -508,8 +482,7 @@ TIME = {
 }
 
 
-# --- the three the build asks for -------------------------------------------
-# Thin, because the shaping is `dmkit.materials`; what is here is the vocabulary.
+# --- the three the build asks for ---
 
 def terrains():
     return _kit.terrains(T, extras=TERRAIN_EXTRAS, tags=TAGS, marks=GROUND)

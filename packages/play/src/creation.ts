@@ -1,14 +1,4 @@
-/**
- * Character creation.
- *
- * Everything offered comes from the module: which ancestries and classes exist,
- * how many points there are to spend, and what each attribute point costs. The
- * shell knows only how to ask.
- *
- * Costs are read from `start.creation.attributeCosts`, a map from target score
- * to total cost. A module that omits it gets a flat one-point-per-step scale,
- * which is the sane default and keeps a half-authored module playable.
- */
+/** Character creation. */
 
 import type { CompiledModule } from '@dm/module';
 import type { CharacterChoices } from '@dm/engine';
@@ -42,8 +32,7 @@ function allowed<T extends { id: string }>(
   if (permitted.length === 0) return everything;
   const wanted = new Set(permitted);
   const narrowed = everything.filter((entry) => wanted.has(entry.id));
-  // A restriction that leaves nothing is an authoring error the linter reports;
-  // it must not leave the player unable to make a character at all.
+  // A restriction that leaves nothing is a linter matter; the player still gets a character.
   return narrowed.length > 0 ? narrowed : everything;
 }
 
@@ -51,10 +40,7 @@ export function creationRules(module: CompiledModule): CreationRules {
   const creation = module.source.start.creation;
   return {
     attributes: module.all<AttributeDef>('rules.attributes'),
-    // Restricted to what the module allows, if it restricts anything. An empty
-    // list means everything is allowed, which is what the schema says — and
-    // both fields were read by nothing, so a module that wanted a dwarves-only
-    // campaign still offered every ancestry it had ever defined.
+    // Restricted to what the module allows, if it restricts anything.
     ancestries: allowed(
       module.all<{ id: string; name: string; description: string }>('content.ancestries'),
       creation.allowedAncestries,
@@ -70,9 +56,7 @@ export function creationRules(module: CompiledModule): CreationRules {
   };
 }
 
-// `costOf`, `totalSpent` and `baseAllocation` are the ruleset's, not this
-// screen's, and live in `@dm/engine` beside `createCharacter` — which enforces
-// the same budget for parties that never come through a creation screen.
+// `costOf`, `totalSpent` and `baseAllocation` are the ruleset's, and live in `@dm/engine`.
 export { costOf, totalSpent, baseAllocation } from '@dm/engine';
 import { totalSpent } from '@dm/engine';
 
@@ -80,12 +64,7 @@ export type AdjustResult =
   | { readonly ok: true; readonly attributes: Record<string, number> }
   | { readonly ok: false; readonly message: string };
 
-/**
- * Raise or lower one attribute, refusing anything the rules forbid.
- *
- * Refusals name the reason, so a player learns the budget by bumping into it
- * rather than by reading a table.
- */
+/** Raise or lower one attribute, refusing anything the rules forbid. */
 export function adjust(
   module: CompiledModule,
   attributes: Readonly<Record<string, number>>,

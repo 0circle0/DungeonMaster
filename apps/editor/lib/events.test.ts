@@ -21,10 +21,10 @@ describe('collectEvents', () => {
   it('answers all five questions for a place trigger', () => {
     const millCleared = events.find((e) => e.where.startsWith('The Old Mill') && e.mode === 'untilComplete')!;
 
-    expect(millCleared.when).toBe('combatEnd'); // when
-    expect(millCleared.where).toContain('The Old Mill'); // where
-    expect(millCleared.who).toBe('the party'); // who
-    expect(millCleared.what).toContain('set mill_clear'); // what
+    expect(millCleared.when).toBe('combatEnd'); // when where who what
+    expect(millCleared.where).toContain('The Old Mill'); 
+    expect(millCleared.who).toBe('the party'); 
+    expect(millCleared.what).toContain('set mill_clear'); 
     expect(millCleared.what.some((w) => w.includes('wardens'))).toBe(true);
     expect(millCleared.remembered).toBe(true);
   });

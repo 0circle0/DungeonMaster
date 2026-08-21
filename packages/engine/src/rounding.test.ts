@@ -1,13 +1,4 @@
-/**
- * How a scaled damage number becomes a whole one.
- *
- * `rules.resolution.damageRounding` covers resistance, a save for half, and a critical. Two of
- * those went through `scaleDamage`, which rounded with a hardcoded floor, so a module that asked
- * for `round` still got `floor` — and at the default setting, seven halved was three rather than
- * four.
- *
- * Both defects were silent, and no shipped module changes the setting.
- */
+/** How a scaled damage number becomes a whole one. */
 
 import { describe, it, expect } from 'vitest';
 import { fileURLToPath } from 'node:url';
@@ -31,11 +22,7 @@ const FLAT_DAMAGE = 7;
 
 type Rounding = 'floor' | 'round' | 'ceil';
 
-/**
- * Greenmarch plus one ability that deals a flat, unrolled amount. Flat rather than rolled because
- * the point is the rounding: a `2d6` would make the assertion depend on the seed. Fumbles are off
- * and the save's difficulty is zero, so the half-damage branch is under test on every run.
- */
+/** Greenmarch plus one ability that deals a flat, unrolled amount. */
 function moduleRounding(rounding: Rounding, kind: 'save' | 'critical'): CompiledModule {
   const doc = JSON.parse(JSON.stringify(GREENMARCH.source)) as never as {
     rules: { resolution: Record<string, unknown> };
@@ -104,11 +91,7 @@ function arena(module: CompiledModule): GameState {
   };
 }
 
-/**
- * The scaled amount the blow asked for. `raw` rather than the hit point delta, because a resource
- * clamps at its floor: a bog hound has 8 hit points, so a delta would measure the hound's health
- * rather than the arithmetic.
- */
+/** The scaled amount the blow asked for. */
 function damageAsked(rounding: Rounding, kind: 'save' | 'critical'): number {
   const module = moduleRounding(rounding, kind);
   const { events } = reduce(
@@ -122,23 +105,19 @@ function damageAsked(rounding: Rounding, kind: 'save' | 'critical'): number {
 }
 
 describe('damageRounding', () => {
-  // 7 × 0.5 = 3.5, which is the whole argument: floor and round disagree, and the module is the one
-  // entitled to an opinion.
   it('governs a save for half', () => {
     expect(damageAsked('round', 'save')).toBe(4);
     expect(damageAsked('floor', 'save')).toBe(3);
     expect(damageAsked('ceil', 'save')).toBe(4);
   });
 
-  // 7 × 1.5 = 10.5. A critical scales the whole amount, modifier included, per
-  // `criticalDamageMultiplier`.
+  // 7 × 1.5 = 10.5.
   it('governs a critical', () => {
     expect(damageAsked('round', 'critical')).toBe(11);
     expect(damageAsked('floor', 'critical')).toBe(10);
   });
 
-  // The default is `round`, so this is the assertion that fails if the default is ever changed by
-  // accident.
+  // The default is `round`, so this is the assertion that fails if the default is ever changed by accident.
   it('rounds by default', () => {
     expect(GREENMARCH.source.rules.resolution.damageRounding).toBe('round');
   });

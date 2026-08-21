@@ -1,13 +1,4 @@
-/**
- * The world hierarchy, which is the studio's primary navigation: rather than
- * listing "areas" and "pointsOfInterest" as flat collections, this shows the
- * containment the engine actually walks — biome → area → POI — with the start
- * location pinned on top, because "where does play begin" is the first
- * question a module has to answer.
- *
- * Every row also answers two questions a flat list hides: is this map
- * hand-authored (✎) or seed-generated (🎲), and who lives there.
- */
+/** The world hierarchy: biome, area and POI, with the start location pinned on top. */
 
 import { Fragment } from 'react';
 import type { ModuleDoc } from '@/lib/store';

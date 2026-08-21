@@ -1,13 +1,4 @@
-/**
- * Deterministic, serializable random number generation.
- *
- * Every random decision in the game flows through here. `Math.random()` must never appear in the
- * engine: a save stores RNG state verbatim, so seed plus action log reproduces a run exactly, and
- * that only holds if this is the sole source of chance.
- *
- * Algorithm is xoshiro128** — four 32-bit words of state, which serializes to four integers rather
- * than an opaque blob.
- */
+/** Deterministic, serializable random number generation. */
 
 /** Serializable RNG state: exactly four 32-bit words. */
 export type RngState = readonly [number, number, number, number];
@@ -18,10 +9,7 @@ function rotl(x: number, k: number): number {
   return ((x << k) | (x >>> (32 - k))) >>> 0;
 }
 
-/**
- * splitmix32 — used only to expand a single seed into well-distributed state. xoshiro recovers
- * poorly from low-entropy seeds, so it is never seeded directly.
- */
+/** splitmix32 — used only to expand a single seed into well-distributed state. */
 function splitmix32(seed: number): () => number {
   let a = seed | 0;
   return () => {
@@ -35,7 +23,7 @@ function splitmix32(seed: number): () => number {
   };
 }
 
-/** FNV-1a. Turns a stream label into a 32-bit value for seed derivation. */
+/** FNV-1a. */
 export function hashString(s: string): number {
   let h = 0x811c_9dc5;
   for (let i = 0; i < s.length; i++) {
@@ -77,15 +65,7 @@ export class Rng {
     return new Rng(state);
   }
 
-  /**
-   * Derive an independent sub-stream.
-   *
-   * Sub-streams are why combat rolls cannot shift dungeon layout: the dungeon draws from
-   * `dungeon:<siteId>` while a fight draws from `combat:<encounterId>`.
-   *
-   * Reads the parent's state without advancing it, so deriving is itself deterministic and side-
-   * effect free.
-   */
+  /** Derive an independent sub-stream. */
   derive(label: string): Rng {
     const h = hashString(label);
     return Rng.fromSeed((this.s0 ^ Math.imul(h, 0x9e37_79b9)) | 0);
@@ -121,10 +101,7 @@ export class Rng {
     return this.nextUint32() / U32;
   }
 
-  /**
-   * Uniform integer in [min, max], inclusive. Rejection sampling rather than modulo: modulo bias is
-   * small but real, and on a d20 it would skew every roll in the game.
-   */
+  /** Uniform integer in [min, max], inclusive. */
   nextInt(min: number, max: number): number {
     if (!Number.isInteger(min) || !Number.isInteger(max)) {
       throw new RangeError(`nextInt requires integer bounds, got [${min}, ${max}]`);
@@ -149,16 +126,13 @@ export class Rng {
     return this.nextFloat() < probability;
   }
 
-  /** Uniformly pick one element. Throws on an empty list rather than returning undefined. */
+  /** Uniformly pick one element. */
   pick<T>(items: readonly T[]): T {
     if (items.length === 0) throw new RangeError('pick: cannot choose from an empty list');
     return items[this.nextInt(0, items.length - 1)]!;
   }
 
-  /**
-   * Pick one element with weights. Non-positive weights are ineligible, so content can disable a
-   * table row with `"weight": 0` instead of deleting it.
-   */
+  /** Pick one element with weights. */
   weightedPick<T>(items: readonly T[], weightOf: (item: T) => number): T {
     if (items.length === 0) throw new RangeError('weightedPick: empty list');
 
@@ -169,8 +143,7 @@ export class Rng {
     }
     if (total <= 0) throw new RangeError('weightedPick: all weights are zero or negative');
 
-    // Integer roll keeps this reproducible across platforms; float accumulation could differ in the
-    // last bit and desync a replay.
+    // Integer roll, so a replay cannot desync on float rounding.
     let roll = this.nextInt(1, Math.max(1, Math.round(total)));
     for (const item of items) {
       const w = weightOf(item);

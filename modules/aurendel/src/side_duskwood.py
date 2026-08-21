@@ -1,19 +1,4 @@
-"""The Hermit of the Beeches — a Duskwood side chain, Act II.
-
-Wend has lived in the Hollow Beeches for forty-one years and the moot has let
-him, on the understanding that he leaves the thorn alone and tells them if
-anything changes. Something has changed. He has been telling them for two
-years and Elderhollow has been busy.
-
-This runs beside the Thornward route rather than through it: the same forest,
-the same moot, and a problem the moot has not got to. A party that has already
-laid or broken the Thornward will find Wend has heard about it — the Keepers
-never forget a ward, and the memory rules say so in `factions.py`.
-
-The branch is fire or grafting, and it is a real choice rather than a good
-option and a bad one. Fire ends it in an afternoon and takes four hundred
-years of the Greenway with it.
-"""
+"""The Hermit of the Beeches — a Duskwood side chain, Act II."""
 from dmkit.quests import (
     arc, stage, reach, kill, talk, flagged, resolved_either_way, set_flag,
     rep, deed, either, node, option, take_job, dialogue, npc,

@@ -52,8 +52,6 @@ describe('expressions', () => {
       expect(ev({ ref: 'actor.tags.0' })).toBe('undead');
     });
 
-    // A silent zero for a typo'd path is the single worst failure mode for a
-    // data-driven game: the ability just quietly stops working.
     it('throws on an unknown path rather than defaulting', () => {
       expect(() => ev({ ref: 'actor.attr.wisdom' })).toThrow(DslError);
       expect(() => ev({ ref: 'nope.at.all' })).toThrow(/unknown path/);

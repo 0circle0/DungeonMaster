@@ -1,12 +1,4 @@
-/**
- * What a character and a creature actually are.
- *
- * Every ancestry field except attribute and skill bonuses was dropped on the
- * floor at creation, statblock skills were discarded at spawn, and resistances
- * were read only from a statblock — which a player character does not have, so
- * `ancestries[].damageInteractions` was unreachable by construction rather than
- * merely unimplemented.
- */
+/** What a character and a creature actually are. */
 
 import { describe, it, expect } from 'vitest';
 import { fileURLToPath } from 'node:url';
@@ -29,8 +21,6 @@ describe('the character sheet is real', () => {
     return newGame(module, { seed: 3, party: [choices] });
   };
 
-  // `createCharacter` passed `undefined` where the ancestry's speeds belong, so
-  // a flying ancestry could not fly and a swimming one could not swim.
   it('gives a character the movement modes its ancestry declares', () => {
     const doc = JSON.parse(JSON.stringify(GREENMARCH.source)) as never as {
       rules: { movementModes: Record<string, unknown>[] };
@@ -57,8 +47,6 @@ describe('the character sheet is real', () => {
   });
 
   it('starts a character wearing the gear they were given', () => {
-    // Starting items landed in the bag and nowhere else, so a fresh party stood
-    // in its first fight holding swords in their packs.
     const state = build('human');
     const hero = state.entities[state.party[0]!]!;
     expect(Object.values(hero.equipped).flat()).toContain('iron_sword');
@@ -66,8 +54,7 @@ describe('the character sheet is real', () => {
 
   it('lets a player character have a resistance at all', async () => {
     const { Transaction, applyOps } = await import('./rules/apply.js');
-    // greenmarch's dwarf halves piercing. Only statblocks were consulted before,
-    // and a character has none — so this was unreachable by construction.
+    // greenmarch's dwarf halves piercing.
     const hit = (ancestry: string) => {
       const state = build(ancestry);
       const txn = new Transaction(state, GREENMARCH);
@@ -85,8 +72,6 @@ describe('the character sheet is real', () => {
 describe('a monster knows what it is trained in', () => {
   it('copies the statblock\'s skill bonuses instead of starting at zero', async () => {
     const { spawnMonster } = await import('./character.js');
-    // The hound is described as keen-nosed and quiet; before, it rolled
-    // perception and stealth at rank 0 like a rock.
     const hound = spawnMonster(GREENMARCH, 'e:99', 'bog_hound');
     expect(hound.skills['perception']).toBe(3);
     expect(hound.skills['stealth']).toBe(2);

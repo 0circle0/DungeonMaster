@@ -1,23 +1,8 @@
-/**
- * The site's one navigation list, so a new page is added in one place.
- *
- * `APPS` is here for the same reason, though it is not part of the nav: the studio and the
- * player are separate deployments on their own subdomains, so they are plain `<a>` links rather
- * than routes, and a hostname written in two files is a hostname that will be changed in one.
- */
+/** The site's one navigation list, so a new page is added in one place. */
 
 import Link from 'next/link';
 
-/**
- * The two apps this site documents. Absolute, because they are different origins -- a relative
- * href would resolve against the docs site and 404.
- *
- * Hard-coded rather than read from the environment: all three apps are static exports with no
- * runtime configuration, and these hostnames are as fixed as the domain itself. The cost is that
- * following one of these from a local dev server lands on production, which is the right
- * trade -- the alternative is a build-time variable that is wrong in exactly one direction and
- * silently.
- */
+/** The two apps this site documents. */
 export const APPS: readonly { href: string; label: string; blurb: string }[] = [
   {
     href: 'https://studio.dnddungeon.com',

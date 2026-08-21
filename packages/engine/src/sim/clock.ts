@@ -1,15 +1,4 @@
-/**
- * The world clock, beyond counting minutes.
- *
- * `world.time` declares day phases, a month length and month names, and none of
- * them were read — so a module could describe dawn, dusk and the month of
- * Firstmelt and the game would tell you it was "day 12 07:15".
- *
- * Everything here is **derived from `state.minute`**, never stored and never
- * ticked. That is the same rule scent trails follow, and for the same reason: a
- * value that is recomputed cannot drift out of step with the clock it describes,
- * and a save cannot disagree with itself.
- */
+/** The world clock, beyond counting minutes. */
 
 import type { CompiledModule } from '@dm/module';
 
@@ -31,13 +20,7 @@ export interface WorldDate {
   readonly minute: number;
 }
 
-/**
- * Which phase of the day it is, or null underground.
- *
- * A barrow has no dusk. `layer: 'underworld'` is what a module uses to say so,
- * and this is the one place that distinction can mean anything mechanical —
- * otherwise "overworld" and "underworld" are two words for the same thing.
- */
+/** Which phase of the day it is, or null underground. */
 export function phaseOf(
   module: CompiledModule,
   minute: number,
@@ -51,9 +34,7 @@ export function phaseOf(
 
   const clock = ((minute % time.minutesPerDay) + time.minutesPerDay) % time.minutesPerDay;
 
-  // The last phase that has already started. Before the first one begins, the
-  // day is still in the previous day's last phase — midnight is night, not
-  // nothing, and wrapping is the only reading that makes the cycle closed.
+  // The last phase that has already started.
   let current = phases[phases.length - 1]!;
   for (const phase of phases) {
     if (phase.startMinute <= clock) current = phase;
@@ -97,8 +78,7 @@ export function layerOf(
   const area = module.find<{ layer?: string; biome?: string }>('world.areas', location.area);
   if (area?.layer === 'underworld') return 'underworld';
 
-  // A biome may say so on the area's behalf — an area that never declared a
-  // layer inherits the one its biome describes.
+  // An area that declares no layer inherits its biome's.
   const biome = area?.biome
     ? module.find<{ layer?: string }>('world.biomes', area.biome)
     : undefined;

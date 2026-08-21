@@ -8,13 +8,7 @@ import styles from '@/app/studio/studio.module.css';
 
 const START_KIND_LABEL = { poi: 'POI', area: 'area', dungeon: 'dungeon' } as const;
 
-/**
- * What autosave last did.
- *
- * There is no `draft` any more. A world is its project files, so a document with
- * errors in it is stored as itself rather than set aside — there is no last-valid
- * copy underneath to be truthful about.
- */
+/** What autosave last did. */
 const AUTOSAVE_LABEL: Record<string, string> = {
   idle: 'Saved',
   pending: 'Saving…',
@@ -23,12 +17,7 @@ const AUTOSAVE_LABEL: Record<string, string> = {
   error: 'Not saved',
 };
 
-/**
- * Module-level operations plus the two facts worth keeping permanently in
- * view: whether the module validates, and where play begins. The start chip
- * exists because a missing start location is the one error that otherwise
- * stays invisible until someone tries to play.
- */
+/** Module-level operations, plus whether the module validates and where play begins. */
 export function Toolbar(props: {
   store: ModuleStore;
   onNew: () => void;
@@ -40,7 +29,7 @@ export function Toolbar(props: {
   ruleFindings: number | null;
   /** How many mods are installed, so the button can say. */
   modCount: number;
-  /** Write back to `modules/<name>/`. Absent for a document loaded from a file. */
+  /** Write back to `modules/<name>/`. */
   onSave: () => void;
   canSave: boolean;
   moduleName: string;

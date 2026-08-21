@@ -1,25 +1,4 @@
-"""The Sunward Steppe's hidden threads — three, in the five areas nothing uses.
-
-Tallgrass is six buildings in the one place the grass goes over head height —
-a store, a shrine, a hayward's, and nobody in any of them. The Horse Road is
-not a road: it is forty yards of grass ridden flat for nine hundred years, with
-a relay post on it and a stone horse beside it. The Dry River is a bed a quarter
-of a mile wide with no water in it for eleven months. The Windbreak is a line of
-trees eleven miles long, planted, and no record of anybody planting it. The
-South Reach is where the grass thins and the Glasslands start making themselves
-felt.
-
-Three threads, and they share a shape: **the grass is lying over somebody's
-work, and the work is still doing what it was built to do.**
-
-  * **The Planting** — eleven miles of one species set within a season of each
-    other, running the wrong way to break any wind that blows here.
-  * **What the Bank Shows** — a quarter-mile bed for a river that runs one
-    month, and forty feet down in the face of it, courses that were laid.
-  * **The Last Water** — a spring at the edge of the pale ground that has never
-    failed, running warm, with a shored shaft beside it in a country that has
-    never had a mine.
-"""
+"""The Sunward Steppe's hidden threads — three, in the five areas nothing uses."""
 from dmkit.quests import npc, shop, quest, reach, kill, flagged, arc
 from lore import (
     clue, thread, rumour, favour, talk, coldshoulder, finding, rumoured,
@@ -196,8 +175,7 @@ GATES = [
 ]
 
 POI_PATCHES = {
-    # A marker stone in the middle of eleven miles of trees, not a dungeon
-    # mouth, so what is under it carries its own table and its own chance.
+    # A marker stone, not a dungeon mouth, so it carries its own table and chance.
     "windbreak_the_planter": {**rumoured("step_line", base=19, step=3, entries=4,
                                          skill="survival"),
                               "gate": "step_line_root",

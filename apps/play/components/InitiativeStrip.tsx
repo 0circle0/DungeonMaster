@@ -1,12 +1,6 @@
 'use client';
 
-/**
- * The turn order, while there is one.
- *
- * The terminal only ever said `⚔ round N`; whose turn it was stayed a guess.
- * Here the order is chips, the active combatant is marked, and the movement
- * left this turn is a number rather than a surprise.
- */
+/** The turn order, while there is one. */
 
 import type { SessionApi } from '../lib/useSession.js';
 

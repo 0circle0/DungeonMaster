@@ -1,16 +1,4 @@
-/**
- * BSP interiors: the made place.
- *
- * Recursive splits carve the bounds into leaves that tile it completely, every room sharing its
- * walls with its neighbours — the floor plan of a building, where rooms-and-corridors reads as a
- * warren.
- *
- * The recursion's structure is the spanning tree: each split connects its two halves through one
- * door punched in the shared wall, so connectivity and the key-before-lock argument hold for the
- * same reason as in the rooms algorithm.
- *
- * `corridorLength` is naturally inert here, since doors join rooms directly.
- */
+/** BSP interiors: the made place. */
 
 import type { Rng } from '@dm/core';
 import { MapBuilder } from '../../grid/tiles.js';
@@ -32,13 +20,10 @@ export interface BspLayout {
   readonly treeCrossings: { edge: [number, number]; crossings: Position[] }[];
 }
 
-/** A leaf is never split below this, walls included. Set by the dungeon. */
+/** A leaf is never split below this, walls included. */
 const DEFAULT_MIN_LEAF = 5;
 
-/**
- * Split the bounds into at least `count` leaves and carve them. Adjacent leaves overlap on their
- * boundary line — the shared wall — so a leaf's interior is `rect` shrunk by one on every side.
- */
+/** Split the bounds into at least `count` leaves and carve them. */
 export function bspLayout(
   builder: MapBuilder,
   templates: PlaceableTemplate[],
@@ -85,8 +70,7 @@ export function bspLayout(
     if (!node) break;
     const { rect } = node;
 
-    // Wider than tall splits vertically, and vice versa; square rects pick by whichever axis has
-    // room.
+    // Wider than tall splits vertically, and vice versa; square rects pick by whichever axis has room.
     const canX = rect.width >= MIN_LEAF * 2 - 1;
     const canY = rect.height >= MIN_LEAF * 2 - 1;
     const axis: 'x' | 'y' = canX && canY ? (rect.width >= rect.height ? 'x' : 'y') : canX ? 'x' : 'y';
@@ -147,15 +131,12 @@ export function bspLayout(
     };
   });
 
-  // — carve ————————————————————————————————————————————————
-  // Whole field wall, then every leaf's interior floored. Shared walls stay.
+  // --- carve: whole field wall, then every leaf's interior floored ---
   for (const room of rooms) {
     builder.fillRect(room.x + 1, room.y + 1, room.width - 2, room.height - 2, palette.floor);
   }
 
-  // — connect ——————————————————————————————————————————————
-  // Each split joins its halves: pick the adjacent leaf pair sharing the longest boundary, punch a
-  // door at the shared wall's midpoint.
+  // --- connect: the leaf pair sharing the longest boundary, door at its midpoint ---
   const tree: [number, number][] = [];
   const treeCrossings: { edge: [number, number]; crossings: Position[] }[] = [];
 
@@ -203,10 +184,7 @@ function area(rect: Rect): number {
   return rect.width * rect.height;
 }
 
-/**
- * The interior span two leaves share along a split line, or null when they do not touch it opposite
- * each other.
- */
+/** The interior span two leaves share along a split line, or null when they do not touch. */
 function sharedWall(
   a: Rect,
   b: Rect,
@@ -224,10 +202,7 @@ function sharedWall(
   return lo <= hi ? [lo, hi] : null;
 }
 
-/**
- * Where a door between two rooms would go, or null when they do not share a wall. Pure, so minExits
- * raising can ask whether two rooms could connect without carving anything.
- */
+/** Where a door between two rooms would go, or null when they do not share a wall. */
 export function findPunch(a: PlacedRoom, b: PlacedRoom): Position | null {
   // Vertical shared wall: a's right edge is b's left edge, or vice versa.
   const vertical = (left: PlacedRoom, right: PlacedRoom): Position | null => {
@@ -248,11 +223,7 @@ export function findPunch(a: PlacedRoom, b: PlacedRoom): Position | null {
   return vertical(a, b) ?? vertical(b, a) ?? horizontal(a, b) ?? horizontal(b, a);
 }
 
-/**
- * A door punch between two adjacent rooms, for minExits raising and branchiness loops. Returns the
- * punched cell, or null when the rooms do not share a wall — BSP never carves corridors, so non-
- * adjacent rooms cannot gain an extra connection.
- */
+/** A door punch between two adjacent rooms, for minExits raising and branchiness loops. */
 export function punchAdjacent(
   builder: MapBuilder,
   a: PlacedRoom,

@@ -1,16 +1,4 @@
-/**
- * The premise incremental validation rests on.
- *
- * Checking one edited entry instead of the whole document is sound only if whole-document
- * `safeParse` decomposes — if the result for a collection is exactly the union of the results for
- * its entries. That holds as long as no `.refine()` / `.superRefine()` sits above the element
- * level: a cross-entry refinement would pass per entry and fail for the document, and an
- * incremental validator would never notice.
- *
- * The schema satisfies this by style rather than by rule, so the rule is written down here. If this
- * test fails, someone has added a refinement that makes the document more than the sum of its
- * entries.
- */
+/** The premise incremental validation rests on. */
 
 import { describe, it, expect } from 'vitest';
 import { readFileSync } from 'node:fs';
@@ -52,14 +40,7 @@ function reachesACollection(schema: z.ZodTypeAny, depth = 0, seen = new Set<z.Zo
   return false;
 }
 
-/**
- * Every refinement above the entry level, split by whether it spans a collection.
- *
- * A refinement over a singleton — "levels must be ordered by non-decreasing xpRequired" on
- * `rules.progression` — is fine, because the incremental validator re-parses singletons whole. One
- * that reaches across collection entries is not: it would pass for every entry and fail for the
- * document.
- */
+/** Every refinement above the entry level, split by whether it spans a collection. */
 function refinementsAboveEntries(): { spanning: string[]; singleton: string[] } {
   const spanning: string[] = [];
   const singleton: string[] = [];
@@ -69,8 +50,6 @@ function refinementsAboveEntries(): { spanning: string[]; singleton: string[] } 
     if (depth > 12 || seen.has(schema)) return;
     seen.add(schema);
 
-    // An entry schema is the floor: what is inside one is per-entry business, free to refine as
-    // much as it likes.
     if (ENTRY_SCHEMAS.has(schema)) return;
 
     const def = schema._def as { typeName?: string; [key: string]: unknown };
@@ -119,25 +98,16 @@ describe('collection element schemas', () => {
     }
   });
 
-  // The load-bearing one. See the file comment.
+  // The load-bearing one.
   it('has no refinement reaching across collection entries', () => {
     expect(refinementsAboveEntries().spanning).toEqual([]);
   });
 
-  /**
-   * Pinned rather than asserted empty. These are legal — they refine a singleton, which the
-   * incremental validator re-parses whole — but a new one appearing is a decision someone should
-   * make on purpose.
-   */
+  /** Pinned rather than asserted empty. */
   it('refines only these singletons above the entry level', () => {
     expect(refinementsAboveEntries().singleton).toEqual(['rules.progression']);
   });
 
-  /**
-   * The equivalence the incremental validator relies on, checked end to end: an entry parsed alone
-   * must come out byte-for-byte what the whole-document parse produces, defaults included, since
-   * the content hash is taken after zod applies them.
-   */
   it.each(MODULES)('parses one entry of %s the same way the whole document does', (name) => {
     const doc = moduleDoc(name);
     const whole = gameModuleSchema.safeParse(doc);

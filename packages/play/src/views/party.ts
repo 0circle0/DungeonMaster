@@ -1,10 +1,4 @@
-/**
- * The party roster, as data.
- *
- * Gains what the terminal never computed: conditions, who each member is
- * following, and where they stand — a click-to-select roster and a map marker
- * both need those, and they are free to read.
- */
+/** The party roster, as data. */
 
 import type { CompiledModule } from '@dm/module';
 import type { GameState, EntityId, Position } from '@dm/engine';

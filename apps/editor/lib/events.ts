@@ -1,17 +1,4 @@
-/**
- * Every moment in a module where something can happen, in one list.
- *
- * A module scatters its behaviour across triggers on places, reactions on creatures, hooks on
- * quests, effects on dialogue options, and procs on items. Each is easy to read on its own and
- * impossible to see as a whole.
- *
- * This flattens all of it into one shape answering five questions: when fires it and whether it
- * repeats, where it hangs off, whose behaviour it is, what effects it runs, and what gate has to
- * pass first.
- *
- * Derived from the raw document rather than the compiled module, so it works on a document that
- * does not yet validate.
- */
+/** Every moment in a module where something can happen, in one list. */
 
 import type { ModuleDoc } from './store';
 import { getAt } from './store';
@@ -54,10 +41,7 @@ function asArray(value: unknown): Row[] {
 
 const nameOf = (row: Row | undefined) => String(row?.['name'] ?? row?.['id'] ?? '—');
 
-/**
- * Summarise an effect list into short human phrases. For scanning rather than fidelity: a reader
- * wants "damage, apply burning" to decide whether to open it.
- */
+/** Summarise an effect list into short human phrases. */
 export function summariseEffects(effects: unknown): string[] {
   const out: string[] = [];
 
@@ -142,10 +126,7 @@ function describeTarget(payload: unknown): string {
   return 'target';
 }
 
-/**
- * Summarise a requirement into short phrases — the "why" column, and the reason gating was unified
- * into one shape: every gate in the module is described by the same function.
- */
+/** Summarise a requirement into short phrases. */
 export function summariseRequirement(requirement: unknown): string[] {
   if (typeof requirement !== 'object' || requirement === null) return [];
   const r = requirement as Row;
@@ -272,8 +253,7 @@ export function collectEvents(doc: ModuleDoc): GameEvent[] {
     });
   });
 
-  // Creatures and people react too, which is the half easiest to lose track of because it is spread
-  // one or two rules at a time across a bestiary.
+  // Creatures and people react too.
   const pushReactions = (rows: Row[], collection: string) => {
     rows.forEach((row, index) => {
       asArray(row['reactions']).forEach((reaction, i) => {

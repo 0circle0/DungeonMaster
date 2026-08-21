@@ -1,12 +1,4 @@
-/**
- * Turn structure: initiative, the action economy, and reactions.
- *
- * What a turn is comes from the module. `rules.actionTypes` declares the budget and abilities name
- * which they consume; the engine only tracks what has been spent.
- *
- * Combat begins when something hostile can perceive the party and ends when one side is gone. It is
- * not a mode the player enters deliberately.
- */
+/** Turn structure: initiative, the action economy, and reactions. */
 
 import { Rng } from '@dm/core';
 import { evalEffects, evalPredicate, compileRequirement, isEmptyRequirement } from '@dm/module';
@@ -90,21 +82,14 @@ function freshTurn(txn: Transaction, entity: Entity): { spent: Record<string, nu
   return { spent: {}, movement: speedOf(txn.module, entity) };
 }
 
-/**
- * Put the player behind the character whose turn it is. Commands act as the selected character, so
- * without this the last-selected member spends every party turn.
- */
+/** Put the player behind the character whose turn it is. */
 function selectActive(txn: Transaction, next: Entity): void {
   if (next.kind !== 'character' || !txn.state.party.includes(next.id)) return;
   if (txn.state.selected === next.id) return;
   txn.set({ ...txn.state, selected: next.id });
 }
 
-/**
- * Begin combat, if anything hostile can perceive the party. Sharing a map is not enough: enrolling
- * every creature in a dungeon the moment the party steps inside would have monsters take turns
- * against someone they have never seen. Only those who noticed take part.
- */
+/** Begin combat, if anything hostile can perceive the party. */
 export function maybeStartCombat(txn: Transaction, context: TargetingContext, rng: Rng): void {
   if (txn.state.combat) return;
 
@@ -148,19 +133,7 @@ export function maybeStartCombat(txn: Transaction, context: TargetingContext, rn
   if (order[0]) txn.emit({ type: 'turnStarted', entity: order[0] });
 }
 
-/**
- * Enrol anyone who has turned hostile since the fight started.
- *
- * `maybeStartCombat` returns immediately once combat is running, so a creature whose disposition
- * changes mid-fight would never appear in the initiative order.
- *
- * Newcomers are appended rather than sorted into place: `combat.turn` is an index into `order`, so
- * appending cannot change whose turn it is. They act at the end of this round and roll in with
- * everyone else at the start of the next.
- *
- * The awareness boundary applies here as at the start: turning hostile does not enrol something
- * that has not noticed anybody.
- */
+/** Enrol anyone who has turned hostile since the fight started. */
 export function joinCombat(txn: Transaction, context: TargetingContext, rng: Rng): void {
   const combat = txn.state.combat;
   if (!combat) return;
@@ -183,17 +156,12 @@ export function joinCombat(txn: Transaction, context: TargetingContext, rng: Rng
   for (const id of order) txn.emit({ type: 'joinedCombat', entity: id });
 }
 
-/**
- * End combat when one side is gone, or when neither side can find the other. The second case is
- * what makes breaking line of sight a real escape. The perception test needs terrain, so it only
- * runs for callers that have it.
- */
+/** End combat when one side is gone, or when neither side can find the other. */
 export function maybeEndCombat(txn: Transaction, context?: TargetingContext): void {
   const combat = txn.state.combat;
   if (!combat) return;
 
-  // Only the enrolled combatants matter: a creature asleep in another room does not keep this fight
-  // going.
+  // Only the enrolled combatants matter: a creature asleep in another room does not keep this fight going.
   const enrolled = combat.order
     .map((id) => txn.entity(id))
     .filter((entity): entity is NonNullable<typeof entity> => Boolean(entity));
@@ -214,17 +182,14 @@ export function maybeEndCombat(txn: Transaction, context?: TargetingContext): vo
       0,
     );
 
-    // Losing everyone stamps the round it happened, so a corner buys `patience` rounds rather than
-    // ending the encounter outright.
+    // Losing everyone stamps the round it happened, and `patience` counts from it.
     const found = anyoneCanSeeAnyone(txn, context, party, hostiles);
     const since = found ? null : combat.unseenSince ?? combat.round;
 
-    // At a patience of zero this is `since === combat.round`: lose them at the top of a round and
-    // the fight is over.
+    // At a patience of zero this is `since === combat.round`.
     escaped = since !== null && combat.round - since >= patience;
 
-    // Written back even when the fight continues, or a patience above zero would have nothing to
-    // count from.
+    // Written back even when the fight continues, so patience has something to count from.
     if (!escaped && since !== combat.unseenSince) {
       txn.set({ ...txn.state, combat: { ...combat, unseenSince: since } });
     }
@@ -252,15 +217,7 @@ export function maybeEndCombat(txn: Transaction, context?: TargetingContext): vo
   }
 }
 
-/**
- * Can any of these still perceive any of those?
- *
- * Asked at the `investigate` threshold, where starting a fight is asked at `aggro`: staying in a
- * fight takes less certainty than picking one.
- *
- * The two thresholds are ordered by the schema, so this bar is always the lower one, which means a
- * fight cannot end and immediately restart on the same tiles.
- */
+/** Can any of these still perceive any of those? */
 function anyoneCanSeeAnyone(
   _txn: Transaction,
   context: TargetingContext,
@@ -308,11 +265,7 @@ export function spendMovement(txn: Transaction, cost: number): void {
   txn.set({ ...txn.state, combat: { ...combat, movement: Math.max(0, combat.movement - cost) } });
 }
 
-/**
- * Advance to the next combatant, skipping the dead and ticking their conditions. Conditions tick at
- * the start of a creature's turn, so a burning creature takes damage once per round on its own
- * turn.
- */
+/** Advance to the next combatant, skipping the dead and ticking their conditions. */
 export function endTurn(txn: Transaction, context: TargetingContext, rng: Rng): void {
   const combat = txn.state.combat;
   if (!combat) {
@@ -387,10 +340,7 @@ interface SpecialTurnDef {
   when?: Predicate;
 }
 
-/**
- * Extra turns taken outside initiative. Run after each combatant's turn ends, which is where a
- * legendary action goes. Uses are counted per round and reset with the round.
- */
+/** Extra turns taken outside initiative. */
 function runSpecialTurns(txn: Transaction, rng: Rng): void {
   const combat = txn.state.combat;
   if (!combat) return;
@@ -438,10 +388,7 @@ function runSpecialTurns(txn: Transaction, rng: Rng): void {
   }
 }
 
-/**
- * Opportunity attacks provoked by leaving a threatened tile. Declared in `rules.opportunities`, so
- * a module that does not want them declares none.
- */
+/** Opportunity attacks provoked by leaving a threatened tile. */
 export function provokeOpportunity(
   txn: Transaction,
   context: TargetingContext,
@@ -505,14 +452,8 @@ export function provokeOpportunity(
   }
 }
 
-/**
- * Run a creature's reactions to something that happened. A reaction is gated on the reactor's own
- * memory, faction standing and state, and may involve them rolling dice of their own.
- */
-/**
- * A reaction's roll against somebody who is resisting it. `passive` uses their score standing
- * still; `contested` makes them roll, and the reactor's record is measured against what they got.
- */
+/** Run a creature's reactions to something that happened. */
+/** A reaction's roll against somebody who is resisting it. */
 function opposedRoll(
   txn: Transaction,
   rng: Rng,
@@ -544,8 +485,7 @@ export function runReactions(
   /** Which `custom` event this is, for reactions that name one. */
   customEvent?: string,
 ): void {
-  // `npcIdOf`, not `reactor.id`: an entity's id and the npc definition it came from are the same
-  // only by coincidence in `spawnNpc`.
+  // `npcIdOf`, not `reactor.id`: an entity id and its npc definition differ.
   const source = reactor.statblock
     ? txn.module.find<{ reactions?: ReactionDef[] }>('content.monsters', reactor.statblock)
     : txn.module.find<{ reactions?: ReactionDef[] }>('content.npcs', npcIdOf(reactor));
@@ -608,8 +548,7 @@ export function runReactions(
           ? (statsOf(txn.module, reactor).mod[reaction.roll.attribute] ?? 0)
           : 0;
 
-      // Which reading of "opposed" applies is the ruleset's call: `contested` rolls the subject
-      // too, `passive` measures against their score standing still.
+      // `contested` rolls the subject too; `passive` measures against their standing score.
       const roll = reaction.roll.opposedBy && subject
         ? opposedRoll(txn, rng, reactor, modifier, subject, reaction.roll.opposedBy)
         : check(txn.module, rng, {

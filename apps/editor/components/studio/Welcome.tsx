@@ -1,23 +1,6 @@
 'use client';
 
-/**
- * The shelf, before a world is open.
- *
- * The studio used to open straight into whichever module the server picked,
- * because there was always one on disk to pick. There is no disk now: a fresh
- * browser has an empty library, and the honest first screen says so and offers
- * every way out of it — start something, add an example, or open a file.
- *
- * Nothing is downloaded until asked. An example is a file this deployment
- * happens to be carrying; it may not be carrying any, and that is a normal
- * state rather than an error.
- *
- * No IndexedDB is the one state that is not a normal one. A world here *is* its
- * project files in the store, so a browser without one cannot open a world at
- * all — not a lesser mode, no mode. It gets told so instead of being shown three
- * buttons that will each fail, and instead of being told to download work it
- * could never have made in the first place.
- */
+/** The shelf, before a world is open. */
 
 import { useRef, useState } from 'react';
 import { blankModule } from '@/lib/templates';

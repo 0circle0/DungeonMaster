@@ -1,6 +1,4 @@
-/**
- * List all module events in one table, grouped by kind and filterable by text.
- */
+/** List all module events in one table, grouped by kind and filterable by text. */
 
 'use client';
 

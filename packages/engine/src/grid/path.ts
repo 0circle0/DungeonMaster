@@ -1,15 +1,4 @@
-/**
- * Pathfinding: A* over the tile map.
- *
- * Runs for every creature that moves, every turn, so it uses a binary heap rather than scanning an
- * array for the cheapest node.
- *
- * Movement cost comes from the module: each terrain declares a `moveCost` and each movement mode a
- * `terrainMultiplier`, so a swimmer crosses water cheaply and a walker cannot cross it at all.
- *
- * Ties are broken by insertion order, so the same request always returns the same path — a replay
- * that diverged because two routes tied would be hard to debug.
- */
+/** Pathfinding: A* over the tile map. */
 
 import { key } from './tiles.js';
 import type { Position, TileMap, TerrainIndex } from './tiles.js';
@@ -85,15 +74,12 @@ export interface PathOptions {
   readonly maxCost?: number;
   /** Whether diagonal steps are allowed. */
   readonly diagonal?: boolean;
-  /**
-   * Stop on reaching any tile adjacent to the goal rather than the goal itself — what a melee
-   * attacker wants, since the target's own tile is occupied.
-   */
+  /** Stop on any tile adjacent to the goal rather than the goal itself. */
   readonly adjacentIsEnough?: boolean;
 }
 
 export interface Path {
-  /** Tiles from the step after `from` through the destination. Empty if none. */
+  /** Tiles from the step after `from` through the destination. */
   readonly steps: readonly Position[];
   readonly cost: number;
   readonly found: boolean;
@@ -134,8 +120,7 @@ export function findPath(options: PathOptions): Path {
       const next = { x: current.x + offset.x, y: current.y + offset.y };
       const nextKey = key(next);
 
-      // The goal itself may be occupied — the normal case when moving to attack — so an occupied
-      // goal is still worth reaching.
+      // An occupied goal is still worth reaching.
       if (blocked.has(nextKey) && nextKey !== goalKey) continue;
 
       const step = terrain.costOf(map, next, modes);
@@ -175,10 +160,7 @@ function reconstruct(
   return { steps, cost, found: true };
 }
 
-/**
- * Every tile reachable within a movement budget, with what it costs to get there. Draws the "where
- * can I move" highlight, and tells an AI where it can stand.
- */
+/** Every tile reachable within a movement budget, with what it costs to get there. */
 export function reachable(
   options: Omit<PathOptions, 'to' | 'adjacentIsEnough'> & { budget: number },
 ): Map<number, number> {
@@ -220,10 +202,7 @@ export function reachable(
   return costs;
 }
 
-/**
- * Flood fill of everything connected to a start tile. Used by generation to prove a dungeon has no
- * sealed-off rooms.
- */
+/** Flood fill of everything connected to a start tile. */
 export function floodFill(
   map: TileMap,
   terrain: TerrainIndex,

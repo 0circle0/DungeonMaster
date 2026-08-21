@@ -1,27 +1,11 @@
-"""The Unsealing, Act III — the Deeproads, and how it ends.
-
-Five quests under the whole continent, finishing at the ninth door of the Long
-Hall — the one that is open, out of two hundred and eleven that are not.
-
-**Nothing here is gated on reputation or on any Act II choice.** The Eleventh
-Chamber wants two Ward-Keys and every route yields one however you resolved it,
-so a party that antagonised every faction on the continent, broke every ward,
-and stole from the Library can still walk to the end. What those choices buy is
-which endings *read* differently, who is standing beside you, and what the
-epilogue says — never whether you get there.
-
-The three endings are one quest with a `resolved_either_way` objective and an
-`if` chain in `onComplete`, because the engine has no branch primitive and this
-is what one is built out of.
-"""
+"""The Unsealing, Act III — the Deeproads, and how it ends."""
 from dmkit.quests import (
     quest, stage, reach, kill, flagged, resolved_either_way, set_flag, rep,
     deed, either, node, option, take_job, dialogue, npc, shop,
 )
 from dmkit.prose import pool
 
-# Two of the three, in any combination. `anyOf` is one level deep, which is
-# exactly deep enough for this and not deep enough for anything cleverer.
+# Two of the three, in any combination.
 TWO_KEYS = {
     "description": "two of the three ward-keys",
     "anyOf": [
@@ -40,12 +24,7 @@ NPCS = [
         home="lantern_deep_fungus_market", disposition=5, gullibility=0.4,
         memory_span=200, cares=["lantern_lit", "deep_door_opened"],
         offers=["lantern_deep"],
-        # Gated, like every other shop in the world: forty people can get you
-        # from here to Karn Dolur and the number is not going up, so they do
-        # not sell the deep stores to somebody they have not led. `lantern_deep`
-        # pays 15, so her own job opens her shelves — which is the shape the
-        # rest of the module already uses and the only faction that was missing
-        # it.
+        # Gated like every other shop: `lantern_deep` pays 15, which opens her shelves.
         shop=shop("deep_stock", multiplier=1.4,
                   requires={"factions": [{"faction": "the_wayfinders",
                                           "minStanding": 10}]})),
@@ -68,7 +47,7 @@ QUESTS = [
             "get_down", "Find a way into the Deeproads.",
             ["down_by_karn_dolur", "down_by_the_tarn", "down_by_the_crater"])],
         xp=300, tags=["act3"],
-        # Two routes done, whichever two. Nothing here asks which.
+        # Two routes done, whichever two.
         requires=TWO_KEYS,
         unlocks=["lantern_deep"],
         on_complete=[set_flag("in_the_deeproads")],
@@ -154,8 +133,7 @@ QUESTS = [
             either("ending_lantern",
                    [deed("lantern_lit"), rep("the_wayfinders", 25),
                     rep("the_keepers", 20),
-                    # Lighting it shuts every door, and the Deeproads are a
-                    # door. Lantern Deep loses its road and keeps its light.
+                    # Lighting it shuts every door, and the Deeproads are a door.
                     set_flag("deeproads_sealed")],
                    []),
             either("ending_through",

@@ -1,19 +1,4 @@
-"""The Dry River — a Sunward Steppe side chain, Act II.
-
-Three Wells has two. The third went in a season, in a place where the horse
-road exists because the wells do, and the Ilkhet lines have been watering at
-Tallgrass ever since and losing a day each way for it.
-
-The chain runs beside the Kurgan route without touching it: same grass, same
-riders, and a problem about water rather than about wards. What it establishes
-is the Ilkhet lines as a power in their own right — nine families, eleven
-thousand horses, and a grazing right older than the Crown that has never been
-written down anywhere the Crown could read it.
-
-The branch is about that last part. The Crown would pay well for a surveyed
-route to a working well, and the lines have spent four hundred years making
-sure nobody has one.
-"""
+"""The Dry River — a Sunward Steppe side chain, Act II."""
 from dmkit.quests import (
     arc, stage, reach, kill, talk, flagged, resolved_either_way,
     set_flag, rep, give, deed, either, node, option, take_job, dialogue, npc,

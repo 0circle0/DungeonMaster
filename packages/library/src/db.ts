@@ -1,7 +1,4 @@
-/**
- * IndexedDB schema for the library and world storage.
- * The studio stores project files by path; the player stores compiled payloads per world.
- */
+/** IndexedDB schema for the library and world storage. */
 
 import type { Codec } from './gzip.js';
 
@@ -42,19 +39,14 @@ export interface PayloadRecord {
   readonly rawBytes: number;
 }
 
-/**
- * One project file stored for a world.
- * The path matches the module bundle layout and is used as the record key.
- */
+/** One project file stored for a world. */
 export interface FileRecord {
   readonly world: string;
   readonly path: string;
   readonly text: string;
 }
 
-/**
- * Key range covering every file record for a single world.
- */
+/** Key range covering every file record for a single world. */
 export function worldRange(key: string): IDBKeyRange {
   return IDBKeyRange.bound([key], [key, []]);
 }
@@ -81,44 +73,25 @@ export function openLibrary(): Promise<IDBDatabase> {
 
     request.onupgradeneeded = (event) => {
       const db = request.result;
-      // One block per version, and an old block is never edited afterwards: the
-      // browser replays from whatever version this profile happens to hold, so
-      // a profile at 1 runs only what is new. Written as `<` tests rather than a
-      // `switch` because the ladder needs every later step to run and a
-      // fall-through `switch` is exactly what `noFallthroughCasesInSwitch`
-      // exists to prevent.
+      // Version ladder: each block runs when the stored version is below it.
       if (event.oldVersion < 1) {
         const worlds = db.createObjectStore(WORLDS, { keyPath: 'key' });
         worlds.createIndex('byUpdatedAt', 'updatedAt');
         worlds.createIndex('byModuleId', 'moduleId');
         db.createObjectStore(PAYLOADS, { keyPath: 'key' });
         db.createObjectStore('drafts', { keyPath: 'key' });
-        // Reserved. Save games live in `localStorage` today because they are
-        // small and the save menu reads them synchronously — but a long run
-        // of a large world may outgrow it, and creating the store now means
-        // that move is a code change rather than a schema upgrade applied to
-        // people who already have data.
+        // Reserved.
         db.createObjectStore(SAVES, { keyPath: 'id' });
         db.createObjectStore(META, { keyPath: 'k' });
       }
 
       if (event.oldVersion < 2) {
-        // The studio's worlds become files. Drafts go with the blob they
-        // existed to protect: they were a *two-version* mechanism, keeping the
-        // last document that compiled while a half-typed one was set aside.
-        // Files have no second version to keep — an entry with a bad reference
-        // is a file like any other, and `joinProject` is structural, so a world
-        // that does not compile still opens. The trade is deliberate: the
-        // library used to always hold a loadable world, and now it always holds
-        // *yours*.
+        // Worlds are stored as files from this version on; the drafts store goes.
         if (db.objectStoreNames.contains('drafts')) db.deleteObjectStore('drafts');
         if (!db.objectStoreNames.contains(FILES)) {
           db.createObjectStore(FILES, { keyPath: ['world', 'path'] });
         }
-        // A metadata row whose bytes are gone is worse than no row: the
-        // switcher would offer a world that cannot open. Nothing is lost that
-        // was not already unreachable — see `deploy.yml` on how many people
-        // this is.
+        // Metadata rows whose payloads are gone are cleared with them.
         request.transaction?.objectStore(WORLDS).clear();
       }
     };
@@ -127,8 +100,7 @@ export function openLibrary(): Promise<IDBDatabase> {
     request.onerror = () => reject(asError(request.error, 'could not open the library'));
     request.onblocked = () => reject(new Error('the library is open in another tab that must be closed first'));
   }).catch((err: unknown) => {
-    // A failed open must not be cached, or a transient failure becomes
-    // permanent for the life of the page.
+    // A failed open is not cached.
     opening = null;
     throw err;
   });
@@ -161,29 +133,18 @@ export function tx<T>(
       result = body(transaction);
     } catch (err) {
       transaction.abort();
-      // `put` can throw synchronously — a quota failure does exactly that — so
-      // the name has to survive here as well.
+      // `put` can throw synchronously, so the error name is preserved here too.
       reject(err instanceof Error ? err : asError(err as DOMException | null, 'transaction failed'));
       return;
     }
     transaction.oncomplete = () => resolve(result);
-    // `transaction.error` is a `DOMException`, which is not an `Error` — and a
-    // quota failure arrives this way, so its `name` has to survive for
-    // `isQuotaError` to recognise it.
+    // `transaction.error` is a `DOMException`; `isQuotaError` reads its name.
     transaction.onerror = () => reject(asError(transaction.error, 'transaction failed'));
     transaction.onabort = () => reject(asError(transaction.error, 'transaction aborted'));
   });
 }
 
-/**
- * One request, as a promise.
- *
- * Resolving on the request rather than on the transaction is right for reads:
- * the value is available then, and the transaction commits immediately after
- * with nothing left to report. Writes go through `tx`, which waits for the
- * commit, because a write that resolved early would let a caller believe a
- * world was stored when the transaction could still abort.
- */
+/** One request, as a promise. */
 function wrap<T>(request: IDBRequest<T>): Promise<T> {
   return new Promise<T>((resolve, reject) => {
     request.onsuccess = () => resolve(request.result);

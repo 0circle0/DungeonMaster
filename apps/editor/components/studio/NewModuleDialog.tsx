@@ -1,18 +1,6 @@
 'use client';
 
-/**
- * "New module": a blank scaffold, or somebody else's rules to start from.
- *
- * The second option is the one that did not exist. `blankModule()` gives one
- * attribute, one resource and one class, and the only way to a real ruleset was
- * a Python script in the repository — so an author working in a browser typed
- * six attributes, ten damage types and five classes by hand or gave up.
- *
- * Every section is on by default, because "the full ruleset" is what somebody
- * asking for a beginner's starting point means. Each one can be turned off, and
- * turning one off takes whatever refers to it, since the alternative is a
- * document that fails to compile for reasons expressed nowhere on this screen.
- */
+/** "New module": a blank scaffold, or somebody else's rules to start from. */
 
 import { useMemo, useState } from 'react';
 import type { ModuleDoc } from '@/lib/store';
@@ -36,13 +24,7 @@ export function NewModuleDialog(props: {
 }) {
   const { library } = props;
 
-  /**
-   * Where the rules come from.
-   *
-   * The catalog first — a deployment usually carries one ruleset for exactly
-   * this — then any world already in the library, because build.py's trick of
-   * lifting a ruleset out of a finished world works just as well from here.
-   */
+  /** Where the rules come from. */
   const sources: readonly { value: string; label: string; source: Source }[] = useMemo(() => [
     ...library.catalog.modules.map((entry) => ({
       value: `example:${entry.id}`,
@@ -64,8 +46,7 @@ export function NewModuleDialog(props: {
   const toggle = (id: string) => {
     setSelected((current) => {
       if (!current.has(id)) return withPrerequisites([...current, id]);
-      // Dropping a section drops what refers to it. Leaving them behind would
-      // produce dangling references the author never chose.
+      // Dropping a section drops what refers to it.
       const falling = new Set([id, ...dependents(id, current)]);
       return new Set([...current].filter((held) => !falling.has(held)));
     });

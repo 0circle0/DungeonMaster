@@ -1,6 +1,4 @@
-/**
- * Simulate memory spread over time for a chosen deed and witness set.
- */
+/** Simulate memory spread over time for a chosen deed and witness set. */
 
 'use client';
 

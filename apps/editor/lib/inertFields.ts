@@ -1,22 +1,4 @@
-/**
- * Fields the engine does not read (yet).
- *
- * The schema-generated forms render every field with equal weight, which
- * quietly teaches authors that every field matters. Some don't: they are
- * accepted, validated, exported — and never dereferenced by the engine. This
- * registry is the studio's honesty layer: the inspector shows these notes
- * under the form so an author knows which knobs are connected to anything.
- *
- * Hand-maintained on purpose. Deriving it would mean grepping the engine at
- * build time; a curated list fails open (an unlisted field is simply shown as
- * live) and cannot drift the schema.
- *
- * **It is no longer only a promise.** `inertFields.test.ts` greps the engine
- * for every field named here and fails when one turns out to be read — which
- * is exactly the drift that let an earlier version of this file go stale,
- * undercounting the real inert surface several times over. Wiring a field up
- * now means deleting its line, and the build says so if you forget.
- */
+/** Fields the engine does not read (yet). */
 
 export interface CoverageNote {
   /** Top-level field key on the entry, or '*' for the whole collection. */

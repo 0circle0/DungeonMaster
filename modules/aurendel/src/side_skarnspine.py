@@ -1,20 +1,4 @@
-"""The Cut — a Skarnspine side chain, Act II.
-
-The Weirwater goes into the ground at the swallet below the corrie lake and
-comes out eleven miles down at the head of the Kingsvale, and it has done that
-for as long as anybody has been counting. This spring it came out red for nine
-days and then stopped coming out at all for two.
-
-Karn Dolur cares because the Hold's water comes off the same mountain and the
-Hold has nine hundred years of ledgers about exactly that. Hulf keeps the pass
-ward on the Hold's behalf and has been told to find out without making it the
-Hold's problem, which is the sort of instruction that arrives with a purse.
-
-The branch is the Skarnspine argument in miniature: the galleries can be sealed
-behind you, or they can be left open as the road under the pass that the
-muleteers have wanted for two centuries and the Hold has refused for the same
-two centuries.
-"""
+"""The Cut — a Skarnspine side chain, Act II."""
 from dmkit.quests import (
     arc, stage, reach, kill, talk, flagged, resolved_either_way,
     set_flag, rep, give, deed, either, node, option, take_job, dialogue, npc,

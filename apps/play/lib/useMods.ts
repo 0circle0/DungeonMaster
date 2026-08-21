@@ -1,17 +1,6 @@
 'use client';
 
-/**
- * Mod setup as a hook.
- *
- * Two things it has to get right:
- *
- *   - **Nothing renders the game until the answer is known.** A session started
- *     without its mods and then re-created with them would have already
- *     advanced the RNG, so the run would not match a replay.
- *   - **A module that declares no mods pays nothing.** No WASM, no await, no
- *     loading state — `status` is `ready` on the first render and the game
- *     mounts exactly as it did before mods existed.
- */
+/** Mod setup as a hook. */
 
 import { useEffect, useMemo, useState } from 'react';
 import type { CompiledModule } from '@dm/module';
@@ -51,9 +40,7 @@ export function useMods(module: CompiledModule, available: readonly ModWire[]): 
 
     void setUpMods(module, available, (id) => !disabled.has(id)).then((setup) => {
       if (cancelled) return;
-      // A missing *required* mod is the one case that stops play: the game says
-      // it needs it, and pretending otherwise produces a broken session that
-      // reads as an engine bug.
+      // A missing required mod is the one case that stops play.
       setState(setup.resolution.ok ? { status: 'ready', setup } : { status: 'blocked', setup });
     });
 
@@ -79,8 +66,7 @@ export function useMods(module: CompiledModule, available: readonly ModWire[]): 
         const next = new Set(current);
         if (on) next.delete(id);
         else next.add(id);
-        // Persisted as the *enabled* set, so a mod added to a game later
-        // defaults to on rather than inheriting an old absence.
+        // Persisted as the enabled set, so a mod added later defaults to on.
         writeEnabled(
           moduleId,
           declared.filter((d) => !next.has(d.id)).map((d) => d.id),

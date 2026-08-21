@@ -1,33 +1,9 @@
-/**
- * Contracts the schema cannot see.
- *
- * `validate` proves a document is well-formed and that every declared reference resolves. Three
- * things in this format fail at play time rather than at load time, and a module carrying any of
- * them passes every existing check:
- *
- * - `objective.target` is a plain id, not a `ref()`, because a `reach` target may be a point of
- *   interest, a map, a trigger or a gate. A `kill` objective naming a monster that does not exist
- *   compiles clean and never completes.
- * - Flags are free strings. `sisters_restord` and `sisters_restored` both validate; the quest
- *   waiting on the second hangs forever.
- * - Per-quest validity is not reachability. Every quest can be individually fine while nothing
- *   offers half of them.
- *
- * The structure mirrors `modules/shared/dmkit/lint.py`: a `Context` that indexes once and shares
- * its derived sets, a `Contract` of the few facts a shared checker cannot know, and a caller-owned
- * list of rules, because the order of the list is the order of the report.
- *
- * A rule is data. It carries what it reads, so the incremental validator can skip it, and why it
- * exists, so the studio can explain itself.
- */
+/** Contracts the schema cannot see. */
 
 import type { CollectionPath } from '../schema/module.js';
 import type { Diagnostic, Severity } from './lint.js';
 
-/**
- * The few facts about a particular module that no shared checker can know, passed as data rather
- * than guessed.
- */
+/** The few facts about a particular module that no shared checker can know. */
 export interface Contract {
   /** Quests that gate an act, so a chain waiting on one is contained. */
   readonly actGateQuests?: readonly string[];
@@ -43,7 +19,7 @@ export interface Rule {
   /** Why this matters, in a sentence an author can act on. */
   readonly why: string;
   readonly severity: Severity;
-  /** What it reads. Metadata for scoping, and documentation either way. */
+  /** What it reads. */
   readonly reads: readonly CollectionPath[];
   run(ctx: RuleContext): void;
 }
@@ -89,11 +65,7 @@ function walkFor(node: unknown, key: string, seen: (value: unknown, path: string
   }
 }
 
-/**
- * The document, indexed once, with the derived sets every rule wants. Built before any rule runs,
- * because half of them ask the same questions and computing per rule would be slower and a place
- * for two rules to disagree.
- */
+/** The document, indexed once, with the derived sets every rule wants. */
 export class RuleContext {
   readonly doc: Entry;
   readonly contract: Contract;
@@ -106,10 +78,7 @@ export class RuleContext {
   /** Flags something writes, and flags something waits on. */
   readonly flagWrites = new Set<string>();
   readonly flagReads = new Map<string, string>();
-  /**
-   * Flags read at least once positively. A flag read only under `without` fails the opposite way
-   * when nothing sets it: the gate never closes rather than never opening.
-   */
+  /** Flags read at least once positively. */
   readonly positiveFlagReads = new Set<string>();
 
   /** Quests a player can actually arrive at, transitively through `unlocks`. */
@@ -118,20 +87,13 @@ export class RuleContext {
   /** Monsters some referenced encounter table can produce. */
   readonly spawnable = new Set<string>();
 
-  /** Dialogues something names. `talk` is the only way into one. */
+  /** Dialogues something names. */
   readonly ownedDialogues = new Set<string>();
 
-  /**
-   * Flags whose every writer sits inside a dialogue no NPC owns. Distinct from a flag nothing
-   * writes: `flag_never_set` is correctly silent because the writer is in the file, but there is no
-   * way to reach the prose that runs it.
-   */
+  /** Flags whose every writer sits inside a dialogue no NPC owns. */
   readonly strandedFlags = new Set<string>();
 
-  /**
-   * Trigger ids, which a `reach` objective may name. On the context rather than in the rule because
-   * it means walking the whole document, and the rule asks per objective.
-   */
+  /** Trigger ids, which a `reach` objective may name. */
   readonly triggerIds = new Set<string>();
 
   constructor(doc: Entry, contract: Contract = {}) {
@@ -169,10 +131,7 @@ export class RuleContext {
     return this.out;
   }
 
-  /**
-   * Both spellings: the DSL's `flags.x` path, and a requirement's `flag`. What is recorded is where
-   * the read is, not what it reads, so a report entry points at a place in the document.
-   */
+  /** Both spellings: the DSL's `flags.x` path, and a requirement's `flag`. */
   private collectFlags(): void {
     walkFor(this.doc, 'setFlag', (value) => {
       const flag = (value as Entry | null)?.['flag'];
@@ -196,10 +155,7 @@ export class RuleContext {
     });
   }
 
-  /**
-   * A quest is startable if a player can be offered it, or if something startable unlocks it. Five
-   * ways in, mirroring the engine.
-   */
+  /** A quest is startable if a player can be offered it, or if something startable unlocks it. */
   private collectStartable(): void {
     const byId = new Map(this.quests.map((quest) => [String(quest['id']), quest]));
 
@@ -235,11 +191,7 @@ export class RuleContext {
     }
   }
 
-  /**
-   * A monster is spawnable only through a table something actually draws from. A table nothing
-   * references is invisible to the world, so a `kill` objective naming a creature that only appears
-   * there can never be completed.
-   */
+  /** A monster is spawnable only through a table something actually draws from. */
   private collectSpawnable(): void {
     const referenced = new Set<string>();
     walkFor(this.doc, 'encounterTables', (value) => {
@@ -257,10 +209,7 @@ export class RuleContext {
     }
   }
 
-  /**
-   * One walk, sorting each write by whether it is inside an unreachable dialogue. A flag is
-   * stranded only if nothing else writes it, so the two sets are collected together and subtracted.
-   */
+  /** One walk, sorting each write by whether it is inside an unreachable dialogue. */
   private collectStranded(): void {
     const unowned = new Set<number>();
     this.dialogues.forEach((dialogue, i) => {
@@ -305,9 +254,7 @@ export class RuleContext {
   }
 }
 
-// ---------------------------------------------------------------------------
-// The rules
-// ---------------------------------------------------------------------------
+// --- The rules -------------------------------------------------------------
 
 export const objectiveTargetsResolve: Rule = {
   code: 'objective_target_missing',
@@ -336,8 +283,7 @@ export const objectiveTargetsResolve: Rule = {
         const collections = TARGET_COLLECTION[kind];
         if (!collections || collections.length === 0 || typeof target !== 'string') continue;
 
-        // `reach` may name a trigger, which lives inside a point of interest rather than in a
-        // collection of its own.
+        // `reach` may name a trigger, which lives inside a point of interest.
         const found =
           collections.some((collection) => known(collection).has(target)) ||
           (kind === 'reach' && ctx.triggerIds.has(target));
@@ -356,15 +302,7 @@ export const objectiveTargetsResolve: Rule = {
   },
 };
 
-/**
- * Flags the engine writes, which no module will be seen setting.
- *
- * The engine keeps its own records in the same flag space under computed names — a trigger that has
- * fired, a place that has been found, a door that has been opened — and content may read them.
- *
- * Prefixes rather than names, because the second half is an id. Kept honest by `rules.test.ts`,
- * which greps the engine for each one.
- */
+/** Flags the engine writes, which no module will be seen setting. */
 export const ENGINE_FLAG_PREFIXES = [
   'trigger:',
   'found:',
@@ -407,10 +345,7 @@ export const flagsHaveWriters: Rule = {
   },
 };
 
-/**
- * Separate from `flag_never_set` rather than folded into it: the two look alike in a report and are
- * opposite to fix — one is a name nobody wrote, the other is prose nobody can open.
- */
+/** Separate from `flag_never_set`: the two look alike but are opposite to fix. */
 export const flagWritersCanRun: Rule = {
   code: 'flag_writer_unreachable',
   title: 'The thing that sets a flag can be reached',
@@ -434,15 +369,7 @@ export const flagWritersCanRun: Rule = {
   },
 };
 
-/**
- * A road is a thing between two places, and the format stores it twice.
- *
- * `connections` is per area, so a road from A to B is one entry in A and another in B, and nothing
- * makes the second follow from the first.
- *
- * The failure is quiet: the party walks somewhere and cannot walk back, which reads as design
- * rather than as a missing line. `oneWay` says it was meant.
- */
+/** A road is a thing between two places, and the format stores it twice. */
 export const roadsAreTwoWay: Rule = {
   code: 'road_is_one_sided',
   title: 'Roads go both ways unless they say otherwise',
@@ -462,8 +389,7 @@ export const roadsAreTwoWay: Rule = {
         if (road['oneWay'] === true) continue;
         const to = String(road['to']);
         const far = byId.get(to);
-        // A road to somewhere that does not exist is a dangling reference the compiler has already
-        // reported.
+        // A road to somewhere that does not exist is a dangling reference the compiler reports.
         if (!far) continue;
         const returns = asList(far['connections']).some((back) => String(back['to']) === from);
         if (returns) continue;
@@ -478,10 +404,7 @@ export const roadsAreTwoWay: Rule = {
   },
 };
 
-/**
- * The engine runs an option's effects before its check, and regardless of the result, so anything
- * given away from `option.effects` is given away on a failed roll too.
- */
+/** An option's effects run before its check, and regardless of the result. */
 const GRANTS = ['learnLore', 'grantItem', 'grantXp', 'setFlag', 'startQuest', 'completeQuest'];
 
 export const effectsRunBeforeChecks: Rule = {
@@ -519,10 +442,7 @@ export const effectsRunBeforeChecks: Rule = {
   },
 };
 
-/**
- * A hidden place needs a `discover`: without it there is no check to make, so the place is
- * unreachable rather than hidden.
- */
+/** A hidden place needs a `discover`, or it is unreachable rather than hidden. */
 export const hiddenPlacesCanBeFound: Rule = {
   code: 'hidden_place_unfindable',
   title: 'A hidden place has a way of being found',
@@ -544,14 +464,7 @@ export const hiddenPlacesCanBeFound: Rule = {
   },
 };
 
-/**
- * The difficulty of finding a hidden place usually falls as the party collects a thread's clues,
- * linked by a `threads.<id>.known` reference inside the formula. It is the only such link; nothing
- * records a thread's anchors anywhere else.
- *
- * A misspelling there is silent: the reference reads as nothing, the difficulty never falls, and
- * the place stays at its hardest check.
- */
+/** A `discover` formula links its thread by a `threads.<id>.known` reference. */
 export const discoverNamesAThread: Rule = {
   code: 'discover_names_no_thread',
   title: 'A discovery formula names a thread that exists',
@@ -656,18 +569,8 @@ export const dialoguesAreReachable: Rule = {
   },
 };
 
-/**
- * The order is the report, and callers own the list: a module with no quests wants a different set
- * from Aurendel.
- */
-/**
- * The two halves of sense suppression name each other, and neither can be a schema reference.
- *
- * `conditions[].suppressesSenses` cannot be a `ref` because it would make the composer's `damage`
- * section depend on `movement`, which already reaches back to `damage` through `skills`;
- * `senses[].ignores` has the mirror of the same problem. So both are bare ids, and a typo in either
- * is silent.
- */
+/** The order is the report, and callers own the list. */
+/** The two halves of sense suppression name each other, and neither can be a schema reference. */
 export const senseLinksResolve: Rule = {
   code: 'sense_link_dangling',
   title: 'Sense suppression names things that exist',
@@ -734,10 +637,7 @@ export function runRules(
   return ctx.diagnostics();
 }
 
-/**
- * Whether a requirement path sits under a negation. `without` is the schema's only negation for a
- * flag clause; `not` is the DSL's.
- */
+/** Whether a requirement path sits under a negation. */
 function negated(path: string): boolean {
   return /(^|\.)(without|not)(\.|$)/.test(path);
 }

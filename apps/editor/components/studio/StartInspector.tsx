@@ -1,13 +1,4 @@
-/**
- * The start configuration, un-buried.
- *
- * In the generated form every `start` field is optional, so a plain render
- * would collapse all nine behind one "Optional (9)" toggle and the pane
- * would look empty. Here each top-level field renders directly, headed by a
- * plain statement of where play begins — or a red card when it begins
- * nowhere, which is the one authoring mistake that only surfaces at
- * `newGame` time.
- */
+/** The start configuration, un-buried. */
 
 import { getAt } from '@/lib/store';
 import type { ModuleStore } from '@/lib/store';

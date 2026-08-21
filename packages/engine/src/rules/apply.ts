@@ -1,13 +1,4 @@
-/**
- * Applying effects: the bridge from the DSL to game state.
- *
- * Content describes what should happen as data, `evalEffects` turns that into `EffectOp[]`, and
- * this turns those into state changes and events.
- *
- * An op is a request, and this validates it before applying: the dead take no damage, resources
- * clamp to their bounds, immune creatures shrug off conditions, and unknown ids are refused rather
- * than crashing. A module cannot corrupt a save.
- */
+/** Applying effects: the bridge from the DSL to game state. */
 
 import { Rng } from '@dm/core';
 import { evalEffects, evalExpr } from '@dm/module';
@@ -29,27 +20,16 @@ export class Transaction {
   private current: GameState;
   private readonly events: GameEvent[] = [];
 
-  /**
-   * Depletions currently unwinding, as `<entity>:<resource>`. Per-call scratch, not on `GameState`:
-   * a module whose `onDepleted` pushes the same pool back to its floor would otherwise recurse
-   * without end. Never serialized.
-   */
+  /** Depletions currently unwinding, as `<entity>:<resource>`. */
   readonly depleting = new Set<string>();
 
-  /**
-   * Guards `event.emit` against re-entering itself: a mod that emits from inside an emit hook would
-   * recurse until the stack gave out. Per-call scratch, never serialized.
-   */
+  /** Guards `event.emit` against re-entering itself. */
   private emitting = false;
 
   constructor(
     state: GameState,
     readonly module: CompiledModule,
-    /**
-     * Installed mods, or null when there are none. Carried on the transaction rather than passed
-     * down because the deepest hook site — an unimplemented effect op — is several frames below
-     * `reduce`. Null costs an optional-chain miss.
-     */
+    /** Installed mods, or null when there are none. */
     readonly mods: ModRuntime | null = null,
   ) {
     this.current = state;
@@ -59,11 +39,7 @@ export class Transaction {
     return this.current;
   }
 
-  /**
-   * Randomness for effects evaluated deep inside an application, such as an `onDepleted` that heals
-   * `1d4` or a condition whose `defaultDuration` is rolled. Derived from the state's own generator,
-   * so a replay reproduces them exactly.
-   */
+  /** Randomness for effects evaluated inside an application, derived from the state's generator. */
   rngFor(label: string): Rng {
     return Rng.fromState(this.current.rng).derive(label);
   }
@@ -75,11 +51,7 @@ export class Transaction {
   emit(event: GameEvent): void {
     this.events.push(event);
 
-    /**
-     * Mods watching for this specific event type. The `match` on the declaration is mandatory for
-     * this hook, so the gate below is a `Set` miss for every event nobody asked about — this runs
-     * hundreds of times a turn. Re-entrancy is guarded.
-     */
+    /** Mods watching for this specific event type. */
     if (this.emitting) return;
     if (!this.mods?.has('event.emit', event.type)) return;
     this.emitting = true;
@@ -134,13 +106,7 @@ interface MonsterDef {
   conditionImmunities?: string[];
 }
 
-/**
- * Every resistance, immunity and vulnerability that applies to a creature: the statblock, the
- * ancestry, and carried items.
- *
- * Sources compose multiplicatively, so armour that halves fire on top of an ancestry that already
- * halves it leaves a quarter.
- */
+/** Every resistance, immunity and vulnerability on a creature; sources compose multiplicatively. */
 function interactionsFor(module: CompiledModule, target: Entity): Interaction[] {
   const out: Interaction[] = [];
 
@@ -173,11 +139,7 @@ function immunitiesOf(module: CompiledModule, target: Entity): string[] {
   return out;
 }
 
-/**
- * Damage multiplier for a type, from the target's resistances. One multiplier covers resistance
- * (0.5), immunity (0) and vulnerability (2), and lets a module express healing from a damage type
- * as -1.
- */
+/** Damage multiplier for a type, from the target's resistances. */
 function damageMultiplier(
   module: CompiledModule,
   target: Entity,
@@ -215,8 +177,7 @@ export function adjustResource(
   }
 
   const before = entity.resources[resourceId] ?? 0;
-  // Both bounds depend on gear and conditions, so they are computed rather than stored; see
-  // `stats.ts`.
+  // Both bounds depend on gear and conditions, so they are computed rather than stored; see `stats.ts`.
   const max = maximaFor(txn, entity)[resourceId] ?? before;
   const min = minimaFor(txn, entity)[resourceId] ?? 0;
 
@@ -251,14 +212,7 @@ export function adjustResource(
   }
 }
 
-/**
- * What happens when a pool bottoms out.
- *
- * The module's own `onDepleted` runs first, and death is declared afterwards only if the character
- * is still at the floor. That is what lets `[heal 1, applyCondition downed]` mean "dropped to 0 and
- * stabilised" without the engine needing a concept of dying. A resource with no `onDepleted` is
- * unaffected.
- */
+/** What happens when a pool bottoms out. */
 function runDepletion(
   txn: Transaction,
   entityId: EntityId,
@@ -269,8 +223,7 @@ function runDepletion(
   const effects = (definition?.onDepleted ?? []) as Effect[];
 
   if (effects.length > 0) {
-    // `onDepleted` may itself damage, heal or kill, so a re-entry mark guards against a module
-    // whose effects push the same pool back down. Per-call scratch, never serialized.
+    // Re-entry mark for `onDepleted`.
     const mark = `${entityId}:${resourceId}`;
     if (txn.depleting.has(mark)) return;
     txn.depleting.add(mark);
@@ -286,8 +239,7 @@ function runDepletion(
     }
   }
 
-  // Death is whatever the module attached to the vital resource running out, and only if the module
-  // did not just pull the character back off the floor.
+  // Death is whatever the module attached to the vital resource running out.
   if (resourceId !== txn.module.source.rules.vitalResource) return;
 
   const after = txn.entity(entityId);
@@ -300,11 +252,7 @@ function runDepletion(
   txn.emit({ type: 'died', entity: entityId, killer });
 }
 
-/**
- * Resource maxima, cached per entity object. Maxima depend on gear and conditions so they are
- * computed rather than stored; the cache is keyed on the entity object, so any change invalidates
- * it.
- */
+/** Resource maxima, cached per entity object. */
 const maximaCache = new WeakMap<Entity, Record<string, number>>();
 
 function maximaFor(txn: Transaction, entity: Entity): Record<string, number> {
@@ -377,8 +325,7 @@ export function applyCondition(
   txn.putEntity({ ...entity, conditions });
   txn.emit({ type: 'conditionApplied', entity: entity.id, condition: conditionId, duration: applied, stacked });
 
-  // `onApply` fires when the condition takes hold, so a second dose of a `refresh` condition re-
-  // runs it and one that was `ignore`d does not.
+  // `onApply` fires when the condition takes hold, and again on a `refresh` dose.
   const effects = (definition.onApply ?? []) as Effect[];
   if (effects.length > 0) {
     const current = txn.entity(entity.id);
@@ -468,10 +415,7 @@ export function adjustReputation(txn: Transaction, factionId: string, delta: num
   }
 }
 
-/**
- * Apply a list of effect ops. Ops are applied in order and each reads the state the previous one
- * left, so content can rely on sequencing.
- */
+/** Apply a list of effect ops. */
 export function applyOps(txn: Transaction, ops: readonly EffectOp[], source: EntityId | null = null): void {
   for (const op of ops) {
     switch (op.op) {
@@ -479,8 +423,7 @@ export function applyOps(txn: Transaction, ops: readonly EffectOp[], source: Ent
         const target = asEntityId(op.target, txn.state);
         const entity = target ? txn.entity(target) : undefined;
         if (!entity) break;
-        // The dead take no further damage, so an area effect cannot kill a corpse repeatedly and
-        // emit a death event each time.
+        // The dead take no further damage.
         if (!entity.alive) break;
 
         const multiplier = damageMultiplier(txn.module, entity, op.damageType, op.tags ?? []);
@@ -544,8 +487,7 @@ export function applyOps(txn: Transaction, ops: readonly EffectOp[], source: Ent
       }
 
       case 'learnLore': {
-        // Learning a clue twice is silent, and the recorded minute stays the first one: content
-        // teaches the same clue from several places on purpose.
+        // Learning a clue twice is silent; the recorded minute stays the first.
         if (!txn.module.find('narrative.lore', op.entry)) break;
         if (op.entry in txn.state.lore) break;
         txn.set({ ...txn.state, lore: { ...txn.state.lore, [op.entry]: txn.state.minute } });
@@ -558,8 +500,7 @@ export function applyOps(txn: Transaction, ops: readonly EffectOp[], source: Ent
         break;
 
       case 'setDisposition': {
-        // Move a creature's stance toward the party. Enrolling it in a fight already under way is
-        // `settle`'s job.
+        // Move a creature's stance toward the party.
         const subject = txn.entity(String(op.target));
         if (!subject) break;
 
@@ -587,8 +528,7 @@ export function applyOps(txn: Transaction, ops: readonly EffectOp[], source: Ent
       }
 
       case 'adjustCurrency': {
-        // Whether the purse can go below zero is the module's call: clamped, a party that
-        // overspends is refused the difference; allowed, a module can model a debt.
+        // Whether the purse can go below zero is the module's call.
         const before = txn.state.purse;
         const raw = before + op.amount;
         const after = configOf(txn.module).allowDebt ? raw : Math.max(0, raw);
@@ -602,8 +542,7 @@ export function applyOps(txn: Transaction, ops: readonly EffectOp[], source: Ent
         const target = asEntityId(op.target, txn.state);
         const entity = target ? txn.entity(target) : undefined;
         if (!entity) break;
-        // Teleporting to a named place is resolved by the caller, which knows about maps; here it
-        // records the intent as a custom event.
+        // Teleporting to a named place is recorded as a custom event; the caller resolves it.
         txn.emit({ type: 'custom', event: 'moveRequested', data: { entity: entity.id, to: op.to } });
         break;
       }
@@ -630,13 +569,11 @@ export function applyOps(txn: Transaction, ops: readonly EffectOp[], source: Ent
       }
 
       default: {
-        // Refuse an op the engine does not implement. The `never` makes it a compile error to add
-        // an op and forget the case; the refusal covers a module built against a newer engine.
+        // Refuse an op the engine does not implement.
         const unhandled: never = op;
         const name = (unhandled as { op: string }).op;
 
-        // Ask the mods before refusing, so a mod can add a genuinely new effect op that module JSON
-        // uses and the studio edits without an engine case for it.
+        // Ask the mods before refusing, so a mod can add a new effect op.
         if (txn.mods?.has('applyOp', name)) {
           const outcome = txn.mods.run(
             txn,

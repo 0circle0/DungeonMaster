@@ -1,29 +1,4 @@
-"""Quests, dialogue, and the shapes branching actually takes.
-
-The engine has no branch primitive. A quest has one linear stage cursor and one completion test, and
-everything that forks is built out of flags and predicates. These helpers are the four idioms that
-come up:
-
-  * `resolved_either_way` — the branch objectives are `optional`, and one required `custom`
-    objective completes when any branch flag is set. Without it a quest with only optional
-    objectives can never complete, because `checkQuestCompletion` insists on at least one required
-    one.
-  * `either` — an `if` effect, which is how one quest produces two outcomes from the same
-    `onComplete`.
-  * `take_job` — the dialogue option that hands a quest over: gate on the quest being unstarted,
-    `emit: startQuest`, hand over whatever comes with it.
-  * `remembered_as` — put the deed on the dialogue node where the work is turned in, not on the
-    quest, so it is witnessed by the person being reported to.
-
-Traps this file avoids:
-
-  * `ordered` defaults to True, and quest-level objectives sort before stage objectives, so mixing
-    the two under the default forces the loose ones first.
-  * A stage whose objectives are all `optional` is skipped entirely — its `onStart` and `onComplete`
-    never run.
-  * `objective.target` is not a ref, so a typo compiles clean and the objective never fires.
-    `dmkit.lint.objective_targets` is the answer.
-"""
+"""Quests, dialogue, and the shapes branching actually takes."""
 
 
 # --- objectives -----------------------------------------------------------
@@ -44,7 +19,7 @@ def obj(oid, description, *, kind="custom", target=None, count=1, when=None,
 
 
 def reach(oid, description, target, **kw):
-    """Arrive somewhere. `target` is a POI id, an area id, or a gate id."""
+    """Arrive somewhere."""
     return obj(oid, description, kind="reach", target=target, **kw)
 
 
@@ -67,9 +42,7 @@ def flagged(oid, description, flag, **kw):
 
 
 def resolved_either_way(oid, description, flags, **kw):
-    """One required objective satisfied by any of several mutually exclusive outcomes, which is what
-    makes a branch completable.
-    """
+    """One required objective satisfied by any of several mutually exclusive outcomes."""
     return obj(oid, description,
                when={"any": [{"test": {"ref": f"flags.{f}"}} for f in flags]},
                **kw)
@@ -95,7 +68,7 @@ def deed(kind):
 
 
 def either(flag, then, otherwise=()):
-    """One outcome or the other, on a flag. The engine's only branch."""
+    """One outcome or the other, on a flag."""
     out = {"when": {"test": {"ref": f"flags.{flag}"}}, "then": list(then)}
     if otherwise:
         out["else"] = list(otherwise)
@@ -166,11 +139,7 @@ def arc(aid, name, description, quests, *, ending=False):
 # --- dialogue -------------------------------------------------------------
 
 def node(nid, says, *, options=(), on_enter=(), remembers=None, redirects=()):
-    """A conversation node.
-
-    A node with no options ends the conversation, so every node that is not meant to be a parting
-    word carries a way out.
-    """
+    """A conversation node."""
     out = {"id": nid, "says": [{"text": t} if isinstance(t, str) else t
                                for t in (says if isinstance(says, (list, tuple)) else [says])],
            "options": list(options), "onEnter": list(on_enter),
@@ -198,14 +167,8 @@ def option(oid, text, *, goto=None, requires=None, when=None, effects=(),
 
 
 def take_job(oid, text, quest_id, goto, *, gives=(), effects=(), requires=None):
-    """The quest-giver pattern.
-
-    Gated on the quest being unstarted so it disappears once taken, and the acceptance is an emitted
-    event the reducer picks up before quests advance, so the job can be progressed by the same batch
-    that granted it.
-    """
-    # Merged key by key rather than `update`d: a caller passing its own `quests` clause would
-    # otherwise replace the unstarted check. Lists concatenate; everything else the caller wins.
+    """The quest-giver pattern."""
+    # Merged key by key: lists concatenate, and everything else the caller wins.
     gate = {"quests": [{"quest": quest_id, "status": "unstarted"}]}
     for key, value in (requires or {}).items():
         if isinstance(value, list) and isinstance(gate.get(key), list):
@@ -223,8 +186,7 @@ def dialogue(did, start, nodes):
     return {"id": did, "start": start, "nodes": list(nodes)}
 
 
-# Somebody who stands where you left them: no wandering, no investigating. They notice everyone,
-# though, which is what lets them witness a theft.
+# Somebody who stands where you left them: no wandering, no investigating.
 MINDS_THE_SHOP = {
     "roamRadius": 0,
     "wanderChance": 0,
@@ -263,8 +225,7 @@ def npc(nid, name, description, *, faction=None, dialogue_id=None, home=None,
     if shop:
         out["shop"] = shop
 
-    # Anyone with a counter to mind or a job to hand out stays put; everyone else has the run of the
-    # place. Stated rather than left to the ruleset.
+    # Anyone with a counter to mind or a job to hand out stays put; everyone else has the run of the place.
     habits = temperament
     if habits is None:
         habits = MINDS_THE_SHOP if (shop or offers) else WALKS_ABOUT

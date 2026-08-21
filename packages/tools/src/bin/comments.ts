@@ -1,20 +1,4 @@
-/**
- * `npm run comments [-- <out>]`
- *
- * Every comment in the project, in one file, in folder order.
- *
- * Uses the TypeScript parser for TS/TSX/JS rather than a regex: a regex for a line comment matches
- * every URL, and one for a block comment matches every such sequence inside a string. `prelude.ts`
- * holds five commented lines inside the template literal it ships to QuickJS, and a site page
- * renders two more as example code; all seven must be excluded. The other languages get small
- * scanners, none of which has a regex literal.
- *
- * Python docstrings count, because in `dmkit` that is where the explanation is. They are found by
- * position — a string opening a file or a `def`/`class` block — so a triple-quoted value is not
- * mistaken for one.
- *
- * JSON is skipped: no comments, and 3,185 of the project's files.
- */
+/** `npm run comments [-- <out>]` */
 
 import ts from 'typescript';
 import { execFileSync } from 'node:child_process';
@@ -57,11 +41,7 @@ function lineAt(starts: readonly number[], offset: number): number {
   return low + 1;
 }
 
-/**
- * Comments are trivia: they hang off the token that follows them, so every token in the tree is
- * asked what precedes it. The end-of-file token is a child like any other, which catches a comment
- * with nothing after it.
- */
+/** Comments are trivia, so every token is asked what precedes it, end-of-file included. */
 function scanTypeScript(path: string, text: string): Comment[] {
   const kind = path.endsWith('.tsx') ? ts.ScriptKind.TSX
     : path.endsWith('.js') || path.endsWith('.mjs') || path.endsWith('.cjs') ? ts.ScriptKind.JS
@@ -91,7 +71,7 @@ function scanTypeScript(path: string, text: string): Comment[] {
   return [...found.values()].sort((a, b) => a.line - b.line);
 }
 
-/** `#` to end of line, for YAML and shell. Quote-aware: a `#` in a string is not one. */
+/** `#` to end of line, for YAML and shell. */
 function scanHash(text: string): Comment[] {
   const out: Comment[] = [];
   const lines = text.split('\n');
@@ -116,7 +96,7 @@ function scanHash(text: string): Comment[] {
   return merge(out);
 }
 
-/** `/* … *\/` only, quote-aware. CSS has no line comments and no regex literals. */
+/** `/* … *\/` only, quote-aware. */
 function scanCss(text: string): Comment[] {
   const out: Comment[] = [];
   const starts = lineIndex(text);
@@ -141,16 +121,12 @@ function scanCss(text: string): Comment[] {
   return out;
 }
 
-/**
- * A docstring is a string that opens something — the file, or the block after a `def` or `class`.
- * That is a position rather than a shape, so a triple-quoted string assigned to a variable is left
- * alone.
- */
+/** A docstring is a string that opens something — the file, or the block after a `def` or `class`. */
 function scanPython(text: string): Comment[] {
   const out: Comment[] = [];
   const lines = text.split('\n');
 
-  /** Does a docstring belong here? True at the top of the file and after a block opener. */
+  /** Does a docstring belong here? */
   let opensBlock = true;
   let inString: string | null = null;
   let docStart = -1;
@@ -194,8 +170,7 @@ function scanPython(text: string): Comment[] {
       continue;
     }
 
-    // A line ending in `:` opens a block, and the next statement in it may be a docstring. Anything
-    // else means the block has started without one.
+    // A line ending in `:` opens a block, and the next statement in it may be a docstring.
     opensBlock = /:\s*(#.*)?$/.test(line);
   }
 
@@ -309,8 +284,7 @@ for (const entry of entries) {
   for (const comment of entry.comments) {
     const at = comment.line === comment.endLine ? `L${comment.line}` : `L${comment.line}–${comment.endLine}`;
     parts.push(`\n**${at}**\n`);
-    // Blockquoted: comments contain `#` and `-` freely and would otherwise be read as this
-    // document's own headings.
+    // Blockquoted, so `#` and `-` are not read as this document's headings.
     parts.push(comment.text.split('\n').map((line) => (line ? `> ${line}` : '>')).join('\n'));
     parts.push('');
   }

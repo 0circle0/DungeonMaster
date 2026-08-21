@@ -1,20 +1,4 @@
-/**
- * The mod manifest.
- *
- * A mod is a directory whose folder name is `<id>-<hash>`, holding a `mod.json` and the JavaScript
- * it runs. Mods are not packaged with a game: a game declares which ones it needs, and the mods are
- * shared and installed independently.
- *
- * Two things this schema does not do:
- *
- *   - It does not restrict what a mod may do to the game. There is no capability allow-list for
- *     reading state or emitting directives.
- *   - It does not describe permissions for I/O. There is no `net`, `fs` or `time` capability
- *     because the sandbox has no such binding to grant.
- *
- * `limits` is the one budget, and it is an anti-hang measure rather than a gameplay restriction:
- * without it a `while (true)` in a shared mod freezes the player's tab.
- */
+/** The mod manifest. */
 
 import { z } from 'zod';
 import { idSchema, versionSchema, displayName, description } from '@dm/module';
@@ -30,30 +14,21 @@ export const hashTagSchema = z
 export const hookDeclSchema = z
   .object({
     hook: z.string().min(1).max(64),
-    /**
-     * `before` runs ahead of the core implementation, `after` behind it, and `replace` instead of
-     * it. A `replace` handler may still return `{ kind: 'core' }` to fall through.
-     */
+    /** `before` runs ahead of the core implementation, `after` behind it, and `replace` instead of it. */
     mode: z.enum(['before', 'after', 'replace']).default('after'),
     /** Higher runs first within a mode. */
     priority: z.number().int().min(-1000).max(1000).default(0),
-    /**
-     * Narrows the hook to one action type, effect op, occasion, or event. Without a match the
-     * runtime has to cross the sandbox boundary for every candidate.
-     */
+    /** Narrows the hook to one action type, effect op, occasion, or event. */
     match: z.string().max(64).optional(),
   })
   .strict();
 
 export type HookDecl = z.infer<typeof hookDeclSchema>;
 
-/** Anti-hang budgets. Not a sandbox permission model — see the file comment. */
+/** Anti-hang budgets. */
 export const limitsSchema = z
   .object({
-    /**
-     * QuickJS interrupt ticks per call. Generous by default: a mod being slow should be a warning
-     * long before it is an error.
-     */
+    /** QuickJS interrupt ticks per call. */
     steps: z.number().int().min(1_000).max(100_000_000).default(2_000_000),
     memoryBytes: z
       .number()
@@ -70,17 +45,10 @@ export const modManifestSchema = z
   .object({
     format: z.number().int().min(1).default(MOD_FORMAT_VERSION),
     id: idSchema,
-    /**
-     * Engine mods change play; editor mods change the studio. Separate because they run against
-     * different hosts.
-     */
+    /** Engine mods change play; editor mods change the studio. */
     target: z.enum(['engine', 'editor']),
     version: versionSchema,
-    /**
-     * Content tag over the manifest (minus this field) and every other file. Recomputed on load and
-     * never trusted; a mismatch warns rather than blocks, because this value sits in a file the
-     * author can edit.
-     */
+    /** Content tag over the manifest (minus this field) and every other file. */
     hash: hashTagSchema,
     meta: z
       .object({
@@ -104,26 +72,16 @@ export const modManifestSchema = z
           .strict(),
       )
       .default([]),
-    /**
-     * Ordering hints beyond `priority`, for when a mod needs to observe the state another mod has
-     * already changed. A cycle is a load error.
-     */
+    /** Ordering hints beyond `priority`. */
     loadAfter: z.array(idSchema).default([]),
     entry: z
       .string()
       .regex(/^[a-z0-9_][a-z0-9_./-]*\.js$/, 'must be a relative .js path')
       .default('main.js'),
-    /**
-     * Declared rather than discovered. The host indexes these before it evaluates a line of mod
-     * code, which is what makes the runtime's hot-path gate a `Set` lookup instead of a boundary
-     * crossing.
-     */
+    /** Declared rather than discovered. */
     hooks: z.array(hookDeclSchema).min(1),
     limits: limitsSchema.default({}),
-    /**
-     * Prose the mod adds, keyed. Mod text goes through the same resolution as
-     * `narrative.systemText`, so the engine's no-literal-prose rule holds for mods too.
-     */
+    /** Prose the mod adds, keyed. */
     systemText: z.record(z.string(), z.string()).default({}),
   })
   .strict();
@@ -135,7 +93,7 @@ export function modIdentity(manifest: Pick<ModManifest, 'id' | 'hash'>): string 
   return `${manifest.id}-${manifest.hash}`;
 }
 
-/** Split `<id>-<hash>` back apart. Returns null if it is not that shape. */
+/** Split `<id>-<hash>` back apart. */
 export function parseModIdentity(value: string): { id: string; hash: string } | null {
   const at = value.lastIndexOf('-');
   if (at <= 0) return null;

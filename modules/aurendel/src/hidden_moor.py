@@ -1,25 +1,4 @@
-"""The Weeping Moor's hidden threads — three, in the four areas nothing uses.
-
-Colder's Hearth is named for a man who kept a fire going for forty years so
-people could find their way off the moor, and they still keep it going: an inn,
-a store, a chapel and two cottages, and nobody had ever been in one of them.
-Mirestead cuts peat on the only firm ground for two miles and has a cutting
-deep enough to reach what the bog has been keeping. The Heatherlands have no
-shelter anywhere in them but a bothy and a burnt farm. Kestrel Edge is two
-hundred feet of gritstone with the whole vale laid out below it and a shooting
-house nobody shoots from.
-
-Three threads, and they share a shape: **the moor takes things and something
-has been putting them back.**
-
-  * **Colder's Fire** — two hundred years without going out, on a third of the
-    peat a fire that size burns, kept by a man the register buries twice.
-  * **Forty-One Out, Forty-One In** — the cutters take bodies out of the deep
-    peat and the store's book records every one of them returned, and they are
-    not always the same ones.
-  * **The Drive That Goes Over** — a roofless shooting house with fresh wear in
-    eight places, and a beaters' line on the estate map that runs off the edge.
-"""
+"""The Weeping Moor's hidden threads — three, in the four areas nothing uses."""
 from dmkit.quests import npc, shop, quest, reach, kill, flagged, arc
 from lore import (
     clue, thread, rumour, favour, talk, coldshoulder, finding, rumoured,
@@ -196,8 +175,7 @@ GATES = [
 ]
 
 POI_PATCHES = {
-    # A chapel on firm ground rather than a dungeon mouth, so what is under it
-    # carries its own table and its own chance.
+    # A chapel on firm ground, so it carries its own table and its own chance.
     "colders_hearth_chapel": {**rumoured("moor_fire", base=19, step=3, entries=4),
                               "gate": "moor_fire_undercroft",
                               "encounterTables": ["moor_fire_boss"],
@@ -525,9 +503,7 @@ _ferrin = [
            "down, and it is the same ink as the rest, which means whoever drew "
            "it drew it on the same afternoon and thought nothing of it.”",
            "moor_shoot_line", faction=LIBRARY, base=15, skill="insight"),
-    # Eleven miles out with nothing between him and it, Ferrin can see the
-    # colour of that fire — which is also what keeps this thread's tellers in
-    # more than one settlement.
+    # Ferrin can see the fire from eleven miles out, which spreads the tellers.
     rumour("moor_ferrin_green", "You can see Colder's Fire from here.",
            "“Every night of my life.” Ferrin does not think it worth "
            "remarking on until he does. “Twice a year it goes green. I can "
@@ -622,9 +598,7 @@ DIALOGUES = [
                  "the bar. “Fewer come back. Every year. Never once the same "
                  "number.”",
                  "moor_shoot_birds", faction=LIBRARY, base=14),
-          # Mirestead is two hours off and every one of the forty-one has been
-          # argued about in this room. It is also the second settlement this
-          # thread needs, so one missed conversation cannot end it.
+          # Mirestead is two hours off and every one of the forty-one has been argued about in this room.
           rumour("moor_sask_buckle",
                  "What do the cutters say comes out of the deep cut?",
                  "“Forty-one, and I have heard about all forty-one in here "

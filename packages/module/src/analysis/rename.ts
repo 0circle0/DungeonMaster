@@ -1,19 +1,4 @@
-/**
- * Changing an id, and everything that points at it.
- *
- * The schema already knows where every reference is — `ref()` marks 178 sites across 44 collections
- * — so the rewrite is exact rather than textual.
- *
- * What this can and cannot promise
- *
- * It promises the declared references: every field the schema marks with `ref:`, rewritten
- * precisely, including record keys and the ones outside any collection — `start.startingArea` is a
- * reference, and a rename that missed it would move the start of the game.
- *
- * It cannot promise the rest. `objective.target` is a plain id because a `reach` target may be a
- * point of interest, a map, a trigger or a gate; flags are free strings. So every other place the
- * old id appears is reported rather than rewritten.
- */
+/** Changing an id, and everything that points at it. */
 
 import { gameModuleSchema, COLLECTION_PATHS } from '../schema/module.js';
 import type { CollectionPath } from '../schema/module.js';
@@ -44,17 +29,13 @@ export interface RenamePlan {
   readonly to: string;
   /** Empty when the rename can go ahead. */
   readonly problems: readonly string[];
-  /** Declared references, rewritten exactly. Includes the entry's own `id`. */
+  /** Declared references, rewritten exactly. */
   readonly edits: readonly RenameEdit[];
-  /** Everything else that says the old id. Reported, never rewritten. */
+  /** Everything else that says the old id. */
   readonly mentions: readonly RenameMention[];
 }
 
-/**
- * One spelling for a path. The compiler's walk writes array indices as `groups[0]` while everything
- * the editor holds is dotted, so normalising here means a plan can be handed straight to the store
- * and the sweep for undeclared mentions can recognise the declared paths.
- */
+/** One spelling for a path. */
 function toDotted(path: string): string {
   return path.replace(/\[(\d+)\]/g, '.$1');
 }
@@ -66,10 +47,7 @@ function collectionEntries(doc: Record<string, unknown>, collection: string): Re
   return Array.isArray(value) ? (value as Record<string, unknown>[]) : [];
 }
 
-/**
- * Walk every string in the document, so nothing that says the old id is missed. Deliberately not
- * schema-driven: the point is to find what the schema does not describe as a reference.
- */
+/** Walk every string in the document, so nothing that says the old id is missed. */
 function walkStrings(
   value: unknown,
   path: string,
@@ -95,10 +73,7 @@ function walkStrings(
   }
 }
 
-/**
- * Work out everything a rename would touch, without touching anything. Returns a plan rather than a
- * document, so the caller can show it first.
- */
+/** Work out everything a rename would touch, without touching anything. */
 export function planRename(
   document: unknown,
   collection: string,
@@ -135,8 +110,7 @@ export function planRename(
 
   if (problems.length > 0) return base;
 
-  // The entry's own id first: a rename that updates every referrer and not the thing itself would
-  // turn each of them into a dangling reference.
+  // The entry's own id first, or every updated referrer becomes dangling.
   edits.push({ path: `${collection}.${index}.id`, kind: 'value' });
 
   const refs: RefSite[] = [];
@@ -149,8 +123,7 @@ export function planRename(
     edits.push({ path, kind: ref.kind });
   }
 
-  // The entry's own id field counts as a declared site for the sweep below, or it would be reported
-  // back as an unexplained mention of itself.
+  // The entry's own id field counts as a declared site for the sweep below.
   declared.add(`${collection}.${index}.id`);
 
   walkStrings(doc, '', (path, text) => {
@@ -158,8 +131,7 @@ export function planRename(
     if (text === from) {
       mentions.push({ path, value: text, how: 'exact' });
     } else if (text.includes(from)) {
-      // Ids get embedded in flags (`given:iron_key`) and in DSL ref paths. Not rewritten, since a
-      // substring match is a guess, but worth pointing at.
+      // Ids get embedded in flags (`given:iron_key`) and in DSL ref paths.
       mentions.push({ path, value: text, how: 'embedded' });
     }
   });
@@ -167,21 +139,16 @@ export function planRename(
   return base;
 }
 
-/**
- * The paths a rename writes, as `(path, value)` pairs for a `value` edit. Key renames are not
- * expressible as a path assignment — the record has to be rebuilt — so `applyRename` handles the
- * whole plan instead.
- */
+/** The paths a rename writes, as `(path, value)` pairs for a `value` edit. */
 export function renameTargets(plan: RenamePlan): readonly string[] {
   return plan.edits.map((edit) => edit.path);
 }
 
-/** Apply a plan, returning a new document. The original is not touched. */
+/** Apply a plan, returning a new document. */
 export function applyRename(document: unknown, plan: RenamePlan): unknown {
   if (plan.problems.length > 0) return document;
 
-  // Deepest paths first, so rebuilding a record cannot invalidate a path still to be visited inside
-  // it.
+  // Deepest paths first, so rebuilding a record cannot invalidate a path still to be visited inside it.
   const ordered = [...plan.edits].sort((a, b) => b.path.split('.').length - a.path.split('.').length);
 
   let out = document;
@@ -210,10 +177,7 @@ function writeAt(node: unknown, path: readonly string[], value: unknown): unknow
   return object;
 }
 
-/**
- * Rename the record key the path ends at, keeping the record's order, because a module is a file
- * people read.
- */
+/** Rename the record key the path ends at, keeping the record's order. */
 function renameKeyAt(node: unknown, path: readonly string[], to: string): unknown {
   const [head, ...rest] = path as [string, ...string[]];
 

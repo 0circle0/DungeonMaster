@@ -1,16 +1,4 @@
-"""Tier two — the middle three, and the places that were dug afterwards.
-
-The first three had gone to ground under buildings. The middle three did not go
-to ground at all: they were built around. The Cut's quarry galleries follow a
-seam that does not run that way. The Sunken Hall in the Black Water was a hall
-before the water. The Milepost Vault on the Sunken Road is a milepost with four
-hundred feet of vault under it, on a road that measures nothing.
-
-Somebody knew where these three had settled and put stone over them, carefully,
-without ever writing down what it was for.
-
-Level 16 at the door, and the door wants a relic worn.
-"""
+"""Tier two — the middle three, and the places that were dug afterwards."""
 from dmkit.quests import reach, kill, flagged, arc
 from dmkit.prose import pool
 from postgame import tier, link, warrant, proving, loosed

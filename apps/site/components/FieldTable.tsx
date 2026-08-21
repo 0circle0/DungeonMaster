@@ -1,10 +1,4 @@
-/**
- * A section of the format, as a table.
- *
- * Server rendered, so the page ships finished HTML and the schemas stay on the
- * build machine. Rows carry `data-row` and a lowercase `data-text` so the
- * filter can hide them without any of this being re-rendered on the client.
- */
+/** A section of the format, as a table. */
 
 import Link from 'next/link';
 import { anchorFor, linkFor, type DocField, type DocSection, type TypeNode } from '../lib/fields';
@@ -20,9 +14,7 @@ function TypeCell({ node }: { node: TypeNode }) {
     case 'ref':
       return <Link className="t-ref" href={linkFor(node.target)}>{node.target}</Link>;
     case 'enum':
-      // One chip per value rather than a run of pipe separated text. Twelve
-      // values on one line is what made the type column 145 characters wide;
-      // chips wrap between values and never inside one.
+      // One chip per value rather than a run of pipe separated text.
       return (
         <span className="t-enum">
           {node.values.map((value) => <code key={value}>{value}</code>)}

@@ -1,11 +1,4 @@
-/**
- * The clock, the calendar, and what the world is like right now.
- *
- * `dayPhases`, `daysPerMonth` and `monthNames` were declared by the schema and
- * read by nothing, so a module that described dawn, dusk and the month of
- * Firstmelt still told the player it was "day 12 07:15". `layer` was the same
- * kind of nothing: two words for one thing.
- */
+/** The clock, the calendar, and what the world is like right now. */
 
 import { describe, it, expect } from 'vitest';
 import { fileURLToPath } from 'node:url';
@@ -148,8 +141,6 @@ describe('a one-way road', () => {
     return compiled.module;
   }
 
-  // Greenmarch lists its roads both ways, which is the natural thing to do —
-  // and meant `oneWay` did nothing at all.
   it('lets you go down, and not back up', () => {
     const module = withCliff();
     const context = { module };
@@ -190,8 +181,6 @@ describe('an area that gates itself', () => {
 });
 
 describe('the wilds are not empty', () => {
-  // An area's own `encounterTables` were declared by every module that has one
-  // and rolled by nothing, so the fens were a marsh with nothing in it.
   it('rolls the area\'s own table on arrival', () => {
     let met = 0;
     for (let seed = 0; seed < 40; seed += 1) {

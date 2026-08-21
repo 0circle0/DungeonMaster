@@ -1,11 +1,4 @@
-/**
- * A remembered place has to be checked before it is used.
- *
- * Between one session and the next an entry can be deleted, a collection
- * emptied, a module rebuilt by a generator. Restoring blindly lands the author
- * on "nothing here — the entry may have been deleted", which is a worse
- * greeting than the default they were trying to avoid.
- */
+/** A remembered place has to be checked before it is used. */
 
 import { describe, it, expect } from 'vitest';
 import { placeStillExists } from './place.js';

@@ -1,10 +1,4 @@
-/**
- * The palette's one job is that the obvious answer is first.
- *
- * A ranking that puts a coincidence in a description above an exact id is not
- * slightly worse than none — it is worse than the tree it replaces, because at
- * least the tree is where you left it.
- */
+/** The palette's one job is that the obvious answer is first. */
 
 import { describe, it, expect } from 'vitest';
 import { fileURLToPath } from 'node:url';
@@ -42,8 +36,6 @@ describe('over a real module', () => {
   ]);
 
   it('indexes every collection and a couple of thousand entries', () => {
-    // Against the schema rather than a number: a collection added there has to
-    // appear here, and a literal would only record what was true once.
     expect(commands.filter((c) => c.kind === 'collection').length).toBe(COLLECTION_PATHS.length);
     expect(commands.filter((c) => c.kind === 'entry').length).toBeGreaterThan(2000);
   });
@@ -75,8 +67,7 @@ describe('over a real module', () => {
   it('stays quick enough to run on every keystroke', () => {
     const started = performance.now();
     for (const q of ['b', 'ba', 'bar', 'barr', 'barro', 'barrow']) search(commands, q);
-    // Six keystrokes over ~2,300 commands. Generous, because a loaded machine
-    // must not fail this; the real figure is an order of magnitude under.
+    // Six keystrokes over ~2,300 commands.
     expect(performance.now() - started).toBeLessThan(500);
   });
 });

@@ -1,20 +1,4 @@
-/**
- * Ruleset knobs, read once.
- *
- * The engine reaches `module.source.rules.*` from a hundred places. These accessors are the half of
- * those numbers that used to be literals in code.
- *
- * Two rules hold here:
- *
- * - No `??` chains. `compileModule` runs the document through Zod, so a declared default is already
- *   present; restating one would be a second source of truth.
- * - Resolved, not merely read, where the module's answer takes more than a property access — a
- *   default that falls back to the first declared entry, or a rounding mode that has to become a
- *   function.
- *
- * Resolution is memoized per module because these are read per operation and a module never
- * changes.
- */
+/** Ruleset knobs, read once. */
 
 import type { CompiledModule } from '@dm/module';
 
@@ -43,10 +27,7 @@ export interface ResolvedConfig {
   readonly allowDebt: boolean;
   /** Minutes in an hour, for the calendar. */
   readonly minutesPerHour: number;
-  /**
-   * How a creature gets about when it declares nothing: the module's own default, then the first
-   * mode it declares at all, and null for a ruleset with no movement modes.
-   */
+  /** How a creature gets about when it declares nothing; null when the ruleset has no modes. */
   readonly defaultMovementMode: string | null;
 }
 
@@ -78,11 +59,7 @@ export function saveMultiplier(module: CompiledModule): number {
   return configOf(module).saveMultiplier;
 }
 
-/**
- * How a scaled damage number is rounded. Every path that scales damage goes through this —
- * resistance, a critical, and a save for half — because a second rounding rule hidden in one of
- * them is a systematic difference.
- */
+/** How a scaled damage number is rounded. */
 export function roundDamageOf(module: CompiledModule): (n: number) => number {
   return configOf(module).roundDamage;
 }
@@ -92,10 +69,7 @@ export function passiveBase(module: CompiledModule): number {
   return configOf(module).passiveBase;
 }
 
-/**
- * The movement mode a creature uses when it declares none. The same shape as `defaultStanceOf` and
- * `reachOf`'s size fallback: declared first, then the first entry, then nothing.
- */
+/** The movement mode a creature uses when it declares none. */
 export function defaultMovementModeOf(module: CompiledModule): string | null {
   return configOf(module).defaultMovementMode;
 }

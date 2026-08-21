@@ -1,18 +1,6 @@
 'use client';
 
-/**
- * Where a session begins.
- *
- * This screen exists because the old one did not: with no module loaded the app
- * used to render "No modules found in modules/." and stop, while the only way
- * to open a file lived in a toolbar that never rendered. Somebody arriving with
- * a world in their downloads folder had no way in at all.
- *
- * So the entry point is its own view, and every route into the app is on it:
- * the worlds already here, the examples this deployment happens to carry, and a
- * file picker that works whether or not either of the first two has anything in
- * it.
- */
+/** Where a session begins. */
 
 import { useRef, useState } from 'react';
 import type { LibraryApi } from '@/lib/useLibrary';

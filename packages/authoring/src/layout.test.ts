@@ -1,13 +1,4 @@
-/**
- * Pinned against the Python it replaces.
- *
- * The fixtures below were produced by `dmkit.regions.lay_out` — the function
- * that placed most of Aurendel's 597 points of interest — rather than written
- * by hand. While both implementations exist they have to agree, or a module
- * rebuilt by the studio moves half its world by a tile and the diff is
- * unreadable. Integer division is the part that would quietly differ: Python's
- * `//` floors and JavaScript's `/` does not.
- */
+/** Pinned against the Python it replaces. */
 
 import { describe, it, expect } from 'vitest';
 import { layOut, ringSpot } from './layout.js';
@@ -47,9 +38,6 @@ describe('layOut', () => {
       [{ id: 'a', width: 31, height: 21 }],
     );
     expect(placed.map((p) => p.id)).toEqual(['laid']);
-    // And the one that was laid out takes the *first* spot: hand placement is
-    // not a slot in the ring, it is outside the sequence entirely. Re-running
-    // after hand-placing something must not shuffle everything else.
     expect(placed[0]?.position).toEqual({ x: 3, y: 3 });
   });
 

@@ -1,17 +1,4 @@
-/**
- * What a blow is swung with, and what it adds.
- *
- * Two halves of the same roll, both of which were stuck. `finesse` shipped as
- * an item property with an empty body, because `itemProperties[].modifiers`
- * maps to derived stats and finesse is not a bonus to anything -- it is a
- * *choice* of which attribute the roll uses, and no number added to a defence
- * can mean "use agility instead of might".
- *
- * Meanwhile a weapon attack added the bare attribute modifier and nothing
- * else, and nothing raises an attribute after character creation, so a warden
- * hit exactly as often at level 20 as at level 1. Spells had
- * `spellcasting.attackBonus`; weapons had no equivalent at all.
- */
+/** What a blow is swung with, and what it adds. */
 
 import { describe, it, expect } from 'vitest';
 import { fileURLToPath } from 'node:url';
@@ -31,10 +18,7 @@ function loadModule(name: string): CompiledModule {
 
 const GREENMARCH = loadModule('greenmarch');
 
-/**
- * Greenmarch with a finesse property that means something, a rapier carrying
- * it, and optionally a rule for what a weapon attack adds.
- */
+/** Greenmarch with a finesse property, a rapier carrying it, and an optional weapon-attack rule. */
 function armed(options: { attackBonus?: unknown } = {}): CompiledModule {
   const doc = JSON.parse(JSON.stringify(GREENMARCH.source)) as never as {
     rules: { itemProperties: Record<string, unknown>[]; resolution: Record<string, unknown> };
@@ -115,8 +99,7 @@ describe('finesse', () => {
     expect(attackStatFor(MODULE, hero, 'might', null)).toBe('might');
   });
 
-  // Ties keep the ability's own attribute, so an offer that is no better is no
-  // change at all.
+  // Ties keep the ability's own attribute, so an offer that is no better is no change at all.
   it('keeps the ability\'s attribute when the offer is not an improvement', () => {
     const { hero } = duellist(MODULE, 'rapier');
     const evenly = { ...hero, attributes: { ...hero.attributes, might: 18, agility: 18 } };
@@ -129,19 +112,12 @@ describe('finesse', () => {
     expect(attackModifier(MODULE, 'rapier')).toBe(4);
   });
 
-  /**
-   * The incoherence this replaces: Aurendel's one finesse weapon declared
-   * agility damage while `strike` named might, so it was aimed with one arm
-   * and hit with the other. Choosing once and using it for both is the rule.
-   */
   it('uses the chosen attribute for the damage too', () => {
     const { state } = duellist(MODULE, 'rapier');
     const { events } = reduce(
       state, { type: 'useAbility', actor: 'e:1', ability: 'strike', target: 'e:99' }, { module: MODULE },
     );
     const damaged = events.find((event) => event.type === 'damaged');
-    // The rapier *declares* might damage; being swung with agility overrides it,
-    // so a 1d6 lands at least 1 + 4 rather than at most 6 + 0.
     if (damaged?.type === 'damaged') expect(damaged.raw).toBeGreaterThan(4);
   });
 });

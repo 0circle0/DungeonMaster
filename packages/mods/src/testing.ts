@@ -1,11 +1,4 @@
-/**
- * Test helpers.
- *
- * Node-only (it reads the real `mods/` tree), and kept out of the isomorphic
- * project for that reason. Tests load the mods that actually ship, the way the
- * engine tests load `modules/greenmarch` — a fixture that cannot drift from the
- * thing it stands for.
- */
+/** Test helpers. */
 
 import { fileURLToPath } from 'node:url';
 
@@ -29,13 +22,7 @@ export function modById(id: string, root = MODS_ROOT): LoadedModFromDisk {
   return found;
 }
 
-/**
- * A ready host.
- *
- * Determinism tests pass `quarantineAfter: Infinity`, so a throwing mod fails
- * the assertion loudly instead of being quietly switched off part-way through
- * the run being compared.
- */
+/** A ready host. */
 export async function testHost(options: Partial<HostOptions> = {}): Promise<SandboxHost> {
   await prepareSandbox();
   return createHost({ target: 'engine', quarantineAfter: Infinity, ...options });

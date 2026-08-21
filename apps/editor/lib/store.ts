@@ -1,16 +1,4 @@
-/**
- * Editor state.
- *
- * Two decisions shape this file:
- *
- * 1. The raw authored document is the source of truth. Validation runs on a copy, so the file the
- *    user exports stays what they wrote; compiling would bake every schema default into their
- *    module.
- *
- * 2. Edits are immutable and addressed by path. `setAt(doc, ['content', 'monsters', 3, 'xp'], 40)`
- *    returns a new document, which makes undo a stack of snapshots rather than a system of inverse
- *    operations.
- */
+/** Editor state. */
 
 'use client';
 
@@ -29,7 +17,7 @@ export function getAt(doc: unknown, path: Path): unknown {
   return current;
 }
 
-/** Immutable set. Missing containers are created as objects or arrays to match the next segment. */
+/** Immutable set. */
 export function setAt(doc: unknown, path: Path, value: unknown): unknown {
   if (path.length === 0) return value;
 
@@ -46,16 +34,7 @@ export function setAt(doc: unknown, path: Path, value: unknown): unknown {
   return object;
 }
 
-/**
- * Many edits, one new document, and object identity preserved everywhere else.
- *
- * Cloning the document and mutating it would give every untouched entry a fresh identity, and
- * validation keys its cache on identity — turning a 60 ms edit into a 700 ms one with no failing
- * test.
- *
- * Folding the edits through `setAt` touches only the spines that change: 40 edits cost 40 spine
- * copies, not one document copy.
- */
+/** Many edits, one new document, and object identity preserved everywhere else. */
 export function setAtMany(
   doc: unknown,
   edits: readonly { readonly path: Path; readonly value: unknown }[],
@@ -65,10 +44,7 @@ export function setAtMany(
   return out;
 }
 
-/**
- * Delete several things at once, without the indices moving under each other. Applying deepest and
- * last-first makes each delete see the list it was chosen against.
- */
+/** Delete several things at once, without the indices moving under each other. */
 export function deleteAtMany(doc: unknown, paths: readonly Path[]): unknown {
   const ordered = [...paths].sort((a, b) => {
     if (a.length !== b.length) return b.length - a.length;
@@ -119,26 +95,15 @@ export interface Validation {
   readonly ok: boolean;
   readonly errors: readonly Diagnostic[];
   readonly warnings: readonly Diagnostic[];
-  /**
-   * Notes, kept apart from warnings because they are not the same claim. `Severity` has three
-   * values, and counting `info` as a warning turns a module with nothing wrong with it into a
-   * console reading "130 warnings".
-   */
+  /** Notes, kept apart from warnings because they are not the same claim. */
   readonly infos: readonly Diagnostic[];
   readonly identity: string;
   readonly hash: string;
   /** The document as it would be exported — line numbers refer to this. */
   readonly text: string;
-  /**
-   * True while the idle-tier work is still pending: diagnostics carry a path but not yet a line,
-   * and `hash` is the previous document's.
-   */
+  /** True while the idle-tier work is pending: diagnostics have no line, `hash` lags. */
   readonly settling: boolean;
-  /**
-   * The compiled module, when it compiles. Shared deliberately: validation already pays for the
-   * schema parse, and anything else wanting a `CompiledModule` — the seed-faithful map preview
-   * above all — would otherwise compile the document again.
-   */
+  /** The compiled module, when it compiles. */
   readonly compiled: CompiledModule | null;
 }
 
@@ -238,34 +203,15 @@ export function useModuleStore(initial: ModuleDoc, initialName = 'module.json') 
     filename: initialName,
   });
 
-  /**
-   * A parse cache that lives as long as the editing session. Validation is dominated by the schema
-   * parse. The index keys on entry identity and `setAt` shares every subtree it did not touch, so
-   * an edit costs one entry rather than the document. See
-   * `packages/module/src/diagnostics/incremental.ts`.
-   */
+  /** A parse cache that lives as long as the editing session. */
   const index = useMemo(() => new ValidationIndex(), []);
 
-  /**
-   * Validation runs the same diagnostics as the CLI, so what the editor calls valid is what will
-   * load at play time.
-   *
-   * The document is linted, not its text. Re-parsing the text builds a whole new object graph every
-   * keystroke, so nothing is recognised as unchanged and the cache above is worthless. Passing the
-   * live document keeps the identity `setAt` preserves.
-   *
-   * The cost is a diagnostic with a path and no line number; `attachPositions` puts those back once
-   * typing stops.
-   */
+  /** Lints the live document, not its text, so `setAt` identity survives and the cache holds. */
   const fresh = useMemo(() => {
     const text = `${JSON.stringify(state.doc, null, 2)}\n`;
     const lint = lintModule(state.doc, { index });
 
-    // The lint already compiled the document to prove its references resolve, so identity comes off
-    // that rather than a third `gameModuleSchema.safeParse` per keystroke.
-    //
-    // `hash` is deliberately not read here: `CompiledModule.hash` computes on first access, which
-    // means serializing the whole document.
+    // Identity comes off the lint's compile; `hash` is not read, since it serializes the document.
     return {
       diagnostics: lint.diagnostics,
       identity: lint.compiled?.identity ?? '',
@@ -276,15 +222,7 @@ export function useModuleStore(initial: ModuleDoc, initialName = 'module.json') 
     // never changes identity, and rebuilding it per edit would throw away the cache.
   }, [state.doc]);
 
-  /**
-   * The two things that wait for a pause in typing: line numbers, and the hash.
-   *
-   * Both walk the whole serialized document — locating a diagnostic parses it for spans, hashing
-   * serializes it — and between them cost about as much as everything else a keystroke does.
-   *
-   * Until they settle the problems console shows a path instead of a line, and the toolbar keeps
-   * the last hash, marked as settling.
-   */
+  /** The two things that wait for a pause in typing: line numbers, and the hash. */
   const [settled, setSettled] = useState<{
     diagnostics: readonly Diagnostic[];
     hash: string;
@@ -347,10 +285,7 @@ export function useModuleStore(initial: ModuleDoc, initialName = 'module.json') 
     set: useCallback((path: Path, value: unknown) => dispatch({ type: 'set', path, value }), []),
     remove: useCallback((path: Path) => dispatch({ type: 'delete', path }), []),
     replace: useCallback((doc: ModuleDoc) => dispatch({ type: 'replace', doc }), []),
-    /**
-     * Apply many edits as one undo step, preserving identity for everything untouched. See
-     * `setAtMany`.
-     */
+    /** Apply many edits as one undo step, preserving identity for everything untouched. */
     setMany: useCallback(
       (edits: readonly { path: Path; value: unknown }[]) => dispatch({ type: 'setMany', edits }),
       [],

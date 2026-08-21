@@ -1,13 +1,4 @@
-"""Aurendel — what the wards were built against, and what wandered in after.
-
-The rule that governs every entry: a monster's abilities must carry their own damage. `weaponDamage`
-only fires when an ability produced none itself, and it reads the attacker's `equipped`, which for a
-spawned monster is empty — so an ability with no `onUse` hits for nothing. Every attack below
-declares its damage inline, which is why this file adds abilities rather than reusing the party's
-`strike`.
-
-Levels run 1 to 9, roughly one per act-and-a-half.
-"""
+"""Aurendel — what the wards were built against, and what wandered in after."""
 
 # --- the abilities they attack with ---------------------------------------
 
@@ -16,18 +7,11 @@ from dmkit.bestiary import A, bite  # noqa: F401  re-exported
 
 
 def creature(*args, faction="the_unsealed", creature_type="undead", **kw):
-    """`dmkit.bestiary.creature`, with Aurendel's defaults.
-
-    Everything the wards were built against belongs to `the_unsealed` and is undead unless it says
-    otherwise. Neither belongs in a shared constructor and both are required there, so a file that
-    imports `creature` from `dmkit.bestiary` by mistake gets a `TypeError` at import rather than a
-    monster quietly fighting on the wrong side.
-    """
+    """`dmkit.bestiary.creature`, with Aurendel's defaults."""
     return _kit.creature(*args, faction=faction, creature_type=creature_type, **kw)
 
 
-# Silver is the questline's answer to the things the wards were built against, and `unless` is how a
-# weapon's tags get an exception to a resistance.
+# Silver is the questline's answer; `unless` gives a weapon's tags an exception.
 HALF_UNLESS_SILVER = [
     {"damageType": "slashing", "multiplier": 0.5, "unless": ["silvered"]},
     {"damageType": "piercing", "multiplier": 0.5, "unless": ["silvered"]},
@@ -76,9 +60,7 @@ ABILITIES = [
     bite("bleed_white", "Bleed White", "2d4", "necrotic",
          "Nothing you can feel happening, which is the trouble with it.",
          stat="endurance", condition=("bleeding", 4)),
-    # Bludgeoning rather than a sound: the ruleset has no thunder damage type, and inventing one in
-    # a side chain would put a damage type in the world that no resistance, immunity or gear knows
-    # about.
+    # Bludgeoning rather than a sound: the ruleset has no thunder damage type.
     bite("toll", "Toll", "2d6", "bludgeoning",
          "One note, under the water, and it is in your chest before it is in "
          "your ears.", stat="presence", range_=30, targeting="allEnemies",
@@ -135,10 +117,7 @@ MONSTERS = [
              ["rend"], "Too large, too bold, and it came from under the mound.",
              creature_type="beast", size="small", faction="the_unsealed",
              descriptors=["a scrabbling", "a bloated"], loot="vermin_scraps", hp=6),
-    # Deliberately not silver-resistant, unlike everything else out of a barrow. This is the first
-    # fight in the game, in `the_open_door`, and a starting party's only damage is a plain iron
-    # blade. Silver starts mattering at the Door-Warden, by which point Hesk will sell you a
-    # silvered blade.
+    # Deliberately not silver-resistant, unlike everything else out of a barrow.
     creature("grave_hound", "Grave Hound", 2, 40, A(12, 12, 12, 3, 14, 8),
              ["rend", "gore"],
              "It was a dog. The barrow has had it for some while.",
@@ -165,9 +144,7 @@ MONSTERS = [
                          "effects": [{"setFlag": {"flag": "warden_saw_you",
                                                   "value": True}}]}]),
 
-    # -- the Kingsvale side chains: the Weirwater and the setts -------------
-    # Level 2 and no silver resistance, like the grave hound and for the same reason: these are
-    # fought at level 1 or 2 with whatever came out of character creation.
+    # --- the Kingsvale side chains: the Weirwater and the setts ---
     creature("weir_lamprey", "Weir Lamprey", 2, 35, A(11, 13, 13, 2, 11, 4),
              ["latch"],
              "Two feet of it, and a mouth that is all of it.",
@@ -185,9 +162,7 @@ MONSTERS = [
              loot="setts_hoard", immunities=["blinded", "frightened"],
              hp=28, guard=13),
 
-    # -- under Aurenhal ----------------------------------------------------
-    # `faction: the_library` is the plot of the Bone Alley chain in one field: the Library buys
-    # grave ash and will not say why.
+    # --- under Aurenhal ---
     creature("cellar_thief", "An Unliveried Digger", 2, 45,
              A(11, 14, 11, 9, 12, 10), ["cut_and_run"],
              "Working the under without a charter, for wages somebody in a "
@@ -208,9 +183,7 @@ MONSTERS = [
              interactions=HALF_UNLESS_SILVER,
              immunities=["frightened", "poisoned"], hp=40, guard=14),
 
-    # -- the Silver Coast and Sarnport --------------------------------------
-    # Living people, and the only faction in the bestiary that is not a thing out of a hole.
-    # `deadMenTellNoTales` makes how you deal with them a decision with consequences.
+    # --- the Silver Coast and Sarnport ---
     creature("strand_wrecker", "A Wrecker", 2, 50, A(13, 12, 12, 9, 12, 9),
              ["cudgel"],
              "Lime under the fingernails and a lantern they only light in "
@@ -294,9 +267,7 @@ MONSTERS = [
                            {"damageType": "bludgeoning", "multiplier": 2}],
              hp=44, guard=16),
 
-    # -- the Act II side chains --------------------------------------------
-    # Levels 4 to 6, to sit beside the ward routes rather than above them: a party that detours here
-    # is level 4 or 5 carrying whatever Act I left them.
+    # --- the Act II side chains: levels 4 to 6 ---
     creature("beech_hollow", "The Hollow Beech", 5, 230, A(17, 7, 17, 6, 13, 9),
              ["root_and_branch", "rend"],
              "Four hundred years growing round a hole somebody dug, and it "
@@ -426,9 +397,7 @@ MONSTERS = [
              loot="deep_scraps", interactions=HALF_UNLESS_SILVER + [
                  {"damageType": "cold", "multiplier": 0}],
              immunities=["frightened", "slowed"], hp=46, guard=16),
-    # -- the Act III side chains -------------------------------------------
-    # Levels 7 and 8, beside the Deeproads rather than beyond it. A party here has two ward-keys and
-    # whatever Act II left them.
+    # --- the Act III side chains: levels 7 and 8 ---
     creature("seam_thing", "What Is In the Old Seams", 7, 400,
              A(18, 10, 18, 6, 12, 9),
              ["stone_fist", "digging_claw", "call_the_shut"],
@@ -551,6 +520,5 @@ MONSTERS = [
              ]),
 ]
 
-# Every monster ability must exist in `content.abilities`; these are additive to the five the party
-# already has from core_fantasy.
+# Every monster ability must exist in `content.abilities`.
 MONSTER_ABILITY_IDS = [a["id"] for a in ABILITIES]

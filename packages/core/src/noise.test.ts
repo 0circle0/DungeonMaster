@@ -1,10 +1,4 @@
-/**
- * The property that matters is not randomness — it is *correlation*.
- *
- * Independent per-tile rolls are perfectly random and produce confetti. These
- * tests pin the thing that makes a field usable for terrain: neighbours agree,
- * distant tiles do not, and the same seed says the same thing forever.
- */
+/** The property that matters is not randomness — it is *correlation*. */
 
 import { describe, it, expect } from 'vitest';
 import { valueNoise } from './noise.js';
@@ -35,8 +29,7 @@ describe('value noise', () => {
     expect(same).toBeLessThan(20);
   });
 
-  // The whole reason this file exists. Neighbouring tiles must be far more
-  // alike than distant ones, or thresholding it produces speckle.
+  // The whole reason this file exists.
   it('correlates neighbours and not distant tiles', () => {
     const field = valueNoise(7, { scale: 8 });
 
@@ -65,8 +58,6 @@ describe('value noise', () => {
   });
 
   it('works either side of the origin', () => {
-    // Truncating toward zero rather than flooring would mirror the lattice
-    // about x=0, giving a visible seam down the middle of any map.
     const field = valueNoise(3, { scale: 8, octaves: 1 });
     const left = field.at(-9, 0);
     const right = field.at(9, 0);
@@ -75,8 +66,7 @@ describe('value noise', () => {
     expect(Math.abs(field.at(-1, 0) - field.at(0, 0))).toBeLessThan(0.35);
   });
 
-  // A golden vector: if the algorithm is ever changed, every generated world
-  // changes with it, and that must be a deliberate act rather than a surprise.
+  // Golden vector: changing the algorithm changes every generated world.
   it('has not drifted', () => {
     const field = valueNoise(2024, { scale: 8, octaves: 2 });
     const sample = [[0, 0], [1, 0], [5, 3], [8, 8], [17, 42], [-6, -11]]

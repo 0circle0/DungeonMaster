@@ -1,19 +1,4 @@
-"""Bone Alley — an Aurenhal side chain, Act I.
-
-The Ratcatchers' Guild has a charter, a livery, and the only complete map of
-what is under the capital. It also has three members who went down at Kettle
-Yard in Lastmonth and did not come up, and it would like that dealt with
-without the Watch being told, because the Watch would want to see the map.
-
-What is actually happening is that somebody is paying men without a charter to
-dig under the Warrens, and the men have gone further than they were paid to. It
-is not a mystery for very long. The question the chain is actually about is who
-you tell — and the Library, which buys grave ash and will not say why, has a
-copyist in a pawnbroker's back room with a purse and a preference.
-
-Both endings close the gaol. One of them puts the guild's map in a place the
-guild cannot get it back from.
-"""
+"""Bone Alley — an Aurenhal side chain, Act I."""
 from dmkit.quests import (
     arc, stage, reach, kill, talk, flagged, resolved_either_way,
     set_flag, rep, give, deed, either, node, option, take_job, dialogue, npc,

@@ -1,9 +1,4 @@
-"""Region 11 — The Sundered Isles.
-
-An archipelago off the south-west, reached only through eleven miles of moving
-shoal. Everything here arrived by water or was left by it, and most of the
-buildings used to float. One free port, two villages, five stretches of sea.
-"""
+"""Region 11 — The Sundered Isles."""
 from place import (
     area, poi, gate, house, inn, smithy, store, workshop, temple, warehouse,
     guild, square, landmark, ruin, delve,

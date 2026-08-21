@@ -1,9 +1,4 @@
-/**
- * One worked example: a title, the JSON, and a line about it.
- *
- * The JSON is printed exactly as it is written in `lib/formulas.ts`, which a
- * test parses and validates, so what is on the page is known to load.
- */
+/** One worked example: a title, the JSON, and a line about it. */
 
 import type { Formula as FormulaData } from '../lib/formulas';
 

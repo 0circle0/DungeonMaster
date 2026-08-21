@@ -1,17 +1,6 @@
 'use client';
 
-/**
- * A thread, and the places that hold it up.
- *
- * A lore thread lists its clues, and nothing anywhere lists its *anchors* — the
- * hidden places that get easier to find as those clues come in. That link
- * exists only as a `threads.<id>.known` reference buried inside a discovery
- * formula, which is also the only way the Python's own linter finds them.
- *
- * So "show me this thread" is a question the studio could not answer, and
- * deleting a thread left its places hidden behind a check that would never
- * fall again. This answers it, by looking where the link actually is.
- */
+/** A thread, and the places that hold it up. */
 
 import { threadAnchored, readRumoured, dcKnowing, floorOf } from '@dm/authoring';
 import { getAt } from '@/lib/store';
@@ -32,8 +21,7 @@ export function ThreadPanel(props: {
     .map((poi, index) => ({ poi, index }))
     .filter(({ poi }) => threadAnchored(poi['discover']) === id);
 
-  // Two tellers in two areas is the rule the Python checks: a thread that dies
-  // with one missed visit is a thread nobody finishes.
+  // Two tellers in two areas is the rule the Python checks.
   const areas = new Set(anchors.map(({ poi }) => String(poi['area'] ?? '')));
 
   return (

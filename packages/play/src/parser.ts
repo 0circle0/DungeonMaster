@@ -1,23 +1,11 @@
-/**
- * The verb parser: turns `attack the skeleton` into an action.
- *
- * Two rules:
- *
- *   - Never say "I don't understand." A refusal should say what was understood and what is missing
- *     — "attack what?".
- *   - Resolve nouns against what is actually present, and report ambiguity rather than silently
- *     picking the first match.
- */
+/** The verb parser: turns `attack the skeleton` into an action. */
 
 import type { CompiledModule } from '@dm/module';
 import type { Action, Direction, GameState } from '@dm/engine';
 import { distance, nameScore, Transaction, shopOf, shopStock } from '@dm/engine';
 import type { Position } from '@dm/engine';
 
-/**
- * The three things an input can be. Discriminated on `kind` rather than on the presence of a field,
- * so narrowing works: `ok: true` alone cannot distinguish an action from a shell command.
- */
+/** The three things an input can be. */
 export type ParseResult =
   | { readonly kind: 'action'; readonly action: Action }
   | { readonly kind: 'meta'; readonly meta: MetaCommand }
@@ -55,11 +43,7 @@ export interface VerbSpec {
   readonly meta: boolean;
 }
 
-/**
- * The verb table, as described data. One table drives the parser's lookup, the generated `HELP`,
- * and a front end's completion list, so a verb cannot work while help never mentions it.
- * Declaration order is match order.
- */
+/** The verb table, as described data. */
 export const VERB_SPECS: readonly VerbSpec[] = [
   { verb: 'go', spellings: ['go', 'move', 'walk', 'head'], takes: 'direction', summary: 'walk one step, or toward a place', meta: false },
   { verb: 'attack', spellings: ['attack', 'hit', 'kill', 'fight', 'strike'], takes: 'entity', summary: 'attack a creature', meta: false },
@@ -83,7 +67,7 @@ export const VERB_SPECS: readonly VerbSpec[] = [
   { verb: 'select', spellings: ['select', 'switch', 'control'], takes: 'member', summary: 'control another party member', meta: false },
   { verb: 'endTurn', spellings: ['end', 'done', 'pass'], takes: 'nothing', summary: 'end your combat turn', meta: false },
   { verb: 'flee', spellings: ['flee', 'run', 'retreat', 'withdraw'], takes: 'nothing', summary: 'run from a fight', meta: false },
-  // Stances. "run" is already flight, so the fast stance is "dash".
+  // Stances.
   { verb: 'sneak', spellings: ['sneak', 'creep', 'stealth', 'prowl'], takes: 'nothing', summary: 'move quietly', meta: false },
   { verb: 'stroll', spellings: ['walk', 'stroll'], takes: 'nothing', summary: 'move at an ordinary pace', meta: false },
   { verb: 'dash', spellings: ['dash', 'sprint', 'hurry'], takes: 'nothing', summary: 'move fast, and loudly', meta: false },
@@ -135,10 +119,7 @@ interface VerbMatch {
   readonly words: number;
 }
 
-/**
- * Match the leading verb, longest spelling first: two words before one, so a multi-word spelling
- * like `look for` can win over the bare `look`.
- */
+/** Match the leading verb, longest spelling first. */
 function matchVerb(words: readonly string[]): VerbMatch | null {
   const pair = words.length > 1 ? `${words[0]} ${words[1]}` : '';
 
@@ -151,10 +132,7 @@ function matchVerb(words: readonly string[]): VerbMatch | null {
   return null;
 }
 
-/**
- * The sense a module means by a word like "listen". Matched against what the module declares rather
- * than hard-coded, since a module is free to call its senses anything.
- */
+/** The sense a module means by a word like "listen". */
 function senseNamed(module: CompiledModule, words: readonly string[]): string | null {
   const senses = module.all<{ id: string; name?: string }>('rules.senses');
   for (const sense of senses) {
@@ -167,27 +145,17 @@ function senseNamed(module: CompiledModule, words: readonly string[]): string | 
   return null;
 }
 
-/**
- * Score how well a noun phrase matches a candidate name. The engine owns the ladder, so naming a
- * thing to the parser and naming it to the narrator cannot mean two different things.
- */
+/** Score how well a noun phrase matches a candidate name. */
 const score = nameScore;
 
 export interface Candidate<T> {
   readonly value: T;
   readonly name: string;
-  /**
-   * Where it stands, when it stands somewhere. Two identically-named monsters are indistinguishable
-   * by every other field, so a picker leans on this.
-   */
+  /** Where it stands, when it stands somewhere. */
   readonly at?: Position;
 }
 
-/**
- * How a noun resolved, or the two ways it did not. Both refusal arms carry `message`, so a caller
- * that only wants a string is unchanged; a front end with a picker reads `kind` and, on a tie, gets
- * the candidates themselves.
- */
+/** How a noun resolved, or the two ways it did not. */
 export type Resolution<T> =
   | { readonly ok: true; readonly value: T }
   | { readonly ok: false; readonly kind: 'none'; readonly message: string }
@@ -275,10 +243,7 @@ export function carried(context: ParseContext): Candidate<string>[] {
 }
 
 /** Items carried, plus anything lying within reach. */
-/**
- * The nearest shopkeeper the party could speak to. Trade verbs take no NPC argument, so the counter
- * they are standing at is inferred the way `talk` infers it.
- */
+/** The nearest shopkeeper the party could speak to. */
 export function traderNearby(context: ParseContext): string | null {
   const actor = context.state.entities[context.state.selected];
   if (!actor) return null;
@@ -365,8 +330,7 @@ export function parse(input: string, context: ParseContext): ParseResult {
     case 'go': {
       const direction = DIRECTION_ALIASES[rest];
       if (direction) return { kind: 'action', action: { type: 'step', direction } };
-      // Bare "walk" is the stance, not an unfinished move. `go` is listed before `stroll` so it
-      // wins the word outright; this hands it back.
+      // Bare "walk" is the stance, not an unfinished move.
       if (!rest && spelling === 'walk') {
         return { kind: 'action', action: { type: 'setStance', stance: 'walk' } };
       }
@@ -384,8 +348,7 @@ export function parse(input: string, context: ParseContext): ParseResult {
     case 'dash':
       return { kind: 'action', action: { type: 'setStance', stance: 'dash' } };
 
-    // Stopping to use a sense costs a minute and reports what it has to say, including what it
-    // noticed a while ago and has not forgotten.
+    // Stopping to use a sense costs a minute and reports what it has to say.
     case 'listen':
     case 'sniff': {
       const wanted = verb === 'listen'
@@ -592,8 +555,7 @@ export function parse(input: string, context: ParseContext): ParseResult {
       return { kind: 'action', action: { type: 'unequip', item: item.value } };
     }
 
-    // Looking is a real action, not a shell command: it goes through the engine, so what is visible
-    // is decided by perception once and lands in the transcript.
+    // Looking goes through the engine, so perception decides what is visible.
     case 'look':
       return { kind: 'action', action: rest ? { type: 'look', at: rest } : { type: 'look' } };
 
@@ -630,10 +592,7 @@ export function isMeta(result: ParseResult): result is { kind: 'meta'; meta: Met
   return result.kind === 'meta';
 }
 
-/**
- * The command list, generated from the same table the parser matches against, so a verb cannot work
- * while help forgets it.
- */
+/** The command list, generated from the same table the parser matches against. */
 export const HELP: string = (() => {
   const GROUPS: readonly (readonly [string, readonly string[]])[] = [
     ['Movement', ['go']],

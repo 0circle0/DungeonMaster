@@ -1,16 +1,4 @@
-/**
- * The editor's half of the mod contract.
- *
- * `editor.fields` is the reason the paired-mod story works at all: a mod adds a
- * field, the value lands in `extra`, and the engine half reads it at play time.
- * It was implemented, declared by the shipped example, and connected to
- * nothing — so the half of `mods/README.md` that describes it was describing
- * something that did not happen.
- *
- * Testing it here rather than through the browser because the failure mode is
- * silence: a hook that returns nothing and a hook that is never called look
- * identical from the outside, which is most of why this went unnoticed.
- */
+/** The editor's half of the mod contract. */
 
 import { describe, it, expect, beforeAll, afterAll } from 'vitest';
 import { testHost, inlineMod } from '@dm/mods/testing';

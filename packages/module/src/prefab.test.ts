@@ -1,10 +1,4 @@
-/**
- * Prefabs, measured against the thing they have to replace.
- *
- * `place.py`'s `inn()` is one line over four lookup tables, and an author writing four strings gets
- * an eleven-key point of interest. The fixture here is that shorthand expressed as a template, and
- * the tests ask whether it produces what the Python produces.
- */
+/** Prefabs, measured against the thing they have to replace. */
 
 import { describe, it, expect } from 'vitest';
 import {
@@ -51,8 +45,6 @@ const INN: Prefab = {
     travelMinutes: 3,
     services: ['inn'],
     tags: ['inn'],
-    // The interior exists only when there is a trade to give it a palette; `poi()` drops
-    // `footprint` the same way, making a place you stand at.
     map: {
       '@when': 'trade',
       then: {
@@ -71,11 +63,7 @@ const FOUR_STRINGS = {
 };
 
 describe('expandPrefab', () => {
-  /**
-   * A row that decides several fields at once is why a style table is a table. `place.py`'s SIZES
-   * maps one size to a width and a height together, and a lookup that could only fetch whole rows
-   * would force an author to split exactly the values that exist to stay in step.
-   */
+  /** A row that decides several fields at once is why a style table is a table. */
   it('walks into a row, so one key can decide several fields', () => {
     const { entry, issues } = expandPrefab(
       {
@@ -127,10 +115,6 @@ describe('expandPrefab', () => {
     expect(big.entry['map']).toEqual({ width: '15', height: '11' });
   });
 
-  /**
-   * The `interior and trade` rule: without a trade there is no palette and no footprint, and the
-   * keys are absent rather than null — a null would reach the schema and the content hash.
-   */
   it('omits a key rather than nulling it', () => {
     const { entry } = expandPrefab(INN, { ...FOUR_STRINGS, trade: '' }, STYLE);
     expect('map' in entry).toBe(false);
@@ -176,11 +160,7 @@ describe('instances', () => {
     return { entry, link };
   };
 
-  /**
-   * The link lives beside the entries, not in one. Every collection schema is `.strict()`, so a
-   * `$prefab` key on a point of interest is a validation error, and the studio validates exactly
-   * the document it is editing.
-   */
+  /** The link lives beside the entries, not in one. */
   it('keeps the entry itself something the schema accepts', () => {
     const { entry } = place(FOUR_STRINGS);
     expect(Object.keys(entry).some((k) => k.startsWith('$'))).toBe(false);
@@ -245,11 +225,6 @@ describe('instances', () => {
   });
 });
 
-/**
- * Nobody designs a template first: they build one place, get it right, and then want thirty more
- * like it. The entry is the specification, and a prefab derived from it has to expand back to
- * exactly that entry, since linking the original is the same as replacing it with the expansion.
- */
 describe('derivePrefab', () => {
   const entry = {
     id: 'millford_village',

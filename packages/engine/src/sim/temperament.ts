@@ -1,12 +1,4 @@
-/**
- * What a creature does when nothing is telling it what to do.
- *
- * Perception answers what it can tell is there; this answers what it does about it. A hound and a
- * shopkeeper standing in the same doorway smell the same street, and only one goes to look.
- *
- * Every default here reproduces the engine's older behaviour: nothing wanders, nothing is leashed,
- * and a fight ends the moment nobody can be perceived.
- */
+/** What a creature does when nothing is telling it what to do. */
 
 import type { CompiledModule } from '@dm/module';
 import type { Entity } from '../state.js';
@@ -14,7 +6,7 @@ import { npcIdOf } from '../state.js';
 import { toTiles } from '../rules/combat/targeting.js';
 import { isHostileTo } from '../rules/combat/targeting.js';
 
-/** How one creature stands toward another. Exhaustive, and each exactly once. */
+/** How one creature stands toward another. */
 export type Regard = 'hostile' | 'neutral' | 'ally';
 
 /** How fast a creature moves, per reason it is moving. */
@@ -25,22 +17,18 @@ export interface Speeds {
   readonly returning: number;
 }
 
-/**
- * A temperament with every default resolved and every distance in tiles. Built per statblock and
- * cached, the way `SenseDef` is: resolving it touches three collections and it is read on every
- * idle step of every creature.
- */
+/** A temperament with every default resolved and every distance in tiles. */
 export interface Temperament {
-  /** Territory around the anchor, in tiles. Zero is a creature that stands still. */
+  /** Territory around the anchor, in tiles. */
   readonly roamRadius: number;
-  /** How far a lead may pull it from the anchor. `Infinity` when unbounded. */
+  /** How far a lead may pull it from the anchor. */
   readonly investigateRadius: number;
-  /** How far it chases before turning for home. `Infinity` when unbounded. */
+  /** How far it chases before turning for home. */
   readonly leashRadius: number;
   readonly wanderChance: number;
   readonly disengageTurns: number;
   readonly speeds: Speeds;
-  /** Senses it acts on, best first. Null means all of them, strongest first. */
+  /** Senses it acts on, best first. */
   readonly investigates: readonly string[] | null;
   readonly followsTrails: boolean;
   readonly notices: readonly Regard[];
@@ -61,20 +49,13 @@ interface DeclaredTemperament {
 
 const cache = new WeakMap<CompiledModule, Map<string, Temperament>>();
 
-/**
- * How `observer` stands toward `other`. Built on {@link isHostileTo} rather than reading
- * `disposition` directly, because disposition is held toward the party while this is a question
- * about two particular creatures.
- */
+/** How `observer` stands toward `other`. */
 export function regardFor(observer: Entity, other: Entity): Regard {
   if (isHostileTo(observer, other)) return 'hostile';
   return observer.disposition === other.disposition ? 'ally' : 'neutral';
 }
 
-/**
- * The temperament this creature runs on. Resolution mirrors `rangeOf`: the most specific statement
- * wins, so a person's own entry beats the statblock they borrow to fight with.
- */
+/** The temperament this creature runs on. */
 export function temperamentOf(module: CompiledModule, entity: Entity): Temperament {
   const key = keyFor(entity);
 
@@ -107,15 +88,13 @@ export function temperamentOf(module: CompiledModule, entity: Entity): Temperame
     return base[field];
   };
 
-  // An absent radius is no limit rather than a radius of zero: zero would pin a creature to the
-  // tile it spawned on.
+  // An absent radius is no limit rather than a radius of zero.
   const optionalTiles = (field: 'investigateRadius' | 'leashRadius'): number => {
     const declared = pick(field);
     return declared === undefined ? Infinity : toTiles(module, declared);
   };
 
-  // Resolved one name at a time, so a creature saying only how fast it wanders keeps the ruleset's
-  // answer for the other three.
+  // Resolved one name at a time, so unstated names keep the ruleset's answer.
   const speed = (name: keyof Speeds): number => {
     for (const override of overrides) {
       const declared = override.speeds?.[name];
@@ -147,10 +126,7 @@ export function temperamentOf(module: CompiledModule, entity: Entity): Temperame
   return resolved;
 }
 
-/**
- * What two creatures sharing a temperament have in common. A person is keyed by who they are and a
- * monster by what it is, so a room of twelve identical bog hounds resolves once.
- */
+/** What two creatures sharing a temperament have in common. */
 function keyFor(entity: Entity): string {
   if (entity.kind === 'npc') return `npc:${npcIdOf(entity)}`;
   if (entity.statblock) return `mon:${entity.statblock}`;

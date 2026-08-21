@@ -1,14 +1,6 @@
 'use client';
 
-/**
- * The player's own worlds, and the examples a deployment happens to carry.
- *
- * Two lists that behave differently on purpose. Worlds are the player's — kept
- * on this machine, editable, deletable, and nothing else can see them. Examples
- * are files the server is serving: fetched once, when asked, and from that
- * moment they are worlds like any other. Nothing is downloaded that nobody
- * asked for, and once a world is here it is never fetched again.
- */
+/** The player's own worlds, and the examples a deployment happens to carry. */
 
 import { useCallback, useEffect, useState } from 'react';
 import {
@@ -54,8 +46,7 @@ export function useLibrary(): LibraryApi {
       setUsage(await estimateStorage());
       return next;
     } catch (err) {
-      // A browser with storage disabled still plays; it just cannot keep
-      // anything, and saying so once is better than failing every action.
+      // A browser with storage disabled still plays; it just cannot keep anything.
       setEphemeral(true);
       setError(`Worlds cannot be saved in this browser: ${(err as Error).message}`);
       return [];
@@ -65,8 +56,7 @@ export function useLibrary(): LibraryApi {
   useEffect(() => {
     let live = true;
     void (async () => {
-      // The catalog is optional and never throws — a deployment that ships no
-      // examples at all is a supported one.
+      // The catalog is optional and never throws.
       const [loadedCatalog] = await Promise.all([fetchCatalog(), refresh()]);
       if (!live) return;
       setCatalog(loadedCatalog);
@@ -133,8 +123,7 @@ export function useLibrary(): LibraryApi {
     await refresh();
   }, [refresh]);
 
-  // An example already in the library is not on offer again — but deleting it
-  // puts it back, which is what makes "delete and re-add" a way to start over.
+  // An example already in the library is not offered again; deleting it puts it back.
   const taken = new Set(worlds.map((w) => w.originId).filter((id): id is string => id !== null));
   const available = catalog.modules.filter((entry) => !taken.has(entry.id));
 

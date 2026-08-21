@@ -1,26 +1,4 @@
-/**
- * Everything the engine says out loud.
- *
- * A stable key for every sentence, with the canonical wording as data rather than as code. The
- * engine emits a key and its values; the module decides the words.
- *
- * Two tiers
- *
- * - `fragment` — a piece another message interpolates. `combat.outcome.failure` is the word
- *   `{outcome}` in `combat.attacked`; delete it and the sentence has a hole where its verb was.
- *   These are required in the document and a module that omits one does not compile.
- * - `message` — a sentence that stands on its own. These carry a schema default, so an author
- *   writes only what they want to change.
- *
- * A value is mandatory only when something else relies on it to convey a message.
- *
- * `placeholders` lists the `{names}` a message cannot lose — the ones carrying the facts. Others
- * (`type`, `resisted`) are optional colour the engine supplies. `compileModule` checks both, so the
- * failure is a load error.
- *
- * A value may also be `{ "pool": "some_pool" }` instead of a string, which hands the message to
- * `narrative.textGrammar` for weighted, condition-gated variation.
- */
+/** Everything the engine says out loud. */
 
 import { z } from 'zod';
 import { ref } from './common.js';
@@ -30,21 +8,15 @@ export interface SystemTextEntry {
   readonly key: string;
   /** What the message is for, published in the generated reference. */
   readonly doc: string;
-  /**
-   * `fragment` — interpolated into another message; required in the document. `message` — stands
-   * alone; defaulted, so it may be omitted.
-   */
+  /** `fragment` — interpolated into another message; required in the document. */
   readonly tier: 'fragment' | 'message';
-  /** `{names}` the text must keep. Losing one leaves a hole in the sentence. */
+  /** `{names}` the text must keep. */
   readonly placeholders: readonly string[];
   /** The canonical English, seeded into a module by `npm run systemtext`. */
   readonly text: string;
 }
 
-/**
- * Generic in the key so the literal survives into `SystemTextKey`, which makes a typo in an engine
- * call site a type error rather than a message that never renders.
- */
+/** Generic in the key, so the literal survives into `SystemTextKey`. */
 const entry = <K extends string>(
   key: K,
   tier: 'fragment' | 'message',
@@ -53,10 +25,7 @@ const entry = <K extends string>(
   placeholders: readonly string[] = [],
 ) => ({ key, tier, text, doc, placeholders });
 
-/**
- * Every message the engine can produce, grouped the way a player meets them. Adding one here is the
- * only way to add engine prose; the guard test in `spine.test.ts` fails on a literal.
- */
+/** Every message the engine can produce, grouped the way a player meets them. */
 export const SYSTEM_TEXT = [
   // — grammar ————————————————————————————————————————————————
   entry('grammar.and', 'fragment', 'and', 'Joins the last two items of a list.'),
@@ -321,7 +290,7 @@ export const SYSTEM_TEXT = [
   entry('refused.internal.unknownOp', 'message', 'this engine does not implement "{op}"', 'An effect this build does not know.', ['op']),
 ] as const satisfies readonly SystemTextEntry[];
 
-/** Every key the engine can ask for. A typo is a type error at the call site. */
+/** Every key the engine can ask for. */
 export type SystemTextKey = (typeof SYSTEM_TEXT)[number]['key'];
 
 /** Lookup by key, built once. */
@@ -341,30 +310,20 @@ export function defaultSystemText(): Record<string, string> {
   return out;
 }
 
-/**
- * Just the fragments — the smallest `systemText` block a module can compile with, so a fresh
- * scaffold is a working document rather than a wall of prose.
- */
+/** The smallest `systemText` block a module can compile with. */
 export function requiredSystemText(): Record<string, string> {
   const out: Record<string, string> = {};
   for (const item of SYSTEM_TEXT) if (item.tier === 'fragment') out[item.key] = item.text;
   return out;
 }
 
-/**
- * One message: a string, or a text-grammar pool for weighted variation. The pool form is a `ref`,
- * so a typo is a dangling reference at load.
- */
+/** One message: a string, or a text-grammar pool for weighted variation. */
 export const systemTextValueSchema = z.union([
   z.string(),
   z.object({ pool: ref('narrative.textGrammar') }).strict(),
 ]);
 
-/**
- * What the engine says, keyed. Fragments are declared optional here so a module missing one gets
- * `compileModule`'s diagnostic — which names the key and quotes the canonical wording — rather than
- * Zod's bare "required".
- */
+/** What the engine says, keyed. */
 export const systemTextSchema = z
   .object(
     Object.fromEntries(

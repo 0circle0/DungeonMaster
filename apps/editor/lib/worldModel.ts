@@ -1,10 +1,4 @@
-/**
- * Reading world structure out of the raw authored document.
- *
- * These helpers work on the unvalidated doc — same policy as the rest of the
- * editor — so the studio's world tree and start chip stay useful while the
- * module is half-written. Anything malformed simply drops out of the lists.
- */
+/** Reading world structure out of the raw authored document. */
 
 import type { ModuleDoc } from './store';
 
@@ -44,10 +38,7 @@ export interface ResolvedStart {
   readonly areaId: string | null;
 }
 
-/**
- * The same precedence `startingLocation()` applies in the engine: POI first,
- * then area, then dungeon. Null means a new game would throw.
- */
+/** The same precedence `startingLocation()` applies in the engine: POI first, then area, then dungeon. */
 export function resolveStart(doc: ModuleDoc): ResolvedStart | null {
   const start = startOf(doc);
   const world = worldOf(doc);

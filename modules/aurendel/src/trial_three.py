@@ -1,18 +1,4 @@
-"""Tier three — the last two, and the thing that had been counting them.
-
-Six lines struck through, and the last two on Hesper's list are not places
-anybody built over or went to ground under. The seventh is a room four miles
-down the Long Hall that was built to listen, and has been listening. The eighth
-is a deep under Firewatch Ridge that the vent-readers have signalled past for
-six hundred years without ever signalling *to*.
-
-And then the ninth line, which is not a door at all. Somebody opened nine doors
-in order over eleven hundred years. That is not weather and it is not luck. It
-is a programme, and something has been running it, and it has been keeping
-count under a ring in the Witchwood the whole time.
-
-Level 18 at the door, and the door wants a relic worn.
-"""
+"""Tier three — the last two, and the thing that had been counting them."""
 from dmkit.quests import reach, kill, flagged, arc
 from dmkit.prose import pool
 from postgame import tier, link, warrant, proving, loosed

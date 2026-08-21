@@ -1,17 +1,4 @@
-/**
- * Static map files: the CSV-per-layer form and its assembly.
- *
- * A static map lives on disk as a folder — `maps/<id>/` beside `module.json` — holding a `map.json`
- * manifest and one CSV per layer. In the assembled document it is an ordinary `world.maps` entry
- * with the grids inlined. This module is the bridge in both directions, and is pure: the editor
- * needs `splitStaticMap` in the browser, and `@dm/module`'s main index is bundled client-side.
- * Filesystem policy lives in `load.ts`.
- *
- * CSV here is the trivial dialect: ids are `[a-z][a-z0-9_]*`, so no cell needs quoting and a parser
- * is a split on commas. Cells are trimmed, an empty cell means nothing, and a line whose first non-
- * space character is `#` is a comment. Anything irregular is an error with a line and column, never
- * a guess.
- */
+/** Static map files: the CSV-per-layer form and its assembly. */
 
 export interface CsvIssue {
   /** 1-based line in the file as authored, comments counted. */
@@ -38,8 +25,7 @@ export function parseCsvGrid(text: string): { cells: string[][]; issues: CsvIssu
   const issues: CsvIssue[] = [];
   const cells: string[][] = [];
 
-  // One trailing newline ends a file rather than adding an empty final row; strip exactly one so
-  // serialize ∘ parse is the identity.
+  // Strip exactly one trailing newline, so serialize after parse is the identity.
   const body = text.endsWith('\n') ? text.slice(0, -1) : text;
   const lines = body === '' ? [] : body.split('\n');
 
@@ -50,8 +36,7 @@ export function parseCsvGrid(text: string): { cells: string[][]; issues: CsvIssu
     const stripped = raw.trim();
     if (stripped.startsWith('#')) return;
     if (stripped === '') {
-      // A blank line is ambiguous — a row of empties or a stray newline — so it is refused rather
-      // than interpreted.
+      // A blank line is ambiguous, so it is refused rather than interpreted.
       issues.push({
         line,
         col: 1,
@@ -98,14 +83,7 @@ export function serializeCsvGrid(cells: readonly (readonly string[])[]): string 
   return cells.map((row) => row.join(',')).join('\n') + '\n';
 }
 
-/**
- * Manifest plus CSV texts → an assembled `world.maps` entry.
- *
- * Structural rather than schema-validating: unknown manifest fields ride through untouched, so
- * `extra` and future fields round-trip, and the zod check happens later at compile. The only errors
- * raised here are the ones a schema can never see — a layer naming a file that is not in the
- * folder, and CSV syntax.
- */
+/** Manifest plus CSV texts → an assembled `world.maps` entry. */
 export function assembleStaticMap(
   manifest: unknown,
   files: Readonly<Record<string, string>>,
@@ -176,12 +154,7 @@ export function assembleStaticMap(
   return { entry: { ...rest, layers: assembled }, issues };
 }
 
-/**
- * An assembled entry → manifest plus CSV texts, the deterministic inverse. The written manifest
- * always lists explicit `file` names — layer `name` when present, layer kind otherwise, suffixed
- * with the layer index on collision — so a folder written twice from the same entry is byte-
- * identical.
- */
+/** An assembled entry → manifest plus CSV texts, the deterministic inverse. */
 export function splitStaticMap(entry: Record<string, unknown>): {
   manifest: Record<string, unknown>;
   files: Record<string, string>;
@@ -207,11 +180,7 @@ export function splitStaticMap(entry: Record<string, unknown>): {
   return { manifest: { ...rest, layers: manifestLayers }, files };
 }
 
-/**
- * Normalize `world.maps` to id order. Assembly discovers folders in directory order and `extends`
- * appends in merge order, so sorting afterwards makes the assembled document — and the module hash
- * — a pure function of content.
- */
+/** Normalize `world.maps` to id order. */
 export function sortWorldMaps(doc: Record<string, unknown>): Record<string, unknown> {
   const world = doc['world'];
   if (world === null || typeof world !== 'object' || Array.isArray(world)) return doc;

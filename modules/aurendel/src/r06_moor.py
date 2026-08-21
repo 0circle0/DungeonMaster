@@ -1,9 +1,4 @@
-"""Region 6 — The Weeping Moor.
-
-Heather to the skyline in the north-east, and under the heather more graves
-than living people. One town built on a barrow, two villages, five stretches of
-moor, and the Nine Sisters standing on the highest of it.
-"""
+"""Region 6 — The Weeping Moor."""
 from place import (
     area, poi, gate, house, inn, smithy, store, temple, stable, square,
     landmark, ruin, delve,

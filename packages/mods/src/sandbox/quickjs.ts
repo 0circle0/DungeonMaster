@@ -1,20 +1,4 @@
-/**
- * The QuickJS host.
- *
- * One `QuickJSContext` per mod, not one shared: mods cannot see or pollute each other's globals,
- * and disposing a quarantined mod is a context disposal.
- *
- * Why this variant
- *
- * `@jitl/quickjs-wasmfile-release-sync` ships the WASM as a real asset located via `new URL(...,
- * import.meta.url)`, which webpack emits as a static file. The `singlefile` variants embed the WASM
- * as a JS string containing raw binary with octal escapes, and Next's SWC minifier rewrites that
- * literal into a template string, where octal escapes are a syntax error — the build succeeds and
- * the browser then fails to load the chunk. Do not switch back without loading a page in a real
- * browser.
- *
- * The same variant works under Node, so there is one variant everywhere.
- */
+/** The QuickJS host. */
 
 import { newQuickJSWASMModuleFromVariant } from 'quickjs-emscripten-core';
 import type { QuickJSContext, QuickJSRuntime, QuickJSWASMModule } from 'quickjs-emscripten-core';
@@ -32,10 +16,7 @@ import type {
 
 let wasmModule: QuickJSWASMModule | null = null;
 
-/**
- * Instantiate the WASM module once per process. The only async step; everything after it is
- * synchronous, which is what lets `reduce()` stay a synchronous pure function.
- */
+/** Instantiate the WASM module once per process. */
 export async function prepareSandbox(): Promise<void> {
   wasmModule ??= await newQuickJSWASMModuleFromVariant(variant);
 }
@@ -48,7 +29,7 @@ interface InstalledMod {
   failures: number;
 }
 
-/** Create a host. `prepareSandbox()` must have resolved first. */
+/** Create a host. */
 export function createHost(options: HostOptions): SandboxHost {
   if (!wasmModule) {
     throw new Error('createHost: call and await prepareSandbox() before creating a host');
@@ -110,9 +91,7 @@ export function createHost(options: HostOptions): SandboxHost {
     }
     preludeResult.value.dispose();
 
-    // The entry file, then any other file the mod ships, are evaluated as one script each. There is
-    // no module loader: a mod is a script, and `lib/*.js` files are evaluated before the entry so
-    // the entry can use what they put on `globalThis`.
+    // The entry file, then any other file the mod ships, are evaluated as one script each.
     const entry = mod.manifest.entry;
     const others = Object.keys(mod.files)
       .filter((p) => p !== entry && p !== 'mod.json' && p.endsWith('.js'))
@@ -138,14 +117,12 @@ export function createHost(options: HostOptions): SandboxHost {
 
     const registered = readRegistered(context);
 
-    // Declared-but-unregistered is a warning: the manifest promised a hook the code never
-    // installed, which is almost always a typo in one of the two.
+    // Declared-but-unregistered is a warning: a hook the manifest promised was never installed.
     const declared = new Set(mod.manifest.hooks.map((h) => h.hook));
     for (const name of declared) {
       if (!registered.includes(name)) issues.push(`declares hook ${JSON.stringify(name)} but never registers one`);
     }
-    // Registered-but-undeclared is an error: the runtime indexes declarations to decide whether to
-    // cross the boundary at all, so an undeclared handler would never run.
+    // Registered-but-undeclared is an error: an undeclared handler is never crossed to.
     for (const name of registered) {
       if (!declared.has(name)) {
         issues.push(`registers hook ${JSON.stringify(name)} that the manifest does not declare — it would never run`);
@@ -186,8 +163,7 @@ export function createHost(options: HostOptions): SandboxHost {
         outcome = decode(text, draws, logs);
       }
     } catch (error) {
-      // A host-side throw — a disposed handle, an FFI fault — must not escape into the engine
-      // either.
+      // A host-side throw — a disposed handle, an FFI fault — must not escape into the engine either.
       outcome = { ok: false, kind: 'threw', error: error instanceof Error ? error.message : String(error) };
     } finally {
       payloadArg.dispose();
@@ -232,10 +208,7 @@ function decode(text: string, draws: number, logs: readonly string[]): SandboxRe
   return { ok: true, directives: parsed, draws, logs };
 }
 
-/**
- * QuickJS reports an interrupt and an out-of-memory as ordinary errors, so the kind has to be read
- * back off the message: "your mod is too slow" and "your mod has a bug" need different fixes.
- */
+/** Reads the failure kind back off QuickJS's message. */
 function classify(detail: string): 'threw' | 'interrupted' | 'oom' {
   const lower = detail.toLowerCase();
   if (lower.includes('interrupt')) return 'interrupted';

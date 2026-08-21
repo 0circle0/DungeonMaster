@@ -1,19 +1,4 @@
-/**
- * Four strings, and an entry.
- *
- * This is the whole claim of the prefab layer made usable: `place.py`'s `inn()`
- * takes an id, a name, an area and a description, and produces an eleven-key
- * point of interest. A form that made you fill in all eleven would not be a
- * smaller version of that.
- *
- * The parameter form is generated from the prefab's own `params`, through the
- * same `Field` renderer every content type uses — so a `ref` parameter is a
- * dropdown of ids that exist, for the same reason and with the same code.
- *
- * What it will make is shown while it is being filled in. A prefab is a
- * template someone else wrote, and expanding one sight-unseen is how an author
- * ends up with forty entries they did not mean.
- */
+/** Four strings, and an entry. */
 
 'use client';
 
@@ -49,7 +34,7 @@ export function PlaceFromPrefab(props: {
   store: ModuleStore;
   prefabs: readonly Prefab[];
   style: StyleTables;
-  /** Record where this entry came from. Persisted by the studio's autosave. */
+  /** Record where this entry came from. */
   onLinkInstance: (collection: string, entryId: string, link: PrefabLink) => void;
   collection: string;
   onClose: () => void;
@@ -85,13 +70,6 @@ export function PlaceFromPrefab(props: {
     const entryId = String(filled['id']);
 
     // The entry, and any prose bundle it names that does not exist yet.
-    //
-    // A template can say `descriptionKey: "{{id}}_desc"` — the settlement
-    // prefab does — which is the right convention and produced a dangling
-    // reference every time, because naming a bundle is not creating one. If a
-    // `description` parameter was collected, that is the words; without one the
-    // bundle is still made, so the module stays valid and the inspector's
-    // description panel has something to edit.
     const edits: { path: (string | number)[]; value: unknown }[] = [
       { path: [...props.collection.split('.'), index], value: preview },
     ];

@@ -1,6 +1,4 @@
-/* Studio shell, scoped by CSS Modules so the classic editor's stylesheet is unaffected. The palette
-   reuses the custom properties globals.css defines on :root, so embedded schema forms and analysis
-   views match the shell without restyling. */
+/* Studio shell, scoped by CSS Modules so the classic editor's stylesheet is unaffected. */
 
 .shell {
   position: fixed;
@@ -507,9 +505,7 @@
 .dialogOption em { display: block; color: var(--muted); font-style: normal; font-size: 11.5px; margin-top: 2px; }
 .dialogActions { display: flex; justify-content: flex-end; gap: 8px; }
 
-/* Mods panel. A mod describes its UI and the host draws it, so these are the only styles a mod's
-   widget tree can reach: an editor mod cannot ship CSS, which is what keeps one mod from restyling
-   the studio. */
+/* Mods panel. */
 .modsBody { padding: 10px 12px; overflow: auto; }
 .modsBody h3 { font-size: 11px; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); margin: 14px 0 6px; }
 .modsBody h3:first-child { margin-top: 0; }
@@ -539,8 +535,7 @@
 .renameCount { margin: 0; font-size: 11px; opacity: 0.75; }
 .renameActions { display: flex; gap: 6px; }
 
-/* The half the rename cannot do for you. Not styled as an error: nothing is wrong yet, but somebody
-   has to go and look. */
+/* The half the rename cannot do for you. */
 .renameWarn {
   font-size: 11px;
   border-left: 2px solid var(--warn, #d9a441);
@@ -644,8 +639,7 @@
   margin-bottom: 8px;
 }
 .modField { position: relative; }
-/* Whose it is. An unattributed field reads as part of the format, and would be looked for in the
-   schema. */
+/* Whose it is. */
 .modFieldOwner {
   position: absolute;
   top: 0;
@@ -682,12 +676,10 @@
   gap: 8px;
   padding: 3px 0;
 }
-/* The value a person put there, not the prefab's — shown so "reset" is a decision rather than a
-   leap. */
+/* The value a person put there, not the prefab's — shown so "reset" is a decision rather than a leap. */
 .prefabValue { flex: 1; opacity: 0.6; font-family: var(--mono); font-size: 10.5px; }
 
-/* A draft from a session that ended badly. Loud, because ignoring it loses it, and it sits above
-   everything until the author decides. */
+/* A draft from a session that ended badly. */
 .recovery {
   position: fixed;
   top: 12px;

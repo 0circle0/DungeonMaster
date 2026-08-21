@@ -1,9 +1,4 @@
-/**
- * The save envelope: lineage and the mod set.
- *
- * Lineage exists to answer "which change broke this save" after the fact, so
- * the property that matters is that earlier entries are never lost.
- */
+/** The save envelope: lineage and the mod set. */
 
 import { describe, it, expect } from 'vitest';
 import { fileURLToPath } from 'node:url';
@@ -42,8 +37,6 @@ describe('lineage', () => {
   it('does not grow when the module has not changed', () => {
     const first = parse(save(started(), 1_000));
     const second = parse(save(started(), 2_000, { previous: first }));
-    // A chain full of duplicates would say nothing about which change broke
-    // anything, which is the only reason the chain exists.
     expect(second.lineage).toHaveLength(1);
     expect(second.lineage?.[0]?.at).toBe(1_000);
   });
@@ -89,8 +82,6 @@ describe('the mod set', () => {
     const result = load(text, GREENMARCH, { mods: [] });
     if (!result.ok) throw new Error(result.error);
 
-    // Never a refusal: the engine cannot tell whether a different mod set
-    // matters, because it does not know what any mod changed.
     expect(result.warnings.join(' ')).toContain('thorns-' + '0'.repeat(16));
     expect(result.warnings.join(' ')).toContain('not active now');
   });
@@ -114,8 +105,6 @@ describe('migration to version 8', () => {
   it('gives an older save an empty mod bag and equals a fresh one', () => {
     const fresh = started();
 
-    // A version-7 save is this state without `modState`, wrapped in the old
-    // envelope shape — no lineage, no mods.
     const { modState: _dropped, ...older } = fresh;
     const legacy = JSON.stringify({
       saveVersion: 7,
@@ -128,8 +117,6 @@ describe('migration to version 8', () => {
 
     expect(result.state.modState).toEqual({});
     expect(result.state.saveVersion).toBe(SAVE_VERSION);
-    // The migration sets `saveVersion` inside the state too, so a migrated
-    // save is not permanently unequal to an identical fresh one.
     expect(statesEqual(result.state, fresh)).toBe(true);
     expect(result.warnings.join(' ')).toContain('migrated save from version 7');
   });

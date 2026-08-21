@@ -1,31 +1,13 @@
-/**
- * Modules, from stored bytes to something playable.
- *
- * Nothing arrives from a server any more. A world comes out of the library on
- * this machine, or out of a file the player picked, and is compiled here in the
- * browser — the editor already proved `compileModule` runs in one.
- */
+/** Modules, from stored bytes to something playable. */
 
 import { compileModule, formatIssues } from '@dm/module';
 import type { CompiledModule } from '@dm/module';
 import type { WorldEnvelope, WorldMeta } from '@dm/library';
 
-/**
- * A world on offer.
- *
- * `key` is composite — `world:<uuid>` — and is what React keys the session on.
- * It cannot be the module id: two worlds can both call themselves `aurendel`
- * the moment somebody imports a copy of one they already have, and keying on
- * the id would carry a live session across the switch between them.
- */
+/** A world on offer. */
 export interface ModuleChoice {
   readonly key: string;
-  /**
-   * The library row this came from, or null when it is being played without
-   * being stored — which only happens where the browser has no storage at all.
-   * Save slots hang off this, so two worlds sharing a module id keep separate
-   * saved games.
-   */
+  /** The library row this came from, or null when the browser has no storage. */
   readonly worldKey: string | null;
   readonly id: string;
   readonly title: string;

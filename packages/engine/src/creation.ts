@@ -1,16 +1,4 @@
-/**
- * What a legal starting character is.
- *
- * `start.creation` declares a point budget, a cost table, and which ancestries
- * and classes a campaign allows — and every one of those was enforced only by
- * the CLI and web creation screens. Any other way of making a party (a test, a
- * `defaultChoices` call, a third-party front end) walked straight past them, so
- * the rules were a property of one user interface rather than of the game.
- *
- * They live here now, beside `createCharacter`, which is the one door every
- * character comes through. The front ends still own *how* a player spends the
- * budget; this owns whether the result is legal.
- */
+/** What a legal starting character is. */
 
 import type { CompiledModule } from '@dm/module';
 
@@ -22,12 +10,7 @@ interface AttributeDef {
   max: number;
 }
 
-/**
- * Total cost of a score.
- *
- * The module's table is cumulative — the cost of *having* that score, not of
- * the last step — because that is how point-buy tables are written.
- */
+/** Total cost of a score. */
 export function costOf(module: CompiledModule, attribute: AttributeDef, score: number): number {
   const table = module.source.start.creation.attributeCosts;
   const key = String(score);
@@ -35,11 +18,7 @@ export function costOf(module: CompiledModule, attribute: AttributeDef, score: n
   if (Object.keys(table).length > 0) {
     if (key in table) return table[key]!;
 
-    // Outside the table: continue at the rate of its last step, so a module
-    // that only tabulates 8–15 still prices a 16 — and prices it like a 15,
-    // not like a rounding error. Never negative: dumping a score below the
-    // table's floor gives nothing back, or a module with a cheap floor would
-    // hand out free points.
+    // Outside the table: continue at the last step's rate, and never below zero.
     const known = Object.keys(table).map(Number).sort((a, b) => a - b);
     const below = score < known[0]!;
     const edge = below ? known[0]! : known.at(-1)!;
@@ -76,14 +55,7 @@ export function baseAllocation(module: CompiledModule): Record<string, number> {
   return out;
 }
 
-/**
- * Why this character could not be made, or null.
- *
- * Returns a reason rather than throwing so a creation screen can show it while
- * `createCharacter` turns it into an error — one rule, two ways of meeting it.
- * An empty `allowedAncestries` or `allowedClasses` means no restriction, which
- * is what the schema's default of `[]` says.
- */
+/** Why this character could not be made, or null. */
 export function creationProblem(
   module: CompiledModule,
   choices: {

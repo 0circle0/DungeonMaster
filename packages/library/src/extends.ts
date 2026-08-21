@@ -1,15 +1,4 @@
-/**
- * `extends`, resolved against whatever the deployment is carrying.
- *
- * Nothing ships with a base today — every module is standalone, because the
- * linter schema-checks a raw child before resolving the merge, so a module that
- * leans on its parent for `rules` fails validation before the merge can help
- * it. Aurendel's build script copies the ruleset in for exactly that reason.
- *
- * This exists anyway, because a stored world is stored *unresolved*: baking a
- * base into a document the studio then saves would corrupt it permanently, so
- * the resolution has to happen between reading and compiling, every time.
- */
+/** Resolves a document's `extends` chain against the files a deployment carries. */
 
 import { resolveExtends } from '@dm/module';
 import { fetchExampleEnvelope, CONTENT_BASE } from './catalog.js';
@@ -24,13 +13,7 @@ export interface ResolveOutcome {
   readonly error: string | null;
 }
 
-/**
- * Fetch whatever a document's `extends` chain needs, then merge it.
- *
- * The fetching is the async part and the merging is the existing synchronous
- * `resolveExtends`, unchanged — this only supplies it a loader whose sources
- * are static files instead of a directory.
- */
+/** Fetches every source a document's `extends` chain names and merges them. */
 export async function resolveExtendsFor(
   doc: Record<string, unknown>,
   catalog: Catalog,

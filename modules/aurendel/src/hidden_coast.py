@@ -1,25 +1,4 @@
-"""The Silver Coast's hidden threads — three, in the six areas nothing else uses.
-
-Cobbleway is a market town of twelve buildings — a wheelwright, a cartwright, a
-saddler, a bakehouse, a church and a holding yard — and nobody had ever stood in
-one of them. Gullmere hauls eleven boats up a beach twice a day. Thrift has a
-chapel and a coastguard house nobody guards from. Sarnport's Harbourside has a
-mole, a ropewalk and a harbour master's office with no harbour master. Above all
-of it the Chalk Downs carry a white horse cut into the hill by nobody anybody
-remembers, and Gannet Head carries a watchtower the Crown gave up on.
-
-Three threads, and they share a shape: **the coast has been surveyed, and the
-survey was never filed.**
-
-  * **The Scouring** — three parishes clear the chalk every spring and each of
-    them says they only come because the other two do, and the shape they keep
-    clear has corners.
-  * **The Tower That Still Signals** — no roof, no stair, and every skipper on
-    this coast corrects two points to starboard off the head at night.
-  * **One a Year, Unclaimed** — two hundred years of the bailiff's book, one
-    entry each October, taken up and never collected, and the fee paid in coin
-    by somebody.
-"""
+"""The Silver Coast's hidden threads — three, in the six areas nothing else uses."""
 from dmkit.quests import npc, shop, quest, reach, kill, flagged, arc
 from lore import (
     clue, thread, rumour, favour, talk, coldshoulder, finding, rumoured,
@@ -195,9 +174,7 @@ POI_PATCHES = {
                                 "gate": "coast_horse_adit"},
     "gannet_head_seacaves": {**rumoured("coast_watch", base=19, step=3, entries=4),
                              "gate": "coast_watch_undercroft"},
-    # A holding yard in the middle of a market town, so `BOSSES` cannot reach
-    # what is behind its fourth wall: the table hangs on the place, and the
-    # chance with it, because `enterPoi` reads `poi.encounterChance ?? 0`.
+    # A point of interest, so the table and its chance hang on the place.
     "cobbleway_pound": {**rumoured("coast_yard", base=18, step=3, entries=4),
                         "gate": "coast_yard_northface",
                         "encounterTables": ["coast_yard_boss"],

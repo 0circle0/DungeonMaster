@@ -70,10 +70,7 @@ describe('map building', () => {
   });
 });
 
-/**
- * The two shapes scatter has — `speckle` and `patch` — and the guarantee that neither can strand
- * the party.
- */
+/** The two shapes scatter has, and the guarantee that neither can strand the party. */
 describe('scattering terrain', () => {
   const FEN = { width: '31', height: '21', layout: [] as string[], legend: {} };
   const fen = (seed: number) =>
@@ -105,8 +102,6 @@ describe('scattering terrain', () => {
     return total === 0 ? 0 : touching / total;
   };
 
-  // The defining property: independent rolls at this frequency leave roughly half the water
-  // isolated; a field leaves almost none.
   it('makes water that is joined up, not sprayed about', () => {
     for (let seed = 1; seed <= 12; seed += 1) {
       const built = fen(seed);
@@ -135,8 +130,6 @@ describe('scattering terrain', () => {
 
       expect(countOf(built, 'shallow_water'), `seed ${seed}`).toBeGreaterThan(0);
 
-      // Shallow water is either the rim of a lake or a ford cut through one, so every tile of it
-      // belongs to the water.
       for (let y = 0; y < built.tiles.height; y += 1) {
         for (let x = 0; x < built.tiles.width; x += 1) {
           if (terrainAt(built.tiles, { x, y }) !== 'shallow_water') continue;
@@ -181,8 +174,6 @@ describe('scattering terrain', () => {
     }
   });
 
-  // A lake is a wall you walk around and must never wall you in: `deep_water` needs `swim`, which
-  // nobody in greenmarch has.
   it('always leaves the whole map walkable from the entry', () => {
     for (let seed = 1; seed <= 40; seed += 1) {
       const built = fen(seed);
@@ -207,8 +198,6 @@ describe('scattering terrain', () => {
     expect(JSON.stringify(fen(3).tiles)).not.toBe(JSON.stringify(fen(4).tiles));
   });
 
-  // Scatter passes must not overwrite one another, or declaration order changes everyone's
-  // effective frequency but the last's.
   it('does not let a later entry erase an earlier one', () => {
     const doc = JSON.parse(JSON.stringify(GREENMARCH.source)) as never as {
       world: { palettes: { id: string; scatter: Record<string, unknown>[] }[] };
@@ -225,8 +214,6 @@ describe('scattering terrain', () => {
     expect(countOf(built, 'deep_water')).toBeGreaterThan(0);
   });
 
-  // `speckle` stays the original algorithm drawing from the original stream, so a module that has
-  // not opted into patches generates exactly the map it always did.
   it('leaves the speckled palettes untouched', () => {
     const built = buildMap(
       GREENMARCH,
@@ -355,8 +342,6 @@ describe('dungeon generation', () => {
     }
   });
 
-  // Drawing templates purely by weight gives a dungeon three entrances; a guaranteed role must mean
-  // exactly one.
   it('places exactly one entrance and at most one boss, over many seeds', () => {
     for (let seed = 0; seed < 150; seed += 1) {
       const rooms = generate(seed).rooms;
@@ -402,13 +387,7 @@ describe('locked doors', () => {
     expect(Object.keys(gatesOf(dungeon)).length).toBe(locked.length);
   });
 
-  /**
-   * The real guarantee: the dungeon is solvable.
-   *
-   * Not "every key sits in the starting region", which would rule out key chains. What must hold is
-   * that a player starting at the entrance can always reach some key they do not yet have, open its
-   * door, and repeat until everything is open.
-   */
+  /** The real guarantee: the dungeon is solvable. */
   it('can always be solved from the entrance, over many seeds', () => {
     for (let seed = 0; seed < 120; seed += 1) {
       const dungeon = generate(seed, LOCKED);
@@ -482,8 +461,6 @@ describe('locked doors', () => {
       const reachable = floodFill(blocked, terrain, dungeon.entrance);
       const open = openTiles(dungeon, terrain).length;
 
-      // With the doors sealed something must be cut off, or the locks are decorative and a loop has
-      // bypassed them.
       expect(reachable.size, `seed ${seed}: locked doors guard nothing`).toBeLessThan(open);
     }
   });
@@ -767,13 +744,9 @@ describe('room degree — minExits and maxExits finally bite', () => {
     for (let seed = 0; seed < 30; seed += 1) {
       const dungeon = generateDungeon(module, 'barrow_depths', Rng.fromSeed(seed));
       if (dungeon.rooms.length < 4) continue;
-      // Counting carved connections exactly would mean a flood fill from each hall centre with
-      // every other room blocked; the honest signal is that a hall is not a leaf.
       const degrees = degreesFromDoors(dungeon);
       for (const room of dungeon.rooms) {
         if (room.template !== 'barrow_hall') continue;
-        // Doors only exist on wall crossings, so a min-3 room in a 6-room dungeon must at least not
-        // be a leaf.
         expect(degrees.get(room.id) ?? 0, `seed ${seed}: ${room.id}`).toBeGreaterThanOrEqual(1);
         checked += 1;
       }
@@ -782,8 +755,7 @@ describe('room degree — minExits and maxExits finally bite', () => {
   });
 
   it('keeps every room reachable even when every cap is 1', () => {
-    // Deliberately unsatisfiable: a path graph needs interior degree 2. Connectivity must win over
-    // the caps, not throw and not seal rooms.
+    // Deliberately unsatisfiable: a path graph needs interior degree 2.
     const module = patched(
       { roomCount: '6' },
       {
@@ -837,8 +809,6 @@ describe('corridor character', () => {
   });
 
   it('a locked door still locks at width 3 — the brush never erodes a doorway', () => {
-    // The property that matters is separation, not wall counts: with every gated door sealed, the
-    // far side must stay unreachable.
     const module = withCorridors({ corridor: { style: 'l', width: 3 }, lockedDoorChance: 1 });
     let checked = 0;
     for (let seed = 0; seed < 30; seed += 1) {
@@ -852,8 +822,6 @@ describe('corridor character', () => {
       }
       const reachable = floodFill({ ...dungeon.tiles, tiles: sealed }, terrain, dungeon.entrance);
 
-      // With the doors sealed something must be cut off, or the wide brush eroded a wall and the
-      // locks are decorative.
       expect(
         reachable.size,
         `seed ${seed}: every locked door was bypassable`,
@@ -879,8 +847,6 @@ describe('corridor character', () => {
 
 describe('derive isolation', () => {
   it('adding a requirement to one template does not move the other rooms', () => {
-    // Template gates are evaluated on a derived stream, so a template gaining `requires` does not
-    // reshuffle the dungeon.
     const doc = JSON.parse(JSON.stringify(GREENMARCH.source)) as never as {
       world: { roomTemplates: ({ id: string } & Record<string, unknown>)[] };
     };
@@ -951,8 +917,6 @@ describe('algorithms: bsp and caverns', () => {
       const locked = dungeon.doors.filter((door) => door.gate);
       if (locked.length === 0) continue;
 
-      // Sealed doors separate; keys reachable before their locks — the same walk the rooms-
-      // algorithm suite does.
       const sealed = dungeon.tiles.tiles.slice();
       for (const door of locked) {
         sealed[door.at.y * dungeon.tiles.width + door.at.x] = dungeon.palette.wall;
@@ -1007,7 +971,6 @@ describe('algorithms: bsp and caverns', () => {
 
 describe('static rooms embedded in generated dungeons', () => {
   // barrow_deep references maps/barrow_deep_cell, the authored 9×9 cell with a warded outer door.
-  // Every barrow contains it (role: boss).
   function bossRoomOf(dungeon: GeneratedDungeon) {
     return dungeon.rooms.find((room) => room.template === 'barrow_deep');
   }
@@ -1050,8 +1013,6 @@ describe('static rooms embedded in generated dungeons', () => {
       // The inner sanctum centre — behind two authored doors — is reachable.
       expect(reachable.has(key({ x: cell.x + 4, y: cell.y + 4 })), `seed ${seed}`).toBe(true);
 
-      // The authored wall ring was not breached anywhere but its doors: every reachable tile on the
-      // ring is one of the two door tiles.
       for (let dx = 0; dx < 9; dx += 1) {
         for (const dy of [0, 8]) {
           const at = { x: cell.x + dx, y: cell.y + dy };
@@ -1123,8 +1084,6 @@ describe('fully static dungeons', () => {
 
   it('generation is skipped: the dungeon IS the map, on every seed', () => {
     const module = withStaticDungeon(false);
-    // generateDungeon is not called for a static dungeon, so this asserts that the module compiles
-    // and the ref resolves; see staticmap.test.ts for the enter path.
     expect(module.has('world.maps', 'barrow_deep_cell')).toBe(true);
   });
 });

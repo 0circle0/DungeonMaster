@@ -1,17 +1,4 @@
-/**
- * Requirements — the one gating vocabulary.
- *
- * Loot limited by level and mastery, doors that need a key or a spell, dialogue that only appears
- * once a faction trusts you, quests that unlock when another finishes, creatures that react to what
- * they remember: all the same question — does this actor, right now, meet these conditions?
- *
- * Defined once and reused everywhere, which gives three things:
- *
- *   - The editor renders one gate UI in every context.
- *   - `compileRequirement` lowers it to a DSL {@link Predicate}, so gates need no special
- *     evaluator.
- *   - Every clause supports "lack of" as well as "has".
- */
+/** Requirements — the one gating vocabulary. */
 
 import { z } from 'zod';
 import { PredicateSchema } from '../dsl/schema.js';
@@ -24,7 +11,7 @@ export const questStatusSchema = z.enum(['available', 'active', 'complete', 'fai
 export const skillRequirementSchema = z
   .object({
     skill: ref('content.skills'),
-    /** Minimum rank. Ranks are the module's mastery scale. */
+    /** Minimum rank. */
     minRank: z.number().int().min(0).default(1),
     /** Named tier from `rules.masteryTiers`, if the module uses them. */
     minTier: ref('rules.masteryTiers').optional(),
@@ -61,10 +48,7 @@ export const factionRequirementSchema = z
   })
   .strict();
 
-/**
- * A memory condition. Memory is per-NPC and imperfect, so a requirement can ask whether this NPC
- * knows about a deed rather than whether it happened.
- */
+/** A memory condition. */
 export const memoryRequirementSchema = z
   .object({
     deedKind: ref('narrative.deedKinds'),
@@ -85,11 +69,7 @@ export const flagRequirementSchema = z
   })
   .strict();
 
-/**
- * Something the party has found out. Distinct from a flag because a lore id is declared: the
- * journal can list what is still missing, and the linter can prove the clue is teachable. `known:
- * false` gates a rumour on not having heard it already.
- */
+/** Something the party has found out. */
 export const loreRequirementSchema = z
   .object({
     entry: ref('narrative.lore'),
@@ -119,9 +99,7 @@ const requirementClauses = {
   attributes: z.array(attributeRequirementSchema).default([]),
   skills: z.array(skillRequirementSchema).default([]),
 
-  /**
-   * What the actor is — "this only affects undead", "this line only appears if you speak Dwarvish".
-   */
+  /** What the actor is — "this only affects undead", "this line only appears if you speak Dwarvish". */
   creatureTypes: z.array(ref('rules.creatureTypes')).default([]),
   alignments: z.array(ref('rules.alignments')).default([]),
   languages: z.array(ref('rules.languages')).default([]),
@@ -134,12 +112,7 @@ const requirementClauses = {
   factions: z.array(factionRequirementSchema).default([]),
   memories: z.array(memoryRequirementSchema).default([]),
   flags: z.array(flagRequirementSchema).default([]),
-  /**
-   * `.optional()` where its neighbours default to `[]`: a requirement is nested in hundreds of
-   * places, so defaulting this would write `lore: []` into every gate in every module and move
-   * every module hash, which `load` reads as a different module. The `clause()` helper below reads
-   * undefined as empty.
-   */
+  /** `.optional()` where its neighbours default to `[]`, so no module hash moves. */
   lore: z.array(loreRequirementSchema).optional(),
 
   /** Conditions that must NOT hold — "only before you have met her". */
@@ -161,16 +134,10 @@ const requirementClauses = {
   custom: PredicateSchema.optional(),
 } as const;
 
-/** One alternative branch. Flat, so the type and the JSON Schema stay finite. */
+/** One alternative branch. */
 export const requirementBranchSchema = z.object(requirementClauses).strict();
 
-/**
- * A gate. Every clause is optional; those present must all hold, and `anyOf` offers alternatives.
- *
- * Alternatives are one level deep rather than fully recursive: arbitrary nesting would make the
- * type circular and the generated form unbounded, and `custom` covers the rare gate that needs
- * more.
- */
+/** A gate. */
 export const requirementSchema = z
   .object({
     ...requirementClauses,
@@ -186,10 +153,7 @@ function alternativesOf(req: Requirement | RequirementBranch): readonly Requirem
   return (('anyOf' in req ? req.anyOf : []) ?? []);
 }
 
-/**
- * Read a clause list defensively. Zod fills these with `[]`, but the editor, the linter and the
- * preview simulations work on raw authored JSON where an unused clause is absent.
- */
+/** Read a clause list defensively. */
 function clause<T>(value: readonly T[] | undefined): readonly T[] {
   return Array.isArray(value) ? value : [];
 }
@@ -250,11 +214,7 @@ export function isEmptyRequirement(req: Requirement | RequirementBranch | undefi
   );
 }
 
-/**
- * Lower a requirement to a DSL predicate. Structured gates are what authors edit; predicates are
- * what the engine runs, so gates need no separate evaluator. The scope paths below are the contract
- * the engine must supply.
- */
+/** Lower a requirement to a DSL predicate. */
 export function compileRequirement(req: Requirement | RequirementBranch | undefined): Predicate {
   if (isEmptyRequirement(req)) return true;
   const r = req!;
@@ -285,8 +245,7 @@ export function compileRequirement(req: Requirement | RequirementBranch | undefi
 
   for (const skill of clause(r.skills)) {
     clauses.push({ gte: [{ ref: `actor.skills.${skill.skill}`, else: 0 }, skill.minRank] });
-    // A tier is a named rung on the rank ladder, per `masteryTier.atRank`, so the comparison is the
-    // skill's rank against the rank the tier starts at. `tiers` comes from the engine's scope.
+    // A tier is a named rung on the rank ladder, per `masteryTier.atRank`.
     if (skill.minTier) {
       clauses.push({
         gte: [{ ref: `actor.skills.${skill.skill}`, else: 0 }, { ref: `tiers.${skill.minTier}` }],
@@ -321,8 +280,7 @@ export function compileRequirement(req: Requirement | RequirementBranch | undefi
     if (faction.maxStanding !== undefined) {
       clauses.push({ lte: [{ ref: `reputation.${faction.faction}`, else: 0 }, faction.maxStanding] });
     }
-    // Ranks are thresholds on the faction's own standing, scoped per faction so two factions may
-    // each declare a rank called `trusted`.
+    // Ranks are thresholds on the faction's own standing, scoped per faction.
     if (faction.minRank) {
       clauses.push({
         gte: [
@@ -344,8 +302,7 @@ export function compileRequirement(req: Requirement | RequirementBranch | undefi
 
   for (const flag of clause(r.flags)) clauses.push(flagClause(flag));
 
-  // `lore.<id>` is the minute it was learned, so `exists` is the whole test — and it must be
-  // `exists` rather than `test`, since a clue learned in the first minute stores a 0.
+  // `lore.<id>` is the minute it was learned, so `exists` is the whole test.
   for (const lore of clause(r.lore)) {
     const known: Predicate = { exists: `lore.${lore.entry}` };
     clauses.push(lore.known ? known : { not: known });

@@ -1,18 +1,9 @@
-/**
- * Actions: what was asked for.
- *
- * The only input to {@link reduce}. A save plus the action log replays a run exactly, so actions
- * must be plain, serializable and complete — no callbacks, no references to live objects, and
- * nothing the player could not have expressed.
- *
- * Actions name intent, not outcome. `Move` asks to move; whether the move happens, costs a turn,
- * provokes an opportunity attack, or is refused is the engine's business.
- */
+/** Actions: what was asked for. */
 
 import type { Position } from './grid/tiles.js';
 import type { EntityId } from './state.js';
 
-/** Who is acting. Omitted means the party's current active character. */
+/** Who is acting. */
 interface Actor {
   readonly actor?: EntityId;
 }
@@ -105,7 +96,7 @@ export const DIRECTIONS = [
 
 export type Direction = (typeof DIRECTIONS)[number];
 
-/** Tile offset for each compass direction. Screen coordinates, so north is -y. */
+/** Tile offset for each compass direction. */
 export const DIRECTION_OFFSETS: Readonly<Record<Direction, Position>> = {
   north: { x: 0, y: -1 },
   northeast: { x: 1, y: -1 },

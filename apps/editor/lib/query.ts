@@ -1,16 +1,4 @@
-/**
- * The filter box, given a grammar.
- *
- * A substring match over 597 points of interest is a way of finding one thing.
- * Bulk editing needs the other question — *which* of these are undead, which
- * have no loot table, which are above level 8 — because a selection you cannot
- * describe is a selection you have to build by hand, one shift-click at a time.
- *
- * Deliberately small. Terms are separated by spaces and all of them must match;
- * there is no `or`, no parentheses, no precedence to learn. Anything that is
- * not recognised as a term is treated as text to look for, so typing a name
- * still works and nothing an author types is ever an error.
- */
+/** The filter box, given a grammar. */
 
 export type Term =
   /** Bare text: matches the id, the name, or the description. */
@@ -112,8 +100,7 @@ function compare(value: unknown, op: string, want: string): boolean {
     }
   }
 
-  // Everything else compares as text, case-insensitively — an author filtering
-  // for `kind:weapon` should not have to know how the value is stored.
+  // Everything else compares as text, case-insensitively.
   const text = value === undefined || value === null ? '' : String(value).toLowerCase();
   const target = want.toLowerCase();
   switch (op) {

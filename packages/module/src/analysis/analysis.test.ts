@@ -37,8 +37,8 @@ describe('monsterThreat', () => {
 describe('budget thresholds', () => {
   // Derived from the module's own curve, so a different xp scale still works.
   it('reads the xp gap from the progression table', () => {
-    expect(xpToNextLevel(levels, 1)).toBe(100); // 0 → 100
-    expect(xpToNextLevel(levels, 2)).toBe(200); // 100 → 300
+    expect(xpToNextLevel(levels, 1)).toBe(100); // 0 → 100 100 → 300
+    expect(xpToNextLevel(levels, 2)).toBe(200); 
   });
 
   it('extrapolates past the end of the table', () => {
@@ -107,8 +107,6 @@ describe('budgetForTable', () => {
 });
 
 describe('assessTable', () => {
-  // The case the feature exists for: an area rated for low levels whose table
-  // can produce something far above it.
   it('detects that the fens can outmatch a level 2 party', () => {
     const assessment = assessTable(tableById('fen_wanderers'), monsters, levels, 2, 4);
     expect(assessment.expected).toBe('trivial');

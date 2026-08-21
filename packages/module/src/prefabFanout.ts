@@ -1,15 +1,4 @@
-/**
- * What changing a prefab would do to the things placed from it.
- *
- * The value of a linked instance is that editing `inn` updates thirty-six inns.
- * The danger is exactly the same sentence. An author who cannot see the second
- * half before it happens learns not to touch prefabs, which costs more than the
- * link was worth.
- *
- * So a change is planned first: which instances move, which fields change in
- * each, and which are left alone because somebody overrode them. Then it is
- * applied, or not.
- */
+/** What changing a prefab would do to the things placed from it. */
 
 import { reexpand } from './prefab.js';
 import type { Prefab, PrefabLink, InstanceMap, StyleTables } from './prefab.js';
@@ -68,12 +57,7 @@ function diff(before: unknown, after: unknown, path: string, out: FieldChange[])
   if (JSON.stringify(before) !== JSON.stringify(after)) out.push({ path, from: before, to: after });
 }
 
-/**
- * Work out what editing this prefab would do, without doing it.
- *
- * `prefab` is the *new* definition; the instances are read from the document as
- * it stands. Nothing is written.
- */
+/** Work out what editing this prefab would do, without doing it. */
 export function planFanout(
   prefab: Prefab,
   doc: Record<string, unknown>,
@@ -104,8 +88,7 @@ export function planFanout(
         continue;
       }
 
-      // What the prefab wanted and did not get. Worth showing: it is the
-      // difference between "this did nothing" and "this was already yours".
+      // What the prefab wanted and did not get.
       const kept = (link.overrides ?? []).filter((path) => {
         const naive = reexpand(prefab, before, { ...link, overrides: [] }, style).entry;
         const held: FieldChange[] = [];

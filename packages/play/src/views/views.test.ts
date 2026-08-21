@@ -1,11 +1,4 @@
-/**
- * The view models both front ends draw from.
- *
- * These are the derivations every front end reads instead of reaching into
- * `GameState` itself. The data is what is under test — bands at their
- * thresholds, the three visibility states, gate reasons, palette precedence —
- * because formatting is the shell's business and derivation is not.
- */
+/** The view models both front ends draw from. */
 
 import { describe, it, expect } from 'vitest';
 import { fileURLToPath } from 'node:url';
@@ -39,8 +32,7 @@ describe('the palette', () => {
   });
 
   it('falls back to tags, then to nothing', () => {
-    // reeds has no color; nothing tags it either — but the name-tag ladder
-    // catches tags like water. floor has neither.
+    // reeds has no color; nothing tags it either — but the name-tag ladder catches tags like water.
     expect(toneOf(GREENMARCH, 'floor')).toBeNull();
     expect(toneOf(MINIMAL, 'bare_floor')).toBeNull();
     expect(toneOf(GREENMARCH, 'no_such_terrain')).toBeNull();
@@ -105,10 +97,6 @@ describe('waysFromHere', () => {
     expect(mill.requires).toEqual([]);
   });
 
-  // The test above sets the flag by hand, which is how the bug survived: the
-  // panel read a flag the engine never wrote, so a door the party had actually
-  // opened went on reading as barred for the rest of the run. This one opens it
-  // by playing.
   it('drops the bar after the gate is opened in play, not just in a fixture', () => {
     const session = startSession(GREENMARCH, 7);
     const hero = session.state.entities[session.state.selected]!;

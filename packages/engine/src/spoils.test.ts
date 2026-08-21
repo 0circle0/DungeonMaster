@@ -1,10 +1,4 @@
-/**
- * What the dead leave behind, and who is allowed to find it.
- *
- * Greenmarch was already authored for all of this — `loot` on both monsters, a
- * `unique` blade gated on the whole party, a `rune_tablet` only a reader
- * recognises, a `bonusRollSkill` — and none of it had ever produced an item.
- */
+/** What the dead leave behind, and who is allowed to find it. */
 
 import { describe, it, expect } from 'vitest';
 import { fileURLToPath } from 'node:url';
@@ -63,8 +57,6 @@ function floorItems(state: GameState, mapId = 'here'): string[] {
 
 describe('loot on death', () => {
   it('drops what the creature was carrying, onto the ground where it fell', () => {
-    // Over a spread of seeds the hound must sometimes leave something: the
-    // table is 30% empty, so a single seed proves nothing either way.
     let dropped = 0;
     for (let seed = 0; seed < 30; seed += 1) {
       const { state } = reduce(arena(seed), { type: 'attack', target: 'e:99' }, ctx);
@@ -125,8 +117,6 @@ describe('who a loot gate is asked about', () => {
     return seen;
   };
 
-  // `anyMember` is the default and the interesting one: one reader in the party
-  // is enough for the whole party to recognise the tablet.
   it('lets one qualifying member open an anyMember entry', () => {
     const illiterate = { finder: member(3, 0), members: [member(3, 0), member(3, 0)] };
     const withReader = { finder: member(3, 0), members: [member(3, 0), member(3, 2)] };
@@ -202,8 +192,6 @@ describe('unique loot', () => {
     }
   });
 
-  // Removed from the table rather than rolled and discarded, which is the
-  // file's stated doctrine: the odds shown must be the odds experienced.
   it('leaves the remaining odds intact rather than swallowing a draw', () => {
     const open = singleScope(proven({}));
     const spent = singleScope(proven({ 'unique:warded_blade': true }));
@@ -216,8 +204,6 @@ describe('unique loot', () => {
       return items;
     };
 
-    // Both draw the same number of times; taking the blade out redistributes
-    // its weight rather than producing empty draws.
     expect(count(spent)).toBeGreaterThanOrEqual(count(open) - 20);
   });
 });
@@ -246,8 +232,6 @@ describe('a scavenging skill', () => {
 
 describe('a place with its own loot', () => {
   it('yields it once, on the first visit', () => {
-    // The mill declares `millers_effects`, whose single entry always drops —
-    // and it is behind the mill door, so the party needs Vess's key to get in.
     const base = newGame(GREENMARCH, { seed: 5, party: [defaultChoices(GREENMARCH, 'Ash')] });
     const hero = base.entities[base.party[0]!]!;
     const keyed: GameState = {
@@ -258,8 +242,6 @@ describe('a place with its own loot', () => {
       },
     };
 
-    // A new game starts at the village but on no map — arriving is the front
-    // end's first act — so the party travels out and back to build one.
     const out = reduce(keyed, { type: 'travelToArea', area: 'the_fens' }, ctx).state;
     const first = reduce(out, { type: 'travelToArea', area: 'millford' }, ctx).state;
     expect(first.currentMap).not.toBe('');

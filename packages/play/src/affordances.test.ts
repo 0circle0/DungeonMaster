@@ -1,10 +1,4 @@
-/**
- * The affordance layer — what a click or a button can mean.
- *
- * The property that matters most is the last one: every action an affordance
- * carries must be accepted by the reducer without a refusal, because a button
- * that produces "you cannot do that" is the system contradicting itself.
- */
+/** The affordance layer — what a click or a button can mean. */
 
 import { describe, it, expect } from 'vitest';
 import { fileURLToPath } from 'node:url';
@@ -49,7 +43,7 @@ describe('affordancesAt', () => {
   it('answers an unreachable tile with a blocked walk, not silence', () => {
     const session = fresh();
     const you = session.state.entities[session.state.selected]!;
-    // Deep water is visible but needs swim, which nobody has. Find one in view.
+    // Deep water is visible but needs swim, which nobody has.
     const map = session.state.maps[session.state.currentMap]!;
     let water: { x: number; y: number } | null = null;
     for (let dy = -8; dy <= 8 && !water; dy += 1) {
@@ -190,12 +184,8 @@ describe('affordances — the context bar', () => {
     for (const session of scenarios) {
       for (const offered of affordances(session)) {
         if (offered.blocked) continue;
-        // `search` answers "nothing hidden here" *as* a refusal, by design —
-        // silence reads as a broken command. That is an outcome, not the
-        // system contradicting itself.
         if (offered.kind === 'search') continue;
-        // Rests can be interrupted and quests re-checked; both still must not
-        // *refuse*. Apply to a copy so scenarios stay independent.
+        // Rests can be interrupted and quests re-checked; both still must not *refuse*.
         const result = reduce(session.state, offered.action, {
           module: session.module, terrain: session.terrain,
         });

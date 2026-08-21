@@ -11,8 +11,6 @@ const GREENMARCH = readFileSync(
   'utf8',
 );
 
-// The raw text alone cannot resolve references into `maps/` folders; the
-// assembled document is what the compile pass must see.
 const ASSEMBLED = readAssembledModule(
   fileURLToPath(new URL('../../../../modules/greenmarch', import.meta.url)),
 ).doc;
@@ -183,8 +181,6 @@ describe('DSL operator typos', () => {
   });
 
   it('accepts an operator with its legitimate companion keys', () => {
-    // `ref` carries an `else`, and `cond` carries `then`/`else` — companions,
-    // not operators, and neither should be reported.
     const document = {
       rules: {
         attributes: [
@@ -285,9 +281,7 @@ describe('semantic checks', () => {
   });
 
   it('accepts a quest that only a trigger starts', () => {
-    // The fifth way in, and the only one that does not name the quest in a
-    // field the pass can see. A hidden thread has no giver on purpose: the
-    // first the player hears of it is standing at the mouth of the place.
+    // The fifth way in, and the only one that does not name the quest in a field the pass can see.
     const document = JSON.parse(GREENMARCH) as Record<string, unknown>;
     const narrative = document['narrative'] as Record<string, unknown>;
     (narrative['quests'] as Record<string, unknown>[]).push({
@@ -310,9 +304,6 @@ describe('semantic checks', () => {
   });
 
   it('warns about a clue nothing can teach', () => {
-    // The same shape of mistake as an unobtainable quest, and quieter: a quest
-    // at least shows up in the journal saying nothing has happened, whereas a
-    // clue nobody can learn is simply a thread that never fills.
     const document = JSON.parse(GREENMARCH) as Record<string, unknown>;
     const narrative = document['narrative'] as Record<string, unknown>;
     narrative['lore'] = [
@@ -320,8 +311,6 @@ describe('semantic checks', () => {
       { id: 'told_by_vess', name: 'Something she mentions.' },
     ];
 
-    // Taught from a dialogue option, which is one of several places effects can
-    // hang — the lint walks for the key rather than keeping a list of them.
     const dialogue = (narrative['dialogues'] as Record<string, unknown>[])[0]!;
     const node = (dialogue['nodes'] as Record<string, unknown>[])[0]!;
     const option = (node['options'] as Record<string, unknown>[])[0]!;

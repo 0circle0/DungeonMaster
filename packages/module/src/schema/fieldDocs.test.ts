@@ -1,12 +1,4 @@
-/**
- * The field glosses, held to the schema in both directions.
- *
- * A description written once and never checked again is the failure mode this
- * whole arrangement exists to avoid: the reference and the site would keep
- * rendering confidently while the format moved underneath them. So adding a
- * field to the format fails here until it is described, removing one fails
- * here until its line goes, and neither can be missed on the way past.
- */
+/** The field glosses, held to the schema in both directions. */
 
 import { describe, it, expect } from 'vitest';
 import { FIELD_DOCS } from './fieldDocs.js';
@@ -29,11 +21,7 @@ describe('field glosses', () => {
     expect(new Set(paths).size).toBe(paths.length);
   });
 
-  /**
-   * The one style rule worth enforcing rather than trusting. A thousand of
-   * these get written in long sittings, and a dash is the punctuation that
-   * creeps back in.
-   */
+  /** The one style rule worth enforcing rather than trusting. */
   it('writes prose without dashes', () => {
     const offenders = Object.entries(FIELD_DOCS)
       .filter(([, text]) => /[-‐-―]/.test(text))

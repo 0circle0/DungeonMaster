@@ -49,8 +49,6 @@ describe('mergeModules', () => {
       ) as { world: { maps: { id: string; layers: unknown[] }[] } };
 
       expect(withMaps.world.maps.map((m) => m.id)).toEqual(['keep', 'shop']);
-      // `layers` is a non-collection array, so the pack's grid wins wholesale —
-      // per-layer patching is deliberately not a thing.
       expect(withMaps.world.maps[1]!.layers).toEqual([
         { kind: 'terrain', cells: [['b', 'b']] },
       ]);
@@ -189,11 +187,6 @@ describe('resolveExtends', () => {
   });
 });
 
-/**
- * `extends` was unusable for a long time, and the merge machinery was never the
- * reason: the lint ran ahead of the resolution and every pass saw the raw child.
- * These pin the ordering that fixed it.
- */
 describe('linting a module that extends another', () => {
   const base = loadMinimal();
   const pack = {

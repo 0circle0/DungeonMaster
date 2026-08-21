@@ -1,18 +1,4 @@
-"""The Rot — a Deeproads side chain, Act III.
-
-Mycelt grows the food the Deeproads eat. Nine hundred people at Lantern Deep,
-four hundred at Mycelt, every waystation on the Deep Market Road: all of it
-comes off the beds. The Rot eats Mycelt, and the pickers stand between those
-two facts with knives, and have done for two hundred years without ever quite
-winning.
-
-This season they are losing. Kesk has cut back to the third gallery, then the
-second, and the beds she has left will not feed Lantern Deep past Highsun.
-
-It sits beside the Deeproads act rather than in it — the party is already down
-here for the Echo Halls, and this is what the people who live down here are
-worried about instead. The Wayfinders care because the Wayfinders eat.
-"""
+"""The Rot — a Deeproads side chain, Act III."""
 from dmkit.quests import (
     arc, stage, reach, kill, talk, flagged, resolved_either_way, set_flag,
     rep, deed, either, node, option, take_job, dialogue, npc, shop,

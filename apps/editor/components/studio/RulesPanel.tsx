@@ -1,20 +1,6 @@
 'use client';
 
-/**
- * The Rules panel.
- *
- * The console says a module is wrong. This says what "wrong" means, who
- * decided, and lets an author disagree.
- *
- * That is not decoration. Every rule here encodes a contract the schema cannot
- * express, which is another way of saying every one of them is a judgement
- * somebody made about how this format is meant to be used. A checker that
- * cannot show its reasoning is indistinguishable from a checker that is wrong,
- * and the response to both is to stop reading the console.
- *
- * So each rule shows its title, why it exists in a sentence, what it reads, and
- * how many findings it is responsible for right now — and has a switch.
- */
+/** The Rules panel. */
 
 import type { Diagnostic } from '@dm/module';
 import type { RulesApi } from '@/lib/useRules';

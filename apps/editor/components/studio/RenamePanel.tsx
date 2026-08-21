@@ -1,14 +1,4 @@
-/**
- * Renaming an id, with what it will touch shown first.
- *
- * The rewrite itself is exact — the schema knows where every declared reference
- * is — so the interesting part of this panel is the half it *cannot* rewrite.
- * `objective.target` is a plain id rather than a `ref()`, flags are free
- * strings, and a `kill` objective naming a renamed monster keeps the old name,
- * compiles clean, and never completes. Those are listed rather than changed,
- * because a tool that quietly guessed at them would be worse than one that
- * says what it does not know.
- */
+/** Renaming an id, with what it will touch shown first. */
 
 'use client';
 
@@ -28,8 +18,7 @@ export function RenamePanel(props: {
   const { store, collection, id } = props;
   const [next, setNext] = useState(id);
 
-  // Planning walks the document, so it waits for a complete id rather than
-  // running on every keystroke of one being typed.
+  // Planning walks the document, so it waits for a complete id.
   const plan = useMemo(
     () => (next === id ? null : planRename(store.doc, collection, id, next)),
     [store.doc, collection, id, next],

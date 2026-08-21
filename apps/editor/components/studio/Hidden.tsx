@@ -1,9 +1,6 @@
 'use client';
 
-/**
- * Edit hidden-place discovery checks and a thread-based formula.
- * If the formula is not in the supported shape, leave the raw field alone.
- */
+/** Edit hidden-place discovery checks and a thread-based formula. */
 
 import { useState } from 'react';
 import { rumoured, readRumoured, threadAnchored, dcKnowing, floorOf } from '@dm/authoring';

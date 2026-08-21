@@ -1,13 +1,4 @@
-/**
- * Where the party can go from here, as data.
- *
- * The roads and places are declared in the module and were, for a long time,
- * shown to nobody — "I don't know where to go" was a fair complaint. This is
- * the answer as a structure: each row carries the `Action` that takes it, so a
- * front end renders buttons rather than re-deriving anything, and a barred way
- * carries *why* it is barred, because "(barred)" with no reason is the least
- * useful thing a UI can say.
- */
+/** Where the party can go from here, as data. */
 
 import type { CompiledModule, Requirement } from '@dm/module';
 import type { GameState, Action, Position } from '@dm/engine';
@@ -82,8 +73,7 @@ function gateState(
 
   const definition = module.find<{ requires?: Requirement }>('world.gates', gate);
   const described = describeRequirement(definition?.requires);
-  // An authored description says it all; the mechanical item list is the
-  // fallback for gates that never wrote one, not an addition to those that did.
+  // The item list is the fallback for gates with no authored description.
   const chosen = definition?.requires?.description ? described.slice(0, 1) : described;
   return { gate, barred: true, requires: chosen.map((need) => render(module, need)) };
 }
@@ -136,13 +126,7 @@ export function waysFromHere(
   return { places, roads, frontier: frontierOf(module, state, terrain) };
 }
 
-/**
- * The nearest unwalked ground the party can reach.
- *
- * A breadth-first walk over ground already seen, stopping at the first tile
- * with an unknown neighbour. In a corridor that is the honest answer to
- * "where haven't I been", which no list of roads can give.
- */
+/** The nearest unwalked ground the party can reach. */
 function frontierOf(
   module: CompiledModule,
   state: GameState,

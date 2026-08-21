@@ -1,12 +1,4 @@
-/**
- * Module diagnostics.
- *
- * Every diagnostic reports where (a dotted path, plus line and column when source text is
- * available), what rule was broken, and why it matters.
- *
- * The passes run in order and stop where continuing would be noise: a document that does not parse
- * cannot be schema-checked, and one that fails the schema produces meaningless semantic results.
- */
+/** Module diagnostics. */
 
 import { z } from 'zod';
 import { gameModuleSchema, COLLECTION_PATHS } from '../schema/module.js';
@@ -40,11 +32,7 @@ export interface LintResult {
   readonly diagnostics: readonly Diagnostic[];
   /** Present when the document parsed and passed the schema. */
   readonly value: unknown;
-  /**
-   * The compiled module, when the document compiled cleanly. Linting already pays for the schema
-   * parse and the compile, so a caller wanting the identity or content hash should read them here
-   * rather than compiling again.
-   */
+  /** The compiled module, when the document compiled cleanly. */
   readonly compiled?: CompiledModule | undefined;
 }
 
@@ -63,11 +51,9 @@ function locate(ctx: Context, rawPath: string): { position: Position | null; exc
   if (!ctx.text || !ctx.spans) return { position: null, excerpt: null };
 
   // The compiler reports array indices as `monsters[0]`; spans are keyed with dot notation.
-  // Normalise so both resolve to the same place.
   const path = rawPath.replace(/\[(\d+)\]/g, '.$1');
 
-  // Try the exact path, then the property name, then walk up to the nearest ancestor with a
-  // position, so an error always lands somewhere.
+  // Try the exact path, then the property name, then the nearest ancestor with a position.
   const candidates = [`${path}#key`, path];
   let span = candidates.map((c) => ctx.spans!.get(c)).find(Boolean);
 
@@ -95,16 +81,7 @@ function report(
   ctx.out.push({ severity, code, path, message, hint, position, excerpt: snippet });
 }
 
-/**
- * Give path-only diagnostics their line and column back.
- *
- * Linting a document rather than its text keeps an edit cheap — parsing the text builds a new
- * object graph every keystroke — but only the text knows where anything is. The editor lints the
- * document on every keystroke and calls this once editing goes quiet.
- *
- * Positions are resolved by the same `locate` as `lintModule(text)`, so a diagnostic lands on the
- * line it would have had.
- */
+/** Give path-only diagnostics their line and column back. */
 export function attachPositions(
   diagnostics: readonly Diagnostic[],
   text: string,
@@ -128,15 +105,9 @@ export function attachPositions(
   });
 }
 
-// ---------------------------------------------------------------------------
-// DSL operator checking
-// ---------------------------------------------------------------------------
+// --- DSL operator checking -------------------------------------------------
 
-/**
- * Walk anything that might be a DSL node and check its operator. Zod validates DSL nodes as a large
- * union, and a union failure reports every branch that did not match. This pass runs first and
- * reports the unknown operator with a suggestion.
- */
+/** Walk anything that might be a DSL node and check its operator. */
 type DslKind = 'effect' | 'predicate' | 'expression';
 
 const OPS_BY_KIND: Record<DslKind, readonly string[]> = {
@@ -145,11 +116,7 @@ const OPS_BY_KIND: Record<DslKind, readonly string[]> = {
   expression: [...EXPR_OPS],
 };
 
-/**
- * What kind each operator's children are. A `damage` payload holds expressions, not effects, so
- * descending into it as an effect would report every `target` and `amount` as an unknown operator.
- * Anything unlisted defaults to expressions.
- */
+/** What kind each operator's children are. */
 const CHILD_KINDS: Record<string, Record<string, DslKind>> = {
   // Effects that contain other effects.
   if: { when: 'predicate', then: 'effect', else: 'effect' },
@@ -167,17 +134,12 @@ const CHILD_KINDS: Record<string, Record<string, DslKind>> = {
 /** Operators whose value is a plain string, not a node to descend into. */
 const OPAQUE_OPS = new Set(['exists', 'ref']);
 
-/**
- * Payload fields that are a map of author-chosen keys to expressions rather than a node.
- * `emit.data` names its own fields, so its keys are not checked against the operator list.
- */
+/** Payload fields that are a map of author-chosen keys to expressions rather than a node. */
 const RECORD_PAYLOAD_FIELDS: Record<string, ReadonlySet<string>> = {
   emit: new Set(['data']),
 };
 
-/**
- * Walk a DSL node and check its operator, reporting the unknown operator and the nearest known one.
- */
+/** Walk a DSL node and check its operator, reporting the unknown operator and the nearest known one. */
 function lintDslNode(ctx: Context, node: unknown, path: string, kind: DslKind, depth = 0): void {
   if (depth > 24) return;
 
@@ -258,8 +220,7 @@ function lintDslNode(ctx: Context, node: unknown, path: string, kind: DslKind, d
   }
 
   if (kind === 'effect') {
-    // An effect payload is an object whose values are expressions; the payload itself is not a
-    // node, so descend one level further.
+    // An effect payload is an object of expressions, so descend one level further.
     if (typeof payload === 'object' && payload !== null && !Array.isArray(payload)) {
       const recordFields = RECORD_PAYLOAD_FIELDS[operator];
       for (const [key, child] of Object.entries(payload as Record<string, unknown>)) {
@@ -285,10 +246,7 @@ function lintDslNode(ctx: Context, node: unknown, path: string, kind: DslKind, d
   lintDslNode(ctx, payload, `${path}.${operator}`, 'expression', depth + 1);
 }
 
-/**
- * Find DSL-bearing fields by name and check them. Matching on field name rather than walking the
- * Zod schema keeps this pass independent of the union structure.
- */
+/** Find DSL-bearing fields by name and check them. */
 const DSL_FIELDS: readonly { key: string; kind: DslKind }[] = [
   { key: 'onUse', kind: 'effect' },
   { key: 'onMiss', kind: 'effect' },
@@ -339,8 +297,7 @@ function walkForDsl(ctx: Context, node: unknown, path: string, depth = 0): void 
     const childPath = path ? `${path}.${key}` : key;
     const field = DSL_FIELD_MAP.get(key);
 
-    // `requires` is a structured requirement object, not a predicate; only its `custom` member is
-    // DSL, and that is matched on its own.
+    // `requires` is a structured requirement, not a predicate; only `custom` is DSL.
     if (field && key !== 'requires' && typeof child === 'object' && child !== null) {
       lintDslNode(ctx, child, childPath, field.kind);
     }
@@ -348,15 +305,9 @@ function walkForDsl(ctx: Context, node: unknown, path: string, depth = 0): void 
   }
 }
 
-// ---------------------------------------------------------------------------
-// Schema issues, with suggestions
-// ---------------------------------------------------------------------------
+// --- Schema issues, with suggestions ---------------------------------------
 
-/**
- * The schema pass, and the only place a module is parsed. Returns the parsed document rather than a
- * bare `ok`, because the compile pass needs the same parse and `safeParse` costs ~610 ms on a large
- * module.
- */
+/** The schema pass, and the only place a module is parsed. */
 function lintSchema(
   ctx: Context,
   document: unknown,
@@ -469,14 +420,9 @@ function unwrapSchema(schema: z.ZodTypeAny): z.ZodTypeAny {
   return current;
 }
 
-// ---------------------------------------------------------------------------
-// Semantic checks
-// ---------------------------------------------------------------------------
+// --- Semantic checks -------------------------------------------------------
 
-/**
- * Problems a schema cannot catch: content that exists but can never be reached. Warnings rather
- * than errors, since a module mid-build is half-connected constantly.
- */
+/** Problems a schema cannot catch: content that exists but can never be reached. */
 function lintSemantics(ctx: Context, document: Record<string, unknown>): void {
   const world = (document['world'] ?? {}) as Record<string, unknown>;
   const narrative = (document['narrative'] ?? {}) as Record<string, unknown>;
@@ -491,9 +437,7 @@ function lintSemantics(ctx: Context, document: Record<string, unknown>): void {
   lintCaverns(ctx, document);
   lintStaticMaps(ctx, document);
 
-  // A module with no start location compiles clean but throws when a new game begins
-  // (`startingLocation` in the engine). An error rather than a warning: the module cannot be
-  // played.
+  // A module with no start location compiles clean but throws when a new game begins.
   const hasStart =
     start['startingPoi'] !== undefined ||
     start['startingArea'] !== undefined ||
@@ -509,8 +453,7 @@ function lintSemantics(ctx: Context, document: Record<string, unknown>): void {
     );
   }
 
-  // No areas is fine for a dungeon-only module, but with no starting dungeon either there is
-  // nowhere for the world to exist.
+  // No areas is fine for a dungeon-only module, but only with a starting dungeon.
   if (areas.length === 0 && start['startingDungeon'] === undefined) {
     report(
       ctx,
@@ -581,8 +524,7 @@ function lintSemantics(ctx: Context, document: Record<string, unknown>): void {
     for (const id of asList(npc['offersQuests'])) offered.add(String(id));
   }
 
-  // `emit: {event: "startQuest"}` is the fifth way in, and the only one that does not name the
-  // quest in a field this pass can see, so a quest started that way is not stranded.
+  // `emit: {event: "startQuest"}` is the fifth way in, and names no quest field.
   const emitted = new Set<string>();
   walkFor(document, 'emit', (value: unknown) => {
     const spec = value as Record<string, unknown> | null;
@@ -606,8 +548,7 @@ function lintSemantics(ctx: Context, document: Record<string, unknown>): void {
     );
   }
 
-  // A clue nothing teaches can never be learned, so its thread can never finish and a gate reading
-  // it can never open. The same shape as `unobtainable_quest`.
+  // A clue nothing teaches can never be learned.
   const taught = new Set<string>();
   walkFor(document, 'learnLore', (value: unknown) => {
     const entry = (value as Record<string, unknown> | null)?.['entry'];
@@ -644,21 +585,14 @@ function lintSemantics(ctx: Context, document: Record<string, unknown>): void {
   }
 }
 
-/**
- * A biome that stocks traps no room it can draw will ever place: the trap is valid and the biome
- * lists it, but every room template leaves `trapChance` at a value that never fires.
- */
-/**
- * An area you can walk into and never walk out of: a one-way road in, nothing out, and no ending
- * reachable from there. The same walk as reachability, asked in reverse.
- */
+/** A biome that stocks traps no room it can draw will ever place. */
+/** An area you can walk into and never walk out of. */
 function lintOneWayTraps(ctx: Context, doc: Record<string, unknown>): void {
   const world = (doc['world'] ?? {}) as Record<string, unknown>;
   const areas = asList(world['areas']);
   if (areas.length === 0) return;
 
-  // Where you can get to from each area, honouring one-way roads: a road marked one-way is passable
-  // out of its origin only.
+  // Where you can get to from each area, honouring one-way roads.
   const out = new Map<string, Set<string>>();
   for (const area of areas) out.set(String(area['id']), new Set());
   for (const area of areas) {
@@ -666,8 +600,7 @@ function lintOneWayTraps(ctx: Context, doc: Record<string, unknown>): void {
     for (const road of asList(area['connections'])) {
       const to = String(road['to']);
       out.get(from)?.add(to);
-      // The far end can come back only if it declares the road itself, and only if this end did not
-      // mark it one-way.
+      // The far end comes back only if it declares the road and this end did not mark it one-way.
       if (road['oneWay'] === true) out.get(to)?.delete(from);
     }
   }
@@ -693,12 +626,7 @@ function lintOneWayTraps(ctx: Context, doc: Record<string, unknown>): void {
   }
 }
 
-/**
- * Static maps, judged as places rather than grids. The schema guarantees the shape; these rules
- * check meaning: whether the party can arrive, stand and reach the rest of the floor, whether a
- * room-template map has anywhere a corridor may attach, and whether a gate sits on something door-
- * like.
- */
+/** Static maps, judged as places rather than grids. */
 function lintStaticMaps(ctx: Context, doc: Record<string, unknown>): void {
   const world = (doc['world'] ?? {}) as Record<string, unknown>;
   const content = (doc['content'] ?? {}) as Record<string, unknown>;
@@ -823,9 +751,7 @@ function lintStaticMaps(ctx: Context, doc: Record<string, unknown>): void {
       }
     }
 
-    // — gates want ground somebody can approach ————————————————
-    // A gate over a passable or door terrain reads fine; one buried in solid wall guards nothing
-    // and confuses the exits panel.
+    // --- gates want ground somebody can approach --------------------------------
     for (const layer of layers) {
       if (layer['kind'] !== 'gates') continue;
       (layer['cells'] as string[][]).forEach((row, y) =>
@@ -842,9 +768,7 @@ function lintStaticMaps(ctx: Context, doc: Record<string, unknown>): void {
         }));
     }
 
-    // — one floor, not several ———————————————————————————————
-    // Flood from the entry, or the first open tile. A sealed vault is a legitimate design, so this
-    // warns rather than errs.
+    // --- one floor, not several: flood from the entry, or the first open tile ---
     let start = entry;
     if (!start || !open(start.x, start.y)) {
       outer: for (let y = 0; y < height; y += 1) {
@@ -931,10 +855,7 @@ function lintStaticMaps(ctx: Context, doc: Record<string, unknown>): void {
   }
 }
 
-/**
- * A cavern has no doors, so anything a module authors about locks or branchiness on one is
- * meaningless. Report it rather than ignoring it.
- */
+/** A cavern has no doors, so anything a module authors about locks or branchiness on one is meaningless. */
 function lintCaverns(ctx: Context, doc: Record<string, unknown>): void {
   const world = (doc['world'] ?? {}) as Record<string, unknown>;
   for (const [i, dungeon] of asList(world['dungeons']).entries()) {
@@ -1003,11 +924,7 @@ function asList(value: unknown): Record<string, unknown>[] {
   return Array.isArray(value) ? (value as Record<string, unknown>[]) : [];
 }
 
-/**
- * Every value of a named key, anywhere in the document. Effects can hang off a dialogue option, a
- * trigger, a quest stage, an item's `onUse` or a monster's reaction, so walking for the key cannot
- * go stale the way a registry of those places would.
- */
+/** Every value of a named key, anywhere in the document. */
 function walkFor(node: unknown, key: string, seen: (value: unknown) => void, depth = 0): void {
   if (depth > 24 || typeof node !== 'object' || node === null) return;
   if (Array.isArray(node)) {
@@ -1020,34 +937,17 @@ function walkFor(node: unknown, key: string, seen: (value: unknown) => void, dep
   }
 }
 
-// ---------------------------------------------------------------------------
-// Entry point
-// ---------------------------------------------------------------------------
+// --- Entry point -----------------------------------------------------------
 
 export interface LintOptions {
-  /**
-   * The document with static map folders inlined into `world.maps`. A `module.json` on disk may
-   * reference maps in sibling folders that the raw text cannot resolve. When provided, the compile
-   * pass (reference integrity, duplicate ids) runs against it instead of the parsed input; text-
-   * positioned lints still run on the input.
-   */
+  /** The document with static map folders inlined into `world.maps`. */
   readonly assembled?: Record<string, unknown>;
 
-  /**
-   * A parse cache carried across edits, for a caller linting the same document repeatedly.
-   *
-   * The schema parse is ~95% of a lint on a large module, and almost all of it re-checks entries
-   * that did not change. Passing the index back drops that to the changed entry. When the document
-   * has schema errors the index steps aside and the ordinary pass runs, because its messages carry
-   * the suggestions; see `incremental.ts`.
-   */
+  /** A parse cache carried across edits, for a caller linting the same document repeatedly. */
   readonly index?: ValidationIndex | undefined;
 }
 
-/**
- * Lint a module. Pass `text` to get line and column numbers; pass an already-parsed object to check
- * a document held in memory.
- */
+/** Lint a module. */
 export function lintModule(input: string | unknown, options: LintOptions = {}): LintResult {
   const out: Diagnostic[] = [];
 
@@ -1085,22 +985,13 @@ export function lintModule(input: string | unknown, options: LintOptions = {}): 
     ctx = { text: null, spans: null, out };
   }
 
-  // DSL operators first: their messages are better than the union errors the schema pass produces
-  // for the same mistake.
+  // DSL operators first: their messages beat the union errors the schema pass gives.
   walkForDsl(ctx, document, '');
 
-  // Everything below checks the assembled document when one is provided: the static-map rules
-  // concern maps in folders the raw text never mentions, and the raw form carries dangling
-  // references that assembly resolves. Paths reachable only through assembly have no span, and
-  // `locate()` degrades to a null position for those.
+  // Everything below checks the assembled document when one is provided.
   const subject: unknown = options.assembled ?? document;
 
-  // The one and only schema parse. `safeParse` costs ~610 ms on a large module against single-digit
-  // milliseconds for every other pass, so the result is handed to the compile pass.
-  //
-  // With an index, the happy path skips almost all of that: only changed entries are re-checked. A
-  // failure falls back to the ordinary pass, whose diagnostics carry the "did you mean"
-  // suggestions.
+  // The one and only schema parse.
   const fast = options.index?.parse(subject);
   const schema = fast?.ok === true ? fast : lintSchema(ctx, subject);
 
@@ -1109,8 +1000,7 @@ export function lintModule(input: string | unknown, options: LintOptions = {}): 
   if (schema.ok && typeof document === 'object' && document !== null) {
     lintSemantics(ctx, subject as Record<string, unknown>);
 
-    // Reference integrity and duplicate ids come from the compiler, so the editor and the engine
-    // agree on what counts as valid.
+    // Reference integrity and duplicate ids come from the compiler.
     const compiled = compileParsed(schema.data);
     if (!compiled.ok) {
       for (const issue of compiled.errors) {
@@ -1128,8 +1018,7 @@ export function lintModule(input: string | unknown, options: LintOptions = {}): 
     }
   }
 
-  // A DSL typo also fails the schema as an "Invalid input" on the enclosing field. Drop those: the
-  // precise message is already reported, and two diagnostics for one mistake reads as two bugs.
+  // A DSL typo also fails the schema as an "Invalid input" on the enclosing field.
   const dslPaths = out
     .filter((d) => d.code === 'dsl_unknown_operator' || d.code === 'dsl_ambiguous')
     .map((d) => d.path);

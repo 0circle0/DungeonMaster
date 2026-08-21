@@ -1,14 +1,4 @@
-/**
- * Conditions that hold without having been applied.
- *
- * `implies` was declared, documented with the example "unconscious implying
- * prone", validated, exported -- and read by nothing, so a module that wrote
- * it got exactly what a module that did not write it got.
- *
- * The three places a condition's static properties are read now all consult
- * it: what it forbids, what it does to a derived stat, and which way it leans
- * the dice.
- */
+/** Conditions that hold without having been applied. */
 
 import { describe, it, expect } from 'vitest';
 import { fileURLToPath } from 'node:url';
@@ -28,10 +18,7 @@ function loadModule(name: string): CompiledModule {
 
 const GREENMARCH = loadModule('greenmarch');
 
-/**
- * Greenmarch with a small chain: `felled` implies `sprawled`, which implies
- * `winded`. Three links, so the walk is tested rather than one hop.
- */
+/** Greenmarch with a small chain: `felled` implies `sprawled`, which implies `winded`. */
 function chained(): CompiledModule {
   const doc = JSON.parse(JSON.stringify(GREENMARCH.source)) as never as {
     rules: { conditions: Record<string, unknown>[] };

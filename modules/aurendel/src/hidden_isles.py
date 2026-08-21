@@ -1,19 +1,4 @@
-"""The Sundered Isles' hidden threads — three, in the five areas nothing uses.
-
-Cormorant is a rock with a jetty, an inn called the Shag, a store, a chapel and
-two houses on it. Halfmast is a fort with a gun forge and a casemate row.
-Neither had a single person in it. Tern Bank has a cut through it, the Narrows
-have a wreck used as a navigation marker, and Wreck Reef has a deep wreck.
-
-Three threads, and the sea is the liar in all of them:
-
-  * **The Marker That Does Not Move** — everything in the Narrows shifts every
-    winter. The marker wreck has been on the same bearing for two hundred years.
-  * **What the Terns Know** — forty thousand birds nest the Bank and none of
-    them nest the cut, and terns nest anywhere.
-  * **The Deep Wreck** — a ship on the reef with her guns run out, in a
-    hundred feet of water, pointing at the island.
-"""
+"""The Sundered Isles' hidden threads — three, in the five areas nothing uses."""
 from dmkit.quests import npc, shop, quest, reach, kill, flagged, arc
 from lore import (
     clue, thread, rumour, favour, talk, coldshoulder, finding, rumoured,
@@ -182,9 +167,7 @@ GATES = [
 ]
 
 POI_PATCHES = {
-    # A point of interest rather than a dungeon mouth, so `BOSSES` cannot place
-    # what is in it and the table hangs on the place. `encounterChance` as well
-    # as the table: `enterPoi` reads `poi.encounterChance ?? 0`.
+    # A point of interest, so the table and `encounterChance` hang on the place.
     "narrows_marker_wreck": {**rumoured("isle_marker", base=20, step=3, entries=4),
                              "gate": "isle_marker_hold",
                              "encounterTables": ["isle_marker_boss"],

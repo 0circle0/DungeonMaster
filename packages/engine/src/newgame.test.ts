@@ -123,9 +123,6 @@ describe('createCharacter', () => {
   });
 
   it('clamps attributes to the module\'s declared bounds', () => {
-    // A budget wide enough that the allocation is legal: what is being tested
-    // here is the bounds, and `createCharacter` now also enforces the point
-    // budget — which the test below covers on its own.
     const rich = loadModule((doc) => {
       (doc['start'] as { creation: Record<string, unknown> }).creation['attributePoints'] = 99;
     });
@@ -135,17 +132,11 @@ describe('createCharacter', () => {
       { ...defaultChoices(rich, 'Ash'), attributes: { vigor: 12, wits: 0 } },
       rng(),
     );
-    expect(character.attributes['vigor']).toBe(12); // capped at max, not 13
-    expect(character.attributes['wits']).toBe(1); // raised to min
+    expect(character.attributes['vigor']).toBe(12); // capped at max, not 13 raised to min
+    expect(character.attributes['wits']).toBe(1); 
   });
 
-  /**
-   * The campaign's own limits, wherever a character is built.
-   *
-   * `start.creation` was enforced only by the creation screens, so a party made
-   * any other way — a test, a third-party front end — walked past the point
-   * budget and the allowed lists entirely.
-   */
+  /** The campaign's own limits, wherever a character is built. */
   it('refuses an allocation the module cannot afford', () => {
     expect(() => createCharacter(
       MODULE,
@@ -252,13 +243,7 @@ describe('buildScope', () => {
   });
 });
 
-/**
- * The no-hardcoding proof.
- *
- * A module with different attribute names, a different modifier curve, and a
- * differently named vital resource must run through the same pipeline. If any
- * fantasy assumption were baked into the engine, this is where it would show.
- */
+/** The no-hardcoding proof. */
 describe('nothing is hardcoded', () => {
   it('runs a module whose ruleset the engine has never seen', () => {
     const module = loadModule((doc) => {

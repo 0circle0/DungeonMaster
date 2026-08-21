@@ -1,10 +1,4 @@
-/**
- * ⌘K: one box over the whole module.
- *
- * The command list is rebuilt only while the palette is open, and only when the
- * document changes underneath it — building it walks every collection, which is
- * a few milliseconds nobody should pay for on a keystroke in a form.
- */
+/** ⌘K: one box over the whole module. */
 
 'use client';
 
@@ -34,8 +28,7 @@ export function CommandPalette(props: {
   const commands = useMemo(() => buildCommands(props.doc, props.actions), [props.doc, props.actions]);
   const results = useMemo(() => search(commands, query), [commands, query]);
 
-  // A new search is a new list; keeping the old position would run whatever
-  // happened to land under it.
+  // A new search is a new list; keeping the old position would run whatever happened to land under it.
   useEffect(() => setCursor(0), [query]);
 
   // Follow the cursor when it walks off the visible part of the list.

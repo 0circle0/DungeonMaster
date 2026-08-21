@@ -1,12 +1,4 @@
-/**
- * Monster and NPC turns.
- *
- * Behaviour is declared, not coded: a creature's `behaviour` list is a set of priority-ordered
- * rules and the engine picks the first whose conditions hold.
- *
- * What the engine supplies is the part that needs the grid — choosing a target, deciding whether to
- * close the distance, and pathing there.
- */
+/** Monster and NPC turns. */
 
 import { Rng } from '@dm/core';
 import { evalPredicate, compileRequirement, isEmptyRequirement } from '@dm/module';
@@ -37,11 +29,7 @@ interface BehaviourRule {
   use: string;
 }
 
-/**
- * Choose which ability to use. Rules are considered in priority order and the first usable one
- * wins; a creature whose rules all fail falls back to a basic attack, so a statblock with no
- * `behaviour` still fights.
- */
+/** Choose which ability to use. */
 function chooseAbility(
   txn: Transaction,
   actor: Entity,
@@ -53,9 +41,7 @@ function chooseAbility(
   const statblock = txn.module.find<{ behaviour?: BehaviourRule[] }>('content.monsters', actor.statblock);
   const rules = [...(statblock?.behaviour ?? [])].sort((a, b) => b.priority - a.priority);
 
-  // Built explicitly rather than with a conditional spread: a spread produces an optional property
-  // typed `X | undefined`, which the shared `Scope` index signature rejects under the editor's
-  // stricter settings.
+  // Built explicitly: a conditional spread types the property `X | undefined`, which `Scope` rejects.
   const extra: Scope = target ? { target: { id: target.id, name: target.name } } : {};
   const scope = buildScope(txn.module, txn.state, actor, extra);
 
@@ -71,23 +57,13 @@ function chooseAbility(
   return defaultAttackAbility(txn.module, actor);
 }
 
-/**
- * Whether going there would take this creature off its own ground.
- *
- * Measured on the destination, not on the step, so a creature refuses the chase rather than walking
- * to the end of its rope — otherwise it could be towed one tile at a time.
- *
- * A creature with no anchor, or a module with no opinion, is never held back.
- */
+/** Whether going there would take this creature off its own ground. */
 function offItsGround(actor: Entity, limit: number, goal: Position): boolean {
   if (!actor.anchor || !Number.isFinite(limit)) return false;
   return distance(actor.anchor, goal) > limit;
 }
 
-/**
- * Take one creature's turn: move into range if needed, then act. Anything cleverer belongs in
- * `behaviour` rules rather than in engine heuristics.
- */
+/** Take one creature's turn: move into range if needed, then act. */
 export function takeAiTurn(
   txn: Transaction,
   context: TargetingContext,
@@ -97,8 +73,7 @@ export function takeAiTurn(
   const current = txn.entity(actor.id);
   if (!current || !current.alive) return;
 
-  // Only what this creature could actually perceive, so it cannot fight something on the far side
-  // of the map.
+  // Only what this creature could actually perceive.
   const target = nearestHostile(context, current, { range: detectionRange(context, current) });
   const abilityId = chooseAbility(txn, current, target, rng);
   const ability = abilityId
@@ -115,8 +90,7 @@ export function takeAiTurn(
     let actorNow = txn.entity(current.id)!;
 
     if (distance(actorNow.position, target.position) > range) {
-      // The leash gates the chase and nothing else: a creature drawn too far from its ground breaks
-      // off, but still swings at whatever is beside it.
+      // The leash gates the chase only; a creature off its ground still swings at what is beside it.
       if (offItsGround(actorNow, temper.leashRadius, target.position)) {
         txn.emit({ type: 'custom', event: 'brokeOff', data: { entity: actorNow.id, sense: '' } });
         goHome(txn, context, actorNow, rng, temper);
@@ -148,10 +122,7 @@ export function takeAiTurn(
   investigate(txn, context, current, rng);
 }
 
-/**
- * Break off and walk back to where it started — the other half of a leash, so a creature that has
- * given up does not stand at the end of its rope.
- */
+/** Break off and walk back to where it started. */
 function goHome(
   txn: Transaction,
   context: TargetingContext,
@@ -167,11 +138,7 @@ function goHome(
   moveToward(txn, context, actor, home, 0, rng, budget, temper.speeds.returning);
 }
 
-/**
- * Go and look at whatever was noticed. Arriving with nothing to show for it drops the alert, so a
- * creature does not pace back to the same empty tile forever; a cold trail is forgotten the same
- * way, by `perceiveInto`.
- */
+/** Go and look at whatever was noticed. */
 function investigate(
   txn: Transaction,
   context: TargetingContext,
@@ -180,15 +147,12 @@ function investigate(
   budget?: number,
 ): boolean {
   const alert = currentAlert(context, actor, 'investigate');
-  // Holding a lead and acting on one are different: a creature whose `investigates` list does not
-  // name that sense has nothing to do here, and the return value says so, so it is free to do
-  // whatever else it would.
+  // A creature whose `investigates` does not name that sense has nothing to do here.
   if (!alert) return false;
 
   const temper = temperamentOf(txn.module, actor);
 
-  // A lead that would take it off its ground is declined, and the alert is dropped rather than
-  // held, so it does not re-decide every turn.
+  // A lead off its ground is declined and the alert dropped rather than held.
   if (offItsGround(actor, temper.investigateRadius, alert.at)) {
     txn.putEntity({
       ...actor,
@@ -208,8 +172,7 @@ function investigate(
     return true;
   }
 
-  // Only when the trail is fresh this minute, so a creature already moving toward something does
-  // not narrate casting about every step.
+  // Only when the trail is fresh this minute.
   if (alert.minute === txn.state.minute) {
     txn.emit({
       type: 'custom',
@@ -221,17 +184,7 @@ function investigate(
   return true;
 }
 
-/**
- * Creatures act on what they noticed even when nobody is fighting, since turns only exist inside
- * combat.
- *
- * Paced by the clock rather than by actions: `tiles` is how far anything may come while that much
- * time passes. Tying it to elapsed minutes stops a free action freezing the world, and makes a long
- * rest genuinely risky.
- *
- * Every creature draws from its own stream, keyed by who it is and when, so what one creature does
- * cannot shift the dice for anything else.
- */
+/** Creature turns outside combat, paced by elapsed minutes; each draws from its own stream. */
 export function runIdleTurns(
   txn: Transaction,
   context: TargetingContext,
@@ -268,18 +221,12 @@ export function runIdleTurns(
     );
     if (chased) continue;
 
-    // Nothing to chase: a creature with ground of its own walks about on it, and one that has
-    // strayed off it heads back. Both leave a trail while they do.
+    // Nothing to chase: roam its own ground, or head back to it.
     wander(txn, local, here, rng.derive(`wander:${actor.id}:${txn.state.minute}`), tiles);
   }
 }
 
-/**
- * Walk about, or walk home.
- *
- * A random step rather than a path: a creature ambling around its own patch has no destination, and
- * asking the pathfinder would cost an A* per creature per turn. Going home does use the pathfinder.
- */
+/** Walk about, or walk home. */
 function wander(
   txn: Transaction,
   context: TargetingContext,
@@ -294,8 +241,7 @@ function wander(
   const map = txn.state.maps[actor.map];
   if (!map) return;
 
-  // Off its ground with nothing to chase: back it goes, whatever its roaming habits, so a dungeon
-  // does not empty itself into whichever room the party fought in.
+  // Off its ground with nothing to chase: back it goes, whatever its roaming habits.
   if (distance(actor.position, home) > temper.roamRadius) {
     goHome(txn, context, actor, rng, temper, Math.floor(tiles * temper.speeds.returning));
     return;
@@ -306,9 +252,7 @@ function wander(
   const budget = Math.floor(tiles * temper.speeds.wander);
   if (budget <= 0) return;
 
-  // Rolled once for the whole tick rather than once per step: per step, a creature that failed its
-  // first roll would stand still for the whole stretch, so a long rest and a single minute would
-  // move it equally far.
+  // Rolled once for the whole tick rather than once per step.
   if (!rng.chance(temper.wanderChance)) return;
 
   const blocked = new Set<number>();
@@ -322,8 +266,7 @@ function wander(
     const now = txn.entity(actor.id);
     if (!now || !now.alive) return;
 
-    // Every open neighbour that keeps it on its ground. Gathered rather than sampled, so the choice
-    // is a single draw against a stable list and two identical runs step identically.
+    // Every open neighbour that keeps it on its ground.
     const open = neighbours(now.position).filter((side) => {
       if (!inBounds(map.tiles, side)) return false;
       if (blocked.has(key(side))) return false;
@@ -343,10 +286,7 @@ function wander(
   }
 }
 
-/**
- * Walk toward a place until within `range`, spending the movement budget. A place, not a creature:
- * closing on an enemy and walking over to a noise are the same movement.
- */
+/** Walk toward a place until within `range`, spending the movement budget. */
 function moveToward(
   txn: Transaction,
   context: TargetingContext,
@@ -362,8 +302,7 @@ function moveToward(
 
   const combat = txn.state.combat;
   const allowance = budgetOverride ?? (combat ? combat.movement : Infinity);
-  // Why it is moving decides how fast. A pace of zero is a creature that does not travel for that
-  // reason at all.
+  // Why it is moving decides how fast.
   const budget = Number.isFinite(allowance) ? Math.floor(allowance * pace) : allowance;
   if (budget <= 0) return;
 
@@ -406,15 +345,11 @@ function moveToward(
     spent += cost;
   }
 
-  // Charged at what it actually walked: `pace` shapes how far it was willing to go, not how cheap
-  // the ground was.
+  // Charged at what it actually walked; `pace` shapes willingness, not cost.
   if (spent > 0 && budgetOverride === undefined) spendMovement(txn, spent);
 }
 
-/**
- * Run every non-player turn until it is a party member's turn again. Called after the player ends
- * their turn, so control returns only when there is something to decide.
- */
+/** Run every non-player turn until it is a party member's turn again. */
 export function runAiTurns(txn: Transaction, context: TargetingContext, rng: Rng, endTurnFn: (txn: Transaction, context: TargetingContext, rng: Rng) => void): void {
   // Bounded so a bad statblock cannot spin forever.
   for (let guard = 0; guard < 200; guard += 1) {

@@ -1,11 +1,4 @@
-/**
- * How the selected character is doing, as data.
- *
- * The derivation half of the terminal's status line: pools with their bands,
- * the clock, the stance when the module offers a choice of them, and — new —
- * whose turn it is in combat, which the terminal never computed and both front
- * ends want.
- */
+/** How the selected character is doing, as data. */
 
 import type { CompiledModule } from '@dm/module';
 import type { GameState, EntityId } from '@dm/engine';
@@ -37,12 +30,7 @@ export interface StatusView {
     /** `day 2 07:15` — the string both front ends print. */
     readonly text: string;
   };
-  /**
-   * What the party has to spend, and what it is called.
-   *
-   * Null in a module that never mentions money, so `minimal` shows no purse
-   * rather than a permanent zero.
-   */
+  /** What the party has to spend, and what it is called. */
   readonly purse: { readonly amount: number; readonly abbrev: string } | null;
   readonly combat: {
     readonly round: number;
@@ -54,13 +42,7 @@ export interface StatusView {
   } | null;
 }
 
-/**
- * `day 2 07:15`, or `Firstmelt 12, 07:15 (Dawn)` when the module has a calendar.
- *
- * Month names, month length and day phases were all declared by the schema and
- * read by nothing, so a module that described its own year still printed a
- * count of days.
- */
+/** `day 2 07:15`, or `Firstmelt 12, 07:15 (Dawn)` when the module has a calendar. */
 export function clockOf(module: CompiledModule, state: GameState): string {
   const date = dateOf(module, state.minute);
   const hh = String(date.hour).padStart(2, '0');
@@ -74,13 +56,7 @@ export function clockOf(module: CompiledModule, state: GameState): string {
     : `day ${date.day} ${hh}:${mm}${named}`;
 }
 
-/**
- * Whether money can actually move in this module.
- *
- * A priced item is not an economy — `item.value` also feeds the editor's
- * Balance view, and `minimal` prices a cudgel it can never sell. What makes a
- * purse worth showing is somewhere to spend it or something to start with.
- */
+/** Whether money can actually move in this module. */
 function hasEconomy(module: CompiledModule): boolean {
   if (module.source.start.creation.startingCurrency > 0) return true;
   return module.all<{ shop?: unknown }>('content.npcs').some((npc) => Boolean(npc.shop));
@@ -112,8 +88,7 @@ export function statusView(module: CompiledModule, state: GameState): StatusView
   const time = module.source.world.time;
   const clockMinute = state.minute % time.minutesPerDay;
 
-  // The pace, shown only when the module gives a choice — it is the difference
-  // between being heard and not.
+  // The pace, shown only when the module gives a choice — it is the difference between being heard and not.
   const stance = stanceOf(module, actor);
   const paced = stance && module.all('rules.stances').length > 1
     ? { id: stance.id, name: stance.name }
@@ -135,8 +110,7 @@ export function statusView(module: CompiledModule, state: GameState): StatusView
       minute: clockMinute % 60,
       text: clockOf(module, state),
     },
-    // Shown only where money is a thing: a module that declares no shop, no
-    // starting coin and no priced items should not sprout a permanent "0c".
+    // Shown only where money is a thing.
     purse: hasEconomy(module) ? { amount: state.purse, abbrev: module.source.rules.currency.abbrev } : null,
     combat: state.combat
       ? {

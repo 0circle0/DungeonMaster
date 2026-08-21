@@ -1,12 +1,4 @@
-/**
- * Zod schemas for the DSL.
- *
- * These are the source of truth in two directions: they validate a module at
- * load time, and they generate the JSON Schema that drives autocomplete and
- * inline errors in the editor. Every object is `.strict()`, so a misspelled key
- * (`"conditon"`) is a load error rather than a silently ignored field — the
- * failure mode that would otherwise have an ability quietly do nothing.
- */
+/** Zod schemas for the DSL. */
 
 import { z } from 'zod';
 import { parseDice } from '@dm/core';
@@ -30,8 +22,7 @@ export const refPath = z
     'must be a dotted path such as "actor.attr.might"',
   );
 
-// `z.lazy` + an explicit annotation is how Zod expresses these mutually
-// recursive shapes; zod-to-json-schema turns them into $ref definitions.
+// `z.lazy` plus an explicit annotation is how Zod expresses mutually recursive shapes.
 
 export const ExprSchema: z.ZodType<Expr> = z.lazy(() =>
   z.union([
@@ -96,7 +87,7 @@ export const EffectSchema: z.ZodType<Effect> = z.lazy(() =>
       })
       .strict(),
     z.object({ heal: z.object({ target: ExprSchema, amount: ExprSchema }).strict() }).strict(),
-    /** Pay or be paid. Negative spends; positive earns. */
+    /** Pay or be paid. */
     z.object({ adjustCurrency: z.object({ amount: ExprSchema }).strict() }).strict(),
     z
       .object({

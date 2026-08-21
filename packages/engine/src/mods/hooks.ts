@@ -1,29 +1,11 @@
-/**
- * The hook contract: the whole surface a mod attaches to.
- *
- * Deliberately small. Every hook is a place the engine already had a seam, and each costs a call
- * site in a hot function, so they are added when something needs them.
- *
- * Why hooks rather than patching functions
- *
- * Both front ends are browsers and packages are bundled from source, so there is no module registry
- * to reach into and ESM live bindings are read-only: a mod cannot literally replace `applyOps`.
- * Declared hook points with before / after / replace semantics give the same power while leaving
- * one place where mod output enters the engine.
- *
- * What a mod may do
- *
- * Anything. `replace` on `action.before` skips the core handler outright, and the `patch` directive
- * writes anywhere in `GameState`. The runtime enforces determinism and containment, and nothing
- * else.
- */
+/** The hook contract: the whole surface a mod attaches to. */
 
 import type { Action } from '../actions.js';
 import type { GameEvent } from '../events.js';
 import type { EntityId } from '../state.js';
 
 export type HookName =
-  /** Before the action switch. `replace` skips the core handler entirely. */
+  /** Before the action switch. */
   | 'action.before'
   /** After the action switch, before the rng is written back. */
   | 'action.after'
@@ -78,7 +60,7 @@ export function isHookName(value: string): value is HookName {
   return (HOOK_NAMES as readonly string[]).includes(value);
 }
 
-/** World facts every hook gets. Cheap to build, and usually enough on its own. */
+/** World facts every hook gets. */
 export interface HookNow {
   readonly minute: number;
   readonly day: number;
@@ -121,11 +103,7 @@ export interface HookSubjects {
   'event.emit': { readonly event: GameEvent };
 }
 
-/**
- * The narrowing key for a hook, matched against a declaration's `match`. This is what keeps the
- * boundary crossing rare: a mod declaring `applyOp` with `match: "gainMomentum"` is only consulted
- * for that op.
- */
+/** The narrowing key for a hook, matched against a declaration's `match`. */
 export function matchKeyFor<K extends HookName>(hook: K, subject: HookSubjects[K]): string | undefined {
   switch (hook) {
     case 'action.before':
@@ -146,8 +124,7 @@ export function matchKeyFor<K extends HookName>(hook: K, subject: HookSubjects[K
     case 'settle.after':
     case 'time.after':
     case 'passives':
-      // Nothing sensible to narrow on: these fire once per reduction, which is rare enough that a
-      // crossing per call is affordable.
+      // Fires once per reduction, so a crossing per call is affordable.
       return undefined;
     default:
       return undefined;

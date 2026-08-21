@@ -1,16 +1,6 @@
 'use client';
 
-/**
- * Writing a world back to the library.
- *
- * A thin seam over `@dm/library`, holding the two facts the studio knows and the library does not:
- * an envelope carries an authoring sidecar alongside the document, and that sidecar's `overrides`
- * are derived from the document rather than remembered.
- *
- * A world is its project files, and a save writes the ones that moved. The filesystem is IndexedDB,
- * so splitting maps into folders and pruning what a document no longer names is what storing a
- * world means.
- */
+/** Writing a world back to the library. */
 
 import { writeWorldFiles, factsFor } from '@dm/library';
 import type { WorldAuthoring, WorldMeta } from '@dm/library';
@@ -19,11 +9,7 @@ import type { CompiledModule } from '@dm/module';
 import { diffProject } from './projectDiff';
 import type { ProjectSnapshot } from './projectDiff';
 
-/**
- * The sidecar, brought up to date with the document. `params` are what somebody typed when they
- * placed an entry and are carried through untouched; `overrides` are recomputed every time, because
- * "a field I changed by hand" is a thing to observe rather than remember.
- */
+/** The sidecar, brought up to date with the document. */
 export function recomputeInstancesFor(
   doc: Record<string, unknown>,
   authoring: WorldAuthoring,
@@ -32,17 +18,7 @@ export function recomputeInstancesFor(
   return instances ? { ...authoring, instances } : authoring;
 }
 
-/**
- * A save: work out which files moved, and write those.
- *
- * `compiled` is the module the studio already has from drawing its diagnostics. Recompiling here
- * was a full schema parse — six hundred milliseconds on Aurendel — on every idle save, purely to
- * fill in a hash. `null` means it does not compile, which is a normal state and records no hash.
- *
- * The snapshot advances after the write resolves. If it moved first and the transaction then
- * aborted — a quota failure does exactly that — the next diff would compare against files that were
- * never stored.
- */
+/** A save: work out which files moved, and write those. */
 export async function saveWorld(args: {
   world: WorldMeta;
   doc: Record<string, unknown>;
@@ -56,11 +32,6 @@ export async function saveWorld(args: {
   const { change, snapshot, storedBytes } = diffProject({ doc, authoring }, previous);
 
   // A save never sweeps, whatever the diff decided.
-  //
-  // `diffProject` asks for one when it has no previous snapshot, which is right for a world being
-  // created, and `createWorldFromFiles` is the only caller that creates one. Reaching here without
-  // a snapshot means an existing world was opened and its baseline went missing, and sweeping then
-  // would delete every file the document does not itself reproduce.
   const { sweep: _sweep, ...safe } = change;
 
   const written = await writeWorldFiles(
@@ -68,8 +39,7 @@ export async function saveWorld(args: {
     safe,
     {
       facts: factsFor(doc, compiled),
-      // The title follows the document, so renaming a world in its own `meta` is not contradicted
-      // by a stale label in the switcher.
+      // The title follows the document.
       title: typeof meta['title'] === 'string' && meta['title'] ? meta['title'] : world.title,
       storedBytes,
     },

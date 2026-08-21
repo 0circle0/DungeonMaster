@@ -1,7 +1,4 @@
-/**
- * Render the schema-driven form for any field type.
- * Reference fields resolve to IDs that actually exist in the current module.
- */
+/** Render the schema-driven form for any field type. */
 
 'use client';
 
@@ -15,21 +12,14 @@ import type { Path } from '@/lib/store';
 import { JsonBox } from './JsonBox';
 import { withEntryIndex } from '@/lib/diagnosticPath';
 
-/**
- * Height of one pinned section header and the maximum stack before the form scrolls.
- */
+/** Height of one pinned section header and the maximum stack before the form scrolls. */
 const HEAD_ROW = 26;
 const MAX_PINNED = 4;
 
-/**
- * Diagnostics keyed by field path so form leaves can show the right problems.
- */
+/** Diagnostics keyed by field path so form leaves can show the right problems. */
 export const FieldDiagnostics = createContext<ReadonlyMap<string, readonly Diagnostic[]>>(new Map());
 
-/**
- * Track fields that no longer follow the parent prefab.
- * The base path is used to resolve relative override paths for the form.
- */
+/** Track fields that no longer follow the parent prefab. */
 export interface OverrideInfo {
   readonly base: Path;
   readonly paths: ReadonlySet<string>;
@@ -233,9 +223,7 @@ export function Field(props: FieldProps) {
                   label={inline ? undefined : name ? `${name} ${i + 1}` : `${i + 1}`}
                   description={null}
                   depth={depth + 1}
-                  // An item is present by construction; inheriting the array's
-                  // own optionality would offer to unset the item as if it were
-                  // the whole list.
+                  // An item is present by construction, so it does not inherit the array's optionality.
                   optional={false}
                   context={name}
                   onHide={undefined}
@@ -352,9 +340,7 @@ export function Field(props: FieldProps) {
   }
 }
 
-/**
- * Header row for a grouped section; pinned rows stay visible while the form scrolls.
- */
+/** Header row for a grouped section; pinned rows stay visible while the form scrolls. */
 function GroupHead(props: { depth: number; label?: string; children?: React.ReactNode }) {
   const slot = props.depth - 1;
   const pinned = slot >= 1 && slot <= MAX_PINNED && Boolean(props.label);
@@ -378,9 +364,7 @@ function HideButton(props: { onHide: () => void }) {
   );
 }
 
-/**
- * Render an object field and allow optional subfields to be revealed on demand.
- */
+/** Render an object field and allow optional subfields to be revealed on demand. */
 function ObjectField(props: FieldProps & { spec: Extract<FieldSpec, { kind: 'object' }>; depth: number }) {
   const { spec, value, path, label, description, optional, onChange, onRemove, depth } = props;
   const [revealed, setRevealed] = useState<ReadonlySet<string>>(new Set());
@@ -431,8 +415,7 @@ function ObjectField(props: FieldProps & { spec: Extract<FieldSpec, { kind: 'obj
       optional={isOptional}
       depth={depth + 1}
       context={undefined}
-      // Offered only while the section is still empty; once something is in it,
-      // removing it is the array's or object's own business.
+      // Offered only while the section is still empty.
       onHide={revealed.has(field.key) && !hasContent(object[field.key]) ? () => hide(field.key) : undefined}
     />
   );
@@ -490,8 +473,7 @@ function Labelled(props: {
   const worst = problems.find((d) => d.severity === 'error') ?? problems[0];
 
   const overrides = useContext(FieldOverrides);
-  // Only inside the entry the override info is about. A nested inspector or a
-  // path that is not under `base` must not borrow another entry's marks.
+  // Only inside the entry the override info is about.
   const relative =
     overrides && props.path && props.path.length > overrides.base.length &&
     overrides.base.every((segment, i) => props.path?.[i] === segment)

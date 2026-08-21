@@ -1,16 +1,4 @@
-/**
- * `npm run project -- split <module>` / `build <module>`
- *
- * Turns a module into a directory of files, and back. `split` is a one-time import: it reads
- * `module.json` and writes `project/`. `build` runs afterwards forever, reading `project/` and
- * writing `module.json`.
- *
- * The safety property is that `build` never invents anything: splitting and rebuilding a module
- * reproduces its file byte for byte, checked for all four shipped modules in `project.test.ts`.
- *
- * `split` refuses to overwrite an existing `project/` without `--force`, and `build` refuses to
- * write a `module.json` that does not compile. Both write whole files rather than patching.
- */
+/** `npm run project -- split <module>` / `build <module>` */
 
 import { readFileSync, writeFileSync, mkdirSync, existsSync, readdirSync, rmSync, statSync } from 'node:fs';
 import { gunzipSync } from 'node:zlib';
@@ -35,11 +23,7 @@ function usage(): number {
   return 2;
 }
 
-/**
- * The prefabs and style tables a project's recipes expand against. Read here rather than by
- * `joinProject`, which has no filesystem. A project with no `prefabs/` gets an empty pair and
- * builds as it always did.
- */
+/** The prefabs and style tables a project's recipes expand against. */
 function readAuthoringFor(projectDir: string): { prefabs: Prefab[]; style: StyleTables } {
   const prefabDir = join(projectDir, 'prefabs');
   const prefabs: Prefab[] = [];
@@ -72,17 +56,7 @@ function readTree(root: string): Record<string, string> {
   return out;
 }
 
-/**
- * Refuse to give a generated module a second source of truth.
- *
- * A generator that overwrites `module.json` rather than merging into it makes a `project/` beside
- * it a third representation of the same world, silently stale from the next run onwards.
- *
- * Aurendel and core_fantasy have been through this door — their generators are retired and their
- * `project/` trees are the source now — so this correctly says nothing about them. The hazard is
- * now somebody re-running a retired generator, and that refusal lives at the top of the generator
- * itself.
- */
+/** Refuse to give a generated module a second source of truth. */
 function generatedElsewhere(moduleDir: string): string | null {
   if (existsSync(join(moduleDir, 'project'))) return null;
   for (const marker of ['src/build.py', 'gen_core.py']) {
@@ -118,8 +92,7 @@ function split(moduleDir: string, force: boolean): number {
   const doc = JSON.parse(text) as Record<string, unknown>;
   const result = splitProject(doc);
 
-  // Verified before anything is written: if the round trip is not exact, the split is not safe to
-  // adopt.
+  // Verified before anything is written: if the round trip is not exact, the split is not safe to adopt.
   const check = joinProject(result.manifest, result.files);
   const rebuilt = `${JSON.stringify(check.document, null, 2)}\n`;
   if (check.issues.length > 0 || rebuilt !== text) {
@@ -165,13 +138,7 @@ function build(moduleDir: string): number {
     return 1;
   }
 
-  // A project that does not compile is a build that must not land: `module.json` is what the game
-  // loads.
-  //
-  // Checked against the *assembled* document — static maps live in
-  // `maps/<id>/` folders, so the raw form a module is written as has fourteen
-  // references nothing has resolved yet. The raw form is still what gets
-  // written; assembly is a reading step, not a build product.
+  // A project that does not compile is a build that must not land: `module.json` is what the game loads.
   const text = `${JSON.stringify(document, null, 2)}\n`;
   const assembled = assembleMapFolders(document, moduleDir);
   if (assembled.issues.length > 0) {
@@ -196,18 +163,7 @@ function build(moduleDir: string): number {
   return 0;
 }
 
-/**
- * A bundle the studio exported, back into the tree it came from.
- *
- * The studio cannot hand over a directory, so it writes one gzipped file of
- * path-to-contents. This is the other end of that, and it writes exactly what
- * the bundle says — no merging, because a partial write is how two
- * representations of one world start disagreeing.
- *
- * Authoring files are left alone: `prefabs/`, `style.json` and `contract.json`
- * are not produced by any document, so a bundle never carries them and clearing
- * them here would delete work nothing else holds.
- */
+/** A bundle the studio exported, back into the tree it came from. */
 function unpack(bundlePath: string, moduleDir: string, force: boolean): number {
   if (!existsSync(bundlePath)) {
     process.stderr.write(`✗ ${bundlePath} does not exist\n`);
@@ -233,8 +189,7 @@ function unpack(bundlePath: string, moduleDir: string, force: boolean): number {
     return 1;
   }
 
-  // Proven before anything is written, the same gate `split` uses: a bundle
-  // that does not rebuild is one nobody wants half-applied.
+  // Proven before anything is written, the same gate `split` uses.
   const { document, issues } = unbundleModule(files);
   if (!document || issues.length > 0) {
     process.stderr.write(`✗ ${bundlePath} does not rebuild a module\n`);

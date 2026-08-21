@@ -1,21 +1,4 @@
-"""What the Strand Keeps — a Silver Coast side chain, Act I.
-
-The *Portion of Grace* went onto the bar at Wreckers' Strand in the Lastmonth
-blow with a cargo the Countinghouse had written down to the barrel. The Strand
-says weather. The Insurers' Hall says a light was shown. Both of them are
-telling the truth about the part they can see.
-
-The chain is short and it is a moral one rather than a mysterious one: you find
-out what happened in the second quest, and the remaining two are about what you
-intend to do with knowing. Orl will not lie to you and does not expect you to
-lie for him — he expects you to understand the difference between a wreck and a
-cargo, which is an argument the Strand has never once lost in front of a
-magistrate because no magistrate has ever come.
-
-Informing is worth more coin and costs the Salvors a standing they do not give
-back: `wreck_informed` is severity -22 and travels, which on this coast means
-every hut between here and the Narrows by the end of the month.
-"""
+"""What the Strand Keeps — a Silver Coast side chain, Act I."""
 from dmkit.quests import (
     arc, stage, reach, kill, talk, flagged, resolved_either_way,
     set_flag, rep, give, deed, either, node, option, take_job, dialogue, npc,

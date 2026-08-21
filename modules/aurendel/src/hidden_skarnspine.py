@@ -1,22 +1,4 @@
-"""The Skarnspine's hidden threads — three, in the four areas nothing else uses.
-
-Snowgate is nine houses dug half into the slope, with a store, a forge and a
-bell to ring when the road shuts, and nobody had ever gone into one of them. The
-Broken Road is the old way up from the vale, taken out by a slip in the year of
-the great rains and never properly mended. The Ironstair is nine hundred steps
-cut and railed and swept up the cliff to Karn Dolur's gate. The Cold Shoulder is
-the north face, in shade from Emberfall to Greening, and the way to the ice.
-
-Three threads, and they share a shape: **this mountain is being kept, and the
-keeping is older than the hold that thinks it is doing the keeping.**
-
-  * **Nine Hundred and One** — the steps are swept daily by nobody the hold
-    pays, there are two stairs, and the count does not agree with the record.
-  * **Rung From Below** — the bell is for a shut road and it has rung eleven
-    times on an open one, and the rope is worn on the inside.
-  * **The Breathing Face** — a cave that draws and blows on a cycle you can
-    time, warm, out of a face that is in shade eight months of the year.
-"""
+"""The Skarnspine's hidden threads — three, in the four areas nothing else uses."""
 from dmkit.quests import npc, shop, quest, reach, kill, flagged, arc
 from lore import (
     clue, thread, rumour, favour, talk, coldshoulder, finding, rumoured,
@@ -191,8 +173,7 @@ GATES = [
 ]
 
 POI_PATCHES = {
-    # Two of the three anchors are places on the surface rather than dungeon
-    # mouths, so each carries its own table and its own chance.
+    # Two of the three anchors are surface places, each with its own table and chance.
     "ironstair_fallen_stair": {**rumoured("skarn_stair", base=20, step=3, entries=4),
                                "gate": "skarn_stair_tread",
                                "encounterTables": ["skarn_stair_boss"],

@@ -1,19 +1,4 @@
-"""The Drowned Fort — a Sundered Isles side chain, Act III.
-
-There is a fort on the Narrows that went down in one night with its guns run
-out and its magazine dry, which are two facts that do not belong in the same
-sentence. The Isles have salvaged everything in these waters that can be got
-at, twice, and have never once been into the fort.
-
-Runa is Wreckmaster at Blackrigging and will say plainly that this is not
-superstition and not sentiment: four crews have gone in and one man has come
-out of the four, and he came out through the chimney at Gullstone, which is a
-mile and a half away and eighty feet up.
-
-If the Silver Coast chain has already been run, the salvors' standing arrives
-with you — informing on the Strand is severity -22 and travels, and the Isles
-are where it travels to.
-"""
+"""The Drowned Fort — a Sundered Isles side chain, Act III."""
 from dmkit.quests import (
     arc, stage, reach, kill, talk, flagged, resolved_either_way, set_flag,
     rep, deed, either, node, option, take_job, dialogue, npc, shop,

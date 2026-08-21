@@ -292,8 +292,6 @@ describe('through the reducer', () => {
   });
 });
 
-// The plan's consolidation requirement: one implementation, so the editor's
-// Balance view and actual play can never report different odds.
 describe('preview parity', () => {
   const veteran = {
     actor: { level: 5, class: 'warden', ancestry: 'human', abilities: [], attr: {}, skills: { lore: 4 }, inventory: {}, conditions: {} },
@@ -378,9 +376,6 @@ describe('the weapon in your hand', () => {
     };
   }
 
-  // `items[].damage` was unread, so a bare `strike` dealt whatever the ability
-  // declared however you were armed — swapping a 15-gold iron sword for a
-  // 200-gold warded blade changed nothing whatsoever.
   it('decides the damage when the ability declares none', () => {
     const totals = (item: string | null) => {
       let sum = 0;
@@ -407,12 +402,7 @@ describe('the weapon in your hand', () => {
   });
 
   it('carries the blade\'s own tags, so a resistance can make an exception', () => {
-    // The wight halves slashing `unless` the blow is silvered, and only the
-    // warded blade is. That pairing is the whole reason the sword costs 200.
-    //
-    // Only blows the wight survives are counted: `amount` is the resource
-    // change after clamping, so a killing blow always reads lower than `raw`
-    // for reasons that have nothing to do with resistance.
+    // The wight halves slashing `unless` the blow is silvered, and only the warded blade is.
     const landed = (item: string) => {
       let raw = 0;
       let taken = 0;
@@ -430,8 +420,7 @@ describe('the weapon in your hand', () => {
       return taken / raw;
     };
 
-    // Silver lands in full; ordinary steel lands at about half — "about",
-    // because a 1-point blow halves to 1 rather than to nothing.
+    // Silver lands in full; steel at about half, since a 1-point blow halves to 1.
     expect(landed('warded_blade')).toBe(1);
     expect(landed('iron_sword')).toBeGreaterThan(0.45);
     expect(landed('iron_sword')).toBeLessThan(0.65);

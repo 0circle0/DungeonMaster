@@ -1,10 +1,4 @@
-"""Region 2 — The Silver Coast.
-
-Chalk cliffs down the western edge of the continent, with Sarnport in the one
-gap wide enough to put a harbour in. Everything here either arrived by sea or
-is waiting to leave by it. Three city districts, one town, two villages, three
-stretches of coast.
-"""
+"""Region 2 — The Silver Coast."""
 from place import (area, poi, gate, toll, house, inn, smithy, store, workshop,
                    temple, stable, warehouse, guild, square, landmark, ruin,
                    delve)

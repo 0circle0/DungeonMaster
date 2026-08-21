@@ -45,8 +45,8 @@ describe('map previews', () => {
     if (!result.ok) throw new Error(result.message);
     const village = result.preview.markers.find((m) => m.label.includes('Millford Village'));
     expect(village).toBeDefined();
-    expect(village!.glyph).toBe('▶'); // it is the start POI
-    expect(village!.label).toContain('vess'); // and its residents are named
+    expect(village!.glyph).toBe('▶'); // it is the start POI and its residents are named
+    expect(village!.label).toContain('vess'); 
   });
 
   it('a POI without an interior shows its area map with the POI highlighted', () => {

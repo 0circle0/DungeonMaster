@@ -1,20 +1,4 @@
-"""The Drowned Bell — a Thornmere side chain, Act II.
-
-The old church at Drowned Bell went under in one night in the year six-eleven,
-and the new tower was built four hundred yards inland by people who had learnt
-something. The bell went down with it. The bell has been heard since. The
-ringers at the new tower will not discuss this and get noticeably worse at not
-discussing it the longer you stand there.
-
-Thornmere has no roads. It has a hundred and six pole-ferrymen who know which
-channels are where this week, and everything that crosses the marsh crosses
-because they said so. Gost is one of them and has lost two poles and a cousin
-to the black water since Harvest.
-
-This is the chain that fills `dungeon_drowned` — eleven dungeons across three
-regions that were authored, given seven room templates each, and never once
-turned on.
-"""
+"""The Drowned Bell — a Thornmere side chain, Act II."""
 from dmkit.quests import (
     arc, stage, reach, kill, talk, flagged, resolved_either_way,
     set_flag, rep, give, deed, either, node, option, take_job, dialogue, npc,

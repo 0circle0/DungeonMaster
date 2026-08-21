@@ -1,12 +1,4 @@
-/**
- * The reachability notes, checked against the engine and the schema.
- *
- * Same reasoning as `inertFields.test.ts`: a hand-maintained list describing
- * someone else's code goes stale silently, and this one decides what an author
- * is told to go and look at. A grep cannot prove the note is *right* — only
- * that the thing it claims the engine reads still appears there — which is the
- * half that rots.
- */
+/** The reachability notes, checked against the engine and the schema. */
 
 import { describe, it, expect } from 'vitest';
 import { readdirSync, readFileSync, statSync } from 'node:fs';
@@ -66,10 +58,7 @@ describe('reachability notes', () => {
   });
 });
 
-/**
- * The number that made this file necessary. Aurendel is the largest module
- * there is, so if the report is going to be useless anywhere it is here.
- */
+/** The number that made this file necessary. */
 describe('what the unreferenced view actually reports for aurendel', () => {
   const doc = readAssembledModule(AURENDEL).doc;
   const raw = findOrphans(doc, buildReferenceIndex(doc), []);
@@ -91,11 +80,7 @@ describe('what the unreferenced view actually reports for aurendel', () => {
     expect(filtered.filter((o) => o.collection === 'narrative.loreThreads')).toEqual([]);
   });
 
-  /**
-   * And keeps what is left, which is the point. These are terrains no palette
-   * scatters and no static map uses — content that was written and never wired
-   * to anything, which is exactly what the view is for.
-   */
+  /** And keeps what is left, which is the point. */
   it('keeps the findings that are real', () => {
     expect(filtered.length).toBeGreaterThan(0);
     expect(filtered.length, 'a report this long is one nobody reads').toBeLessThan(30);

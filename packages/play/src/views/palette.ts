@@ -1,22 +1,14 @@
-/**
- * Which tone a thing on the map gets.
- *
- * The *decision* is shared knowledge — terrain declaring `color: "blue"` or
- * `tags: ["water"]` means the same thing to every front end. The *paint* is
- * not: the browser turns a tone into a CSS variable, and another front end
- * would turn it into something else. Splitting it here is what stops two
- * surfaces drawing water in different colours without anybody noticing.
- */
+/** Which tone a thing on the map gets. */
 
 import type { CompiledModule } from '@dm/module';
 import type { Entity } from '@dm/engine';
 
-/** The eight tones a text map can carry. Front ends map these to real colour. */
+/** The eight tones a text map can carry. */
 export type Tone = 'red' | 'green' | 'yellow' | 'blue' | 'magenta' | 'cyan' | 'white' | 'gray';
 
 const NAMED = new Set<Tone>(['red', 'green', 'yellow', 'blue', 'magenta', 'cyan', 'white', 'gray']);
 
-/** Tag fallbacks, for modules that never thought about colour. Order matters. */
+/** Tag fallbacks, for modules that never thought about colour. */
 const BY_TAG: readonly (readonly [string, Tone])[] = [
   ['water', 'blue'],
   ['vegetation', 'green'],
@@ -27,10 +19,7 @@ const BY_TAG: readonly (readonly [string, Tone])[] = [
   ['wall', 'gray'],
 ];
 
-/**
- * The tone for a terrain: its declared `color` hint first, then its tags,
- * then none. Pass a cache when calling per tile — the lookup walks the module.
- */
+/** The tone for a terrain: its declared `color` hint first, then its tags, then none. */
 export function toneOf(
   module: CompiledModule,
   terrainId: string,
@@ -61,12 +50,7 @@ export function toneOfEntity(entity: Entity): Tone {
   return entity.disposition === 'hostile' ? 'red' : 'yellow';
 }
 
-/**
- * The glyph for a creature.
- *
- * A monster is its name's first letter, which is legible without a
- * per-creature glyph in the schema; characters and people are fixed.
- */
+/** The glyph for a creature. */
 export function glyphOfEntity(entity: Entity): string {
   if (entity.kind === 'character') return '@';
   if (entity.kind === 'npc') return '&';

@@ -1,10 +1,4 @@
-"""Region 12 — The Deeproads.
-
-The underworld layer, running beneath the whole continent and surfacing in four
-places: Karn Dolur, the Black Tarn on the moor, the Ember Reach, and the crater
-in the Glasslands. Halls cut by hands and caverns cut by water, with no clean
-line between them. One town, one village, eight stretches of dark.
-"""
+"""Region 12 — The Deeproads."""
 from place import (
     area, poi, gate, toll, house, inn, smithy, store, workshop, temple,
     guild, landmark, ruin, delve,

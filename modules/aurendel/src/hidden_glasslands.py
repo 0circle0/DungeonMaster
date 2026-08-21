@@ -1,26 +1,4 @@
-"""The Glasslands' hidden threads — four, and one of them is a city.
-
-Vashta Qal is the module's second city: two districts, fifty-five points of interest, a spring, a
-glass market, a lens maker, a sunken bath behind a door that already had a lock on it, and until now
-not one person in either district.
-
-The other four empty areas are a salt town, a dry cistern with a village around it, a ruined town
-coming out of a dune, and a field of fulgurite. Five dungeons between them, none named by anything.
-
-The four threads are the same question asked four ways: the water left, and the leaving was not
-weather.
-
-  * The Ninth Course — the salt pans are cut in eight courses and the weighing house counts nine.
-  * What the Cistern Was For — a cistern the size of a market, dry since before the village, and the
-    village is named after it.
-  * The Bath That Is Still Full — every well in Vashta Qal is metered and the bath under the Glass
-    Quarter has never once been metered.
-  * The Town That Came Back — the dune moved off a town in one season, and the town is the wrong age
-    for the dune.
-
-The Crater Stair is the over-tuned one: level 7 ground at the bottom of a level 6 district, sealed
-on a lens the cutters will not sell and something that turns heat.
-"""
+"""The Glasslands' hidden threads — four, and one of them is a city."""
 from dmkit.quests import npc, shop, quest, reach, kill, flagged, arc
 from lore import (
     clue, thread, rumour, favour, talk, coldshoulder, finding, rumoured,
@@ -220,8 +198,7 @@ GATES = [
                    "part worth thinking about."),
            items=["cistern_key"], opens_flag="glass_cistern_open"),
 
-    # The over-tuned one: level 7 under a level 6 district, and the seal names both the lens and
-    # something that turns heat.
+    # The over-tuned one: level 7 under a level 6 district.
     sealed("glass_crater_seal", "The Stonework Under the Lip",
            "There is masonry under the glass, and the glass was poured over it "
            "rather than the other way round.",
@@ -806,8 +783,7 @@ DIALOGUES.append(
                  "position.”",
                  "glass_bath_metered", faction=WARDENS, base=13,
                  skill="insight"),
-          # A Saltrun matter, told in Vashta Qal on purpose: a thread whose tellers all live in one
-          # town ends with one missed conversation, and `check_quests.py` counts the areas.
+          # A Saltrun matter told in Vashta Qal, so the tellers are in two towns.
           rumour("glass_taj_nine",
                  "You take the pans' returns. How many courses do they yield?",
                  "“Nine.” He does not have to look it up. “Which has been "

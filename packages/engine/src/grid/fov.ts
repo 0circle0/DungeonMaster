@@ -1,16 +1,4 @@
-/**
- * Field of view, by recursive shadowcasting.
- *
- * This runs for every creature that needs to perceive, every turn. Casting a ray to every tile in
- * range is O(r³) and produces artefacts — pillars that leak light, walls with holes; recursive
- * shadowcasting is O(r²) and has none.
- *
- * It matters beyond drawing the map: `witness.requiresLineOfSight` is answered here, so whether an
- * NPC learns what the party did comes down to this computation.
- *
- * The map is divided into eight octants and each is scanned outward row by row. Each recursion
- * carries a slope range; a wall narrows it, and when the range closes the scan ends.
- */
+/** Field of view, by recursive shadowcasting. */
 
 import { key } from './tiles.js';
 import type { Position, TileMap, TerrainIndex } from './tiles.js';
@@ -38,10 +26,7 @@ export interface FovOptions {
   readonly radius: number;
 }
 
-/**
- * Compute visible tiles from `origin`. The origin is always visible, and opaque tiles are
- * themselves visible — you can see the wall, you just cannot see past it.
- */
+/** Compute visible tiles from `origin`. */
 export function fieldOfView(options: FovOptions): Visible {
   const { map, terrain, origin, radius } = options;
   const visible = new Set<number>([key(origin)]);
@@ -87,8 +72,7 @@ function castLight(
         y: origin.y + dx * yx + dy * yy,
       };
 
-      // Euclidean, so the visible area is a disk. Chebyshev would make it a square, letting a
-      // creature see noticeably further along the diagonals.
+      // Euclidean, so the visible area is a disk.
       if (euclidean(position, origin) <= radius + 0.5) visible.add(key(position));
 
       const opaque = terrain.isOpaque(map, position);
@@ -104,8 +88,7 @@ function castLight(
       }
 
       if (opaque && currentRow < radius) {
-        // Start a shadow: scan the sector to this wall's left, then continue past it with a
-        // narrowed range.
+        // Start a shadow: scan the sector to this wall's left, then continue past it with a narrowed range.
         blocked = true;
         castLight(visible, map, terrain, origin, radius, currentRow + 1, startSlope, leftSlope, octant);
         nextStart = rightSlope;
@@ -114,16 +97,7 @@ function castLight(
   }
 }
 
-/**
- * Whether an unobstructed line exists between two tiles.
- *
- * Used for targeting and for witnessing, where computing a whole field of view would be wasteful.
- * Endpoints are exempt: a creature standing in a doorway can still be seen and can still see out.
- *
- * Symmetric by construction. Bresenham breaks ties by direction, so drawing a line one way can clip
- * a corner the other way does not — which would let one creature shoot another that cannot shoot
- * back. Ordering the endpoints canonically before tracing removes that.
- */
+/** Whether an unobstructed line exists between two tiles. */
 export function hasLineOfSight(
   map: TileMap,
   terrain: TerrainIndex,
@@ -170,11 +144,7 @@ function bresenham(from: Position, to: Position): Position[] {
   }
 }
 
-/**
- * Tiles lit by any light source, for describing a dark room. Light is a union of fields of view,
- * one per source, which is why a torch around a corner does not illuminate the corridor you are
- * standing in.
- */
+/** Tiles lit by any light source, for describing a dark room. */
 export function litTiles(
   map: TileMap,
   terrain: TerrainIndex,

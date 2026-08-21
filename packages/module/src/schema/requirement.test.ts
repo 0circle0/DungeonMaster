@@ -25,8 +25,7 @@ const SCOPE: Scope = {
     conditions: { burning: 2 },
   },
   reputation: { wardens: 20, thieves: -5 },
-  // Supplied by the engine's `buildScope`: the rank a tier starts at, and each
-  // faction's own ladder. Both are scoped exactly as the engine scopes them.
+  // Supplied by the engine's `buildScope`: the rank a tier starts at, and each faction's own ladder.
   tiers: { novice: 1, adept: 3, master: 6 },
   ranks: { wardens: { friend: 10, trusted: 25 }, thieves: { trusted: 5 } },
   flags: { met_vess: true, tithe_paid: false, chapter: 3 },
@@ -92,10 +91,6 @@ describe('character development gates', () => {
   });
 
   it('does not throw when a tier gate is evaluated', () => {
-    // A tier compiled against an unpopulated namespace resolved to null and
-    // then threw inside the comparison, from call sites that do not catch —
-    // so a gate, an ability, a quest or a dialogue option carrying a `minTier`
-    // took the whole reduction down.
     expect(() => holds(req({ skills: [{ skill: 'lore', minTier: 'adept' }] }))).not.toThrow();
   });
 
@@ -146,8 +141,6 @@ describe('possession and progress gates', () => {
   });
 
   it('scopes ranks to their own faction', () => {
-    // Both ladders name a `trusted` rank at different standings; asking about
-    // the wardens must not be answered by the thieves' threshold.
     expect(holds(req({ factions: [{ faction: 'thieves', minRank: 'trusted' }] }))).toBe(false);
     expect(() => holds(req({ factions: [{ faction: 'wardens', minRank: 'trusted' }] }))).not.toThrow();
   });

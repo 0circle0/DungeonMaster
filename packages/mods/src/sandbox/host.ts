@@ -1,17 +1,4 @@
-/**
- * The sandbox contract.
- *
- * Separated from the QuickJS implementation so the engine depends on an interface rather than a
- * WASM module, and so tests can substitute a fake host.
- *
- * Two properties the engine relies on:
- *
- *   - `call` is synchronous. `reduce()` is a pure synchronous function and is not becoming async
- *     for mods; QuickJS instantiation is async, so a host is built once up front and handed in
- *     ready.
- *   - `call` never throws. A mod that explodes, hangs, or returns nonsense produces a failed
- *     result, which the engine turns into a reported `modError` event.
- */
+/** The sandbox contract. */
 
 import type { ModManifest } from '../schema/manifest.js';
 import type { ModFiles } from '../hash.js';
@@ -24,9 +11,9 @@ export interface LoadedMod {
   readonly hash: string;
 }
 
-/** Why a crossing failed. Distinguished because the fixes differ. */
+/** Why a crossing failed. */
 export type SandboxFailure =
-  /** The mod threw. Its bug. */
+  /** The mod threw. */
   | 'threw'
   /** It exceeded its step budget — too slow, or looping. */
   | 'interrupted'
@@ -48,7 +35,7 @@ export interface SandboxCall {
   readonly payload: string;
   /** Deterministic entropy, bound as `dm.random()`. */
   readonly random: () => number;
-  /** Bound as `dm.state.get(path)`. Returns JSON text, or null when absent. */
+  /** Bound as `dm.state.get(path)`. */
   readonly query: (path: string) => string | null;
 }
 
@@ -61,9 +48,9 @@ export interface InstallResult {
 
 export interface SandboxHost {
   readonly target: 'engine' | 'editor';
-  /** Evaluate a mod's entry once and register its hooks. Synchronous. */
+  /** Evaluate a mod's entry once and register its hooks. */
   install(mod: LoadedMod): InstallResult;
-  /** Never throws. Repeated failures quarantine the mod. */
+  /** Never throws. */
   call(call: SandboxCall): SandboxResult;
   quarantined(modId: string): boolean;
   installed(modId: string): boolean;
@@ -72,10 +59,6 @@ export interface SandboxHost {
 
 export interface HostOptions {
   readonly target: 'engine' | 'editor';
-  /**
-   * Failures before a mod is switched off for the rest of the run. Tests that assert determinism
-   * pass `Infinity`, so a throwing mod fails loudly instead of being quietly disabled halfway
-   * through.
-   */
+  /** Failures before a mod is switched off for the rest of the run. */
   readonly quarantineAfter?: number;
 }

@@ -1,11 +1,4 @@
-/**
- * Lore: what the party found out, as opposed to what it was told to do.
- *
- * The properties worth pinning are the ones a front end or a module would
- * otherwise get quietly wrong — that learning twice is silent, that an unknown
- * entry hands out no text, and that `threads` is a closed namespace while
- * `lore` is an open one.
- */
+/** Lore: what the party found out, as opposed to what it was told to do. */
 
 import { describe, it, expect } from 'vitest';
 import { readFileSync } from 'node:fs';
@@ -29,13 +22,7 @@ const holds = (predicate: Parameters<typeof evalPredicate>[0], scope: ReturnType
 
 const MINIMAL_PATH = fileURLToPath(new URL('../../../modules/minimal/module.json', import.meta.url));
 
-/**
- * `minimal` plus a thread, built here rather than shipped in a fixture module.
- *
- * The point of testing against `minimal` is that it declares none of the usual
- * fantasy vocabulary, so nothing here can be passing because greenmarch happens
- * to have a skill or a faction with the right name.
- */
+/** `minimal` plus a thread, built here rather than shipped in a fixture module. */
 function moduleWithLore(): CompiledModule {
   const doc = JSON.parse(readFileSync(MINIMAL_PATH, 'utf8')) as Record<string, unknown>;
   const narrative = (doc['narrative'] ?? {}) as Record<string, unknown>;
@@ -84,8 +71,6 @@ describe('learning lore', () => {
   });
 
   it('is silent the second time, and keeps the first minute', () => {
-    // Content teaches the same clue from several places on purpose, so a party
-    // that hears it twice must not see it announced twice.
     const first = learn({ ...fresh(), minute: 100 }, 'tide_turns_late');
     const txn = new Transaction({ ...first, minute: 900 }, MODULE);
     applyOps(txn, [{ op: 'learnLore', entry: 'tide_turns_late' }], first.party[0]);
@@ -96,15 +81,11 @@ describe('learning lore', () => {
   });
 
   it('ignores an entry the module does not declare', () => {
-    // A typo in a `learnLore` must not put an unlistable id into the journal,
-    // where it would render as a clue nobody wrote.
     const state = learn(fresh(), 'no_such_clue');
     expect(state.lore['no_such_clue']).toBeUndefined();
   });
 
   it('a minute-zero entry still reads as known', () => {
-    // The trap `exists` avoids and `test` would fall into: learning something in
-    // the first minute of the game stores a 0.
     const state = learn({ ...fresh(), minute: 0 }, 'tide_turns_late');
     const gate = compileRequirement({
       lore: [{ entry: 'tide_turns_late', known: true }],
@@ -141,8 +122,6 @@ describe('the journal', () => {
 
     const unknown = thread.entries.find((entry) => entry.id === 'iron_will_not_bite')!;
     expect(unknown.known).toBe(false);
-    // The whole point: a front end cannot render a clue the party has not
-    // earned, because it is not given one to render.
     expect(unknown.name).toBe('');
     expect(unknown.source).toBe('');
     expect(unknown.learnedAt).toBeNull();
@@ -201,8 +180,7 @@ describe('reading lore from content', () => {
   });
 
   it('`lore` is open and `threads` is closed', () => {
-    // An unlearned clue is a "not yet"; an unknown thread is a typo. The second
-    // has to be loud, which is the whole reason they differ.
+    // An unlearned clue is a "not yet"; an unknown thread is a typo.
     expect(OPEN_NAMESPACES).toContain('lore');
     const scope = scopeOf(fresh());
 

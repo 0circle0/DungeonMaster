@@ -1,12 +1,6 @@
 'use client';
 
-/**
- * The studio shell: toolbar, left dock, viewport, inspector, console.
- *
- * State is `useModuleStore` plus one selection value and one viewport value. The selection decides
- * what the inspector edits; the viewport is sticky, so selecting a singleton does not tear down the
- * map being looked at.
- */
+/** The studio shell: toolbar, left dock, viewport, inspector, console. */
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useModuleStore, exportModule, getAt } from '@/lib/store';
@@ -75,10 +69,7 @@ function StudioShell(props: {
   const rules = useRules();
   const [paletteOpen, setPaletteOpen] = useState(false);
   const [placing, setPlacing] = useState<string | null>(null);
-  /**
-   * What this module pins, which decides whose opinions apply to it. Read from the document rather
-   * than passed in, so adopting a mod takes effect as soon as the pin is written.
-   */
+  /** What this module pins, which decides whose opinions apply to it. */
   const declaredMods = useMemo(
     () =>
       (Array.isArray(store.doc['mods']) ? (store.doc['mods'] as { id?: unknown }[]) : [])
@@ -108,8 +99,7 @@ function StudioShell(props: {
   const [semanticReady, setSemanticReady] = useState(false);
   useEffect(() => {
     if (!validation.ok) {
-      // A document that does not compile has nothing coherent to check, and its existing errors are
-      // the ones worth reading first.
+      // A document that does not compile has nothing coherent to check.
       setSemantic([]);
       setSemanticReady(false);
       return;
@@ -129,8 +119,7 @@ function StudioShell(props: {
     const infos = extra.filter((d) => d.severity === 'info');
     return {
       ...validation,
-      // A mod can raise an error but cannot make a valid module invalid: `ok` still reflects the
-      // format, so a mod's opinion never blocks export.
+      // A mod can raise an error but cannot make a valid module invalid.
       errors: [...validation.errors, ...errors],
       warnings: [...validation.warnings, ...warnings],
       infos: [...validation.infos, ...infos],
@@ -166,11 +155,7 @@ function StudioShell(props: {
     rememberPlace({ module: props.world.key, selection, viewportKind, tablePath, mapTarget });
   }, [canSave, props.world.key, selection, viewportKind, tablePath, mapTarget]);
 
-  /**
-   * The authoring sidecar's two mutations. Both are state rather than server writes, and the next
-   * autosave carries them to the library alongside the document, so a prefab and the entries made
-   * from it cannot be written apart.
-   */
+  /** The authoring sidecar's two mutations. */
   const savePrefab = useCallback((prefab: Prefab) => {
     props.onAuthoringChange({
       ...props.authoring,
@@ -191,11 +176,7 @@ function StudioShell(props: {
   const autosave = useAutosave(store, props.world, props.authoring, canSave, props.loadedSnapshot);
   const saveToDisk = autosave.flush;
 
-  /**
-   * The "are you sure" prompt, only when a save actually failed. Autosave writes as you type and a
-   * beacon catches whatever is still in the idle window, so a dirty document is not lost work;
-   * prompting anyway trains people to dismiss the one case that matters.
-   */
+  /** The "are you sure" prompt, only when a save actually failed. */
   useEffect(() => {
     if (autosave.state !== 'error') return;
     const guard = (event: BeforeUnloadEvent) => event.preventDefault();
@@ -226,22 +207,16 @@ function StudioShell(props: {
     return () => window.removeEventListener('keydown', onKey);
   }, [saveToDisk, store]);
 
-  /**
-   * The commands that are not simply somewhere to go. Memoised on what they close over, so the
-   * palette's index is not rebuilt every time the studio re-renders.
-   */
+  /** The commands that are not simply somewhere to go. */
   const paletteActions: readonly Command[] = useMemo(
     () => [
-      // Writes the project files that moved to the store, now rather than at the end of the idle
-      // window.
+      // Writes the project files that moved to the store, now rather than at the end of the idle window.
       { kind: 'action', id: 'act:save', label: 'Save now', hint: '⌘S', run: () => void saveToDisk() },
-      // The compile. `module.json` is what a player loads, so producing one is an errand the author
-      // runs; the studio's own storage stays the project files.
+      // The compile.
       { kind: 'action', id: 'act:export', label: 'Compile module.json', hint: 'to play', run: () => {
         exportModule(store.doc, store.filename);
       } },
-      // The project as a repository holds it: `project/` for entries and `maps/` for static maps,
-      // which is what `npm run project -- unpack` reads back.
+      // The project as a repository holds it: `project/` for entries, `maps/` for static maps.
       { kind: 'action', id: 'act:export-project', label: 'Download project files', hint: 'for git', run: () => {
         void downloadProject(store.doc, store.filename, props.authoring);
       } },
@@ -251,16 +226,11 @@ function StudioShell(props: {
       { kind: 'action', id: 'act:start', label: 'Start & creation', hint: 'where play begins', run: () => openStart() },
       { kind: 'action', id: 'act:mods', label: 'Mods', hint: `${NO_MODS.length} installed`, run: () => setModsOpen((open) => !open) },
     ],
-    // The navigation helpers are redefined every render and close over nothing that changes, so
-    // they are deliberately not dependencies. `props.authoring` is one, because exporting project
-    // files must carry the prefabs a compressed project rebuilds against.
+    // The navigation helpers close over nothing that changes, so they are not dependencies.
     [store, saveToDisk, props.authoring],
   );
 
-  /**
-   * Fields the installed mods want on whatever is selected. Keyed on the selected entry rather than
-   * the document, so it costs a QuickJS call per selection rather than per keystroke.
-   */
+  /** Fields the installed mods want on whatever is selected. */
   const selectedEntry = useMemo(() => {
     if (selection.kind !== 'item') return null;
     const entries = getAt(store.doc, selection.path.split('.'));
@@ -345,8 +315,7 @@ function StudioShell(props: {
     draft['id'] = uniqueId(list, String(seed['id'] ?? `new_${info.name.replace(/s$/, '')}`));
     if ('name' in draft && !seed['name']) draft['name'] = 'Untitled';
 
-    // A schema-empty static map would be invalid (no layers), so start it as a small paintable
-    // room: a filled base terrain and an entry marker.
+    // A schema-empty static map is invalid, so start with a filled base and an entry marker.
     if (path === 'world.maps' && !seed['layers']) {
       const terrains = getAt(store.doc, ['world', 'terrains']);
       const first = Array.isArray(terrains)
@@ -389,10 +358,7 @@ function StudioShell(props: {
     setSelection({ kind: 'none' });
   };
 
-  /**
-   * One history entry that sets the chosen field and clears the other two, so undo undoes the whole
-   * decision and the exported start block carries no redundant fields.
-   */
+  /** One history entry that sets the chosen field and clears the other two. */
   const setStart = (field: 'startingPoi' | 'startingArea' | 'startingDungeon', id: string) => {
     const start = { ...startOf(store.doc) };
     delete start['startingPoi'];
@@ -511,8 +477,7 @@ function StudioShell(props: {
             required: entry.required ?? false,
           })) ?? []}
           onPatch={(patches) => {
-            // Batched, because a mod command is one thing the author did and should be one press of
-            // undo.
+            // Batched, because a mod command is one thing the author did and should be one press of undo.
             const writes = patches.filter((patch) => patch.op === 'set');
             const deletes = patches.filter((patch) => patch.op === 'delete');
             if (writes.length > 0) {
@@ -562,8 +527,7 @@ function StudioShell(props: {
             required: entry.required ?? false,
           })) ?? []}
           onPatch={(patches) => {
-            // Batched, because a mod command is one thing the author did and should be one press of
-            // undo.
+            // Batched, because a mod command is one thing the author did and should be one press of undo.
             const writes = patches.filter((patch) => patch.op === 'set');
             const deletes = patches.filter((patch) => patch.op === 'delete');
             if (writes.length > 0) {
@@ -620,12 +584,10 @@ function StudioShell(props: {
         <NewModuleDialog
           library={props.library}
           dirty={store.dirty}
-          // This world keeps its own files under its own key, so making another does not endanger
-          // it; the only gap is the idle window, which flushing closes.
+          // This world keeps its own files under its own key; flushing closes the idle window.
           onSaveFirst={() => void saveToDisk()}
           onCreate={(doc, filename) => {
-            // A new world is a library row before it is a document on screen, so there is never a
-            // state where typing goes nowhere.
+            // A new world is a library row before it is a document on screen.
             props.onNewWorld(doc, filename);
             setNewDialog(false);
           }}
@@ -645,15 +607,7 @@ function uniqueId(entries: readonly Record<string, unknown>[], base: string): st
   }
 }
 
-/**
- * Choosing a world, and getting it into the shell.
- *
- * All of it runs in the browser against the library, which is what makes the studio a page a static
- * host can serve.
- *
- * First paint is a skeleton rather than a guess: with no server render there is no wrong document
- * to hide.
- */
+/** Choosing a world, and getting it into the shell. */
 export function Studio() {
   const library = useEditorLibrary();
   const [world, setWorld] = useState<LoadedWorld | null>(null);
@@ -661,19 +615,14 @@ export function Studio() {
   const [failed, setFailed] = useState<string | null>(null);
   const [claimed, setClaimed] = useState(true);
 
-  /**
-   * The claim on the world this tab has open, given up when it opens another. A ref rather than
-   * state: nothing renders from it, and it has to be read and swapped inside `open` rather than a
-   * render later.
-   */
+  /** The claim on the world this tab has open, given up when it opens another. */
   const claim = useRef<WorldClaim | null>(null);
   useEffect(() => () => claim.current?.release(), []);
 
   const open = useCallback(async (key: string): Promise<void> => {
     setOpening(key);
     try {
-      // Claim before letting go, and let go only once the new world is in hand: releasing first
-      // would leave the world on screen unclaimed if the open then failed.
+      // Claim before letting go, and let go only once the new world is in hand.
       const [loaded, held] = await Promise.all([loadWorld(key), claimWorld(key)]);
       if (!loaded) {
         if (held !== claim.current) held.release();
@@ -692,8 +641,7 @@ export function Studio() {
     }
   }, []);
 
-  // Resume where the author was, if that world is still here. No fallback to another world: opening
-  // something nobody asked for is worse than showing the shelf.
+  // Resume where the author was, if that world is still here.
   useEffect(() => {
     if (library.loading || world) return;
     let live = true;
@@ -725,9 +673,7 @@ export function Studio() {
 
   return (
     <StudioShell
-      // Remounting on the world is deliberate: the store, the selection and the undo history all
-      // belong to one document, and carrying any of them across a switch lands an edit in the wrong
-      // world.
+      // Remounting on the world: store, selection and undo history all belong to one document.
       key={world.meta.key}
       initialDoc={world.doc}
       initialName={world.meta.filename}

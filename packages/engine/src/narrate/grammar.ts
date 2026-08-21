@@ -1,12 +1,4 @@
-/**
- * Prose from templates.
- *
- * With no LLM at runtime, variety comes from weighted pools keyed on world state. Expansion is
- * seeded per scene rather than per call, so re-describing the same room gives the same sentence
- * while two playthroughs describe it differently.
- *
- * Templates interpolate `{placeholder}` from a context the caller supplies.
- */
+/** Prose from templates. */
 
 import { Rng, hashString } from '@dm/core';
 import { evalPredicate, compileRequirement, isEmptyRequirement } from '@dm/module';
@@ -30,10 +22,7 @@ export interface NarrateOptions {
   readonly context?: Readonly<Record<string, string | number>>;
   /** Scope for evaluating variant conditions. */
   readonly scope?: Scope;
-  /**
-   * Stable identity for the thing being described. The same key always yields the same phrasing
-   * within a run.
-   */
+  /** Stable identity for the thing being described. */
   readonly sceneKey?: string;
   readonly openNamespaces?: readonly string[];
 }
@@ -45,16 +34,12 @@ export function interpolate(
 ): string {
   return template.replace(/\{(\w+)\}/g, (whole, name: string) => {
     const value = context[name];
-    // An unresolved placeholder is left in place rather than blanked, so a missing value is visible
-    // in play instead of leaving a hole in a sentence.
+    // An unresolved placeholder is left in place rather than blanked.
     return value === undefined ? whole : String(value);
   });
 }
 
-/**
- * Expand a text pool into a line. Returns an empty string when the pool does not exist, so a
- * missing `textKey` degrades to silence rather than throwing mid-scene.
- */
+/** Expand a text pool into a line. */
 export function narrateFrom(
   module: CompiledModule,
   poolId: string,
@@ -64,8 +49,7 @@ export function narrateFrom(
   const pool = module.find<TextPool>('narrative.textGrammar', poolId);
   if (!pool || pool.variants.length === 0) return '';
 
-  // The scene key decides the phrasing, so the same room reads the same way every time it is
-  // described within one run.
+  // The scene key decides the phrasing, so a room reads the same way all run.
   const rng = Rng.fromSeed(seed ^ hashString(options.sceneKey ?? poolId));
 
   const eligible = options.scope
@@ -91,18 +75,13 @@ function allows(
     }
     if (variant.when && !evalPredicate(variant.when, context)) return false;
   } catch {
-    // A variant whose condition cannot be evaluated is skipped rather than crashing the scene; the
-    // pool's other phrasings still work.
+    // A variant whose condition cannot be evaluated is skipped.
     return false;
   }
   return true;
 }
 
-/**
- * The words a sentence is assembled from, resolved from the module once. The rules stay here —
- * where the conjunction goes, that a vowel takes the other article — and only the words live in the
- * module.
- */
+/** The words a sentence is assembled from, resolved from the module once. */
 export interface Grammar {
   readonly and: string;
   readonly or: string;
@@ -136,10 +115,7 @@ export function list(grammar: Grammar, items: readonly string[], conjunction = g
   });
 }
 
-/**
- * "a sword" / "an apple". The vowel test is a rule about how the language works; which word each
- * branch produces is the module's business.
- */
+/** "a sword" / "an apple". */
 export function article(grammar: Grammar, noun: string): string {
   return interpolate(/^[aeiou]/i.test(noun) ? grammar.vowel : grammar.consonant, { noun });
 }
@@ -155,16 +131,7 @@ export function count(
   return interpolate(grammar.counted, { number: word, noun: n === 1 ? singular : plural });
 }
 
-/**
- * How well a typed noun matches a name, from 100 down to 0 for no match.
- *
- * The order of the rungs is load-bearing: a whole word beats the start of a longer word, which is
- * the difference between `enter mill` finding The Old Mill and finding Millford Village. Putting
- * the plain substring test above the word test makes the word test dead code.
- *
- * Lives here rather than in either front end because the parser and the narrator must agree about
- * what a name means.
- */
+/** How well a typed noun matches a name, from 100 down to 0 for no match. */
 export function nameScore(needle: string, name: string): number {
   const typed = needle.trim().toLowerCase();
   const candidate = name.trim().toLowerCase();
@@ -179,11 +146,7 @@ export function nameScore(needle: string, name: string): number {
   return 0;
 }
 
-/**
- * How a creature reads in prose: "a lean, mud-slicked bog hound", from `monsters[].descriptors`.
- * Picked with a scene-seeded generator, so the same hound reads the same way each time it is
- * mentioned and differently between playthroughs.
- */
+/** How a creature reads in prose: "a lean, mud-slicked bog hound", from `monsters[].descriptors`. */
 export function describeCreature(
   module: CompiledModule,
   entity: { id: string; name: string; statblock: string | null },

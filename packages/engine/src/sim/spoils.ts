@@ -1,15 +1,4 @@
-/**
- * What the dead leave behind.
- *
- * Loot is rolled in the second transaction of a reduction rather than on the damage that killed the
- * creature, for three reasons:
- *
- *   1. It sees the whole batch of events, so a creature killed by an ally's AI turn inside
- *      `settle()` drops its loot too.
- *   2. It has the corpse, so the map and the tile are read off it.
- *   3. Rolling inside `adjustResource` would make the dice depend on where in an area-of-effect
- *      each death happened, which is a reproducibility bug.
- */
+/** What the dead leave behind. */
 
 import { Rng } from '@dm/core';
 import type { ItemStack } from '../state.js';
@@ -30,11 +19,7 @@ interface LootTableDef {
   bonusRolls: { onSuccess: number; onCritical: number };
 }
 
-/**
- * Extra draws earned by a scavenging skill: one for a success and two for a critical. The check is
- * made here rather than inside `rollLoot`, which is shared verbatim with the editor's Balance
- * preview and knows nothing about characters.
- */
+/** Extra draws earned by a scavenging skill: one for a success and two for a critical. */
 function bonusRollsFor(
   txn: Transaction,
   tableId: string,
@@ -53,11 +38,7 @@ function bonusRollsFor(
   return roll.outcome === 'critical' ? (bonus?.onCritical ?? 2) : (bonus?.onSuccess ?? 1);
 }
 
-/**
- * Drop what the newly dead were carrying, onto the ground where they fell. Deaths are handled in
- * event order so the same batch always rolls the same dice, and each corpse gets its own sub-stream
- * keyed by its id.
- */
+/** Drop what the newly dead were carrying, onto the ground where they fell. */
 export function dropDeathLoot(
   txn: Transaction,
   terrain: TerrainIndex,
@@ -74,7 +55,6 @@ export function dropDeathLoot(
     if (!statblock) continue;
 
     // The creature's own table, then any table the finder additionally qualifies for.
-    // `conditionalLoot` is drawn on top rather than instead.
     const tables = [statblock.loot, ...(statblock.conditionalLoot ?? [])]
       .filter((id): id is string => Boolean(id));
     if (tables.length === 0) continue;
@@ -92,8 +72,7 @@ export function dropDeathLoot(
 
       for (const draw of rollLoot(txn.module, tableId, scopes, tableRng, { bonusRolls })) {
         dropped.push({ item: draw.item, quantity: draw.quantity });
-        // A unique has now dropped; the flag removes it from every future draw, so it cannot be
-        // found twice in one save.
+        // A dropped unique is flagged out of every future draw.
         if (draw.unique) {
           txn.set({
             ...txn.state,

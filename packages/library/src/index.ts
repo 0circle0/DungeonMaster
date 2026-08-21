@@ -1,11 +1,4 @@
-/**
- * The world library.
- *
- * Worlds live on the machine that edits or plays them: nothing here talks to a
- * server, and after the client-side conversion there is no server to talk to.
- * The shipped examples arrive as static files, once, and become ordinary worlds
- * the moment they land.
- */
+/** The world library: worlds stored on the machine that edits or plays them. */
 
 export {
   WORLD_FORMAT,
@@ -30,8 +23,7 @@ export {
   createWorld,
   deleteWorld,
   renameWorld,
-  // The studio's storage: a world is its project files, and a save writes the
-  // ones that changed.
+  // The studio's storage: a world is its project files, and a save writes the ones that changed.
   readWorldFiles,
   writeWorldFiles,
   createWorldFromFiles,

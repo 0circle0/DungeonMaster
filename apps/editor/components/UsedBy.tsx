@@ -1,7 +1,4 @@
-/**
- * Show which entries reference this item.
- * Empty results are surfaced as a warning so orphaned content is visible.
- */
+/** Show which entries reference this item. */
 
 'use client';
 

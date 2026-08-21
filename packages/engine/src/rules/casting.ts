@@ -1,13 +1,4 @@
-/**
- * Casting: slots, points, concentration, rituals, and components.
- *
- * Two things decide the shape here:
- *
- * - The engine owns no spell list. Which abilities are spells is decided by an ability carrying a
- *   `spellLevel`; an ability without one is unaffected by everything in this file.
- * - A slot is spent, not reserved. `Entity.slotsUsed` counts what is gone, indexed by level, so a
- *   character who levels up gains slots without anything reconciling a stored maximum.
- */
+/** Casting: slots, points, concentration, rituals, and components. */
 
 import { Rng } from '@dm/core';
 import { evalExpr } from '@dm/module';
@@ -41,10 +32,7 @@ export interface SpellDef {
   upcast: unknown[];
 }
 
-/**
- * The module's casting rules. The schema's own type rather than a hand-written mirror, which would
- * need an `as unknown as` cast and could drift.
- */
+/** The module's casting rules. */
 export function spellcastingOf(module: CompiledModule): Spellcasting {
   return module.source.rules.spellcasting;
 }
@@ -59,15 +47,12 @@ export function casterClassOf(module: CompiledModule, actor: Entity): ClassCasti
   return characterClass?.spellcasting ?? null;
 }
 
-/** Whether this ability is a spell at all. Everything here turns on that. */
+/** Whether this ability is a spell at all. */
 export function isSpell(ability: { spellLevel?: number }): boolean {
   return typeof ability.spellLevel === 'number';
 }
 
-/**
- * Slots this character has at each level, before any are spent. `slotTable` is keyed by caster
- * level and `progression` scales it, so a half-caster reads the same table at half the rate.
- */
+/** Slots this character has at each level, before any are spent. */
 export function slotsFor(module: CompiledModule, actor: Entity): number[] {
   const casting = spellcastingOf(module);
   if (casting.mode !== 'slots' && casting.mode !== 'both') return [];
@@ -78,8 +63,7 @@ export function slotsFor(module: CompiledModule, actor: Entity): number[] {
   const effective = Math.max(0, Math.floor(actor.level * (caster.progression ?? 1)));
   if (effective <= 0) return [];
 
-  // The highest declared level at or below the caster's, so a table that only lists odd levels
-  // still works.
+  // The highest declared level at or below the caster's, so a table that only lists odd levels still works.
   let best: number[] = [];
   for (const [levelKey, slots] of Object.entries(casting.slotTable)) {
     if (Number(levelKey) <= effective) {
@@ -103,10 +87,7 @@ export function slotsLeft(module: CompiledModule, actor: Entity): number[] {
   return slotsFor(module, actor).map((total, index) => total - (actor.slotsUsed[index] ?? 0));
 }
 
-/**
- * The lowest slot that can carry this spell, or null when none can. A spell may be cast from a
- * higher slot than its own, so the search runs upward.
- */
+/** The lowest slot that can carry this spell, or null when none can. */
 export function slotForSpell(
   module: CompiledModule,
   actor: Entity,
@@ -149,8 +130,7 @@ function evaluate(module: CompiledModule, actor: Entity, expr: Expr): number | u
       derived: stats.derived,
       // The attribute the class casts with, so one formula covers every caster.
       castingMod: caster ? (stats.mod[caster.castingAttribute] ?? 0) : 0,
-      // This scope is built here rather than by `buildScope`, so the proficiency curve has to be
-      // supplied explicitly or a caster's save DC and attack bonus cannot grow with level.
+      // The proficiency curve is supplied explicitly; this scope is not built by `buildScope`.
       proficiency: proficiencyOf(module, actor),
     },
   };
@@ -158,17 +138,13 @@ function evaluate(module: CompiledModule, actor: Entity, expr: Expr): number | u
   return typeof value === 'number' && Number.isFinite(value) ? Math.floor(value) : undefined;
 }
 
-/**
- * Whether the caster can supply what the spell asks for. Blocking conditions are named by the
- * module's own `prevents` lists, so the engine knows nothing about what silence or manacles are.
- */
+/** Whether the caster can supply what the spell asks for. */
 export function componentsMissing(
   txn: Transaction,
   actor: Entity,
   spell: SpellDef,
 ): Message | null {
-  // Which action a component is, per the module. A ruleset that names neither cannot have its
-  // casting interrupted that way.
+  // Which action a component is, per the module.
   const { verbal, somatic } = spellcastingOf(txn.module).componentActionTypes;
 
   for (const component of spell.components) {
@@ -200,10 +176,7 @@ export function consumeComponents(txn: Transaction, actor: Entity, spell: SpellD
   changeInventory(txn, txn.entity(actor.id) ?? actor, spell.materialComponent, -1);
 }
 
-/**
- * Pay for a spell, in whatever currency the module casts in. Returns the slot the spell went into,
- * so the caller knows how far it was upcast. A ritual pays nothing and takes time instead.
- */
+/** Pay for a spell, in whatever currency the module casts in. */
 export function paySpell(
   txn: Transaction,
   actor: Entity,
@@ -254,10 +227,7 @@ export function paySpell(
   return { ok: true, slot: level };
 }
 
-/**
- * Take up concentration on a spell, dropping whatever was already held. Only one is tracked per
- * creature, so `maxConcurrent` above one means the previous spell is not dropped.
- */
+/** Take up concentration on a spell, dropping whatever was already held. */
 export function beginConcentration(txn: Transaction, actor: Entity, spellId: string): void {
   const casting = spellcastingOf(txn.module);
   if (!casting.concentration.enabled) return;
@@ -269,10 +239,7 @@ export function beginConcentration(txn: Transaction, actor: Entity, spellId: str
   txn.putEntity({ ...current, concentrating: spellId });
 }
 
-/**
- * A blow that might shake a caster's hold on a spell. Called from the damage path, since that is
- * when concentration is tested. The difficulty is the module's formula.
- */
+/** A blow that might shake a caster's hold on a spell. */
 export function testConcentration(
   txn: Transaction,
   actor: Entity,

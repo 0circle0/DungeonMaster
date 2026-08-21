@@ -1,15 +1,4 @@
-/**
- * The `ref:` marker, which is doing two jobs in one string.
- *
- * `.describe()` is the only annotation zod gives a string, and `ref:` took it —
- * so a reference field was the one kind that could never explain itself, which
- * is backwards. "What does `giver` mean" is a better question than "what does
- * `name` mean", and the answer is usually a fact about the engine.
- *
- * The risk of putting two things in one string is a second parser somewhere
- * that only knows about the first. The editor had exactly that, and would have
- * started offering a dropdown bound to `content.npcs|A label. What actually…`.
- */
+/** The `ref:` marker, which is doing two jobs in one string. */
 
 import { describe, it, expect } from 'vitest';
 import { ref, refTarget, refHelp } from './common.js';
@@ -41,12 +30,7 @@ describe('ref markers', () => {
     expect(refHelp(undefined)).toBeNull();
   });
 
-  /**
-   * Every marker in the real schema still resolves to a collection. This is
-   * what would have caught the editor's second parser, and what will catch the
-   * next one: a target that comes back with prose stuck to it is a dropdown
-   * bound to nothing.
-   */
+  /** Every marker in the real schema still resolves to a collection. */
   it('resolves every marker in the schema to a bare collection path', () => {
     const seen = new Set<string>();
     const walk = (schema: unknown, depth: number): void => {

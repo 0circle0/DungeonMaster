@@ -1,18 +1,4 @@
-/**
- * `npm run check:projects`
- *
- * Every TypeScript file must belong to a TypeScript project.
- *
- * A file that no `tsconfig.json` includes still opens fine in an editor — it
- * lands in an *inferred* project, which has no path mappings, no Node types and
- * default module resolution. It lights up red while `npm run typecheck` passes
- * clean, because the typecheck never looked at it. That happened here to all
- * twenty test files and to `vitest.config.ts`, and it hid a test calling a
- * six-argument function with four.
- *
- * The check is the same one a person would do by hand: ask each project what
- * files it sees, and compare that against what is on disk.
- */
+/** `npm run check:projects` */
 
 import { execFileSync } from 'node:child_process';
 import { readdirSync, statSync } from 'node:fs';
@@ -21,8 +7,7 @@ import { join, relative, resolve } from 'node:path';
 /** Projects that between them must cover everything. */
 const PROJECTS = [
   'tsconfig.json',
-  // Excluded from the root project because it is the only package that needs
-  // the DOM lib; it still has to be covered by something.
+  // Excluded from the root project as the only package needing the DOM lib.
   'packages/library/tsconfig.json',
   'apps/editor/tsconfig.json',
   'apps/play/tsconfig.json',

@@ -1,20 +1,4 @@
-"""The Unsealing, Act II — the three wards.
-
-Three routes, four quests each, and you need any two of the three. The third stays open and
-unplayed.
-
-Every route has the same spine, so the skeleton is built once here and the writing is per-route
-below.
-
-The branch is inside the third quest of each route: restore the ward, or break through it. Both hand
-you the route's Ward-Key, because the key is what the ward was made out of. What differs is who saw
-you do it, what the Keepers hear within a fortnight, and one fact about the Deeproads that only
-breaking through gives you.
-
-`resolved_either_way` makes that completable: the two branch objectives are `optional`, so neither
-gates the quest, and one required `custom` objective completes when either flag is set. A quest
-whose objectives are all optional can never complete.
-"""
+"""The Unsealing, Act II — the three wards."""
 from dmkit.quests import (
     quest, stage, arc, reach, kill, flagged, resolved_either_way, set_flag,
     rep, deed, either, node, option, dialogue, npc, shop,
@@ -25,15 +9,7 @@ from dmkit.prose import pool
 def route(key, *, name, ward_name, key_item, approach_area, site_poi,
           site_dungeon, boss_monster, region_faction, level,
           xp=(150, 200, 250, 200), unlocks_from="the_undercroft"):
-    """The four quests of one route, in order.
-
-    `unlocks_from` is only for the journal — every quest below also states its own `requires`,
-    because `unlocks` marks a quest available and does not gate starting it.
-
-    The ward's tender is reached through `{key}_briefed`, which their conversation sets. The tenders
-    are declared in `NPCS` below, one per `approach_area`, and `check_quests.py` §11 is what holds
-    the relationship together.
-    """
+    """The four quests of one route, in order."""
     q1, q2, q3, q4 = (f"{key}_road", f"{key}_site", f"{key}_choice", f"{key}_key")
     broke, restored = f"{key}_broken", f"{key}_restored"
 
@@ -75,8 +51,7 @@ def route(key, *, name, ward_name, key_item, approach_area, site_poi,
             "The ward can be put back. It can also be taken the rest of the "
             "way down, which is faster and tells you more.",
             [
-                # Both optional, so neither gates completion; the required objective below is
-                # satisfied by either.
+                # Both optional; the required objective below is satisfied by either.
                 flagged("restore", "Put the ward back as it was.", restored,
                         optional=True),
                 flagged("break", "Take the ward the rest of the way down.",
@@ -89,8 +64,7 @@ def route(key, *, name, ward_name, key_item, approach_area, site_poi,
             unlocks=[q4],
             on_complete=[
                 either(broke,
-                       # Faster, and it costs you with everybody who tends these. The deed is
-                       # emitted here so whoever is standing at the ward witnesses it.
+                       # Faster, and it costs you with everybody who tends these.
                        [deed("ward_broken"), rep(region_faction, -10),
                         set_flag(f"{key}_open"), set_flag("knows_the_pattern")],
                        [deed("ward_restored"), rep("the_keepers", 12),
@@ -108,8 +82,7 @@ def route(key, *, name, ward_name, key_item, approach_area, site_poi,
             requires={"quests": [{"quest": q3, "status": "complete"}]},
             items=[(key_item, 1)],
             reputation={region_faction: 5},
-            # Every route opens the way below. Three unlockers for one quest, so no single route is
-            # load-bearing and any two will do.
+            # Every route opens the way below.
             unlocks=["the_way_below"],
             on_complete=[set_flag(f"{key}_done")],
         ),
@@ -149,9 +122,7 @@ ARCS = [
 ]
 
 
-# --- the people who tend them ---------------------------------------------
-# One per route, living in that route's `approach_area`, because the first quest of every route
-# sends you there and then asks you to find whoever tends the ward. There must be three.
+# --- the people who tend them: one per route, in that route's approach_area ---
 
 NPCS = [
     npc("thorn_warden_bel", "Bel of the Thornward",
@@ -181,12 +152,7 @@ NPCS = [
 def ward_talk(did, greeting, brief, restore_line, break_line, key_flag,
               region_faction, restored_flag, broken_flag, taken_flag,
               cold_line):
-    """The conversation every ward-tender has, in their own words.
-
-    Three states, and a redirect picks between them: before you have been in, after you have cleared
-    it and have to decide, and afterwards — which for somebody who broke a ward means being met by a
-    person who has heard.
-    """
+    """The conversation every ward-tender has, in their own words."""
     return dialogue(did, "greet", [
         node("greet", greeting, redirects=[
             ({"flags": [{"flag": f"{key_flag}_cleared", "equals": True}],

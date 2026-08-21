@@ -14,8 +14,6 @@ describe('the blank module scaffold', () => {
   it('lints clean except for the intended start to-dos', () => {
     const result = lintModule(JSON.stringify(blankModule()));
     const errors = result.diagnostics.filter((d) => d.severity === 'error');
-    // The console of a fresh module should read as a to-do list: where does
-    // play start, and where does the world exist — and nothing else.
     expect(errors.map((e) => e.code).sort()).toEqual(['empty_world', 'no_start_location']);
   });
 });

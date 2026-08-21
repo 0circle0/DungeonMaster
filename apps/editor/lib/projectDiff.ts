@@ -1,30 +1,6 @@
 'use client';
 
-/**
- * What a save has to write, which is almost never very much.
- *
- * The studio holds a world assembled in memory because everything it does is cross-referential, but
- * the storage is the project files and an edit touches one of them. Given the document now and the
- * document as last written, this works out which files differ.
- *
- * Why references and not paths
- *
- * `setAt` copies only the spine of the path it edits and leaves every untouched subtree as the same
- * object — an invariant `ValidationIndex` also depends on, since it keys a `WeakMap` on raw entry
- * objects. So a reference comparison over the collections finds exactly the entries that moved, in
- * one pass of pointer equality and no serialization.
- *
- * It is also correct where path-tracking could not be: `undo` and `redo` restore older documents
- * that share structure with the current one, and a rename fans out across every entry that referred
- * to the old id.
- *
- * What is recomputed rather than diffed
- *
- * The manifest and `shell.json` are recomputed and compared as text. Naming every entry costs a
- * regex apiece and no serializing, and the two files together are 124 KB on Aurendel, so "did a
- * collection gain a key, did a non-collection value move" becomes a string equality rather than a
- * reference comparison to get right.
- */
+/** What a save has to write, which is almost never very much. */
 
 import {
   liftMaps,
@@ -41,11 +17,7 @@ import {
 import type { ProjectManifest, Prefab, StyleTables, InstanceMap, PrefabLink } from '@dm/module';
 import type { WorldAuthoring, FileChange } from '@dm/library';
 
-/**
- * What a string costs to store, which is not its length. `sizes` feeds `storedBytes`, which is
- * shown to the author and compared against a quota; `text.length` counts UTF-16 code units, so an
- * em dash is undercounted by two thirds and an emoji by half.
- */
+/** What a string costs to store, which is not its length. */
 function utf8Length(text: string): number {
   let bytes = 0;
   for (let i = 0; i < text.length; i++) {
@@ -58,11 +30,7 @@ function utf8Length(text: string): number {
   return bytes;
 }
 
-/**
- * The document as it was last written, and enough about it to diff the next one. `doc` is the
- * lifted document — maps already out — so the arrays compared here are the same objects the store
- * holds; lifting is a shallow spread of `world`, so every collection array survives by reference.
- */
+/** The document as it was last written, and enough about it to diff the next one. */
 export interface ProjectSnapshot {
   readonly doc: Record<string, unknown>;
   readonly manifest: ProjectManifest;
@@ -72,33 +40,15 @@ export interface ProjectSnapshot {
   readonly maps: ReadonlyMap<string, Record<string, unknown>>;
   /** Path to byte length, so `storedBytes` is kept by delta rather than by scan. */
   readonly sizes: ReadonlyMap<string, number>;
-  /**
-   * Linked entries whose file is not a recipe, as `collection\u0000id`.
-   *
-   * These are the only links `prefabs/instances.json` has to carry: a recipe file names its own
-   * prefab, so recording it again in a sidecar states the same fact twice.
-   *
-   * Carried in the snapshot rather than recomputed, because a save visits only the entries that
-   * moved; the first one visits all of them, so the set starts complete.
-   */
+  /** Linked entries whose file is not a recipe, as `collection\u0000id`. */
   readonly literal: ReadonlySet<string>;
   /** `prefabs/instances.json` as it was written, so it is not rewritten unchanged. */
   readonly instancesText: string;
-  /**
-   * Every link by value, as `collection\u0000id` → signature.
-   *
-   * An entry's file text has three inputs — the entry, its prefab, and its link — so linking an
-   * existing entry to a prefab that has not itself changed moves no object a reference diff looks
-   * at.
-   *
-   * By value rather than by reference, because `recomputeInstances` rebuilds the whole map and
-   * every `PrefabLink` in it on every save; reference comparison would report all 767 of Aurendel's
-   * links as moved each time.
-   */
+  /** Every link by value, as `collection\u0000id` → signature. */
   readonly linkSigs: ReadonlyMap<string, string>;
 }
 
-/** A link reduced to something comparable. Key order is fixed here, not inherited. */
+/** A link reduced to something comparable. */
 function linkSig(link: PrefabLink): string {
   return JSON.stringify([link.id, link.params, link.overrides ?? []]);
 }
@@ -182,8 +132,7 @@ export function diffProject(
     sizes.delete(path);
   };
 
-  // Maps first, always. `COLLECTION_PATHS` counts `world.maps`, so a manifest built from the
-  // assembled document would name `project/world/maps/*.json` — files no bundle contains.
+  // Maps first, always.
   const { document: doc, maps } = liftMaps(next.doc);
 
   const manifest = manifestFor(doc);
@@ -198,9 +147,7 @@ export function diffProject(
   const { prefabs, style, instances } = next.authoring;
   const dirty = dirtyPrefabs(prefabs, style, previous);
 
-  // Links that are not what they were, including ones that have appeared and gone. An entry whose
-  // link moved must be rewritten even if the entry did not: it is the difference between a recipe
-  // file and a literal one.
+  // Links that are not what they were, including ones that have appeared and gone.
   const linkSigs = linkSigsOf(instances);
   const movedLinks = new Set<string>();
   for (const [key, sig] of linkSigs) {
@@ -232,8 +179,7 @@ export function diffProject(
       const oldEntries = ((previous?.doc[section] as Record<string, unknown> | undefined)?.[name] ?? []) as readonly unknown[];
       const before = byName(oldNames, oldEntries);
 
-      // The same array object, named the same way, with no prefab moving under it: nothing here can
-      // have changed, and a document has eighty of these.
+      // The same array object, named the same way, with no prefab moving under it.
       const sameArray = previous != null
         && entries === ((previous.doc[section] as Record<string, unknown> | undefined)?.[name]);
       const sameNames = oldNames.length === names.length
@@ -247,10 +193,7 @@ export function diffProject(
 
         const id = idOf(entry);
         const link = id ? linkFor(instances, collection, id) : null;
-        // A prefab that moved rewrites its entries even though the document did not touch them,
-        // since the recipe on disk now expands to something else. Three inputs decide this file's
-        // text: the entry, compared by reference below, plus the prefab and the link, which have to
-        // be asked about.
+        // A prefab that moved rewrites its entries: the recipe on disk expands to something else.
         const forced = (link !== null && dirty.has(link.id))
           || (id !== null && movedLinks.has(linkKey(collection, id)));
         if (!forced && before.get(file) === entry) return;
@@ -258,8 +201,7 @@ export function diffProject(
         const text = entryFileText(entry, link, prefabs, style);
         write(`${dir}/${file}`, text);
 
-        // Whether this entry ended up describing its own provenance decides whether the sidecar has
-        // to.
+        // Whether this entry ended up describing its own provenance decides whether the sidecar has to.
         if (link && id) {
           const key = linkKey(collection, id);
           if (isPrefabRecipe(JSON.parse(text))) literal.delete(key);
@@ -283,9 +225,7 @@ export function diffProject(
 
   // --- static maps ---------------------------------------------------------
 
-  // Folder-granular on purpose: a layer's CSV filename comes from its `name`, then its `kind`, then
-  // its index, so renaming a layer orphans a file no per-file comparison would notice. A folder is
-  // a few kilobytes.
+  // Folder-granular: a layer's CSV filename comes from its name, then kind, then index.
   const mapsById = new Map<string, Record<string, unknown>>();
   for (const entry of maps) mapsById.set(entry['id'] as string, entry);
 
@@ -316,8 +256,7 @@ export function diffProject(
   const live = new Set(prefabs.map((prefab) => prefab.id));
   for (const id of beforePrefabs.keys()) if (!live.has(id)) drop(prefabPath(id));
 
-  // Guarded on non-empty, mirroring `bundleModule`: a project that grows files it does not need is
-  // a tree the repository no longer matches.
+  // Guarded on non-empty, mirroring `bundleModule`.
   const sidecar = (path: string, value: object, had: object | undefined): void => {
     const full = `${AUTHORING_PREFIX}${path}`;
     if (Object.keys(value).length === 0) {
@@ -331,15 +270,7 @@ export function diffProject(
   sidecar('style.json', style, previous?.authoring.style);
   sidecar('contract.json', next.authoring.contract, previous?.authoring.contract);
 
-  /**
-   * The links that have nowhere else to live.
-   *
-   * Recipe-backed entries stay out of it: the file names its own prefab, and recording it twice
-   * leaves prefabs pointing at nothing.
-   *
-   * Compared as text, like the manifest and the shell, because this object is rebuilt every save
-   * and a reference test would rewrite it every save.
-   */
+  /** The links that have nowhere else to live. */
   const remainder: Record<string, Record<string, PrefabLink>> = {};
   for (const key of literal) {
     const cut = key.indexOf(LINK_SEP);
@@ -374,11 +305,7 @@ export function diffProject(
   };
 }
 
-/**
- * The snapshot of a world that was just read, without re-deriving its files. Without it the first
- * save after opening a world has no previous to compare against and rewrites every record — 2,858
- * of them for Aurendel — with the bytes they already had.
- */
+/** The snapshot of a world that was just read, without re-deriving its files. */
 export function snapshotFrom(
   doc: Record<string, unknown>,
   authoring: WorldAuthoring,
@@ -412,9 +339,7 @@ export function snapshotFrom(
     manifestText: files[PROJECT_MANIFEST] ?? '',
     shellText: files[`${AUTHORING_PREFIX}shell.json`] ?? '',
     instancesText: files[`${AUTHORING_PREFIX}${INSTANCES_FILE}`] ?? '',
-    // Seeded from what was read, so the first save rewrites an entry only if its link has moved
-    // since. `authoring.instances` here is the merged map the join produced, recipe-recovered links
-    // included.
+    // Seeded from what was read, so the first save rewrites an entry only if its link has moved since.
     linkSigs: linkSigsOf(authoring.instances),
     authoring,
     maps: mapsById,

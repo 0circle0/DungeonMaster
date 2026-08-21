@@ -1,10 +1,4 @@
-/**
- * Preview simulations, for the editor.
- *
- * These are the same `rollLoot` and `rollEncounter` the game plays with, run many times to produce
- * a distribution. That identity is the point: a preview with its own copy of the odds would drift
- * from actual play.
- */
+/** Preview simulations, for the editor. */
 
 import { Rng } from '@dm/core';
 import type { CompiledModule, Scope } from '@dm/module';
@@ -55,10 +49,7 @@ interface Options {
   readonly labelFor?: (id: string) => string;
 }
 
-/**
- * Roll a loot table many times. Entries the party does not qualify for never appear, because the
- * engine removes them before drawing, so the reported odds are the odds this party will experience.
- */
+/** Roll a loot table many times. */
 export function simulateLoot(
   module: CompiledModule,
   tableId: string,
@@ -198,15 +189,7 @@ export interface PerceptionPreview {
   readonly cells: readonly PerceptionCell[];
 }
 
-/**
- * How far each sense reaches across a sketch of a map.
- *
- * For the editor: an author changing a threshold or a falloff should see the shape of it
- * immediately. It runs the engine's own propagation rather than a reimplementation, so what the
- * editor draws and what happens in play cannot drift.
- *
- * `layout` is rows of terrain ids; the observer stands at `source`.
- */
+/** How far each sense reaches across a sketch of a map. */
 export function simulatePerception(
   module: CompiledModule,
   options: {
@@ -229,8 +212,7 @@ export function simulatePerception(
   }
   const tiles = builder.freeze();
 
-  // A real game state holding nothing but this sketch, so the preview asks the same questions of
-  // the same functions the reducer does.
+  // A game state holding nothing but this sketch.
   const base = newGame(module, { seed: 1, party: [defaultChoices(module, 'Preview')] });
   const template = base.entities[base.party[0]!]!;
 
@@ -258,9 +240,7 @@ export function simulatePerception(
 
   for (let y = 0; y < height; y += 1) {
     for (let x = 0; x < width; x += 1) {
-      // Someone standing here: how much of the source reaches them? Built from the plain template
-      // rather than the source, so a statblock picked as the emitter cannot smuggle its own sense
-      // ranges into the perceiver.
+      // Someone standing here: how much of the source reaches them?
       const observer: Entity = { ...template, id: 'preview:observer', map: 'preview', position: { x, y } };
       const context = {
         module,

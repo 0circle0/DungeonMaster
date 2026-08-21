@@ -1,16 +1,4 @@
-/**
- * Pinned two ways, because there are two ways to be wrong here.
- *
- * The formula must match `dmkit.lore.rumoured` byte for byte while both exist,
- * or a place rebuilt in the studio becomes findable at a different difficulty
- * than the one Aurendel ships. And `dcKnowing` must agree with what the engine
- * will actually compute, so the preview an author reads is the check they get
- * — it is run through the real DSL evaluator rather than trusted.
- *
- * `readRumoured` is the third: the editor has to be able to open a place that
- * already has a formula, which means the round trip has to hold on all 36 of
- * the ones Aurendel ships.
- */
+/** Pinned two ways, because there are two ways to be wrong here. */
 
 import { describe, it, expect } from 'vitest';
 import { fileURLToPath } from 'node:url';
@@ -85,9 +73,6 @@ describe('readRumoured', () => {
     const readable = hidden.filter((poi) => readRumoured(poi['discover']) !== null);
     expect(readable.length).toBe(38);
 
-    // Every anchored place is also a readable one — no hand-written formula
-    // has crept in that the editor could show but not edit.
-    // And what comes back rebuilds the formula it came from.
     for (const poi of readable) {
       const spec = readRumoured(poi['discover'])!;
       expect(rumoured(spec).discover).toEqual(poi['discover']);
@@ -135,8 +120,6 @@ describe('noticing', () => {
   });
 
   it('teaches from the trigger, where there is no roll to be before', () => {
-    // Unlike a dialogue option, an arrival trigger has no check to run ahead
-    // of — so the effect belongs here and there is nowhere else to put it.
     const trigger = noticing({ id: 't', description: 'd', clue: 'c', mode: 'always' });
     expect(trigger['mode']).toBe('always');
     expect(trigger['effects']).toEqual([{ learnLore: { entry: 'c' } }]);

@@ -105,8 +105,6 @@ describe('compileModule', () => {
     });
 
     it('accepts every reference in the fixture, proving the walker reaches them', () => {
-      // A walker that silently visits nothing would also report zero errors, so confirm it found
-      // references by breaking one of each kind.
       const kinds: Array<(doc: GameModule) => void> = [
         (d) => { d.content.monsters[0]!.abilities = ['nope']; },
         (d) => { d.world.biomes[0]!.roomTemplates = ['nope']; },
@@ -189,42 +187,14 @@ describe('hashModule', () => {
     expect(hashModule(changed)).not.toBe(original);
   });
 
-  /**
-   * Do not "fix" this test by updating the expected values.
-   *
-   * `compileModule` hashes `parsed.data` — the document after zod applies defaults — so any new
-   * top-level field carrying a `.default()` changes the hash of every module ever authored, and
-   * `load()` refuses a save whose recorded hash no longer matches.
-   *
-   * If this test fails, a schema change did it. The fix is to make the new field `.optional()`,
-   * since an absent key stays absent in `parsed.data`.
-   *
-   * One change cannot take that fix: a new sentence for the engine to say. `systemTextSchema` gives
-   * every `message` a `.default()`, so a new `SYSTEM_TEXT` entry appears in `parsed.data` for every
-   * module that has not declared it. Making messages `.optional()` would not help — the messages
-   * `minimal` leaves to their defaults would then vanish from the document and move the hash by as
-   * much.
-   *
-   * The number below has been re-stamped for: the `lore.learned` sentences;
-   * `rules.resolution.swingStacking`; `rules.resolution.criticalScope`; and `rules.temperament`
-   * with `rules.perception.maxMarksPerTile`. Each is a policy the ruleset holds an opinion about,
-   * which is declared rather than invented as a fallback. Their per-entry companions —
-   * `rules.conditions[].swings`, `content.monsters[].temperament`, `content.npcs[].temperament`,
-   * `world.terrains[].marks` — are `.optional()` and moved nothing. Saves from before each move
-   * need `allowModuleDrift`.
-   */
+  /** Do not "fix" this test by updating the expected values. */
   it('is unchanged for a module that declares no mods', () => {
-    // `minimal` is the witness rather than greenmarch: greenmarch carries mods and authored `extra`
-    // data, so its hash moves whenever its content does. `minimal` declares no mods, so only the
-    // schema can move this number.
     const at = (name: string) => fileURLToPath(new URL(`../../../modules/${name}`, import.meta.url));
     expect(loadModuleFrom(at('minimal')).hash).toBe('25b811d298a743a2');
   });
 
   it('treats an absent `mods` key as absent, not as an empty list', () => {
-    // The property the pinned number depends on. If `mods` were `.default([])` rather than
-    // `.optional()`, zod would insert `mods: []` into every document ever parsed and every module
-    // hash would change. The two hashes below being different is what proves the key stays out.
+    // The property the pinned number depends on.
     const bare = compileModule(loadMinimal());
     const doc = loadMinimal();
     doc['mods'] = [];

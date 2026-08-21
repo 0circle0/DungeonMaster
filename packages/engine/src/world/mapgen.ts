@@ -1,12 +1,4 @@
-/**
- * Building tiles from a map spec.
- *
- * A module describes a space either by size (`width`/`height` as dice, so it varies per instance)
- * or by a hand-authored `layout` of glyph rows. Set pieces and generated space compose.
- *
- * Palettes are the indirection that makes one generator produce a stone crypt or a reed marsh: the
- * generator asks for "floor" and "wall", and the palette decides what those are.
- */
+/** Building tiles from a map spec. */
 
 import { Rng, parseDice, rollDice, valueNoise } from '@dm/core';
 import type { CompiledModule } from '@dm/module';
@@ -20,17 +12,13 @@ export interface MapSpec {
   width: string;
   height: string;
   palette?: string;
-  /** A `world.maps` id used verbatim. Callers branch to `buildStaticMap` before generating. */
+  /** A `world.maps` id used verbatim. */
   static?: string;
   layout: string[];
   legend: Record<string, string>;
 }
 
-/**
- * Terrain laid over the floor after a space is generated. `speckle` is an independent roll per
- * tile, right for debris; `patch` thresholds a noise field, so the terrain comes out connected and
- * can carry a shoreline.
- */
+/** Terrain laid over the floor after a space is generated. */
 export interface ScatterDef {
   readonly terrain: string;
   readonly frequency: number;
@@ -75,10 +63,7 @@ function resolveScatter(entry: Partial<ScatterDef>): ScatterDef {
   };
 }
 
-/**
- * Resolve a palette by id. Falls back to the first passable and first impassable terrain the module
- * declares, so a module that never mentions palettes still generates something walkable.
- */
+/** Resolve a palette by id. */
 export function resolvePalette(module: CompiledModule, paletteId: string | undefined): Palette {
   const definition = paletteId
     ? module.find<PaletteDef>('world.palettes', paletteId)
@@ -118,10 +103,7 @@ export interface BuiltMap {
   readonly marks: Readonly<Record<string, { x: number; y: number }[]>>;
 }
 
-/**
- * Build a map from its spec. A `layout` is used verbatim; otherwise a walled rectangle is generated
- * at the rolled size. Scatter terrain is sprinkled afterwards, never onto walls.
- */
+/** Build a map from its spec. */
 export function buildMap(
   module: CompiledModule,
   spec: MapSpec | undefined,
@@ -150,8 +132,7 @@ export function buildMap(
         if (terrain) {
           builder.set(x, y, terrain);
         } else {
-          // An unmapped glyph is a marker — a spawn point, a treasure spot — recorded for the
-          // caller and drawn as floor.
+          // An unmapped glyph is a marker: recorded for the caller and drawn as floor.
           builder.set(x, y, palette.floor);
         }
         if (!(glyph in legend) && glyph !== ' ') {
@@ -179,18 +160,12 @@ export function buildMap(
   return { tiles: builder.freeze(), palette, marks };
 }
 
-/**
- * Lay a palette's scatter over the open floor. Entries are laid in priority order and never
- * overwrite one another, so a later entry cannot delete a share of an earlier one.
- */
+/** Lay a palette's scatter over the open floor. */
 export function applyScatter(
   builder: MapBuilder,
   palette: Palette,
   rng: Rng,
-  /**
-   * Tiles scatter may never claim, packed `y * width + x`. Dungeons reserve room centres, the
-   * entrance and doorways: an impassable rubble pile on the boss room's centre is not dressing.
-   */
+  /** Tiles scatter may never claim, packed `y * width + x`. */
   reserved: ReadonlySet<number> = new Set(),
 ): void {
   const { width, height } = builder;
@@ -199,8 +174,7 @@ export function applyScatter(
     if (index >= 0 && index < claimed.length) claimed[index] = 1;
   }
 
-  // A stable sort by priority: equal priorities keep their declared order, so reordering identical
-  // entries cannot change the map.
+  // A stable sort by priority; equal priorities keep their declared order.
   const entries = palette.scatter
     .map((entry, index) => ({ entry, index }))
     .sort((a, b) => a.entry.priority - b.entry.priority || a.index - b.index);
@@ -217,9 +191,7 @@ export function applyScatter(
     if (entry.frequency <= 0 || !entry.terrain) continue;
 
     if (entry.distribution === 'speckle') {
-      // The original roll, drawn in the original order from the one shared stream, so a module that
-      // has not opted into patches generates exactly the map it did before. The roll happens before
-      // the `open` check, so skipping an already-claimed tile cannot shift the stream either.
+      // The original roll, drawn in the original order, before the `open` check.
       for (let y = 1; y < height - 1; y += 1) {
         for (let x = 1; x < width - 1; x += 1) {
           if (!rng.chance(entry.frequency)) continue;
@@ -236,8 +208,7 @@ export function applyScatter(
       octaves: entry.octaves,
     });
 
-    // Threshold by rank rather than by a fixed value, so `frequency` means the fraction of floor
-    // covered whatever shape the noise takes.
+    // Threshold by rank, so `frequency` is the fraction of floor covered.
     const candidates: { at: number; value: number }[] = [];
     for (let y = 1; y < height - 1; y += 1) {
       for (let x = 1; x < width - 1; x += 1) {
@@ -255,8 +226,7 @@ export function applyScatter(
     const inPatch = new Set<number>();
     for (const tile of chosen) inPatch.add(tile.at);
 
-    // The shore goes down first, so the patch can be written over its inner edge without a hole
-    // appearing.
+    // The shore goes down first, so the patch can be written over its inner edge without a hole appearing.
     if (entry.edgeTerrain && entry.edgeWidth > 0) {
       const reach = entry.edgeWidth;
       for (let y = 1; y < height - 1; y += 1) {
@@ -282,37 +252,22 @@ export function applyScatter(
   }
 }
 
-/**
- * Make sure every piece of walkable floor can be reached from the entry.
- *
- * Patches of impassable terrain can strand a corner of the map or bury the entry point. Rather than
- * constrain the generator, anything cut off is dug back out along a straight line to the main
- * region.
- *
- * The invariant: `buildMap` never returns a map whose walkable floor is in more than one piece.
- */
+/** Make sure every piece of walkable floor can be reached from the entry. */
 export function reconnect(
   builder: MapBuilder,
   module: CompiledModule,
   palette: Palette,
   entry: Position,
-  /**
-   * Cells the repair may never dig through nor worry about, packed with the grid `key()`. Dungeons
-   * pass their static rooms' rectangles, so a pocket the author sealed stays sealed.
-   */
+  /** Cells the repair may never dig through nor worry about, packed with the grid `key()`. */
   avoid: ReadonlySet<number> = new Set(),
 ): void {
   const terrain = new TerrainIndex(module);
   const { width, height } = builder;
-  // Connectivity is judged for `rules.defaultMovementMode`, not for a word the engine happens to
-  // know.
+  // Connectivity is judged for `rules.defaultMovementMode`, not for a word the engine happens to know.
   const defaultMode = defaultMovementModeOf(module);
   const WALK = defaultMode === null ? [] : [defaultMode];
 
-  /**
-   * What to replace a blocking tile with: whatever the scatter entry declared as that terrain's
-   * edge, so a way cut through a lake is a ford of shallow water rather than a dry corridor.
-   */
+  /** What to replace a blocking tile with: the terrain the scatter entry declared as its edge. */
   const walkable = (id: string): boolean => {
     const definition = module.find<{ passable?: boolean; requiresMode?: string[] }>(
       'world.terrains',
@@ -334,16 +289,14 @@ export function reconnect(
     builder.set(entry.x, entry.y, crossing(entry));
   }
 
-  // Stranded tiles whose every route back crosses an avoided cell, given up on so the search does
-  // not pick them again.
+  // Stranded tiles whose every route back crosses an avoided cell.
   const abandoned = new Set<number>();
 
   for (let attempt = 0; attempt < 32; attempt += 1) {
     const tiles = builder.freeze();
     const main = floodFill(tiles, terrain, entry, WALK);
 
-    // Any walkable tile the flood did not reach is stranded. Tiles inside an avoided region are the
-    // author's business.
+    // Any walkable tile the flood did not reach is stranded.
     let stranded: Position | null = null;
     for (let y = 1; y < height - 1 && !stranded; y += 1) {
       for (let x = 1; x < width - 1; x += 1) {
@@ -357,8 +310,7 @@ export function reconnect(
     }
     if (!stranded) return;
 
-    // Dig straight back to the nearest tile of the main region whose line does not cross an avoided
-    // cell, so the repair reads as a ford or a causeway.
+    // Dig straight back to the nearest main-region tile whose line crosses no avoided cell.
     const crossesAvoid = (target: Position): boolean =>
       avoid.size > 0 && line(stranded, target).some((step) => avoid.has(packKey(step)));
 

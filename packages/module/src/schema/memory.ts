@@ -1,16 +1,4 @@
-/**
- * Memory, gossip, and learning.
- *
- * A deed is not a global fact: it is witnessed by particular people, spreads imperfectly through
- * particular settlements, distorts as it travels, and fades unless something renews it. Two runs of
- * the same module diverge because who knows what diverges.
- *
- * `mode` sets who is driving:
- *
- *   - `simulated` — the engine runs witnessing, spread and decay on its own;
- *   - `manual` — nothing propagates unless content says so explicitly;
- *   - `hybrid` — the engine simulates, but anything a rule states explicitly wins.
- */
+/** Memory, gossip, and learning. */
 
 import { z } from 'zod';
 import { PredicateSchema } from '../dsl/schema.js';
@@ -29,25 +17,15 @@ export const forgettingSchema = z
     curve: forgettingCurveSchema.default('exponential'),
     /** In-world days for a memory to lose half its strength. */
     halfLifeDays: z.number().min(0).default(30),
-    /**
-     * Strength below which a memory is gone. A floor above zero means some things are never
-     * forgotten.
-     */
+    /** Strength below which a memory is gone. */
     floor: z.number().min(0).max(1).default(0.05),
     /** Recalling a memory renews it, which is why grudges outlive kindnesses. */
     reinforceOnRecall: z.number().min(0).max(1).default(0.25),
     /** Multiplier per point of a deed's own memorability. */
     memorabilityWeight: z.number().min(0).default(1),
-    /**
-     * How much longer somebody remembers a deed of a kind they care about, for anything in an NPC's
-     * `caresAbout`.
-     */
+    /** How much longer a deed of a kind in `caresAbout` is remembered. */
     caresAboutMultiplier: z.number().min(0).default(2),
-    /**
-     * What half-life means for the `linear` curve, as a multiple of `halfLifeDays`: strength runs
-     * down to the floor over `halfLifeDays × this`. Two makes it agree with the exponential curve
-     * at the halfway mark.
-     */
+    /** What half-life means for the `linear` curve, as a multiple of `halfLifeDays`. */
     linearSpanMultiplier: z.number().min(0.01).default(2),
     /** Deed kinds exempt from forgetting entirely. */
     neverForget: z.array(ref('narrative.deedKinds')).default([]),
@@ -55,40 +33,27 @@ export const forgettingSchema = z
   })
   .strict();
 
-/**
- * How news travels. Spread is per-hop rather than global: a rumour moves from someone who knows to
- * someone who does not, losing fidelity each time, so a village two days away hears a garbled
- * version and the next hears nothing.
- */
+/** How news travels. */
 export const gossipSchema = z
   .object({
     enabled: z.boolean().default(true),
     /** Fraction of a settlement's people who learn a known rumour per day. */
     spreadPerDay: z.number().min(0).max(1).default(0.25),
-    /** How many retellings before a rumour stops moving. 0 disables spread. */
+    /** How many retellings before a rumour stops moving. */
     maxHops: z.number().int().min(0).default(4),
     /** Strength retained per hop. */
     hopRetention: z.number().min(0).max(1).default(0.75),
     /** Chance per hop that a detail changes — who did it, or how badly. */
     distortionPerHop: z.number().min(0).max(1).default(0.15),
-    /**
-     * Whether a rumour needs someone to physically travel between settlements. With it off, news
-     * teleports.
-     */
+    /** Whether a rumour needs someone to physically travel between settlements. */
     requiresTravel: z.boolean().default(true),
     /** Multiplier on spread between settlements of hostile factions. */
     crossFactionRate: z.number().min(0).max(1).default(0.4),
     /** Minimum severity worth repeating; small deeds die where they happen. */
     minimumSeverity: z.number().min(0).default(1),
-    /**
-     * What a listener's `gullibility` is multiplied by when deciding whether a rumour takes. At the
-     * default of 2, a gullibility of 0.5 is the neutral point.
-     */
+    /** What a listener's `gullibility` is multiplied by when deciding whether a rumour takes. */
     gullibilityScale: z.number().min(0).default(2),
-    /**
-     * Strength kept by a rumour that came out garbled. `distortionPerHop` decides whether a
-     * retelling distorts; this is how much it costs.
-     */
+    /** Strength kept by a rumour that came out garbled. */
     garbledRetention: z.number().min(0).max(1).default(0.5),
     /** Rumours that spread even when nobody survived to tell it. */
     spreadsWithoutWitness: z.boolean().default(false),
@@ -96,16 +61,10 @@ export const gossipSchema = z
   })
   .strict();
 
-/**
- * Who sees what. "Deadmen tell no tales" is what makes stealth and massacre mechanically distinct:
- * kill every witness and the deed never enters the social system.
- */
+/** Who sees what. */
 export const witnessSchema = z
   .object({
-    /**
-     * Same location by default; a wider radius includes neighbouring places. With
-     * `requiresLineOfSight` off, zero means everyone present.
-     */
+    /** Same location by default; a wider radius includes neighbouring places. */
     radius: z.number().int().min(0).default(0),
     /** Sneaking and darkness can prevent witnessing. */
     requiresLineOfSight: z.boolean().default(true),
@@ -121,11 +80,7 @@ export const witnessSchema = z
   })
   .strict();
 
-/**
- * Simulated learning: creatures and factions adapt to how the party fights. Memory changes how
- * people feel; learning changes what they do — the third goblin ambush prepares for the fireball
- * that killed the first two.
- */
+/** Simulated learning: creatures and factions adapt to how the party fights. */
 export const learningSchema = z
   .object({
     enabled: z.boolean().default(true),
@@ -147,10 +102,7 @@ export const learningSchema = z
   })
   .strict();
 
-/**
- * A named override the GM can drop on any of the above. The escape hatch that makes `hybrid` mode
- * usable: let the simulation run, but state that this deed always reaches these people.
- */
+/** A named override the GM can drop on any of the above. */
 export const memoryRuleSchema = z
   .object({
     id: idSchema,

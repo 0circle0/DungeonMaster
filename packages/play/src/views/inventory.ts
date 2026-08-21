@@ -1,9 +1,4 @@
-/**
- * What the selected character carries, as data.
- *
- * Gains what the terminal never computed: whether each item is equipped and in
- * which slot, which a browser inventory needs for its Equip/Unequip buttons.
- */
+/** What the selected character carries, as data. */
 
 import type { CompiledModule } from '@dm/module';
 import type { GameState } from '@dm/engine';

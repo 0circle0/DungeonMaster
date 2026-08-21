@@ -1,12 +1,4 @@
-/**
- * The map as data.
- *
- * Both front ends draw from this one picture: the same three-state visibility
- * ladder — lit and visible, remembered but out of sight, unknown — the same
- * glyphs, the same tones. It is the derivation most likely to drift between a
- * terminal and a browser, and the one where a drift is most visible, so there
- * is exactly one copy of it.
- */
+/** The map as data. */
 
 import type { CompiledModule } from '@dm/module';
 import type { GameState, Entity, EntityId, Position } from '@dm/engine';
@@ -49,12 +41,7 @@ export interface MapCellView {
   /** Item stacks lying on the floor here. */
   readonly items: number;
   readonly gate: { readonly id: string; readonly open: boolean } | null;
-  /**
-   * A trap the party knows about.
-   *
-   * Never set for a `hidden` one: leaking an undiscovered trap through the UI
-   * is the same failure as drawing a creature through a wall.
-   */
+  /** A trap the party knows about. */
   readonly trap: 'found' | 'disarmed' | 'sprung' | null;
 }
 

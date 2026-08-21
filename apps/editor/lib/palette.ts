@@ -1,16 +1,4 @@
-/**
- * Everything in the module, one keystroke away.
- *
- * A dock of five tabs and a table per collection is a fine way to browse and a
- * poor way to *arrive*. Opening `bog_hound` currently means knowing it is a
- * monster, that monsters live under Content, and then finding it among a
- * hundred and twenty-seven. At Aurendel's size the tree stops being navigation
- * and becomes a place to get lost in.
- *
- * So: one box, and in it every entry in all 48 collections, every collection,
- * every view, and the commands. 2,300 entries on the largest module there is,
- * which is small enough to score on every keystroke without any cleverness.
- */
+/** Everything in the module, one keystroke away. */
 
 import { COLLECTIONS, SECTIONS, labelFor } from './schema';
 import { VIEW_LABELS } from '@/app/studio/selection';
@@ -23,13 +11,7 @@ export type Command =
   | { readonly kind: 'view'; readonly id: string; readonly label: string; readonly hint: string; readonly view: ViewId }
   | { readonly kind: 'action'; readonly id: string; readonly label: string; readonly hint: string; readonly run: () => void };
 
-/**
- * A subsequence match, scored so the obvious answer comes first.
- *
- * Not a fuzzy-search library: the whole requirement is that typing `boghou`
- * finds the bog hound and that an exact id beats a coincidence buried in a
- * description. Anything more elaborate would need tuning nobody has time for.
- */
+/** A subsequence match, scored so the obvious answer comes first. */
 export function score(haystack: string, needle: string): number {
   if (needle === '') return 1;
   const text = haystack.toLowerCase();
@@ -40,8 +22,7 @@ export function score(haystack: string, needle: string): number {
 
   const at = text.indexOf(want);
   if (at >= 0) {
-    // A match at a word boundary reads as intentional; one mid-word is often
-    // a coincidence, so it scores lower.
+    // A match at a word boundary scores higher than one mid-word.
     const boundary = at === 0 || /[\s_.:-]/.test(text[at - 1] ?? '');
     return (boundary ? 300 : 150) - at;
   }
@@ -60,13 +41,7 @@ export function score(haystack: string, needle: string): number {
   return 0;
 }
 
-/**
- * Every place worth going, built once per document.
- *
- * Actions come from the caller because they close over the studio's own state;
- * everything else is derived, so a collection added to the schema shows up here
- * with no edit.
- */
+/** Every place worth going, built once per document. */
 export function buildCommands(doc: ModuleDoc, actions: readonly Command[]): readonly Command[] {
   const out: Command[] = [...actions];
 
@@ -109,12 +84,7 @@ export function buildCommands(doc: ModuleDoc, actions: readonly Command[]): read
   return out;
 }
 
-/**
- * The best few matches.
- *
- * Entries win ties against collections and views, because someone who typed a
- * name is looking for the thing rather than the place it lives.
- */
+/** The best few matches. */
 export function search(commands: readonly Command[], query: string, limit = 30): readonly Command[] {
   const trimmed = query.trim();
   if (trimmed === '') {

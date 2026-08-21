@@ -1,26 +1,4 @@
-"""Aurendel — the nine powers the questline never had to name.
-
-The main six are the story of the Unsealing: a Crown that wants it quiet, a
-Library that wants it written down, Keepers who want the doors shut, a hold that
-charges for the privilege of not opening one, forty guides, and the thing on the
-other side. They are continental. They have nothing to say about who is allowed
-to cut peat.
-
-These nine are local, and that is the point of them. Each holds one region, each
-has a rank ladder worth climbing, and each declares `relations` that spill one
-hop into the main six — so salvaging a wreck off the Strand is eventually a fact
-the Crown has an opinion about, without the Crown having to declare a coastline.
-
-Two rules, both learned the hard way elsewhere in this module:
-
-  * **A faction with no deed kind is a number.** Standing moved only by
-    `adjustReputation` is silent: nobody witnesses it, nobody spreads it, nobody
-    is cold to you a fortnight later in a different town. Every faction below
-    names at least one deed so the memory model carries it.
-  * **`decayPerDay` is mercy, and not everybody gets it.** Standing drifts back
-    toward neutral without crossing it. A guild forgets. A drowned bell does
-    not, and neither do people who count wrecks.
-"""
+"""Aurendel — the nine powers the questline never had to name."""
 from dmkit.factions import regional, deed_kind
 
 FACTIONS = [
@@ -115,9 +93,7 @@ FACTIONS = [
 ]
 
 
-# --- deeds ----------------------------------------------------------------
-# `severity` is what a witness who identifies you costs. The asymmetry is
-# deliberate throughout: it is easier to be remembered for the bad one.
+# --- deeds: `severity` is what a witness who identifies you costs ---
 
 DEED_KINDS = [
     deed_kind("under_kept", "Kept the Under", "the_ratcatchers", 12),

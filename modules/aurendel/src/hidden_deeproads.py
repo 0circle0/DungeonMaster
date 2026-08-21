@@ -1,24 +1,4 @@
-"""The Deeproads' hidden threads — three, at the top of the ladder.
-
-The spine ends down here and uses five of the ten areas. The other five — the
-Deep Market Road, the Sunless River, the Black Bridge, the Broken Stair and the
-Weeping Vault — carry four dungeons, a toll post, a set of lamps that are still
-lit, a chasm and a shaft, and nothing has ever mentioned any of it.
-
-Three threads, and they are all the same suspicion the Wayfinders have never
-written down: **the Deeproads were not dug. They were finished.**
-
-  * **The Lamps That Are Still Lit** — nobody has oiled the market road in four
-    hundred years and the lamps are lit.
-  * **What the Bridge Was Built Over** — the Black Bridge has footings on both
-    sides and the chasm has no bottom, so the footings stand on something.
-  * **The Weeping Vault** — the columns weep, the water is warm, and the shaft
-    above them goes up into rock with no surface at the end of it.
-
-The Broken Stair is the over-tuned one. Level 10 ground at the bottom of level
-10 ground, which in the Deeproads means it is worse than the finale, and the
-seal says so.
-"""
+"""The Deeproads' hidden threads — three, at the top of the ladder."""
 from dmkit.quests import npc, shop, quest, reach, kill, flagged, arc
 from lore import (
     clue, thread, rumour, favour, talk, coldshoulder, finding, rumoured,

@@ -1,14 +1,4 @@
-/**
- * The examples a deployment happens to be carrying.
- *
- * Everything here is optional by design. There may be no catalog, no artifact
- * behind an entry, no network, or no `content/` directory at all — a deployment
- * that ships nothing but the app is a supported configuration, because the
- * library is the source of truth and these files are only a seed. So nothing in
- * this file throws: the worst case is an empty list and a quiet line in the UI,
- * never an error screen in front of somebody who only wanted to open their own
- * world.
- */
+/** The example catalog a deployment ships under `content/`. */
 
 import { gunzipJson } from './gzip.js';
 import { isEnvelope, envelopeFromDoc } from './envelope.js';
@@ -46,13 +36,7 @@ function looksLikeCatalog(value: unknown): value is Catalog {
   );
 }
 
-/**
- * The catalog, or an empty one.
- *
- * A 404, a parse failure, a captive-portal HTML page, being offline — all the
- * same answer. There is nothing a caller could usefully do differently, and
- * every one of them ends in "this deployment has no examples".
- */
+/** Fetches the catalog under `base`. */
 export async function fetchCatalog(base: string = CONTENT_BASE): Promise<Catalog> {
   try {
     const response = await fetch(`${base}/catalog.json`, { cache: 'no-cache' });
@@ -64,13 +48,7 @@ export async function fetchCatalog(base: string = CONTENT_BASE): Promise<Catalog
   }
 }
 
-/**
- * One example, inflated and wrapped.
- *
- * Null rather than a throw when it is not there: an entry can outlive its
- * artifact, and "Aurendel isn't available on this server" is one line next to a
- * button, not a broken page.
- */
+/** Fetches one example as an envelope. */
 export async function fetchExampleEnvelope(
   id: string,
   base: string = CONTENT_BASE,
@@ -81,7 +59,7 @@ export async function fetchExampleEnvelope(
     const bytes = new Uint8Array(await response.arrayBuffer());
     const parsed = await gunzipJson<unknown>(bytes);
     if (isEnvelope(parsed)) return parsed;
-    // A plain document is just as loadable; only the wrapper is missing.
+    // A bare document rather than an envelope.
     if (typeof parsed === 'object' && parsed !== null) {
       return envelopeFromDoc(parsed as Record<string, unknown>, id);
     }
@@ -91,13 +69,7 @@ export async function fetchExampleEnvelope(
   }
 }
 
-/**
- * One example as the project it is.
- *
- * What the studio fetches, because what the studio edits is files. The player
- * takes `<id>.json.gz` — the compiled module — from the function above; these
- * are two artifacts of one world and each app gets the one it can use.
- */
+/** Fetches one example as its project files, which is what the studio edits. */
 export async function fetchExampleProject(
   id: string,
   base: string = CONTENT_BASE,

@@ -1,15 +1,4 @@
-/**
- * The journal panels, rendered.
- *
- * `Quests` and `Lore` are thin, but thin is where the null dereference lives: a
- * quest in no arc gives `group.arc === null`, and an unlearned clue gives a view
- * with no words in it. Both are the *normal* case rather than an edge, and
- * neither is reachable from a type error. Rendering to a string is enough to
- * prove they survive it, and needs no browser.
- *
- * Lives in `lib/` rather than beside the component because `vitest.config.ts`
- * collects `apps/ ** / *.test.ts` and the component file is `.tsx`.
- */
+/** The journal panels, rendered. */
 
 import { describe, it, expect } from 'vitest';
 import { createElement } from 'react';
@@ -58,8 +47,6 @@ describe('the lore panel', () => {
     const html = render(module, fresh(), Lore);
     expect(html).toContain('The Drowned King');
     expect(html).toContain('0/2');
-    // The blank is the whole point: a thread you have one piece of has to look
-    // like a thread you have one piece of.
     expect(html).toContain('clue unknown');
     expect(html).not.toContain('turn of the year');
   });
@@ -84,8 +71,6 @@ describe('the lore panel', () => {
 
 describe('the quest panel', () => {
   it('renders a quest that belongs to no arc', () => {
-    // `journalByArc` returns `arc: null` for these, and the heading has to be
-    // skipped rather than dereferenced.
     const module = moduleWith(LORE);
     const state = newGame(module, { seed: 3, party: [defaultChoices(module, 'Ash')] });
     const withQuest: GameState = {

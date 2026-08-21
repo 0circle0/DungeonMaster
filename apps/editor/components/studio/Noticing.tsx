@@ -1,23 +1,6 @@
 'use client';
 
-/**
- * What a place gives up when you are standing on it.
- *
- * Some facts have nobody next to them. A ship in the middle of the ice does not
- * talk, and which way it is pointed is the whole of what it has to say. 114 of
- * Aurendel's places carry an arrival trigger that teaches a clue for exactly
- * that reason.
- *
- * Written out it is five nested fields for one sentence and one clue, and the
- * two that matter — `on: "enter"` and where the effect goes — are the two an
- * author has no reason to remember. Unlike a dialogue option there is no check
- * to be careful about here: a trigger has nothing to run before, so the effect
- * belongs on it and there is nowhere else to put it.
- *
- * Existing triggers are listed rather than hidden, because a place that already
- * says something on arrival is the thing you need to know before adding a
- * second one.
- */
+/** What a place gives up when you are standing on it. */
 
 import { useState } from 'react';
 import { noticing } from '@dm/authoring';

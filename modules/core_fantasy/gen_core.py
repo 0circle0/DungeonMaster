@@ -1,17 +1,12 @@
 #!/usr/bin/env python3
-"""Generate modules/core_fantasy/module.json — the base standard ruleset.
-
-Rules and character content only. No items, monsters, NPCs or loot: those belong to a world module.
-A token `nowhere` area exists so the base validates standalone; world modules `$delete` it.
-"""
+"""Generate modules/core_fantasy/module.json — the base standard ruleset."""
 import json
 import os, sys, collections
 
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
 OUT = os.path.join(ROOT, "modules/core_fantasy")
 
-# Handed over to `core_fantasy/project/`. This file writes module.json wholesale, so running it now
-# would discard whatever has been authored there since. See modules/shared/dmkit/retired.py.
+# Handed over to `core_fantasy/project/`.
 if os.path.isdir(os.path.join(OUT, "project")) and "--force" not in sys.argv:
     sys.stderr.write(
         "x core_fantasy is authored as core_fantasy/project now, and this "
@@ -323,8 +318,7 @@ rules = {
     "itemProperties": [
         {"id": "silvered", "name": "Silvered", "description": "Chased with silver along the edge. Old things feel it."},
         {"id": "two_handed", "name": "Two-Handed", "description": "Needs both hands, and gives up the shield to get them."},
-        # The property that gives the word its meaning: a finesse weapon may be swung with agility
-        # instead, and the better of the two is used for the damage as well as the roll.
+        # A finesse weapon may be swung with agility, for the damage as well as the roll.
         {"id": "finesse", "name": "Finesse", "description": "Rewards a quick hand over a heavy one.",
          "attackStats": ["agility"]},
         {"id": "thrown", "name": "Thrown", "description": "Meant to leave your hand and be regretted at a distance."},
@@ -359,9 +353,7 @@ rules = {
         "checkDice": "1d20", "advantageDice": "2d20kh1", "disadvantageDice": "2d20kl1",
         "criticalSuccessAt": 20, "criticalFailureAt": 1, "criticalDamageMultiplier": 2,
         "saveSuccessMultiplier": 0.5, "passiveBase": 10, "defaultDifficulty": 12,
-        # A swung weapon scales the same way a cast spell does. Without this a warden hits exactly
-        # as often at level 20 as at level 1, since nothing raises an attribute after character
-        # creation.
+        # A swung weapon scales the same way a cast spell does.
         "attackBonus": {"add": [{"ref": "actor.proficiency"}, {"ref": "actor.attackMod"}]},
         "difficulties": {"trivial": 5, "easy": 8, "standard": 12, "hard": 16, "daunting": 20, "heroic": 25},
     },
@@ -392,9 +384,7 @@ rules = {
          "impressionTextKey": "smelled_something", "faintImpressionTextKey": "smelled_something_faint",
          "emptyTextKey": "smelled_nothing",
          "thresholds": {"detect": 0.05, "investigate": 0.3, "aggro": 0.95}},
-        # What the ground remembers. Prints need soft footing to form and close eyes to read, so
-        # they are useless at any distance and useless on stone, but they outlast a scent by hours.
-        # `aggro` is 1, which no signal reaches: you cannot pick a fight with a footprint.
+        # What the ground remembers.
         {"id": "tracks", "name": "Tracks",
          "description": "Prints in soft ground. Worthless on stone and worthless from across a room, but they last hours after a scent has gone and they say which way a thing was going.",
          "defaultRange": 10, "propagation": "line", "blockedBy": "opaque", "falloff": "linear",
@@ -416,12 +406,7 @@ rules = {
     ],
     "perception": {"defaultStance": "walk", "sightSense": "sight", "curiosityMinutes": 20,
                    "maxMarksPerTile": 4},
-    # What anything does when nobody is telling it what to do. Every creature inherits this and
-    # overrides what it disagrees with, so 127 monsters get sensible habits without 127 hand-written
-    # blocks.
-    #
-    # Distances are module units and a tile here is two feet, not five, because `tileSize` takes the
-    # smallest declared size and `tiny` is 2. Halve these to read them in tiles.
+    # What anything does when nobody is telling it what to do.
     "temperament": {
         "roamRadius": 30, "investigateRadius": 80, "leashRadius": 120,
         "wanderChance": 0.35, "disengageTurns": 2,
@@ -437,8 +422,7 @@ rules = {
         {"id": "parting_blow", "name": "Parting Blow",
          "description": "Anyone who walks out of your reach gives you one free swing, which is what makes disengaging a decision rather than a formality.",
          "on": "moveAway", "actionType": "reaction", "use": "strike", "usesPerRound": 1,
-         # Nobody gets a free swing at someone who spent their action backing out carefully. This is
-         # the whole of disengaging, and it needs the gate to see the creature that is leaving.
+         # Nobody gets a free swing at someone who spent their action backing out carefully.
          "requires": {"not": {"exists": "target.conditions.disengaging"}}},
     ],
     "coverTypes": [
@@ -460,8 +444,7 @@ rules = {
         "slotTable": {"1": [2], "2": [3], "3": [4, 2], "4": [4, 3], "5": [4, 3, 2],
                       "6": [4, 3, 3], "7": [4, 3, 3, 1], "8": [4, 3, 3, 2],
                       "9": [4, 3, 3, 3, 1], "10": [4, 3, 3, 3, 2]},
-        # Both scale with the proficiency curve. A literal 2 is a level-1 caster's bonus, so a
-        # level-20 one would throw spells that were exactly as easy to dodge.
+        # Both scale with the proficiency curve.
         "saveDifficulty": {"add": [8, {"ref": "actor.proficiency"}, {"ref": "actor.castingMod"}]},
         "attackBonus": {"add": [{"ref": "actor.proficiency"}, {"ref": "actor.castingMod"}]},
         "concentration": {"enabled": True, "savingThrow": "will",
@@ -525,9 +508,7 @@ doc["world"] = world
 def pool(pid, *texts):
     return {"id": pid, "variants": [{"text": t} for t in texts]}
 
-# Sense impressions are ruleset furniture rather than world colour: `rules.senses` points at them by
-# name, so they live wherever the senses live. Place-agnostic on purpose — a world module overrides
-# any it wants to give a local accent.
+# Sense impressions are ruleset furniture: `rules.senses` points at them by name.
 TEXT_GRAMMAR = [
     pool("heard_something",
          "Something moves out there, {direction} of you, and does not care who knows it.",
@@ -576,8 +557,7 @@ TEXT_GRAMMAR = [
          "Whatever came through here left the ground exactly as it found it."),
 ]
 
-# Keep whatever `npm run systemtext` already seeded, so regenerating this file never has to be
-# followed by re-seeding 198 messages.
+# Keep whatever `npm run systemtext` already seeded.
 _existing_system_text = {}
 _prev = os.path.join(OUT, "module.json")
 if os.path.exists(_prev):
@@ -599,14 +579,7 @@ doc["start"] = {
 }
 
 def jsonable(value):
-    """A document Python and JavaScript serialize identically.
-
-    A whole float becomes an int: JSON has one number type, but Python writes `1.0` where
-    `JSON.stringify` writes `1`.
-
-    Mirrors `dmkit.assemble.jsonable`, copied rather than imported because this module is generated
-    with nothing but the standard library on the path.
-    """
+    """A document Python and JavaScript serialize identically."""
     if isinstance(value, bool):
         return value
     if isinstance(value, float) and value.is_integer():
@@ -619,8 +592,7 @@ def jsonable(value):
 
 
 os.makedirs(OUT, exist_ok=True)
-# `ensure_ascii=False`: the studio writes these files too, and `JSON.stringify` emits an em dash as
-# itself, so escaping here would make the editor's first save rewrite lines nobody touched.
+# `ensure_ascii=False`, so the studio's first save does not rewrite untouched lines.
 with open(os.path.join(OUT, "module.json"), "w", encoding="utf-8") as f:
     json.dump(jsonable(doc), f, indent=2, ensure_ascii=False)
     f.write("\n")

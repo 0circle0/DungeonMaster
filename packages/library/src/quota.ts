@@ -1,14 +1,4 @@
-/**
- * How much room there is, and whether the browser intends to keep it.
- *
- * Once worlds live only on the user's machine, storage stops being plumbing and
- * becomes the product: losing the database is losing their work. Two things
- * follow, and both are here.
- *
- * Persistence is asked for on the *first write*, never on load. Firefox shows a
- * prompt, and a prompt in front of somebody who has not used the app yet gets
- * dismissed — spending the one chance to ask on the worst possible moment.
- */
+/** Storage quota, and whether the browser intends to keep the database. */
 
 export interface PersistenceResult {
   readonly persisted: boolean;
@@ -43,12 +33,7 @@ export async function estimateStorage(): Promise<StorageEstimate | null> {
   }
 }
 
-/**
- * Is this the browser saying "no room"?
- *
- * Worth distinguishing from every other failure, because it is the one a person
- * can act on: download a world, delete it, carry on.
- */
+/** Is this error the browser reporting no room? */
 export function isQuotaError(err: unknown): boolean {
   if (!(err instanceof Error)) return false;
   return err.name === 'QuotaExceededError' || err.name === 'NS_ERROR_DOM_QUOTA_REACHED';

@@ -1,15 +1,4 @@
-/**
- * What to do with the rows that are checked.
- *
- * Every operation says what it will change before it changes it, and the count
- * is of entries that will actually move — "set level on 40" when 37 already
- * hold that value is the kind of thing that makes an author stop trusting the
- * count, and then stop using the tool.
- *
- * Everything lands through `store.setMany`: one undo step for the whole batch,
- * because a bulk edit is one thing the author did, and object identity kept for
- * every entry not named, because validation caches on it.
- */
+/** What to do with the rows that are checked. */
 
 'use client';
 
@@ -195,13 +184,7 @@ function ReplaceAction(props: {
   );
 }
 
-/**
- * `"3"` typed into a value box means the number three.
- *
- * The schema is what decides in the end — a wrong type shows up in the problems
- * console immediately — but guessing right here saves the author from being
- * told off for typing what they meant.
- */
+/** `"3"` typed into a value box means the number three. */
 function coerce(text: string): unknown {
   if (text === 'true') return true;
   if (text === 'false') return false;

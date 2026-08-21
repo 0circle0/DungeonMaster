@@ -1,22 +1,10 @@
-/**
- * Space: terrain, maps, and position.
- *
- * The game is played on a grid at all times. Everything here is declared by the module — a terrain
- * is impassable because the module says `passable: false`.
- *
- * The unit is a tile. `rules.sizes` gives each creature size a `space` in whatever unit the module
- * uses, and ability `range` and `areaOfEffect.size` use the same unit. Conversion happens once, at
- * the edge.
- */
+/** Space: terrain, maps, and position. */
 
 import { z } from 'zod';
 import { EffectSchema, diceNotation } from '../dsl/schema.js';
 import { idSchema, displayName, description, ref, tags, extra } from './common.js';
 
-/**
- * A kind of ground. `passable` and `opaque` are separate: a chasm blocks movement but not sight, a
- * curtain blocks sight but not movement.
- */
+/** A kind of ground. */
 export const terrainSchema = z
   .object({
     id: idSchema,
@@ -27,11 +15,7 @@ export const terrainSchema = z
     /** Single character used to draw it on a text map. */
     glyph: z.string().min(1).max(2).default('.'),
 
-    /**
-     * Suggested colour when drawn on a text map. A hint for a front end, never a rule: the glyph
-     * alone still has to distinguish this terrain. A front end with no colour for a terrain falls
-     * back to its `tags`.
-     */
+    /** Suggested colour when drawn on a text map. */
     color: z
       .enum(['red', 'green', 'yellow', 'blue', 'magenta', 'cyan', 'white', 'gray'])
       .optional(),
@@ -40,10 +24,7 @@ export const terrainSchema = z
     /** Blocks line of sight, and therefore field of view and witnessing. */
     opaque: z.boolean().default(false),
 
-    /**
-     * Tiles of movement consumed to enter. 2 is the usual difficult terrain. Combined
-     * multiplicatively with the mover's `movementMode.terrainMultiplier`.
-     */
+    /** Tiles of movement consumed to enter. */
     moveCost: z.number().min(0).default(1),
 
     /** Only creatures with one of these movement modes may enter. */
@@ -57,14 +38,10 @@ export const terrainSchema = z
     /** Fires at the end of a turn spent standing here. */
     onOccupy: z.array(EffectSchema).default([]),
 
-    /** Light emitted, in tiles. Zero is dark. */
+    /** Light emitted, in tiles. */
     lightRadius: z.number().min(0).default(0),
 
-    /**
-     * How well this ground keeps a trace, per sense. Zero keeps none. A fact about the ground
-     * rather than the creature standing on it, which is why it lives here and not on the sense.
-     * Absent is one.
-     */
+    /** How well this ground keeps a trace, per sense. */
     marks: z.record(ref('rules.senses'), z.number().min(0).max(1)).optional(),
 
     /** A door-like terrain that a gate can be attached to. */
@@ -73,10 +50,7 @@ export const terrainSchema = z
   })
   .strict();
 
-/**
- * How a space is drawn. A palette maps generator roles to terrain, so one generator produces a
- * stone crypt or a reed marsh depending on which palette the biome names.
- */
+/** How a space is drawn. */
 export const paletteSchema = z
   .object({
     id: idSchema,
@@ -84,11 +58,7 @@ export const paletteSchema = z
     floor: ref('world.terrains'),
     wall: ref('world.terrains'),
     door: ref('world.terrains').optional(),
-    /**
-     * Terrain laid over the floor, either sprinkled or in patches. `speckle` rolls each tile on its
-     * own, which is right for debris; `patch` thresholds a noise field, so the terrain forms
-     * connected bodies with ragged edges and can be given a shore.
-     */
+    /** Terrain laid over the floor, either sprinkled or in patches. */
     scatter: z
       .array(
         z
@@ -124,28 +94,16 @@ export const positionSchema = z
   })
   .strict();
 
-/**
- * How a space is sized and drawn.
- *
- * Three ways to get a map, in precedence order: `static` names a hand-built `world.maps` entry used
- * verbatim; `layout` is the older glyph-row escape hatch; otherwise the map is generated from
- * `width` × `height` and the palette.
- *
- * The inner object is exported separately because `.superRefine` produces a ZodEffects, which
- * cannot be `.extend`ed — anything composing this spec starts from `mapSpecObject`.
- */
+/** How a space is sized and drawn. */
 export const mapSpecObject = z
   .object({
     /** Dice notation, so size varies per instance. */
     width: diceNotation.default('7'),
     height: diceNotation.default('7'),
     palette: ref('world.palettes').optional(),
-    /** A hand-built map used exactly as authored. Wins over `layout` and generation. */
+    /** A hand-built map used exactly as authored. */
     static: ref('world.maps').optional(),
-    /**
-     * Hand-authored tiles, as rows of palette glyphs. When present, `width` and `height` are
-     * ignored.
-     */
+    /** Hand-authored tiles, as rows of palette glyphs. */
     layout: z.array(z.string()).default([]),
     /** Maps a glyph in `layout` to a terrain, beyond the palette's own. */
     legend: z.record(z.string(), ref('world.terrains')).default({}),

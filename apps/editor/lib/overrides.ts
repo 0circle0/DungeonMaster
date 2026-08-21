@@ -1,20 +1,6 @@
 'use client';
 
-/**
- * What a placed entry no longer takes from its prefab.
- *
- * One derivation, used in two places that must never disagree: the prefab
- * panel, which lists the overrides, and the form itself, which marks them
- * where the author is actually looking. Two implementations of "is this field
- * overridden?" would eventually answer differently, and the state they would
- * disagree about — whether editing the prefab still reaches this field — is
- * the one an author cannot afford to be wrong about.
- *
- * The comparison is live rather than stored: an override is whatever differs
- * from what the prefab would produce *now*. That is the only definition that
- * stays true when the prefab changes, and it means nothing has to be migrated
- * when it does.
- */
+/** What a placed entry no longer takes from its prefab. */
 
 import { useMemo } from 'react';
 import { expandPrefab, linkFor, overriddenPaths } from '@dm/module';
@@ -63,7 +49,7 @@ export function usePrefabState(args: {
     const expanded = expandPrefab(prefab, link.params, authoring.style);
     const paths = new Set(overriddenPaths(prefab, entry, link, authoring.style));
 
-    /** Hand one field back. Absent from the prefab means the field goes. */
+    /** Hand one field back. */
     const reset = (relativePath: string) => {
       const segments = relativePath.split('.');
       const value = segments.reduce<unknown>(

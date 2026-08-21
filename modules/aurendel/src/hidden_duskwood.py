@@ -1,23 +1,4 @@
-"""The Duskwood's hidden threads — three, in the five areas nothing else uses.
-
-Fenny Cross is a wet hollow where two roads meet and everybody arriving is
-already in a bad mood: an inn, a store, a forge and two cottages, none of them
-with anybody in. Rooksrest burns charcoal and the smoke never quite leaves the
-clearing. The Moot Road runs dead straight to Elderhollow because, the phrasing
-in every account is the same, the trees were persuaded to allow it. The Greenway
-is older than the Moot Road and straighter, and nobody cut it. The Undereaves is
-where the fields stop and do not start again for four days.
-
-Three threads, and they share a shape: **terms were agreed with this forest, and
-somebody is still keeping them.**
-
-  * **The Extra Miles** — fourteen marked miles on an eleven-mile road, and the
-    three that do not fit line up with each other instead.
-  * **The Road Nobody Cut** — forty yards wide, nine miles dead straight, in a
-    wood that closes a gap in four years, and nothing crosses it after dark.
-  * **The Round** — the parish has paid a woodward for four hundred years and
-    cannot name the current one, and the marks have moved outward.
-"""
+"""The Duskwood's hidden threads — three, in the five areas nothing else uses."""
 from dmkit.quests import npc, shop, quest, reach, kill, flagged, arc
 from lore import (
     clue, thread, rumour, favour, talk, coldshoulder, finding, rumoured,
@@ -195,8 +176,7 @@ POI_PATCHES = {
     "greenway_barrow_of_the_ride": {**rumoured("dusk_green", base=21, step=3,
                                                entries=4, skill="survival"),
                                     "gate": "dusk_green_span"},
-    # The stones on the wood's edge are a point of interest, not a dungeon
-    # mouth, so what walks the round carries its own table and its own chance.
+    # A point of interest, so it carries its own table and its own chance.
     "undereaves_boundary_stone": {**rumoured("dusk_ward", base=20, step=3, entries=4),
                                   "gate": "dusk_ward_mark",
                                   "encounterTables": ["dusk_ward_boss"],

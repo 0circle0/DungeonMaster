@@ -1,26 +1,9 @@
-/**
- * Static maps: hand-authored, identical across seeds.
- *
- * A generated map answers "what might be here"; a static map answers "this is here". Castles, shops
- * and set-piece rooms are authored as a grid of ids — one id per cell, one grid per layer — and the
- * engine uses them verbatim.
- *
- * On disk a static map is a folder (`maps/<id>/` beside `module.json`): a `map.json` manifest plus
- * one CSV per layer, assembled into this shape at load. In the assembled document the grids are
- * plain 2-D arrays, which is what makes the ordinary machinery work unchanged — `collectRefs`
- * proves every cell resolves, `hashModule` hashes the content, and `extends` merges maps by id.
- *
- * Layers are ordered by draw order, and the kind of a layer decides which collection its cells
- * resolve against.
- */
+/** Static maps: hand-authored, identical across seeds. */
 
 import { z } from 'zod';
 import { idSchema, displayName, description, ref, tags, extra } from './common.js';
 
-/**
- * Which collection each layer kind's cells resolve against. `markers` is null: marker ids are free
- * names ("entry", "door", "spawn") rather than references.
- */
+/** Which collection each layer kind's cells resolve against. */
 export const LAYER_TARGETS = {
   terrain: 'world.terrains',
   items: 'content.items',
@@ -52,11 +35,7 @@ function layerBranch(kind: LayerKind, cells: z.ZodTypeAny) {
     .strict();
 }
 
-/**
- * A plain union rather than a discriminated one, deliberately: the compiler's `collectRefs` walks
- * `ZodUnion` by descending the first branch that parses, which is what turns every non-empty cell
- * into a checked reference. Each branch's `kind` literal makes the match unambiguous.
- */
+/** A plain union, not a discriminated one: `collectRefs` descends the first branch that parses. */
 export const mapLayerSchema = z.union([
   layerBranch('terrain', cellsOf(LAYER_TARGETS.terrain)),
   layerBranch('items', cellsOf(LAYER_TARGETS.items)),
@@ -76,19 +55,14 @@ export const staticMapSchema = z
     name: displayName.optional(),
     description: description.default(''),
     tags,
-    /**
-     * The marker id the party arrives at. Required (via lint) when an area, POI or dungeon uses
-     * this map directly; a map only ever stamped into a generated dungeon as a room needs `door`
-     * markers instead.
-     */
+    /** The marker id the party arrives at. */
     entry: idSchema.default('entry'),
     layers: z.array(mapLayerSchema).min(1),
     extra,
   })
   .strict()
   .superRefine((map, ctx) => {
-    // Every layer must be the same rectangle — a sparse layer is authored as empty cells, never as
-    // missing rows.
+    // Every layer must be the same rectangle.
     const first = map.layers[0]!.cells as string[][];
     const height = first.length;
     const width = first[0]?.length ?? 0;

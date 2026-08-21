@@ -1,18 +1,4 @@
-/**
- * What actually drew the map on screen.
- *
- * The viewport shows a generated map and everything about it is authorable, but the fields live two
- * or three collections away: an area's reeds and water come from a palette's `scatter`, reached
- * through the biome named on the area; a barrow's shape comes from the dungeon entry.
- *
- * This resolves that chain the way the engine does, so the controls beside the map are the ones
- * that moved the pixels. The per-type knowledge lives here because the engine's palette resolution
- * is itself per-type — an area takes its biome's palette as an override, a POI interior takes no
- * override, and a dungeon prefers its own.
- *
- * Works on the raw authored document, so the controls survive a module that does not currently
- * compile.
- */
+/** What actually drew the map on screen. */
 
 import type { ModuleDoc, Path } from './store';
 import type { MapTarget } from '@/app/studio/selection';
@@ -83,14 +69,10 @@ function paletteSubject(doc: ModuleDoc, id: string | null): MapSubject | null {
   return found ? subject('palettes', id, found.entry, found.index) : null;
 }
 
-/**
- * Which entry and which palette produced the map for this target. The redirects matter as much as
- * the palettes: a POI with no interior draws its area, and a POI with a dungeon draws the dungeon.
- */
+/** Which entry and which palette produced the map for this target. */
 export function resolveMapSubjects(doc: ModuleDoc, target: MapTarget): MapSubjects {
   switch (target.type) {
-    // The engine resolves the start the same way — POI, then area, then dungeon — so this reduces
-    // to whichever of those it picked.
+    // The engine resolves the start the same way: POI, then area, then dungeon.
     case 'start': {
       const start = resolveStart(doc);
       if (!start) return NOTHING;
@@ -101,9 +83,7 @@ export function resolveMapSubjects(doc: ModuleDoc, target: MapTarget): MapSubjec
       const found = find(doc, 'areas', target.id);
       if (!found) return NOTHING;
 
-      // `buildMap(module, area.map, rng, biome?.palette)`: the biome's palette arrives as an
-      // override, and `resolvePalette` takes the override ahead of the spec's own. See preview.ts
-      // and mapgen.ts.
+      // The biome's palette arrives as an override, ahead of the spec's own.
       const biomeId = str(found.entry['biome']);
       const biome = biomeId ? find(doc, 'biomes', biomeId) : null;
       const fromBiome = str(biome?.entry['palette']);
@@ -165,8 +145,7 @@ export function resolveMapSubjects(doc: ModuleDoc, target: MapTarget): MapSubjec
       const found = find(doc, 'dungeons', target.id);
       if (!found) return NOTHING;
 
-      // `resolvePalette(module, definition.palette ?? biome?.palette)` — the dungeon's own wins
-      // here, the opposite way round from an area.
+      // `resolvePalette(module, definition.palette ??
       const own = str(found.entry['palette']);
       const biomeId = str(found.entry['biome']);
       const biome = biomeId ? find(doc, 'biomes', biomeId) : null;

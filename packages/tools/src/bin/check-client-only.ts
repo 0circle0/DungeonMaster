@@ -1,19 +1,4 @@
-/**
- * `npm run check:client`
- *
- * Both apps must stay client-only.
- *
- * `output: 'export'` already fails the build on a route handler or a dynamic
- * server API, and that is the real enforcement. This exists as well because a
- * build failure from `output: 'export'` names a Next.js constraint rather than
- * the reason for it — and the reason matters here. The studio used to write to
- * `modules/` on the machine serving it, which meant a deployment was a shared,
- * unauthenticated editor of the repository's own content. Nothing should be
- * able to drift back towards that without someone reading a sentence about why.
- *
- * Cheap enough to sit in `npm run check`: it reads the app source and nothing
- * else.
- */
+/** `npm run check:client` */
 
 import { readFileSync, readdirSync, statSync, existsSync } from 'node:fs';
 import { join, dirname, relative, resolve } from 'node:path';
@@ -29,7 +14,7 @@ interface Rule {
   readonly why: string;
 }
 
-/** Server surfaces. Any of these means the app needs a Node process again. */
+/** Server surfaces. */
 const FORBIDDEN: readonly Rule[] = [
   { pattern: /from ['"]next\/headers['"]/, why: 'reads a request — worlds live in the browser now' },
   { pattern: /from ['"]next\/server['"]/, why: 'a server runtime the app no longer has' },

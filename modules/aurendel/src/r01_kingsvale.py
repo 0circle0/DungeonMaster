@@ -1,10 +1,4 @@
-"""Region 1 — The Kingsvale.
-
-The heartland: the Weirwater running down out of the Skarnspine, the Kingsroad crossing it at
-Aurenhal, and everything either side hedged into fields. Four city districts, one town, three
-villages, four stretches of country. Where a party starts, so it is the safest ground on the
-continent and the densest in doors you can open.
-"""
+"""Region 1 — The Kingsvale."""
 from place import area, poi, gate, toll
 from dmkit.dungeons import dungeon
 from dmkit.prose import pool
@@ -96,8 +90,7 @@ GATES = [
     gate("kingshold_undercroft_door", "The Undercroft Door", "lock",
          "Iron-banded oak at the bottom of a stair nobody sweeps.",
          bypass=("lockpicking", 16),
-         # Two ways in, the shape every gate on the critical path takes: the Crown's key if you took
-         # the Crown's commission, and a lock that can be picked if you did not.
+         # Two ways in: the Crown's key, or a lock that can be picked.
          requires={"description": "the undercroft key, or a very good lockpick",
                    "items": [{"item": "undercroft_key", "consume": False}]},
          blocked_key="kingshold_undercroft_blocked"),
@@ -624,8 +617,7 @@ pool("kingsvale_oxbow_meadows_desc",
      "its ribs at low water.",
      "Flat, wet, loud with birds, and difficult to cross in a straight line.")
 
-# Places that earn their own voice. Declaring a `<poi_id>_desc` pool is all it takes —
-# regions.pois() wires it up.
+# Places that earn their own voice.
 
 pool("aurenhal_kingshold_desc",
      "A castle that started as a river-fort and has been argued with by every "
@@ -834,8 +826,7 @@ pool("oxbow_sunken_boat_desc",
      "upstream flank.",
      "Willow has gone through the deck. There is still a hold under it.")
 
-# Why a barred way is barred. A gate with a `blockedTextKey` says so in its own words; without one
-# the play layer falls back to listing the requirement.
+# Why a barred way is barred.
 
 pool("aurenhal_kings_gate_blocked",
      "The clerk does not look up. \"Five marks the party, or the ledger, and "

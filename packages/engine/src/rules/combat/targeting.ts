@@ -1,12 +1,4 @@
-/**
- * Targeting: who can be hit, from where.
- *
- * Range, reach, line of sight, cover and area shapes are real geometry rather than tags, so a wall
- * genuinely protects you and a fireball genuinely catches your own party.
- *
- * Distances are in tiles. The module measures range in its own units, so conversion happens once,
- * here, using the tile size derived from `rules.sizes`.
- */
+/** Targeting: who can be hit, from where. */
 
 import type { CompiledModule } from '@dm/module';
 import type { GameState, Entity, EntityId } from '../../state.js';
@@ -22,10 +14,7 @@ import type { Message } from '../../narrate/systemText.js';
 /** Fallback tile size when a module declares no sizes. */
 const DEFAULT_TILE_SIZE = 5;
 
-/**
- * How many module units one tile represents. Taken from the smallest declared size's `space`, since
- * that is the creature that fits in exactly one tile.
- */
+/** How many module units one tile represents. */
 export function tileSize(module: CompiledModule): number {
   const sizes = module.all<{ space: number }>('rules.sizes');
   if (sizes.length === 0) return DEFAULT_TILE_SIZE;
@@ -71,8 +60,7 @@ export function speedOf(module: CompiledModule, entity: Entity): number {
   const stance = stanceOf(module, entity);
   if (stance) best = Math.floor(best * stance.speedMultiplier);
 
-  // A creature with no declared movement still shuffles one tile; being unable to move at all
-  // should come from a condition, not from missing data.
+  // A creature with no declared movement still shuffles one tile.
   return Math.max(1, best);
 }
 
@@ -102,11 +90,7 @@ export interface Reachability {
   readonly cover: string | null;
 }
 
-/**
- * Whether a target can be reached from a position, and what protects it. Cover is read from the
- * terrain between the two, and the module decides how much by declaring the cover type on the
- * terrain.
- */
+/** Whether a target can be reached from a position, and what protects it. */
 export function reachability(
   context: TargetingContext,
   from: Position,
@@ -120,8 +104,7 @@ export function reachability(
 
   const hasSight = hasLineOfSight(map.tiles, context.terrain, from, to);
 
-  // Cover comes from the tile immediately adjacent to the target along the line of fire — the thing
-  // it is standing behind.
+  // Cover comes from the tile adjacent to the target along the line of fire.
   let cover: string | null = null;
   if (hasSight && gap > 1) {
     for (const offset of [{ x: -1, y: 0 }, { x: 1, y: 0 }, { x: 0, y: -1 }, { x: 0, y: 1 }]) {
@@ -162,10 +145,7 @@ interface AbilityDef {
   };
 }
 
-/**
- * Everyone an ability would affect. Area abilities catch whoever is standing in the shape,
- * including the caster's own party; `affects` is how content narrows that.
- */
+/** Everyone an ability would affect. */
 export function resolveTargets(
   context: TargetingContext,
   actor: Entity,
@@ -258,8 +238,7 @@ export function nearestHostile(
   const map = context.state.maps[actor.map];
   if (!map) return null;
 
-  // Uncapped unless a caller says otherwise: how far a creature can notice something is a question
-  // about that creature, so the limit belongs to whoever is asking.
+  // Uncapped unless a caller says otherwise.
   const limit = options.range ?? Infinity;
 
   let best: Entity | null = null;

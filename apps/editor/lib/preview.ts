@@ -1,15 +1,4 @@
-/**
- * Seed-faithful map previews.
- *
- * Everything here calls the real engine generators with the same rng derivations the engine uses at
- * game start, never a reimplementation, so what the studio draws for seed N is what a player
- * starting with seed N walks into. The chain mirrored is `startSession`'s:
- * `Rng.fromSeed(seed).derive('arrival')`, then the per-place stream (`area:<id>`, `poi:<id>`,
- * `dungeon:<id>`) as `sim/enter.ts` derives it.
- *
- * Maps entered later in a session come from a stream that has advanced, which is why this is a seed
- * preview rather than a save preview.
- */
+/** Seed-faithful map previews. */
 
 import { compileModule } from '@dm/module';
 import type { CompiledModule } from '@dm/module';
@@ -37,11 +26,7 @@ export interface Marker {
   readonly y: number;
   readonly glyph: string;
   readonly label: string;
-  /**
-   * The point of interest this marker is, when it is one. A marker drawn from a map's layers is a
-   * picture of the layer; one drawn from `poi.position` is a picture of an entry, and an entry can
-   * be moved. Carrying the id is what lets the viewport put it back somewhere else.
-   */
+  /** The point of interest this marker is, when it is one. */
   readonly poi?: string;
 }
 
@@ -111,10 +96,7 @@ function isFail(value: BuiltStaticMap | PreviewResult): value is PreviewResult {
   return 'ok' in value;
 }
 
-/**
- * Everything a static map's own layers place, as decorated markers: the entry, the named marks, and
- * the gates, traps, items and creatures the engine will put there on every seed.
- */
+/** Everything a static map's own layers place, as decorated markers. */
 function staticMarkers(built: BuiltStaticMap): Marker[] {
   const markers: Marker[] = [
     {
@@ -164,8 +146,7 @@ export function previewArea(
   }>('world.areas', areaId);
   if (!area) return fail(`No area "${areaId}" in world.areas.`);
 
-  // A static map wins over everything: the engine draws it verbatim and takes its entry from the
-  // map's own marker, ignoring entryPoint and palette.
+  // A static map wins over everything: drawn verbatim, entry from its own marker.
   const staticId = area.map?.static;
   let tiles: TileMap;
   let authored: boolean;
@@ -196,8 +177,7 @@ export function previewArea(
     }
   }
 
-  // Every POI sits somewhere on this map, so showing them here answers "what is on this map, and
-  // where is everyone" without opening each POI.
+  // Every POI sits somewhere on this map.
   const startPoiId = module.source.start.startingPoi;
   for (const poi of poisIn(module, areaId)) {
     if (!poi.position) continue;
@@ -255,8 +235,7 @@ export function previewPoi(module: CompiledModule, poiId: string, seed: number):
 
   if (poi.dungeon) return previewDungeon(module, poi.dungeon, seed);
   if (!poi.map) {
-    // No interior means the place is a spot on its area map, so show that map with the spot
-    // highlighted.
+    // No interior means the place is a spot on its area map, so show that map with the spot highlighted.
     const areaResult = previewArea(module, poi.area, seed, { highlightPoi: poiId });
     if (!areaResult.ok) return areaResult;
     const at = poi.position ? `at its position (${poi.position.x},${poi.position.y}), marked ◉` : 'wherever it happens to stand (no position set)';
@@ -400,11 +379,7 @@ export function previewDungeon(module: CompiledModule, dungeonId: string, seed: 
   };
 }
 
-/**
- * What one room from a template looks like. Room templates have no place of their own — the dungeon
- * generator stamps them — so the preview builds a single room as the generator would: a static
- * template is its `world.maps` entry verbatim; anything else rolls the template's map spec.
- */
+/** What one room from a template looks like. */
 export function previewRoomTemplate(
   module: CompiledModule,
   templateId: string,
@@ -499,11 +474,7 @@ function dungeonMarkers(generated: GeneratedDungeon, population: PopulationLike)
   return markers;
 }
 
-/**
- * Ground truth for what a new game with this seed opens onto: run the real newGame and arrival
- * sequence and read the resulting state — residents spawned, encounters rolled, party placed.
- * Throws are reported, which doubles as a will-this-module-boot check.
- */
+/** Runs the real newGame and arrival sequence and reads the resulting state. */
 export function previewStart(module: CompiledModule, seed: number): PreviewResult {
   const start = module.source.start;
   if (!start.startingPoi && !start.startingArea && !start.startingDungeon) {

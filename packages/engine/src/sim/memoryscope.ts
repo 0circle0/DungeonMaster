@@ -1,20 +1,4 @@
-/**
- * What is remembered, as something the DSL can read.
- *
- * `requirement.memories` compiles to `{exists: "memory.<who>.<deedKind>"}`, so a gate on what
- * somebody remembers is only as good as the `memory` namespace in scope.
- *
- * Two things make this cheap enough to put in `buildScope`, which runs several times per entity per
- * turn:
- *
- *   * The five `who` keys are getters, memoized on first read, so a scope built for something that
- *     never mentions memory costs one object literal.
- *   * `memory` is a plain object whose keys are getters, not a getter called `memory`. Eight call
- *     sites do `{ ...buildScope(...) }`; a shallow spread copies the reference and the inner
- *     getters survive it.
- *
- * `lookup()` in the DSL walks the scope with plain property access, so a getter is invisible to it.
- */
+/** What is remembered, as something the DSL can read. */
 
 import type { CompiledModule, Value } from '@dm/module';
 import type { Deed, Entity, GameState } from '../state.js';
@@ -23,16 +7,13 @@ import { dateOf } from './clock.js';
 
 /** What the DSL sees for one remembered deed kind. */
 export interface RecalledDeed extends Record<string, Value> {
-  /**
-   * When it happened, as a day index — the same units as `world.day`, so `requirement.withinDays`
-   * subtracts like with like. The records themselves store `state.minute`.
-   */
+  /** When it happened, as a day index matching `world.day`; records store `state.minute`. */
   readonly at: number;
   /** The raw minute, for content that wants finer arithmetic than a day. */
   readonly atMinute: number;
   /** 0..1, decaying on the module's forgetting curve. */
   readonly strength: number;
-  /** How many retellings away from having seen it. 0 means they were there. */
+  /** How many retellings away from having seen it. */
   readonly hops: number;
 }
 
@@ -73,11 +54,7 @@ function lazily(target: Record<string, Value>, key: string, build: () => Recolle
   });
 }
 
-/**
- * The `memory` namespace for a scope. `subject` is whose recollection `speaker` means: the person
- * being talked to in a conversation, the reactor in a reaction, and otherwise the actor the scope
- * was built for.
- */
+/** The `memory` namespace for a scope. */
 export function memoryScope(
   module: CompiledModule,
   state: GameState,
@@ -88,13 +65,11 @@ export function memoryScope(
 
   const own = () => strongestByKind(state.deeds, state.memory[memoryKeyOf(subject)], toDay);
 
-  // What this person knows. `self` is the same thing under a name that reads properly outside a
-  // conversation.
+  // What this person knows.
   lazily(out, 'speaker', own);
   lazily(out, 'self', own);
 
-  // What the party did, rather than what it knows: witnesses never include characters (`deeds.ts`
-  // skips them), so "the party saw it" is not something the simulation records.
+  // What the party did: witnesses never include characters.
   lazily(out, 'party', () => {
     const mine = new Set(state.party);
     const into: Recollection = {};
@@ -112,8 +87,7 @@ export function memoryScope(
     return into;
   });
 
-  // Anybody at all knows it. Distinct from the speaker, or "word has got around" would be
-  // indistinguishable from "this one person saw you".
+  // Anybody at all knows it.
   lazily(out, 'anyone', () => {
     const into: Recollection = {};
     for (const held of Object.values(state.memory)) {

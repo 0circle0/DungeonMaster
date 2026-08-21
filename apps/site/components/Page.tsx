@@ -1,7 +1,4 @@
-/**
- * The frame every documentation page sits in: navigation, a title, and the
- * body. Pages supply content and nothing else.
- */
+/** The frame every documentation page sits in: navigation, a title, and the body. */
 
 import { Nav } from './Nav';
 
@@ -30,7 +27,7 @@ export function Page({
   );
 }
 
-/** A fenced example. Kept plain: no highlighting library, no client cost. */
+/** A fenced example. */
 export function Code({ children }: { children: string }) {
   return <pre className="code"><code>{children}</code></pre>;
 }

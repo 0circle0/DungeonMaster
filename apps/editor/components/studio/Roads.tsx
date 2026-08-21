@@ -1,24 +1,6 @@
 'use client';
 
-/**
- * Roads out of this area, edited from one end.
- *
- * `connections` is stored per area, so a road between two places is two
- * entries that nothing keeps in step. The generated form will happily let an
- * author add one and not the other, and the result is a party that walks
- * somewhere and cannot walk back — which reads as design rather than as a
- * missing line.
- *
- * `dmkit.regions.edges` solves this by declaring a road once and emitting both
- * directions, and the proof that it works is that Aurendel has 296 roads and
- * not one accidental one-way. This is the same idea as an affordance: adding a
- * road writes both ends, removing one removes both, and changing the travel
- * time changes it in both places. One-way is a checkbox, so it is a decision
- * rather than an omission.
- *
- * The generic array editor is still underneath in the form above — this does
- * not hide anything, it just makes the correct edit the easy one.
- */
+/** Roads out of this area, edited from one end. */
 
 import { useState } from 'react';
 import type { ModuleStore } from '@/lib/store';
@@ -67,8 +49,7 @@ export function Roads(props: { store: ModuleStore; areaIndex: number }) {
   const remove = (road: Road, i: number) => {
     const far = indexOf(road.to);
     const back = far >= 0 ? roadsOf(far).findIndex((entry) => entry.to === id) : -1;
-    // Far end first: removing this end first would shift nothing there, but
-    // doing it in one order consistently keeps the two removals independent.
+    // Far end first, so the two removals stay independent.
     const paths: (string | number)[][] = [];
     if (far >= 0 && back >= 0) paths.push(['world', 'areas', far, 'connections', back]);
     paths.push(['world', 'areas', areaIndex, 'connections', i]);
@@ -89,8 +70,7 @@ export function Roads(props: { store: ModuleStore; areaIndex: number }) {
     const far = indexOf(road.to);
     const back = far >= 0 ? roadsOf(far).findIndex((entry) => entry.to === id) : -1;
     if (oneWay) {
-      // A one-way road is *this* end only; the return entry is what makes it
-      // two-way, so marking it one-way removes that rather than annotating it.
+      // A one-way road is this end only: marking it one-way removes the return entry.
       store.setMany([{ path: ['world', 'areas', areaIndex, 'connections', i, 'oneWay'], value: true }]);
       if (back >= 0) store.remove(['world', 'areas', far, 'connections', back]);
       return;

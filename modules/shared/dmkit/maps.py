@@ -1,34 +1,11 @@
-"""Hand-drawn interiors: ASCII art in, a `maps/<id>/` folder out.
-
-A folder is one CSV per layer plus a manifest, and the loader inlines it into `world.maps`
-(packages/module/src/load.ts). A map is drawn as art and expanded here.
-
-Rules the module linter enforces, checked at drawing time instead so the error can point at the art:
-
-  * every layer is the same rectangle, and the first terrain layer has no empty cells;
-  * there must be an `entry` marker, it must be standable, and everything else must be reachable
-    from it;
-  * a gate cell has to sit on door-like terrain.
-
-`Map` names no terrain. `TERRAIN`, `MARKER` and `IMPASSABLE` are class attributes a module must
-supply by subclassing, because a world's terrain vocabulary is its own. See
-`modules/aurendel/src/staticmaps.py`.
-"""
+"""Hand-drawn interiors: ASCII art in, a `maps/<id>/` folder out."""
 import json
 import os
 
 class Map:
-    """One hand-drawn interior. Subclass and override the three tables for a world whose terrain
-    vocabulary differs.
-    """
+    """One hand-drawn interior."""
 
-    # Declared, never assigned: a subclass must supply all three. An annotation without a value is
-    # the contract, because these are a world's terrain vocabulary.
-    #
-    # TERRAIN    art character -> terrain id. A character not in it is an error, so a typo in the
-    # art cannot silently become floor.
-    # MARKER     art character -> marker name, for the cells that carry one.
-    # IMPASSABLE terrain ids you cannot stand on, to catch drawing mistakes.
+    # Declared, never assigned: a subclass must supply all three.
     TERRAIN: dict
     MARKER: dict
     IMPASSABLE: set
@@ -57,10 +34,7 @@ class Map:
         self._check_reachable()
 
     def _check_reachable(self):
-        """Fail here rather than in the linter. Furniture is impassable, and a ring of tables will
-        seal a room off as effectively as a wall; catching it at drawing time is the difference
-        between a one-line fix and a rebuild.
-        """
+        """Fail here rather than in the linter."""
         height, width = len(self.art), len(self.art[0])
         walkable = {(x, y) for y in range(height) for x in range(width)
                     if self.TERRAIN[self.art[y][x]] not in self.IMPASSABLE}
@@ -85,7 +59,7 @@ class Map:
         return [[pick(ch) for ch in row] for row in self.art]
 
     def write(self, root):
-        """Write `<root>/<id>/`. Returns a one-line summary."""
+        """Write `<root>/<id>/`."""
         folder = os.path.join(root, self.id)
         os.makedirs(folder, exist_ok=True)
         layers = [("terrain", "terrain.csv", lambda ch: self.TERRAIN[ch]),
@@ -108,6 +82,6 @@ class Map:
 
 
 def write_all(maps, root):
-    """Write every map under `root`, in order. Returns the summary lines."""
+    """Write every map under `root`, in order."""
     os.makedirs(root, exist_ok=True)
     return [entry.write(root) for entry in maps]

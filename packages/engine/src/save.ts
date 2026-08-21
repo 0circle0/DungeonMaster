@@ -1,18 +1,4 @@
-/**
- * Saving and loading.
- *
- * A save is the `GameState` object and nothing else — no side tables, no derived caches. That is
- * why maxima, Guard and initiative are computed rather than stored: a cached number would be a
- * second source of truth a save could disagree with.
- *
- * Two guards:
- *
- *   - Module identity. A save records the module id, version and content hash it was made against,
- *     and loading it into an edited module is refused rather than producing a character whose class
- *     no longer exists.
- *   - Schema version. Migrations run in order, so an old save is brought forward step by step
- *     rather than needing a migration per version pair.
- */
+/** Saving and loading. */
 
 import type { CompiledModule } from '@dm/module';
 import { SAVE_VERSION } from './state.js';
@@ -29,11 +15,7 @@ export interface SaveLineageEntry {
 export interface SaveFile {
   readonly saveVersion: number;
   readonly savedAt: number;
-  /**
-   * Every module build this save has been written under, oldest first. Appended, never replaced, so
-   * it can answer which change broke a save. Optional, so a save written before lineage existed
-   * still loads.
-   */
+  /** Every module build this save has been written under, oldest first. */
   readonly lineage?: readonly SaveLineageEntry[];
   /** Mods active when this was written, as `<id>-<hash>`, sorted. */
   readonly mods?: readonly string[];
@@ -45,32 +27,25 @@ export type LoadResult =
       readonly ok: true;
       readonly state: GameState;
       readonly warnings: readonly string[];
-      /**
-       * The envelope as read, so a front end can show lineage and hand it back to `save()` as
-       * `previous`, which keeps the chain going.
-       */
+      /** The envelope as read; hand it back to `save()` as `previous` to continue the chain. */
       readonly file: SaveFile;
     }
   | { readonly ok: false; readonly error: string };
 
 export interface SaveOptions {
-  /** The file this run was loaded from, if any. Its lineage is carried forward. */
+  /** The file this run was loaded from, if any. */
   readonly previous?: SaveFile | null;
   /** Active mods as `<id>-<hash>`. */
   readonly mods?: readonly string[];
 }
 
-/**
- * Serialize state. `savedAt` is passed in rather than read from a clock, because the engine has no
- * clock and reading one would break replay.
- */
+/** Serialize state. */
 export function save(state: GameState, savedAt: number, options: SaveOptions = {}): string {
   const previous = options.previous ?? null;
   const carried = previous?.lineage ?? [];
   const last = carried[carried.length - 1];
 
-  // Append only when the module actually changed, so saving twice against the same build does not
-  // grow the chain.
+  // Appended only when the module actually changed.
   const lineage: SaveLineageEntry[] =
     last && last.hash === state.module.hash
       ? [...carried]
@@ -89,15 +64,9 @@ export function save(state: GameState, savedAt: number, options: SaveOptions = {
 /** A migration from one save version to the next. */
 type Migration = (state: Record<string, unknown>) => Record<string, unknown>;
 
-/**
- * Migrations by the version they upgrade from. Each moves a save forward exactly one version.
- * Anything that cannot be defaulted means the save should be refused rather than guessed at.
- */
+/** Migrations by the version they upgrade from. */
 const MIGRATIONS: Readonly<Record<number, Migration>> = {
-  /**
-   * 1 → 2: perception. Creatures gained what they have noticed and how they are moving; maps gained
-   * the traces left on them. All three default cleanly.
-   */
+  /** 1 → 2: perception. */
   1: (state) => {
     const entities = { ...(state['entities'] as Record<string, Record<string, unknown>>) };
     for (const [id, entity] of Object.entries(entities)) {
@@ -109,15 +78,11 @@ const MIGRATIONS: Readonly<Record<number, Migration>> = {
       maps[id] = { ...map, marks: {} };
     }
 
-    // `load` reads the version off the file wrapper and never the copy inside the state, so a
-    // migration moves it itself; otherwise a migrated save is forever unequal to an identical fresh
-    // one.
+    // `load` reads the version off the wrapper, never the copy inside the state.
     return { ...state, saveVersion: 2, entities, maps };
   },
 
-  /**
-   * 2 → 3: walking together. Creatures gained who they are following; null is the old behaviour.
-   */
+  /** 2 → 3: walking together. */
   2: (state) => {
     const entities = { ...(state['entities'] as Record<string, Record<string, unknown>>) };
     for (const [id, entity] of Object.entries(entities)) {
@@ -126,16 +91,11 @@ const MIGRATIONS: Readonly<Record<number, Migration>> = {
     return { ...state, saveVersion: 3, entities };
   },
 
-  /**
-   * 3 → 4: the dungeon is a dungeon. Maps gained their traps, the rooms they were generated from,
-   * and how deep they sit. All three default to the old behaviour: no traps installed, no rooms
-   * known, everything at depth 1.
-   */
+  /** 3 → 4: the dungeon is a dungeon. */
   3: (state) => {
     const maps = { ...(state['maps'] as Record<string, Record<string, unknown>>) };
     for (const [id, map] of Object.entries(maps)) {
-      // Filled in, never overwritten: a migration that clobbers a field already present can only
-      // destroy a save.
+      // Filled in, never overwritten.
       maps[id] = {
         ...map,
         traps: map['traps'] ?? {},
@@ -146,13 +106,10 @@ const MIGRATIONS: Readonly<Record<number, Migration>> = {
     return { ...state, saveVersion: 4, maps };
   },
 
-  /** 4 → 5: coin. An empty purse is what a save written before money existed describes. */
+  /** 4 → 5: coin. */
   4: (state) => ({ ...state, saveVersion: 5, purse: state['purse'] ?? 0 }),
 
-  /**
-   * 5 → 6: cooldowns, once-per-encounter reactions, and legendary actions. All three live on the
-   * combat, which is null in most saves; empty is the old behaviour.
-   */
+  /** 5 → 6: cooldowns, once-per-encounter reactions, and legendary actions. */
   5: (state) => {
     const combat = state['combat'] as Record<string, unknown> | null;
     if (!combat) return { ...state, saveVersion: 6 };
@@ -168,10 +125,7 @@ const MIGRATIONS: Readonly<Record<number, Migration>> = {
     };
   },
 
-  /**
-   * 6 → 7: casting. Creatures gained the slots they have spent and what they are concentrating on.
-   * Nothing spent and nothing held is the old behaviour.
-   */
+  /** 6 → 7: casting. */
   6: (state) => {
     const entities = { ...(state['entities'] as Record<string, Record<string, unknown>>) };
     for (const [id, entity] of Object.entries(entities)) {
@@ -184,29 +138,13 @@ const MIGRATIONS: Readonly<Record<number, Migration>> = {
     return { ...state, saveVersion: 7, entities };
   },
 
-  /**
-   * 7 → 8: mods. A save written before mods existed carries no mod state, which an empty bag
-   * describes. `lineage` and `mods` live on the envelope rather than in state and need no
-   * migration: an older file simply has neither, and both are optional.
-   */
+  /** 7 → 8: mods. */
   7: (state) => ({ ...state, saveVersion: 8, modState: state['modState'] ?? {} }),
 
-  /**
-   * 8 → 9: lore. The party gained a record of what it has found out; knowing nothing is the state
-   * every earlier save was in.
-   */
+  /** 8 → 9: lore. */
   8: (state) => ({ ...state, saveVersion: 9, lore: state['lore'] ?? {} }),
 
-  /**
-   * 9 → 10: territory, and a fight that survives a corner.
-   *
-   * Creatures gained the tile they keep to, and an encounter gained a count of how long nobody has
-   * been able to find anybody.
-   *
-   * A creature adopts where it is standing rather than getting a null anchor, which would leave
-   * every creature in an old save unable to wander. The party keeps a null anchor because the party
-   * has no territory.
-   */
+  /** 9 → 10: territory, and a fight that survives a corner. */
   9: (state) => {
     const entities = { ...(state['entities'] as Record<string, Record<string, unknown>>) };
     const party = new Set((state['party'] as string[] | undefined) ?? []);
@@ -217,8 +155,7 @@ const MIGRATIONS: Readonly<Record<number, Migration>> = {
       entities[id] = {
         ...entity,
         anchor: held ?? (party.has(id) || entity['kind'] === 'character' ? null : position ?? null),
-        // As if it had been standing there since the save was written: an older save records no
-        // arrival time.
+        // As if it had been standing there since the save was written.
         since: entity['since'] ?? state['minute'] ?? 0,
       };
     }
@@ -279,8 +216,7 @@ export function load(
   }
 
   if (recorded.hash !== module.hash) {
-    // Content drift is usually an edited module rather than a corrupt save, so it can be allowed
-    // deliberately, but never silently.
+    // Content drift can be allowed deliberately, but never silently.
     const message =
       `module "${module.source.id}" has changed since this save was made ` +
       `(save ${recorded.hash.slice(0, 8)}, module ${module.hash.slice(0, 8)})`;
@@ -290,9 +226,7 @@ export function load(
     warnings.push(message);
   }
 
-  // Mod drift is reported, never refused. The engine does not know what any mod changed, so
-  // blocking would make every mod toggle a save-breaking decision. Naming what differs lets the
-  // player judge it, and the lineage is there afterwards.
+  // Mod drift is reported, never refused.
   const savedMods = file.mods ?? [];
   const activeMods = options.mods ?? [];
   const gone = savedMods.filter((id) => !activeMods.includes(id));
@@ -307,11 +241,7 @@ export function load(
   return { ok: true, state, warnings, file: { ...file, state } };
 }
 
-/**
- * Serialize with object keys in a fixed order. Array order is preserved because it is real
- * information; the order two pieces of code happened to write an object's fields is not. A state
- * rebuilt by a migration would otherwise compare unequal to an identical fresh one.
- */
+/** Serialize with object keys in a fixed order. */
 function canonical(value: unknown): string {
   if (value === null || typeof value !== 'object') return JSON.stringify(value) ?? 'null';
   if (Array.isArray(value)) return `[${value.map(canonical).join(',')}]`;
@@ -323,10 +253,7 @@ function canonical(value: unknown): string {
   return `{${entries.map(([key, held]) => `${JSON.stringify(key)}:${canonical(held)}`).join(',')}}`;
 }
 
-/**
- * Whether two states are identical. The determinism tests rest on this: comparing serialized forms
- * catches a difference anywhere, including RNG position, which a field-by-field check would miss.
- */
+/** Whether two states are identical. */
 export function statesEqual(a: GameState, b: GameState): boolean {
   return canonical(a) === canonical(b);
 }

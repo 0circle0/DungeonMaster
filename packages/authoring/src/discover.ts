@@ -1,7 +1,4 @@
-/**
- * Hidden places are discovered by a thread-based formula.
- * The supported shape is a five-value description that converts to the engine formula.
- */
+/** Hidden places are discovered by a thread-based formula. */
 
 /** Five values describing a hidden-place discovery formula. */
 export interface Rumoured {
@@ -31,9 +28,7 @@ export function dcKnowing(spec: Rumoured, known: number): number {
   return Math.max(floorOf(spec), spec.base - spec.step * known);
 }
 
-/**
- * Build the hidden/discovery fields that anchor a place to a lore thread.
- */
+/** Build the hidden/discovery fields that anchor a place to a lore thread. */
 export function rumoured(spec: Rumoured): { hidden: true; discover: Discover } {
   return {
     hidden: true,
@@ -54,10 +49,7 @@ export function rumoured(spec: Rumoured): { hidden: true; discover: Discover } {
   };
 }
 
-/**
- * Read the supported hidden-place formula back into the five-value form.
- * Hand-written or alternative formulas are left alone.
- */
+/** Read the supported hidden-place formula back into the five-value form. */
 export function readRumoured(discover: unknown): Rumoured | null {
   if (typeof discover !== 'object' || discover === null) return null;
   const skill = (discover as Record<string, unknown>)['skill'];
@@ -97,9 +89,7 @@ export function readRumoured(discover: unknown): Rumoured | null {
   };
 }
 
-/**
- * Extract the thread name from a hidden-place formula regardless of form.
- */
+/** Extract the thread name from a hidden-place formula regardless of form. */
 export function threadAnchored(discover: unknown): string | null {
   const found = /"threads\.([^".]+)\.known"/.exec(JSON.stringify(discover ?? null));
   return found?.[1] ?? null;
@@ -116,9 +106,7 @@ export interface Noticing {
   readonly mode?: 'once' | 'always';
 }
 
-/**
- * Create an arrival trigger that teaches a clue.
- */
+/** Create an arrival trigger that teaches a clue. */
 export function noticing(spec: Noticing): Record<string, unknown> {
   return {
     id: spec.id,

@@ -1,15 +1,4 @@
-/**
- * Experience for what the party killed, and which rolls may crit.
- *
- * `content.monsters[].xp` was authored on 89 of Aurendel's 127 creatures,
- * copied onto every spawned one, and converted into party experience by
- * nothing: quests were the only way to gain a level. The numbers say what they
- * were written for, a barrow rat being worth 15 against a level 2 costing 100.
- *
- * `criticalScope` is the narrower dial beside `criticalSuccessAt`, which was
- * all or nothing -- switching criticals off at all switched them off on
- * attacks too.
- */
+/** Experience for what the party killed, and which rolls may crit. */
 
 import { describe, it, expect } from 'vitest';
 import { fileURLToPath } from 'node:url';
@@ -71,8 +60,7 @@ describe('experience for a kill', () => {
     expect(xpAfter([died('e:1')])).toBe(worth);
   });
 
-  // A creature killed by another creature, or by the ground it stood on,
-  // teaches the party nothing.
+  // A creature killed by another creature, or by the ground it stood on, teaches the party nothing.
   it('goes unpaid when the party did not do it', () => {
     expect(xpAfter([died('m:0')])).toBe(0);
     expect(xpAfter([died(null)])).toBe(0);
@@ -82,11 +70,6 @@ describe('experience for a kill', () => {
     expect(xpAfter([died('e:1'), died('e:1')])).toBe(worth * 2);
   });
 
-  /**
-   * The switch is the module's, and it already had one: a ruleset that does not
-   * want experience for killing gives its creatures none, which is the schema
-   * default. Nothing had to be declared twice.
-   */
   it('pays nothing for a creature worth nothing', () => {
     const doc = JSON.parse(JSON.stringify(GREENMARCH.source)) as never as {
       content: { monsters: Record<string, unknown>[] };

@@ -1,25 +1,11 @@
 'use client';
 
-/**
- * Mod status and toggles.
- *
- * Two surfaces, because they answer different questions at different moments:
- * the banner tells a player mid-game that what they are playing is not quite
- * what the author shipped, and the panel is where they decide what runs.
- */
+/** Mod status and toggles. */
 
 import type { ModSetup } from '@/lib/mods';
 import type { ModsApi } from '@/lib/useMods';
 
-/**
- * A persistent warning that a mod is not the build the game was authored
- * against.
- *
- * Loud rather than blocking, deliberately. The hash sits in a JSON file the
- * player can edit, so refusing to run would teach people to edit the hash
- * rather than to fix the mismatch — and then the pin would mean nothing at all.
- * Saying plainly what differs leaves the judgement where it belongs.
- */
+/** A persistent warning that a mod is not the build the game was authored against. */
 export function ModBanner({ setup }: { setup: ModSetup | null }) {
   if (!setup) return null;
   const { drifted } = setup.resolution;
@@ -43,13 +29,7 @@ export function ModBanner({ setup }: { setup: ModSetup | null }) {
   );
 }
 
-/**
- * What one mod is currently holding.
- *
- * Rendered as plain key/value rather than prettied per mod: the host has no
- * idea what any given mod's bag means, and guessing would be worse than
- * showing the truth.
- */
+/** What one mod is currently holding. */
 function ModState({ held }: { held: Readonly<Record<string, unknown>> | undefined }) {
   const entries = Object.entries(held ?? {});
   if (entries.length === 0) return null;

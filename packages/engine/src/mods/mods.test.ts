@@ -1,8 +1,4 @@
-/**
- * Mods against the real engine. The two that matter most are the first two: the hook sites are
- * inert without mods, and a run with mods replays identically. Everything else is a feature; those
- * two are the contract.
- */
+/** Mods against the real engine. */
 
 import { describe, it, expect, beforeAll, afterAll } from 'vitest';
 import { fileURLToPath } from 'node:url';
@@ -68,8 +64,7 @@ afterAll(() => host?.dispose());
 
 describe('the seam is inert', () => {
   it('produces the identical state with no mods and with a zero-mod runtime', () => {
-    // If this ever fails, adding the hook call sites changed the game — the one thing they must not
-    // do.
+    // If this ever fails, adding the hook call sites changed the game — the one thing they must not do.
     const plain = reduceAll(started(), SCRIPT, { module: GREENMARCH });
     const empty = reduceAll(started(), SCRIPT, { module: GREENMARCH, mods: runtimeWith([]) });
     expect(statesEqual(plain.state, empty.state)).toBe(true);
@@ -90,9 +85,7 @@ describe('determinism', () => {
   });
 
   it('is unaffected by how many random numbers a mod draws', () => {
-    // `derive()` reads the parent generator without advancing it, so a mod's draws cannot perturb
-    // anything downstream. This is what lets a mod author add a die roll without changing the rest
-    // of the game.
+    // `derive()` reads the parent generator without advancing it.
     const drawing = (id: string, times: number): LoadedMod =>
       inlineMod(
         { ...thorns.manifest, id, hooks: [{ hook: 'action.after', mode: 'after', priority: 0, match: 'wait' }] },
@@ -126,8 +119,6 @@ describe('a mod adds an effect op the engine has never heard of', () => {
     // Carrying four, so plucking two leaves two.
     const state: GameState = { ...started(), modState: { thorns: { stacks: 4 } } };
 
-    // Driven the way content would: through `applyOps`, which reaches the unknown-op branch and
-    // asks the mods before refusing.
     const txn = new Transaction(state, GREENMARCH, mods);
     applyOps(txn, [{ op: 'pluckThorns', amount: 2 } as never]);
     const result = txn.finish();
@@ -157,8 +148,6 @@ describe('the content thorns depends on actually exists', () => {
   });
 
   it('actually generates briar on the maps the party walks onto', () => {
-    // Declaring the terrain is not enough: if nothing scatters it, the mod is unreachable in play
-    // however correct its code is.
     const withBriar = [1, 2, 3, 4].filter((seed) => {
       const state = newGame(GREENMARCH, { seed, party: [defaultChoices(GREENMARCH, 'Ash')] });
       const terrain = new TerrainIndex(GREENMARCH);
@@ -185,8 +174,6 @@ describe('thorns, end to end', () => {
   };
 
   it('catches a thorn when the party is wounded standing in briar', () => {
-    // Through `event.emit`, which is why that hook must be cheap: it sees every `damaged` event and
-    // nothing else.
     const result = wound(started(1, 'briar'));
 
     expect(result.state.modState['thorns']?.['stacks']).toBe(1);
@@ -196,7 +183,7 @@ describe('thorns, end to end', () => {
   });
 
   it('costs nothing to be wounded off the briar', () => {
-    // The gate that makes the mod's description true. Without it every wound anywhere was a thorn.
+    // The gate that makes the mod's description true.
     const result = wound(started(1, 'floor'));
     expect(result.state.modState['thorns']?.['stacks'] ?? 0).toBe(0);
     expect(result.events.find(
@@ -301,8 +288,6 @@ describe('a mod refuses in its own words', () => {
 describe('the paired mod reads what the studio half wrote', () => {
   it('reaches a monster’s extra bag through a module query', () => {
     // The engine half of `morale` looks up `module.content.monsters.<id>` and reads `extra.morale`.
-    // That is the whole contract between the two halves: they share no code, only a path into a bag
-    // the schema allows.
     const morale = modById('morale');
     const mods = runtimeWith([{ manifest: morale.manifest, files: morale.files, hash: morale.hash }]);
 
@@ -363,8 +348,6 @@ describe('the wider hook surface', () => {
          minutes: ctx.subject.minutes, days: ctx.subject.daysCrossed,
        } }]);`,
     );
-    // A long rest crosses a day boundary; a single `wait` may not move the clock at all, which is
-    // the case this hook distinguishes.
     const { events } = reduce(
       started(),
       { type: 'advanceTime', minutes: 2000 },
@@ -453,8 +436,6 @@ describe('containment', () => {
     const mods = runtimeWith([nan]);
     const { state, events } = reduce(started(), { type: 'wait' }, { module: GREENMARCH, mods });
 
-    // JSON turns NaN into null on the way out of the sandbox, so what arrives is a null rather than
-    // a NaN — either way it must not be stored as a number the state then lies about.
     expect(state.modState['nan']?.['bad'] ?? null).toBeNull();
     void events;
   });

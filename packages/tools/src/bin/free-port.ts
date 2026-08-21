@@ -1,18 +1,4 @@
-/**
- * `tsx packages/tools/src/bin/free-port.ts 4400`
- *
- * Clear a stale dev server off a port before starting a new one.
- *
- * A dev server that outlives the terminal it was started from is invisible
- * until the next `npm run editor`, which then fails with `EADDRINUSE` and a
- * stack trace that says nothing about what to do. This finds the process on the
- * port, checks it belongs to this repository, and stops it.
- *
- * The ownership check is the important part: it will never touch a process
- * whose working directory is outside this checkout, so a database or another
- * project's server happening to sit on the same port is reported rather than
- * killed.
- */
+/** `tsx packages/tools/src/bin/free-port.ts 4400` */
 
 import { execFileSync } from 'node:child_process';
 import { readlinkSync } from 'node:fs';
@@ -100,8 +86,7 @@ function main(): number {
   for (const pid of pids) {
     const cwd = workingDirectoryOf(pid);
 
-    // Someone else's process. Say so plainly and leave it alone — a port
-    // collision is worth a sentence, not a kill.
+    // Someone else's process.
     if (cwd === null || !cwd.startsWith(repoRoot)) {
       process.stderr.write(
         `  Port ${port} is held by pid ${pid}, which is not part of this project:\n`

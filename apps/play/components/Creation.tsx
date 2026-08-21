@@ -1,14 +1,6 @@
 'use client';
 
-/**
- * Character creation as a form.
- *
- * Built over `@dm/play`'s `creation.ts` rules and nothing else — `adjust`
- * returns a tagged refusal carrying a human-readable message, which is exactly
- * what a form wants to put beside the button that was pressed. The terminal's
- * prompt-sequence screen is deliberately not reused: a form is a different
- * animal.
- */
+/** Character creation as a form. */
 
 import { useMemo, useState } from 'react';
 import type { CompiledModule } from '@dm/module';

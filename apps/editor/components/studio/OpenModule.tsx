@@ -1,18 +1,6 @@
 'use client';
 
-/**
- * Switching between the worlds in your library.
- *
- * This used to be a full page navigation: a module's prefabs, style tables,
- * contract and recovered draft were all read on the server for one named
- * module, so swapping the document in the running page would have left every
- * one of them belonging to the last one. Reloading was correct by construction.
- *
- * None of that is true now. A world is one envelope — document, sidecar and
- * draft together — so switching is a single read, and the state that has to be
- * replaced is replaced by remounting the shell on the world's key. A reload
- * would only throw away the page for no gain.
- */
+/** Switching between the worlds in your library. */
 
 import type { WorldMeta } from '@dm/library';
 import styles from '@/app/studio/studio.module.css';

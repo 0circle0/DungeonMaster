@@ -1,20 +1,4 @@
-"""Aurendel — who cares what you do.
-
-Six powers, and the questline is largely the story of choosing between the
-first three. `relations` is directional and spills one hop only, so siding
-with the Crown costs you the Library because the Crown says so — not because
-the Library also declares it.
-
-`decayPerDay` is what stops a single bad afternoon following you for the rest
-of the game: standing drifts back toward neutral, never crossing it. A faction
-with no decay never forgives, which is the right reading for the thing under
-the Deeproads and the wrong one for a city.
-
-The nine regional powers the side chains brought with them live in
-`sidefactions.py` and are concatenated on at the bottom. Kept apart because the
-six below are the story of the Unsealing and are read by the act files, and
-mixing the two lists would make it hard to see which is which.
-"""
+"""Aurendel — who cares what you do."""
 import sidefactions
 
 MAIN_FACTIONS = [
@@ -95,8 +79,7 @@ MAIN_FACTIONS = [
         ],
     },
     {
-        # No decay. It does not drift back toward neutral because it was never
-        # neutral and has nowhere to drift to.
+        # No decay.
         "id": "the_unsealed",
         "name": "What Was Shut",
         "description": "Whatever the wards were built against. It has a side, "
@@ -109,9 +92,7 @@ MAIN_FACTIONS = [
 ]
 
 
-# --- deeds --------------------------------------------------------------
-# `severity` moves the named faction's standing when somebody identifies you.
-# Kill the witnesses and it costs nothing; that is the design, not a hole.
+# --- deeds: `severity` moves the named faction's standing ---
 
 MAIN_DEED_KINDS = [
     {"id": "ward_restored", "name": "Restored a Ward", "faction": "the_keepers",
@@ -137,8 +118,7 @@ MAIN_DEED_KINDS = [
 ]
 
 
-# --- and the nine the side chains brought with them ------------------------
-# Concatenated here so `build.py` still has one name to ask for.
+# --- and the nine the side chains brought with them ---
 
 FACTIONS = MAIN_FACTIONS + sidefactions.FACTIONS
 DEED_KINDS = MAIN_DEED_KINDS + sidefactions.DEED_KINDS
@@ -151,8 +131,7 @@ MEMORY = {
     "forgetting": {
         "curve": "exponential",
         "halfLifeDays": 45,
-        # Above zero on purpose: nobody in Aurendel forgets a broken ward
-        # outright, they only stop being able to prove it.
+        # Above zero on purpose: a broken ward is remembered, only unprovable.
         "floor": 0.04,
         "caresAboutMultiplier": 3,
         "memorabilityWeight": 1,
@@ -166,8 +145,7 @@ MEMORY = {
         "distortionPerHop": 0.15,
         "requiresTravel": True,
         "crossFactionRate": 0.35,
-        # A ward broken is severity 18 and travels; a barrow robbed is 10 and
-        # travels; anything smaller stays where it happened.
+        # A ward broken is severity 18 and travels; a barrow robbed is 10 and travels.
         "minimumSeverity": 8,
         "gullibilityScale": 2,
         "garbledRetention": 0.5,

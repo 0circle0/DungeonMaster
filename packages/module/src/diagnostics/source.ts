@@ -1,15 +1,4 @@
-/**
- * JSON with source positions.
- *
- * A module is hand-edited JSON, so "`content.monsters[2].loot` does not exist"
- * is only half an answer — the author still has to find it. This parses a
- * document while recording where every value came from, so a diagnostic can say
- * *line 214, column 9* and print the offending line with a caret under it.
- *
- * It also reports syntax errors properly. `JSON.parse` gives one terse message;
- * this reports the position, what it expected, and — for the classic cases of a
- * missing brace, a trailing comma, or a single quote — what to do about it.
- */
+/** JSON with source positions. */
 
 export interface Position {
   /** 1-based, for display. */
@@ -58,11 +47,7 @@ class Reader {
     return { line: this.line, column: this.index - this.lineStart + 1, offset: this.index };
   }
 
-  /**
-   * Deliberately a method rather than a getter: TypeScript narrows a getter and
-   * keeps that narrowing across `parseString()`, which advances the cursor —
-   * producing a false "these types have no overlap" error.
-   */
+  /** A method rather than a getter: a getter's narrowing would survive `parseString()`. */
   private peek(): string | undefined {
     return this.text[this.index];
   }
@@ -88,8 +73,7 @@ class Reader {
         this.advance();
         continue;
       }
-      // Comments are not JSON, but authors write them constantly, so say so
-      // rather than reporting a baffling "unexpected /".
+      // Comments are not JSON, but authors write them, so say so.
       if (char === '/' && (this.text[this.index + 1] === '/' || this.text[this.index + 1] === '*')) {
         this.fail('comments are not allowed in JSON', 'remove the comment, or move it into a "description" field');
       }
@@ -192,8 +176,7 @@ class Reader {
       this.advance();
 
       out[key] = this.parseValue(childPath);
-      // Record the key's own position too, so "unknown property" can point at
-      // the name rather than at its value.
+      // Record the key's own position, so "unknown property" points at the name.
       this.spans.set(`${childPath}#key`, { start: keyStart, end: this.position });
 
       this.skipWhitespace();
@@ -341,7 +324,7 @@ class Reader {
   }
 }
 
-/** Parse JSON, recording a span for every value. Throws {@link JsonSyntaxError}. */
+/** Parse JSON, recording a span for every value. */
 export function parseJsonWithSource(text: string): ParsedSource {
   const reader = new Reader(text);
   const value = reader.parseDocument();
@@ -361,11 +344,7 @@ export function positionAt(text: string, offset: number): Position {
   return { line, column: offset - lineStart + 1, offset };
 }
 
-/**
- * Render the offending line with a caret, the way a compiler would.
- *
- * Seeing the actual line is most of what makes an error easy to fix.
- */
+/** Render the offending line with a caret, the way a compiler would. */
 export function excerpt(text: string, position: Position, contextLines = 1): string {
   const lines = text.split('\n');
   const from = Math.max(0, position.line - 1 - contextLines);

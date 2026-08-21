@@ -1,27 +1,9 @@
-/**
- * Keeping the instance sidecar in step with the document.
- *
- * Half of a link is authored and half is derived, and the distinction is the
- * whole point: `params` are what somebody typed when they placed the entry and
- * are carried through untouched, while `overrides` are recomputed every time,
- * because "a field I changed by hand" is not a thing to remember — it is a
- * thing to observe. An override is whatever differs from what the prefab
- * produces *now*, so the inspector shows the truth rather than a record of one.
- *
- * Pure, and separate from any storage: this used to live beside the code that
- * wrote files, which made it look like filesystem policy when it is really the
- * behaviour behind a panel. The studio runs it in the browser now.
- */
+/** Keeping the instance sidecar in step with the document. */
 
 import { overriddenPaths } from './prefab.js';
 import type { Prefab, PrefabLink, InstanceMap, StyleTables } from './prefab.js';
 
-/**
- * The instance map, brought up to date with the document.
- *
- * Returns null when there are no prefabs, so a world that does not use them
- * never grows the sidecar.
- */
+/** The instance map, brought up to date with the document. */
 export function recomputeInstances(
   doc: Record<string, unknown>,
   prefabs: readonly Prefab[],
@@ -41,8 +23,7 @@ export function recomputeInstances(
     for (const [id, link] of Object.entries(links)) {
       const entry = (entries as Record<string, unknown>[]).find((e) => e['id'] === id);
       const prefab = byId.get(link.id);
-      // An entry that is gone, or a prefab that is, keeps no link: the first
-      // has nothing to describe and the second can never be followed again.
+      // An entry that is gone, or a prefab that is, keeps no link.
       if (!entry || !prefab) continue;
 
       (out[collection] ??= {})[id] = {

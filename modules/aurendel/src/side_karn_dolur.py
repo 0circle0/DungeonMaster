@@ -1,19 +1,4 @@
-"""The Old Seams — a Karn Dolur side chain, Act III.
-
-Karn Dolur has nine hundred years of not opening the Deep Door and a ledger of
-every fee ever charged for the privilege of not being let through it. It also
-has the old seams, worked out and abandoned in the year four hundred, and the
-Hold has never written down which year it stopped for — which for a hold that
-writes down the weather is not an omission, it is a decision.
-
-Vare keeps the Hall of Measures, which is where the Hold puts things it has
-decided about. She is not a Speaker and cannot open anything, and that is
-exactly why she is willing to have this conversation.
-
-The reward is the deep warrant fee waived and Hold Plate off the muster floor,
-which is the heaviest armour in Aurendel and the only body slot the questline
-does not already fill.
-"""
+"""The Old Seams — a Karn Dolur side chain, Act III."""
 from dmkit.quests import (
     arc, stage, reach, kill, talk, flagged, resolved_either_way, set_flag,
     rep, deed, either, node, option, take_job, dialogue, npc, shop,

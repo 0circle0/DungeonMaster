@@ -1,24 +1,6 @@
 'use client';
 
-/**
- * The chain this quest is part of, and whether it is wired up.
- *
- * A chain is four pieces of bookkeeping that all have to agree, and every one
- * of them fails quietly on its own: only the head is offered, every later link
- * waits on the one before, every link but the last names the next in
- * `unlocks`, and the level floor sits on the head alone. Miss the third and
- * the tail is unreachable. Miss the second and the chain has two heads, which
- * validates perfectly and plays as two chains.
- *
- * None of that is visible from one quest's form, because a chain is not a
- * thing in the format — it is a shape spread across several entries. So this
- * recovers it: follow `unlocks` forward and quest requirements back, show the
- * order, and say what is wrong with it.
- *
- * Reading only. Wiring the next link is one button because the wiring is
- * mechanical; everything else is left to the form, since a chain that the
- * studio rearranges on its own is a chain nobody trusts.
- */
+/** The chain this quest is part of, and whether it is wired up. */
 
 import { chainProblems } from '@dm/authoring';
 import { getAt } from '@/lib/store';
@@ -46,16 +28,7 @@ export function QuestChain(props: { store: ModuleStore; questIndex: number }) {
   const unlocksOf = (entry: Quest | undefined): string[] =>
     Array.isArray(entry?.unlocks) ? entry.unlocks.map((other) => String(other)) : [];
 
-  /**
-   * Backwards along quest requirements, then forwards along `unlocks`.
-   *
-   * Backwards only follows a requirement whose target *also* unlocks this
-   * quest, and that is the whole distinction between a link and a gate. Every
-   * side chain in Aurendel waits on an act opening — `the_open_door`, or
-   * `the_undercroft` — and without this the walk swallows the act quest as a
-   * first link and then reports the chain as broken because an act does not
-   * unlock the chains it opens.
-   */
+  /** Backwards along quest requirements, then forwards along `unlocks`. */
   const chain: Quest[] = [quest];
   const seen = new Set([id]);
 
@@ -85,9 +58,7 @@ export function QuestChain(props: { store: ModuleStore; questIndex: number }) {
 
   if (chain.length < 2) return null;
 
-  // Gates: a quest the chain waits on that is not in it. A side chain gated on
-  // an act opening is contained, not leaking — so what the chain's own head
-  // waits on counts as declared rather than as a fault.
+  // Gates: a quest the chain waits on that is not in it.
   const gates = (chain[0]?.requires?.quests ?? [])
     .map((clause) => String(clause?.quest))
     .filter((other) => !seen.has(other));

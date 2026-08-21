@@ -1,14 +1,6 @@
 'use client';
 
-/**
- * The map: a monospace grid of clickable cells.
- *
- * Everything drawn comes from `@dm/play`'s `mapView` — the same three-state
- * visibility ladder and the same tones the terminal draws from, so the two
- * front ends cannot disagree about what is on the ground. Clicking asks
- * `affordancesAt` what the tile can mean; one unblocked answer dispatches,
- * several open the shared picker.
- */
+/** The map: a monospace grid of clickable cells. */
 
 import { useMemo, useState } from 'react';
 import type { Action, Position } from '@dm/engine';
@@ -35,7 +27,6 @@ export function MapView({ session }: { session: SessionApi }) {
   );
 
   // The route a click on the hovered tile would walk, for the path preview.
-  // Memoized on the packed key: re-rendering with an unchanged hover is free.
   const hoverPath = useMemo(() => {
     if (!hover) return null;
     const offered = affordancesAt({ module, state: frame.state, terrain }, hover);
@@ -111,13 +102,7 @@ export function MapView({ session }: { session: SessionApi }) {
   );
 }
 
-/**
- * An affordance as a picker row.
- *
- * A map click's candidates all sit on one tile, so a walk shows its step
- * count and the rest need no detail; the command bar builds richer rows of
- * its own, because there the candidates differ *only* by position.
- */
+/** An affordance as a picker row. */
 export function toPickerItem(
   entry: Affordance,
   _from: Position | null,

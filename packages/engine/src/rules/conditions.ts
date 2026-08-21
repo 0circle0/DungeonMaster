@@ -1,13 +1,4 @@
-/**
- * Condition lifecycle.
- *
- * Everything that expires runs through one tick, so durations cannot leak: a condition applied by a
- * spell, a trap, or a terrain tile is the same object and ages the same way.
- *
- * Order within a tick is fixed: `onTick` effects fire first, then durations decrease, then anything
- * at zero expires and fires `onExpire`. A poison that deals damage on the round it wears off is
- * correct — it was still active for that round.
- */
+/** Condition lifecycle. */
 
 import { Rng } from '@dm/core';
 import { evalEffects, evalExpr } from '@dm/module';
@@ -45,11 +36,7 @@ function savesAt(
   return timing === when || timing === 'both';
 }
 
-/**
- * Give an entity its saves against the conditions that allow one. "Save ends" is a save, a
- * difficulty and a timing; without this pass a condition with a save behaves exactly like one
- * without, and the `saved` reason on `conditionRemoved` is unreachable.
- */
+/** Give an entity its saves against the conditions that allow one. */
 export function rollConditionSaves(
   txn: Transaction,
   entityId: EntityId,
@@ -110,16 +97,7 @@ export function preventsAction(txn: Transaction, entity: Entity, actionType: str
   return false;
 }
 
-/**
- * Every swing an entity's conditions impose on one kind of roll.
- *
- * A list rather than a single answer, because reconciling them is `resolveSwing`'s job and
- * `check`'s alone to do — collecting here and deciding there is what stops two call sites
- * disagreeing.
- *
- * Takes a module rather than a transaction, unlike `preventsAction`, because the roll sites that
- * need this do not all have one.
- */
+/** Every swing an entity's conditions impose on one kind of roll. */
 export function swingsFrom(
   module: CompiledModule,
   entity: Entity,
@@ -134,15 +112,12 @@ export function swingsFrom(
   return out;
 }
 
-/**
- * Advance every condition on one entity by a round. `rng` is passed in rather than drawn from state
- * because a tick happens inside a turn that already has its own sub-stream.
- */
+/** Advance every condition on one entity by a round. */
 export function tickConditions(txn: Transaction, entityId: EntityId, rng: Rng): void {
   const entity = txn.entity(entityId);
   if (!entity || entity.conditions.length === 0) return;
 
-  // 1. Effects fire while the condition is still active.
+  // 1.
   for (const active of entity.conditions) {
     const definition = txn.module.find<ConditionDef>('rules.conditions', active.condition);
     if (!definition || definition.onTick.length === 0) continue;
@@ -157,7 +132,7 @@ export function tickConditions(txn: Transaction, entityId: EntityId, rng: Rng): 
     applyOps(txn, evalEffects(definition.onTick, { scope, rng, openNamespaces: OPEN_NAMESPACES }), active.source);
   }
 
-  // 2. Age them, and collect what has run out.
+  // 2.
   const after = txn.entity(entityId);
   if (!after) return;
 
@@ -175,13 +150,11 @@ export function tickConditions(txn: Transaction, entityId: EntityId, rng: Rng): 
     else expired.push(active.condition);
   }
 
-  // Always write the aged conditions back: returning early when nothing expired would discard the
-  // decremented durations, and conditions would tick forever without running out.
+  // Always write the aged conditions back, or the decremented durations are discarded.
   txn.putEntity({ ...after, conditions: surviving });
   if (expired.length === 0) return;
 
-  // 3. Expiry effects run once the condition is already gone, so an `onExpire` that reapplies it
-  //    does not immediately expire again.
+  // 3.
   for (const conditionId of expired) {
     txn.emit({ type: 'conditionRemoved', entity: entityId, condition: conditionId, reason: 'expired' });
 

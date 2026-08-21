@@ -1,12 +1,4 @@
-/**
- * The play surface, shared by every front end.
- *
- * Everything here is isomorphic — no Node APIs, no ANSI, no DOM. It emits data
- * and leaves every question of paint to the shell above it, so a second front
- * end is a rendering layer rather than a second opinion about what the game
- * *is*. The restriction is enforced by `tsconfig.isomorphic.json` and a lint
- * block, not by convention.
- */
+/** The play surface, shared by every front end. */
 
 export { parse, resolveNoun, isMeta, HELP, VERB_SPECS, traderNearby, stockNearby } from './parser.js';
 export type {

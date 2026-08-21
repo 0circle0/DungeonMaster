@@ -1,11 +1,4 @@
-/**
- * The studio's entry form. Nothing is hidden: every field renders, in an
- * order that reads top-down as "what is this, what makes it work, then the
- * fine print" — identity (id, name, description) first, the promoted fields
- * from lib/importantFields.ts next, the rest in schema order, and the
- * free-form `extra` bag last. Complex sections collapse individually, and
- * start open, so folding is the author's choice rather than the default.
- */
+/** The studio's entry form. */
 
 import { useState } from 'react';
 import type { FieldEntry, FieldSpec } from '@/lib/schema';
@@ -30,10 +23,7 @@ export function ItemForm(props: {
   registryPath: string;
   basePath: Path;
   store: ModuleStore;
-  /**
-   * Keys to leave out. For the map drawer, which addresses its subject by `id`
-   * and would lose track of it the moment that field were edited.
-   */
+  /** Keys to leave out. */
   omit?: ReadonlySet<string>;
 }) {
   const { spec, store } = props;
@@ -74,8 +64,7 @@ export function ItemForm(props: {
             path={[...props.basePath, field.key]}
             // Containers get their label from the section header instead.
             label={isContainer ? undefined : name}
-            // …which is why the name is handed down separately: an array item
-            // still needs to know what it is one of.
+            // The name is handed down separately: an array item still needs to know what it is one of.
             context={isContainer ? name : undefined}
             description={field.key === 'extra' ? EXTRA_HINT : field.description}
             optional={field.optional}
@@ -111,8 +100,7 @@ function countOf(field: FieldEntry, value: unknown): string {
     const keys = typeof value === 'object' && value !== null ? Object.keys(value).length : 0;
     return String(keys);
   }
-  // Only a missing object with no schema default is genuinely unset — an
-  // absent defaulted object (an area's `map`) compiles to its default anyway.
+  // Only a missing object with no schema default is genuinely unset.
   if (field.spec.kind === 'object') {
     return value == null && field.defaultValue == null ? 'unset' : '';
   }

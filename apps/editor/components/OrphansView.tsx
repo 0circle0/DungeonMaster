@@ -1,18 +1,4 @@
-/**
- * Content nothing points at.
- *
- * The other half of the reference graph, and the half that finds work nobody
- * remembers doing: a loot table written three sessions ago that no creature
- * drops, an item no shop stocks, a gate hung on nothing. None of it is an
- * error — the module compiles and plays — which is exactly why it accumulates.
- *
- * The collections excluded here are the ones legitimately reached without a
- * static reference, and the list is shared with the used-by panel rather than
- * written twice: a condition is named inside a DSL string, an ancestry is
- * chosen at character creation, an area is reached by walking. Reporting those
- * would train an author to ignore the view, which costs more than the view is
- * worth.
- */
+/** Content nothing points at. */
 
 'use client';
 
@@ -26,8 +12,7 @@ export function OrphansView(props: {
   doc: ModuleDoc;
   onOpen: (collection: string, index: number) => void;
 }) {
-  // The same walk `UsedBy` does, and the same reason for deferring it: it reads
-  // the whole document, and nothing here needs to be current mid-keystroke.
+  // The same walk `UsedBy` does, deferred: it reads the whole document.
   const doc = useDeferredValue(props.doc);
   const [showAll, setShowAll] = useState(false);
 
@@ -36,8 +21,7 @@ export function OrphansView(props: {
     const found = findOrphans(doc, index, showAll ? [] : [...REACHED_INDIRECTLY.keys()]);
     if (showAll) return found;
 
-    // An NPC naming its own home is on the map; nothing pointing at it is not a
-    // problem, it is the wrong question. See `lib/reachability.ts`.
+    // An NPC naming its own home is on the map.
     return found.filter((orphan) => {
       const [section, name] = orphan.collection.split('.') as [string, string];
       const entries = (doc[section] as Record<string, unknown> | undefined)?.[name];

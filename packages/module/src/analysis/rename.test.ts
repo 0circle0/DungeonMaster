@@ -1,17 +1,4 @@
-/**
- * Renaming an id has to move every reference or none.
- *
- * Two cases a first implementation gets wrong:
- *
- * - `start.startingArea` is a reference and lives outside every collection, so anything built on
- *   `buildReferenceIndex` (which indexes by owning entry) would silently move the start of the
- *   game.
- * - a record key can be a reference, where the path names the key rather than a value, and writing
- *   to it would leave the old key beside a new one.
- *
- * The third case cannot be fixed here at all: ids embedded in fields the schema does not mark as
- * references. Those are reported.
- */
+/** Renaming an id has to move every reference or none. */
 
 import { describe, it, expect } from 'vitest';
 import { fileURLToPath } from 'node:url';
@@ -19,10 +6,7 @@ import { compileModule } from '../compile.js';
 import { readAssembledModule } from '../load.js';
 import { planRename, applyRename } from './rename.js';
 
-/**
- * Assembled, which is what the editor holds: static maps live in folders, so the raw `module.json`
- * of a module that uses them does not compile on its own.
- */
+/** Assembled, which is what the editor holds: static maps live in folders. */
 const load = (name: string): Record<string, unknown> =>
   readAssembledModule(fileURLToPath(new URL(`../../../../modules/${name}`, import.meta.url))).doc;
 
@@ -77,10 +61,7 @@ describe('applyRename', () => {
     expect(ids(doc, 'content.items')[0]).toBe(from);
   });
 
-  /**
-   * After a rename the module must still compile. A missed reference shows up here as
-   * `dangling_ref`, which is the failure the feature exists to prevent.
-   */
+  /** After a rename the module must still compile. */
   it.each(['minimal', 'greenmarch', 'aurendel'])(
     'leaves %s compiling cleanly after renaming every monster',
     (name) => {
@@ -104,8 +85,6 @@ describe('applyRename', () => {
   );
 
   it('follows a reference that lives outside any collection', () => {
-    // `start.startingArea` is a `ref()`, and it is why this cannot be built on the used-by index:
-    // that one only knows references owned by a collection entry.
     const doc = load('greenmarch');
     const startArea = (doc['start'] as Record<string, unknown>)['startingArea'];
     expect(typeof startArea).toBe('string');
@@ -139,11 +118,6 @@ describe('applyRename', () => {
 });
 
 describe('what it will not claim to have fixed', () => {
-  /**
-   * `objective.target` is a plain id, not a `ref()`, so a `kill` objective naming a renamed monster
-   * keeps the old name and still compiles. The plan has to say so rather than let an author believe
-   * the rename was complete.
-   */
   it('reports an id used somewhere the schema does not call a reference', () => {
     // Aurendel rather than greenmarch: it is the module with kill objectives.
     const doc = load('aurendel');

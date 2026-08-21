@@ -1,16 +1,4 @@
-"""Refuse to overwrite a module that has been handed over to its `project/`.
-
-These generators write `module.json` wholesale. Once a module has a `project/`
-beside it, that tree is the source of truth and `module.json` is built from it
-by `npm run project -- build` — so a generator run would throw away whatever has
-been authored since the handover, and the only thing that would notice is
-`project.test.ts` failing some time later.
-
-Kept rather than deleted because these files are still the only home for what
-was never ported: `lint.py`'s contract checks, the map reachability flood fill,
-the caverns and BSP sizing, the post-game ladder, and two-way road expansion.
-They are how these worlds were first built, not how they are maintained.
-"""
+"""Refuse to overwrite a module that has been handed over to its `project/`."""
 
 import os
 import sys

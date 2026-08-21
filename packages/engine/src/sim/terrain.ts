@@ -1,11 +1,4 @@
-/**
- * What the ground does to whoever is standing on it.
- *
- * `onEnter` and `onOccupy` are declared on every terrain in the schema and were
- * read by nothing, so a lava tile was scenery. They live here rather than in
- * the reducer because the end-of-turn hook is inside the combat turn, which the
- * reducer imports — putting them together would be a cycle.
- */
+/** What the ground does to whoever is standing on it. */
 
 import { Rng } from '@dm/core';
 import { evalEffects } from '@dm/module';
@@ -16,12 +9,7 @@ import { Transaction, applyOps } from '../rules/apply.js';
 import { terrainAt } from '../grid/tiles.js';
 import type { Position } from '../grid/tiles.js';
 
-/**
- * Run a terrain's own effects on whoever is standing on it.
- *
- * `onEnter` fires on the step; `onOccupy` at the end of a turn spent there.
- * Both were declared on every terrain and read by nothing.
- */
+/** Run a terrain's own effects on whoever is standing on it. */
 export function runTerrain(
   txn: Transaction,
   actorId: EntityId,

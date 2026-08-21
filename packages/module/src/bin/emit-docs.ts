@@ -1,18 +1,4 @@
-/**
- * `npm run docs`
- *
- * Generates the module format reference from the Zod schemas.
- *
- * Hand-written reference documentation for a format this size would be wrong
- * within a week. This walks the actual schemas, so every field, default, and
- * cross-reference in the reference is what the validator truly enforces. The
- * prose docs under `docs/` explain the ideas; this explains the fields.
- *
- * The walk itself lives in `schema/walk.ts`, shared with the documentation
- * site, and the sentence per field comes from `schema/fieldDocs.ts`, which a
- * test holds to the schema in both directions. Nothing here decides what the
- * format contains; it decides how to print it.
- */
+/** `npm run docs` */
 
 import { writeFileSync, mkdirSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
@@ -22,7 +8,7 @@ import { SYSTEM_TEXT } from '../schema/systemText.js';
 import { FIELD_DOCS } from '../schema/fieldDocs.js';
 import { walkModuleSchema, type SectionRow, type TypeNode } from '../schema/walk.js';
 
-/** Stable anchor for a section path. The document itself is `module`. */
+/** Stable anchor for a section path. */
 function anchorFor(path: string): string {
   return path === '' ? 'module' : `module-${path.replace(/\./g, '-')}`;
 }
@@ -68,13 +54,7 @@ function formatDefault(value: unknown): string {
   return `\`${JSON.stringify(value).replace(/\|/g, '\\|')}\``;
 }
 
-/**
- * What the engine says, key by key.
- *
- * Written from the registry rather than the schema shape, because the three
- * things an author needs — whether a key is mandatory, which placeholders it
- * must keep, and what it is for — live there and not in the Zod type.
- */
+/** What the engine says, key by key. */
 function systemTextSection(section: SectionRow): string[] {
   const lines = [
     `### ${headingFor(section.trail)}`,
@@ -135,14 +115,7 @@ function renderSection(section: SectionRow, heading: boolean): string[] {
   return lines;
 }
 
-/**
- * The document's own fields first, then one heading per top-level area.
- *
- * Walking the root and then re-walking each area would emit nothing the second
- * time, since a shared schema is documented once — which is how six area
- * headings came to stand empty over everything they claimed to introduce.
- * Grouping one walk by its first path part cannot drift that way.
- */
+/** The document's own fields first, then one heading per top-level area. */
 const AREAS: readonly (readonly [string, string])[] = [
   ['mods', 'Mods'],
   ['meta', 'Meta'],

@@ -1,20 +1,4 @@
-/**
- * The controls that made the map on the left.
- *
- * The complaint this answers was "it doesn't seem like you have control over
- * these" — and the knobs were always there, just two or three collections away
- * with nothing linking them to the picture. `world.palettes`, which decides
- * every reed and puddle on an overworld map, does not even appear in the world
- * tree.
- *
- * It renders the ordinary {@link ItemForm} against the real document paths
- * rather than a hand-picked list of inputs. That is the whole design: the
- * generation fields lead because `lib/importantFields.ts` already promotes
- * them, everything else stays reachable in schema order, and a field added to
- * `packages/module` shows up here for free — the same invariant the inspector
- * keeps. A curated list of controls would have to be maintained by hand and
- * would go stale the first time the generator learned a new trick.
- */
+/** The controls that made the map on the left. */
 
 import { useState } from 'react';
 import { collectionAt } from '@/lib/schema';
@@ -26,11 +10,7 @@ import { Coverage } from './Coverage';
 import { ItemForm } from './ItemForm';
 import styles from '@/app/studio/studio.module.css';
 
-/**
- * The map is addressed by id, and the viewport's target is not re-derived when
- * the document changes — so editing `id` here would blank the map being looked
- * at. It stays available in the inspector, where that is less of a trap.
- */
+/** `id` is omitted: the viewport addresses the map by it, so editing it here blanks the view. */
 const OMIT = new Set(['id']);
 
 export function MapGenerationPanel(props: {

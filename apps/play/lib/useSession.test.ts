@@ -1,9 +1,4 @@
-/**
- * The session reducer — the one piece of app logic that is not a component.
- *
- * Relative imports throughout: the vitest config aliases `@` to the *editor's*
- * directory, so app lib tests keep to `./x.js` specifiers.
- */
+/** The session reducer — the one piece of app logic that is not a component. */
 
 import { describe, it, expect } from 'vitest';
 import { fileURLToPath } from 'node:url';
@@ -58,8 +53,6 @@ describe('sessionReducer', () => {
   });
 
   it('is a pure function: same message twice gives the same frame', () => {
-    // React 19 StrictMode double-invokes reducers; the engine call lives in
-    // the event handler precisely so this double-run is harmless.
     const before = frame();
     const msg = {
       type: 'applied' as const,

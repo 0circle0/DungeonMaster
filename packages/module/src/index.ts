@@ -5,8 +5,7 @@ export type { CompileIssue, CompileResult, RefSite } from './compile.js';
 
 export { mergeModules, resolveExtends, parseExtends, DELETE_MARKER } from './merge.js';
 
-// A module as a directory of files, and back. Pure — the studio uses both
-// directions in the browser, filesystem policy lives in `bin/project.ts`.
+// A module as a directory of files, and back.
 export {
   splitProject,
   joinProject,
@@ -14,8 +13,7 @@ export {
   isAuthoringFile,
   AUTHORING_PATHS,
   PROJECT_FORMAT,
-  // The halves of a split, so the studio can recompute what a save needs
-  // (names and order) without serializing thirteen megabytes of entries.
+  // The halves of a split, so the studio can recompute what a save needs.
   manifestFor,
   shellFor,
   entryFileName,
@@ -26,8 +24,7 @@ export {
 export { bundleModule, unbundleModule, liftMaps, authoringFromFiles, PROJECT_MANIFEST } from './bundle.js';
 export type { BundleIssue, BundleAuthoring } from './bundle.js';
 
-// Prefabs: an entry described once and placed many times. Pure — the studio
-// expands and previews in the browser.
+// Prefabs: an entry described once and placed many times.
 export {
   expandPrefab,
   expandRecipe,
@@ -64,20 +61,16 @@ export { recomputeInstances } from './prefabInstances.js';
 export type { Rule, Contract } from './diagnostics/rules.js';
 export * from './analysis/index.js';
 
-// Shared field primitives. Exported so the mod format reuses the same id
-// grammar and version rules rather than re-deriving them slightly differently.
+// Shared field primitives.
 export { idSchema, versionSchema, displayName, description, refTarget, refHelp } from './schema/common.js';
 
 export { gameModuleSchema, FORMAT_VERSION, COLLECTION_PATHS } from './schema/module.js';
 export type { GameModule, CollectionPath, ModuleMeta, Creation, Start } from './schema/module.js';
 
-// The element schema behind each collection. The editor generates a form from
-// it and the incremental validator checks one entry against it, so both are
-// reading the same derivation rather than two that can drift.
+// The element schema behind each collection.
 export { COLLECTION_SCHEMAS, collectionSchema, unwrapSchema } from './schema/collections.js';
 
-// The schema walk and the sentence per field. Shared by `npm run docs`, the
-// coverage test that keeps the two in step, and the documentation site.
+// The schema walk and the sentence per field.
 export { walkModuleSchema, fieldPaths, sectionsByArea, MAX_SECTION_DEPTH, SYSTEM_TEXT_PATH } from './schema/walk.js';
 export type { FieldRow, SectionRow, TypeNode, DslKind } from './schema/walk.js';
 export { FIELD_DOCS } from './schema/fieldDocs.js';

@@ -1,28 +1,11 @@
-/**
- * What a world is, once it leaves the repository.
- *
- * The studio and the player are separate origins with separate stores, so a file is the only thing
- * that passes between them — and it is also what a player hands to a friend and what the content
- * build ships. One shape for all three, versioned from the first commit.
- *
- * A separate export entry — `@dm/library/envelope` — because this file is the half with no browser
- * in it: the content build runs in Node, and importing the package root would drag IndexedDB and
- * CompressionStream into a project with no DOM lib. The same split `@dm/module` and
- * `@dm/module/load` draw.
- *
- * Deliberately not the split `project/` file map: that form exists to give git a readable diff, and
- * there is no git in a browser.
- */
+/** The world envelope: the file form a world takes outside the repository. */
 
 import type { Prefab, InstanceMap, StyleTables, Contract } from '@dm/module';
 
 /** Bumped when the envelope gains or loses a field readers cannot infer. */
 export const WORLD_FORMAT = 1;
 
-/**
- * The authored half of a world: what generated its entries, rather than the entries themselves. A
- * world either carries prefabs or it does not, which is a question the data answers by itself.
- */
+/** The authored half of a world: prefabs, instance links and style tables. */
 export interface WorldAuthoring {
   readonly prefabs: readonly Prefab[];
   readonly instances: InstanceMap;
@@ -41,11 +24,7 @@ export interface WorldEnvelope {
   /** Sniffable discriminator: this is an envelope, not a bare document. */
   readonly dmWorld: 1;
   readonly format: number;
-  /**
-   * The assembled document — `maps/<id>/` folders inlined into `world.maps`, and `extends`
-   * deliberately left unresolved. Baking a base into a document the studio then saves would corrupt
-   * it permanently.
-   */
+  /** The assembled document: `maps/<id>/` folders inlined into `world.maps`, `extends` left unresolved. */
   readonly doc: Record<string, unknown>;
   /** Null for a world that was never a project, and for a bare import. */
   readonly authoring: WorldAuthoring | null;

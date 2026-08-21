@@ -1,19 +1,4 @@
-/**
- * Dice notation: parsing and rolling.
- *
- * Grammar (whitespace insensitive, case insensitive):
- *
- *   expr  := term (('+' | '-') term)*
- *   term  := dice | integer
- *   dice  := [count] 'd' sides [keep]
- *   keep  := ('kh' | 'kl') [n]        keep highest / lowest n, default 1
- *
- * Examples: `1d20`, `d6`, `2d6+3`, `4d6kh3`, `2d20kh1` (advantage), `1d8+1d4-1`.
- *
- * Parsing is separated from rolling so content can be validated at load time — a typo in a
- * monster's damage string is a load error, not a crash mid-combat. Rolls return every individual
- * face because the combat log narrates them.
- */
+/** Dice notation: parsing and rolling. */
 
 export interface DiceTerm {
   readonly kind: 'dice';
@@ -66,14 +51,12 @@ const MAX_SIDES = 1_000_000;
 
 const TERM_RE = /^(\d*)d(\d+)(?:k([hl])(\d*))?$/;
 
-/**
- * Parse dice notation into a reusable expression. Throws {@link DiceParseError} on malformed input.
- */
+/** Parse dice notation into a reusable expression. */
 export function parseDice(source: string): DiceExpr {
   const cleaned = source.replace(/\s+/g, '').toLowerCase();
   if (cleaned === '') throw new DiceParseError(source, 'expression is empty');
 
-  // Split on +/- while keeping the operators. A leading sign is allowed.
+  // Split on +/- while keeping the operators.
   const pieces = cleaned.split(/(?=[+-])/);
   const terms: Term[] = [];
 
@@ -163,12 +146,12 @@ export function rollDice(expr: DiceExpr, rng: DiceRng): RollResult {
   return { total, dice, modifier, expr };
 }
 
-/** Parse and roll in one step. Prefer caching the parse in hot paths. */
+/** Parse and roll in one step. */
 export function roll(source: string, rng: DiceRng): RollResult {
   return rollDice(parseDice(source), rng);
 }
 
-/** Lowest possible total. Used to sanity-check content and to bound AI search. */
+/** Lowest possible total. */
 export function minRoll(expr: DiceExpr): number {
   return boundRoll(expr, 'min');
 }
@@ -205,8 +188,7 @@ export function averageRoll(expr: DiceExpr): number {
     if (!term.keep) {
       total += term.sign * term.count * ((term.sides + 1) / 2);
     } else {
-      // No closed form worth the complexity here; order statistics are approximated well enough for
-      // balance tooling by scaling the mean.
+      // Order statistics approximated by scaling the mean.
       const mean = (term.sides + 1) / 2;
       const spread = (term.sides - 1) / 2;
       const bias = term.keep.mode === 'highest' ? 1 : -1;

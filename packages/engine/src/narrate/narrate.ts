@@ -1,13 +1,4 @@
-/**
- * Events into prose.
- *
- * The engine never writes a sentence; it emits facts, and this turns them into lines. Nothing
- * narrated can influence a rule, which is what lets the same run drive a terminal, a browser, or a
- * test assertion unchanged.
- *
- * Combat lines carry their arithmetic — "17 (14+3) vs Guard 12 — a hit" — so a player can learn the
- * system from the transcript.
- */
+/** Events into prose. */
 
 import type { CompiledModule, SystemTextKey } from '@dm/module';
 import type { GameEvent, RollRecord } from '../events.js';
@@ -96,10 +87,7 @@ const OUTCOME_KEY = {
   fumble: 'combat.outcome.fumble',
 } as const satisfies Record<RollRecord['outcome'], SystemTextKey>;
 
-/**
- * Turn one event into a line, or nothing. Returning null for events that need no prose keeps the
- * transcript readable.
- */
+/** Turn one event into a line, or nothing. */
 export function narrateEvent(context: NarratorContext, event: GameEvent): Line | null {
   const { module } = context;
 
@@ -114,11 +102,7 @@ export function narrateEvent(context: NarratorContext, event: GameEvent): Line |
     }
 
     case 'custom': {
-      /**
-       * A mod speaking. The one custom event whose text is carried on the event rather than looked
-       * up here, because the words belong to a mod's own `systemText` and this file cannot reach
-       * it.
-       */
+      /** A mod speaking. */
       if (event.event === 'modSay') {
         const spoken = String(event.data['text'] ?? '');
         if (!spoken) return null;
@@ -129,8 +113,7 @@ export function narrateEvent(context: NarratorContext, event: GameEvent): Line |
 
       // Perception events read as prose rather than as a log line.
       if (event.event === 'investigating' || event.event === 'lostInterest') {
-        // Only if the party could see it happen: announcing that something unseen is casting about
-        // for them hands the player knowledge their characters do not have.
+        // Only if the party could see it happen.
         const id = String(event.data['entity'] ?? '');
         if (!partyCanSee(context, id)) return null;
 
@@ -172,8 +155,7 @@ export function narrateEvent(context: NarratorContext, event: GameEvent): Line |
         const stage = questShape(context, questId)?.stages?.find((entry) => entry.id === stageId);
         const name = stage?.name ?? stageId.replace(/_/g, ' ');
 
-        // The stage's own journal prose, which is the line telling a player what the next piece of
-        // work is.
+        // The stage's own journal prose, which is the line telling a player what the next piece of work is.
         const journal = stage?.journalKey
           ? narrateFrom(module, stage.journalKey, context.seed, { sceneKey: `stage:${questId}:${stageId}` })
           : '';
@@ -195,8 +177,7 @@ export function narrateEvent(context: NarratorContext, event: GameEvent): Line |
       return { text: render(module, event.reason, context.seed), kind: 'refusal' };
 
     case 'blocked': {
-      // `by` is a terrain id when the wall stopped you and a creature's name when someone did, so
-      // look the id up and fall back to what was sent.
+      // `by` is a terrain id or a creature name; look it up, fall back to what was sent.
       const named = module.find<{ name: string }>('world.terrains', event.by)?.name
         ?? (event.by || text(module, 'move.blocked.edge'));
       return {
@@ -350,8 +331,7 @@ export function narrateEvent(context: NarratorContext, event: GameEvent): Line |
       };
     }
 
-    // A purchase already states its price; this is for coin that moves any other way — a reward, a
-    // toll, a bribe.
+    // For coin that moves any way other than a purchase.
     case 'currencyChanged':
       return {
         text: event.amount > 0
@@ -390,8 +370,7 @@ export function narrateEvent(context: NarratorContext, event: GameEvent): Line |
     case 'roundStarted':
       return { text: text(module, 'combat.round', { round: event.round }), kind: 'system' };
 
-    // Whose turn it is has to land in the transcript: the player commands the party one member at a
-    // time.
+    // Whose turn it is has to land in the transcript: the player commands the party one member at a time.
     case 'turnStarted':
       return { text: text(module, 'combat.turn', { who: nameOf(context, event.entity) }), kind: 'combat' };
 
@@ -437,8 +416,7 @@ export function narrateEvent(context: NarratorContext, event: GameEvent): Line |
         'narrative.lore',
         event.entry,
       );
-      // A clue may be authored as a pool. Seeded on the entry rather than the scene: it is learned
-      // once, and the wording it was learned in is what the journal keeps showing.
+      // A clue may be authored as a pool.
       const said = lore?.textKey
         ? narrateFrom(module, lore.textKey, context.seed, { sceneKey: `lore:${event.entry}` })
         : lore?.name ?? event.entry.replace(/_/g, ' ');
@@ -453,8 +431,7 @@ export function narrateEvent(context: NarratorContext, event: GameEvent): Line |
     case 'questStarted': {
       const quest = questShape(context, event.quest);
       const name = quest?.name ?? contentName(context, 'narrative.quests', event.quest);
-      // The description is the point of taking a job; the title alone says a quest exists and
-      // nothing about it.
+      // The description, not the title: the title says only that a quest exists.
       return {
         text: quest?.description
           ? text(module, 'quest.started', { quest: name, description: quest.description })
@@ -536,9 +513,7 @@ export function narrateEvent(context: NarratorContext, event: GameEvent): Line |
 export function narrate(context: NarratorContext, events: readonly GameEvent[]): Line[] {
   const out: Line[] = [];
   for (const event of events) {
-    // A few events are a paragraph rather than a sentence — looking around is the room, its
-    // occupants and what reaches you; listening is one line per thing heard — so they expand here,
-    // where a list is allowed.
+    // A few events expand to a paragraph rather than a sentence.
     if (event.type === 'custom' && event.event === 'looked') {
       out.push(...describeLook(context, String(event.data['at'] ?? '')));
       continue;
@@ -561,8 +536,7 @@ function describeLook(context: NarratorContext, at: string): Line[] {
   const { module, state } = context;
   const target = at.toLowerCase();
 
-  // Everything the party could reasonably mean, scored together: checking creatures first would let
-  // a miller answer for a mill.
+  // Everything the party could mean, scored together.
   const candidates: { score: number; lines: () => Line[] }[] = [];
 
   for (const entity of Object.values(state.entities)) {
@@ -646,10 +620,7 @@ function describeLook(context: NarratorContext, at: string): Line[] {
   return best.lines();
 }
 
-/**
- * `listen`, `smell`, and anything else the module calls a sense. Always says something, since a
- * sense that reports nothing must say so out loud.
- */
+/** `listen`, `smell`, and anything else the module calls a sense. */
 function describeSense(context: NarratorContext, senseId: string, by: string): Line[] {
   const { module, state } = context;
   const observer = state.entities[by] ?? state.entities[state.selected];
@@ -667,8 +638,7 @@ function describeSense(context: NarratorContext, senseId: string, by: string): L
     const authored = empty
       ? narrateFrom(module, empty, context.seed, { sceneKey: `${empty}:${state.minute}` })
       : '';
-    // Phrased around the sense as a noun — "by hearing", "by smell" — because the engine knows the
-    // module's name for a sense and not its verb.
+    // Phrased around the sense as a noun: the engine knows its name, not its verb.
     const named = module.find<{ name: string }>('rules.senses', senseId)?.name ?? '';
     return [{
       text: authored || (named
@@ -681,8 +651,7 @@ function describeSense(context: NarratorContext, senseId: string, by: string): L
   return readings
     .map((reading) => impressionLine(context, {
       sense: senseId,
-      // Something remembered rather than present is reported as faint and uncertain, however loud
-      // it was at the time.
+      // Something remembered rather than present is reported as faint.
       strength: reading.age === 0 ? reading.strength : Math.min(reading.strength, 0.3),
       direction: reading.direction,
       x: observer.position.x,
@@ -691,10 +660,7 @@ function describeSense(context: NarratorContext, senseId: string, by: string): L
     .filter((line): line is Line => line !== null);
 }
 
-/**
- * One terrain index per module, built once. The narrator is called several times a turn, and the
- * index is derived from the module, which does not change.
- */
+/** One terrain index per module, built once. */
 const terrainCache = new WeakMap<CompiledModule, TerrainIndex>();
 function terrainFor(module: CompiledModule): TerrainIndex {
   let index = terrainCache.get(module);
@@ -714,10 +680,7 @@ interface Place {
   readonly sceneKey: string;
 }
 
-/**
- * Where the party is, by the module's own name for it. A point of interest wins over the area
- * containing it, so standing in the village says the village and not the marsh.
- */
+/** Where the party is, by the module's own name for it. */
 export function placeOf(module: CompiledModule, state: GameState): Place {
   const location = state.location;
 
@@ -755,10 +718,7 @@ export function placeNameOf(module: CompiledModule, state: GameState): string {
   return placeOf(module, state).placeName;
 }
 
-/**
- * Describe where the party is standing. Uses the place's own text pool when it has one, and falls
- * back to naming what is visible.
- */
+/** Describe where the party is standing. */
 export function describeSurroundings(context: NarratorContext): Line[] {
   const { state, module } = context;
   const out: Line[] = [];
@@ -788,8 +748,7 @@ export function describeSurroundings(context: NarratorContext): Line[] {
       (!visible || visible.has(key(entity.position))),
   );
   if (others.length > 0) {
-    // A lone creature gets the colour its statblock declares; several of a kind are tallied
-    // instead, since "two lean bog hounds and a lean bog hound" reads worse than counting them.
+    // One creature gets its statblock's colour; several of a kind are tallied.
     const names = others.map((entity) => entity.name.toLowerCase());
     const tally = new Map<string, number>();
     for (const name of names) tally.set(name, (tally.get(name) ?? 0) + 1);
@@ -803,11 +762,10 @@ export function describeSurroundings(context: NarratorContext): Line[] {
     out.push({ text: text(module, 'look.creatures', { what: list(grammar, described) }), kind: 'prose' });
   }
 
-  // And what reaches the party by other senses. Unnamed and approximate on purpose.
+  // And what reaches the party by other senses.
   if (actor && map) {
     for (const felt of impressions({ module, state, terrain }, actor)) {
-      // The same authored phrasing the moment-of-noticing uses, so looking around and being
-      // surprised describe the world the same way.
+      // The same authored phrasing the moment-of-noticing uses.
       const line = impressionLine(context, {
         sense: felt.sense,
         // A trail is reported as faint however strong the reading: what matters is that it is old.
@@ -839,11 +797,7 @@ function partyCanSee(context: NarratorContext, id: string): boolean {
   });
 }
 
-/**
- * What noticing something reads like. The module writes it. A sense that declares no phrasing still
- * says something — a bare line naming the sense — so a half-authored module is playable rather than
- * silent.
- */
+/** What noticing something reads like. */
 function impressionLine(
   context: NarratorContext,
   data: Readonly<Record<string, unknown>>,
@@ -859,8 +813,7 @@ function impressionLine(
     : sense?.impressionTextKey;
 
   const declared = module.find<{ name: string }>('rules.senses', senseId);
-  // The bearing arrives as a key, so the module's own `{direction}` pools read in the module's own
-  // vocabulary.
+  // The bearing arrives as a key, so `{direction}` reads in the module's vocabulary.
   const where = data['direction']
     ? text(module, data['direction'] as SystemTextKey)
     : '';

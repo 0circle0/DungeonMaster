@@ -1,10 +1,4 @@
-/**
- * Entity identity.
- *
- * Ids must be deterministic: `Date.now()` or a random UUID would break replay,
- * since a re-run has to produce byte-identical state. Runtime entity ids come
- * from a counter that lives in the save file.
- */
+/** Entity identity. */
 
 /** Branded string ids, so a monster id cannot be passed where an item id belongs. */
 export type Id<Kind extends string> = string & { readonly __kind: Kind };
@@ -22,11 +16,7 @@ export function entityId(value: string): EntityId {
   return value as EntityId;
 }
 
-/**
- * Monotonic entity id allocator. The counter is serialized with the game state
- * so a reloaded save keeps issuing ids where it left off and never collides
- * with an entity already in the world.
- */
+/** Monotonic entity id allocator. */
 export class IdAllocator {
   private counter: number;
 

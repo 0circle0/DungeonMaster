@@ -1,11 +1,4 @@
-/**
- * One shape for every field table on the site.
- *
- * The walk supplies structure, `FIELD_DOCS` supplies the sentence, and this
- * puts them together once so no page has to know that they were ever apart.
- * All of it runs at build time: pages are server components and the export is
- * static, so Zod never reaches the browser.
- */
+/** One shape for every field table on the site. */
 
 import {
   walkModuleSchema,
@@ -24,7 +17,7 @@ export interface DocField {
   type: TypeNode;
   required: boolean;
   defaultValue: unknown;
-  /** The one line sentence. Guaranteed present by `fieldDocs.test.ts`. */
+  /** The one line sentence. */
   doc: string;
 }
 
@@ -37,14 +30,7 @@ export interface DocSection {
   fromRegistry: boolean;
 }
 
-/**
- * Where the requirement object is documented.
- *
- * It is one vocabulary reached from some thirty places, and the walk gives it
- * to whichever path met it first. That happens to be under abilities, which
- * would be a misleading place to read it, so these sections are lifted onto
- * their own page and left out of Content.
- */
+/** Where the requirement object is documented. */
 export const REQUIREMENT_ROOT = 'content.abilities.requires';
 
 const SECTIONS: DocSection[] = walkModuleSchema().map((section) => ({
@@ -93,11 +79,7 @@ export function anchorFor(path: string): string {
   return path.replace(/\./g, '-');
 }
 
-/**
- * The page a collection lives on, so a reference can link across pages.
- *
- * Requirement sections are the one exception to "the area is the page".
- */
+/** The page a collection lives on, so a reference can link across pages. */
 export function pageFor(path: string): string {
   if (isRequirement(path)) return '/format/requirements';
   const area = path.split('.')[0] ?? '';

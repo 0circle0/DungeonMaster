@@ -1,13 +1,4 @@
-/**
- * Reverse references: what points at this?
- *
- * The compiler already walks every `ref:` marker to prove references resolve.
- * The same walk, kept rather than discarded, answers the question an author
- * actually asks: *if I delete this monster, what breaks?*
- *
- * It also finds content nothing points at, which is how a module ends up
- * carrying a loot table written three sessions ago that no creature drops.
- */
+/** Reverse references: what points at this? */
 
 import { z } from 'zod';
 import { gameModuleSchema, COLLECTION_PATHS } from '../schema/module.js';
@@ -37,13 +28,7 @@ interface RawRef {
   id: string;
 }
 
-/**
- * Walk the schema alongside the document, collecting `ref:` markers.
- *
- * Mirrors `compile.ts` deliberately: matching its traversal means the used-by
- * panel and the dangling-reference check can never disagree about what counts
- * as a reference.
- */
+/** Walk the schema alongside the document, collecting `ref:` markers. */
 function collectRefs(schema: z.ZodTypeAny, value: unknown, path: string, out: RawRef[]): void {
   if (value === undefined || value === null) return;
   const def = schema._def as { typeName?: string; [k: string]: unknown };
@@ -209,13 +194,7 @@ export interface OrphanEntry {
   readonly label: string;
 }
 
-/**
- * Entries nothing references.
- *
- * Not necessarily a problem — abilities reached only through a class's level
- * table, or content mid-authoring — but worth surfacing, because a loot table
- * no creature drops is invisible work.
- */
+/** Entries nothing references. */
 export function findOrphans(
   document: unknown,
   index: ReferenceIndex,

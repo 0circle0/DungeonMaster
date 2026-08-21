@@ -1,6 +1,4 @@
-/**
- * The character sheet, as data.
- */
+/** The character sheet, as data. */
 
 import type { CompiledModule } from '@dm/module';
 import type { GameState, EntityId } from '@dm/engine';
@@ -23,12 +21,7 @@ export interface SheetView {
   readonly derived: readonly { readonly id: string; readonly name: string; readonly value: number }[];
   readonly abilities: readonly { readonly id: string; readonly name: string }[];
   readonly skills: readonly { readonly id: string; readonly name: string; readonly rank: number }[];
-  /**
-   * Spell slots left at each level, lowest first.
-   *
-   * Empty for anyone who does not cast, so a module with no magic shows no
-   * slots rather than a row of zeroes.
-   */
+  /** Spell slots left at each level, lowest first. */
   readonly slots: readonly { readonly level: number; readonly left: number; readonly total: number }[];
   /** What this character is holding a spell on, if anything. */
   readonly concentrating: { readonly id: string; readonly name: string } | null;

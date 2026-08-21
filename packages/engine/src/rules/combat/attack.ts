@@ -1,17 +1,4 @@
-/**
- * Using an ability, and hitting with it.
- *
- * One path for everything a creature actively does: a sword swing, a spell, a shout, a healing
- * touch. The differences are declared in the ability, so the engine has no separate notion of
- * attack versus spell.
- *
- * Order of resolution:
- *
- *   1. can it be used at all — costs, cooldown, requirement, conditions
- *   2. who does it reach — range, line of sight, area shape
- *   3. per target: attack roll, or saving throw, or neither
- *   4. effects, scaled for criticals and successful saves
- */
+/** Using an ability, and hitting with it. */
 
 import { Rng, parseDice, rollDice } from '@dm/core';
 import {
@@ -36,11 +23,7 @@ import { saveMultiplier, roundDamageOf } from '../config.js';
 import { count } from '../../narrate/grammar.js';
 import type { Message } from '../../narrate/systemText.js';
 
-/**
- * What a spell gains from being cast out of a bigger slot. Applied once per level above the spell's
- * own, with `upcastLevels` in scope so one authored effect can scale itself. Nothing for a spell
- * cast at its own level.
- */
+/** What a spell gains from being cast out of a bigger slot. */
 function upcastEffects(
   ability: AbilityDef,
   slot: number,
@@ -108,7 +91,7 @@ export interface AbilityDef {
   onMiss: Effect[];
   onCritical: Effect[];
 
-  /** Spell fields. Absent on an ordinary ability, which is how magic is opt-in. */
+  /** Spell fields. */
   spellLevel?: number;
   concentration?: boolean;
   ritual?: boolean;
@@ -124,10 +107,7 @@ export interface UseResult {
   readonly reason: Message | null;
 }
 
-/**
- * Scale damage in a set of ops — used for criticals and half-damage saves. Rounded by
- * `rules.resolution.damageRounding`; at the default `round`, seven halved is four.
- */
+/** Scale damage in a set of ops — used for criticals and half-damage saves. */
 function scaleDamage(
   module: CompiledModule,
   ops: readonly EffectOp[],
@@ -140,11 +120,7 @@ function scaleDamage(
   );
 }
 
-/**
- * Evaluate an ability's costs. Costs are DSL expressions, so a spell can cost more at higher level.
- * Rolled once and reused for the affordability check and the payment, so a random cost cannot
- * differ between the two.
- */
+/** Evaluate an ability's costs. */
 function costsOf(txn: Transaction, actor: Entity, ability: AbilityDef, rng: Rng): Map<string, number> {
   const scope = buildScope(txn.module, txn.state, actor);
   const costs = new Map<string, number>();
@@ -175,10 +151,7 @@ function payCosts(txn: Transaction, actor: Entity, costs: ReadonlyMap<string, nu
   }
 }
 
-/**
- * Use an ability. Refusals are ordinary play — out of range, not enough focus, stunned — and each
- * returns a reason the player can read.
- */
+/** Use an ability. */
 export function useAbility(
   txn: Transaction,
   context: TargetingContext,
@@ -208,8 +181,7 @@ export function useAbility(
     return refuse(txn, message('refused.ability.unavailable', { ability: ability.name }));
   }
 
-  // Cooldowns count in rounds, so out of combat there is nothing to count and an ability is always
-  // ready.
+  // Cooldowns count in rounds, so out of combat there is nothing to count and an ability is always ready.
   const combat = txn.state.combat;
   if (combat && ability.cooldown > 0) {
     const waiting = combat.cooldowns.find(
@@ -228,9 +200,7 @@ export function useAbility(
     }
   }
 
-  // — casting ————————————————————————————————————————————————
-  // Everything below is skipped for an ability with no `spellLevel`, so a module with no magic is
-  // unaffected.
+  // --- casting ---------------------------------------------------------------
   let slot = 0;
   if (isSpell(ability)) {
     const spell = asSpell(ability);
@@ -270,8 +240,7 @@ export function useAbility(
     });
   }
 
-  // The cooldown starts when the ability is spent, not when it is attempted: a refusal must not put
-  // it on the shelf.
+  // The cooldown starts when the ability is spent, not when it is attempted.
   const running = txn.state.combat;
   if (running && ability.cooldown > 0) {
     const rest = running.cooldowns.filter(
@@ -335,20 +304,17 @@ function resolveAgainst(
     const reach = reachability(context, actor.position, current.position, range);
     const defenceWithCover = defence + coverBonus(module, reach.cover);
 
-    // The weapon is chosen before the roll: which attribute the blow uses can depend on what is in
-    // the hand, which is what finesse means.
+    // The weapon is chosen before the roll: finesse lets the hand decide the attribute.
     const wielded = weaponOf(module, actor);
     const attackStat = attackStatFor(module, actor, ability.attack.stat, wielded);
     const attackMod = stats.mod[attackStat] ?? 0;
 
-    // A spell attack uses the caster's own `spellcasting.attackBonus`, when the module declares
-    // one.
+    // A spell attack uses the caster's own `spellcasting.attackBonus`, when the module declares one.
     const spellBonus = isSpell(ability) ? attackBonusOf(module, actor) : undefined;
     const roll = check(module, rng, {
       modifier: spellBonus ?? weaponAttackBonus(module, actor, attackMod),
       difficulty: defenceWithCover,
-      // Both sides of the blow: what the attacker is carrying, and what the target's own conditions
-      // do to anyone swinging at them.
+      // Both sides: what the attacker carries, and what the target's conditions do to attackers.
       swing: [
         ability.swing ?? null,
         ...swingsFrom(module, actor, 'ownAttacks'),
@@ -368,15 +334,12 @@ function resolveAgainst(
       ...evalEffects(ability.onUse, { scope: scopeFor(), rng }),
       ...upcastEffects(ability, slot, scopeFor(), rng),
     ];
-    // The blow carries the wielded weapon's qualities, so a resistance's `unless` is asking about
-    // the weapon rather than the ability. Damage the ability tagged itself is left alone, and if
-    // the ability named no damage the weapon supplies it.
+    // The blow carries the weapon's qualities, and its damage when the ability names none.
     const ops = [
       ...withWeaponTags(declared, wielded),
       ...weaponDamage(module, actor, current, declared, wielded, rng, attackStat),
     ];
-    // A critical multiplies damage by whatever the module says, then runs any extra `onCritical`
-    // effects.
+    // A critical multiplies damage by whatever the module says, then runs any extra `onCritical` effects.
     const factor = roll.outcome === 'critical' ? criticalMultiplier(module) : 1;
     applyOps(txn, scaleDamage(module, ops, factor), actor.id);
 
@@ -388,8 +351,7 @@ function resolveAgainst(
 
   // — a saving throw, when the ability declares one ——————————
   if (ability.savingThrow) {
-    // The spell's own DC when the ability names one, then the caster's formula, then the module's
-    // ordinary difficulty.
+    // The spell's own DC, then the caster's formula, then the module's ordinary difficulty.
     const declared = ability.savingThrow.difficulty as number | undefined;
     const casterDc = isSpell(ability) ? saveDifficultyOf(module, actor) : undefined;
     const difficulty = difficultyOf(module, declared ?? casterDc);
@@ -439,10 +401,7 @@ interface WeaponDef {
   damage?: { dice: string; damageType: string; stat?: string };
 }
 
-/**
- * The weapon a character is actually wielding. Weapon-kind items only: a shield and a ring are
- * equipped too.
- */
+/** The weapon a character is actually wielding. */
 export function weaponOf(module: CompiledModule, actor: Entity): WeaponDef | null {
   for (const items of Object.values(actor.equipped)) {
     for (const itemId of items) {
@@ -453,11 +412,7 @@ export function weaponOf(module: CompiledModule, actor: Entity): WeaponDef | nul
   return null;
 }
 
-/**
- * Which attribute this blow is swung with. The ability names one; the weapon's properties may offer
- * others, and the best wins — that is finesse, a choice of attribute rather than a bonus. Ties keep
- * the ability's own attribute.
- */
+/** Which attribute this blow is swung with. */
 /** Whether any of this weapon's properties offer a choice of attack attribute. */
 function offersAttackStats(module: CompiledModule, weapon: WeaponDef | null): boolean {
   return (weapon?.properties ?? []).some((propertyId) => {
@@ -487,10 +442,7 @@ export function attackStatFor(
   return best;
 }
 
-/**
- * What a weapon attack adds to the die: the attribute modifier alone unless
- * `rules.resolution.weaponAttackBonus` says otherwise. The mirror of `spellcasting.attackBonus`.
- */
+/** What a weapon attack adds to the die; mirrors `spellcasting.attackBonus`. */
 function weaponAttackBonus(
   module: CompiledModule,
   actor: Entity,
@@ -506,8 +458,7 @@ function weaponAttackBonus(
       mod: stats.mod,
       derived: stats.derived,
       proficiency: proficiencyOf(module, actor),
-      // The modifier for whichever attribute the attack resolved to, so one formula covers a might
-      // swing and an agility one.
+      // The modifier for whichever attribute the attack resolved to.
       attackMod,
     },
   };
@@ -515,10 +466,7 @@ function weaponAttackBonus(
   return typeof value === 'number' && Number.isFinite(value) ? Math.floor(value) : attackMod;
 }
 
-/**
- * Damage from the wielded weapon, when the ability produced none of its own. An ability that does
- * declare damage keeps it.
- */
+/** Damage from the wielded weapon, when the ability produced none of its own. */
 function weaponDamage(
   module: CompiledModule,
   actor: Entity,
@@ -532,8 +480,7 @@ function weaponDamage(
   if (!weapon?.damage) return [];
 
   const stats = statsOf(module, actor);
-  // The attribute the blow was swung with, when the weapon offered a choice. Chosen once and used
-  // for both halves, so a finesse weapon is not aimed with agility and hit with might.
+  // The attribute the blow was swung with, when the weapon offered a choice.
   const chosen = offersAttackStats(module, weapon) ? attackStat : weapon.damage.stat;
   const bonus = chosen ? (stats.mod[chosen] ?? 0) : 0;
 
@@ -549,8 +496,7 @@ function weaponDamage(
     target: target.id,
     amount: Math.max(0, rolled + bonus),
     damageType: weapon.damage.damageType,
-    // The blade's own tags travel with the blow, so a wight immune to slashing `unless:
-    // ['silvered']` can be cut by a silvered blade.
+    // The blade's own tags travel with the blow, so `unless` can ask about them.
     tags: qualitiesOf(weapon),
   }];
 }
@@ -572,11 +518,7 @@ function withWeaponTags(ops: readonly EffectOp[], weapon: WeaponDef | null): Eff
 
 /** The `target.*` half of the DSL scope. */
 
-/**
- * A basic attack with whatever the actor is wielding. Looks for an equipped weapon's ability, then
- * the first ability the actor knows that declares an attack roll, so `attack goblin` works without
- * ability names.
- */
+/** A basic attack with whatever the actor is wielding. */
 export function defaultAttackAbility(module: CompiledModule, actor: Entity): string | null {
   // A weapon's own ability first: a shield or a ring may also grant one.
   for (const items of Object.values(actor.equipped)) {

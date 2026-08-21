@@ -1,21 +1,4 @@
-/**
- * Wiring a list of quests into a chain that can actually be started.
- *
- * A chain is four separate pieces of bookkeeping that all have to agree, each failing quietly on
- * its own:
- *
- * - Only the head is offered. Give every link a giver and the whole chain is available at once, out
- *   of order.
- * - Every later link requires the one before it. Miss one and a chain has two heads, which
- *   validates perfectly and plays as two chains.
- * - Every link but the last names the next in `unlocks`. This is what `questsAreReachable` follows;
- *   without it the tail is unreachable.
- * - The level floor goes on the head only, or the middle of a chain looks conditional when it is
- *   not.
- *
- * None of that is checkable after the fact without knowing the author meant a chain, which is what
- * this records.
- */
+/** Wiring a list of quests into a chain that can actually be started. */
 
 export interface ChainLink {
   readonly id: string;
@@ -37,10 +20,7 @@ export interface ChainOptions {
   readonly tags?: readonly string[];
 }
 
-/**
- * The quests, in order, wired to each other. Pure: it returns new objects and reads its input only.
- * The studio shows the result as a diff before writing it.
- */
+/** The quests, in order, wired to each other. */
 export function buildChain(
   links: readonly ChainLink[],
   options: ChainOptions = {},
@@ -85,19 +65,11 @@ export function buildChain(
 }
 
 export interface ChainCheckOptions {
-  /**
-   * Quests outside the chain that its head may legitimately wait on. A side chain gated on an act
-   * opening is contained rather than leaking. Passed as data rather than guessed, the same way
-   * `Contract.actGateQuests` is.
-   */
+  /** Quests outside the chain that its head may legitimately wait on. */
   readonly gates?: readonly string[];
 }
 
-/**
- * What is wrong with a set of quests that is meant to be a chain. The inverse of the builder, for
- * quests that already exist — which is most of them, since a chain is usually recognised after it
- * has been written.
- */
+/** What is wrong with a set of quests that is meant to be a chain. */
 export function chainProblems(
   quests: readonly Record<string, unknown>[],
   options: ChainCheckOptions = {},
@@ -142,8 +114,7 @@ export function chainProblems(
     }
   }
 
-  // A quest required by something but not present is the chain reaching out, unless it is a
-  // declared gate, which is the chain being placed in the story.
+  // A required quest that is absent is the chain reaching out, unless it is a declared gate.
   const gates = new Set(options.gates ?? []);
   for (const id of required) {
     if (ids.includes(id) || gates.has(id)) continue;

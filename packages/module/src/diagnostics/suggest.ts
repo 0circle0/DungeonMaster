@@ -1,17 +1,6 @@
-/**
- * "Did you mean…?"
- *
- * Hand-edited JSON fails in predictable ways: `fgte` for `gte`, `conditon` for
- * `condition`, `monster` for `monsters`. Each of those is a one-word fix that
- * can cost an author twenty minutes of staring, so every diagnostic that knows
- * the valid alternatives offers the nearest one.
- */
+/** "Did you mean…?" */
 
-/**
- * Damerau-Levenshtein distance — Levenshtein plus adjacent transposition,
- * because `gte` → `gt e` and `teh` → `the` are exactly the typos people make.
- * Bounded: once the distance provably exceeds `limit` it stops early.
- */
+/** Damerau-Levenshtein distance, bounded: it stops once the distance exceeds `limit`. */
 export function editDistance(a: string, b: string, limit = Infinity): number {
   if (a === b) return 0;
   if (a.length === 0) return b.length;
@@ -48,11 +37,7 @@ export function editDistance(a: string, b: string, limit = Infinity): number {
   return previous[b.length]!;
 }
 
-/**
- * The closest candidate, or null when nothing is close enough to be worth
- * guessing. A bad suggestion is worse than none — it sends the author to the
- * wrong place — so the threshold scales with word length and stays tight.
- */
+/** The closest candidate, or null when nothing is close enough to be worth guessing. */
 export function closest(word: string, candidates: Iterable<string>): string | null {
   const lower = word.toLowerCase();
   const threshold = Math.max(1, Math.min(3, Math.floor(word.length / 3) + 1));
@@ -63,8 +48,7 @@ export function closest(word: string, candidates: Iterable<string>): string | nu
   for (const candidate of candidates) {
     if (candidate === word) return candidate;
 
-    // A pure case difference, or one string containing the other, is almost
-    // certainly the intended word regardless of raw distance.
+    // A pure case difference, or one string containing the other, is the intended word.
     const candidateLower = candidate.toLowerCase();
     if (candidateLower === lower) return candidate;
 

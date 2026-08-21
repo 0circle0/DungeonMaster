@@ -1,33 +1,10 @@
-"""Checks the contracts `npm run validate` cannot see.
-
-The schema marks most cross-references with `ref(...)` and `compile.ts` turns an unresolved one into
-a `dangling_ref` error. Three things it does not cover, each failing silently at play time:
-
-  * `objective.target` is `idSchema`, not a ref. A `kill` objective naming a monster that does not
-    exist compiles clean and never completes.
-  * Flags are free strings, so `setFlag` writing `sisters_restord` and an objective waiting on
-    `sisters_restored` both validate and the quest hangs.
-  * Reachability. Every quest can be fine while the chain from the starting quest to the ending arc
-    has a break in it.
-
-Optional content is also defined by contract rather than by a field: `quest.tags` is read by
-nothing, so the contract is asserted here.
-
-A check is a function of one `Context`. It reports via `ctx.problem()` (a build stopper),
-`ctx.warn()` (a to-do list) or `ctx.note()` (the report body). Both lists print in append order, so
-the order of the check list is the report format — which is why this module ships no default list.
-The caller owns it; see `modules/aurendel/src/check_quests.py`.
-
-`Contract` holds the few module-specific facts a shared checker cannot know, passed in as data.
-"""
+"""Checks the contracts `npm run validate` cannot see."""
 import collections
 import json
 import re
 
 
-# --- the walkers ----------------------------------------------------------
-# Each takes a node and an accumulator, so they compose and can run over a single quest or the whole
-# document.
+# --- the walkers: each takes a node and an accumulator, so they compose ---
 
 def ids(doc, section, collection):
     return {entry["id"] for entry in doc.get(section, {}).get(collection, [])}
@@ -47,11 +24,7 @@ def walk(node, want, out):
 
 
 def flag_refs(node, out):
-    """Every flag read under this node, by either spelling.
-
-    `{"ref": "flags.x"}` is the DSL predicate form; `requires.flags[].flag` is the structured gate.
-    Content uses both and they mean the same thing.
-    """
+    """Every flag read under this node, by either spelling."""
     if isinstance(node, dict):
         for k, v in node.items():
             if k == "ref" and isinstance(v, str) and v.startswith("flags."):
@@ -78,11 +51,7 @@ def flag_writes(node, out):
 
 
 def emits(node, out):
-    """Every quest a `startQuest` event names.
-
-    The fifth way into a quest, and the only way a hidden thread's begins: a dialogue option hands a
-    job over, or a trigger starts one on arrival.
-    """
+    """Every quest a `startQuest` event names."""
     if isinstance(node, dict):
         if node.get("event") == "startQuest":
             target = (node.get("data") or {}).get("quest")
@@ -173,14 +142,12 @@ def xp_of(quest):
     return value if isinstance(value, int) else 0
 
 
-# Which collection an objective's `target` is an id in, per `kind`. Read off `matchesEvent` in
-# packages/engine/src/sim/quests.ts.
+# Which collection an objective's `target` is an id in, per `kind`.
 TARGET_COLLECTION = {
     "kill": ("content", "monsters"),
     "collect": ("content", "items"),
     "talk": ("content", "npcs"),
-    # `reach` is matched as a substring of a map id, or against a trigger source, a gate, or a point
-    # of interest.
+    # `reach` is matched against a map id, a trigger source, a gate, or a point of interest.
     "reach": None,
 }
 
@@ -188,11 +155,9 @@ TARGET_COLLECTION = {
 # --- what a module's contracts are, as data -------------------------------
 
 Contract = collections.namedtuple("Contract", [
-    # Spine quests a chain may name in `requires` — the act gates. Anything else is a chain with a
-    # dependency on the story.
+    # Spine quests a chain may name in `requires` — the act gates.
     "act_gate_quests",
-    # Factions allowed to gate nothing and be gained never: the side a monster belongs to, with no
-    # rank ladder.
+    # Factions allowed to gate nothing and be gained never.
     "exempt_factions",
     # Tier key -> the `requires` clause that tier's head must state.
     "tier_gates",
@@ -200,11 +165,7 @@ Contract = collections.namedtuple("Contract", [
 
 
 class Context:
-    """A built module, indexed, plus the three report channels.
-
-    Everything expensive is computed once here rather than in whichever check needs it first, since
-    most of it is wanted by more than one.
-    """
+    """A built module, indexed, plus the three report channels."""
 
     def __init__(self, doc, contract=Contract()):
         self.doc = doc
@@ -238,10 +199,7 @@ class Context:
             "triggers": walk(doc["world"], "id", set()),
         }
 
-        # -- the four kinds of content, by the tags the kits write ---------
-        # The spine is what is left when every kind of optional content is taken out. Each new kind
-        # must be subtracted here as well as checked below, or it counts as spine in the XP budget
-        # and escapes the skippability rules.
+        # --- the four kinds of content, by the tags the kits write ---
         self.side = [q for q in self.quests if "side" in q.get("tags", [])]
         self.hidden = [q for q in self.quests if "hidden" in q.get("tags", [])]
         self.trials = [q for q in self.quests if "trial" in q.get("tags", [])]
@@ -250,9 +208,7 @@ class Context:
         self.side_ids = {q["id"] for q in self.side}
         self.trial_ids = {q["id"] for q in self.trials}
 
-        # A chain is the set of quests sharing a key; the key is the third tag `dmkit.chains.chain`
-        # writes, after "side" and the act. A tier is the second tag `dmkit.trials.tier` writes,
-        # after "trial".
+        # A chain is the quests sharing a key; a tier is the second tag `dmkit.trials.tier` writes.
         self.chains = {}
         for quest in self.side:
             tags = quest.get("tags", [])
@@ -280,9 +236,7 @@ class Context:
             for quest_id in npc.get("offersQuests", []):
                 self.offers.setdefault(quest_id, []).append(npc["id"])
 
-        # Where everything is, so a `reach` resolves to a region. Areas carry their region as the
-        # first tag; a point of interest inherits its area's; a dungeon and a gate inherit from the
-        # point of interest that leads there.
+        # Where everything is, so a `reach` resolves to a region.
         self.region_of = {}
         for area in doc["world"]["areas"]:
             tags = area.get("tags") or []
@@ -358,8 +312,7 @@ class Context:
     def _owned_dialogues(self):
         owned = {npc["dialogue"] for npc in self.npcs.values()
                  if npc.get("dialogue")}
-        # Anything else in the document that names a dialogue counts as an owner too, so a future
-        # way of opening one does not read as a fault.
+        # Anything else naming a dialogue counts as an owner too.
         owned |= walk(self.doc["world"], "dialogue", set())
         owned |= walk(self.doc["narrative"], "dialogue", set())
         return owned
@@ -369,8 +322,7 @@ class Context:
         stranded = set()
         for dialogue_id in set(self.dialogues) - self.owned_dialogues:
             stranded |= flag_writes(self.dialogues[dialogue_id], set())
-        # A flag is stranded only if nothing else writes it, so subtract every writer that is not in
-        # an unowned dialogue.
+        # A flag is stranded only if nothing else writes it.
         live = flag_writes({k: v for k, v in self.doc.items()
                             if k != "narrative"}, set())
         live |= flag_writes([d for i, d in self.dialogues.items()
@@ -380,7 +332,7 @@ class Context:
         return stranded - live
 
 
-# --- 1. objective targets -------------------------------------------------
+# --- 1.
 
 def objective_targets(ctx):
     """Every `target` names something that exists, per the objective's kind."""
@@ -409,7 +361,7 @@ def objective_targets(ctx):
                         f"interest, area, dungeon, gate, or trigger")
 
 
-# --- 2. flags: written somewhere, waited on somewhere ---------------------
+# --- 2.
 
 def flags_have_writers(ctx):
     written = walk(ctx.doc, "flag", set())
@@ -421,7 +373,7 @@ def flags_have_writers(ctx):
             f"objective or gate reading it can never come true")
 
 
-# --- 3. the chain from the start to the ending ---------------------------
+# --- 3.
 
 def everything_is_startable(ctx):
     for quest in ctx.quests:
@@ -442,7 +394,7 @@ def ending_is_reachable(ctx):
                     f"starts")
 
 
-# --- 4. skippable ---------------------------------------------------------
+# --- 4.
 
 def ending_is_skippable(ctx):
     for arc in ctx.ending:
@@ -463,9 +415,7 @@ def spine_does_not_unlock_side(ctx):
 
 
 def chain_flags_are_owned(ctx):
-    """Every flag a chain writes carries its key as a prefix. That convention makes "does the spine
-    wait on side content?" a string comparison instead of a dataflow analysis.
-    """
+    """Every flag a chain writes carries its key as a prefix."""
     for key, members in ctx.chains.items():
         for quest in members:
             for flag in sorted(walk(quest, "flag", set())):
@@ -487,7 +437,7 @@ def spine_does_not_read_side_flags(ctx):
                     f"{owner} chain — the spine would then need side content")
 
 
-# --- 5. act containment ---------------------------------------------------
+# --- 5.
 
 def chains_are_contained(ctx):
     """One act, one region, no dependency on the story, and never expiring."""
@@ -521,19 +471,17 @@ def chains_are_contained(ctx):
                         f"act gate nor part of the {key} chain")
 
             if quest.get("timeLimitDays"):
-                # `expireQuests` in sim/agenda.ts never runs `onFail`, so a chain that can expire is
-                # a chain that can be missed.
+                # `expireQuests` never runs `onFail`, so a chain that can expire can be missed.
                 ctx.problem(
                     f"{quest['id']}: side content must not expire "
                     f"(timeLimitDays is set, and onFail would not run anyway)")
 
 
-# --- 6. chain integrity ---------------------------------------------------
+# --- 6.
 
 def chains_have_one_head(ctx):
     for key, members in ctx.chains.items():
-        # Declaration order survives the build, so the head is the one nothing else in the chain
-        # unlocks.
+        # Declaration order survives the build, so the head is the one nothing else in the chain unlocks.
         unlocked_within = {u for q in members for u in q.get("unlocks", [])
                            if u in {m["id"] for m in members}}
         heads = [q for q in members if q["id"] not in unlocked_within]
@@ -560,13 +508,10 @@ def chains_have_one_head(ctx):
                     f"{quest['id']}: nothing in the {key} chain unlocks it")
 
 
-# --- 7. no faction is decoration -----------------------------------------
+# --- 7.
 
 def factions_are_used(ctx):
-    """Every faction is moved, deeded, and gated on somewhere. Warnings rather than errors: a
-    dangling objective target makes a game unwinnable, while a faction nobody gates on is merely
-    unfinished.
-    """
+    """Every faction is moved, deeded, and gated on somewhere."""
     moved = walk(ctx.doc, "faction", set())
     for reward in ctx.quests:
         moved.update(reward.get("rewards", {}).get("reputation", {}).keys())
@@ -589,27 +534,16 @@ def factions_are_used(ctx):
                 f"with it buys nothing")
 
 
-# --- 9. the hidden threads ------------------------------------------------
-# A hidden thread has no giver and no visible arc, so every guarantee a side chain gets from being
-# offered is asserted here instead. Each of these failures validates cleanly and is invisible until
-# somebody plays for hours and finds nothing.
+# --- 9.
 
 def clues_are_teachable(ctx):
-    """9a. Every clue is taught by something."""
+    """9a."""
     for cid in sorted(set(ctx.lore) - taught(ctx.doc, set())):
         ctx.problem(f"clue {cid!r} is taught by nothing, so it can never be learned")
 
 
 def clues_do_not_name_their_anchor(ctx):
-    """9b. No clue names the place it points at.
-
-    The mechanical half of "a clue is true and partial": text containing the name or id of a point
-    of interest is a waypoint marker rather than a clue.
-
-    Two tests. Any raw point-of-interest id in a clue is wrong. Display names are checked only
-    against the anchors of the clue's own thread, since common landmark names would otherwise forbid
-    ordinary English.
-    """
+    """9b."""
     anchor_names = {}
     for thread in ctx.threads:
         key = f'threads.{thread["id"]}.known'
@@ -636,7 +570,7 @@ def clues_do_not_name_their_anchor(ctx):
 
 
 def threads_have_two_tellers(ctx):
-    """9c. Two tellers, in two areas, so a thread does not die with one missed conversation."""
+    """9c."""
     for thread in ctx.threads:
         entries = set(thread["entries"])
         tellers = []
@@ -659,7 +593,7 @@ def threads_have_two_tellers(ctx):
 
 
 def key_items_have_two_routes(ctx):
-    """9e. Every key item can be asked for, and taken off the body."""
+    """9e."""
     for item in ctx.items.values():
         holder = (item.get("extra") or {}).get("heldBy")
         if not holder:
@@ -687,10 +621,7 @@ def key_items_have_two_routes(ctx):
 
 
 def standing_is_a_price(ctx):
-    """9f. Standing is a price, never a wall. A `minStanding` in front of a clue or a key item is
-    forbidden: hostility belongs in the check's difficulty, where it makes a roll harder rather
-    than impossible.
-    """
+    """9f."""
     keepsakes = {i["id"] for i in ctx.items.values()
                  if (i.get("extra") or {}).get("heldBy")}
     for dialogue in ctx.doc["narrative"]["dialogues"]:
@@ -711,17 +642,14 @@ def standing_is_a_price(ctx):
 
 
 def boss_rooms_have_a_table(ctx):
-    """9h. A boss room with nothing to draw from generates empty."""
+    """9h."""
     for dungeon in ctx.doc["world"]["dungeons"]:
         if not dungeon.get("bossTable"):
             ctx.warn(f"{dungeon['id']}: boss room with no bossTable")
 
 
 def kill_targets_spawn(ctx):
-    """9j. A kill objective needs something that actually spawns. That the monster exists does not
-    prove anything puts it on a map, and an encounter table nothing references is invisible to
-    every other check here.
-    """
+    """9j."""
     for quest in ctx.hidden + ctx.side + ctx.trials:
         for objective in objectives_of(quest):
             if objective.get("kind") != "kill":
@@ -735,7 +663,7 @@ def kill_targets_spawn(ctx):
 
 
 def thread_anchors_come_down(ctx):
-    """9i. Each thread's anchor gets easier to find as the thread fills."""
+    """9i."""
     for thread in ctx.threads:
         key = f'threads.{thread["id"]}.known'
         anchors = [p for p in ctx.pois.values()
@@ -746,10 +674,10 @@ def thread_anchors_come_down(ctx):
                 f"fills, so the clues inform nothing")
 
 
-# --- 10. the trials -------------------------------------------------------
+# --- 10.
 
 def ending_does_not_need_a_trial(ctx):
-    """10a. Nothing about the ending may depend on post-game content."""
+    """10a."""
     for arc in ctx.ending:
         for quest_id in arc["quests"]:
             if quest_id in ctx.trial_ids:
@@ -759,9 +687,7 @@ def ending_does_not_need_a_trial(ctx):
 
 
 def tiers_are_a_ladder(ctx):
-    """10c. Ordered, gated on the rung below, and offered by somebody. `unlocks` marks a quest
-    available and does not gate starting it, so each head states its own gate.
-    """
+    """10c."""
     for key, members in sorted(ctx.tiers.items()):
         unlocked_within = {u for q in members for u in q.get("unlocks", [])
                            if u in {m["id"] for m in members}}
@@ -776,8 +702,7 @@ def tiers_are_a_ladder(ctx):
         if not giver:
             ctx.problem(f"{head['id']}: the head of {key} has no giver")
         elif giver not in ctx.offers.get(head["id"], []):
-            # `giver` is a label; `offersQuests` is what puts the job in front of a player. A tier
-            # with the first and not the second is offered by nobody.
+            # `giver` is a label; `offersQuests` is what puts the job in front of a player.
             ctx.problem(
                 f"{head['id']}: {giver} is its giver but does not list it in "
                 f"offersQuests, so nothing will offer it in play")
@@ -797,7 +722,7 @@ def tiers_are_a_ladder(ctx):
 
 
 def tier_doors_want_a_relic(ctx):
-    """10d. Every tier's door asks for the relic to be equipped, not merely owned."""
+    """10d."""
     for key in sorted(ctx.tiers):
         doors = [g for g in ctx.gates
                  if "trial" in (g.get("tags") or []) and key in json.dumps(g)]
@@ -808,14 +733,10 @@ def tier_doors_want_a_relic(ctx):
                 f"— a tier tuned for fabled gear must check for it")
 
 
-# --- 11. content that exists and cannot be reached ------------------------
-# Whether a flag is written anywhere is not the same question as whether the writing can ever run. A
-# dialogue that is the only writer of a flag and belongs to no NPC passes every other check here.
+# --- 11.
 
 def unowned_dialogues(ctx):
-    """11a. A dialogue nobody owns cannot be opened. `talk` is the only way in and it goes through
-    an NPC.
-    """
+    """11a."""
     for dialogue_id in sorted(set(ctx.dialogues) - ctx.owned_dialogues):
         ctx.problem(
             f"dialogue {dialogue_id!r} belongs to no NPC — nothing can open "
@@ -823,9 +744,7 @@ def unowned_dialogues(ctx):
 
 
 def stranded_flags(ctx):
-    """11b. A flag an objective waits on needs a writer that can actually run. Separate from 11a
-    because this makes a questline unfinishable rather than merely wasting prose.
-    """
+    """11b."""
     for quest in ctx.quests:
         for flag in sorted(flag_refs(quest, set()) & ctx.stranded_flags):
             ctx.problem(
@@ -845,9 +764,7 @@ def run(doc, checks, contract=Contract()):
 
 
 def report(ctx, headline=()):
-    """Print the result and return the exit code. Problems first and alone, then the caller's
-    headline sentences, then the notes, then the warnings.
-    """
+    """Print the result and return the exit code."""
     if ctx.problems:
         print(f"✗ {len(ctx.problems)} problem(s) the schema cannot see\n")
         for problem in ctx.problems:

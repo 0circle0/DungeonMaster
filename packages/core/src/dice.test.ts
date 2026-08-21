@@ -38,8 +38,6 @@ describe('parseDice', () => {
     expect(parseDice(' 2D6 + 3 ').terms).toEqual(parseDice('2d6+3').terms);
   });
 
-  // Content is validated at load, so a typo must be a load error rather than
-  // an exception thrown in the middle of a fight.
   it.each([
     ['', 'empty'],
     ['abc', 'nonsense'],

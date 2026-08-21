@@ -1,12 +1,4 @@
-/**
- * Room placement for the rooms-and-corridors algorithm.
- *
- * Rejection sampling, as ever — simple, predictable, and it reads naturally
- * when rooms vary a lot in size. What changed: the gap between rooms is no
- * longer a hardcoded single tile. `dungeons[].corridorLength` now sets the
- * spacing rooms are sampled at (its mean, statically — no rng is consumed
- * computing it), so "long corridors" finally means long corridors.
- */
+/** Room placement for the rooms-and-corridors algorithm. */
 
 import { Rng, parseDice, rollDice } from '@dm/core';
 import type { DiceExpr } from '@dm/core';
@@ -50,15 +42,7 @@ function roll(notation: string, rng: Rng, fallback: number): number {
   }
 }
 
-/**
- * The mean of a dice expression, statically.
- *
- * Used for room spacing so that map geometry does not consume the rng — a
- * corridorLength of `2d3` spaces rooms four tiles apart on every seed, and
- * only the winding walk (which has its own stream) varies. Keep clauses are
- * approximated as keeping plain dice; nobody writes `4d6kh3` corridors, and if
- * they do, "roughly the mean" is still the honest reading.
- */
+/** The mean of a dice expression, statically. */
 export function diceMean(notation: string, fallback: number): number {
   let parsed: DiceExpr;
   try {
@@ -101,13 +85,7 @@ export function placeRooms(
   const rooms: PlacedRoom[] = [];
   const attemptsPerRoom = 40;
 
-  /**
-   * Build the draw order up front.
-   *
-   * A guaranteed role means *exactly one* — one entrance, one boss. Drawing
-   * purely by weight would give a dungeon three entrances and two boss rooms,
-   * which is what happens without this.
-   */
+  /** Build the draw order up front. */
   const ordered: PlaceableTemplate[] = [];
   const guaranteed = new Set(guaranteedRoles);
 
@@ -143,8 +121,7 @@ export function placeRooms(
       const candidate: PlacedRoom = {
         id: `r${index}`,
         template: template.id,
-        // A filler room drawn from a role-bearing template loses that role, so
-        // the guarantee holds even when a module has only one template.
+        // A filler room drawn from a role-bearing template loses that role.
         role: index < guaranteedRoles.length
           ? template.role
           : (guaranteed.has(template.role) ? 'chamber' : template.role),

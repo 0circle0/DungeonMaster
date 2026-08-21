@@ -1,19 +1,4 @@
-/**
- * Starting a world from someone else's rules.
- *
- * `extends` cannot express this: the linter schema-checks a raw child before resolving the merge,
- * so a module without its own `rules` block fails with "attributes is required". That is why
- * `modules/aurendel/src/build.py` copies `core_fantasy/module.json` in at build time rather than
- * inheriting it.
- *
- * This is that composition step, moved somewhere an author can reach it and generalised so the
- * source is any world rather than one hardcoded file.
- *
- * Not here: `narrative.systemText`'s 54 fragments. They are never a choice — `compileModule` treats
- * a missing one as a load error — and `blankModule()` writes them from `requiredSystemText()`, so
- * they are always present. The other 146 messages carry schema defaults and are worth copying only
- * when the source has rewritten them, which is the one prose checkbox below.
- */
+/** Starting a world from someone else's rules. */
 
 import { blankModule } from './templates';
 import type { ModuleDoc } from './store';
@@ -26,20 +11,13 @@ export interface RulesetSection {
   readonly paths: readonly string[];
   /** Sections whose absence would leave this one referring to nothing. */
   readonly requires: readonly string[];
-  /**
-   * The schema will not accept a document without this. Unchecking falls back to the one-of-each
-   * version in the blank scaffold rather than omitting it.
-   */
+  /** The schema will not accept a document without this. */
   readonly required?: boolean;
   /** Off unless asked for. */
   readonly optional?: boolean;
 }
 
-/**
- * The sections, grouped by what an author would decide together rather than by where the schema
- * puts them: "damage and conditions" is one decision across three keys, and `rules.spellcasting` is
- * one key that is a whole decision.
- */
+/** The sections, grouped by what an author decides together. */
 export const RULESET_SECTIONS: readonly RulesetSection[] = [
   {
     id: 'attributes',
@@ -77,9 +55,7 @@ export const RULESET_SECTIONS: readonly RulesetSection[] = [
     id: 'movement',
     label: 'Movement, stances & senses',
     detail: 'How things move and carry themselves, what they notice, and how big they are.',
-    // Stances live here rather than with combat: a stance emits an impression a sense must pick up,
-    // while `perception.defaultStance` names one back, so splitting them would be a dependency
-    // cycle.
+    // Stances live here rather than with combat: perception names one back.
     paths: [
       'rules.senses', 'rules.perception', 'rules.stances', 'rules.movementModes', 'rules.sizes',
       'rules.defaultSize', 'rules.defaultMovementMode', 'rules.interactionRange', 'rules.search',
@@ -92,8 +68,7 @@ export const RULESET_SECTIONS: readonly RulesetSection[] = [
     label: 'Equipment & economy',
     detail: 'Where gear goes, what it can be, and what it costs.',
     paths: ['rules.equipmentSlots', 'rules.itemProperties', 'rules.currency'],
-    // A property may name the attributes a weapon carrying it can be swung with, which is what
-    // finesse is. `attributes` requires nothing, so there is no cycle to route around.
+    // A property may name the attributes a weapon carrying it can be swung with, which is what finesse is.
     requires: ['attributes'],
   },
   {
@@ -115,11 +90,9 @@ export const RULESET_SECTIONS: readonly RulesetSection[] = [
     id: 'skills',
     label: 'Skills & abilities',
     detail: 'What characters can be good at, the things they can do, and what each costs to use.',
-    // `rules.actionTypes` sits here rather than with combat because every ability names one, while
-    // combat's opportunities name an ability — splitting them the other way is a dependency cycle.
+    // `rules.actionTypes` sits here: every ability names one.
     paths: ['content.skills', 'content.abilities', 'rules.actionTypes'],
-    // Abilities name the attribute they use, the mastery tier they need, and the save they are
-    // resisted by.
+    // Abilities name the attribute they use, the mastery tier they need, and the save they are resisted by.
     requires: ['attributes', 'progression', 'damage'],
   },
   {
@@ -162,11 +135,7 @@ export const DEFAULT_SECTIONS: readonly string[] =
 
 const byId = new Map(RULESET_SECTIONS.map((section) => [section.id, section]));
 
-/**
- * Close a selection over its prerequisites. Taking classes without attributes leaves every
- * `primaryAttribute` pointing at nothing, so the dialog adds what is needed rather than producing a
- * document that fails to compile.
- */
+/** Close a selection over its prerequisites. */
 export function withPrerequisites(selected: Iterable<string>): Set<string> {
   const out = new Set(selected);
   let grew = true;
@@ -202,11 +171,7 @@ function write(doc: Record<string, unknown>, path: string, value: unknown): void
   doc[section] = { ...container, [key]: value };
 }
 
-/**
- * A new document, built from the blank scaffold and whatever was ticked. The scaffold is always the
- * base because it is known to compile, and it sets no start location and no areas so the console
- * reads as a to-do list. A section that is not taken keeps whatever the scaffold had.
- */
+/** A new document, built from the blank scaffold and whatever was ticked. */
 export function composeModule(
   source: Record<string, unknown>,
   selected: Iterable<string>,

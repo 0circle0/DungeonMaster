@@ -1,24 +1,4 @@
-"""The Kingsvale's hidden threads — three, at the level the game starts on.
-
-Aurenhal has a Craftrow with eight trades on it and a Riverside with a wharf, a
-boatyard, a fish market and a grate down into the undercity. Wraymill is a mill
-town with a brewery and a weaver. Ashcott has a hedge maze. Pennyford has a ford
-and a sluice house. The Kingsroad South has a quarry, a milestone and a gibbet.
-Not one person had ever stood in any of it.
-
-These are deliberately the gentlest threads in the world and they are here for a
-specific reason: **this is where a player learns that clues exist at all.** The
-Kingsvale is level 1–2 ground you cross in the first hour, and if nothing here
-rewards listening then the whole layer is something a player discovers eleven
-regions too late.
-
-  * **The Quarry's Second Face** — the roadstone quarry has been worked from two
-    faces and the Crown only ever paid for one.
-  * **What Goes Under Aurenhal** — the undercity grate is bricked at the third
-    turn, and the brick is newer than the city.
-  * **The Ford Toll** — Pennyford's sluice house has a keeper's cottage and no
-    keeper, and the sluice is worked.
-"""
+"""The Kingsvale's hidden threads — three, at the level the game starts on."""
 from dmkit.quests import npc, shop, quest, reach, kill, flagged, arc
 from lore import (
     clue, thread, rumour, favour, talk, coldshoulder, finding, rumoured,
@@ -191,9 +171,7 @@ POI_PATCHES = {
                                "gate": "kings_quarry_face"},
     "riverside_undercity_grate": {**rumoured("kings_under", base=18, step=3, entries=4),
                                   "gate": "kings_under_brick_wall"},
-    # A point of interest rather than a dungeon mouth, so `BOSSES` cannot place
-    # what is in it and the table hangs on the place. `encounterChance` as well
-    # as the table: `enterPoi` reads `poi.encounterChance ?? 0`.
+    # A point of interest, so the table and `encounterChance` hang on the place.
     "pennyford_sluice_house": {**rumoured("kings_ford", base=16, step=3, entries=4),
                                "gate": "kings_ford_sluice",
                                "encounterTables": ["kings_ford_boss"],

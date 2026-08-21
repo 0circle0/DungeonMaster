@@ -1,8 +1,4 @@
-/**
- * The filter grammar, which has one hard requirement: nothing an author types
- * may be an error. A half-finished query is a normal state of a text box, so
- * anything unrecognised falls back to looking for the text.
- */
+/** The filter grammar, which has one hard requirement: nothing an author types may be an error. */
 
 import { describe, it, expect } from 'vitest';
 import { parseQuery, matchesQuery } from './query.js';
@@ -63,8 +59,6 @@ describe('matchesQuery', () => {
   });
 
   it('compares numbers as numbers', () => {
-    // The trap: "150" < "20" as text, and a level filter that sorted like a
-    // string would quietly return the wrong creatures.
     expect(keep(all, 'xp>100')).toEqual(['barrow_wight']);
     expect(keep(all, 'xp<100')).toEqual(['bog_hound']);
     expect(keep(all, 'level=2')).toEqual(['bog_hound']);

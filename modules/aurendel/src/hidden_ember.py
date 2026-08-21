@@ -1,23 +1,4 @@
-"""The Ember Reach's hidden threads — four, in five areas nothing else uses.
-
-Slagfoot is a village built on ground that is warm all year, with a forge, a
-store, an inn called the Kettle and a cottage somebody named after a reader. The
-Ashfall has a village under it. The Burnt March has a treeline that is the wrong
-age. The Obsidian Shelf has a sheet of glass a mile across with a stair broken
-into it. Four dungeons between them and, until now, one named NPC in the whole
-region.
-
-Four threads, and all of them are the same argument the vent-readers have been
-losing for a century: **the Reach is not a volcano doing what volcanoes do.**
-
-  * **The Warm Ground** — Slagfoot has never once been cold, and the tube under
-    it does not go where a lava tube goes.
-  * **Under the Roofs** — the buried village's roofs are the wrong way up.
-  * **The New Treeline** — the March grew back in eleven years instead of ninety,
-    and the old workings under it were sealed from inside.
-  * **The Sheet** — the over-tuned one. Level 8 on level 7 ground, behind a
-    stair broken into a mile of glass, and the seal names what it wants.
-"""
+"""The Ember Reach's hidden threads — four, in five areas nothing else uses."""
 from dmkit.quests import npc, shop, quest, reach, kill, flagged, arc
 from lore import (
     clue, thread, rumour, favour, talk, coldshoulder, finding, rumoured,

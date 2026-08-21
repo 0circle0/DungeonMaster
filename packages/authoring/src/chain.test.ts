@@ -1,11 +1,4 @@
-/**
- * A chain is four pieces of bookkeeping that have to agree, and each one fails
- * quietly on its own. So the tests are about the failures, not the successes:
- * every case here produces quests that compile and validate and play wrong.
- *
- * `chainProblems` is tested against the *real* chains in Aurendel, which is
- * the only way to know it does not simply reject everything.
- */
+/** A chain is four pieces of bookkeeping that have to agree, and each one fails quietly on its own. */
 
 import { describe, it, expect } from 'vitest';
 import { readFileSync } from 'node:fs';
@@ -96,11 +89,6 @@ describe('chainProblems', () => {
     expect(chainProblems(broken, { gates: ['somewhere_else'] })).toEqual([]);
   });
 
-  /**
-   * The check that says this is usable rather than merely strict: every chain
-   * Aurendel actually ships, recovered from its quest tags, has to come back
-   * clean.
-   */
   it('passes the chains in aurendel', () => {
     const doc = JSON.parse(
       readFileSync(fileURLToPath(new URL('../../../modules/aurendel/module.json', import.meta.url)), 'utf8'),

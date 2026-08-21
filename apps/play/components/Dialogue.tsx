@@ -1,9 +1,6 @@
 'use client';
 
-/**
- * Render the active dialogue as a numbered list of choices.
- * Locked options remain visible with their unlock hint.
- */
+/** Render the active dialogue as a numbered list of choices. */
 
 import { useMemo } from 'react';
 import { Rng } from '@dm/core';

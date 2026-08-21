@@ -1,10 +1,4 @@
-/**
- * The module document: an entire game as one JSON file.
- *
- * This is the unit that gets authored, validated, shared and played. A save records the module id,
- * version and content hash it was created against, so loading a save into a module that has since
- * changed fails loudly.
- */
+/** The module document: an entire game as one JSON file. */
 
 import { z } from 'zod';
 import { PredicateSchema } from '../dsl/schema.js';
@@ -77,31 +71,16 @@ export const startSchema = z
     /** Ends the game when it becomes true. */
     victoryWhen: PredicateSchema.optional(),
     defeatWhen: PredicateSchema.optional(),
-    /**
-     * What finishing an `isEnding` arc does. `end` stops the run; `continue` records the win,
-     * narrates it, and leaves the world live so a module can put content on the far side of its own
-     * ending.
-     *
-     * `.optional()`, and it must stay that way: `compileModule` hashes `parsed.data`, so a
-     * `.default('end')` would insert the key into every document zod has ever parsed, change every
-     * module's content hash, and make `load()` refuse every existing save.
-     */
+    /** What finishing an `isEnding` arc does. */
     postVictory: z.enum(['end', 'continue']).optional(),
   })
   .strict();
 
-/**
- * A mod this game expects, pinned to the exact build it was authored against.
- *
- * `id` and `hash` are separate fields rather than one `"thorns-3f2a…"` string because
- * `mergeModules` merges by `id`: a combined string would make a base pinning one version and a
- * patch pinning another look like two different mods, and both would survive the merge. Split,
- * `$delete` also works — a pack drops an inherited mod with `{ "id": "thorns", "$delete": true }`.
- */
+/** A mod this game expects, pinned to the exact build it was authored against. */
 export const moduleModSchema = z
   .object({
     id: idSchema,
-    /** The build this game was authored against. Drift warns; it does not block. */
+    /** The build this game was authored against. */
     hash: z.string().regex(/^[0-9a-f]{16}$/, 'must be a 16-character mod content hash'),
     target: z.enum(['engine', 'editor']).default('engine'),
     /** Forced on, and play is blocked when it is missing. */
@@ -121,26 +100,13 @@ export const gameModuleSchema = z
     version: versionSchema,
     /** Engine range this module expects, e.g. `^1.0.0`. */
     engine: z.string().default('^1.0.0'),
-    /**
-     * Base module to layer on, as `id@version`. The named module is loaded first and this document
-     * is merged over it, so a pack can ship twelve monsters instead of forking an entire game.
-     */
+    /** Base module to layer on, as `id@version`. */
     extends: z
       .string()
       .regex(/^[a-z][a-z0-9_]*@\d+\.\d+\.\d+$/, 'must look like "core_fantasy@1.0.0"')
       .nullable()
       .default(null),
-    /**
-     * Mods this game expects.
-     *
-     * `.optional()`, and it must stay that way: `compileModule` hashes `parsed.data`, so a
-     * `.default([])` would insert `mods: []` into every document zod has ever parsed and change
-     * every module's hash, and `load()` refuses a save whose recorded hash no longer matches.
-     * `compile.test.ts` pins the shipped modules' hashes to catch that.
-     *
-     * The section does participate in the hash once an author adds it, so changing a required mod
-     * pin surfaces as drift on an old save rather than passing silently.
-     */
+    /** Mods this game expects. */
     mods: z.array(moduleModSchema).optional(),
     meta: moduleMetaSchema,
     rules: rulesSchema,

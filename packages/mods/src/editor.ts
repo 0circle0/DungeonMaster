@@ -1,27 +1,8 @@
-/**
- * The editor mod contract.
- *
- * An engine mod changes how a game plays; an editor mod changes how a game is authored. They are
- * separate targets because they run against different hosts, and a feature normally ships as one of
- * each — an editor mod adds a field, and its paired engine mod reads it.
- *
- * Why widgets are described rather than rendered
- *
- * Mod code runs inside QuickJS, which has no DOM and no React, so it returns a description of a
- * component and the host renders it with the editor's own components. That covers extra fields,
- * tables, buttons and text. It cannot express a canvas, a map overlay, a graph, drag-and-drop, or
- * per-keystroke feedback; an editor mod that needs those needs a core editor change.
- *
- * Why fields write into `extra`
- *
- * `schema/common.ts` documents `extra` as the supported way to exceed what the format ships with. A
- * mod adding `morale` to a monster writes into that bag, so the module still validates and hashes
- * stably against a stock engine.
- */
+/** The editor mod contract. */
 
 import { z } from 'zod';
 
-/** Editor hooks. Smaller than the engine's, and for a different job. */
+/** Editor hooks. */
 export type EditorHookName =
   /** Extra validation over the whole document, surfaced in the problems console. */
   | 'editor.lint'
@@ -43,19 +24,14 @@ export function isEditorHookName(value: string): value is EditorHookName {
   return (EDITOR_HOOK_NAMES as readonly string[]).includes(value);
 }
 
-/**
- * A field description. A subset of the editor's own `FieldSpec`, which is already plain data, so
- * the existing `Field` component renders a mod's field with no new rendering code.
- */
+/** A field description. */
 export const modFieldSchema = z
   .object({
-    /** Where the value lives, relative to the selected entry. Usually under `extra`. */
+    /** Where the value lives, relative to the selected entry. */
     path: z.array(z.union([z.string(), z.number().int()])).min(1).max(8),
     label: z.string().min(1).max(120),
     kind: z.enum(['string', 'number', 'boolean', 'select']),
-    // `.optional()` rather than `.default()` so the schema's input and output types stay identical:
-    // `modWidgetSchema` is recursive and needs an explicit `ZodType<ModWidget>` annotation, which a
-    // default would break. Readers use `?? []` / `?? ''`.
+    // `.optional()` rather than `.default()`, so the schema's input and output types match.
     /** For `select`. */
     options: z.array(z.string()).max(200).optional(),
     help: z.string().max(400).optional(),
@@ -67,8 +43,7 @@ export const modFieldSchema = z
 export type ModField = z.infer<typeof modFieldSchema>;
 
 /** A widget tree the host renders with the editor's own components. */
-// The `| undefined` on every optional is `exactOptionalPropertyTypes`: zod's parsed output admits
-// it, so the hand-written mirror has to as well.
+// The `| undefined` on every optional is `exactOptionalPropertyTypes`.
 export type ModWidget =
   | { readonly kind: 'text'; readonly text: string; readonly tone?: 'note' | 'warn' | 'error' | undefined }
   | { readonly kind: 'field'; readonly field: ModField }
@@ -76,9 +51,7 @@ export type ModWidget =
   | { readonly kind: 'table'; readonly columns: readonly string[]; readonly rows: readonly (readonly string[])[] }
   | { readonly kind: 'rows'; readonly children: readonly ModWidget[] };
 
-// `z.lazy` plus an explicit annotation is how Zod expresses a recursive shape, and the trailing
-// cast is what `dsl/schema.ts` does for the same reason: the defaults inside make the parsed output
-// differ from the accepted input.
+// `z.lazy` plus an explicit annotation is how Zod expresses a recursive shape.
 export const modWidgetSchema: z.ZodType<ModWidget> = z.lazy(() =>
   z.discriminatedUnion('kind', [
     z.object({ kind: z.literal('text'), text: z.string().max(4000), tone: z.enum(['note', 'warn', 'error']).optional() }).strict(),
@@ -106,7 +79,7 @@ export const modDiagnosticSchema = z
 
 export type ModDiagnostic = z.infer<typeof modDiagnosticSchema>;
 
-/** A document edit. Maps one-to-one onto the editor's `setAt` / `deleteAt`. */
+/** A document edit. */
 export const modPatchSchema = z.discriminatedUnion('op', [
   z.object({ op: z.literal('set'), path: z.array(z.union([z.string(), z.number().int()])).min(1).max(16), value: z.unknown() }).strict(),
   z.object({ op: z.literal('delete'), path: z.array(z.union([z.string(), z.number().int()])).min(1).max(16) }).strict(),

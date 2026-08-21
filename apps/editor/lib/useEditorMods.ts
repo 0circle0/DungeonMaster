@@ -1,13 +1,6 @@
 'use client';
 
-/**
- * Editor mods as a hook.
- *
- * Unlike the play side, nothing here blocks: the studio must always render, so
- * an author can fix whatever is broken — including a module that pins a mod
- * they do not have. Mods arrive when they arrive, and the panels that use them
- * are empty until then.
- */
+/** Editor mods as a hook. */
 
 import { useEffect, useMemo, useState } from 'react';
 import { prepareSandbox, createHost } from '@dm/mods';
@@ -53,19 +46,7 @@ export interface EditorModsApi {
   readonly isActive: (id: string) => boolean;
 }
 
-/**
- * Which editor mods run against the document that is open.
- *
- * The answer used to be "all of them", and the module's own `mods` list was
- * shown in the panel and otherwise ignored. So aurendel — which pins no editor
- * mod at all — was being linted by greenmarch's morale mod, and reported 127
- * problems from a mod it does not use. Every one of them was true about a world
- * with morale in it and meaningless about a world without.
- *
- * A mod runs when the module asks for it. Anything else is *borrowed*: switched
- * on by hand, remembered separately, and off by default — because you have to be
- * able to try a mod before adopting it, and adopting it is writing the pin.
- */
+/** Which editor mods run against the document that is open. */
 export function useEditorMods(
   installed: readonly ModWire[],
   /** Mod ids the open module pins. */
@@ -133,9 +114,7 @@ export function useEditorMods(
     declares: (id) => declaredIds.has(id),
     isActive: (id) => activeIds.has(id),
     setEnabled: (id, on) => {
-      // Which set the switch writes to depends on whether the module asked for
-      // the mod: turning a declared one off is a preference, turning an
-      // undeclared one on is borrowing it.
+      // Turning a declared mod off is a preference; turning an undeclared one on is borrowing.
       if (declaredIds.has(id)) {
         setDisabled((current) => {
           const next = new Set(current);

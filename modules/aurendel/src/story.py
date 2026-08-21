@@ -1,21 +1,9 @@
-"""The Unsealing — the acts, assembled.
-
-Each `act*.py` owns a stretch of the questline and exports whatever it has:
-
-    NPCS  QUESTS  ARCS  DIALOGUES
-
-and registers its own prose by importing `prose.pool` at module level. This file is the gathering,
-plus the two things that belong to the questline as a whole: the ending arc, and the wiring that
-turns the continent's biomes and dungeons live along the route.
-"""
+"""The Unsealing — the acts, assembled."""
 from dmkit import story as _kit
 
 ACT_MODULES = ["act1", "act2", "act3"]
 
-# The side chains: one file per chain, each owning one region and one act and exporting the same
-# four names the acts do. Gathered alongside rather than inside the acts because the difference is
-# load-bearing — `ACT_THREE_SPINE` below decides what winning means, and nothing from this list may
-# go near it.
+# The side chains: one file per chain, each owning one region and one act.
 SIDE_MODULES = [
     # Act I — the Kingsvale, the capital, and the coast.
     "side_kingsvale", "side_aurenhal", "side_coast", "side_sarnport",
@@ -27,11 +15,7 @@ SIDE_MODULES = [
     "side_isles",
 ]
 
-# The hidden threads: things nobody hands you, in the sixty-one areas neither the spine nor a side
-# chain touches. A third list rather than more entries in the second, because the contract is
-# different again — a side chain has a giver and a visible arc, and one of these has neither.
-# `check_quests.py` holds them to `hiddenspace.EMPTY` and to the rule that no clue may name the
-# place it points at.
+# The hidden threads, in the areas neither the spine nor a side chain touches.
 HIDDEN_MODULES = [
     "hidden_frostmere",
     "hidden_glasslands",
@@ -47,12 +31,7 @@ HIDDEN_MODULES = [
     "hidden_moor",
 ]
 
-# The trials: post-game content, behind `aurendel_finished`. A fourth list because the contract is
-# different again — a trial only exists once the game has been won, and is tuned for a party that
-# has done the threads. `postgame.py` states the rules and `check_quests.py` asserts them.
-#
-# Nothing here may go near `ACT_THREE_SPINE`: a trial the ending waited on would be a game you have
-# to finish twice.
+# The trials: post-game content, behind `aurendel_finished`.
 TRIAL_MODULES = [
     "trial_one",
     "trial_two",
@@ -110,16 +89,14 @@ def arcs():
         ACT_THREE_SPINE))
 
 
-# The quests that must all be complete for the game to be won. Deliberately only the spine: no
-# branch quest is in here, so no choice can lock the ending.
+# The quests that must all be complete for the game to be won.
 ACT_THREE_SPINE = [
     "the_way_below", "lantern_deep", "the_eleventh_chamber",
     "behind_the_ninth_door", "the_unsealing",
 ]
 
 
-# Arriving somewhere is the event, for the three ways into the Deeproads. A trigger on the point of
-# interest is how the questline says so without the geography files knowing a questline exists.
+# Arriving somewhere is the event, for the three ways into the Deeproads.
 POI_TRIGGERS = {
     "black_tarn_shaft": [{
         "id": "found_the_tarn_shaft", "mode": "once", "on": "enter",
@@ -150,8 +127,7 @@ def attach_patches(poi_list):
 
 def attach_content(biome_list, dungeon_list, room_templates, area_list):
     """What the questline turns live, and nothing else on the continent."""
-    # Function-scoped: `story` is imported by `build.py` before `loot` is needed, and the tables are
-    # content rather than wiring.
+    # Function-scoped: `story` is imported by `build.py` before `loot` is needed.
     import loot
     _kit.attach_content(
         _LOADED, biome_list, dungeon_list, room_templates, area_list,

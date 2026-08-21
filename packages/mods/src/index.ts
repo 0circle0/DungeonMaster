@@ -1,10 +1,4 @@
-/**
- * The mod format and its sandbox.
- *
- * Browser-safe: nothing here touches the filesystem. Reading a mod off disk
- * lives in `@dm/mods/load`, which is deliberately not re-exported so a client
- * import of it is a build error.
- */
+/** The mod format and its sandbox. */
 
 export {
   modManifestSchema,
@@ -45,8 +39,7 @@ export type {
   InstallResult,
 } from './sandbox/host.js';
 
-// The editor target. Separate from the engine contract because the two run
-// against different hosts and share nothing but the manifest.
+// The editor target.
 export {
   modFieldSchema,
   modWidgetSchema,

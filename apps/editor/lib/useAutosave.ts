@@ -1,15 +1,6 @@
 'use client';
 
-/**
- * Saving as you type, rather than when you remember to.
- *
- * One destination: a world is its files. There is no separate draft — a file with a half-typed
- * reference is still a file, the world still opens, and the diagnostic says so.
- *
- * The delay is idle time rather than a timer: it restarts on every keystroke, so a sentence is
- * written once when finished rather than once per letter. What a save writes is the files that
- * moved, which for an edited field is one of them.
- */
+/** Saving as you type, rather than when you remember to. */
 
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { saveWorld, recomputeInstancesFor } from '@/lib/worldStore';
@@ -17,20 +8,10 @@ import type { ProjectSnapshot } from '@/lib/projectDiff';
 import type { ModuleStore } from './store';
 import type { WorldAuthoring, WorldMeta } from '@dm/library';
 
-/**
- * Short, because a local compressed write is a fraction of what a network round trip cost, and a
- * shorter window is the only mitigation available for the teardown case below.
- */
+/** Short: a local compressed write costs a fraction of a network round trip. */
 const IDLE_MS = 400;
 
-/**
- * Left behind on the way out, read on the way in.
- *
- * An IndexedDB transaction is not guaranteed to commit during teardown, and Safari is documented to
- * kill in-flight ones, so nothing local can promise what `sendBeacon` did. The write is attempted
- * at `visibilitychange`, the last reliable moment, and this marker is written synchronously beside
- * it. If the next session finds a marker newer than the world it belongs to, the author is told.
- */
+/** Left behind on the way out, read on the way in. */
 const PENDING_KEY = 'dm.studio.pending';
 
 export type AutosaveState = 'idle' | 'pending' | 'saving' | 'saved' | 'error';
@@ -38,7 +19,7 @@ export type AutosaveState = 'idle' | 'pending' | 'saving' | 'saved' | 'error';
 export interface Autosave {
   readonly state: AutosaveState;
   readonly note: string;
-  /** Write now rather than waiting out the idle delay. ⌘S, or switching world. */
+  /** Write now rather than waiting out the idle delay. */
   readonly flush: () => Promise<void>;
 }
 
@@ -56,19 +37,13 @@ export function useAutosave(
   const [state, setState] = useState<AutosaveState>('idle');
   const [note, setNote] = useState('');
 
-  // The save reads these at the moment it runs, not when it was scheduled, or a burst of typing
-  // would each save its own stale copy.
+  // The save reads these when it runs, not when it was scheduled.
   const latest = useRef({ doc: store.doc, compiled: store.validation.compiled, authoring, world });
   latest.current = { doc: store.doc, compiled: store.validation.compiled, authoring, world };
 
   /** The world as it was last written, and what the next diff compares against. */
   const snapshot = useRef<ProjectSnapshot | null>(loaded);
-  /**
-   * Prefabs and style tables never go through the store — `savePrefab` and `linkInstance` set state
-   * on the loader — so `store.dirty` stays false for them and the idle effect below would never
-   * fire. Since entry files can be recipes built from those prefabs, the two could otherwise
-   * disagree.
-   */
+  /** Prefabs and style tables never go through the store, so `store.dirty` misses them. */
   const savedAuthoring = useRef<WorldAuthoring | null>(null);
 
   const inFlight = useRef(false);
@@ -80,21 +55,18 @@ export function useAutosave(
     if (!target) return;
 
     if (inFlight.current) {
-      // Something changed while a write was in the air; go round once more rather than dropping it
-      // or queueing an unbounded chain.
+      // Something changed while a write was in the air; go round once more.
       again.current = true;
       return;
     }
 
     inFlight.current = true;
     setState('saving');
-    // Captured once. The diff, the write and the snapshot all have to be about the same document,
-    // or the snapshot claims files were written that were not.
+    // Captured once.
     const { doc, compiled, authoring: sidecar } = latest.current;
 
     try {
-      // Which fields are the author's rather than the prefab's, derived from the document being
-      // written so it matches what the inspector shows.
+      // Which fields are the author's rather than the prefab's, from the document being written.
       const written = recomputeInstancesFor(doc, sidecar);
       const { meta, snapshot: next } = await saveWorld({
         world: target,
@@ -104,8 +76,7 @@ export function useAutosave(
         previous: snapshot.current,
       });
 
-      // Only now: a quota failure aborts the transaction, and a snapshot that moved first would
-      // make the next diff compare against files that were never stored.
+      // Only now: a quota failure aborts the transaction, so the snapshot must not move first.
       snapshot.current = next;
       savedAuthoring.current = sidecar;
       store.markSaved();
@@ -133,11 +104,7 @@ export function useAutosave(
     return () => clearTimeout(timer);
   }, [enabled, store.doc, store.dirty, authoringDirty, save]);
 
-  /**
-   * The tab going away. `visibilitychange → hidden` fires before `pagehide` and is the last point a
-   * write is likely to complete. The marker is written first and synchronously, because it is the
-   * only part guaranteed to survive.
-   */
+  /** The tab going away. */
   useEffect(() => {
     if (!enabled) return;
     const onHide = () => {
@@ -164,10 +131,7 @@ export function useAutosave(
   return { state, note, flush: save };
 }
 
-/**
- * Was the last session cut off mid-write? Returns the moment it happened. A world whose `updatedAt`
- * is newer than the marker finished saving after all.
- */
+/** Was the last session cut off mid-write? */
 export function interruptedAt(world: WorldMeta | null): number | null {
   if (!world || typeof window === 'undefined') return null;
   try {

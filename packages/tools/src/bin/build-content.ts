@@ -1,19 +1,4 @@
-/**
- * `npm run content`
- *
- * Emit the example worlds each app ships, pre-zipped, in the form each app can use.
- *
- * The player receives `<id>.json.gz`: the compiled `module.json`, which it reads and never edits.
- * The studio receives `<id>.project.json.gz`: the project tree exactly as the repository holds it,
- * recipes and prefabs and style tables included, because the studio edits project files.
- *
- * The repository keeps its modules pretty-printed for readable diffs. Aurendel is 2.9 MB pretty,
- * 1.5 MB minified and 296 KB gzipped, so the readable form stays in git and this writes the small
- * one at build time — there is no server to do it on.
- *
- * What ships is an explicit allowlist rather than the contents of `modules/`: `greenmarch` and
- * `minimal` are test fixtures and are not games.
- */
+/** `npm run content` */
 
 import { mkdirSync, writeFileSync, readFileSync, readdirSync, existsSync, rmSync, statSync } from 'node:fs';
 import { join, dirname, resolve, relative } from 'node:path';
@@ -23,18 +8,10 @@ import { compileModule, hashModule, formatIssues, unbundleModule } from '@dm/mod
 import { readAssembledModule, formatMapIssues } from '@dm/module/load';
 import type { WorldEnvelope, WorldAuthoring } from '@dm/library/envelope';
 
-/**
- * The repository root, from this file rather than from the shell. `predev` and `prebuild` run with
- * the cwd set to the app being built, so `process.cwd()` would look for `apps/play/modules/` and
- * find nothing.
- */
+/** The repository root, from this file rather than from the shell. */
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..', '..', '..', '..');
 
-/**
- * What each app is allowed to ship. The player gets Aurendel; the studio gets it too, plus
- * `core_fantasy`, which is a ruleset rather than a game — 6 attributes, 10 damage types, 16 skills,
- * 5 classes and 20 levels a new module can be composed from.
- */
+/** What each app is allowed to ship. */
 const SHIP: Readonly<Record<string, readonly string[]>> = {
   play: ['aurendel'],
   editor: ['aurendel', 'core_fantasy'],
@@ -54,16 +31,12 @@ export interface BuiltModule {
   readonly storedBytes: number;
   readonly minified: string;
   readonly gz: Buffer;
-  /** The project tree, gzipped. Absent for a module with no `project/`. */
+  /** The project tree, gzipped. */
   readonly project: Buffer | null;
   readonly projectBytes: number;
 }
 
-/**
- * The committed project tree, verbatim. Read off disk rather than regenerated from `module.json`:
- * the build expands 767 of Aurendel's entry files from recipes, and re-splitting the result would
- * ship a world with the prefabs still in it and nothing pointing at them.
- */
+/** The committed project tree, verbatim. */
 function projectFilesOf(dir: string): Record<string, string> | null {
   if (!existsSync(join(dir, 'project'))) return null;
 
@@ -80,7 +53,7 @@ function projectFilesOf(dir: string): Record<string, string> | null {
   return files;
 }
 
-/** The authoring sidecar, when the module is a project. Empty when it is not. */
+/** The authoring sidecar, when the module is a project. */
 function readAuthoring(dir: string): WorldAuthoring | null {
   const projectDir = join(dir, 'project');
   if (!existsSync(projectDir)) return null;
@@ -109,11 +82,7 @@ function readAuthoring(dir: string): WorldAuthoring | null {
   };
 }
 
-/**
- * Assemble one module and prove it works before anyone can download it. An artifact is generated
- * and served rather than reviewed, so the compile gate here is the only chance to notice that a
- * world no longer loads.
- */
+/** Assemble one module and prove it works before anyone can download it. */
 export function buildModule(name: string): BuiltModule {
   if (FIXTURES.has(name)) {
     throw new Error(`${name} is a test fixture and is never shipped`);
@@ -144,8 +113,7 @@ export function buildModule(name: string): BuiltModule {
   const minified = JSON.stringify(envelope);
   const gz = gzipSync(Buffer.from(minified, 'utf8'), { level: 9 });
 
-  // Proved against the same gate: a bundle that does not rebuild the document this module just
-  // compiled is not shippable.
+  // Proved against the same gate the bundle must rebuild through.
   const tree = projectFilesOf(dir);
   let project: Buffer | null = null;
   if (tree) {
@@ -183,11 +151,7 @@ export function buildAll(): Map<string, BuiltModule> {
   return out;
 }
 
-/**
- * The committed record of what the artifacts contain. The `.gz` files stay out of git — a 300 KB
- * binary per content change is an unreadable diff — so this is what gets committed, making
- * "somebody changed a world and forgot to regenerate" a one-line diff.
- */
+/** The committed record of what the artifacts contain. */
 export function manifestOf(built: Map<string, BuiltModule>): string {
   const modules = [...built.values()].map((m) => ({
     id: m.id,
@@ -211,8 +175,7 @@ function catalogFor(app: string, built: Map<string, BuiltModule>): string {
       title: m.title,
       description: m.description,
       extends: m.extends,
-      // What this app will download, which differs by app: the studio takes the project, the player
-      // takes the compiled module. The catalog exists so a button can say what a click costs.
+      // What this app downloads: the studio a project, the player a compiled module.
       storedBytes: app === 'editor' ? m.projectBytes : m.storedBytes,
       rawBytes: m.rawBytes,
       hash: m.hash,

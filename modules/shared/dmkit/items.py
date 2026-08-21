@@ -1,30 +1,10 @@
-"""Things you can carry.
-
-The trap this module documents: `strike` declares no damage of its own, so damage comes entirely
-from an equipped weapon (`rules/combat/attack.ts`). A party with no weapons swings for zero and
-nothing reports it.
-
-The sibling trap is `kind`. `weaponOf` returns the first equipped item that is `kind: "weapon"` and
-has `damage`, so a blade filed as a trinket hits for nothing. Every constructor here derives `kind`
-rather than taking it.
-"""
+"""Things you can carry."""
 
 def gear(gid, name, slot, value, description, *, skills=None, guard=None,
          initiative=None, carry=None, resist=(), weight=1, rarity=None,
          tags=(), damage=None, properties=()):
-    """A piece of equipment, for the slots the main questline leaves empty.
-
-    `head`, `cloak`, `ring` and `belt` are the four a spine written around hands and bodies never
-    fills, so optional content can pay out in real power without touching the weapon and armour
-    numbers the main line was tuned against.
-
-    `skills` is why the engine changed: `item.modifiers` is keyed by `rules.derivedStats` and can
-    only move guard, initiative and carry, while `skillBonuses` is read by `skillRankOf`, which both
-    the dice and the `minRank` gates go through.
-    """
-    # `kind` is not decoration. `weaponOf` (rules/combat/attack.ts) returns the first equipped item
-    # that is `kind: "weapon"` and has `damage`, so a blade filed as a trinket hits for nothing.
-    # Anything that declares damage is a weapon, whatever slot it hangs in.
+    """A piece of equipment, for the slots the main questline leaves empty."""
+    # `kind` is not decoration.
     if damage:
         kind = "weapon"
     elif slot in ("body", "head", "cloak"):
@@ -48,8 +28,7 @@ def gear(gid, name, slot, value, description, *, skills=None, guard=None,
     if skills:
         out["skillBonuses"] = dict(skills)
     if resist:
-        # `unless` is left off deliberately: a cloak that turns fire turns fire. Silver's exception
-        # belongs on the monster, not on the coat.
+        # `unless` is left off deliberately: a cloak that turns fire turns fire.
         out["damageInteractions"] = [{"damageType": d, "multiplier": m}
                                      for d, m in resist]
     if damage:
@@ -113,12 +92,7 @@ HEAL = lambda dice: [{"heal": {"target": {"ref": "actor.id"}, "amount": {"roll":
 
 
 def outfit(classes, kit):
-    """Give every class its gear. Mutates the list the build is about to emit.
-
-    `kit` is class id -> [(item id, quantity), ...]. Separate from the class definitions because
-    `core_fantasy` says what a warden is, and the world it is played in says what a warden starts
-    out holding.
-    """
+    """Give every class its gear."""
     for entry in classes:
         items = kit.get(entry["id"])
         if items:

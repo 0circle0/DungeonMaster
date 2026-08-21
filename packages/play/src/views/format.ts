@@ -1,12 +1,6 @@
-/**
- * Plain-text fragments both front ends want verbatim.
- *
- * The bar for being here is strict: no ANSI, no layout, and the exact same
- * string wanted by the terminal and the browser. Everything else is a front
- * end's own business.
- */
+/** Plain-text fragments both front ends want verbatim. */
 
-/** `1h 30m`, `20m`, `2h` — travel time as a phrase. Empty for zero. */
+/** `1h 30m`, `20m`, `2h` — travel time as a phrase. */
 export function duration(minutes: number): string {
   if (minutes <= 0) return '';
   const hours = Math.floor(minutes / 60);

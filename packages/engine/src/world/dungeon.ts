@@ -1,34 +1,4 @@
-/**
- * Dungeon generation.
- *
- * Rooms are placed, connected into a tree, carved into tiles, and then locked. Two properties hold
- * for every seed, by construction:
- *
- *   Everything is reachable. Rooms are connected with a spanning tree before any extra loops are
- * added.
- *
- *   Every key lies before its lock. A lock is only placed on a tree edge, which splits the dungeon
- * in two, and the key goes in the part containing the entrance. Because the edge is a bridge, there
- * is no other route to the far side.
- *
- * Every extra edge — branchiness loops and the `minExits`-raising connections — is added only after
- * locks are chosen, and refused when it would join a lock's two sides.
- *
- * Rng streams. Each subsystem derives its own, so a change in one cannot shift another; template
- * `requires` evaluation is isolated per template (`qualify:<id>`) so adding a gate to one room
- * cannot reshuffle the map:
- *
- *   `count`          roomCount roll
- *   `size`           authored width/height rolls
- *   `qualify:<id>`   template requirement evaluation
- *   `rooms`          placement sampling
- *   `corridors`      elbow orientation, winding walks, per-edge length rolls
- *   `locks`          lock selection and key hosts
- *   `loops`          branchiness extras
- *   `scatter`        palette scatter over the carved floor
- *
- * `depth` and `populate` are derived by the caller.
- */
+/** Dungeon generation. */
 
 import { Rng, parseDice, rollDice } from '@dm/core';
 import { evalPredicate, compileRequirement, isEmptyRequirement } from '@dm/module';
@@ -77,17 +47,10 @@ export interface GeneratedDungeon {
   readonly entrance: Position;
   readonly entranceRoom: string;
   readonly bossRoom: string | null;
-  /**
-   * Keys that must be placed: the item, the room it goes in, and the gate it opens. The gate is
-   * recorded so the ordering can be verified — a key is reachable once every earlier lock has been
-   * opened.
-   */
+  /** Keys that must be placed: the item, the room it goes in, and the gate it opens. */
   readonly keyPlacements: readonly { item: string; room: string; gate: string }[];
   readonly palette: Palette;
-  /**
-   * Content authored on embedded static rooms, at absolute positions: the gates, traps, items and
-   * creatures a `map.static` room template carries into the generated dungeon.
-   */
+  /** Content authored on embedded static rooms, at absolute positions. */
   readonly authored: AuthoredContent;
 }
 
@@ -218,14 +181,7 @@ export interface PlacementInputs {
   readonly derivedSize: number;
 }
 
-/**
- * The inputs `placeRooms` will be handed for this dungeon.
- *
- * Exposed so authoring tools can ask whether these rooms fit in a map of a given size without
- * generating the dungeon, and without a second approximate copy of how the inputs are derived.
- * Generation rounds and clamps the corridor mean to 1..12, so a tool computing the raw mean
- * disagrees with the engine on exactly the long corridors that make rooms not fit.
- */
+/** The inputs `placeRooms` will be handed for this dungeon. */
 export function placementInputs(module: CompiledModule, dungeonId: string): PlacementInputs {
   const definition = module.get<DungeonDef>('world.dungeons', dungeonId);
   const biome = module.find<BiomeDef>('world.biomes', definition.biome);
@@ -255,19 +211,14 @@ export function generateDungeon(
   const biome = module.find<BiomeDef>('world.biomes', definition.biome);
   const palette = resolvePalette(module, definition.palette ?? biome?.palette);
 
-  // A template the party does not qualify for is not built at all — the same remove-before-the-draw
-  // rule loot and encounters follow.
-  //
-  // Each evaluation gets its own derived stream, so a template gaining a requirement cannot shift
-  // every stream after it and reshuffle the dungeon.
+  // A template the party does not qualify for is removed before the draw, on its own stream.
   const templates = (biome?.roomTemplates ?? [])
     .map((id) => module.find<PlaceableTemplate>('world.roomTemplates', id))
     .filter((entry): entry is PlaceableTemplate => Boolean(entry))
     .filter((entry) => qualifies(entry.requires, scope, rng.derive(`qualify:${entry.id}`)));
 
   if (templates.length === 0) {
-    // Nothing to build from: a single empty chamber rather than throwing, so a half-authored module
-    // is still explorable in the editor.
+    // Nothing to build from: a single empty chamber rather than a throw.
     const builder = new MapBuilder(11, 11, palette.floor);
     builder.strokeRect(0, 0, 11, 11, palette.wall);
     return {
@@ -287,7 +238,6 @@ export function generateDungeon(
   const roomCount = Math.max(2, roll(definition.roomCount, rng.derive('count'), 6));
 
   // Room spacing comes from `corridorLength`'s static mean, so the map's geometry consumes no rng.
-  // Bounds grow with it; authored `width`/`height` dice override the derived square.
   const spacing = Math.max(1, Math.min(12, Math.round(diceMean(definition.corridorLength, 1))));
   const derivedSize = Math.max(20, Math.ceil(Math.sqrt(roomCount) * (8 + spacing)) + 6);
   const sizeRng = rng.derive('size');
@@ -301,9 +251,7 @@ export function generateDungeon(
   const templateById = new Map(templates.map((entry) => [entry.id, entry]));
   const corridorRng = rng.derive('corridors');
 
-  // Each algorithm lays out rooms, carves them, and connects its spanning tree. Everything after
-  // that — locks, minExits raising, loops, dressing — is shared, parameterized by how an extra edge
-  // can be made.
+  // Each algorithm lays out rooms, carves them, and connects its spanning tree.
   let rooms: PlacedRoom[];
   let tree: [number, number][];
   let treeCrossings: { edge: [number, number]; crossings: Position[] }[];
@@ -312,12 +260,10 @@ export function generateDungeon(
   let authored: AuthoredContent = NO_AUTHORED;
   // Static room cells are excluded from the scatter pass: the author drew every tile of them.
   const staticCells = new Set<number>();
-  // Their door markers, absolute. The corridor mouths outside them stay clear of scatter too, or a
-  // rubble pile could wall off the one way in.
+  // Their door markers, absolute.
   const authoredDoors: Position[] = [];
 
-  // A template whose map is a static `world.maps` entry embeds only in the rooms algorithm: BSP
-  // leaves take their size from the splits, and a cavern has no rooms to stamp.
+  // A static `world.maps` room embeds only in the rooms algorithm.
   const nonStatic = templates.filter((entry) => !entry.map?.static);
 
   if (algorithm === 'caverns') {
@@ -343,8 +289,7 @@ export function generateDungeon(
     connectExtra = (a, b) => punchAdjacent(builder, rooms[a]!, rooms[b]!, palette) !== null;
     canConnect = (a, b) => findPunch(rooms[a]!, rooms[b]!) !== null;
   } else {
-    // Static-mapped templates take their size from the map and are stamped verbatim; the build is
-    // pure, and done once per template here.
+    // Static-mapped templates take their size from the map and are stamped verbatim.
     const staticBuilt = new Map<string, BuiltStaticMap>();
     const placeable = templates.map((entry) => {
       const staticId = entry.map?.static;
@@ -381,8 +326,7 @@ export function generateDungeon(
           }
         }
       } else if (layout && layout.length > 0) {
-        // A hand-authored room is stamped verbatim. Its legend's defaults come from the room's own
-        // `map.palette` when it names one.
+        // A hand-authored room is stamped verbatim.
         const roomPalette = template?.map?.palette
           ? resolvePalette(module, template.map.palette)
           : palette;
@@ -416,12 +360,10 @@ export function generateDungeon(
       winding: definition.winding,
     };
 
-    // Door spots accumulate as tree corridors are carved, so no later brush can erode the wall
-    // around an earlier door.
+    // Door spots accumulate as corridors are carved, so no later brush erodes an earlier door.
     const doorSpots = new Set<number>();
 
-    // A static room may only be entered through its door markers: every other cell of its rectangle
-    // is off limits to every corridor.
+    // A static room may only be entered through its door markers.
     const forbidden = new Set<number>();
     for (const room of rooms) {
       const built = staticBuilt.get(room.template);
@@ -457,8 +399,7 @@ export function generateDungeon(
     };
 
     const connect = (a: number, b: number): Position[] => {
-      // Winding corridors read the per-edge roll as a minimum path length; the other styles are as
-      // long as geometry makes them.
+      // Winding corridors read the per-edge roll as a minimum path length.
       const minLength =
         corridor.style === 'winding' ? roll(definition.corridorLength, corridorRng, spacing) : 0;
       return carvePath(
@@ -531,9 +472,7 @@ export function generateDungeon(
     };
   });
 
-  // — lock ——————————————————————————————————————————————————
-  // Only tree edges are candidates: each is a bridge, so locking one separates the dungeon into a
-  // near side and a far side.
+  // --- lock: only tree edges are candidates, each a bridge that splits the map ---
   const entranceIndex = Math.max(0, rooms.findIndex((room) => room.role === 'entrance'));
   const gates = definition.doorGates
     .map((id) => module.find<GateDef>('world.gates', id))
@@ -542,13 +481,7 @@ export function generateDungeon(
   const lockRng = rng.derive('locks');
   const keyPlacements: { item: string; room: string; gate: string }[] = [];
 
-  /**
-   * Decide which doors are locked, then place their keys in the order a player meets them.
-   *
-   * Locking only bridges is not sufficient alone: with two locks, a room can sit on the near side
-   * of the first while still being behind the second. Locks are sorted by depth from the entrance
-   * and keys placed one at a time, each into the region the party can already reach.
-   */
+  /** Decide which doors are locked, then place their keys in the order a player meets them. */
   const depth = depthsFrom(entranceIndex, tree);
   const candidates = treeCrossings
     .filter((entry) => entry.crossings.length > 0)
@@ -559,8 +492,7 @@ export function generateDungeon(
       return depthOf(a.edge) - depthOf(b.edge);
     });
 
-  // Walk the locks outward: assign each its gate and place that gate's key in the region reachable
-  // with every later lock still sealed.
+  // Walk the locks outward, placing each key in the region reachable with later locks sealed.
   const gateByEdge = new Map<string, string>();
   const solved = new Set<string>();
 
@@ -608,15 +540,11 @@ export function generateDungeon(
   const bypassesLock = (a: number, b: number): boolean =>
     lockedSides.some((near) => near.has(a) !== near.has(b));
 
-  // — raise to minExits ————————————————————————————————————
-  // After locking, so an extra connection can never route around a locked door. Deterministic, so
-  // it sits between the `locks` and `loops` streams without owning one.
+  // --- raise to minExits: after locking, so a new edge cannot route around a door ---
   const raised = raiseToMinDegrees(rooms, tree, limits, bypassesLock, canConnect);
   for (const [a, b] of raised) connectExtra(a, b);
 
-  // — loop ——————————————————————————————————————————————————
-  // Extra connections are added after locking, so they cannot bypass a locked door and invalidate
-  // the key-placement argument. They also respect `maxExits`.
+  // --- loop: extra connections, added after locking and respecting `maxExits` ---
   const extraRng = rng.derive('loops');
   const extras = Math.floor(rooms.length * definition.branchiness);
   const withRaised = [...tree, ...raised];
@@ -638,10 +566,7 @@ export function generateDungeon(
 
   const entranceRoom = rooms[entranceIndex]!;
 
-  // — dress ————————————————————————————————————————————————
-  // Palette scatter over the carved floor. Room centres, the entrance and doorways are reserved,
-  // since corridors aim at centres and doors are the only way through a wall; the reconnect pass
-  // guarantees whatever else it claims cannot strand a region.
+  // — dress ———————————————————————————————————————————————— Palette scatter over the carved floor.
   if (palette.scatter.length > 0) {
     const reserved = new Set<number>(staticCells);
     const reserve = (at: Position) => reserved.add(at.y * builder.width + at.x);
@@ -655,8 +580,7 @@ export function generateDungeon(
       reserve({ x: at.x, y: at.y - 1 });
     }
     applyScatter(builder, palette, rng.derive('scatter'), reserved);
-    // Static room rectangles are off limits to the repair dig too, keyed the way reconnect keys
-    // tiles.
+    // Static room rectangles are off limits to the repair dig too, keyed the way reconnect keys tiles.
     const avoid = new Set<number>();
     for (const packed of staticCells) {
       avoid.add(packKey({ x: packed % builder.width, y: Math.floor(packed / builder.width) }));
@@ -664,8 +588,7 @@ export function generateDungeon(
     reconnect(builder, module, palette, entranceRoom.centre, avoid);
   }
 
-  // `palette.exterior` fills the space beyond the walls — rock, void, open sky. A wall with no
-  // carved neighbour is painted exterior so the field reads as solid ground.
+  // `palette.exterior` fills the space beyond the walls — rock, void, open sky.
   if (palette.exterior !== palette.wall) {
     paintExterior(builder, palette);
   }

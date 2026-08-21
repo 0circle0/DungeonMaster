@@ -1,19 +1,4 @@
-/**
- * `npm run bench -- modules/<name>`
- *
- * What one keystroke in the editor costs.
- *
- * The studio revalidates the whole document on every change, so the number this
- * prints is the editor's frame budget rather than a CLI timing. It is here
- * because the cost is dominated by one line — `gameModuleSchema.safeParse` — in
- * a way that is invisible from the outside: on `modules/aurendel` the parse is
- * ~610 ms and *everything else the compiler does* is single-digit milliseconds.
- * Anyone optimising this file's other passes would be optimising noise.
- *
- * Deliberately not a test. A latency budget asserted in CI fails on a busy
- * machine and teaches people to skip the suite; this is a thing you run when
- * you have changed something and want to know which way it moved.
- */
+/** `npm run bench -- modules/<name>` */
 
 import { readFileSync } from 'node:fs';
 import { gameModuleSchema } from '@dm/module';
@@ -85,8 +70,7 @@ function main(): number {
   time('lintModule (object)', 3, () => void lintModule(doc));
   time('lintModule (text, with spans)', 3, () => void lintModule(text));
 
-  // What the editor actually pays once a session is warm: one field changed,
-  // every other entry shared with the previous document.
+  // What the editor pays once warm: one field changed, every other entry shared.
   process.stdout.write('\n  one keystroke, warm\n');
   const index = new ValidationIndex();
   index.parse(doc);
@@ -125,8 +109,7 @@ function main(): number {
     void JSON.stringify(edited, null, 2);
   });
 
-  // Other whole-document walks the editor does per edit, which the parse cache
-  // does nothing for.
+  // Other whole-document walks the editor does per edit, which the parse cache does nothing for.
   process.stdout.write('\n  other per-edit walks\n');
   time('buildReferenceIndex (UsedBy)', 5, () => void buildReferenceIndex(doc));
 

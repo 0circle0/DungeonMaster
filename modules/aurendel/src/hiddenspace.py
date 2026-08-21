@@ -1,21 +1,4 @@
-"""The empty half of Aurendel, frozen.
-
-Sixty-one of the continent's 108 areas are touched by no quest, no dialogue, no NPC's home and no
-trigger. They hold 307 points of interest, among them 32 dungeon mouths, 20 ruins, 13 camps, 12
-shrines and 159 shops and houses.
-
-Hidden threads go here and nowhere else. That is rule 1 in `dmkit.lore`, and this is the list it is
-checked against.
-
-Frozen deliberately. Computing it at build time would be circular — the moment a thread puts
-somebody in Whalebone Landing, the Landing stops being empty and the rule would reject the thread
-that filled it. Regenerate only when the questlines move:
-
-    python3 -c "$(sed -n '/^REGENERATE/,/^\"\"\"/p' hiddenspace.py)"
-
-Levels are the band each region's empty areas sit in, so a thread never has to borrow ground from a
-questline to stay level-appropriate.
-"""
+"""The empty half of Aurendel, frozen."""
 
 EMPTY = {
     # levels 9–10

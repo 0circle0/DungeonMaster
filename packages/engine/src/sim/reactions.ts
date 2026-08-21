@@ -1,19 +1,4 @@
-/**
- * Turning events into reactions.
- *
- * `content.monsters[].reactions` and `content.npcs[].reactions` declare twelve triggers —
- * `seePlayer`, `allyHurt`, `allyKilled`, `selfHurt`, `lowHealth`, `combatStart`, `combatEnd`,
- * `turnStart`, `witnessDeed`, `questComplete`, `itemShown`, `custom` — and all of them are
- * broadcast from here.
- *
- * The dispatch is event-driven rather than hooked at each origin. Damage alone arrives from six
- * places — a player ability, an AI ability, a trap, terrain, a condition tick, and a resource
- * bottoming out — so `damaged` is one event, emitted once, from all of them.
- *
- * It cannot be driven from inside `adjustResource`: reaction effects call `applyOps`, which calls
- * `adjustResource`, and nothing but a scratch set meant for something else would stand between that
- * and unbounded recursion.
- */
+/** Turning events into reactions. */
 
 import { Rng } from '@dm/core';
 import type { Entity } from '../state.js';
@@ -28,10 +13,7 @@ function bystanders(txn: Transaction, subject: Entity | null): readonly Entity[]
     .filter((entity) => !subject || entity.id !== subject.id);
 }
 
-/**
- * Fan a batch of events out to whoever declared a reaction to them. `died` is deliberately absent:
- * `allyKilled` is broadcast from `performAbility`, where it has always been.
- */
+/** Fan a batch of events out to whoever declared a reaction to them. */
 export function dispatchReactions(
   txn: Transaction,
   events: readonly GameEvent[],
@@ -67,9 +49,7 @@ export function dispatchReactions(
 
         runReactions(txn, victim, 'selfHurt', source, rng.derive(`selfHurt:${victim.id}`));
 
-        // "Ally" is read the way `isHostileTo` reads every other question about sides: anyone who
-        // is not hostile to the victim. That makes a monster pack care about its own without a
-        // module declaring a faction.
+        // "Ally" is anyone not hostile to the victim, as `isHostileTo` reads it.
         for (const entity of bystanders(txn, victim)) {
           if (isHostileTo(entity, victim)) continue;
           runReactions(txn, entity, 'allyHurt', victim, rng.derive(`allyHurt:${entity.id}`));
@@ -79,8 +59,6 @@ export function dispatchReactions(
 
       case 'deedDone': {
         // Exactly the people who saw it, which is the point of the witness roll in `recordDeed`.
-        // The event carries the deed's id rather than its doer, so who to be annoyed at comes back
-        // out of the log.
         const deed = txn.state.deeds.find((entry) => entry.id === event.deed);
         const actor = deed ? txn.entity(deed.actor) ?? null : null;
         for (const id of event.witnesses) {
@@ -98,9 +76,7 @@ export function dispatchReactions(
       }
 
       case 'custom': {
-        // `deed` and `startQuest` are the reducer's own vocabulary and are handled there; re-
-        // broadcasting them here would fire a reaction on the machinery rather than on the event
-        // the content meant.
+        // `deed` and `startQuest` are the reducer's own vocabulary and are handled there.
         if (event.event === 'deed' || event.event === 'startQuest') break;
         for (const entity of bystanders(txn, null)) {
           runReactions(
@@ -117,12 +93,7 @@ export function dispatchReactions(
   }
 }
 
-/**
- * Reactions to being noticed. Split from the event fan-out because noticing is a difference between
- * two perception passes rather than an event. Passing the pairs in rather than importing
- * `runReactions` into `sim/senses.ts` avoids a cycle: `rules/combat/turn.ts` already imports
- * `canPerceive` from there.
- */
+/** Reactions to being noticed. */
 export function dispatchNoticed(
   txn: Transaction,
   noticed: readonly { readonly observer: string; readonly subject: string }[],

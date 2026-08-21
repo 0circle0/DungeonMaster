@@ -1,11 +1,4 @@
-/**
- * Traps, room descriptions, and depth.
- *
- * The generator placed traps from the first day and `enterDungeon` threw the
- * array away, so `content.traps` was a whole collection — a detect check, a
- * disarm check, effects on both — that could not fire. Greenmarch has declared
- * a `snare` in its biome the entire time.
- */
+/** Traps, room descriptions, and depth. */
 
 import { describe, it, expect } from 'vitest';
 import { fileURLToPath } from 'node:url';
@@ -222,10 +215,6 @@ describe('a generated room says what it is', () => {
   });
 
   it('narrates a room the first time the party walks into it', () => {
-    // Every greenmarch room template declares `barrow_room`, a required field
-    // that was narrated nowhere — so a generated dungeon read as blank ground.
-    // Seeds vary in whether any room happens to have a west-side approach, so
-    // scan until one does.
     let txn: Transaction | null = null;
     let doorway: { x: number; y: number } | null = null;
 
@@ -237,8 +226,6 @@ describe('a generated room says what it is', () => {
         at.x >= room.x && at.x < room.x + room.width
         && at.y >= room.y && at.y < room.y + room.height);
 
-      // A walkable tile outside every room with a room tile due east of it:
-      // the step across that line is the one that should introduce the room.
       for (let y = 1; y < map.tiles.height - 1 && !doorway; y += 1) {
         for (let x = 1; x < map.tiles.width - 2; x += 1) {
           const here = { x, y };
@@ -284,8 +271,6 @@ describe('a generated room says what it is', () => {
 });
 
 describe('the occasions a trigger can declare', () => {
-  // `runTriggers` was only ever called with 'enter', from three places, so
-  // seven of the eight occasions were authorable and inert.
   it('fires a rest trigger when the party rests', () => {
     const doc = JSON.parse(JSON.stringify(GREENMARCH.source)) as never as {
       world: { areas: { id: string; triggers?: unknown[] }[] };

@@ -1,13 +1,4 @@
-/**
- * The world's own clock.
- *
- * Everything here happens whether or not the party is watching: rumours travel, memories fade,
- * factions cool off, creatures learn, and quests time out.
- *
- * Determinism is the constraint. A day's off-screen activity draws from `world:day:<n>`, so it is a
- * pure function of the seed and the day number, independent of what the party spent their turns
- * doing.
- */
+/** The world's own clock. */
 
 import { Rng } from '@dm/core';
 import { evalPredicate } from '@dm/module';
@@ -18,27 +9,17 @@ import { spreadRumours, decayMemories, driftFactions, memoryModel } from './goss
 import { buildScope, OPEN_NAMESPACES } from '../stats.js';
 import { message } from '../narrate/systemText.js';
 
-/**
- * What a creature kind has learned about the party. Held in flags rather than a dedicated table so
- * it serializes with everything else and content can read it: a statblock's `behaviour` rule can
- * check `flags.learned:bog_hound:encounters`.
- */
+/** What a creature kind has learned about the party. */
 export function learningKey(subject: string, what: string): string {
   return `learned:${subject}:${what}`;
 }
 
-/**
- * The module's learning settings. A read, not a merge — see the note on `witnessConfig` in
- * `deeds.ts`.
- */
+/** The module's learning settings. */
 function learningConfig(txn: Transaction): MemoryModel['learning'] {
   return memoryModel(txn.module).learning;
 }
 
-/**
- * Record that the party fought something, so its kin can adapt. Called when a fight ends, and only
- * for creatures bright enough to learn.
- */
+/** Record that the party fought something, so its kin can adapt. */
 export function recordEncounter(txn: Transaction, statblock: string, usedAbilities: readonly string[]): void {
   const config = learningConfig(txn);
   if (!config.enabled) return;
@@ -50,14 +31,12 @@ export function recordEncounter(txn: Transaction, statblock: string, usedAbiliti
   if (!monster) return;
 
   if (config.minimumIntellect !== undefined) {
-    // Which attribute the module treats as intellect is not the engine's business, so the check
-    // reads every attribute and takes the highest.
+    // The check reads every attribute and takes the highest.
     const best = Math.max(0, ...Object.values(monster.attributes ?? {}));
     if (best < config.minimumIntellect) return;
   }
 
-  // Knowledge is filed against the faction when it is shared, so one goblin learning means the
-  // whole warren knows.
+  // Knowledge is filed against the faction when it is shared.
   const subject = config.sharedWithinFaction && monster.faction ? monster.faction : statblock;
 
   const countKey = learningKey(subject, 'encounters');
@@ -94,8 +73,7 @@ export function hasAdapted(txn: Transaction, statblock: string, rng?: Rng): bool
   const seen = Number(txn.state.flags[learningKey(subject, 'encounters')] ?? 0);
   if (seen < config.encountersBeforeAdapting) return false;
 
-  // Knowing better and doing better are not the same: `adaptationStrength` is how often the lesson
-  // reaches the creature's decision.
+  // `adaptationStrength` is how often the lesson reaches the creature's decision.
   if (!rng) return true;
   return rng.chance(config.adaptationStrength);
 }
@@ -161,14 +139,9 @@ function expireQuests(txn: Transaction, rng: Rng): void {
   }
 }
 
-/**
- * Advance the world by one day. Order is deliberate: rumours spread from what is currently known,
- * then memories fade. Reversing it would let a memory decay away in the same tick it was to be
- * passed on.
- */
+/** Advance the world by one day. */
 export function tickDay(txn: Transaction, day: number, rng: Rng): void {
-  // The whole day derives from one labelled stream, so off-screen activity is a pure function of
-  // the seed and the day number.
+  // The whole day derives from one labelled stream.
   const dayRng = rng.derive(`world:day:${day}`);
 
   spreadRumours(txn, day, dayRng.derive('gossip'));

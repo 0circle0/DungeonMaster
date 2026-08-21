@@ -1,27 +1,10 @@
-/**
- * The element schema behind every collection.
- *
- * `COLLECTION_PATHS` says *where* the collections are; this says *what one
- * entry looks like*, by walking down to the array's element type. Two callers
- * want the same answer and used to derive it separately: the editor, to
- * generate a form per content type, and the incremental validator, to check one
- * entry without parsing the whole document.
- *
- * Deriving it rather than listing it is what keeps both honest — a collection
- * added to the schema is picked up by each of them with no second edit.
- */
+/** The element schema behind every collection. */
 
 import { z } from 'zod';
 import { gameModuleSchema, COLLECTION_PATHS } from './module.js';
 import type { CollectionPath } from './module.js';
 
-/**
- * Strip the wrappers zod uses for optionality, defaults and refinement.
- *
- * They nest arbitrarily — `.optional().default(x).describe(y)` — so this loops
- * rather than unwrapping once, with a bound so a malformed schema cannot hang
- * the caller.
- */
+/** Strip the wrappers zod uses for optionality, defaults and refinement. */
 export function unwrapSchema(schema: z.ZodTypeAny): z.ZodTypeAny {
   let current = schema;
   for (let guard = 0; guard < 20; guard += 1) {
@@ -44,12 +27,7 @@ export function unwrapSchema(schema: z.ZodTypeAny): z.ZodTypeAny {
   return current;
 }
 
-/**
- * Every collection's element schema, keyed by its `section.collection` path.
- *
- * Built once at module load — walking the zod AST is not free and the schema
- * never changes at runtime.
- */
+/** Every collection's element schema, keyed by its `section.collection` path. */
 const derived = (() => {
   const schemas = new Map<CollectionPath, z.ZodTypeAny>();
   const minima = new Map<CollectionPath, number>();
@@ -83,13 +61,7 @@ const derived = (() => {
 
 export const COLLECTION_SCHEMAS: ReadonlyMap<CollectionPath, z.ZodTypeAny> = derived.schemas;
 
-/**
- * Collections the schema insists are non-empty — today `rules.attributes` and
- * `rules.resources`, because a character has to be made of something.
- *
- * The incremental parser needs these: it checks a document with the collections
- * lifted out, and an emptied list would trip a minimum the real document meets.
- */
+/** Collections the schema insists are non-empty, which the incremental parser must respect. */
 export const COLLECTION_MIN_LENGTHS: ReadonlyMap<CollectionPath, number> = derived.minima;
 
 /** The element schema for one collection, or `undefined` if the path is not one. */

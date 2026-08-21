@@ -1,15 +1,4 @@
-/**
- * Cellular caverns: the place nobody built.
- *
- * A noise fill smoothed by a few automaton passes produces organic chambers and squeezes; the
- * largest connected body of floor is kept and every smaller pocket is filled back in, so the one-
- * component invariant holds by construction.
- *
- * A cavern has no doors, so no locks and no branchiness — the lint warns when a module authors
- * either. Rooms exist as pseudo-rooms: farthest-point samples across the floor that give
- * `populateDungeon` somewhere to put monsters, loot and traps, and give `descriptionKey` a chamber
- * to describe. The entrance is the first sample; the boss holds the chamber farthest from it.
- */
+/** Cellular caverns: the place nobody built. */
 
 import type { Rng } from '@dm/core';
 import { MapBuilder } from '../../grid/tiles.js';
@@ -21,10 +10,7 @@ export interface CavernLayout {
   readonly entranceIndex: number;
 }
 
-/**
- * The cellular-automaton dials, from the dungeon that asked for the cavern. These shape how a cave
- * reads more than anything else in generation, so they are the module's to set.
- */
+/** The cellular-automaton dials, from the dungeon that asked for the cavern. */
 export interface CavernTuning {
   readonly fill: number;
   readonly smoothingPasses: number;
@@ -43,9 +29,7 @@ export function cavernLayout(
 ): CavernLayout {
   const { width, height } = builder;
 
-  // — fill and smooth ——————————————————————————————————————
-  // One boolean grid, mutated in generations; the builder is written once at the end. The outer
-  // ring is always wall.
+  // --- fill and smooth: one boolean grid in generations; the outer ring is wall ---
   let wall = new Uint8Array(width * height);
   for (let y = 0; y < height; y += 1) {
     for (let x = 0; x < width; x += 1) {
@@ -112,8 +96,7 @@ export function cavernLayout(
     }
   }
 
-  // A degenerate noise roll can silt the whole field; an empty cavern is a stub chamber rather than
-  // a crash, as with the no-templates case.
+  // An empty cavern is a stub chamber rather than a crash.
   if (floor.length === 0) {
     const cx = Math.floor(width / 2);
     const cy = Math.floor(height / 2);
@@ -123,10 +106,7 @@ export function cavernLayout(
     }
   }
 
-  // — pseudo-rooms by farthest-point sampling ———————————————
-  // BFS distance over the floor from the chosen set; each new sample is the floor tile farthest
-  // from everything chosen so far. Deterministic: the first sample is the lowest packed floor cell,
-  // ties break on cell order.
+  // --- pseudo-rooms: farthest-point sampling by BFS distance over the floor ---
   const chosen: number[] = [floor[0]!];
   const roomCount = Math.max(2, Math.min(count, Math.max(2, Math.floor(floor.length / 12))));
 
@@ -167,8 +147,7 @@ export function cavernLayout(
     chosen.push(farthest);
   }
 
-  // The boss chamber is the sample farthest from the entrance, so index order is: entrance first,
-  // boss second, the rest as drawn.
+  // The boss chamber is the sample farthest from the entrance.
   const fromEntrance = distancesFrom([chosen[0]!]);
   const rest = chosen.slice(1).sort((a, b) => fromEntrance[b]! - fromEntrance[a]! || a - b);
   const samples = [chosen[0]!, ...rest];
@@ -186,8 +165,7 @@ export function cavernLayout(
     ordered.push(rng.weightedPick(fillerPool, (entry) => entry.weight ?? 1));
   }
 
-  // The entrance role must land on sample 0 and the boss on the farthest, so guaranteed roles are
-  // mapped positionally: entrance → 0, boss → 1.
+  // Guaranteed roles are mapped positionally: entrance to 0, boss to 1.
   const rooms: PlacedRoom[] = samples.map((cell, index) => {
     const cx = cell % width;
     const cy = Math.floor(cell / width);

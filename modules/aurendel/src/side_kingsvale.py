@@ -1,19 +1,4 @@
-"""The Eel-Weir — a Kingsvale side chain, Act I.
-
-The eel camp on the Weirwater is occupied in Frostfall, which it should not be,
-because the eels stopped running past the drowned chapel in Harvest and the
-camp has been waiting for them ever since. Four quests, four days' walk in
-total, and none of it has anything to do with the wards.
-
-That last part is the design. This chain is entirely skippable and says so: it
-is a parish problem about a river, and the thing at the bottom of it is a
-thing, not a portent. What it pays is a lamp the eel-men do not sell, standing
-with two factions that the questline otherwise makes you choose between, and
-the Hedge Setts stocked with something worth the walk.
-
-The branch at the end is the small version of the questline's own: tell the
-Crown, or tell the Keepers. Both close the chapel. One puts it in a ledger.
-"""
+"""The Eel-Weir — a Kingsvale side chain, Act I."""
 from dmkit.quests import (
     arc, stage, reach, kill, talk, flagged, resolved_either_way,
     set_flag, rep, give, deed, either, node, option, take_job, dialogue, npc,
@@ -44,9 +29,7 @@ NPCS = [
 ]
 
 
-# --- arriving somewhere *is* the event ------------------------------------
-# The barge does not talk and nobody is standing next to it. Finding it is the
-# whole of that beat, so the point of interest carries the fact.
+# --- arriving somewhere is the event: the point of interest carries the fact ---
 
 POI_TRIGGERS = {
     "oxbow_sunken_boat": [{
@@ -141,9 +124,7 @@ QUESTS = chain(KEY, [
 ], act="act1", region="kingsvale", giver="eelwife_nesh")
 
 
-# An arc of its own, so the journal groups the four rather than scattering them
-# under the unheaded list with everything else that is not the Unsealing.
-# `isEnding` is false and stays false — see `check_quests.py`, which asserts it.
+# An arc of its own, so the journal groups the four.
 ARCS = [
     arc("the_eel_weir", "The Eel-Weir",
         "A fish turned round in Harvest, and the reason it turned round has "
@@ -271,8 +252,7 @@ DIALOGUES = [
              "the_matter_of_the_chapel"),
         ], options=[
             option("the_bridge", "Tell me about the bridge.", goto="the_bridge"),
-            # The Crown's own standing finally buys something: a clerk who has
-            # been told you are useful reads you the part he is not to discuss.
+            # The Crown's own standing finally buys something.
             option("what_does_the_crown_say", "What does Aurenhal say about "
                    "the chapel?", goto="the_crowns_view",
                    requires={"factions": [{"faction": "the_crown",

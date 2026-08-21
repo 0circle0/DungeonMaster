@@ -1,9 +1,4 @@
-"""Region 9 — The Sunward Steppe.
-
-Grass to every horizon in the south, broken only by burial mounds and the
-smoke of somebody's camp. One town that is really a permanent camp, two
-villages built round the only reliable water, and six stretches of grass.
-"""
+"""Region 9 — The Sunward Steppe."""
 from place import (
     area, poi, gate, toll, house, inn, smithy, store, workshop, temple,
     stable, square, landmark, ruin, delve,
@@ -49,10 +44,7 @@ EDGES = [
     ("steppe_horse_road", "steppe_ilkhet", 40),
     ("steppe_ilkhet", "steppe_kurgan_field", 45),
     ("steppe_kurgan_field", "steppe_three_wells", 40),
-    # The grazing toll was written and never laid across anything. It goes
-    # here — water on one side, grass on the other, which is what anybody
-    # would be charging for — and the long grass keeps its second road in off
-    # the dry river, so the toll is a price and not a wall.
+    # The grazing toll was written and never laid across anything.
     ("steppe_three_wells", "steppe_the_long_grass", 50,
      {"gate": "steppe_grazing_right"}),
     ("steppe_the_long_grass", "steppe_dry_river", 45),

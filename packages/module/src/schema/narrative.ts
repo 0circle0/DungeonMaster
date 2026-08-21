@@ -1,9 +1,4 @@
-/**
- * Narrative: the text grammar, dialogue, and quests. With no LLM at runtime, prose comes from
- * weighted template pools keyed on world state. `textGrammar` is that vocabulary; the narrator
- * expands it with a scene-seeded RNG, so a room reads the same on re-entry but differs between
- * playthroughs.
- */
+/** Narrative: the text grammar, dialogue, and quests. */
 
 import { z } from 'zod';
 import { ExprSchema, PredicateSchema, EffectSchema } from '../dsl/schema.js';
@@ -12,10 +7,7 @@ import { requirementSchema } from './requirement.js';
 import { memoryModelSchema } from './memory.js';
 import { systemTextSchema } from './systemText.js';
 
-/**
- * One way of saying something. Variants may carry conditions, so a room reads differently once it
- * has been looted or its occupants are dead.
- */
+/** One way of saying something. */
 export const textVariantSchema = z
   .object({
     /** Supports `{placeholder}` interpolation resolved against the scene scope. */
@@ -28,10 +20,7 @@ export const textVariantSchema = z
   })
   .strict();
 
-/**
- * A named pool of phrasings. The compiler warns when a pool is small enough that players will
- * notice the repetition.
- */
+/** A named pool of phrasings. */
 export const textPoolSchema = z
   .object({
     id: idSchema,
@@ -40,11 +29,7 @@ export const textPoolSchema = z
   })
   .strict();
 
-/**
- * One thing the player can say. Options are gated by the same requirement vocabulary as everything
- * else, so a line can appear only for a certain class, only while carrying proof, or only if this
- * NPC has not heard what you did.
- */
+/** One thing the player can say. */
 export const dialogueOptionSchema = z
   .object({
     id: idSchema,
@@ -58,10 +43,7 @@ export const dialogueOptionSchema = z
     check: z
       .object({
         skill: ref('content.skills'),
-        /**
-         * The number to beat, as a formula. Standing belongs here rather than in `requires`:
-         * someone you have wronged should be harder to talk round, not impossible to talk to.
-         */
+        /** The number to beat, as a formula. */
         difficulty: ExprSchema.default(12),
         /** The NPC's own roll opposes it, rather than a fixed number. */
         opposedBy: ref('content.skills').optional(),
@@ -119,8 +101,7 @@ export const dialogueSchema = z
         }
       }
       for (const option of node.options) {
-        // Every branch an option can take must land somewhere real, including the success and
-        // failure outcomes of a persuasion check.
+        // Every branch an option can take must land somewhere real.
         for (const [label, goto] of [
           ['goto', option.goto],
           ['check.onSuccess', option.check?.onSuccess],
@@ -138,7 +119,7 @@ export const dialogueSchema = z
     }
   });
 
-/** One step of a quest. Objectives observe the event stream. */
+/** One step of a quest. */
 export const objectiveSchema = z
   .object({
     id: idSchema,
@@ -148,10 +129,7 @@ export const objectiveSchema = z
     /** Target of the objective, interpreted per `kind`. */
     target: idSchema.optional(),
     count: z.number().int().min(1).default(1),
-    /**
-     * For `custom`, the completion condition, and required. For the other kinds, an extra gate the
-     * matching event must also satisfy — not a second way to finish.
-     */
+    /** For `custom`, the completion condition, and required. */
     when: PredicateSchema.optional(),
     /** Additional gate before the objective becomes active. */
     requires: requirementSchema.optional(),
@@ -175,10 +153,7 @@ export const questSchema = z
     giver: ref('content.npcs', 'A label. What actually puts the job in front of a player is that NPC\u2019s offersQuests.').optional(),
     /** Gate on development, items, factions, memory, or other quests. */
     requires: requirementSchema.optional(),
-    /**
-     * Stages run in order; each holds its own objectives. A single-stage quest is just a list of
-     * objectives.
-     */
+    /** Stages run in order; each holds its own objectives. */
     stages: z
       .array(
         z
@@ -245,16 +220,7 @@ export const questSchema = z
     }
   });
 
-/**
- * One thing the party can come to know.
- *
- * A quest records what you were told to do; lore records what you found out. Content teaches an
- * entry with the `learnLore` effect from anywhere: a line of dialogue, a trigger on arriving
- * somewhere, an object picked up off a corpse.
- *
- * Learning is permanent and unordered, so an entry says only what it is. Where it sits in a story
- * is the thread's business.
- */
+/** One thing the party can come to know. */
 export const loreSchema = z
   .object({
     id: idSchema,
@@ -263,20 +229,14 @@ export const loreSchema = z
     /** Longer context, when a single line is not enough. */
     description: description.default(''),
     tags,
-    /**
-     * Vary the wording instead of fixing it, for entries a player may meet more than one way. Takes
-     * precedence over `name` when the journal has a scene to expand it against.
-     */
+    /** Vary the wording instead of fixing it, for entries a player may meet more than one way. */
     textKey: ref('narrative.textGrammar').optional(),
     /** Where it came from — "Netmender Ossa, Sarnport", "cut into the lintel". */
     source: z.string().max(200).default(''),
   })
   .strict();
 
-/**
- * A heading several lore entries hang under, so a partial answer reads as one. The same shape as
- * {@link arcSchema}. Declaring the whole set is what lets the journal say three of five.
- */
+/** A heading several lore entries hang under, so a partial answer reads as one. */
 export const loreThreadSchema = z
   .object({
     id: idSchema,
@@ -299,10 +259,7 @@ export const arcSchema = z
   })
   .strict();
 
-/**
- * How a deed is weighted when it reaches a faction's ears. The social sim reads these rather than
- * hardcoding what counts as an outrage.
- */
+/** How a deed is weighted when it reaches a faction's ears. */
 export const deedKindSchema = z
   .object({
     id: idSchema,
@@ -321,35 +278,19 @@ export const deedKindSchema = z
 
 export const narrativeSchema = z
   .object({
-    /**
-     * How many nodes a dialogue may auto-advance through before it stops. A loop guard, and a cap
-     * on how long a scene can run without the player saying anything.
-     */
+    /** How many nodes a dialogue may auto-advance through before it stops. */
     maxDialogueHops: z.number().int().min(1).default(8),
     textGrammar: z.array(textPoolSchema).default([]),
-    /**
-     * What the engine itself says: refusals, combat lines, the words a narrated sentence is
-     * assembled from. The engine holds no prose of its own.
-     */
+    /** What the engine itself says: refusals, combat lines, narration fragments. */
     systemText: systemTextSchema.default({}),
     dialogues: z.array(dialogueSchema).default([]),
     quests: z.array(questSchema).default([]),
     arcs: z.array(arcSchema).default([]),
-    /**
-     * What the party can find out, and the headings it hangs under.
-     *
-     * `.optional()` rather than `.default([])`, unlike every collection above: `compileModule`
-     * hashes the document after zod applies defaults, and `load` refuses a save whose recorded
-     * module hash has moved, so a new defaulted top-level field would break every save ever
-     * written. `collectionAt` and `CompiledModule.all` both read a missing collection as empty.
-     */
+    /** What the party can find out, and the headings it hangs under. */
     lore: z.array(loreSchema).optional(),
     loreThreads: z.array(loreThreadSchema).optional(),
     deedKinds: z.array(deedKindSchema).default([]),
-    /**
-     * Memory, gossip, forgetting and learning. Defaults give a world that runs itself; `mode:
-     * "manual"` hands control back to the content.
-     */
+    /** Memory, gossip, forgetting and learning. */
     memory: memoryModelSchema.default({}),
   })
   .strict();

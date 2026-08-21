@@ -1,28 +1,8 @@
-/**
- * Turning a diagnostic's path into one the editor can act on.
- *
- * A path names an entry two ways in practice. Our own checks count — the
- * compiler and the rules both emit `content.monsters.3` — while a mod names
- * what it means: `content.monsters.grave_hound`. Both are right. An index is
- * what the document literally is; an id is the only part of it that survives
- * something being inserted above.
- *
- * Only one of them could be clicked. A diagnostic carrying an id fell through
- * every branch of the resolver and opened the raw JSON, which is the answer
- * "somewhere in this document" to the question "where". Every mod diagnostic
- * did this, and on aurendel that is 127 of the 130 rows.
- *
- * So ids are resolved here, once, against the document — used both to open the
- * entry and to mark the field inside it, because the two disagreeing would be
- * its own kind of confusing.
- */
+/** Turning a diagnostic's path into one the editor can act on. */
 
 import { COLLECTIONS } from '@/lib/schema';
 
-/**
- * The same path with any id turned into its index, or null if the id names
- * nothing. A path that already counts comes back untouched.
- */
+/** The same path with any id turned into its index, or null if the id names nothing. */
 export function withEntryIndex(doc: unknown, path: string): string | null {
   const found = splitEntryPath(doc, path);
   if (!found) return path;
@@ -46,9 +26,7 @@ export function splitEntryPath(doc: unknown, path: string): EntryPath | null {
     if (head === undefined) return null;
 
     const counted = Number.parseInt(head, 10);
-    // `Number.parseInt` stops at the first non-digit, so an id beginning with
-    // one — `3rd_barrow` — would otherwise read as index 3 and open whatever
-    // happens to be there.
+    // `Number.parseInt` stops at the first non-digit, so `3rd_barrow` would read as index 3.
     if (/^\d+$/.test(head) && Number.isInteger(counted)) {
       return { collection: collection.path, index: counted, rest };
     }

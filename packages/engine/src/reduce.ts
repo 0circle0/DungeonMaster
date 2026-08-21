@@ -1,12 +1,4 @@
-/**
- * The reducer: the only path that changes state.
- *
- * `reduce(state, action)` returns a new state and the events describing what happened. It is pure:
- * no I/O, no clock, no ambient randomness. Randomness comes from the RNG state stored in the state
- * and written back, so a save plus an action log replays a run exactly.
- *
- * Each handler owns one action; shared logic lives in `rules/`.
- */
+/** The reducer: the only path that changes state. */
 
 import { Rng } from '@dm/core';
 import type { CompiledModule } from '@dm/module';
@@ -67,17 +59,11 @@ export interface ReduceResult {
   readonly events: readonly GameEvent[];
 }
 
-/**
- * Per-call context. The terrain index is derived from the module and may be cached by the caller;
- * everything else is read from state.
- */
+/** Per-call context. */
 export interface ReduceContext {
   readonly module: CompiledModule;
   readonly terrain?: TerrainIndex;
-  /**
-   * Installed mods. Absent means no mods: every hook site is an optional-chain miss, so nothing is
-   * allocated or serialized.
-   */
+  /** Installed mods. */
   readonly mods?: ModRuntime | undefined;
 }
 
@@ -98,10 +84,7 @@ export function occupiedTiles(state: GameState, exclude?: EntityId): Set<number>
   return blocked;
 }
 
-/**
- * What an action costs on the world clock. Durations come from the module; an action it does not
- * price costs nothing.
- */
+/** What an action costs on the world clock. */
 function actionMinutes(module: CompiledModule, action: string): number {
   return module.source.world.time.actionMinutes[action] ?? 0;
 }
@@ -112,15 +95,13 @@ export function reduce(state: GameState, action: Action, context: ReduceContext)
   const mods = context.mods ?? null;
   const txn = new Transaction(state, module, mods);
 
-  // The run's RNG is restored, used, and written back, so consuming randomness is part of the state
-  // transition and replays identically.
+  // The run's RNG is restored, used and written back, so a replay is identical.
   const rng = Rng.fromState(state.rng);
 
   /** Rebuilt per read because it closes over the transaction's current state. */
   const targeting = (): TargetingContext => ({ module, state: txn.state, terrain });
 
-  // Mods get first refusal on every action; a `replace` handler stands in for the core case
-  // entirely.
+  // Mods get first refusal on every action; a `replace` handler stands in for the core case entirely.
   let replacedByMod = false;
   if (mods?.has('action.before', action.type)) {
     const actorId = 'actor' in action && action.actor ? action.actor : state.selected;
@@ -132,8 +113,7 @@ export function reduce(state: GameState, action: Action, context: ReduceContext)
     }
   }
 
-  // Switch on `action.type` directly: anything computed would lose the discriminated-union
-  // narrowing every case below depends on.
+  // Switch on `action.type` directly, to keep the discriminated-union narrowing.
   if (!replacedByMod)
   switch (action.type) {
     case 'step':
@@ -297,8 +277,7 @@ export function reduce(state: GameState, action: Action, context: ReduceContext)
           break;
         }
 
-        // Enforce `oneWay`. The route is looked up on the origin, so an asymmetry by omission was
-        // already enforced; this covers a module that lists the connection both ways.
+        // Enforce `oneWay`.
         const back = module
           .find<{ connections: { to: string; oneWay: boolean }[] }>('world.areas', action.area)
           ?.connections.find((entry) => entry.to === areaId);
@@ -362,8 +341,7 @@ export function reduce(state: GameState, action: Action, context: ReduceContext)
       const actor = actorOf(state, action);
       if (!actor) break;
 
-      // Looking is free. The narrator answers it from state, so what is seen is decided by
-      // perception, not here.
+      // Looking is free.
       txn.emit({ type: 'custom', event: 'looked', data: { by: actor.id, at: action.at ?? '' } });
       break;
     }
@@ -434,8 +412,7 @@ export function reduce(state: GameState, action: Action, context: ReduceContext)
       }
 
       for (const poi of hidden) {
-        // A discovery formula lowers the check as the party learns clues, so a clue is never a
-        // prerequisite.
+        // A discovery formula lowers the check as clues are learned.
         const roll = skillCheck(
           module, rng, actor, poi.discover!.skill,
           difficultyFrom(module, txn.state, actor, poi.discover!.difficulty, rng.derive(`findDc:${poi.id}`)),
@@ -570,9 +547,7 @@ export function reduce(state: GameState, action: Action, context: ReduceContext)
         break;
       }
 
-      // Fleeing spends the actor's whole movement away from the nearest enemy. Adjacent enemies get
-      // their opportunity attack as with any disengagement; `maybeEndCombat` decides when the fight
-      // ends.
+      // Fleeing spends the actor's whole movement away from the nearest enemy.
       const steps = runAway(txn, terrain, actor.id, rng);
 
       if (steps === 0) {
@@ -598,9 +573,7 @@ export function reduce(state: GameState, action: Action, context: ReduceContext)
 
       const here = txn.state.location;
       if (here.kind === 'dungeon') {
-        // `leave` walks back out from the exit tile recorded on arrival, or a tile beside it — the
-        // party clusters on arrival, so a member may be standing on the tile itself. Anywhere else,
-        // the dungeon still has to be crossed.
+        // `leave` walks back out from the recorded exit tile, or a tile beside it.
         const inside = txn.state.maps[txn.state.currentMap];
         const leader = txn.entity(txn.state.selected);
         const exit = inside && leader
@@ -637,9 +610,7 @@ export function reduce(state: GameState, action: Action, context: ReduceContext)
       // The place's `exit` occasion.
       if (here.kind === 'poi') runOccasion(txn, 'exit', rng);
       if (here.kind === 'poi') {
-        // Stepping out of a place returns you to its area. If that area is the map already
-        // underfoot, change only the location — re-entering would teleport the party to the area's
-        // arrival point.
+        // Stepping out of a place returns you to its area.
         const areaMap = `area:${here.area}`;
         if (txn.state.currentMap === areaMap) {
           txn.set({ ...txn.state, location: { kind: 'area', area: here.area } });
@@ -647,8 +618,7 @@ export function reduce(state: GameState, action: Action, context: ReduceContext)
           break;
         }
         enterArea(txn, terrain, here.area, rng);
-        // Stepping out of an interior puts the party at the place's outdoor position, not the
-        // area's arrival point.
+        // Stepping out of an interior lands on the place's outdoor position.
         const outside = module.find<{ position?: Position }>('world.pointsOfInterest', here.poi);
         if (outside?.position) placeParty(txn, terrain, `area:${here.area}`, outside.position);
         break;
@@ -713,9 +683,7 @@ export function reduce(state: GameState, action: Action, context: ReduceContext)
     }
 
     default: {
-      // Every action in the union is handled above and TypeScript checks it, so adding a case to
-      // `Action` without a handler fails to compile. Still reachable at runtime — a save or a
-      // caller can supply a type this build does not know — so refuse it by name rather than throw.
+      // Unknown action types are refused by name; a save may carry one this build lacks.
       const exhaustive: never = action;
       const unhandled = exhaustive as unknown as { type: string };
       txn.emit({
@@ -738,8 +706,7 @@ export function reduce(state: GameState, action: Action, context: ReduceContext)
   txn.set({ ...txn.state, rng: rng.save() });
   settle(txn, terrain, rng);
 
-  // After everything the action set in motion has resolved. No `replace` here; see the note on the
-  // hook.
+  // After everything the action set in motion has resolved.
   if (mods?.has('settle.after')) {
     mods.run(
       txn,
@@ -762,9 +729,7 @@ export function reduce(state: GameState, action: Action, context: ReduceContext)
     batch = produced;
   }
 
-  // Report a module whose consequences never settle. An event carrying data rather than a `refused`
-  // carrying prose: every message-tier system-text entry has a schema default, so adding one would
-  // change every module's hash and invalidate every save.
+  // Report a module whose consequences never settle.
   if (batch.length > 0) {
     followUp.emit({
       type: 'custom',
@@ -777,27 +742,10 @@ export function reduce(state: GameState, action: Action, context: ReduceContext)
   return { state: settled.state, events: [...pending.events, ...settled.events] };
 }
 
-/**
- * How many times a batch of events may set off another batch. Deep enough that no honest chain hits
- * it, shallow enough that a quest whose `onComplete` restarts itself stops rather than hanging the
- * turn.
- */
+/** How many times a batch of events may set off another batch. */
 const MAX_EMISSION_PASSES = 4;
 
-/**
- * Everything a batch of events sets in motion.
- *
- * Loops, so events emitted by `advanceQuests` are themselves scanned. That is what makes
- * `quest.remembersAs`, `onComplete` emitting `startQuest`, and an objective's `onComplete` firing a
- * trigger work.
- *
- * Each pass is fed only the previous pass's new events. Re-feeding the accumulated list would
- * double-count a multi-kill objective, since `advanceQuests` tallies hits per batch, and would drop
- * the same corpse's loot twice.
- *
- * Pass 0 keeps its original rng labels, so a module whose quests emit nothing has a byte-identical
- * trace.
- */
+/** Everything a batch of events sets in motion. */
 function processEmissions(
   txn: Transaction,
   terrain: TerrainIndex,
@@ -810,8 +758,7 @@ function processEmissions(
   // Re-read the leader each pass: a quest's `onComplete` can change who is selected, or kill them.
   const actor = txn.entity(txn.state.selected);
 
-  // Content asks for a deed by emitting one, so recording it here covers every path that can cause
-  // one.
+  // Content asks for a deed by emitting one, so recording it here covers every path that can cause one.
   if (actor) {
     for (const event of events) {
       if (event.type !== 'custom' || event.event !== 'deed') continue;
@@ -820,8 +767,7 @@ function processEmissions(
     }
   }
 
-  // A quest can be granted in conversation. Before quests advance, so the same batch that granted
-  // it can progress it.
+  // A quest can be granted in conversation.
   for (const event of events) {
     if (event.type !== 'custom' || event.event !== 'startQuest') continue;
     const questId = String((event.data as { quest?: unknown }).quest ?? '');
@@ -835,35 +781,21 @@ function processEmissions(
     runOccasion(txn, 'custom', rng.derive(`custom:${event.event}${suffix}`), event.event);
   }
 
-  // Whoever declared they would react to this. After the deed scan, so `witnessDeed` sees a deed
-  // the same batch recorded.
+  // Whoever declared they would react to this.
   dispatchReactions(txn, events, rng.derive(`reactions${suffix}`));
 
-  // The dead drop what they carried. Before quests advance, so a fetch objective can be satisfied
-  // by the batch that killed it.
+  // The dead drop what they carried.
   dropDeathLoot(txn, terrain, events, rng.derive(`spoils${suffix}`));
 
-  // Award XP for kills. Before quests advance, so a level gained is in hand when the quest pays
-  // out.
+  // Award XP for kills.
   awardKillXp(txn, events, rng.derive(`killxp${suffix}`));
 
   // Quests watch everything that just happened.
   advanceQuests(txn, events, rng.derive(`quests${suffix}`));
 }
 
-/**
- * Move one entity one tile. Returns whether the move happened, so a multi-tile walk can stop
- * cleanly. Whether a tile can be entered comes from the module's terrain definitions.
- */
-/**
- * Back away from whatever is hostile, one step at a time.
- *
- * Greedy: each step goes to the reachable neighbour furthest from the nearest enemy, and stops when
- * no neighbour is an improvement. Every step goes through `moveEntity`, so opportunity attacks,
- * terrain cost and the movement budget all apply.
- *
- * Returns how many steps were taken.
- */
+/** Move one entity one tile. */
+/** Back away from whatever is hostile, one step at a time. */
 function runAway(txn: Transaction, terrain: TerrainIndex, actorId: EntityId, rng: Rng): number {
   let steps = 0;
 
@@ -886,8 +818,7 @@ function runAway(txn: Transaction, terrain: TerrainIndex, actorId: EntityId, rng
         .map((other) => key(other.position)),
     );
 
-    // Score a tile by distance to the nearest enemy, then total distance to all of them; the second
-    // term breaks ties toward open ground.
+    // Score by distance to the nearest enemy, then total distance to all of them.
     const score = (at: Position): [number, number] => {
       let nearest = Infinity;
       let total = 0;
@@ -936,8 +867,7 @@ function moveEntity(
   _rng: Rng,
   options: { readonly silent?: boolean } = {},
 ): boolean {
-  // A follower's step is silent and does not charge the clock again for the step the leader already
-  // paid for.
+  // A follower's step is silent and does not charge the clock again.
   const silent = options.silent === true;
 
   const map = txn.state.maps[actor.map];
@@ -946,8 +876,7 @@ function moveEntity(
     return false;
   }
 
-  // Movement draws on the same shared budget as actions, so it obeys turn order. AI movement does
-  // not come through here.
+  // Movement draws on the same shared budget as actions, so it obeys turn order.
   const wrongTurn = outOfTurn(txn, actor.id);
   if (wrongTurn) {
     if (!silent) txn.emit({ type: 'refused', action: 'move', reason: wrongTurn });
@@ -986,8 +915,7 @@ function moveEntity(
 
   const from = actor.position;
 
-  // Leaving a threatened tile may provoke, and the reaction can kill the mover, so the move is re-
-  // checked afterwards.
+  // Leaving a threatened tile may provoke, so the move is re-checked afterwards.
   provokeOpportunity(txn, { module: txn.module, state: txn.state, terrain }, actor, from, to, _rng);
   const survived = txn.entity(actor.id);
   if (!survived || !survived.alive) return false;
@@ -1012,8 +940,7 @@ function moveEntity(
   // What the terrain does to whoever stands on it — lava, caltrops, a pressure plate.
   runTerrain(txn, actor.id, 'onEnter', to, _rng);
 
-  // Narrate a room template's `descriptionKey` on entry; this is how a generated dungeon is
-  // described.
+  // Narrate a room template's `descriptionKey` on entry; this is how a generated dungeon is described.
   enterRoom(txn, actor.id, from, to, _rng);
 
   // And whatever is buried under the tile.
@@ -1032,10 +959,7 @@ function moveEntity(
   return true;
 }
 
-/**
- * Every place the party is currently inside, innermost last, so a trigger on the biome, area, point
- * of interest, room or dungeon all get their occasion.
- */
+/** Every place the party is currently inside, innermost last. */
 function placesHere(txn: Transaction): { collection: string; id: string }[] {
   const here = txn.state.location;
   const out: { collection: string; id: string }[] = [];
@@ -1058,11 +982,7 @@ function placesHere(txn: Transaction): { collection: string; id: string }[] {
   return out;
 }
 
-/**
- * Fire everything declared for an occasion, wherever the party is standing. `trigger.on` accepts
- * eight occasions; all of them run through here, including `mode: 'loop'`, which needs an occasion
- * that recurs.
- */
+/** Fire everything declared for an occasion, wherever the party is standing. */
 export function runOccasion(
   txn: Transaction,
   occasion: string,
@@ -1080,8 +1000,7 @@ export function runOccasion(
     : null;
   if (!source) return;
 
-  // Mods see every occasion, including the `custom` events content emits, so a mod can listen to
-  // the module's own pub/sub. A `replace` here stands in for the module's triggers entirely.
+  // Mods see every occasion, including the `custom` events content emits.
   const key = customEvent ?? occasion;
   if (txn.mods?.has('occasion', key)) {
     const outcome = txn.mods.run(
@@ -1113,10 +1032,7 @@ function roomAt(txn: Transaction, mapId: string, at: Position): { id: string; te
   return null;
 }
 
-/**
- * Notice walking from one room into another. The description is given once per room per save, but
- * the room's own triggers use their declared mode, so an `everyEntry` ambush still fires.
- */
+/** Notice walking from one room into another. */
 function enterRoom(txn: Transaction, actorId: EntityId, from: Position, to: Position, rng: Rng): void {
   const actor = txn.entity(actorId);
   if (!actor || actor.kind !== 'character') return;
@@ -1142,14 +1058,7 @@ function enterRoom(txn: Transaction, actorId: EntityId, from: Position, to: Posi
   );
 }
 
-/**
- * Bring along whoever is following the leader.
- *
- * Runs inside the leader's step rather than as its own action, so the clock and the combat movement
- * budget are charged once, to whoever chose to move.
- *
- * Never in combat: there initiative decides who acts and each character is commanded individually.
- */
+/** Bring along whoever is following the leader. */
 function moveFollowers(
   txn: Transaction,
   terrain: TerrainIndex,
@@ -1170,8 +1079,7 @@ function moveFollowers(
     if (member.following !== leaderId) continue;
     if (member.map !== leader.map) continue;
 
-    // Already at the leader's shoulder. How far counts as trailing, and how fast followers close it
-    // up, is the module's to set.
+    // Already at the leader's shoulder.
     const follow = txn.module.source.start.partyFollow;
     let steps = distance(member.position, leader.position) > follow.catchUpDistance
       ? follow.catchUpSteps
@@ -1194,8 +1102,7 @@ function moveFollowers(
       });
 
       const next = route.steps[0];
-      // No route, or blocked by someone in a doorway: stand still rather than emit a refusal per
-      // follower per step.
+      // No route, or a blocked doorway: stand still rather than refuse per follower.
       if (!route.found || !next) break;
       if (!moveEntity(txn, terrain, current, next, rng, { silent: true })) break;
       steps -= 1;
@@ -1203,10 +1110,7 @@ function moveFollowers(
   }
 }
 
-/**
- * Record tiles as seen, for the fog of war. Kept sorted ascending so the list has a total order
- * independent of the order tiles were noticed in; saved state is compared array-positionally.
- */
+/** Record tiles as seen, for the fog of war. */
 function markExplored(txn: Transaction, mapId: string, seen: ReadonlySet<number>): void {
   const map = txn.state.maps[mapId];
   if (!map) return;
@@ -1243,12 +1147,10 @@ export function advanceTime(txn: Transaction, minutes: number, rng: Rng): void {
   txn.set({ ...txn.state, minute: after });
   txn.emit({ type: 'timePassed', minutes, totalMinute: after });
 
-  // Ambience and anything on a schedule. `timePass` is the occasion a `mode: 'loop'` trigger with a
-  // cooldown is written against.
+  // Ambience and anything on a schedule.
   runOccasion(txn, 'timePass', rng.derive(`timePass:${after}`));
 
-  // Out of combat the world moves because time passes, so anything that noticed something acts on
-  // it here.
+  // Out of combat the world moves because time passes, so anything that noticed something acts on it here.
   const terrain = terrainFor(txn.module);
   runIdleTurns(txn, { module: txn.module, state: txn.state, terrain }, rng, minutes);
 
@@ -1270,25 +1172,17 @@ export function advanceTime(txn: Transaction, minutes: number, rng: Rng): void {
   }
 }
 
-/**
- * Consequences that follow any action: death, victory, defeat. Run once at the end of a reduction
- * rather than inside each handler, so no handler can forget to check.
- */
+/** Consequences that follow any action: death, victory, defeat. */
 function settle(txn: Transaction, terrain: TerrainIndex, rng: Rng): void {
   if (txn.state.outcome !== 'playing') return;
 
-  // Combat begins when something hostile shares the map and ends when one side is gone; there is no
-  // explicit enter-combat action.
-  // Everything notices what there is to notice before anyone acts, so a creature that heard the
-  // party acts on it this turn.
+  // Combat begins when something hostile shares the map and ends when one side is gone.
   const noticed = perceiveAll(txn, terrain);
 
-  // Anything that has just spotted a party member. Before `maybeStartCombat`, so a reaction that
-  // kills or drives off the observer keeps it out of the fight.
+  // Anything that has just spotted a party member.
   dispatchNoticed(txn, noticed, rng.derive('noticed'));
 
-  // Ancestry and carried-item passives, re-applied every reduction so a passive whose condition
-  // changed takes effect when it changes.
+  // Ancestry and carried-item passives, re-applied every reduction.
   runPartyPassives(txn, rng.derive('passives'));
 
   // `combatStart` and `combatEnd` are occasions a place can declare triggers for.
@@ -1296,8 +1190,7 @@ function settle(txn: Transaction, terrain: TerrainIndex, rng: Rng): void {
   const combatBefore = txn.state.combat !== null;
   maybeEndCombat(txn, { module: txn.module, state: txn.state, terrain });
   maybeStartCombat(txn, { module: txn.module, state: txn.state, terrain }, rng);
-  // Someone whose stance changed while the fight was already running. After `maybeStartCombat`,
-  // which does nothing once combat exists.
+  // Someone whose stance changed while the fight was already running.
   joinCombat(txn, { module: txn.module, state: txn.state, terrain }, rng);
 
   if (!combatBefore && txn.state.combat !== null) {
@@ -1306,15 +1199,11 @@ function settle(txn: Transaction, terrain: TerrainIndex, rng: Rng): void {
     runOccasion(txn, 'combatEnd', rng.derive('combatEnd'));
   }
 
-  // `combatStarted`, `combatEnded` and `turnStarted` are emitted here rather than by the action, so
-  // they are past `processEmissions` by the time it runs. Fanning them out from inside `settle` is
-  // what makes the combat lifecycle triggers fire.
+  // `combatStarted`, `combatEnded` and `turnStarted` are emitted here, inside `settle`.
   let dispatched = txn.finish().events.length;
   dispatchReactions(txn, txn.finish().events.slice(eventsBefore), rng.derive('settleReactions'));
 
-  // Non-player characters act as soon as the turn reaches them. Running here, after every action,
-  // means a creature that becomes active because combat just started, or because the previous
-  // creature died, still acts.
+  // Non-player characters act as soon as the turn reaches them.
   if (txn.state.combat) {
     runAiTurns(
       txn,
@@ -1324,23 +1213,16 @@ function settle(txn: Transaction, terrain: TerrainIndex, rng: Rng): void {
     );
     maybeEndCombat(txn, { module: txn.module, state: txn.state, terrain });
 
-    // AI turns emit their own `turnStarted` and damage, so the fan-out runs again over what they
-    // produced. Two passes rather than one at the end, so `seePlayer` and `combatStart` can change
-    // the board before anybody acts on it.
+    // AI turns emit their own `turnStarted` and damage, so the fan-out runs again over what they produced.
     dispatchReactions(txn, txn.finish().events.slice(dispatched), rng.derive('aiReactions'));
     dispatched = txn.finish().events.length;
   }
 
-  // Both module-declared ways of winning are checked before the all-dead test, so a party that
-  // falls on the winning blow has still won.
+  // Both declared ways of winning are checked before the all-dead test.
   const start = txn.module.source.start;
   const ending = endingReached(txn.module, txn.state);
   if (ending && !txn.state.flags[endingFlag(ending.id)]) {
-    // `gameOver` as well as the arc event: `gameOver` is the only thing `narrate` renders
-    // `game.victory` from.
-    //
-    // The `ending:<arc>` flag is what makes this fire once. In `continue` mode `outcome` stays
-    // `playing`, so the outcome cannot be the guard.
+    // `gameOver` as well as the arc event; the `ending:<arc>` flag makes this fire once.
     txn.set({
       ...txn.state,
       flags: { ...txn.state.flags, [endingFlag(ending.id)]: true },
@@ -1371,10 +1253,7 @@ function settle(txn: Transaction, terrain: TerrainIndex, rng: Rng): void {
   }
 }
 
-/**
- * Whether a module-declared ending condition holds. A malformed predicate reads as "not yet" rather
- * than ending a run or throwing.
- */
+/** Whether a module-declared ending condition holds. */
 function outcomeReached(txn: Transaction, when: unknown, rng: Rng): boolean {
   if (!when) return false;
   const leader = txn.state.entities[txn.state.selected];
@@ -1388,13 +1267,7 @@ function outcomeReached(txn: Transaction, when: unknown, rng: Rng): boolean {
   }
 }
 
-/**
- * In combat, initiative decides who may act: returns a reason naming whose turn it is, or null when
- * the actor is free to go ahead.
- *
- * The budget is a single record on the combat state, so without this check the selected character
- * could act on any combatant's turn and spend it for them.
- */
+/** Whose turn it is, or null when the actor may act. */
 function outOfTurn(txn: Transaction, actorId: EntityId): Message | null {
   const combat = txn.state.combat;
   if (!combat) return null;
@@ -1404,10 +1277,7 @@ function outOfTurn(txn: Transaction, actorId: EntityId): Message | null {
   return active ? message('refused.turn.other', { who: active.name }) : null;
 }
 
-/**
- * Use an ability and, in combat, spend the action it costs. Shared by `attack` and `useAbility` so
- * the budget cannot be spent by one path and not the other.
- */
+/** Use an ability and, in combat, spend the action it costs. */
 function performAbility(
   txn: Transaction,
   targeting: () => TargetingContext,
@@ -1447,10 +1317,7 @@ function performAbility(
   }
 }
 
-/**
- * Apply a sequence of actions. The replay primitive: a seed and a list of actions reproduce a run
- * exactly.
- */
+/** Apply a sequence of actions. */
 export function reduceAll(
   state: GameState,
   actions: readonly Action[],

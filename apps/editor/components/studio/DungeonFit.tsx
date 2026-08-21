@@ -1,8 +1,6 @@
 'use client';
 
-/**
- * Measure the room count a dungeon actually generates and suggest a safe size.
- */
+/** Measure the room count a dungeon actually generates and suggest a safe size. */
 
 import { useMemo, useState } from 'react';
 import { measureRooms, sizeToFit } from '@dm/authoring';

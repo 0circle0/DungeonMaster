@@ -1,14 +1,4 @@
-"""The Unsealing, Act I — the Kingsvale.
-
-A door that has always been open changes, and the only people who notice are
-the ones who walk past it every day. Four quests, ending with the first real
-fight and the first real choice.
-
-The choice is the Crown or the Library, and it is a genuine fork: each has a
-quest the other locks out, each moves two factions in opposite directions, and
-**both end with the Wardlist in your pack**. One is handed it. One copies it
-off a shelf it was not shown. The critical path does not care which.
-"""
+"""The Unsealing, Act I — the Kingsvale."""
 from dmkit.quests import (
     quest, stage, arc, reach, kill, talk, flagged, resolved_either_way,
     set_flag, rep, deed, either, node, option, take_job, dialogue, npc,
@@ -112,10 +102,7 @@ QUESTS = [
          flagged("read_the_list", "Read the Wardlist in the Kingshold.",
                  "wardlist_read")],
         giver="steward_vail", xp=90, tags=["act1", "branch"],
-        # Mutually exclusive with the Library's errand, and expressed as
-        # "not already active or done" rather than as a flag, because the
-        # flags are only set on completion and the lockout has to bite the
-        # moment the other side is taken.
+        # Mutually exclusive with the Library's errand: not already active or done.
         requires={"quests": [{"quest": "word_to_aurenhal", "status": "complete"}],
                   "without": {"quests": [
                       {"quest": "the_librarians_errand", "status": "active"},
@@ -175,9 +162,7 @@ QUESTS = [
 ]
 
 ARCS = [
-    # Both sides of the branch belong here too. `journalByArc` files a quest
-    # that no arc claims at the bottom of the journal under no heading, so
-    # leaving them out put Act I's one real choice below Act III.
+    # Both sides of the branch belong here too.
     arc("act_one", "The Open Door",
         "A parish matter that turns out not to be one.",
         ["the_open_door", "word_to_aurenhal",

@@ -1,27 +1,4 @@
-/**
- * Drive one hidden thread through the real engine, three ways, and report what happened.
- *
- *     npx tsx packages/tools/src/bin/playlore.ts frost_blue
- *     npx tsx packages/tools/src/bin/playlore.ts frost_blue --route=hostile
- *     npx tsx packages/tools/src/bin/playlore.ts --all --quiet
- *
- * A hidden thread has more ways to be silently broken than a side chain, because none of it is
- * announced: a clue nobody can be asked for reads like a clue nobody has asked for yet, and an
- * anchor whose discovery difficulty never comes down is a place that does not exist for the player.
- *
- * Three routes, and the thread must survive all three:
- *
- *   friendly — full standing, asks for everything, never draws a weapon
- *   hostile  — standing driven below every floor, so nobody will talk; takes what it needs off the
- * bodies
- *   blind    — learns no clues at all, and searches until the anchor turns up
- *
- * The third tests the claim that a clue informs the search rather than gating it. If `blind` cannot
- * reach the relic, the content is a lock wearing a rumour's clothes.
- *
- * Like `playchain`, this teleports and fakes kills. What is under test is the wiring, not the
- * combat maths.
- */
+/** Drive one hidden thread through the real engine, three ways, and report what happened. */
 import { fileURLToPath } from 'node:url';
 import { Rng } from '@dm/core';
 import { loadModuleFrom } from '@dm/module/load';
@@ -148,10 +125,7 @@ function withItem(state: GameState, item: string): GameState {
 
 // --- what each route does ---------------------------------------------------
 
-/**
- * Ask everyone who has anything, and take the answer the dice give. Retried, because a roll is a
- * price rather than a gate: a friendly party that fails a persuasion is expected to try again.
- */
+/** Ask everyone who has anything, and take the answer the dice give. */
 function askAround(
   start: GameState,
   tellers: readonly { npc: NpcDef; clues: string[] }[],
@@ -169,8 +143,7 @@ function askAround(
       enterPoi(txn, terrain, home.id, leader(txn.state), Rng.fromSeed(SEED + round), true);
       state = txn.finish().state;
 
-      // The NPC has to actually be standing there — `residentsOf` spawns from `npc.home`, and a
-      // teller nobody can walk up to tells nobody anything.
+      // The NPC has to actually be standing there; `residentsOf` spawns from `npc.home`.
       const body = Object.values(state.entities).find((e) => e.alive && npcIdOf(e) === npc.id);
       if (!body) continue;
 
@@ -195,11 +168,7 @@ function askAround(
   return state;
 }
 
-/**
- * Kill whoever is holding something, and see what falls out. Skips anyone who has already handed
- * theirs over: a corpse dropping a second copy of a gift already made is the bug the `given:` flag
- * on the loot entry prevents.
- */
+/** Kill whoever is holding something, and see what falls out. */
 function takeByForce(start: GameState, holders: readonly { npc: NpcDef; item: string }[]): GameState {
   let state = start;
 
@@ -217,9 +186,7 @@ function takeByForce(start: GameState, holders: readonly { npc: NpcDef; item: st
     const body = Object.values(state.entities).find((e) => e.alive && npcIdOf(e) === holder.id);
     if (!body) { fail(`${holder.id}: nobody to kill — no entity spawned at ${holder.home}`); continue; }
 
-    // Down to one hit point in a bare transaction, then killed by a real attack through `reduce`:
-    // `dropDeathLoot` runs in the reducer's second transaction, so a corpse made inside a
-    // transaction of our own drops nothing.
+    // Killed by a real attack through `reduce`: `dropDeathLoot` runs in its second transaction.
     txn = new Transaction(state, module_);
     txn.putEntity({ ...body, resources: { ...body.resources, hp: 1 } });
     state = txn.finish().state;
@@ -238,8 +205,7 @@ function takeByForce(start: GameState, holders: readonly { npc: NpcDef; item: st
       const result = reduce(state, { type: 'attack', target: body.id }, { module: module_, terrain });
       state = result.state;
       if (!state.entities[body.id]?.alive) break;
-      // A miss costs nothing here; put them back on one and swing again, since what is under test
-      // is the drop and not the dice.
+      // A miss costs nothing: put them back on one and swing again.
       const still = state.entities[body.id]!;
       const patch = new Transaction(state, module_);
       patch.putEntity({ ...still, resources: { ...still.resources, hp: 1 } });
@@ -281,8 +247,7 @@ function run(thread: ThreadDef, route: Route): void {
   const anchors = anchorsOf(thread.id);
   const tellers = tellersOf(thread.entries);
   const keys = keysOf(anchors);
-  // Key items come in two shapes: most are held by somebody, a few are a relic paid out for
-  // finishing another thread. Both must be reachable; only the first is reachable by violence.
+  // Key items come in two shapes: held by somebody, or paid out for finishing a thread.
   const rewarded = new Set(
     module_.all<{ rewards?: { items?: { item: string }[] } }>('narrative.quests')
       .flatMap((quest) => (quest.rewards?.items ?? []).map((entry) => entry.item)),
@@ -353,16 +318,14 @@ function run(thread: ThreadDef, route: Route): void {
   }
   for (const key of keys) {
     if (!hasKey(state, key.id) && key.extra?.heldBy && route === 'friendly') {
-      // Asking is a roll, and a run of bad ones is not a broken thread — but the item must still be
-      // reachable, so fall back and say which way it came.
+      // Asking is a roll, so fall back and say which way the item came.
       state = takeByForce(state, holders);
       if (hasKey(state, key.id)) note(`${key.id}: asking failed the dice; taken instead`);
     }
     if (hasKey(state, key.id)) { note(`holding ${key.id}`); continue; }
 
     if (rewarded.has(key.id)) {
-      // Paid out by another thread of this layer, which this driver runs separately. Grant it and
-      // say so.
+      // Paid out by another thread of this layer, which this driver runs separately.
       state = withItem(state, key.id);
       note(`${key.id}: earned by another thread — granted, run that one too`);
       continue;
@@ -394,9 +357,6 @@ function run(thread: ThreadDef, route: Route): void {
   }
 
   // — the quest nobody gave you —
-  //
-  // Through `reduce`, not a transaction of our own: `emit: {event: "startQuest"}` is turned into an
-  // actual quest by `processEmissions`, which runs in the reducer.
   for (const anchor of anchors) {
     state = put(state, anchor.area);
     const arrived = reduce(state, { type: 'enter', target: anchor.id }, { module: module_, terrain });
@@ -414,8 +374,7 @@ function run(thread: ThreadDef, route: Route): void {
     }
   }
 
-  // Every thread must be able to start its quest for somebody. Which route gets there is the
-  // player's business; that none of them can is a bug.
+  // Every thread must be able to start its quest for somebody.
   const hidden = module_.all<{ id: string; tags?: string[] }>('narrative.quests')
     .filter((q) => q.tags?.includes('hidden') && q.tags.includes(thread.id));
   for (const quest of hidden) {

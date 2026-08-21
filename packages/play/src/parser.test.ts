@@ -1,12 +1,4 @@
-/**
- * The verb parser, and the session it drives.
- *
- * Typing is the widest input surface either front end has: the browser command
- * bar and its completions both run on `parse`, so a verb that stops resolving
- * is a feature that silently disappears. Several tests below carry the bug they
- * were written for — verb shadowing and noun scoring are the two places this
- * has gone wrong in practice.
- */
+/** The verb parser, and the session it drives. */
 
 import { describe, it, expect } from 'vitest';
 import { fileURLToPath } from 'node:url';
@@ -73,8 +65,6 @@ describe('parser', () => {
     expect(result.message).toContain('flumox');
   });
 
-  // `go` lists "walk" and is declared first, so it won the word outright and
-  // the stance verb it shadowed could never be reached.
   it('reads a bare "walk" as the pace, not an unfinished move', () => {
     expect(parse('walk', ctx(base.state)))
       .toMatchObject({ action: { type: 'setStance', stance: 'walk' } });
@@ -157,9 +147,6 @@ describe('parser', () => {
       expect(resolveNoun('vess', candidates)).toEqual({ ok: true, value: 'c' });
     });
 
-    // `enter the mill` walked into Millford Village: "Millford" *starts with*
-    // "mill" and scored above "The Old Mill", which only *contained* it —
-    // the whole-word rung sat below the substring rung and was unreachable.
     it('prefers a whole word to the start of a longer one', () => {
       const places = [
         { value: 'millford_village', name: 'Millford Village' },

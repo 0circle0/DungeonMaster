@@ -1,14 +1,4 @@
-/**
- * Starting a game.
- *
- * `newGame` is the one place a {@link GameState} is created from nothing. It
- * takes a compiled module, a seed, and the party's creation choices, and
- * returns fully serializable state — no further setup, no hidden globals.
- *
- * Everything it reads comes from the module: how many characters the party has,
- * what the world clock starts at, which flags a new game sets, and where play
- * begins. Swapping the module changes all of it.
- */
+/** Starting a game. */
 
 import { Rng } from '@dm/core';
 import type { CompiledModule } from '@dm/module';
@@ -18,7 +8,7 @@ import { SAVE_VERSION } from './state.js';
 import type { Entity, GameState, Location } from './state.js';
 
 export interface NewGameOptions {
-  /** Root seed. Everything random in the run derives from this one number. */
+  /** Root seed. */
   readonly seed: number;
   readonly party: readonly CharacterChoices[];
 }
@@ -35,26 +25,18 @@ interface FactionDef {
   initialStanding: number;
 }
 
-/**
- * Where play begins.
- *
- * A module may drop the party straight into a dungeon or start them in a
- * region; the plan's "initial gameplay is the dungeon crawl" is a content
- * decision expressed by `start.startingDungeon`, not an engine assumption.
- */
+/** Where play begins. */
 function startingLocation(module: CompiledModule): Location {
   const { startingDungeon, startingArea, startingPoi } = module.source.start;
 
-  // A point of interest is the most specific starting point, then an area, then
-  // diving straight into a generated dungeon.
+  // A point of interest, then an area, then a generated dungeon.
   if (startingPoi) {
     const poi = module.get<{ area: string }>('world.pointsOfInterest', startingPoi);
     return { kind: 'poi', area: poi.area, poi: startingPoi };
   }
   if (startingArea) return { kind: 'area', area: startingArea };
   if (startingDungeon) {
-    // The room id is filled in by dungeon generation; until M2 lands, the
-    // entrance is named but not yet built.
+    // The room id is filled in by dungeon generation.
     return { kind: 'dungeon', dungeon: startingDungeon, room: '' };
   }
 
@@ -74,8 +56,7 @@ export function newGame(module: CompiledModule, options: NewGameOptions): GameSt
     );
   }
 
-  // Sub-streams so that, for example, rolling extra hit dice at creation cannot
-  // shift the dungeon this seed would have generated.
+  // Sub-streams, so one draw cannot shift what another would generate.
   const root = Rng.fromSeed(options.seed);
   const creationRng = root.derive('creation');
 
@@ -103,8 +84,7 @@ export function newGame(module: CompiledModule, options: NewGameOptions): GameSt
       hash: module.hash,
     },
     seed: options.seed,
-    // The root generator is stored unadvanced; sub-streams are derived by
-    // label, so nothing consumed during setup perturbs the run.
+    // The root generator is stored unadvanced; sub-streams are derived by label.
     rng: root.save(),
     nextEntityId,
     minute: module.source.world.time.startMinute,
@@ -112,8 +92,7 @@ export function newGame(module: CompiledModule, options: NewGameOptions): GameSt
     entities,
     selected: party[0]!,
     location: startingLocation(module),
-    // Maps are generated on arrival, not at creation — the party has not been
-    // placed anywhere yet.
+    // Maps are generated on arrival, not at creation — the party has not been placed anywhere yet.
     maps: {},
     currentMap: '',
     combat: null,
@@ -131,13 +110,7 @@ export function newGame(module: CompiledModule, options: NewGameOptions): GameSt
   };
 }
 
-/**
- * Default choices for a character, used by quick-start and by tests.
- *
- * Picks the first ancestry and class the module offers and leaves attributes at
- * their declared defaults, so it works for any module including ones whose
- * content this engine has never seen.
- */
+/** Default choices for a character, used by quick-start and by tests. */
 export function defaultChoices(module: CompiledModule, name: string): CharacterChoices {
   const ancestries = module.ids('content.ancestries');
   const classes = module.ids('content.classes');

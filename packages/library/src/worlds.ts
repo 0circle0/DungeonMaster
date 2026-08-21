@@ -1,10 +1,4 @@
-/**
- * Worlds, as the user's own property.
- *
- * Everything in the library belongs to whoever is sitting there. The shipped examples are not in it
- * until they ask for one, and the moment they do it is an ordinary world they can edit, rename and
- * delete: there is no read-only state anywhere.
- */
+/** Worlds: create, read, list, rename and delete the rows in the library. */
 
 import { compileModule, hashModule } from '@dm/module';
 import type { CompiledModule } from '@dm/module';
@@ -34,7 +28,7 @@ export async function listWorlds(): Promise<WorldMeta[]> {
   return all.sort((a, b) => b.updatedAt - a.updatedAt);
 }
 
-/** One world's metadata. The switcher lists; opening a world wants exactly one row. */
+/** One world's metadata. */
 export async function readWorldMeta(key: string): Promise<WorldMeta | null> {
   const db = await openLibrary();
   return (await get<WorldMeta>(db, WORLDS, key)) ?? null;
@@ -56,17 +50,7 @@ export interface WorldFacts {
   readonly hash: string | null;
 }
 
-/**
- * What the switcher needs to know about a world, without opening it.
- *
- * `compiled` is the seam that matters: the studio has already compiled this document to draw its
- * diagnostics, and re-running a full schema parse here — six hundred milliseconds on Aurendel — was
- * the most expensive thing on the save path.
- *
- * Pass `undefined` to compile here (an import, where nobody has), or `null` to say it does not
- * compile. Never pass a hash read from the editor's idle tier: that one settles on a timer and is
- * the previous document's while it settles.
- */
+/** The facts the switcher needs about a document, without opening it. */
 export function factsFor(
   doc: Record<string, unknown>,
   compiled?: CompiledModule | null,
@@ -79,21 +63,12 @@ export function factsFor(
     moduleId: typeof doc['id'] === 'string' ? doc['id'] : 'untitled',
     version: typeof doc['version'] === 'string' ? doc['version'] : '0.0.0',
     description: typeof meta['description'] === 'string' ? meta['description'] : '',
-    // A world that does not compile is still worth storing, so the hash is simply absent for it.
+    // A world that does not compile has no hash.
     hash: module ? hashModule(module.source) : null,
   };
 }
 
-/**
- * Store a world.
- *
- * The compression happens before the transaction opens. An IndexedDB transaction commits as soon as
- * the microtask queue drains, so awaiting a compression stream inside one ends in
- * `TransactionInactiveError`.
- *
- * Metadata and payload go in one transaction, so there is no state where a world's size says one
- * thing and its bytes another.
- */
+/** Stores a world. */
 export async function writeWorld(
   key: string,
   envelope: WorldEnvelope,
@@ -132,7 +107,7 @@ export async function writeWorld(
     throw err;
   }
 
-  // Asked here, on a real write, rather than on load — see `quota.ts`.
+  // Requested on a real write rather than on load — see `quota.ts`.
   void requestPersistence();
   return meta;
 }
@@ -153,15 +128,12 @@ export async function deleteWorld(key: string): Promise<void> {
   await tx(db, [WORLDS, PAYLOADS, FILES], 'readwrite', (t) => {
     t.objectStore(WORLDS).delete(key);
     t.objectStore(PAYLOADS).delete(key);
-    // One range rather than one call per file: a world is a few thousand of them, and the key was
-    // chosen so this is a single delete.
+    // One range rather than one call per file.
     t.objectStore(FILES).delete(worldRange(key));
   });
 }
 
-/**
- * A new title, and nothing else touched. The title lives in the metadata row and in no file at all.
- */
+/** A new title, and nothing else touched. */
 export async function renameWorld(key: string, title: string): Promise<WorldMeta | null> {
   const db = await openLibrary();
   const meta = await get<WorldMeta>(db, WORLDS, key);
@@ -171,10 +143,7 @@ export async function renameWorld(key: string, title: string): Promise<WorldMeta
   return next;
 }
 
-/**
- * Every file of a world, by path. The studio's read: two thousand eight hundred records for
- * Aurendel, which is one ranged `getAll` and about as much JSON as `module.json` was.
- */
+/** Every file of a world, by path. */
 export async function readWorldFiles(key: string): Promise<Record<string, string>> {
   const db = await openLibrary();
   const records = await getRange<FileRecord>(db, FILES, worldRange(key));
@@ -191,18 +160,7 @@ export interface FileChange {
   readonly sweep?: boolean;
 }
 
-/**
- * Write the files that changed: editing one integer puts one record.
- *
- * Metadata and files commit together, so there is no state where the switcher describes a world its
- * files do not match, and none where a recipe has landed but the prefab it names has not — which
- * would destroy the entry rather than degrade it, since `joinProject` yields `undefined` and that
- * serializes to `null`.
- *
- * Everything here is synchronous, which is what lets it be one transaction: an IndexedDB
- * transaction commits when the microtask queue drains, so awaiting a compression stream inside one
- * ends in `TransactionInactiveError`.
- */
+/** Write the files that changed: editing one integer puts one record. */
 export async function writeWorldFiles(
   key: string,
   change: FileChange,

@@ -1,11 +1,4 @@
-/**
- * Money, and what it is for.
- *
- * `npcs[].shop` was a stock table, a price multiplier, a list of what they buy
- * and a gate on being served — accepted, validated, and with no verb behind it.
- * There was no money in the engine either, so `items[].value` and
- * `start.creation.startingCurrency` described an economy that did not exist.
- */
+/** Money, and what it is for. */
 
 import { describe, it, expect } from 'vitest';
 import { fileURLToPath } from 'node:url';
@@ -81,8 +74,6 @@ describe('a shopkeeper', () => {
     const today = atTheCounter();
     const tomorrow: GameState = { ...today, minute: today.minute + 1440 };
 
-    // Not necessarily *different* stock — the same draw can recur — but a
-    // different draw, from a different day's stream.
     const rolls = new Set<string>();
     for (let day = 0; day < 8; day += 1) {
       const state: GameState = { ...today, minute: today.minute + day * 1440 };
@@ -213,8 +204,7 @@ describe('selling', () => {
 });
 
 describe('a toll', () => {
-  // `gate.kind: 'toll'` was a word. A currency requirement plus an
-  // `adjustCurrency` in `onOpen` is what makes it a price.
+  // `gate.kind: 'toll'` was a word.
   it('opens for coin, and takes it', () => {
     const base = newGame(GREENMARCH, { seed: 4, party: [defaultChoices(GREENMARCH, 'Ash')] });
     const { state: after, events } = reduce(base, { type: 'travelToArea', area: 'the_fens' }, ctx);
@@ -235,8 +225,6 @@ describe('a toll', () => {
     expect(after.location).toMatchObject({ area: 'millford' });
   });
 
-  // `staysOpen: false` is the difference between a door and a turnstile: the
-  // ferryman wants paying every time.
   it('charges again on the way back', () => {
     const base = newGame(GREENMARCH, { seed: 4, party: [defaultChoices(GREENMARCH, 'Ash')] });
     const out = reduce(base, { type: 'travelToArea', area: 'the_fens' }, ctx).state;

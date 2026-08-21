@@ -1,12 +1,6 @@
 'use client';
 
-/**
- * The narrated log.
- *
- * Follows the newest line unless the player has scrolled back, in which case
- * their place is theirs until they return — auto-scroll that fights the reader
- * is worse than none.
- */
+/** The narrated log. */
 
 import { useEffect, useRef } from 'react';
 import type { Line } from '@dm/engine';

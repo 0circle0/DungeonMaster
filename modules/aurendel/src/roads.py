@@ -1,28 +1,4 @@
-"""The roads between the regions.
-
-Region files own the lanes inside a region; the highways that stitch the continent together live
-here, in one table, because that is the only way to see whether the map is connected.
-
-Times are in minutes and long on purpose: the engine spends them on `advanceTime` before the
-destination is entered (reduce.ts).
-
-Geography, so the table can be checked against something:
-
-              Frostmere
-                  |
-    Duskwood — Skarnspine — Weeping Moor
-        |          |             |
-  Silver Coast — Kingsvale — Ember Reach
-        |          |             |
-   Sundered — Thornmere ————————-+
-    Isles         |
-                  |
-            Sunward Steppe
-                  |
-             Glasslands
-
-The Deeproads run underneath all of it and surface in four places.
-"""
+"""The roads between the regions."""
 
 EDGES = [
     # -- the western roads -------------------------------------------------

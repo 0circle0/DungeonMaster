@@ -1,18 +1,4 @@
-/**
- * Encounter budgeting.
- *
- * `challenge` and `recommendedLevel` are recorded in modules but nothing reads them, so an area
- * rated for level 2 can contain a table that spawns something that will kill the party. This works
- * out what each encounter table can produce and compares it against what a party at a given level
- * can survive.
- *
- * The thresholds are derived from the module's own progression curve rather than a hardcoded table:
- * a party needs `xpToNextLevel × partySize` to advance, and assuming roughly eight encounters per
- * level gives the xp a standard encounter should be worth.
- *
- * Advisory rather than a rule: a deliberately lethal encounter is a legitimate design choice, so
- * everything here reports rather than forbids.
- */
+/** Encounter budgeting. */
 
 import { parseDice, minRoll, maxRoll, averageRoll } from '@dm/core';
 
@@ -30,10 +16,7 @@ export const DIFFICULTY_BANDS = {
 
 export type Difficulty = keyof typeof DIFFICULTY_BANDS | 'overwhelming';
 
-/**
- * Fighting several weaker creatures is harder than the raw xp suggests, since they get more
- * actions. The usual action-economy correction.
- */
+/** Fighting several weaker creatures is harder than the raw xp suggests, since they get more actions. */
 function groupMultiplier(count: number): number {
   if (count <= 1) return 1;
   if (count === 2) return 1.5;
@@ -77,10 +60,7 @@ interface LevelLike {
   xpRequired: number;
 }
 
-/**
- * A creature's threat, in xp. `xp` is the natural currency because modules already record it;
- * `challenge` overrides it when an author has tuned a creature nastier than its xp suggests.
- */
+/** A creature's threat, in xp. */
 export function monsterThreat(monster: MonsterLike): number {
   if (typeof monster.challenge === 'number' && monster.challenge > 0) {
     // Challenge is a level-like number; convert it to the xp scale.

@@ -1,22 +1,4 @@
-/**
- * Fields a mod added to whatever is selected.
- *
- * The paired-mod story only works if both halves do: `mods/editor/morale_studio`
- * adds a Morale field to every monster and `mods/engine/morale` reads it during
- * play. The engine half has worked all along; the authoring half was computed
- * on every selection and thrown away, so the field a mod declared was
- * unreachable and the example in `mods/README.md` described something that did
- * not happen.
- *
- * Nothing here renders a widget. A mod describes a field as *data* and the
- * studio's own `Field` draws it, which is why a mod cannot make the editor look
- * unlike itself — and why adding a field kind later is a change in one place.
- *
- * The value lands wherever the mod says, which by convention is under `extra`:
- * `schema/common.ts` documents that bag as the supported way to exceed the
- * format, so a module carrying `extra.morale` still validates, still compiles,
- * and still hashes stably against a stock engine.
- */
+/** Fields a mod added to whatever is selected. */
 
 'use client';
 

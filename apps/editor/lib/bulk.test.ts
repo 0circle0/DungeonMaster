@@ -1,10 +1,4 @@
-/**
- * Bulk edits, planned rather than applied.
- *
- * The property worth pinning is that a plan counts what will *change*, not what
- * was selected: telling an author "40 entries updated" when 37 of them already
- * held the value is how a tool loses their trust the second time they use it.
- */
+/** Bulk edits, planned rather than applied. */
 
 import { describe, it, expect } from 'vitest';
 import { planSetField, planTag, planReplace, planMove } from './bulk.js';
@@ -99,8 +93,6 @@ describe('planMove', () => {
   });
 
   it('leaves the entries themselves as the same objects', () => {
-    // Reordering must not re-identify anything, or validation reparses the
-    // whole collection to move one row.
     const plan = planMove(entries, 'content.monsters', 2, 0);
     const next = setAtMany(doc, plan.edits);
     const after = getAt(next, ['content', 'monsters']) as unknown[];

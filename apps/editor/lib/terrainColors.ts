@@ -1,9 +1,4 @@
-/**
- * Terrain id → display color for the map preview.
- *
- * Conventional names get hand-picked colors; anything else gets a stable
- * hashed hue, so custom terrains stay distinguishable without configuration.
- */
+/** Terrain id → display color for the map preview. */
 
 import { hashString } from '@dm/core';
 

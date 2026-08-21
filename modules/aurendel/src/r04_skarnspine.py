@@ -1,9 +1,4 @@
-"""Region 4 — The Skarnspine.
-
-The northern range, and Karn Dolur inside it: a hold-city of three districts
-cut into the rock, reached through a gate at the top of a stair. The only ways
-north to the ice go through here, and the pass is shut more often than not.
-"""
+"""Region 4 — The Skarnspine."""
 from place import (area, poi, gate, toll, house, inn, smithy, store, workshop,
                    temple, stable, warehouse, guild, square, landmark, ruin,
                    delve)

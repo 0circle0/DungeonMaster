@@ -1,12 +1,4 @@
-/**
- * Studio display-label overrides.
- *
- * The generated labels are right almost everywhere; the exceptions are listed
- * here rather than patched into `lib/schema.ts`, which stays a pure schema
- * mirror. "Perception" would otherwise appear twice — once for the rules
- * singleton and once for the simulation view — and these overrides are how the
- * studio tells them apart.
- */
+/** Studio display-label overrides. */
 
 export const SINGLETON_LABELS: Record<string, string> = {
   'rules.perception': 'Perception rules',

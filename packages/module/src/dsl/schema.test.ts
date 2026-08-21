@@ -12,8 +12,6 @@ describe('DSL schemas', () => {
     ).toBe(true);
   });
 
-  // The forward reference from Expr's `cond` to Predicate is resolved lazily;
-  // this asserts it actually works at runtime rather than hitting a TDZ error.
   it('resolves the mutual recursion between expressions and predicates', () => {
     expect(
       ExprSchema.safeParse({
@@ -24,8 +22,6 @@ describe('DSL schemas', () => {
     ).toBe(true);
   });
 
-  // A misspelled key must fail loudly; silently ignoring it would leave an
-  // ability that parses fine and does nothing.
   it('rejects unknown keys', () => {
     expect(ExprSchema.safeParse({ ref: 'a.b', fallback: 0 }).success).toBe(false);
     expect(

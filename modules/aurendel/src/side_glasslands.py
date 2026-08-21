@@ -1,18 +1,4 @@
-"""The Ninth Well — a Glasslands side chain, Act III.
-
-Bone Wells has nine shafts. Eight were sunk for water and reached it. The
-ninth was sunk in the same season by the same crew and the diggers' camp has
-been arranged so that nobody has to look at it for four hundred years.
-
-Vashta Qal's water wardens decide how much of one spring four thousand people
-are allowed, which makes them the only people on the continent professionally
-qualified to be curious about a well that nobody uses. Sefa is the one who has
-been curious out loud, which is why she is at Bone Wells and not at the spring.
-
-The Fulgurite Lens is the best skill item in the module — two ranks of lore and
-one of arcana, ground over nine years by a man at the Glass Quarter who would
-not say what he was grinding it for. He knew.
-"""
+"""The Ninth Well — a Glasslands side chain, Act III."""
 from dmkit.quests import (
     arc, stage, reach, kill, talk, flagged, resolved_either_way, set_flag,
     rep, deed, either, node, option, take_job, dialogue, npc, shop,

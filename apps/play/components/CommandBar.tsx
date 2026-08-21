@@ -1,8 +1,6 @@
 'use client';
 
-/**
- * Command input with completion and noun disambiguation.
- */
+/** Command input with completion and noun disambiguation. */
 
 import { useMemo, useRef, useState } from 'react';
 import { distance, roughBearing, text as systemText } from '@dm/engine';

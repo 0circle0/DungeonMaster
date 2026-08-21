@@ -1,18 +1,4 @@
-/**
- * What a mod hands back.
- *
- * Mods never mutate state directly. They return requests, which the host feeds through the engine's
- * own doors — `applyOps` for effect ops, the transaction for patches and events. That is not a
- * restriction on what a mod may change; `patch` can write anywhere in `GameState`. It is about
- * there being one place where mod output enters the engine.
- *
- * Two rules are enforced on the way through, and neither is a game rule:
- *
- *   - JSON-safety and determinism. `NaN` and `±Infinity` are rejected, because `JSON.stringify`
- *     turns them into `null` — a state carrying `NaN` would compare equal under `statesEqual` while
- *     behaving differently.
- *   - Size. A mod that stuffs a map into `modState` makes every save unusable.
- */
+/** What a mod hands back. */
 
 import { z } from 'zod';
 
@@ -29,7 +15,7 @@ export type StatePatch = z.infer<typeof statePatchSchema>;
 export const modDirectiveSchema = z.discriminatedUnion('kind', [
   /** Effect ops, run through `applyOps` exactly as the module DSL's are. */
   z.object({ kind: z.literal('ops'), ops: z.array(z.unknown()) }).strict(),
-  /** Direct state writes. The unrestricted path. */
+  /** Direct state writes. */
   z.object({ kind: z.literal('patch'), patches: z.array(statePatchSchema) }).strict(),
   /** A `custom` game event, visible to triggers, quests, and other mods. */
   z
@@ -48,10 +34,7 @@ export const modDirectiveSchema = z.discriminatedUnion('kind', [
       params: z.record(z.string(), z.union([z.string(), z.number()])).default({}),
     })
     .strict(),
-  /**
-   * Put a line in the transcript. Keyed rather than literal: the text comes from the mod's own
-   * `systemText`, so a mod's prose is data the same way a module's is.
-   */
+  /** Put a line in the transcript. */
   z
     .object({
       kind: z.literal('say'),
@@ -78,11 +61,7 @@ export type ModDirective = z.infer<typeof modDirectiveSchema>;
 /** A handler returns any number of directives, or nothing at all. */
 export const modDirectivesSchema = z.array(modDirectiveSchema);
 
-/**
- * Reject values that survive `JSON.stringify` in a shape that lies. `NaN` and `Infinity` serialize
- * to `null`, so a state holding one compares equal to a state holding the other under `statesEqual`
- * while behaving differently on reload. Functions and `undefined` vanish entirely.
- */
+/** Reject values that survive `JSON.stringify` in a shape that lies. */
 export function checkJsonSafe(value: unknown, path = 'value'): string | null {
   if (value === null) return null;
   switch (typeof value) {

@@ -1,18 +1,4 @@
-"""Tier one — the first three doors, and what has been living under the vale.
-
-Nine doors were opened in order. The Unsealing dealt with the ninth. Nobody
-dealt with the eight before it, because for nine hundred years the ninth was
-the one standing open and the others were a list in a Keeper's book.
-
-The first three were opened a long way apart and a long time ago, and what came
-through them went to ground in the quietest places on the continent: the ward
-cellars under Highpass, the undercroft of a keep the moor took back, and a root
-cellar in the Hollow Beeches with a floor that is not the floor. All three sit
-under ground the party walked in Acts I and II and left safe. They are not safe
-now.
-
-Level 14 at the door, and the door wants the relic worn.
-"""
+"""Tier one — the first three doors, and what has been living under the vale."""
 from dmkit.quests import npc, shop, reach, kill, flagged, arc
 from dmkit.prose import pool
 from postgame import tier, link, warrant, proving, loosed
@@ -26,9 +12,7 @@ ITEMS = [
             "countersigned, which is a thing the Keepers have not had cause to "
             "do in nine hundred years."),
 
-    # Trial gear sits in the same four slots every other optional payout uses,
-    # so nothing here touches the weapon and armour numbers the spine was
-    # tuned against — it only makes a party that has earned it harder to stop.
+    # Trial gear sits in the same four slots every other optional payout uses.
     {"id": "eighth_list_cloak", "name": "The Cloak of the Eighth List",
      "description": "Keeper's oilcloth with eight lines stitched inside the "
                     "collar and three of them picked out again in red.",
@@ -132,11 +116,7 @@ NPCS = [
         faction=KEEPERS, dialogue_id="trial_hesper_talk",
         home="lantern_deep_fungus_market", disposition=3, gullibility=0.15,
         memory_span=365, cares=["lantern_lit", "hold_honoured"],
-        # All three heads, not just this tier's. Hesper is the giver for the
-        # whole ladder and `offersQuests` is what actually puts a job in front
-        # of a player — a head with a `giver` who does not list it is offered
-        # by nobody, which is the failure the side-chain rule 4 exists for and which
-        # tiers two and three walked straight into.
+        # All three heads, not just this tier's.
         offers=["trial_one_cellars", "trial_two_galleries",
                 "trial_three_listening"],
         shop=shop("keeper_stock", buys=("treasure",), multiplier=1.1)),
@@ -214,18 +194,14 @@ ENCOUNTER_TABLES = [
     encounters("trial_one_third", [group("b", [("third_through", "1", False)])],
                chance=1, empty=0),
 
-    # Rule 5: the quiet half of the continent, after the ending. Every group in
-    # here is gated on `aurendel_finished`, so this table draws nothing at all
-    # until the Unsealing lands.
+    # Rule 5: the quiet half of the continent, after the ending.
     loosed("the_loosed", [
         ("walkers", [("door_walker", "1d2", True)], 5),
         ("a_pair", [("door_walker", "2", False)], 2),
     ], chance=0.4, empty=4),
 ]
 
-# Places already walked and left safe. `attach_content` appends these to
-# whatever the area already draws from, so the old encounters stay and this is
-# added to them rather than replacing them.
+# Places already walked and left safe.
 AREA_ENCOUNTERS = {
     "skarnspine_highpass": ["the_loosed"],
     "moor_barrowgate": ["the_loosed"],

@@ -1,19 +1,4 @@
-"""The Frostmere's hidden threads — three, in the five areas nothing else uses.
-
-Whalebone Landing, the Rimewatch, the Bone Strand, the Glass Ice and the Wind-Scoured Flats were all
-built and never mentioned by anything: four dungeons, a boneyard, a stone circle and a bearing
-marker.
-
-  * The Blue Voice — the ice under the calving face makes a note, and the whales stopped coming
-    inside it. Findable cold; you will not get in without the tally.
-  * The Count of the Strand — the boneyard has more skulls than the Landing has ever had ships, and
-    the bone carver has known it for eleven years.
-  * What the Marker Points At — the over-tuned one. A bearing marker on the Glass Ice points at
-    nothing, and the Moulin at the end of the bearing is level 9 in a level 8 region. It is sealed,
-    and the seal says why.
-
-Nobody offers any of it.
-"""
+"""The Frostmere's hidden threads — three, in the five areas nothing else uses."""
 from dmkit.quests import npc, shop, quest, reach, kill, flagged, arc
 from lore import (
     clue, thread, rumour, favour, talk, coldshoulder, finding, rumoured,
@@ -184,8 +169,7 @@ GATES = [
                    "waiting to be told a number it already knows."),
            items=["carvers_count"], opens_flag="frost_strand_open"),
 
-    # The over-tuned one. Level 9 in a level 8 region, and the seal is why a party that stumbled on
-    # it does not walk in and die.
+    # The over-tuned one.
     sealed("frost_moulin_seal", "The Seal on the Moulin",
            "Stonework at the lip of the hole, facing inward. Whatever this was "
            "built for, it was not built to keep anybody out.",
@@ -215,7 +199,6 @@ GATES = [
 
 POI_PATCHES = {
     # Findable knowing nothing, at 22 — a party that searches the shore turns it up eventually.
-    # Knowing the thread, 10. The clues never say where it is.
     "rimewatch_blue_caves": rumoured("frost_blue", base=22, step=3, entries=4),
     "bone_strand_ribcage": rumoured("frost_strand", base=20, step=3, entries=4),
     "glass_ice_the_moulin": rumoured("frost_marker", base=24, step=4, entries=4,
@@ -252,8 +235,7 @@ POI_TRIGGERS = {
         "What somebody cut into the camp door, and then left.",
         "frost_strand_ribs")],
 
-    # Reaching an anchor with the thread in hand is the commitment: the quest starts here and only
-    # here. Nobody offers it and nothing announces it.
+    # Reaching an anchor with the thread in hand is the commitment: the quest starts here and only here.
     "rimewatch_blue_caves": [{
         "id": "frost_blue_committed", "mode": "once", "on": "enter",
         "description": "Standing at the mouth of it, knowing what it is.",
@@ -291,11 +273,7 @@ BOSSES = {
 
 def _hidden(qid, name, description, objectives, *, xp, items=(), thread_key=None,
             stages=None):
-    """A quest with no giver, started by arriving somewhere with a thread in hand.
-
-    `hidden` objectives throughout: the journal shows the quest and that something is expected, and
-    does not lay out the steps. The engine reveals each one as it completes.
-    """
+    """A quest with no giver, started by arriving somewhere with a thread in hand."""
     return quest(qid, name, description, objectives, xp=xp, items=items,
                  stages=stages or [],
                  tags=["hidden", REGION] + ([thread_key] if thread_key else []))
@@ -405,10 +383,6 @@ NPCS = [
 
 
 # --- conversation ----------------------------------------------------------
-#
-# Every clue here is behind a roll whose difficulty moves with what the Ice Moot thinks of you, and
-# no clue is behind a standing floor. A party that has spent the game breaking wards finds Saeun
-# hard work and Hallr nearly impossible, and can still, at -40, take the sighting stone off him.
 
 MOOT = "the_ice_moot"
 
@@ -633,14 +607,6 @@ DIALOGUES.append(
 
 
 # --- what is down there ----------------------------------------------------
-#
-# Three anchors, three ends, and five boss tables — the last two for `frostmere_under_pavement` and
-# `frostmere_first_cairn`, which no thread uses but which ship a boss room carrying
-# `alwaysEncounter` and nothing to draw from.
-#
-# The three clue-holders get statblocks of their own rather than a shared one: `dropDeathLoot`
-# resolves what a corpse leaves through `corpse.statblock`, so a shared statblock would have every
-# reader in the Frostmere dropping the tally.
 
 from bestiary import creature, A, HALF_UNLESS_SILVER  # noqa: E402
 from dmkit.loot import group, encounters  # noqa: E402
@@ -768,8 +734,7 @@ LOOT_TABLES += [
 ]
 
 
-# Vigdis lives on the Strand rather than in the Landing: a thread every one of whose tellers is in
-# the same room dies with one missed conversation, and `check_quests.py` counts the areas.
+# Vigdis lives on the Strand rather than in the Landing: two areas, not one.
 DIALOGUES.append(
     talk("frost_vigdis_talk", "greet",
          ["A tarpaulin, a fire that is mostly smoke, and a woman sorting bone "

@@ -1,12 +1,4 @@
-/**
- * Mods, from source text to a running hook table.
- *
- * The server reads `mods/` and hands over plain objects — a manifest and a map
- * of file contents, all strings, which cross the RSC boundary as easily as a
- * module document does. Everything else happens here, in the browser, for the
- * same reason modules are compiled here: the result is a live object with a
- * WASM context behind it and cannot be serialized.
- */
+/** Mods, from source text to a running hook table. */
 
 import { prepareSandbox, createHost, resolveMods, activeModIdentities } from '@dm/mods';
 import type { LoadedMod, ModDeclaration, ModResolution, SandboxHost } from '@dm/mods';
@@ -26,7 +18,7 @@ export interface ModSetup {
   readonly resolution: ModResolution;
   /** Null when nothing is active — which is exactly the unmodded engine. */
   readonly runtime: ModRuntime | null;
-  /** `<id>-<hash>` for every active mod, sorted. What a save records. */
+  /** `<id>-<hash>` for every active mod, sorted. */
   readonly identities: readonly string[];
   /** Install-time complaints, one line each. */
   readonly installIssues: readonly string[];
@@ -45,14 +37,7 @@ export function declarationsOf(module: CompiledModule): readonly ModDeclaration[
 
 let host: SandboxHost | null = null;
 
-/**
- * Build the runtime for one module.
- *
- * Async only because instantiating the WASM module is; every call after that
- * is synchronous, which is what keeps `reduce` a synchronous pure function.
- * The host is created once and reused, so switching modules does not pay for
- * it again.
- */
+/** Build the runtime for one module. */
 export async function setUpMods(
   module: CompiledModule,
   available: readonly ModWire[],
@@ -82,8 +67,7 @@ export async function setUpMods(
     }
     const result = host.install(mod);
     for (const issue of result.issues) installIssues.push(`${mod.manifest.id}: ${issue}`);
-    // A mod that failed to evaluate has no handlers, so it is left out of the
-    // runtime rather than left in to fail on every hook.
+    // A mod that failed to evaluate is left out of the runtime.
     if (result.ok) installed.push(mod);
   }
 
@@ -96,13 +80,7 @@ export async function setUpMods(
   };
 }
 
-/**
- * Which optional mods the player has switched off, per module.
- *
- * Mirrors the `dm.save.<moduleId>.<slot>` convention already in `useSaves`.
- * Required mods are never consulted against this — `resolveMods` forces them
- * on regardless.
- */
+/** Which optional mods the player has switched off, per module. */
 const keyFor = (moduleId: string) => `dm.mods.${moduleId}`;
 
 export function readEnabled(moduleId: string): ReadonlySet<string> | null {
